@@ -5,31 +5,40 @@
   fetchNpmDeps,
   nixosTests,
   stdenv,
+  rustPlatform,
   npmHooks,
   nodejs,
   esbuild,
   brotli,
   zstd,
+  cargo,
+  bashInteractive,
+  llvmPackages,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.26.2";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yY8dwWyQy/N3A32MYtxLWAJCmR9rtSyzaYUHBNXRm/0=";
+    hash = "sha256-iB0DRagqPZfjmAYkmyf8HpRSz2oVUsJB5DXc9gBdHUM=";
   };
 
-  vendorHash = "sha256-+NPwL4p0p/s74m1Ld0z2GEcsWk5FqhcLbHrTNP3yEzk=";
+  vendorHash = "sha256-7TYCWky6ybc5iyNsLpY3XorwACs/9qMRq+oP5v9sW1I=";
 
   npmDeps = fetchNpmDeps {
     name = "anubis-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-SPoI66jy2XS4FM6BaJPt18dV1QM12nIOdeD5sAMaOzQ=";
+    hash = "sha256-HELLfMRf8JniTGqTLWz5WreRx3uWOQ7Jak2Sy99JQjM=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-T0lZQyAJLFKrR2kQ2i/WHN15APlEwQ3jBP1w/GUYmuA=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +48,11 @@ buildGoModule (finalAttrs: {
 
     nodejs
     npmHooks.npmConfigHook
+
+    rustPlatform.cargoSetupHook
+    cargo
+    bashInteractive
+    llvmPackages.lld
   ];
 
   subPackages = [ "cmd/anubis" ];
@@ -50,18 +64,18 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
 
-  prePatch = ''
-    # we must forcefully disable the hook when creating the go vendor archive
-    if [[ $name =~ go-modules ]]; then
-      npmConfigHook() { true; }
-    fi
-  '';
+  overrideModAttrs = oa: {
+    nativeBuildInputs = lib.subtractLists [
+      npmHooks.npmConfigHook
+      rustPlatform.cargoSetupHook
+    ] oa.nativeBuildInputs;
+  };
 
   postPatch = ''
     patchShebangs \
+      ./wasm/scripts/build_*.sh \
       ./web/build.sh \
-      ./lib/challenge/preact/build.sh \
-      ./lib/challenge/proofofwork/build.sh
+      ./lib/challenge/*/build.sh
   '';
 
   preBuild = ''
@@ -70,6 +84,8 @@ buildGoModule (finalAttrs: {
       # https://github.com/TecharoHQ/anubis/blob/main/xess/build.sh
       npx postcss ./xess/xess.css -o xess/xess.min.css
       go generate ./...
+      ./wasm/scripts/build_wasm.sh
+      ./wasm/scripts/build_wasm2js.sh
       ./web/build.sh
     fi
   '';

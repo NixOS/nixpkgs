@@ -10,17 +10,18 @@
   pnpmConfigHook,
   installShellFiles,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "mo-viewer";
-  version = "1.6.3";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "mo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DbcktOAdcg/v5q3gYgxMvSHVtwXODz9xHoPqiiWBaP4=";
+    hash = "sha256-BXGMjybhKZzw+yae478EP2j3cKw/ZbJMrW342W8ZCmY=";
   };
 
   frontend = stdenvNoCC.mkDerivation (finalFrontendAttrs: {
@@ -34,7 +35,7 @@ buildGoModule (finalAttrs: {
       sourceRoot = "${finalFrontendAttrs.src.name}/internal/frontend";
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-thlwYvB7y6RFwLknbQt5evF4xQVzllrQqVYDdKSbEUM=";
+      hash = "sha256-jnajsNerQ6VCOvgP5PQSG/SL+98SD+AXQXg2s0fC9xE=";
     };
 
     nativeBuildInputs = [
@@ -62,7 +63,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-rmtJswO3DWWxpb2uk91aIatc7ugNmsqzwlEeKdX7ITE=";
+  vendorHash = "sha256-v1EfsHryyLfv9/ZzVazSMFySio62upqsB33eLV6LZZU=";
 
   preBuild = ''
     cp -r ${finalAttrs.frontend} internal/static/dist
@@ -92,6 +93,13 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   __structuredAttrs = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "frontend"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/k1LoW/mo";

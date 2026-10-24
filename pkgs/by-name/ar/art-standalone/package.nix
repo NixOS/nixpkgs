@@ -19,20 +19,21 @@
   libpng,
   makeWrapper,
   binutils,
+  vixl,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "art-standalone";
-  version = "0-unstable-2025-10-09";
+  version = "0-unstable-2026-08-03";
 
   src = fetchFromGitLab {
     owner = "android_translation_layer";
     repo = "art_standalone";
-    rev = "e78bf68917bcaaf58fef3960cd88793b3b7f39cc";
-    hash = "sha256-0r6Ap41AMSHhZpMJ5QoWiGGcHPj35et4kiA20xs9uLs=";
+    rev = "66a5d9079b159e9c5819bfeef4a6fff6a5f32719";
+    hash = "sha256-4dRKghsPP8XLCcCe6bQDzJVlggBdFWe3l2/ge35HIXA=";
   };
 
   patches = [
-    # Do not hardocde addr2line binary path
+    # Do not hardcode addr2line binary path
     ./no-hardcode-path-addr2line.patch
     ./remove-wolfssljni.patch
   ];
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     jdk17
@@ -67,12 +69,20 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xz
     zlib
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ vixl ];
 
   makeFlags = [
     "____LIBDIR=lib"
     "____PREFIX=${placeholder "out"}"
     "____INSTALL_ETC=${placeholder "out"}/etc"
+    "ARCH=${stdenv.hostPlatform.uname.processor}"
+    "HOST_CC=${stdenv.cc.targetPrefix}cc"
+    "HOST_CXX=${stdenv.cc.targetPrefix}c++"
+    "HOST_AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "C_INCLUDE_PATH=${vixl}/include"
   ];
 
   postFixup = ''
@@ -86,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/android_translation_layer/art_standalone";
     # No license specified yet
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [ onny ];
   };
 })

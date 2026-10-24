@@ -12,7 +12,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
   typer,
   yarl,
   zeroconf,
@@ -57,14 +57,14 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "gotailwind" ];
 
   meta = {
-    description = "Modul to communicate with Tailwind garage door openers";
+    description = "Module to communicate with Tailwind garage door openers";
     homepage = "https://github.com/frenck/python-gotailwind";
     changelog = "https://github.com/frenck/python-gotailwind/releases/tag/${src.tag}";
     license = lib.licenses.mit;

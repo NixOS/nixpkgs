@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-ptMqyCiIJsQfjFyislyc3pR0BGpwnu8Ba3OcQYLJPtM=";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   passthru = {
-    tests.boot = lib.optional stdenv.isDarwin (
+    tests.boot = lib.optional stdenv.hostPlatform.isDarwin (
       callPackage ./boot-test.nix { krunkit = finalAttrs.finalPackage; }
     );
     updateScript = nix-update-script { };

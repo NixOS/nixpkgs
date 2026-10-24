@@ -20,14 +20,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "5650e9cf76d3be4318d5fa3af38ee483ddfd5e4a";
-      hash = "sha256-O9ClnGm4WSTX3g1Q2VYTMhUtGG52XBwxzgHtWW9WSG0=";
+      rev = "2065f4ded0558c6f89fee67c8e5228feb4eb960e";
+      hash = "sha256-CEtLO4il9/jk+bFDDV0rXeX1OkirA0u6nxrSiWq0NPM=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "834a61fc65e8b7885fcf177f1230ae4b897118fa";
-      hash = "sha256-V5pVCG5QdFlgBIVKMv4jyTTB22BWfTHD3HolVPDFpgQ=";
+      rev = "a6b4a9f00b36c19af9997d68a1cf6e0b5b3d032c";
+      hash = "sha256-yJzrkJxJUtCXmBJK474mu4MHJTT6ZnNnBRNwuCkRHEo=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -38,26 +38,20 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "ea13a98decd497a8c5588fb5de71b57bcf10d864";
-      hash = "sha256-v9bNWc9yfK3vG8hYhQ7vkc7DHaoPF6RAKfX9kC0Gw8c=";
+      rev = "b1f8b0c3b8db9c3711349144acf951226700ddb4";
+      hash = "sha256-R8VxOEjJvkBCcQRWpTi9oWI3Mhxp31wrOcQ2IQN3GIw=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "52eb8108c5bdec04579160ae17225d66034bd723";
-      hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
-    };
-    lodepng = fetchFromGitHub {
-      owner = "lvandeve";
-      repo = "lodepng";
-      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
-      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
+      rev = "063de7e9578f82b369302001269680b4b1553359";
+      hash = "sha256-rXsn2L0xeWvfxTjMAoWEu0UFZ7xOSfYmhbKgRF5J9co=";
     };
     miniz = fetchFromGitHub {
       owner = "richgel999";
       repo = "miniz";
-      rev = "d10b03cc73475af673df40f06e5cefd1d5f940d9";
-      hash = "sha256-hRB/0TVVQjr4VwjozfRnYKUJfeqO+1PNfdvP/rrOCR4=";
+      rev = "77d0dce8627735138c51770d1799a1ef48f2117d";
+      hash = "sha256-/MAJWZXZ+pbelFduGE75rK/x9qEzxSFEj8RJWe3JUv0=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
@@ -68,8 +62,8 @@ let
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
       repo = "tinyobjloader";
-      rev = "1421a10d6ed9742f5b2c1766d22faa6cfbc56248";
-      hash = "sha256-9z2Ne/WPCiXkQpT8Cun/pSGUwgClYH+kQ6Dx1JvW6w0=";
+      rev = "2945a967c5303b2c8c14174117c45f3302591150";
+      hash = "sha256-eEgy43IzhovTjEgLz3qNsRnOkp0bcvQdWve7jOidHX4=";
     };
     tinyxml2 = fetchFromGitHub {
       owner = "leethomason";
@@ -83,12 +77,20 @@ let
       rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
+
+    # cmake/third_party_deps/lodepng.cmake
+    lodepng = fetchFromGitHub {
+      owner = "lvandeve";
+      repo = "lodepng";
+      rev = "22561883dd63fd1850f18e1f6adac321e4f609b0";
+      hash = "sha256-JscUapUNVs2n0Ky08dksFCigBv83DcbxWHcaktqYP7Y=";
+    };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.11.0";
+  version = "3.17.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -99,12 +101,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-8CJD8jQ51fe0r36n9zFzuXCNLlqyvG/ZY/HA9hK1/PY=";
+    hash = "sha256-sa8mqUk28IMwjXZSc1xGBWxutnf/q/Yf12TwpqBJyE4=";
   };
 
   patches = [
     ./mujoco-system-deps-dont-fetch.patch
   ];
+
+  # Install plugins to expose them in python to fix mujoco-warp tests
+  # ref. https://github.com/google-deepmind/mujoco/pull/3602
+  postPatch = ''
+    for plugin in actuator elasticity sensor; do
+      echo "install(TARGETS $plugin)" >> plugin/$plugin/CMakeLists.txt
+    done
+
+    for plugin in sdf usd_decoder; do
+      echo "install(TARGETS $plugin""_plugin)" >> plugin/$plugin/CMakeLists.txt
+    done
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -151,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     ln -s ${pin.eigen3} build/_deps/eigen3-src
     ln -s ${pin.googletest} build/_deps/googletest-src
-    ln -s ${pin.lodepng} build/_deps/lodepng-src
     ln -s ${pin.miniz} build/_deps/miniz-src
   ''
   # qhull is patched by mujoco's cmake and thus needs to be writable
@@ -159,6 +172,12 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     cp -r ${pin.qhull} build/_deps/qhull-src
     chmod -R +w build/_deps/qhull-src
+  ''
+  # lodepng needs a custom CMakeLists.txt copied into its source dir
+  # by FindOrFetch, so it must be writable
+  + ''
+    cp -r ${pin.lodepng} build/_deps/lodepng-src
+    chmod -R +w build/_deps/lodepng-src
   ''
   + ''
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src

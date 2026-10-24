@@ -1,0 +1,59 @@
+diff --git a/vendor/github.com/okzk/sdnotify/notify.go b/vendor/github.com/okzk/sdnotify/notify.go
+index f7d70e0d..8133617e 100644
+--- a/vendor/github.com/okzk/sdnotify/notify.go
++++ b/vendor/github.com/okzk/sdnotify/notify.go
+@@ -7,3 +7,8 @@ func SdNotify(state string) error {
+ 	// do nothing
+ 	return nil
+ }
++
++func Reloading() error {
++	return nil
++}
++
+diff --git a/vendor/github.com/okzk/sdnotify/notify_linux.go b/vendor/github.com/okzk/sdnotify/notify_linux.go
+index 91d1efac..e31e823b 100644
+--- a/vendor/github.com/okzk/sdnotify/notify_linux.go
++++ b/vendor/github.com/okzk/sdnotify/notify_linux.go
+@@ -1,8 +1,11 @@
+ package sdnotify
+ 
+ import (
++	"fmt"
+ 	"net"
+ 	"os"
++
++	"golang.org/x/sys/unix"
+ )
+ 
+ // SdNotify sends a specified string to the systemd notification socket.
+@@ -21,3 +24,13 @@ func SdNotify(state string) error {
+ 	_, err = conn.Write([]byte(state))
+ 	return err
+ }
++
++func Reloading() error {
++	var ts unix.Timespec
++	if err := unix.ClockGettime(unix.CLOCK_MONOTONIC, &ts); err != nil {
++		return fmt.Errorf("getting monotonic time: %w", err)
++	}
++	nsecs := ts.Sec*1e09 + ts.Nsec
++	return SdNotify(fmt.Sprintf("RELOADING=1\nMONOTONIC_USEC=%d",
++		nsecs/1000))
++}
+diff --git a/vendor/github.com/okzk/sdnotify/util.go b/vendor/github.com/okzk/sdnotify/util.go
+index 71e1e928..0ee19d67 100644
+--- a/vendor/github.com/okzk/sdnotify/util.go
++++ b/vendor/github.com/okzk/sdnotify/util.go
+@@ -18,11 +18,6 @@ func Stopping() error {
+ 	return SdNotify("STOPPING=1")
+ }
+ 
+-// Reloading sends RELOADING=1 to the systemd notify socket.
+-func Reloading() error {
+-	return SdNotify("RELOADING=1")
+-}
+-
+ // Errno sends ERRNO=? to the systemd notify socket.
+ func Errno(errno int) error {
+ 	return SdNotify(fmt.Sprintf("ERRNO=%d", errno))

@@ -1,13 +1,13 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
   orjson,
-  poetry-core,
+  hatchling,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -18,17 +18,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiomealie";
-  version = "1.2.4";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-mealie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OROL48v5SniYtzuCYZWt9mSXcFqMTO0JB2K+Ym3Ksz4=";
+    hash = "sha256-F9gl+OdTQe6VxZPvFyo8r5GRxO3Ug4juvqje86djFNw=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeBuildInputs = [
     pyprojectVersionPatchHook
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

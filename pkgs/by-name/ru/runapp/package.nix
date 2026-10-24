@@ -1,12 +1,12 @@
 {
   fetchFromGitHub,
-  gcc15Stdenv,
+  stdenv,
   lib,
   nix-update-script,
   pkg-config,
   systemd,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "runapp";
   version = "0.5.1";
 

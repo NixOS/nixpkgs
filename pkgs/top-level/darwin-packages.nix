@@ -10,6 +10,7 @@ in
   libc,
   llvmPackages,
   makeScopeWithSplicing',
+  nixosTests,
   pkgs,
   preLibcHeaders,
   stdenv,
@@ -142,6 +143,7 @@ makeScopeWithSplicing' {
         xcode_26_5_Apple_silicon
         xcode_26_6
         xcode_26_6_Apple_silicon
+        xcode_27
         xcode
         requireXcode
         ;
@@ -179,6 +181,37 @@ makeScopeWithSplicing' {
       linux-builder-x86_64 = self.linux-builder.override {
         modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
       };
+
+      # Like `linux-builder`, but runs the guest on Apple's Virtualization.framework
+      # via `vzvm`, translating x86_64-linux builds with Rosetta instead of emulating
+      # them. See doc/packages/darwin-builder.section.md
+      linux-builder-vz = lib.makeOverridable (
+        { modules }:
+        let
+          nixos = import ../../nixos {
+            configuration = {
+              imports = [
+                ../../nixos/modules/profiles/nix-builder-vz-vm.nix
+              ]
+              ++ modules;
+
+              virtualisation.host = { inherit pkgs; };
+
+              # aarch64-darwin is the only supported host, so the guest is fixed too.
+              nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+            };
+
+            system = null;
+          };
+        in
+        nixos.config.system.build.macos-builder-installer.overrideAttrs (oldAttrs: {
+          passthru = oldAttrs.passthru // {
+            tests = (oldAttrs.passthru.tests or { }) // {
+              store-gc = nixosTests.linux-builder-vz-store-gc;
+            };
+          };
+        })
+      ) { modules = [ ]; };
     }
   );
 }

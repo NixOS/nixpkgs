@@ -62,12 +62,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.7.0";
+    version = "0.7.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-ZNAQ9ITsp+DJxyCI1jd7c7JQIPnR5C3H4SvkaF6CV2Q=";
+      hash = "sha256-fGhbLgi3HQF8iKnUBgxPFlctQr8ebZfmYEksxyv0reQ=";
     };
     meta = {
       description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
@@ -94,12 +94,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.15.0";
+    version = "0.15.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-S3FPe6XR6DRjJ6Cn/Jcy211MV9KWXJvZ02tpMHjwlOY=";
+      hash = "sha256-MycWukXoeTZzGAcoNODzt592VHWgjnMXZdNPoQWDC18=";
     };
     meta = {
       description = "Vale-compatible implementation of the Microsoft Writing Style Guide";
@@ -126,12 +126,12 @@ in
 
   readability = buildStyle rec {
     name = "Readability";
-    version = "0.1.1";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "readability";
       rev = "v${version}";
-      hash = "sha256-5Y9v8QsZjC2w3/pGIcL5nBdhpogyJznO5IFa0s8VOOI=";
+      hash = "sha256-3IGEt42ifvv3kSunDsHu7dJov7Y2AWUDIob2luIu2ak=";
     };
     meta = {
       description = "Vale-compatible implementations of many popular \"readability\" metrics";
@@ -142,12 +142,12 @@ in
 
   redhat = buildStyle rec {
     name = "RedHat";
-    version = "673";
+    version = "680";
     src = fetchFromGitHub {
       owner = "redhat-documentation";
       repo = "vale-at-red-hat";
       rev = "v${version}";
-      hash = "sha256-/Yv4bzyZiSVDaEe7pYqdSJI6DPh4A4p/0Vh2bTXc0U4=";
+      hash = "sha256-1n/hKmNRxSpKFNBSnXdtcgxzu4A+ZF4cIP+6qCVewYo=";
     };
     stylePath = ".vale/styles/RedHat";
     meta = {

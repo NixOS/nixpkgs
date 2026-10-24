@@ -2,10 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  stdenv,
 
   # build-system
   hatchling,
+  versioningit,
 
   # dependencies
   matplotlib,
@@ -22,6 +23,8 @@
 
   # tests
   pytestCheckHook,
+  pytest-xdist,
+  writableTmpDirAsHomeHook,
 
   # optional-dependencies
   pyside6,
@@ -31,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optiland";
-  version = "0.6.0";
+  version = "0.6.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,28 +42,19 @@ buildPythonPackage (finalAttrs: {
     owner = "HarrisonKramer";
     repo = "optiland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s+EFsfj+3VIgpqhBv8f6IblyxfxXHWnO/i1lO3bEke4=";
+    hash = "sha256-iyTvY+aqczzNCa13i/PnEiVAxXlqw9TWviqBANBV/sw=";
   };
 
-  patches = [
-    # wayland is not supported, see:
-    # https://github.com/optiland/optiland/issues/556
-    (fetchpatch {
-      url = "https://github.com/optiland/optiland/commit/9644df6e06bd24c5a3a7cf36c8df9dd83050bccc.patch";
-      hash = "sha256-a74Z7rp3ji3+9lM8Q/RttMIzwlRBki1N2Y0YtBiVaEA=";
-    })
-    # A fixup for the above, see:
-    #
-    # - https://github.com/optiland/optiland/pull/564#discussion_r3106831922
-    # - https://github.com/optiland/optiland/pull/568
-    (fetchpatch {
-      url = "https://github.com/optiland/optiland/commit/652922bce5e1854f1d067e292422d95dee129a46.patch";
-      hash = "sha256-9O+DNbqBDDSAaRkwCy3o76lwy5MJ7WHQqzfcN1fcmnE=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'default-version = "0.0.0+unknown"' \
+        'default-version = "${finalAttrs.version}"'
+  '';
 
   build-system = [
     hatchling
+    versioningit
   ];
 
   dependencies = [
@@ -91,6 +85,8 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
+    writableTmpDirAsHomeHook
   ]
   # No need for optional-dependencies.gui, as the relevant tests requiring the
   # gui dependencies are disabled below.
@@ -100,6 +96,14 @@ buildPythonPackage (finalAttrs: {
     # From some reason, importing pyside6 during tests causes a core dump of the
     # python interpreter, so we disable all GUI tests.
     "tests/gui/"
+    # Flaky test according to the experience in:
+    # https://github.com/NixOS/nixpkgs/pull/572833#issuecomment-6135335498
+    "tests/test_materials.py::TestBaseMaterial::test_large_array_cache_key_avoids_python_scalar_overhead"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/optiland/optiland/issues/927
+    "tests/regression/test_golden_snapshots.py::test_golden_snapshot[backend=numpy-wide_fov]"
+    "tests/regression/test_golden_snapshots.py::test_golden_snapshot[backend=torch-wide_fov]"
   ];
 
   pythonImportsCheck = [

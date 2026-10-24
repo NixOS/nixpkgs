@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  qaseprite,
   qbs,
   libsForQt5,
   zlib,
@@ -12,6 +13,7 @@
 
 let
   qtEnv = libsForQt5.env "tiled-qt-env" [
+    qaseprite
     libsForQt5.qtbase
     libsForQt5.qtdeclarative
     libsForQt5.qtsvg

@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
-  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
     ln -s $out/Applications/gg.app/Contents/MacOS/gg $out/bin/gg
   '';

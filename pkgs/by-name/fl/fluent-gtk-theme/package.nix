@@ -13,9 +13,8 @@
 
 let
   pname = "fluent-gtk-theme";
-in
-lib.checkListOfEnum "${pname}: theme variants"
-  [
+
+  checkThemes = lib.checkListOfEnum "${pname}: theme variants" [
     "default"
     "purple"
     "pink"
@@ -26,34 +25,31 @@ lib.checkListOfEnum "${pname}: theme variants"
     "teal"
     "grey"
     "all"
-  ]
-  themeVariants
-  lib.checkListOfEnum
-  "${pname}: color variants"
-  [
+  ] themeVariants;
+
+  checkColors = lib.checkListOfEnum "${pname}: color variants" [
     "standard"
     "light"
     "dark"
-  ]
-  colorVariants
-  lib.checkListOfEnum
-  "${pname}: size variants"
-  [
+  ] colorVariants;
+
+  checkSizes = lib.checkListOfEnum "${pname}: size variants" [
     "standard"
     "compact"
-  ]
-  sizeVariants
-  lib.checkListOfEnum
-  "${pname}: tweaks"
-  [
+  ] sizeVariants;
+
+  checkTweaks = lib.checkListOfEnum "${pname}: tweaks" [
     "solid"
     "float"
     "round"
     "blur"
     "noborder"
     "square"
-  ]
-  tweaks
+  ] tweaks;
+
+  checkAll = checkThemes checkColors checkSizes checkTweaks;
+in
+checkAll
 
   stdenvNoCC.mkDerivation
   (finalAttrs: {

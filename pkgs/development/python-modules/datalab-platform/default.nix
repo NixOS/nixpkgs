@@ -53,7 +53,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalab-platform";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DataLab-Platform";
     repo = "DataLab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rJDA5qYv2LYMyrckxNy63Gqn8HYU62qG0OAioztKGtA=";
+    hash = "sha256-c9ze/Qw6FZ78JEkoQzJSESf/0tWvbL9wHuE2xlzKlv8=";
   };
 
   # NOTE: DataLab is compatible with qt6, but it's apparently not perfect as

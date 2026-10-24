@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lerc";
-  version = "4.1.1";
+  version = "4.2.0";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "esri";
     repo = "lerc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YTNIydQLCBzsuvPWA6qnOkOIPf9JlByJdNHkTevE7Z0=";
+    hash = "sha256-ysD+0B5yMOdNOKe9MS2T8o0KgqygdxLYiLMr8XeG4JE=";
   };
 
   # Required to get the freebsd-ports patch to apply.

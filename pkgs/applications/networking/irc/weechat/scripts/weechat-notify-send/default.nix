@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "s3rvac";
     repo = "weechat-notify-send";
     rev = "v${version}";
-    sha256 = "sha256-7uw0IdRSxhPrLqdgECKB9eOrtFj+2HTILBhakKiRuNQ=";
+    hash = "sha256-7uw0IdRSxhPrLqdgECKB9eOrtFj+2HTILBhakKiRuNQ=";
   };
 
   passthru.scripts = [ "notify_send.py" ];

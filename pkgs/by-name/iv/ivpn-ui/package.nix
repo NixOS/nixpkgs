@@ -2,36 +2,44 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  electron,
+  electron_44,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
   makeWrapper,
   ivpn-service,
 }:
+let
+  electron = electron_44;
+in
 buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
-  version = "3.15.6";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C24klcr10i0lki74eNfJ4bappdIttp3S4FGg1wkAGcY=";
+    hash = "sha256-sbi4B9gNzgipsqgTxbPrZRNjB5ulwp0gmCwjYyyYj6o=";
   };
 
   sourceRoot = "source/ui";
 
-  npmDepsHash = "sha256-S/fB3MxEDLVEZ762EkBkyemYW2rgBGtCH5y/6p6nqgE=";
+  npmDepsHash = "sha256-fQQEhTa9m0ixcv1DlIQaldFFLkvhbWCXoDge/U5xtDU=";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
 
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  };
+  # electron 42's install.js no longer honors ELECTRON_SKIP_BINARY_DOWNLOAD and
+  # unconditionally downloads the electron binary.
+  # install-app-deps is a no-op here, so drop the whole postinstall,
+  # that way the electron download is skipped properly.
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail '"postinstall": "node node_modules/electron/install.js && electron-builder install-app-deps",' ""
+  '';
 
   postBuild = ''
     electron_dist="$(mktemp -d)"

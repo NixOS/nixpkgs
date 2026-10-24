@@ -14,22 +14,25 @@
   glib,
   gtk3,
   python3,
-  lua,
+  lua5_5,
   opencc,
   libsoup_3,
   json-glib,
   libnotify,
 }:
+let
+  lua = lua5_5;
+in
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.16.5";
+  version = "1.16.6";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
-    tag = version;
-    hash = "sha256-3QZHovjzGifWLFVudCnJOwMn/M3Nzfn8CZ1HpQwzUVw=";
+    tag = "v${version}";
+    hash = "sha256-uPYqMtppo+lLq035Tny0zYQA4NkfJ7H5EL0U78iSRAM=";
   };
 
   nativeBuildInputs = [

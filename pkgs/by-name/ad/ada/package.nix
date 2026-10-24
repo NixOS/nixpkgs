@@ -14,15 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ada";
-  version = "3.4.4";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ada-url";
     repo = "ada";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kfUbsqQ+CsqnySKgeL1GFJLcDe1Irivp4CoZG93BZYg=";
+    hash = "sha256-TvjoLUKO2+YgS1mlyglLb+rBLTO/SWSBVA2S34Z6kMI=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     validatePkgConfig
@@ -53,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "WHATWG-compliant and fast URL parser written in modern C";

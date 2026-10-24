@@ -1,32 +1,70 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  typing-extensions,
+
+  # optional-dependencies
   paramiko,
+
+  # tests
+  mount,
+  openssh,
+  ps,
   psutil,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plumbum";
-  version = "1.10.0";
+  version = "2.0.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
-    tag = "v${version}";
-    hash = "sha256-ca9avbBJnMecuKljIrx3mYIGA50QXmhC/LP3hM9Uvcs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i99HpT/QuF9JwX92IwwOqpEVUc/1k39E7N9v9TZ4Qvg=";
   };
 
+  patches = [
+    # Fix parsing processes with an empty STAT field on Darwin
+    (fetchpatch {
+      url = "https://github.com/tomerfiliba/plumbum/commit/217a22f361ea590c77da5f73d1387fe8a57fd742.patch";
+      hash = "sha256-Cp01aeTkJS5wy6ZZs95suzKV/HKziy1YIQtk4jYT2Gg=";
+    })
+  ];
+
+  postPatch =
+    # `ps` on Darwin reports negative UIDs (`nobody` is -2), which the parser rejects
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace plumbum/lib.py \
+        --replace-fail \
+          'r"\s*(\d+)\s+(\d+)"' \
+          'r"\s*(\d+)\s+(-?\d+)"'
+    '';
+
   build-system = [
-    hatchling
     hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -34,38 +72,29 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    mount
+    openssh
+    ps
     psutil
+    pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  preCheck = ''
-    export HOME=$TMP
-  '';
-
-  disabledTests = [
+  pytestFlags = [
     # broken in nix env
-    "test_change_env"
-    "test_dictlike"
-    "test_local"
-    # incompatible with pytest 7
-    "test_incorrect_login"
-  ];
-
-  disabledTestPaths = [
-    # incompatible with pytest7
-    # https://github.com/tomerfiliba/plumbum/issues/594
-    "tests/test_remote.py"
+    "--deselect=tests/test_local.py::TestLocalMachine::test_local"
   ];
 
   meta = {
     description = "Module Shell Combinators";
-    changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/v${version}";
+    changelog = "https://github.com/tomerfiliba/plumbum/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/tomerfiliba/plumbum";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

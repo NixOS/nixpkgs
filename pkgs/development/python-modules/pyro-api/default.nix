@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "a1b900d9580aa1c2fab3b123ab7ff33413744da7c5f440bd4aadc4d40d14d920";
+    hash = "sha256-obkA2VgKocL6s7Ejq3/zNBN0TafF9EC9Sq3E1A0U2SA=";
   };
 
   pythonImportsCheck = [ "pyroapi" ];

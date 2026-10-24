@@ -16,7 +16,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "charon";
-  version = "2026.08.03";
+  version = "2026.08.15";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

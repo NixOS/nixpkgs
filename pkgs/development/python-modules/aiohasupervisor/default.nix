@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "aiohasupervisor";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
     tag = version;
-    hash = "sha256-qIj3kiKSo0aUj7b250c39FqxU3jV6uegmBlxR6wOkQ8=";
+    hash = "sha256-OAuLee6hbShgEDN/3oD7O6KzxylnfrJoCgMPjluYcG8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=68.0,<82.1" "setuptools"
+      --replace-fail "setuptools>=68.0,<83.1" "setuptools"
   '';
 
   nativeBuildInputs = [
@@ -46,16 +46,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-aiohttp
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # mocked url differs with empty query param value vs dropped query param
-    "test_download_backup"
   ];
 
   pythonImportsCheck = [ "aiohasupervisor" ];

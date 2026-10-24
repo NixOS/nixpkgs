@@ -11,7 +11,7 @@
   copyDesktopItems,
 }:
 let
-  version = "2.68.0";
+  version = "2.69.2";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -22,8 +22,10 @@ python3Packages.buildPythonApplication rec {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-obx4YG75XxpdlaFlmFmkXdkazHERhm5boOzSx7zDRQs=";
+    hash = "sha256-Zf4Vjcp731AZOeHi+S9hJRkoVMf6wbSv0bZoY93ZEzI=";
   };
+
+  patches = [ ./dark-theme-wxpython-4.2-compat.patch ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -43,9 +45,10 @@ python3Packages.buildPythonApplication rec {
     matplotlib
     python-dateutil
     requests
-    sqlalchemy_1_4
+    sqlalchemy
     cryptography
     markdown2
+    packaging
     beautifulsoup4
     pyaml
     roman
@@ -72,7 +75,7 @@ python3Packages.buildPythonApplication rec {
   #
   # upstream does not include setup.py
   #
-  patchPhase = ''
+  postPatch = ''
     cat > setup.py <<EOF
       from setuptools import setup
       setup(

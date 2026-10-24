@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   gtest,
   protobuf,
@@ -10,7 +11,7 @@
   prometheus-cpp,
   nlohmann_json,
   nix-update-script,
-  cxxStandard ? null,
+  cxxStandard ? "20",
   enableHttp ? false,
   enableGrpc ? false,
   enablePrometheus ? false,
@@ -23,27 +24,35 @@ let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.10.0";
-    hash = "sha256-RJrS0C4GZfUdETff+ZlbJr67Z+JObrLsDvyGqobf4UI=";
+    rev = "v1.11.0";
+    hash = "sha256-1s94AS5+bPD0/UKbI/Ox+nSZe4PGLkinUcItITVgEiQ=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.28.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+S/C+msuUEzOVIcx/1lEuQh6ZmyujALVXsiSqb0s2FM=";
+    hash = "sha256-md4JwlqxMM7zAz0/v9/S3hSj1S0cwXXn4sWT8UWK0Dw=";
   };
 
   patches = [
     ./0001-Disable-tests-requiring-network-access.patch
+    (fetchpatch2 {
+      # Add missing cstdint include to predicate_factory.h
+      url = "https://github.com/open-telemetry/opentelemetry-cpp/commit/e62f627ccb220e9c72eaebf32b246ec0bf98d60f.patch?full_index=1";
+      hash = "sha256-YCg0kHP8QW9FFivNWYqJvwKLVUvY+grTsev5nJY6xjY=";
+    })
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals (enableGrpc && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ grpc ];
 
   buildInputs = [
     curl
@@ -61,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # TODO remove when https://github.com/NixOS/nixpkgs/pull/573523 is fixed
+  enableParallelChecking = false;
+
   checkInputs = [
     gtest
   ];
@@ -69,17 +81,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "WITH_BENCHMARK" false)
-    (lib.cmakeBool "WITH_OTLP_HTTP" enableHttp)
-    (lib.cmakeBool "WITH_OTLP_GRPC" enableGrpc)
-    (lib.cmakeBool "WITH_PROMETHEUS" enablePrometheus)
-    (lib.cmakeBool "WITH_ELASTICSEARCH" enableElasticSearch)
-    (lib.cmakeBool "WITH_ZIPKIN" enableZipkin)
+    (lib.cmakeBool "OTELCPP_WITH_BENCHMARK" false)
+    (lib.cmakeBool "WITH_EXAMPLES" (!enableGrpc))
+    (lib.cmakeBool "OTELCPP_WITH_OTLP_HTTP" enableHttp)
+    (lib.cmakeBool "OTELCPP_WITH_OTLP_GRPC" enableGrpc)
+    (lib.cmakeBool "OTELCPP_WITH_PROMETHEUS" enablePrometheus)
+    (lib.cmakeBool "OTELCPP_WITH_ELASTICSEARCH" enableElasticSearch)
+    (lib.cmakeBool "OTELCPP_WITH_ZIPKIN" enableZipkin)
     (lib.cmakeFeature "OTELCPP_PROTO_PATH" "${opentelemetry-proto}")
   ]
   ++ lib.optionals (cxxStandard != null) [
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-    (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
+    (lib.cmakeFeature "OTELCPP_WITH_STL" "CXX${cxxStandard}")
   ];
 
   outputs = [
@@ -101,6 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+  # For dependents that compile the protos themselves.
+  passthru.opentelemetry-proto = opentelemetry-proto;
+
   passthru.tests = {
     # Unfortunately there is no such thing as finalAttrs.finalPackage.override,
     # so we have to resort to this.
@@ -109,6 +125,21 @@ stdenv.mkDerivation (finalAttrs: {
       enableGrpc = true;
       enablePrometheus = true;
       enableElasticSearch = true;
+      enableZipkin = true;
+    };
+    http = opentelemetry-cpp.override {
+      enableHttp = true;
+    };
+    grpc = opentelemetry-cpp.override {
+      enableGrpc = true;
+    };
+    prometheus = opentelemetry-cpp.override {
+      enablePrometheus = true;
+    };
+    elasticSearch = opentelemetry-cpp.override {
+      enableElasticSearch = true;
+    };
+    zipkin = opentelemetry-cpp.override {
       enableZipkin = true;
     };
   };
@@ -122,7 +153,5 @@ stdenv.mkDerivation (finalAttrs: {
       panicgh
     ];
     platforms = lib.platforms.all;
-    # https://github.com/protocolbuffers/protobuf/issues/14492
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 })

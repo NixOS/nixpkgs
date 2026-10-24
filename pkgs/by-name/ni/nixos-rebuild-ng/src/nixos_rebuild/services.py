@@ -92,32 +92,44 @@ def _get_system_attr(
     action: Action,
     args: argparse.Namespace,
     flake: Flake | None,
-    build_attr: BuildAttr,
+    build_attr: BuildAttr | None,
     grouped_nix_args: GroupedNixArgs,
 ) -> str:
     match action:
-        case Action.BUILD_IMAGE if flake:
-            variants = nix.get_build_image_variants_flake(
-                flake,
-                eval_flags=grouped_nix_args.flake_eval_flags,
-            )
-            _validate_image_variant(args.image_variant, variants)
-            attr = f"config.system.build.images.{args.image_variant}"
         case Action.BUILD_IMAGE:
-            variants = nix.get_build_image_variants(
-                build_attr,
-                instantiate_flags=grouped_nix_args.common_flags,
-            )
-            _validate_image_variant(args.image_variant, variants)
-            attr = f"config.system.build.images.{args.image_variant}"
-        case Action.BUILD_VM:
-            attr = "config.system.build.vm"
-        case Action.BUILD_VM_WITH_BOOTLOADER:
-            attr = "config.system.build.vmWithBootLoader"
-        case _:
-            attr = "config.system.build.toplevel"
+            variants: ImageVariants = {}
+            if flake:
+                variants = nix.get_build_image_variants_flake(
+                    flake,
+                    args.specialisation,
+                    eval_flags=grouped_nix_args.flake_eval_flags,
+                )
+            elif build_attr:
+                variants = nix.get_build_image_variants(
+                    build_attr,
+                    args.specialisation,
+                    instantiate_flags=grouped_nix_args.common_flags,
+                )
+            else:
+                raise NixOSRebuildError(
+                    "failed to get image variants: both `flake` and `build_attr` are None"
+                )
 
-    return attr
+            _validate_image_variant(args.image_variant, variants)
+            return (
+                f"{nix.get_build_image_attr(args.specialisation)}.{args.image_variant}"
+            )
+
+        case Action.BUILD_VM:
+            if args.specialisation:
+                return f"config.specialisation.{args.specialisation}.configuration.system.build.vm"
+            return "config.system.build.vm"
+        case Action.BUILD_VM_WITH_BOOTLOADER:
+            if args.specialisation:
+                return f"config.specialisation.{args.specialisation}.configuration.system.build.vmWithBootLoader"
+            return "config.system.build.vmWithBootLoader"
+        case _:
+            return "config.system.build.toplevel"
 
 
 def _rollback_system(
@@ -259,12 +271,14 @@ def _activate_system(
                 image_name = nix.get_build_image_name_flake(
                     flake,
                     args.image_variant,
+                    args.specialisation,
                     eval_flags=grouped_nix_args.flake_eval_flags,
                 )
             else:
                 image_name = nix.get_build_image_name(
                     build_attr,
                     args.image_variant,
+                    args.specialisation,
                     instantiate_flags=grouped_nix_args.common_flags,
                 )
             disk_path = path_to_config / image_name
@@ -291,7 +305,7 @@ def build_and_activate_system(
     )
 
     if args.store_path:
-        path_to_config = Path(args.store_path)
+        path_to_config = Path(args.store_path).resolve()
         nix.copy_closure(
             path_to_config,
             to_host=target_host,

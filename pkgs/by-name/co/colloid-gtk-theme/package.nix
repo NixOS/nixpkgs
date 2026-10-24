@@ -55,13 +55,13 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
   stdenvNoCC.mkDerivation
   (finalAttrs: {
     inherit pname;
-    version = "2025-07-31";
+    version = "2026-08-08";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-gtk-theme";
       tag = finalAttrs.version;
-      hash = "sha256-0pXbeeBAkk6v2DBWfUYhWWdyrQhgr/JfDbhyS33maMM=";
+      hash = "sha256-2FNX5S4xN86ljj1GxHRuloP31b/QLkTCmle90NkpcpA=";
     };
 
     nativeBuildInputs = [

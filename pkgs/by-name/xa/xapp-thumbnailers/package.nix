@@ -12,7 +12,7 @@
   dcraw,
   gimp,
   libjxl,
-  squashfsTools,
+  squashfs-tools,
 
   # Exclude "raw" for now because dcraw is vulnerable.
   enabledThumbnailers ? [
@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup =
     let
       runtimeBinPackages =
-        lib.optional (builtins.elem "appimage" enabledThumbnailers) squashfsTools
+        lib.optional (builtins.elem "appimage" enabledThumbnailers) squashfs-tools
         ++ lib.optional (builtins.elem "gimp" enabledThumbnailers) gimp
         ++ lib.optional (builtins.elem "jxl" enabledThumbnailers) libjxl
         ++ lib.optional (builtins.elem "raw" enabledThumbnailers) dcraw;

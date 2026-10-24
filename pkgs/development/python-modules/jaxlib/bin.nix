@@ -5,20 +5,19 @@
 # See `python3Packages.jax.passthru` for CUDA tests.
 
 {
-  absl-py,
   autoPatchelfHook,
   buildPythonPackage,
   fetchPypi,
-  flatbuffers,
   lib,
   ml-dtypes,
+  numpy,
   python,
   scipy,
   stdenv,
 }:
 
 let
-  version = "0.11.0";
+  version = "0.12.0.1";
   inherit (python) pythonVersion;
 
   # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
@@ -40,7 +39,6 @@ let
             ;
           pname = "jaxlib";
           format = "wheel";
-          # See the `disabled` attr comment below.
           python = dist;
           abi = dist;
         };
@@ -49,49 +47,49 @@ let
       "3.12-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_x86_64";
         dist = "cp312";
-        hash = "sha256-fqncBtlPU23qvPMEUTFDvIn1EXPd/XhtRPisMD799kM=";
+        hash = "sha256-eDGOmseckpcvgcdwkPVXvbSlpJghdRxu4/apxmqUiEI=";
       };
       "3.12-aarch64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_aarch64";
         dist = "cp312";
-        hash = "sha256-G3Z8TXrU38Y1gxO2OubYPDVx086WbeBNiq8p60RjN4Y=";
+        hash = "sha256-QIEiAcO81MsQS4j3H1j+xMvQwyupDlySs/qPQIGfZ3Q=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-9b8LO/wu9HeFgARzidrLUa4ADlDGs7b5jRB4iScGbJc=";
+        hash = "sha256-2yzIWE19DRZik+8kdbcmmIoQ9vm1qOO443EkFeVXA4A=";
       };
 
       "3.13-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_x86_64";
         dist = "cp313";
-        hash = "sha256-M92UBcqwXuTz7MOpEokyPpvS8I0lmQ5dRf+4Uk9RlQY=";
+        hash = "sha256-/cVpmbppC9kV9wKWEyaYSOqvhdIx7Iq8RmENO4QMGJw=";
       };
       "3.13-aarch64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_aarch64";
         dist = "cp313";
-        hash = "sha256-ESoBxYRwen0OhjT9Vd1+//6BKWbmDC06yE6MJORXEzY=";
+        hash = "sha256-yN4crTgnExFPZX9AY4PtxT7p/aRnnbTisJ0d/v4cTkU=";
       };
       "3.13-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp313";
-        hash = "sha256-iLNJqpXkUsqjCmcjMg6T7HvRqySenwvykADaG1765zM=";
+        hash = "sha256-i+FgsLhHvFcWjkMFcTdW9toNC7omcV5k+dL0bAp6a0I=";
       };
 
       "3.14-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_x86_64";
         dist = "cp314";
-        hash = "sha256-YSXahTJhBkG30+p5JiF82rUtzLKU72YVRV4rbsueLuY=";
+        hash = "sha256-tgeadmnWJOvULRVxM5Vm5iz+ciX0taILjhZ3PqmoNXo=";
       };
       "3.14-aarch64-linux" = getSrcFromPypi {
         platform = "manylinux_2_27_aarch64";
         dist = "cp314";
-        hash = "sha256-SDQpzH+n/Wogy1D2ZsjS1Jnvt+m6MWOBHAHwUa1gV8Q=";
+        hash = "sha256-YJ3v+uo4jR7Z0cUQTY9gQXkfAHca3DBfcxa3QvUC/Ws=";
       };
       "3.14-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp314";
-        hash = "sha256-fmwOI3SUO6cZH+GW4iBnt4mJTFjPbd0kyZca5kLeWO4=";
+        hash = "sha256-k7jaGD8CNWA8RgtTDajNbrI+p/HGrcT4KkOmA1SX1GY=";
       };
     };
 in
@@ -115,9 +113,8 @@ buildPythonPackage {
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   dependencies = [
-    absl-py
-    flatbuffers
     ml-dtypes
+    numpy
     scipy
   ];
 
@@ -125,9 +122,15 @@ buildPythonPackage {
 
   meta = {
     description = "Prebuilt jaxlib backend from PyPi";
-    homepage = "https://github.com/google/jax";
+    homepage = "https://github.com/jax-ml/jax";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
+    # Keep in sync with `srcs` above
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 }

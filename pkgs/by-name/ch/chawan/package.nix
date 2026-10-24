@@ -10,17 +10,18 @@
   brotli,
   gitUpdater,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.3.3";
+  version = "0.4.4";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GVDh94pgdMlwHMyqtT8q2yM+rwioodBYQfA+AOZ/CsU=";
+    hash = "sha256-4MrJoBNQ4Sbx02/Cl/JdTux5UUu8ioSwRNvDxCH6gcY=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     nim
     pkg-config
     brotli
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [

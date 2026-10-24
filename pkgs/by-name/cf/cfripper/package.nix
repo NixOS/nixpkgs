@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cfripper";
-  version = "1.21.0";
+  version = "1.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-psuUG8Kk+pl9Qv9vpH7yCn2X6leciftgFN1Ft+zEgtg=";
+    hash = "sha256-mLV2WYMEJkoZ9dECcZUuAqiqj7OQqA/l9LczPF+ZAys=";
   };
 
   pythonRelaxDeps = [

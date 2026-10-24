@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "stim";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "Stim";
     tag = "v${version}";
-    hash = "sha256-Wls7dJkuV/RXnMizwrYOJOKopWEf1r21FKoKHjmpEQ0=";
+    hash = "sha256-M6NtGjbj4tyIR87N6i4JSM4HEOS9sGOvdIm74lEIHAs=";
   };
 
   patches = [

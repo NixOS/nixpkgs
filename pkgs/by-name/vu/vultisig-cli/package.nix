@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs,
   yarn-berry,
+  substitute,
   makeWrapper,
 }:
 
@@ -15,20 +16,30 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vultisig";
     repo = "vultisig-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4I+N9uKZBzw0AePjS8CiALye/fuykBtpAoYxp+5iTW8=";
-  };
+    hash = "sha256-IFEses2Gs0HdgXVMpNYA6y7PtnMMDVLSoAuyi3a+ZgE=";
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/vultisig/vultisig-sdk/blob/main/package.json#L4
-    ./yarn-4.14-support.patch
-  ];
+    # Remove when updating since upstream has updated to Yarn 4.16
+    # https://github.com/vultisig/vultisig-sdk/commit/45611297a55da72d3c56b1a2ffe6522da1b64d7b
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-EW0Vc3502xoL4iDr2hPDXQ39McvvsiBWpMKgZRtF44M=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-e5sNNDJVYY4PgbpYtrzxzOL+rtYq1ZwOYglJvZ6OKzo=";
   };
 
   nativeBuildInputs = [

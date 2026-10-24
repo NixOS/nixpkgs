@@ -2,23 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  nix-update-script,
   tantivy-go,
+  versionCheckHook,
+  nix-update-script,
 }:
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "anytype-cli";
-  version = "0.3.6";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T/mdF+pzApm15Cg2g1ybgU7pEHLsTC4jD7WuXzNqM2M=";
+    hash = "sha256-RDWCFPvQISjpjLnmwJMvzfDODGQEEJW/Mt2cpDnx1ns=";
   };
 
-  vendorHash = "sha256-S6Xb2XYAn/cTC++1WK5cmXcC6QCZpPoYMRrjk/IPKas=";
+  vendorHash = "sha256-nEJ/EwagspWVCr13oTwOSdxdeb0Or+tcwNs2bJV/OjM=";
   proxyVendor = true;
 
   env.CGO_ENABLED = 1;
@@ -26,9 +27,11 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/anyproto/anytype-cli/core.Version=v${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

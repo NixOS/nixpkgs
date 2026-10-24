@@ -4,17 +4,18 @@
   fetchFromGitHub,
   kvrocks,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "prometheus-kvrocks-exporter";
-  version = "1.0.9";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "RocksLabs";
     repo = "kvrocks_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nyNdQfSXD6mAusO5VCEfvKuyvNawH4C5xDGOZSnTn7A=";
+    hash = "sha256-GP7TNXGP3Z/17LLolTBfOPyd4N42j97bzGv1Lln9VYg=";
   };
 
   vendorHash = "sha256-QVbcHQQr6o3jnF3CWw2NCCeRkGBDdA8OkmDd/GPfHuI=";
@@ -63,7 +64,10 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^(${builtins.concatStringsSep "|" skippedTests})$" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests.prometheus-exporters) kvrocks; };
+  };
 
   meta = {
     description = "Prometheus exporter for Kvrocks metrics";

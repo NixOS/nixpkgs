@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fiji";
-  version = "20250408-1717";
+  version = "20250514-1117";
 
   src = fetchurl {
     url = "https://downloads.imagej.net/fiji/archive/${finalAttrs.version}/fiji-nojre.zip";
-    sha256 = "sha256-bqVrTBKII58E7WSlQfRPE0Dxd4h/oJALFvIOdAAFZoI=";
+    sha256 = "sha256-6rBL0KyrV8BRbvufXbAGhmnPgqXMyIESVHmV7CkH26g=";
   };
 
   dontBuild = true;

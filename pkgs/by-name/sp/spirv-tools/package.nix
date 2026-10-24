@@ -2,43 +2,47 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  abseil-cpp,
   cmake,
+  ctestCheckHook,
+  gtest,
   python3,
+  re2,
   spirv-headers,
 }:
 
+let
+  effcee-src = fetchFromGitHub {
+    owner = "google";
+    repo = "effcee";
+    rev = "910ed15722d5d05c9d71ecf36c1a22243cb79b02";
+    hash = "sha256-l6MbPrPHqpeov4QSO/rmIuPcFqnlLJ5kTusNqZM5mFM=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-tools";
-  version = "1.4.350.0";
+  version = "1.4.363.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-tR3POZH/LXaAljMUS9aHBBvIvlr6o7d6+YUtJCRMS1w=";
+    hash = "sha256-EYMtZe3gcskWKgJ1VTS89poc/RyuzmcnJiOys5qfrwU=";
   };
 
   patches = [
     # https://github.com/KhronosGroup/SPIRV-Tools/pull/6483
     ./0001-Fix-generated-pkg-config-modules-with-absolute-insta.patch
-
-    # backport to fix glslang tests
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://github.com/KhronosGroup/SPIRV-Tools/commit/2ec8457ab33d539b6f1fecc998360c0b8b05ed4f.diff";
-      hash = "sha256-YHbYBwXMm4rTKpmMW6I3LUafhA4RuNUdXqUBUAXwXpE=";
-    })
-
-    (fetchpatch {
-      url = "https://github.com/KhronosGroup/SPIRV-Tools/commit/0db9162641d9709c63c92a13e66fd88905180e89.diff";
-      hash = "sha256-eoS35Zxb+frQTTTNCaZ4TV/QZjaK45mW1OzzIlXQ1C0=";
-    })
   ]
   # The cmake options are sufficient for turning on static building, but not
   # for disabling shared building, just trim the shared lib from the CMake
   # description
   ++ lib.optional stdenv.hostPlatform.isStatic ./no-shared-libs.patch;
+
+  # Can't pass this location via flags
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    ln -vs ${effcee-src} external/effcee
+  '';
 
   outputs = [
     "out"
@@ -51,11 +55,28 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   cmakeFlags = [
     "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers}"
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     "-DSPIRV_WERROR=OFF"
+    (lib.cmakeBool "SPIRV_SKIP_TESTS" (!finalAttrs.finalPackage.doCheck))
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    (lib.cmakeFeature "absl_SOURCE_DIR" "${abseil-cpp.src}")
+    (lib.cmakeFeature "GMOCK_DIR" "${gtest.src}")
+    (lib.cmakeFeature "RE2_SOURCE_DIR" "${re2.src}")
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = lib.optionals (!stdenv.hostPlatform.isLittleEndian) [
+    # Likely fixed by https://github.com/KhronosGroup/SPIRV-Tools/pull/5302
+    "spirv-tools-test_spirv_unit_test_tools_objdump"
   ];
 
   meta = {

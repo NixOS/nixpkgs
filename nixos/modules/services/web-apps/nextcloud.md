@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud34` which is also the latest
+The current default by NixOS is `nextcloud35` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -218,7 +218,7 @@ release notes when upgrading.
     the cache size to zero:
 
     ```nix
-    { services.nextcloud.phpOptions."realpath_cache_size" = "0"; }
+    { services.nextcloud.phpOptions.realpath_cache_size = 0; }
     ```
 
   - **Empty Files on chunked uploads**

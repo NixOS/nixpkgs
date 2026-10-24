@@ -9,28 +9,32 @@
   # runtime dependencies
   nix-prefetch-git,
   nix-prefetch-docker,
+  skopeo,
   git, # for git ls-remote
+  pkg-config,
+  aws-lc,
 }:
 
 let
   runtimePath = lib.makeBinPath [
     nix-prefetch-git
     nix-prefetch-docker
+    skopeo
     git
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npins";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "andir";
     repo = "npins";
     tag = finalAttrs.version;
-    sha256 = "sha256-OkPEh0axWs3gUoUyplQexYpEXxyCDYWm5BQpwB2PIqA=";
+    sha256 = "sha256-PRdGQlxpv8qXdQ6KwlP2Ky2HBHDY83lGTSiD6yljUxE=";
   };
 
-  cargoHash = "sha256-ZbdAvt2FRq5fHS0RRndeCrpY3j8Lvn2oTAECteIss5A=";
+  cargoHash = "sha256-N0Hurb/cmXCDS7EZlYCct9WPbUMXvU+0TK1cBY6+mYc=";
 
   cargoBuildFlags = [
     "-p"
@@ -40,8 +44,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    pkg-config
     makeWrapper
     installShellFiles
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   # (Almost) all tests require internet

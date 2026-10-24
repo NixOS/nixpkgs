@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-files";
-  version = "1.5.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-LxD0k0B6Z1k92QFsOumH476Y5vnu5E9lFvEVWivilHo=";
+    hash = "sha256-kPiOaFkOqZxy2De3ln3T/chtKLQWkT4469flb62AOoE=";
   };
 
-  cargoHash = "sha256-mtES/yfTa2JhwVU8hm7FBo/ypr3ZTjLMbCUfYWUQ3gs=";
+  cargoHash = "sha256-W9J736EyQ5o8WlQDYwmE1B4uD0/TgnF+OL5M/oidbnE=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -59,6 +59,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files"
     runHook cargoBuildHook
 
+    cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files-thumbnailer"
+    runHook cargoBuildHook
+
     cargoBuildFlags="$defaultCargoBuildFlags --package cosmic-files-applet"
     runHook cargoBuildHook
 
@@ -71,6 +74,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     defaultCargoTestFlags="$cargoTestFlags"
 
     cargoTestFlags="$defaultCargoTestFlags --package cosmic-files"
+    runHook cargoCheckHook
+
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-thumbnailer"
     runHook cargoCheckHook
 
     cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"

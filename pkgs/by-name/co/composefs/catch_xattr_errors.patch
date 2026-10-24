@@ -1,0 +1,48 @@
+From 5ff87511c2bacd825b00e1503bbf828a1c2e8265 Mon Sep 17 00:00:00 2001
+From: Kiskae <Kiskae@users.noreply.github.com>
+Date: Wed, 14 Oct 2026 13:27:09 +0200
+Subject: [PATCH] tests/dumpdir: Don't exit with exception if xattr not
+ supported
+
+This was already the case with gendir.
+---
+ tests/dumpdir | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/tests/dumpdir b/tests/dumpdir
+index a60a2970..876118b2 100755
+--- a/tests/dumpdir
++++ b/tests/dumpdir
+@@ -6,6 +6,7 @@ import shlex
+ import hashlib
+ import stat
+ import argparse
++import errno
+ 
+ def log_error(error):
+     print("Readdir error: " + error)
+@@ -20,6 +21,15 @@ def has_whiteout_child(path):
+             return True
+     return False
+ 
++def list_xattrs(file):
++    try:
++        return sorted(os.listxattr(file, follow_symlinks=False))
++    except OSError as e:
++        # Not much we can do if the backing fs doesn't allow xattrs
++        if e.errno not in (errno.EPERM, errno.ENOTSUP):
++            raise
++        return []
++
+ def dumpfile(file, root):
+     rel = os.path.relpath(file, root)
+     s = os.lstat(file)
+@@ -53,7 +63,7 @@ def dumpfile(file, root):
+         link = os.readlink(file)
+         print(f" ->{shlex.quote(link)}",end="")
+ 
+-    for attr in sorted(os.listxattr(file, follow_symlinks=False)):
++    for attr in list_xattrs(file):
+         v = os.getxattr(file, attr, follow_symlinks=False)
+         xattrs[attr] = v
+ 

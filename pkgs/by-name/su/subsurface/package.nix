@@ -23,14 +23,14 @@
 }:
 
 let
-  version = "6.0.5576";
+  version = "6.0.5707";
 
   subsurfaceSrc = (
     fetchFromGitHub {
       owner = "Subsurface";
       repo = "subsurface";
-      rev = "87a5ba9fd00712e71b90115b7566d4228a5c0d98";
-      hash = "sha256-ILy5M2m2rKPP77x7cMiqNzpd6NOnQS8UpqZemf/SHf4=";
+      rev = "bb47bfa2834dea073e5a709051dbda8405e3de16";
+      hash = "sha256-Z/hoCNCJyPENZdT87rxbirUTCumMhf7P0jLe5OddFEk=";
       fetchSubmodules = true;
     }
   );
@@ -180,7 +180,7 @@ stdenv.mkDerivation {
       names of other divers, and lets users rate dives and provide additional notes.
     '';
     homepage = "https://subsurface-divelog.org";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ mguentner ];
     platforms = lib.platforms.all;
   };

@@ -15,19 +15,19 @@
 
 let
   pname = "bcompare";
-  version = "5.2.0.31950";
+  version = "5.2.4.32425";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://www.scootersoftware.com/files/bcompare-${version}_amd64.deb";
-      sha256 = "sha256-CCSRNGWIYVKAoQVVJ8McDUtc45nK0S4CdamcT5uVlQM=";
+      sha256 = "sha256-gXmz7ZgTLPNzqckzKV7r+B8V0oS10/GQNTM0/0EYs3s=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
-      sha256 = "sha256-R+G2Zlr074i2W4GaEDweK0c0q8tnzjs6M0N106WVAlg=";
+      sha256 = "sha256-CzAARAKDBSORI/zCELEdA8VRdWXHq+sMHGPkr3wV+G8=";
     };
   };
 

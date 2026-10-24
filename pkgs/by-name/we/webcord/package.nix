@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   copyDesktopItems,
@@ -8,6 +9,7 @@
   electron_43,
   makeDesktopItem,
   nodejs_22,
+  darwin,
 }:
 
 buildNpmPackage.override { nodejs = nodejs_22; } rec {
@@ -26,8 +28,13 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
   makeCacheWritable = true;
 
   nativeBuildInputs = [
-    copyDesktopItems
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   # npm install will error when electron tries to download its binary
@@ -37,12 +44,33 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
   # remove husky commit hooks, errors and aren't needed for packaging
   postPatch = ''
     rm -rf .husky
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # fix font rendering on about page
+    substituteInPlace sources/assets/web/css/fonts.css \
+      --replace-fail 'sans-serif, Twemoji' 'sans-serif, "Helvetica Neue", Twemoji' \
+      --replace-fail 'monospace, Twemoji' 'monospace, Menlo, Twemoji'
   '';
 
   # override installPhase so we can copy the only folders that matter
   installPhase =
     let
       binPath = lib.makeBinPath [ xdg-utils ];
+      infoPlist = lib.generators.toPlist { escape = true; } {
+        CFBundleName = "WebCord";
+        CFBundleExecutable = "Electron";
+        CFBundleIconFile = "webcord.icns";
+        CFBundleIdentifier = "io.github.spacingbat3.webcord";
+        CFBundleShortVersionString = version;
+        CFBundleVersion = version;
+        LSApplicationCategoryType = "public.app-category.social-networking";
+        LSEnvironment.MallocNanoZone = "0";
+        NSHighResolutionCapable = true;
+        NSPrincipalClass = "AtomApplication";
+        NSCameraUsageDescription = "Camera access";
+        NSMicrophoneUsageDescription = "Mic access";
+      };
+      buildInfo = builtins.toJSON { type = "release"; };
     in
     ''
       runHook preInstall
@@ -52,7 +80,8 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
 
       mkdir -p $out/lib/node_modules/webcord
       cp -r app node_modules sources package.json $out/lib/node_modules/webcord/
-
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
@@ -60,7 +89,20 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
         --suffix PATH : "${binPath}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/lib/node_modules/webcord/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
 
+      app=$out/Applications/WebCord.app
+      cp -r ${electron_43.dist}/Electron.app $app
+      chmod -R +w $app
+
+      ln -s $out/lib/node_modules/webcord $app/Contents/Resources/app
+      install -Dm644 sources/assets/icons/app.icns $app/Contents/Resources/webcord.icns
+      cp ${builtins.toFile "Info.plist" infoPlist} $app/Contents/Info.plist
+      cp ${builtins.toFile "buildInfo.json" buildInfo} $app/Contents/Resources/app/buildInfo.json
+    ''
+    + ''
       runHook postInstall
     '';
 
@@ -88,9 +130,10 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
     license = lib.licenses.mit;
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
+      eclairevoyant
       huantian
       NotAShelf
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

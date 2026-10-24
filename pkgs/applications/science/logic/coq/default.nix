@@ -76,7 +76,7 @@ let
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
     "9.1.1".sha256 = "sha256-aFsGsFzexyDnOVarHPKs35HjiV8uUCpeOKSl15wXZ4s=";
     "9.2.0".sha256 = "sha256-rVhv2GLImdVPgRwwTQ+wiWNtRUflMrES0ElIrdTIN1s=";
-    "9.3+rc1".sha256 = "sha256-vGJkRRzf8ur7i9IUpRA/sxVEQvZGnxfV/ex28Lt1kWw=";
+    "9.3.0".sha256 = "sha256-Wr9+5Mq3/hS3gnyZDnzBo9aJCjeqQDGi4eaU1LinwaE=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -100,6 +100,7 @@ let
   version = fetched.version;
   coq-version =
     args.coq-version or (if version != "dev" then lib.versions.majorMinor version else "dev");
+  rocq-version = coq-version;
   coqAtLeast = v: coq-version == "dev" || lib.versionAtLeast coq-version v;
   buildIde = args.buildIde or (coqAtLeast "8.10" && !coqAtLeast "8.14");
   csdpPatch = lib.optionalString (csdp != null) ''
@@ -146,6 +147,7 @@ let
     ocamlPackages.ocaml
     ocamlPackages.findlib
   ]
+  ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
   ++ lib.optional (coqAtLeast "8.14") dune;
   ocamlBuildInputs = [
     ocamlPackages.findlib
@@ -161,6 +163,7 @@ let
 
     passthru = {
       inherit coq-version;
+      inherit rocq-version;
       inherit ocamlPackages ocamlNativeBuildInputs;
       inherit ocamlPropagatedBuildInputs;
       # For compatibility
@@ -305,7 +308,10 @@ let
       + ''
         ln -s $out/lib/coq${suffix} $OCAMLFIND_DESTDIR/coq${suffix}
       ''
-      + lib.optionalString (coqAtLeast "8.14") ''
+      + lib.optionalString (coqAtLeast "9.4") ''
+        ln -s $out/lib/rocqide-server $OCAMLFIND_DESTDIR/rocqide-server
+      ''
+      + lib.optionalString (coqAtLeast "8.14" && !coqAtLeast "9.4") ''
         ln -s $out/lib/coqide-server $OCAMLFIND_DESTDIR/coqide-server
       ''
       + lib.optionalString buildIde ''
@@ -338,6 +344,7 @@ let
     strictDeps = true;
     __structuredAttrs = true;
   };
+  coqrocqide-server = if coqAtLeast "9.4" then "rocqide-server" else "coqide-server";
 in
 if coqAtLeast "8.21" then
   self.overrideAttrs (o: {
@@ -350,12 +357,12 @@ if coqAtLeast "8.21" then
     ];
     buildPhase = ''
       runHook preBuild
-      dune build -p coq-core,coqide-server${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES
+      dune build -p coq-core,${coqrocqide-server}${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES
       runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
-      dune install --prefix $out coq-core coqide-server${lib.optionalString buildIde " rocqide"}
+      dune install --prefix $out coq-core ${coqrocqide-server}${lib.optionalString buildIde " rocqide"}
       # coq and rocq are now in different directories, which sometimes confuses coq_makefile
       # which expects both in the same /nix/store/.../bin/ directory
       # adding symlinks to content it

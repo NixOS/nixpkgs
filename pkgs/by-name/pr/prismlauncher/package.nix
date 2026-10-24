@@ -11,14 +11,16 @@
   kdePackages,
   lib,
   libGL,
-  libx11,
-  libxcursor,
-  libxext,
-  libxrandr,
-  libxxf86vm,
+  libdecor,
   libjack2,
   libpulseaudio,
   libusb1,
+  libx11,
+  libxcursor,
+  libxext,
+  libxkbcommon,
+  libxrandr,
+  libxxf86vm,
   openal,
   pciutils,
   pipewire,
@@ -105,6 +107,8 @@ symlinkJoin {
         libxrandr
         libxxf86vm
         wayland
+        libdecor
+        libxkbcommon
 
         udev # oshi
 
@@ -142,5 +146,6 @@ symlinkJoin {
       mainProgram
       platforms
       ;
+    identifiers = { inherit (prismlauncher'.meta.identifiers) cpeParts; };
   };
 }

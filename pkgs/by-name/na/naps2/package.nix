@@ -15,13 +15,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "8.3.2";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     tag = "v${version}";
-    hash = "sha256-LGnrQc8/iO/uThiB2M9nx3dJHLXb6Kf3koByUIl7Uxk=";
+    hash = "sha256-oVgbz0MnvKpO59oVGxK2nKpJsWUbcN1rV4mqhawxIeg=";
   };
 
   patches = [
@@ -31,6 +31,10 @@ buildDotnetModule rec {
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
   nugetDeps = ./deps.json;
+
+  dotnetFlags = [
+    "-p:TargetFrameworks=net10.0"
+  ];
 
   executables = [ "naps2" ];
 

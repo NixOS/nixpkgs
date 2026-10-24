@@ -9,11 +9,11 @@
 
 gccStdenv.mkDerivation (finalAttrs: {
   pname = "acme-client";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchurl {
     url = "https://files.wolfsden.cz/releases/acme-client/acme-client-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Mq+6epLcgEnlQ0JAPYCxGQu7EM0VS0Y32PYuvEuliAE=";
+    hash = "sha256-P+Gp5R4lNIFlwYvfw91pPCtejFBnx51x2/2dWx8v9Ag=";
   };
 
   nativeBuildInputs = [

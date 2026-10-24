@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = lib.optionals (glibcLocales != null) [ glibcLocales ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "BENCHMARK_USE_BUNDLED_GTEST" false)
     (lib.cmakeBool "BENCHMARK_ENABLE_WERROR" false)
@@ -52,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # This might be a problem with our Clang, as it does not reproduce
     # with Xcode, but we just work around it by silencing the warning.
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
+    NIX_CFLAGS_COMPILE = lib.join " " (
+      lib.optional stdenv.cc.isClang "-Wno-error=c2y-extensions"
+      ++ lib.optional stdenv.cc.isClang "-Wno-c++17-attribute-extensions"
+    );
   }
   // lib.optionalAttrs stdenv.hostPlatform.isGnu {
     # For test:locale_impermeability_test
@@ -69,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit prometheus-cpp;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Microbenchmark support library";

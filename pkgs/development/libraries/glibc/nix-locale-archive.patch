@@ -10,8 +10,8 @@ index 452e3eb6e3..e2016a8aab 100644
 +open_locale_archive (void)
 +{
 +  int fd = -1;
-+  char *versioned_path = secure_getenv ("LOCALE_ARCHIVE_2_27");
-+  char *path = secure_getenv ("LOCALE_ARCHIVE");
++  char *versioned_path = __libc_secure_getenv ("LOCALE_ARCHIVE_2_27");
++  char *path = __libc_secure_getenv ("LOCALE_ARCHIVE");
 +  if (versioned_path)
 +    fd = __open_nocancel (versioned_path, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
 +  if (path && fd < 0)

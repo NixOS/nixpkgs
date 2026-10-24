@@ -37,7 +37,7 @@ maven.buildMavenPackage rec {
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  mvnHash = "sha256-wfIg6yVmcOiuEphcI5bgEutNi7wZSRWkF8TL2jPCE4c=";
+  mvnHash = "sha256-Go5+7AtLkGkrympN6jNkc8zQcktyBhRNaOZpHOSBsgE=";
 
   strictDeps = true;
 
@@ -100,9 +100,8 @@ maven.buildMavenPackage rec {
     changelog = "https://github.com/veraPDF/veraPDF-library/blob/${src.tag}/RELEASENOTES.md";
     description = "Command line and GUI industry supported PDF/A and PDF/UA Validation";
     homepage = "https://github.com/veraPDF/veraPDF-apps";
-    license = [
+    license = lib.licenses.OR [
       lib.licenses.gpl3Plus
-      # or
       lib.licenses.mpl20
     ];
     maintainers = [

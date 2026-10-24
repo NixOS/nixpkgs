@@ -14,7 +14,7 @@ build-idris-package {
     owner = "be5invis";
     repo = "idris-dict";
     rev = "dddc7c9f45e079b151ee03c9752b968ceeab9dab";
-    sha256 = "18riq40vapg884y92w10w51j4896ah984zm5hisfv1sm9qbgx8ii";
+    hash = "sha256-MaL+Fk5Vh+10hKV+ghJUJiEiQ+EgcJE8QehdtQHBMaM=";
   };
 
   postUnpack = ''

@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "whoisdomain";
-  version = "2.20260709.1";
+  version = "2.20260806.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mboot-github";
     repo = "WhoisDomain";
     tag = finalAttrs.version;
-    hash = "sha256-9oXKqMdZZFC0orrWMgcpL1mmJil3ENRY5fZjlISupF0=";
+    hash = "sha256-qQbwtwyACTPNcrs8QMEIBwDu4guMmOMc+TuF5MXY1cE=";
   };
 
   build-system = [ hatchling ];

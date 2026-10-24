@@ -15,6 +15,7 @@
   # dependencies
   h5py,
   matplotlib,
+  phonors,
   pyyaml,
   scipy,
   spglib,
@@ -25,15 +26,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "phonopy";
-  version = "3.5.1";
+  version = "4.7.2";
   pyproject = true;
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P5anv0bg+L5dUdmZBECPNLa1AzjB782s8IfZCun7pN4=";
+    hash = "sha256-3KbyMF/LLCuuNHy/rX6+eSmH4Vhbkoa2iAxHj8aDjPA=";
   };
 
   postPatch = ''
@@ -56,6 +58,7 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     numpy
     pyyaml
+    phonors
     scipy
     spglib
     symfc

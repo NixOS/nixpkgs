@@ -74,7 +74,7 @@ in
         default = null;
         description = ''
           Environment file, used to set any secret ATUIN_* environment variables, such as ATUIN_DB_URI containing a password.
-          See https://docs.atuin.sh/cli/self-hosting/server-setup/#configuration for available environment variables.
+          See <https://docs.atuin.sh/latest/self-hosting/server-setup/#configuration> for available environment variables.
         '';
       };
     };

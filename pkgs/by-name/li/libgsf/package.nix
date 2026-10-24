@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/libgsf";
     changelog = "https://gitlab.gnome.org/GNOME/libgsf/-/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.lgpl21Only;
-    maintainers = [ ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

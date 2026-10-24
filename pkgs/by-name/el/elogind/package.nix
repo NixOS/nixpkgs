@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "elogind";
-  version = "255.5";
+  version = "255.27";
 
   src = fetchFromGitHub {
     owner = "elogind";
     repo = "elogind";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4KZr/NiiGVwzdDROhiX3GEQTUyIGva6ezb+xC2U3bkg=";
+    hash = "sha256-zPKVD8gXgnjgquHgZ3F8VNIngGGN0i4lQckHokTqtP4=";
   };
 
   nativeBuildInputs = [
@@ -96,46 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/strerror_r.patch";
       hash = "sha256-amqXP12mLtrkWuAURb3/aoQeeTSRYlYqL2q2zrKbhxk=";
     })
-    (fetchurl {
-      url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/strerror_r_1.patch";
-      hash = "sha256-tVUlmPValUPApqRX+Cqkzn7bkIILYSuCouvgRsdl9XE=";
-    })
     (fetchpatch {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/xxx-musl-fixes.patch";
-      includes = [
-        "src/basic/missing_prctl.h"
-        "src/libelogind/sd-journal/journal-file.h"
-      ];
-      hash = "sha256-JYPB9AKbQpVgid5BhwBTvcebE5rxDFRMYhKRNS8KPTc=";
+      includes = [ "src/libelogind/sd-journal/journal-file.h" ];
+      hash = "sha256-3tNz0M8PNTxISDaLP5f3Ldy5z1a+F85P6NZWpGe71Nc=";
     })
     (fetchurl {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/gshadow.patch";
       hash = "sha256-YBy1OeWD1EluLTeUvqUvZKyrZyoUbGg1mxwqG5+VNO0=";
     })
-    (fetchurl {
-      name = "FTW.patch";
-      url = "https://git.openembedded.org/openembedded-core/plain/meta/recipes-core/systemd/systemd/0005-add-missing-FTW_-macros-for-musl.patch?id=6bc5e3f3cd882c81c972dbd27aacc1ce00e5e59a";
-      hash = "sha256-SGvP0GT43vfyHxrmvl4AbsWQz8CPmNGyH001s3lTxng=";
-    })
-    (fetchurl {
-      name = "malloc_info.patch";
-      url = "https://git.openembedded.org/openembedded-core/plain/meta/recipes-core/systemd/systemd/0016-pass-correct-parameters-to-getdents64.patch?id=6bc5e3f3cd882c81c972dbd27aacc1ce00e5e59a";
-      hash = "sha256-8aOw+BTtl5Qta8aqLmliKSHEirTjp1xLM195EmBdEDI=";
-    })
-    (fetchpatch {
-      name = "malloc_trim.patch";
-      url = "https://git.openembedded.org/openembedded-core/plain/meta/recipes-core/systemd/systemd/0020-sd-event-Make-malloc_trim-conditional-on-glibc.patch?id=6bc5e3f3cd882c81c972dbd27aacc1ce00e5e59a";
-      stripLen = 3;
-      extraPrefix = [ "src/libelogind/" ];
-      hash = "sha256-rtSnCEK+frhnlwl/UW3YHxB8MUCAq48jEzQRURpxdXk=";
-    })
-    (fetchurl {
-      name = "malloc_info.patch";
-      url = "https://git.openembedded.org/openembedded-core/plain/meta/recipes-core/systemd/systemd/0021-shared-Do-not-use-malloc_info-on-musl.patch?id=6bc5e3f3cd882c81c972dbd27aacc1ce00e5e59a";
-      hash = "sha256-ZyOCmM5LcwJ7mHiZr0lQjV4G+XMxjhsUm7g7L3OzDDM=";
-    })
-    ./Add-missing-musl_missing.h-includes-for-basename.patch
-    ./Remove-outdated-musl-hack-in-rlimit_nofile_safe.patch
     ./errno-list-filter-out-EFSBADCRC-and-EFSCORRUPTED.patch
   ];
 

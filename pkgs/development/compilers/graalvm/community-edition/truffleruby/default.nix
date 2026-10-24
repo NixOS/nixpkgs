@@ -38,4 +38,19 @@ graalvmPackages.buildGraalvmProduct {
       ''
     }
   '';
+
+  meta = {
+    description = "High-performance implementation of Ruby built on GraalVM";
+    homepage = "https://truffleruby.dev/";
+    mainProgram = "ruby";
+    maintainers = with lib.maintainers; [ nirvdrum ];
+
+    license =
+      with lib.licenses;
+      OR [
+        epl20
+        gpl2Only
+        lgpl21Only
+      ];
+  };
 }

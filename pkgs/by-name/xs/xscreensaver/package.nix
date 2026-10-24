@@ -25,9 +25,9 @@
   perlPackages,
   appres,
   pkg-config,
-  systemd,
+  systemdLibs,
   forceInstallAllHacks ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   nixosTests,
   replaceVars,
   wrapperPrefix ? "/run/wrappers/bin",
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.MozillaCA
     perlPackages.perl
   ]
-  ++ lib.optionals withSystemd [ systemd ];
+  ++ lib.optionals withSystemd [ systemdLibs ];
 
   postPatch = ''
     pushd hacks

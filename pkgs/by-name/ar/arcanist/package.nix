@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     php
   ];
 
-  postPatch = lib.optionalString stdenv.isAarch64 ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     substituteInPlace support/xhpast/Makefile \
       --replace "-minline-all-stringops" ""
   '';

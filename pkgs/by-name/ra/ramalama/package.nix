@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  callPackage,
   python3Packages,
   fetchFromGitHub,
   go-md2man,
@@ -15,14 +17,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.22.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k3VfZ9+ATu2Cwx531D0WVagjn1ZMIKR1i3yyq+3IGJ4=";
+    hash = "sha256-AwlB2JeOMFCXoIovqfr9nhy36QWC2m42kHFIGg4dJFo=";
   };
 
   build-system = with python3Packages; [
@@ -54,11 +56,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     let
       binPackages = [
         llama-cpp-vulkan
+        python3Packages.huggingface-hub
       ]
-      ++ (with python3Packages; [
-        huggingface-hub
-        mlx-lm
-      ])
+      ++ lib.optional stdenv.hostPlatform.isDarwin python3Packages.mlx-lm
       ++ lib.optional withPodman podman;
     in
     ''
@@ -77,14 +77,36 @@ python3Packages.buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     export PATH="$out/bin:$PATH"
   '';
 
   passthru = {
+    updateScript = ./update.sh;
+
     tests = {
+      nocontainer = callPackage ./tests/nocontainer.nix {
+        ramalama = finalAttrs.finalPackage;
+      };
+
       withoutPodman = ramalama.override {
         withPodman = false;
+      };
+    }
+    //
+      lib.optionalAttrs
+        (
+          stdenv.hostPlatform.isDarwin
+          || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64))
+        )
+        {
+          podman = callPackage ./tests/podman.nix { };
+        }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      mlx = callPackage ./tests/mlx.nix {
+        ramalama = finalAttrs.finalPackage;
       };
     };
   };

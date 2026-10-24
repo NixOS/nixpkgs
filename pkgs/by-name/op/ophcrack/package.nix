@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       [ "--disable-gui" ]
   );
 
-  installPhase = lib.optional (stdenv.hostPlatform.isDarwin && enableGui) ''
+  installPhase = lib.optionalString (stdenv.hostPlatform.isDarwin && enableGui) ''
     mkdir -p $out/Applications
     cp -R src/ophcrack.app $out/Applications/ophcrack.app
   '';

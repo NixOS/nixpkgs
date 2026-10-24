@@ -17,12 +17,17 @@ let
     field:
     with builtins;
     let
-      matches = match ''^[^#\r\n]*${field}="([a-zA-Z0-9_]+)".*$'' (readFile firmwareConfig);
+      lines = lib.splitString "\n" (readFile firmwareConfig);
+      matchLine = line: match ''${field}="?([a-zA-Z0-9_]+)"?.*'' (lib.trim line);
+      matched = lib.findFirst (line: matchLine line != null) null lines;
     in
-    if matches != null then head matches else null;
+    if matched != null then head (matchLine matched) else null;
   matchPlatform = getConfigField "CONFIG_BOARD_DIRECTORY";
   matchBoard = getConfigField "CONFIG_MCU";
   matchAvrdudeProtocol = getConfigField "CONFIG_AVRDUDE_PROTOCOL";
+  matchFlashApplicationAddress = getConfigField "CONFIG_FLASH_APPLICATION_ADDRESS";
+  # Only stm32's require -s/--start (flash_stm32f4 in scripts/flash_usb.py)
+  flashStartAddress = if matchPlatform == "stm32" then matchFlashApplicationAddress else null;
   flashUsbSupportedBoards = [
     "sam3"
     "sam4"
@@ -63,9 +68,15 @@ writeShellApplication {
   text =
     # generic USB script for most things with serial and bootloader (see MCU_TYPES in scripts/flash_usb.py)
     if flashDevice != null then
-      if (builtins.elem matchBoard flashUsbSupportedBoards) && matchPlatform != null then
+      if
+        matchBoard != null
+        && lib.any (prefix: lib.hasPrefix prefix matchBoard) flashUsbSupportedBoards
+        && matchPlatform != null
+      then
         ''
-          ${klipper}/lib/scripts/flash_usb.py -t ${matchBoard} -d ${flashDevice} ${klipper-firmware}/klipper.bin "$@"
+          ${klipper}/lib/scripts/flash_usb.py -t ${matchBoard} -d ${flashDevice}${
+            lib.optionalString (flashStartAddress != null) " -s ${flashStartAddress}"
+          } ${klipper-firmware}/klipper.bin "$@"
         ''
       else if matchPlatform == "avr" && matchAvrdudeProtocol != null && matchBoard != null then
         ''

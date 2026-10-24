@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    (libfm.override { withGtk3 = true; })
+    libfm
     keybinder3
     gtk3
     libx11

@@ -8,6 +8,7 @@
 {
   package ? null,
   maintainer ? null,
+  team ? null,
   predicate ? null,
   get-script ? pkg: pkg.updateScript or null,
   path ? null,
@@ -114,6 +115,28 @@ let
   packagesWithUpdateScriptMatchingPredicate =
     cond: packagesWith (path: pkg: (get-script pkg != null) && cond path pkg);
 
+  # Recursively find all packages in `pkgs` with updateScript by given team.
+  packagesWithUpdateScriptAndTeam =
+    team':
+    let
+      team =
+        if !builtins.hasAttr team' lib.teams then
+          throw "Team with name `${team'} does not exist in `maintainers/team-list.nix`."
+        else
+          builtins.getAttr team' lib.teams;
+    in
+    packagesWithUpdateScriptMatchingPredicate (
+      path: pkg:
+      (
+        if builtins.hasAttr "teams" pkg.meta then
+          (
+            if builtins.isList pkg.meta.teams then builtins.elem team pkg.meta.teams else team == pkg.meta.teams
+          )
+        else
+          false
+      )
+    );
+
   # Recursively find all packages in `pkgs` with updateScript by given maintainer.
   packagesWithUpdateScriptAndMaintainer =
     maintainer':
@@ -175,6 +198,8 @@ let
       packagesWithUpdateScriptMatchingPredicate predicate pkgs
     else if maintainer != null then
       packagesWithUpdateScriptAndMaintainer maintainer pkgs
+    else if team != null then
+      packagesWithUpdateScriptAndTeam team pkgs
     else if path != null then
       packagesWithUpdateScript path pkgs
     else
@@ -187,6 +212,10 @@ let
 
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
+
+        % nix-shell maintainers/scripts/update.nix --argstr team ngi
+
+    to run update script for a specific team, or
 
         % nix-shell maintainers/scripts/update.nix --argstr package nautilus
 

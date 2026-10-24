@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.9.5";
+  version = "6.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
     tag = version;
-    hash = "sha256-DHA/OukSK1p65imJEZg7hbErJGL7aQiDbW4vUUuSEko=";
+    hash = "sha256-+LMjvUFGlRsWl8TaGC4ist63Gzwi+xfpeAnNY8Fws/M=";
   };
 
   build-system = [

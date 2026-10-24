@@ -22,16 +22,16 @@ assert builtins.elem target [
 
 buildGoModule (finalAttrs: {
   pname = "syncthing";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tR4yXoEYbCi8Uh3wCyATc+J4+cGvD7k0d9egjHS5H4k=";
+    hash = "sha256-uTjmOAjis2eBm2SnZbyvDDiQXKN8De+DhjNHbFLLbn0=";
   };
 
-  vendorHash = "sha256-t2wjl4eWvcUHMaBS7KEPzZejqrlI+7c5fRqWqxuCZy8=";
+  vendorHash = "sha256-ueUf9YEa5z7mG6MofIJ3Xco+PxVPi/85Rdi+1aean6c=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # Recent versions of macOS seem to require binaries to be signed when
@@ -100,11 +100,14 @@ buildGoModule (finalAttrs: {
     tests = {
       inherit (nixosTests)
         syncthing
+        syncthing-defaults
         syncthing-folders
         syncthing-guiPassword
         syncthing-guiPasswordFile
         syncthing-init
+        syncthing-many-devices
         syncthing-no-settings
+        syncthing-private-relay
         syncthing-relay
         ;
     };

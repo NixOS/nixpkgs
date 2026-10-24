@@ -5,14 +5,14 @@
   tcllib,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "mustache-tcl";
   version = "1.1.3.4";
 
   src = fetchFromGitHub {
     owner = "ianka";
     repo = "mustache.tcl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-apM57LEZ0Y9hXcEPWrKYOoTVtP5QSqiaQrjTHQc3pc4=";
   };
 
@@ -33,4 +33,4 @@ mkTclDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ nat-418 ];
   };
-}
+})

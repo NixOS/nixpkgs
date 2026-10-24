@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "overturemaps";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-yKl13Y9kRCGHzoqeZIQEac/PrByTCtCQFaz8sUgeVIs=";
+    hash = "sha256-6SNV3MKWHaDOlauYN6WfLRW8w1e+UdDEFc6rPYEvyX0=";
   };
 
   nativeBuildInputs = with python3Packages; [

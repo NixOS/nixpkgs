@@ -1,41 +1,42 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
-  fetchpatch,
   versionCheckHook,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "3.2.5";
+  version = "4.0.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rlrhGeNoTVuN7HjN26ahrxeBlB1VeEpBoF65qcV/A0M=";
+    hash = "sha256-gCTM37rR5KgUH0ST3MHglcxuZlQxS6AMspJqO8Qo+Zo=";
   };
 
-  patches = [
-    # use pillow-heif instead of pi-heif as it has been discontinued
-    # https://github.com/bigcat88/pillow_heif/pull/431
-    (fetchpatch {
-      url = "https://github.com/yurijmikhalevich/rclip/commit/7207600d8da6aef0aacb2c2b52e90a564e3018aa.patch";
-      hash = "sha256-Bua9tIpRq2mWSQLP0dcHE8S0Ef7AZKvlOS5fXAqTcQY=";
-      revert = true;
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.11.12,<0.12.0" uv_build
+    substituteInPlace pyproject.toml --replace-fail "uv_build>=0.11.12,<0.12.0" "uv-build"
   '';
 
   build-system = with python3Packages; [
     uv-build
   ];
 
+  pythonRelaxDeps = [
+    "numpy"
+    "pillow"
+    "rawpy"
+    "regex"
+    "textual-image"
+  ];
+  pythonRemoveDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    # unpackaged
+    "coremltools"
+  ];
   dependencies = with python3Packages; [
     ftfy
     huggingface-hub
@@ -45,15 +46,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pillow-heif
     regex
     requests
+    textual
+    textual-image
     tqdm
     rawpy
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
-    "pillow"
-    "rawpy"
-    "regex"
   ];
 
   pythonImportsCheck = [ "rclip" ];
@@ -63,6 +59,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.jinja2
   ]
   ++ (with python3Packages; [ pytestCheckHook ]);
+
+  disabledTests = [
+    # requires rawpy to be built with DEMOSAIC_PACK_GPL2
+    "test_collects_native_versions_from_runtime_apis"
+    # requires rclip to be built with uv before inspecting the artifacts
+    "test_sdist_includes_compliance_inputs"
+    "test_wheel_includes_clip_legal_files"
+  ];
 
   disabledTestPaths = [
     # requires network

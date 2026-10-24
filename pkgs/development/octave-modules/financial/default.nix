@@ -11,7 +11,7 @@ buildOctavePackage rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-C5BohrTHVMaDrV9GTbp5d0OvXR+szQMjV5hvONFtP7s=";
+    hash = "sha256-C5BohrTHVMaDrV9GTbp5d0OvXR+szQMjV5hvONFtP7s=";
   };
 
   requiredOctavePackages = [

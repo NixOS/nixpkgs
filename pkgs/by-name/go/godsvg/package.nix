@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "godsvg";
-  version = "1.0-alpha16";
+  version = "1.0-alpha17";
   src = fetchFromGitHub {
     owner = "MewPurPur";
     repo = "GodSVG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MuPEPnoBmqAg0vLQ7rQidWHA2DFpfNx7evPYeG311co=";
+    hash = "sha256-6KdGkpgzBJ1OAtWxpbntxrTuw0E6hyq7oZSI5HPSZ6U=";
   };
 
   nativeBuildInputs = [

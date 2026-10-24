@@ -2,7 +2,6 @@
   mkKdeDerivation,
   pkg-config,
   qtvirtualkeyboard,
-  libplasma,
   wayland-protocols,
 }:
 mkKdeDerivation {
@@ -14,9 +13,6 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     qtvirtualkeyboard
-
-    libplasma
-
     wayland-protocols
   ];
 

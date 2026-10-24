@@ -5,13 +5,16 @@
   pythonAtLeast,
 
   ## wandb-core
-  buildGoModule,
+  buildGo127Module,
   gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 
-  ## wandb-xpu
+  ## wandb-symon
   rustPlatform,
+
+  ## parquet-rust-wrapper
+  cacert,
 
   ## wandb
   buildPythonPackage,
@@ -21,16 +24,18 @@
 
   # dependencies
   click,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-sdk,
   packaging,
   platformdirs,
   protobuf,
   pydantic,
   pyyaml,
   requests,
-  sentry-sdk,
   setproctitle,
-  pythonOlder,
   typing-extensions,
+  xxhash,
 
   # tests
   azure-containerregistry,
@@ -53,6 +58,7 @@
   matplotlib,
   moto,
   moviepy,
+  optuna,
   pandas,
   parameterized,
   pillow,
@@ -69,6 +75,7 @@
   responses,
   scikit-learn,
   soundfile,
+  sweeps,
   tenacity,
   torch,
   torchvision,
@@ -76,27 +83,24 @@
 }:
 
 let
-  version = "0.28.1";
+  version = "0.31.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-yXsSHyPOh3QXRRkTL4Rj8lLuFjp1LIKfPiacy4+obAk=";
+    hash = "sha256-Hp0e+7Lmng7eCGz46QyrmQcAfifUjNgzuubzPT23Ns4=";
   };
 
-  wandb-xpu = rustPlatform.buildRustPackage {
-    pname = "wandb-xpu";
-    version = "0.7.0";
+  wandb-symon = rustPlatform.buildRustPackage {
+    pname = "wandb-symon";
+    version = "0.8.0";
     inherit src;
 
-    sourceRoot = "${src.name}/xpu";
+    sourceRoot = "${src.name}/symon";
 
-    cargoHash = "sha256-vB0LZjfnf//U1BXCzvaQBjlXLlGx/4g+emSZWcS+oGU=";
+    cargoHash = "sha256-ZMa3aGbp4AtFBmATEua+woRlI9l7nTxfrevPcoZ3s1Y=";
 
     checkFlags = [
-      # fails in sandbox
-      "--skip=gpu_amd::tests::test_gpu_amd_new"
-
       # tries to download libtpu wheel from PyPI
       "--skip=tpu_libtpu::tests::test_libtpu_sdk"
     ];
@@ -107,7 +111,7 @@ let
     doInstallCheck = true;
 
     meta = {
-      mainProgram = "wandb-xpu";
+      mainProgram = "wandb-symon";
     };
   };
 
@@ -116,12 +120,19 @@ let
 
   parquet-rust-wrapper = rustPlatform.buildRustPackage {
     pname = "arrow-rs-wrapper";
-    version = "0.1.0";
+    version = "0.1.1";
     inherit src;
 
     sourceRoot = "${src.name}/parquet-rust-wrapper";
 
-    cargoHash = "sha256-BkeSRbZoehYGHj15KcInugRBvOLXJlh1NqTHhRnNOK8=";
+    cargoHash = "sha256-F68Rvfc04eI/y0Z5tGtQn4zEmqLuMZGZiKEh2HMFi/g=";
+
+    nativeCheckInputs = [
+      # The `httpfile` tests serve a local HTTP server, but reqwest's rustls backend refuses to
+      # build a client at all without system CA certificates.
+      # Its setup hook exports `SSL_CERT_FILE`.
+      cacert
+    ];
 
     # The original build script renames the library:
     # https://github.com/wandb/wandb/blob/v0.26.0/parquet-rust-wrapper/build.sh#L37-L68
@@ -132,26 +143,19 @@ let
     __darwinAllowLocalNetworking = true;
   };
 
-  wandb-core = buildGoModule {
+  wandb-core = buildGo127Module {
     pname = "wandb-core";
     inherit src version;
 
     sourceRoot = "${src.name}/core";
 
     postPatch =
-      # Relax the Go toolchain requirement; nixpkgs ships 1.26.2.
+      # hardcode the `wandb-symon` binary path.
       ''
-        substituteInPlace go.mod \
+        substituteInPlace internal/monitor/symonresourcemanager.go \
           --replace-fail \
-            "go 1.26.4" \
-            "go 1.26.2"
-      ''
-      # hardcode the `wandb-xpu` binary path.
-      + ''
-        substituteInPlace internal/monitor/xpuresourcemanager.go \
-          --replace-fail \
-            'cmdPath, err := getXPUCmdPath()' \
-            'cmdPath, err := "${lib.getExe wandb-xpu}", error(nil)'
+            'cmdPath, err := symonPath()' \
+            'cmdPath, err := "${lib.getExe wandb-symon}", error(nil)'
       ''
       # hardcode the `parquet-rust-wrapper` library path.
       + ''
@@ -223,7 +227,7 @@ buildPythonPackage (finalAttrs: {
     # Prevent the install script from trying to build and embed native binaries in the wheel.
     # Their paths have been patched accordingly in the `wandb-core` and `wandb` source codes.
     # https://github.com/wandb/wandb/blob/v0.18.5/hatch_build.py#L37-L47
-    WANDB_BUILD_SKIP_WANDB_XPU = true;
+    WANDB_BUILD_SKIP_WANDB_SYMON = true;
     WANDB_BUILD_SKIP_ORJSON = true;
     WANDB_BUILD_UNIVERSAL = true;
   };
@@ -232,19 +236,24 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRemoveDeps = [
+    # Only lazily imported for CES EvalTable logging, and not packaged in nixpkgs
+    "cwevals"
+  ];
   dependencies = [
     click
+    opentelemetry-api
+    opentelemetry-exporter-otlp-proto-http
+    opentelemetry-sdk
     packaging
     platformdirs
     protobuf
     pydantic
     pyyaml
     requests
-    sentry-sdk
     setproctitle
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
+    xxhash
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -271,6 +280,7 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     moto
     moviepy
+    optuna
     pandas
     parameterized
     pillow
@@ -287,11 +297,12 @@ buildPythonPackage (finalAttrs: {
     responses
     scikit-learn
     soundfile
+    sweeps
     tenacity
-    versionCheckHook
     torch
     torchvision
     tqdm
+    versionCheckHook
     writableTmpDirAsHomeHook
   ];
 
@@ -304,9 +315,6 @@ buildPythonPackage (finalAttrs: {
     # Require docker access
     "tests/system_tests"
 
-    # broke somewhere between sentry-sdk 2.15.0 and 2.22.0
-    "tests/unit_tests/test_analytics/test_sentry.py"
-
     # Server connection times out under load
     "tests/unit_tests/test_wandb_login.py"
 
@@ -315,6 +323,13 @@ buildPythonPackage (finalAttrs: {
 
     # Requires kfp which is not packaged
     "tests/unit_tests/test_kfp.py"
+
+    # UsageError: This W&B server does not support CES EvalTable logging.
+    "tests/unit_tests/test_eval_table_media_ces.py::test_eval_table_writes_supported_media_extensions_to_ces"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_columns_register_distinct_overlay_class_labels"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_overlay_class_labels_merge_with_resumed_string_ids"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_overlay_keys_register_distinct_class_labels"
+    "tests/unit_tests/test_eval_table_media_ces.py::test_image_rows_merge_overlay_class_labels"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Breaks in sandbox: "Timed out waiting for wandb service to start"
@@ -322,6 +337,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # The conftest mocks out `read_many_from_queue`, which is the agent loop's only throttle.
+    # It then spins while the child runs, and the `MagicMock` API retains every heartbeat
+    # call (~270MiB/s), OOM-killing the pytest worker.
+    "test_agent_config_whitespace_cli_agent"
+    "test_agent_subprocess_with_import_readline"
+
     # Probably failing because of lack of internet access
     # AttributeError: module 'wandb.sdk.launch.registry' has no attribute 'azure_container_registry'. Did you mean: 'elastic_container_registry'?
     "test_registry_from_uri"
@@ -392,6 +413,7 @@ buildPythonPackage (finalAttrs: {
     "test_log_media_prefixed_with_multiple_slashes"
     "test_log_media_saves_to_run_directory"
     "test_log_media_with_path_traversal"
+    "test_table_logging_mode_incremental_warns_after_100_increments"
 
     # HandleAbandonedError / SystemExit when run in sandbox
     "test_makedirs_raises_oserror__uses_temp_dir"
@@ -399,6 +421,20 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: Not all requests have been executed
     "test_image_refs"
+
+    # AssertionError: logger state differs (pytest's own log capture handlers)
+    "test_restore_library_logs_undoes_routing"
+
+    # cursed regression in click 8.4 leads to ansi escapes not being stripped
+    # in output. since this output is asserted on in tests, we get failures to
+    # match strings.
+    # remove when updating to click >= 3.5.0
+    # https://github.com/pallets/click/issues/3572
+    # https://github.com/wandb/wandb/blob/v0.30.0/requirements/requirements_dev.txt#L3-L4
+    "test_finds_synced_runs"
+    "test_include_unsynced"
+    "test_include_unsynced_mixed"
+    "test_reports_rmtree_errors"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert not copy2_mock.called
@@ -422,7 +458,7 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert 'did you mean https://api.wandb.ai' in '1'
     "test_login_bad_host"
 
-    # Asserttion error: 1 != 0 (testing system exit code)
+    # Assertion error: 1 != 0 (testing system exit code)
     "test_login_host_trailing_slash_fix_invalid"
 
     # Breaks in sandbox: "Timed out waiting for wandb service to start"
@@ -437,7 +473,7 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     inherit
       wandb-core
-      wandb-xpu
+      wandb-symon
       parquet-rust-wrapper
       ;
   };
@@ -447,8 +483,11 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/wandb/wandb";
     changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+    ];
     mainProgram = "wandb";
-    broken = wandb-xpu.meta.broken || wandb-core.meta.broken;
+    broken = wandb-symon.meta.broken || wandb-core.meta.broken;
   };
 })

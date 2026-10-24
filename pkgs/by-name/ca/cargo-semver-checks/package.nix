@@ -7,23 +7,28 @@
   testers,
   cargo-semver-checks,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-semver-checks";
-  version = "0.50.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = "cargo-semver-checks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tXUEWla7dUjx7eaNzKyHNg59LXr8LP+jXxkexR3vSdk=";
+    hash = "sha256-3rhrNoO0ldthQWvDzvhowqokuacUxxF6KdYYA0BV1g4=";
   };
 
-  cargoHash = "sha256-rc3F104atiV+KecsNtThfFwe80jyKOFLHKn53Nhm++w=";
+  cargoHash = "sha256-ZCq8dh/pYFRx1cYgyYtWFDG4C2k2QnPaQmMLR1Wdj50=";
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [

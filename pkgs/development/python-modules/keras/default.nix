@@ -123,6 +123,17 @@ buildPythonPackage (finalAttrs: {
 
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "test_reloading_default_saved_model"
+
+    # jax >= 0.11.2 serializes StableHLO portable artifacts targeting v1.18.0, which use
+    # `vhlo.custom_call_v2`. tensorflow's `XlaCallModule` (StableHLO v1.13.7) cannot
+    # deserialize them, breaking `JaxLayer`/`FlaxLayer` native serialization.
+    "test_jax_layer_native_serialization"
+    "test_jax_layer_stateless"
+    "test_jax_layer_training_independent"
+    "test_jax_layer_training_state"
+    "test_jax_layer_training_state_dtype_policy"
+    "test_with_polymorphic_shape_more_than_26_dimension_names"
+    "test_with_structures_as_inputs_and_outputs"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Hangs forever

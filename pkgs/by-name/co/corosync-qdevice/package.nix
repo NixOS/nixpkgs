@@ -8,7 +8,7 @@
   libqb,
   nss,
   nspr,
-  systemd,
+  systemdLibs,
   versionCheckHook,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     libqb
     nss
     nspr
-    systemd
+    systemdLibs
   ];
 
   configureFlags = [

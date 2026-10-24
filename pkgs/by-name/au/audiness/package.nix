@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "audiness";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audius";
     repo = "audiness";
     tag = finalAttrs.version;
-    hash = "sha256-zru37eNQyY9AcbALge1qlINuxzVKq3RTNypm5Pyhkz8=";
+    hash = "sha256-Fy5T2WyC5MGYzNDEJpgtuvSnoTS0EzAcXR9qpHYT6aM=";
   };
 
   pythonRelaxDeps = [

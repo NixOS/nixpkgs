@@ -35,7 +35,6 @@
   lz4,
   openssl,
   libucontext,
-  libgcrypt,
   libidn2,
   curl,
   zlib,
@@ -80,6 +79,10 @@
   bpftools,
   libbpf,
 
+  # vmlinux.h (kernel BTF) for the systemd BPF programs.
+  # This is used for the linuxPackages*.systemd packages.
+  vmlinux-btf ? null,
+
   # Needed to produce a ukify that works for cross compiling UKIs.
   targetPackages,
 
@@ -101,7 +104,6 @@
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
   withFirstboot ? true,
-  withGcrypt ? true,
   withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
@@ -158,6 +160,10 @@
   # attempt to load a service which does not exist, resulting in errors.
   withUtmp ? !stdenv.hostPlatform.isMusl,
   withVmspawn ? true,
+  # The BPF programs backing nsresourced/mountfsd need a vmlinux.h, which is
+  # only available when a kernel BTF is provided (see vmlinux-btf above).
+  withNsresourced ? withLibBPF && vmlinux-btf != null,
+  withMountfsd ? withLibBPF && vmlinux-btf != null,
   # kernel-install shouldn't usually be used on NixOS, but can be useful, e.g. for
   # building disk images for non-NixOS systems. To save users from trying to use it
   # on their live NixOS system, we disable it by default.
@@ -186,7 +192,9 @@ assert withHomed -> withPam;
 assert withHomed -> withOpenSSL;
 assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
-assert withImportd -> (withGcrypt || withOpenSSL);
+assert withNsresourced -> withLibBPF;
+assert withMountfsd -> withLibBPF;
+assert withImportd -> withOpenSSL;
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
@@ -203,13 +211,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261.1";
+  version = "262";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4iOitWGdRmGgJjEXGWtq2lEhPtGguma+qrjTShrps2g=";
+    hash = "sha256-oGzFW2dD8abLXBwDczr1hvl712s03CHTUqOz6uPfhmQ=";
   };
 
   # PATCH POLICY
@@ -236,12 +244,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0003-add-rootprefix-to-lookup-dir-paths.patch
-    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0005-core-don-t-taint-on-unmerged-usr.patch
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0003-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0004-core-don-t-taint-on-unmerged-usr.patch
   ];
 
   postPatch = ''
@@ -336,9 +340,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     libucontext
   ]
-  ++ lib.optionals withGcrypt [
-    libgcrypt
-  ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
   ++ lib.optional withAcl acl
@@ -366,7 +367,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
-  ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
+  ++ lib.optionals (withHomed || withCryptsetup || withFido2) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
   ++ lib.optional withUkify (
@@ -502,7 +503,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "acl" withAcl)
     (lib.mesonEnable "audit" withAudit)
     (lib.mesonEnable "apparmor" withApparmor)
-    (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
     (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)
@@ -558,6 +558,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
+  ]
+  ++ lib.optionals withNsresourced [
+    (lib.mesonBool "nsresourced" withNsresourced)
+  ]
+  ++ lib.optionals withMountfsd [
+    (lib.mesonBool "mountfsd" withMountfsd)
+  ]
+  ++ lib.optionals (withLibBPF && vmlinux-btf != null) [
+    (lib.mesonOption "vmlinux-h" "provided")
+    (lib.mesonOption "vmlinux-h-path" "${vmlinux-btf}/vmlinux.h")
   ]
   ++ lib.optionals withVConsole [
     (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
@@ -710,6 +720,8 @@ stdenv.mkDerivation (finalAttrs: {
       withLogind
       withMachined
       withNetworkd
+      withNsresourced
+      withMountfsd
       withNspawn
       withRepart
       withPortabled
@@ -789,46 +801,48 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-repart-basic
           systemd-repart-create-root
           systemd-repart-encrypt-tpm2
-          # systemd-repart-factory-reset # broken upstream
+          systemd-repart-factory-reset
           ;
       }
       // {
         inherit (nixosTests)
           simple-vm
-          fsck-systemd-stage-1
-          hibernate-systemd-stage-1
+          fsck
+          hibernate
           switchTest
-          # systemd # broken on master
+          switchTest-basics
+          switchTest-units
+          switchTest-user
+          systemd
           systemd-analyze
           systemd-bpf
+          systemd-nsresourced-mountfsd
           systemd-confinement
-          # systemd-coredump # broken on master
+          systemd-coredump
           systemd-cryptenroll
           systemd-credentials-tpm2
           systemd-escaping
           systemd-initrd-btrfs-raid
           systemd-initrd-luks-fido2
           systemd-initrd-luks-keyfile
-          systemd-initrd-luks-empty-passphrase
+          initrd-luks-empty-passphrase
           systemd-initrd-luks-password
           systemd-initrd-luks-tpm2
           systemd-initrd-modprobe
-          systemd-initrd-shutdown
           systemd-initrd-simple
           systemd-initrd-swraid
           # systemd-initrd-vconsole # broken on master
           systemd-initrd-networkd-ssh
-          systemd-initrd-networkd-openvpn
+          initrd-network-openvpn
           systemd-initrd-vlan
           systemd-journal
-          # systemd-journal-gateway # broken on master
+          systemd-journal-gateway
           systemd-journal-upload
           # systemd-machinectl # broken on master
           systemd-networkd
           systemd-networkd-bridge
           systemd-networkd-dhcpserver
           systemd-networkd-dhcpserver-static-leases
-          systemd-networkd-ipv6-prefix-delegation
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn
@@ -842,12 +856,13 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-sysusers-mutable
           systemd-sysusers-immutable
           systemd-sysusers-password-option-override-ordering
-          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-timesyncd
+          systemd-timesyncd-nscd-dnssec
           systemd-user-linger
           systemd-user-tmpfiles-rules
           systemd-misc
           systemd-userdbd
-          # systemd-homed # broken on master
+          systemd-homed
           ;
       };
 
@@ -912,6 +927,8 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version // {
+      product = "systemd"; # default is pname, but we do not want a suffix, i.e. not "-libs" or "-minimal"
+    };
   };
 })

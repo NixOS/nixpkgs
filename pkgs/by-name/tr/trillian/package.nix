@@ -6,14 +6,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "trillian";
-  version = "1.7.3";
-  vendorHash = "sha256-PomzPYtLEDx0mjTTidfp9dlvnW4mcVIka5AekPNYU2g=";
+  version = "1.8.0";
+  vendorHash = "sha256-Xr6qRnJmsDvWD3F6quECu+icYsSUM+I87OO099xfflM=";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "trillian";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-QOR98Xpf2iwGpqzEuB58gMsbYITiksMX4JmfqiKjeVw=";
+    sha256 = "sha256-5pq2bvTujaxl7W+JswFYP1fbcV5Yd2uOqFRctiIpMv8=";
   };
 
   subPackages = [

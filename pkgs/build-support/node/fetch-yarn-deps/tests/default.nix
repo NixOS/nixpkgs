@@ -9,6 +9,11 @@
     yarnLock = ./simple.lock;
     sha256 = "sha256-FRrt8BixleILmFB2ZV8RgPNLqgS+dlH5nWoPgeaaNQ8=";
   };
+  mirrorUrl = testers.invalidateFetcherByDrvHash fetchYarnDeps {
+    yarnLock = ./simple.lock;
+    mirrorUrl = "https://registry.npmjs.com/";
+    sha256 = "sha256-FRrt8BixleILmFB2ZV8RgPNLqgS+dlH5nWoPgeaaNQ8=";
+  };
   gitDep = testers.invalidateFetcherByDrvHash fetchYarnDeps {
     yarnLock = ./git.lock;
     sha256 = "sha256-f90IiEzHDiBdswWewRBHcJfqqpPipaMg8N0DVLq2e8Q=";

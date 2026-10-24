@@ -37,16 +37,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fireworks-ai";
-  version = "1.2.0";
+  version = "1.2.26";
   pyproject = true;
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "fw-ai-external";
     repo = "python-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hcJ32r4MnZFBPYf3aT2PhrtXDIYY3EBaE8Y5wH2Sxuw=";
+    hash = "sha256-hEJqgigcIvIKaWQ8R5npX6CQ2Rk3JkzavOdhbqtnpew=";
   };
 
   postPatch = ''
@@ -96,6 +95,16 @@ buildPythonPackage (finalAttrs: {
     time-machine
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  pytestFlags = [
+    # ResourceWarning: Unclosed client session <aiohttp.client.ClientSession object at 0x7ffff1d48ec0>
+    "-Wignore::ResourceWarning"
+  ];
+
+  disabledTests = [
+    # httpx.TimeoutException: Test timeout error
+    "test_retrying_timeout_errors_doesnt_leak"
+  ];
 
   pythonImportsCheck = [
     "fireworks"

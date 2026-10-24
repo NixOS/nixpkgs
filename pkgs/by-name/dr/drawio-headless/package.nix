@@ -41,5 +41,6 @@ writeTextFile {
       tfc
     ];
     mainProgram = "drawio";
+    inherit (drawio.meta) license;
   };
 }

@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "radicale";
-  version = "3.7.7";
+  version = "3.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-skNlk2fuUH6GGhphjr2sw4UA/l3Im8p/j52RhE3uDwE=";
+    hash = "sha256-yhmsUN9hSKPpKN9UFOpCKV/AnYcC6SgtPzgthra7/aY=";
   };
 
   build-system = with python3.pkgs; [
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       pika
       requests
       ldap3
+      python-pam
     ]
     ++ libpass.optional-dependencies.argon2
     ++ libpass.optional-dependencies.bcrypt;
@@ -40,6 +41,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     waitress
   ];
+
+  # skip tests which try to measure how long something takes; makes the build fail sometimes
+  disabledTests = [ "delay" ];
 
   passthru.tests = {
     inherit (nixosTests) radicale;

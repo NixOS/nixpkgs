@@ -41,7 +41,7 @@
   pkg-config,
   pixman,
   stdenv,
-  systemd,
+  systemdLibs,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -56,11 +56,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwayland";
-  version = "24.1.13";
+  version = "24.1.14";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/xwayland-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FzrqPW95YJFkwEUo4cjkybYPzVk5HDydrUZnKX1yf7Y=";
+    hash = "sha256-Tra5jWeCmaS5YTjYhjRbKUEwaVdgNF74RZYiWoIkB4o=";
   };
 
   postPatch = ''
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libtirpc
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     epoll-shim

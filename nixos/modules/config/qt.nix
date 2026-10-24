@@ -12,10 +12,6 @@ let
       qgnomeplatform
       qgnomeplatform-qt6
     ];
-    gtk2 = [
-      libsForQt5.qtstyleplugins
-      qt6Packages.qt6gtk2
-    ];
     kde = [
       kdePackages.kio
       kdePackages.plasma-integration
@@ -36,10 +32,6 @@ let
     bb10dark = [ libsForQt5.qtstyleplugins ];
     cde = [ libsForQt5.qtstyleplugins ];
     cleanlooks = [ libsForQt5.qtstyleplugins ];
-    gtk2 = [
-      libsForQt5.qtstyleplugins
-      qt6Packages.qt6gtk2
-    ];
     motif = [ libsForQt5.qtstyleplugins ];
     plastique = [ libsForQt5.qtstyleplugins ];
 
@@ -128,17 +120,12 @@ in
             "qt6Packages"
             "qt6ct"
           ]
-          [
-            "qt6Packages"
-            "qt6gtk2"
-          ]
         ];
         description = ''
           Selects the platform theme to use for Qt applications.
 
           The options are
           - `gnome`: Use GNOME theme with [qgnomeplatform](https://github.com/FedoraQt/QGnomePlatform)
-          - `gtk2`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
           - `kde`: Use Qt settings from Plasma.
           - `lxqt`: Use LXQt style set using the [lxqt-config-appearance](https://github.com/lxqt/lxqt-config)
              application.
@@ -164,10 +151,6 @@ in
           ]
           [
             "qt6Packages"
-            "qt6gtk2"
-          ]
-          [
-            "qt6Packages"
             "qtstyleplugin-kvantum"
           ]
         ];
@@ -180,7 +163,7 @@ in
             [adwaita](https://github.com/FedoraQt/adwaita-qt)
           - `breeze`: Use the Breeze style from
             [breeze](https://github.com/KDE/breeze)
-          - `bb10bright`, `bb10dark`, `cleanlooks`, `gtk2`, `motif`, `plastique`:
+          - `bb10bright`, `bb10dark`, `cleanlooks`, `motif`, `plastique`:
             Use styles from
             [qtstyleplugins](https://github.com/qt/qtstyleplugins)
           - `kvantum`: Use styles from

@@ -240,6 +240,46 @@ runBuildTests {
     '';
   };
 
+  yaml_1_1Tags = shouldPass {
+    format = formats.yaml_1_1 { tags = true; };
+    input = {
+      tag1 = {
+        "!mytag" = {
+          k1 = "v1";
+        };
+      };
+      tag2 = {
+        "!anothertag" = true;
+      };
+    };
+    expected = ''
+      %YAML 1.1
+      ---
+      tag1: !mytag
+        k1: v1
+      tag2: !anothertag true
+    '';
+  };
+
+  yaml_1_2Tags = shouldPass {
+    format = formats.yaml_1_2 { tags = true; };
+    input = {
+      tag1 = {
+        "!mytag" = {
+          k1 = "v1";
+        };
+      };
+      tag2 = {
+        "!anothertag" = true;
+      };
+    };
+    expected = ''
+      tag1: !mytag
+        k1: v1
+      tag2: !anothertag true
+    '';
+  };
+
   iniAtoms = shouldPass {
     format = formats.ini { };
     input = {
@@ -1148,21 +1188,12 @@ runBuildTests {
         import re
         import a.b.c
 
-        attrs = {
-            "conditional": 1 if True else 2,
-            "foo": None,
-        }
+        attrs = {"conditional": 1 if True else 2, "foo": None}
         bool = True
         float = 3.141
-        func = re.findall(r"\bf[a-z]*", "which foot or hand fell fastest")
+        func = re.findall("\\bf[a-z]*", "which foot or hand fell fastest")
         int = 10
-        list = [
-            None,
-            1,
-            "str",
-            True,
-            1 if True else 2,
-        ]
+        list = [None, 1, "str", True, 1 if True else 2]
         null = None
         str = "foo"
         str_special = "foo\ntesthello''''"

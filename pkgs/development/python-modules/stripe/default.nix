@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchPypi,
+  python,
   requests,
   flit-core,
   typing-extensions,
@@ -9,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "15.4.0";
+  version = "15.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+UwngKdyjF+0l4ng+7GOmEJn+T+nJOhACzGuvzbQGx4=";
+    hash = "sha256-7oe2lkGfTWWgY3wxWDk96KIgHegbWJYyQYUXcT5OyO0=";
   };
 
   build-system = [ flit-core ];
@@ -26,6 +28,11 @@ buildPythonPackage rec {
 
   # Tests require network connectivity and there's no easy way to disable them
   doCheck = false;
+
+  postFixup = ''
+    rm $out/${python.sitePackages}/stripe/data/ca-certificates.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python.sitePackages}/stripe/data/ca-certificates.crt
+  '';
 
   pythonImportsCheck = [ "stripe" ];
 

@@ -22,12 +22,19 @@ let
       "aarch64"
     else
       throw "renode: unsupported host architecture ${stdenv.hostPlatform.system}";
+  rid = dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system;
+  llvmDisasLib =
+    if stdenv.hostPlatform.isAarch64 then "libllvm-disas-aarch64.so" else "libllvm-disas.so";
+
+  targetFramework = "net10.0";
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   resources = fetchFromGitHub {
     owner = "renode";
     repo = "renode-resources";
-    rev = "d3d69f8f17ed164ee23e46f0c06844a69bf4c004";
-    hash = "sha256-wR3heL58NOQLENwCzL4lPM4KuvT/ON7dlc/KUqrlRjg=";
+    rev = "14b80cde0a136b684f316eb7f6a31aeaae0684bf";
+    hash = "sha256-OdRNcvFnpAMGnxIYH9brmHKREVp3gICqGjM3sJC1SEI=";
   };
 
   pythonLibs =
@@ -38,6 +45,7 @@ let
       pyyaml
       requests
       tkinter
+      telnetlib3
 
       # from tools/csv2resd/requirements.txt
       construct
@@ -65,15 +73,15 @@ let
     ];
 
 in
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "renode";
-  version = "1.16.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "renode";
     repo = "renode";
-    rev = "d66b0c2aa3d420408eccecfd1d3bab0fd702a6db";
-    hash = "sha256-HQaMo3qsZvD4uBIsGzyKpTO7gaxjVvurI91pm1UXvjc=";
+    rev = "ab721d88e135a1bcb8ed2ecc5a38f51cbe61fdd2";
+    hash = "sha256-vVd1ZTz5+iuKjZh7gxgVvX496+FrTxVSV+3neWUy9/Y=";
     fetchSubmodules = true;
   };
 
@@ -83,43 +91,51 @@ buildDotnetModule rec {
     dotnet-sdk
   ];
 
-  projectFile = "Renode_NET.sln";
+  projectFile = "src/Renode/Renode.csproj";
 
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
-  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  inherit dotnet-sdk dotnet-runtime;
 
   nugetDeps = ./deps.json;
 
   patches = [ ./renode-test.patch ];
 
-  dotnetFlags = [ "-p:TargetFrameworks=net10.0" ];
+  dotnetFlags = [
+    "-p:Architecture=${hostArch}"
+    "-p:Version=${lib.head (lib.splitString "-" finalAttrs.version)}"
+    "-p:InformationalVersion=${finalAttrs.version}+git${finalAttrs.src.rev}"
+  ];
 
-  prePatch = ''
-    sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${version}.0")/g' src/Renode/Properties/AssemblyInfo.template
-    sed -i 's/AssemblyInformationalVersion("%INFORMATIONAL_VERSION%")/AssemblyInformationalVersion("${src.rev}")/g' src/Renode/Properties/AssemblyInfo.template
-    mv src/Renode/Properties/AssemblyInfo.template src/Renode/Properties/AssemblyInfo.cs
-  '';
+  dotnetInstallFlags = [ "-p:TargetFramework=${targetFramework}" ];
+
+  installPath = "${placeholder "out"}/lib/renode";
 
   postPatch = ''
     # https://github.com/dotnet/roslyn/issues/37379#issuecomment-513371985
-    cat << EOF > Directory.Build.props
+    cat << 'EOF' > Directory.Build.props
     <Project>
       <ItemGroup>
         <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
-    </ItemGroup>
+      </ItemGroup>
+    </Project>
+    EOF
+
+    cat << EOF > Directory.Build.targets
+    <Project>
+      <PropertyGroup>
+        <TargetFrameworks>${targetFramework}</TargetFrameworks>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
+      </PropertyGroup>
     </Project>
     EOF
 
     patchShebangs build.sh tools/
-
-    # Fixes determinism build error
-    sed -i 's/AssemblyVersion("1.0.*")/AssemblyVersion("1.0.0.0")/g' lib/AntShell/AntShell/Properties/AssemblyInfo.cs lib/CxxDemangler/CxxDemangler/Properties/AssemblyInfo.cs
   '';
 
   nativeBuildInputs = [
     cmake
     gcc
   ];
+
   runtimeDeps = [
     gtk3
   ];
@@ -132,50 +148,61 @@ buildDotnetModule rec {
     mkdir -p lib/resources
     ln -s ${resources}/* lib/resources/
 
-    mkdir output
-    mv src/Infrastructure/src/Emulator/Cores/linux-properties.csproj output/properties.csproj
-    sed -i "s#/usr/bin/gcc#${gcc}/bin/gcc#g" output/properties.csproj
-    sed -i "s#/usr/bin/ar#${gcc}/bin/ar#g" output/properties.csproj
+    pushd tools/building
+    ./check_weak_implementations.sh
+    popd
 
-    # To fix value "" error in element <Import>
-    rm -rf src/Directory.Build.targets
+    CORES_PATH="$PWD/src/Infrastructure/src/Emulator/Cores"
+    NATIVE_CORES_BUILD_PATH="$CORES_PATH/obj/Release/${rid}"
+    NATIVE_CORES_BIN_PATH="$CORES_PATH/bin/Release/${rid}"
+    mkdir -p "$NATIVE_CORES_BIN_PATH"
 
-    CORES=(arm.le arm.be arm64.le arm-m.le arm-m.be ppc.le ppc.be ppc64.le ppc64.be i386.le x86_64.le riscv.le riscv64.le sparc.le sparc.be xtensa.le)
-    for core_config in ''${CORES[@]}
-    do
+  ''
+  + lib.optionalString (hostArch == "i386") ''
+    mkdir -p "$NATIVE_CORES_BUILD_PATH/virt"
+    pushd "$NATIVE_CORES_BUILD_PATH/virt"
+    cmake -DCMAKE_BUILD_TYPE=Release "$CORES_PATH/virt"
+    cmake --build . -j$NIX_BUILD_CORES
+    cp -v *.so "$NATIVE_CORES_BIN_PATH/"
+    popd
+
+  ''
+  + ''
+    CORES=(arm.le arm.be arm64.le arm-m.le arm-m.be ppc.le ppc.be ppc64.le ppc64.be i386.le x86_64.le riscv.le riscv64.le sparc.le sparc.be xtensa.le arm-experimental.le)
+    for core_config in "''${CORES[@]}"; do
       CORE="$(echo $core_config | cut -d '.' -f 1)"
       ENDIAN="$(echo $core_config | cut -d '.' -f 2)"
       BITS=32
-
-      if [[ $CORE =~ "64" ]]; then
+      if [[ $CORE =~ "64" || $CORE =~ ^arm-experimental ]]; then
         BITS=64
       fi
 
-      SOURCE="${src}/src/Infrastructure/src/Emulator/Cores"
-      CMAKE_CONF_FLAGS="-DTARGET_ARCH=$CORE -DTARGET_WORD_SIZE=$BITS -DCMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$out/lib"
-      CORE_DIR=build/$CORE/$ENDIAN
-      mkdir -p $CORE_DIR
-      pushd $CORE_DIR
-
+      CMAKE_CONF_FLAGS="-DTARGET_ARCH=$CORE -DTARGET_WORD_SIZE=$BITS -DCMAKE_BUILD_TYPE=Release"
       if [[ $ENDIAN == "be" ]]; then
-          CMAKE_CONF_FLAGS+=" -DTARGET_WORDS_BIGENDIAN=1"
+        CMAKE_CONF_FLAGS+=" -DTARGET_WORDS_BIGENDIAN=1"
       fi
 
-      cmake $CMAKE_CONF_FLAGS -DHOST_ARCH=${hostArch} $SOURCE
+      CORE_DIR="$NATIVE_CORES_BUILD_PATH/$CORE/$ENDIAN"
+      mkdir -p "$CORE_DIR"
+      pushd "$CORE_DIR"
+      cmake $CMAKE_CONF_FLAGS -DHOST_ARCH=${hostArch} "$CORES_PATH"
       cmake --build . -j$NIX_BUILD_CORES
+      cp -v tlib/*.so "$NATIVE_CORES_BIN_PATH/"
       popd
     done
 
-    mkdir -p src/Infrastructure/src/Emulator/Cores/bin/Release/lib
-    ln -s $out/lib/*.so src/Infrastructure/src/Emulator/Cores/bin/Release/lib
+    mkdir -p output/bin/Release/platform-lib
+    cp -r "$CORES_PATH/bin/Release/." output/bin/Release/platform-lib
+    cp lib/resources/llvm/${llvmDisasLib} output/bin/Release/platform-lib/${rid}/libllvm-disas.so
+
+    unset version versionForDotnet
   '';
 
-  dotnetInstallFlags = [ "-p:TargetFramework=net10.0" ];
-
   postInstall = ''
-    rm -rf build output/properties.csproj
-    find . -type d -name obj -exec rm -rf {} +
-    mkdir -p $out/lib/renode
+    cp -r output/bin/Release/platform-lib $out/lib/renode/
+
+    rm -rf output
+    find . -type d \( -name bin -o -name obj \) -prune -exec rm -rf {} +
     mv * .renode-root $out/lib/renode
 
     makeWrapper "$out/lib/renode/renode-test" "$out/bin/renode-test" \
@@ -195,7 +222,7 @@ buildDotnetModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://github.com/renode/renode/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/renode/renode/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Virtual development framework for complex embedded systems";
     downloadPage = "https://github.com/renode/renode";
     homepage = "https://renode.io";
@@ -209,4 +236,4 @@ buildDotnetModule rec {
       "aarch64-linux"
     ];
   };
-}
+})

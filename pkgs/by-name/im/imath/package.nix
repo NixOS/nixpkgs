@@ -7,16 +7,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imath";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "imath";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-uLGH2kMo5S6iT2gS1091qKkCAxQ/iuQ8xx9507k6SzY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kmWj9g6PnvgEOojjiWYpJ9+lXwT1svpezYDsCns4NP0=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  strictDeps = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics";

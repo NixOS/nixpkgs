@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "resterm";
-  version = "0.49.4";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "unkn0wn-root";
     repo = "resterm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4hLhmQ2ks1g9eF+wKKLc8/6g07IHisgwYMBhGr4DjbE=";
+    hash = "sha256-vzyNJGqZO8eWXPOJemeXttsnuIx/z/GOVfAbu4MR/yI=";
   };
 
-  vendorHash = "sha256-K6edyYLkVQwEZBAfRwgckUJI8dmo/ZxFRjEkExtyLxY=";
+  vendorHash = "sha256-sAcV1O5ns7gAVomai68rkcrMYPHNoQZp7BKv3bEvD40=";
 
   # modernc.org/libc (via modernc.org/sqlite) tries to read /etc/protocols
   modPostBuild = ''
@@ -27,19 +27,8 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/resterm" ];
 
-  # Skip tests that require network access or socket binding
-  checkFlags = [
-    "-skip"
-    "^(${
-      lib.concatStringsSep "|" [
-        "TestServeMocksStartsAndStopsWithContext"
-        "TestServeMocksRequiresTLSPair"
-        "TestServeMocksValidatesJournalLimitsAsUsageErrors"
-        "TestMockControlCommandsResetClearAndVerify"
-        "TestCLIUpdaterCheckDev"
-      ]
-    })$"
-  ];
+  # for tests binding 127.0.0.1:0 on darwin
+  __darwinAllowLocalNetworking = true;
 
   ldflags = [
     "-s"

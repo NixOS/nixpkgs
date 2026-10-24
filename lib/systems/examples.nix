@@ -93,7 +93,6 @@ rec {
     config = "aarch64-unknown-linux-android";
     androidSdkVersion = "35";
     androidNdkVersion = "27";
-    libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
   };
@@ -169,22 +168,18 @@ rec {
 
   riscv64-embedded = {
     config = "riscv64-none-elf";
-    libc = "newlib";
   };
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
-    libc = "newlib";
   };
 
   mips64-embedded = {
     config = "mips64-none-elf";
-    libc = "newlib";
   };
 
   mips-embedded = {
     config = "mips-none-elf";
-    libc = "newlib";
   };
 
   # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
@@ -201,17 +196,17 @@ rec {
 
   mmix = {
     config = "mmix-unknown-mmixware";
+    # Not `isNone`: the OS here is `mmixware`, so the bare-metal default does
+    # not apply.
     libc = "newlib";
   };
 
   rx-embedded = {
     config = "rx-none-elf";
-    libc = "newlib";
   };
 
   msp430 = {
     config = "msp430-elf";
-    libc = "newlib";
   };
 
   avr = {
@@ -220,12 +215,10 @@ rec {
 
   vc4 = {
     config = "vc4-elf";
-    libc = "newlib";
   };
 
   or1k = {
     config = "or1k-elf";
-    libc = "newlib";
   };
 
   m68k = {
@@ -250,7 +243,6 @@ rec {
 
   arm-embedded = {
     config = "arm-none-eabi";
-    libc = "newlib";
   };
   arm-embedded-nano = {
     config = "arm-none-eabi";
@@ -258,7 +250,6 @@ rec {
   };
   armhf-embedded = {
     config = "arm-none-eabihf";
-    libc = "newlib";
     # GCC8+ does not build without this
     # (https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg552339.html):
     gcc = {
@@ -269,38 +260,31 @@ rec {
 
   aarch64-embedded = {
     config = "aarch64-none-elf";
-    libc = "newlib";
     rust.rustcTarget = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
     config = "aarch64_be-none-elf";
-    libc = "newlib";
   };
 
   ppc-embedded = {
     config = "powerpc-none-eabi";
-    libc = "newlib";
   };
 
   ppcle-embedded = {
     config = "powerpcle-none-eabi";
-    libc = "newlib";
   };
 
   i686-embedded = {
     config = "i686-elf";
-    libc = "newlib";
   };
 
   x86_64-embedded = {
     config = "x86_64-elf";
-    libc = "newlib";
   };
 
   microblaze-embedded = {
     config = "microblazeel-none-elf";
-    libc = "newlib";
   };
 
   #
@@ -338,16 +322,10 @@ rec {
 
   x86_64-unknown-uefi = {
     config = "x86_64-unknown-uefi";
-    libc = null;
-    useLLVM = true;
-    linker = "lld";
   };
 
   aarch64-unknown-uefi = {
     config = "aarch64-unknown-uefi";
-    libc = null;
-    useLLVM = true;
-    linker = "lld";
   };
 
   #
@@ -382,12 +360,11 @@ rec {
   };
 
   # mingw-w64 with ucrt for Aarch64, default compiler (which is LLVM
-  # because GCC does not support this platform yet).
+  # see ./default.nix).
   mingw-ucrt-aarch64 = {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
     rust.rustcTarget = "aarch64-pc-windows-gnullvm";
-    useLLVM = true;
   };
 
   # mingw-64 back compat
@@ -400,12 +377,10 @@ rec {
   # Target the MSVC ABI
   x86_64-windows = {
     config = "x86_64-pc-windows-msvc";
-    useLLVM = true;
   };
 
   aarch64-windows = {
     config = "aarch64-pc-windows-msvc";
-    useLLVM = true;
   };
 
   x86_64-cygwin = {
@@ -416,12 +391,10 @@ rec {
 
   aarch64-freebsd = {
     config = "aarch64-unknown-freebsd";
-    useLLVM = true;
   };
 
   x86_64-freebsd = {
     config = "x86_64-unknown-freebsd";
-    useLLVM = true;
   };
 
   x86_64-netbsd = {

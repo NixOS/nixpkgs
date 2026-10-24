@@ -1,22 +1,89 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   bun,
+  darwin,
   fetchFromGitHub,
+  installShellFiles,
   makeBinaryWrapper,
   models-dev,
   nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
-  installShellFiles,
   versionCheckHook,
+  wayland,
   writableTmpDirAsHomeHook,
 }:
+let
+  node_modules =
+    finalAttrs:
+    stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-node_modules";
+      inherit (finalAttrs) version src;
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
+
+      nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+      ];
+
+      dontConfigure = true;
+
+      buildPhase = ''
+        runHook preBuild
+
+        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+        bun install \
+          --cpu="*" \
+          --filter './' \
+          --filter './packages/cli' \
+          --filter './packages/desktop' \
+          --filter './packages/app' \
+          --frozen-lockfile \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"
+
+        bun --bun ./nix/scripts/canonicalize-node-modules.ts
+        bun --bun ./nix/scripts/normalize-bun-binaries.ts
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out
+        find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+        # opencode targets only Linux and Darwin (see meta.platforms), so the
+        # Windows executables that "bun install --os=*" fetches are never
+        # executed. Dropping them keeps the output reproducible on hosts whose
+        # security endpoint agents scan the store, and removes the vulnerable
+        # bundled 7za.exe that will be quarantined.
+        find $out -type f -name '*.exe' -delete
+
+        runHook postInstall
+      '';
+
+      # NOTE: Required else we get errors that our fixed-output derivation references store paths
+      dontFixup = true;
+
+      outputHash = "sha256-Z+0RJzeJHSfEeDFs0kF8CCr2/Xoi2mWrRH40zgKXLww=";
+      outputHashMode = "recursive";
+    };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.18.11";
+  version = "2.1.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -25,100 +92,61 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rg+NeRLeu0e+WSTZd8oJzV3XMMxXZCZ5LImDcCraX8g=";
+    hash = "sha256-CoujRYCvqFXDJ6bzMxinT8CSPyKiLSAzCINjVaZBm/Y=";
   };
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${finalAttrs.pname}-node_modules";
-    inherit (finalAttrs) version src;
-
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-      bun install \
-        --cpu="*" \
-        --frozen-lockfile \
-        --filter ./ \
-        --filter ./packages/app \
-        --filter ./packages/desktop \
-        --filter ./packages/opencode \
-        --filter ./packages/shared \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
-
-      bun --bun ./nix/scripts/canonicalize-node-modules.ts
-      bun --bun ./nix/scripts/normalize-bun-binaries.ts
-
-      runHook postBuild
+  postPatch =
+    # Relax Bun version check to be a warning instead of an error
+    ''
+      substituteInPlace packages/script/src/index.ts \
+        --replace-fail \
+        'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    ''
+    # Avoid requiring prettier just to format the schema JSON
+    + ''
+      substituteInPlace packages/cli/script/schema.ts \
+        --replace-fail 'import { format } from "prettier"' 'const format = (s: string) => JSON.stringify(JSON.parse(s), null, 2)'
     '';
 
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-      runHook postInstall
-    '';
-
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
-
-    outputHash = "sha256-lHr4g4Kw9CvyDHiuyuCDsyk9vOXzz/My5bI9/zd5aYE=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  };
+  node_modules = node_modules finalAttrs;
 
   nativeBuildInputs = [
     bun
-    nodejs
     installShellFiles
     makeBinaryWrapper
+    nodejs
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
-  postPatch = ''
-    # NOTE: Relax Bun version check to be a warning instead of an error
-    substituteInPlace packages/script/src/index.ts \
-      --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
-                     'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
-  '';
+  env = {
+    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+    OPENCODE_DISABLE_MODELS_FETCH = true;
+    OPENCODE_VERSION = finalAttrs.version;
+    OPENCODE_CHANNEL = "latest";
+    NODE_OPTIONS = "--max-old-space-size=4096";
+  };
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/. .
+    cp -R "$node_modules"/. .
     patchShebangs node_modules
     patchShebangs packages/*/node_modules
 
     runHook postConfigure
   '';
 
-  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-  env.OPENCODE_DISABLE_MODELS_FETCH = true;
-  env.OPENCODE_VERSION = finalAttrs.version;
-  env.OPENCODE_CHANNEL = "stable";
-
   buildPhase = ''
     runHook preBuild
 
-    cd ./packages/opencode
+    cd ./packages/cli
     bun --bun ./script/build.ts --single --skip-install
-    bun --bun ./script/schema.ts config.json tui.json
+    bun --bun ./script/schema.ts cli.json
+    bun --bun ../schema/script/config-schema.ts config.json
 
     runHook postBuild
   '';
@@ -126,32 +154,41 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
-    wrapProgram $out/bin/opencode \
-     --prefix PATH : ${
-       lib.makeBinPath (
-         [
-           ripgrep
-         ]
-         ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-           sysctl
-         ]
-       )
-     } \
-    --set OPENCODE_DISABLE_AUTOUPDATE true
+    install -Dm755 dist/cli-*/bin/opencode $out/bin/opencode
 
-    install -Dm644 config.json $out/share/opencode/config.json
-    install -Dm644 tui.json $out/share/opencode/tui.json
-    install -Dm644 ../web/public/theme.json $out/share/opencode/theme.json
+    wrapArgs=(
+      --set OPENCODE_DISABLE_AUTOUPDATE true
+      --suffix PATH : ${lib.makeBinPath [ ripgrep ]}
+    )
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapArgs+=(--prefix PATH : ${lib.makeBinPath [ sysctl ]})
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapArgs+=(--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          stdenv.cc.cc
+          wayland
+        ]
+      })
+    ''}
+
+    wrapProgram $out/bin/opencode "''${wrapArgs[@]}"
+
+    install -Dm644 cli.json $out/share/cli.json
+    install -Dm644 config.json $out/share/config.json
+    install -Dm644 ../web/public/theme.json $out/share/theme.json
 
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd opencode \
-      --bash <($out/bin/opencode completion) \
-      --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
+      --bash <($out/bin/opencode --completions bash) \
+      --zsh <($out/bin/opencode --completions zsh) \
+      --fish <($out/bin/opencode --completions fish)
   '';
+
+  dontStrip = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -166,9 +203,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     jsonschema = {
-      config = "${finalAttrs.finalPackage}/share/opencode/config.json";
-      theme = "${finalAttrs.finalPackage}/share/opencode/theme.json";
-      tui = "${finalAttrs.finalPackage}/share/opencode/tui.json";
+      cli = "${finalAttrs.finalPackage}/share/cli.json";
+      config = "${finalAttrs.finalPackage}/share/config.json";
+      theme = "${finalAttrs.finalPackage}/share/theme.json";
     };
     updateScript = nix-update-script {
       extraArgs = [
@@ -187,6 +224,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       delafthi
       DuskyElf
       graham33
+      xiaoxiangmoe
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [

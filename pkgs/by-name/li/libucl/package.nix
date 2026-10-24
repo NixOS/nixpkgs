@@ -5,7 +5,7 @@
   pkg-config,
   autoreconfHook,
   curl,
-  lua,
+  lua5_2_compat,
   openssl,
   features ? {
     urls = false;
@@ -19,6 +19,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   featureDeps = {
     urls = [ curl ];
     signatures = [ openssl ];

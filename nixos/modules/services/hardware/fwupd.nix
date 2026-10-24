@@ -31,8 +31,11 @@ let
   originalEtc =
     let
       mkEtcFile = n: lib.nameValuePair n { source = "${cfg.package}/etc/${n}"; };
+      etcFiles = lib.filter (
+        f: config.boot.loader.grub.enable || f != "grub.d/35_fwupd"
+      ) cfg.package.filesInstalledToEtc;
     in
-    lib.listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
+    lib.listToAttrs (map mkEtcFile etcFiles);
   extraTrustedKeys =
     let
       mkName = p: "pki/fwupd/${baseNameOf p}";
@@ -184,7 +187,7 @@ in
   config = lib.mkIf cfg.enable {
     # Disable test related plug-ins implicitly so that users do not have to care about them.
     services.fwupd.daemonSettings = {
-      EspLocation = config.boot.loader.efi.efiSysMountPoint;
+      EspLocation = lib.mkDefault config.boot.loader.efi.efiSysMountPoint;
     };
 
     environment.systemPackages = [ cfg.package ];
@@ -201,6 +204,12 @@ in
 
     systemd = {
       packages = [ cfg.package ];
+
+      # fwupd looks for its EFI app in /run/fwupd-efi so that signed variants can
+      # be placed next to it; `C+` keeps those signed files across a rebuild.
+      tmpfiles.rules = [
+        "C+ /run/fwupd-efi - - - - ${cfg.package.fwupd-efi}/libexec/fwupd/efi"
+      ];
 
       # The upstream unit runs as User=fwupd-refresh; ensure it can take
       # ownership of /var/lib/fwupd.

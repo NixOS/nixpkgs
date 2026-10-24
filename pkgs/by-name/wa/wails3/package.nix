@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "wails3";
-  version = "3.0.0-alpha2.117";
+  version = "3.0.0-beta.3";
 
   __structuredAttrs = true;
 
@@ -17,13 +17,14 @@ buildGoModule (finalAttrs: {
     owner = "wailsapp";
     repo = "wails";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lGMY+xlhclf+1YWJHiZI8/VVOz8e5bCOAw4XUDzecNI=";
+    hash = "sha256-bQIiE2Ah0MnIJUVSHZy8nUK3E6WGjI/qrxMwM+zy+Ww=";
   };
 
-  proxyVendor = true;
-  vendorHash = "sha256-HXUC9f8B+NA74I6wPf+VdqVpcyE+QoRaVWbYLQqOi1o=";
+  sourceRoot = "source/v3";
 
-  subPackages = [ "v3/cmd/wails3" ];
+  vendorHash = "sha256-evBFmY8hyd0PqUbcoigZ/6h/j3k8pGJSqry45z6L/1k=";
+
+  subPackages = [ "cmd/wails3" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ webkitgtk_6_0 ];

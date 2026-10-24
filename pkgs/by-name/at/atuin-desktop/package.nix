@@ -14,7 +14,7 @@
 
   alsa-lib,
   glib-networking,
-  libappindicator-gtk3,
+  libappindicator,
   openssl,
   webkitgtk_4_1,
 }:
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "./.";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-68yQkgIVpqUo5tOcvxKh6NOkW565V94zHIZeI4q7nNA=";
   };
 
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     glib-networking
-    libappindicator-gtk3
+    libappindicator
     openssl
     webkitgtk_4_1
   ];

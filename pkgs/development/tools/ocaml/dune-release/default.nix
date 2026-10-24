@@ -11,7 +11,6 @@
   rresult,
   logs,
   fpath,
-  odoc,
   opam-format,
   opam-core,
   opam-state,
@@ -49,6 +48,9 @@ buildDunePackage (finalAttrs: {
     hash = "sha256-A0es0mk6aEMdKvweVfffkaezfgIi1DWAr3dLmNwGOTo=";
   };
 
+  # Compatibility with opam-format 2.6
+  patches = [ ./opam-2_6.patch ];
+
   nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [
     curly
@@ -60,14 +62,12 @@ buildDunePackage (finalAttrs: {
     opam-core
     rresult
     logs
-    odoc
     bos
     yojson
     astring
     fpath
   ];
   nativeCheckInputs = [
-    odoc
     gitMinimal
   ];
   checkInputs = [ alcotest ] ++ runtimeInputs;

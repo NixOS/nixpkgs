@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ts-warp";
-  version = "1.5.8";
+  version = "1.5.11";
 
   src = fetchFromGitHub {
     owner = "mezantrop";
     repo = "ts-warp";
     tag = finalAttrs.version;
-    hash = "sha256-eHw8OUBlrptLzMhG4udjYH/WIXbu+3G9IVLUwO4JlpU=";
+    hash = "sha256-izSQ7VsI+zuX9t2GMjyb5JaXnfkXIGPSf1QUHwaiHvY=";
   };
 
   nativeBuildInputs = [ which ];

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tinfoil-cli";
-  version = "0.14.2";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "tinfoilsh";
     repo = "tinfoil-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ET6fPEE6LKbB3UmMgSGC9/EuzdmNRe4ELmJegrWJpZU=";
+    hash = "sha256-csFYToNR1CyVNtrXxdFJ90qAotWa/EDcRE2rvC/MG18=";
   };
 
-  vendorHash = "sha256-b6UmayV913SVyV5+1BMZiRM7SV/Asau6xkx87DWTf9k=";
+  vendorHash = "sha256-VyZfBhmbH8PiY4RE7e6XFrYztSRzFo3BzFFcf4QcU34=";
 
   # The attestation test requires internet access
   checkFlags = [ "-skip=TestAttestationVerifySEV" ];
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
     description = "Command-line interface for making verified HTTP requests to Tinfoil enclaves and validating attestation documents";
     homepage = "https://github.com/tinfoilsh/tinfoil-cli";
     changelog = "https://github.com/tinfoilsh/tinfoil-cli/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.haylin ];
     mainProgram = "tinfoil";
   };

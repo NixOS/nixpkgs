@@ -151,4 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}"/* "$out/lib"
     ln -s "$dev/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}/include"/* "$dev/include/"
   '';
+
+  __structuredAttrs = true;
 })

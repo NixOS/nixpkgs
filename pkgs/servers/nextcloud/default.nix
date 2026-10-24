@@ -3,9 +3,9 @@
   stdenvNoCC,
   fetchurl,
   nixosTests,
-  nextcloud32Packages,
   nextcloud33Packages,
   nextcloud34Packages,
+  nextcloud35Packages,
 }:
 
 let
@@ -56,24 +56,24 @@ let
     };
 in
 {
-  nextcloud32 = generic {
-    version = "32.0.13";
-    hash = "sha256-7rAaOJp2z+RfweD2GhW1x0vkDNKciuT1TNa0J817nvA=";
-    packages = nextcloud32Packages;
-  };
-
   nextcloud33 = generic {
-    version = "33.0.7";
-    hash = "sha256-uuGoL8u/TWmZTS1Y1OgVFm+/T+1a06VRIfOM4H7emRM=";
+    version = "33.0.10";
+    hash = "sha256-QnEQuW/YWA2P6yOkCkHQBlfpdflF4ISEhaaibXd9fK4=";
     packages = nextcloud33Packages;
   };
 
   nextcloud34 = generic {
-    version = "34.0.2";
-    hash = "sha256-Qc4x3xLMgQkMPQf+DouQveYckrGK6A5NZIutQ9eZEQE=";
+    version = "34.0.5";
+    hash = "sha256-BOw93fRlyfLCqebuXzm4GDmdTz1YFVb0HQhyvutZsKk=";
     packages = nextcloud34Packages;
   };
 
+  nextcloud35 = generic {
+    version = "35.0.2";
+    hash = "sha256-38eVXq7FYh3pDgMdEPdgBhc7Pz4x1dbhdIIdHaFPFi0=";
+    packages = nextcloud35Packages;
+  };
+
   # tip: get the sha with:
-  # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
+  # curl  "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha512" | grep '.tar.bz2'  | cut -f1 -d' ' | xargs nix hash convert --hash-algo sha512 --to sri
 }

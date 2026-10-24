@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "ranger";
-  version = "1.9.4-unstable-2026-07-28";
+  version = "1.9.4-unstable-2026-09-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
-    rev = "5eee985f4a427f3a1c540851b48b5f8cd4254605";
-    hash = "sha256-1tAa6VP2WbXdgGRyr8wGAqnBnmlklD7FnfFYC3XdQjw=";
+    rev = "46e957af9762dd2fcaabfbef4d3c45c16edd1184";
+    hash = "sha256-y5b0NqOGGjNNbk40PJ62tMymCP03MB3UbJ5299MTQCw=";
   };
 
   build-system = with python3Packages; [

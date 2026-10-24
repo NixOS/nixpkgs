@@ -12,20 +12,20 @@
 }:
 let
   pname = "dependabot-cli";
-  version = "1.91.0";
+  version = "1.94.0";
 
   # `tag` is what `dependabot` uses to find the relevant docker images.
   tag = "nixpkgs-dependabot-cli-${version}";
 
   # Get these hashes from
-  # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
-  updateJobProxy.imageDigest = "sha256:70cf9a8f006db9cde732faf9e33a4f60af895532bbe803268fc8fd2f70aa3202";
-  updateJobProxy.hash = "sha256-IBUBBSXHwepTqvcWJyo5St+ceCc80ml0Arf6R9v54Eg=";
+  # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/proxy --image-tag latest --final-image-name dependabot-update-job-proxy --final-image-tag ${tag}
+  updateJobProxy.imageDigest = "sha256:a39e7ef7188c9a4b36692df47a0e8f876e83199e657cd0b6be00e736fbe03c2f";
+  updateJobProxy.hash = "sha256-5/2v869kKBjxhrhWz7M8eVqLfKghPZw8lbyazdOJ9bs=";
 
   # Get these hashes from
   # nix run nixpkgs#nix-prefetch-docker -- --image-name ghcr.io/dependabot/dependabot-updater-github-actions --image-tag latest --final-image-name dependabot-updater-github-actions --final-image-tag ${tag}
-  updaterGitHubActions.imageDigest = "sha256:57b7da54e9ce0f360523f27b3536f38af1606bf6a0a74a906d39fb9fa5caf80a";
-  updaterGitHubActions.hash = "sha256-cuAlu1PovPztc3P79bz8ySRCCDKh3dbt2WA4/ws6In8=";
+  updaterGitHubActions.imageDigest = "sha256:463c173f72e3f1824d0255a864fc0e075e7704a58448973878ad8c1b94f79d52";
+  updaterGitHubActions.hash = "sha256-0zYX1raxkOU30hwLpXOzQQ747xt6WsCxgJY55nlJNlc=";
 in
 buildGoModule {
   inherit pname version;
@@ -34,10 +34,10 @@ buildGoModule {
     owner = "dependabot";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-8wDP9NRsO/xbtbRTXY1BviEbZUEsiZBosJAni62uyFE=";
+    hash = "sha256-m7dyJqd1kmjcyqiVTKF/06VRrKHi0n+Gcqp9GDiPJgs=";
   };
 
-  vendorHash = "sha256-mo/OOo+vw2jX0ggeEzNE8Qr5xXg0GEaTH6krdGQyeEE=";
+  vendorHash = "sha256-48OdlduXPRXzDmfTzM2Kn/gUpdYZ58TDQe5R30FiSDY=";
 
   ldflags = [
     "-s"
@@ -79,7 +79,7 @@ buildGoModule {
     postBuild =
       let
         updateJobProxyImage = dockerTools.pullImage {
-          imageName = "ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy";
+          imageName = "ghcr.io/dependabot/proxy";
           finalImageName = "dependabot-update-job-proxy";
           finalImageTag = tag;
           inherit (updateJobProxy) imageDigest hash;

@@ -5,22 +5,24 @@
   rustPlatform,
   gitMinimal,
   installShellFiles,
+  installAgentSkills,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.68.0";
+  version = "0.80.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4mxWRNNrpM5Fo49Xm8ypzBS15Y8kPPFd1iPod1RwxjA=";
+    hash = "sha256-wT9V9A6ty4yCp/wJ9F92AC5SrsQzemEb8/d2NSjH/SY=";
   };
 
-  cargoHash = "sha256-ZEv3peP/mjDDWYw4LNuhIt8I806W/yfUKtEA7e3t7rA=";
+  cargoHash = "sha256-CVk7tSdt0eh7MtbbMruU1f4664tlnQPjQ2ovXfRcbIA=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
@@ -30,30 +32,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    installAgentSkills
+    # wt reads config from $HOME when generating completions
+    writableTmpDirAsHomeHook
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    # wt reads config from $HOME; provide a throwaway dir so it doesn't fail.
-    export HOME="$(mktemp -d)"
+  dontInstallAgentSkills = true;
 
+  postInstall = ''
+    installSkill skills/worktrunk worktrunk
+    installSkill skills/wt-switch-create worktrunk
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd wt \
       --bash <($out/bin/wt config shell completions bash) \
       --fish <($out/bin/wt config shell completions fish) \
       --nushell <($out/bin/wt config shell completions nu) \
       --zsh <($out/bin/wt config shell completions zsh)
-
-    # -L dereferences symlinks (e.g. skills/worktrunk/reference/README.md → repo
-    # root), so no dangling symlinks end up in $out.
-    cp -RL ${finalAttrs.src}/skills $out/
   '';
 
   nativeCheckInputs = [ gitMinimal ];
 
   checkFlags = [
-    # Expects `which` on PATH
-    "--skip=output::commit_generation::tests::test_command_exists_known_command"
     # Integration tests use insta snapshots with environment-specific paths
     "--skip=integration_tests::"
+    # Relies on environment-specific behavior. Notably, fails on the r-ryantm update-bot host
+    "--skip=git::repository::working_tree::tests::working_tree_diff_stats_with_untracked_reports_only_a_moves_line_delta"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # These tests probe the live process table — on macOS that means libproc
@@ -87,6 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       siriobalmelli
       DuskyElf
       yzx9
+      nirvdrum
     ];
   };
 })

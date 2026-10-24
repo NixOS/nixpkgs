@@ -10,8 +10,8 @@
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   sqlite,
   util-linux,
-  testers,
-  duperemove,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,14 +21,23 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Y3HIqq61bLfZi4XR2RtSyuCPmcWrTxeWvqpTh+3hUjc=";
   };
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postPatch = ''
-    substituteInPlace util.c --replace \
-      "lscpu" "${lib.getBin util-linux}/bin/lscpu"
+    substituteInPlace util.c --replace-fail \
+      "lscpu" "${lib.getExe' util-linux "lscpu"}"
   '';
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -46,15 +55,19 @@ stdenv.mkDerivation (finalAttrs: {
     "VERSION=v${finalAttrs.version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = duperemove;
-    command = "duperemove --version";
-    version = "v${finalAttrs.version}";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Simple tool for finding duplicated extents and submitting them for deduplication";
     homepage = "https://github.com/markfasheh/duperemove";
+    changelog = "https://github.com/markfasheh/duperemove/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       thoughtpolice

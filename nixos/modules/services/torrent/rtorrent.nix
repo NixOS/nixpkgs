@@ -128,8 +128,8 @@ in
       execute.throw = sh, -c, (cat, "mkdir -p ", (cfg.basedir), "/session ", (cfg.watch), " ", (cfg.logs))
 
       # Listening port for incoming peer traffic (fixed; you can also randomize it)
-      network.port_range.set = ${toString cfg.port}-${toString cfg.port}
-      network.port_random.set = no
+      network.listen.port.range.set = ${toString cfg.port}-${toString cfg.port}
+      network.listen.port.random.set = no
 
       # Tracker-less torrent and UDP tracker support
       # (conservative settings for 'private' trackers, change for 'public')

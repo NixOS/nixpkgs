@@ -22,28 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8DO+lfM4mk4bA/IOEJlLaOp9snCUBHiw7RRcYEwJC7c=";
+    hash = "sha256-OeLeNXLPUDs907DHDOUE3r0G39e+nxF7HTSQjXYEryE=";
   };
-
-  # aligator 0.19.0 expect gbenchmark 1.9.5, which is not merged yet:
-  # https://github.com/NixOS/nixpkgs/pull/506375
-  postPatch = ''
-    substituteInPlace \
-        bench/lqr.cpp \
-        bench/se2-car.cpp \
-        bench/talos-walk.cpp \
-        bench/croc-talos-arm.cpp \
-        bench/gar-riccati.cpp \
-      --replace-fail \
-        "benchmark::Benchmark" \
-        "benchmark::internal::Benchmark"
-  '';
 
   outputs = [
     "doc"
@@ -77,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PINOCCHIO_SUPPORT" true)
     (lib.cmakeBool "BUILD_CROCODDYL_COMPAT" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_WITH_OPENMP_SUPPORT" true)
     (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
     (lib.cmakeBool "GENERATE_PYTHON_STUBS" false) # this need git at configure time

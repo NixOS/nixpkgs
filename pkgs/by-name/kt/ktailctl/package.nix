@@ -1,31 +1,32 @@
 {
-  buildGoModule,
+  buildGo127Module,
   cmake,
   fetchFromGitHub,
   git,
-  go,
+  go_1_27,
   lib,
   nlohmann_json,
   stdenv,
   kdePackages,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.22.1";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     tag = "v${version}";
-    hash = "sha256-BRkjVZaoxiMW8JltIkYDiCCE2kNGLDpRJd0iclQMcGY=";
+    hash = "sha256-HroxzuXBws4Hr5Q0381gf56alm+g50xJiLGcAsO8inY=";
   };
 
   goDeps =
-    (buildGoModule {
+    (buildGo127Module {
       pname = "ktailctl-go-wrapper";
       inherit src version;
       modRoot = "src/tailscale/wrapper";
-      vendorHash = "sha256-h2gf9igVOguNRroGK6qvinUlEkpeZ2YJTtKArvlMj88=";
+      vendorHash = "sha256-QaKaYdPuKxb75lFpnR5RqzrgJaWSCmiFUnKDz64TsaI=";
     }).goModules;
 in
 stdenv.mkDerivation {
@@ -34,11 +35,6 @@ stdenv.mkDerivation {
 
   postPatch = ''
     cp -r --reflink=auto ${goDeps} src/tailscale/wrapper/vendor
-  '';
-
-  # needed for go build to work
-  preBuild = ''
-    export HOME=$TMPDIR
   '';
 
   cmakeFlags = [
@@ -50,8 +46,9 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     git
-    go
+    go_1_27
     wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = with kdePackages; [

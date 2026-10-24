@@ -9,26 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cqlsh-rs";
-  version = "0.5.12";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "scylladb";
     repo = "cqlsh-rs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0lxhO5mAcmF8lKzHUzUERjvvJVaPJ0VvZCu0ROPBRBY=";
+    hash = "sha256-swilyE6culJzqwrMeL+zUhbK7eh4D2FASBUq7GGWDp4=";
   };
 
-  # Upstream does not commit Cargo.lock.
-  # See https://github.com/scylladb/cqlsh-rs/issues/172
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-dLHziQjQ25xMSunPgXdDFfziONb7iIEhmx9FX4A8i6w=";
 
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
-
-  strictDeps = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];

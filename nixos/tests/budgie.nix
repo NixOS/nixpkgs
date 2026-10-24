@@ -67,6 +67,9 @@
           machine.succeed(f"{cmd} | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 
       with subtest("Open run dialog"):
+          machine.wait_for_console_text("Monitoring /home/${user.name}/.config/budgie-desktop/labwc/environment for keyboard layout changes")
+          machine.wait_for_console_text("Published CurrentLayout=us")
+          machine.sleep(2)
           machine.send_key("alt-f2")
           machine.wait_until_succeeds("pgrep -xf budgie-run-dialog")
           machine.sleep(2)
@@ -76,7 +79,7 @@
       with subtest("Open Budgie Control Center"):
           machine.succeed("su - ${user.name} -c '${env} budgie-control-center >&2 &'")
           machine.wait_until_succeeds("su - ${user.name} -c '${env} wlrctl toplevel list | grep org.buddiesofbudgie.ControlCenter'")
-          machine.wait_for_text("Network|Ethernet|Control|Connected")
+          machine.wait_for_text(r"(Network|Introduction|Privacy)")
 
       with subtest("Open GNOME terminal"):
           machine.succeed("su - ${user.name} -c '${env} gnome-terminal >&2 &'")

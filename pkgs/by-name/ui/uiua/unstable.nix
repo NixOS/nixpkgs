@@ -1,8 +1,8 @@
 rec {
-  version = "0.19.0-rc.1";
+  version = "0.19.1";
   tag = version;
-  hash = "sha256-xN154QH0CxPaoAN8oa5jj3G/wBRQgdBmYYnv0qMjShs=";
-  cargoHash = "sha256-lC3hm6cdd7IyjjsGvXX39JAqVfA6SEkV0kEnXL83sC4=";
+  hash = "sha256-wDMOFbwATIp0+wwlGxm5yEqnw7EtNc/savQy3RI2a/8=";
+  cargoHash = "sha256-eKfqPipGrrKQZLVKyHPYyeGHl8xQEIm4X5I1lfEwdxA=";
   updateScript = ./update-unstable.sh;
   patches = [ ./0001-no-network-test.patch ];
 }

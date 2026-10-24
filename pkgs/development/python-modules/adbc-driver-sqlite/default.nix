@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-sqlite";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "adbc_driver_sqlite";
     inherit (finalAttrs) version;
-    hash = "sha256-pMa0liYQ981nzXVMQt104YosEfq+7JSIxVAdc65i3GI=";
+    hash = "sha256-GEZqLwwU+UywsXgYFXzBTta5Ou8KSO9kjelF6brBVA0=";
   };
 
   build-system = [

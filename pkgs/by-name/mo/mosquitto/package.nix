@@ -12,9 +12,9 @@
   libuv,
   libwebsockets,
   openssl,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   sqlite,
-  systemd,
+  systemdLibs,
   uthash,
   nixosTests,
 }:
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     uthash
   ]
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
 
   propagatedBuildInputs = [ cjson ];
 

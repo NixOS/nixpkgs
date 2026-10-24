@@ -82,7 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # do not use x87's 80-bit arithmetic, rounding errors result in very different font binaries
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
+  env.NIX_CFLAGS_COMPILE = lib.join " " (
+    [
+      "-Wno-error=incompatible-pointer-types"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse"
+  );
 
   strictDeps = true;
 

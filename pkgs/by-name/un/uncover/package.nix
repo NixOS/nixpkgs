@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
@@ -24,12 +25,11 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "API wrapper to search for exposed hosts";
@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
       uncover is a go wrapper using APIs of well known search engines to quickly
       discover exposed hosts on the internet. It is built with automation in mind,
       so you can query it and utilize the results with your current pipeline tools.
-      Currently, it supports shodan,shodan-internetdb, censys, and fofa search API.
+      Currently, it supports shodan, shodan-internetdb, censys, and fofa search API.
     '';
     homepage = "https://github.com/projectdiscovery/uncover";
     changelog = "https://github.com/projectdiscovery/uncover/releases/tag/${finalAttrs.src.tag}";

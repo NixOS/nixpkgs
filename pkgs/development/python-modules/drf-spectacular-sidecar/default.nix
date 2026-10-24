@@ -6,16 +6,19 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-spectacular-sidecar";
-  version = "2026.7.1";
+  # Upstream does automated monthly releases even if there are no changes at all
+  # https://github.com/tfranzel/drf-spectacular-sidecar/issues/17
+  # nixpkgs-update: no auto update
+  version = "2026.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
-    tag = version;
-    hash = "sha256-RNaYPOw+XPUjGgpWcC3TKikNwv8VMX7dF0HR87HnCvQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-fjrXNUR2IyMrK2ZmaxbSkjCSfoIr82x6y83OxZQFD4k=";
   };
 
   build-system = [ setuptools ];
@@ -33,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

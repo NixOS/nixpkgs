@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-ost";
-  version = "1.1.10";
+  version = "1.1.11";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-ost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1QdGPAvQgh533oAFwVxtGKPGJ7rfq7tG/zy8VUqJLq0=";
+    hash = "sha256-zmq2KqNjFb4htk5Wl0eA4Ef0bR16jto9YVFbVESehFI=";
   };
 
   vendorHash = null;

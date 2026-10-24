@@ -10,14 +10,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blesh";
-  version = "0.4.0-devel3-unstable-2026-07-11";
+  version = "0.4.0-devel3-unstable-2026-09-08";
 
   src = fetchFromGitHub {
     owner = "akinomyoga";
     repo = "ble.sh";
-    rev = "d69e4d549a1881a37300fe6b4a05478bd9157dfc";
+    rev = "d81fd54feb0d996fdff20dca27eaf0201f7015cc";
     fetchSubmodules = true;
-    hash = "sha256-w2d7JCa/cBpe8x+pnGWq+h6cpUVJCNyHZymgbKKPDQE=";
+    hash = "sha256-meKnNtepyOXfVGq351AoCML/vcgML79R3HW2Tf9rIuk=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +88,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       aiotter
-      hibiday
+      recutita
       matthiasbeyer
     ];
     platforms = lib.platforms.unix;

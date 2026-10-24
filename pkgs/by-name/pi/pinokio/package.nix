@@ -18,7 +18,7 @@ let
       }
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 
   meta = {
     homepage = "https://pinokio.computer";

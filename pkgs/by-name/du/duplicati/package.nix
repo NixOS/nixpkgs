@@ -6,33 +6,47 @@
   fetchFromGitHub,
   autoPatchelfHook,
   dotnetCorePackages,
-  bun,
+  npm-lockfile-fix,
   icu,
   openssl,
   krb5,
 }:
 
 let
-  # for update.sh easy to handle
-  ngclientVersion = "0.0.226";
-  ngclientRev = "2cc3e2e088ddb4691bb389b0afa89287d399340e";
-  ngclientHash = "sha256-uMWOunSaV9HNhgH65P2boangZFe/9NCRb5BBqXv9TI0=";
+  version = "2.4.0.1";
+  channel = "stable";
+  buildDate = "2026-10-07";
+  ngclientVersion = "0.0.238";
+  ngclientRev = "374ce0d56d519caa88999989e10dc16ef39c4536";
+  ngclientHash = "sha256-4EGtVo79p7P+L21vnVhl1ameFe1RL+7nsEmickONrYw=";
 
   # from Duplicati/Server/webroot/ngclient/package.json
   ngclient = buildNpmPackage {
     pname = "ngclient";
     version = ngclientVersion;
+    __structuredAttrs = true;
+    strictDeps = true;
 
     src = fetchFromGitHub {
       owner = "duplicati";
       repo = "ngclient";
       rev = ngclientRev;
       hash = ngclientHash;
+
+      postFetch = ''
+        ${lib.getExe npm-lockfile-fix} -r $out/package-lock.json
+      '';
     };
 
-    npmDepsHash = "sha256-89l/1v8dncwImDgiQic2VN65K/dxIkEPCrsHCty2VV0=";
+    postPatch = ''
+      substituteInPlace package.json \
+        --replace-fail '"build:prod": "bun run gen:font & ng build' \
+                       '"build:prod": "npm run gen:font && ng build' \
+        --replace-fail '"gen:font": "ship-fg' \
+                       '"gen:font": "node node_modules/.bin/ship-fg'
+    '';
 
-    nativeBuildInputs = [ bun ];
+    npmDepsHash = "sha256-jDHpuGm7juGjlRQ4Sq85lW6lcSwYSczryYxdL8uE9gg=";
 
     npmBuildScript = "build:prod";
 
@@ -56,17 +70,16 @@ let
     '';
   };
 in
-buildDotnetModule rec {
+buildDotnetModule {
   pname = "duplicati";
-  version = "2.3.0.4";
-  channel = "stable";
-  buildDate = "2026-07-09";
+  inherit version channel buildDate;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "duplicati";
     repo = "duplicati";
     tag = "v${version}_${channel}_${buildDate}";
-    hash = "sha256-pVfcD7bIlZ/ZsMNwjPcg+DY6YFNm191ngEm5SrDukSw=";
+    hash = "sha256-f/NOjUiePDt1kDxEEH0NSKlgIKuZmoFax2+wgjN5Sdk=";
     stripRoot = true;
   };
 
@@ -85,11 +98,15 @@ buildDotnetModule rec {
     krb5
   ];
 
-  autoPatchelfIgnoreMissingDeps = lib.optionals (!stdenv.hostPlatform.isMusl) [
-    "libc.musl-x86_64.so.1"
-    "libc.musl-aarch64.so.1"
-    "libc.musl-armv7.so.1"
-  ];
+  autoPatchelfIgnoreMissingDeps =
+    lib.optionals (!stdenv.hostPlatform.isMusl) [
+      "libc.musl-x86_64.so.1"
+      "libc.musl-aarch64.so.1"
+      "libc.musl-armv7.so.1"
+    ]
+    ++ [
+      "liblog.so"
+    ];
 
   executables = [
     "Duplicati.Agent"
@@ -118,23 +135,29 @@ buildDotnetModule rec {
   '';
 
   postFixup = ''
-    mv $out/bin/Duplicati.Agent $out/bin/duplicati-agent
-    mv $out/bin/Duplicati.GUI.TrayIcon $out/bin/duplicati
-    mv $out/bin/Duplicati.Server $out/bin/duplicati-server
-    cp $out/bin/duplicati-server $out/lib/duplicati/duplicati-server
-    mv $out/bin/Duplicati.Service $out/bin/duplicati-service
-    mv $out/bin/Duplicati.CommandLine $out/bin/duplicati-cli
-    mv $out/bin/Duplicati.CommandLine.SyncTool $out/bin/duplicati-sync-tool
-    mv $out/bin/Duplicati.CommandLine.SourceTool $out/bin/duplicati-source-tool
-    mv $out/bin/Duplicati.CommandLine.DatabaseTool $out/bin/duplicati-database-tool
-    mv $out/bin/Duplicati.CommandLine.SharpAESCrypt $out/bin/duplicati-aescrypt
-    mv $out/bin/Duplicati.CommandLine.AutoUpdater $out/bin/duplicati-autoupdater
-    mv $out/bin/Duplicati.CommandLine.BackendTester $out/bin/duplicati-backend-tester
-    mv $out/bin/Duplicati.CommandLine.BackendTool $out/bin/duplicati-backend-tool
-    mv $out/bin/Duplicati.CommandLine.RecoveryTool $out/bin/duplicati-recovery-tool
-    mv $out/bin/Duplicati.CommandLine.SecretTool $out/bin/duplicati-secret-tool
-    mv $out/bin/Duplicati.CommandLine.ServerUtil $out/bin/duplicati-server-util
-    mv $out/bin/Duplicati.CommandLine.Snapshots $out/bin/duplicati-snapshots
+    for mapping in \
+      "Duplicati.Agent:duplicati-agent" \
+      "Duplicati.GUI.TrayIcon:duplicati" \
+      "Duplicati.Server:duplicati-server" \
+      "Duplicati.Service:duplicati-service" \
+      "Duplicati.CommandLine:duplicati-cli" \
+      "Duplicati.CommandLine.SyncTool:duplicati-sync-tool" \
+      "Duplicati.CommandLine.SourceTool:duplicati-source-tool" \
+      "Duplicati.CommandLine.DatabaseTool:duplicati-database-tool" \
+      "Duplicati.CommandLine.SharpAESCrypt:duplicati-aescrypt" \
+      "Duplicati.CommandLine.AutoUpdater:duplicati-autoupdater" \
+      "Duplicati.CommandLine.BackendTester:duplicati-backend-tester" \
+      "Duplicati.CommandLine.BackendTool:duplicati-backend-tool" \
+      "Duplicati.CommandLine.RecoveryTool:duplicati-recovery-tool" \
+      "Duplicati.CommandLine.SecretTool:duplicati-secret-tool" \
+      "Duplicati.CommandLine.ServerUtil:duplicati-server-util" \
+      "Duplicati.CommandLine.Snapshots:duplicati-snapshots"
+    do
+      IFS=: read -r source target <<< "$mapping"
+      mv "$out/bin/$source" "$out/bin/$target"
+    done
+
+    cp "$out/bin/duplicati-server" "$out/lib/duplicati/duplicati-server"
   '';
 
   passthru.updateScript = ./update.sh;

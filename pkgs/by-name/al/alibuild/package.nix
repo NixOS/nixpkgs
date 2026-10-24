@@ -6,20 +6,18 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alibuild";
-  version = "1.17.42";
+  version = "1.17.48";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-QFNyb6lmTGOaAj4qyDo/mTW7J6LHfALnjo+b0WTllDQ=";
+    hash = "sha256-uxATZVPvdk5TICoSc2yRwRxBNRRd5UC888YWyHv/4tA=";
   };
 
   build-system = with python3Packages; [
     setuptools
     setuptools-scm
   ];
-
-  nativeBuildInputs = with python3Packages; [ pip ];
 
   dependencies = with python3Packages; [
     requests
@@ -29,14 +27,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
     distro
   ];
 
-  pythonRelaxDeps = [ "boto3" ];
-
-  doCheck = false;
+  postPatch = ''
+    # strip setuptools_scm upper bound limit
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm[toml]>=6.2,<10" "setuptools_scm[toml]>=6.2"
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm>=6.2,<10" "setuptools_scm>=6.2"
+  '';
 
   meta = {
     homepage = "https://alisw.github.io/alibuild/";
     description = "Build tool for ALICE experiment software";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/alisw/alibuild/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ktf ];
   };
 })

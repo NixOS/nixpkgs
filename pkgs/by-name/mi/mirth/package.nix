@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "mirth";
+  pname = "mirth";
   version = "0-unstable-2026-05-28";
 
   src = fetchFromSourcehut {

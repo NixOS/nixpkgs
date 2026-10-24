@@ -19,12 +19,12 @@
 }:
 buildPythonPackage rec {
   pname = "libtfr";
-  version = "2.1.10";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3iW9LevxZwzxxFmXoIayVA/zJPzq6i7jMFwVfZLttDY=";
+    hash = "sha256-+fq5cpBiY5AJYDoxEAoQG8iEoEDfhHqChBAky1jKD/g=";
   };
 
   nativeBuildInputs = [

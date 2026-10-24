@@ -19,17 +19,18 @@
   cereal,
   minizip,
   versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "domoticz";
-  version = "2026.2-unstable-2026-07-09";
+  version = "2026.4";
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = "domoticz";
-    rev = "7e12d1e5d7bf3f7d083ef31d5dd611d678f89d48"; # pinned due to removed dependency (see nixpkgs pr #539060)
-    hash = "sha256-+6EIEsgGTaLEPzBa/R5EYAxnYB3+cj54LGDJwutTQGA=";
+    tag = finalAttrs.version;
+    hash = "sha256-zuZI/2VD5nDg2nK8ivqMHXEDLQTcSONCVOI+KCN19B4=";
     fetchSubmodules = true;
   };
 
@@ -72,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src/Config $out/share/domoticz
     cp -r $src/scripts $out/share/domoticz
     cp -r $src/plugins $out/share/domoticz
+    cp -r $src/dzVents $out/share/domoticz
 
     mkdir -p $out/bin
     cp domoticz $out/bin
@@ -79,9 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [
-    # versionCheckHook # readd once we can move to a tagged release again
+    versionCheckHook
   ];
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Home automation system";

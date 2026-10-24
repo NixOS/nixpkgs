@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "1xahdr6bh3dw5swrc2r8kqa8ljhqlb7k2kxv5mrw5rhcmcnzcyig";
+    hash = "sha256-L3r2LasM5sJzLbtPMc+iGEqKFJ4oC5a5LrwNuExuUPU=";
   };
 
   build-system = [
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Lightweight multi-platform, multi-architecture assembler framework";
-    homepage = "https://www.keystone-engine.org";
+    homepage = "https://github.com/keystone-engine/keystone";
     maintainers = with lib.maintainers; [ dump_stack ];
     license = lib.licenses.gpl2Only;
   };

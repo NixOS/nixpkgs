@@ -61,6 +61,8 @@ let
     genList
     getExe
     getExe'
+    getDarwinApp
+    getDarwinApp'
     getLicenseFromSpdxIdOr
     groupBy
     groupBy'
@@ -68,6 +70,7 @@ let
     hasInfix
     id
     ifilter0
+    isFunction
     isStorePath
     join
     lazyDerivation
@@ -154,6 +157,8 @@ let
     builder = "builder";
     system = "system";
   };
+
+  aPathLiteral = ./misc.nix;
 in
 
 runTests {
@@ -925,6 +930,63 @@ runTests {
     expected = "1.2.3";
   };
 
+  testIsFunctionStr = {
+    expr = isFunction "a";
+    expected = false;
+  };
+  testIsFunctionInt = {
+    expr = isFunction 0;
+    expected = false;
+  };
+  testIsFunctionFloat = {
+    expr = isFunction 0.4;
+    expected = false;
+  };
+  testIsFunctionPath = {
+    expr = isFunction ./.;
+    expected = false;
+  };
+  testIsFunctionList = {
+    expr = isFunction [ ];
+    expected = false;
+  };
+  testIsFunctionAttrs = {
+    expr = isFunction { };
+    expected = false;
+  };
+  testIsFunctionBool = {
+    expr = isFunction false;
+    expected = false;
+  };
+  testIsFunctionDerivation = {
+    expr = isFunction (builtins.derivation { });
+    expected = false;
+  };
+  testIsFunctionNull = {
+    expr = isFunction null;
+    expected = false;
+  };
+  testIsFunctionFunction = {
+    expr = isFunction isFunction;
+    expected = true;
+  };
+  testIsFunctionAttrsWithValidFunctor = {
+    expr = isFunction { __functor = _: _: null; };
+    expected = true;
+  };
+  testIsFunctionDrvWithValidFunctor = {
+    expr = isFunction ((builtins.derivation { }) // { __functor = _: _: null; });
+    expected = true;
+  };
+  testIsFunctionAttrsWithFunctorArity1 = {
+    expr = isFunction { __functor = _: null; };
+    expected = false;
+  };
+  testIsFunctionAttrsWithNonFunctionFunctor = {
+    expr = isFunction { __functor = null; };
+    expected = false;
+  };
+
   testIsStorePath = {
     expr =
       let
@@ -988,7 +1050,7 @@ runTests {
           outPath = "/drv";
           foo = "ignored attribute";
         };
-        path = /path;
+        path = aPathLiteral;
         stringable = {
           __toString = _: "hello toString";
           bar = "ignored attribute";
@@ -1002,7 +1064,7 @@ runTests {
       possibly newlines
       ')
       drv=/drv
-      path=/path
+      path=${aPathLiteral}
       stringable='hello toString'
     '';
   };
@@ -1789,6 +1851,42 @@ runTests {
     {
       expr = lists.commonPrefix longList longList;
       expected = longList;
+    };
+
+  testListCommonPrefixLengthExample1 = {
+    expr = lists.commonPrefixLength [ 1 2 3 4 5 6 ] [ 1 2 4 8 ];
+    expected = 2;
+  };
+  testListCommonPrefixLengthExample2 = {
+    expr = lists.commonPrefixLength [ 1 2 3 ] [ 1 2 3 4 5 ];
+    expected = 3;
+  };
+  testListCommonPrefixLengthExample3 = {
+    expr = lists.commonPrefixLength [ 1 2 3 ] [ 4 5 6 ];
+    expected = 0;
+  };
+  testListCommonPrefixLengthEmpty = {
+    expr = lists.commonPrefixLength [ ] [ 1 2 3 ];
+    expected = 0;
+  };
+  testListCommonPrefixLengthSame = {
+    expr = lists.commonPrefixLength [ 1 2 3 ] [ 1 2 3 ];
+    expected = 3;
+  };
+  testListCommonPrefixLengthLazy = {
+    expr =
+      lists.commonPrefixLength
+        [ 1 ]
+        [ 1 (abort "lib.lists.commonPrefixLength shouldn't evaluate this") ];
+    expected = 1;
+  };
+  testListCommonPrefixLengthLong =
+    let
+      longList = genList (n: n) 100000;
+    in
+    {
+      expr = lists.commonPrefixLength longList longList;
+      expected = 100000;
     };
 
   testSort = {
@@ -4655,6 +4753,31 @@ runTests {
   testGetExe'FailureFirstArg = testingThrow (getExe' "not a derivation" "executable");
 
   testGetExe'FailureSecondArg = testingThrow (getExe' { type = "derivation"; } "dir/executable");
+
+  testGetDarwinAppOutput = {
+    expr = getDarwinApp {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+      meta.mainDarwinApp = "mainDarwinApp.app";
+    };
+    expected = "somelonghash/Applications/mainDarwinApp.app";
+  };
+
+  testGetDarwinApp'Output = {
+    expr = getDarwinApp' {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+    } "app.app";
+    expected = "somelonghash/Applications/app.app";
+  };
+
+  testGetDarwinApp'FailureFirstArg = testingThrow (getDarwinApp' "not a derivation" "executable");
+
+  testGetDarwinApp'FailureSecondArg = testingThrow (
+    getDarwinApp' { type = "derivation"; } "dir/executable"
+  );
 
   testGetLicenseFromSpdxIdOrExamples = {
     expr = [

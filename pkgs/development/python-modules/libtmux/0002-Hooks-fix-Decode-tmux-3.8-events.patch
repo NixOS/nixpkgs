@@ -1,0 +1,134 @@
+From 64871802a2a6af055d8d960d43faabc8f8796dd3 Mon Sep 17 00:00:00 2001
+From: Tony Narlock <tony@git-pull.com>
+Date: Sun, 13 Sep 2026 09:10:45 -0500
+Subject: [PATCH] Hooks(fix): Decode tmux 3.8 events
+
+why: New tmux hooks made complete show-hooks output fail typed decoding.
+
+what:
+- Append 22 typed sparse hook fields with documented event meanings
+- Exercise new hooks against tmux 3.8 through set/show/unset cycles
+- Verify removed after-queue rejects setting on 3.8
+
+Upstream: https://github.com/tmux-python/libtmux/pull/758/commits/64871802a2a6af055d8d960d43faabc8f8796dd3
+---
+ src/libtmux/_internal/constants.py | 23 ++++++++++++++++
+ tests/test_hooks.py                | 43 ++++++++++++++++++++++++++++--
+ 2 files changed, 64 insertions(+), 2 deletions(-)
+
+diff --git a/src/libtmux/_internal/constants.py b/src/libtmux/_internal/constants.py
+index a0b7981..f7d7f54 100644
+--- a/src/libtmux/_internal/constants.py
++++ b/src/libtmux/_internal/constants.py
+@@ -559,6 +559,29 @@ class Hooks(
+     # Runs when a command fails (tmux 3.5+)
+     command_error: SparseArray[str] = field(default_factory=SparseArray)
+ 
++    after_swap_window: SparseArray[str] = field(default_factory=SparseArray)
++    client_closed: SparseArray[str] = field(default_factory=SparseArray)
++    client_created: SparseArray[str] = field(default_factory=SparseArray)
++    marked_pane_changed: SparseArray[str] = field(default_factory=SparseArray)
++    pane_activity: SparseArray[str] = field(default_factory=SparseArray)
++    pane_bell: SparseArray[str] = field(default_factory=SparseArray)
++    pane_command_finished: SparseArray[str] = field(default_factory=SparseArray)
++    pane_command_started: SparseArray[str] = field(default_factory=SparseArray)
++    pane_created: SparseArray[str] = field(default_factory=SparseArray)
++    pane_mode_entered: SparseArray[str] = field(default_factory=SparseArray)
++    pane_mode_exited: SparseArray[str] = field(default_factory=SparseArray)
++    pane_moved: SparseArray[str] = field(default_factory=SparseArray)
++    pane_prompt_closed: SparseArray[str] = field(default_factory=SparseArray)
++    pane_prompt_opened: SparseArray[str] = field(default_factory=SparseArray)
++    pane_resized: SparseArray[str] = field(default_factory=SparseArray)
++    pane_shell_prompt: SparseArray[str] = field(default_factory=SparseArray)
++    session_added_to_group: SparseArray[str] = field(default_factory=SparseArray)
++    session_removed_from_group: SparseArray[str] = field(default_factory=SparseArray)
++    window_closed: SparseArray[str] = field(default_factory=SparseArray)
++    window_created: SparseArray[str] = field(default_factory=SparseArray)
++    window_unzoomed: SparseArray[str] = field(default_factory=SparseArray)
++    window_zoomed: SparseArray[str] = field(default_factory=SparseArray)
++
+     @classmethod
+     def from_stdout(cls, value: list[str]) -> Hooks:
+         """Parse raw tmux hook output into a Hooks instance.
+diff --git a/tests/test_hooks.py b/tests/test_hooks.py
+index 4e03f0a..77e4d7e 100644
+--- a/tests/test_hooks.py
++++ b/tests/test_hooks.py
+@@ -6,6 +6,7 @@ import typing as t
+ 
+ import pytest
+ 
++from libtmux import exc
+ from libtmux._internal.constants import Hooks
+ from libtmux._internal.sparse_array import SparseArray
+ from libtmux.common import has_gte_version
+@@ -315,6 +316,7 @@ class HookTestCase(t.NamedTuple):
+     hook: str  # tmux hook name (hyphenated)
+     min_version: str = "3.0"  # Minimum tmux version required
+     xfail_reason: str | None = None  # Mark as expected failure with reason
++    removed_version: str | None = None
+ 
+ 
+ # --- Alert Hooks ---
+@@ -381,7 +383,7 @@ AFTER_HOOKS: list[HookTestCase] = [
+     HookTestCase("after_new_window", "after-new-window"),
+     HookTestCase("after_paste_buffer", "after-paste-buffer"),
+     HookTestCase("after_pipe_pane", "after-pipe-pane"),
+-    HookTestCase("after_queue", "after-queue"),
++    HookTestCase("after_queue", "after-queue", removed_version="3.8"),
+     HookTestCase("after_refresh_client", "after-refresh-client"),
+     HookTestCase("after_rename_session", "after-rename-session"),
+     HookTestCase("after_rename_window", "after-rename-window"),
+@@ -416,7 +418,39 @@ NEW_HOOKS: list[HookTestCase] = [
+ 
+ # Combine all hook test cases
+ ALL_HOOK_TEST_CASES: list[HookTestCase] = (
+-    ALERT_HOOKS + CLIENT_HOOKS + SESSION_HOOKS + WINDOW_HOOKS + PANE_HOOKS + AFTER_HOOKS
++    ALERT_HOOKS
++    + CLIENT_HOOKS
++    + SESSION_HOOKS
++    + WINDOW_HOOKS
++    + PANE_HOOKS
++    + AFTER_HOOKS
++    + [
++        HookTestCase(name.replace("-", "_"), name, "3.8")
++        for name in (
++            "after-swap-window",
++            "client-closed",
++            "client-created",
++            "marked-pane-changed",
++            "pane-activity",
++            "pane-bell",
++            "pane-command-finished",
++            "pane-command-started",
++            "pane-created",
++            "pane-mode-entered",
++            "pane-mode-exited",
++            "pane-moved",
++            "pane-prompt-closed",
++            "pane-prompt-opened",
++            "pane-resized",
++            "pane-shell-prompt",
++            "session-added-to-group",
++            "session-removed-from-group",
++            "window-closed",
++            "window-created",
++            "window-unzoomed",
++            "window-zoomed",
++        )
++    ]
+ )
+ 
+ 
+@@ -451,6 +485,11 @@ def test_hook_set_show_unset_cycle(server: Server, test_case: HookTestCase) -> N
+ 
+     hook_cmd = "display-message 'test hook fired'"
+ 
++    if test_case.removed_version and has_gte_version(test_case.removed_version):
++        with pytest.raises(exc.InvalidOption, match="invalid option"):
++            session.set_hook(f"{test_case.hook}[0]", hook_cmd)
++        return
++
+     # Test set_hook (using session-level hook which works on all tmux versions)
+     session.set_hook(f"{test_case.hook}[0]", hook_cmd)
+ 

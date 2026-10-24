@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.0.1.3";
+  version = "3.0.2.0";
   pname = "discount";
 
   src = fetchFromGitHub {
     owner = "Orc";
     repo = "discount";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-b3cC/dWfhkuYSPGmuJIiAcvEdN5KAMjPYeit1lr546o=";
+    hash = "sha256-VApMh5Q+4ZKVIhXbXwqcm6TIP3kcZHs5vZojpSP1F+8=";
   };
 
   patches = [ ./fix-configure-path.patch ];

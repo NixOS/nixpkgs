@@ -20,6 +20,7 @@ for i in \
     "x86_64-linux linux-x64 tar.gz" \
     "aarch64-linux linux-arm64 tar.gz" \
     "loongarch64-linux linux-loong64 tar.gz" \
+    "riscv64-linux linux-riscv64 tar.gz" \
     "aarch64-darwin darwin-arm64 zip"; do
     set -- $i
     hash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $(nix-prefetch-url "https://github.com/VSCodium/vscodium/releases/download/$latestVersion/VSCodium-$2-$latestVersion.$3"))

@@ -16,11 +16,11 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "3f863a3f35f31b61982d813835d8637b3d93d87a";
-    hash = "sha256-BsxP3GrS98ubIAkFx/c4pB1i97ZZL2TijS+2ORnooww=";
+    rev = "6d7a78e3bb927a52e3e2a5087729f9136d35c084";
+    hash = "sha256-qH4MYS12oKni1JMtZEm7KEpK68CSr3/45aWGmxaydEE=";
   };
-  GIT_DATE = "2025-08-29";
-  GIT_VERSION = "v0.0-4023-gc1271a00";
+  GIT_DATE = "2026-08-16";
+  GIT_VERSION = "v0.0-4148-g1ea007ec";
 in
 buildBazelPackage {
   pname = "verible";
@@ -30,6 +30,8 @@ buildBazelPackage {
     # a build string shown in the tools --version output.
     # If env variables not set, it would attempt to extract it from .git/.
     inherit GIT_DATE GIT_VERSION;
+    ${if stdenv.hostPlatform.isDarwin then "NIX_CFLAGS_COMPILE" else null} =
+      "-mmacos-version-min=10.15";
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     LIBTOOL = "${cctools}/bin/libtool";
@@ -44,7 +46,7 @@ buildBazelPackage {
     owner = "chipsalliance";
     repo = "verible";
     tag = GIT_VERSION;
-    hash = "sha256-N+yjRcVxFI56kP3zq+qFHNXZLTtVnQaVnseZS13YN0s=";
+    hash = "sha256-6mKnmIIGu7PX6dOelPW6/9dacpqFOtPEC/0wCraoEAQ=";
   };
 
   bazel = bazel_7;
@@ -57,12 +59,15 @@ buildBazelPackage {
   fetchAttrs = {
     preInstall = ''
       rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      find $bazelOut/external/abseil-cpp~ -type f -name BUILD.bazel -exec sed -i -e 's/"layering_check",//g' {} \;
     '';
     hash =
       {
-        aarch64-linux = "sha256-KsXrwRIiCft/WaT0uj28gOj5ahhTKxcaiosbY7Mo3JY=";
-        x86_64-linux = "sha256-X7/W2iOTXruRO2wx9J5tGYvy2IuZ6mXiRAmUI5Eq9Vc=";
-        aarch64-darwin = "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
+        aarch64-linux = "sha256-1jEiJJycHZ2LybV13AUCXjUbUTY1ZhH09aG9oVzOEto=";
+        x86_64-linux = "sha256-RXji3oV9ccUfje8+i73w7dox9e4wZH3KADJ+YecFgL4=";
+        aarch64-darwin = "sha256-mQM82RlRIyLRZeo5vQh+Bm7W+1eCmwj9yEYRe9blJFg=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gitsign";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "gitsign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-j57eWH4HmgKtw1uM0byKm1PuxcSBjSw6p6nRn7eedIE=";
+    hash = "sha256-cXgCgHL1zy4LBYuUxJUO8unkbG1lrxC31i790+6DVv0=";
   };
   vendorHash = "sha256-SitjW9g+GY1YDmJP13eTGL2Om2EsV+HRrXbLb6g+w3Y=";
 

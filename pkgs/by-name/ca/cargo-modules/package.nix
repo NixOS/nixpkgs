@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-modules";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = "cargo-modules";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wERrtMrmR4PKfCzhTCMLZyIkvawDy5HcfeMCTzxVLPc=";
+    hash = "sha256-tNmzhVaA5RehRxYfhrXKpnk8yh9sbLAKX2R8jrgz6r0=";
   };
 
-  cargoHash = "sha256-RriIKgRmSmgdTWncfmnbFfusru/+ChgDoS7bkmjI7N8=";
+  cargoHash = "sha256-k+TdO5NNGAWzPpJ7OF5igU4L/Iqt1RAJUObDasAtxEA=";
 
   checkFlags = [
     "--skip=cfg_test::with_tests::smoke"

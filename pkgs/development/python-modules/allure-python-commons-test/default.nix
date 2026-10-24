@@ -1,13 +1,10 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
-  attrs,
-  pluggy,
-  six,
+  fetchPypi,
   pyhamcrest,
-  setuptools-scm,
   python,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,14 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-otfGxWNnbMUGuQcqsroOOfiqhCQqe25c39Ur57ek2og=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm<10" "setuptools_scm"
+  '';
+
   build-system = [ setuptools-scm ];
 
-  dependencies = [
-    attrs
-    pluggy
-    six
-    pyhamcrest
-  ];
+  dependencies = [ pyhamcrest ];
 
   checkPhase = ''
     ${python.interpreter} -m doctest ./src/container.py

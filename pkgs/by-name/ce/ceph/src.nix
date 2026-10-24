@@ -6,11 +6,11 @@
 
 applyPatches (final: {
   pname = "ceph-src";
-  version = "20.2.2";
+  version = "20.2.4";
 
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${final.version}.tar.gz";
-    hash = "sha256-G76ZcCdadt4KP7Ry0yzqPrbi1ydZlrcZb2IhGd2Fd1M=";
+    hash = "sha256-XzRWkkGiiQRGuTHwbNhE+TvKZl90CiBjFCnS1Vsemzc=";
   };
 
   patches = [
@@ -23,8 +23,32 @@ applyPatches (final: {
       stripLen = 1;
       hash = "sha256-0jn5X4jIdluCufFXWHeO6skMz6XQpliHkC1tPLK6dbk=";
     })
+    # arrow-cpp 24 dropped the `arrow/util/span.h` header and switched its
+    # parquet encryption API from `arrow::util::span` to `std::span`.
+    # Must be applied on top of the s3select patch above, which introduces the
+    # vendored headers this touches.
+    ./patches/0002-s3select-std-span.patch
     # fixes issues when python3 is not on the PATH
     # See: https://github.com/ceph/ceph/pull/67904
     ./patches/0001-mgr-python-interpreter.patch
+    # fixes compilation on the gcc version present in nixos-unstable
+    # See: https://github.com/ceph/ceph/pull/67081
+    (fetchpatch2 {
+      name = "ceph-20.2.1-backport-gcc16-fixes.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/ceph-20.2.1-backport-gcc16-fixes.patch?h=ceph&id=b158fda8a3e3834a7aa362954dc17077dc46f609";
+      hash = "sha256-uLl20Sdd+JJFWqbMHIZRt53OpGRXlTaceajgpzYCaTM=";
+      excludes = [
+        # these cause CMake dependency cycles
+        "src/test/CMakeLists.txt"
+        "src/rgw/CMakeLists.txt"
+      ];
+    })
+    # fixes compilation on the gcc version present in nixos-unstable
+    # See: https://github.com/ceph/ceph/pull/69166
+    (fetchpatch2 {
+      name = "ceph-20.2.4-radosgw-gcc16-fixes.patch";
+      url = "https://github.com/ceph/ceph/pull/69166.patch?full_index=1";
+      hash = "sha256-yaqOrmw0ZItT2efzNfpDqjTRsva8VN0R+TLqbTX0snc=";
+    })
   ];
 })

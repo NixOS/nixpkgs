@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sarasa-gothic";
-  version = "1.0.40";
+  version = "1.0.42";
 
   src = fetchurl {
     # Use the 'ttc' files here for a smaller closure size.
     # (Using 'ttf' files gives a closure size about 15x larger, as of November 2021.)
     url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${finalAttrs.version}/Sarasa-TTC-${finalAttrs.version}.zip";
-    hash = "sha256-riWSPs+KJEhKJ+L683CKjsyYjFfh6Jn1jXNtgsUsyYA=";
+    hash = "sha256-I9jrDiXC0qhiioKVMHYyl7j3ltlOLoZt9AE5dwr8uug=";
   };
 
   sourceRoot = ".";

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "irtt";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "heistp";
     repo = "irtt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b0Od/KWV408PP/rPtqMr+lTyPXlxigLEU2/by6gjfxg=";
+    hash = "sha256-22ibxq78pt9pHq58jowMo0nENFy39ZSl/oBw9/F7vAc=";
   };
 
-  vendorHash = "sha256-Mxdvb1d44dag1/jKjSVAzqYBed/lylyamgwQwj9THl4=";
+  vendorHash = "sha256-du6PXKBrb3qrvD6rBFWfY3pK2gVu7/nvvom5mHs+JJs=";
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
   doInstallCheck = true;

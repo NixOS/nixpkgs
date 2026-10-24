@@ -9,7 +9,7 @@ def render(tmp_path: Path, header: Path | None) -> str:
     infile = tmp_path / "index.md"
     infile.write_text(SAMPLE_BOOK)
     outfile = tmp_path / "index.html"
-    params = HTMLParameters("", [], [], 2, sidebar_open = [], media_dir=tmp_path, header = header)
+    params = HTMLParameters("", [], [], 2, media_dir=tmp_path, header = header)
     HTMLConverter("1.0.0", params, {}).convert(infile, outfile)
     return outfile.read_text()
 

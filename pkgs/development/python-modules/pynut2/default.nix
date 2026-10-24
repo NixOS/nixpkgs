@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mezz64";
     repo = "python-nut2";
     rev = version;
-    sha256 = "1lg7n1frndfgw73s0ssl1h7kc6zxm7fpiwlc6v6d60kxzaj1dphx";
+    hash = "sha256-Hd4WpPp9AtPMNozyeN2p/Rs2DwxUa6DH4c81m12w59E=";
   };
 
   build-system = [ setuptools ];

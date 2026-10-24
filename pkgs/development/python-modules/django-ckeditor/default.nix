@@ -64,13 +64,13 @@ buildPythonPackage rec {
         CKEditor 4 package is provided by its upstream developers as a
         non-free/commercial LTS package until December 2028.
 
-        Note that while there are publically known vulnerabilities for the
+        Note that while there are publicly known vulnerabilities for the
         CKEditor 4 series, the exploitability of these issues depends on how
         CKEditor is used by the given Django application.
 
         Further information:
 
-        * List of vulnerabilites fixed in CKEditor 4.24.0-lts:
+        * List of vulnerabilities fixed in CKEditor 4.24.0-lts:
 
           * GHSA-fq6h-4g8v-qqvm
           * GHSA-fq6h-4g8v-qqvm

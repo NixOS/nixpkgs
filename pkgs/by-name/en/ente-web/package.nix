@@ -12,7 +12,7 @@
   wasm-pack,
   writeScript,
   extraBuildEnv ? { },
-  # This package contains serveral sub-applications. This specifies which of them you want to build.
+  # This package contains several sub-applications. This specifies which of them you want to build.
   enteApp ? "photos",
   # Accessing some apps (such as account) directly will result in a hardcoded redirect to ente.io.
   # To prevent users from accidentally logging in to ente.io instead of the selfhosted instance, you
@@ -24,7 +24,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.59";
+  version = "1.3.61";
 
   src = fetchFromGitHub {
     owner = "ente";
@@ -35,7 +35,7 @@ buildNpmPackage (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-M2JFNfozDU6AeHpPul6rLtwxjc//CdxTLjl4vWojv8w=";
+    hash = "sha256-ZLcjrauIdQdLCbMafYVpJVhc13DE7XBOt5awiQmnBnk=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -47,11 +47,11 @@ buildNpmPackage (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-66MZPxwXkvna3IfDGH6vPJ5CxTaYl1AJ/7qGYKHt1Mg=";
+    hash = "sha256-NMqkShAHqCcx25rlmWyvoZf/BqeIgzwWZT4Pzhajfr0=";
   };
   cargoRoot = "../rust";
 
-  npmDepsHash = "sha256-+ygPdfrgVGephAtef7VhRrLGLtTb503BlaJbiIzfEl8=";
+  npmDepsHash = "sha256-7kE2tT7/vfJIoAbg3up+Uao2+fmP6ccr+bYNFXxU174=";
 
   nativeBuildInputs = [
     binaryen
@@ -84,7 +84,7 @@ buildNpmPackage (finalAttrs: {
     # Replace hardcoded links pointing to the public ente instance so that
     # users of a self-hosted instance are not accidentally redirected there
     + lib.optionalString (enteMainUrl != null) ''
-      for pattern in "https://web.ente.io" "https://ente.com" "https://ente.io"; do
+      for pattern in "https://web.ente.io" "https://ente.com" "https://ente.io" "https://photos.ente.com"; do
         mapfile -d "" -t files < <(grep -rlFZ -- "$pattern" apps/)
         ${lib.getExe sd} -F -- "$pattern" ${lib.escapeShellArg enteMainUrl} "''${files[@]}"
       done

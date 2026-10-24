@@ -9,11 +9,8 @@
 
   # dependencies
   numpy,
-  types-pytz,
 
   # tests
-  # pytestCheckHook,
-  pytest9_0CheckHook,
   beautifulsoup4,
   html5lib,
   jinja2,
@@ -23,7 +20,9 @@
   openpyxl,
   pandas,
   pyarrow,
+  pyiceberg,
   pyreadstat,
+  pytestCheckHook,
   python-calamine,
   scipy,
   sqlalchemy,
@@ -33,35 +32,27 @@
   xarray,
   xlsxwriter,
 }:
-let
-  # pytest 9.1 turns non-list/tuple argvalues in @parametrize into
-  # PytestRemovedIn10Warning, which pandas-stubs' warning filter treats
-  # as a fatal error during test collection.
-  # Pin to 9.0 until upstream converts the affected
-  # generators to lists/tuples
-  pytestCheckHook = pytest9_0CheckHook;
-in
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "pandas-stubs";
-  version = "3.0.3.260530";
+  version = "3.0.5.260914";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas-stubs";
-    tag = "v${version}";
-    hash = "sha256-vPXz4ibNbFE2B14pkGPN5EDAwhA92VgFXzMLR9da6WQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5SSqxYzTUszIDB+1OIDYR5rdxD8GI8ubuhe/kfoNvoc=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     numpy
-    types-pytz
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     beautifulsoup4
     html5lib
     jinja2
@@ -71,7 +62,10 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pyarrow
+    pyiceberg
     pyreadstat
+    pytestCheckHook
+    python-calamine
     scipy
     sqlalchemy
     tables
@@ -79,7 +73,12 @@ buildPythonPackage rec {
     typing-extensions
     xarray
     xlsxwriter
-    python-calamine
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future.
+    # This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -117,4 +116,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ malo ];
   };
-}
+})

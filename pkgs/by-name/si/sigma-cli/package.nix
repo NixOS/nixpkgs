@@ -26,13 +26,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     colorama
     prettytable
     pysigma
+    pysigma-backend-crowdstrike
     pysigma-backend-elasticsearch
     pysigma-backend-insightidr
+    pysigma-backend-loki
     pysigma-backend-opensearch
     pysigma-backend-qradar
     pysigma-backend-splunk
-    pysigma-backend-loki
-    pysigma-pipeline-crowdstrike
     pysigma-pipeline-sysmon
     pysigma-pipeline-windows
   ];

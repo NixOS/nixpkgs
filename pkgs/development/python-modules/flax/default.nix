@@ -16,6 +16,7 @@
   pyyaml,
   rich,
   tensorstore,
+  treescope,
   typing-extensions,
 
   # tests
@@ -27,7 +28,7 @@
   pytest-xdist,
   sphinx,
   tensorflow,
-  treescope,
+  torch,
 
   writeScript,
   tomlq,
@@ -35,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.8";
+  version = "0.12.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0I5RwA1ORlWtSawOZhgsZMBQSOusyxD0WnIoPgZdxZw=";
+    hash = "sha256-cgtRncxqT6ZKBUR3NpN08+c7zddxU3EoeIF5Xt9omc0=";
   };
 
   build-system = [
@@ -69,11 +70,14 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cloudpickle
-    keras
     einops
     pytestCheckHook
     pytest-xdist
     sphinx
+    torch
+  ]
+  ++ lib.optionals tensorflow.meta.available [
+    keras
     tensorflow
   ];
 
@@ -88,6 +92,10 @@ buildPythonPackage (finalAttrs: {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    "tests/io_test.py"
+    "tests/tensorboard_test.py"
   ];
 
   disabledTests = [

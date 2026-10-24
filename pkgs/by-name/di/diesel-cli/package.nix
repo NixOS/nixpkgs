@@ -27,15 +27,15 @@ assert lib.assertMsg (lib.elem true [
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.3.11";
+  version = "2.3.14";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-zxlV3AbG5cBBGUk3hx9U3OR26lB3G2QQlcxTg00WJZQ=";
+    hash = "sha256-kf1vVtcgDnO5jK3kpEcfaokBfeWxrHd8vKPMkVY5MHs=";
   };
 
-  cargoHash = "sha256-GytJ0Eq4LkdSq1fosXFoC0nI7bY0VdM8oOV/tvyUSMg=";
+  cargoHash = "sha256-u+8QUz0o73BYvzx3n/ZbHr0OExPfJNWLhLe1cu59LPs=";
 
   nativeBuildInputs = [
     installShellFiles

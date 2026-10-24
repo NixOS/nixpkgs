@@ -8,7 +8,7 @@
 let
   cfg = config.services.paperless;
   opt = options.services.paperless;
-
+  pythonPkgs = cfg.package.python.pkgs;
   defaultUser = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
 
@@ -19,6 +19,8 @@ let
   # Runtime-generated PAPERLESS_SECRET_KEY (see paperless-secret-key.service),
   # shared with every service and the paperless-manage wrapper via EnvironmentFile.
   secretKeyFile = "${cfg.dataDir}/nixos-paperless-secret-key.env";
+
+  extraPythonPath = pythonPkgs.makePythonPath (cfg.extraPythonPackages pythonPkgs);
 
   env = {
     PAPERLESS_DATA_DIR = cfg.dataDir;
@@ -38,14 +40,13 @@ let
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
   }
   // lib.optionalAttrs (cfg.settings.PAPERLESS_AI_ENABLED or true) {
-    NLTK_DATA = cfg.package.nltkDataDir;
     TIKTOKEN_CACHE_DIR = cfg.package.tiktokenCacheDir;
   }
-  // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
-    PAPERLESS_NLTK_DIR = cfg.package.nltkDataDir;
-  }
-  // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
+  // lib.optionalAttrs cfg.openMPThreadingWorkaround {
     OMP_NUM_THREADS = "1";
+  }
+  // lib.optionalAttrs (cfg.extraPythonPackages pythonPkgs != [ ]) {
+    PYTHONPATH = extraPythonPath;
   }
   // (lib.mapAttrs (
     _: s:
@@ -121,7 +122,6 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
-    SupplementaryGroups = lib.optional enableRedis redisServer.user;
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       "@system-service"
@@ -270,7 +270,29 @@ in
     user = lib.mkOption {
       type = lib.types.str;
       default = defaultUser;
-      description = "User under which Paperless runs.";
+      description = ''
+        User under which Paperless runs
+
+        ::: {.note}
+        If left as the default value this user will automatically be
+        created on system activation, otherwise you are responsible for
+        ensuring the group exists before the paperless service starts.
+        :::
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = defaultUser;
+      description = ''
+        Primary group under which Paperless runs
+
+        ::: {.note}
+        If left as the default value this group will automatically be
+        created on system activation, otherwise you are responsible for
+        ensuring the group exists before the redis service starts.
+        :::
+      '';
     };
 
     package = lib.mkPackageOption pkgs "paperless-ngx" { } // {
@@ -389,6 +411,18 @@ in
       default = false;
       description = ''
         Whether to configure Tika and Gotenberg to process Office and e-mail files with OCR.
+      '';
+    };
+
+    extraPythonPackages = lib.mkOption {
+      type = with lib.types; functionTo (listOf package);
+      default = _: [ ];
+      defaultText = lib.literalExpression "_: [ ]";
+      example = lib.literalExpression "with ps; [ paperless-ngx-erechnung ]";
+      description = ''
+        Additional Python packages to add to add to Paperless-ngx' Python environment.
+
+        This is mainly used to add and automatically load Paperless-ngx Plugins as defined in <https://docs.paperless-ngx.com/development#plugin-discovery>.
       '';
     };
 
@@ -574,7 +608,7 @@ in
               # and automatically migrates when needed (e.g. with v2 -> v3 swapping from Whoosh to Tantivy)
               ${lib.getExe cfg.package} document_index reindex --if-needed --no-progress-bar
 
-            if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n $PAPERLESS_ADMIN_PASSWORD ]]; then
+            if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n ''${PAPERLESS_ADMIN_PASSWORD-} ]]; then
               export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
               if [[ -e $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD ]]; then
                 PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
@@ -648,7 +682,7 @@ in
           ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
-            ExecStart = "${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application";
+            ExecStart = "${lib.getExe pythonPkgs.granian} --interface asginl --ws paperless.asgi:application";
             Restart = "on-failure";
 
             LimitNOFILE = 65536;
@@ -658,7 +692,12 @@ in
             PrivateNetwork = false;
           };
           environment = env // {
-            PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src";
+            PYTHONPATH = lib.concatStringsSep ":" (
+              lib.optional (env ? PYTHONPATH) env.PYTHONPATH
+              ++ [
+                "${pythonPkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src"
+              ]
+            );
           };
           # Allow the web interface to access the private /tmp directory of the server.
           # This is required to support uploading files via the web interface.
@@ -680,9 +719,9 @@ in
 
         services.gotenberg = lib.mkIf cfg.configureTika {
           enable = true;
-          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.18.2/docker/compose/docker-compose.sqlite-tika.yml#L60-L65
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v3.3.1/docker/compose/docker-compose.sqlite-tika.yml#L64-L66
           chromium.disableJavascript = true;
-          extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
+          extraArgs = [ "--chromium-allow-list=^file:///tmp/.*" ];
         };
 
         services.tika = lib.mkIf cfg.configureTika {
@@ -696,7 +735,9 @@ in
           "d '${cfg.exporter.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
         ];
 
-        services.paperless.exporter.settings = options.services.paperless.exporter.settings.default;
+        services.paperless.exporter.settings = lib.mapAttrs (
+          _: v: lib.mkDefault v
+        ) options.services.paperless.exporter.settings.default;
 
         systemd.services.paperless-exporter = {
           startAt = lib.defaultTo [ ] cfg.exporter.onCalendar;

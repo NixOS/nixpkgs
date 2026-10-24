@@ -1,8 +1,5 @@
 {
   lib,
-  buildPackages ? {
-    inherit stdenvNoCC;
-  },
   stdenvNoCC,
   curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
   cacert ? null,
@@ -24,7 +21,11 @@ let
     isList
     isString
     length
+    mapAttrs'
     match
+    nameValuePair
+    toFile
+    toShellVars
     warn
     ;
   nixpkgsVersion = lib.trivial.release;
@@ -38,15 +39,12 @@ let
   # fetchurl instantiations via environment variables.  This makes the
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
-  mirrorsFile = buildPackages.stdenvNoCC.mkDerivation (
-    {
-      name = "mirrors-list";
-      strictDeps = true;
-      builder = ./write-mirror-list.sh;
-      preferLocalBuild = true;
-    }
-    // mirrors
-  );
+  mirrorsListFile =
+    let
+      # Add a prefix to the names of the mirrors to avoid variable name clashes in the builder
+      mirrorsPrefixed = mapAttrs' (n: v: nameValuePair ("_mirror_" + n) v) mirrors;
+    in
+    toFile "mirrors-list" (toShellVars mirrorsPrefixed);
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",
   # "gnu", etc.).
@@ -304,6 +302,8 @@ lib.extendMkDerivation {
 
       nativeBuildInputs = defaultNativeBuildInputs ++ nativeBuildInputs;
 
+      strictDeps = true;
+
       urls = urls_;
 
       # If set, prefer the content-addressable mirrors
@@ -331,19 +331,22 @@ lib.extendMkDerivation {
 
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
-      env.SSL_CERT_FILE =
-        if
-          (
-            hash_.outputHash == ""
-            || hash_.outputHash == fakeSha256
-            || hash_.outputHash == fakeSha512
-            || hash_.outputHash == fakeHash
-            || netrcPhase != null
-          )
-        then
-          "${cacert}/etc/ssl/certs/ca-bundle.crt"
-        else
-          "/no-cert-file.crt";
+      env = {
+        SSL_CERT_FILE =
+          if
+            (
+              hash_.outputHash == ""
+              || hash_.outputHash == fakeSha256
+              || hash_.outputHash == fakeSha512
+              || hash_.outputHash == fakeHash
+              || netrcPhase != null
+            )
+          then
+            "${cacert}/etc/ssl/certs/ca-bundle.crt"
+          else
+            "/no-cert-file.crt";
+      }
+      // (derivationArgs.env or { });
 
       outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
@@ -373,7 +376,7 @@ lib.extendMkDerivation {
         curlOptsList
         downloadToTemp
         executable
-        mirrorsFile
+        mirrorsListFile
         postFetch
         showURLs
         ;

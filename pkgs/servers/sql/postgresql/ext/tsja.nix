@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tsja.c --replace-fail /usr/local/lib/mecab ${mecab}/lib/mecab
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   buildInputs = [
     mecab
     postgresql

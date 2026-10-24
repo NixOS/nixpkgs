@@ -54,14 +54,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url =
-          if lib.versionOlder version "3.0" then
-            let
-              versionFixed = builtins.replaceStrings [ "." ] [ "_" ] version;
-            in
-            "https://github.com/openssl/openssl/releases/download/OpenSSL_${versionFixed}/openssl-${version}.tar.gz"
-          else
-            "https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz";
+        url = "https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz";
         inherit hash;
       };
 
@@ -104,12 +97,11 @@ let
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
         rm test/recipes/01-test_symbol_presence.t
       ''
-      # this test has inconsistent behavior in the freebsd sandbox
-      # (binds to only ipv6 and connects on only ipv4)
+      # this test has multiple issues in the freebsd sandbox:
+      # * binds to only ipv6 and connects on only ipv4
+      # * attempts name resolution which fails
       + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-        substituteInPlace test/recipes/82-test_ocsp_cert_chain.t \
-          --replace-fail '"-accept",' '"-4", "-accept",' \
-          --replace-fail '"-connect",' '"-4", "-connect",'
+        rm test/recipes/82-test_ocsp_cert_chain.t
       '';
 
       outputs = [
@@ -413,81 +405,24 @@ let
 in
 {
   # intended version "policy":
-  # - 1.1 as long as some package exists, which does not build without it
-  #   (tracking issue: https://github.com/NixOS/nixpkgs/issues/269713)
-  #   try to remove in 24.05 for the first time, if possible then
   # - latest 3.x LTS
   # - latest 3.x non-LTS as preview/for development
   #
   # - other versions in between only when reasonable need is stated for some package
   # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
 
-  # If you do upgrade here, please update in pkgs/top-level/release.nix
-  # the permitted insecure version to ensure it gets cached for our users
-  # and backport this to stable release (at time of writing this 23.11).
-  openssl_1_1 = common {
-    version = "1.1.1w";
-    hash = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
-    patches = [
-      ./1.1/nix-ssl-cert-file.patch
-
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./1.1/use-etc-ssl-certs-darwin.patch
-        else
-          ./1.1/use-etc-ssl-certs.patch
-      )
-    ];
-    withDocs = true;
-    extraMeta = {
-      knownVulnerabilities = [
-        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.11 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
-      ];
-    };
-  };
-
-  openssl_3 = common {
-    version = "3.0.21";
-    hash = "sha256-YX4pr45CH0ZklISkk35IxoXkf0ZIgWfJgviLxOwdUi8=";
-
-    patches = [
-      # Support for NIX_SSL_CERT_FILE, motivation:
-      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
-      ./3.0/nix-ssl-cert-file.patch
-
-      # openssl will only compile in KTLS if the current kernel supports it.
-      # This patch disables build-time detection.
-      ./3.0/openssl-disable-kernel-detection.patch
-
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
-      )
-    ]
-    ++
-      # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
-      # and also https://github.com/openssl/openssl/pull/29321
-      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
-
-    withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
-  };
-
   openssl_3_5 = common {
-    version = "3.5.7";
-    hash = "sha256-qMDSilKcpID582z1eS4s0hmEVSo8jkqhGiSqMa6smOg=";
+    version = "3.5.9";
+    hash = "sha256-YD9WAuLu8A13+9Qp003NWCK7MBdXobyc2yTGcPHrhZo=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
       # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
-      ./3.0/nix-ssl-cert-file.patch
+      ./3.5/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
-      ./3.0/openssl-disable-kernel-detection.patch
+      ./3.5/openssl-disable-kernel-detection.patch
 
       # Look up SSL certificates in /etc rather than the immutable installation directory
       (
@@ -496,9 +431,6 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      ./3.5/fix-mingw-linking.patch
     ];
 
     withDocs = true;
@@ -509,17 +441,17 @@ in
   };
 
   openssl_3_6 = common {
-    version = "3.6.3";
-    hash = "sha256-JDqGZJz28j7rai/yRW4J5dd92QGKVNPZawxr3Wumx/E=";
+    version = "3.6.5";
+    hash = "sha256-ohV8KDDv3sN4iTmwDJsGODBtPwu7dtxIMu5QO7OX35g=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
       # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
-      ./3.0/nix-ssl-cert-file.patch
+      ./3.5/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
-      ./3.0/openssl-disable-kernel-detection.patch
+      ./3.5/openssl-disable-kernel-detection.patch
 
       # Look up SSL certificates in /etc rather than the immutable installation directory
       (
@@ -538,17 +470,17 @@ in
   };
 
   openssl_4_0 = common {
-    version = "4.0.1";
-    hash = "sha256-LbPzoNbqS1nh8JSs4sjNU23/uHzcOQhMWvoeb3833Qk=";
+    version = "4.0.3";
+    hash = "sha256-MltcgGFnwTtAsf/q3+AkgZfADszEzxI+weKNLS/SFtk=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
       # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
-      ./3.0/nix-ssl-cert-file.patch
+      ./3.5/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
-      ./3.0/openssl-disable-kernel-detection.patch
+      ./3.5/openssl-disable-kernel-detection.patch
 
       # Look up SSL certificates in /etc rather than the immutable installation directory
       (

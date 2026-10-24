@@ -1,7 +1,7 @@
 {
   lib,
   callPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   makeWrapper,
   nixosTests,
 
@@ -12,16 +12,15 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.12.0";
-  src = fetchFromGitHub {
-    owner = "mrmn2";
+  version = "1.14.0";
+  src = fetchFromCodeberg {
+    owner = "mrmn";
     repo = "PdfDing";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-LcZa9BxP99lI7Hqt3seyBeFNn4oLtR31yjq3Ap/IwUE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yxDN6aFYRdrpDV7AdKeam1ZUcs5GTXU1fLaOHB7Mx8c=";
   };
   pyproject = true;
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   # remove supervisor from dependencies, we use systemd
@@ -52,7 +51,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
       ruamel-yaml
       whitenoise
 
-      # dependecies required for django collectstatic
+      # dependencies required for django collectstatic
       cryptography
       pyjwt
       requests
@@ -138,8 +137,10 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     "django-allauth"
     "gunicorn"
     "huey"
+    "markdown"
     "nh3"
     "psycopg2-binary"
+    "pypdf"
     "pypdfium2"
   ];
 
@@ -187,9 +188,9 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/mrmn2/PdfDing/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://codeberg.org/mrmn/PdfDing/src/commit/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Selfhosted PDF manager, viewer and editor offering a seamless user experience on multiple devices";
-    downloadPage = "https://github.com/mrmn2/PdfDing";
+    downloadPage = "https://codeberg.org/mrmn/PdfDing";
     homepage = "https://pdfding.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "pdfding-manage";

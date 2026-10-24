@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mate-wayland-session";
-  version = "1.28.5";
+  version = "1.28.6";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-wayland-session";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YWuBAzsLrvnwGgXbcDzIZtQIscIl37Y3wIRCOKidtYo=";
+    hash = "sha256-jlUmA+a59VGXtPUftmA7DruZK53IQM+66RgeP1Jg3e8=";
   };
 
   nativeBuildInputs = [

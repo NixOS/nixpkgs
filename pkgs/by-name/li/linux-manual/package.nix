@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     homepage = "https://kernel.org/";
     description = "Linux kernel API manual pages";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

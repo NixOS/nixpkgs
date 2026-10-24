@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  testers,
-  mirrord,
   autoPatchelfHook,
+  versionCheckHook,
 }:
 
 let
@@ -13,6 +12,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mirrord";
   version = manifest.version;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl (manifest.assets.${stdenv.hostPlatform.system});
 
@@ -29,15 +31,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D $src $out/bin/mirrord
+
+    runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = mirrord;
-    };
-    updateScript = ./update.py;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.py;
 
   meta = {
     description = "Run local processes in the context of Kubernetes environment";

@@ -20,7 +20,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-triton";
-  version = "3.7.10.post20260531";
+  version = "3.8.10.post20260920";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lightseekorg";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xsV63z2NtB5BM0rF0J+cnMH2RYzoWkpsSXHQI2nIEdQ=";
+    hash = "sha256-IsPm9yrtTTAzjsrFAfZOLSthCHi8akUemv2jZI6SuVM=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # https://github.com/lightseekorg/triton/blob/v3.7.10.post20260531/.github/workflows/wheels.yml#L109-L117
+  # https://github.com/lightseekorg/triton/blob/v3.8.10.post20260920/.github/workflows/wheels.yml#L110-L118
   env = {
     TRITON_OFFLINE_BUILD = true;
     TRITON_BUILD_RELEASE = true;
@@ -63,7 +63,13 @@ buildPythonPackage (finalAttrs: {
     TRITON_STABLE_ABI = pythonAtLeast "3.12";
     LLVM_SYSPATH = tokenspeed-triton-llvm;
     JSON_SYSPATH = nlohmann_json;
-    NIX_CFLAGS_COMPILE = "-Wno-stringop-overflow";
+    # Skip building the AMD codegen library, which requires its own pinned LLVM (cmake/amd-llvm-info.json).
+    # It is only dlopen'ed at runtime by the AMD backend.
+    TRITON_AMD_CODEGEN_PATH = "/dev/null";
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-stringop-overflow"
+      "-Wno-free-nonheap-object"
+    ];
   };
 
   buildInputs = [

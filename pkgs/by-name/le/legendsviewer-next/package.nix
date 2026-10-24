@@ -13,13 +13,13 @@
   nix-update-script,
 }:
 let
-  version = "1.2.5";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Kromtec";
     repo = "LegendsViewer-Next";
     tag = "v${version}";
-    hash = "sha256-R84y+QdLiEoVTo+z3jaql8m2rg2nbX9aXa2m8JiYAzU=";
+    hash = "sha256-NfNCWRN54NHbTDGcZDqd4PGFUudh14jhZYaYBL4jPc0=";
   };
 
   patches' = patches ++ [ ./remove-npm-frontend.patch ];

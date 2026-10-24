@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goaccess";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = "goaccess";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9Z57T0MPs3ytwi32fMF67j8h7ml20cw4Hf+/DEg5AQY=";
+    hash = "sha256-hLabLVnLCCIAuQbzUxiPomLzFXGk65Ea+COdDqPW0pM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -47,7 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://goaccess.io";
     changelog = "https://github.com/allinurl/goaccess/raw/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ederoyd46 ];
+    maintainers = with lib.maintainers; [
+      ederoyd46
+      luochen1990
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "goaccess";
   };

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
-  version = "3.0.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "zxing-cpp";
     repo = "zxing-cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZtjvHBnuPJkc9kU998jH7IPlX3jF/RGtLNWDzsb0v4A=";
+    hash = "sha256-dCqn2qYQGHY/nmwwkgd4uGoKp0YeQxWiHpS0Hhsm+UE=";
   };
 
   strictDeps = true;
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DZXING_DEPENDENCIES=LOCAL"
     "-DZXING_EXAMPLES=OFF"
     "-DZXING_USE_BUNDLED_ZINT=OFF"
+    (lib.cmakeFeature "ZXING_WRITERS" "BOTH")
   ];
 
   passthru = {

@@ -15,17 +15,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "keifu";
-  version = "0.5.0";
+  version = "0.7.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "trasta298";
     repo = "keifu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ndMWi//G9kwnoPf58YtICyytMv2t0e4h7cwBdfpaoVY=";
+    hash = "sha256-IV6IAB5XarQ91PSi1/1cjjM+R4oGejVzvWNPPOK5NH4=";
   };
 
-  cargoHash = "sha256-lNctnxVntxRZaS9XeII1sQZ2ZNKkSvd8n+bq5Fwd6QM=";
+  cargoHash = "sha256-WM+FLo+YH0gWIlSs2WfXjfGpNWN8Vk2fPQ9lIYxE88Y=";
 
   nativeBuildInputs = [
     pkg-config

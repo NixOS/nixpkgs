@@ -301,6 +301,15 @@ stdenv.mkDerivation (
         stripLen = 1;
         extraPrefix = "libraries/unix/";
       })
+      # Fix build with gcc16 where `const` is not detected.
+      # https://github.com/haskell/unix/pull/371
+      (fetchpatch {
+        name = "unix-AC_C_CONST-drop.patch";
+        url = "https://github.com/haskell/unix/commit/1e4183114d4bde7a343803ae11ebbe6763a81ad2.patch";
+        hash = "sha256-ZeIeX4mX5qO0AwT8ASO25ZQXjcTICPfyy5MYw5CJ9sw=";
+        stripLen = 1;
+        extraPrefix = "libraries/unix/";
+      })
 
       # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129 krank:ignore-line
       ./docs-sphinx-7.patch
@@ -325,7 +334,7 @@ stdenv.mkDerivation (
     # This causes GHC to fail compilation on mach-o platforms ever since we upgraded to
     # LLVM 19.
     #
-    # clang compiles the same file without issues whithout the roundtrip via assembly. Thus,
+    # clang compiles the same file without issues without the roundtrip via assembly. Thus,
     # the solution is to backport those changes from GHC 9.6 that skip the intermediate
     # assembly step.
     #
@@ -394,6 +403,13 @@ stdenv.mkDerivation (
     ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     postPatch = "patchShebangs .";
+
+    # libraries/unix/configure.ac patch requires ./configure refresh
+    postAutoreconf = ''
+      pushd libraries/unix
+      autoconf
+      popd
+    '';
 
     # GHC is a bit confused on its cross terminology.
     # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths

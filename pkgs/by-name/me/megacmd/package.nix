@@ -15,7 +15,7 @@
   libzen,
   makeWrapper,
   nix-update-script,
-  pdfium-binaries,
+  pdfium,
   pkg-config,
   readline,
   sqlite,
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "megacmd";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "${finalAttrs.version}_Linux";
     fetchSubmodules = true;
     postCheckout = "git -C $out/sdk rev-parse --short HEAD > $out/sdk/.gitrev";
-    hash = "sha256-RE4n4igAXhYNshnjjyeb2McmBKt5HY0oZ+U5SMMtQ2I=";
+    hash = "sha256-sqclkEm6BCyk6GhMutyt9TGsevGIwrTMGSwrPGar1nI=";
   };
 
   __structuredAttrs = true;
@@ -45,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     # use pkg-config instead of vcpkg
     # https://github.com/meganz/MEGAcmd/pull/1067
     ./no-vcpkg.patch
+
+    # Accept PDFium paths directly from nixpkgs instead of requiring pkg-config.
+    ./pdfium-from-nixpkgs.patch
 
     # use cmake option to enable the updater instead of depending on os
     # https://github.com/meganz/MEGAcmd/pull/1117
@@ -64,14 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "check_function_exists(aio_write, HAVE_AIO_RT)" "check_function_exists(aio_write HAVE_AIO_RT)"
 
     # cryptopp on nixpkgs has libcryptopp.pc, not libcrypto++.pc
-    # pdfium-binaries{,-v8} in nixpkgs does not provide a pc file but only a cmake file
-    # libicui18n is needed (https://github.com/meganz/sdk/pull/2769)
     substituteInPlace sdk/cmake/modules/sdklib_libraries.cmake \
-      --replace-fail "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcrypto++)" "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcryptopp)" \
-      --replace-fail "pkg_check_modules(pdfium REQUIRED IMPORTED_TARGET pdfium)" "find_package(PDFium)" \
-      --replace-fail "target_link_libraries(SDKlib PRIVATE PkgConfig::pdfium)" "target_link_libraries(SDKlib PRIVATE pdfium)" \
-      --replace-fail "find_package(ICU COMPONENTS uc data REQUIRED)" "find_package(ICU COMPONENTS i18n uc data REQUIRED)" \
-      --replace-fail "target_link_libraries(SDKlib PRIVATE ICU::uc ICU::data)" "target_link_libraries(SDKlib PRIVATE ICU::i18n ICU::uc ICU::data)"
+      --replace-fail "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcrypto++)" "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcryptopp)"
   '';
 
   enableParallelBuilding = true;
@@ -106,13 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     libuv
     libzen
-    pdfium-binaries
+    pdfium
     readline
     sqlite
   ];
 
   cmakeFlags = [
     (lib.cmakeFeature "VCPKG_ROOT" "") # fallback to pkg-config instead of vcpkg
+    (lib.cmakeFeature "PDFIUM_INCLUDE_DIR" "${lib.getDev pdfium}/include/public")
+    (lib.cmakeFeature "PDFIUM_LIBRARY" "${lib.getLib pdfium}/lib/libpdfium${stdenv.hostPlatform.extensions.sharedLibrary}")
     (lib.cmakeBool "ENABLE_UPDATER" false)
     (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage was removed from nixpkgs
     (lib.cmakeBool "USE_PCRE" false) # causes link errors and is not needed anyway (use std::regex instead)

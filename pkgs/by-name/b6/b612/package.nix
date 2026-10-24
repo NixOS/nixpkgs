@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installFonts ];
 
   meta = {
-    homepage = "https://b612-font.com/";
+    homepage = "https://projects.eclipse.org/projects/polarsys.b612";
     description = "Highly legible font family for use on aircraft cockpit screens";
     longDescription = ''
       B612 is the result of a research project initiated by Airbus. The font

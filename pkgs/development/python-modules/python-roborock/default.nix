@@ -21,20 +21,21 @@
   pyyaml,
   vacuum-map-parser-roborock,
   click-shell,
-  syrupy,
+  syrupy_5,
   writableTmpDirAsHomeHook,
+  zmqtt,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "5.31.1";
+  version = "7.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HjiOZd+fkCTlxMEiuHWxaFeHwf7vHAYESMLkJ9Cye1U=";
+    hash = "sha256-S1rVkm0UPesQ0+s28uVD2ztjnaly0G2aUKHcCXBOroI=";
   };
 
   pythonRelaxDeps = [
@@ -68,8 +69,9 @@ buildPythonPackage (finalAttrs: {
     freezegun
     pytest-asyncio
     pytestCheckHook
-    syrupy
+    syrupy_5
     writableTmpDirAsHomeHook
+    zmqtt
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
@@ -86,7 +88,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python library & console tool for controlling Roborock vacuum";
     homepage = "https://github.com/Python-roborock/python-roborock";
     changelog = "https://github.com/Python-roborock/python-roborock/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "roborock";
   };

@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Client for the Mozilla VPN service";
     mainProgram = "mozillavpn";
-    homepage = "https://vpn.mozilla.org/";
+    homepage = "https://www.mozilla.org/en-US/products/vpn/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;

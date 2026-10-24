@@ -8,7 +8,7 @@
   intltool,
   adwaita-icon-theme,
   gdk-pixbuf,
-  libappindicator-gtk3,
+  libappindicator,
   fetchurl,
   lib,
   writeScript,
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libnotify
     adwaita-icon-theme
     gdk-pixbuf
-    libappindicator-gtk3
+    libappindicator
   ];
 
   propagatedBuildInputs = with python3Packages; [

@@ -28,7 +28,7 @@ in
     src = fetchurl {
 
       url = "https://download.brother.com/welcome/dlf102774/${model}lpr-1.0.0-0.i386.deb";
-      sha256 = "sha256-EXUN69YJEz1M0ADEF+0uZ+hdMgIiXChwtf+NzeFk7j0=";
+      hash = "sha256-EXUN69YJEz1M0ADEF+0uZ+hdMgIiXChwtf+NzeFk7j0=";
     };
 
     nativeBuildInputs = [
@@ -86,7 +86,7 @@ in
 
     src = fetchurl {
       url = "https://download.brother.com/welcome/dlf102775/${model}cupswrapper-1.0.0-0.i386.deb";
-      sha256 = "sha256-JrYn9UlQr48HlETUmsNRq4oNPwtSiTFCsOuPMJ2kzSU=";
+      hash = "sha256-JrYn9UlQr48HlETUmsNRq4oNPwtSiTFCsOuPMJ2kzSU=";
     };
 
     nativeBuildInputs = [

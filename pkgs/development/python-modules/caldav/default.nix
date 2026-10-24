@@ -3,6 +3,7 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
+  httpx,
   icalendar,
   icalendar-searcher,
   lxml,
@@ -26,16 +27,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "caldav";
-  version = "3.2.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
-    tag = "v${version}";
-    hash = "sha256-SCqc0MVxKaHpES+NkDcaItHlkk0kCFj6kFqH8k08vdA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5wYmN3jKoL/AsfQPdJcud7hnIMH9RwJGvCP6dJtu3DQ=";
   };
 
   build-system = [
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    httpx
     manuel
     proxy-py
     pyfakefs
@@ -71,14 +73,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "caldav" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-caldav/caldav/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       marenz
       dotlambda
     ];
   };
-}
+})

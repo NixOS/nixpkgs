@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-resourcemanager";
-  version = "0.9.0";
+  version = "0.11.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "stackit_resourcemanager";
     inherit (finalAttrs) version;
-    hash = "sha256-vrDilDnoAGm0k9ejF9LFoDiBSvk4zYPXu95AbmNNQDY=";
+    hash = "sha256-o17wo/xevH+iKtrwHjsNAiCRUNnNCn2v9xz2L+WtcAo=";
   };
 
   build-system = [ hatchling ];

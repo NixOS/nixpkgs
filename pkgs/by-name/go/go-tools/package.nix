@@ -6,21 +6,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-tools";
-  version = "2026.1";
+  version = "2026.2.2";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
-    rev = finalAttrs.version;
-    sha256 = "sha256-cj/pHKwp7eGuOO1zhv5bFmuPHgsFytktLQmihhdYkfY=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-nmcXIQf9Mws4CMQDKQ1NUYHLYkm+ggSnh5sDiuvdnK4=";
   };
 
-  vendorHash = "sha256-Wu8+e0r0bkztLbxekbHktoKjg6c8q7ls5APSEdO8CKs=";
+  vendorHash = "sha256-YC+DQZ3xjLGzhUXq/KBYhi1PGE63hBFaFor+XUZE1Ng=";
 
   excludedPackages = [ "website" ];
 
   meta = {
     description = "Collection of tools and libraries for working with Go code, including linters and static analysis";
+    changelog = "https://github.com/dominikh/go-tools/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://staticcheck.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

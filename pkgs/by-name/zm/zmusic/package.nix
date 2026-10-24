@@ -51,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "DYN_MPG123" false)
+    (lib.cmakeBool "DYN_SNDFILE" false)
+  ];
+
   meta = {
     description = "GZDoom's music system as a standalone library";
     homepage = "https://github.com/ZDoom/ZMusic";

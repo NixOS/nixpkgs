@@ -1,25 +1,24 @@
 {
   lib,
   stdenv,
-  cmakeMinimal,
   fetchFromGitHub,
+  cmake,
   ninja,
   rust-bindgen,
   testers,
-  aws-lc,
   nix-update-script,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
   withRustBindings ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "5.0.0";
+  version = "5.11.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Dvy6mzEfKgimxCGp7q2fPk9urBMJMU6gZmaZXwdZfWw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2gsjaMgP8NcJVSdW2g4hGFySVfTfKJuSkjSrG8KTKWI=";
   };
 
   outputs = [
@@ -29,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    cmakeMinimal
+    cmake
     ninja
   ]
   ++ lib.optionals withRustBindings [
@@ -38,20 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" useSharedLibraries)
+    (lib.cmakeBool "DISABLE_GO" true)
+    (lib.cmakeBool "DISABLE_PERL" true)
     (lib.cmakeBool "GENERATE_RUST_BINDINGS" withRustBindings)
-    "-GNinja"
-    "-DDISABLE_GO=ON"
-    "-DDISABLE_PERL=ON"
-    "-DBUILD_TESTING=ON"
+  ]
+  ++ lib.optionals stdenv.cc.isGNU [
+    # Needed with gcc but breaks with clang
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-Wno-error=stringop-overflow")
   ];
 
   doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-    ninja run_minimal_tests
-    runHook postCheck
-  '';
+  checkTarget = "run_minimal_tests";
 
   postInstall = ''
     moveToOutput lib/crypto/cmake "$dev"
@@ -61,29 +57,29 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput share/rust "$dev"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isGNU [
-      # Needed with GCC 12 but breaks on darwin (with clang)
-      "-Wno-error=stringop-overflow"
-    ]
-  );
+  # AWS-LC's generated *-targets.cmake files hardcode _IMPORT_PREFIX to $out
+  # and set INTERFACE_INCLUDE_DIRECTORIES to "$out/include", but headers live
+  # in $dev/include under multi-output splitting. Clear the broken claim so
+  # consumers fall back to stdenv's normal include-path propagation via
+  # buildInputs (which correctly resolves to $dev/include).
+  postFixup = ''
+    for f in $out/lib/{crypto,ssl}/cmake/*/*-targets.cmake; do
+      substituteInPlace "$f" \
+        --replace-fail \
+          'INTERFACE_INCLUDE_DIRECTORIES "\$<\$<BOOL:1>:>;''${_IMPORT_PREFIX}/include"' \
+          'INTERFACE_INCLUDE_DIRECTORIES ""'
+    done
+  '';
 
   __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests = {
       version = testers.testVersion {
-        package = aws-lc;
+        package = finalAttrs.finalPackage;
         command = "bssl version";
       };
-      pkg-config = testers.hasPkgConfigModules {
-        package = aws-lc;
-        moduleNames = [
-          "libcrypto"
-          "libssl"
-          "openssl"
-        ];
-      };
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = nix-update-script { };
   };
@@ -91,12 +87,24 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "General-purpose cryptographic library maintained by the AWS Cryptography team for AWS and their customers";
     homepage = "https://github.com/aws/aws-lc";
-    license = [
-      lib.licenses.asl20 # or
-      lib.licenses.isc
-    ];
-    maintainers = [ lib.maintainers.theoparis ];
-    platforms = lib.platforms.unix;
+    changelog = "https://github.com/aws/aws-lc/releases/tag/v${finalAttrs.version}";
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        isc
+      ];
     mainProgram = "bssl";
+    maintainers = with lib.maintainers; [
+      theoparis
+      whispersofthedawn
+    ];
+    pkgConfigModules = [
+      "aws-lc"
+      "libcrypto"
+      "libssl"
+      "openssl"
+    ];
+    platforms = lib.platforms.unix;
   };
 })

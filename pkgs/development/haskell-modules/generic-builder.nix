@@ -23,7 +23,8 @@ let
   crossSupport = rec {
     emulator = stdenv.hostPlatform.emulator buildPackages;
 
-    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs; # JS backend already handles this
+    # Both backends provide their own interpreter.
+    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm;
 
     canProxyTH =
       # Using iserv-proxy with 9.4 yields
@@ -121,7 +122,9 @@ in
   doHaddockQuickjump ? doHoogle,
   doInstallIntermediates ? false,
   editedCabalFile ? null,
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs,
+  # Cabal does not build the profiled dynamic objects required by wasm TH.
+  enableLibraryProfiling ?
+    !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm && (ghc.enableProfiledLibs or true),
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling
@@ -349,6 +352,7 @@ let
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
+  ++ optional doHaddock "--with-haddock=${ghc.targetPrefix}haddock"
   ++ optionals (!isHaLVM) [
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
@@ -524,7 +528,7 @@ let
   )
   ++ setupHaskellDepends
   ++ collectedToolDepends
-  ++ optional stdenv.hostPlatform.isGhcjs nodejs;
+  ++ optional (stdenv.hostPlatform.isGhcjs || stdenv.hostPlatform.isWasm) nodejs;
   propagatedBuildInputs =
     buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =

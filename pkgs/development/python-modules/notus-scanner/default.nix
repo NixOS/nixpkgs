@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "notus-scanner";
-  version = "22.7.2";
+  version = "23.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "notus-scanner";
     tag = "v${version}";
-    hash = "sha256-JKDnqgEBzEIOI3WIh+SOycACFaYZoZHy7tPFirltDiM=";
+    hash = "sha256-ZrGomSGeFX07XJnlk/etcq7JVMS7OvCW8O1uUqfqm60=";
   };
 
   pythonRelaxDeps = [

@@ -1,4 +1,9 @@
-{ lib, options, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
 let
   inherit (lib) types mkOption literalMD;
 
@@ -26,7 +31,7 @@ in
       '';
       apply = lib.filterAttrs (k: v: v != null);
       type = types.submodule (
-        { options, config, ... }:
+        { options, ... }:
         {
           options = {
             maintainers = mkOption {
@@ -71,7 +76,10 @@ in
             };
             platforms = mkOption {
               type = types.listOf types.raw;
-              default = lib.platforms.linux ++ lib.platforms.darwin;
+              default = lib.platforms.linux ++ lib.optionals (config.containers == { }) lib.platforms.darwin;
+              defaultText = literalMD ''
+                `lib.platforms.linux ++ lib.platforms.darwin` when no containers are configured; otherwise `lib.platforms.linux`.
+              '';
               description = ''
                 Sets the [`meta.platforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-platforms) attribute on the [{option}`test`](#test-opt-test) derivation.
               '';

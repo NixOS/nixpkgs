@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
+  writers,
   alsa-lib,
   autoreconfHook,
   ffmpeg,
@@ -27,15 +28,23 @@
   zlib,
 }:
 
+let
+  check-dosbox-conf = writers.writeText "check-dosbox.conf" ''
+    [autoexec]
+    MOUNT C .
+
+    VER > C:\BLUB
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.07.02";
+  version = "2026.08.31";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-HO5JJQHeEJYXU7TtNCXZALgqkNbIMGI+TjDwbvs5L8w=";
+    hash = "sha256-RYnepkAHwLOQFBXNZSPkH4L9bi3BkVC2RKd+YReGMqU=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
@@ -111,6 +120,26 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
     '';
 
+  # Can't personally check Darwin anymore
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    env \
+      SDL_AUDIODRIVER=dummy \
+      SDL_VIDEODRIVER=dummy \
+      $out/bin/dosbox-x \
+        -nopromptfolder -nogui \
+        -exit \
+        -machine pc98 \
+        -conf ${check-dosbox-conf}
+
+    grep -q 'Reported DOS version' BLUB
+
+    runHook postInstallCheck
+  '';
+
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
@@ -136,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       hughobrien
-      OPNA2608
     ];
     platforms = lib.platforms.unix;
     mainProgram = "dosbox-x";

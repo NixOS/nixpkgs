@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goldendict-ng";
-  version = "26.6.2";
+  version = "26.11.0";
 
   src = fetchFromGitHub {
     owner = "xiaoyifang";
     repo = "goldendict-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2K0I6uYJtqRw0JbvNbbmIjzxzn6l7tzDU1d9Lo49cYs=";
+    hash = "sha256-EbG/K43OKCceU4VmFnAvim3KYQ2V+h/6xu1Mfxs1RoI=";
   };
 
   strictDeps = true;

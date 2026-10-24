@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.jwz.org/dadadodo";
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.all;
+    license = lib.licenses.hpndSellVariant;
   };
 })

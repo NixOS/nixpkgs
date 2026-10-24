@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "atproto-goat";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "goat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mI7GC0ElE+FxT7v29V/a+UZBI1d6os+HpEO5WYWxm6A=";
+    hash = "sha256-a9krG9OufTOwWIvtjz3emb8KKqdLxxCdbhsNqz0dWdM=";
   };
 
   postPatch = ''

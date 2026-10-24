@@ -128,6 +128,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Desktop client for nostr, an open social media protocol";
     downloadPage = "https://github.com/mikedilger/gossip/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/mikedilger/gossip";

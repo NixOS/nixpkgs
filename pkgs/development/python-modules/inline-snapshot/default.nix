@@ -65,6 +65,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
+    # Sensitive to formatter versions
+    "tests/test_docs.py"
   ];
 
   meta = {

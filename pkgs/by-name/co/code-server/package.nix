@@ -13,8 +13,9 @@
   runCommand,
   python3,
   esbuild,
-  nodejs_22,
+  nodejs_24,
   node-gyp,
+  npm-lockfile-fix,
   libsecret,
   libkrb5,
   libx11,
@@ -24,38 +25,48 @@
   xcbuild,
   quilt,
   nixosTests,
+  nix-update-script,
   prefetch-npm-deps,
 }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
-  esbuild' = esbuild.override {
-    buildGoModule =
-      args:
-      buildGoModule (
-        args
-        // rec {
-          version = "0.27.2";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-JbJB3F1NQlmA5d0rdsLm4RVD24OPdV4QXpxW8VWbESA=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      );
-  };
+  esbuildFor =
+    version: hash: vendorHash:
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // {
+            inherit version vendorHash;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              inherit hash;
+            };
+          }
+        );
+    };
 
-  # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path: version: ''
+  # VS Code pins esbuild independently in its build and extensions trees.
+  # The JavaScript API requires the native binary to have the exact same version.
+  esbuild_0_27_2 =
+    esbuildFor "0.27.2" "sha256-JbJB3F1NQlmA5d0rdsLm4RVD24OPdV4QXpxW8VWbESA="
+      "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+  esbuild_0_28_1 =
+    esbuildFor "0.28.1" "sha256-V+HKaWGAIs24ynFFIS9fQ0EAJJdNmlAMeL1sgDEAqWM="
+      "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+
+  # Replace esbuild's download script with a binary from nixpkgs.
+  patchEsbuild = esbuildPackage: path: ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
-    sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${lib.getExe esbuild'} ${path}/node_modules/esbuild/bin/esbuild
+    ln -s -f ${lib.getExe esbuildPackage} ${path}/node_modules/esbuild/bin/esbuild
   '';
 
   vscodeTarget =
@@ -66,63 +77,57 @@ let
     }
     .${system};
 
-  # Comment from @code-asher, the code-server maintainer
-  # See https://github.com/NixOS/nixpkgs/pull/240001#discussion_r1244303617
-  #
-  # If the commit is missing it will break display languages (Japanese, Spanish,
-  # etc). For some reason VS Code has a hard dependency on the commit being set
-  # for that functionality.
-  # The commit is also used in cache busting. Without the commit you could run
-  # into issues where the browser is loading old versions of assets from the
-  # cache.
-  # Lastly, it can be helpful for the commit to be accurate in bug reports
-  # especially when they are built outside of our CI as sometimes the version
-  # numbers can be unreliable (since they are arbitrarily provided).
-  #
-  # To compute the commit when upgrading this derivation, do:
-  # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
-  # Example: `$ git rev-parse v4.16.1`
-  commit = "1c6fb2dc200eb57c5c7d612004e18a5e6ae8b0ed";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.115.0";
+  version = "4.140.0";
+  npmDepsHash = "sha256-ttccUM1xjUvnc5Y6ERtQzKNzWt8+7Kf3rPrFhjObGAo=";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hoi5QABYwRySGB9DNyEI6qMFYXCka3rfsE5j0Ww7Ax8=";
+    postCheckout = ''
+      git -C "$out" rev-parse HEAD > "$out/.git-revision"
+    '';
+    hash = "sha256-M/Sxl08PiiTiqhfxk510FSktSp0a/j74zPzycWcV+xE=";
   };
 
-  nodeModules =
+  npmDeps =
     runCommand "code-server-node-modules"
       {
         inherit (finalAttrs) src;
         nativeBuildInputs = finalAttrs.nativeBuildInputs ++ [
+          npm-lockfile-fix
           prefetch-npm-deps
         ];
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-nsKsbSuIMvqKT9XVPIsEN6EgvnDvB7rAuUYZDLBBO4A=";
+        outputHash = finalAttrs.npmDepsHash;
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
           npm_config_progress = false;
           npm_config_cafile = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
         };
       }
       ''
         runPhase unpackPhase
         export HOME=$TMPDIR/home
-        mkdir $out
+        npm-lockfile-fix lib/vscode/build/rspack/package-lock.json
         for p in $(find -name package-lock.json)
         do (
           echo "Prefetching $p"
           prefetch-npm-deps "$p" "$out/$(dirname $p)"
         )
         done
+
+        # VS Code downloads Electron typings outside npm.
+        # Use upstream's version and checksum for the offline dependency cache.
+        node lib/vscode/build/npm/electronTypes.ts
+        cp lib/vscode/.build/typings/electron.d.ts "$out/electron.d.ts"
       '';
 
   nativeBuildInputs = [
@@ -141,10 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxkbfile
+    libkrb5
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libsecret
-    libkrb5
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -155,18 +160,30 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove all git calls from the VS Code build script except `git rev-parse
     # HEAD` which is replaced in postPatch with the commit.
     ./build-vscode-nogit.patch
+    # Prevent the VS Code build from downloading Node.js.
+    ./remove-node-download.patch
+    # Use npm's installed Copilot native package to keep the build offline.
+    ./use-vendored-copilot-native.patch
   ];
 
   postPatch = ''
+    # The rspack lockfile omits resolved URLs and integrity hashes for peer
+    # dependencies, which prefetch-npm-deps needs for an offline cache.
+    cp "$npmDeps/lib/vscode/build/rspack/package-lock.json" \
+      lib/vscode/build/rspack/package-lock.json
+
+    # Let VS Code's postinstall use the prefetched, checksum-verified typings.
+    install -Dm644 "$npmDeps/electron.d.ts" lib/vscode/.build/typings/electron.d.ts
+
     export HOME=$PWD
 
     patchShebangs ./ci
 
     # inject git commit
     substituteInPlace ./ci/build/build-vscode.sh \
-      --replace-fail '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "$(cat .git-revision)"
     substituteInPlace ./ci/build/build-release.sh \
-      --replace-fail '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "$(cat .git-revision)"
 
     substituteInPlace ./lib/vscode/build/npm/postinstall.ts \
       --replace-fail "child_process.execSync('git config pull.rebase merges');" \
@@ -191,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export HOME=$TMPDIR/home
     mkdir -p $HOME
-    cp -R $nodeModules $TMPDIR/cache
+    cp -R $npmDeps $TMPDIR/cache
     chmod -R +w $TMPDIR/cache
   '';
 
@@ -245,14 +262,11 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
       lib/vscode/src/vs/platform/update/common/update.config.contribution.ts
 
-    # Patch out remote download of nodejs from build script.
-    patch -p1 -i ${./remove-node-download.patch}
-
     patchShebangs .
 
     # Use esbuild from nixpkgs.
-    ${patchEsbuild "./lib/vscode/build" "0.27.2"}
-    ${patchEsbuild "./lib/vscode/extensions" "0.27.2"}
+    ${patchEsbuild esbuild_0_27_2 "./lib/vscode/build"}
+    ${patchEsbuild esbuild_0_28_1 "./lib/vscode/extensions"}
 
     # Put ripgrep binary into bin, so post-install does not try to download it.
     find -name ripgrep -type d \
@@ -272,11 +286,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-    # (see issue #101229).
+    # VS Code's postinstall removes the prebuilt @parcel/watcher binary, so
+    # build it from source, as upstream's macOS release build does.
     pushd ./lib/vscode/remote/node_modules/@parcel/watcher
-    mkdir -p ./build/Release
-    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+    node "$npm_config_node_gyp" rebuild
     jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
     popd
   ''
@@ -328,7 +341,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    prefetchNodeModules = lib.overrideDerivation finalAttrs.nodeModules (d: {
+    updateScript = nix-update-script { };
+    prefetchNodeModules = lib.overrideDerivation finalAttrs.npmDeps (d: {
       outputHash = lib.fakeSha256;
     });
     tests = {
@@ -349,12 +363,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/coder/code-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      connornelson
       henkery
       code-asher
     ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     mainProgram = "code-server";
   };

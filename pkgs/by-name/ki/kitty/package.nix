@@ -46,26 +46,27 @@
   makeBinaryWrapper,
   darwin,
   cairo,
+  shader-slang,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.48.2";
+  version = "0.49.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-qNgVPpvMm8Y/nbBjVvWVuZ954ZXIuWmXhldP3w8MBhU=";
+    hash = "sha256-FstfBzwdh1z7Qy9zWDY7L7mpd5bxnypgqEzqeLe16fY=";
   };
 
   goModules =
     (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-BZudfNfREwNrgalaimC5Lp+UIdFS+jHFLl9mEXcHYMI=";
+      vendorHash = "sha256-iSPPwwu9jllnIxkQeOlJFdDL4xLUGRP2RMW9DPRY6FQ=";
     }).goModules;
 
   buildInputs = [
@@ -108,11 +109,13 @@ buildPythonApplication rec {
     sphinx
     furo
     sphinx-copybutton
+    sphinx-design
     sphinxext-opengraph
     sphinx-inline-tabs
     go_1_26
     fontconfig
     makeBinaryWrapper
+    shader-slang
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -147,6 +150,15 @@ buildPythonApplication rec {
       libxkbcommon = "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0";
     })
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace glfw/x11_init.c \
+      --replace-fail 'libXi.so.6'       '${lib.getLib libxi}/lib/libXi.so.6' \
+      --replace-fail 'libXrandr.so.2'   '${lib.getLib libxrandr}/lib/libXrandr.so.2' \
+      --replace-fail 'libXcursor.so.1'  '${lib.getLib libxcursor}/lib/libXcursor.so.1' \
+      --replace-fail 'libXinerama.so.1' '${lib.getLib libxinerama}/lib/libXinerama.so.1' \
+      --replace-fail 'libXext.so.6'     '${lib.getLib libxext}/lib/libXext.so.6'
+  '';
 
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
@@ -294,6 +306,7 @@ buildPythonApplication rec {
       lib.makeBinPath [
         imagemagick
         ncurses.dev
+        shader-slang
       ]
     }"
 

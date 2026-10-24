@@ -12,18 +12,18 @@
   perl,
 }:
 let
-  version = "0.1.2";
+  version = "0.4.2";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
     tag = "v${version}";
-    hash = "sha256-x7OhVz4rWj2x1UsUm8iqkB5PQVAELvAYJ0yo2beU9TY=";
+    hash = "sha256-Xh/Y9dDur5oXJRavAxQIwRNg9/3ofAREkAxmM/0Tyks=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-pTWCT2s820mjnfTscFnoSKC37RE7DAPKxP71QuM+JXQ=";
+    cargoHash = "sha256-Mtku+MLkDdBYN5xj2x4XbyFXFZ+qTfl1eX2g9VcfpFU=";
 
     nativeBuildInputs = [
       pkg-config
@@ -56,6 +56,8 @@ vimUtils.buildVimPlugin {
   dependencies = with vimPlugins; [
     dressing-nvim
     img-clip-nvim
+    mega-cmdparse
+    mega-logging
     nui-nvim
     nvim-treesitter
     plenary-nvim
@@ -72,6 +74,8 @@ vimUtils.buildVimPlugin {
       cp ${avante-nvim-lib}/lib/libavante_templates${ext} $out/lua/avante_templates${ext}
       cp ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/lua/avante_tokenizers${ext}
       cp ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/lua/avante_html2md${ext}
+
+      install -D contrib/avante $out/bin/avante
     '';
 
   passthru = {
@@ -94,7 +98,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";
-    homepage = "https://github.com/yetone/avante.nvim";
+    homepage = "https://github.com/avante-corp/avante.nvim";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ttrei

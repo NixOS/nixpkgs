@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -18,7 +17,7 @@
   libsamplerate ? null,
   ossSupport ? false,
   alsa-oss ? null,
-  pulseaudioSupport ? config.pulseaudio or false,
+  pulseaudioSupport ? false,
   libpulseaudio ? null,
   sndioSupport ? false,
   sndio ? null,
@@ -52,8 +51,6 @@
   libmodplug ? null,
   mpcSupport ? true,
   libmpcdec ? null,
-  tremorSupport ? false,
-  tremor ? null,
   vorbisSupport ? true,
   libvorbis ? null,
   wavpackSupport ? true,
@@ -71,10 +68,6 @@
 }:
 
 assert samplerateSupport -> jackSupport;
-
-# vorbis and tremor are mutually exclusive
-assert vorbisSupport -> !tremorSupport;
-assert tremorSupport -> !vorbisSupport;
 
 let
   # https://github.com/cmus/cmus/issues/1459
@@ -123,7 +116,6 @@ let
     (mkFlag mikmodSupport "CONFIG_MIKMOD=y" libmikmod)
     (mkFlag modplugSupport "CONFIG_MODPLUG=y" libmodplug)
     (mkFlag mpcSupport "CONFIG_MPC=y" libmpcdec)
-    (mkFlag tremorSupport "CONFIG_TREMOR=y" tremor)
     (mkFlag vorbisSupport "CONFIG_VORBIS=y" libvorbis)
     (mkFlag wavpackSupport "CONFIG_WAVPACK=y" wavpack)
     (mkFlag opusSupport "CONFIG_OPUS=y" opusfile)

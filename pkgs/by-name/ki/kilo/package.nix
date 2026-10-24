@@ -191,5 +191,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
+    # Has been broken on all platforms for over a month: https://github.com/NixOS/nixpkgs/issues/542516. Maintainer is irresponsive, mark broken to prevent blocking upstream updates.
+    broken = true;
   };
 })

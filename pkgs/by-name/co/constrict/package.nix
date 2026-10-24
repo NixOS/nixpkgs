@@ -21,7 +21,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "constrict";
-  version = "26.2";
+  version = "26.4";
   pyproject = false; # Built with meson
 
   src = fetchFromGitLab {
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "Constrict";
     tag = finalAttrs.version;
-    hash = "sha256-SkfutiBi0Y7gNx5PyTaSzVw/5rU/0ULxbtf2606i2wA=";
+    hash = "sha256-UYdWPjwemqhGGk+GfTzPc2IpVdCCNerbXnwx31rmZIg=";
   };
 
   nativeBuildInputs = [

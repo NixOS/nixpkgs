@@ -48,8 +48,11 @@ let
     "application/ld+json"
     "application/manifest+json"
     "application/rdf+xml"
+    "application/rss+xml" # What the default (mailcap) mime.types maps ".rss" to
+    "application/vnd.api+json"
     "application/vnd.ms-fontobject"
     "application/wasm"
+    "application/x-javascript" # Legacy alias of "application/javascript", still emitted by some upstreams
     "application/x-rss+xml"
     "application/x-web-app-manifest+json"
     "application/xhtml+xml"
@@ -61,6 +64,8 @@ let
     "image/bmp"
     "image/svg+xml"
     "image/vnd.microsoft.icon"
+    "image/x-icon" # What nginx's own mime.types maps ".ico" to, see services.nginx.defaultMimeTypes
+    "image/x-ms-bmp" # What nginx's own mime.types maps ".bmp" to, see services.nginx.defaultMimeTypes
     "text/cache-manifest"
     "text/calendar"
     "text/css"
@@ -72,6 +77,7 @@ let
     "text/vnd.rim.location.xloc"
     "text/vtt"
     "text/x-component"
+    "text/x-cross-domain-policy"
     "text/xml"
   ];
 
@@ -189,6 +195,13 @@ let
         error_log ${cfg.logError};
         daemon off;
 
+        worker_processes ${toString cfg.workerProcesses};
+
+        # load_module is a main-context directive that must precede events{}/http{}.
+        ${optionalString (
+          (cfg.package.dynamicModules or [ ]) != [ ]
+        ) "include ${cfg.package}/etc/nginx/dynamic-modules.conf;"}
+
         ${optionalString cfg.enableQuicBPF ''
           quic_bpf on;
         ''}
@@ -230,16 +243,17 @@ let
             }
 
             ${optionalString cfg.recommendedTlsSettings ''
-              # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
+              # Consider https://configurator.tlsref.org/#server=nginx&config=intermediate as the lower bound
 
               ssl_conf_command Groups "X25519MLKEM768:X25519:P-256:P-384";
-              ssl_session_timeout 1d;
-              ssl_session_cache shared:SSL:10m;
-              # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
-              ssl_session_tickets off;
-              # We don't enable insecure ciphers by default, so this allows
-              # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+
+              # Allow clients to choose the most performant ciphersuite from our safe allowlist
+              # https://github.com/mozilla/server-side-tls/issues/260
               ssl_prefer_server_ciphers off;
+
+              # Support TLS session resumption (cache and tickets)
+              ssl_session_cache shared:SSL:10m; # ~40k sessions
+              ssl_session_timeout 1d;
             ''}
 
             ${optionalString cfg.recommendedBrotliSettings ''
@@ -277,10 +291,6 @@ let
               proxy_connect_timeout   ${cfg.proxyTimeout};
               proxy_send_timeout      ${cfg.proxyTimeout};
               proxy_read_timeout      ${cfg.proxyTimeout};
-              proxy_http_version      1.1;
-              # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
-              # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
-              proxy_set_header        "Connection" "";
               include ${recommendedProxyConfig};
             ''}
 
@@ -397,6 +407,11 @@ let
             mkDefaultListenVhost (map (addr: { inherit addr; }) addrs);
 
         hostListen = if vhost.forceSSL then filter (x: x.ssl) defaultListen else defaultListen;
+
+        # If there's any location setting `useGrpcErrorPages`, we need to add the location blocks.
+        locationsWantGrpcErrorPages = builtins.any (location: location.useGrpcErrorPages) (
+          attrValues vhost.locations
+        );
 
         listenString =
           {
@@ -515,6 +530,10 @@ let
 
           ${mkBasicAuth vhostName vhost}
 
+          ${optionalString locationsWantGrpcErrorPages ''
+            include ${./grpc-locations.conf};
+          ''}
+
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
 
           ${optionalString (vhost.globalRedirect != null) ''
@@ -559,6 +578,9 @@ let
               optionalAttrs (config.fastcgiParams != { }) (defaultFastcgiParams // config.fastcgiParams)
             )
           )}
+          ${optionalString config.useGrpcErrorPages ''
+            include ${./grpc-error-pages.conf};
+          ''}
           ${optionalString (config.index != null) "index ${config.index};"}
           ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
           ${optionalString (config.root != null) "root ${config.root};"}
@@ -694,6 +716,14 @@ in
         example = "20s";
         description = ''
           Change the uwsgi related timeouts in recommendedUwsgiSettings.
+        '';
+      };
+
+      workerProcesses = mkOption {
+        type = types.either types.ints.positive (types.enum [ "auto" ]);
+        default = "auto";
+        description = ''
+          Defines the number of worker processes.
         '';
       };
 
@@ -1026,7 +1056,7 @@ in
 
       sslCiphers = mkOption {
         type = types.nullOr (types.either types.str (types.listOf types.str));
-        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+        # Keep in sync with https://configurator.tlsref.org/#server=nginx&config=intermediate
         default = [
           "ECDHE-ECDSA-AES128-GCM-SHA256"
           "ECDHE-RSA-AES128-GCM-SHA256"
@@ -1614,11 +1644,7 @@ in
           ];
           RestrictNamespaces = true;
           LockPersonality = true;
-          MemoryDenyWriteExecute =
-            !(
-              (builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules)
-              || (lib.getName cfg.package == "openresty")
-            );
+          MemoryDenyWriteExecute = false; # for pcre2 & several plugins
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           RemoveIPC = true;
@@ -1628,7 +1654,7 @@ in
           SystemCallFilter = [
             "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
           ]
-          ++ optional cfg.enableQuicBPF [ "bpf" ];
+          ++ optionals cfg.enableQuicBPF [ "bpf" ];
         };
       };
 

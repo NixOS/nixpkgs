@@ -48,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ];
+  ]
+  ++ lib.optional (
+    stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name
+  ) "UNAME=${stdenv.hostPlatform.uname.system}";
 
   postPatch = ''
     # we don't want to build HTML documentation
@@ -57,11 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isStatic ''
     # Upstream build system does not support NOT building shared libraries.
-    sed -i '/all:/ s/$(LIBGIFSO)//' Makefile
-    sed -i '/all:/ s/$(LIBUTILSO)//' Makefile
-    sed -i '/-m 755 $(LIBGIFSO)/ d' Makefile
-    sed -i '/ln -sf $(LIBGIFSOVER)/ d' Makefile
-    sed -i '/ln -sf $(LIBGIFSOMAJOR)/ d' Makefile
+    substituteInPlace Makefile \
+      --replace-fail "all: shared-lib static-lib $(UTILS)" "all: static-lib $(UTILS)" \
+      --replace-fail "install-lib: install-static-lib install-shared-lib" "install-lib: install-static-lib"
   '';
 
   passthru.tests = {

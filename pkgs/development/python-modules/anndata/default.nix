@@ -40,7 +40,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anndata";
-  version = "0.13.2";
+  version = "0.13.3.post0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scverse";
     repo = "anndata";
     tag = finalAttrs.version;
-    hash = "sha256-Iw8LJklySaJGcyvtv6nl81xC63+bALtmH83H+LidHkQ=";
+    hash = "sha256-ApwWoSVfeYqIP10HbIBl/3WJTcQjiZEVKgPSiEVOiv4=";
   };
 
   build-system = [

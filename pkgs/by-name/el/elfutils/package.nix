@@ -113,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
+  strictDeps = true;
+
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [
@@ -143,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://sourceware.org/git/elfutils.git";
     rev-prefix = "elfutils-";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://sourceware.org/elfutils/";

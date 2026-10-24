@@ -1,65 +1,24 @@
 {
-  aiohttp,
-  alive-progress,
-  ast-serialize,
   build,
   clang-tools,
   click,
-  colorama,
-  coloredlogs,
-  cryptography,
-  debugpy,
-  diskcache,
   fetchFromGitHub,
   fetchpatch,
   glib,
   gn,
-  googleapis-common-protos,
-  ipython,
   jinja2,
-  json5,
-  jsonschema,
   lark,
   lib,
   libnl,
-  mobly,
-  mypy,
-  mypy-protobuf,
   ninja,
   openssl,
-  packaging,
-  parameterized,
   pip-tools,
   pkg-config,
   pkgconfig,
-  prompt-toolkit,
-  protobuf,
-  psutil,
-  ptpython,
-  pyelftools,
-  pyfakefs,
-  pygments,
-  pykwalify,
-  pyperclip,
-  pyserial,
   python,
-  python-daemon,
   python-path,
-  pyyaml,
-  requests,
   setuptools,
-  six,
-  sphinx,
-  sphinx-argparse,
-  sphinx-design,
   stdenv,
-  tabulate,
-  tomli,
-  tornado,
-  types-pyyaml,
-  types-requests,
-  watchdog,
-  websockets,
   zap-chip,
 }:
 
@@ -194,54 +153,57 @@ stdenv.mkDerivation rec {
   env.PIP_NO_INDEX = "1";
   env.PIP_FIND_LINKS =
     let
-      dependencies = [
-        aiohttp
-        alive-progress
-        ast-serialize
-        colorama
-        coloredlogs
-        click
-        cryptography
-        debugpy
-        diskcache
-        googleapis-common-protos
-        ipython
-        jinja2
-        json5
-        jsonschema
-        lark
-        mobly
-        mypy
-        mypy-protobuf
-        packaging
-        parameterized
-        pkgconfig
-        prompt-toolkit
-        protobuf
-        psutil
-        ptpython
-        pyfakefs
-        pyelftools
-        pygments
-        pykwalify
-        pyperclip
-        pyserial
-        python-daemon
-        python-path
-        pyyaml
-        requests
-        six
-        sphinx
-        sphinx-argparse
-        sphinx-design
-        tabulate
-        tomli
-        tornado
-        types-pyyaml
-        types-requests
-        watchdog
-        websockets
-      ];
+      # these packages are needed at build-time, so we need to pull them from pythonOnBuildForHost
+      dependencies = lib.attrValues {
+        inherit (python.pythonOnBuildForHost.pkgs)
+          aiohttp
+          alive-progress
+          ast-serialize
+          colorama
+          coloredlogs
+          click
+          cryptography
+          debugpy
+          diskcache
+          googleapis-common-protos
+          ipython
+          jinja2
+          json5
+          jsonschema
+          lark
+          mobly
+          mypy
+          mypy-protobuf
+          packaging
+          parameterized
+          pkgconfig
+          prompt-toolkit
+          protobuf
+          psutil
+          ptpython
+          pyfakefs
+          pyelftools
+          pygments
+          pykwalify
+          pyperclip
+          pyserial
+          python-daemon
+          python-path
+          pyyaml
+          requests
+          six
+          sphinx
+          sphinx-argparse
+          sphinx-design
+          tabulate
+          tomli
+          tornado
+          types-pyyaml
+          types-requests
+          watchdog
+          websockets
+          ;
+      };
       filterNull = list: lib.filter (dep: dep != null) list;
       toItem = dep: {
         inherit dep;
@@ -272,6 +234,8 @@ stdenv.mkDerivation rec {
     ''target_cc="${stdenv.cc.targetPrefix}cc"''
     ''target_cxx="${stdenv.cc.targetPrefix}c++"''
     ''target_ar="${stdenv.cc.targetPrefix}ar"''
+    # Needed for cross-compilation
+    ''pkg_config="${stdenv.cc.targetPrefix}pkg-config"''
   ];
 
   preBuild = ''

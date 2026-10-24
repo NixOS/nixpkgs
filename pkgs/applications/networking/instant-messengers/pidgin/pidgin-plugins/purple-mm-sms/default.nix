@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  glibmm,
+  glibmm_2_4,
   pidgin,
   pkg-config,
   modemmanager,
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "purple-mm-sms";
     rev = "v${version}";
-    sha256 = "0917gjig35hmi6isqb62vhxd3lkc2nwdn13ym2gvzgcjfgjzjajr";
+    hash = "sha256-WSr55XOSvb+fqH4E27gVbNLROtzCLKyjiRWW8aJ8JyQ=";
   };
 
   makeFlags = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glibmm
+    glibmm_2_4
     pidgin
     modemmanager
   ];

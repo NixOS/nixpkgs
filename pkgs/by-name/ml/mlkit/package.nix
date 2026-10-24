@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlkit";
-  version = "4.7.21";
+  version = "4.7.23";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c1GdM3K6dgY0EgHu01adBXwAxuMehRfo73Lo71couJ4=";
+    hash = "sha256-8jixqrDWlO56ec/atLzOwXJeGPJDgXCARiIwsfVpKRo=";
   };
 
   nativeBuildInputs = [

@@ -17,7 +17,6 @@
   kaitaistruct,
   ldap3,
   mitmproxy-rs,
-  msgpack,
   nixosTests,
   publicsuffix2,
   pyopenssl,
@@ -53,6 +52,10 @@ buildPythonPackage rec {
   # pins many dependencies way to strict
   pythonRelaxDeps = true;
 
+  # msgpack is unused and was removed upstream:
+  # https://github.com/mitmproxy/mitmproxy/pull/8319
+  pythonRemoveDeps = [ "msgpack" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -70,7 +73,6 @@ buildPythonPackage rec {
     kaitaistruct
     ldap3
     mitmproxy-rs
-    msgpack
     publicsuffix2
     pyopenssl
     pyparsing

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPyPy,
   blas,
   lapack,
@@ -18,15 +19,17 @@
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxopt";
   version = "1.3.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gFnO9B8fEVyHvJt1/sn4bblefwr88DpS1hm6Qz5EO8s=";
   };
 
@@ -35,7 +38,10 @@ buildPythonPackage rec {
     lapack
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
@@ -69,6 +75,8 @@ buildPythonPackage rec {
     "tests"
   ];
 
+  pythonImportsCheck = [ "cvxopt" ];
+
   meta = {
     homepage = "https://cvxopt.org/";
     description = "Python Software for Convex Optimization";
@@ -85,4 +93,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ edwtjo ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

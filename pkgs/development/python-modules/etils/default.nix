@@ -109,7 +109,7 @@ buildPythonPackage (finalAttrs: {
       ++ self.etree
       ++ self.etree-dm
       ++ self.etree-jax
-      ++ self.etree-tf;
+      ++ lib.optionals (!tensorflow.meta.broken) self.etree-tf;
   });
 
   pythonImportsCheck = [ "etils" ];
@@ -144,6 +144,9 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert '/tmp/to/something' == '/private/tmp/to/something'
     "test_repr"
+  ]
+  ++ lib.optionals tensorflow.meta.broken [
+    "test_use_backend"
   ];
 
   disabledTestPaths = [
@@ -152,6 +155,18 @@ buildPythonPackage (finalAttrs: {
 
     # Requires unpackaged fiddle
     "etils/epy/text_utils_test.py"
+  ]
+  ++ lib.optionals tensorflow.meta.broken [
+    "etils/ecolab/array_as_img_test.py"
+    "etils/enp/array_spec_test.py"
+    "etils/enp/array_types/dtypes_test.py"
+    "etils/enp/checking_test.py"
+    "etils/enp/compat_test.py"
+    "etils/enp/geo_utils_test.py"
+    "etils/enp/interp_utils_test.py"
+    "etils/enp/linalg_test.py"
+    "etils/enp/numpy_utils_test.py"
+    "etils/etree/tree_utils_test.py"
   ];
 
   meta = {

@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Linux remote desktop client built on open source technology";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "cendio";
       fullName = "Cendio end-user license agreement";
       url = "https://www.cendio.com/thinlinc/docs/legal/eula";
       free = false;

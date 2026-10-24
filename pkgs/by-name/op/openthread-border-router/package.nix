@@ -12,37 +12,33 @@
   cjson,
   bashNonInteractive,
   buildNpmPackage,
+  libnftnl,
+  libmnl,
+  readline,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "openthread-border-router";
-  version = "2026.06.0";
+  version = "2026.10.0";
 
   src = fetchFromGitHub {
     owner = "openthread";
     repo = "ot-br-posix";
-    tag = "v${version}";
-    hash = "sha256-7si62h1nXnAzEmloThCcOeY3VhfSIFV+7kWKgJywcvk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-saTJ6lt9kNOdyNVvZ1RRg16KsgooSrT5+Y6zrj9Ifb4=";
     fetchSubmodules = true;
   };
 
   frontendModules = buildNpmPackage {
-    pname = "${pname}-frontend";
-    inherit version;
-    src = "${src}/src/web/web-service/frontend";
-    npmDepsHash = "sha256-7UVfPICyIbHEClpr3p7eDR46OUzS8mVf6P7phnDpVLk=";
+    pname = "${finalAttrs.pname}-frontend";
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/src/web/web-service/frontend";
+    npmDepsHash = "sha256-8KenFVtfxC0jkfZHHuYeV2Dj2kmzHUQTeACvRtOyZLA=";
     dontNpmBuild = true;
   };
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   strictDeps = true;
   __structuredAttrs = true;
-
-  patches = [
-    # Patch the firewall script so we can run it within the systemd start script
-    ./firewall-script.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +48,7 @@ stdenv.mkDerivation {
 
   # Adding npmConfigHook and manually passing fetchNpmDeps was resulting in ENOTCACHED errors
   postConfigure = ''
-    ln -sf ${frontendModules}/lib/node_modules/otbr-web/node_modules ./src/web/web-service/frontend/
+    ln -sf ${finalAttrs.frontendModules}/lib/node_modules/otbr-web/node_modules ./src/web/web-service/frontend/
   '';
 
   buildInputs = [
@@ -62,18 +58,14 @@ stdenv.mkDerivation {
     dbus
     cjson
     (lib.getBin bashNonInteractive)
+    libnftnl
+    libmnl
+    readline
   ];
 
-  postInstall = ''
-    install -Dm555 -t $out/bin ../script/otbr-firewall
-  '';
-
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
-
     (lib.cmakeBool "BUILD_TESTING" false)
     (lib.cmakeBool "INSTALL_SYSTEMD_UNIT" false)
-    (lib.cmakeBool "Boost_USE_STATIC_LIBS" false)
     (lib.cmakeBool "OTBR_REST" true)
 
     # OpenThread's built-in mDNS publisher (upstream default). No Avahi daemon needed.
@@ -85,8 +77,10 @@ stdenv.mkDerivation {
     (lib.cmakeBool "OTBR_BORDER_ROUTING" true)
     (lib.cmakeBool "OTBR_DBUS" true)
     (lib.cmakeBool "OTBR_TREL" true)
+    (lib.cmakeBool "OTBR_NFTABLES" true)
+    (lib.cmakeFeature "OT_READLINE" "readline")
 
-    (lib.cmakeFeature "OTBR_VERSION" version)
+    (lib.cmakeFeature "OTBR_VERSION" finalAttrs.version)
     # otbr-agent aborts on startup with "Vendor name must be set." unless a vendor
     # and product name are baked in at build time.
     (lib.cmakeFeature "OTBR_VENDOR_NAME" "NixOS")
@@ -114,4 +108,4 @@ stdenv.mkDerivation {
     mainProgram = "ot-ctl";
     platforms = lib.platforms.linux;
   };
-}
+})

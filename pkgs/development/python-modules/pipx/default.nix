@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pipx";
-  version = "1.16.5";
+  version = "1.16.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pypa";
     repo = "pipx";
     tag = finalAttrs.version;
-    hash = "sha256-oeZxtH3Wkx8VIcS+rAYKndbArSez3nO7N8r4sknd7cw=";
+    hash = "sha256-2su1kJHrSYGnTKCXvWCWRQUMlR0oEhno90D57UIOCJU=";
   };
 
   patches = [

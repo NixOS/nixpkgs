@@ -18,6 +18,8 @@ mkNginxPlugin (finalAttrs: {
   };
 
   patches = [
+    # https://github.com/evanmiller/mod_zip/pull/120
+    ./fix-gcc16-unused-counter.patch
     (fetchpatch {
       name = "fix-upstream-subrequest-crc-calculation.patch";
       url = "https://github.com/evanmiller/mod_zip/commit/8e65b82c82c7890f67a6107271c127e9881b6313.patch";

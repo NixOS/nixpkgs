@@ -41,7 +41,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "stable-diffusion-cpp";
-  version = "master-782-b290693";
+  version = "master-982-0518b34";
 
   outputs = [
     "out"
@@ -51,8 +51,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "leejet";
     repo = "stable-diffusion.cpp";
-    rev = "master-782-b290693";
-    hash = "sha256-VXRjsJ+AVpja2NMiwA6/R4WOfUXAQ9KFKEFY5/FGOfQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-CbJ4gU06sTUT8U03PHATYe/L8f/jGjWdmEXdQBGm6Uc=";
     fetchSubmodules = true;
   };
 
@@ -98,7 +98,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (cmakeBool "SD_BUILD_EXAMPLES" true)
-    (cmakeBool "SD_BUILD_SHARED_LIBS" true)
+    (cmakeBool "SD_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (cmakeBool "SD_USE_SYSTEM_GGML" false)
     (cmakeBool "SD_CUDA" cudaSupport)
     (cmakeBool "SD_HIPBLAS" rocmSupport)
@@ -121,6 +121,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "sd";
     maintainers = with lib.maintainers; [
       adriangl
+      jk
     ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.optionals (cudaSupport || openclSupport) lib.platforms.darwin;

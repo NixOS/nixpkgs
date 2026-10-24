@@ -16,8 +16,11 @@ for py in "312" "313" "314"; do
   prefetch "$py" "aarch64-darwin" "jaxlib-bin"
   prefetch "$py" "x86_64-linux" "jax-cuda12-plugin"
   prefetch "$py" "aarch64-linux" "jax-cuda12-plugin"
+  prefetch "$py" "x86_64-linux" "jax-cuda13-plugin"
+  prefetch "$py" "aarch64-linux" "jax-cuda13-plugin"
 done
 
 for arch in "x86_64-linux" "aarch64-linux"; do
   prefetch "312" "$arch" "jax-cuda12-pjrt"
+  prefetch "312" "$arch" "jax-cuda13-pjrt"
 done

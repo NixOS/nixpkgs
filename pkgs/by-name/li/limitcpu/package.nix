@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-Wf/rGjUXr+RZmHFL6EGSYKQ2MvfOwI8LAmwezN/1fPw=";
   };
 
-  buildFlags = with stdenv; [
+  buildFlags = with stdenv.hostPlatform; [
     (
       if isDarwin then
         "osx"

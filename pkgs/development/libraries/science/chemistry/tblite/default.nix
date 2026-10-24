@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix wrong paths in pkg-config file
     ./pkgconfig.patch
+
+    # Several C-API functions with bind(C) were not declared as public in their
+    # Fortran modules, leading to link errors with gfortran 16.
+    ./fix-c-api-visibility-gfortran16.patch
   ];
 
   postPatch =
@@ -103,10 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";
-    license = with lib.licenses; [
-      gpl3Plus
-      lgpl3Plus
-    ];
+    license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/tblite/tblite";
     changelog = "https://github.com/tblite/tblite/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;

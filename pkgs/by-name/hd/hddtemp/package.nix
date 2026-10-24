@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  nixosTests,
 }:
 let
   db = fetchurl {
@@ -40,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.tests.nixos = nixosTests.hddtemp;
 
   meta = {
     description = "Tool for displaying hard disk temperature";

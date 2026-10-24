@@ -15,8 +15,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-ycKm7kzOM+fv5Jhjv3JrG+oyK3LEOj9Ps7ll2Pz0T9c=";
   };
 
-  unpackCmd = "7zz -snld x $src";
-
   nativeBuildInputs = [ _7zz ];
 
   sourceRoot = ".";

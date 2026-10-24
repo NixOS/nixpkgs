@@ -1,31 +1,49 @@
 # Linux-specific base builder.
 
 {
-  stdenv,
+  # keep-sorted start
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  coreutils,
+  cups,
+  dbus,
+  e2fsprogs,
+  fontconfig,
+  git,
+  glibcLocales,
+  gnugrep,
   lib,
+  libGL,
+  libgbm,
+  libnotify,
+  libsecret,
+  libx11,
+  libxcb,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxkbcommon,
+  libxrandr,
   makeDesktopItem,
   makeWrapper,
+  nspr,
+  nss,
+  pango,
   patchelf,
-  writeText,
-  coreutils,
-  gnugrep,
-  which,
-  git,
-  unzip,
-  libsecret,
-  libnotify,
-  udev,
-  e2fsprogs,
   python3,
-  autoPatchelfHook,
-  glibcLocales,
-  fontconfig,
-  libGL,
-  libx11,
+  stdenv,
+  udev,
+  unzip,
+  which,
+  writeText,
+  # keep-sorted end
 
-  jdk,
   vmopts ? null,
-  forceWayland ? null,
   excludeDrvArgNames,
 }:
 
@@ -42,7 +60,8 @@ lib.extendMkDerivation {
       productShort ? product,
       wmClass,
 
-      libdbm,
+      jdk,
+      jetbrains-libdbm,
       fsnotifier,
 
       extraLdPath ? [ ],
@@ -58,11 +77,6 @@ lib.extendMkDerivation {
       loName = lib.toLower productShort;
       hiName = lib.toUpper productShort;
       vmoptsName = loName + lib.optionalString stdenv.hostPlatform.is64bit "64" + ".vmoptions";
-      finalExtraWrapperArgs =
-        extraWrapperArgs
-        ++ lib.optionals forceWayland [
-          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
-        ];
 
       desktopItem = makeDesktopItem {
         name = finalAttrs.pname;
@@ -82,19 +96,40 @@ lib.extendMkDerivation {
       inherit desktopItem vmoptsIDE vmoptsFile;
 
       buildInputs = buildInputs ++ [
-        stdenv.cc.cc
+        # keep-sorted start
+        alsa-lib
+        at-spi2-atk
+        at-spi2-core
+        atk
+        cairo
+        cups
+        dbus
         fontconfig
         libGL
+        libgbm
         libx11
-        # required for the bundled jcef-plugin
+        libxcb
+        libxcomposite
+        libxdamage
+        libxext
+        libxfixes
+        libxkbcommon
+        libxrandr
+        nspr
+        nss
+        pango
+        stdenv.cc.cc
         udev
+        # keep-sorted end
       ];
 
       nativeBuildInputs = nativeBuildInputs ++ [
+        # keep-sorted start
+        autoPatchelfHook
         makeWrapper
         patchelf
         unzip
-        autoPatchelfHook
+        # keep-sorted end
       ];
 
       postPatch = ''
@@ -104,6 +139,19 @@ lib.extendMkDerivation {
 
         if [ -d "plugins/remote-dev-server" ]; then
           patch -F3 -p1 < ${../patches/jetbrains-remote-dev.patch}
+        fi
+
+        # The bundled libraries of the remote dev server are not used (see the patch above),
+        # so drop them. This has to happen before autoPatchelfHook runs, otherwise their
+        # directory ends up in the RPATH of unrelated binaries, see below.
+        rm -rf plugins/remote-dev-server/selfcontained
+
+        # libjcef.so has "." in its RPATH. autoPatchelfHook follows the RPATHs of the
+        # libraries it indexes and resolves that "." against the build directory, which
+        # makes it prefer bundled copies of libraries over the ones from nixpkgs and
+        # bake build-time-only paths into the RPATHs it writes.
+        if [ -e plugins/jcef-plugin/jcef/libjcef.so ]; then
+          patchelf --set-rpath '$ORIGIN' plugins/jcef-plugin/jcef/libjcef.so
         fi
 
         vmopts_file=bin/linux/${vmoptsName}
@@ -116,11 +164,9 @@ lib.extendMkDerivation {
         fi
         echo -Djna.library.path=${
           lib.makeLibraryPath [
-            libsecret
             e2fsprogs
             libnotify
-            # Required for Help -> Collect Logs
-            # in at least rider and goland
+            libsecret
             udev
           ]
         } >> $vmopts_file
@@ -134,7 +180,7 @@ lib.extendMkDerivation {
         cp -a . $out/$pname
         [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/icons/hicolor/128x128/apps/${pname}.png
         [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-        cp ${libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
+        cp ${jetbrains-libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
         cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
         jdk=${jdk.home}
@@ -154,16 +200,16 @@ lib.extendMkDerivation {
           wrapProgram  "$launcher" \
             --prefix PATH : "${
               lib.makeBinPath [
-                jdk
                 coreutils
-                gnugrep
-                which
                 git
+                gnugrep
+                jdk
+                which
               ]
             }" \
             --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
             --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
-            ${lib.concatStringsSep " " finalExtraWrapperArgs} \
+            ${lib.concatStringsSep " " extraWrapperArgs} \
             --set-default JDK_HOME "$jdk" \
             --set-default ANDROID_JAVA_HOME "$jdk" \
             --set-default JAVA_HOME "$jdk" \
@@ -179,7 +225,6 @@ lib.extendMkDerivation {
         fi
 
         ln -s "$launcher" $out/bin/$pname
-        rm -rf $out/$pname/plugins/remote-dev-server/selfcontained/
         echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
         chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
         ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server

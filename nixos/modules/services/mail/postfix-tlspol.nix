@@ -244,8 +244,6 @@ in
             "noroot"
             "noroot-locked"
           ];
-          RuntimeDirectory = "postfix-tlspol";
-          RuntimeDirectoryMode = "1750";
           WorkingDirectory = "/var/cache/postfix-tlspol";
           UMask = "0077";
         };

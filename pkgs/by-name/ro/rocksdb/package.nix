@@ -127,7 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://rocksdb.org";
     description = "Library that provides an embeddable, persistent key-value store for fast storage";
     changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
-    license = lib.licenses.asl20;
+    license =
+      with lib.licenses;
+      OR [
+        gpl2Plus
+        asl20
+      ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       adev

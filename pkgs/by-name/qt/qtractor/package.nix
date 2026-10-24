@@ -6,6 +6,7 @@
   dssi,
   fetchurl,
   flac,
+  gtk3,
   libjack2,
   ladspa-header,
   ladspaPlugins,
@@ -30,11 +31,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtractor";
-  version = "1.6.2";
+  version = "1.6.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/qtractor/qtractor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WjXY1XboGlz16uqVUKJehIWXZBJMPVuAZ8jSea+EuUQ=";
+    hash = "sha256-rXjiDytSXb+aSZZVASSkzGvqvkxaCFduBSQWUXEKku8=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.qttools
     qt6.wrapQtAppsHook
+  ];
+
+  # Qt's GTK3 file chooser uses GSettings. GTK3's GSettings schemas
+  # are installed below share/gsettings-schemas, which is not otherwise
+  # exposed to the wrapped Qt application.
+  qtWrapperArgs = [
+    "--suffix"
+    "XDG_DATA_DIRS"
+    ":"
+    "${gtk3}/share/gsettings-schemas/${gtk3.name}"
   ];
 
   buildInputs = [

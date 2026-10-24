@@ -1,17 +1,21 @@
 {
-  apple-sdk_15,
-  buildGoModule,
-  buildPackages,
-  darwin,
-  fetchFromGitHub,
-  gn,
   lib,
-  ninja,
-  python3,
+  buildGoModule,
+  fetchFromGitHub,
   replaceVars,
   stdenvNoCC,
   symlinkJoin,
+
+  # nativeBuildInputs
+  buildPackages,
+  gn,
+  ninja,
+  python3,
   xcbuild,
+
+  # buildInputs
+  apple-sdk_15,
+  darwin,
 }:
 let
   llvmCcAndBintools = symlinkJoin {
@@ -24,15 +28,17 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cronet-go";
-  version = "148.0.7778.96-1-unstable-2026-07-12";
+  # NOTE: https://github.com/SagerNet/sing-box/blob/stable/.github/CRONET_GO_VERSION
+  version = "150.0.7871.63-3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "cronet-go";
-    rev = "617d38f41f935b46a68f550d9add2e38abb3f168";
+    # NOTE: keep rev for easier overriding
+    rev = "049f2909701ca088c9569f6b303bba5376a2b2ff";
     fetchSubmodules = true;
-    hash = "sha256-UK7mv0TuhJX4y64DhH49t5mgZFGhMx4Viy/chulKD4s=";
+    hash = "sha256-705cctVHseRSJuEPFxlTRJJUWsNgZ4y5ZQ9nwhyTqFY=";
   };
 
   patches = [
@@ -43,6 +49,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       libresolv = lib.getInclude darwin.libresolv;
     }
   );
+
+  postPatch = ''
+    patchShebangs --build naiveproxy/src/build/toolchain/apple/linker_driver.py
+
+    sslDir="naiveproxy/src/net/data/ssl/chrome_root_store"
+    # Check existence
+    grep -Fq '# CN=emSign ECC Root CA - G3,' "$sslDir/root_store.textproto"
+    grep -Fxq '# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b' "$sslDir/root_store.certs"
+    # Remove emSign ECC Root CA - G3 from root store, which is compromised.
+    sed -i '/^# CN=emSign ECC Root CA - G3,/,/^}/d' "$sslDir/root_store.textproto"
+    sed -i \
+      '/^# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b$/,/^-----END CERTIFICATE-----$/d' \
+      "$sslDir/root_store.certs"
+  '';
 
   nativeBuildInputs = [
     buildPackages.rustc.llvmPackages.bintools

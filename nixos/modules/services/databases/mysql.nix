@@ -213,7 +213,7 @@ in
       initialScript = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database.";
+        description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database. Run as superuser.";
       };
 
       ensureDatabases = lib.mkOption {
@@ -752,7 +752,7 @@ in
             "AF_INET6"
           ];
           LockPersonality = true;
-          MemoryDenyWriteExecute = true;
+          MemoryDenyWriteExecute = false; # pcre2 jit
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           PrivateMounts = true;

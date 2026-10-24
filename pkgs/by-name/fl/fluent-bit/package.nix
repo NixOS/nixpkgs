@@ -22,20 +22,20 @@
   pkg-config,
   rdkafka,
   sqlite,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "5.0.7";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5X6qiwoRc7FTJSGjWYhhef9N8gaxrc9dwD8Z/8woIUo=";
+    hash = "sha256-VXLHuyOxKWiMaYSRObu/I8kFbmUx8pGa4oKMGaEItbg=";
   };
 
   # The source build documentation covers some dependencies and CMake options.
@@ -78,12 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # libbpf doesn't build for Darwin yet.
     libbpf
-    systemd
+    systemdLibs
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "FLB_RELEASE" true)
     (lib.cmakeBool "FLB_PREFER_SYSTEM_LIBS" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Auto would raise the baseline to rv64gcv_zba
+    (lib.cmakeFeature "FLB_SIMD" "Off")
   ]
   ++ lib.optionals stdenv.cc.isClang [
     # `FLB_SECURITY` causes bad linker options for Clang to be set.
@@ -122,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Fast and lightweight logs and metrics processor for Linux, BSD, OSX and Windows";
     homepage = "https://fluentbit.io";
     license = lib.licenses.asl20;

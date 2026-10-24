@@ -29,6 +29,7 @@ let
     ;
   inherit (lib.attrsets)
     attrByPath
+    catAttrs
     optionalAttrs
     showAttrPath
     ;
@@ -539,7 +540,7 @@ rec {
 
     :::
   */
-  getValues = map (x: x.value);
+  getValues = catAttrs "value";
 
   /**
     Extracts values of all `file` keys of the given list
@@ -561,7 +562,7 @@ rec {
 
     :::
   */
-  getFiles = map (x: x.file);
+  getFiles = catAttrs "file";
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.

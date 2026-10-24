@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "uhi";
-  version = "1.0.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MxGIlJsaScjbnvnVC3xNTfRgYRXRR97ZfE8FDagnDnQ=";
+    hash = "sha256-PCkr94hKfD815ofpLcdWQH5XXRnBXJ+ZyBl6FvtnCMI=";
   };
 
   build-system = [

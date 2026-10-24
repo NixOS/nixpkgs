@@ -63,6 +63,12 @@ mesonCheckPhase() {
         flagsArray+=("--timeout-multiplier=0")
     fi
 
+    local _disabledTestsArray=()
+    concatTo _disabledTestsArray disabledTests
+    for disabledTest in "${_disabledTestsArray[@]}"; do
+        flagsArray+=("--exclude" "$disabledTest")
+    done
+
     # Parallel building is enabled by default.
     local buildCores=1
     if [ "${enableParallelBuilding-1}" ]; then

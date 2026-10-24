@@ -3,6 +3,8 @@
 {
   name = "rauc";
 
+  meta.broken = builtins.trace "This test depends on the removed scripted stage 1." true;
+
   nodes.machine =
     {
       pkgs,
@@ -44,7 +46,7 @@
         runtimeInputs = with pkgs; [
           config.services.rauc.package
           e2fsprogs
-          squashfsTools
+          squashfs-tools
         ];
 
         text = ''

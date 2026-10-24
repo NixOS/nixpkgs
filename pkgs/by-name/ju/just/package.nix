@@ -5,6 +5,7 @@
   rustPlatform,
   bashInteractive,
   coreutils,
+  installAgentSkills,
   installShellFiles,
   libiconv,
   mdbook,
@@ -17,7 +18,7 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  version = "1.57.0";
+  version = "1.58.0";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -36,14 +37,16 @@ rustPlatform.buildRustPackage {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-fFeWGX72YcTKzPqfRYloTtnW4r7uXHUipyYP9VV8LZE=";
+    hash = "sha256-yAjirHM3/+Pv9AhcaW7Ab992vwQhh20axK42Gl2LNEA=";
   };
 
-  cargoHash = "sha256-hdfOs9UDjdrk8XclCxTdQgSOpt+yYQoPD5lWZrdNs2Q=";
+  cargoHash = "sha256-zpP5XLmgQFH4+B97zMhh+iE6kS+PHTh9heH89rXCQo0=";
 
-  nativeBuildInputs =
-    lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
-    ++ lib.optionals withDocumentation [ mdbook ];
+  nativeBuildInputs = [
+    installAgentSkills
+  ]
+  ++ lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
+  ++ lib.optionals withDocumentation [ mdbook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
@@ -117,7 +120,6 @@ rustPlatform.buildRustPackage {
       jk
       ryan4yin
       xrelkd
-      yvnth
     ];
     mainProgram = "just";
   };

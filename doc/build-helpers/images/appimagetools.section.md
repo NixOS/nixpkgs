@@ -41,7 +41,7 @@ appimageTools.wrapType2 {
 
 :::
 
-The argument passed to `wrapType2` can also contain an `extraPkgs` attribute, which allows you to include additional packages inside the FHS environment your AppImage is going to run in.
+The argument passed to `wrapType2` can also contain an `extraPkgs` attribute, which includes additional packages inside the FHS environment your AppImage is going to run in.
 `extraPkgs` must be a function that returns a list of packages.
 There are a few ways to learn which dependencies an application needs:
 
@@ -116,7 +116,7 @@ appimageTools.wrapType2 (finalAttrs: {
 
 `appimageTools` also exposes the `extract` function should you need to do it manually, requiring `pname`, `version`, and `src` arguments (`src` being the AppImage file to extract).
 
-The arguments passed to `extract` can also contain a `postExtract` attribute, which allows you to execute additional commands after the files are extracted from the AppImage.
+The arguments passed to `extract` can also contain a `postExtract` attribute, which executes additional commands after the files are extracted from the AppImage.
 `postExtract` must be a string with commands to run.
 
 :::{.warning}

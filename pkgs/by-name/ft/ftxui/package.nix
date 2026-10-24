@@ -4,7 +4,6 @@
   fetchFromGitHub,
 
   cmake,
-  doxygen,
   gbenchmark,
   graphviz,
   gtest,
@@ -12,21 +11,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ftxui";
-  version = "6.1.9";
+  version = "7.0.3";
 
   src = fetchFromGitHub {
     owner = "ArthurSonzogni";
     repo = "ftxui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-plJxTLhOhUyuay5uYv4KLK9UTmM2vsoda+iDXVa4b+k=";
+    hash = "sha256-hKdmzraAgKwvOGQXpglD9lm0465j92AAn2MhS9ZM4jA=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    graphviz
   ];
 
   checkInputs = [
@@ -37,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   cmakeFlags = [
-    (lib.cmakeBool "FTXUI_BUILD_EXAMPLES" false)
-    (lib.cmakeBool "FTXUI_BUILD_DOCS" true)
     (lib.cmakeBool "FTXUI_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 

@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchurl,
@@ -22,7 +21,7 @@
 
   jackSupport ? stdenv.hostPlatform.isLinux,
   jackLibrary ? libjack2, # Another option is "pipewire.jack"
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
 }:
 
@@ -40,17 +39,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "reaper";
-  version = "7.78";
+  version = "7.82";
 
   src = fetchurl {
     url = url_for_platform finalAttrs.version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-Z7H85bcIoY9tXGuOboh3X54hZQAD2LPKxLGXZ1EtfQE="
+        "sha256-J7H/YD1ueUHxWOHqbj6ACeTYRHhX4G3wAkGQDEL/BJE="
       else
         {
-          x86_64-linux = "sha256-1mLrNdyrf9LOX6xqYJITYu8DPi0HXHTM75dPu9E6ZUI=";
-          aarch64-linux = "sha256-xqzPN4naSYaveYlFOkKzocnfysMfzaUkWndLel4jAHw=";
+          x86_64-linux = "sha256-pKqWFTTyKuWukQ5OwMIA3LRHbJ91VoBv4JqXQ81YJWM=";
+          aarch64-linux = "sha256-51OsK4odLGlLqV79C3wSvQ8xX5sznUVruQlxBFn9qho=";
         }
         .${stdenv.hostPlatform.system};
   };

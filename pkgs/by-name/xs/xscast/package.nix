@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/tckmn/xscast";
     license = lib.licenses.mit;
-    description = "Screencasts of windows with list of keystrokes overlayed";
+    description = "Screencasts of windows with list of keystrokes overlaid";
     maintainers = [ ];
     mainProgram = "xscast";
   };

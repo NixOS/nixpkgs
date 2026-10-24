@@ -1,39 +1,27 @@
 {
   lib,
-  stdenv,
   fetchFromGitLab,
-  ncurses,
-  asciidoctor,
   gitUpdater,
+  rustPlatform,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "greed";
-  version = "4.5";
+  version = "5.2";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "greed";
     tag = finalAttrs.version;
-    hash = "sha256-S2K6nn4WS1gOvhlYK/UH1hfA0pzij4w5SeP004WVZik=";
+    hash = "sha256-zhbx+4ZtsIAVfQ99FndLwGWnqf4QeZHDBUynBDFVssM=";
   };
+
+  cargoHash = "sha256-AT7o6uMdV6NtsbZwjh/r9OUMH7glaOeFfMvMJxVwXtA=";
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "-lcurses" "-lncurses" \
       --replace-fail "/usr/games/lib/greed.hs" "/var/lib/greed/greed.hs"
   '';
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  makeFlags = [ "PREFIX=$(out)" ];
-
-  buildInputs = [
-    ncurses
-  ];
-
-  nativeBuildInputs = [
-    asciidoctor
-  ];
 
   passthru = {
     updateScript = gitUpdater { };

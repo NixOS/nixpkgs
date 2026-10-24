@@ -25,7 +25,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.12.3";
+  version = "0.14.1";
   mainProgram = "nitropy";
 in
 
@@ -35,7 +35,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gVHa95vQH9mCxeU+hX6tXDM2WUc0vw+8iTcPs1msjbQ=";
+    hash = "sha256-ZUleWvx+zRInAHf5j1gn1lLF37G/80122sG+vz6yc74=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -69,7 +69,11 @@ buildPythonPackage {
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
-  makeWrapperArgs = [ "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}" ];
+  makeWrapperArgs = [
+    "--set"
+    "LIBNK_PATH"
+    (lib.makeLibraryPath [ libnitrokey ])
+  ];
 
   pythonImportsCheck = [ "pynitrokey" ];
 
@@ -84,10 +88,12 @@ buildPythonPackage {
     description = "Python client for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/pynitrokey";
     changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       panicgh
     ];

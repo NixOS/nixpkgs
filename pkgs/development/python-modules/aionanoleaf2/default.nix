@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aionanoleaf2";
-  version = "1.0.2";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "loebi-ch";
     repo = "aionanoleaf2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Auh69JY07nnZKRUGPkaqo4DjZNeNkY8FIlsjch3JLu4=";
+    hash = "sha256-+t7CqNNFc6otuAeEwBaW2Oq8HLDibsVuUvxZV22XPOU=";
   };
 
   build-system = [ setuptools ];

@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchurl,
-  wrapQtAppsHook,
   python3,
   zbar,
   enableQt ? true,
+  qt5,
   enablePythonEcdsa ? false,
   callPackage,
-  qtwayland,
+
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -22,25 +23,23 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "electrum";
-  version = "4.8.0";
+  version = "4.8.2";
   pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${finalAttrs.version}/Electrum-${finalAttrs.version}.tar.gz";
-    hash = "sha256-z14bzs81eJNTMSWSBLTyCmsljDNztG54SVkoTcSqvsM=";
+    hash = "sha256-84zuMzyGaYbN+zBEKPp0h6/8Qpw4U/yA6YIr1CC7wik=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = [ python3.pkgs.setuptools ];
 
   nativeBuildInputs = [
     python3.pkgs.pythonRelaxDepsHook
   ]
   ++ lib.optionals enableQt [
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
-  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qt5.qtwayland;
 
   dependencies =
     with python3.pkgs;
@@ -53,7 +52,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       cryptography
       dnspython
       jsonrpclib-pelix
-      matplotlib
       pbkdf2
       protobuf
       pysocks
@@ -67,16 +65,17 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       ledger-bitcoin
       cbor2
       pyserial
+      trezor
     ]
     ++ lib.optionals enablePythonEcdsa [
       # enablePythonEcdsa gates plugins known to pull in python-ecdsa, which we
       # avoid by default due to CVE-2024-23342.
       ckcc-protocol
       keepkey
-      trezor
       bitbox02
     ]
     ++ lib.optionals enableQt [
+      matplotlib
       pyqt6
       qdarkstyle
     ];
@@ -90,13 +89,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "protobuf"
   ];
 
-  checkInputs =
-    with python3.pkgs;
-    lib.optionals enableQt [
-      pyqt6
-    ];
+  checkInputs = lib.optionals enableQt [
+    python3.pkgs.pyqt6
+  ];
   disabledTestPaths = lib.optionals (!enableQt) [
-    "tests/test_qml_types.py"
+    "tests/qml"
   ];
 
   postPatch =
@@ -132,14 +129,15 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     pyaes
     pycryptodomex
+
+    # avoid homeless-shelter error in tests
+    writableTmpDirAsHomeHook
   ];
 
   enabledTestPaths = [ "tests" ];
 
-  # avoid homeless-shelter error in tests
   preCheck = ''
     export PYTHONPATH=${python3.pkgs.protobuf}/${python3.sitePackages}:$PYTHONPATH
-    export HOME="$(mktemp -d)"
   '';
 
   postCheck = ''

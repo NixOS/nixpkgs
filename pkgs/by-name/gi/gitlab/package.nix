@@ -12,7 +12,7 @@
   net-tools,
   nixosTests,
   nodejs_22,
-  ruby_3_3,
+  ruby_3_4,
   stdenv,
   tzdata,
 
@@ -22,6 +22,9 @@
   cargo,
   rustc,
   rustPlatform,
+
+  # gitlab-glaz
+  buildPackages,
 
   # gpgme
   pkg-config,
@@ -51,7 +54,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_3;
+    ruby = ruby_3_4;
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
@@ -66,23 +69,60 @@ let
         buildInputs = [ file ];
         buildFlags = [ "--enable-system-libraries" ];
       };
-      gitlab-glfm-markdown = attrs: {
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          src = stdenv.mkDerivation {
+
+      gitlab-glaz =
+        attrs:
+        {
+          cargoDeps = rustPlatform.fetchCargoVendor {
             inherit (buildRubyGem { inherit (attrs) gemName version source; })
               name
               src
               unpackPhase
               nativeBuildInputs
               ;
-            dontBuilt = true;
-            installPhase = ''
-              cp -R ext/gitlab_glfm_markdown $out
-              rm $out/Cargo.lock
-              cp Cargo.lock $out
-            '';
+            hash = "sha256-rsSoo7T8Vn5ecOAe7M8WzALjZPA6gStJj96cUOARnR8=";
           };
-          hash = "sha256-ikizLu1B+stdk+HDGjrACOpgptg0jfbHcoqfrJtUpEY=";
+
+          dontBuild = false;
+
+          nativeBuildInputs = [
+            cargo
+            rustc
+            rustPlatform.cargoSetupHook
+            rustPlatform.bindgenHook
+          ];
+
+          disallowedReferences = [
+            rustc.unwrapped
+          ];
+
+          preInstall = ''
+            export CARGO_HOME="$NIX_BUILD_TOP/.cargo"
+          '';
+
+          postInstall = ''
+            find $out -type f -name .rustc_info.json -delete
+          '';
+        }
+        // lib.optionalAttrs stdenv.hostPlatform.isRiscV64 {
+          # protoc-bin-vendored ships no riscv64 protoc
+          postPatch = ''
+            substituteInPlace $cargoDepsCopy/source-*/glaz-proto-*/build.rs \
+              --replace-fail 'protoc_bin_vendored::protoc_bin_path()?' \
+                'std::path::PathBuf::from(std::env::var("PROTOC")?)'
+          '';
+          PROTOC = lib.getExe' buildPackages.protobuf "protoc";
+        };
+
+      gitlab-glfm-markdown = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-IBhBTKYLMSURUTCDAxdIB2fX7O8rjWgEQTlOOKvP6pQ=";
         };
 
         dontBuild = false;
@@ -99,7 +139,7 @@ let
         ];
 
         preInstall = ''
-          export CARGO_HOME="$PWD/../.cargo/"
+          export CARGO_HOME="$NIX_BUILD_TOP/.cargo"
         '';
 
         postInstall = ''
@@ -108,35 +148,26 @@ let
       };
 
       gitlab_query_language = attrs: rec {
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          src = stdenv.mkDerivation {
-            inherit (buildRubyGem { inherit (attrs) gemName version source; })
-              name
-              src
-              unpackPhase
-              nativeBuildInputs
-              ;
-            installPhase = ''
-              mkdir -p $out
-              cp Cargo.lock $out
-              cp -R ext/gitlab_query_language/* $out
+        cargoDeps =
+          let
+            prev = buildRubyGem { inherit (attrs) gemName version source; };
+          in
+          rustPlatform.fetchCargoVendor {
+            inherit (prev) name src unpackPhase;
+            nativeBuildInputs = prev.nativeBuildInputs ++ [ cargo ];
+
+            # GitLab publishes a Cargo.lock for gitlab_query_language that does not contain the `source` attribute
+            # for the `glql` dependency. This is an intentional choice by them that is documented in the README.
+            # This code refetches this hash and exposes the lockfile, so that it can be used in later stages.
+            postPatch = ''
+              export CARGO_HOME="$(mktemp -d)"
+              mv Cargo.lock ext/gitlab_query_language/Cargo.lock
+              cd ext/gitlab_query_language
+              cargo fetch
             '';
+
+            hash = "sha256-UzkRSxL+W+nhIHafqxgpUxv++4HSgLo1I42l+Ijv3Pk=";
           };
-
-          # GitLab publishes a Cargo.lock for gitlab_query_lanaguage that does not contain the `source` attribute
-          # for the `glql` dependency. This is an intentional choice by them that is documented in the README.
-          # This code refetches this hash and exposes the lockfile, so that it can be used in later stages.
-          nativeBuildInputs = [ cargo ];
-          postPatch = ''
-            export CARGO_HOME="$PWD/../.cargo/"
-            cargo fetch
-          '';
-          postBuild = ''
-            cp Cargo.lock $out
-          '';
-
-          hash = "sha256-BRbBijOg2nQK2Nzrkpk7mwCjr+AaF3D/3HUrS5GwIz4=";
-        };
 
         postPatch = ''
           cp ${cargoDeps}/Cargo.lock .
@@ -155,7 +186,7 @@ let
         # before rustc ran.
         # This fixes this and makes the rustc invocation work.
         preInstall = ''
-          export CARGO_HOME="$PWD/../.cargo/"
+          export CARGO_HOME="$NIX_BUILD_TOP/.cargo"
           # Unpack
           tar xvf $gempkg
           # Modify
@@ -181,22 +212,15 @@ let
           ''
             substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
           '';
+
         cargoDeps = rustPlatform.fetchCargoVendor {
-          src = stdenv.mkDerivation {
-            inherit (buildRubyGem { inherit (attrs) gemName version source; })
-              name
-              src
-              unpackPhase
-              nativeBuildInputs
-              ;
-            dontBuilt = true;
-            installPhase = ''
-              cp -R ext/fast_mmaped_file_rs $out
-              rm $out/Cargo.lock
-              cp Cargo.lock $out
-            '';
-          };
-          hash = "sha256-7jqaf5RIsc9gq98WBCe3Dd3Fv2X+4echdXU1FSK/xnE=";
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-pEgmtBnvLjc2xG26hdLQnJOJDFv8YaYlOW/OYqJL98I=";
         };
 
         nativeBuildInputs = [
@@ -211,7 +235,7 @@ let
         ];
 
         preInstall = ''
-          export CARGO_HOME="$PWD/../.cargo/"
+          export CARGO_HOME="$NIX_BUILD_TOP/.cargo"
         '';
 
         postInstall = ''
@@ -291,7 +315,7 @@ let
       SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
 
       SKIP_YARN_INSTALL = 1;
-      NODE_OPTIONS = "--max-old-space-size=8192";
+      NODE_OPTIONS = "--max-old-space-size=16384";
     };
 
     postConfigure = ''
@@ -333,6 +357,9 @@ let
       pushd node_modules/vue-demi
       yarn run postinstall
       popd
+
+      # Apply node_modules patches
+      node scripts/frontend/postinstall.js
 
       # Creates a `infection_scanner.json` needed for the assets compiler to succeed.
       node scripts/frontend/infection_scanner/infection_scanner.mjs

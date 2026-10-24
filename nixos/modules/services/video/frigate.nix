@@ -148,6 +148,7 @@ let
   withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
   withCoralPCI = any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
   withCoral = withCoralPCI || withCoralUSB;
+  withOpenVINO = any (d: d.type == "openvino") detectors;
 in
 
 {
@@ -328,6 +329,9 @@ in
               # Pass info about the request
               proxy_set_header X-Original-Method $request_method;
               proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
+              # set by the go2rtc stream locations; client headers are not forwarded, so
+              # this cannot be spoofed
+              proxy_set_header X-Go2rtc-Stream-Proxy $go2rtc_stream_proxy;
               proxy_set_header X-Server-Port $server_port;
               proxy_set_header Content-Length "";
 
@@ -405,7 +409,9 @@ in
             extraConfig = nginxAuthRequest + ''
               types {
                   video/mp4 mp4;
-                  image/jpeg jpg;
+                  image/jpeg jpg jpeg;
+                  image/png png;
+                  image/webp webp;
               }
 
               expires 7d;
@@ -462,6 +468,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except GET {
                     deny  all;
                 }
@@ -475,6 +483,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except GET {
                     deny  all;
                 }
@@ -483,19 +493,6 @@ in
           # pass through go2rtc player
           "/live/webrtc/webrtc.html" = {
             proxyPass = "http://frigate-go2rtc/webrtc.html";
-            recommendedProxySettings = true;
-            extraConfig =
-              nginxAuthRequest
-              + nginxProxySettings
-              + ''
-                limit_except GET {
-                    deny  all;
-                }
-              '';
-          };
-          # frontend uses this to fetch the version
-          "/api/go2rtc/api" = {
-            proxyPass = "http://frigate-go2rtc/api";
             recommendedProxySettings = true;
             extraConfig =
               nginxAuthRequest
@@ -515,6 +512,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except POST {
                     deny  all;
                 }
@@ -541,6 +540,7 @@ in
                 expires off;
 
                 proxy_cache frigate_api_cache;
+                proxy_cache_key "$scheme$proxy_host$request_uri|$role|$groups|$user";
                 proxy_cache_lock on;
                 proxy_cache_use_stale updating;
                 proxy_cache_valid 200 5s;
@@ -557,6 +557,13 @@ in
                 }
 
                 location /api/login {
+                    auth_request off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
+                location /api/logout {
                     auth_request off;
                     rewrite ^/api(/.*)$ $1 break;
                     proxy_pass http://frigate-api;
@@ -747,7 +754,6 @@ in
         ]
         ++ optionals (!stdenv.hostPlatform.isAarch64) [
           # not available on aarch64-linux
-          intel-gpu-tools
           rocmPackages.rocminfo
         ];
       serviceConfig = {
@@ -775,11 +781,10 @@ in
         Group = "frigate";
         SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
 
-        AmbientCapabilities = optionals (elem cfg.vaapiDriver [
-          "i965"
-          "iHD"
-        ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
+        # No capabilities
+        CapabilityBoundingSet = [ "" ];
 
+        # Allow delegating access
         UMask = "0027";
 
         StateDirectory = "frigate";
@@ -787,6 +792,7 @@ in
 
         # Caches
         PrivateTmp = true;
+        TemporaryFileSystem = "/dev/shm:mode=1777,nosuid,nodev";
         CacheDirectory = [
           "frigate"
           # https://github.com/blakeblackshear/frigate/discussions/18129
@@ -796,10 +802,60 @@ in
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+        RemoveIPC = true;
 
         # Reduce visible process scope to cgroup
         ProtectProc = "invisible";
+
+        # Allow wide /proc inspection, e.g. for cpuinfo
+        ProcSubset = "all";
+
+        # Protect various system locations/interfaces
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+
+        # OpenVINO calls `mprotect(PROT_READ|PROT_WRITE|PROT_EXEC)` as confirmed by strace. See
+        # #575222.
+        MemoryDenyWriteExecute = !withOpenVINO;
+
+        # No ABI personality changes
+        LockPersonality = true;
+
+        # Only IP/Unix sockets
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+
+        # Deny namespace creation
+        RestrictNamespaces = true;
+
+        # No privilege escalation
+        NoNewPrivileges = true;
+        RestrictSUIDSGID = true;
+
+        # No realtime schedulign
+        RestrictRealtime = true;
+
+        # Restrict allowed syscalls
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
       };
+    };
+
+    systemd.tmpfiles.settings."frigate" = {
+      # prevent gc of multiprocessing forkserver socket due to default systemd tmpfiles rules
+      "/tmp/systemd-private-%b-${config.systemd.services.frigate.name}-*/tmp/pymp-*".x = { };
     };
   };
 }

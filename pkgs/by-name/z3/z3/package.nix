@@ -29,13 +29,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "4.16.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-DnhX3kxggnFmyYwXEPBsBA1rh4oor1oIJR5TMJk/jvc=";
+    hash = "sha256-F46bADHVe6ssQrj6oXPSi3KRGBaX//pXO3+4bMFi8Ag=";
   };
 
   patches = lib.optionals useCmakeBuild [
@@ -134,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     )
     + lib.optionalString pythonBindings ''
+      # delete dangling symlink
+      rm -f $python/${python3Packages.python.sitePackages}/z3/libz3.so.*
       ln -sf $lib/lib $python/${python3Packages.python.sitePackages}/z3/lib
     '';
 

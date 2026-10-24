@@ -30,18 +30,17 @@
   # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
   builderKeys ? [
     "1A3E761F19D2CC7785C5502EA291A2C45D0C504A" # luke-jr.gpg
-    "DAED928C727D3E613EC46635F5073C4F4882FFFC" # leo-haf.gpg
   ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "29.3.knots20260508";
+  version = "29.4.2.knots20260508";
 
   src = fetchurl {
     url = "https://bitcoinknots.org/files/29.x/${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz";
     # hash retrieved from signed SHA256SUMS
-    hash = "sha256-jjrr2sqzL29rZdkMmKGIlSVToSpXfgtY0TUlv9Wd1jA=";
+    hash = "sha256-EcC5moK4scnCmrdtmwUHzhAXgTZldBYns/OIOkwven8=";
   };
 
   nativeBuildInputs = [
@@ -86,18 +85,18 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoinknots";
         repo = "guix.sigs";
-        rev = "15113e2fe61b31354a6bcc3fddd17f759ce20c4a";
-        sha256 = "sha256-snbs2j88k9CBdv8+s3GaFoIXyJRVWlKoxiKA8R6ek9Y=";
+        rev = "da0adcba7ebe5f9e207810c967e3a7b5e6fe6658";
+        sha256 = "sha256-IEk3w5ofPYgw6cmgqEw/Kb+q2xpzrptvNgfwH7h4zEM=";
       };
 
       checksums = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-vFfeObwXowk143DSv9WZ++u+KA0fuHexFU1NizrCiV4=";
+        hash = "sha256-kL0XUF03uSt6w8VabXEJuUFclnEdBLkEHjez/GdVf2c=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-8pVhrITphjs7rnJZrmxAU92GVgkjVPlkA54ne9iwiIs=";
+        hash = "sha256-Fxtm+bQbXjCr9aSNcgSq32T1OSyh6Ly/NLXahKnJaE0=";
       };
 
       verifyBuilderKeys =
@@ -149,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     # building with db48 (for legacy wallet support) is broken on Darwin
     (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
     (lib.cmakeBool "WITH_USDT" enableTracing)
-    (lib.cmakeFeature "RDTS_CONSENT" "RUNTIME_WARN")
   ]
   ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     (lib.cmakeBool "BUILD_TESTS" false)

@@ -19,6 +19,7 @@ let
   supportedFetcherVersions = [
     3 # Build a reproducible tarball. See https://github.com/NixOS/nixpkgs/pull/469950
     4 # Dump SQLite database to an SQL file. See https://github.com/NixOS/nixpkgs/pull/522703
+    5 # Keep virtual store materializations out of the archived store. See https://github.com/NixOS/nixpkgs/pull/565315
   ];
 in
 {
@@ -59,7 +60,7 @@ in
 
     assert
       !(fetcherVersion == 1 || fetcherVersion == 2)
-      || throw "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` was removed in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 3` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
+      || throw "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` was removed in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 5` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
     assert
       builtins.elem fetcherVersion supportedFetcherVersions
@@ -67,7 +68,7 @@ in
 
     assert
       !(fetcherVersion == 3 && lib.versionAtLeast pnpm.version "11.0.0")
-      || throw "fetchPnpmDeps `fetcherVersion = 3` is no longer supported for `pnpm_11`. Please upgrade to the latest, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
+      || throw "fetchPnpmDeps `fetcherVersion = 3` is no longer supported for `pnpm_11` or newer. Please upgrade to the latest, see https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion.";
 
     stdenvNoCC.mkDerivation (
       finalAttrs:
@@ -81,6 +82,7 @@ in
             jq
             moreutils
             pnpm # from args
+            pnpm.nodejs-slim
             pnpm-fixup-state-db'
             sqlite
             writableTmpDirAsHomeHook
@@ -122,6 +124,8 @@ in
               export pnpm_config_side_effects_cache=false
 
               export pnpm_config_update_notifier=false
+
+              export pnpm_config_force_ignores_platform=true
             else
               pnpm config set manage-package-manager-versions false
               pnpm config set side-effects-cache false
@@ -129,10 +133,24 @@ in
             fi
             popd
 
+            pnpm config set reporter append-only
             pnpm config set store-dir $storePath
 
             # Run any additional pnpm configuration commands that users provide.
             ${prePnpmInstall}
+
+            if [[ ${toString fetcherVersion} -ge 5 ]]; then
+              # The virtual store is a derived installation artifact. Keep it
+              # outside the content-addressable store archived by this fetcher.
+              virtualStorePath=$(mktemp -d)
+              if versionAtLeast "$pnpmVersion" "11"; then
+                export pnpm_config_virtual_store_dir="$virtualStorePath"
+                export pnpm_config_global_virtual_store_dir="$virtualStorePath"
+              else
+                export npm_config_virtual_store_dir="$virtualStorePath"
+                export npm_config_global_virtual_store_dir="$virtualStorePath"
+              fi
+            fi
 
             echo "Final pnpm config:"
             pnpm config list
@@ -140,13 +158,20 @@ in
 
             # pnpm is going to warn us about using --force
             # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
+            local installFlagsArray=(
+              "--force"
+              "--ignore-scripts"
+              "--frozen-lockfile"
+            )
+
+            if [[ -n "$NIX_NPM_REGISTRY" ]]; then
+              installFlagsArray+=("--registry=$NIX_NPM_REGISTRY")
+            fi
+
             pnpm install \
-                --force \
-                --ignore-scripts \
                 ${lib.escapeShellArgs filterFlags} \
                 ${lib.escapeShellArgs pnpmInstallFlags} \
-                --registry="$NIX_NPM_REGISTRY" \
-                --frozen-lockfile
+                "''${installFlagsArray[@]}"
 
             # Record the fetcherVersion in the output for introspection.
             echo ${toString fetcherVersion} > $out/.fetcher-version

@@ -129,7 +129,7 @@ let
           $out/lazy_html/_build/c/third_party/lexbor/${lexborCommit}
       '';
 
-  beamPackages = beam27Packages.extend (self: super: { elixir = self.elixir_1_18; });
+  beamPackages = beam27Packages.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 
 in
 beamPackages.mixRelease rec {

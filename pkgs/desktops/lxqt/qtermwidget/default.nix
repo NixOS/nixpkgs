@@ -11,7 +11,7 @@
   version ? "2.4.0",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qtermwidget";
   inherit version;
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  postPatch = lib.optionals (version == "1.4.0") ''
+  postPatch = lib.optionalString (version == "1.4.0") ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';

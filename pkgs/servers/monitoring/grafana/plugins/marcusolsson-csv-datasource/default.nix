@@ -2,11 +2,11 @@
 
 grafanaPlugin {
   pname = "marcusolsson-csv-datasource";
-  version = "1.0.0";
+  version = "1.0.4";
   zipHash = {
-    x86_64-linux = "sha256-lG8kpRSPXYWPag4fBAPi9QU73hAawJ0kpFsmKVdZpyc=";
-    aarch64-linux = "sha256-k8ba5JY1ezQSzey1BORFuQ1K2oVMy8mfnZn6m6BhaOo=";
-    aarch64-darwin = "sha256-9XNbx4KdBVOYKmHA+whnTsG7ykVNb3jMHlsRswDAoGE=";
+    x86_64-linux = "sha256-+KWTg9vwiQQnUiww/+NhB2/4kphRFsiQTc2422ixG74=";
+    aarch64-linux = "sha256-Xb7/BALWemvaY+wk8qAfE1RuXwFsKBl8Kj/0bOSPaWI=";
+    aarch64-darwin = "sha256-TNSeqT4Vu7CUZyKiK/Kc0THQNHozLQihn29alDBfcx8=";
   };
   meta = {
     description = "Load CSV data into Grafana, expanding your capabilities to visualize and analyze data stored in CSV (Comma-Separated Values) format";

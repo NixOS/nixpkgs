@@ -34,13 +34,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "clevis-luks-askpass requires boot.initrd.systemd.enable = true";
-      }
-    ];
-
     warnings =
       if
         cfg.useTang && !config.boot.initrd.network.enable && !config.boot.initrd.systemd.network.enable
@@ -55,7 +48,7 @@ in
 
       storePaths = [
         cfg.package
-        "${pkgs.systemd}/lib/systemd/systemd-reply-password"
+        "${config.systemd.package}/lib/systemd/systemd-reply-password"
         "${pkgs.jose}/bin/jose"
         "${pkgs.curl}/bin/curl"
         "${pkgs.cryptsetup}/bin/cryptsetup"

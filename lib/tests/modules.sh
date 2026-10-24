@@ -226,6 +226,9 @@ checkConfigError 'In attrTag, each tag value must be an option, but tag int was 
 # types
 checkConfigOutput '"ok"' config.assertions ./types.nix
 
+# types.nullOr
+checkConfigError 'A definition for option .nullableValue\.mixed. is not of type .*\. TypeError: The option .nullableValue\.mixed. is defined both null and not null, in .* and .*\.' config.nullableValue.mixed ./types.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
@@ -742,6 +745,9 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line 
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
+# types.pathWith in-module assertions
+checkConfigOutput '"ok"' config.assertionsResult ./pathWith.nix
+
 # types.pathWith { inStore = true; }
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./pathWith.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./pathWith.nix
@@ -858,6 +864,8 @@ checkConfigError 'the-defs-file\.nix' config.argv ./attrList-valueMeta-definitio
 
 # attrListOf does not support type merging
 checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is already declared in .*/declare-attrList-type-merge.nix' config.merged ./declare-attrList-type-merge.nix
+
+checkConfigOutput '"ok"' config.result ./mapAttrsOfSubmodule.nix
 
 cat <<EOF
 ====== module tests ======

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,21 +16,26 @@ stdenvNoCC.mkDerivation {
     sha256 = "jcSQ72WK0GucZPgG7IQKrKzCOEbGgbQVl21RIKSF6A0=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   outputs = [
     "out"
     "doc"
   ];
 
+  dontInstallWebfonts = true;
+
   installPhase = ''
     runHook preInstall
-    mkdir -p $doc/sarabun $out/share/fonts/truetype
+
+    mkdir -p $doc/sarabun
     cp -r $src/OFL.txt $src/docs/* $doc/sarabun
-    cp $src/fonts/*.ttf $out/share/fonts/truetype
+
     runHook postInstall
   '';
 
   meta = {
-    homepage = "https://cadsondemak.github.io/sarabun/";
+    homepage = "https://cadsondemak.github.io/Sarabun/";
     description = "Slightly-condensed looped Thai and sans serif Latin typeface for communications";
     longDescription = ''
       The most popular typeface from the 13 fonts from SIPA Thailand’s National

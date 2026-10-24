@@ -10,26 +10,26 @@
   fmt,
   sdl3,
   toml11,
+  zarchive,
+  zstd,
 
   shadps4,
 }:
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4-qtlauncher";
-  version = "0-unstable-2026-06-07";
+  version = "0-unstable-2026-10-14";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadps4-qtlauncher";
-    rev = "eadffe744d6f2bb7b21aedeef2cc0f66cdffd6ed";
-    hash = "sha256-tlCP8Cu3UVoclaQ0cIVr89q7wwgkzFVwhMSqpVB6FnM=";
+    rev = "d585d56cdef7e376aa8526d52616398cbdd6f91e";
+    hash = "sha256-WXDGUdBtCHKx8mRetpGl3dfqGhoMgsQ41WRgPJ3VzMY=";
 
     postCheckout = ''
-      cd "$out"
+      git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
+      date -u -d "@$(git -C "$out" log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
 
-      git rev-parse --short=8 HEAD > $out/COMMIT
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-
-      git -C externals submodule update --init --recursive \
+      git -C "$out/externals" submodule update --init --recursive \
         volk \
         json \
         openal-soft \
@@ -40,11 +40,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  patches = [
-    ./qt-paths.patch
-    # https://github.com/shadps4-emu/shadps4-qtlauncher/pull/335
-    ./version-directory.patch
-  ];
+  patches = [ ./qt-paths.patch ];
 
   postPatch = ''
     substituteInPlace src/common/scm_rev.cpp.in \
@@ -64,6 +60,9 @@ clangStdenv.mkDerivation (finalAttrs: {
       --replace-fail "@shadps4-qt@" "$out"
   '';
 
+  # System Zstd is not linked by default
+  env.NIX_LDFLAGS = "-lzstd";
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -74,6 +73,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     fmt
     sdl3
     toml11
+    zarchive
+    zstd
     qt6.qtbase
     qt6.qttools
     qt6.qtmultimedia
@@ -94,13 +95,15 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     inherit (shadps4.meta)
+      homepage
+      downloadPage
+      donationPage
       platforms
       license
       maintainers
       ;
 
     description = shadps4.meta.description + " (Qt UI)";
-    homepage = "https://github.com/shadps4-emu/shadps4-qtlauncher";
     mainProgram = "shadPS4QtLauncher";
   };
 })

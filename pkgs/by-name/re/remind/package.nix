@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
-  gitUpdater,
+  fetchzip,
+  bashNonInteractive,
   tk,
   tclPackages,
   tcl,
@@ -12,32 +12,20 @@
       lib.warn "tkremind is deprecated and should be removed; use withGui instead." tkremind
     else
       true,
-  writeText,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "remind";
-  version = "06.02.08";
+  version = "06.03.06";
 
-  src =
-    let
-      domain = "git.skoll.ca";
-      netrc = writeText "netrc" ''
-        machine ${domain}
-        login notabot
-        password notabot
-      '';
-    in
-    fetchFromGitea {
-      inherit domain;
-      owner = "Skollsoft-Public";
-      repo = "Remind";
-      rev = version;
-      hash = "sha256-+5ms52n5W2fmW7YhloB67vI0gF4+q8i1CyciSvY5lg0=";
-      netrcPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-        cp ${netrc} netrc
-      '';
-    };
+  src = fetchzip {
+    url = "https://dianne.skoll.ca/projects/remind/download/remind-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5x6SbABTQHAu61/Cg0PJgY5k9py/YsrN0bNxEoSSEhI=";
+  };
+
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   propagatedBuildInputs = lib.optionals withGui [
     tclPackages.tcllib
@@ -49,20 +37,20 @@ tcl.mkTclDerivation rec {
     # as rem2pdf is currently not build since it requires the JSON::MaybeXS,
     # Pango and Cairo Perl modules.
     substituteInPlace scripts/tkremind.in \
-      --replace-fail "exec wish" "exec ${lib.getExe' tk "wish"}" \
+      --replace-fail '@TCLSH@' '${lib.getExe' tcl "tclsh"}' \
       --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # On Darwin setenv and unsetenv are defined in stdlib.h from libSystem
-    "-DHAVE_SETENV"
-    "-DHAVE_UNSETENV"
-  ]);
-
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "-BETA";
+    NIX_CFLAGS_COMPILE = toString [
+      "-DHAVE_SETENV"
+      "-DHAVE_UNSETENV"
+    ];
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://dianne.skoll.ca/projects/remind/";
@@ -76,4 +64,4 @@ tcl.mkTclDerivation rec {
     mainProgram = "remind";
     platforms = lib.platforms.unix;
   };
-}
+})

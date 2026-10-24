@@ -28,12 +28,12 @@
 
 assert usePam -> pam != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcap";
   version = "2.78";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/libcap-${finalAttrs.version}.tar.xz";
     hash = "sha256-DWIeVi/ZMsz2e5Zg+wGORopoPXuCdUHfJ4EyKMmWuxE=";
   };
 
@@ -79,23 +79,24 @@ stdenv.mkDerivation rec {
     patchShebangs ./progs/mkcapshdoc.sh
 
     # use full path to bash
-    substituteInPlace progs/capsh.c --replace "/bin/bash" "${runtimeShell}"
+    substituteInPlace progs/capsh.c \
+      --replace-fail "/bin/bash" "${runtimeShell}"
 
     # set prefixes
     substituteInPlace Make.Rules \
-      --replace 'prefix=/usr' "prefix=$lib" \
-      --replace 'exec_prefix=' "exec_prefix=$out" \
-      --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
-      --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
-      --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
+      --replace-fail 'prefix=/usr' "prefix=$lib" \
+      --replace-fail 'exec_prefix=' "exec_prefix=$out" \
+      --replace-fail 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
+      --replace-fail 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
+      --replace-fail 'man_prefix=$(prefix)' "man_prefix=$doc"
   '';
 
   installFlags = [ "RAISE_SETFCAP=no" ];
 
   postInstall = ''
     ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
-    mkdir -p "$doc/share/doc/${pname}-${version}"
-    cp License "$doc/share/doc/${pname}-${version}/"
+    mkdir -p "$doc/share/doc/libcap-${finalAttrs.version}"
+    cp License "$doc/share/doc/libcap-${finalAttrs.version}/"
   ''
   + lib.optionalString usePam ''
     mkdir -p "$pam/lib/security"
@@ -126,15 +127,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for working with POSIX capabilities";
     homepage = "https://sites.google.com/site/fullycapable";
     platforms = lib.platforms.linux;
-    license = lib.licenses.bsd3;
+    license = lib.licenses.OR [
+      lib.licenses.bsd3
+      lib.licenses.gpl2Only
+    ];
     pkgConfigModules = [
       "libcap"
       "libpsx"
     ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap_project" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap_project" finalAttrs.version;
   };
-}
+})

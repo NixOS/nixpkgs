@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hatsu";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-66BNgcCYPMJ5AE/OCfbLrU+A/usv0/QvcyPy8D+7PVs=";
+    hash = "sha256-ebMVk/OV0fTzj7NhPvplC4bjPoEdlYXZGs2+CDtqPhk=";
   };
 
-  cargoHash = "sha256-NXauXnCpk8YjiX4bqZMbEy/QPb7MiJYzY64YKDV6qq0=";
+  cargoHash = "sha256-+KNysTRSu9BCTYVHXxM4/mEm+zrU2LxdVLRAGJb2QDI=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -21,16 +21,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "halloy";
-  version = "2026.8";
+  version = "2026.9";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = finalAttrs.version;
-    hash = "sha256-OPSitjgfiBbqCNa3dIBHrFCP7097vsF78H5aCbtvPAI=";
+    hash = "sha256-rIrmhrnM4UWZeDZVOyDu13WiTROcQWsDBztqeQzRbuQ=";
   };
 
-  cargoHash = "sha256-LBJmiUxCHUZM1nzF7rCapKPELqdSLNdz2am7ivHSK98=";
+  cargoHash = "sha256-pyRh6zSle4ZCGUsf2R7YIhcBOT53WKBFA0JHWGA3Z5s=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -101,7 +101,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p "$APP_DIR/MacOS"
     cp -r ${finalAttrs.src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
-    substituteInPlace "$APP_DIR/Info.plist" \
+    substitute \
+      "${finalAttrs.src}/assets/macos/Info.plist.in" \
+      "$APP_DIR/Info.plist" \
       --replace-fail "{{ VERSION }}" "${finalAttrs.version}" \
       --replace-fail "{{ BUILD }}" "${finalAttrs.version}-nixpkgs"
 

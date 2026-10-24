@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-qbittorrent-exporter";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "martabal";
     repo = "qbittorrent-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bVfYDIT3FMCFs/p+fFwm+xKiqbffPJ26Z2KFmBlqMjg=";
+    hash = "sha256-mPmoaqQp/TOryJxDm5/7hybBxEIn8TaSf/+KTNYmZOE=";
   };
 
-  vendorHash = "sha256-vw4uwQt/PI8yl81NC3wAdgCiPacg/Pmv2MNlnR9Y/v0=";
+  vendorHash = "sha256-vRAmGwguHq7b/85joMidgI8T/jGoONB48sX68U4bdp4=";
 
   ldflags = [
     "-s"

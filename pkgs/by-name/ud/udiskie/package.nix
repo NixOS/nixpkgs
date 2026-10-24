@@ -6,7 +6,7 @@
   gtk3,
   installShellFiles,
   keyutils,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   librsvg,
   python3Packages,
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
     libnotify
     librsvg # SVG icons
     udisks
@@ -96,7 +96,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/coldfix/udiskie/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
     longDescription = ''
-      udiskie is a udisks2 front-end that allows to manage removeable media such
+      udiskie is a udisks2 front-end that allows to manage removable media such
       as CDs or flash drives from userspace.
 
       Its features include:

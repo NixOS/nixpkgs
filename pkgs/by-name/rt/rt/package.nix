@@ -4,7 +4,6 @@
   autoreconfHook,
   buildEnv,
   fetchFromGitHub,
-  fetchpatch,
   perl,
   perlPackages,
   makeWrapper,
@@ -14,24 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rt";
-  version = "5.0.8";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     repo = "rt";
     rev = "rt-${finalAttrs.version}";
     owner = "bestpractical";
-    hash = "sha256-4/iC1PjLgLAp7XWTafe8HW3bTkDWWQxtSEIOs8wluzE=";
+    hash = "sha256-wmYBeHb/aGKzbDD7mbSMpz0eEZHRq+Jr5+hDK0Hl9+s=";
   };
 
   patches = [
     ./dont-check-users_groups.patch # needed for "make testdeps" to work in the build
     ./override-generated.patch
-    # Fix "Wide character in subroutine entry" crash on every request
-    # merged upstream
-    (fetchpatch {
-      url = "https://github.com/bestpractical/rt/commit/f8f03dd6e69dfbf4eb71e3ded0f793af4721a06d.patch";
-      hash = "sha256-Mk8ve8n5tgyyHT7RAt2o+QnUlcYNOu95lNjku6VgXS0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -50,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
           BusinessHours
           CGIEmulatePSGI
           CGIPSGI
+          CSSInliner
           CSSMinifierXS
           CSSSquish
           ConvertColor
@@ -65,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
           DateExtract
           DateManip
           DateTimeFormatNatural
+          DateTimeSet
           DevelGlobalDestruction
           EmailAddress
           EmailAddressList
@@ -78,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
           GDGraph
           GnuPGInterface
           GraphViz2
+          HashMerge
+          HashMergeExtra
           HTMLFormatExternal
           HTMLFormatTextWithLinks
           HTMLFormatTextWithLinksAndTables
@@ -87,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
           HTMLQuoted
           HTMLRewriteAttributes
           HTMLScrubber
+          Imager
           IPCRun
           IPCRun3
           JSON

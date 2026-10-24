@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-register";
-  version = "7.2.3";
+  version = "7.2.4";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocprofiler-register"
       "shared"
@@ -42,6 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
       # [rocprofiler-register] Fix compilation with system fmt/glog
       url = "https://github.com/ROCm/rocm-systems/commit/c8ad2522083c6e00539ce5c1c22df766c20084fb.patch";
       hash = "sha256-VloRKV6kUzIfIInltx/bV1EM0FUfeQZrVAx6qgdsLyg=";
+      relative = "projects/rocprofiler-register";
+    })
+    (fetchpatch {
+      # fix(rocprofiler-sdk): include fmt/format.h instead of fmt/core.h for fmt::format
+      # fmt 12.2.0 changes the meaning of fmt/core.h so it no longer includes
+      # fmt::format, so this upstream commit switches to the correct header.
+      url = "https://github.com/ROCm/rocm-systems/commit/e2f588592ecfb0653ed5b3078753186325adf70a.patch";
+      hash = "sha256-ip/s7tmUptcXMen3fyQJYKiZKwoe3SH0XqTVb0YBA7k=";
       relative = "projects/rocprofiler-register";
     })
   ];

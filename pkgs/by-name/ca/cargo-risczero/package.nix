@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   nix-update-script,
+  stdenv, # for meta.broken
 }:
 let
   # That is from cargoDeps/risc0-circuit-recursion/build.rs
@@ -20,18 +21,18 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-risczero";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-1tuY+XoZpilak9gc5vDnRDEB1SK+itBWoGNxwefT6xo=";
+    hash = "sha256-yhYD2wtkR5ZSZGuFuOEiMYw1xH9e/I17EYFiTaSKZcA=";
   };
 
   env = {
     RECURSION_SRC_PATH = src-recursion;
   };
 
-  cargoHash = "sha256-ayKQvhjYawPEl9ryVmDx4J93/EGPSeKds0mOnkRI2Fo=";
+  cargoHash = "sha256-D2TtmGvjffWDesHm1/lnNTZHRB3INfNp2RI/PfHMo2o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cargo extension to help create, manage, and test RISC Zero projects";
     mainProgram = "cargo-risczero";
     homepage = "https://risczero.com";

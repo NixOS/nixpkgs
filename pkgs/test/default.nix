@@ -148,6 +148,7 @@ in
   fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
   fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
+  fetchRepoProject = recurseIntoAttrs (callPackages ../build-support/fetchrepoproject/tests.nix { });
   fetchNextcloudApp = recurseIntoAttrs (
     callPackages ../build-support/fetchnextcloudapp/tests.nix { }
   );
@@ -247,6 +248,8 @@ in
 
   auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
 
+  auto-patchelf-hook-relativize-rpath = callPackage ./auto-patchelf-hook-relativize-rpath { };
+
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
     concatMapAttrs (
@@ -284,4 +287,6 @@ in
   );
 
   home-assistant-components = recurseIntoAttrs pkgs.home-assistant.tests.components;
+
+  openscad = recurseIntoAttrs (callPackage ../build-support/openscad/tests { });
 }

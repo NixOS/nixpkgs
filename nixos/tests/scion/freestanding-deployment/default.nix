@@ -122,7 +122,7 @@ in
           ret=0
           for as in "$@"
           do
-            scion ping "$as,127.0.0.1" -c 3
+            scion ping --sciond default "$as,127.0.0.1" -c 3
             ret=$?
             if [ "$ret" -ne "0" ]; then
               break

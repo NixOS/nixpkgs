@@ -7,6 +7,7 @@
   callPackage,
   zlib,
   nix-update-script,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-DZItqq7B1lXZ6VFsQUdQKn0wt1HaX4ymq2pI2DamY3w=";
     })
   ];
+
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   postPatch = ''
     substituteInPlace Makefile \

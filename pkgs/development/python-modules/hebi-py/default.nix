@@ -12,17 +12,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hebi-py";
-  version = "2.7.9";
+  version = "2.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hebi-py";
     inherit (finalAttrs) version;
-    hash = "sha256-7B0oxG1CVDTUVDFTJpuYvaCj+HnCL/2zmsD33W4nTLs=";
+    hash = "sha256-KvAUshMFDu+QCQcdSI2i4SmnLm+sOMPvu8JUCs912Go=";
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
   build-system = [
     setuptools
     patchelfUnstable # Depends on --clear-execstack which is not in any tagged release yet

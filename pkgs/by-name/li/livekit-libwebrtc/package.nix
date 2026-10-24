@@ -49,7 +49,7 @@ let
     "aarch64" = "arm64";
   };
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
-  gnArch = platformMap."${cpuName}" or (throw "unsupported arch ${cpuName}");
+  gnArch = platformMap."${cpuName}" or "unsupported";
   gnOs =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -352,6 +352,8 @@ stdenv.mkDerivation {
       WeetHet
       niklaskorz
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.intersectLists (lib.platforms.linux ++ lib.platforms.darwin) (
+      lib.platforms.x86 ++ lib.platforms.aarch64 ++ lib.platforms.arm
+    );
   };
 }

@@ -8,19 +8,20 @@
   util-linux,
   python3,
   boost,
+  simde,
   sqlite,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vectorscan";
-  version = "5.4.12";
+  version = "5.4.13";
 
   src = fetchFromGitHub {
     owner = "VectorCamp";
     repo = "vectorscan";
     rev = "vectorscan/${finalAttrs.version}";
-    hash = "sha256-P/3qmgVZ9OLfJGfxsKJ6CIuaKuuhs1nJt4Vjf1joQDc=";
+    hash = "sha256-dUrtyMXBhsgJj8w7qXLZK8BYjlRUL1JWyUz7yVREcew=";
   };
 
   postPatch = ''
@@ -30,9 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
     substituteInPlace cmake/cflags-generic.cmake \
       --replace-fail "-Werror" ""
-    substituteInPlace cmake/build_wrapper.sh \
-      --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
-      --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
   '';
 
   nativeBuildInputs = [
@@ -46,7 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     sqlite
-  ];
+  ]
+  ++
+    # FAT binaries on x86 linux can use SIMDe as fallback.
+    lib.optional (lib.elem stdenv.hostPlatform.system [
+      "x86_64-linux"
+      "i686-linux"
+    ]) simde;
 
   # FAT_RUNTIME bundles optimized implementations for different CPU extensions and uses CPUID to
   # transparently select the fastest for the current hardware.

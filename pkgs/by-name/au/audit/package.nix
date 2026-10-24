@@ -30,13 +30,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-poldhsF+ccutCxK7KE/gYpxa1x3wUQJWoCwU6pGFj6A=";
+    hash = "sha256-W8VyeOYQGPAvvmQUe3F22u5ldWwIuxrVJ/sXyu0Qrl4=";
   };
 
   postPatch = ''
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
       musl = pkgsMusl.audit or null;
       static = pkgsStatic.audit or null;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      inherit (nixosTests) audit audit-testsuite;
+      inherit (nixosTests) audit audit-testsuite utmp;
       # Broken on a hardened kernel
       package = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
         pname = previousAttrs.pname + "-test";

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
   pkg-config,
   autoreconfHook,
@@ -35,21 +36,21 @@
 let
 
   pname = "hplip";
-  version = "3.26.4";
+  version = "3.26.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/hplip-${version}.tar.gz";
-    hash = "sha256-ucYSUnVPNbSiNzlsqJYeez4MVtt21mpnEre/PjDmlGM=";
+    hash = "sha256-X7IjWpy27AfLR4bEBmsVE1nDATJNVKqr9prn7vNWBrM=";
   };
 
   plugin = fetchurl {
-    url = "https://developers.hp.com/sites/default/files/2026-05/hplip-${version}-plugin.run";
+    url = "https://developers.hp.com/sites/default/files/2026-09/hplip-${version}-plugin.run";
     # HTTP 403 otherwise
     curlOptsList = [
       "--user-agent"
       "Mozilla/5.0 Gecko/20100101 Firefox/150.0"
     ];
-    hash = "sha256-GZ94+K9/NolNcYDpCQljziVQp17HAfikujdmWpdG/fA=";
+    hash = "sha256-u4MHEr+sxFZ+hxRSLxNZp0nfNEeGJWyFE+3t8+lFUyU=";
   };
 
   hplipState = replaceVars ./hplip.state {
@@ -73,6 +74,13 @@ let
     "x86_64"
     "arm32"
     "arm64"
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${net-tools}/bin"
   ];
 
 in
@@ -129,7 +137,6 @@ python3Packages.buildPythonApplication {
       usbutils
       dbus-python
       distro
-      distutils
     ]
     ++ lib.optionals withQt5 [
       pyqt5
@@ -153,9 +160,14 @@ python3Packages.buildPythonApplication {
     ./gcc-compatability.patch
 
     # Remove all ImageProcessor functionality since that is closed source
-    (fetchurl {
-      url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
-      hash = "sha256-tNYccuwrcx5WCe7ULk8r8J6MVcUytGspiW64zAvO0qI=";
+    ./remove-imageprocessor.patch
+    # Python 3.14 removed urllib.request.URLopener. Remove references to it until
+    # upstream updates the code accordingly.
+    # See https://bugs.launchpad.net/hplip/+bug/2115046 and
+    # https://bugs.launchpad.net/ubuntu/+source/hplip/+bug/2146570
+    (fetchpatch {
+      url = "https://launchpadlibrarian.net/800485629/hplip-no-urlopener.patch";
+      hash = "sha256-LCd43WnwPo6SBjcxGI3bVryWedDeyKXc9tCF16edDK4=";
     })
   ];
 
@@ -322,10 +334,9 @@ python3Packages.buildPythonApplication {
       ${if withQt5 then "makeQtWrapper" else "makeWrapper"} "$py" "$bin" \
           --prefix PATH ':' "$program_PATH" \
           --set PYTHONNOUSERSITE "true" \
-          $makeWrapperArgs "''${gappsWrapperArgs[@]}"
+          ${lib.escapeShellArgs makeWrapperArgs}
     done
   '';
-
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
     # Patch udev rules:

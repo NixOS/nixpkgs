@@ -32,6 +32,7 @@ in
 
       domain = mkOption {
         type = types.nullOr types.str;
+        default = null;
         description = ''
           If non-null, enables an nginx reverse proxy virtual host at this FQDN,
           at the path configurated with `services.slskd.web.url_base`.

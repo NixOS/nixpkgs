@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -23,8 +22,6 @@ buildDotnetModule rec {
     find . -name "*.csproj" -exec sed -i 's/netstandard1.0;//g' {} +
   '';
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
-
   projectFile = "inklecate/inklecate.csproj";
   nugetDeps = ./deps.json;
   executables = [ "inklecate" ];
@@ -42,7 +39,8 @@ buildDotnetModule rec {
     downloadPage = "https://github.com/inkle/ink/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    badPlatforms = lib.platforms.aarch64;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      robinheghan
+    ];
   };
 }

@@ -11,7 +11,7 @@
   libjack2,
   libsndfile,
   wxwidgets_3_2,
-  libsigcxx,
+  libsigcxx_2_0,
   libsamplerate,
   rubberband,
   gettext,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libsndfile
     wxwidgets_3_2
-    libsigcxx
+    libsigcxx_2_0
     libsamplerate
     rubberband
     gettext

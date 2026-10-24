@@ -1,39 +1,6 @@
 { lib }:
 let
-  inherit (lib) optionalAttrs;
-
-  mkLicense =
-    lname:
-    {
-      shortName ? lname,
-      # Most of our licenses are Free, explicitly declare unfree additions as such!
-      free ? true,
-      deprecated ? false,
-      spdxId ? null,
-      url ? null,
-      fullName ? null,
-      redistributable ? free,
-    }@attrs:
-    {
-      inherit
-        shortName
-        free
-        deprecated
-        redistributable
-        ;
-      licenseType = "simple";
-    }
-    // optionalAttrs (attrs ? spdxId) {
-      inherit spdxId;
-      url = "https://spdx.org/licenses/${spdxId}.html";
-    }
-    // optionalAttrs (attrs ? url) {
-      inherit url;
-    }
-    // optionalAttrs (attrs ? fullName) {
-      inherit fullName;
-    };
-
+  mkLicense = shortName: license: lib.licenses.mkLicense ({ inherit shortName; } // license);
 in
 lib.mapAttrs mkLicense (
   {
@@ -178,6 +145,11 @@ lib.mapAttrs mkLicense (
       fullName = "Baekmuk License";
     };
 
+    bisonException22 = {
+      spdxId = "Bison-exception-2.2";
+      fullName = "Bison exception 2.2";
+    };
+
     bitstreamCharter = {
       spdxId = "Bitstream-Charter";
       fullName = "Bitstream Charter Font License";
@@ -196,6 +168,11 @@ lib.mapAttrs mkLicense (
     bitTorrent11 = {
       spdxId = "BitTorrent-1.1";
       fullName = " BitTorrent Open Source License v1.1";
+    };
+
+    blessing = {
+      spdxId = "blessing";
+      fullName = "SQLite Blessing";
     };
 
     boehmGC = {
@@ -273,9 +250,14 @@ lib.mapAttrs mkLicense (
       fullName = "BSD 3-Clause Tso variant";
     };
 
+    bsdAskToEndorse = {
+      spdxId = "BSD-ask-to-endorse";
+      fullName = "BSD - ask to endorse";
+    };
+
     bsdAxisNoDisclaimerUnmodified = {
-      fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
-      url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
+      spdxId = "BSD-Source-Code-no-disclaimer";
+      fullName = "BSD Source Code Attribution - no disclaimer";
     };
 
     bsdOriginal = {
@@ -313,6 +295,11 @@ lib.mapAttrs mkLicense (
     buddy = {
       spdxId = "Buddy";
       fullName = "Buddy License";
+    };
+
+    bugroff = {
+      spdxId = "Bugroff";
+      fullName = "Bugroff License";
     };
 
     bzip2 = {
@@ -388,8 +375,7 @@ lib.mapAttrs mkLicense (
     };
 
     cc-by-nc-30-igo = {
-      # Currently does not have a spdxID will get one in the future https://github.com/spdx/license-list-XML/issues/2845
-      # spdxId = "CC-BY-NC-3.0-IGO";
+      spdxId = "CC-BY-NC-3.0-IGO";
       fullName = "Creative Commons Attribution Non Commercial 3.0 IGO";
       free = false;
     };
@@ -694,6 +680,16 @@ lib.mapAttrs mkLicense (
       url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
     };
 
+    gccException20 = {
+      spdxId = "GCC-exception-2.0";
+      fullName = "GCC Runtime Library exception 2.0";
+    };
+
+    gccException31 = {
+      spdxId = "GCC-exception-3.1";
+      fullName = "GCC Runtime Library exception 3.1";
+    };
+
     geogebra = {
       fullName = "GeoGebra Non-Commercial License Agreement";
       url = "https://www.geogebra.org/license";
@@ -703,11 +699,6 @@ lib.mapAttrs mkLicense (
     generaluser = {
       fullName = "GeneralUser GS License v2.0";
       url = "https://www.schristiancollins.com/generaluser.php"; # license included in sources
-    };
-
-    gfl = {
-      fullName = "GUST Font License";
-      url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-LICENSE.txt";
     };
 
     gfsl = {
@@ -930,9 +921,14 @@ lib.mapAttrs mkLicense (
       fullName = "FSF All Permissive License";
     };
 
+    fsfullr = {
+      spdxId = "FSFULLR";
+      fullName = "FSF Unlimited License (with License Retention)";
+    };
+
     hl3 = {
+      spdxId = "Hippocratic-3.0-core";
       fullName = "Hippocratic License v3.0";
-      url = "https://firstdonoharm.dev/version/3/0/core.txt";
       free = false;
       redistributable = true;
     };
@@ -1024,9 +1020,9 @@ lib.mapAttrs mkLicense (
       fullName = "Licence Libre du Québec – Permissive version 1.1";
     };
 
-    llgpl21 = {
-      fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
-      url = "https://opensource.franz.com/preamble.html";
+    llgplPreamble = {
+      spdxId = "LLGPL";
+      fullName = "LLGPL Preamble"; # Only used together with LGPL (clarifying C-centric terms of LGPL in context of Lisp), SPDX tracks it separately
     };
 
     llvm-exception = {
@@ -1237,6 +1233,70 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    nvidiaCudaPython = {
+      shortName = "CUDA Python License";
+      fullName = "NVIDIA Software License for NVIDIA CUDA Python";
+      url = "https://github.com/NVIDIA/cuda-python/blob/v12.9.7/cuda_bindings/LICENSE";
+      free = false;
+      redistributable = true;
+    };
+
+    nvidiaCuptiPython = {
+      shortName = "CUPTI Python License";
+      fullName = "NVIDIA Software License Agreement for CUPTI Python";
+      url = "https://docs.nvidia.com/cupti-python/nvidia-cupti-python-license.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCudnn = {
+      shortName = "cuDNN EULA";
+      fullName = "cuDNN SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/deeplearning/cudnn/backend/latest/reference/eula.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCusparse_lt = {
+      shortName = "cuSPARSELt EULA";
+      fullName = "cuSPARSELt SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/cuda/cusparselt/license.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCutensor = {
+      shortName = "cuTENSOR EULA";
+      fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/cuda/cutensor/latest/license.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCutlassDsl = {
+      shortName = "CUTLASS DSLs SLA";
+      fullName = "NVIDIA Software License Agreement for the NVIDIA CUTLASS DSLs";
+      url = "https://github.com/NVIDIA/cutlass/blob/main/EULA.txt";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaTensorrt = {
+      shortName = "TensorRT EULA";
+      fullName = "TensorRT SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/deeplearning/tensorrt/latest/reference/sla.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaMath_sdk_sla = {
+      shortName = "NVIDIA Math SDK SLA";
+      fullName = "LICENSE AGREEMENT FOR NVIDIA MATH LIBRARIES SOFTWARE DEVELOPMENT KITS";
+      url = "https://developer.download.nvidia.com/compute/mathdx/License.txt";
+      free = false;
+      redistributable = false;
+    };
+
     obsidian = {
       fullName = "Obsidian End User Agreement";
       url = "https://obsidian.md/eula";
@@ -1257,6 +1317,11 @@ lib.mapAttrs mkLicense (
     odbl = {
       spdxId = "ODbL-1.0";
       fullName = "Open Data Commons Open Database License v1.0";
+    };
+
+    ofl10 = {
+      spdxId = "OFL-1.0";
+      fullName = "SIL Open Font License 1.0";
     };
 
     ofl = {
@@ -1302,6 +1367,11 @@ lib.mapAttrs mkLicense (
     osl3 = {
       spdxId = "OSL-3.0";
       fullName = "Open Software License 3.0";
+    };
+
+    owl094 = {
+      fullName = "Open Works License v0.9.4";
+      url = "https://owl.apotheon.org/";
     };
 
     paratype = {
@@ -1355,6 +1425,16 @@ lib.mapAttrs mkLicense (
       fullName = "Q Public License 1.0";
     };
 
+    qtGplException10 = {
+      spdxId = "Qt-GPL-exception-1.0";
+      fullName = "Qt GPL exception 1.0";
+    };
+
+    qtLgplException11 = {
+      spdxId = "Qt-LGPL-exception-1.1";
+      fullName = "Qt LPL exception 1.1";
+    };
+
     qwtException = {
       spdxId = "Qwt-exception-1.0";
       fullName = "Qwt exception 1.0";
@@ -1405,6 +1485,11 @@ lib.mapAttrs mkLicense (
       fullName = "Sun Industry Standards Source License 1.1";
     };
 
+    sl = {
+      spdxId = "SL";
+      fullName = "SL License";
+    };
+
     sleepycat = {
       spdxId = "Sleepycat";
       fullName = "Sleepycat License";
@@ -1430,15 +1515,15 @@ lib.mapAttrs mkLicense (
       redistributable = true; # Definitely redistributable though, it's an AGPL derivative
     };
 
+    stalwart = {
+      fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
+      url = "https://github.com/stalwartlabs/cli/blob/main/LICENSES/LicenseRef-SEL.txt";
+      free = false;
+    };
+
     stk = {
       spdxId = "MIT-STK";
       fullName = "MIT-STK License";
-    };
-
-    sudo = {
-      shortName = "sudo";
-      fullName = "Sudo License (ISC-style)";
-      url = "https://www.sudo.ws/about/license/";
     };
 
     sustainableUse = {
@@ -1587,6 +1672,13 @@ lib.mapAttrs mkLicense (
       fullName = "Universal Permissive License";
     };
 
+    valveSDK = {
+      fullName = "Valve Corporation Steamworks SDK Access Agreement";
+      url = "https://partner.steamgames.com/documentation/sdk_access_agreement";
+      free = false;
+      redistributable = true;
+    };
+
     vim = {
       spdxId = "Vim";
       fullName = "Vim License";
@@ -1601,6 +1693,8 @@ lib.mapAttrs mkLicense (
     vol-sl = {
       fullName = "Volatility Software License, Version 1.0";
       url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
+      free = false;
+      redistributable = true;
     };
 
     vsl10 = {
@@ -1630,6 +1724,11 @@ lib.mapAttrs mkLicense (
     w3c-19980720 = {
       spdxId = "W3C-19980720";
       fullName = "W3C Software Notice and License (1998-07-20)";
+    };
+
+    w3c-20150513 = {
+      spdxId = "W3C-20150513";
+      fullName = "W3C Software Notice and Document License (2015-05-13)";
     };
 
     wadalab = {
@@ -1705,18 +1804,6 @@ lib.mapAttrs mkLicense (
   }
   // {
     # TODO: remove legacy aliases
-    apsl10 = {
-      # deprecated for consistency with `apple-psl20`; use `apple-psl10`
-      spdxId = "APSL-1.0";
-      fullName = "Apple Public Source License 1.0";
-      deprecated = true;
-    };
-    apsl20 = {
-      # deprecated due to confusion with Apache-2.0; use `apple-psl20`
-      spdxId = "APSL-2.0";
-      fullName = "Apple Public Source License 2.0";
-      deprecated = true;
-    };
     gpl2 = {
       spdxId = "GPL-2.0";
       fullName = "GNU General Public License v2.0";

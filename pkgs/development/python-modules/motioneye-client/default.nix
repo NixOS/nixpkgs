@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "motioneye-client";
-  version = "0.3.14";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = "motioneye-client";
     rev = "v${version}";
-    hash = "sha256-kgFSd5RjO+OtnPeAOimPTDVEfJ47rXh2Ku5xEYStHv8=";
+    hash = "sha256-YNeq0rmJWrOOW5zWAY+mshfB4EDXAXBHsC27O2EluGw=";
   };
 
   postPatch = ''

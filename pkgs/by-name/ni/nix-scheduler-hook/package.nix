@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   fetchFromCodeberg,
-  stdenv,
+  clangStdenv,
   lib,
   nixVersions,
   meson,
@@ -32,18 +32,16 @@ let
   };
   nix = nixVersions.nix_2_34;
 in
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "nix-scheduler-hook";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchFromCodeberg {
     owner = "lisanna";
     repo = "nix-scheduler-hook";
     tag = "v${version}";
-    hash = "sha256-QMenfkNvn6bBGdu+d6i533/CkHNS7Tmr40cgl/ks5dk=";
+    hash = "sha256-IyObnqwCUqD6QqfoBRrjmxmmqikKCoEHK/VtOv8bJ5w=";
   };
-
-  sourceRoot = "source/src";
 
   nativeBuildInputs = [
     meson
@@ -70,7 +68,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    mv nsh $out/bin
+    mv src/nsh $out/bin
     mkdir -p $out/lib
     shopt -s extglob
     mv subprojects/restclient-cpp/librestclient_cpp.so!(*p) $out/lib
@@ -84,7 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Nix build hook that forwards builds to job schedulers";
-    homepage = "https://github.com/lisanna-dettwyler/nix-scheduler-hook";
+    homepage = "https://codeberg.org/lisanna/nix-scheduler-hook";
     license = lib.licenses.lgpl21;
     mainProgram = "nsh";
     maintainers = with lib.maintainers; [ lisanna-dettwyler ];

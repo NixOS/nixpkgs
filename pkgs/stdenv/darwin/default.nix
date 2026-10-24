@@ -10,7 +10,6 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
@@ -21,8 +20,6 @@
       throw "Unsupported platform for the Darwin stdenv"
   ),
 }:
-
-assert crossSystem == localSystem;
 
 let
   inherit (localSystem) system;
@@ -1176,9 +1173,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
     assert isFromNixpkgs prevStage.binutils-unwrapped.src;
     assert isBuiltByNixpkgsCompiler prevStage.curl;
-
-    # libiconv should be an alias for darwin.libiconv
-    assert prevStage.libiconv == prevStage.darwin.libiconv;
 
     {
       inherit (prevStage) config overlays stdenv;

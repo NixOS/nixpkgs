@@ -15,7 +15,6 @@
   jq,
   protobuf_31,
   python3,
-  python3Packages,
   qt6,
   rsync,
   rustPlatform,
@@ -24,6 +23,7 @@
   yarn,
   yarn-berry_4,
   runCommand,
+  substitute,
 
   wrapGAppsHook3,
 
@@ -35,16 +35,17 @@
 
 let
   yarn-berry = yarn-berry_4;
+  python = python3;
 
   pname = "anki";
-  version = "26.08";
-  rev = "666c2c64d4a1772c03948f5b667438da63ddaa76";
+  version = "26.09.3";
+  rev = "29bb700b951e3f0c0cb69b77c0180fc1fe33e6ba";
 
-  srcHash = "sha256-0sqtKiMqw7MLXVFSCT1sKX/VO7q5BY63pJP5OnCE2zo=";
-  cargoHash = "sha256-LQ5uD86ZOKXy9vGbTqPBi3Q57PZEjwQkbHR94QAIVMg=";
-  yarnHash = "sha256-bOgiZImraPXR/gVk9MB3o9GScMGvLvdhc9mLAaCA4IE=";
+  srcHash = "sha256-N55F8dDDRrCmA8GYP2QtfNs6QQrKhY7D2+yJO+4pqss=";
+  cargoHash = "sha256-2atsCtbtS+0T1h+KqUXI3aGHJFQbQsIaCXSi5KFUz5E=";
+  yarnHash = "sha256-jjTN/jd9UgNefkFtIZ9RT9oGyxNlAO3WlMNHzjnlOCM=";
   pythonDeps =
-    with python3Packages;
+    with python.pkgs;
     [
       # anki (pylib) runtime deps
       decorator
@@ -135,7 +136,7 @@ let
   );
 in
 
-python3Packages.buildPythonApplication (finalAttrs: {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = false;
   inherit pname version;
 
@@ -155,9 +156,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Used in with-addons.nix
     ./patches/allow-setting-addons-folder.patch
 
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/ankitects/anki/blob/main/package.json#L99
-    ./patches/yarn-4.14-support.patch
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/ankitects/anki/blob/main/package.json#L103
+    (substitute {
+      src = ./patches/yarn-fix.patch;
+      substitutions = [
+        "--replace-fail"
+        "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+        yarn-berry.lockfileVersion
+      ];
+    })
   ];
 
   inherit cargoDeps;
@@ -175,7 +183,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     jq
     ninja
     nodejs
-    python3Packages.mypy-protobuf
+    python.pkgs.mypy-protobuf
     qt6.wrapQtAppsHook
     rsync
     rustPlatform.cargoSetupHook
@@ -189,12 +197,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
+    qt6.qtmultimedia
     qt6.qtsvg
     qt6.qtwebengine
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python.pkgs; [
     pytest
     pytest-mock
     mock
@@ -223,7 +232,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     OFFLINE_BUILD = "1";
     NODE_BINARY = lib.getExe nodejs;
     PROTOC_BINARY = lib.getExe protobuf_31;
-    PYTHON_BINARY = lib.getExe python3;
+    PYTHON_BINARY = lib.getExe python;
     UV_BINARY = lib.getExe uv;
     UV_NO_MANAGED_PYTHON = "1";
     UV_SYSTEM_PYTHON = true;
@@ -239,7 +248,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mkdir -p out/pylib/anki .git
 
     echo ${builtins.substring 0 8 rev} > out/buildhash
-    echo ${python3.version} > .python-version
+    echo ${python.version} > .python-version
 
     # Setup the python environment.
     # We use nixpkgs python packages (via UV_FIND_LINKS), whose versions may
@@ -262,14 +271,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # anki's build tooling expects python and protoc-gen-mypy in pyenv
     mkdir -p ./out/pyenv/bin
     ln -sf $PYTHON_BINARY ./out/pyenv/bin/python
-    ln -sf ${lib.getExe python3Packages.mypy-protobuf} ./out/pyenv/bin/protoc-gen-mypy
+    ln -sf ${lib.getExe python.pkgs.mypy-protobuf} ./out/pyenv/bin/protoc-gen-mypy
 
     mv node_modules out
 
     # And finally build
     patchShebangs ./ninja
 
-    export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
+    export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python.sitePackages}
     # Necessary for yarn to not complain about 'corepack'
     jq 'del(.packageManager)' package.json > package.json.tmp && mv package.json.tmp package.json
     YARN_BINARY="${lib.getExe noInstallYarn}" PIP_USER=1 \
@@ -298,7 +307,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     in
     ''
       runHook preCheck
-      export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
+      export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python.sitePackages}
       ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
         pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
       ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
@@ -336,11 +345,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ${lib.optionalString stdenv.hostPlatform.isLinux ''"''${gappsWrapperArgs[@]}"''}
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
-      --prefix PYTHONPATH ':' "$lib/${python3.sitePackages}"
+      --prefix PYTHONPATH ':' "$lib/${python.sitePackages}"
     )
   '';
 
   passthru = {
+    inherit python;
     withAddons = ankiAddons: callPackage ./with-addons.nix { inherit ankiAddons; };
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };

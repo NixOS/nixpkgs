@@ -4,20 +4,22 @@
   fetchFromGitHub,
   makeWrapper,
   nix,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "niks3";
-  version = "1.8.0";
+  version = "1.15.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "niks3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-86afR/fMjLRLmBEMFA6ow6SRI9T5Qe83l0em/FciW2g=";
+    hash = "sha256-w2WpjabRT4UeEFKN8r0gm5JHQPZFI4mB3y/fW9t/ve0=";
   };
 
-  vendorHash = "sha256-qkB99S/9fmSk5G9uHyQF/z+joi9JACIJWaHMrIo4ziU=";
+  vendorHash = "sha256-9vV4LoOGg0OToRRvMjEnEqxYwiMZobofcxOMIgQJXug=";
 
   subPackages = [
     "cmd/niks3"
@@ -29,7 +31,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
   # The niks3 client shells out to `nix path-info` which differs between Nix and Lix; pinning Nix
@@ -38,10 +39,12 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/niks3 --prefix PATH : ${lib.makeBinPath [ nix ]}
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "S3-backed Nix binary cache with garbage collection";
     homepage = "https://github.com/Mic92/niks3";
-    changelog = "https://github.com/Mic92/niks3/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Mic92/niks3/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mic92

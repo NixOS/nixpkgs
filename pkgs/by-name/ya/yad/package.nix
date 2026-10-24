@@ -8,8 +8,8 @@
   gettext,
   gspell,
   gtk3,
-  gtksourceview,
-  libappindicator-gtk3,
+  gtksourceview3,
+  libappindicator,
   netpbm,
   webkitgtk_4_1,
 }:
@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gspell
     gtk3
-    gtksourceview
-    libappindicator-gtk3
+    gtksourceview3
+    libappindicator
     webkitgtk_4_1
   ];
 

@@ -33,11 +33,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = {
       inherit (nixosTests)
         userborn
+        userborn-migration
         userborn-mutable-users
         userborn-mutable-etc
         userborn-immutable-users
         userborn-immutable-etc
         userborn-static
+        userborn-subids
+        userborn-subids-immutable-etc
+        userborn-subids-mutable-etc
         ;
     };
   };

@@ -7,7 +7,7 @@
   jansson,
   jose,
   http-parser,
-  systemd,
+  systemdLibs,
   meson,
   ninja,
   makeWrapper,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     jansson
     jose
     http-parser
-    systemd
+    systemdLibs
   ];
 
   outputs = [

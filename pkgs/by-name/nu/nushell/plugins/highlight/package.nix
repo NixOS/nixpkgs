@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_highlight";
-  version = "1.4.15+0.113.1";
+  version = "1.4.17+0.115.1";
 
   src = fetchFromGitHub {
     owner = "cptpiepmatz";
     repo = "nu-plugin-highlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zJYbtGpQU0CrAu7sEQWv06hJj/PCD/iYCLOLrNmsL5U=";
+    hash = "sha256-8yXDP3VKIGjqKPKhQJvDlYBLyl4pplqXqFgL58q4oJg=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-oJtmmKRylOZQjBBifvWBx7ikwK2inGg8rGb/rPZ/t/s=";
+  cargoHash = "sha256-56PVP1pw6cJVmfd3O3so6YmFro1jvN1R++nnanItBUQ=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
@@ -34,5 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/cptpiepmatz/nu-plugin-highlight";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mgttlinger ];
+    # "Plugin `highlight` is compiled for nushell version 0.114.1, which is
+    # not compatible with version 0.115.1"
+    broken = true;
   };
 })

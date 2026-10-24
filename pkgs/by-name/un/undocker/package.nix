@@ -7,7 +7,7 @@
 let
   version = "1.2.3";
   src = fetchgit {
-    url = "https://git.jakstys.lt/motiejus/undocker.git";
+    url = "https://git.jakstys.lt/undocker.git";
     rev = "v${version}";
     hash = "sha256-hyP85pYtXxucAliilUt9Y2qnrfPeSjeGsYEFJndJWyA=";
   };
@@ -25,7 +25,7 @@ buildGoModule {
   vendorHash = null;
 
   meta = {
-    homepage = "https://git.jakstys.lt/motiejus/undocker";
+    homepage = "https://git.jakstys.lt/undocker";
     description = "CLI tool to convert a Docker image to a flattened rootfs tarball";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

@@ -18,7 +18,8 @@ assert lib.assertMsg (
 ) "Dynamic linking to cronet-go is only available on Linux.";
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.13.16";
+  # NOTE: also update cronet-go
+  version = "1.14.3";
 
   __structuredAttrs = true;
 
@@ -27,10 +28,27 @@ buildGoModule (finalAttrs: {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GAIU0SRvxU92E40zCkMsiSPuIEIUZM5vORN2u2XIhqs=";
+    hash = "sha256-Cy95gViVKmMYSXTKDbOxCOna7nBJ2b7/b8min1hZ2mM=";
   };
 
-  vendorHash = "sha256-ZUEpYfgb/iflImVCdLIgUzfp4QY9ho1gYkIAJV1tXrg=";
+  # Remove distrusted CA certificates from the embedded root stores.
+  # TODO: Remove once upstream updates its bundled CA certificates.
+  postPatch = ''
+    for cert in \
+      "AAA Certificate Services" \
+      "emSign ECC Root CA - G3" \
+      "emSign Root CA - C1" \
+      "emSign ECC Root CA - C3"; do
+      grep -Fxq "// $cert" common/certificate/mozilla.go
+    done
+    grep -Fq '// CN=emSign ECC Root CA - G3;' common/certificate/chrome.go
+
+    sed -i -E \
+      '/^\/\/ (CN=)?(AAA Certificate Services|emSign ECC Root CA - G3|emSign Root CA - C1|emSign ECC Root CA - C3)(;|$)/,/^-----END CERTIFICATE-----$/d' \
+      common/certificate/{mozilla,chrome}.go
+  '';
+
+  vendorHash = "sha256-wWe4aUpiCD+wgsj7YPJYVER7PxfgUbVTAhjarEzLtTc=";
 
   tags = [
     "with_gvisor"
@@ -43,6 +61,10 @@ buildGoModule (finalAttrs: {
     "with_tailscale"
     "with_ccm"
     "with_ocm"
+    "with_cloudflared"
+    "with_usbip"
+    "with_openvpn"
+    "with_openconnect"
     "badlinkname"
     "tfogo_checklinkname0"
   ]
@@ -70,20 +92,23 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
-    "-X=internal/godebug.defaultGODEBUG=multipathtcp=0"
+    "-X=runtime.godebugDefault=multipathtcp=0,tlssha1=1"
     "-checklinkname=0"
   ];
 
   postConfigure = lib.optionalString withNaiveOutbound ''
     pushd vendor/github.com/sagernet/cronet-go
     chmod -R u+w .
-    cp -r ${cronet-go}/ .
+    cp -r ${cronet-go}/. .
     # for !withStaticCronet
     patch -p1 < ${./cronet-go.patch}
     substituteInPlace internal/cronet/loader_unix.go \
       --subst-var out
     popd
   '';
+
+  # no tests
+  doCheck = false;
 
   postInstall = ''
     installShellCompletion release/completions/sing-box.{bash,fish,zsh}

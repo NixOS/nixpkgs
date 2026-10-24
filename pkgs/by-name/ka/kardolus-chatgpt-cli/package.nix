@@ -6,7 +6,7 @@
 }:
 
 buildGoModule (finalAttrs: {
-  # "chatgpt-cli" is taken by another package with the same upsteam name.
+  # "chatgpt-cli" is taken by another package with the same upstream name.
   # To keep "pname" and "package attribute name" identical, the owners name (kardolus) gets prefixed as identifier.
   pname = "kardolus-chatgpt-cli";
   version = "1.11.0";

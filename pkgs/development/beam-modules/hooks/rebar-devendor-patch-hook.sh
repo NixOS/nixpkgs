@@ -10,4 +10,6 @@ rebarDevendorPatchHook() {
   echo "Finished rebarDevendorPatchHook"
 }
 
-prePatchHooks+=(rebarDevendorPatchHook)
+if [ -z "${dontRebarDevendorPatch-}" ]; then
+  prePatchHooks+=(rebarDevendorPatchHook)
+fi

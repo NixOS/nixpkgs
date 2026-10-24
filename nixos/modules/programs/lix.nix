@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -30,31 +29,30 @@ let
     };
   };
 
-  makeNixBuildUser = nr: {
-    name = "nixbld${toString nr}";
-    value = {
-      description = "Lix build user ${toString nr}";
-      uid = builtins.add config.ids.uids.nixbld nr;
-      isSystemUser = true;
-      group = "nixbld";
-      extraGroups = [ "nixbld" ];
-    };
-  };
-
-  nixbldUsers = lib.listToAttrs (map makeNixBuildUser (lib.range 1 cfg.nrBuildUsers));
+  enableExperimentalRpc = builtins.elem "rpc-sockets" (
+    config.nix.settings.experimental-features or [ ]
+    ++ config.nix.settings.extra-experimental-features or [ ]
+  );
 
 in
 
 {
-  config = lib.mkIf (cfg.enable && nixPackage.pname == "lix") {
+  config = lib.mkIf (cfg.daemon.enable && nixPackage.pname == "lix") {
+    assertions = [
+      {
+        assertion = cfg.enable;
+        message = ''
+          Enabling the Lix Daemon requires also enabling Nix (config.nix.enable = true).
+        '';
+      }
+    ];
+
+    warnings = lib.mkIf (enableExperimentalRpc && lib.versionOlder nixPackage.version "2.96") [
+      "Lix: selected experimental feature 'rpc-sockets', but Lix version ${nixPackage.version} doesn't support it."
+    ];
+
     # Require the tun kernel module for pasta, can be disabled if pasta is not used.
     boot.kernelModules.tun = lib.mkDefault true;
-
-    environment.systemPackages = [
-      nixPackage
-      pkgs.nix-info
-    ]
-    ++ lib.optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
 
     systemd.packages = [ nixPackage ];
 
@@ -112,20 +110,22 @@ in
     ];
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars;
+    environment.sessionVariables =
+      cfg.envVars
+      // lib.optionalAttrs enableExperimentalRpc {
+        NIX_REMOTE = "daemon?protocol=any";
+      };
 
-    nix.nrBuildUsers = lib.mkDefault (
-      if cfg.settings.auto-allocate-uids or false then
-        0
-      else
-        lib.max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
+    systemd.sockets."lix-daemon-xp1".wantedBy = lib.mkIf enableExperimentalRpc [ "sockets.target" ];
+
+    systemd.services."lix-daemon-xp1@" = lib.mkIf enableExperimentalRpc (
+      lib.mkMerge [
+        commonNixDaemonConfig
+        {
+          # Do not kill daemons in flight.
+          restartIfChanged = false;
+        }
+      ]
     );
-
-    users.users = nixbldUsers;
-
-    services.displayManager.hiddenUsers = lib.attrNames nixbldUsers;
-
-    # Legacy configuration conversion.
-    nix.settings.sandbox-fallback = false;
   };
 }

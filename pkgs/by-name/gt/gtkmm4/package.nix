@@ -89,9 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
       There's extensive documentation, including API reference and a
       tutorial.
     '';
-    homepage = "https://gtkmm.org/";
+    homepage = "https://gitlab.gnome.org/GNOME/gtkmm";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };

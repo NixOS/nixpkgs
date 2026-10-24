@@ -18,7 +18,7 @@ Run a derivation in a Linux virtual machine (using Qemu/KVM).
 By default, there is no disk image; the root filesystem is a `tmpfs`, and the Nix store is shared with the host (via the [9P protocol](https://wiki.qemu.org/Documentation/9p#9p_Protocol)).
 Thus, any pure Nix derivation should run unmodified.
 
-If the build fails and Nix is run with the `-K/--keep-failed` option, a script `run-vm` will be left behind in the temporary build directory that allows you to boot into the VM and debug it interactively.
+If the build fails and Nix is run with the `-K/--keep-failed` option, a script `run-vm` will be left behind in the temporary build directory that boots into the VM for interactive debugging.
 
 ### Attributes {#vm-tools-runInLinuxVM-attributes}
 
@@ -109,8 +109,8 @@ A set of functions that build a predefined set of minimal Linux distributions im
 ### Images {#vm-tools-diskImageFuns-images}
 
 * Fedora
-  * `fedora42x86_64`
   * `fedora43x86_64`
+  * `fedora44x86_64`
 * Rocky Linux
   * `rocky9x86_64`
   * `rocky10x86_64`
@@ -119,15 +119,15 @@ A set of functions that build a predefined set of minimal Linux distributions im
   * `alma10x86_64`
 * Oracle Linux
   * `oracle9x86_64`
+  * `oracle10x86_64`
 * Amazon Linux
   * `amazon2023x86_64`
 * Ubuntu
   * `ubuntu2204i386`
   * `ubuntu2204x86_64`
   * `ubuntu2404x86_64`
+  * `ubuntu2604x86_64`
 * Debian
-  * `debian11i386`
-  * `debian11x86_64`
   * `debian12i386`
   * `debian12x86_64`
   * `debian13i386`

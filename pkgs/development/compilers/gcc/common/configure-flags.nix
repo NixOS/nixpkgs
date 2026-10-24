@@ -40,15 +40,6 @@
 
 assert !enablePlugin -> disableGdbPlugin;
 
-# Note [Windows Exception Handling]
-# sjlj (short jump long jump) exception handling makes no sense on x86_64,
-# it's forcibly slowing programs down as it produces a constant overhead.
-# On x86_64 we have SEH (Structured Exception Handling) and we should use
-# that. On i686, we do not have SEH, and have to use sjlj with dwarf2.
-# Hence it's now conditional on x86_32 (i686 is 32bit).
-#
-# ref: https://stackoverflow.com/questions/15670169/what-is-difference-between-sjlj-vs-dwarf-vs-seh
-
 let
   inherit (stdenv)
     hostPlatform
@@ -69,6 +60,10 @@ let
       "--with-as=${
         if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools
       }/bin/${targetPlatform.config}-as"
+    ]
+    ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
+      "--disable-sjlj-exceptions"
+      "--with-dwarf2"
     ]
     ++ (
       if withoutTargetLibc then
@@ -101,11 +96,6 @@ let
           "--disable-nls"
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
-        ]
-        ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
-          # See Note [Windows Exception Handling]
-          "--enable-sjlj-exceptions"
-          "--with-dwarf2"
         ]
       else
         [

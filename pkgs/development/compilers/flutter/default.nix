@@ -1,5 +1,4 @@
 {
-  useNixpkgsEngine ? false,
   callPackage,
   fetchzip,
   fetchFromGitHub,
@@ -22,10 +21,6 @@ let
     {
       version,
       engineVersion,
-      engineSwiftShaderHash,
-      engineSwiftShaderRev,
-      engineHashes,
-      enginePatches,
       dartVersion,
       flutterHash,
       dartHash,
@@ -39,14 +34,9 @@ let
         inherit
           version
           engineVersion
-          engineSwiftShaderRev
-          engineSwiftShaderHash
-          engineHashes
-          enginePatches
           patches
           pubspecLock
           artifactHashes
-          useNixpkgsEngine
           channel
           ;
 
@@ -123,7 +113,6 @@ let
         mkFlutter (
           {
             patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
-            enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
           }
           // data
         )

@@ -1,7 +1,8 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  testers,
 }:
 let
   # The web client verifies that the server version is a valid datetime string:
@@ -25,37 +26,30 @@ let
   #   => "2026"
   versionToYear = version: builtins.elemAt (lib.splitString "-" version) 0;
 in
-buildGoModule (finalAttrs: {
+# Upstream's go.mod requires go 1.27.1 (release notes for 2026-09-03),
+# and buildGoModule defaults to 1.26 which refuses. Pin to buildGo127Module
+# rather than buildGoLatestModule to avoid joining the mass rebuild when
+# buildGoLatestModule tracks Go 1.28. Per pkgs/build-support/go/README.md,
+# this builder auto-bumps to the then-oldest supported toolchain once Go
+# 1.27 reaches EOL, so we won't strand on it forever.
+buildGo127Module (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "silo";
-  version = "2026-06-18T00-00-00Z";
+  version = "2026-10-18T00-00-00Z";
 
   src = fetchFromGitHub {
     owner = "pgsty";
-    repo = "minio";
+    repo = "silo";
     tag = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-TwuqWof8FozryQoZt1lybw7z8z8E3Ose4jbKZ0To2lk=";
+    hash = "sha256-u+3aAv85XWQNlPdPsO8F3WfZR0HCp9A1N1JjqH7lq3M=";
   };
 
-  vendorHash = "sha256-rewz3Sez/01iWGCEhMVmcVnIxxjgBzmeUyMqFi6s4mc=";
+  vendorHash = "sha256-BC7JHgRZZppbR8A+Uzr2WyuZXpjqYmXue4TDL0DLkfk=";
 
   subPackages = [ "." ];
 
   env.CGO_ENABLED = 0;
-
-  # nixpkgs go_1_26 pinned to 1.26.3; pgsty/minio's go.mod says go 1.26.4.
-  # Step down to 1.26.3 to use the available toolchain. If pgsty/minio
-  # genuinely needs 1.26.4 features, we can replace this with one of:
-  #   - Go toolchain auto-switch: prePatch GOTOOLCHAIN=go1.26.4+auto
-  #     (fails inside Nix sandbox since GOPROXY=off blocks toolchain download)
-  #   - Override go: buildGoModule.override { go = go_1_26.overrideAttrs ... }
-  #     (compile go 1.26.4 from source, ~5–10 min)
-  #   - Wait for nixpkgs to bump go_1_26 past 1.26.4
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.26.4" "go 1.26.3"
-  '';
 
   tags = [ "kqueue" ];
 
@@ -72,14 +66,20 @@ buildGoModule (finalAttrs: {
       "-X ${t}.CopyrightYear=${versionToYear finalAttrs.version}"
     ];
 
+  # Despite the renaming, the binary result comes out as minio. Upstream's goreleaser pipeline passes an explicit -o silo. The buildGoModule does not.
   postInstall = ''
     ln -s "$out/bin/minio" "$out/bin/silo"
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "RELEASE.${finalAttrs.version}";
+  };
+
   meta = {
     description = "Community-maintained fork of MinIO packaged as silo";
-    homepage = "https://github.com/pgsty/minio";
-    changelog = "https://github.com/pgsty/minio/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/pgsty/silo";
+    changelog = "https://github.com/pgsty/silo/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ randoneering ];
     license = lib.licenses.agpl3Plus;
     mainProgram = "silo";

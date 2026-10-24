@@ -120,7 +120,7 @@ in
                   else
                     "-o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\"";
                 ready = pkgs.writers.writeBash "systemd-signal-ready" ''
-                  ${pkgs.systemd}/bin/systemd-notify --ready
+                  ${config.systemd.package}/bin/systemd-notify --ready
                 '';
               in
               ''

@@ -11,7 +11,7 @@ let
     builtins.toJSON {
       inherit (config.system.nixos) distroName;
       nixPath = config.nix.package;
-      efiBootMgrPath = pkgs.efibootmgr;
+      efiBootMgrPath = if cfg.efiSupport then pkgs.efibootmgr else null;
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
@@ -254,13 +254,47 @@ in
         };
       };
 
+      signAdditionalFiles = {
+        enable = lib.mkEnableOption null // {
+          default = cfg.secureBoot.enable;
+          defaultText = lib.literalExpression "boot.loader.limine.secureBoot.enable";
+          description = ''
+            Whether to sign the files listed in
+            {option}`boot.loader.limine.additionalFiles` with
+            {command}`sbctl` `sign` while installing the bootloader.
+
+            Files referenced by {option}`boot.loader.limine.extraEntries` are
+            executed by Limine itself and therefore have to be signed for
+            Secure Boot to allow booting them.
+
+            Only PE/COFF images can be signed. Files which are not detected as
+            such, e.g. firmware modules or other data files, are left untouched
+            automatically and do not need to be listed in
+            {option}`boot.loader.limine.secureBoot.signAdditionalFiles.skip`.
+          '';
+        };
+
+        skip = lib.mkOption {
+          default = [ ];
+          example = lib.literalExpression ''[ "efi/memtest86/memtest86.efi" ]'';
+          type = lib.types.listOf lib.types.str;
+          description = ''
+            Destination paths, relative to {file}`/boot`, of files listed in
+            {option}`boot.loader.limine.additionalFiles` which must not be
+            signed, even if they are signable PE/COFF images. This is meant for
+            files which are already signed by their vendor and should keep
+            their original signature.
+          '';
+        };
+      };
+
       sbctl = lib.mkPackageOption pkgs "sbctl" { };
     };
 
     style = {
       wallpapers = lib.mkOption {
-        default = [ ];
-        example = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
+        default = [ defaultWallpaper ];
+        defaultText = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
         type = lib.types.listOf lib.types.path;
         description = ''
           A list of wallpapers.
@@ -281,7 +315,8 @@ in
       };
 
       backdrop = lib.mkOption {
-        default = null;
+        default = if (cfg.style.wallpapers == [ defaultWallpaper ]) then "2F302F" else null;
+        defaultText = lib.literalMD "`2F302F` for the default wallpaper, `null` otherwise.";
         example = "7EBAE4";
         type = lib.types.nullOr lib.types.str;
         description = ''
@@ -360,7 +395,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             black, red, green, brown, blue, magenta, cyan, and gray.
           '';
         };
@@ -369,7 +404,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             dark gray, bright red, bright green, yellow, bright blue, bright magenta, bright cyan, and white.
           '';
         };
@@ -426,13 +461,6 @@ in
   };
 
   config = lib.mkMerge [
-    {
-      boot.loader.limine.style.wallpapers = lib.mkDefault [ defaultWallpaper ];
-    }
-    (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
-      boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
-    })
     (lib.mkIf cfg.enable {
       assertions = [
         {
@@ -497,6 +525,15 @@ in
           assertion = !cfg.enableEditor;
           message = "Editor is unconditionally disabled by Limine.";
         }
+        {
+          assertion = lib.all (
+            path: builtins.hasAttr path cfg.additionalFiles
+          ) cfg.secureBoot.signAdditionalFiles.skip;
+          message = ''
+            Every entry in boot.loader.limine.secureBoot.signAdditionalFiles.skip
+            must be a key of boot.loader.limine.additionalFiles.
+          '';
+        }
       ];
 
       boot.loader.limine.enrollConfig = true;
@@ -506,21 +543,18 @@ in
 
     # Fwupd binary needs to be signed in secure boot mode
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable && config.services.fwupd.enable) {
-      systemd.services.fwupd = {
-        environment.FWUPD_EFIAPPDIR = "/run/fwupd-efi";
-      };
-
       systemd.services.fwupd-efi = {
         description = "Sign fwupd EFI app for secure boot";
         wantedBy = [ "fwupd.service" ];
         partOf = [ "fwupd.service" ];
         before = [ "fwupd.service" ];
+        # /run/fwupd-efi is populated by the fwupd module.
+        after = [ "systemd-tmpfiles-setup.service" ];
 
         unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          RuntimeDirectory = "fwupd-efi";
         };
 
         script = ''

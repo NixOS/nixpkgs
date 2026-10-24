@@ -149,6 +149,9 @@ grammars.withPlugins (p: [
 
 The scoped `withPlugins` helper receives derivations from the same overridden scope, so added or replaced grammars are visible.
 
+Deprecated or renamed grammar aliases live in [aliases.nix](aliases.nix) and are exposed only when `config.allowAliases = true`.
+An alias resolves to the same derivation as its canonical name, so `derivations`, `allGrammars`, and `withPlugins` all see it once enabled.
+
 The set also carries package-set helpers (`callPackage`, `newScope`, `overrideScope`, …) alongside the grammars, so do not iterate it directly.
 Use one of its grammar-only views instead; each reflects any `overrideScope`:
 

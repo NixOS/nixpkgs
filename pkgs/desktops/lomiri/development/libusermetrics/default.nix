@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -40,6 +41,22 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
     "doc"
+  ];
+
+  patches = [
+    # Upstream switched to building qdjango statically so users don't have to build & install a dead project.
+    # Maybe https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/24 will get rid of it for good.
+    # Until then, undo & link against our system-installed build.
+    (fetchpatch {
+      name = "0001-libusermetrics-revert-qdjango-vendoring.patch";
+      url = "https://gitlab.com/ubports/development/core/libusermetrics/-/commit/87f83dd4711bfb4e94fd87bc68403a9bd5cfef2a.patch";
+      revert = true;
+      includes = [
+        "CMakeLists.txt"
+        "src/usermetricsservice/CMakeLists.txt"
+      ];
+      hash = "sha256-OPTQPRr10I7bk7dQ/9x17mv42pKc8yIQUGEGak01Hic=";
+    })
   ];
 
   postPatch = ''

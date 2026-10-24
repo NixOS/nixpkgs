@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "8.4";
+  version = "8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "RestrictedPython";
     tag = version;
-    hash = "sha256-Ck5YDtjYs7rZk+MC+eKrQVCQX1EYlxC6m4kD5+QjfjE=";
+    hash = "sha256-SOvKMhpmA5PnuR01o6MfHApRmd0jJ/qjabPWptnByrU=";
   };
 
   postPatch = ''

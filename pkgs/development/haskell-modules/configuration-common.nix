@@ -423,18 +423,6 @@ with haskellLib;
     sha256 = "sha256-b29AVDiEMcShceRJyKEauK/411UkOh3ME9AnKEYvcEs=";
   }) super.lifted-base;
 
-  leveldb-haskell = overrideCabal (drv: {
-    version = "2024-05-05-unstable";
-    # Fix tests on mtl ≥ 2.3
-    # https://github.com/kim/leveldb-haskell/pull/42
-    src = pkgs.fetchFromGitHub {
-      owner = "kim";
-      repo = "leveldb-haskell";
-      rev = "3a505f3a7de0f5d14463538d7c2c9a9881a60eb9";
-      sha256 = "sha256-okUn5ZuWcj8vPr0GWXvO1LygNCrDfttkDaUoOt+FLA0=";
-    };
-  }) super.leveldb-haskell;
-
   # 2025-08-08: Allow QuickCheck >= 2.15 in selective's test-suite
   # https://github.com/snowleopard/selective/pull/81
   selective = doJailbreak super.selective;
@@ -697,6 +685,15 @@ with haskellLib;
         # TODO(@sternenseemann): submit upstreamable patch resolving this
         # (this should be possible by also taking PREFIX into account).
         ./patches/git-annex-no-usr-prefix.patch
+        (fetchpatch {
+          name = "support-bup-0.34.patch";
+          url = "http://source.git-annex.branchable.com/?p=source.git;a=patch;h=0b0bd012976b20b3857d532f00a1fc7a9bab12a3";
+          excludes = [
+            "CHANGELOG"
+            "doc/bugs/support_new_bup_version.mdwn"
+          ];
+          hash = "sha256-d/PII/daPkevjqqx73iPUFnN+FyeCtzk2+QaAZi4FLo=";
+        })
       ];
 
       postPatch = ''
@@ -720,8 +717,12 @@ with haskellLib;
   }) super.shell-conduit;
 
   # No maintenance planned until eventual removal
+  # Throw added 2026-08-19
   # https://github.com/NixOS/nixfmt/issues/340#issuecomment-3315920564
-  nixfmt = doJailbreak super.nixfmt;
+  nixfmt =
+    lib.throwIf pkgs.config.allowAliases
+      "haskell.packages.*.nixfmt has been removed as it is deprecated and unmaintained. Consider using top-level nixfmt instead."
+      (doJailbreak super.nixfmt);
 
   # Too strict upper bounds on turtle and text
   # https://github.com/awakesecurity/nix-deploy/issues/35
@@ -2337,7 +2338,7 @@ with haskellLib;
 
   # Latest release depends on crypton-connection ==0.3.2 https://github.com/ndmitchell/hoogle/issues/435
   hoogle = overrideSrc {
-    version = "unstable-2024-07-29";
+    version = "5.0.18.4-unstable-2024-07-28";
     src = pkgs.fetchFromGitHub {
       owner = "ndmitchell";
       repo = "hoogle";
@@ -3416,13 +3417,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.11.1";
+    version = "1.12.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-TuvKVBX60mqyMT6OB5JqVEh1YIWtFMR/igLCaCdC9tw=";
+      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
     };
   in
   {
@@ -3441,6 +3442,7 @@ with haskellLib;
         drv.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
           hnix-store-core = self.hnix-store-core_0_8_0_0;
+          hnix-store-nar = self.hnix-store-nar;
         }
       )
     ];

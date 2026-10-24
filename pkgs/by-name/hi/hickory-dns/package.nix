@@ -1,24 +1,26 @@
 {
   cacert,
   fetchFromGitHub,
+  sqlite,
+  openssl,
   lib,
   nix-update-script,
+  nixosTests,
   rustPlatform,
   versionCheckHook,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hickory-dns";
-  version = "0.26.1";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "hickory-dns";
     repo = "hickory-dns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRcq9b409O5bjta8hFLFBFC6ILf8QA2EZ8tQqk2m1Rk=";
+    hash = "sha256-zm8qMYqdDEZjtNC9arMzCAxPpBRRRwiHsb3lsP/cHIg=";
   };
 
-  cargoHash = "sha256-zszSkclNCLGVchWiNdtNLJeY2j5CmubjMjhwVwsvRP8=";
+  cargoHash = "sha256-u6Uf9lhrFgWfzIXZ3DIPk2JdDTdd1qBTkqUgmSspR9c=";
 
   buildFeatures = [
     "blocklist"
@@ -30,6 +32,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "rustls-platform-verifier"
     "tls-ring"
   ];
+
+  buildInputs = [ sqlite ];
 
   # skip tests that need network or public resolvers
   checkFlags = [
@@ -67,12 +71,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::readme_example"
   ];
 
+  nativeCheckInputs = [ openssl ];
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
 
   preCheck = ''
+    # bundled test certs expire after Sep 2026
+    substituteInPlace tests/test-data/test_configs/sec/gen-keys.sh \
+      --replace-fail /etc/ssl/openssl.cnf ${openssl}/etc/ssl/openssl.cnf
+    (cd tests/test-data/test_configs/sec && bash gen-keys.sh)
+
+    substituteInPlace scripts/gen_certs.sh \
+      --replace-fail "-out ca.pem -config /tmp/ca.conf" "-out ca.pem -config /tmp/ca.conf -extensions req_ext"
+    rm -f tests/test-data/{ca.key,ca.pem,cert.key,cert.csr,cert.pem,cert.p12}
+    bash scripts/gen_certs.sh
+
     # integration tests spin up the server which needs a cert bundle
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -80,7 +96,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace crates/resolver/src/lib.rs --replace-fail '//! ```rust' '//! ```rust,no_run'
   '';
 
-  passthru.updateScript = nix-update-script { };
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) hickory-dns;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Rust based DNS client, server, and resolver";

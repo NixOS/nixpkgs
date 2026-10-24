@@ -17,7 +17,7 @@ in
           password = pin;
         };
 
-        services.xserver.desktopManager.phosh = {
+        services.desktopManager.phosh = {
           enable = true;
           user = "nixos";
           group = "users";

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "gmr";
     repo = "helper";
     rev = version;
-    sha256 = "0zypjv8rncvrsgl200v7d3bn08gs48dwqvgamfqv71h07cj6zngp";
+    hash = "sha256-99lvJDsAhrOxq+ptzBsi+iFg12hnAyDo03kzm9GW138=";
   };
 
   propagatedBuildInputs = [ pyyaml ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Development library for quickly writing configurable applications and daemons";
-    homepage = "https://helper.readthedocs.org/";
+    homepage = "https://github.com/gmr/helper";
     license = lib.licenses.bsd3;
   };
 }

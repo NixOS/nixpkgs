@@ -20,7 +20,6 @@ let
       hash = "sha256-Xq8gFE8rWMwufvZL5ZaWXbQ/Ls6nPGgmU3PjzFeQOuM=";
     };
 
-    strictDeps = true;
     __structuredAttrs = true;
 
     build-system = with python3Packages; [ setuptools ];

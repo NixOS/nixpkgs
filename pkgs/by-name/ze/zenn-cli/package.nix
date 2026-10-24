@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "zenn-dev";
     repo = "zenn-editor";
     tag = finalAttrs.version;
-    hash = "sha256-zvQ8b7ZaDBYGMGqOcttixjaQpC27vtvZ6ZXpzmg9Sf4=";
+    hash = "sha256-U5rKmDi1FSWA/QBeKkVOIJYYeySjDwT9yvEWgPD6YsA=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-tPA2pgbvcFIL3UXr+G6XLdmdTxzdx6pi6KnzvvkCYAk=";
+    hash = "sha256-EObQPLRq911rc9zNUpU7za+Vl6Y/3VE3KPcJ4UII0Y4=";
   };
 
   preBuild = ''

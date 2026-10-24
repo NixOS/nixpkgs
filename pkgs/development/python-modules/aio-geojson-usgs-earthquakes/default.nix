@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aio-geojson-usgs-earthquakes";
-  version = "2026.6.0";
+  version = "2026.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-usgs-earthquakes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Faz4411UuPE1L/FWcn41l2ZiFVn0s4Pp2YgYhznEzqg=";
+    hash = "sha256-ymmO43USHiu11SRmirkJfjKZayD7eRv057uPhtZLWx0=";
   };
 
   build-system = [ setuptools ];

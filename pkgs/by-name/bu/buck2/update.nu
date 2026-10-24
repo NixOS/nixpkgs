@@ -8,6 +8,7 @@ const ARCHES = [
   { name: "aarch64-linux", target: "aarch64-unknown-linux-gnu" },
   { name: "aarch64-darwin", target: "aarch64-apple-darwin" },
 ];
+const BINARIES = ["buck2", "rust-project", "starlark_fmt"]
 
 const MANIFEST = "pkgs/by-name/bu/buck2/hashes.json"
 
@@ -19,30 +20,31 @@ def main [] {
     | get name
 
   let preludeHash = http get $"https://github.com/facebook/buck2/releases/download/($version)/prelude_hash" | decode | str trim
-  let preludeFod = run-external "nix" "--extra-experimental-features" "nix-command" "store" "prefetch-file" "--json" $"https://github.com/facebook/buck2-prelude/archive/($preludeHash).tar.gz" | from json | get hash
+  let preludeFod = prefetch-hash $"https://github.com/facebook/buck2-prelude/archive/($preludeHash).tar.gz"
 
   print $"Newest version: ($version)"
   print $"Newest prelude hash: ($preludeHash)"
 
-  let hashes = $ARCHES | par-each {
-    |arch|
-
-    {
-      $arch.name: {
-        "buck2": (run-external "nix" "--extra-experimental-features" "nix-command" "store" "prefetch-file" "--json" $"https://github.com/facebook/buck2/releases/download/($version)/buck2-($arch.target).zst" | from json | get hash),
-        "rust-project": (run-external "nix" "--extra-experimental-features" "nix-command" "store" "prefetch-file" "--json" $"https://github.com/facebook/buck2/releases/download/($version)/rust-project-($arch.target).zst" | from json | get hash),
+  let json = $ARCHES
+    | par-each { |arch|
+      {
+        $arch.name: (
+          $BINARIES | each { |binary|
+            { $binary: (prefetch-hash $"https://github.com/facebook/buck2/releases/download/($version)/($binary)-($arch.target).zst") }
+          } | into record
+        )
       }
     }
-  } | reduce { |val, accum| $accum | merge $val }
-
-  let new_manifest = $hashes
+    | into record
+    | sort # keep diffs minimal
     | insert "version" $version
     | insert "preludeGit" $preludeHash
     | insert "preludeFod" $preludeFod
+    | to json
 
-  $new_manifest
-  | to json
-  | append "\n"
-  | str join
-  | save -f $MANIFEST
+  $json + "\n" | save -f $MANIFEST
+}
+
+def prefetch-hash [url: string]: nothing -> string {
+  nix --extra-experimental-features nix-command store prefetch-file --json $url | from json | get hash
 }

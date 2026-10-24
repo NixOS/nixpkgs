@@ -10,19 +10,20 @@
   fetchFromGitHub,
   protobuf,
   setuptools,
+  tesla-protocol,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tesla-fleet-api";
-  version = "1.7.6";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
-    tag = "v${version}";
-    hash = "sha256-EgHV0O2i6ib85D23qPCPkVN1RAOQ/PzNVwz8VQIF7xw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MsFLTJpNmT6CcT64bYcUn0rRS6EDW4/hAZv1vexSrCk=";
   };
 
   build-system = [ setuptools ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     bleak-retry-connector
     cryptography
     protobuf
+    tesla-protocol
     typing-extensions
   ];
 
@@ -46,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Tesla Fleet API and Teslemetry";
     homepage = "https://github.com/Teslemetry/python-tesla-fleet-api";
-    changelog = "https://github.com/Teslemetry/python-tesla-fleet-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/Teslemetry/python-tesla-fleet-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

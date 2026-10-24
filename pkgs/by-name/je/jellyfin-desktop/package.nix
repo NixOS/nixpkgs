@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "jellyfin-desktop";
-  version = "2.0.0";
+  version = "2.0.0-unstable-2026-08-31";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-desktop";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ITlYOrMS6COx9kDRSBi4wM6mzL/Q2G5X9GbABwDIOe4=";
+    rev = "2cb4a4456fd29b5b62d825ef0e5df93ed6913328";
+    hash = "sha256-EbDTw7Nzq6JTF3YmIBNizDiPJ8wbc1leREfgCbME3Js=";
     fetchSubmodules = true;
   };
   patches = [
@@ -63,17 +63,20 @@ stdenv.mkDerivation (finalAttrs: {
   qtWrapperArgs = [
     "--set QT_STYLE_OVERRIDE Fusion"
     "--set NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
-    # Disable hardware acceleration to fix severe flickering in video playback.
-    "--set-default QTWEBENGINE_FORCE_USE_GBM 0"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Desktop.app" $out/Applications
-    ln -s "$out/Applications/Jellyfin Desktop.app/Contents/MacOS/Jellyfin Desktop" $out/bin/jellyfindesktop
+    ln -s "$out/Applications/Jellyfin Desktop.app/Contents/MacOS/Jellyfin Desktop" $out/bin/jellyfin-desktop
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "branch"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/jellyfin/jellyfin-desktop";
@@ -90,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       jojosch
       paumr
+      irgolic
     ];
     mainProgram = "jellyfin-desktop";
   };

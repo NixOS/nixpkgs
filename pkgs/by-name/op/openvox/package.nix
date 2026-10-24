@@ -6,7 +6,8 @@
   ruby_3_4,
   testers,
 }:
-((bundlerApp.override { ruby = ruby_3_4; }) {
+
+(bundlerApp.override { ruby = ruby_3_4; }) {
   pname = "openvox";
   gemdir = ./.;
   exes = [ "puppet" ];
@@ -28,11 +29,4 @@
     mainProgram = "puppet";
     maintainers = with lib.maintainers; [ skyethepinkcat ];
   };
-}).overrideAttrs
-  # Workaround `bundlerApp` not specifying `__structuredAttrs = true` and `strictDeps = true` for its result package.
-  {
-    # TODO(@ShamrockLee, @skyethepinkcat): Revert/remove after PR #539303 lands on the master branch.
-    __structuredAttrs = true;
-    # TODO(@ShamrockLee, @skyethepinkcat): Revert/remove after PR #540069 lands on the master branch.
-    strictDeps = true;
-  }
+}

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk-sync";
-  version = "0.1.2";
+  version = "0.2.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pablospe";
     repo = "worktrunk-sync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LGxTzXF/AWNWajH8gygbSQVpIidbArUZRaokefeD7es=";
+    hash = "sha256-ua9JPlXgO3dg3MkRvM4znwMp36fE1E/EFgZjkSKSrqQ=";
   };
 
-  cargoHash = "sha256-iClMQtyDH6SPJSaHXzOsme4uAJCoLQA9QF8EUu/FQDM=";
+  cargoHash = "sha256-RHocExKv2cbpVhD21xU1QxAnkW2WMaQIS0kG9h4pfiM=";
 
   nativeBuildInputs = [ makeWrapper ];
 

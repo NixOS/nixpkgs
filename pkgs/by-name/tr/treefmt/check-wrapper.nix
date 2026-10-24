@@ -2,7 +2,8 @@
   lib,
   gitMinimal,
   runCommandLocal,
-  stdenv,
+  gitSetupHook,
+  stdenvNoCC,
   wrapper,
 }:
 /**
@@ -17,12 +18,13 @@ runCommandLocal "${lib.getName wrapper}-check"
     strictDeps = true;
     nativeBuildInputs = [
       gitMinimal
+      gitSetupHook
       wrapper
     ];
     inherit project;
     env = {
-      LANG = if stdenv.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
-      LC_ALL = if stdenv.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+      LANG = if stdenvNoCC.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+      LC_ALL = if stdenvNoCC.buildPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
     };
     meta.description = "Check that the project tree is formatted";
   }
@@ -34,8 +36,6 @@ runCommandLocal "${lib.getName wrapper}-check"
 
     # Setup a git repo
     git init --initial-branch main
-    git config user.name nixbld
-    git config user.email nixbld@example.com
     git add .
     git commit -m init --quiet
 

@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
     owner = "diml";
     repo = "ppx_derivers";
     rev = finalAttrs.version;
-    sha256 = "0yqvqw58hbx1a61wcpbnl9j30n495k23qmyy2xwczqs63mn2nkpn";
+    hash = "sha256-9k4rbB1G4894F95XPMQsiVgwZKJ2XcaDUaEviArHG3s=";
   };
 
   meta = {

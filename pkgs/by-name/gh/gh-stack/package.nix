@@ -5,11 +5,12 @@
   versionCheckHook,
   nix-update-script,
   gitMinimal,
+  installAgentSkills,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gh-stack";
-  version = "0.1.0";
+  version = "0.2.1";
 
   __structuredAttrs = true;
 
@@ -17,18 +18,26 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-stack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-48JkOeqbvHlCZ2u3LnwJymw55xMQWLTPJLDbV44clGI=";
+    hash = "sha256-Mq4jAqeSHDuCiDYSa40okrq06UhC3dZGjgCXJKMbgzU=";
   };
 
-  vendorHash = "sha256-0Xtr/MOpX4u5GnbRdNxKPA0GpSzi8PIbVc9MmP05De4=";
-
-  nativeCheckInputs = [ gitMinimal ];
+  vendorHash = "sha256-TC1mSXYjOQo00fb2yuGdk1rl6z6rp0WT3AmzXomPzis=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/github/gh-stack/cmd.Version=${finalAttrs.version}"
   ];
+
+  nativeBuildInputs = [
+    installAgentSkills
+  ];
+
+  nativeCheckInputs = [ gitMinimal ];
+
+  # some tests resolve branches through git and need to run inside a repository
+  preCheck = ''
+    git init --quiet
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

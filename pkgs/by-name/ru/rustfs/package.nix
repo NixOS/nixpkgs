@@ -3,19 +3,23 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   nodejs,
   rustPlatform,
   protobuf,
   cacert,
+  nix-update,
   nixosTests,
+  writeShellApplication,
 }:
 
 let
+  pnpm = pnpm_11;
+
   console = stdenv.mkDerivation (finalAttrs: {
     pname = "rustfs-console";
-    version = "0.1.17";
+    version = "0.1.37";
     __structuredAttrs = true;
     __darwinAllowLocalNetworking = true;
 
@@ -23,13 +27,14 @@ let
       owner = "rustfs";
       repo = "console";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-t1NYCSdhCYSRjQ/qp+lFP43/N9UXapGiLN7a0gcUaYU=";
+      hash = "sha256-yLzKLlZ/OZYGfrCcz1RdcXHQSu9h4FTEtzCOsvquK2U=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
+      inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-+U4HRaThEeC6jA6dA4UmhJLvANq0IMySOW5ua9m5Q6A=";
+      hash = "sha256-tWeemxHBvWEWKECIAYzlw0MaKpkjXTTodj9Rgf8U28s=";
     };
 
     nativeBuildInputs = [
@@ -49,53 +54,64 @@ let
     '';
   });
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
-  version = "1.0.0-beta.12";
+  version = "1.0.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";
     repo = "rustfs";
-    tag = version;
-    hash = "sha256-u5DhPg0e42IvP5lNyLVh2kBQLEYQz3J5crnTs8mfFms=";
+    tag = finalAttrs.version;
+    hash = "sha256-Vzu3pA6P/BJcPxK8IcKgT8vUNYdEsKKYwsV87M/IVyQ=";
   };
 
   postPatch = ''
     rm -rf ./rustfs/static
-    cp -rL ${console} ./rustfs/static
+    cp -rL ${finalAttrs.console} ./rustfs/static
   '';
 
-  cargoHash = "sha256-5QpSWlGN0zV6BW6joRyP+Ly6QEVTkHTJUSBBnyYx+EQ=";
+  cargoHash = "sha256-OLaCvnyMTXYC1bO0FJo0inINjjWzIpZsi60wzGbcSZA=";
 
   nativeBuildInputs = [
     protobuf
     cacert
   ];
 
-  env = {
-    RUSTFLAGS = "--cfg tokio_unstable";
-    # reqwest loads CA certs even if not used during tests
-    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  };
+  inherit console;
+
+  env.RUSTFLAGS = "--cfg tokio_unstable";
 
   # Only build the main rustfs binary
   cargoBuildFlags = "-p rustfs";
-  cargoTestFlags = "-p rustfs";
 
-  # tests share global state and fail depending on execution order,
-  # upstream uses nexttest to run tests in separate processes
-  useNextest = true;
+  # they are to intensive on the resource usage, we are just relying on nixos vm test
+  doCheck = false;
 
-  passthru.tests = {
-    inherit (nixosTests) rustfs;
+  passthru = {
+    tests = {
+      inherit (nixosTests) rustfs;
+    };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "rustfs-update-script";
+      runtimeInputs = [ nix-update ];
+      text = ''
+        nix-update rustfs
+        nix-update rustfs.console
+      '';
+    });
   };
 
   meta = {
     description = "S3-compatible high-performance object storage system supporting migration and coexistence with other S3-compatible platforms such as MinIO and Ceph";
     homepage = "https://github.com/rustfs/rustfs";
+    changelog = "https://github.com/rustfs/rustfs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ marcel ];
+    maintainers = with lib.maintainers; [
+      marcel
+      adamcstephens
+    ];
     mainProgram = "rustfs";
   };
-}
+})

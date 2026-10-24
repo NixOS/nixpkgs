@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-V1rmP+bQLu766tSRfAiNtMkJEiQuBnoi6payEpITGxM=";
   };
 
-  strictDeps = true;
-
   cargoHash = "sha256-IEtGulY6EqJ74ok1xLY64K1yKSZcmb/wyObtcaHYMRk=";
 
   postInstall = ''

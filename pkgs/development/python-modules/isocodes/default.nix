@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "isocodes";
-  version = "2025.8.25";
+  version = "2026.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Atem18";
     repo = "isocodes";
     tag = finalAttrs.version;
-    hash = "sha256-rGARvUNaTZ8/CuQ2vhPRx4whYty8lJLSE+5AZTS3eQw=";
+    hash = "sha256-/B4DjJHgqmQZQTcHfd92zGBCtM2Vlg0sepBkObDuIj8=";
   };
 
   build-system = [

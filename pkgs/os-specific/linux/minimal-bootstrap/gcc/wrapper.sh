@@ -41,7 +41,7 @@ done
 exec -a "@origname@" @gcc@ -Wl,-dynamic-linker=@dynlinker@ \
   @extraflags@ \
   $extraRpath \
-  -Wl,-rpath,@libc@,-rpath,@libgcc@ \
+  -Wl,-rpath,@libc@ \
   -B@libc@/.. \
   -B@libgcc@ \
   -B@libc@ \

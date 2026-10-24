@@ -30,6 +30,7 @@
   procps,
   psmisc,
   nixosTests,
+  nix-update-script,
 }:
 
 # NOTES:
@@ -88,13 +89,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.38.3";
+  version = "1.38.6";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
     tag = version;
-    hash = "sha256-Hko5ViEevcKp0kiSFK9DBcSoYkZY3KttazhEexv4klI=";
+    hash = "sha256-sSFEarFMbCHDMbrWRJT1Y/0owLJqr033t0eaVDPjzdw=";
     fetchSubmodules = true;
   };
 
@@ -237,6 +238,9 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit dirName;
     tests = nixosTests.zoneminder;
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   postInstall = ''

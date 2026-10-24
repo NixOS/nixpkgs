@@ -47,6 +47,14 @@ buildPythonPackage (finalAttrs: {
     ./torch-arg-constraints-property.patch
   ];
 
+  # `torch.cholesky` and `Tensor.cholesky` were removed in torch 2.14
+  postPatch = ''
+    substituteInPlace test/pyro/test_convert.py test/pyro/test_hmm.py \
+      --replace-fail "torch.cholesky(cov)" "torch.linalg.cholesky(cov)"
+    substituteInPlace test/test_gaussian.py \
+      --replace-fail "u = x.cholesky()" "u = torch.linalg.cholesky(x)"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -75,6 +83,11 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     export FUNSOR_BACKEND=torch
   '';
+
+  pytestFlags = [
+    # FutureWarning: `torch.jit.trace` is not supported in Python 3.14+ and may break.
+    "-Wignore:`torch.jit.:FutureWarning"
+  ];
 
   pythonImportsCheck = [ "funsor" ];
 

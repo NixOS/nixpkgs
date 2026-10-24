@@ -5,8 +5,8 @@
   pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs,
-  electron_43,
+  nodejs_24,
+  electron_44,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
@@ -16,17 +16,18 @@
 }:
 let
   pnpm = pnpm_11;
-  electron = electron_43;
+  nodejs = nodejs_24;
+  electron = electron_44;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "7.0.1";
+  version = "7.10.0";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-04vvupEmAIZ4/nNWlxqMNisaKsxq20GlBjP6Ov3o6WU=";
+    hash = "sha256-bvh79v4N4LHmfVVjeSEVklF6c/r6MOakliK4OIaxyu8=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-9/nT2JuQi8hWqVxy+9UcsD9BplYn+BgRUM/WT4t06Ds=";
+    hash = "sha256-1TorCd8NVShDm/dz2RpopwpxslWW05bGwSPvN/PHN3I=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

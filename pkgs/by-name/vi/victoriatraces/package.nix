@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
@@ -11,15 +11,15 @@
   withVtGen ? false,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "VictoriaTraces";
-  version = "0.10.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaTraces";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-edK4cUYTkijQAPhoULM2vq9y7WBiiuG4ENQT9nPagrg=";
+    hash = "sha256-rl97K4Vy7Xkziopm1HVAPG+L58zsNO4YJN+3yhoSgkg=";
   };
 
   vendorHash = null;

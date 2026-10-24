@@ -10,17 +10,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "schedctl";
-  version = "1.2.1";
+  version = "1.3.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "schedkit";
     repo = "schedctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5LxD4420WCdHWcz7Yb0JV+ar4gSf/xsbkeHLPdLV1eY=";
+    hash = "sha256-59m9hJjB2f6s+a4IgjppXRLpwXKEuXimiCl2Av6WXJ4=";
   };
 
-  vendorHash = "sha256-LMYJlvUmGejHk/AA/k2WwoI2Gtw3rNYgsklUcK+cB40=";
+  vendorHash = "sha256-ZjHa6frReZHnmnszEwO9SdGlWph1Fo5GxWC3UMCbs0Q=";
   proxyVendor = true;
 
   subPackages = [ "." ];

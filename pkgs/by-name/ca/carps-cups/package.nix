@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "carps-cups";
-  version = "unstable-2018-03-05";
+  version = "0-unstable-2018-03-05";
 
   src = fetchFromGitHub {
     owner = "ondrej-zary";
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "CUPS Linux drivers for Canon printers";
-    homepage = "https://www.canon.com/";
-    license = lib.licenses.gpl3Plus;
+    homepage = "https://github.com/ondrej-zary/carps-cups";
+    license = lib.licenses.gpl3Only;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       ewok

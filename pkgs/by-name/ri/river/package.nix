@@ -27,7 +27,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.6";
+  version = "0.5.0";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zSXiniROSgkLeFUQJY/8XbOWZ/lvnV4ZF/cEhzNpYsQ=";
+    hash = "sha256-Yn0+V0PMT+PIV4dVuy4d3BAEfLj5hwLh5ngGpM3RbHY=";
   };
 
   strictDeps = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-MVFoc361EKGhz5V/9tAOc8lldAi45o592oyOfHX1vTM=";
+    hash = "sha256-u7lnnqxrTdaiqNOeFrqvesDM6B4YUjYkmP7CtGOBDIs=";
   };
 
   postConfigure = ''
@@ -115,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       GaetanLepage
-      adamcstephens
     ];
     mainProgram = "river";
     platforms = lib.platforms.linux;

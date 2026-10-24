@@ -95,6 +95,8 @@ rec {
             (mkDerivationSuper args).overrideAttrs (
               args:
               (
+                # OpenBSD's rcrt0 expects the linker-provided _DYNAMIC symbol
+                # emitted for static PIE executables.
                 if (args ? NIX_CFLAGS_LINK) then
                   lib.warn
                     (
@@ -103,12 +105,18 @@ rec {
                       + lib.optionalString (args ? version) "-${args.version}"
                     )
                     {
-                      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+                      NIX_CFLAGS_LINK =
+                        toString (args.NIX_CFLAGS_LINK or "")
+                        + " -static"
+                        + lib.optionalString stdenv.hostPlatform.isOpenBSD " -pie";
                     }
                 else
                   {
                     env = (args.env or { }) // {
-                      NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -static";
+                      NIX_CFLAGS_LINK =
+                        toString (args.env.NIX_CFLAGS_LINK or "")
+                        + " -static"
+                        + lib.optionalString stdenv.hostPlatform.isOpenBSD " -pie";
                     };
                   }
               )
@@ -355,16 +363,29 @@ rec {
     if !stdenv.targetPlatform.isLinux then
       throw "Wild only supports building Linux ELF files from Linux hosts."
     else
-      stdenv.override (prev: {
-        allowedRequisites = null;
-        cc = prev.cc.override {
-          bintools = prev.cc.bintools.override {
-            extraBuildCommands = ''
-              ln -fs ${pkgs.buildPackages.wild}/bin/* "$out/bin"
-            '';
+      stdenv.override (
+        prev:
+        {
+          allowedRequisites = null;
+          cc = prev.cc.override {
+            bintools = prev.cc.bintools.override {
+              extraBuildCommands = ''
+                ln -fs ${pkgs.buildPackages.wild}/bin/* "$out/bin"
+              '';
+            };
           };
-        };
-      });
+        }
+        //
+          lib.optionalAttrs
+            (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "16"))
+            {
+              mkDerivationFromStdenv = extendMkDerivationArgs prev (args: {
+                env = (args.env or { }) // {
+                  NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -fuse-ld=wild";
+                };
+              });
+            }
+      );
 
   /*
     Modify a stdenv so that it builds binaries optimized specifically

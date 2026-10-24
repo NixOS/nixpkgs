@@ -7,6 +7,7 @@
   setuptools,
 
   # dependencies
+  click,
   filelock,
   fsspec,
   hf-xet,
@@ -14,7 +15,6 @@
   packaging,
   pyyaml,
   tqdm,
-  typer,
   typing-extensions,
 
   # optional-dependencies
@@ -41,19 +41,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.16.0";
+  version = "1.30.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GuTsoz7ow3A/PJyU3L/xLp56r3RVx5O1YH3nr3T4u7U=";
+    hash = "sha256-43yZ9wOmCaGw8wcuD0j91kKYwzgf9xqSTabYJaA+tDg=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
+    click
     filelock
     fsspec
     hf-xet
@@ -61,13 +66,11 @@ buildPythonPackage (finalAttrs: {
     packaging
     pyyaml
     tqdm
-    typer
     typing-extensions
   ];
 
   optional-dependencies = {
     all = [
-
     ];
     fastai = [
       toml
@@ -103,6 +106,11 @@ buildPythonPackage (finalAttrs: {
   versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";

@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiopnsense";
-  version = "1.1.5";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Snuffy2";
     repo = "aiopnsense";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-amXqUp77L72fv6xxz4Nm7fMj4xxWaYrsy1EPxccKm+Q=";
+    hash = "sha256-j/d1RjzBIRMavUql5Zl0PDZFIzjO2yx0Bgkkgp8eCWs=";
   };
 
   build-system = [ setuptools ];
@@ -44,6 +44,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "aiopnsense" ];
+
+  disabledTestPaths = [
+    # Tests dependabot
+    "tests/test_dependabot_auto_merge.py"
+  ];
 
   meta = {
     description = "Async Python client library for OPNsense";

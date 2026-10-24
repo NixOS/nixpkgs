@@ -6,7 +6,7 @@
 buildKodiAddon rec {
   pname = "osmc-skin";
   namespace = "skin.osmc";
-  version = "21.1.1";
+  version = "21.2.1";
 
   src = fetchFromGitHub {
     owner = "osmc";

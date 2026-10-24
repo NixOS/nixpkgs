@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
-  version = "13.1.0";
+  version = "13.3.0";
   src = fetchurl {
     url = "https://github.com/flyway/flyway/releases/download/flyway-${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-5DhMlTdrhFBXOGekrv8dW+xrN5N2iponVjMxuWCm8HA=";
+    sha256 = "sha256-poRj8bywGc4cRqKDeJxB7zPKXUKqHwKTblZQ5Eg+1HY=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;

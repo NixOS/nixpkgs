@@ -9,7 +9,7 @@
   libcap_ng,
   libidn2,
   libunistring,
-  systemd,
+  systemdLibs,
   nettle,
   libedit,
   zlib,
@@ -23,8 +23,8 @@
   xdp-tools,
   fstrm,
   protobufc,
-  sphinx,
   autoreconfHook,
+  tzdata,
   nixosTests,
   knot-resolver_5,
   knot-resolver-manager_6,
@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knot-dns";
-  version = "3.5.6";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://knot-dns.nic.cz/release/knot-${finalAttrs.version}.tar.xz";
-    sha256 = "8e2dde44c97f8a63ec5e6c11db26099acd5341286af5b6be900b62ccade68898";
+    sha256 = "2916ac117ac77d1f2341a6562e47d797493521b791b414960a382cb5bc113e21";
   };
 
   outputs = [
@@ -62,12 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./runtime-deps.patch
   ];
 
-  # FIXME: sphinx is needed for now to get man-pages
   nativeBuildInputs = [
     pkg-config
     protobufc # dnstap support
     autoreconfHook
-    sphinx
+    tzdata # tests/contrib/test_time
   ];
   buildInputs = [
     gnutls
@@ -88,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap_ng
-    systemd
+    systemdLibs
     xdp-tools
     libbpf
     libmnl # XDP support (it's Linux kernel API)

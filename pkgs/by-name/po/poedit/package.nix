@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poedit";
-  version = "3.9.1";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${finalAttrs.version}-oss";
-    hash = "sha256-WLXIPvAMJd8zkx1r4XMzjl+NZDpB6WHVSksx6oz1AiA=";
+    hash = "sha256-I5JwyXNQJSxz6Q9dumev53TM6nv/clYtjOjW8fHA+dk=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.poedit.net/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ dasj19 ];
+    maintainers = with lib.maintainers; [ RumBugen ];
     # configure: error: GTK+ build of wxWidgets is required
     broken = stdenv.hostPlatform.isDarwin;
   };

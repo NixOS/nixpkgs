@@ -18,7 +18,7 @@ if [[ ! -f "$depsFilePath" ]]; then
 fi
 
 # if on bleed, update to the latest commit from the bleed branch
-# otherwise, check Github releases for releases with a matching prefix
+# otherwise, check GitHub releases for releases with a matching prefix
 declare newVersion
 declare newHash
 if [[ "$build" == "bleed" ]]; then

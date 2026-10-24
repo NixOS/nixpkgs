@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tomlplusplus";
   version = "3.4.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
@@ -40,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  checkInputs = [
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isGnu [
     glibcLocales
   ];
 
@@ -49,9 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dbuild_examples=true"
   ];
 
-  # almost all tests fail on Darwin with the following exception:
+  # locale tests seem to only work with glibc
+  # darwin also fails the following:
   # libc++abi: terminating due to uncaught exception of type std::runtime_error: collate_byname<char>::collate_byname failed to construct for
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = stdenv.hostPlatform.isGnu;
 
   passthru = {
     updateScript = nix-update-script { };

@@ -11,7 +11,6 @@
   freetype,
   fontconfig,
   libxml2,
-  gnome2,
   darwin,
 }:
 
@@ -31,7 +30,7 @@ let
       freetype
       fontconfig
       libxml2
-      gnome2.gtksourceview
+      # gnome2.gtksourceview: was here and appeared used, but was removed from Nixpkgs.
     ]
     + ":${lib.getLib stdenv.cc.cc}/lib64:$out/libexec";
 

@@ -31,6 +31,25 @@ in
         package = kanidmPackage;
         server = {
           enable = true;
+
+          entryManagement.migrations = {
+            "00-base" = {
+              id = "a2b58e97-0aaf-4b04-a4e4-7984616fe1df";
+              assertions = [
+                {
+                  state = "present";
+                  id = "0ee875bd-408d-4ff9-85ca-c162f262493d";
+                  class = [
+                    "person"
+                    "account"
+                  ];
+                  name = "migration_user";
+                  displayname = "Migration User";
+                }
+              ];
+            };
+          };
+
           settings = {
             origin = "https://${serverDomain}";
             domain = serverDomain;
@@ -118,6 +137,10 @@ in
           client.wait_until_tty_matches("1", "Enter password: ")
           client.send_chars(f"{idm_admin_password}\n")
           client.wait_until_tty_matches("1", "Login Success for idm_admin")
+
+      with subtest("Test entry management migration"):
+          output = client.succeed("kanidm person get migration_user")
+          assert "No matching entries" not in output, "The migration user was not created"
 
       with subtest("Test unixd connection"):
           client.wait_for_unit("kanidm-unixd.service")

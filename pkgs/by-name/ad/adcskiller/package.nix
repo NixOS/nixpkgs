@@ -41,6 +41,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://github.com/grimlockx/ADCSKiller";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ exploitoverload ];
-    mainProgram = "ADCSKiller";
+    mainProgram = "adcskiller";
   };
 }

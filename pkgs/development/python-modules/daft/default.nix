@@ -14,7 +14,6 @@
   nasm,
 
   # dependencies
-  fsspec,
   packaging,
   pyarrow,
   tqdm,
@@ -79,7 +78,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "daft";
-  version = "0.7.21";
+  version = "0.7.26";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -87,12 +86,12 @@ buildPythonPackage (finalAttrs: {
     owner = "Eventual-Inc";
     repo = "Daft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vz9lCm2zQaWM+9jPH2fnhGEQiCYPH0Jl477yaZDQ370=";
+    hash = "sha256-lIlKJPDW2r0BzvXfMCYH9+ZjgPjS33Lx1fRQrcbSbOo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-8pezsGc2iYlYdPgZFjmFq1shkCWCG6F69Cx/+P1iKU8=";
+    hash = "sha256-iKVKRI42G01yb2QQJn07hwPay2QGMyDhVeLUdwVIclQ=";
 
     # azure-sdk-for-rust omits svc/blobstorage from the services workspace
     postBuild = ''
@@ -114,6 +113,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail \
         'chunks.into_remainder()' \
         'Some(chunks.into_remainder())'
+  ''
+  # PyAV in 19.0 removed the metadata_encoding argument and now always encodes as UTF8 with surrogateescape
+  + ''
+    substituteInPlace daft/file/video.py \
+      --replace-fail ', metadata_encoding="utf-8"' ""
   '';
 
   nativeBuildInputs = [
@@ -143,11 +147,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   pythonRelaxDeps = [
-    "fsspec"
     "tqdm"
   ];
   dependencies = [
-    fsspec
     packaging
     pyarrow
     tqdm
@@ -349,9 +351,21 @@ buildPythonPackage (finalAttrs: {
     "test_download_with_none" # None vs nan
     "test_from_pandas_roundtrip" # Timestamp[us] vs Timestamp[ns]
     "test_infer_from_type" # issubclass() arg 1 must be a class (numpy_ndarray_int)
+
+    # Regression from the pyiceberg 0.12.0 bump: https://github.com/NixOS/nixpkgs/pull/560480
+    #   AssertionError: assert result is None
+    "test_type_promotion_float_to_double"
+    "test_type_promotion_int_to_long"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ray.exceptions.RpcError: Timed out while waiting for GCS to become available.
+    "test_extension_ray_runner"
+    "test_extension_ray_runner_aggregate"
   ];
 
   pythonImportsCheck = [ "daft" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Distributed dataframes for multimodal data";

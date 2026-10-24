@@ -3,6 +3,8 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  callPackage,
+  rustPlatform,
 
   # tests
   gitMinimal,
@@ -13,7 +15,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.23.1";
+  version = "3.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,14 +23,53 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WEyzBhkqh/B4NZD8tKoRkQGrw/85xVCftFyRamlMaYg=";
+    hash = "sha256-W1gpG0eZYXbY4j3/dtOMpvIznLAmNDYGkXdJJvaA6eA=";
   };
 
-  build-system = with python3Packages; [
-    editables
-    hatch-vcs
-    hatchling
+  patches = [
+    # os.nice() fails with EPERM in the sandbox
+    ./tolerate-unavailable-nice.patch
   ];
+
+  postPatch =
+    # The e2e tests expect the `vibe` executables to sit next to the Python interpreter
+    ''
+      substituteInPlace tests/e2e/common.py \
+        --replace-fail \
+          'Path(sys.executable).with_name(' \
+          "Path('$out/bin/vibe').with_name("
+    '';
+
+  # The Unified Harness native extension (`mistralai_vibe_local_harness._native`)
+  cargoRoot = "harness/core";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    hash = "sha256-JkmZ65pnioLfTLg9Nmtsjs4m6lB72c6iTKvnwz48Gqo=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+
+  env = {
+    # The v8 crate would otherwise download these at build time
+    RUSTY_V8_ARCHIVE = finalAttrs.passthru.librusty_v8.archive;
+    RUSTY_V8_SRC_BINDING_PATH = finalAttrs.passthru.librusty_v8.srcBinding;
+  };
+
+  # Replicate what upstream's custom build backend (build_backend/maturin_backend.py)
+  # does before handing over to maturin, without its zig/manylinux portability
+  # tweaks and with the Rust TUI built separately.
+  preBuild = ''
+    mkdir -p .native-build
+    cp -r harness/core .native-build/harness-core
+    cp -r harness/runtimes/python/python/mistralai_vibe_local_harness .
+
+    mkdir -p vibe/_bin
+    cp ${lib.getExe finalAttrs.passthru.vibe-rs} vibe/_bin/vibe-rs
+  '';
 
   pythonRelaxDeps = true;
   dependencies =
@@ -44,6 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       cffi
       charset-normalizer
       click
+      croniter
       cryptography
       eval-type-backport
       gitdb
@@ -73,6 +115,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mcp
       mdit-py-plugins
       mdurl
+      miniaudio
       mistralai
       more-itertools
       opentelemetry-api
@@ -101,12 +144,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pyyaml
       referencing
       requests
+      rfc8785
       rich
       rpds-py
       sentry-sdk
+      setproctitle
       six
       smmap
-      sounddevice
       soupsieve
       sse-starlette
       starlette
@@ -136,6 +180,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
     gitMinimal
+    python3Packages.pyte
     python3Packages.pytest-asyncio
     python3Packages.pytest-textual-snapshot
     python3Packages.pytest-xdist
@@ -148,91 +193,90 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
 
-  disabledTests = [
-    # vibe is spawned in a sub-process and fails to import `mcp`
-    # ModuleNotFoundError: No module named 'mcp'
-    "TestMCPConnectionPoolIntegration"
+  # Make sure that the installed runtime, which ships the native extension, is imported
+  preCheck = ''
+    rm -rf mistralai_vibe_local_harness
+  '';
 
-    # AssertionError: assert '32:2617357:1782120467963161870:7' != '32:2617357:1782120467963161870:7'
-    "test_changes_when_file_changes"
+  disabledTests = [
+    # AssertionError: assert <MCPSourceStatus.UNAVAILABLE: 'unavailable'> is <MCPSourceStatus.ENABLED: 'enabled'>
+    "test_mcp_catalog_read_refresh_toggle_remove_and_compatibility_aliases"
 
     # vibe.core.llm.exceptions.BackendError: LLM backend error [mock-provider]
     # reason: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Missing Authority Key Identifier (_ssl.c:1032)
     "test_generic_backend_streaming_uses_ssl_cert_file"
 
-    # AssertionError: assert 0 == 1
-    "test_preserves_accents_when_matching_latin1_encoded_file"
-
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
 
-    # Fail in the sandbox
-    # vibe.core.audio_recorder.audio_recorder_port.NoAudioInputDeviceError: No audio input device available
-    "test_audio_stream_yields_chunks"
-    "test_auto_stops_after_max_duration"
-    "test_buffer_mode_audio_stream_yields_nothing"
-    "test_callback_feeds_audio_data"
-    "test_callback_pads_silence_at_end"
-    "test_can_play_multiple_times"
-    "test_can_record_multiple_times"
-    "test_cancel_discards_audio"
-    "test_creates_stream_with_correct_params"
-    "test_finished_callback_resets_state"
-    "test_manual_stop_prevents_on_expire"
-    "test_on_expire_receives_audio"
-    "test_on_finished_called_after_natural_completion"
-    "test_peak_clamps_to_one"
-    "test_peak_updates_from_callback"
-    "test_play_sets_playing_state"
-    "test_play_when_already_playing_raises"
-    "test_silent_audio_has_zero_peak"
-    "test_start_sets_recording_state"
-    "test_start_when_already_recording_raises"
-    "test_stop_closes_stream"
-    "test_stop_from_event_loop_does_not_block"
-    "test_stop_returns_empty_data_in_stream_mode"
-    "test_stop_returns_positive_duration"
-    "test_stop_returns_valid_wav"
-    "test_stop_triggers_on_finished_via_callback"
-    "test_stop_without_drain_returns_promptly"
-    "test_stream_audio_does_not_leak_into_buffer_recording"
-    "test_unsupported_format_raises"
+    # The sandbox helper runs `python3 -I`, which cannot import the harness runtime
+    # assert 3 == 1
+    "test_a_sandbox_without_skills_of_its_own_needs_no_upload"
 
-    # AssertionError: assert True is False
-    #  +  where True = VibeApp(title='VibeApp', ...)._rewind_mode
-    "test_rewind_confirm_edits_message_and_prefills_input"
-    "test_rewind_option_selection_with_number_keys"
+    # An extra notification is emitted because connectors fail to load (no network)
+    "test_opening_a_unified_session_notifies_invalid_managed_config"
 
-    # AssertionError: assert 3 == 1
-    # +  where 3 = len([UserMessage(classes='user-message'), UserMessage(classes='...
-    "test_rewind_removes_messages_after_selected"
+    # Flaky: TimeoutError
+    "test_unified_host_reads_the_live_public_event_cursor"
+
+    # Flaky: session references are not yet garbage-collected
+    "test_closed_sessions_release_their_servers_and_background_tasks"
+
+    # Both writes land in the same coarse filesystem timestamp tick, so the
+    # (device, inode, mtime, size) fingerprint does not change
+    "test_changes_when_file_changes"
+
+    # Upstream pins mistralai==2.6.0, whose `create_or_update_user_credentials_async`
+    # was replaced by `create_credentials_async` in later versions
+    "test_connect_http_failure_reads_as_a_sentence_without_the_body"
+    "test_connect_turns_a_no_auth_connector_into_a_connected_one"
+    "test_connect_without_credentials_creates_the_default_user_connection"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AssertionError
-    "test_rebuilds_index_when_mass_change_threshold_is_exceeded"
-    "test_updates_index_incrementally_by_default"
-    "test_updates_index_on_file_creation"
-    "test_updates_index_on_file_deletion"
-    "test_updates_index_on_file_rename"
-    "test_updates_index_on_folder_rename"
-    "test_watcher_toggle_flow_off_on_off"
+    # AssertionError: assert 'alive' == 'gone'
+    "test_background_processes_answer_the_model_alike_on_the_host_and_in_a_sandbox"
+
+    # RuntimeError: Session lease file watcher did not start
+    "test_unified_lease_subscription_ends_with_its_connection"
+    "test_unified_lease_subscription_reports_held_sessions_then_changes"
   ];
 
   disabledTestPaths = [
-    # This tests the install_script and fails. This is not relevant for nixpkgs.
-    "tests/test_install_script.py"
-
-    # All snapshot tests fail with AssertionError
+    # All snapshot tests use syrupy 4.8.0, which is not packaged here.
     "tests/snapshots/"
 
-    # Try to invoke `uv run vibe`
-    "tests/e2e/"
+    # These tests invoke uv run and fail to import the packaged pydantic extension.
+    "tests/e2e/agent_loop_characterization/test_resume.py"
+    "tests/e2e/agent_loop_characterization/test_subagents.py"
+    "tests/e2e/agent_loop_characterization/test_tool_execution.py"
+    "tests/e2e/agent_loop_characterization/test_tool_permissions.py"
+    "tests/e2e/agent_loop_characterization/test_user_interaction.py"
+    "tests/e2e/test_cli_tui_hooks.py"
+    "tests/e2e/test_cli_tui_onboarding.py"
+    "tests/e2e/test_cli_tui_session_exit.py"
+    "tests/e2e/test_cli_tui_streaming.py"
+    "tests/e2e/test_cli_tui_tool_approval.py"
 
     # ACP tests require network access
     "tests/acp/test_acp_entrypoint_smoke.py"
+
+    # The installer is run with a PATH restricted to /usr/bin:/bin, where the
+    # sandbox provides no `bash`
+    "tests/test_install_script.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: Session lease file watcher did not start
+    "tests/app_server/test_session_lease_watch.py"
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    librusty_v8 = callPackage ./librusty_v8.nix { };
+    vibe-rs = callPackage ./vibe-rs.nix {
+      inherit (finalAttrs) version src meta;
+    };
+  };
 
   meta = {
     description = "Minimal CLI coding agent by Mistral";

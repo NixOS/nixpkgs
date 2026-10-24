@@ -1,35 +1,54 @@
 {
-  absl-py,
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  absl-py,
   chex,
   dm-env,
   dm-tree,
-  fetchFromGitHub,
   flax,
   immutabledict,
   jax,
-  lib,
   matplotlib,
   mediapy,
   numpy,
   pillow,
-  pytestCheckHook,
-  setuptools,
   tensorflow,
   tqdm,
+
+  # tests
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
-  pname = "waymax";
-  version = "0-unstable-2025-05-30";
+buildPythonPackage (finalAttrs: {
+  pname = "waymo-waymax";
+  version = "0.1.0-unstable-2025-10-23";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "waymo-research";
     repo = "waymax";
-    rev = "48b33d71aac20a22db7d25f2d3220596899d944a";
-    hash = "sha256-YV0KI0UrFXO3HvKjqJE+K+hJJuYI4GiIR4l1fZNnl/E=";
+    rev = "a64dfec9be8576b60d9cecc94f406d9812d4a7d0";
+    hash = "sha256-vS0ZxLPKcjRzu5QaFApOVYNO5LBNQjop8wzmdEVdMC8=";
   };
+
+  # jax>=0.12 no longer supports 2D vectors in jnp.cross
+  # ValueError: Dimension must be 3 for cross product
+  postPatch = ''
+    substituteInPlace waymax/metrics/roadgraph.py \
+      --replace-fail \
+        "jnp.cross(points_to_edge, nearest_vector_xys)" \
+        "(points_to_edge[..., 0] * nearest_vector_xys[..., 1] - points_to_edge[..., 1] * nearest_vector_xys[..., 0])" \
+      --replace-fail \
+        "jnp.cross(points_to_edge, prior_vector_xys)" \
+        "(points_to_edge[..., 0] * prior_vector_xys[..., 1] - points_to_edge[..., 1] * prior_vector_xys[..., 0])"
+  '';
 
   build-system = [ setuptools ];
 
@@ -49,29 +68,22 @@ buildPythonPackage {
     tqdm
   ];
 
+  pythonImportsCheck = [ "waymax" ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "waymax" ];
-
-  disabledTests = [
-    # AssertionError: Not equal to tolerance rtol=1e-07, atol=0
-    "test_obs_from_state_for_different_coordinate_system0"
-    "test_obs_from_state_for_different_coordinate_system1"
-  ];
-
   disabledTestPaths = [
-    # Disable visualization tests that require a GUI
-    # waymax/visualization/viz_test.py Fatal Python error: Aborted
+    # Fatal Python error: Aborted (requires a GUI)
     "waymax/visualization/viz_test.py"
   ];
 
   meta = {
     description = "JAX-based simulator for autonomous driving research";
     homepage = "https://github.com/waymo-research/waymax";
-    changelog = "https://github.com/waymo-research/waymax/blob/main/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ samuela ];
+    changelog = "https://github.com/waymo-research/waymax/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

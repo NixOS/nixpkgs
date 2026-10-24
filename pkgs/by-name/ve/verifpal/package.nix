@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "verifpal";
-  version = "0.53.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "symbolicsoft";
     repo = "verifpal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8WOEGE/bvZ1eKOMPXdg2R+ESsYYld1BiDBNk3KrQJuU=";
+    hash = "sha256-7OeGuZV8M/0/Hjn3gD+iEqsPmSNAgUK/Usf4eEXoNJ4=";
   };
 
-  cargoHash = "sha256-kDskJRb5mGn0BoMAaw24twlexkSJavei7ncRZXDujvk=";
+  cargoHash = "sha256-7uMs6DSZVUFZh1UBzAtyqJhQjuUVen0O9Mx8vmbMedY=";
 
   meta = {
     homepage = "https://verifpal.com/";

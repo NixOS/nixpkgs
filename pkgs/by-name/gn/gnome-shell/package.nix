@@ -47,7 +47,7 @@
   gtk4,
   libadwaita,
   sassc,
-  systemd,
+  systemdLibs,
   pipewire,
   gst_all_1,
   adwaita-icon-theme,
@@ -73,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "50.2";
+  version = "50.4";
 
   outputs = [
     "out"
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-UyFUIOUO/dTQYRultZ4Qy0yJ+j9R4q3f2Vyt4GGgmik=";
+    hash = "sha256-xTGTlTnbMWpBrvI2cDcKvRMw0yVPhLyw+fTa5dbjYs8=";
   };
 
   patches = [
@@ -99,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Make D-Bus services wrappable.
     ./wrap-services.patch
+
+    # Detect profile switches even when icon directory mtimes are unchanged.
+    ./icon-theme-directory-identity.patch
 
     # Fix greeter logo being too big.
     # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
@@ -127,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     gsettings-desktop-schemas
     gnome-keyring
     glib
@@ -259,7 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
-    description = "Core user interface for the GNOME 3 desktop";
+    description = "Core user interface for the GNOME desktop";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.gpl2Plus;

@@ -69,8 +69,8 @@ runCommand "gclient2nix"
     # substitutions
     depot_tools_checkout = fetchgit {
       url = "https://chromium.googlesource.com/chromium/tools/depot_tools";
-      rev = "1b1b01fa912786b88a79f3504176a275183839b5";
-      hash = "sha256-SRPeosetXYUklafhcuqsJiIKfItUJACG70m4Z5pBQiU=";
+      rev = "604a436d8af23ca0b9fd3d1d8be193fc9a4679f6";
+      hash = "sha256-tNJq/a4j0AHmn2FS4zbwkWeEMYlp4uXDcpPzP9D3ULE=";
     };
 
     passthru = {

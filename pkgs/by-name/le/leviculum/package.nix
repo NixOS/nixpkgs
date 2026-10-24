@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   udev,
   versionCheckHook,
@@ -10,19 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leviculum";
-  version = "0.8.0";
+  version = "0.9.0";
   __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Lew_Palm";
     repo = "leviculum";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-Gfx1XxkIEfPxag0JHBU7+rNV63HnOcxBxqNiKtjM9h4=";
+    hash = "sha256-mkYhTvareotglj03jRkcIaj0SN2IBFyioDxQN3Wuu+I=";
   };
 
-  cargoHash = "sha256-CfdlcujftaPTGewjO+H7p9sQoXV5MmVF3wlZoRdW9BM=";
+  cargoHash = "sha256-0LuzJK7I4+WofgSDJZM5ggo5z5TAk7kPJsEjkO7QIHg=";
 
   nativeBuildInputs = [
     pkg-config

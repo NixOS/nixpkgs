@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Simple GTD-style todo list for the command line";
-    homepage = "https://ultralist.io";
+    homepage = "https://github.com/gammons/ultralist";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
     mainProgram = "ultralist";

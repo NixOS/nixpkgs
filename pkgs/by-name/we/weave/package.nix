@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  git,
   rustPlatform,
   nix-update-script,
   versionCheckHook,
@@ -10,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weave";
-  version = "0.3.6";
+  version = "0.5.4";
 
   __structuredAttrs = true;
 
@@ -18,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ataraxy-labs";
     repo = "weave";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VlJUXAXlWpFGlJgAEhhdeX35AZV/G/IJlXEjU/7SfJg=";
+    hash = "sha256-en8HwzvC2uPBwyHnQyUHrRLvWyWDWPptfTpX353i/pU=";
   };
 
-  cargoHash = "sha256-ZPe9l3S88idwYrayT5mmagW/VdA0VlUHTDXVyHoOF1w=";
+  cargoHash = "sha256-LYcHCc3OkBmWY9tSpm3Mp+Dw/CRoTICngL7+GkUDAHk=";
 
   cargoBuildFlags = [
     "--bin"
@@ -47,6 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
+
+  # crates/weave-driver/tests/public_properties.rs, added after 0.3.6,
+  # shells out to git to build a conflicted merge and then abort it.
+  nativeCheckInputs = [ git ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

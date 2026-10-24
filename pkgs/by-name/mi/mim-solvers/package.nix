@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t21zzUo+Oiqvr3lYN9v1lCeoki3I1FWPqo3gWzM6Kdw=";
   };
 

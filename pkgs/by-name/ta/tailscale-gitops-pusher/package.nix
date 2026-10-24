@@ -1,10 +1,10 @@
 {
   lib,
   tailscale,
-  buildGoModule,
+  buildGo127Module,
 }:
 
-buildGoModule {
+buildGo127Module {
   pname = "tailscale-gitops-pusher";
   inherit (tailscale) version;
 

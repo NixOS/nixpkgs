@@ -1,0 +1,26 @@
+{
+  "version": "1.4.12",
+  "build": "R6909.1",
+  "assets": {
+    "x86_64-linux": {
+      "name": "muse-code-1.4.12-x86_64-linux",
+      "url": "https://lookaside.facebook.com/lookaside/muse/download/?channel=muse&version=1.4.12-R6909.1&file=muse-x86-linux",
+      "hash": "sha256-gei7FiiSA7qODKf4DEuC5ZujX17lCq/vk6KkEW8ssn8="
+    },
+    "aarch64-linux": {
+      "name": "muse-code-1.4.12-aarch64-linux",
+      "url": "https://lookaside.facebook.com/lookaside/muse/download/?channel=muse&version=1.4.12-R6909.1&file=muse-aarch64-linux",
+      "hash": "sha256-5IgoigvLaNVIytHgPjAmtR/4MXVdG+vSKrRu3F5xXzc="
+    },
+    "aarch64-darwin": {
+      "name": "muse-code-1.4.12-aarch64-darwin",
+      "url": "https://lookaside.facebook.com/lookaside/muse/download/?channel=muse&version=1.4.12-R6909.1&file=muse-aarch64-macos",
+      "hash": "sha256-cRi5yiInpuwbkMxQb4q91KNdFNirZoPJFksHUAKlX/8="
+    },
+    "x86_64-darwin": {
+      "name": "muse-code-1.4.12-x86_64-darwin",
+      "url": "https://lookaside.facebook.com/lookaside/muse/download/?channel=muse&version=1.4.12-R6909.1&file=muse-x86-macos",
+      "hash": "sha256-OzWA6FUv3bViQrt9WvxfgQROAuiOoltyFCeJWxXtWbo="
+    }
+  }
+}

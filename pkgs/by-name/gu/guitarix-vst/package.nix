@@ -7,7 +7,7 @@
   fftwFloat,
   freetype,
   glib,
-  glibmm,
+  glibmm_2_4,
   lib,
   libsndfile,
   libx11,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
     freetype
     glib
-    glibmm
+    glibmm_2_4
     libx11
     libxcursor
     libxext

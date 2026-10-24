@@ -988,6 +988,20 @@ fetchRadiclePatch {
 }
 ```
 
+## `fetchFromTangled` {#fetchfromtangled}
+
+This is to be used with tangled repositories. `fetchFromTangled` works with
+very similar arguments to `fetchFromGithub`. However, instead of a `owner` and
+`repo`, a `did` argument is expected.
+
+```nix
+fetchFromTangled {
+  did = "did:plc:jj6ajj6duxnlthwtnob4qyuv"; # tranquil.farm/tranquil-pds
+  tag = "v6.6.0";
+  hash = "sha256-cfTsjmK/IMqT5kMKOGpwwWbBlvtrCDOerUJJ8AVI3kY=";
+}
+```
+
 ## `requireFile` {#requirefile}
 
 `requireFile` allows requesting files that cannot be fetched automatically, but whose content is known.

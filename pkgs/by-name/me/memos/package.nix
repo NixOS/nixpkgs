@@ -1,25 +1,25 @@
 {
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   stdenvNoCC,
   nix-update-script,
   nodejs,
   lib,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "memos";
-  version = "0.29.1";
+  version = "0.31.0";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bc9NWP/CauR3gKBOPFg8urD9dSUq0jtfwQOknkPbX0s=";
+    hash = "sha256-O6r+M+T6zDr9getunGgNSXJlmt3ZsSwTCYoSpVgDcM4=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalWebAttrs: {
@@ -29,8 +29,8 @@ buildGoModule (finalAttrs: {
       inherit (finalWebAttrs) pname version src;
       inherit pnpm;
       sourceRoot = "${finalWebAttrs.src.name}/web";
-      fetcherVersion = 3;
-      hash = "sha256-wj8Rh1/wYDKIrJQgdoJBtoP2xeQnrUBORE2Gegxwim0=";
+      fetcherVersion = 4;
+      hash = "sha256-GkLRGTefn85bZ652/sW4xrBHZ6QsVn/cTBb7UoU8UQQ=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -50,16 +50,26 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-6oJgxhGS7aD3I0umTQuVMLzcOhzf53g4TZcCtkKrrc8=";
+  vendorHash = "sha256-AJkTk34kYa2I24F+naj9GX8b2YYhqTuK6i9MvDUoBU0=";
 
   ldflags = [
     "-X github.com/usememos/memos/internal/version.Version=${finalAttrs.version}"
   ];
 
   preBuild = ''
-    rm -rf server/router/frontend/dist
-    cp -r ${finalAttrs.memos-web} server/router/frontend/dist
+    rm -rf server/frontend/dist
+    cp -r ${finalAttrs.memos-web} server/frontend/dist
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestEntrypointDoesNotLoopWhenTargetUIDIsRoot" # requires root
+        "TestUserWebhookSigningSecretLifecycle" # requires internet access for example.com
+        "TestDetectAttachmentMimeType" # REMOVE NEXT RELEASE: bug in test, fixed by https://github.com/usememos/memos/pull/6353
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

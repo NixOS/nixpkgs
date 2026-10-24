@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchurl,
@@ -16,7 +15,7 @@
   gsl,
   libpng,
   sfml_2,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   useQt ? false,
   libsForQt5,
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple interface for devices supported by the linux UVC driver";
     mainProgram = "guvcview";
     homepage = "https://guvcview.sourceforge.net";
-    maintainers = [ lib.maintainers.coconnor ];
+    maintainers = [ ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };

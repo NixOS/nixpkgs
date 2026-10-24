@@ -2,7 +2,7 @@
   pname,
   version,
   # Map from Nix system strings ("x86_64-linux", "aarch64-darwin", ...) to
-  # the corresponding upstream `{ url, hash }` record. Encoding the per-system
+  # the corresponding upstream `{ url, sha256 }` record. Encoding the per-system
   # sources as data rather than positional arguments lets channel-specific
   # package.nix files drop platforms that upstream hasn't published yet.
   archives,
@@ -62,16 +62,19 @@
   nspr,
   nss,
   pango,
+  pciutils,
   pipewire,
   snappy,
+  speechd-minimal,
   udev,
   wayland,
   xdg-utils,
   coreutils,
   libxcb,
+  vulkan-loader,
   zlib,
   # Darwin dependencies
-  unzip,
+  undmg,
   makeWrapper,
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
@@ -86,7 +89,6 @@
   enableVideoAcceleration ? libvaSupport,
   # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
   vulkanSupport ? false,
-  addDriverRunpath,
   enableVulkan ? vulkanSupport,
 }:
 
@@ -150,13 +152,16 @@ let
     nspr
     nss
     pango
+    pciutils # ANGLE dlopens libpci to identify GPUs, including for VA-API device selection.
     pipewire
     udev
     wayland
     libxcb
     zlib
     snappy
+    speechd-minimal # Text-to-speech through speech-dispatcher (--enable-speech-dispatcher).
     libkrb5
+    vulkan-loader # Chromium and Dawn dlopen libvulkan.so.1 by name.
     qt6.qtbase
   ]
   ++ optional pulseSupport libpulseaudio
@@ -191,9 +196,12 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (archive) url hash; };
 
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "${darwinApp}.app";
+
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontStrip = stdenv.hostPlatform.isDarwin;
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
   nativeBuildInputs =
@@ -204,7 +212,7 @@ stdenv.mkDerivation {
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      unzip
+      undmg
       makeWrapper
     ];
 
@@ -260,6 +268,11 @@ stdenv.mkDerivation {
           ln -s $out/opt/brave.com/${optName}/product_logo_''${icon}.png $out/share/icons/hicolor/''${icon}x''${icon}/apps/${fileBase}.png
       done
 
+      # ANGLE loads this copy by absolute path; the NixOS-patched loader finds ICDs
+      # under /run/opengl-driver, the bundled one does not.
+      rm $out/opt/brave.com/${optName}/libvulkan.so.1
+      ln -s ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 $out/opt/brave.com/${optName}/libvulkan.so.1
+
       # Replace xdg-settings and xdg-mime
       ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/${optName}/xdg-settings
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/${optName}/xdg-mime
@@ -297,9 +310,6 @@ stdenv.mkDerivation {
         --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
-      ${optionalString vulkanSupport ''
-        --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
-      ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )
   '';
@@ -309,7 +319,7 @@ stdenv.mkDerivation {
     $out/opt/brave.com/${optName}/brave --version
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
 
   meta = {
     homepage = homepage;
@@ -338,7 +348,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       uskudnik
       jefflabonte
-      nasirhm
       buckley310
       rachalaraj
     ];

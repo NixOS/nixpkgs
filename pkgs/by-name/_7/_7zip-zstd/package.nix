@@ -12,11 +12,13 @@
     && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWindows),
   _experimental-update-script-combinators,
   nix-update-script,
+  _7zz,
   enableUnfree ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zip-zstd";
   version = "26.02-v1.5.7-R2";
+  inherit (_7zz) setupHook;
 
   src = fetchFromGitHub {
     owner = "mcmilk";
@@ -119,11 +121,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
+      # Upstream always names this module 7z.so on Unix, including Darwin.
       install -Dt "$out/${if isWindows then "bin" else "lib"}/7zip" \
         CPP/7zip/Bundles/Alone/b/*/7za${extensions.executable} \
         CPP/7zip/Bundles/Alone2/b/*/7zz${extensions.executable} \
         CPP/7zip/Bundles/Alone7z/b/*/7zr${extensions.executable} \
-        CPP/7zip/Bundles/Format7zF/b/*/7z${extensions.sharedLibrary} \
+        CPP/7zip/Bundles/Format7zF/b/*/7z${if isWindows then extensions.sharedLibrary else ".so"} \
         CPP/7zip/UI/Console/b/*/7z${extensions.executable}
       install -D CPP/7zip/Bundles/SFXCon/b/*/7zCon${extensions.executable} "$out/lib/7zip/7zCon.sfx"
 
@@ -140,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  setupHook = ./setup-hook.sh;
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script {
       attrPath = "_7zip-zstd";

@@ -3,73 +3,72 @@
   lib,
   pkgsCross,
   buildPythonPackage,
+  common-updater-scripts,
+  coreutils,
+  curl,
+  diffutils,
   fetchFromGitHub,
-  gitUpdater,
-  setuptools-scm,
-  pdfium-binaries,
+  gnutar,
+  gzip,
+  jq,
+  nix,
+  nix-update,
+  packaging,
+  setuptools,
+  pdfium,
   numpy,
   pillow,
   pytestCheckHook,
   removeReferencesTo,
   python,
+  writeShellApplication,
 }:
 
 let
-  # They demand their own fork of ctypesgen
-  ctypesgen = buildPythonPackage rec {
-    pname = "ctypesgen";
-    version = "1.1.1+g${src.rev}"; # the most recent tag + git version
-    pyproject = true;
-
-    src = fetchFromGitHub {
-      owner = "pypdfium2-team";
-      repo = "ctypesgen";
-      rev = "3961621c3e057015362db82471e07f3a57822b15";
-      hash = "sha256-0OBY7/Zn12rG20jNYG65lANTRVRIFvE0SgUdYGFpRtU=";
-    };
-
-    build-system = [
-      setuptools-scm
-    ];
+  # Use the fork revision bundled with this release's source distribution.
+  ctypesgen = fetchFromGitHub {
+    owner = "pypdfium2-team";
+    repo = "ctypesgen";
+    rev = "4ddc2b2cdc4daefb0be450e8b5152e11337e9e3c";
+    hash = "sha256-S98kIimLZa3wJ5aKlADYOkqxsOhUlLqLHogC7Id0vVo=";
   };
-
 in
 buildPythonPackage rec {
   pname = "pypdfium2";
-  version = "5.7.0";
+  version = "5.14.0";
   pyproject = true;
 
+  # Use GitHub because the PyPI source distribution excludes the test suite.
   src = fetchFromGitHub {
     owner = "pypdfium2-team";
     repo = "pypdfium2";
     tag = version;
-    hash = "sha256-zc/83Ypmxul8fB3q0lUSgC9yfcdg7tJuZff+0LE0w30=";
+    hash = "sha256-KnZkIbV1ke0tL+VdUOkHElZXVrJixNBBoD0fpLPHNbY=";
   };
 
   build-system = [
-    ctypesgen
-    setuptools-scm
+    packaging
+    setuptools
   ];
+
+  postPatch = ''
+    mkdir -p deps
+    ln -s ${ctypesgen} deps/ctypesgen
+  '';
 
   nativeBuildInputs = [
     removeReferencesTo
   ];
 
   propagatedBuildInputs = [
-    pdfium-binaries
+    pdfium
   ];
 
-  preBuild = ''
-    getVersion() {
-      cat ${pdfium-binaries}/VERSION | grep $1 | sed 's/.*=//'
-    }
-    export GIVEN_FULLVER="$(getVersion MAJOR).$(getVersion MINOR).$(getVersion BUILD).$(getVersion PATCH)"
-  '';
-
   env = {
-    PDFIUM_PLATFORM = "system-search:${pdfium-binaries.version}";
-    PDFIUM_HEADERS = "${pdfium-binaries}/include";
-    PDFIUM_BINARY = "${pdfium-binaries}/lib/libpdfium${stdenv.targetPlatform.extensions.sharedLibrary}";
+    GIVEN_FULLVER = pdfium.fullVersion;
+    PDFIUM_PLATFORM = "system-search:${pdfium.version}";
+    PDFIUM_HEADERS = "${lib.getDev pdfium}/include/public";
+    PDFIUM_BINARY = "${lib.getLib pdfium}/lib/libpdfium${stdenv.targetPlatform.extensions.sharedLibrary}";
     CPP = "${stdenv.cc.targetPrefix}cpp";
   };
 
@@ -84,14 +83,36 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Avoid collecting ctypesgen's tests, which also define tests.conftest.
+  enabledTestPaths = [ "tests" ];
+
+  disabledTestPaths = [
+    # does not work on ZFS with normalization
+    "tests/test_opener.py::test_open_garbled_filename"
+  ];
+
   pythonImportsCheck = [
     "pypdfium2"
   ];
 
   passthru = {
-    updateScript = gitUpdater {
-      allowedVersions = "^[.0-9]+$";
-    };
+    inherit ctypesgen;
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "pypdfium2-update";
+      runtimeInputs = [
+        common-updater-scripts
+        coreutils
+        curl
+        diffutils
+        gnutar
+        gzip
+        jq
+        nix
+        nix-update
+      ];
+      text = builtins.readFile ./update.sh;
+    });
     tests.cross = pkgsCross.aarch64-multiplatform.python3Packages.pypdfium2;
   };
 

@@ -1,3 +1,17 @@
+diff --git a/js-build/document-worker.js b/js-build/document-worker.js
+index 52f81d2d83..4d3febfcce 100644
+--- a/js-build/document-worker.js
++++ b/js-build/document-worker.js
+@@ -44,9 +44,6 @@ async function getDocumentWorker(signatures) {
+ 			}
+ 		}
+ 		catch (e) {
+-			console.error(e);
+-			await exec('npm ci', { cwd: modulePath });
+-			await exec('npm run build', { cwd: modulePath });
+ 			await fs.copy(path.join(modulePath, 'build'), targetDir);
+ 			let missingFiles = await getMissingFiles(targetDir);
+ 			if (missingFiles.length) {
 diff --git a/js-build/note-editor.js b/js-build/note-editor.js
 index 1435730342..bfd552f863 100644
 --- a/js-build/note-editor.js
@@ -12,20 +26,6 @@ index 1435730342..bfd552f863 100644
  			await fs.copy(path.join(modulePath, 'build', 'zotero'), targetDir);
  		}
  		signatures['note-editor'] = { hash };
-diff --git a/js-build/pdf-worker.js b/js-build/pdf-worker.js
-index b820304f3a..aafb6b1ef5 100644
---- a/js-build/pdf-worker.js
-+++ b/js-build/pdf-worker.js
-@@ -33,9 +33,6 @@ async function getPDFWorker(signatures) {
- 			);
- 		}
- 		catch (e) {
--			console.error(e);
--			await exec('npm ci', { cwd: modulePath });
--			await exec('npm run build', { cwd: modulePath });
- 			await fs.copy(path.join(modulePath, 'build', 'worker.js'), path.join(targetDir, 'worker.js'));
- 		}
- 		signatures['pdf-worker'] = { hash };
 diff --git a/js-build/reader.js b/js-build/reader.js
 index 12b5df6a92..20c3f20a57 100644
 --- a/js-build/reader.js

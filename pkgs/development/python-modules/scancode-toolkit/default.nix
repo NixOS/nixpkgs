@@ -133,7 +133,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Pre-genrating license index
+  # Pre-generating license index
   postInstall = ''
     $out/bin/scancode-reindex-licenses
   '';

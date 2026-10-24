@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  systemd,
+  systemdLibs,
   libxslt,
   docbook_xsl,
   docbook_xml_dtd_45,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
   ];
 
   configureFlags = [

@@ -4,32 +4,38 @@
   backoff,
   buildPythonPackage,
   distro,
+  django,
+  djangorestframework,
   fetchFromGitHub,
+  flask,
   freezegun,
+  google-genai,
+  mcp,
   mock,
-  monotonic,
   openai,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   parameterized,
   pytest-asyncio,
+  pytest-bdd,
   pytestCheckHook,
-  python-dateutil,
   pythonAtLeast,
   requests,
   setuptools,
-  six,
   typing-extensions,
+  zstandard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "7.11.0";
+  version = "7.71.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-GmwFI23HUp9/p6o+UFCES7WwvnexrBrVTDhLd/YYWOs=";
+    tag = "posthog-v${finalAttrs.version}";
+    hash = "sha256-4sc1PZaN/SdUk/akzyHhuPejUEDYyXuHlBxIw2LYOaA=";
   };
 
   build-system = [ setuptools ];
@@ -37,51 +43,43 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     backoff
     distro
-    monotonic
-    python-dateutil
     requests
-    six
     typing-extensions
   ];
 
   nativeCheckInputs = [
     anthropic
+    django
+    djangorestframework
+    flask
     freezegun
+    google-genai
+    mcp
     mock
     openai
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
     parameterized
     pytest-asyncio
+    pytest-bdd
     pytestCheckHook
+    zstandard
   ];
 
   pythonImportsCheck = [ "posthog" ];
 
   disabledTests = [
-    "test_load_feature_flags_wrong_key"
     # Tests require network access
     "test_excepthook"
     "test_request"
-    "test_trying_to_use_django_integration"
     "test_upload"
-    # AssertionError: 2 != 3
-    "test_flush_interval"
-    # len(client.distinct_ids_feature_flags_reported) = 101 != i % 100 + 1
-    "test_capture_multiple_users_doesnt_out_of_memory"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
-    # Pydantic V1 functionality isn't compatible with Python 3.14
-    "test_clean_pydantic"
-  ];
-
-  disabledTestPaths = [
-    # Missing parts
-    "posthog/test/integrations/test_middleware.py"
   ];
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2";
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/posthog/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

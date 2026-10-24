@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.afdko # for otfautohint
     python3.pkgs.cffsubr
     python3.pkgs.ufo2ft
+    python3.pkgs.ufolib2
     python3.pkgs.uharfbuzz
     gettext
   ];

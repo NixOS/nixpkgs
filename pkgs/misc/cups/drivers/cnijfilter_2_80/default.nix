@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://gdlp01.c-wss.com/gds/1/0100000841/01/cnijfilter-common-2.80-1.tar.gz";
-    sha256 = "06s9nl155yxmx56056y22kz1p5b2sb5fhr3gf4ddlczjkd1xch53";
+    hash = "sha256-o0DWQ5vyM9oacW9k6MrSYpUb/hTCmwJM6bX7UgK1SRs=";
   };
 
   nativeBuildInputs = [

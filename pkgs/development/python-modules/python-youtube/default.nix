@@ -45,6 +45,11 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  disabledTests = [
+    # This test try to make request to the internet
+    "test_parse_response"
+  ];
+
   meta = {
     description = "Simple Python wrapper around for YouTube Data API";
     homepage = "https://github.com/sns-sdks/python-youtube";

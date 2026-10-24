@@ -37,6 +37,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Uk3r6aYhrjYJ8GrMKfdlv3/muK/uUynd4pd1yWCwSOM=";
   };
 
+  # https://github.com/Textualize/rich/issues/4209
+  patches = [ ./Update-to-pygments-2.21.0.patch ];
+
   build-system = [ poetry-core ];
 
   dependencies = [

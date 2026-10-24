@@ -26,13 +26,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.14.0";
+  version = "0.17.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-yT51MCHt00JEUbuC6rcXN3L4Vul3aBa8YCgpGVzM5rQ=";
+    hash = "sha256-xp9+pAi529B5WAznRRVJExOlZp/qhPWztZJ5/NyxsIY=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -53,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-HsPz3S2TL7TJzDU7c7IWgT7kO+FkloMsAWc8g5ZKofw=";
+    hash = "sha256-gVKDUPkChjsZZS5+h1jfMuLekY40WRsvbxwqEw1IuTM=";
   };
 
-  cargoHash = "sha256-BTSmfMrxNwAdoPuYn4hbx9C9myE1wJh+1FXPG78IgeU=";
+  cargoHash = "sha256-ZkcnktTbvbiAPra+wgrm/xILZp1YBpsj0UFZ/AFzx1U=";
 
   twemojiAssets = fetchFromGitHub {
     owner = "twitter";
@@ -118,6 +118,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     runHook postCheck
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     inherit (finalAttrs) env;

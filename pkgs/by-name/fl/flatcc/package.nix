@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatcc";
-  version = "0.6.3";
+  version = "0.6.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dvidelabs";
     repo = "flatcc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kDZ05r/k15peBLGG2jzyeKwrdTn3+1PWrrDUmC3SV50=";
+    hash = "sha256-J3vw7DYhaYD7QVChcNElKCYoh0cwGJj2hr5ugcIcZZw=";
   };
 
   nativeBuildInputs = [ cmake ];

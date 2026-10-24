@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-generate";
-  version = "0.23.9";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-myakseKwLEjQa9GgcxdWZJWdjMFXh7Wi64CwrN2ZwSU=";
+    hash = "sha256-rkzCfHT1zfUbfao3ejeHVj5akBjx/JCxAeuKN/Kjh48=";
   };
 
-  cargoHash = "sha256-IAUgpk3HD9znLORCQKNw+AO6NG9GEVWMU/cez3B+CKc=";
+  cargoHash = "sha256-RIMRgv0XSyMIxy7bW5ot+Ymyn7qSW5YALuqOL9ArxRM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=hooks_and_rhai::it_fails_when_a_system_command_returns_non_zero_exit_code"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=git::utils::should_canonicalize"
+    "--skip=utils::tests::should_canonicalize"
   ];
 
   env = {

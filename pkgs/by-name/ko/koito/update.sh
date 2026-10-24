@@ -26,7 +26,7 @@ yarn-berry-fetcher missing-hashes "${src_path}/client/yarn.lock" >"${package_dir
 
 echo "Updating offline cache hash…"
 offline_cache_hash=$(yarn-berry-fetcher prefetch "${src_path}/client/yarn.lock" "${package_dir}/missing-hashes.json")
-old_hash=$(nix-instantiate --eval --expr "with import ./. {}; koito.client.offlineCache.outputHash" --raw)
+old_hash=$(nix-instantiate --eval --raw -A koito.client.offlineCache.outputHash)
 sed -i "s|${old_hash}|${offline_cache_hash}|" "${package_dir}/client.nix"
 
 echo "Done."

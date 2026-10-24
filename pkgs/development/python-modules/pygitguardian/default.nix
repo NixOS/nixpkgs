@@ -9,20 +9,21 @@
   requests,
   responses,
   setuptools,
+  typeguard,
   typing-extensions,
   vcrpy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pygitguardian";
-  version = "1.33.1";
+  version = "1.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K0hsOfU0tCvjTjOFaDrYNATO31YgbfgAYkZh1DxQNIw=";
+    hash = "sha256-AJ4efKUNBImBBiEFTDAW9YxPLzhhuHJBQTFfUiZZbrs=";
   };
 
   build-system = [ pdm-backend ];
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
     marshmallow-dataclass
     requests
     setuptools
+    typeguard
     typing-extensions
   ];
 

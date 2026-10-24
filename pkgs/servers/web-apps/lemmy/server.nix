@@ -14,20 +14,20 @@ let
   pinData = lib.importJSON ./pin.json;
   version = pinData.serverVersion;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   inherit version;
   pname = "lemmy-server";
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy";
-    rev = version;
+    tag = finalAttrs.version;
     hash = pinData.serverHash;
     fetchSubmodules = true;
   };
 
   preConfigure = ''
-    echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
+    echo 'pub const VERSION: &str = "${finalAttrs.version}";' > crates/utils/src/version.rs
   '';
 
   cargoHash = pinData.serverCargoHash;
@@ -69,22 +69,26 @@ rustPlatform.buildRustPackage rec {
 
   # This gets installed automatically by cargoInstallHook,
   # but we don't actually need it, and it leaks a reference to rustc.
-  postInstall = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     rm $out/lib/libhtml2md.so
   '';
 
-  passthru.updateScript = ./update.py;
-  passthru.tests.lemmy-server = nixosTests.lemmy;
+  passthru = {
+    updateScript = ./update.py;
+    tests.lemmy-server = nixosTests.lemmy;
+  };
 
   meta = {
-    description = "🐀 Building a federated alternative to reddit in rust";
+    description = "Federated link aggregator and forum";
     homepage = "https://join-lemmy.org/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       happysalada
       billewanick
       georgyo
+      lucasew
     ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "lemmy_server";
   };
-}
+})

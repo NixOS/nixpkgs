@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-serialization-form";
-  version = "1.11.7";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-serialization-form-v${finalAttrs.version}";
-    hash = "sha256-Fd9XSO3H1Au8y+Acft5to7hi7QNwWcmP0/NeWZlufjg=";
+    hash = "sha256-QyOcSVPWqhPTqvpurzHXiIlU59SP8s1+lpi06aDZjP8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/serialization/form/";
@@ -40,8 +40,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kiota_serialization_form" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-serialization-form-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "microsoft-kiota-serialization-form-v";
+    };
   };
 
   meta = {

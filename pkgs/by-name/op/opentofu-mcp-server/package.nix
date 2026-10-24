@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentofu-mcp-server";
-  version = "1.0.0-unstable-2026-07-15";
+  version = "1.0.0-unstable-2026-09-04";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "opentofu";
     repo = "opentofu-mcp-server";
-    rev = "ad9e50780d8ae56ee9a71ddea5f3f8c8f2da1020";
-    hash = "sha256-bp1tY4ggHVSVFcU+b/TlWBHhjmrf32Q3a86GWgvkFOk=";
+    rev = "2ab816e75f0176fc764b67b12c9fd61cadd45d3b";
+    hash = "sha256-sar4OB4FS47zzfF2zn5sWsSDWavWCDRzCAnCQnRtpzI=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -42,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
     pnpm build
     runHook postBuild
+  '';
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
   '';
 
   installPhase = ''

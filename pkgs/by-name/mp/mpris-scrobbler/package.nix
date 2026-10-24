@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpris-scrobbler";
-  version = "0.5.7";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "mariusor";
     repo = "mpris-scrobbler";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ro2Eop4CGvcT1hiCYxxmECFp5oefmAnBT9twnVfpsvY=";
+    sha256 = "sha256-8QSYiM8kbAq5q7pgM800AdwT0rp2Z7NGWbjlURYVz7o=";
   };
 
   postPatch = ''

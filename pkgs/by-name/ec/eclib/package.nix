@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   # sage tests to run:
   # src/sage/interfaces/mwrank.py
   # src/sage/libs/eclib
-  # ping @timokau for more info
+  # ping the sage team for more info
   src = fetchurl {
     # all releases for this project appear on its GitHub releases page
     # by definition! other distros sometimes update whenever they see

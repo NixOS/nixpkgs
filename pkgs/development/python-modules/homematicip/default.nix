@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "homematicip";
-  version = "2.13.4";
+  version = "2.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     tag = finalAttrs.version;
-    hash = "sha256-hYmsrtejyMV6QkQlvlHttiOT1tIxo1LLqNdwjdpba3g=";
+    hash = "sha256-YmyhPaQwEhndB2Oa17AeRnpJs8exZvf2hvWAPGFSqOk=";
   };
 
   build-system = [

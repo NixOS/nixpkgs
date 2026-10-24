@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-eh0beK1UYf/Xe30wGxli6dfPKh875yTnOn7CCN2XTtI=";
+
+  env.LIBGIT2_NO_VENDOR = 1;
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 ];
 
   meta = {
     changelog = "https://github.com/pls-rs/pls/releases/tag/${finalAttrs.src.tag}";

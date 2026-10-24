@@ -36,11 +36,11 @@ let
   # TODO: we could cut the `let` short here, but it would de-indent everything.
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_6";
-    version = "6.4.1";
+    version = "6.5.1";
 
     src = fetchurl {
       url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
-      hash = "sha256-GqTClyHAm86amfPVZXIjEQNj1ms1ytSYm5Wyr9qTeag=";
+      hash = "sha256-OyoEYmwd+bQkIJYAJbyU4od3dE0xxWetuVgMNxiarpc=";
     };
 
     outputs = [

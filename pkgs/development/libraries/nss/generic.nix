@@ -76,6 +76,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   ''
+  + lib.optionalString (lib.versionAtLeast version "3.129") ''
+    substituteInPlace build.sh --replace "\$obj_dir/lib/pkgconfig/nspr.pc" "${nspr.dev}/lib/pkgconfig/nspr.pc"
+  ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
     substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
@@ -260,7 +263,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "Set of libraries for development of security-enabled client and server applications";
-    changelog = "https://github.com/mozilla/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
+    changelog = "https://github.com/mozilla/nss/blob/master/doc/src/releases/nss_${underscoreVersion}.md";
     maintainers = with lib.maintainers; [
       hexa
       ajs124

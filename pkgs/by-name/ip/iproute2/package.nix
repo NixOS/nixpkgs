@@ -16,24 +16,25 @@
   pkgsStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iproute2";
-  version = "7.1.0";
+  version = "7.2.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/iproute2/iproute2-${version}.tar.xz";
-    hash = "sha256-/Z+huVgJQXFXyoPdcpV+MmG9vOiWNTy5NvgK8LM6S1w=";
+    url = "mirror://kernel/linux/utils/net/iproute2/iproute2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-TC+hJMLPCv18o00e6sumugSKVvY3Tiqrk9r729TuqcA=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "CC := gcc" "CC ?= $CC"
+      --replace-fail "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [
     "out"
     "dev"
     "scripts"
+    "man"
   ];
 
   configureFlags = [
@@ -44,7 +45,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -86,6 +86,8 @@ stdenv.mkDerivation rec {
     libbpf
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
@@ -105,4 +107,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

@@ -10,6 +10,7 @@
   mkdocs-callouts,
   mkdocs-custom-tags-attributes,
   pymdown-extensions,
+  pyprojectVersionPatchHook,
   python-frontmatter,
   ruamel-yaml,
   setuptools,
@@ -27,9 +28,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-6FmMMaR+gyp5Gx0oXiDYvsr6uA8hwrV93YYrYkJsMNY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "version = \"2.1.4\"" "version = \"${finalAttrs.version}\""
+  '';
+
   build-system = [
     hatchling
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     beautifulsoup4

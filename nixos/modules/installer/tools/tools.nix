@@ -53,13 +53,27 @@ let
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    replacements = {
+    replacements = rec {
       inherit (pkgs) runtimeShell;
       inherit (config.system.nixos) version codeName revision;
       inherit (config.system) configurationRevision;
+      kernelVersion =
+        if config.boot.kernel.enable then
+          # modDirVersion returns 6.18.54-xanmod1 instead of 6.18.54
+          config.boot.kernelPackages.kernel.modDirVersion or config.boot.kernelPackages.kernel.version
+        else
+          null;
+      specialisations = lib.escapeShellArg (
+        lib.concatStringsSep " " (lib.attrNames config.specialisation)
+      );
+
       json = builtins.toJSON (
         {
           nixosVersion = config.system.nixos.version;
+          specialisations = lib.attrNames config.specialisation;
+        }
+        // lib.optionalAttrs (kernelVersion != null) {
+          inherit kernelVersion;
         }
         // lib.optionalAttrs (config.system.nixos.revision != null) {
           nixpkgsRevision = config.system.nixos.revision;
@@ -84,7 +98,7 @@ let
         # If you prefer a stable release instead, you can change the word unstable to the latest number shown here: https://nixos.org/download
         # i.e. nixos-24.11
         # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+        nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
       };
       outputs = inputs\@{ self, nixpkgs, ... }: {
         # NOTE: '${options.networking.hostName.default}' is the default hostname
@@ -292,7 +306,7 @@ in
         {
           options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
             default = config.nix.enable && !config.system.disableInstallerTools;
-            defaultText = "config.nix.enable && !config.system.disableInstallerTools";
+            defaultText = lib.literalExpression "config.nix.enable && !config.system.disableInstallerTools";
           };
 
           config = lib.mkIf config.system.tools.${name}.enable {

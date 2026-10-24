@@ -12,6 +12,7 @@
 
 runCommand (rstudio.name + "-wrapper")
   {
+    inherit (rstudio) pname version;
     preferLocalBuild = true;
     allowSubstitutes = false;
 

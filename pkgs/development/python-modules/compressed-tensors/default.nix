@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "compressed-tensors";
-  version = "0.17.1";
+  version = "0.18.0";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "neuralmagic";
     repo = "compressed-tensors";
     tag = finalAttrs.version;
-    hash = "sha256-14AHbokDlN5iXy/fvOq7Xp1OS8N1b+Xpxd33KOylWiU=";
+    hash = "sha256-cbHP2YZgG0UY+rrcOKKwtgwga2pEZaEEMoJqq57pFb0=";
   };
 
   postPatch = ''
@@ -132,6 +132,8 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # these try to download models from HF Hub
     "tests/test_quantization/lifecycle/test_apply.py"
+    "tests/test_quantization/test_quant_config.py::test_map_to_checkpoint_names"
+
     # RuntimeError: The weights trying to be saved contained shared tensors
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-hadamard]"
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-random-hadamard]"
@@ -153,6 +155,11 @@ buildPythonPackage (finalAttrs: {
     "tests/test_compressors/distributed/test_module_parallel.py"
     "tests/test_compressors/model_compressors/test_model_compressor_distributed.py"
     "tests/test_offload"
+    # https://github.com/vllm-project/compressed-tensors/issues/885
+    "tests/test_compressors/model_compressors/test_model_compressor.py"
+
+    # Tests require CUDA
+    "tests/test_compressors/test_compress_decompress_module.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: Torch not compiled with CUDA enabled

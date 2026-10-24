@@ -158,5 +158,17 @@ with lib;
         Enable recommended uwsgi settings.
       '';
     };
+
+    useGrpcErrorPages = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to configure error codes to be emitted as gRPC-compatible errors.
+
+        Should be set when proxying gRPC, and returning responses from nginx (like when adding authentication).
+
+        This defines a few `@grpc-*` locations inside the containing vhost.
+      '';
+    };
   };
 }

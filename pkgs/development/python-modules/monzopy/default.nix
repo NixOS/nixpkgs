@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "monzopy";
-  version = "1.6.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JakeMartin-ICL";
     repo = "monzopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NmCnCIOCwlTwSfrJOuXMyzXgsjcYpfFNwi6S0BAatk8=";
+    hash = "sha256-qCFOd+AVofRJ7xkatWVKOhf8V8riTEhrumkpX3HXUSw=";
   };
 
   build-system = [ setuptools ];

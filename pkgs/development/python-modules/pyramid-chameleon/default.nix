@@ -6,7 +6,7 @@
   fetchPypi,
   pyramid,
   pytestCheckHook,
-  setuptools,
+  setuptools_80,
   zope-interface,
 }:
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     chameleon
     pyramid
-    setuptools
+    setuptools_80
     zope-interface
   ];
 

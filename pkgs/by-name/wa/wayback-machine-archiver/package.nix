@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wayback-machine-archiver";
-  version = "3.6.0";
+  version = "4.1.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,12 +15,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "agude";
     repo = "wayback-machine-archiver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YIVrz+TUx2SFIDOCR/P+2R3jpXN1K+SM2xyiVL2Hjfo=";
+    sha256 = "sha256-FrMssgfqR+7mCo18DjaimJK4JREdXIG2dRJjOtAgB9k=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
+    defusedxml
     requests
     python-dotenv
   ];

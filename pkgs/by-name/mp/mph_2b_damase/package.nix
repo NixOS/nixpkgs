@@ -1,4 +1,5 @@
 {
+  lib,
   stdenvNoCC,
   fetchzip,
   installFonts,
@@ -15,5 +16,9 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [ installFonts ];
 
-  meta = { };
+  meta = {
+    # Font file has metadata listing it as PD
+    license = lib.licenses.publicDomain;
+    homepage = "https://www.wazu.jp/gallery/views/View_MPH2BDamase.html";
+  };
 }

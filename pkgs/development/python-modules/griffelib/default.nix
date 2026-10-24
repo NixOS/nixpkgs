@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "griffelib";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
     tag = finalAttrs.version;
-    hash = "sha256-hNKL86LSE9PwIofxt2t5PrlThiX7hTgYADK2HDVhNjk=";
+    hash = "sha256-Rcp2bppNk8QUe/WbhmsCNfYmKjJrJINlU/zhuAom758=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/griffelib";
@@ -62,6 +62,11 @@ buildPythonPackage (finalAttrs: {
     "tests/test_api.py"
     "tests/test_git.py"
   ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     changelog = "https://github.com/mkdocstrings/griffe/releases/tag/${finalAttrs.src.tag}";

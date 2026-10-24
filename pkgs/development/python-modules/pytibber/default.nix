@@ -7,19 +7,20 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
+  tenacity,
   websockets,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytibber";
-  version = "0.37.6";
+  version = "0.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = finalAttrs.version;
-    hash = "sha256-pyU8ju1T+AI4UvWq4/gtS8wV0a/cZfoRzlWpoK9eTtM=";
+    hash = "sha256-H0j/cXLLvTVy3CVHaU2AO/mBvM3Iti/LFfbPEnEgpxE=";
   };
 
   build-system = [ setuptools ];
@@ -27,6 +28,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     gql
+    tenacity
     websockets
   ];
 

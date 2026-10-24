@@ -38,13 +38,13 @@ assert enableTools -> enableAudio && enableEmulation && enableLibplayer;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvgm";
-  version = "0-unstable-2026-06-23";
+  version = "0-unstable-2026-10-09";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "libvgm";
-    rev = "867223e7c33d63de115d1ab955f784c44f19040a";
-    hash = "sha256-GuvngfkqLy3E5Esb+HOnY6G1XYDyDzv1yz+NccaclGI=";
+    rev = "a6eed945ecf4e5a25cf82004779c6f7e4fd5c319";
+    hash = "sha256-GszyDqml6ey0M5IUksWCjnRJ6tzt9o+rzBbW/6KOrwo=";
   };
 
   outputs = [
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.licenses.unfree # https://github.com/ValleyBell/libvgm/issues/43
       else
         lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     pkgConfigModules = [
       "vgm-utils"

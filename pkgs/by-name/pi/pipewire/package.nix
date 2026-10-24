@@ -12,8 +12,8 @@
   elogind,
   libinotify-kqueue,
   epoll-shim,
-  systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.qyliss.
+  systemdLibs,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs, # enableSystemd=false maintained by maintainers.highghlow.
   pkg-config,
   docutils,
   doxygen,
@@ -88,7 +88,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.6.8";
+  version = "1.6.9";
 
   outputs = [
     "out"
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-sxS6+LtvpEWCKoKLDUSYkW4+rrcIXPjWPBglReIDh/k=";
+    hash = "sha256-YmICqzAHRuLoGuZ5UwvfLotOr04/usEPsRIKZXF4SLI=";
   };
 
   patches = [
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (
     if enableSystemd then
-      [ systemd ]
+      [ systemdLibs ]
     else if stdenv.hostPlatform.isLinux then
       [
         elogind
@@ -229,6 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "pipewire-v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "libsystemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
+    (lib.mesonEnable "systemd-user-service" enableSystemd)
     (lib.mesonEnable "udev" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "ffmpeg" true)
     (lib.mesonEnable "pw-cat-ffmpeg" true)

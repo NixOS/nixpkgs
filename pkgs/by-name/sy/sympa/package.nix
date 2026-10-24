@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open source mailing list manager";
-    homepage = "https://www.sympa.org";
+    homepage = "https://www.sympa.community/sympa/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       sorki

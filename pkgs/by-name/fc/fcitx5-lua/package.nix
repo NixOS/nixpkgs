@@ -6,17 +6,17 @@
   pkg-config,
   kdePackages,
   fcitx5,
-  lua5_3,
+  lua5_5,
   gettext,
 }:
 
 let
-  lua = lua5_3;
+  lua = lua5_5;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lua";
-  version = "5.0.17";
+  version = "5.0.18";
 
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fcitx";
     repo = "fcitx5-lua";
     tag = finalAttrs.version;
-    hash = "sha256-uEWa1wprWT8vDSHKXHUHEmXBtNHgj94hFuKvBm5GXqc=";
+    hash = "sha256-YelfFE9RNQbsZm81TauleQxyiR3qOquLRHpQa9kyqEU=";
   };
 
   nativeBuildInputs = [

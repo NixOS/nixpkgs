@@ -4,11 +4,12 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "k8sgpt";
-  version = "0.4.36";
+  version = "0.4.39";
 
   nativeBuildInputs = [
     installShellFiles
@@ -18,17 +19,15 @@ buildGoModule (finalAttrs: {
     owner = "k8sgpt-ai";
     repo = "k8sgpt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J8imL+Rkp7/0xMppjMSXFdLTH3CwLvS1+Tbt6CWI6SQ=";
+    hash = "sha256-wWkk6Qu385DRjdDVW143MfhRVc+KGKb20/9iFs1F0eM=";
   };
 
-  vendorHash = "sha256-XLlBDFbvjr+Bun9V36MYwknz7SPw39ovd0b9gCht7L8=";
+  vendorHash = "sha256-osPj6FfAbUI1/NpvbxiSAbFKf01D6o9IWylIFdW9ihQ=";
 
   # https://nixos.org/manual/nixpkgs/stable/#var-go-CGO_ENABLED
   env.CGO_ENABLED = 0;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # https://nixos.org/manual/nixpkgs/stable/#ssec-skip-go-tests
   ldflags = [

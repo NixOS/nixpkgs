@@ -83,14 +83,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.13.2";
+  version = "3.13.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sHMfAAZ4LrHXXh1g3Q9WsAqt8DHRkSdBlb3kZSy+vX0=";
+    hash = "sha256-8rTCv0Nsb+BhRypwXDY5SWP7Bo1vqJBlm7y6YCOMa2M=";
   };
+
+  patches = [
+    # https://github.com/OSGeo/gdal/pull/15259
+    ./proj-9.9.0-compat.patch
+  ];
 
   nativeBuildInputs = [
     bison
@@ -113,7 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${
-      lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"
+      # mysql puts libraries into top-level `lib` (but has pkgconfig),
+      # mariadb puts them into a subdirectory (but has no pkgconfig)
+      lib.optionalString (libmysqlclient.pname != "mysql-client") "mysql/"
     }libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ]
   ++ lib.optionals finalAttrs.doInstallCheck [

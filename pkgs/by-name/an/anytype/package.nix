@@ -24,7 +24,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "anytype";
-  version = "0.56.0";
+  version = "0.57.4";
 
   strictDeps = true;
 
@@ -32,14 +32,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U4giu+5IjB/cSMszbIDynU9ddbv/pnY3M7GeC876oX8=";
+    hash = "sha256-dEDHydI+KeCV5oYKYddlOYcs4z62zWkGw37S8MNwASI=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "94dd09449672e352a886b0b3c26a294802176444";
-    hash = "sha256-AORBgil78wOuzKrLdSekDvDTSjfFqs1L73Spyd/0rfk=";
+    rev = "611852b1a883f0b980efc674dc0df5fdfb2dbb7d";
+    hash = "sha256-kxRkwrGUdv97XOo1XvDITaQOqYKV1ZkHsJRt3/VXJ4A=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -87,7 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-i2GPGi7LgIy8y+//rR0H+vX+bc/v2NKd7xGLargd044=";
+    outputHash = "sha256-ryGxMV8Rr1EbLJuIJf9ZXYj5jsIXueF53DS315DY/yQ=";
     outputHashMode = "recursive";
   };
 

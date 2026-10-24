@@ -1,7 +1,7 @@
 {
   stdenv,
   buildPackages,
-  v4l-utils,
+  libv4l,
   fetchFromGitHub,
   fetchpatch,
   meson,
@@ -63,14 +63,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.25";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-KPIUoHMzArqEVbhS8hrvzQUV906MydBPm5ZmV/CVS3A=";
+    hash = "sha256-7+KC69Ps86IkICMJdtg2x9b0A6SwE7ITKP0yibZ2bx8=";
   };
 
   patches = [
@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     # For `libdisplay-info`
     python3
     hwdata
-    v4l-utils
+    libv4l
   ];
 
   buildInputs = [

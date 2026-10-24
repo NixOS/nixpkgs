@@ -15,8 +15,6 @@ mkTclDerivation (finalAttrs: {
     hash = "sha256-IcoDZu2P+yafntDNeDZS3NSwFuRgZgIBZCLhCdIY+6g=";
   };
 
-  strictDeps = true;
-
   patches = [
     # https://github.com/apnadkarni/tclh/pull/2
     ./efscorrupted-euclean.patch

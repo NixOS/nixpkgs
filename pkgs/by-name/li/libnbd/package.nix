@@ -7,6 +7,7 @@
   perl,
   buildPythonBindings ? false,
   buildOcamlBindings ? false,
+  disableFuse ? stdenv.hostPlatform.isDarwin,
   ocamlPackages,
   python3,
   libxml2,
@@ -40,19 +41,21 @@ stdenv.mkDerivation rec {
   );
 
   buildInputs = [
-    fuse3
     gnutls
     libxml2
-  ];
+  ]
+  ++ lib.optionals (!disableFuse) [ fuse3 ];
 
   postPatch = lib.optionalString buildOcamlBindings ''
     substituteInPlace ocaml/Makefile.am \
         --replace-fail '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib'
   '';
 
-  configureFlags = lib.optionals buildPythonBindings [
-    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
-  ];
+  configureFlags =
+    lib.optionals buildPythonBindings [
+      "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
+    ]
+    ++ lib.optionals disableFuse [ "--disable-fuse" ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
@@ -84,7 +87,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       humancalico
     ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; linux ++ darwin;
     broken = buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.version "4.05";
   };
 }

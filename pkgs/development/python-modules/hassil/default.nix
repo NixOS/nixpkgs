@@ -16,7 +16,7 @@
 
 let
   pname = "hassil";
-  version = "3.8.0";
+  version = "3.12.1";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "OHF-Voice";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-b+ykT6P9yG8jZZN92K76uBaKTJpV6lkcqP3AAYbj3dU=";
+    hash = "sha256-jbodtdsEBDL4nB8kBkPjxFsMOMvsGPDpfMokMRF4xIA=";
   };
 
   build-system = [ setuptools ];
@@ -37,11 +37,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    # infinite recursion with home-assistant.intents
-    "tests/test_fuzzy.py"
-  ];
 
   meta = {
     changelog = "https://github.com/OHF-Voice/hassil/blob/${src.tag}/CHANGELOG.md";

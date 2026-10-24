@@ -11,6 +11,7 @@
   pathlib2,
   pyfakefs,
   python-dateutil,
+  pycryptodome,
   requests,
   setuptools,
   setuptools-scm,
@@ -19,20 +20,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "1.2.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptolyzer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v+himg/DOBlIRiWBIGkxiahT3JGp384Ed4cUCIq6TOw=";
+    hash = "sha256-2U+7y88m+r1LzOiDp4QydnlQCjBfN6p56Yh9mZMjnyE=";
   };
-
-  patches = [
-    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
-    ./fix-dirs-exclude.patch
-  ];
 
   pythonRemoveDeps = [ "bs4" ];
 
@@ -51,6 +47,7 @@ buildPythonPackage (finalAttrs: {
     pathlib2
     pyfakefs
     python-dateutil
+    pycryptodome
     requests
     urllib3
   ];
@@ -67,6 +64,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "cryptolyzer" ];
+
+  passthru.updateScript = ../cryptodatahub/update.sh;
 
   meta = {
     description = "Cryptographic protocol analyzer";

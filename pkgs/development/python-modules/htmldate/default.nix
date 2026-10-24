@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.10.0";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "htmldate";
     tag = "v${version}";
-    hash = "sha256-3qtksgzqcgWtUv81Aqeh0nTWYnH0PjPLG4NuYChbV0g=";
+    hash = "sha256-ehhhM3AmZq5CzNzSYDsuX2/0F3M4GzylYqxa+UZY5D4=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +34,11 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  pythonRelaxDeps = [ "lxml" ];
+  pythonRelaxDeps = [
+    "charset_normalizer"
+    "lxml"
+    "urllib3"
+  ];
 
   optional-dependencies = {
     speed = [

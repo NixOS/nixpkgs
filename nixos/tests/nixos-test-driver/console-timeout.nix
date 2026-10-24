@@ -16,11 +16,13 @@
   };
 
   testScript = ''
+    from datetime import timedelta
+
     machine.start()
     machine.wait_for_unit("multi-user.target")
 
     machine.systemctl("start generate-output")
     machine.wait_for_console_text("match that")
-    machine.wait_for_console_text("match this", timeout=10)
+    machine.wait_for_console_text("match this", timeout=timedelta(seconds=10))
   '';
 }

@@ -60,6 +60,6 @@ stdenv.mkDerivation {
     description = "Visual, musical editor for delay effects";
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.all;
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.bsd2;
   };
 }

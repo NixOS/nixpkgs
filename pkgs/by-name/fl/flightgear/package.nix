@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flightgear";
-  version = "2024.1.6";
+  version = "2024.1.7";
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "flightgear";
     tag = finalAttrs.version;
-    hash = "sha256-unYP8q7IvNwjLHTmm/38gauCPxr3+ZFcsD5rY6BEzno=";
+    hash = "sha256-XboJDhFGvtht1ECFabrsXOUORY4zlawqMyHmH1QjImA=";
   };
 
   nativeBuildInputs = [
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "flightgear";
         repo = "fgdata";
         tag = finalAttrs.version;
-        hash = "sha256-B7WCEMrHtSW4Yk2HM+ZjgKt5GeQrSmvxKITqAYXKSuw=";
+        hash = "sha256-8MeQ/zbumwMMWEWs36ywkVJxjIBbCq5dA69GhpSXvv4=";
       };
 
       dontUnpack = true;
@@ -133,7 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A free and highly sophisticated flight simulator";
     homepage = "https://www.flightgear.org/";
-    changelog = "https://www.flightgear.org/download/releases/2024-1-5"; # TODO: Use finalattrs when back on stable tracking
+    changelog = "https://www.flightgear.org/download/releases/${
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     maintainers = with lib.maintainers; [
       raskin
       kirillrdy

@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Network related tests are having troube in the sandbox
+    # Network related tests are having trouble in the sandbox
     "test_resolve_hostname"
     "test_get_dns_state"
     # Assertion issue

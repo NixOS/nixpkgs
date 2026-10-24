@@ -5,19 +5,19 @@
   oslotest,
   pbr,
   setuptools,
+  stestrCheckHook,
   testscenarios,
-  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "6.8.0";
+  version = "6.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_i18n";
     inherit version;
-    hash = "sha256-oLTGTBOWhp1xRNymCtl8frAo949h+RxwB1MSOAUZl98=";
+    hash = "sha256-V0vPIYc7GFBovOyVHeHsCTFY/9/wWoBV/Rjdy2n2nmU=";
   };
 
   postPatch = ''
@@ -33,20 +33,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run -e <(echo "
-    # list is not deduped
-    oslo_i18n.tests.test_gettextutils.GettextTest.test_get_available_languages
-    ")
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "oslo_i18n" ];
 

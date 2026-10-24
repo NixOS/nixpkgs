@@ -6,58 +6,29 @@
 
 pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.37.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-svJA9QyqwpY1xzOQ09qFlZwrGp3HZXW9T2AICVJfqOs=";
+    hash = "sha256-xAuKhgnH5j5NioXDivwpaZFKkkTzGWJglbmVw5koaqE=";
   };
 
-  cargoHash = "sha256-QJr6kM520OWxje7Q5FZWgJH1IS8j+Jv1vNf7VyCINNA=";
+  cargoHash = "sha256-hNZhL+kZgm2pX28mKdCgpGyBexI33idlEfPB8OmgGOY=";
 
-  env.RUSTFLAGS = "--cfg tokio_unstable";
-
-  checkFlags = [
-    # these tests set setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
-    "--skip=copy::copy_tests::check_default_mode"
-    "--skip=test_weird_permissions"
-    "--skip=test_edge_case_special_permissions"
-    "--skip=test_default_strips_special_bits_on_directories"
-    "--skip=test_default_strips_special_bits_on_files"
-    "--skip=test_default_preserves_special_bits_on_directories"
-    "--skip=test_preserve_all_preserves_special_bits_on_directories"
-    "--skip=test_preserve_all_preserves_special_bits_on_files"
-    "--skip=test_preserve_settings_dir_gid_time_7777"
-    "--skip=test_preserve_settings_dir_7777_preserves_special_bits"
-    "--skip=test_preserve_settings_file_7777_preserves_special_bits"
-    "--skip=test_preserve_settings_none_strips_special_bits_on_directories"
-    "--skip=no_setid_clears_bits_for_unchanged_owner_rule"
-    "--skip=no_setid_clears_existing_bits_for_unrelated_mode"
-    "--skip=no_setid_dry_run_reports_but_does_not_clear_bits"
-    "--skip=no_setid_respects_filter_and_per_type_scope"
-    "--skip=no_setid_retains_sticky_and_clears_setgid_on_directory"
-    # this test expects overwrite behavior that doesn't work in a sandbox
-    "--skip=test_overwrite_behavior"
-    # these tests require network access to determine local IP address
-    "--skip=test_remote"
-    # these tests expect to find version/git info from Cargo.toml, which isn't available in the sandbox
-    "--skip=version::tests::test_current_version"
-    "--skip=test_protocol_version_has_git_info"
-    "--skip=test_rcpd_protocol_version_has_git_info"
-    # these tests shell out to `getent` to resolve real user/group names, which isn't available in the sandbox
-    "--skip=chmod::tests::getent_real_resolves_root"
-    "--skip=chmod::tests::getent_real_option_like_name_fails_closed_no_injection"
-    "--skip=rejects_unknown_group"
-    # these tests change ownership and set setuid/setgid bits (fchown / chmod / chgrp),
-    # which the unprivileged sandbox build user isn't permitted to do (EPERM)
-    "--skip=safedir::tests::set_dir_metadata_fd_applies"
-    "--skip=safedir::tests::set_file_metadata_fd_ordering_preserves_setuid"
-    "--skip=applies_per_type_modes_recursively"
-    "--skip=group_change_preserves_setgid_across_chgrp"
-    "--skip=preserves_setgid_through_mode_change"
+  # Enable upstream's Nix sandbox test filter without replacing nixpkgs'
+  # target-specific Rust flags. Keep this config identical in both phases so
+  # Cargo can reuse the release artifacts built before the checks.
+  cargoBuildFlags = [
+    "--config"
+    ''target.'cfg(all())'.rustflags=["--cfg","tokio_unstable","--cfg","rcp_nix_sandbox"]''
   ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  # fixtures that mutate process-global admission, congestion, hook and file-descriptor
+  # state are only supported under nextest's process isolation or single-threaded libtest
+  dontUseCargoParallelTests = true;
 
   meta = {
     changelog = "https://github.com/wykurz/rcp/releases/tag/v${finalAttrs.version}";

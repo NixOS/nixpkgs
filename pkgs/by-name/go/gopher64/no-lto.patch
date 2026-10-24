@@ -1,7 +1,7 @@
 --- a/build.rs
 +++ b/build.rs
-@@ -150,11 +143,6 @@
-         println!("cargo:rustc-link-lib=dylib=freetype");
+@@ -147,11 +147,6 @@ fn main() {
+         println!("cargo:rustc-link-lib=static=clang_rt.osx");
      }
  
 -    volk_build.flag("-flto=thin");

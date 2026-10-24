@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxfont_2";
-  version = "2.0.8";
+  version = "2.0.9";
 
   outputs = [
     "out"
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXfont2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9VbA4Qk6TmkRzJC8SxBtIBkC7hh/10ryBv8WL35qJNU=";
+    hash = "sha256-8EKjcGZoFee5Qem3AZAkdVvRxsKVSvv6UVrzeCUXmeI=";
   };
 
   strictDeps = true;

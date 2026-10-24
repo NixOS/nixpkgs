@@ -1,37 +1,40 @@
 {
   rustPlatform,
   fetchFromGitHub,
+  cacert,
+  cmake,
   pkg-config,
   makeWrapper,
   nasm,
   alsa-lib,
-  opus,
   pipewire,
+  libva,
+  mesa,
   lib,
   stdenv,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "concord-tui";
-  version = "2.5.0";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "concord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DkbZZlURGwQCajhWmkcYmgFZDLvUOg6aU/JjGRiZY4Y=";
+    hash = "sha256-B0bIwhU/hOIqap3nRwWXQUB4UvXqQs+PDwfaiSBOaA8=";
   };
 
-  cargoHash = "sha256-ISWQjHUPoYPgMu+aJUDlLjp5AahauHG9BuOAANMXKRA=";
+  cargoHash = "sha256-ovHqPjnkPUbulFmnnePJemBhwJZbqjNCMtUqRTWPv1U=";
 
-  buildInputs = [
-    opus
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     pipewire
+    libva
+    mesa
   ];
   nativeBuildInputs = [
+    cmake
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -39,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [ nasm ];
+
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ cacert ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram "$out/bin/concord" \
@@ -56,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/chojs23/concord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      Simon-Weij
+      inomish
       neo
       Br1ght0ne
     ];

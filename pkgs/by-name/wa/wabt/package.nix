@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
          binary format
        * wasm2wat: the inverse of wat2wasm, translate from the binary format
          back to the text format (also known as a .wat)
-       * wasm-objdump: print information about a wasm binary. Similiar to
+       * wasm-objdump: print information about a wasm binary. Similar to
          objdump.
        * wasm-interp: decode and run a WebAssembly binary file using a
          stack-based interpreter

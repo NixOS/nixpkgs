@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow";
     tag = version;
-    hash = "sha256-KNxR8AiEJ9S15G5l3rB48BvLdgB5s6q6L1I83V7iMv0=";
+    hash = "sha256-P3MaS0wXyRCYyHW07ifPoglP95SUakhH5rdkAsktXag=";
   };
 
   build-system = [ flit-core ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isx86_32 [
+  disabledTests = lib.optionals stdenv.hostPlatform.is32bit [
     # Raises a slightly different error than upstream expects: 'Timestamp is too large' instead of 'out of range'
     "test_from_timestamp_with_overflow_value"
   ];

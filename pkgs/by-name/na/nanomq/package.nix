@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
-  version = "0.24.11";
+  version = "0.25.6";
 
   src = fetchFromGitHub {
     owner = "nanomq";
     repo = "nanomq";
     tag = finalAttrs.version;
-    hash = "sha256-I2SLc/KbkBvqbbWuLr8ARmmg4DeE7ZbTqcM1tw8WhwQ=";
+    hash = "sha256-Ym57iLZFnmR7NErX8qE8I9ApNPC08Z437b3tWTeqcIw=";
     fetchSubmodules = true;
   };
 

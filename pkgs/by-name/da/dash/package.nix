@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ "--with-libedit" ];
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
   '';
 
@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";

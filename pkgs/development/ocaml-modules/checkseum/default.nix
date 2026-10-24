@@ -13,12 +13,12 @@
 }:
 
 buildDunePackage (finalAttrs: {
-  version = "0.5.3";
+  version = "0.5.4";
   pname = "checkseum";
 
   src = fetchurl {
     url = "https://github.com/mirage/checkseum/releases/download/v${finalAttrs.version}/checkseum-${finalAttrs.version}.tbz";
-    hash = "sha256-uIwRmUNBITo1wj80Fou6enS/P4kFH3e+s52COtzhpTE=";
+    hash = "sha256-CfltUNvXTofKRqC+XvvlP1+I2rAFTz0P+QQPgOkWp/A=";
   };
 
   buildInputs = [ dune-configurator ];

@@ -96,6 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadrolibs";
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.bsd3;
   };
 })

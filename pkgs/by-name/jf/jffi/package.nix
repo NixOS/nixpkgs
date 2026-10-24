@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jffi";
-  version = "1.3.15";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "jnr";
     repo = "jffi";
     rev = "jffi-${finalAttrs.version}";
-    hash = "sha256-CW9tB8g/xR01RB1Fl80vWVeXke1eLjHp9mSkMy6O4G4=";
+    hash = "sha256-KprkeSMHW/g5IoRnkNaSpBi5sPiBcRcyct+Z0zPWVGU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libffi ];
 
-  # The pkg-config script in the build.xml doesn't work propery
+  # The pkg-config script in the build.xml doesn't work properly
   # set the lib path manually to work around this.
   env.LIBFFI_LIBS = "${libffi}/lib/libffi${stdenv.hostPlatform.extensions.sharedLibrary}";
   env.ANT_ARGS = "-Duse.system.libffi=1";

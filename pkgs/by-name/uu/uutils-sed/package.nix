@@ -6,16 +6,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-sed";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "sed";
     tag = finalAttrs.version;
-    hash = "sha256-y1X9nj/quBtisp+6MHFjVKFHrdFnujWTxLWNLvdrADA=";
+    hash = "sha256-r7roYjhR//MQ0ZK4YwDIZhtijxJCY1QofJk0rIsYPzA=";
   };
 
-  cargoHash = "sha256-N5wwNPjOL3U4bPSONGpjmOBU31Nt/sCVth+JH3xmz/g=";
+  cargoHash = "sha256-gcFMYF8effLwMPLVU78f419UFtJz2KGv2gVZw8kOdPI=";
+
+  # Upstream tests assume stderr is not a terminal; some builders attach a pty.
+  env.UUTILS_DIAG = "never";
 
   meta = {
     changelog = "https://github.com/uutils/sed/releases/tag/${finalAttrs.version}";

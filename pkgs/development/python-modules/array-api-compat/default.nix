@@ -52,6 +52,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "array_api_compat" ];
 
+  # Otherwise, cupy will try to write in $HOME (/homeless-shelter)
+  preCheck = ''
+    export CUPY_CACHE_DIR=$(mktemp -d)
+  '';
+
   disabledTests = [
     # CUDA (used via cupy) is not available in the testing sandbox
     "cupy"

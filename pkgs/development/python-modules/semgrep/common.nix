@@ -1,9 +1,9 @@
 { lib }:
 
 rec {
-  version = "1.172.0";
+  version = "1.180.0";
 
-  srcHash = "sha256-dILO0ia4zriHiC1jVv02YOyj0Snni4aY66g+omApqSQ=";
+  srcHash = "sha256-IaXW9gExaYqu/SBF/7Xu1Djx2GniVb50ZEv/35lwUNw=";
 
   # This tag is used to select the correct wheel from PyPI.
   # It is updated by the update.sh script.
@@ -17,8 +17,8 @@ rec {
     "cli/src/semgrep/semgrep_interfaces" = {
       owner = "semgrep";
       repo = "semgrep-interfaces";
-      rev = "6dc898658d554ce80e6fdd58904adea2fd0e30c8";
-      hash = "sha256-7JMo2TU5JbPscrfI1qdz1P2bF6J8dTDhOqAQXxa3tm8=";
+      rev = "9782c7582ed1ce8fb93fcf5fb54ebd31408bf61e";
+      hash = "sha256-qwUOcOyZBHfg21CZxFKp8edmMlz9tt+stD7ukrrbP9Y=";
     };
   };
 
@@ -29,15 +29,15 @@ rec {
   core = {
     x86_64-linux = {
       platform = "manylinux_2_34_x86_64";
-      hash = "sha256-2LlK9CZqV1KHrSzYRFc3Q6tP5Y9r+22SKTJ4B5N+reM=";
+      hash = "sha256-FtsuJwargUqXXu7CXev61Jq7qEa3xRPYjgQURxUvhEc=";
     };
     aarch64-linux = {
       platform = "manylinux_2_34_aarch64";
-      hash = "sha256-yIGjBbll5ZS4ixXCxkGbOY525DjsYeYJFsiy7/6SckA=";
+      hash = "sha256-y6BvZLEOXshqCzqXV8/f3zzmwrvbXph2KqKksKKW+Mo=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-CeksnmwWNaFUnU4pey1KloTc01GyFu1/LrUc/FVHnEk=";
+      hash = "sha256-nGEHDqp954WoMY4dAN5skVHvpmDMPljD4v/W9eYYCvc=";
     };
   };
 

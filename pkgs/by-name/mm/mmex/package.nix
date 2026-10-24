@@ -14,9 +14,12 @@
   sqlite,
   wxwidgets_3_2,
   gtk3,
-  lua,
+  lua5_2_compat,
   wxsqlite3,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "money-manager-ex";

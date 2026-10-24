@@ -88,7 +88,7 @@ update_darwin() {
     </request>"
 
     response="$(curl -s -X POST -H "Content-Type: text/xml" --data "$post_data" "https://tools.google.com/service/update2")"
-    url="$(echo "$response" | xmllint --xpath "string(//url[contains(@codebase, 'http://dl.google.com/release2')]/@codebase)" -)"
+    url="$(echo "$response" | xmllint --xpath "string(//url[contains(@codebase, 'https://dl.google.com/release2')]/@codebase)" -)"
     pkg="$(echo "$response" | xmllint --xpath "string(//package/@name)" -)"
     manifest_version="$(echo "$response" | xmllint --xpath "string(//manifest/@version)" -)"
 

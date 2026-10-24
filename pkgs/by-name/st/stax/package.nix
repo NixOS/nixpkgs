@@ -6,20 +6,23 @@
   versionCheckHook,
   perl,
   pkg-config,
+  libgit2,
   openssl,
   libiconv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stax";
-  version = "0.74.0";
+  version = "0.102.2";
 
   src = fetchFromGitHub {
     owner = "cesarferreira";
     repo = "stax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Z8yfjslG0lTT0/kFO0ornssxa2VE0KhO6w//LpAdaQ=";
+    hash = "sha256-ItRt0J2nR94nmg9L6Pion/OB7wW7mmMFE5CHZmr2Yvs=";
   };
+
+  env.LIBGIT2_NO_VENDOR = 1;
 
   postPatch = ''
     # Remove darwin linker override that breaks nix builds
@@ -32,13 +35,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
-  cargoHash = "sha256-oUYODmjnlOKhg8OUGJmkzUX11nebutLWABOtjpr+NcE=";
+  cargoHash = "sha256-/jDIsdlCFXkvyuurZUes/+7/dX1BoHcWCDAkJwIwawI=";
 
   doInstallCheck = true;
   doCheck = false;

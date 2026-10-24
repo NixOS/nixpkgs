@@ -41,6 +41,7 @@
   python3,
 
   traySupport ? config.profanity.traySupport or true,
+  terminal-notifier,
   gtk3,
   otrSupport ? true,
   libotr,
@@ -51,13 +52,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "profanity";
-  version = "0.18.2";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     tag = finalAttrs.version;
-    hash = "sha256-rPiYzG5KvJyKt7b99AImmO6wTYxZPFcf/6Xhz8SrgIo=";
+    hash = "sha256-3mVUlWnDyP7yHsKowhWSz/eHpSsjGa2ZlUfY+O9IWpY=";
   };
 
   enableParallelBuilding = true;
@@ -88,6 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals notifySupport [
     libnotify
     gdk-pixbuf
+  ]
+  ++ lib.optionals (notifySupport && stdenv.hostPlatform.isDarwin) [
+    terminal-notifier
   ]
   ++ lib.optionals omemoSupport [
     libsignal-protocol-c

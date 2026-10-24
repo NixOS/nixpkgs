@@ -1,5 +1,4 @@
 {
-  bintools,
   buildPackages,
   callPackage,
   cacert,
@@ -7,7 +6,7 @@
   dart-bin,
   debug ? false,
   fetchurl,
-  gn,
+  fetchpatch,
   gitMinimal,
   gitSetupHook,
   icu,
@@ -16,12 +15,9 @@
   nix-update,
   pax-utils,
   pkg-config,
-  python312,
+  python3,
   ripgrep,
-  runCommand,
-  samurai,
   stdenv,
-  versionCheckHook,
   writableTmpDirAsHomeHook,
   writeShellScript,
   writeText,
@@ -29,7 +25,7 @@
 }:
 
 let
-  version = "3.12.2";
+  version = "3.13.0";
 
   tools = callPackage ../../flutter/engine/tools.nix { inherit (stdenv) hostPlatform buildPlatform; };
 
@@ -47,7 +43,7 @@ let
 
   buildArchInfo = getArchInfo stdenv.buildPlatform;
 
-  python3 = python312.withPackages (
+  pythonEnv = python3.withPackages (
     ps: with ps; [
       httplib2
       six
@@ -80,7 +76,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-J+qlj0sSWYqqvMiTP6hZYD97ho2VsrqRynCaiSRQV6Q=";
+    outputHash = "sha256-kw6bygtcy+yAPLX61CYzcA9l0GRZaI70hB5oY0xJEjU=";
 
     buildCommand = ''
       mkdir source
@@ -94,7 +90,7 @@ let
         target_cpu = ['x64', 'arm64', 'riscv64']
         target_cpu_only = True
       ''} .gclient
-      export PATH=${python3}/bin:$PATH:${tools.depot_tools}
+      export PATH=${pythonEnv}/bin:$PATH:${tools.depot_tools}
       python3 ${tools.depot_tools}/gclient.py sync --no-history --nohooks --noprehooks
       find sdk -name ".versions" -type d -exec rm -rf {} +
       rm --recursive --force sdk/buildtools/sysroot
@@ -130,7 +126,7 @@ dart-bin.overrideAttrs (oldAttrs: {
   nativeBuildInputs = [
     gitMinimal
     gitSetupHook
-    python312
+    python3
     ripgrep
     pkg-config
   ];
@@ -144,9 +140,15 @@ dart-bin.overrideAttrs (oldAttrs: {
     ./gcc13.patch
     ./zlib-not-found.patch
     ./custom-flags.patch
+
+    # Remove when upgrading to Dart 3.14:
+    (fetchpatch {
+      name = "dart-ignore-binaryen-warnings.patch";
+      url = "https://github.com/dart-lang/sdk/commit/963b46dfebad01cab9e063fc8b508df227154a31.patch";
+      hash = "sha256-+JY97WFq+UWNoGikXfHIPxBwPdCWV1HYHjhi9pzqVCo=";
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-    ./unbundle.patch
     ./unbundle-icu.patch
   ];
 
@@ -177,7 +179,6 @@ dart-bin.overrideAttrs (oldAttrs: {
     python3 tools/generate_package_config.py
     python3 tools/generate_sdk_version_file.py
     echo "" > tools/bots/dartdoc_footer.html
-    rm third_party/devtools/web/devtools_analytics.js
     JOBS_COUNT=''${NIX_BUILD_CORES:-2}
     rg --no-ignore -l 'google-analytics\.com' . \
       | rg -v "\.map\$" \
@@ -188,6 +189,17 @@ dart-bin.overrideAttrs (oldAttrs: {
         sed --in-place --regexp-extended 's|UA-[0-9]+-[0-9]+|UA-2137-0|g'
   ''
   + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    install -D --mode=0644 ${./unbundle/icu.gn} build/linux/unbundle/icu.gn
+    install -D --mode=0644 ${./unbundle/zlib.gn} build/linux/unbundle/zlib.gn
+    install -D --mode=0755 ${./unbundle/replace_gn_files.py} build/linux/unbundle/replace_gn_files.py
+    install -D --mode=0644 ${./unbundle/shim_headers.gni} build/shim_headers.gni
+    install -D --mode=0644 ${
+      fetchurl {
+        url = "https://raw.githubusercontent.com/dart-lang/sdk/d684a576a6aa954ae107a03b2b4e1d61c3bebe93/tools/generate_shim_headers.py";
+        hash = "sha256-jE3RZFnqq0mUR7tIrTGU5sblBaBsi/SwhKg2H37ypGg=";
+      }
+    } tools/generate_shim_headers.py
+
     for _lib in icu zlib; do
         find . -type f -path "*third_party/$_lib/*" \
             \! -path "*third_party/$_lib/chromium/*" \

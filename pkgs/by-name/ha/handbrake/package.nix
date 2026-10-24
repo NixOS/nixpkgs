@@ -75,7 +75,7 @@
   intltool,
   glib,
   gtk4,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   gst_all_1,
   dbus-glib,
@@ -310,7 +310,7 @@ let
       gst_all_1.gstreamer
       gtk4
       hicolor-icon-theme
-      libappindicator-gtk3
+      libappindicator
       libgudev
       libnotify
       udev

@@ -9,10 +9,10 @@
   makeWrapper,
   perl,
   openssl,
+  autoconf-archive,
   autoreconfHook,
   openssh,
   bash-completion,
-  fetchpatch,
   withUtempter ? stdenv.hostPlatform.isLinux,
   libutempter,
   # build server binary only when set to false (useful for perlless systems)
@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    autoconf-archive
     autoreconfHook
     pkg-config
     makeWrapper
@@ -58,15 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./mosh-client_path.patch
     # Fix build with bash-completion 2.10
     ./bash_completion_datadir.patch
-
-    # Fixes build with protobuf3 23.x
-    (fetchpatch {
-      url = "https://github.com/mobile-shell/mosh/commit/eee1a8cf413051c2a9104e8158e699028ff56b26.patch";
-      hash = "sha256-CouLHWSsyfcgK3k7CvTK3FP/xjdb1pfsSXYYQj3NmCQ=";
-    })
   ];
 
+  # remove the m4 directory, as it contains only ancient versions of macros
+  # from autoconf-archive or pkg-config. instead, we fetch up-to-date versions
+  # from the packages which provide them. this allows selecting modern C++
+  # standard versions, which is important with e.g. GCC 16.
   postPatch = ''
+    rm -rf m4
+
     substituteInPlace scripts/mosh.pl \
       --subst-var-by ssh "${openssh}/bin/ssh" \
       --subst-var-by mosh-client "$out/bin/mosh-client"

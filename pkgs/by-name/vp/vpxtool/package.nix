@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vpxtool";
-  version = "0.33.8";
+  version = "0.38.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "francisdb";
     repo = "vpxtool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cAB/18aYSbDK/u7aTKX0FrmnIwnsVcEMESGXwy9iNMo=";
+    hash = "sha256-1R+8U41qYKQMdwT022GEB3qUwKaJ1IXyavBIjfNRDT8=";
   };
 
-  cargoHash = "sha256-VuTYT7GpASp2CWsH2zz/AraRLGNlYOLIIwynTRxtc7U=";
+  cargoHash = "sha256-hTJpVyzK+//AB950LmMXqR6Kq32Mg83Vr7WSTGwYwds=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

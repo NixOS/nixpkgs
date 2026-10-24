@@ -41,26 +41,26 @@ let
   sdb = fetchFromGitHub {
     owner = "radareorg";
     repo = "sdb";
-    tag = "2.4.6"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
-    hash = "sha256-5DuHC5uL4gXBJPGW2awDq/5Ufdi1RoEJnm+eAU3X8S4=";
+    tag = "2.5.8"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
+    hash = "sha256-WjjFDPKtv29wk1/Ktiv3XWACh4x5BmLOAyiI7t08qs0=";
   };
 
   qjs = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "3087a2ce5bcb66cc1fcd9f34d3e5ce3bd43a67d9"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
-    hash = "sha256-Z6DUe/W1+3SYPRPCiL3oNL5ovXCsW3dsFuGkA9WF3W4=";
+    rev = "b51e5278439b2fa0510fbb1f3b3dff9f0064d5d7"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
+    hash = "sha256-xKEtry1YJ6kQzGJRCpR9drSNlOYdMzLheVhdcxN0R8s=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.1.8";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-Gh+W0vWsIscbew1u5cuOXWC20azCxYuA7D+qVTkfEN0=";
+    hash = "sha256-AI2kA1ebEIb5pepvqeUycirk0MlOzF8fUCuo0qVFr8k=";
   };
 
   mesonFlags = [

@@ -12,12 +12,12 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fusesoc";
-  version = "2.4.6";
+  version = "2.4.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-d04DFtV71CkrvX51x19cl0KSn2yOCMmYWGRv3AED8Xw=";
+    hash = "sha256-8QI95XUkZgtZJv7GgHrw7eywRBiRjjmhUiTIOFVUaJQ=";
   };
 
   build-system = with python3Packages; [
@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     simplesat
     fastjsonschema
     argcomplete
+    pydantic
   ];
 
   nativeCheckInputs = [
@@ -56,13 +57,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        iverilog
-        verilator
-        gnumake
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      iverilog
+      verilator
+      gnumake
+    ])
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -70,7 +72,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     homepage = "https://github.com/olofk/fusesoc";
     description = "Package manager and build tools for HDL code";
-    maintainers = with lib.maintainers; [ VZstless ];
+    maintainers = with lib.maintainers; [
+      VZstless
+      evanwporter
+    ];
     license = lib.licenses.bsd2;
     mainProgram = "fusesoc";
   };

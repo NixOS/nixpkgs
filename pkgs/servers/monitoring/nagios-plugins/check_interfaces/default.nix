@@ -15,9 +15,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-sQ2lee2gxyrl455tumMJ4EbKc8mYEDXl18Wik6daf5Q=";
   };
 
-  buildInputs = [ net-snmp ];
+  buildInputs = [
+    net-snmp
+  ];
 
-  configureFlags = [ "--libexecdir=${placeholder "out"}/bin" ];
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+    "--libexecdir=${placeholder "out"}/bin"
+  ];
+
+  postConfigure = ''
+    substituteInPlace Makefile \
+      --replace-fail "-Werror=declaration-after-statement" ""
+  '';
 
   enableParallelBuilding = true;
 

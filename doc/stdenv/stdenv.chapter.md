@@ -493,7 +493,7 @@ When using native compilation, `stdenv` is lenient towards incorrect placement o
 
 While convenient for getting to a package quickly, this behavior can break cross-compilation. Adding `strictDeps = true` as a parameter to `mkDerivation` or any of its language specific wrappers disables this behavior.
 
-The specialized `build*` functions for dlang, emacs, go, nim, ocaml, python, and rust enable this option by default.
+The specialized `build*` functions for dlang, emacs, go, nim, ocaml, python, rust, and `tcl.mkTclDerivation` enable this option by default.
 
 ## Attributes {#ssec-stdenv-attributes}
 
@@ -508,6 +508,7 @@ A number between 0 and 7 indicating how much information to log. If set to 1 or 
 #### `enableParallelBuilding` {#var-stdenv-enableParallelBuilding}
 
 If set to `true`, `stdenv` will pass specific flags to `make` and other build tools to enable parallel building with up to `build-cores` workers.
+Can be overridden for a specific phase using `enableParallelInstalling` or `enableParallelChecking`.
 
 Unless set to `false`, some build systems with good support for parallel building including `cmake`, `meson`, and `qmake` will set it to `true`.
 
@@ -612,7 +613,7 @@ Specifies the phases. You can change the order in which phases are executed, or 
 
 The elements of `phases` must not contain spaces. If `phases` is specified as a Nix Language attribute, it should be specified as lists instead of strings. The same rules apply to the `*Phases` variables.
 
-It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
+It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obvious phases (like `fixupPhase` which patches the shebang of scripts).
 Usually, if you just want to add a few phases, it’s more convenient to set one of the `*Phases` variables below.
 
 ##### `prePhases` {#var-stdenv-prePhases}

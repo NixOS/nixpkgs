@@ -7,11 +7,15 @@
   writeShellApplication,
   gnugrep,
   installShellFiles,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-cli";
-  version = "1.2.20";
+  version = "1.3.4";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -22,9 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp tideways $out/bin/tideways
-    chmod +x $out/bin/tideways
+    installBin tideways
 
     installShellCompletion --cmd tideways \
       --bash <($out/bin/tideways completion bash) \
@@ -34,19 +36,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-nhwWsD3EefHSC7YSVla4WFTDiTWZjTf7sUZjMNROXoQ=";
+        hash = "sha256-Gu4sZC3y5D0G6LtO1YuZsltBXk28ajvaDty9ecYujqU=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-s74CnmEQ9RPki1af477tQFkrp6C9MwfehXTq2HPNAkk=";
+        hash = "sha256-bwt+vKSGfvC4b2KpEVe6BoHDpNEs63HEyDRU1z7bj28=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-RTt5XKMJbYPea6pEPD72mITfUW41v584zrwT3rkEcQg=";
+        hash = "sha256-qTkoboI/aFN3/W1NZhr/bkn5bkvTzX5uXg/uowVkgO8=";
       };
     };
 

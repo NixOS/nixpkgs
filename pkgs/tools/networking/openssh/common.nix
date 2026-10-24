@@ -30,7 +30,9 @@
   libredirect,
   etcDir ? null,
   withKerberos ? false,
-  withLdns ? true,
+  withLdns ? false,
+  withSelinux ? false,
+  libselinux,
   krb5,
   libfido2,
   libxcrypt,
@@ -99,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
   ++ lib.optional withPAM pam
+  ++ lib.optional withSelinux libselinux
   ++ lib.optionals withAudit [
     audit
     libcap_ng
@@ -151,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
   ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
   ++ lib.optional withAudit "--with-audit=linux"
+  ++ lib.optional withSelinux "--with-selinux"
   ++ extraConfigureFlags;
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
@@ -265,7 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         borgbackup-integration = withThisSsh nixosTests.borgbackup;
         nixosTest = withThisSsh nixosTests.openssh;
-        initrd-network-openssh = withThisSsh nixosTests.initrd-network-ssh;
+        initrd-network-openssh = withThisSsh nixosTests.systemd-initrd-networkd-ssh;
         openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
           pname = previousAttrs.pname + "-test";
           doCheck = true;

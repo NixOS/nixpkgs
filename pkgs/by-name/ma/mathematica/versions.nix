@@ -5,6 +5,20 @@
 */
 [
   {
+    version = "15.0.1";
+    lang = "en";
+    language = "English";
+    hash = "sha256-7N5FJoj0gTGNwY3Q+8hJGZi+ze6IRRMnwu6nLEv3cF4=";
+    installer = "Wolfram_15.0.1_LIN.sh";
+  }
+  {
+    version = "15.0.1";
+    lang = "en";
+    language = "English";
+    hash = "sha256-VzK8CuOhk4sOO5CL4z3rfpY5631F2RN6c0Dh8cExeeg=";
+    installer = "Wolfram_15.0.1.sh";
+  }
+  {
     version = "15.0.0";
     lang = "en";
     language = "English";

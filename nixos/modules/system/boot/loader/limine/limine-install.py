@@ -436,6 +436,37 @@ def copy_file(from_path: str, to_path: str):
     paths[to_path] = True
 
 
+def is_pe_coff_image(path: str) -> bool:
+    """Check whether path is a PE/COFF image, which is what sbctl can sign.
+
+    sbctl parses the file as PE/COFF and ignores the filename entirely, so the
+    extension is deliberately not taken into account here. This mirrors the
+    checks done by Go's debug/pe: the DOS "MZ" magic, a "PE\\0\\0" signature
+    at the offset stored at 0x3c, and a recognised optional header magic.
+    """
+    try:
+        with open(path, "rb") as file:
+            if file.read(2) != b"MZ":
+                return False
+
+            # The PE signature offset lives in the last 4 bytes of the DOS header.
+            file.seek(0x3C)
+            offset = int.from_bytes(file.read(4), "little")
+            file.seek(offset)
+
+            if file.read(4) != b"PE\0\0":
+                return False
+
+            # The optional header follows the signature and the 20 byte COFF
+            # file header. Its first field is the magic, 0x10b for PE32 and
+            # 0x20b for PE32+.
+            file.seek(offset + 4 + 20)
+            magic = file.read(2)
+            return magic in (b"\x0b\x01", b"\x0b\x02")
+    except OSError:
+        return False
+
+
 def option_from_config(name: str, config_path: List[str]) -> str:
     value = config(*config_path)
     if value is None:
@@ -697,6 +728,35 @@ def install_bootloader() -> None:
                 print("error: failed to sign limine", file=sys.stderr)
                 sys.exit(1)
 
+            if config("secureBoot", "signAdditionalFiles", "enable"):
+                skip = config("secureBoot", "signAdditionalFiles", "skip")
+
+                for additional_file in config("additionalFiles"):
+                    if additional_file in skip:
+                        print(f"skipping signing of {additional_file}")
+                        continue
+
+                    path = os.path.join(str(config("efiMountPoint")), additional_file)
+
+                    # Only PE/COFF images can be signed. Anything else is left
+                    # alone instead of failing the installation, as additional
+                    # files are not necessarily meant to be bootable.
+                    if not is_pe_coff_image(path):
+                        print(
+                            f"skipping signing of {additional_file}: not a PE/COFF image"
+                        )
+                        continue
+
+                    print(f"signing {additional_file}...")
+                    try:
+                        subprocess.run([sbctl, "sign", path], check=True)
+                    except (subprocess.CalledProcessError, OSError):
+                        print(
+                            f"error: failed to sign {additional_file}",
+                            file=sys.stderr,
+                        )
+                        sys.exit(1)
+
         if not config("efiRemovable") and not config("canTouchEfiVariables"):
             print(
                 "warning: boot.loader.efi.canTouchEfiVariables is set to false while boot.loader.limine.efiInstallAsRemovable.\n  This may render the system unbootable."
@@ -730,6 +790,14 @@ def install_bootloader() -> None:
                     boot_order = re.findall(
                         r"BootOrder: ((?:[0-9a-fA-F]{4},?)*)", efibootmgr_output
                     )[0]
+                    normalized_boot_order = boot_order.upper().split(",")
+                    create_options = ["-C"]
+                    if limine_boot_entry.upper() in normalized_boot_order:
+                        create_options = [
+                            "-c",
+                            "--index",
+                            str(normalized_boot_order.index(limine_boot_entry.upper())),
+                        ]
 
                     efibootmgr_output = subprocess.check_output(
                         [
@@ -745,7 +813,7 @@ def install_bootloader() -> None:
                     efibootmgr_output = subprocess.check_output(
                         [
                             efibootmgr,
-                            "-c",
+                            *create_options,
                             "-b",
                             limine_boot_entry,
                             "-d",
@@ -756,8 +824,6 @@ def install_bootloader() -> None:
                             f"\\efi\\limine\\{boot_file}",
                             "-L",
                             "Limine",
-                            "-o",
-                            boot_order,
                         ],
                         stderr=subprocess.STDOUT,
                         universal_newlines=True,

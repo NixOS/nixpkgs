@@ -8,18 +8,21 @@
   stdenv,
   nixosTests,
   nix-update-script,
+  withLogind ? true,
+  withSystemd ? true,
+  withAutostart ? false,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.5.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-lL8is6WveKxOn/Ej3SrMfLrulnb+Qw9QAPcCbdLo07E=";
+    hash = "sha256-HRfPlVTd97ku+KmZs55cWBg8v1MMWKsxX1oirm8oc4E=";
   };
 
   postPatch = ''
@@ -30,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/bin/start-cosmic' "$out/bin/start-cosmic"
   '';
 
-  cargoHash = "sha256-5dLG40X+yxJo566guyHqOCLNp+uNSE+HONS8GIDm58A=";
+  cargoHash = "sha256-o/ufWQ6A2c3p530jxvGwr/p/ArC4n8mzIQQKXx1MpFY=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -41,6 +44,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ bash ];
 
+  buildNoDefaultFeatures = true;
+  buildFeatures =
+    lib.optional withLogind "logind"
+    ++ lib.optional withSystemd "systemd"
+    ++ lib.optional withAutostart "autostart";
   dontUseJustBuild = true;
 
   justFlags = [

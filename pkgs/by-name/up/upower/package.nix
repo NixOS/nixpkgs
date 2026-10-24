@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   makeWrapper,
   pkg-config,
   libxslt,
@@ -30,15 +29,13 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
   gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
 }:
 
 assert withDocs -> withIntrospection;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
-  version = "1.91.2";
+  version = "1.91.5";
 
   outputs = [
     "out"
@@ -52,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "upower";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lr7Va7jmC7Hy+kY8YIbAEE5mK3TxU9LtgTKxEyM1QY8=";
+    hash = "sha256-1ccMs+iA3H0xt9pYKsXV/0zBYjWsvmfqMoJ+/ZJvwDI=";
   };
 
   patches =
@@ -108,9 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       pp.pygobject3
       pp.packaging
     ]))
-  ]
-  ++ lib.optionals withSystemd [
-    systemd
   ]
   ++ lib.optionals useIMobileDevice [
     libimobiledevice

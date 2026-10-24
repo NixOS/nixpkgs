@@ -125,7 +125,7 @@ let
     in
     lib.concatStringsSep "\n\n" (
       lib.concatLists [
-        (entry true "Value" (toPretty value))
+        (entry true "Value" (safeToPretty value))
         (entry (option ? default) "Default" (toPretty option.default))
         (entry (option ? type) "Type" (option.type.description))
         (entry (option ? description) "Description" (lib.removeSuffix "\n" option.description))

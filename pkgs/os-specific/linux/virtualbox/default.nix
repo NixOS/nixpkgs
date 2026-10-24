@@ -2,6 +2,7 @@
   stdenv,
   virtualbox,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +19,10 @@ stdenv.mkDerivation {
 
   env.KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  makeFlags = [ "INSTALL_MOD_PATH=$(out)" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=$(out)"
+    "VBOX_ALLOW_MODULE_SIGNING=1"
+  ];
   installTargets = [ "install" ];
 
   enableParallelBuilding = true;

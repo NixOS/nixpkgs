@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch2,
+  fetchpatch,
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
@@ -30,6 +30,17 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-uajQf8otXRDZMiC8V6aFFh1yrx/HYoXVXFZN2qhi5YQ=";
   };
+
+  patches = [
+    # Recent CMake versions normalize paths, changing some /./foo.txt to
+    # /foo.txt in some tests.
+    # https://github.com/scikit-build/scikit-build/pull/1205
+    (fetchpatch {
+      name = "test-cmake4-install-path-normalization.patch";
+      url = "https://github.com/scikit-build/scikit-build/commit/c73be45c664349554fcbc5ab3919b74b33c3bc1e.patch";
+      hash = "sha256-ekuOVj6dfPYkNRCFnvLJqW1WL7KnbCVBBmq0+zlH7YY=";
+    })
+  ];
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:
   #  E   UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.

@@ -10,13 +10,13 @@
 
 swift.stdenv.mkDerivation (finalAttrs: {
   pname = "swiftformat";
-  version = "0.61.1";
+  version = "0.63.1";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
     rev = finalAttrs.version;
-    sha256 = "sha256-h0d/vdoKZuYJkMO+TmFFgomaSVA94P+MKclSlBlIleE=";
+    sha256 = "sha256-NW/JESkyBziEVk59QRn3hnYBapSodB4cjttS8IIU9tg=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ swift.stdenv.mkDerivation (finalAttrs: {
         ''
           export CACHE_DIR=$(mktemp -d)
           printf "class Test{\nvar a:Int=1;;\n}" > test.swift
-          swiftformat --cache $CACHE_DIR --swiftversion 5.8 --indent 2 test.swift 2> stderr.txt
+          swiftformat --cache $CACHE_DIR --swiftversion 5.8 --indent 2 --locale system test.swift 2> stderr.txt
 
           grep -Fxq "Running SwiftFormat..." stderr.txt
           grep -Fxq "1/1 files formatted." stderr.txt
@@ -57,7 +57,7 @@ swift.stdenv.mkDerivation (finalAttrs: {
 
           cmp expected.swift test.swift
 
-          swiftformat --cache $CACHE_DIR --swiftversion 5.8 --indent 2 test.swift 2> stderr.txt
+          swiftformat --cache $CACHE_DIR --swiftversion 5.8 --indent 2 --locale system test.swift 2> stderr.txt
 
           grep -Fxq "Running SwiftFormat..." stderr.txt
           grep -Fxq "0/1 files formatted." stderr.txt

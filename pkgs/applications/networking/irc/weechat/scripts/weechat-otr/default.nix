@@ -23,7 +23,7 @@ let
     src = fetchgit {
       url = "https://salsa.debian.org/sramacher/python-crypto.git";
       rev = "debian/${version}";
-      sha256 = "1mahqmlgilgk0rn5hfkhza7kscfm7agdakkb6rqnif9g0qp3s52f";
+      hash = "sha256-ThQ9LgYvuWhxNmtO1Z461TE9j/pwOlhsBvPR+GjFUNU=";
     };
 
     postPatch = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     repo = "weechat-otr";
     owner = "mmb";
     rev = "v${version}";
-    sha256 = "1lngv98y6883vk8z2628cl4d5y8jxy39w8245gjdvshl8g18k5s2";
+    hash = "sha256-QpeJwkMU6t3kK0QgnobvEvnSCGVIGPHR3AMh41Haz9I=";
   };
 
   patches = [

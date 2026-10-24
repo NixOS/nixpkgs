@@ -5,7 +5,7 @@
   libtorrent-rasterbar,
   python3Packages,
   gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   glib,
   gobject-introspection,
   librsvg,
@@ -30,12 +30,18 @@ let
         hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
+      patches = [
+        # https://github.com/deluge-torrent/deluge/pull/514
+        ./replace-pyopenssl-certificate-generation.patch
+      ];
+
       propagatedBuildInputs =
         with pypkgs;
         [
           twisted
           mako
           chardet
+          cryptography
           pyxdg
           pyopenssl
           service-identity
@@ -58,7 +64,7 @@ let
           gtk3
           gobject-introspection
           pygobject3
-          libappindicator-gtk3
+          libappindicator
         ];
 
       nativeBuildInputs = [

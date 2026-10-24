@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "azure-cosmos";
-  version = "4.14.5";
+  version = "4.16.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_cosmos";
     inherit version;
-    hash = "sha256-MjmmBf4pyUt3ORgmdzqj0Nm75Lk5A/zltkNLDzJ0K6c=";
+    hash = "sha256-2gpNmVfeez8Biy67cot+BJRiPU21hjnrkszRQO3cEtM=";
   };
 
   build-system = [ setuptools ];

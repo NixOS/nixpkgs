@@ -52,25 +52,27 @@ let
       aarch64-linux = "aarch64-unknown-linux-gnu";
     }
     .${stdenv.hostPlatform.system};
+
+  binaries = [
+    # the main Buck2 binary
+    "buck2"
+    # provides IDE integration for Buck2 Rust projects
+    "rust-project"
+    # opinionated formatter for Starlark/BUCK files
+    "starlark_fmt"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "buck2";
   version = buildHashes.version;
 
-  srcs = [
-    # the platform-specific binary — which is also
-    # zstd-compressed
-    (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${finalAttrs.version}/buck2-${platform-suffix}.zst";
-      hash = archHashes.buck2;
-    })
-    # rust-project, which is used to provide IDE integration Buck2 Rust projects,
-    # is part of the official distribution
-    (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${finalAttrs.version}/rust-project-${platform-suffix}.zst";
-      hash = archHashes.rust-project;
-    })
-  ];
+  srcs = map (
+    binary:
+    fetchurl {
+      url = "https://github.com/facebook/buck2/releases/download/${finalAttrs.version}/${binary}-${platform-suffix}.zst";
+      hash = archHashes.${binary};
+    }
+  ) binaries;
 
   unpackCmd = "unzstd $curSrc -o $(stripHash $curSrc)";
   sourceRoot = ".";
@@ -85,15 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    #225963
+    # https://github.com/NixOS/nixpkgs/issues/225963
     stdenv.cc.cc.libgcc or null
   ];
 
   installPhase = ''
     runHook preInstall
 
-    install -D buck2* "$out/bin/buck2"
-    install -D rust-project* "$out/bin/rust-project"
+    ${lib.concatMapStringsSep "\n" (binary: "install -D ${binary}* $out/bin/${binary}") binaries}
 
     runHook postInstall
   '';

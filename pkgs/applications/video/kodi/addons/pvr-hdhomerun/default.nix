@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     owner = "kodi-pvr";
     repo = "pvr.hdhomerun";
     rev = "${version}-${rel}";
-    sha256 = "sha256-wgKMt3ufvOh08nwZTGvDGoJ0U+aUzSWJptCNRiRW4B0=";
+    hash = "sha256-wgKMt3ufvOh08nwZTGvDGoJ0U+aUzSWJptCNRiRW4B0=";
   };
 
   extraBuildInputs = [

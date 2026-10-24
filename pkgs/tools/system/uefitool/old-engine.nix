@@ -1,14 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
-  qtbase,
-  qmake,
+  qt5,
   cmake,
   zip,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "uefitool";
   version = "0.28.0";
 
@@ -19,11 +18,12 @@ mkDerivation rec {
     tag = version;
   };
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qt5.qtbase ];
   nativeBuildInputs = [
-    qmake
+    qt5.qmake
     cmake
     zip
+    qt5.wrapQtAppsHook
   ];
 
   dontConfigure = true;

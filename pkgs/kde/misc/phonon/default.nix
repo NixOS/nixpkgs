@@ -33,6 +33,8 @@ mkKdeDerivation rec {
   cmakeFlags = [
     "-DPHONON_BUILD_QT5=0"
     "-DPHONON_BUILD_QT6=1"
+    # Do not expose upstream's unstable experimental API.
+    (lib.cmakeBool "PHONON_BUILD_EXPERIMENTAL" false)
   ];
 
   meta.license = with lib.licenses; [

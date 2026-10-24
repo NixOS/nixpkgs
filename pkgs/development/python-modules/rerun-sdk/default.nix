@@ -4,7 +4,6 @@
   pkgs,
   buildPythonPackage,
   rerun,
-  python,
 
   # nativeBuildInputs
   rustPlatform,
@@ -12,10 +11,9 @@
   # dependencies
   attrs,
   numpy,
-  opencv4,
   pillow,
+  psutil,
   pyarrow,
-  semver,
   typing-extensions,
 
   # tests
@@ -23,9 +21,10 @@
   datafusion,
   inline-snapshot,
   polars,
-  pytest-snapshot,
   pytestCheckHook,
   rerun-notebook,
+  semver,
+  syrupy,
   tomli,
   torch,
   torchvision,
@@ -67,7 +66,7 @@ buildPythonPackage {
     # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
     # AVX2 / scalar kernels.
     + ''
-      lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-8.0.0/src/distance"
+      lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-10.0.0/src/distance"
 
       substituteInPlace "$lanceDistance/dot_u8.rs" \
         --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
@@ -89,24 +88,13 @@ buildPythonPackage {
   dependencies = [
     attrs
     numpy
-    opencv4
     pillow
+    psutil
     pyarrow
-    semver
     typing-extensions
   ];
 
   buildAndTestSubdir = "rerun_py";
-
-  # https://github.com/NixOS/nixpkgs/issues/289340
-  #
-  # Alternatively, one could
-  # dontUsePythonImportsCheck = true;
-  # dontUsePytestCheck = true;
-  postInstall = ''
-    rm $out/${python.sitePackages}/rerun_sdk.pth
-    ln -s rerun_sdk/rerun $out/${python.sitePackages}/rerun
-  '';
 
   pythonImportsCheck = [ "rerun" ];
 
@@ -115,9 +103,10 @@ buildPythonPackage {
     datafusion
     inline-snapshot
     polars
-    pytest-snapshot
     pytestCheckHook
     rerun-notebook
+    semver
+    syrupy
     tomli
     torch
     torchvision
@@ -126,50 +115,43 @@ buildPythonPackage {
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
+  pytestFlags = [
+    # Some checked-in `.ambr` entries belong to tests skipped below (and to tests upstream has since
+    # removed). syrupy fails the whole session over unused snapshots by default.
+    "--snapshot-warn-unused"
+  ];
+
   disabledTests = [
     # RuntimeError: MP4 error: MP4 demux: MP4 error: file contains a box with a larger size than it
-    "test_allow_b_frames_opts_in_to_b_frame_inputs"
     "test_asset_mode_timeline_type_timestamp_applies_to_index_chunk"
-    "test_b_frames_in_stream_mode_raise"
     "test_custom_entity_path_applies_to_every_chunk"
     "test_default_mode_produces_video_stream_chunks"
+    "test_default_timeline_type"
+    "test_optimize_only_coarsens_the_readers_gop_partition"
     "test_output_codec_same_as_source_stays_on_the_direct_path"
     "test_stream_mode_chunk_by_gop_false_emits_one_sample_per_chunk"
     "test_stream_mode_chunk_by_gop_true_packs_multiple_samples"
+    "test_timeline_aliases"
     "test_timeline_type_timestamp_produces_timestamp_typed_column"
 
     # ConnectionError: Connection: connecting to server: transport error
     "test_batch_shape"
-    "test_decode_matrix"
-    "test_fixed_rate_sampling_duplicates_decode_correctly"
     "test_isolated_streams"
-    "test_off_grid_capture_rate_decodes_correctly"
     "test_roundtrip_parity"
-    "test_save_screenshot"
     "test_send_dataframe_roundtrip"
+    "test_server_ephemeral_port"
     "test_server_failed_table_creation_does_not_leak_entry"
     "test_server_version_info"
     "test_server_with_dataset_files"
     "test_server_with_dataset_prefix"
     "test_server_with_multiple_datasets"
-    "test_viewer_dies_on_client_close"
-
-    # TypeError: 'Snapshot' object is not callable
-    "test_chunk_record_batch"
-    "test_schema_recording"
-
-    # pytest_snapshot mismatch: serialized schema/summary output drifted in 0.32.0
-    "test_schema"
-    "test_summary_format"
 
     # AttributeError: 'datetime.datetime' object has no attribute 'value'
     "test_lenses_time_extraction"
 
     # av.InvalidDataError: the mp4 asset is a Git LFS pointer, not the real
     # video (rerun.src is fetched without fetchLFS).
-    "test_anchor_path_decodes_mid_gop_target"
     "test_collect_optimize_video_stream_summary"
-    "test_heuristic_fallback_when_is_keyframe_column_absent"
 
     # AssertionError: the Git LFS pointer mp4 asset fails to demux before the
     # expected "FFmpeg executable not found" error can be raised, so the
@@ -178,6 +160,21 @@ buildPythonPackage {
   ];
 
   disabledTestPaths = [
+    # av.InvalidDataError: every test builds its recording from the mp4 asset, which is a Git LFS
+    # pointer, not the real video (rerun.src is fetched without fetchLFS).
+    "rerun_py/tests/integration/test_dataloader_video.py"
+
+    # ConnectionError: Connection: connecting to server: transport error
+    "rerun_py/tests/integration/test_dataloader_video_codecs.py"
+
+    # The headless viewer panics: "No graphics adapter was found for the enabled graphics backends"
+    "rerun_py/tests/integration/test_headless_viewer.py"
+
+    # ValueError: Failed to read a metadata table: Parquet error: Invalid Parquet file. The
+    # LeRobot fixture's .parquet files are Git LFS pointer files, not real binaries (rerun.src is
+    # fetched without fetchLFS).
+    "rerun_py/tests/integration/test_lerobot_reader.py"
+
     # RuntimeError: MCAP error: Bad magic number. The .mcap test assets are
     # Git LFS pointer files, not real binaries (rerun.src is fetched without
     # fetchLFS).
@@ -187,6 +184,10 @@ buildPythonPackage {
     # signature not found. The .h5 test assets are Git LFS pointer files, not
     # real binaries (rerun.src is fetched without fetchLFS).
     "rerun_py/tests/integration/test_hdf5_reader.py"
+
+    # ModuleNotFoundError: No module named 'mdlint'. It sits next to the test file, which is
+    # not on `sys.path` as `scripts/ci` has no `__init__.py`.
+    "scripts/ci/mdlint_test.py"
 
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
@@ -198,7 +199,8 @@ buildPythonPackage {
     # ConnectionError: Connection: connecting to server: transport error
     "rerun_py/tests/api_sandbox/"
 
-    # RuntimeError: Failed to load URDF file: No elements found
+    # RuntimeError: Failed to load URDF file: No elements found. `so100.urdf` is a Git LFS
+    # pointer file, not the real model (rerun.src is fetched without fetchLFS).
     "rerun_py/tests/unit/test_urdf_tree.py"
   ];
 

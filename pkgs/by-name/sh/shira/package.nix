@@ -10,6 +10,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.8.5";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "KraXen72";
     repo = "shira";
@@ -32,17 +34,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   # Needed because of:
+  # ytmusicapi==1.12.1 not satisfied by version 1.12.2
   # yt-dlp==2026.3.17 not satisfied by version 2026.7.4
   pythonRelaxDeps = [
+    "ytmusicapi"
     "yt-dlp"
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      ffmpeg
+    ]}"
   ];
 
   meta = {

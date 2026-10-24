@@ -31,7 +31,7 @@
   libxrandr,
   libxrender,
   libxtst,
-  libappindicator-gtk3,
+  libappindicator,
   libcxx,
   libdbusmenu,
   libdrm,
@@ -53,7 +53,7 @@
   pipewire,
   pixman,
   stdenv,
-  systemd,
+  systemdLibs,
   wayland,
   xdg-utils,
   writeScript,
@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/289abaac/Feishu-linux_x64-7.66.10.deb";
-      sha256 = "sha256-68WKfT4dblQOQDd51n90nyAzOxrkBESR0pqbjbwrOso=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/6e3610b5/Feishu-linux_x64-7.66.11.deb";
+      sha256 = "sha256-3E8NLC2zzIO7l1jPcePhMfCafgjuyWOzeNZgxTTM/TE=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/382a3d72/Feishu-linux_arm64-7.66.10.deb";
-      sha256 = "sha256-Beh0dYJ96BuwJwTMPF61H6R9u99Jcg4pzEF1rFOj9WA=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/36c6e858/Feishu-linux_arm64-7.66.11.deb";
+      sha256 = "sha256-2nMHCuJy2dYiokwR3dFAkITeBgH8K9poJ9gkJNp42aQ=";
     };
   };
 
@@ -106,7 +106,7 @@ let
     libxrandr
     libxrender
     libxtst
-    libappindicator-gtk3
+    libappindicator
     libcxx
     libdbusmenu
     libdrm
@@ -127,13 +127,13 @@ let
     pipewire
     pixman
     stdenv.cc.cc
-    systemd
+    systemdLibs
     wayland
     xdg-utils
   ];
 in
 stdenv.mkDerivation {
-  version = "7.66.10";
+  version = "7.66.11";
   pname = "feishu";
 
   src =

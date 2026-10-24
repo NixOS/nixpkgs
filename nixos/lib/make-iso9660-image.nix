@@ -6,7 +6,7 @@
   xorriso,
   syslinux,
   libossp_uuid,
-  squashfsTools,
+  squashfs-tools,
 
   # The file name of the resulting ISO image.
   isoName ? "cd.iso",

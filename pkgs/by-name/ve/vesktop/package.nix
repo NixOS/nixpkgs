@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron_43,
+  electron_44,
   libicns,
   pipewire,
   libpulseaudio,
@@ -26,17 +26,17 @@
   withSystemVencord ? false,
 }:
 let
-  electron = electron_43;
+  electron = electron_44;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.6.5-unstable-2026-07-16";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
-    rev = "8a718e00785f1e17153e49c2d7ffae094e5cecef";
-    hash = "sha256-0t/1GIknc6NBW2E+BNZ/NTU+38IMVxEtOEXOwHkZrGo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-K7vgEtHf8047mge06KsoAJeg0v2leHgGbADW0rSfoXQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-xvb3DfqmcCyOpGHaGjeCJxClfVcHpdezyzxLXNiz72k=";
+    hash = "sha256-7wzkmGaXx1t43zNAWsocKJy12ib9CUoDNN3d9unoahg=";
   };
 
   nativeBuildInputs = [
@@ -163,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     icon = "vesktop";
     startupWMClass = "Vesktop";
     genericName = "Internet Messenger";
+    comment = "Alternative Discord client with Vencord built-in";
     keywords = [
       "discord"
       "vencord"
@@ -185,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Alternate client for Discord with Vencord built-in";
+    description = "Alternative Discord client with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     changelog = "https://github.com/Vencord/Vesktop/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;

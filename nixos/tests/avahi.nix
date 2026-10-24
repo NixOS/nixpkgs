@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   # bool: whether to use networkd in the tests
   networkd ? false,
@@ -7,7 +8,7 @@
 
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
 {
-  name = "avahi";
+  name = "avahi${lib.optionalString networkd "-with-resolved"}";
   meta.maintainers = [ ];
 
   nodes =
@@ -18,11 +19,13 @@
           services.avahi = {
             enable = true;
             nssmdns4 = true;
-            publish.addresses = true;
-            publish.domain = true;
-            publish.enable = true;
-            publish.userServices = true;
-            publish.workstation = true;
+            settings.publish = {
+              disable-publishing = false;
+              disable-user-service-publishing = false;
+              publish-addresses = true;
+              publish-domain = true;
+              publish-workstation = true;
+            };
             extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
             debug = true;
           };

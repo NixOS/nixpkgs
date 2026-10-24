@@ -1,13 +1,17 @@
+diff --git a/main.go b/main.go
+index 6ef2dc50c1..0083d75a3b 100644
 --- a/main.go
 +++ b/main.go
-@@ -370,6 +370,7 @@
- 			mod = mod.Replace
- 		}
+@@ -823,6 +823,7 @@
+ 		mod = mod.Replace
+ 	}
  
-+		mod.Version = "@version@"
- 		fmt.Printf("%s %s\n\n", mod.Path, mod.Version)
- 		fmt.Printf("Build settings:\n")
- 		for _, setting := range info.Settings {
++	mod.Version = "@version@"
+ 	fmt.Fprintf(w, "%s %s\n\n", mod.Path, mod.Version)
+ 	fmt.Fprintf(w, "Build settings:\n")
+ 	for _, setting := range info.Settings {
+diff --git a/testdata/script/help.txtar b/testdata/script/help.txtar
+index 8e4eb39a53..ddc48f59b0 100644
 --- a/testdata/script/help.txtar
 +++ b/testdata/script/help.txtar
 @@ -88,7 +88,7 @@

@@ -14,7 +14,7 @@
   python3,
   lib,
   stdenv,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   xapp,
   libxtst,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxau
     libxcomposite
 
-    systemd
+    systemdLibs
 
     libxtst
     libxrender

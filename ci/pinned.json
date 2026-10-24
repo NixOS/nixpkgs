@@ -9,9 +9,9 @@
       },
       "branch": "nixpkgs-unstable",
       "submodules": false,
-      "revision": "7525d999cd850b9a488817abc89c75dc733acf17",
-      "url": "https://github.com/NixOS/nixpkgs/archive/7525d999cd850b9a488817abc89c75dc733acf17.tar.gz",
-      "hash": "sha256-4IHyyLgLBdKefkljdKod4IMn023pQiDXAWJA187cmdY="
+      "revision": "f20cd90e28fe0403873f473b29e42662cd86e8c4",
+      "url": "https://github.com/NixOS/nixpkgs/archive/f20cd90e28fe0403873f473b29e42662cd86e8c4.tar.gz",
+      "hash": "sha256-EjZqHKObBfIOeHZnMRVV87HB3pPq/WBkmRJWyFxmZu8="
     },
     "nixpkgs-26.05-darwin": {
       "type": "Git",
@@ -22,9 +22,9 @@
       },
       "branch": "nixpkgs-26.05-darwin",
       "submodules": false,
-      "revision": "51fe96f9107566e6b8eeb7fc4ba696c01e548b04",
-      "url": "https://github.com/NixOS/nixpkgs/archive/51fe96f9107566e6b8eeb7fc4ba696c01e548b04.tar.gz",
-      "hash": "sha256-yj0LPLnsmYoLmA3FGANjeTEwej0/DHjZBXWnDQDUuIs="
+      "revision": "42966a9c76f2cdb95b108c9fac939a27b0b8f2c5",
+      "url": "https://github.com/NixOS/nixpkgs/archive/42966a9c76f2cdb95b108c9fac939a27b0b8f2c5.tar.gz",
+      "hash": "sha256-c+NgsnPFEfvGOLxJEQkxkpOESw7mPjnh/H9qDVEWFkQ="
     }
   },
   "version": 8

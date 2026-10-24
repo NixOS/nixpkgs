@@ -4,7 +4,7 @@
   glib,
   autoreconfHook,
   pkg-config,
-  systemd,
+  systemdLibs,
   fetchFromGitLab,
   nix-update-script,
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "gnome-desktop-testing";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
+    hash = "sha256-PWn4eEZskY0YgMpf6O2dgXNSu8b8T311vFHREv2HE/Q=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;

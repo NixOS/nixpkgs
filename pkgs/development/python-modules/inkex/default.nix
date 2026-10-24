@@ -78,10 +78,13 @@ buildPythonPackage {
     "test_extract_multiple"
     "test_lookup_and"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_image_extract"
     "test_path_number_nodes"
     "test_plotter" # Hangs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "test_ellipse_arc"
   ];
 
   disabledTestPaths = [

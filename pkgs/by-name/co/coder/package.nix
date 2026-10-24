@@ -15,19 +15,19 @@ let
 
   channels = {
     stable = {
-      version = "2.33.11";
+      version = "2.36.7";
       hash = {
-        x86_64-linux = "sha256-NY9xyLc6Pr1wWPnr4fLo6t+7B7Gin/BlTH3tdxQk30k=";
-        aarch64-linux = "sha256-Wc9hhotJKcb1fdjfh9pWxVs/e4YpBua1PyAhMRJbUAY=";
-        aarch64-darwin = "sha256-7A6BxOg4A3Ua5SXjnh5gtG/LE94iGuRQPe/S9UjX/oc=";
+        x86_64-linux = "sha256-C98Jcx42F0on224J31NF/RqtE6OjXflZO6IRWU8v8dE=";
+        aarch64-linux = "sha256-7uTyV5veoZ8X4tscOJPsrRoPQo+XTsaMuPdejnD8jAs=";
+        aarch64-darwin = "sha256-7oPzD/t+PHcerLRPLkgluGTH3x+I0OThtuTax3W6mo8=";
       };
     };
     mainline = {
-      version = "2.34.5";
+      version = "2.38.0";
       hash = {
-        x86_64-linux = "sha256-B0roCJqTu6o89nHbVA3b9eHKj/VmJ9i1j4blF1I76yU=";
-        aarch64-linux = "sha256-UDyEhBAlvgSHWLPtbNXHj6X2gle1Y3fjQLSKHzwc/XI=";
-        aarch64-darwin = "sha256-VhliikNdqi7AauYlKQvMroEjR3jZZnhNw0HTtJFw5zg=";
+        x86_64-linux = "sha256-bJAmr0XxAZBReqMX0C0H89zlDIwVRIIv1lMVlsQ47XY=";
+        aarch64-linux = "sha256-poCb24pNJf8lK2dlCDA/jR2CDAEHKf+TIGnb/ULS2So=";
+        aarch64-darwin = "sha256-/87O/VBeFgZ3umbI2BKWLpcAEDhPcofk3Jq13EYf0+c=";
       };
     };
   };
@@ -35,6 +35,9 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coder";
   version = channels.${channel}.version;
+
+  __structuredAttrs = true;
+
   src = fetchurl {
     hash = (channels.${channel}.hash).${system};
 
@@ -96,10 +99,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Provision remote development environments via Terraform";
     homepage = "https://coder.com";
     license = lib.licenses.agpl3Only;
+    platforms = lib.attrNames channels.${channel}.hash;
     mainProgram = "coder";
     maintainers = with lib.maintainers; [
       bpmct
       developmentcats
+      faukah
       kylecarbs
       phorcys420
     ];

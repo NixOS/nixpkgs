@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hexagonrpc";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "hexagonrpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OC6wXBCIW4XznWG0zzxRK3BzWMVK2Jq/gTL36sJV1PE=";
+    hash = "sha256-njhDLpkEuA2PSPe9rpYvlDN4JLgkYCfgZ5oX/NFx2Ho=";
   };
 
   outputs = [

@@ -375,12 +375,18 @@ let
         };
 
         fprintAuth = lib.mkOption {
-          default = config.services.fprintd.enable;
-          defaultText = lib.literalExpression "config.services.fprintd.enable";
+          default = config.services.fprintd.enablePam;
+          defaultText = lib.literalExpression "config.services.fprintd.enablePam";
           type = lib.types.bool;
           description = ''
             If set, fingerprint reader will be used (if exists and
             your fingerprints are enrolled).
+
+            ::: {.note}
+            This setting should only be enabled for clients that can ensure
+            user attention, such as lockscreens.
+            See https://github.com/NixOS/nixpkgs/issues/442117
+            :::
           '';
         };
 
@@ -684,6 +690,18 @@ let
             If the user's login password does not match their keyring password,
             oo7 will prompt separately after login.
           '';
+        };
+
+        rosec = {
+          enable = lib.mkOption {
+            default = false;
+            type = lib.types.bool;
+            description = ''
+              If enabled, pam_rosec will attempt to automatically unlock the
+              user's rosec vault upon login. If the user login password does not
+              match their vault password, rosec will prompt separately after login.
+            '';
+          };
         };
 
         enableUMask = lib.mkOption {
@@ -1209,6 +1227,7 @@ let
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
                       || cfg.oo7.enable
+                      || cfg.rosec.enable
                       || config.services.intune.enable
                       || cfg.googleAuthenticator.enable
                       || cfg.gnupg.enable
@@ -1239,7 +1258,7 @@ let
                       name = "fscrypt";
                       enable = config.security.pam.enableFscrypt;
                       control = "optional";
-                      modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                      modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
                     }
                     {
                       name = "zfs_key";
@@ -1277,6 +1296,12 @@ let
                       enable = cfg.oo7.enable;
                       control = "optional";
                       modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+                    }
+                    {
+                      name = "rosec";
+                      enable = cfg.rosec.enable;
+                      control = "optional";
+                      modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
                     }
                     {
                       name = "intune";
@@ -1430,7 +1455,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key";
@@ -1498,6 +1523,12 @@ let
                 enable = cfg.oo7.enable;
                 control = "optional";
                 modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+              }
+              {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
               }
             ];
 
@@ -1585,7 +1616,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key-skip-systemd";
@@ -1725,6 +1756,12 @@ let
                 settings = {
                   auto_start = true;
                 };
+              }
+              {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
               }
               {
                 name = "gnupg";
@@ -2632,7 +2669,7 @@ in
       ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     security.wrappers = {

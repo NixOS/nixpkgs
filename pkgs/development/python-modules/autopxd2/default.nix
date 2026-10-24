@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-autopxd2";
+  pname = "autopxd2";
   version = "3.2.3";
   pyproject = true;
   __structuredAttrs = true;

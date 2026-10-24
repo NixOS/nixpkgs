@@ -472,7 +472,6 @@ in
     + test true
     + ''
       gitlab.systemctl("start gitlab-backup.service")
-      gitlab.wait_for_unit("gitlab-backup.service")
       gitlab.wait_for_file("${nodes.gitlab.services.gitlab.statePath}/backup/dump_gitlab_backup.tar")
       gitlab.systemctl("stop postgresql gitlab-config.service gitlab.target")
       gitlab.succeed(

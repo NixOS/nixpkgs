@@ -12,7 +12,7 @@
   cairo,
   dbus,
   xorg_sys_opengl,
-  systemd,
+  systemdLibs,
   libcap,
   libdrm,
   pulseaudio,
@@ -61,7 +61,7 @@ let
   runtimeDeps = [
     dbus.lib
     xorg_sys_opengl
-    systemd
+    systemdLibs
     libcap.lib
     libdrm
     pulseaudio

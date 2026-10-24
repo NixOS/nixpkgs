@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter341,
+  flutter347,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -15,16 +15,16 @@
   dart,
 }:
 let
-  version = "0.9.24-beta";
+  version = "1.0.1-beta";
 in
-flutter341.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "finamp-app";
     repo = "finamp";
     rev = version;
-    hash = "sha256-o7q7Yr47maTrt4CG3PiV9Fdhy77ToboVdd8olZFfFts=";
+    hash = "sha256-6SQHc1Dgnay4KAHbZI5wSAQ6NRNDqd1VSdV3IxTQ1xw=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

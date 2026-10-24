@@ -31,6 +31,17 @@ in
       description = "Base directory for Tdarr data.";
     };
 
+    libraryDir = lib.mkOption {
+      type = lib.types.listOf (lib.types.path);
+      description = "Additional directories where your media library is stored";
+      example = lib.literalExpression ''
+        [
+          "/mnt/library1"
+          "/mnt/library2"
+        ]
+      '';
+    };
+
     user = lib.mkOption {
       type = lib.types.str;
       default = "tdarr";

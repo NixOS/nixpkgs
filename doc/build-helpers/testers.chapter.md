@@ -41,9 +41,26 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 ## `hasCmakeConfigModules` {#tester-hasCmakeConfigModules}
 
 Checks whether a package exposes a given list of `*config.cmake` modules.
+If the `moduleNames` argument is omitted, `hasCmakeConfigModules` will use `meta.cmakeConfigModules`.
 Note the moduleNames used in cmake find_package are case sensitive.
 
-:::{.example #ex-hascmakeconfigmodules}
+:::{.example #ex-hascmakeconfigmodules-defaultvalues}
+
+# Check that `*config.cmake` modules are exposed using default values
+
+```nix
+{
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules { package = finalAttrs.finalPackage; };
+
+  meta.cmakeConfigModules = [ "Foo" ];
+}
+```
+
+:::
+
+<!-- Old anchor name so links still work -->
+[]{#ex-hascmakeconfigmodules}
+:::{.example #ex-hascmakeconfigmodules-explicitmodules}
 
 # Check that `*config.cmake` modules are exposed using explicit module names
 

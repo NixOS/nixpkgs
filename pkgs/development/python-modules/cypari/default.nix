@@ -5,7 +5,6 @@
   buildPythonPackage,
   nix-update-script,
   fetchurl,
-  fetchpatch,
 
   # build-time dependencies
   setuptools,
@@ -31,25 +30,23 @@
   ),
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cypari";
-  version = "2.5.6";
+  version = "2.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "CyPari";
-    tag = "${version}_as_released";
-    hash = "sha256-pzxnrWkoPW7fpxLbUQ+drIrdrjqaAiNnDfe9ky2IxaA=";
+    tag = "${finalAttrs.version}_as_released";
+    hash = "sha256-t8nuov7BZNSEd5ReIKsArtLvwh7BWs7rfaTswdypKgg=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-build-with-cython-3_1.patch";
-      url = "https://github.com/3-manifolds/CyPari/compare/17bf39dc4508f2e46de75b95c65982c627652b60...d6cb914d2bdc74a51cc2a9136204ebf47b3e7369.diff";
-      hash = "sha256-c8sq80mYSMMvgFh7RXYwKcqwI7iVRQsm/8yaIL0+PHQ=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requires = ["setuptools", "wheel", "cython==3.2.3"]' \
+                     'requires = ["setuptools", "wheel", "cython"]'
+  '';
 
   preBuild = ''
     mkdir libcache
@@ -84,11 +81,11 @@ buildPythonPackage rec {
   meta = {
     description = "Sage's PARI extension, modified to stand alone";
     homepage = "https://github.com/3-manifolds/CyPari";
-    changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
+    changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       noiioiu
       alejo7797
     ];
   };
-}
+})

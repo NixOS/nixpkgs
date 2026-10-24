@@ -755,7 +755,7 @@ with self;
     # Compatibility with ppxlib 0.23
     patches = fetchpatch {
       url = "https://github.com/janestreet/ppx_python/commit/b2fe0040cc39fa6164de868f8a20edb38d81170e.patch";
-      sha256 = "sha256:1mrdwp0zw3dqavzx3ffrmzq5cdlninyf67ksavfzxb8gb16w6zpz";
+      hash = "sha256-/37DTVgPrf7dVnoe47yNljZW8K/ZudH/VrgN/sHlLdc=";
     };
     propagatedBuildInputs = [
       ppx_base

@@ -27,6 +27,8 @@ buildPythonPackage rec {
   patches = [
     # https://github.com/iroco-co/aioimaplib/issues/125
     ./event-loop.patch
+    # https://github.com/iroco-co/aioimaplib/pull/138
+    ./python3.14.7-compat.patch
   ];
 
   postPatch = ''

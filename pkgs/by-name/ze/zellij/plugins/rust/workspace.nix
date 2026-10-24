@@ -2,6 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  libiconv,
+  pkgsBuildBuild,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-EkPwtJ134yfzVDVXp4uXjzyhFetp6TC10DSePua/g1k=";
+
+  depsBuildBuild = lib.optionals stdenv.buildPlatform.isDarwin [
+    pkgsBuildBuild.stdenv.cc
+    libiconv
+  ];
 
   meta = {
     description = "Zellij plugin for applying layouts to current zellij session";

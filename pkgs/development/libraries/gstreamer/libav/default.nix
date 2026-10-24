@@ -19,16 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-libav";
-  version = "1.28.5";
-
-  outputs = [
-    "out"
-    "dev"
-  ];
+  version = "1.28.7";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
-    hash = "sha256-RShUZWBW8LFlEaHZrU8mef9eWofIn5DPfuXewAXdseQ=";
+    hash = "sha256-WNpR3Tns8c9vqt40zGQSABvi4uFFvKiuD0Uzb2CjarI=";
   };
 
   separateDebugInfo = true;
@@ -56,9 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_gstreamer
   ];
 
-  mesonFlags = [
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    doc = enableDocumentation;
+    tests = finalAttrs.finalPackage.doCheck;
+  };
 
   postPatch = ''
     patchShebangs \
@@ -79,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

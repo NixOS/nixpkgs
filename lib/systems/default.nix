@@ -151,7 +151,21 @@ let
           );
 
         # Derived meta-data
-        useLLVM = final.isFreeBSD || final.isOpenBSD;
+        useLLVM =
+          final.isFreeBSD
+          || final.isOpenBSD
+          || final.isUefi
+          || final.isMsvc
+          ||
+            # because GCC does not support this platform yet
+            (with final; isWindows && isAarch64);
+
+        # Use the split GCC package set (`gccNGPackages`) instead of the
+        # monolithic `gcc`.
+        #
+        # NetBSD is here to dogfood it: it is low tier and has to use GCC
+        # rather than LLVM.
+        useGccNG = final.isCygwin || final.isNetBSD;
 
         libc =
           if final.isDarwin then
@@ -176,9 +190,7 @@ let
             "uclibc"
           else if final.isAndroid then
             "bionic"
-          else if
-            final.isLinux # default
-          then
+          else if final.isLinux then
             "glibc"
           else if final.isFreeBSD then
             "fblibc"
@@ -189,6 +201,8 @@ let
           else if final.isAvr then
             "avrlibc"
           else if final.isGhcjs then
+            null
+          else if final.isUefi then
             null
           else if final.isNone then
             "newlib"
@@ -524,10 +538,14 @@ let
                 .${cpu.name} or cpu.name;
               vendor_ = final.rust.platform.vendor;
               abi_ =
-                # We're very explicit about the POWER ELF ABI w/ glibc in our parsing, while Rust is not.
-                # TODO: Somehow ensure that Rust actually *uses* the correct ABI, and not just a libc-based default.
-                if (lib.strings.hasPrefix "powerpc" cpu.name) && (lib.strings.hasPrefix "gnuabielfv" abi.name) then
-                  "gnu"
+                # Rustc uses different triplets for ELFv1 & ELFv2 w/ glibc.
+                # (we reject just "gnu" due to ambiguity, musl is ELFv2-only)
+                if (cpu.name == "powerpc64" && kernel.name == "linux") then
+                  {
+                    "gnuabielfv1" = "gnu";
+                    "gnuabielfv2" = "gnuelfv2";
+                  }
+                  .${abi.name} or abi.name
                 else
                   abi.name;
 
@@ -703,6 +721,26 @@ let
               "iOS"
             else
               null;
+        };
+        swift = {
+          arch = final.uname.processor;
+          platform =
+            if final.isMacOS then
+              "macosx"
+            else if final.isiOS then
+              "iphoneos"
+            else if final.isLinux then
+              "linux"
+            else if final.isWindows then
+              "windows"
+            else
+              null;
+          triple =
+            if final.isDarwin then
+              # FIXME: Can this be done a better way?
+              "${final.swift.arch}-${final.parsed.vendor.name}-${final.swift.platform}${final.darwinMinVersion}"
+            else
+              final.config;
         };
       };
     in

@@ -94,6 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://www.openwall.com/lists/musl/2026/04/10/3/1";
       hash = "sha256-HuKfZPnKjorXw0l3nWYf9rUhJqJ1ddNYaYE1elLEBvs=";
     })
+    (fetchurl {
+      name = "CVE-2026-107891.patch";
+      url = "https://www.openwall.com/lists/musl/2026/10/21/1/1";
+      hash = "sha256-DPAJCrQz6PntCK4DoMk6/1V8HT40cmD2KmGhAoH1Mzs=";
+    })
   ];
 
   env = {
@@ -174,7 +179,19 @@ stdenv.mkDerivation (finalAttrs: {
     install -D ${tree_h} $dev/include/sys/tree.h
   '';
 
-  passthru.linuxHeaders = linuxHeaders;
+  passthru = {
+    linuxHeaders = linuxHeaders;
+
+    # musl's threads are POSIX threads.
+    #
+    # See the comment on `threadModel` in
+    # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix for further
+    # details.
+    threadModel = "posix";
+  };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Efficient, small, quality libc implementation";

@@ -9,7 +9,7 @@
   nss,
   nspr,
   libqb,
-  systemd,
+  systemdLibs,
   dbus,
   rdma-core,
   libstatgrab,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     nspr
     libqb
-    systemd.dev
+    systemdLibs.dev
   ]
   ++ optional enableDbus dbus
   ++ optional enableInfiniBandRdma rdma-core

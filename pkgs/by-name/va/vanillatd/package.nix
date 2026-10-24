@@ -23,9 +23,9 @@
   callPackage,
   symlinkJoin,
   rsync,
+  unstableGitUpdater,
 
   appName ? "vanillatd",
-  CMAKE_BUILD_TYPE ? "RelWithDebInfo", # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
 }:
 assert lib.assertOneOf "appName" appName [
   "vanillatd"
@@ -33,17 +33,15 @@ assert lib.assertOneOf "appName" appName [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = appName;
-  version = "0.0.0";
+  version = "0-unstable-2026-07-16";
 
   src = fetchFromGitHub {
     owner = "TheAssemblyArmada";
     repo = "Vanilla-Conquer";
-    # FIXME: This version has format-security
-    rev = "ebc8083d5d149f98abc20f460a512a2d16fdc59f";
-    hash = "sha256-iUF9UFc0FMvOwLkGqSyLYGy5E8YqNySqDp5VVUa+u4o=";
+    rev = "ce83b59edd99cccac6cebaae054ca04962c744b7";
+    hash = "sha256-jjiqW3J1XQr4+cNd86yXO0dFpt5VEKmxtMywBjTceTc=";
+
   };
-  # TODO: Remove this. Just add this flag to ignore the format-security error temporarily.
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   buildInputs = [
     SDL2
@@ -69,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_VANILLARA" (appName == "vanillara"))
     (lib.cmakeBool "BUILD_REMASTERTD" (appName == "remastertd"))
     (lib.cmakeBool "BUILD_REMASTERRA" (appName == "remasterra"))
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" CMAKE_BUILD_TYPE)
   ];
 
   # TODO: Fix this from the upstream
@@ -125,6 +122,13 @@ stdenv.mkDerivation (finalAttrs: {
     in
     {
       inherit packages;
+
+      updateScript = unstableGitUpdater {
+        # A 'latest' tag exists,
+        # but it appears to be there only for upstream to provide builds
+        # and might move around.
+        hardcodeZeroVersion = true;
+      };
 
       withPackages =
         cb:

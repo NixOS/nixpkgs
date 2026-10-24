@@ -14,7 +14,7 @@ build-idris-package {
     owner = "sellout";
     repo = "Iaia";
     rev = "dce68d2b63a26dad7c94459773eae2d42686fa05";
-    sha256 = "0209fhv8x3sw6ijrwc8a85pch97z821ygaz78va3l274xam4l659";
+    hash = "sha256-qRhKqurkCDrURuer54NA/yTIbkEKMZ5lNFyPjjZ0CQg=";
   };
 
   meta = {

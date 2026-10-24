@@ -10,7 +10,7 @@
   jansson,
   gd,
   whereami,
-  lua,
+  lua5_2_compat,
   lz4,
   udevCheckHook,
   nix-update-script,
@@ -27,16 +27,19 @@
   hardwarePlatformExtras ? lib.optionalString withBlueshark "BTADDON",
   standalone ? "LF_SAMYRUN",
 }:
+let
+  lua = lua5_2_compat;
+in
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxmark3";
-  version = "4.21128";
+  version = "4.23346";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KlSYbYEdLVsQCbRilqolGewH5ra9QXOHVgYk34aCous=";
+    hash = "sha256-/YQHqy/GBHoa0yLQsPlUIPlAI+CNNuXaMYFmnYYDURU=";
   };
 
   postPatch = ''

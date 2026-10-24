@@ -30,13 +30,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenroom";
-  version = "5.37.2";
+  version = "5.38.1";
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "Zenroom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gNUclaXF7C2yBywo1TAwHOfB9Pe17g6fCLhEcFq8JL0=";
+    hash = "sha256-FDGIMeWzhHSLsVUAH/y3cgJbkXzzX3yiHjXeSL2xnto=";
     postFetch = ''
       # conflict on case-insensitive filesystems
       pushd $out/docs/examples/zencode_cookbook/cookbook_when

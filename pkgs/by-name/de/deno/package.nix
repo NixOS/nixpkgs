@@ -17,6 +17,7 @@
   zstd,
   lcms2,
   lld,
+  vulkan-loader,
   writableTmpDirAsHomeHook,
 
   # Test deps
@@ -36,13 +37,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.4";
+  version = "2.9.7";
 
   __structuredAttrs = true;
 
   outputs = [
     "out"
     "denort"
+    "libdenort"
   ];
 
   src = fetchFromGitHub {
@@ -50,10 +52,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-ivch++yGRUyWtox/5QqomC4DlTvMBxK+gIcN9/7tt5E=";
+    hash = "sha256-GOhud8uXlsDdyAN84WscakxK2qCFTEYSUwR5Wt2QPAs=";
   };
 
-  cargoHash = "sha256-ynbHLZXkPPYpsC4dCu6jA6x8ftiTHWZ/uxzdbUcUaa0=";
+  cargoHash = "sha256-VSWkdTJiSX8O3+Kpu7RKnydxB3OcbwG9+NJCvLdFl68=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -95,12 +97,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
   buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "v8"
+  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
+  # Workaround for riscv64 because it has no pre-generated bindings.
+  env.RUSTY_V8_SRC_BINDING_PATH = librusty_v8.binding;
 
   # de-vendor SQLite
   env.LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
@@ -134,6 +141,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "aarch64"
         else if stdenv.hostPlatform.isx86_64 then
           "x64"
+        else if stdenv.hostPlatform.isRiscV64 then
+          "riscv64"
         else
           throw "Unsupported architecture";
     in
@@ -168,10 +177,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=node_unit_tests::tls_test"
     "--skip=npm::lock_file_lock_write"
     "--skip=happy_eyeballs::tests::test_parallel_second_wins"
-
-    # GPU access
-    "--skip=js_unit_tests::webgpu_test"
-    "--skip=js_unit_tests::jupyter_test"
 
     # Use of /usr/bin
     "--skip=specs::permission::proc_self_fd"
@@ -236,14 +241,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preInstall = ''
     # Delete generated shared libraries that aren't needed in the final package
     find ./target \
-      -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
+      \( -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
       -name "libtest_ffi${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
-      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \) \
       -delete
   '';
 
   postInstall = ''
     moveToOutput "bin/denort" "$denort"
+    moveToOutput "lib/libdenort${stdenv.hostPlatform.extensions.sharedLibrary}" "$libdenort"
 
     # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
@@ -256,6 +262,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} $out/bin/deno
   '';
 
   doInstallCheck = canExecute;
@@ -305,6 +315,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "riscv64-linux"
       "aarch64-darwin"
     ];
   };

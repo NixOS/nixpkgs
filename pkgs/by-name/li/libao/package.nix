@@ -8,8 +8,7 @@
   libpulseaudio,
   alsa-lib,
   libcap,
-  config,
-  usePulseAudio ? config.pulseaudio or (lib.meta.availableOn stdenv.hostPlatform libpulseaudio),
+  usePulseAudio ? lib.meta.availableOn stdenv.hostPlatform libpulseaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

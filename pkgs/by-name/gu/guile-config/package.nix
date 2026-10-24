@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  guileImportsCheck = [ "config" ];
+
   meta = {
     description = "Configuration management library for GNU Guile";
     homepage = "https://gitlab.com/a-sassmannshausen/guile-config";

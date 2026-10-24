@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "telethon";
-  version = "1.44.0";
+  version = "1.45.0";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "Lonami";
     repo = "Telethon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NzLlDwxzLWyySluUazQGPDukT71awCrJZEbjd5T9K/g=";
+    hash = "sha256-glKzh5l1/xvC6wa2sdE5050yeW0xYGBAHe2KLHS36hU=";
   };
 
   postPatch = ''

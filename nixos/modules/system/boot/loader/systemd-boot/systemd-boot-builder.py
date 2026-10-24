@@ -496,7 +496,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
         bootctl_flags.append(f"--boot-path={BOOT_MOUNT_POINT}")
 
     if not CAN_TOUCH_EFI_VARIABLES:
-        bootctl_flags.append("--no-variables")
+        bootctl_flags.append("--variables=no")
 
     if GRACEFUL:
         bootctl_flags.append("--graceful")

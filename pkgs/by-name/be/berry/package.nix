@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
         windows via a hotkey daemon such as sxhkd or expand functionality via
         shell scripts.
       - Small, hackable source code.
-      - Extensible themeing options with double borders, title bars, and window
+      - Extensible theming options with double borders, title bars, and window
         text.
       - Intuitively place new windows in unoccupied spaces.
       - Virtual desktops.

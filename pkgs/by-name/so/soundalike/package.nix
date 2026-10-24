@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "soundalike";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromCodeberg {
     owner = "derat";
     repo = "soundalike";
     tag = "v${version}";
-    hash = "sha256-mpYUVTj3Zll6kNuK5Mdzv1R7k5FZy6XFghhzmAPPVM8=";
+    hash = "sha256-T3N8/8QP2Lc8cWfFTYtQATIFAYGOHhC0/1Ty1yvyOhU=";
   };
 
-  vendorHash = "sha256-7hRezOBcjB2wsx/SwV519wg3Azh+0kHMcAoc9aYPM3A=";
+  vendorHash = "sha256-pgS+QzpGpDOdNKG1jMKmXG4UtiH2ssBtYwy3e5nb+pQ=";
 
   ldflags = [
     "-s"

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   testers,
   wizer,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,11 +31,7 @@ rustPlatform.buildRustPackage rec {
     "cli"
   ];
 
-  # Setting $HOME to a temporary directory is necessary to prevent checks from failing, as
-  # the test suite creates a cache directory at $HOME/Library/Caches/BytecodeAlliance.wasmtime.
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "WebAssembly pre-initializer";

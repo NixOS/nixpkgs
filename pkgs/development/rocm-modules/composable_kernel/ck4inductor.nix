@@ -15,6 +15,8 @@ buildPythonPackage {
     setuptools-scm
   ];
   inherit (composable_kernel) version src sourceRoot;
+  # Upstream uses the distribution name "rocm-composable-kernel".
+  dontCheckPythonMetadata = true;
   pythonImportsCheck = [
     "ck4inductor"
     "ck4inductor.universal_gemm.gen_instances"

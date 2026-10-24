@@ -224,7 +224,7 @@ let
       # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
       "test_rolling"
     ]
-    ++ lib.optional stdenv.hostPlatform.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # https://github.com/pandas-dev/pandas/issues/37398
       "test_rolling_var_numerical_issues"
     ];

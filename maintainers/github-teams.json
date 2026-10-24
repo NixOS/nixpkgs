@@ -2,11 +2,10 @@
   "acme": {
     "description": "Maintain ACME-related packages and modules.",
     "id": 3806126,
-    "maintainers": {
-      "emilazy": 18535642
-    },
+    "maintainers": {},
     "members": {
       "arianvp": 628387,
+      "emilazy": 18535642,
       "m1cr0man": 3044438
     },
     "name": "ACME"
@@ -60,7 +59,6 @@
       "adamcstephens": 2071575,
       "ankhers": 750786,
       "gleber": 33185,
-      "minijackson": 1200507,
       "yurrriq": 1866448
     },
     "name": "Beam"
@@ -68,11 +66,10 @@
   "boot-security": {
     "description": "Maintain support for boot security technologies like Secure Boot",
     "id": 18686947,
-    "maintainers": {
-      "emilazy": 18535642
-    },
+    "maintainers": {},
     "members": {
-      "ElvishJerricco": 1365692
+      "ElvishJerricco": 1365692,
+      "emilazy": 18535642
     },
     "name": "Boot security"
   },
@@ -86,6 +83,18 @@
     "members": {},
     "name": "bootstrapping"
   },
+  "calamares-nixos-extensions": {
+    "description": "Maintainers of the calamares-nixos-extensions",
+    "id": 5946247,
+    "maintainers": {
+      "ElvishJerricco": 1365692,
+      "RaitoBezarius": 314564,
+      "lulu-berlin": 10565807,
+      "vlinkz": 20145996
+    },
+    "members": {},
+    "name": "calamares-nixos-extensions"
+  },
   "categorization": {
     "description": "Maintain the categorization system in Nixpkgs, per RFC 0146. This team has authority over all categorization issues in Nixpkgs. Matrix: https://matrix.to/#/%23nixpkgs-categorization:matrix.org",
     "id": 11723948,
@@ -98,10 +107,12 @@
       "fgaz": 8182846,
       "natsukium": 25083790,
       "philiptaron": 43863,
-      "pyrotelekinetic": 29682759,
-      "tomodachi94": 68489118
+      "tomodachi94": 68489118,
+      "tr3foil": 29682759
     },
-    "members": {},
+    "members": {
+      "l0b0": 168301
+    },
     "name": "Categorization"
   },
   "channel-updaters": {
@@ -112,6 +123,18 @@
       "nixos-channel-bot": 56695723
     },
     "name": "channel-updaters"
+  },
+  "coder": {
+    "description": "Maintainers of Coder.com products (Coder, code-server, etc.)",
+    "id": 19200022,
+    "maintainers": {
+      "phorcys420": 57866459
+    },
+    "members": {
+      "faukah": 75451918,
+      "kylecarbs": 7122116
+    },
+    "name": "coder"
   },
   "coq": {
     "description": "Coq proof assistant and package maintainers",
@@ -162,8 +185,7 @@
       "samuela": 226872
     },
     "members": {
-      "ethancedwards8": 60861925,
-      "prusnak": 42201
+      "ethancedwards8": 60861925
     },
     "name": "cuda-maintainers"
   },
@@ -171,11 +193,12 @@
     "description": "Maintain core platform support and packages for macOS and other Apple platforms",
     "id": 11265438,
     "maintainers": {
-      "emilazy": 18535642
+      "emilazy": 18535642,
+      "reckenrode": 7413633
     },
     "members": {
       "Samasaur1": 30577766,
-      "reckenrode": 7413633,
+      "booxter": 90200,
       "toonn": 1486805
     },
     "name": "darwin-core"
@@ -184,7 +207,6 @@
     "description": "Improve Darwin-support across Nixpkgs and help maintainers without access to Darwin hardware. Apply to join through https://github.com/NixOS/nixpkgs/issues/323144 to keep the process transparent.",
     "id": 2385202,
     "maintainers": {
-      "emilazy": 18535642,
       "toonn": 1486805
     },
     "members": {
@@ -197,37 +219,40 @@
       "Emin017": 99674037,
       "Et7f3": 29592775,
       "Guanran928": 68757440,
+      "KristijanZic": 10299892,
       "LnL7": 689294,
       "Mastermindaxe": 33257997,
       "Moraxyc": 69713071,
       "Prince213": 25235514,
       "Samasaur1": 30577766,
       "Steven0351": 24440751,
+      "TyceHerrman": 22066434,
       "afh": 16507,
       "azuwis": 9315,
       "booxter": 90200,
-      "carlossless": 498906,
       "cideM": 4246921,
       "cidkidnix": 67574902,
       "copumpkin": 2623,
+      "delafthi": 50531499,
       "devusb": 4951663,
       "domenkozar": 126339,
-      "donn": 12652988,
       "dwt": 57199,
       "eclairevoyant": 848000,
+      "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
       "fulsomenko": 14945057,
       "gador": 1883533,
-      "griff": 4368,
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,
       "iamanaws": 78835633,
+      "iedame": 60272,
       "isabelroses": 71222764,
       "jonhermansen": 660911,
       "juliusrickert": 5007494,
       "jwiegley": 8460,
+      "karstx": 498906,
       "kashw2": 15855440,
       "kevingriffin": 209729,
       "khaneliman": 1778670,
@@ -247,7 +272,6 @@
       "mstone": 412508,
       "n8henrie": 1234956,
       "ofalvai": 1694986,
-      "prusnak": 42201,
       "reckenrode": 7413633,
       "ryand56": 22267679,
       "samrose": 115821,
@@ -257,13 +281,13 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
-      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
       "stephenstubbs": 18033664,
       "t-monaghan": 62273348,
       "thefloweringash": 42933,
+      "thtrf": 82712122,
       "tricktron": 16036882,
       "uncenter": 47499684,
       "usertam": 22500027,
@@ -289,6 +313,7 @@
     },
     "members": {
       "friedow": 17351844,
+      "trespaul": 7453891,
       "wamirez": 24505474
     },
     "name": "Documentation Team"
@@ -381,9 +406,35 @@
       "jtojnar": 705123
     },
     "members": {
-      "Hythera": 87016780
+      "Hythera": 87016780,
+      "hesiod": 3159881
     },
     "name": "Freedesktop"
+  },
+  "gaming": {
+    "description": "Maintain games, game engines, launchers, compatibility layers, game-related utilities and other gaming software in nixpkgs.",
+    "id": 19617985,
+    "maintainers": {
+      "TomaSajt": 62384384,
+      "dwt": 57199,
+      "ethancedwards8": 60861925,
+      "iedame": 60272,
+      "keenanweaver": 37268985,
+      "l0b0": 168301
+    },
+    "members": {
+      "DrymarchonShaun": 40149778,
+      "Gliczy": 129636582,
+      "Mistyttm": 51770769,
+      "PaulGrandperrin": 1748936,
+      "RoGreat": 64620440,
+      "karstx": 498906,
+      "liamthexpl0rer": 119797945,
+      "liberodark": 4238928,
+      "qubitnano": 146656568,
+      "yvnth": 201552597
+    },
+    "name": "Gaming"
   },
   "geospatial": {
     "description": "Maintain geospatial, remote sensing and OpenStreetMap software",
@@ -418,10 +469,13 @@
     "description": "Maintain GNOME desktop environment and platform.",
     "id": 3806133,
     "maintainers": {
+      "bobby285271": 20080233,
       "jtojnar": 705123
     },
     "members": {
-      "bobby285271": 20080233
+      "nekowinston": 79978224,
+      "theCapypara": 3512122,
+      "thunze": 22795263
     },
     "name": "GNOME"
   },
@@ -431,8 +485,7 @@
     "maintainers": {
       "Aleksanaa": 42209822,
       "Hythera": 87016780,
-      "getchoo": 48872998,
-      "michaelgrahamevans": 5932424
+      "getchoo": 48872998
     },
     "members": {},
     "name": "GNOME Circle"
@@ -442,12 +495,10 @@
     "id": 4020424,
     "maintainers": {
       "Mic92": 96200,
-      "kalbasit": 87115,
-      "katexochen": 49727155
+      "kalbasit": 87115
     },
     "members": {
-      "mfrw": 4929861,
-      "qbit": 68368
+      "mfrw": 4929861
     },
     "name": "golang"
   },
@@ -564,12 +615,9 @@
     "description": "Lix maintainers in nixpkgs/NixOS",
     "id": 13838744,
     "maintainers": {
-      "lf-": 6652840
-    },
-    "members": {
-      "Qyriad": 1542224,
       "RaitoBezarius": 314564
     },
+    "members": {},
     "name": "Lix maintainers"
   },
   "llvm": {
@@ -577,11 +625,11 @@
     "id": 9955829,
     "maintainers": {
       "RossComputerGuy": 19699320,
-      "alyssais": 2768870,
-      "emilazy": 18535642
+      "alyssais": 2768870
     },
     "members": {
       "Ericson2314": 1055245,
+      "emilazy": 18535642,
       "peterwaller-arm": 52030119,
       "rrbutani": 7833358
     },
@@ -656,7 +704,6 @@
       "djacu": 7043297
     },
     "members": {
-      "Sigmanificient": 53050011,
       "flyfloh": 74379,
       "thilobillerbeck": 7442383
     },
@@ -693,8 +740,8 @@
       "eclairevoyant": 848000
     },
     "members": {
-      "Eveeifyeve": 88671402,
-      "daylinmorgan": 47667941
+      "daylinmorgan": 47667941,
+      "eveeifyeve": 88671402
     },
     "name": "nim"
   },
@@ -724,6 +771,7 @@
       "edolstra": 1148549,
       "lisanna-dettwyler": 72424138,
       "lovesegfault": 7243783,
+      "roberth": 496447,
       "tomberek": 178444,
       "xokdvium": 145775305
     },
@@ -733,7 +781,7 @@
     "description": "Manage the current nixpkgs/NixOS release",
     "id": 3620128,
     "maintainers": {
-      "jopejoe1": 34899572,
+      "Scrumplex": 11587657,
       "yayayayaka": 73759599
     },
     "members": {},
@@ -752,16 +800,6 @@
       "mdaniels5757": 8762511
     },
     "name": "Nixpkgs CI"
-  },
-  "nixpkgs-core": {
-    "description": "Provides leadership for and has authority over Nixpkgs.",
-    "id": 14317027,
-    "maintainers": {
-      "alyssais": 2768870,
-      "emilazy": 18535642
-    },
-    "members": {},
-    "name": "Nixpkgs core"
   },
   "nixpkgs-merge-bot": {
     "description": "This team exists as a target for triggering the nixpkgs merge bot.",
@@ -797,10 +835,11 @@
     "description": "Maintain Pantheon desktop environment and platform",
     "id": 4786995,
     "maintainers": {
+      "bobby285271": 20080233,
       "davidak": 91113
     },
     "members": {
-      "bobby285271": 20080233
+      "amz-x": 18249234
     },
     "name": "Pantheon"
   },
@@ -864,6 +903,7 @@
       "lorenzleutgeb": 542154
     },
     "members": {
+      "Mic92": 96200,
       "ju1m": 21160136,
       "matthiasbeyer": 427866
     },
@@ -904,7 +944,6 @@
       "0x4A6F": 9675338
     },
     "members": {
-      "DarkKirb": 23011243,
       "dramforever": 2818072,
       "fgaz": 8182846,
       "jonhermansen": 660911
@@ -947,16 +986,16 @@
     "name": "Scala"
   },
   "sdl": {
-    "description": "Maintain core SDL libraries",
+    "description": "Maintain core SDL libraries. Matrix: #nixpkgs-sdl-team:nixos.org",
     "id": 13033942,
     "maintainers": {
+      "GrimmTheShrimp": 49513131,
+      "marcin-serwin": 12128106,
       "pbsds": 140964
     },
     "members": {
-      "LordGrimmauld": 49513131,
       "evysgarden": 92547295,
-      "jansol": 2588851,
-      "marcin-serwin": 12128106
+      "jansol": 2588851
     },
     "name": "SDL"
   },
@@ -968,7 +1007,6 @@
     },
     "members": {
       "andir": 638836,
-      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"
@@ -998,12 +1036,11 @@
     "id": 11265412,
     "maintainers": {
       "RossComputerGuy": 19699320,
-      "emilazy": 18535642,
       "philiptaron": 43863
     },
     "members": {
-      "Artturin": 56650223,
       "Ericson2314": 1055245,
+      "emilazy": 18535642,
       "reckenrode": 7413633
     },
     "name": "stdenv"
@@ -1017,11 +1054,22 @@
     },
     "members": {
       "ElvishJerricco": 1365692,
-      "LordGrimmauld": 49513131,
+      "GrimmTheShrimp": 49513131,
       "aanderse": 7755101,
       "arianvp": 628387
     },
     "name": "systemd"
+  },
+  "tenstorrent": {
+    "description": "Maintain Tenstorrent-related packages ",
+    "id": 19876744,
+    "maintainers": {
+      "RossComputerGuy": 19699320,
+      "ju1m": 21160136,
+      "liberodark": 4238928
+    },
+    "members": {},
+    "name": "tenstorrent"
   },
   "test-driver": {
     "description": "Maintain the NixOS integration test driver.",

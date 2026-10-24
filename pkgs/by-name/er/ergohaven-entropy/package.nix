@@ -35,16 +35,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ergohaven-entropy";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ergohaven";
     repo = "entropy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ibU379pT0/u6xsIOfgK7KjIlmoyoN9+G3J1T2rYwc44=";
+    hash = "sha256-WQ7QHBy7XpikEoihSLNv4IJ8uqawlqptnb+llZjkLQk=";
   };
 
-  cargoHash = "sha256-e2bLlqH+2Cv4LBV+JooupcXDUe83NmiFI4zPNMTEW3A=";
+  cargoHash = "sha256-ux777GxggvnxP1Gqu7052G1LZnb2z3SAmRi3g48VkFA=";
 
   __structuredAttrs = true;
 
@@ -89,7 +89,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
     cat > $out/lib/udev/rules.d/59-vial.rules << RULES
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+    # Entropy Vial hidraw access v2
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:E126:*", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
     RULES
 
     icoFileToHiColorTheme $src/assets/entropy.ico entropy $out

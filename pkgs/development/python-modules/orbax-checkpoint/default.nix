@@ -27,6 +27,7 @@
   # tests
   aiosqlite,
   chex,
+  cloudpickle,
   fastapi,
   google-cloud-logging,
   greenlet,
@@ -42,7 +43,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.12.1";
+  version = "0.12.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "orbax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yE8M8f2c+4lTL56LrS57vU/MMM3NgYCZOuHZWbdODh0=";
+    hash = "sha256-+jE6piKv1Q/e/nVwnJeufrMfzVv/LEZh7c+/UMDobGM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/checkpoint";
@@ -80,6 +81,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     aiosqlite
     chex
+    cloudpickle
     fastapi
     google-cloud-logging
     greenlet
@@ -132,6 +134,9 @@ buildPythonPackage (finalAttrs: {
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
     "test_create_snapshot"
+
+    # AssertionError: Expected 'BasePyTreeCheckpointHandler' to have been called.
+    "test_memory_options_propagation"
   ];
 
   disabledTestPaths = [
@@ -178,6 +183,13 @@ buildPythonPackage (finalAttrs: {
     # which is not the same as the test file we want to collect:
     #   /build/source/checkpoint/orbax/checkpoint/experimental/v1/_src/metadata/serialization_test.py
     "orbax/checkpoint/experimental/v1/_src/metadata/serialization_test.py"
+
+    # import file mismatch:
+    # imported module 'deletion_test' has this __file__ attribute:
+    #   /build/source/checkpoint/orbax/checkpoint/experimental/v1/_src/deletion/deletion_test.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/checkpoint/orbax/checkpoint/experimental/v1/_src/training/deletion_test.py
+    "orbax/checkpoint/experimental/v1/_src/training/deletion_test.py"
 
     # E   FileNotFoundError: [Errno 2] No such file or directory:
     # '/build/absl_testing/DefaultSnapshotTest/runTest/root/path/to/source/data.txt'

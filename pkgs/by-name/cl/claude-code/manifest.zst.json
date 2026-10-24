@@ -1,0 +1,89 @@
+{
+  "version": "2.1.309",
+  "manifestSignatureEnforcement": "flag",
+  "commit": "1ce7e4ff2da8d4b0f5c15b291e4a9b54716970c2",
+  "buildDate": "2026-10-22T19:34:30Z",
+  "platforms": {
+    "darwin-arm64": {
+      "binary": "claude.zst",
+      "checksum": "614eb35bb650dee9cfa4a7821a60d5eab75fbcabe2c1b8aa408d2e93f06c1370",
+      "size": 93159896,
+      "bundle": {
+        "checksum": "5af865b9901c3f7512d85aa78571966834c943e3143f1b82ef4d33ed89b7f0ba",
+        "size": 93151388
+      }
+    },
+    "darwin-x64": {
+      "binary": "claude.zst",
+      "checksum": "7426a8b80fe213e90b8e58682a54668aa7efe838939c9b2cab8d6089ab13befb",
+      "size": 98568120,
+      "bundle": {
+        "checksum": "300ae7409767b5bf31c77b466987278ee4493cfc82099ef4ad89841f7bfc71d4",
+        "size": 98585917
+      }
+    },
+    "linux-arm64": {
+      "binary": "claude.zst",
+      "checksum": "a2f75e390c4afc3c610db69e7ff2587327f135f161cad5f088c2d0de6e5a9441",
+      "size": 102438847
+    },
+    "linux-x64": {
+      "binary": "claude.zst",
+      "checksum": "e52289b95def16148c8d0a48b1ccc0d357429e73473a9a20ac0638fb7460a59b",
+      "size": 103411745
+    },
+    "linux-arm64-musl": {
+      "binary": "claude.zst",
+      "checksum": "0a94b79920b85f8284d09d73ac8536434e37576924b7c4c6a38fce7d378417c7",
+      "size": 100788523
+    },
+    "linux-x64-musl": {
+      "binary": "claude.zst",
+      "checksum": "16c3f12d7c34922ca04a991244ec10645f6fbd4da809eb79f5f86bc8e660f1f1",
+      "size": 101827875
+    },
+    "win32-x64": {
+      "binary": "claude.exe.zst",
+      "checksum": "9078b9c1d466965d3faee8d13128f03d79b61794fb2130255ca1f5eab84e602c",
+      "size": 106715810
+    },
+    "win32-arm64": {
+      "binary": "claude.exe.zst",
+      "checksum": "1bfeb992f9659ef84307012c5da5735cdf05da6a81ced1bea60dbddae67ecdad",
+      "size": 101912543
+    }
+  },
+  "sdkCompat": {
+    "testedWrapperVersions": [
+      "0.3.276",
+      "0.3.277",
+      "0.3.278",
+      "0.3.280",
+      "0.3.281",
+      "0.3.282",
+      "0.3.283",
+      "0.3.284",
+      "0.3.285",
+      "0.3.286",
+      "0.3.287",
+      "0.3.288",
+      "0.3.289",
+      "0.3.290",
+      "0.3.291",
+      "0.3.292",
+      "0.3.293",
+      "0.3.294",
+      "0.3.295",
+      "0.3.296",
+      "0.3.299",
+      "0.3.300",
+      "0.3.301",
+      "0.3.302",
+      "0.3.303",
+      "0.3.304",
+      "0.3.305",
+      "0.3.306"
+    ],
+    "harnessSchema": 1
+  }
+}

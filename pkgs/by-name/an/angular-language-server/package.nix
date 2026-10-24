@@ -11,15 +11,15 @@
   common-updater-scripts,
   jq,
   unzip,
-  typescript,
+  typescript_5,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
-  version = "22.0.1";
+  version = "22.1.0";
   src = fetchurl {
     name = "angular-language-server-${finalAttrs.version}.zip";
     url = "https://github.com/angular/angular/releases/download/vsix-${finalAttrs.version}/ng-template-${finalAttrs.version}.vsix";
-    hash = "sha256-IaaqFb0YLJcVqoV5QT9fZmYd5GbfQCUlK68SF76Y/dY=";
+    hash = "sha256-/PftUvaE9EjsKRc0TnF0lftOgp5fzKmR+KGhocXEMrk=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patchShebangs $out/lib/bin/ngserver $out/lib/index.js $out/lib/node_modules
     makeWrapper $out/lib/bin/ngserver $out/bin/ngserver \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --add-flags "--tsProbeLocations ${typescript}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
+      --add-flags "--tsProbeLocations ${typescript_5}/lib/node_modules/typescript --ngProbeLocations $out/lib/node_modules"
   '';
 
   passthru = {
