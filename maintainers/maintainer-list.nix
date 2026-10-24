@@ -32642,6 +32642,11 @@
     github = "ymstnt";
     githubId = 21342713;
   };
+  YoanWai = {
+    name = "Yoan Wainmann";
+    github = "YoanWai";
+    githubId = 106609173;
+  };
   yoavlavi = {
     email = "yoav@yoavlavi.com";
     github = "yoav-lavi";
