@@ -1,0 +1,12 @@
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index 1a4ee8c..9a74ca4 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -14,7 +14,6 @@ pluginManagement {
+ }
+ 
+ plugins {
+-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+ }
+ 
+ dependencyResolutionManagement {
