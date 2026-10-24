@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to remove unused imports and unused variables";
     homepage = "https://github.com/myint/autoflake";
+    changelog = "https://github.com/PyCQA/autoflake/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yuriaisaka ];
     mainProgram = "autoflake";
