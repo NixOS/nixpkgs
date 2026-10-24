@@ -6,6 +6,7 @@
   poetry-core,
   more-itertools,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage {
@@ -19,6 +20,7 @@ buildPythonPackage {
     rev = "9b122d85ce667d096ebee75a49350bbdbd48686d"; # no 0.2.6 version tag
     hash = "sha256-4Sn/TuBvBpl1nvJBg327+sVrjGavkYKEYP32DwLWako=";
   };
+  disabled = pythonAtLeast "3.14";
 
   patches = [
     # https://github.com/danields761/class-doc/pull/2
