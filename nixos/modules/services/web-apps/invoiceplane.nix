@@ -448,6 +448,38 @@ in
 
     }
 
+    {
+      # Auto migrate database
+
+      systemd.services = mapAttrs' (
+        hostName: cfg:
+        (nameValuePair "invoiceplane-migrate-database-${hostName}" {
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "phpfpm-invoiceplane-${hostName}.service"
+          ]
+          ++ optional cfg.database.createLocally "mysql.service";
+          script = ''
+            # Auto migrate database after version update
+            versionFile="${cfg.stateDir}/src-version"
+            version=$(cat "$versionFile" 2>/dev/null || echo 0)
+            if [[ $version != 0 && $version != ${(pkg hostName cfg).version} ]]; then
+              echo "Executing database migration"
+              ${lib.getExe config.services.phpfpm.phpPackage} index.php setup/cli/migrate
+            fi
+            echo ${(pkg hostName cfg).version} > "$versionFile"
+          '';
+          serviceConfig = {
+            Type = "oneshot";
+            User = user;
+            Group = webserver.group;
+            WorkingDirectory = "${pkg hostName cfg}";
+          };
+        })
+      ) eachSite;
+
+    }
+
     (mkIf (cfg.webserver == "caddy") {
       services.caddy = {
         enable = true;
