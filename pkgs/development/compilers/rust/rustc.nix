@@ -106,6 +106,21 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
     RUSTDOCFLAGS = "-A rustdoc::broken-intra-doc-links";
+  }
+  // lib.optionalAttrs stdenv.targetPlatform.isUefi {
+    # Workaround for:
+    # > warning: compiler_builtins@0.1.160: Warning: supplying the --target x86_64-unknown-windows-gnu != x86_64-unknown-uefi argument to a nix-wrapped
+    # > compiler may not work correctly - cc-wrapper is currently not designed with multi-target compilers in mind. You may want to use an un-wrapped compiler instead.
+    #
+    # This happens due to a Rust workaround for legacy LLVM not having UEFI targets:
+    # https://github.com/rust-lang/cc-rs/blob/0882deacc8d3a29237fcc73d86af1782b5a91a2d/src/target/llvm.rs#L32-L55
+    # called by https://github.com/rust-lang/cc-rs/blob/0882deacc8d3a29237fcc73d86af1782b5a91a2d/src/lib.rs#L2854-L2856
+    #
+    # It's ok to ignore because these targets are the same, just historically named differently.
+    #
+    # A Rust fix is pending (since 2024):
+    # https://github.com/rust-lang/rust/pull/132570
+    NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING = "1";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
