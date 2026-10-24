@@ -87,22 +87,7 @@ buildFHSEnv (finalAttrs: {
 
   # these libs are installed as 64 bit, plus as 32 bit when multiArch is true
   multiPkgs =
-    pkgs:
-    with pkgs;
-    let
-      # NOTE: Not using `pkgs.extend` here on purpose: `pkgs` here is
-      # `pkgsi686Linux`, a spliced package set (see the "splicing code does not
-      # handle `pkgsi686Linux` well" comment in buildFHSEnv.nix), and `.extend`
-      # rebuilds the whole fixed point instead of overriding a single
-      # derivation. That drops the splice, so every package pulled from this
-      # set below (not just the ones touching `libpng`) ends up rebuilt from an
-      # independent, non-spliced i686 bootstrap instead of sharing store paths
-      # with the rest of the closure.
-      freetype = pkgs.freetype.override { libpng = libpng12; };
-      fontconfig = pkgs.fontconfig.override { inherit freetype; };
-      libxft = pkgs.libxft.override { inherit freetype fontconfig; };
-    in
-    [
+    pkgs: with pkgs; [
       # questa requirements
       libxml2
       ncurses5
