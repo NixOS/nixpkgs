@@ -10,7 +10,10 @@ let
         nodes.machine = lib.mkMerge [
           {
             virtualisation.memorySize = 2048;
-            services.opensearch.enable = true;
+            services.opensearch = {
+              enable = true;
+              settings."logger.org.opensearch.bootstrap.SystemCallFilter" = "DEBUG";
+            };
           }
           extraSettings
         ];
@@ -22,6 +25,11 @@ let
 
           machine.succeed(
               "curl --fail localhost:9200"
+          )
+          # OpenSearch can serve HTTP even when JNA fails to load.
+          machine.succeed(
+              "journalctl -b -u opensearch.service --no-pager "
+              "| grep -F 'Linux seccomp filter installation successful'"
           )
         '';
       }
