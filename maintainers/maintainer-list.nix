@@ -26948,6 +26948,11 @@
     githubId = 5512096;
     name = "Sébastien Guimmara";
   };
+  sha1000 = {
+    name = "Shamil Ghaseeta";
+    github = "sha1000";
+    githubId = 6487680;
+  };
   shadaj = {
     github = "shadaj";
     githubId = 543055;
