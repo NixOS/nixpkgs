@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   pkgs,
@@ -31,6 +32,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "greenbone.feed.sync" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test is os-dependent
+    "test_change"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Tool for downloading the Greenbone Community Feed";
