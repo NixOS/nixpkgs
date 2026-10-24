@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.7.6";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
     tag = version;
-    hash = "sha256-+bheNSRcFnq/07Y6BaTqsUAVxEQcdQwtz39cX1nKOBs=";
+    hash = "sha256-bRT4WsZVoXtSGMCq+FHHtL454pPVKb7Wc9dMqzYHcgU=";
   };
 
   build-system = [ setuptools ];
