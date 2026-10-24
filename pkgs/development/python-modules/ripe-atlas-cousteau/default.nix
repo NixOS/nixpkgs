@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ripe-atlas-cousteau";
-  version = "2.0.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-cousteau";
     tag = "v${version}";
-    hash = "sha256-z8ZXOiCVYughrbmXfnwtks7NPmYpII2BA0+8mr1cdSQ=";
+    hash = "sha256-yeoMpzf7Ba7f9KKphCPQDy33UUJDo5ZM6bwdlRnwhZE=";
   };
 
   pythonRelaxDeps = [ "websocket-client" ];
