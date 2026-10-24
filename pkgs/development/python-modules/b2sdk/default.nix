@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     tag = "v${version}";
-    hash = "sha256-JzJ83+W9k5ys8dj0Q3X4MY+GH4m8/crvKmeQKOttspM=";
+    hash = "sha256-9L/CxLSkPivqSGPm8QYAqgsu5A9B+mdkhLS+CYMExCI=";
   };
 
   build-system = [
