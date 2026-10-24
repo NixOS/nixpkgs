@@ -1,0 +1,13 @@
+diff --git a/ftlex.cabal b/ftlex.cabal
+index d6e1a47..fada293 100644
+--- a/ftlex.cabal
++++ b/ftlex.cabal
+@@ -42,7 +42,7 @@ library
+   build-depends:
+     base >= 4.17.2.1 && <= 4.19.1.0,
+     containers >= 0.6.7 && <= 0.6.8,
+-    megaparsec >= 9.5.0 && <= 9.6.1,
++    megaparsec >= 9.5.0,
+     mtl == 2.3.1,
+     text >= 2.0.2 && <= 2.1.1,
+     transformers >= 0.6 && <= 0.6.1.0,
