@@ -6,6 +6,7 @@
   fetchpatch,
   git-unroll,
   buildPythonPackage,
+  buildPackages,
   python,
   runCommand,
   writeShellScript,
@@ -32,7 +33,7 @@
   MPISupport ? false,
   mpi,
   buildDocs ? false,
-  targetPackages,
+  pkgsHostHost,
 
   # tests.cudaAvailable:
   callPackage,
@@ -119,63 +120,66 @@ let
     ;
   inherit (cudaPackages) cudnn flags nccl;
 
+  cudaInputs = lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cccl # <thrust/*>
+      cuda_cudart # cuda_runtime.h, propagated CRT headers, and libraries
+      cuda_cupti # For kineto
+      cuda_nvml_dev # <nvml.h>
+      cuda_nvrtc
+      cuda_nvtx # -llibNVToolsExt
+      libcublas
+      libcufft
+      libcurand
+      libcusolver
+      libcusparse
+    ]
+    ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
+    ++ lists.optionals useSystemNccl [
+      # Some platforms do not support NCCL (i.e., Jetson)
+      nccl # Provides nccl.h
+      (lib.getOutput "static" nccl) # Link-only archive; nccl above provides headers.
+    ]
+    ++ lists.optionals withNvshmem [
+      cudaPackages.libnvshmem
+    ]
+    ++ lists.optionals withCufile [ cudaPackages.libcufile ]
+    ++ lists.optionals withCusparselt [ cudaPackages.libcusparse_lt ]
+    ++ [
+      cuda_profiler_api # <cuda_profiler_api.h>
+    ]
+  );
+
+  # Derive installed JIT paths before mkDerivation projects inputs to dev.
+  # Explicit static archive inputs are link-only; their package's ordinary
+  # input above supplies the public headers and shared-library interface.
+  cudaPublicInputs = map (input: input.__spliced.hostTarget or input) (
+    lib.filter (
+      input: !(input.outputSpecified or false) || (input.outputName or "") != "static"
+    ) cudaInputs
+  );
+  cudaIncludeFlags = lib.concatMapStringsSep " " (
+    input:
+    let
+      include =
+        if input ? outputInclude then lib.getOutput input.outputInclude input else lib.getInclude input;
+    in
+    "-I${include}/include"
+  ) cudaPublicInputs;
+  cudaLibraryDirs = lib.concatMapStringsSep " " (
+    input: "${lib.getOutput (input.outputLib or "lib") input}/lib"
+  ) cudaPublicInputs;
+
+  # Inductor loads its generated code in the running HOST process. Select the
+  # HOST -> HOST compiler before extracting the nested stdenv.cc attribute.
+  runtimeCC = pkgsHostHost.targetPackages.stdenv.cc;
+
   triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L2569-L2572
-  supportedTorchCudaCapabilities =
-    let
-      real = [
-        "3.5"
-        "3.7"
-        "5.0"
-        "5.2"
-        "5.3"
-        "6.0"
-        "6.1"
-        "6.2"
-        "7.0"
-        "7.2"
-        "7.5"
-        "8.0"
-        "8.6"
-        "8.7"
-        "8.9"
-        "9.0"
-        "9.0a"
-        "10.0"
-        "10.0a"
-        "10.3"
-        "10.3a"
-        "11.0"
-        "11.0a"
-        "12.0"
-        "12.0a"
-        "12.1"
-        "12.1a"
-      ];
-      ptx = lists.map (x: "${x}+PTX") real;
-    in
-    real ++ ptx;
-
-  # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
-  #   of the first list *from* the second list. That means:
-  #   lists.subtractLists a b = b - a
-
-  # For CUDA
-  supportedCudaCapabilities = lists.intersectLists flags.cudaCapabilities supportedTorchCudaCapabilities;
-  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities flags.cudaCapabilities;
-
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
-
-  # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
-  gpuArchWarner =
-    supported: unsupported:
-    trivial.throwIf (supported == [ ]) (
-      "No supported GPU targets specified. Requested GPU targets: "
-      + strings.concatStringsSep ", " unsupported
-    ) supported;
 
   # Create the gpuTargetString.
   gpuTargetString = strings.concatStringsSep ";" (
@@ -183,7 +187,10 @@ let
       # If gpuTargets is specified, it always takes priority.
       gpuTargets
     else if cudaSupport then
-      gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
+      # The CUDA scope validates toolkit support. Torch's CMake parser accepts
+      # numeric targets (including a/f suffixes); its Python JIT allowlist is a
+      # separate interface and must not silently narrow the package build.
+      flags.cudaCapabilities
     else if rocmSupport then
       lib.lists.subtractLists [
         # Remove RDNA1 gfx101x archs from default ROCm support list to avoid
@@ -302,7 +309,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     "lib" # output libtorch libraries
     "cxxdev" # propagated deps for the cmake consumers of torch
   ];
-  cudaPropagateToOutput = "cxxdev";
 
   src = callPackage ./src.nix {
     inherit
@@ -317,9 +323,31 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
+    ./cpp-extension-dependency-paths.patch
+    ./nnpack-psimd-array-contracts.patch
+    # Unmerged upstream fix, followed by the remaining reduction repairs below.
+    # https://github.com/pytorch/pytorch/pull/196216
+    ./sparse-csr-empty-values.patch
+    # Resolve reduction dtype before dispatch and keep wider accumulators
+    # separate from explicit result dtypes on both CPU and CUDA.
+    ./sparse-csr-reduction-dtypes.patch
+  ]
+  ++ lib.optionals (!(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) [
+    ./cross-blas-dot.patch
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # Link What You Use runs ldd on the linked HOST libraries.
+    ./disable-cross-lwyu.patch
+  ]
+  ++ lib.optionals (cudaSupport || rocmSupport) [
+    ./symmetric-memory-socket-path.patch
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
+    ./find-cuda-use-package-paths.patch
+    ./cuda-launch-bounds.patch
+    ./async-mm-eligibility.patch
+    ./cudnn-version-display.patch
 
     # Let CMake find CUPTI through the variables we export in `preConfigure`, so that the
     # `CUDA::cupti` target kineto requires gets defined
@@ -347,81 +375,95 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ./no-bundle-aotriton.patch
   ];
 
-  postPatch =
-    # Provide path to openssl binary for inductor code cache hash
-    # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
-    ''
-      substituteInPlace torch/_inductor/codecache.py \
-        --replace-fail '"openssl"' '"${lib.getExe openssl}"'
-    ''
-    + ''
-      substituteInPlace cmake/public/cuda.cmake \
-        --replace-fail \
-          'message(FATAL_ERROR "Found two conflicting CUDA' \
-          'message(WARNING "Found two conflicting CUDA' \
-        --replace-warn \
-          "set(CUDAToolkit_ROOT" \
-          "# Upstream: set(CUDAToolkit_ROOT"
-      substituteInPlace third_party/gloo/cmake/Cuda.cmake \
-        --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
-    ''
-    # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
-    + ''
-      sed -i -e "/from __future__ import/d" **.py
-      substituteInPlace third_party/NNPACK/CMakeLists.txt \
-        --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
-    ''
-    # flag from cmakeFlags doesn't work, not clear why
-    # setting it at the top of NNPACK's own CMakeLists does
-    + ''
-      sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
-    ''
-    # ATenConfig.cmake would otherwise point to the (temporary) scikit-build-core install prefix
-    + ''
-      substituteInPlace aten/src/ATen/CMakeLists.txt \
-        --replace-fail \
-          'set(ATEN_INCLUDE_DIR "''${CMAKE_INSTALL_PREFIX}/''${AT_INSTALL_INCLUDE_DIR}")' \
-          'set(ATEN_INCLUDE_DIR "${placeholder "dev"}/include")'
-    ''
-    # Ensure that torch profiler unwind uses addr2line from nix
-    + ''
-      substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
-        --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
-    ''
-    # Ensures torch compile can find and use compilers from nix.
-    + ''
-      substituteInPlace torch/_inductor/config.py \
-        --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
-        '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
-    ''
-    # Doesn't pick up the environment variable?
-    + lib.optionalString rocmSupport ''
-      substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
-        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
-      patchShebangs aten/src/ATen/native/transformers/hip/flash_attn/ck/add_make_kernel_pt.sh
-    ''
-    # When possible, composable kernel as dependency, rather than built-in third-party
-    + lib.optionalString (rocmSupport && !vendorComposableKernel) ''
-      substituteInPlace aten/src/ATen/CMakeLists.txt \
-        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
-        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
-    ''
-    # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
-    # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
-    # newer architectures (sm_90a). We do want to delete vendored patches, but have to keep them
-    # until https://github.com/pytorch/pytorch/issues/76082 is addressed
-    + lib.optionalString cudaSupport ''
-      rm cmake/Modules/FindCUDAToolkit.cmake
-    ''
-    # Otherwise, torch compile will fail at runtime if openmp is not available
-    #   torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    #   fatal error: 'omp.h' file not found
-    + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace torch/csrc/inductor/cpp_prefix.h \
-        --replace-fail \
-          "#include <omp.h>" \
-          '#include "${lib.getInclude llvmPackages.openmp}/include/omp.h"'
-    '';
+  postPatch = ''
+    cp ${../tests/csr-reductions.py} test/csr_reductions.py
+  ''
+  # Publish the same CUDA public interface to installed Python JIT consumers.
+  # pkg-config supplies cudart's transitive CRT/CCCL headers without copying
+  # stdenv propagation logic into the installed helper.
+  + ''
+    cudartCflags=""
+    ${lib.optionalString cudaSupport ''
+      cudartCflags="$($PKG_CONFIG --cflags-only-I cudart-${cudaPackages.cudaMajorMinorVersion})"
+    ''}
+    substituteInPlace torch/utils/cpp_extension.py \
+      --subst-var-by cuda_cflags ${lib.escapeShellArg cudaIncludeFlags}" $cudartCflags" \
+      --subst-var-by cuda_library_dirs ${lib.escapeShellArg cudaLibraryDirs}
+  ''
+  # Provide path to openssl binary for inductor code cache hash
+  # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
+  + ''
+    substituteInPlace torch/_inductor/codecache.py \
+      --replace-fail '"openssl"' '"${lib.getExe openssl}"'
+  ''
+  + ''
+    substituteInPlace cmake/public/cuda.cmake \
+      --replace-fail \
+        'message(FATAL_ERROR "Found two conflicting CUDA' \
+        'message(WARNING "Found two conflicting CUDA' \
+      --replace-warn \
+        "set(CUDAToolkit_ROOT" \
+        "# Upstream: set(CUDAToolkit_ROOT"
+    substituteInPlace third_party/gloo/cmake/Cuda.cmake \
+      --replace-warn "find_package(CUDAToolkit 7.0" "find_package(CUDAToolkit"
+  ''
+  # annotations (3.7), print_function (3.0), with_statement (2.6) are all supported
+  + ''
+    sed -i -e "/from __future__ import/d" **.py
+    substituteInPlace third_party/NNPACK/CMakeLists.txt \
+      --replace-fail "PYTHONPATH=" 'PYTHONPATH=$ENV{PYTHONPATH}:'
+  ''
+  # flag from cmakeFlags doesn't work, not clear why
+  # setting it at the top of NNPACK's own CMakeLists does
+  + ''
+    sed -i '2s;^;set(PYTHON_SIX_SOURCE_DIR ${six.src})\n;' third_party/NNPACK/CMakeLists.txt
+  ''
+  # ATenConfig.cmake would otherwise point to the (temporary) scikit-build-core install prefix
+  + ''
+    substituteInPlace aten/src/ATen/CMakeLists.txt \
+      --replace-fail \
+        'set(ATEN_INCLUDE_DIR "''${CMAKE_INSTALL_PREFIX}/''${AT_INSTALL_INCLUDE_DIR}")' \
+        'set(ATEN_INCLUDE_DIR "${placeholder "dev"}/include")'
+  ''
+  # Ensure that torch profiler unwind uses addr2line from nix
+  + ''
+    substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
+      --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
+  ''
+  # Ensures torch compile can find and use compilers from nix.
+  + ''
+    substituteInPlace torch/_inductor/config.py \
+      --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
+      '"${lib.getExe' runtimeCC "${runtimeCC.targetPrefix}c++"}"'
+  ''
+  # Doesn't pick up the environment variable?
+  + lib.optionalString rocmSupport ''
+    substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
+      --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
+    patchShebangs aten/src/ATen/native/transformers/hip/flash_attn/ck/add_make_kernel_pt.sh
+  ''
+  # When possible, composable kernel as dependency, rather than built-in third-party
+  + lib.optionalString (rocmSupport && !vendorComposableKernel) ''
+    substituteInPlace aten/src/ATen/CMakeLists.txt \
+      --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
+      --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
+  ''
+  # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
+  # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
+  # newer architectures (sm_90a). We do want to delete vendored patches, but have to keep them
+  # until https://github.com/pytorch/pytorch/issues/76082 is addressed
+  + lib.optionalString cudaSupport ''
+    rm cmake/Modules/FindCUDAToolkit.cmake
+  ''
+  # Otherwise, torch compile will fail at runtime if openmp is not available
+  #   torch._inductor.exc.InductorError: CppCompileError: C++ compile error
+  #   fatal error: 'omp.h' file not found
+  + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace torch/csrc/inductor/cpp_prefix.h \
+      --replace-fail \
+        "#include <omp.h>" \
+        '#include "${lib.getInclude llvmPackages.openmp}/include/omp.h"'
+  '';
 
   # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
   # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time
@@ -434,7 +476,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       export CUDA_cupti_LIBRARY=${lib.getLib cudaPackages.cuda_cupti}/lib/libcupti.so
     ''
     + lib.optionalString (cudaSupport && cudaPackages ? cudnn) ''
-      export CUDNN_INCLUDE_DIR=${lib.getLib cudnn}/include
+      export CUDNN_INCLUDE_DIR=${lib.getInclude cudnn}/include
       export CUDNN_LIB_DIR=${lib.getLib cudnn}/lib
     ''
     + lib.optionalString rocmSupport ''
@@ -538,6 +580,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "PYTHON_SIX_SOURCE_DIR" "${six.src}")
+    (lib.cmakeFeature "Python_INCLUDE_DIR" "${lib.getInclude python}/include/${python.libPrefix}")
+    (lib.cmakeFeature "Python_NumPy_INCLUDE_DIR" numpy.coreIncludeDir)
     # (lib.cmakeBool "CMAKE_FIND_DEBUG_MODE" true)
 
     # The vendored fmt (>= 12) enables C++20 module scanning with clang, but the unwrapped
@@ -550,7 +594,16 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # Unbreaks version discovery in enable_language(CUDA) when wrapping nvcc with ccache
     # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/26363
     (lib.cmakeFeature "CMAKE_CUDA_COMPILER_TOOLKIT_VERSION" cudaPackages.cudaMajorMinorVersion)
-  ];
+  ]
+  ++ lib.optionals (!(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) (
+    let
+      nativeTools = buildPackages.callPackage ./native-tools.nix { inherit (finalAttrs) src; };
+    in
+    [
+      (lib.cmakeFeature "NATIVE_BUILD_DIR" "${nativeTools.sleef}")
+      (lib.cmakeFeature "CAFFE2_CUSTOM_PROTOC_EXECUTABLE" "${nativeTools.protoc}/bin/protoc")
+    ]
+  );
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -607,37 +660,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   # Including openmp leads to two copies being used on ARM, which segfaults.
   # https://github.com/pytorch/pytorch/issues/149201#issuecomment-2776842320
   ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isAarch64) [ llvmPackages.openmp ]
-  ++ lib.optionals cudaSupport (
-    with cudaPackages;
-    [
-      cccl # <thrust/*>
-      cuda_cudart # cuda_runtime.h and libraries
-      cuda_cupti # For kineto
-      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
-      cuda_nvml_dev # <nvml.h>
-      cuda_nvrtc
-      cuda_nvtx # -llibNVToolsExt
-      libcublas
-      libcufft
-      libcurand
-      libcusolver
-      libcusparse
-    ]
-    ++ lists.optionals (cudaPackages ? cudnn) [ cudnn ]
-    ++ lists.optionals useSystemNccl [
-      # Some platforms do not support NCCL (i.e., Jetson)
-      (lib.getDev nccl) # Provides nccl.h
-      (lib.getOutput "static" nccl) # Provides static library
-    ]
-    ++ lists.optionals withNvshmem [
-      cudaPackages.libnvshmem
-    ]
-    ++ lists.optionals withCufile [ cudaPackages.libcufile ]
-    ++ lists.optionals withCusparselt [ cudaPackages.libcusparse_lt ]
-    ++ [
-      cuda_profiler_api # <cuda_profiler_api.h>
-    ]
-  )
+  ++ cudaInputs
   ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
   ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
@@ -672,8 +695,14 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     vulkan-loader
   ];
 
-  propagatedCxxBuildInputs =
-    [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+  # Custom output lists need the same role-before-output projection as
+  # mkDerivation's propagatedBuildInputs/propagatedNativeBuildInputs.
+  propagatedCxxBuildInputs = map (p: lib.getDev (p.__spliced.hostTarget or p)) (
+    cudaInputs ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ]
+  );
+  propagatedCxxNativeBuildInputs = lib.optionals cudaSupport [
+    (lib.getDev (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
+  ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
@@ -744,7 +773,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   postFixup = ''
     mkdir -p "$cxxdev/nix-support"
-    printWords "''${propagatedCxxBuildInputs[@]}" >> "$cxxdev/nix-support/propagated-build-inputs"
+    printWords "''${!outputDev}" "''${propagatedCxxBuildInputs[@]}" > "$cxxdev/nix-support/propagated-build-inputs"
+    printWords "''${propagatedCxxNativeBuildInputs[@]}" > "$cxxdev/nix-support/propagated-native-build-inputs"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $(ls $lib/lib/*.dylib); do
@@ -798,15 +828,59 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       withCusparselt
       withCufile
       ;
-    cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
+    cudaCapabilities = if cudaSupport then flags.cudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
     triton = _tritonEffective;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-    tests = callPackage ../tests {
-      inherit rocmSupport cudaSupport;
-    };
+    tests =
+      let
+        csrTester =
+          feature:
+          (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }) {
+            name = "torch-csr-reductions" + lib.optionalString (feature == null) "-cpu";
+            inherit feature;
+            libraries = [ finalAttrs.finalPackage ];
+            makeWrapperArgs = lib.optionals (feature == null) [
+              "--add-flags"
+              "--device cpu"
+            ];
+          } (builtins.readFile ../tests/csr-reductions.py);
+      in
+      callPackage ../tests {
+        inherit rocmSupport cudaSupport;
+      }
+      // {
+        nnpackPSIMD = buildPackages.callPackage ../tests/nnpack-psimd.nix {
+          inherit (finalAttrs) src;
+          nnpackPatch = ./nnpack-psimd-array-contracts.patch;
+        };
+        tester-csrReductionsCpu = csrTester null;
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        csrReductionsCpu = (csrTester null).gpuCheck;
+      }
+      // lib.optionalAttrs (cudaSupport && cudaPackages.cudaAtLeast "12.9") {
+        cudaArchitectures = callPackage ../tests/cuda-architectures.nix {
+          inherit cudaPackages;
+          inherit (finalAttrs) src;
+        };
+      }
+      // lib.optionalAttrs cudaSupport {
+        tester-cppExtension = callPackage ../tests/cpp-extension.nix {
+          inherit cudaPackages python;
+          torch = finalAttrs.finalPackage;
+        };
+        tester-csrReductions = csrTester "cuda";
+      }
+      // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        symmetricMemorySocketName = callPackage ../tests/symm-mem-socket-name.nix {
+          inherit (finalAttrs) src;
+          torch = finalAttrs.finalPackage;
+          socketPatch = ./symmetric-memory-socket-path.patch;
+        };
+      };
   };
 
   meta = {

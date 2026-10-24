@@ -1,9 +1,4 @@
-# N.B. It may be a surprise that the derivation-specific variables are exported,
-# since this is just sourced by the wrapped binaries---the end consumers. This
-# is because one wrapper binary may invoke another (e.g. cc invoking ld). In
-# that case, it is cheaper/better to not repeat this step and let the forked
-# wrapped binary just inherit the work of the forker's wrapper script.
-
+# Prepare policy locally. Explicit child bindings transport it without changing caller inputs.
 var_templates_list=(
     NIX_CFLAGS_COMPILE
     NIX_CFLAGS_COMPILE_BEFORE
@@ -34,49 +29,46 @@ done
 # compiler invocation.
 path_backup="@bintools@/bin:$path_backup"
 
-# Export and assign separately in order that a failing $(..) will fail
-# the script.
-
-# Currently bootstrap-tools does not split glibc, and gcc files into
-# separate directories. As a workaround we want resulting cflags to be
-# ordered as: crt1-cflags libc-cflags cc-cflags. Otherwise we mix crt/libc.so
-# from different libc as seen in
-#   https://github.com/NixOS/nixpkgs/issues/158042
-#
-# Note that below has reverse ordering as we prepend flags one-by-one.
-# Once bootstrap-tools is split into different directories we can stop
-# relying on flag ordering below.
-
+# wrapperCompileFlags assembles the suppressible defaults in their required
+# order when the individual compiler invocation is interpreted.
 if [ -e @out@/nix-support/cc-cflags ]; then
-    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/cc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
+    wrapper_NIX_CFLAGS_COMPILE="$(< @out@/nix-support/cc-cflags) $wrapper_NIX_CFLAGS_COMPILE"
 fi
 
-if [[ "$cInclude" = 1 ]] && [ -e @out@/nix-support/libc-cflags ]; then
-    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
+# Keep defaults which an individual compiler invocation can suppress separate
+# until that invocation's arguments have been interpreted. GNAT deliberately
+# prepares an empty libc component for all of its compiler jobs.
+wrapper_CC_LIBC_FLAGS=
+if [[ "$cInclude" = 1 && -e @out@/nix-support/libc-cflags ]]; then
+    wrapper_CC_LIBC_FLAGS="$(< @out@/nix-support/libc-cflags)"
+fi
+wrapper_CC_CRT_FLAGS=
+if [[ -e @out@/nix-support/libc-crt1-cflags ]]; then
+    wrapper_CC_CRT_FLAGS="$(< @out@/nix-support/libc-crt1-cflags)"
 fi
 
-if [ -e @out@/nix-support/libc-crt1-cflags ]; then
-    NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-crt1-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
-fi
-
+# Packaged header defaults are distinct from opaque caller C++ arguments:
+# Clang's C driver can need the former without accepting the latter.
+wrapper_CC_CXX_FLAGS=
 if [ -e @out@/nix-support/libcxx-cxxflags ]; then
-    NIX_CXXSTDLIB_COMPILE_@suffixSalt@+=" $(< @out@/nix-support/libcxx-cxxflags)"
+    wrapper_CC_CXX_FLAGS="$(< @out@/nix-support/libcxx-cxxflags)"
 fi
 
+wrapper_CC_CXX_LINK_FLAGS=
 if [ -e @out@/nix-support/libcxx-ldflags ]; then
-    NIX_CXXSTDLIB_LINK_@suffixSalt@+=" $(< @out@/nix-support/libcxx-ldflags)"
+    wrapper_CC_CXX_LINK_FLAGS="$(< @out@/nix-support/libcxx-ldflags)"
 fi
 
 if [ -e @out@/nix-support/gnat-cflags ]; then
-    NIX_GNATFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/gnat-cflags) $NIX_GNATFLAGS_COMPILE_@suffixSalt@"
+    wrapper_NIX_GNATFLAGS_COMPILE="$(< @out@/nix-support/gnat-cflags) $wrapper_NIX_GNATFLAGS_COMPILE"
 fi
 
 if [ -e @out@/nix-support/cc-ldflags ]; then
-    NIX_LDFLAGS_@suffixSalt@+=" $(< @out@/nix-support/cc-ldflags)"
+    wrapper_NIX_LDFLAGS+=" $(< @out@/nix-support/cc-ldflags)"
 fi
 
 if [ -e @out@/nix-support/cc-cflags-before ]; then
-    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="$(< @out@/nix-support/cc-cflags-before) $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
+    wrapper_NIX_CFLAGS_COMPILE_BEFORE="$(< @out@/nix-support/cc-cflags-before) $wrapper_NIX_CFLAGS_COMPILE_BEFORE"
 fi
 
 # Only add darwin min version flag if a default darwin min version is set,
@@ -84,8 +76,6 @@ fi
 if [ "@darwinMinVersion@" ]; then
     mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
 
-    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@="-m@darwinPlatformForCC@-version-min=${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@"
+    wrapper_@darwinMinVersionVariable@=${wrapper_@darwinMinVersionVariable@:-@darwinMinVersion@}
+    wrapper_NIX_CFLAGS_COMPILE_BEFORE="-m@darwinPlatformForCC@-version-min=${wrapper_@darwinMinVersionVariable@:-@darwinMinVersion@} $wrapper_NIX_CFLAGS_COMPILE_BEFORE"
 fi
-
-# That way forked processes will not extend these environment variables again.
-export NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@=1

@@ -7,6 +7,7 @@
   cuda_nvcc,
   cuda_profiler_api,
   cudaAtLeast,
+  cudaConfig,
   cudaMajorMinorVersion,
   cudaNamePrefix,
   fetchFromGitHub,
@@ -126,8 +127,8 @@ backendStdenv.mkDerivation (finalAttrs: {
       }
       # https://docs.rapids.ai/install#system-req
       {
-        message = "RAFT supports CUDA compute capabilities 7.0 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-        assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
+        message = "RAFT supports CUDA compute capabilities 7.0 and newer (found ${builtins.toJSON cudaConfig.cudaCapabilities})";
+        assertion = lib.all (lib.flip lib.versionAtLeast "7.0") cudaConfig.cudaCapabilities;
       }
     ];
   };

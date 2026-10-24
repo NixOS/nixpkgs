@@ -19,6 +19,8 @@ let
       hash = "sha256-Cn7rvg1FI7H/26GzSe4pv5VW/gvwbwGqivAqEeawkwk=";
     })
     ./configure-skip-target-libs-hooks.patch
+    # Preserve literal newlines when GCC and collect2 exchange response files.
+    ../../../../development/compilers/gcc/common/libiberty-writeargv-newlines.patch
   ];
 in
 {

@@ -1,0 +1,67 @@
+From 6b1e5bfbdb3915c8cf2314c80d4d0233ea9f7c83 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:28:41 -0700
+Subject: [PATCH] cmake: export toolkit headers and install a discoverable
+ package version
+
+Public NVSHMEM headers require CUDA headers. Publish CUDA::toolkit on both
+installed targets and use the ConfigVersion filename expected by find_package.
+
+Assisted-by: Codex (gpt-6-astra)
+---
+ CMakeLists.txt            | 2 +-
+ src/CMakeLists.txt        | 4 ++--
+ src/device/CMakeLists.txt | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0c66e33..6f1717c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -170,7 +170,7 @@ configure_package_config_file(
+   PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR BIN_INSTALL_DIR)
+ 
+ write_basic_package_version_file(
+-  NVSHMEMVersion.cmake
++  NVSHMEMConfigVersion.cmake
+   VERSION ${NVSHMEM_BASE_VERSION}
+   COMPATIBILITY AnyNewerVersion)
+ 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 85a6da7..30bdd71 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -682,7 +682,7 @@ if (NVSHMEM_BUILD_WITH_CUTLASS)
+ 
+ endif()
+ 
+-target_link_libraries(nvshmem_host PRIVATE CUDA::cudart_static)
++target_link_libraries(nvshmem_host PRIVATE CUDA::cudart_static PUBLIC CUDA::toolkit)
+ if (CCCL_FOUND AND CUDAToolkit_VERSION_MAJOR GREATER 12)
+   target_link_libraries(nvshmem_host PUBLIC CCCL::CCCL)
+ endif()
+@@ -1256,7 +1256,7 @@ install(
+ )
+ 
+ # ${CMAKE_CURRENT_BINARY_DIR}/NVSHMEMConfig.cmake
+-install(FILES ${CMAKE_BINARY_DIR}/NVSHMEMVersion.cmake
++install(FILES ${CMAKE_BINARY_DIR}/NVSHMEMConfigVersion.cmake
+         DESTINATION lib/cmake/nvshmem
+ )
+ 
+diff --git a/src/device/CMakeLists.txt b/src/device/CMakeLists.txt
+index 7b6f7c4..e6084db 100644
+--- a/src/device/CMakeLists.txt
++++ b/src/device/CMakeLists.txt
+@@ -186,7 +186,7 @@ else()
+   configure_file(../include/non_abi/device/pt-to-pt/transfer_device.cuh.in ${CMAKE_CURRENT_SOURCE_DIR}/comm/transfer_device.cu COPYONLY)
+ endif()
+ 
+-target_link_libraries(nvshmem_device PRIVATE CUDA::cudart_static)
++target_link_libraries(nvshmem_device PRIVATE CUDA::cudart_static PUBLIC CUDA::toolkit)
+ if (CCCL_FOUND AND CUDAToolkit_VERSION_MAJOR GREATER 12)
+   target_link_libraries(nvshmem_device PUBLIC CCCL::CCCL)
+ endif()
+-- 
+2.43.0
+

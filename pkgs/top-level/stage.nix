@@ -28,6 +28,9 @@ in
   # Use to reevaluate Nixpkgs
   nixpkgsFun,
 
+  # Internal operations on the originating import and its corresponding stage.
+  __stage,
+
   ## Other parameters
   ##
 
@@ -279,6 +282,8 @@ let
     # in one go when calling Nixpkgs, for performance and simplicity.
     # Prefer appendOverlays if used repeatedly.
     extend = f: self.appendOverlays [ f ];
+
+    inherit __stage;
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).

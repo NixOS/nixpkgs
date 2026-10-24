@@ -13,7 +13,6 @@
   fetchFromGitHub,
   lib,
   libcusparse,
-  setupCudaHook,
 }:
 let
   base = backendStdenv.mkDerivation (finalAttrs: {
@@ -28,6 +27,7 @@ let
     nativeBuildInputs = [
       cmake
       addDriverRunpath
+      cuda_nvcc
     ];
     buildInputs = [ cudatoolkit ];
     postFixup = ''
@@ -79,7 +79,7 @@ in
       # CUTENSOR_ROOT is double escaped
       postPatch = prevAttrs.postPatch or "" + ''
         substituteInPlace CMakeLists.txt \
-          --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getOutput "include" libcutensor}/include"
+          --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getOutput libcutensor.outputInclude libcutensor}/include"
       '';
 
       CUTENSOR_ROOT = libcutensor;

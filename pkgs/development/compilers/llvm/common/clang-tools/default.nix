@@ -13,6 +13,9 @@
   enableLibcxx ? false,
 }:
 
+let
+  headerCompiler = if enableLibcxx then libcxxClang else clang;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-tools";
   version = lib.getVersion clang-unwrapped;
@@ -44,7 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       cp $toolPath $out/bin/$toolName-unwrapped
       substitute ${./wrapper} $out/bin/$toolName \
-        --replace-fail "@clang@" "${if enableLibcxx then libcxxClang else clang}" \
+        --replace-fail "@libcFlags@" "${headerCompiler}/nix-support/${
+          headerCompiler.importerFlags.libc or "libc-cflags"
+        }" \
+        --replace-fail "@cxxFlags@" "${headerCompiler}/nix-support/${
+          headerCompiler.importerFlags.cxx or "libcxx-cxxflags"
+        }" \
         --replace-fail "@out@" "$out"
       chmod +x $out/bin/$toolName
     done

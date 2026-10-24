@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./nix-ssl-cert-file.patch
+    ./multi-alerts-socket-lifetime.patch
   ];
 
   # Skip some tests:

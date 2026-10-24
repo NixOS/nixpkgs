@@ -67,6 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs tests/*.sh
+
+    # run-sysroot.sh tests openat2(RESOLVE_IN_ROOT) whenever the kernel is new
+    # enough, but seccomp filters such as systemd's RestrictSUIDSGID= still
+    # reject it with ENOSYS, and libdwfl then falls back to open(). Keep the
+    # plain --sysroot check.
+    substituteInPlace tests/run-sysroot.sh \
+      --replace-fail \
+        'if libc_has_openat2_resolve_in_root && kernel_has_openat2_resolve_in_root; then' \
+        'if false; then'
   ''
   + lib.optionalString stdenv.hostPlatform.isRiscV ''
     # disable failing test:

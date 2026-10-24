@@ -28,7 +28,10 @@ let
   # derivation!
   stdenv' =
     if stdenvNoCC.hostPlatform.useLLVM or false then
-      overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibcxx
+      # Keep stack unwinding available without introducing the C++ runtime cycle.
+      overrideCC stdenvNoCC (
+        buildPackages.llvmPackages.clangWithLibcAndBasicRtAndLibcxx.override { libcxx = null; }
+      )
     else if stdenvNoCC.hostPlatform.useGccNG or false then
       overrideCC stdenvNoCC buildPackages.gccNGPackages.gccWithLibatomic
     else

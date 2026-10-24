@@ -1,6 +1,10 @@
 {
   lib,
   stdenv,
+  buildPackages,
+  callPackage,
+  autoreconfHook,
+  fetchpatch,
   fetchurl,
   removeReferencesTo,
   gfortran,
@@ -11,7 +15,7 @@
   numactl,
   libevent,
   hwloc,
-  targetPackages,
+  pkgsHostHost,
   libpsm2,
   libfabric,
   pmix,
@@ -20,6 +24,7 @@
   prrte,
   makeWrapper,
   python3,
+  pkg-config,
   config,
   # Enable CUDA support
   cudaSupport ? config.cudaSupport,
@@ -43,6 +48,21 @@
 
 assert cudaSupport -> !rocmSupport;
 
+let
+  crossFortranSupported = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  crossFortran =
+    fortranSupport
+    && !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
+    && crossFortranSupported;
+
+  # Installed MPI wrappers compile and link against HOST's MPI libraries.
+  runtimeCC =
+    if lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform then
+      stdenv.cc
+    else
+      pkgsHostHost.targetPackages.stdenv.cc;
+  runtimeFC = gfortran.__spliced.hostHost or gfortran;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
   version = "5.0.11";
@@ -52,29 +72,93 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-5mijxKzVDEHcIEyKbdmKYR4PJq+Jz2d1d/qb6KJpgAM=";
   };
 
+  patches = [
+    # OpenMPI 5.0.11 already includes the REAL16 datatype fixes from PR 13714.
+    # PR 14478 supplies the remaining _Quad guard, COMPLEX*32 kind, and quad-complex
+    # reductions. Only stable-branch and external32 repairs remain local.
+    (fetchpatch {
+      url = "https://github.com/open-mpi/ompi/commit/33a56031b0ea8e04c159bd2cb740e34373811efe.patch";
+      hash = "sha256-DkEGm2jyfsw7xXbAwD0v6i2/NN27iR+4MMScfv/wUdc=";
+    })
+    (fetchpatch {
+      url = "https://github.com/open-mpi/ompi/commit/a6df34efc3f9fcb623aa8972c155fe081e97854a.patch";
+      hash = "sha256-owwNqhJTuFRFiFd30ZZaLpzV/QXnTqse9KdWD1FLVFY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/open-mpi/ompi/commit/9817e9d3195451544caa1f6c8f9564e61fd0e39b.patch";
+      hash = "sha256-7p+17Ua1J38CRs2hwfgvDBuzgiFEFJfCvsesn9GjBCw=";
+      # The same commit adds independent AVX/SVE complex-sum optimizations
+      # for upstream main; backport only the missing base quad operations.
+      excludes = [
+        "ompi/mca/op/aarch64/op_aarch64_functions.c"
+        "ompi/mca/op/avx/op_avx_functions.c"
+      ];
+    })
+    ./float128-complex-and-external32.patch
+    ./cuda-diagnostic-formats.patch
+    ./ucx-fence-completion.patch
+    ./oshmem-language-metadata.patch
+  ]
+  ++ lib.optionals crossFortran [ ./fortran-cross-probes.patch ];
+
   postPatch = ''
     patchShebangs ./
-
-    # This is dynamically detected. Configure does not provide fine grained options
-    # We just disable the check in the configure script for now
-    ${lib.pipe (finalAttrs.passthru.defaultAvxOptions // avxOptions) [
-      (lib.mapAttrsToList (
-        option: val: ''
-          substituteInPlace configure \
-            --replace-fail \
-              ompi_cv_op_avx_check_${option}=yes \
-              ompi_cv_op_avx_check_${option}=${lib.boolToYesNo val}
-        ''
-      ))
-      (lib.concatStringsSep "\n")
-    ]}
   '';
+
+  # Retain the bundled dependency configure scripts and generated component
+  # lists while regenerating the top-level datatype checks and headers.
+  autoreconfFlags = [
+    "--install"
+    "--force"
+    "--verbose"
+    "--no-recursive"
+    "-I"
+    "config"
+    "-I"
+    "config/oac"
+  ];
+  preAutoreconf = ''
+    autom4te --language=m4sh -I config config/opal_get_version.m4sh > config/opal_get_version.sh
+    chmod +x config/opal_get_version.sh
+    patchShebangs config/opal_get_version.sh
+  '';
+
+  postAutoreconf =
+    lib.optionalString
+      (!stdenv.buildPlatform.canExecute stdenv.hostPlatform && stdenv.hostPlatform.isLinux)
+      ''
+        # The libnl ABI-conflict check needs transitive ELF dependencies. ldd would
+        # execute HOST's loader; lddtree reads the same dependency graph on BUILD.
+        substituteInPlace configure \
+          --replace-fail 'ldd conftest' '${lib.getExe' buildPackages.pax-utils "lddtree"} conftest'
+      ''
+    + ''
+
+      # This is dynamically detected. Configure does not provide fine grained options
+      # We just disable the check in the configure script for now
+      ${lib.pipe (finalAttrs.passthru.defaultAvxOptions // avxOptions) [
+        (lib.mapAttrsToList (
+          option: val: ''
+            substituteInPlace configure \
+              --replace-fail \
+                ompi_cv_op_avx_check_${option}=yes \
+                ompi_cv_op_avx_check_${option}=${lib.boolToYesNo val}
+          ''
+        ))
+        (lib.concatStringsSep "\n")
+      ]}
+    '';
 
   # Ensure build is reproducible according to manual
   # https://docs.open-mpi.org/en/v5.0.x/release-notes/general.html#general-notes
   env = {
     USER = "nixbld";
     HOSTNAME = "localhost";
+  }
+  // lib.optionalAttrs crossFortran {
+    # Execute only the original Fortran ABI probes, keeping all other
+    # configure logic in cross-compilation mode.
+    OMPI_FORTRAN_RUNNER = stdenv.hostPlatform.emulator buildPackages;
   };
 
   outputs = [
@@ -120,6 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     removeReferencesTo
     makeWrapper
+    pkg-config
+    autoreconfHook
   ]
   ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals fortranSupport [ gfortran ];
@@ -131,17 +217,18 @@ stdenv.mkDerivation (finalAttrs: {
     # From some reason, without this the darwin build fails with cyclic
     # references between $dev and $out
     "--with-pmix=${lib.getDev pmix}"
-    "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
     (lib.withFeatureAs true "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
     (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
-    # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
-    # https://github.com/openucx/ucx
-    # https://www.open-mpi.org/faq/?category=buildcuda
-    # NOTE: Open MPI requires the header files specifically, which are in the `include` output.
-    (lib.withFeatureAs cudaSupport "cuda" (lib.getOutput "include" cudaPackages.cuda_cudart))
-    (lib.withFeatureAs cudaSupport "cuda-libdir" "${lib.getLib cudaPackages.cuda_cudart}/lib")
+    # Open MPI probes the CUDA driver API, whose link-time stub is separate
+    # from libcudart. The existing CUDA hook removes stub runtime search paths.
+    (lib.withFeatureAs cudaSupport "cuda" (
+      lib.getOutput cudaPackages.cuda_cudart.outputInclude cudaPackages.cuda_cudart
+    ))
+    (lib.withFeatureAs cudaSupport "cuda-libdir"
+      "${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs"
+    )
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs rocmSupport "rocm" rocmPackages.clr)
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
@@ -151,6 +238,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals rocmSupport [ "--with-rocm-libdir=${lib.getLib rocmPackages.clr}/lib" ]
   ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
+
+  postConfigure = lib.optionalString cudaSupport ''
+    # Upstream can silently disable CUDA even with --with-cuda requested.
+    grep -q '^#define OPAL_CUDA_SUPPORT 1$' opal/include/opal_config.h || {
+      echo "Open MPI did not enable the requested CUDA support" >&2
+      exit 1
+    }
+  '';
 
   enableParallelBuilding = true;
 
@@ -170,8 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
           "c++"
           "cxx"
           "cc"
-        ]
-        ++ lib.optionals fortranSupport [
+          # OpenSHMEM installs unsupported-language wrappers even without Fortran.
           "f77"
           "f90"
           "fort"
@@ -187,20 +281,18 @@ stdenv.mkDerivation (finalAttrs: {
           # commands to the name of the compiler ("clang" for Darwin and
           # "gcc" for Linux)
           "$CC"
-          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CC"
+          (lib.getExe' runtimeCC "${runtimeCC.targetPrefix}cc")
         ];
         "c++" = [
           # Same as with $CC
           "$CXX"
-          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CXX"
+          (lib.getExe' runtimeCC "${runtimeCC.targetPrefix}c++")
         ];
       }
       // lib.optionalAttrs fortranSupport {
         "fort" = [
-          "gfortran"
-          "${targetPackages.gfortran or gfortran}/bin/${
-            targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
-          }gfortran"
+          "$FC"
+          (lib.getExe' runtimeFC "${runtimeFC.targetPrefix}gfortran")
         ];
       };
       # The -wrapper-data.txt files that are not symlinks, need to be iterated as
@@ -224,6 +316,7 @@ stdenv.mkDerivation (finalAttrs: {
       # The main wrapper that all the rest of the commonly used binaries are
       # symlinked to
       moveToOutput "bin/opal_wrapper" "''${!outputDev}"
+      moveToOutput "share/openmpi/help-opal-wrapper.txt" "''${!outputDev}"
       # All of the following files are symlinks to opal_wrapper
       ${lib.pipe fileNamesToIterate [
         (lib.mapCartesianProduct (
@@ -236,8 +329,7 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # default compilers should be indentical to the
-      # compilers at build time
+      # These wrappers run on HOST and compile against HOST's MPI libraries.
       ${lib.pipe wrapperDataFileNames [
         (lib.mapCartesianProduct (
           { part1, part2 }:
@@ -274,6 +366,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru = {
+    tests = {
+      ucxFence = buildPackages.callPackage ./tests/ucx-fence.nix {
+        inherit (finalAttrs) src patches;
+      };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      pkgConfig = callPackage ./tests/pkg-config.nix {
+        openmpi = finalAttrs.finalPackage;
+        inherit fortranSupport;
+      };
+    };
     defaultAvxOptions = {
       sse3 = true;
       sse41 = true;
@@ -295,7 +398,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    # checking size of Fortran CHARACTER... configure: error: Can not determine size of CHARACTER when cross-compiling
-    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    # Cross Fortran ABI probes need an emulator for the selected HOST platform.
+    broken =
+      fortranSupport && !stdenv.buildPlatform.canExecute stdenv.hostPlatform && !crossFortranSupported;
   };
 })

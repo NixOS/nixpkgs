@@ -79,13 +79,15 @@ let
   ) swift.swift-driver or null;
 
   inherit (llvmPackages)
-    clang
     clang-unwrapped
     llvm
 
     libclang
     libllvm
     ;
+
+  # Build-tree Swift importers read the adjacent compiler's header-support files.
+  clang = llvmPackages.clang;
 
   inherit (darwin) sigtool;
 

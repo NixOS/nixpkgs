@@ -109,7 +109,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   env = {
     LDFLAGS = toString [
       # Fake libcuda.so (the real one is deployed impurely)
-      "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+      "-L${lib.getOutput cudaPackages.cuda_cudart.outputStubs cudaPackages.cuda_cudart}/lib/stubs"
     ];
   };
 

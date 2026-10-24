@@ -1,6 +1,6 @@
 {
-  backendStdenv,
   buildRedist,
+  cudaConfig,
   lib,
 }:
 buildRedist (finalAttrs: {
@@ -21,10 +21,10 @@ buildRedist (finalAttrs: {
     {
       message =
         "NPP+ releases since 0.10.0 (found ${finalAttrs.version})"
-        + " support CUDA compute capabilities 7.5 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
+        + " support CUDA compute capabilities 7.5 and newer (found ${builtins.toJSON cudaConfig.cudaCapabilities})";
       assertion =
         lib.versionAtLeast finalAttrs.version "0.10"
-        -> lib.all (lib.flip lib.versionAtLeast "7.5") backendStdenv.cudaCapabilities;
+        -> lib.all (lib.flip lib.versionAtLeast "7.5") cudaConfig.cudaCapabilities;
     }
   ];
 

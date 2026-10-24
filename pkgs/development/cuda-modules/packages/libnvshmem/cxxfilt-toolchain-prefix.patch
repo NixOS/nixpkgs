@@ -1,0 +1,42 @@
+From e142dc8267569d3eac29490540c8a084699d0f2b Mon Sep 17 00:00:00 2001
+From: Connor Baker <connorb@nvidia.com>
+Date: Fri, 23 Oct 2026 09:44:30 -0700
+Subject: [PATCH] test: find c++filt with CMAKE_NM's target prefix
+
+The host ABI test pairs CMAKE_NM with c++filt, but finds c++filt by its
+unprefixed name. CMake finds nm with the compiler's target prefix, and
+cross toolchains may install only prefixed tools (for example
+aarch64-linux-gnu-c++filt), so configuration fails when cross-compiling.
+
+Look for the c++filt that shares CMAKE_NM's prefix and directory first,
+then fall back to the previous names.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Signed-off-by: Connor Baker <connorb@nvidia.com>
+---
+ test/host/abi/CMakeLists.txt | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/test/host/abi/CMakeLists.txt b/test/host/abi/CMakeLists.txt
+index a2bcd1d..bdcde28 100644
+--- a/test/host/abi/CMakeLists.txt
++++ b/test/host/abi/CMakeLists.txt
+@@ -1,5 +1,14 @@
+ find_package(Python3 REQUIRED COMPONENTS Interpreter)
+-find_program(NVSHMEM_CXXFILT NAMES c++filt llvm-cxxfilt REQUIRED)
++# Demangle with the binutils that provide CMAKE_NM. CMake finds nm with the
++# compiler's target prefix, and cross toolchains may install only prefixed
++# tools (for example aarch64-linux-gnu-c++filt).
++get_filename_component(NVSHMEM_NM_DIR "${CMAKE_NM}" DIRECTORY)
++get_filename_component(NVSHMEM_NM_NAME "${CMAKE_NM}" NAME)
++set(NVSHMEM_CXXFILT_NAMES c++filt llvm-cxxfilt)
++if(NVSHMEM_NM_NAME MATCHES "^(.+-)nm$")
++  list(PREPEND NVSHMEM_CXXFILT_NAMES "${CMAKE_MATCH_1}c++filt")
++endif()
++find_program(NVSHMEM_CXXFILT NAMES ${NVSHMEM_CXXFILT_NAMES} HINTS "${NVSHMEM_NM_DIR}" REQUIRED)
+ 
+ if(SubBuild)
+   # Use the configured headers that the test target itself consumes. In
+-- 
+2.43.0
+

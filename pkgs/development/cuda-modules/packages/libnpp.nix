@@ -1,16 +1,19 @@
-{ buildRedist }:
-buildRedist {
-  redistName = "cuda";
+args@{
+  buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
+  cudaOlder,
+  lib,
+}:
+(import ../library.nix args) {
   pname = "libnpp";
 
-  outputs = [
-    "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
-  ];
+  postPatch = lib.optionalString (cudaOlder "13.4") ''
+    # Older archives include these obsolete modules for nonexistent libraries;
+    # newer patch releases already omit them.
+    rm -f share/pkgconfig/{nppi,nppicom}-${cudaMajorMinorVersion}.pc \
+      share/pkgconfig/{nppi,nppicom}.pc
+  '';
 
   meta = {
     description = "Library of primitives for image and signal processing";

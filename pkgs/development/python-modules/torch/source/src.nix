@@ -2,6 +2,8 @@
   version,
   fetchFromGitLab,
   fetchFromGitHub,
+  fetchpatch,
+  applyPatches,
   runCommand,
 }:
 assert version == "2.14.1";
@@ -228,11 +230,26 @@ rec {
     rev = "910b55815be16109f04f4180e9adee14fb4ce281";
     hash = "sha256-AsPZt+ylfdGpytQ1RoQljKeXE2uGkGONCaWzLK2sZhA=";
   };
-  src_libuv = fetchFromGitHub {
-    owner = "libuv";
-    repo = "libuv";
-    rev = "5152db2cbfeb5582e9c27c5ea1dba2cd9e10759b";
-    hash = "sha256-ayTk3qkeeAjrGj5ab7wF7vpWI8XWS1EeKKUqzaD/LY0=";
+  src_libuv = applyPatches {
+    src = fetchFromGitHub {
+      owner = "libuv";
+      repo = "libuv";
+      rev = "5152db2cbfeb5582e9c27c5ea1dba2cd9e10759b";
+      hash = "sha256-ayTk3qkeeAjrGj5ab7wF7vpWI8XWS1EeKKUqzaD/LY0=";
+    };
+    patches = [
+      (fetchpatch {
+        name = "libuv-cgroup-path-buffer.patch";
+        url = "https://github.com/libuv/libuv/commit/b00c5d1a09c094020044e79e19f478a25b8e1431.patch";
+        hash = "sha256-dhq7cCW937q2/zYzCArkc7KHX4lT9G5B/pc/iCcEyzA=";
+      })
+      (fetchpatch {
+        name = "libuv-fractional-cpu-quota.patch";
+        url = "https://github.com/libuv/libuv/commit/2e7c07f4d10c1b391a7138471c49f4aae3c47d8d.patch";
+        hash = "sha256-b1Hc76jKP0UPQN34GJ+7r3afy8zeEGEB8kOSi38qLf4=";
+      })
+      ../../../../by-name/li/libuv/cgroup-cpu-quota.patch
+    ];
   };
   src_mimalloc = fetchFromGitHub {
     owner = "microsoft";

@@ -35,6 +35,7 @@ let
   };
 
   patches = [
+    ../../../../development/compilers/gcc/common/libiberty-writeargv-newlines.patch
     # Make binutils output deterministic by default.
     ./deterministic.patch
   ];
