@@ -1,0 +1,32 @@
+diff --git a/Makefile b/Makefile
+index f2e5786..74c6655 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,14 +4,14 @@
+ 
+ CC     ?= cc
+ CSTD    = c99
+-IFLAGS  = -I/usr/lib/swipl/include -I/usr/lib/swi-prolog/include -I/usr/include/freetype2
++IFLAGS  = -I@swi-prolog@/lib/swipl/include
+ WFLAGS  = -Wall -Wextra -Wconversion -Wshadow -pedantic -pedantic-errors
+ OFLAGS  = -O2
+ 
+ CFLAGS  = -std=$(CSTD) $(IFLAGS) $(WFLAGS) $(OFLAGS) -fpic
+ LDFLAGS = -shared -lX11 -lXft -lXrandr
+ 
+-LIB_PATH = /usr/local/lib
++LIB_PATH = @plwm@/lib
+ 
+ BIN_DIR = bin
+ PLWM = $(BIN_DIR)/plwm
+@@ -51,9 +51,7 @@ cppcheck:
+ 
+ clang-tidy:
+ 	clang-tidy --checks='clang-analyzer-*' --extra-arg="-std=$(CSTD)" \
+-	--extra-arg="-I/usr/include/freetype2" \
+-	--extra-arg="-I/usr/lib/swipl/include" \
+-	--extra-arg="-I/usr/lib/swi-prolog/include" \
++	--extra-arg="-I@swi-prolog@/lib/swipl/include" \
+ 	--warnings-as-errors='*' \
+ 	src/plx.c --
+ 
