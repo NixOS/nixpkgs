@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiiuse";
-  version = "0.15.7";
+  version = "0.16.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wiiuse";
     repo = "wiiuse";
     tag = finalAttrs.version;
-    hash = "sha256-kB/iGzpO9lin3bTDlXBwZEdEg5UOivU1mnWDj/E44k4=";
+    hash = "sha256-1NLwS/GVEKyKz/WrKKRYaOir64YhZTTAYk/ot9EOGHI=";
   };
 
   outputs = [
