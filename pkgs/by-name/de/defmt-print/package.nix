@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "defmt-print";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = "defmt";
     tag = "defmt-print-v${finalAttrs.version}";
-    hash = "sha256-owG78NHFy7A+fZnnnY1GplAXvDyc++WO9t8dAGyQP6s=";
+    hash = "sha256-t6i7u4ET3QNo6rhxNhEhZmIpQGitq+baqwvR/Lp4wTs=";
   };
 
-  cargoHash = "sha256-hgPX5HkVfSK4FHCnFFYuG4KdzjUrbta6LQa+8rK8TuA=";
+  cargoHash = "sha256-qOGPkTRrk+NPPoztsaYi5LZQ56xSdnChTLESLo1XCP8=";
 
   cargoBuildFlags = [
     "--bin"
