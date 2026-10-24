@@ -668,7 +668,7 @@ in
       '';
     })
     (lib.mkIf cfg.enable {
-      fonts.fontconfig.confPackages = [ confPkg ];
+      fonts.fontconfig.confPackages = [ confPkg ] ++ config.fonts.packages;
     })
   ];
 
