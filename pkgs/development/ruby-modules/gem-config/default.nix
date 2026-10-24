@@ -1231,5 +1231,7 @@ in
 
   zookeeper = attrs: {
     buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+    # avoid failing on strchr discarding const
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=discarded-qualifiers";
   };
 }
