@@ -2,8 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   hatchling,
+  pyprojectVersionPatchHook,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "dataclass-csv";
@@ -17,13 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-hDnuPg5xniybR2J91KnJxSlOI+dWzUPQJtYKfqsNCvw=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dataclass_csv" ];
 
