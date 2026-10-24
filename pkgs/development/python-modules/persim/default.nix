@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "persim";
-  version = "0.3.8";
+  version = "0.4.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "persim";
-    hash = "sha256-4T0YWEF2uKdk0W1+Vt8I3Mi6ZsazJXoHI0W+O9WbpA0=";
+    hash = "sha256-1E0ZwYaZFlxd61IlIAIH9igvvx77kMjauEV0710k+AY=";
   };
 
   build-system = [
