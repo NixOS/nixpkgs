@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Dependencies are already managed by nix
   cmakeFlags = [
-    "-DCONTOUR_USE_CPM=OFF"
+    (lib.cmakeBool "CONTOUR_USE_CPM" false)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCONTOUR_MACOS_DEPLOY=OFF"
+    (lib.cmakeBool "CONTOUR_MACOS_DEPLOY" false)
   ];
 
   outputs = [
@@ -112,10 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + ''
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-  '';
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    /usr/bin/codesign --force --sign - $out/Applications/contour.app
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;
