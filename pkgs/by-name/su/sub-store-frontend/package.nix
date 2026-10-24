@@ -8,6 +8,7 @@
   pnpmConfigHook,
   nix-update-script,
   nodejs,
+  nixosTests,
 }:
 let
   pnpm = pnpm_10;
@@ -46,7 +47,12 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) sub-store;
+    };
+  };
 
   meta = {
     description = "Sub-Store Progressive Web App";
