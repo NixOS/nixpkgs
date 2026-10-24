@@ -197,6 +197,12 @@
     github = "13r0ck";
     githubId = 58987761;
   };
+  _1Git2Clone = {
+    name = "Ivan";
+    email = "ivan@hu-tao.dev";
+    github = "1Git2Clone";
+    githubId = 171241044;
+  };
   _1nv0k32 = {
     name = "Armin";
     email = "Armin.Mahdilou@gmail.com";
