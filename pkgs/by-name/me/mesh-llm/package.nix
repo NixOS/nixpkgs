@@ -18,6 +18,7 @@
   versionCheckHook,
   skippy-native-runtime,
   rocmPackages,
+  nixosTests,
   runCommand,
 
   config,
@@ -259,6 +260,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Also updates skippy-native-runtime, which pins the release.
     updateScript = ./update.sh;
     tests = {
+      nixos = nixosTests.mesh-llm;
       # Upstream's package QA (Mesh-LLM/mesh-packaging): a client reaches
       # readiness offline and stops cleanly on SIGINT.
       client-ready =
@@ -354,7 +356,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       models through an OpenAI-compatible API and a web console. This package
       bundles a CPU runtime and, on Linux, a Vulkan runtime. CUDA and ROCm
       runtimes come with `mesh-llm-cuda` (unfree) and `mesh-llm-rocm`, or with
-      the nixpkgs settings `cudaSupport` and `rocmSupport`.
+      the nixpkgs settings `cudaSupport` and `rocmSupport`. To run a node on
+      NixOS, use `services.mesh-llm`.
     '';
     homepage = "https://github.com/Mesh-LLM/mesh-llm";
     inherit (skippy-native-runtime.meta) changelog;

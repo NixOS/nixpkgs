@@ -11,6 +11,7 @@
   patchelf,
   python3,
   shaderc,
+  nixosTests,
   rustPlatform,
   spirv-headers,
   vulkan-headers,
@@ -290,6 +291,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     inherit (release) llamaCppBuild;
     # Cargo vendor hash of src's lockfile, shared with mesh-llm.
     inherit (release) cargoHash;
+
+    # Serves a model with mesh-llm and this runtime.
+    tests.nixos = nixosTests.mesh-llm;
   };
 
   meta = {
