@@ -120,6 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
     hash = "sha256-Av6CN95XjdUagIKh3AAjD0UK8r01fDz0cD0BLjZ70dg=";
     relative = "compiler-rt";
+  })
+  # Avoid recursive sanitizer initialization through dyld's allocating shared-cache traversal.
+  ++ lib.optional (lib.versionOlder release_version "22") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/2e7d07a33725a82ecfc514e27f047ece3ff13d4c.patch";
+    hash = "sha256-66NzQcr91mM51titM3HlRXt6HUz1pGCXdXDh3lX1loA=";
+    relative = "compiler-rt";
   });
 
   nativeBuildInputs = [
