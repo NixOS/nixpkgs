@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=c++17";
+
   buildInputs = [
     gmp
     ntl
