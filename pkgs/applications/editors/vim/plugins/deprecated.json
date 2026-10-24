@@ -275,6 +275,10 @@
         "date": "2026-02-04",
         "new": "vim-ipython"
     },
+    "kanagawa-paper-nvim": {
+        "date": "2026-10-22",
+        "new": "kanagawa-paper"
+    },
     "latex-live-preview": {
         "date": "2026-02-04",
         "new": "vim-latex-live-preview"
