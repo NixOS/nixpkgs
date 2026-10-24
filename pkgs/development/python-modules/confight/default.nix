@@ -16,9 +16,9 @@ buildPythonPackage rec {
     hash = "sha256-iodoexnh9tG4dgkjDXCUzWRFDhRlJ3HRgaNhxG2lwPY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ toml ];
+  dependencies = [ toml ];
 
   pythonImportsCheck = [ "confight" ];
 
