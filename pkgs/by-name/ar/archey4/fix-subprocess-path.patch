@@ -1,0 +1,95 @@
+Keep PATH in the environment of subprocesses that force a C locale.  Without
+it, Python looks commands up in os.defpath only, so `df`, `lscpu`, `free` and
+`uptime` are never found on NixOS.  Also tolerate a missing `getent`, which
+crashes the Shell entry when SHELL is unset on systems lacking it, such as
+Darwin.
+
+diff --git a/archey/entries/cpu.py b/archey/entries/cpu.py
+index 75ca9e0..5ef4cf2 100644
+--- a/archey/entries/cpu.py
++++ b/archey/entries/cpu.py
+@@ -1,6 +1,7 @@
+ """CPU information detection class"""
+ 
+ import json
++import os
+ import platform
+ import re
+ from subprocess import DEVNULL, CalledProcessError, check_output
+@@ -100,7 +101,7 @@ class CPU(Entry):
+     def _parse_lscpu_output(cls) -> List[Dict[str, int]]:
+         """Same operation but from `lscpu` output"""
+         try:
+-            cpu_info = check_output("lscpu", env={"LANG": "C"}, universal_newlines=True)
++            cpu_info = check_output("lscpu", env={"LANG": "C", "PATH": os.environ.get("PATH", os.defpath)}, universal_newlines=True)
+         except FileNotFoundError:
+             return []
+ 
+diff --git a/archey/entries/disk.py b/archey/entries/disk.py
+index abafc3e..bf6316a 100644
+--- a/archey/entries/disk.py
++++ b/archey/entries/disk.py
+@@ -1,5 +1,6 @@
+ """Disk usage detection class"""
+ 
++import os
+ import platform
+ import plistlib
+ import re
+@@ -176,7 +177,7 @@ class Disk(Entry):
+         try:
+             df_output = run(
+                 ["df", "-P", "-k"],
+-                env={"LANG": "C"},
++                env={"LANG": "C", "PATH": os.environ.get("PATH", os.defpath)},
+                 universal_newlines=True,
+                 stdout=PIPE,
+                 # On error, `df` may "hold" `EXIT_FAILURE` as exit status code.
+diff --git a/archey/entries/ram.py b/archey/entries/ram.py
+index ba87f0b..3053e4a 100644
+--- a/archey/entries/ram.py
++++ b/archey/entries/ram.py
+@@ -61,7 +61,7 @@ class RAM(Entry):
+             filter(
+                 re.compile(r"Mem").search,
+                 check_output(
+-                    ["free", "-m"], env={"LANG": "C"}, universal_newlines=True
++                    ["free", "-m"], env={"LANG": "C", "PATH": os.environ.get("PATH", os.defpath)}, universal_newlines=True
+                 ).splitlines(),
+             )
+         ).split()
+diff --git a/archey/entries/shell.py b/archey/entries/shell.py
+index 4050d25..4ed50b5 100644
+--- a/archey/entries/shell.py
++++ b/archey/entries/shell.py
+@@ -34,8 +34,8 @@ class Shell(Entry):
+                 .rstrip()
+                 .rsplit(":", maxsplit=1)[-1]
+             )
+-        except CalledProcessError:
+-            # Ghost user...
++        except (OSError, CalledProcessError):
++            # Ghost user, or `getent` is unavailable (e.g. on Darwin)...
+             return None
+ 
+         return shell
+diff --git a/archey/entries/uptime.py b/archey/entries/uptime.py
+index 09b0222..42e5d8b 100644
+--- a/archey/entries/uptime.py
++++ b/archey/entries/uptime.py
+@@ -1,5 +1,6 @@
+ """Uptime detection class"""
+ 
++import os
+ import re
+ import time
+ from contextlib import suppress
+@@ -71,7 +72,7 @@ class Uptime(Entry):
+     def _parse_uptime_cmd(self) -> timedelta:
+         """Tries to get uptime by parsing the `uptime` command"""
+         try:
+-            uptime_output = run("uptime", env={"LANG": "C"}, stdout=PIPE, stderr=PIPE, check=True)
++            uptime_output = run("uptime", env={"LANG": "C", "PATH": os.environ.get("PATH", os.defpath)}, stdout=PIPE, stderr=PIPE, check=True)
+         except FileNotFoundError as error:
+             raise ArcheyException("Couldn't find `uptime` command on this system.") from error
+ 
