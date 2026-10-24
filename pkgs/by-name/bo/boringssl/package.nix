@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://boringssl.googlesource.com";
     maintainers = with lib.maintainers; [
       thoughtpolice
-      theoparis
       niklaskorz
     ];
     license = with lib.licenses; [
