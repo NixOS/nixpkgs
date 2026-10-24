@@ -18,7 +18,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "wuffs";
-  version = "0.4.0-alpha.9";
+  version = "0.3.6";
 
   outputs = [
     "out"
@@ -30,10 +30,10 @@ buildGoModule (finalAttrs: {
     owner = "google";
     repo = "wuffs";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-XbupK4QYnPudUlO5tRWrQRncGHITzJL//Yk/E7WNxYk=";
+    hash = "sha256-TxvmC5eEuJhAdHh2cSVI9GJHOvFLWIOpAIJA9m4xWYQ=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-CRzsGHE3K/WWPX0A3B1CvvEdADlxdIhaT5fOtaA3LPo=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
 
       install -Dm444 -t "$lib/lib" gen/lib/c/${compiler}-dynamic/libwuffs.*
 
-      install -Dm444 release/c/wuffs-unsupported-snapshot.c "$dev/include/wuffs/wuffs-v0.4.c"
+      install -Dm444 release/c/wuffs-v0.3.c "$dev/include/wuffs/wuffs-v0.3.c"
 
       install -Dm444 ${pkgconfig} "$dev/lib/pkgconfig/wuffs.pc"
     '';
@@ -79,7 +79,6 @@ buildGoModule (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = [
-    ];
+    maintainers = with lib.maintainers; [ schembriaiden ];
   };
 })
