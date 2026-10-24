@@ -15,13 +15,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "balatro-mod-manager";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "skyline69";
     repo = "balatro-mod-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ISEgmyGA96r+OolKc/8qiKee43ruNonmWdqfM4pr3p8=";
+    hash = "sha256-cazd6Cns87cjwBORQIsAD5rBes7eTGCAz7bytZO+TsQ=";
   };
 
   nodeModules = stdenv.mkDerivation {
@@ -52,13 +52,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     outputHashAlgo = "sha256";
     outputHash =
       {
-        x86_64-linux = "sha256-97O4DrnjZO2mhSrCQz9xbcRCSaxMNNa4NaLNPlmecJg=";
-        aarch64-linux = "sha256-0H14Be8jhBwOBG2Ui8gYrnAcTtatLVsBxFVfTyzmutw=";
+        x86_64-linux = "sha256-SQCF05uuJg16Il7SvCXlzkm64wJyPfNzVqfgDj7YldI=";
+        aarch64-linux = "sha256-YobKPWe+0StlyJkYEeUmNzYAinGwR042HWpdwWOCt6Q=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   };
 
-  cargoHash = "sha256-TPZf4jtv/3mIpe6ASzPkIusQC/iPFpYN51XiiH6pkZc=";
+  cargoHash = "sha256-m27OdD+hpj1fGiTbe9VmdY+2EFBZKJ3o/4WMdpCpRSw=";
 
   dontUseCargoParallelTests = true;
   checkFlags = [
