@@ -37,6 +37,7 @@
   makeBinaryWrapper,
   runCommand,
   runtimeShell,
+  re-plistbuddy,
 }:
 self:
 let
@@ -243,7 +244,8 @@ runCommand (lib.appendToName "with-packages" emacs).name
       emacs
       lndir
       makeBinaryWrapper
-    ];
+    ]
+    ++ lib.optionals isDarwin [ re-plistbuddy ];
 
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -257,6 +259,16 @@ runCommand (lib.appendToName "with-packages" emacs).name
     for prog in $emacs/bin/*; do # */
       local progname=$(basename "$prog")
       rm -f "$out/bin/$progname"
+
+      # Terminal launches must execute the binary in the new app bundle too,
+      # otherwise it will not find fonts.
+      if [ -d "$emacs/Applications/Emacs.app" ]; then
+        case "$progname" in
+          emacs|emacs-[0-9]*)
+            prog="$out/Applications/Emacs.app/Contents/MacOS/.Emacs-unwrapped"
+            ;;
+        esac
+      fi
 
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${runtimeShell} \
@@ -287,6 +299,31 @@ runCommand (lib.appendToName "with-packages" emacs).name
             $emacs/Applications/Emacs.app/Contents/Resources \
             $out/Applications/Emacs.app/Contents
 
+      cp -L "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs" \
+            "$out/Applications/Emacs.app/Contents/MacOS/.Emacs-unwrapped"
+
+      chmod u+w "$out/Applications/Emacs.app/Contents/Info.plist" \
+                "$out/Applications/Emacs.app/Contents/Resources"
+
+      fontDir="$out/Applications/Emacs.app/Contents/Resources/nix-fonts"
+      mkdir -p "$fontDir"
+      fontIndex=0
+      while IFS= read -r -d "" font; do
+        # Prefix names to avoid collisions when flattening the directory.
+        ln -s "$font" "$fontDir/$fontIndex-$(basename "$font")"
+        fontIndex=$((fontIndex + 1))
+      done < <(
+        # sort to make the order deterministic
+        find -L "$deps/share/fonts" -type f -print0 | LC_ALL=C sort -z
+      )
+
+      plist="$out/Applications/Emacs.app/Contents/Info.plist"
+      # Update the font path if it already exists; otherwise add it.
+      if plutil -type ATSApplicationFontsPath "$plist" > /dev/null 2>&1; then
+        plutil -replace ATSApplicationFontsPath -string "nix-fonts" "$plist"
+      else
+        plutil -insert ATSApplicationFontsPath -string "nix-fonts" "$plist"
+      fi
 
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
         --subst-var-by bash ${runtimeShell} \
@@ -298,7 +335,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by wrapperXdgDataDir "$deps/share" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \
-        --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
+        --subst-var-by prog "$out/Applications/Emacs.app/Contents/MacOS/.Emacs-unwrapped"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
       wrapProgramBinary $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi
