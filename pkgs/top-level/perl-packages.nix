@@ -25682,7 +25682,12 @@ with self;
       pkgs.cups
       pkgs.libcupsfilters
     ];
+    nativeCheckInputs = [
+      pkgs.cups
+    ];
+    strictDeps = true;
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.cups}/lib -lcups";
+    __structuredAttrs = true;
     meta = {
       description = "Common Unix Printing System Interface";
       homepage = "https://github.com/niner/perl-Net-CUPS";
