@@ -16,7 +16,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "thumbdrives";
-  version = "0.3.2";
+  version = "24338890799c4b3435a07406a19f23ae37a9222a";
 
   pyproject = false;
 
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "~martijnbraam";
     repo = "thumbdrives";
     rev = finalAttrs.version;
-    hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
+    hash = "sha256-+y8C1Ij+QX4ACZQlgYAumrmaDCyx+7645OR/gBu+XbU=";
   };
 
   postPatch = ''
