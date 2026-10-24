@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    for f in {configure,ltmain.sh,m4/libtool.m4}; do
+    for f in configure ltmain.sh m4/libtool.m4; do
       substituteInPlace $f \
         --replace /usr/bin/file ${file}/bin/file
     done

@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE3-konqueror/*.desktop -t $out/share/apps/konqueror/servicemenus
 
     # Install desktop entries's icons
-    for size in {48,256}; do
+    for size in 48 256; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
       mkdir $out/share/icons/hicolor/"$size"x"$size"/mimetypes
       mkdir $out/share/icons/hicolor/"$size"x"$size"/actions

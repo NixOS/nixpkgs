@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir $out
 
-    for file in {ebsnvme-id,ec2-metadata,ec2nvme-nsid,ec2udev-vbd}; do
+    for file in ebsnvme-id ec2-metadata ec2nvme-nsid ec2udev-vbd; do
       install -D -m 755 -t $out/bin "$file"
     done
 
