@@ -2,12 +2,17 @@
   lib,
   common-updater-scripts,
   cudaPackages,
+  # "cpu" pins the CPU torch flavour; "cuda" substitutes the prebuilt CUDA
+  # wheels, which are unfree and Linux-only but avoid a multi-hour torch build
+  # against the default cudaPackages.
+  acceleration ? "cpu",
   extraPackages ? (ps: [ ]),
   fetchFromGitHub,
   gnutar,
   gzip,
   nix-update,
   makeBinaryWrapper,
+  nixosTests,
   python3,
   stdenvNoCC,
   writeShellApplication,
@@ -17,7 +22,50 @@
 let
   # Using overrideScope does not work when using `withPackages appDependencies`
   # and creates a an env without those overrides
-  python = python3;
+  python = python3.override (
+    {
+      packageOverrides ? (_: _: { }),
+      ...
+    }:
+    {
+      self = python;
+      # Compose with the caller's overrides rather than replacing them, so a
+      # `python3` passed in from outside (one providing torch-bin, say) survives.
+      # The caller runs first and supplies the base package; the CUDA pin below
+      # is applied on top of it and stays in effect unless cudaPackages is
+      # overridden too.
+      packageOverrides = lib.composeExtensions packageOverrides (
+        final: prev:
+        let
+          cuda = acceleration == "cuda";
+          # Every attribute that takes a cudaPackages has to carry the same value:
+          # the prebuilt torchvision resolves `torch-bin` from this set, so an
+          # unpinned `torch-bin` could be built against a different cudaPackages
+          # and fail the cuda-bindings >= 13.0.3 check.
+          pin = pkg: pkg.override { inherit cudaPackages; };
+          torchPkg = if cuda then prev.torch-bin else prev.torch.override { cudaSupport = false; };
+          tritonPkg = if cuda then prev.triton-bin else prev.triton.override { cudaSupport = false; };
+        in
+        {
+          # older cudaPackages are not supported and actively disabled
+          # https://github.com/Comfy-Org/ComfyUI/blob/v0.27.0/comfy/quant_ops.py#L25
+          torch = pin torchPkg;
+          triton = pin tritonPkg;
+          torchvision = if cuda then pin prev.torchvision-bin else prev.torchvision;
+          # Pinned so that anything resolving `torch-bin` (or the other bin
+          # attributes) from this set gets the same cudaPackages; see the `pin`
+          # comment above.
+          torch-bin = pin prev.torch-bin;
+          triton-bin = pin prev.triton-bin;
+          torchvision-bin = pin prev.torchvision-bin;
+          # comfy-kitchen has no prebuilt wheel. Keep it CPU-only so the CUDA
+          # path only pulls the prebuilt torch wheels instead of also building
+          # its CUDA kernels from source.
+          comfy-kitchen = prev.comfy-kitchen.override { cudaSupport = false; };
+        }
+      );
+    }
+  );
 
   appDependencies =
     ps:
@@ -149,6 +197,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         done < "$src/requirements.txt"
       '';
     });
+
+    tests.comfyui = nixosTests.comfyui;
   };
 
   meta = {
