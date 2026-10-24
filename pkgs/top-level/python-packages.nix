@@ -13261,6 +13261,10 @@ self: super: with self; {
 
   paperbush = callPackage ../development/python-modules/paperbush { };
 
+  paperless-ngx-erechnung = callPackage ../development/python-modules/paperless-ngx-erechnung {
+    inherit (pkgs) fop;
+  };
+
   papermill = callPackage ../development/python-modules/papermill { };
 
   paperwork-backend = callPackage ../applications/office/paperwork/paperwork-backend.nix { };
