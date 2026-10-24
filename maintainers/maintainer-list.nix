@@ -16367,6 +16367,11 @@
     githubId = 621759;
     name = "Lassulus";
   };
+  Latias94 = {
+    name = "Latias94";
+    github = "Latias94";
+    githubId = 13315417;
+  };
   lavafroth = {
     email = "lavafroth@protonmail.com";
     github = "lavafroth";
