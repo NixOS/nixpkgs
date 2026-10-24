@@ -4,6 +4,7 @@
   lib,
   makeWrapper,
   nodejs,
+  nixosTests,
   postgresql,
   stdenv,
   yarn-berry_4,
@@ -45,10 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  # Blocked on:
-  # - Unreleased change to nix-update: <https://github.com/Mic92/nix-update/pull/640#issuecomment-6298951201>
-  # - Unmerged fix to yarn-berry-fetcher: <https://cyberchaos.dev/yuka/yarn-berry-fetcher/-/merge_requests/29>
-  # passthru.updateScript = nix-update-script { };
+  passthru = {
+    # Blocked on:
+    # - Unreleased change to nix-update: <https://github.com/Mic92/nix-update/pull/640#issuecomment-6298951201>
+    # - Unmerged fix to yarn-berry-fetcher: <https://cyberchaos.dev/yuka/yarn-berry-fetcher/-/merge_requests/29>
+    # updateScript = nix-update-script { };
+
+    tests = { inherit (nixosTests) twenty; };
+  };
 
   # To generate this file:
   # nix-shell -p yarn-berry_4.yarn-berry-fetcher --command 'yarn-berry-fetcher missing-hashes "$(nix-build -A twenty.src)/yarn.lock" > pkgs/by-name/tw/twenty/missing-hashes.json'
