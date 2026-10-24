@@ -33,6 +33,8 @@
   withOpus ? true,
   ldapSupport ? false,
   openldap,
+  postgresqlSupport ? false,
+  postgresql,
 }:
 
 let
@@ -46,7 +48,8 @@ let
     }:
     stdenv.mkDerivation {
       inherit version;
-      pname = "asterisk" + lib.optionalString ldapSupport "-ldap";
+      pname =
+        "asterisk" + lib.optionalString ldapSupport "-ldap" + lib.optionalString postgresqlSupport "-psql";
 
       buildInputs = [
         jansson
@@ -71,13 +74,18 @@ let
         opusfile
         libogg
       ]
-      ++ lib.optionals ldapSupport [ openldap ];
+      ++ lib.optionals ldapSupport [ openldap ]
+      ++ lib.optionals postgresqlSupport [ postgresql ];
+
       nativeBuildInputs = [
         util-linux
         pkg-config
         autoconf
         libtool
         automake
+      ]
+      ++ lib.optionals postgresqlSupport [
+        postgresql.pg_config
       ];
 
       patches = [
@@ -131,6 +139,9 @@ let
         "--with-lua=${lua}/lib"
         "--with-pjproject-bundled"
         "--with-externals-cache=$(PWD)/externals_cache"
+      ]
+      ++ lib.optionals postgresqlSupport [
+        "--with-postgres"
       ];
 
       preBuild = ''
