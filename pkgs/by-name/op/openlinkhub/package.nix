@@ -1,8 +1,10 @@
 {
   lib,
   buildGoModule,
+  coreutils,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   pkg-config,
   pipewire,
   udev,
@@ -41,13 +43,29 @@ buildGoModule (finalAttrs: {
 
     cp -rt $out/opt/OpenLinkHub database static web
 
-    mkdir -p $out/bin
-    ln -st $out/bin $out/opt/OpenLinkHub/OpenLinkHub
+    install -Dm 755 ${./provision.sh} $out/libexec/openlinkhub-provision
+    install -Dm 755 ${./launcher.sh} $out/bin/OpenLinkHub
+    substituteInPlace $out/libexec/openlinkhub-provision \
+      --replace-fail '@coreutils@' '${coreutils}/bin' \
+      --replace-fail '@version@' '${finalAttrs.version}' \
+      --replace-fail '@out@' "$out"
+    substituteInPlace $out/bin/OpenLinkHub \
+      --replace-fail '@coreutils@' '${coreutils}/bin' \
+      --replace-fail '@out@' "$out"
 
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) openlinkhub; };
+    assets = {
+      static = "${finalAttrs.finalPackage}/opt/OpenLinkHub/static";
+      web = "${finalAttrs.finalPackage}/opt/OpenLinkHub/web";
+      database = "${finalAttrs.finalPackage}/opt/OpenLinkHub/database";
+    };
+    provision = "${finalAttrs.finalPackage}/libexec/openlinkhub-provision";
+  };
 
   meta = {
     homepage = "https://github.com/jurkovic-nikola/OpenLinkHub";
