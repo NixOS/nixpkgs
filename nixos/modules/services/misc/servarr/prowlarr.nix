@@ -78,4 +78,6 @@ in
       allowedTCPPorts = [ cfg.settings.server.port ];
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ connor-grady ];
 }

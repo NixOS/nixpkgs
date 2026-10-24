@@ -2,7 +2,7 @@
 
 {
   name = "prowlarr";
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ connor-grady ];
 
   nodes.machine =
     { pkgs, ... }:
