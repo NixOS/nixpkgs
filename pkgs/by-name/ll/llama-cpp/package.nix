@@ -5,7 +5,6 @@
   cmake,
   ctestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   stdenv,
 
@@ -119,9 +118,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-pEDYgI3AMTU+cekvRX7NNt5wddznydQSNuerswvEpsA=";
   };
-
-  patches = [
-  ];
 
   nativeBuildInputs = [
     cmake
