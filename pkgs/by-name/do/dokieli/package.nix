@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZwK+MxrTodDvvJuQCIhcDkluor4ri856m/WhcVRwfzo=";
   };
 
+  # fails in `preInstall` without doing this
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail "postinstall" "dont-postinstall"
+  '';
+
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
@@ -37,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarn build
 
     runHook postBuild
+  '';
+
+  # Save space by removing non-production deps before install
+  preInstall = ''
+    yarn workspaces focus -A --production
   '';
 
   installPhase = ''
