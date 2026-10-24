@@ -150,7 +150,9 @@ def _rollback_system(
             if maybe_path_to_config:
                 path_to_config = maybe_path_to_config
             else:
-                raise NixOSRebuildError("could not find previous generation")
+                raise NixOSRebuildError(
+                    f"could not find previous generation for profile '{profile.name}'"
+                )
 
     return path_to_config
 
@@ -378,7 +380,7 @@ def list_generations(
     args: argparse.Namespace,
     profile: Profile,
 ) -> None:
-    generations = nix.list_generations(profile)
+    generations = nix.list_generations(profile=profile, elevate=args.elevator)
     if args.json:
         print(json.dumps(generations, indent=2))
     else:
