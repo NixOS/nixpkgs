@@ -75,14 +75,15 @@ let
   };
   boost' = boost.override { enableNumpy = true; };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rdkit";
   version = "2025.03.6";
   pyproject = false;
+  __structuredAttrs = true;
 
   src =
     let
-      versionTag = lib.replaceStrings [ "." ] [ "_" ] version;
+      versionTag = lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchFromGitHub {
       owner = "rdkit";
@@ -184,6 +185,19 @@ buildPythonPackage rec {
     (lib.cmakeFeature "coordgen_DIR" "${coordgenlibs}/lib/cmake")
   ];
 
+  # The CMake build does not produce any .dist-info, which makes the runtime dependency check of
+  # reverse dependencies fail. Install a minimal one so that `importlib.metadata` finds rdkit.
+  postInstall = ''
+    distInfo="$out/${python.sitePackages}/rdkit-${finalAttrs.version}.dist-info"
+    mkdir -p "$distInfo"
+    cat > "$distInfo/METADATA" <<EOF
+    Metadata-Version: 2.1
+    Name: rdkit
+    Version: ${finalAttrs.version}
+    EOF
+    echo "nix" > "$distInfo/INSTALLER"
+  '';
+
   checkPhase = ''
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
@@ -206,6 +220,6 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.bsd3;
     homepage = "https://www.rdkit.org";
-    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.tag}";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})
