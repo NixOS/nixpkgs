@@ -1,0 +1,12 @@
+diff -Naur a/cnijfilter/src/bjfimage.c b/cnijfilter/src/bjfimage.c
+--- a/cnijfilter/src/bjfimage.c
++++ b/cnijfilter/src/bjfimage.c
+@@ -1574,7 +1574,7 @@
+ 		goto onErr;
+ 	}
+ 
+-	if (setjmp (png_p->jmpbuf))
++	if (setjmp (png_jmpbuf(png_p)))
+ 	{
+ 		png_destroy_read_struct(&png_p, &info_p, (png_infopp)NULL);
+ 		goto onErr;
