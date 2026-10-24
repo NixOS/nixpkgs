@@ -46,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  # a hack to bypass an expectation for the apple clang compiler
+  env.CXXFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D__apple_build_version__=17000000";
+
   cmakeFlags = [
     (lib.cmakeBool "PODOFO_BUILD_STATIC" stdenv.hostPlatform.isStatic)
     (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_NAME_DIR" true)
@@ -66,7 +69,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kuflierl
     ];
-    # last successful hydra build on darwin was in 2025
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
