@@ -1,0 +1,39 @@
+diff --git a/landlock_linux.go b/landlock_linux.go
+index 82229d6..9191986 100644
+--- a/landlock_linux.go
++++ b/landlock_linux.go
+@@ -83,6 +83,12 @@ func setupLandlock() error {
+ 		fsRules = append(fsRules, landlock.RODirs(path).IgnoreIfMissing())
+ 	}
+ 
++	// Extra read-only paths from --landlock-allow-read, for example the
++	// targets of symlinks in /etc.
++	for _, path := range *landlockAllowRead {
++		fsRules = append(fsRules, landlock.PathAccess(llsys.AccessFSReadFile|llsys.AccessFSReadDir, path))
++	}
++
+ 	// When ACME is enabled, certmagic persists certificates and keys to
+ 	// $XDG_DATA_HOME/certmagic (defaulting to $HOME/.local/share/certmagic).
+ 	// Grant RW on the parent dir so certmagic can create and populate the
+diff --git a/main.go b/main.go
+index 31543c4..b46bbf3 100644
+--- a/main.go
++++ b/main.go
+@@ -68,6 +68,8 @@ var (
+ 	disableLandlock      *bool   //nolint:unused
+ )
+ 
++var landlockAllowRead *[]string //nolint:unused
++
+ // Main flags (always supported)
+ var (
+ 	app = kingpin.New("ghostunnel", "A simple TLS proxy with mutual authentication for securing non-TLS services.")
+@@ -189,6 +191,8 @@ func init() {
+ 
+ 		// Flag to disable use of landlock if necessary. Note that landlock is automatically disabled when PKCS#11 is used.
+ 		disableLandlock = app.Flag("disable-landlock", "Disable the best-effort landlock sandboxing.").Bool()
++
++		landlockAllowRead = app.Flag("landlock-allow-read", "Allow the landlock sandbox to read files and list directories in the given directory and below it (can be repeated).").PlaceHolder("DIR").Strings()
+ 	}
+ 
+ 	// Aliases for flags that were renamed to be backwards-compatible

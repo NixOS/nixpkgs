@@ -20,6 +20,13 @@ buildGo127Module (finalAttrs: {
 
   deleteVendor = true;
 
+  patches = [
+    # A flag for extra paths in the landlock sandbox.
+    # Needed for config files in the store, for instance.
+    # Not offered upstream yet.
+    ./landlock-allow-read.patch
+  ];
+
   checkFlags = [
     # These tests don't exist for Linux, and on Darwin they attempt to use the macOS Keychain
     # which doesn't work from a nix build. Presumably other platform implementations of the
@@ -48,6 +55,13 @@ buildGo127Module (finalAttrs: {
 
   meta = {
     description = "TLS proxy with mutual authentication support for securing non-TLS backend applications";
+    longDescription = ''
+      On Linux, ghostunnel restricts itself with a landlock sandbox. The
+      Nixpkgs build adds a `--landlock-allow-read` flag, which lets the sandbox
+      read files and list directories in a further path. On NixOS, many paths
+      in /etc are symlinks into the Nix store, so run ghostunnel with
+      `--landlock-allow-read=/nix/store` there.
+    '';
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
