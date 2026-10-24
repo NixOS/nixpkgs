@@ -14209,8 +14209,6 @@ self: super: with self; {
 
   protoletariat = callPackage ../development/python-modules/protoletariat { };
 
-  proton-client = callPackage ../development/python-modules/proton-client { };
-
   proton-core = callPackage ../development/python-modules/proton-core { };
 
   proton-keyring-linux = callPackage ../development/python-modules/proton-keyring-linux { };
