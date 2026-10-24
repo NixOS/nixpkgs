@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.quantenzitrone ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "dosfstools_project" finalAttrs.version;
   };
 })
