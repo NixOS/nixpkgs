@@ -3466,12 +3466,6 @@
     githubId = 157330;
     name = "Ben Burdette";
   };
-  bcarrell = {
-    email = "brandoncarrell@gmail.com";
-    github = "bcarrell";
-    githubId = 1015044;
-    name = "Brandon Carrell";
-  };
   bcc32 = {
     email = "me@bcc32.com";
     github = "bcc32";
