@@ -742,6 +742,9 @@ in
         store.
 
         By default, this is enabled if you mount a host Nix store.
+        However, if a NixOS container inside the VM is configured
+        to use a private user namespace, it is disabled due to
+        filesystem limitations.
       '';
     };
 
