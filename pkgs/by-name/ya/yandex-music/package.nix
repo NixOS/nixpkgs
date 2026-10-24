@@ -1,122 +1,125 @@
 {
-  fetchurl,
-  stdenvNoCC,
   lib,
+  stdenvNoCC,
+  fetchurl,
+  dpkg,
   makeWrapper,
-  p7zip,
-  asar,
-  jq,
-  python3,
   electron,
-  fetchFromGitHub,
-  electronArguments ? "",
-
-  # Whether to enable tray menu by default
-  trayEnabled ? true,
-  # Style of tray: 1 - default style, 2 - mono black, 3 - mono white
-  trayStyle ? 1,
-  # Whether to leave application in tray disregarding of its play state
-  trayAlways ? false,
-  # Whether to enable developers tools
-  devTools ? false,
-  # Vibe animation FPS can be  from 0 (black screen) to any reasonable number.
-  # Recommended 25 - 144. Default 25.
-  vibeAnimationMaxFps ? 25,
-  # Yandex Music's custom Windows-styled titlebar. Also makes the window frameless.
-  customTitleBar ? false,
+  libayatana-appindicator,
+  asar,
+  undmg,
 }:
-assert lib.assertMsg (trayStyle >= 1 && trayStyle <= 3) "Tray style must be withing 1 and 3";
-assert lib.assertMsg (vibeAnimationMaxFps >= 0) "Vibe animation max FPS must be greater then 0";
-stdenvNoCC.mkDerivation rec {
-  pname = "yandex-music";
-  version = "5.63.1";
+let
+  version = "5.122.0";
 
-  src = fetchFromGitHub {
-    owner = "cucumber-sp";
-    repo = "yandex-music-linux";
-    # tags are retagged for some bug fixes
-    rev = "066a6c7f503304d2181db04c5ed379a80f9137b8";
-    hash = "sha256-z+gmUG0/7ykF42+OlFGZC268Tj8+vpfgZRYrW4otpfM=";
+  linuxSrc = fetchurl {
+    url = "https://desktop.app.music.yandex.net/stable/Yandex_Music_amd64_${version}.deb";
+    hash = "sha256-kJEzmWGJlDEm9epRixeKuvPTPbom56g6j1vhKZDcQ+M=";
   };
 
-  nativeBuildInputs = [
-    p7zip
-    asar
-    jq
-    python3
-    makeWrapper
-  ];
+  darwinSrc = fetchurl {
+    url = "https://desktop.app.music.yandex.net/stable/Yandex_Music_universal_${version}.dmg";
+    hash = "sha256-KxToPH/SD0rXdiapoLk0PViLwzsctF/+DeuKe4YFx+w=";
+  };
+in
+stdenvNoCC.mkDerivation {
+  pname = "yandex-music";
+  inherit version;
 
-  passthru.updateScript = ./update.sh;
+  src = if stdenvNoCC.hostPlatform.isDarwin then darwinSrc else linuxSrc;
 
-  ymExe =
-    let
-      ym_info = builtins.fromJSON (builtins.readFile ./ym_info.json);
-    in
-    fetchurl {
-      url = ym_info.exe_link;
-      hash = ym_info.exe_hash;
-    };
+  nativeBuildInputs =
+    if stdenvNoCC.hostPlatform.isDarwin then
+      [ undmg ]
+    else
+      [
+        dpkg
+        makeWrapper
+        asar
+      ];
 
-  buildPhase = ''
+  dontConfigure = true;
+
+  sourceRoot = ".";
+
+  unpackPhase =
+    if stdenvNoCC.hostPlatform.isDarwin then
+      ''
+        runHook preUnpack
+        undmg $src
+        runHook postUnpack
+      ''
+    else
+      ''
+        runHook preUnpack
+        dpkg-deb -x $src .
+        runHook postUnpack
+      '';
+
+  buildPhase = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
     runHook preBuild
-    bash "./repack.sh" -o "./app" "$ymExe"
+
+    asar extract opt/Яндекс\ Музыка/resources/app.asar app
+
+    # Fix tray icon by providing assets from the host electron
+    substituteInPlace app/index.js \
+      --replace-warn "process.resourcesPath" "require('path').join(__dirname, '..')"
+
+    asar pack app app.asar
+
     runHook postBuild
   '';
 
-  config =
-    let
-      inherit (lib) optionalString;
-    in
-    ''
-      ELECTRON_ARGS="${electronArguments}"
-      VIBE_ANIMATION_MAX_FPS=${toString vibeAnimationMaxFps}
-    ''
-    + optionalString trayEnabled ''
-      TRAY_ENABLED=${toString trayStyle}
-    ''
-    + optionalString trayAlways ''
-      ALWAYS_LEAVE_TO_TRAY=1
-    ''
-    + optionalString devTools ''
-      DEV_TOOLS=1
-    ''
-    + optionalString customTitleBar ''
-      CUSTOM_TITLE_BAR=1
-    '';
+  installPhase =
+    if stdenvNoCC.hostPlatform.isDarwin then
+      ''
+        runHook preInstall
 
-  installPhase = ''
-    runHook preInstall
+        mkdir -p $out/Applications
+        cp -r "Yandex Music.app" $out/Applications/
 
-    mkdir -p "$out/share/nodejs"
-    mv app/yandex-music.asar "$out/share/nodejs"
+        runHook postInstall
+      ''
+    else
+      ''
+        runHook preInstall
 
-    CONFIG_FILE="$out/share/yandex-music.conf"
-    echo "$config" >> "$CONFIG_FILE"
+        mkdir -p $out/bin $out/share/yandex-music
+        install -Dm644 app.asar $out/share/yandex-music/app.asar
+        cp -r opt/Яндекс\ Музыка/resources/assets $out/share/yandex-music/assets
 
-    install -Dm755 "$src/templates/yandex-music.sh" "$out/bin/yandex-music"
-    substituteInPlace "$out/bin/yandex-music"                                  \
-      --replace-fail "%electron_path%" "${electron}/bin/electron"              \
-      --replace-fail "%asar_path%" "$out/share/nodejs/yandex-music.asar"
+        cp -r usr/share/applications $out/share/
+        cp -r usr/share/icons $out/share/
 
-    wrapProgram "$out/bin/yandex-music"                                        \
-      --set-default YANDEX_MUSIC_CONFIG "$CONFIG_FILE"
+        mv $out/share/applications/yandexmusic.desktop $out/share/applications/yandex-music.desktop
 
-    install -Dm644 "./app/favicon.png" "$out/share/icons/hicolor/48x48/apps/yandex-music.png"
-    install -Dm644 "./app/favicon.svg" "$out/share/icons/hicolor/scalable/apps/yandex-music.svg"
+        substituteInPlace $out/share/applications/yandex-music.desktop \
+          --replace-fail "/opt/Яндекс Музыка/yandexmusic" "$out/bin/yandex-music" \
+          --replace-fail "Name=Яндекс Музыка" "Name=Yandex Music" \
+          --replace-fail "StartupWMClass=Яндекс Музыка" "StartupWMClass=yandexmusic"
 
-    install -Dm644 "$src/templates/desktop" "$out/share/applications/yandex-music.desktop"
+        makeWrapper ${electron}/bin/electron $out/bin/yandex-music \
+          --run 'if [ -d "$HOME/.config/yandex-music" ] && [ ! -d "$HOME/.config/YandexMusic" ]; then mv "$HOME/.config/yandex-music" "$HOME/.config/YandexMusic"; fi' \
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libayatana-appindicator ]}" \
+          --add-flags "$out/share/yandex-music/app.asar" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
-    runHook postInstall
-  '';
+        runHook postInstall
+      '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "Personal recommendations, selections for any occasion and new music";
+    description = "Yandex Music Desktop App";
     homepage = "https://music.yandex.ru/";
-    downloadPage = "https://music.yandex.ru/download/";
-    changelog = "https://github.com/cucumber-sp/yandex-music-linux/releases/tag/v${version}";
+    downloadPage = "https://music.yandex.com/download/";
     license = lib.licenses.unfree;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ shved ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
+    mainProgram = if stdenvNoCC.hostPlatform.isDarwin then "Yandex Music" else "yandex-music";
   };
 }
