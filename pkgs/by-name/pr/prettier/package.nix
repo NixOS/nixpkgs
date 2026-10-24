@@ -137,6 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
   version = "3.9.10";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
