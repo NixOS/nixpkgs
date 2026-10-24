@@ -851,6 +851,7 @@ in
   # This test happens to work on x86_64-linux but not on other platforms.
   hibernate = handleTestOn [ "x86_64-linux" ] ./hibernate.nix { };
   hickory-dns = runTest ./hickory-dns.nix;
+  hindsight-api = runTest ./hindsight-api.nix;
   hister = runTest ./hister.nix;
   hitch = runTest ./hitch;
   hledger-web = runTest ./hledger-web.nix;
