@@ -22,20 +22,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "connectrpc";
-  version = "0.11.1";
+  version = "0.12.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z0ltm1HZH2hFhKiAMaaoz9EVqzbxASLZ6wRpQx9XU0Q=";
+    hash = "sha256-tAI5zk0yzse7463mm78B6VGVnc/WCQ06iKyovWdoRK0=";
   };
 
-  build-system = [
-    uv-build
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout = 1800  # 30 min" 'timeout = "1800"'
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     # Upstream pins protobuf-py to this exact version; bump the two together.
