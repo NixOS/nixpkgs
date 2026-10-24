@@ -293,6 +293,9 @@ stdenvNoCC.mkDerivation {
         echo "${libc_lib}" > $out/nix-support/orig-libc
         echo "${libc_dev}" > $out/nix-support/orig-libc-dev
       ''
+      + optionalString (libc.staticLibsInDev or false) ''
+        echo "-L${libc_dev}${libc.libdir or "/lib"}" >> $out/nix-support/libc-ldflags
+      ''
 
       ##
       ## Dynamic linker support
