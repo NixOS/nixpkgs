@@ -57,8 +57,8 @@
 let
   # Upstream reads these from git, which the release tarball does not ship.
   # They are purely informational: `llama-server --version`, `/props`, and the web UI.
-  buildNumber = "11429";
-  buildCommit = "d812350";
+  buildNumber = "11669";
+  buildCommit = "620d222";
 
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
@@ -103,7 +103,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "0.6.0";
+  version = "0.7.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -117,16 +117,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l6l6JIlIVTaVC6xh5M4fRHFtXsweQuugtkNTWHcZZF4=";
+    hash = "sha256-pEDYgI3AMTU+cekvRX7NNt5wddznydQSNuerswvEpsA=";
   };
 
   patches = [
-    # Initialize dynamically loaded backends before generating test models.
-    # https://github.com/ggml-org/llama.cpp/pull/30034
-    (fetchpatch {
-      url = "https://github.com/ggml-org/llama.cpp/commit/07ccce23cf7fe3c84e13d810accff672b1d966bf.patch";
-      hash = "sha256-KtsPcveFM51fY1hDWntiqCW/KHoWLv05Gmnhd1U/9Zs=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -171,7 +165,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   npmRoot = "tools/ui";
-  npmDepsHash = "sha256-a17M+L3nLdRnN6WMB6imPFmwqG2g8uv+gwN0XTAUrf8=";
+  npmDepsHash = "sha256-hqYzdp1FwPhYkBP278fQXgY9NCKB6Q3P6Gko7BfP0m0=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
@@ -267,7 +261,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "test-download-model"
     "test-arg-parser"
     "test-thread-safety"
-    "test-state-restore-fragmented"
+    "test-llama-context-model"
   ];
 
   passthru.updateScript = ./update.sh;

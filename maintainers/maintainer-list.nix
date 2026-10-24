@@ -16626,6 +16626,12 @@
     githubId = 480920;
     name = "Luca Bruno";
   };
+  lethargii = {
+    email = "l.sevault@proton.me";
+    github = "lethargii";
+    githubId = 127450613;
+    name = "Lucien Sevault Wolber";
+  };
   leungbk = {
     email = "leungbk@mailfence.com";
     github = "leungbk";
@@ -19514,6 +19520,12 @@
     github = "mirdhyn";
     githubId = 149558;
     name = "Merlin Gaillard";
+  };
+  mirdukkkkk = {
+    email = "karmulav@gmail.com";
+    github = "mirdukkkkk";
+    githubId = 69540930;
+    name = "mirdukkkkk";
   };
   mirkolenz = {
     name = "Mirko Lenz";
@@ -28233,7 +28245,7 @@
   };
   stepbrobd = {
     name = "Yifei Sun";
-    email = "ysun@hey.com";
+    email = "ysun@duck.com";
     matrix = "@ysun:beeper.com";
     github = "stepbrobd";
     githubId = 81826728;
@@ -30918,8 +30930,8 @@
     name = "Klaas van Schelven";
   };
   VarNepvius = {
-    name = "VarNapvius";
-    github = "VarNapvius";
+    name = "VarNepvius";
+    github = "VarNepvius";
     githubId = 14352929;
   };
   varunpatro = {

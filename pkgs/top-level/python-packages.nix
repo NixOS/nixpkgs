@@ -6255,6 +6255,8 @@ self: super: with self; {
 
   flash-mla = callPackage ../development/python-modules/flash-mla { };
 
+  flashinfer-jit-cache = callPackage ../development/python-modules/flashinfer-jit-cache { };
+
   flashinfer-python = callPackage ../development/python-modules/flashinfer-python { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
@@ -11895,6 +11897,18 @@ self: super: with self; {
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
   myuplink = callPackage ../development/python-modules/myuplink { };
+
+  nab = callPackage ../development/python-modules/nab { };
+
+  nab-index = callPackage ../development/python-modules/nab-index { };
+
+  nab-markersets = callPackage ../development/python-modules/nab-markersets { };
+
+  nab-project = callPackage ../development/python-modules/nab-project { };
+
+  nab-provider = callPackage ../development/python-modules/nab-provider { };
+
+  nab-resolver = callPackage ../development/python-modules/nab-resolver { };
 
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 

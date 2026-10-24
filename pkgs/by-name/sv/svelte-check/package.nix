@@ -53,19 +53,23 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    pnpm install --filter=svelte-check... --frozen-lockfile --offline --force --ignore-scripts
-    mkdir -p $out/lib/node_modules/svelte-check/
-    mkdir -p $out/bin
+    cp -rL packages/svelte-check/node_modules/svelte "$TMPDIR/svelte"
+        rm -rf node_modules packages/*/node_modules
+        pnpm install --filter=svelte-check... --prod --frozen-lockfile --offline --force --ignore-scripts
+        cp -r "$TMPDIR/svelte" packages/svelte-check/node_modules/svelte
 
-    mv {packages,node_modules} $out/lib/node_modules/svelte-check/
+        mkdir -p $out/lib/node_modules/svelte-check/
+        mkdir -p $out/bin
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/svelte-check \
-      --add-flags "$out/lib/node_modules/svelte-check/packages/svelte-check/bin/svelte-check" \
-      --set NODE_PATH "$out/lib/node_modules/svelte-check/packages/svelte-check/node_modules/"
+        mv {packages,node_modules} $out/lib/node_modules/svelte-check/
 
-    runHook postInstall
+        makeWrapper ${lib.getExe nodejs} $out/bin/svelte-check \
+          --add-flags "$out/lib/node_modules/svelte-check/packages/svelte-check/bin/svelte-check" \
+          --set NODE_PATH "$out/lib/node_modules/svelte-check/packages/svelte-check/node_modules/"
+
+        runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script {
