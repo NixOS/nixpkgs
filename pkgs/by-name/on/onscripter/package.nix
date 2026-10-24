@@ -14,7 +14,7 @@
   libvorbis,
   lua5_1,
   runCommand,
-  smpeg,
+  smpeg2,
   stdenv,
 }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       let
         commands = [
           "${lib.getDev SDL}/bin/sdl-config"
-          "${lib.getDev smpeg}/bin/smpeg-config"
+          "${lib.getDev smpeg2}/bin/smpeg2-config"
         ]
         ++ lib.optionals isDarwin [
           "${lib.getDev freetype}/bin/freetype-config"
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "onscripter-host-deps" { } ''
         mkdir -p $out/bin
         ln -s ${lib.escapeShellArgs commands} $out/bin
+        ln -s $out/bin/smpeg{2,}-config
       ''
     )
   ];
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libvorbis
     lua5_1
-    smpeg
+    smpeg2
   ]
   ++ (if isDarwin then [ freetype ] else [ fontconfig ]);
 
