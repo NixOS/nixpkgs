@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "tock";
-  version = "2.0.4";
+  version = "2.0.8";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kriuchkov";
     repo = "tock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8mG25DocVz2cSz2LF2uHPwApCv4KKAYiCm2WGId/zeM=";
+    hash = "sha256-4RvQ0MMJAttWcVPUc07uvYolbkcudB4fNdsCR4k8iEU=";
   };
 
-  vendorHash = "sha256-j8npmhZX2hcZYrtDtJWxUXzrBtf5hPOHkInRfuWVb40=";
+  vendorHash = "sha256-b6zrhDf4iRnnMWIlxCyQjr0LakZbavc11xCu6X0bJOs=";
 
   ldflags = [
     "-s"
