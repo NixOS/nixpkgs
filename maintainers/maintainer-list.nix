@@ -6061,6 +6061,13 @@
     githubId = 34543609;
     name = "creator54";
   };
+  creepycode = {
+    email = "nixpkgs-jvb3dh3u@creepy.sh";
+    github = "ByteZ1337";
+    githubId = 42820438;
+    name = "creepycode";
+    keys = [ { fingerprint = "62FB 090D A7C1 2EE1 326F  B69E 94D2 598D 5A23 AD5E"; } ];
+  };
   crem = {
     email = "max@alstercaminer.com";
     github = "ItsCrem";
