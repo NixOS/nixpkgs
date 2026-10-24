@@ -64,9 +64,10 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Line-by-line profiler";
-    mainProgram = "kernprof";
     homepage = "https://github.com/pyutils/line_profiler";
     changelog = "https://github.com/pyutils/line_profiler/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
+    mainProgram = "kernprof";
   };
 })
