@@ -1,12 +1,10 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl yq
+#!nix-shell -i bash -p curl common-updater-scripts
 set -eu -o pipefail
 
-target="$(dirname "$(readlink -f "$0")")/package.nix"
-host="https://launcherupdates.lunarclientcdn.com"
-metadata=$(curl "$host/latest-ow-linux.yml")
-version=$(echo "$metadata" | yq .version -r | cut -d- -f1)
-hash=$(echo "$metadata" | yq .sha512 -r)
-
-sed -i "s@version = .*;@version = \"$version\";@g" "$target"
-sed -i "s@hash.* = .*;@hash = \"sha512-$hash\";@g" "$target"
+redirect=$(curl -fsS --head -o /dev/null -w '%{redirect_url}' 'https://api.lunarclientprod.com/site/download?os=linux')
+[[ "$redirect" =~ Lunar([ ]|%20)Client-([0-9]+\.[0-9]+\.[0-9]+)-ow\.AppImage ]] || {
+  echo "update.sh: could not parse version from $redirect" >&2
+  exit 1
+}
+update-source-version lunar-client "${BASH_REMATCH[2]}" "" "${redirect// /%20}"
