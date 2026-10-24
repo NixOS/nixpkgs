@@ -746,6 +746,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     mkdir -p "$cxxdev/nix-support"
     printWords "''${propagatedCxxBuildInputs[@]}" >> "$cxxdev/nix-support/propagated-build-inputs"
   ''
+  # nvcc leaves its library path in the device code, see cudaPackages.nccl.
+  + lib.optionalString cudaSupport ''
+    find "$lib/lib" -type f -exec remove-references-to -t ${lib.getBin cudaPackages.cuda_nvcc} '{}' +
+  ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $(ls $lib/lib/*.dylib); do
         install_name_tool -id $lib/lib/$(basename $f) $f || true

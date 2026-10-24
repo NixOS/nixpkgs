@@ -6,6 +6,7 @@ inputs@{
   fetchFromGitHub,
   lib,
   libtool,
+  removeReferencesTo,
   stdenv,
   ucx,
   # Configuration options
@@ -71,7 +72,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     automake
     libtool
   ]
-  ++ optionals enableCuda [ cuda_nvcc ];
+  ++ optionals enableCuda [
+    cuda_nvcc
+    removeReferencesTo
+  ];
 
   buildInputs = [
     ucx
@@ -112,6 +116,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     find "$out/lib/" -name "*.la" -exec rm -f \{} \;
 
     moveToOutput bin/ucc_info "$dev"
+  ''
+  # nvcc leaves its library path in the device code, see cudaPackages.nccl.
+  + lib.optionalString enableCuda ''
+    remove-references-to -t "${lib.getBin cuda_nvcc}" "$out"/lib/ucc/*.so.*
   '';
 
   meta = {
