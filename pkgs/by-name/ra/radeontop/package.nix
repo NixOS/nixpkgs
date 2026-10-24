@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/clbr/radeontop";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.booxter ];
   };
 })
