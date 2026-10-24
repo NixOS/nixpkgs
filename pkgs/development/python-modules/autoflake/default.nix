@@ -6,6 +6,7 @@
   pyflakes,
   pytestCheckHook,
 }:
+
 buildPythonPackage rec {
   pname = "autoflake";
   version = "2.4.0";
@@ -16,9 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-73xJbZvOnSzvBJ8k5ILR0wkMN/vUTl6F37ANs8eO4Ww=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ pyflakes ];
+  dependencies = [ pyflakes ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -31,9 +32,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tool to remove unused imports and unused variables";
-    mainProgram = "autoflake";
     homepage = "https://github.com/myint/autoflake";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yuriaisaka ];
+    mainProgram = "autoflake";
   };
 }
