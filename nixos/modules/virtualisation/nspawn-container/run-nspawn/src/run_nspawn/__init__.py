@@ -229,14 +229,16 @@ def run(
             # "Linux file attributes". Please improve this if you run into this!
             #
             # [0]: https://github.com/NixOS/nixpkgs/blob/d1eff395720e1fe15838263642a2bc1dca1eea32/nixos/modules/system/activation/activation-script.nix#L281
-            subprocess.run(
-                [
-                    "@chattr@",
-                    "-i",
-                    root_dir / "var/empty",
-                ],
-                check=True,
-            )
+            empty_dir = root_dir / "var/empty"
+            if empty_dir.exists():
+                subprocess.run(
+                    [
+                        "@chattr@",
+                        "-i",
+                        empty_dir,
+                    ],
+                    check=True,
+                )
 
         sys.exit(exit_code)
 
