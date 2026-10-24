@@ -332,6 +332,7 @@
   ./programs/sharing.nix
   ./programs/singularity.nix
   ./programs/skim.nix
+  ./programs/skwd-wall-v2.nix
   ./programs/slock.nix
   ./programs/sniffnet.nix
   ./programs/solaar.nix
