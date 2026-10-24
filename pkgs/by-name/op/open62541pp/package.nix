@@ -36,5 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+    # open62541pp is not yet ported to open62541 1.5.x
+    # https://github.com/open62541pp/open62541pp/issues/695
+    broken = lib.versionAtLeast open62541.version "1.5";
   };
 })
