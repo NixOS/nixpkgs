@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
+    ./fix-notification-name.patch
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -76,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm --offline electron-builder \
       --dir \
       -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.extraMetadata.desktopName=com.heroicgameslauncher.hgl.desktop
 
     runHook postBuild
   '';
@@ -126,7 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
     install -D "src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
     substituteInPlace "$out/share/applications/com.heroicgameslauncher.hgl.desktop" \
-      --replace-fail "Exec=heroic-run" "Exec=heroic"
+      --replace-fail "Exec=heroic-run" "Exec=heroic" \
+      --replace-fail "StartupWMClass=heroic" "StartupWMClass=com.heroicgameslauncher.hgl"
 
     runHook postInstall
   '';
