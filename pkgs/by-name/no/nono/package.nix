@@ -8,6 +8,7 @@
 
   dbus,
 
+  installShellFiles,
   writableTmpDirAsHomeHook,
   gitMinimal,
   nix-update-script,
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -226,6 +228,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "tool_sandbox::dynamic_providers::tests::git_read_main_worktree_returns_main_repo_root_in_linked_worktree"
     ]
   );
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd nono \
+      --bash <($out/bin/nono completion bash) \
+      --zsh <($out/bin/nono completion zsh) \
+      --fish <($out/bin/nono completion fish)
+  '';
 
   passthru.updateScript = nix-update-script { };
   meta = {
