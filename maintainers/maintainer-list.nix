@@ -30270,12 +30270,6 @@
     githubId = 28788713;
     name = "Trevor Richards";
   };
-  trevorj = {
-    email = "nix@trevor.joynson.io";
-    github = "akatrevorjay";
-    githubId = 1312290;
-    name = "Trevor Joynson";
-  };
   treyfortmuller = {
     email = "treyunofficial@gmail.com";
     github = "treyfortmuller";

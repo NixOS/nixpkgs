@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "iptstate";
     homepage = "https://github.com/jaymzh/iptstate";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ trevorj ];
+    maintainers = [ ];
     downloadPage = "https://github.com/jaymzh/iptstate/releases";
     license = lib.licenses.zlib;
   };
