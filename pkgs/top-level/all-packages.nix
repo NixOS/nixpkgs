@@ -9221,7 +9221,7 @@ with pkgs;
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
-    packages = _: [ haskellPackages.xmonad-contrib ];
+    packages = haskPkgs: [ haskPkgs.xmonad-contrib ];
   };
 
   xmonadctl = callPackage ../applications/window-managers/xmonad/xmonadctl.nix {
