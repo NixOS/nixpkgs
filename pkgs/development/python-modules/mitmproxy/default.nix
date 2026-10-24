@@ -3,6 +3,7 @@
   aioquic_1_2,
   argon2-cffi,
   asgiref,
+  backports-zstd,
   bcrypt,
   brotli,
   buildPythonPackage,
@@ -27,6 +28,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   requests,
   ruamel-yaml,
   setuptools,
@@ -34,19 +36,18 @@
   tornado,
   urwid,
   wsproto,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.3";
+  version = "12.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
+    hash = "sha256-jaXvXM87H3p4OIxAX5DlQzMjNmL8Jd/hpqOhQFp/4Hk=";
   };
 
   # pins many dependencies way to strict
@@ -82,8 +83,8 @@ buildPythonPackage rec {
     tornado
     urwid
     wsproto
-    zstandard
-  ];
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [ backports-zstd ];
 
   nativeCheckInputs = [
     hypothesis
@@ -158,7 +159,10 @@ buildPythonPackage rec {
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      Misaka13514
+    ];
     mainProgram = "mitmproxy";
   };
 }

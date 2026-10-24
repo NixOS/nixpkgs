@@ -11,7 +11,7 @@
   makeDesktopItem,
   nix-update-script,
   node-gyp,
-  nodejs,
+  nodejs_26,
   pkg-config,
   python3,
   spdx-license-list-data,
@@ -19,7 +19,7 @@
   writeDarwinBundle,
   xcbuild,
   fetchPnpmDeps,
-  pnpm_11,
+  pnpm_12,
   pnpmConfigHook,
   pnpmBuildHook,
   cacert,
@@ -30,7 +30,9 @@ stdenv.mkDerivation (
   let
     appName = "T3 Code (Alpha)";
     electron = electron_44;
-    pnpm = pnpm_11;
+    # Upstream package.json requires Node.js 26; the nixpkgs default is still 24.
+    nodejs = nodejs_26;
+    pnpm = pnpm_12;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
         "assets/prod/black-macos-1024.png"
@@ -40,7 +42,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.1.0";
+    version = "0.1.2";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -48,7 +50,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-P82DqoY1E9wtROwu5Nr7MB/I1PdmZHWXXR4nRa4GWXM=";
+      hash = "sha256-C5l7541kanlsukhswrAEu8GFpr/YpWDnofJ5dlg7+LM=";
     };
 
     postPatch = ''
@@ -104,12 +106,12 @@ stdenv.mkDerivation (
         pnpmWorkspaces
         ;
 
-      fetcherVersion = 4;
-      hash = "sha256-oX4tOu20tYO3ci7VvSEL8eFgxAYWp5HlQFSfAWJGJmg=";
+      fetcherVersion = 5;
+      hash = "sha256-SvNUylZW3EgFF44kRZY8YEAMPidP8/OhrSvX3aYNcfA=";
     };
 
     preBuild = ''
-      # pnpm 11 otherwise detects the package version updates below as
+      # pnpm otherwise detects the package version updates below as
       # dependency drift and runs another install, including lifecycle scripts.
       export pnpm_config_verify_deps_before_run=false
 
@@ -236,6 +238,7 @@ stdenv.mkDerivation (
       changelog = "https://github.com/pingdotgg/t3code/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
+        _0x4bs3nt
         iamanaws
         qweered
       ];
