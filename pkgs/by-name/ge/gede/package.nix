@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gede";
-  version = "2.22.1";
+  version = "2.23.1";
 
   src = fetchFromGitHub {
     owner = "jhn98032";
     repo = "gede";
     tag = "v${version}";
-    hash = "sha256-6YSrqLDuV4G/uvtYy4vzbwqrMFftMvZdp3kr3R436rs=";
+    hash = "sha256-jNV51hUCQ7Vcv677zHq1DSla8Oz3Z5ON9fX05pwiL4k=";
   };
 
   nativeBuildInputs = [
