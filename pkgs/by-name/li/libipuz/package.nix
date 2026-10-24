@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libipuz";
   version = "0.5.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
@@ -46,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    gi-docgen
     json-glib
   ];
 
