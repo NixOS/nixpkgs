@@ -24980,7 +24980,8 @@ with self;
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.16.zip";
       hash = "sha256-UDhQk6owAFa8Jiu2pACpbiGVl3wcXh6/FaXgdak3e4Y=";
     };
-    buildInputs = [ pkgs.unzip ];
+    nativeBuildInputs = [ pkgs.unzip ];
+    strictDeps = true;
 
     postPatch = ''
       substituteInPlace Makefile.PL --replace "'PL_FILES'" "#'PL_FILES'"
@@ -24989,6 +24990,7 @@ with self;
       perl data_pod.PL PERL5LIB:$PERL5LIB
     '';
     outputs = [ "out" ];
+    __structuredAttrs = true;
     meta = {
       description = "Module for reading tags of MP3 audio files";
       license = lib.licenses.artistic1;
