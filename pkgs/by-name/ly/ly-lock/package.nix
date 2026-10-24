@@ -49,10 +49,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     )
   '';
 
-  postInstall = ''
-    install -Dm644 pam/ly-lock $out/etc/pam.d/ly-lock
-  '';
-
   pythonImportsCheck = [ "ly_lock" ];
 
   meta = {
