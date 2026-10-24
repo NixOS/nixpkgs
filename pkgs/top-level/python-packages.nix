@@ -134,6 +134,8 @@ self: super: with self; {
 
   aetcd = callPackage ../development/python-modules/aetcd { };
 
+  aeventkit = callPackage ../development/python-modules/aeventkit { };
+
   afdko = callPackage ../development/python-modules/afdko { };
 
   affine = callPackage ../development/python-modules/affine { };
@@ -8240,6 +8242,8 @@ self: super: with self; {
   iapws = callPackage ../development/python-modules/iapws { };
 
   iaqualink = callPackage ../development/python-modules/iaqualink { };
+
+  ib_async = callPackage ../development/python-modules/ib-async { };
 
   ibeacon-ble = callPackage ../development/python-modules/ibeacon-ble { };
 
