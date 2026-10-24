@@ -12,7 +12,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "anyzig";
-  version = "2026_10_20";
+  version = "2026_10_23";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "marler8997";
     repo = "anyzig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pQbMU7fR5bVT4Tgxq6kR0/uRgW0EpSkyWyZVTUXsHgM=";
+    hash = "sha256-aB3XGcyCQStxY2KDFxhcfmG5EzaBCBQ1AzkMPmRQ39s=";
   };
 
   nativeBuildInputs = [ zig ];
