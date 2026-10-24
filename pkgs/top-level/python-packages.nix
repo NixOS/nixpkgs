@@ -20930,7 +20930,9 @@ self: super: with self; {
         tk = if pythonAtLeast "3.14" then pkgs.tk-9_0 else pkgs.tk-8_6;
       };
 
-  tkinter-gl = callPackage ../development/python-modules/tkinter-gl { };
+  tkinter-gl = callPackage ../development/python-modules/tkinter-gl {
+    inherit (pkgs.tclPackages) tkgl;
+  };
 
   tld = callPackage ../development/python-modules/tld { };
 
