@@ -33200,6 +33200,11 @@
     email = "brianmlyles@gmail.com";
     githubId = 1123282;
   };
+  zlatkoc = {
+    name = "Zlatko Čajić";
+    github = "zlatkoc";
+    githubId = 385570;
+  };
   zlepper = {
     name = "Rasmus Hansen";
     github = "zlepper";
