@@ -32472,6 +32472,11 @@
     github = "yanganto";
     githubId = 10803111;
   };
+  yangkx1024 = {
+    github = "yangkx1024";
+    githubId = 8359081;
+    name = "Kexuan Yang";
+  };
   yannham = {
     github = "yannham";
     githubId = 6530104;
