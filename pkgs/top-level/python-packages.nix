@@ -22068,6 +22068,8 @@ self: super: with self; {
 
   ultralytics-thop = callPackage ../development/python-modules/ultralytics-thop { };
 
+  ultranest = callPackage ../development/python-modules/ultranest { };
+
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
