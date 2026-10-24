@@ -1,0 +1,34 @@
+diff -ruN a/build/DirectXTex-config.cmake.in b/build/DirectXTex-config.cmake.in
+--- a/build/DirectXTex-config.cmake.in	2026-10-22 17:29:27.310575524 -0700
++++ b/build/DirectXTex-config.cmake.in	2026-10-22 17:29:31.882475205 -0700
+@@ -24,7 +24,11 @@
+ endif()
+ 
+ if(MINGW OR (NOT WIN32))
+-    find_dependency(directx-headers)
++    find_package(directx-headers CONFIG QUIET)
++    if(NOT directx-headers_FOUND)
++        find_dependency(PkgConfig)
++        pkg_check_modules(DirectX-Headers REQUIRED IMPORTED_TARGET DirectX-Headers)
++    endif()
+     find_dependency(directxmath)
+ else()
+     find_package(directx-headers CONFIG QUIET)
+diff -ruN a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2026-10-22 17:29:27.308575568 -0700
++++ b/CMakeLists.txt	2026-10-22 17:29:27.318575348 -0700
+@@ -384,7 +384,13 @@
+     find_package(directxmath CONFIG REQUIRED)
+     target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+ 
+-    find_package(directx-headers CONFIG REQUIRED)
++    find_package(directx-headers CONFIG QUIET)
++    if(NOT TARGET Microsoft::DirectX-Headers)
++        find_package(PkgConfig REQUIRED)
++        pkg_check_modules(DirectX-Headers REQUIRED IMPORTED_TARGET DirectX-Headers)
++        add_library(Microsoft::DirectX-Headers ALIAS PkgConfig::DirectX-Headers)
++        set(directx-headers_FOUND TRUE)
++    endif()
+     target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectX-Headers)
+     target_compile_definitions(${PROJECT_NAME} PUBLIC USING_DIRECTX_HEADERS)
+ else()
