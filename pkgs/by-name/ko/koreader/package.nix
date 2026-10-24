@@ -479,7 +479,7 @@ stdenv.mkDerivation {
     inherit src_repo luajit_koreader;
     updateScript = writeScript "update-koreader" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix curl jq nix-update common-updater-scripts
+      #!nix-shell -i bash -p nix curl jq nix-update common-updater-scripts nix-prefetch-git git python3
       set -eou pipefail
       version=$(nix eval --raw --file . koreader.version)
       nix-update koreader
@@ -493,6 +493,15 @@ stdenv.mkDerivation {
         hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . koreader.src.url --system "$system")))
         update-source-version koreader $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
       done
+      # koreader-base's own thirdparty deps (versions, patches, which ones even
+      # exist) can and do change on every release -- re-derive our pins from the
+      # newly-fetched source tree rather than let them silently go stale. See
+      # update-thirdparty-sources.py for what this can't fully automate on its
+      # own (needs a human to read its stderr warnings and, occasionally, this
+      # package's own postPatch).
+      koreaderSrc=$(nix eval --raw -f . koreader.src_repo)
+      python3 pkgs/by-name/ko/koreader/update-thirdparty-sources.py \
+        "$koreaderSrc" pkgs/by-name/ko/koreader/thirdparty-sources.nix
     '';
   };
 
