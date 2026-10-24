@@ -85,6 +85,11 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
         done
         qtWrapperDoneForOuputs+=("$prefix")
 
+        # bash 5.3 segfaults on some macOS when the isELF/isMachO fixup helpers do a
+        # transient `LANG=C read` in a forked subshell with no locale set. Presetting
+        # LANG makes that switch a no-op.
+        export LANG="${LANG:-C}"
+
         local targetDirs=("$prefix/bin" "$prefix/sbin" "$prefix/libexec" "$prefix/Applications" "$prefix/"*.app)
         echo "wrapping Qt applications in ${targetDirs[*]}"
 
