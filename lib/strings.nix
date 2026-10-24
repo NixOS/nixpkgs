@@ -2734,12 +2734,15 @@ rec {
     :::
   */
   isStorePath =
+    let
+      getFirstChar = substring 0 1;
+    in
     x:
     if isStringLike x then
       let
         str = toString x;
       in
-      substring 0 1 str == "/"
+      getFirstChar str == "/"
       && (
         dirOf str == storeDir
         # Match content‐addressed derivations, which _currently_ do not have a
