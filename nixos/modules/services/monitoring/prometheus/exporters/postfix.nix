@@ -8,6 +8,7 @@
 let
   cfg = config.services.prometheus.exporters.postfix;
   inherit (lib)
+    literalExpression
     mkOption
     types
     mkIf
@@ -19,6 +20,18 @@ in
 {
   port = 9154;
   extraOpts = {
+    listenStream = mkOption {
+      type = types.str;
+      default = "${cfg.listenAddress}:${toString cfg.port}";
+      defaultText = literalExpression ''"''${config.services.prometheus.exporters.postfix.listenAddress}:''${toString config.services.prometheus.exporters.postfix.port}"'';
+      example = "/run/prometheus-postfix-exporter.sock";
+      description = ''
+        The value of `ListenStream=` in the exporter's socket unit.
+        Accepts any value supported by systemd, e.g. an IPv4/IPv6 address
+        with port, a Unix domain socket path (absolute), or an abstract
+        namespace socket prefixed with `@`.
+      '';
+    };
     package = lib.mkPackageOption pkgs "prometheus-postfix-exporter" { };
     group = mkOption {
       type = types.str;
