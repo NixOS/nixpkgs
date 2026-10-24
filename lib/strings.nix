@@ -1790,11 +1790,14 @@ rec {
     :::
   */
   splitString =
+    let
+      filterStrings = filter isString;
+    in
     sep:
     let
       escapedSep = escapeRegex (toString sep);
     in
-    s: map (addContextFrom s) (filter isString (split escapedSep (toString s)));
+    s: map (addContextFrom s) (filterStrings (split escapedSep (toString s)));
 
   /**
     Splits a string into substrings based on a predicate that examines adjacent characters.
