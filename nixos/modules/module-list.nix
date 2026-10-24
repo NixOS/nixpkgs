@@ -313,6 +313,7 @@
   ./programs/plotinus.nix
   ./programs/pmount.nix
   ./programs/projecteur.nix
+  ./programs/proton-vpn.nix
   ./programs/proxychains.nix
   ./programs/pulseview.nix
   ./programs/qdmr.nix

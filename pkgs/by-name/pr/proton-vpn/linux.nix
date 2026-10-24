@@ -11,7 +11,9 @@
   wrapGAppsHook4,
   writableTmpDirAsHomeHook,
   nix-update-script,
+  nixosTests,
   withIndicator ? true,
+  withSplitTunneling ? false,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proton-vpn";
@@ -47,19 +49,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
-  dependencies = with python3Packages; [
-    dbus-python
-    distro
-    packaging
-    proton-core
-    proton-keyring-linux
-    proton-vpn-api-core
-    # Required for split tunneling
-    proton-vpn-daemon
-    requests
-    pycairo
-    pygobject3
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      dbus-python
+      distro
+      packaging
+      proton-core
+      proton-keyring-linux
+      proton-vpn-api-core
+      requests
+      pycairo
+      pygobject3
+    ]
+    ++ lib.optional withSplitTunneling proton-vpn-daemon;
 
   dontWrapGApps = true;
 
@@ -100,6 +103,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests.proton-vpn = nixosTests.proton-vpn;
 
   meta = meta // {
     platforms = lib.platforms.linux;
