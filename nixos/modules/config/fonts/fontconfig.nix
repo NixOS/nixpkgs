@@ -670,6 +670,8 @@ in
     (lib.mkIf cfg.enable {
       # Include font packages so fontconfig rules installed in $out/etc/fonts/conf.d
       # (e.g. Noto, Corefonts, Carlito, Lohit) are discovered and linked into /etc/fonts/conf.d.
+      # Note: environment.etc.fonts.source explicitly links only the ${fontconfigEtc}/etc/fonts/ subfolder,
+      # so font binary files ($out/share/fonts) and documentation are safely ignored and not exposed to /etc.
       fonts.fontconfig.confPackages = [ confPkg ] ++ config.fonts.packages;
     })
   ];
