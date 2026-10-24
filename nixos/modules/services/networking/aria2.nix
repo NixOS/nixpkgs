@@ -66,6 +66,9 @@ in
           accessible to users in the `aria2` group.
         '';
       };
+      package = lib.mkPackageOption pkgs "aria2" {
+        example = "aria2-next";
+      };
       openPorts = lib.mkOption {
         type = lib.types.bool;
         default = false;

@@ -293,6 +293,7 @@ in
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   appliance-repart-image-verity-store = runTest ./appliance-repart-image-verity-store.nix;
   aria2 = runTest ./aria2.nix;
+  aria2-next = runTest ./aria2-next.nix;
   armagetronad = runTest ./armagetronad.nix;
   artalk = runTest ./artalk.nix;
   asynch = runTest ./asynch.nix;
