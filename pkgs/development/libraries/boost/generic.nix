@@ -177,7 +177,7 @@ stdenv.mkDerivation {
       (fetchpatch {
         url = "https://github.com/boostorg/thread/commit/49ccf9c30a0ca556873dbf64b12b0d741d1b3e66.patch";
         relative = "include";
-        sha256 = "sha256-O1dH8H1kPZvj4ol47TvlW7+MIejy7uggcIOnZ2t8/UI=";
+        hash = "sha256-O1dH8H1kPZvj4ol47TvlW7+MIejy7uggcIOnZ2t8/UI=";
       })
     ]
 
@@ -185,14 +185,14 @@ stdenv.mkDerivation {
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
       relative = "include";
-      sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
+      hash = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
     })
     # Fixes ABI detection
     ++ lib.optional (version == "1.83.0") (fetchpatch {
       url = "https://github.com/boostorg/context/commit/6fa6d5c50d120e69b2d8a1c0d2256ee933e94b3b.patch";
       stripLen = 1;
       extraPrefix = "libs/context/";
-      sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
+      hash = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
     })
     # Backports https://github.com/boostorg/context/pull/331, which prevents
     # an optimisation that breaks coroutine migration between threads.
