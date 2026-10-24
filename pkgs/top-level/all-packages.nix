@@ -7497,6 +7497,7 @@ with pkgs;
     server = server-pgsql;
   };
 
+  zabbix80 = recurseIntoAttrs (zabbixFor "v80");
   zabbix74 = recurseIntoAttrs (zabbixFor "v74");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
