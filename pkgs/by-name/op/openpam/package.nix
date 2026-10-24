@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openpam";
-  version = "20230627";
+  version = "20250531";
 
   src = fetchurl {
     url = "mirror://sourceforge/openpam/openpam/Ximenia/openpam-${finalAttrs.version}.tar.gz";
-    hash = "sha256-DZrI9bVaYkH1Bz8T7/HpVGFCLEWsGjBEXX4QaOkdtP0=";
+    hash = "sha256-wesvNpiwElgg2Y3b5WmqbUeNeWuLQlkLEa4A8+cgFZU=";
   };
 
   strictDeps = true;
