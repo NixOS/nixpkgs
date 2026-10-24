@@ -64,5 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
       l0b0
     ];
     platforms = lib.platforms.unix;
+    categories = with lib.categories; [
+      game.puzzle
+      implementedIn.c
+      role.sharedLib
+      worksWith.file
+    ];
   };
 })

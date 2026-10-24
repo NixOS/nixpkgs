@@ -53,6 +53,16 @@ Right: `"Library for decoding PNG images"`
 
 An arbitrarily long description of the package in [CommonMark](https://commonmark.org) Markdown.
 
+### `categories` {#var-meta-categories}
+
+A list of the categories applicable to the package. The categories attribute set is defined in [`nixpkgs/lib/categories.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/categories.nix), and is structured as {option}`<facet>.<category>`. A *facet* is a group of categories. Both facets and categories have a `name` and `description` attribute, providing human-readable values.
+
+It is not valid to apply a whole facet to a package:
+
+Wrong: `categories = [ lib.categories.devel ]`
+
+Right: `categories = [ lib.categories.devel.ide ]`
+
 ### `branch` {#var-meta-branch}
 
 Release branch. Used to specify that a package is not going to receive updates that are not in this branch; for example, Linux kernel 3.0 is supposed to be updated to 3.0.X, not 3.1.
