@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopenweathermap";
   version = "0.3.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "freekode";
     repo = "pyopenweathermap";
     # https://github.com/freekode/pyopenweathermap/issues/2
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RdzIfiCFMPmaX6tV66JGDELzaHDIYoZBsMKlEfjZWoI=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
