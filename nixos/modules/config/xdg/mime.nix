@@ -138,6 +138,32 @@ in
 
       if [ -w $out/share/applications ]; then
           ${pkgs.buildPackages.desktop-file-utils}/bin/update-desktop-database $out/share/applications
+
+          # Auto-set defaults for URL scheme handlers that have exactly one
+          # registered handler. Some desktop environments (notably GNOME) need
+          # an explicit default in mimeapps.list to resolve URL scheme handlers;
+          # having the handler declared only in mimeinfo.cache is not sufficient.
+          # Without this, browser-to-app authentication flows that rely on
+          # custom URL schemes (e.g. OAuth redirects via slack://) fail.
+          # See: https://github.com/NixOS/nixpkgs/issues/301893
+          #
+          # These defaults are installed at distribution-level priority
+          # ($XDG_DATA_DIRS/applications/mimeapps.list) and are overridden by
+          # entries in xdg.mime.defaultApplications (/etc/xdg/mimeapps.list)
+          # and user-level configuration (~/.config/mimeapps.list).
+          if [ -f $out/share/applications/mimeinfo.cache ]; then
+              scheme_handler_defaults=""
+              while IFS='=' read -r mime apps; do
+                  handler_count=$(printf '%s' "$apps" | tr ';' '\n' | grep -c . || true)
+                  if [ "$handler_count" -eq 1 ]; then
+                      handler=$(printf '%s' "$apps" | sed 's/;*$//')
+                      scheme_handler_defaults="''${scheme_handler_defaults}$mime=$handler"$'\n'
+                  fi
+              done < <(grep '^x-scheme-handler/' $out/share/applications/mimeinfo.cache || true)
+              if [ -n "$scheme_handler_defaults" ]; then
+                  printf '[Default Applications]\n%s' "$scheme_handler_defaults" > $out/share/applications/mimeapps.list
+              fi
+          fi
       fi
     '';
   };
