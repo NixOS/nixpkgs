@@ -22,7 +22,7 @@
   withMinecraftPatch ? false,
 }:
 let
-  version = "3.4";
+  version = "3.5.1";
   minecraftPatches = fetchFromGitHub {
     owner = "BoyOrigin";
     repo = "glfw-wayland";
@@ -30,7 +30,7 @@ let
     hash = "sha256-kvWP34rOD4HSTvnKb33nvVquTGZoqP8/l+8XQ0h3b7Y=";
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glfw${lib.optionalString withMinecraftPatch "-minecraft"}";
   inherit version;
 
@@ -42,8 +42,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
-    rev = version;
-    hash = "sha256-FcnQPDeNHgov1Z07gjFze0VMz2diOrpbKZCsI96ngz0=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-Vwi7MbzrQmcsENez987/Ju7H0pz0tSV6YC0DqwGeQ+w=";
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
@@ -110,7 +110,8 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       Scrumplex
       twey
+      lukas-sgx
     ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})
