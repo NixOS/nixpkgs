@@ -953,6 +953,7 @@
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/memos.nix
+  ./services/misc/mesh-llm.nix
   ./services/misc/metabase.nix
   ./services/misc/minuspod.nix
   ./services/misc/mollysocket.nix
