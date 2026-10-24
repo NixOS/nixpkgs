@@ -1158,6 +1158,10 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
+  dolphin-emu-primehack = callPackage ../by-name/do/dolphin-emu/package.nix {
+    dolphinVariant = "primehack";
+  };
+
   libretro = recurseIntoAttrs (callPackage ../by-name/li/libretroPackages/packages.nix { });
 
   retroarch = wrapRetroArch { };
