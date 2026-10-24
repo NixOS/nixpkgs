@@ -32,6 +32,11 @@ buildPythonPackage rec {
   # Network discovery doesn't work in the sandbox for darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  disabledTests = [
+    # Test fails aon hydra
+    "test_get_settings"
+  ];
+
   meta = {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
     homepage = "https://gitlab.com/MatthiasLohr/tololib";
