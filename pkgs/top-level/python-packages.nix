@@ -9218,6 +9218,10 @@ self: super: with self; {
 
   keepalive = callPackage ../development/python-modules/keepalive { };
 
+  keeper-secrets-manager-core =
+    callPackage ../development/python-modules/keeper-secrets-manager-core
+      { };
+
   keepkey = callPackage ../development/python-modules/keepkey { };
 
   kegtron-ble = callPackage ../development/python-modules/kegtron-ble { };
