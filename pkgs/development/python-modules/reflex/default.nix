@@ -86,6 +86,7 @@ let
 
       postPatch = lib.optionalString (pname == "reflex-release") ''
         substituteInPlace pyproject.toml \
+          --replace-fail '"towncrier >=24.8.0,<26"' '"towncrier"' \
           --replace-fail '"hatchling == 1.31.0"' '"hatchling"' \
           --replace-fail '"uv-dynamic-versioning == 0.14.0"' '"uv-dynamic-versioning"'
       '';
