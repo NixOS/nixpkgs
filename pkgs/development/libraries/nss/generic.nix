@@ -10,6 +10,7 @@
   fetchFromGitHub,
   nspr,
   perl,
+  python3,
   installShellFiles,
   zlib,
   sqlite,
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     ninja
-    (buildPackages.python3.withPackages (ps: with ps; [ gyp ]))
+    (python3.withPackages (ps: with ps; [ gyp ]))
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

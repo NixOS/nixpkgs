@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+    (python3.withPackages (ps: [ ps.pygobject3 ]))
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook

@@ -291,7 +291,59 @@ let
     }
   );
 
+  crossTests =
+    let
+      debugPython = python.override {
+        enableDebug = true;
+        self = debugPython;
+      };
+
+      testEnvironment =
+        {
+          name,
+          interpreter ? python,
+          selectOutput ? lib.id,
+          expectDebug ? false,
+        }:
+        runCommand "${python.name}-${name}"
+          {
+            nativeBuildInputs = [ (selectOutput (interpreter.withPackages (ps: [ ps.cffi ]))) ];
+          }
+          ''
+            # Both the interpreter and the compiled extension must run on the build platform.
+            python - <<'PY'
+            import cffi
+            import _cffi_backend
+            import sysconfig
+
+            assert bool(sysconfig.get_config_var("Py_DEBUG")) == ${if expectDebug then "True" else "False"}
+            PY
+
+            touch "$out"
+          '';
+    in
+    {
+      with-packages-native = testEnvironment {
+        name = "with-packages-native";
+      };
+
+      with-packages-native-output = testEnvironment {
+        name = "with-packages-native-output";
+        selectOutput = env: env.out;
+      };
+
+      with-packages-native-debug = testEnvironment {
+        name = "with-packages-native-debug";
+        interpreter = debugPython;
+        expectDebug = true;
+      };
+    };
+
 in
-lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
+# The debug interpreter test requires CPython's enableDebug and Py_DEBUG.
+lib.optionalAttrs (
+  stdenv.hostPlatform != stdenv.buildPlatform && python.implementation == "cpython"
+) crossTests
+// lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
   environmentTests // integrationTests // overrideTests // condaTests // editableTests
 )

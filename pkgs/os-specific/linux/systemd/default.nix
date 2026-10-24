@@ -306,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
     docbook_xml_dtd_45
     bash
-    (buildPackages.python3Packages.python.withPackages (
+    (python3Packages.python.withPackages (
       ps:
       with ps;
       [
