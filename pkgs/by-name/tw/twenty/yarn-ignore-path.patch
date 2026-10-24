@@ -1,0 +1,10 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+index 313a9d1e45..7323eca94a 100644
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -18,5 +18,3 @@ npmPreapprovedPackages:
+   - twenty-ui
+   - esbuild@0.28.1
+   - "@esbuild/*@0.28.1"
+-
+-yarnPath: .yarn/releases/yarn-4.18.1.cjs

@@ -1883,6 +1883,7 @@
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/tuliprox.nix
+  ./services/web-apps/twenty.nix
   ./services/web-apps/umami.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
