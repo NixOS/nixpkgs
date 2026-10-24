@@ -31,11 +31,11 @@ python3Packages.buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
-    tmpl_udev="$out/lib/udev/rules.d/99-rivalcfg.rules"
+    tmpl_udev="$out/lib/udev/rules.d/99-steelseries-rival.rules"
     tmpudev="''${tmpl_udev}.in"
     finaludev="$tmpl_udev"
     "$out/bin/rivalcfg" --print-udev > "$tmpudev"
-    substitute "$tmpudev" "$out/lib/udev/rules.d/99-rivalcfg.rules" \
+    substitute "$tmpudev" "$out/lib/udev/rules.d/99-steelseries-rival.rules" \
       --replace-fail MODE=\"0666\" "MODE=\"0664\", GROUP=\"input\""
     rm "$tmpudev"
   '';
