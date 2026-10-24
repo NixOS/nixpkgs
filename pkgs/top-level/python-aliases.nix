@@ -472,6 +472,7 @@ mapAliases {
   Nuitka = throw "'Nuitka' has been renamed to/replaced by 'nuitka'"; # Converted to throw 2025-10-29
   numpy_1 = throw "'numpy_1' has been deprecated in favor of 'numpy', as an old unmaintained version."; # added 2026-10-06
   numpy_2 = warnAlias "'numpy_2' has been renamed to 'numpy'"; # added 2026-10-06
+  oapi-sdk-python = throw "This project have inconsistent naming, use pypi name 'lark-oapi'"; # added 2026-06-25
   oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
   objax = throw "objax has been removed because the upstream project was archived."; # Added 2025-10-04
