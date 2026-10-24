@@ -3,13 +3,10 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
-let
-  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "r8168";
@@ -30,7 +27,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   # avoid using the Makefile directly -- it doesn't understand
   # any kernel but the current.
@@ -47,11 +44,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p ${modDestDir}
-    find . -name '*.ko' -exec cp --parents '{}' ${modDestDir} \;
-    find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
-  '';
+  kernelModuleDirs = [ "src" ];
+  kernelModuleInstallDir = "kernel/drivers/net/wireless/realtek/r8168";
 
   meta = {
     description = "Realtek r8168 driver";

@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
 }:
 
 let
@@ -21,12 +22,9 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   buildPhase = "make -C ${KDIR} M=/build/source modules";
-  installPhase = ''
-    make -C ${KDIR} M=/build/source INSTALL_MOD_PATH="$out" modules_install
-  '';
 
   meta = {
     homepage = "https://github.com/twifty/amd-gpu-i2c";

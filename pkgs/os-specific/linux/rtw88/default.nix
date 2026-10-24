@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   unstableGitUpdater,
 }:
@@ -21,22 +22,14 @@ stdenv.mkDerivation {
     hash = "sha256-8qDSDz6pliZMal1Nt/KufZ42TYHlQuMgZwhm23Qr9pk=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
   makeFlags = kernelModuleMakeFlags ++ [
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p ${modDestDir}
-    find . -name '*.ko' -exec cp --parents {} ${modDestDir} \;
-    find ${modDestDir} -name '*.ko' -exec xz -f {} \;
-
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "kernel/drivers/net/wireless/realtek/rtw88";
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 

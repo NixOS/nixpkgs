@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/driver";
   hardeningDisable = [ "pic" ];
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   preBuild = ''
     substituteInPlace Makefile --replace "KERNELDIR :=" "KERNELDIR ?="
@@ -35,11 +36,7 @@ stdenv.mkDerivation rec {
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D ch9344.ko $out/lib/modules/${kernel.modDirVersion}/usb/serial/ch9344.ko
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "usb/serial";
 
   meta = {
     homepage = "https://www.wch-ic.com/";

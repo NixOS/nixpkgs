@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 let
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -37,11 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace "KERNEL := " "KERNEL ?= "
   '';
 
-  installPhase = ''
-    runHook preInstall
-    install -D lkrg.ko $out/lib/modules/${kernel.modDirVersion}/extra/lkrg.ko
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "extra";
 
   meta = {
     description = "LKRG Linux Kernel module";

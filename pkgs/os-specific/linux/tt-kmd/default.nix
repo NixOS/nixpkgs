@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Wjxz8kfRNeq0CpGn0M4ro6XnuyyUyYFV1Y6sOGHzkA0=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags;
 
@@ -24,12 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installFlags = finalAttrs.buildFlags ++ [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=misc"
-  ];
-
-  installTargets = [ "modules_install" ];
+  kernelModuleInstallDir = "misc";
 
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d

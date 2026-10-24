@@ -4,10 +4,11 @@
   fetchzip,
   kmod,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 let
-  modDestDir = "$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/motorcomm";
+  modDestDir = "${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/motorcomm";
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     "INSTALL_MOD_PATH=${placeholder "out"}"
     "ko_dir=${modDestDir}"
     "ko_full=${modDestDir}/yt6801.ko.xz"
-  ];
+  ]
+  ++ kernelModuleMakeFlags;
 
   meta = {
     homepage = "https://www.motor-comm.com/product/ethernet-control-chip";

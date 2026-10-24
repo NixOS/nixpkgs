@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
@@ -28,17 +29,13 @@ stdenv.mkDerivation {
     ./include-slab.patch
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm644 -t $out/lib/modules/${kernel.modDirVersion}/extra tsme-test.ko
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "extra";
 
   meta = {
     description = "Kernel driver to test the status of AMD TSME (Transparent Secure Memory Encryption)";

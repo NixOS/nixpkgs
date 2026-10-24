@@ -2,6 +2,7 @@
   lib,
   stdenv,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   fetchFromGitHub,
   nix-update-script,
@@ -23,23 +24,13 @@ stdenv.mkDerivation {
     ./kernel-7.2-comp.patch
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=kernel/drivers/hwmon/zenpower"
-    "INSTALL_MOD_STRIP=1"
-    "DEPMOD=true"
   ];
 
-  installTargets = [ "modules_install" ];
-
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)"
-  ];
+  kernelModuleInstallDir = "kernel/drivers/hwmon/zenpower";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

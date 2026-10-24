@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 let
@@ -24,26 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
-  makeFlags = kernelModuleMakeFlags ++ [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=misc"
-    "INSTALL_MOD_STRIP=1"
-    "DEPMOD=true"
-  ];
+  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installTargets = [ "modules_install" ];
-
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)"
-  ];
+  kernelModuleInstallDir = "misc";
 
   meta = {
     maintainers = with lib.maintainers; [ ahoneybun ];
