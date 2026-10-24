@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo126Module,
+  buildGo127Module,
   chromium,
   fetchFromGitHub,
   libreoffice,
@@ -25,20 +25,14 @@ let
 
   unoconverter = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "unoconverter";
-    version = "0.4.0";
+    version = "0.5.0";
 
     src = fetchFromGitHub {
       owner = "gotenberg";
       repo = "unoconverter";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-K3d/6jvj0Tt1e83hVTHZ0N7FzPgJsjxlUBS1nbp82zw=";
+      hash = "sha256-YxhZjsT/NkuzacQsWxLy5CkM2OMoBrLPR89Njy3Iexg=";
     };
-
-    patches = [
-      # Remove compatibility fixes for very old LO/OO
-      # https://github.com/gotenberg/unoconverter/pull/5
-      ./5.patch
-    ];
 
     postPatch = ''
       substituteInPlace unoconv \
@@ -67,9 +61,9 @@ let
     };
   });
 in
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gotenberg";
-  version = "8.36.0";
+  version = "8.40.0";
 
   outputs = [
     "out"
@@ -80,10 +74,10 @@ buildGo126Module (finalAttrs: {
     owner = "gotenberg";
     repo = "gotenberg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mIaTANaES3FilK5345FlaVBfwaPRmryV44AJkSgak4w=";
+    hash = "sha256-51ylEbKMcLiKP4xZGZ7Nnl9dKiH58VqEEbp7ieSEL58=";
   };
 
-  vendorHash = "sha256-sU1yquAP63+/q102b7PkBY5hr/xlCOjS/AYDF4lp8OY=";
+  vendorHash = "sha256-u31PCNvwFJagJWUZbaSVxHP4+K68jNMvW+hhAt9r0yQ=";
 
   postPatch = ''
     find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${finalAttrs.src}#g' {} \;
