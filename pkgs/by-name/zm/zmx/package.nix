@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
       --bash <($out/bin/zmx completions bash) \
       --zsh <($out/bin/zmx completions zsh) \
+      --nushell <($out/bin/zmx completions nu) \
       --fish <($out/bin/zmx completions fish)
   '';
 

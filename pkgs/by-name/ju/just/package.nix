@@ -104,6 +104,7 @@ rustPlatform.buildRustPackage {
       installShellCompletion --cmd just \
         --bash <($out/bin/just --completions bash) \
         --fish <($out/bin/just --completions fish) \
+        --nushell <($out/bin/just --completions nushell) \
         --zsh <($out/bin/just --completions zsh)
     '';
 
