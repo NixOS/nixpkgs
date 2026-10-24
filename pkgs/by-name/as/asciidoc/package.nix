@@ -283,10 +283,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   )
   + ''
     # Fix tests
-    for f in $(grep -R --files-with-matches "2002-11-25") ; do
-      substituteInPlace $f --replace "2002-11-25" "1980-01-02"
-      substituteInPlace $f --replace "00:37:42" "00:00:00"
-    done
+    substituteInPlace $(grep -R --files-with-matches "2002-11-25" tests/data) \
+      --replace-fail "2002-11-25" "1980-01-02"
+    substituteInPlace $(grep -R --files-with-matches "00:37:42" tests/data) \
+      --replace-fail "00:37:42" "00:00:00"
   ''
   + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     # We want to use asciidoc from the build platform to build the documentation.
