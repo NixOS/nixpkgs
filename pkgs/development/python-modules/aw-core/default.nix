@@ -4,7 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   jsonschema,
-  peewee,
+  peewee_3,
   platformdirs,
   iso8601,
   rfc3339-validator,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jsonschema
-    peewee
+    peewee_3
     platformdirs
     iso8601
     rfc3339-validator
