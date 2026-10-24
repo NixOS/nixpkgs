@@ -1,0 +1,36 @@
+commit f7955a501474b1dd7873b46b8c4616ca99f9b673 (HEAD -> master)
+Author: laalsaas <laalsaas@systemli.org>
+Date:   Sat Mar 30 21:59:07 2024 +0100
+
+    remove bogus qtchooser
+
+diff --git a/configure.ac b/configure.ac
+index 3ba294d..9c1149e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -58,25 +58,6 @@ if test -z "$RCC" ; then
+     AC_MSG_ERROR([Cannot find 'rcc'])
+ fi
+ 
+-AC_PATH_PROG(qtchooser, qtchooser, , $PATH:$QTDIR/bin)
+-if test -z "QTCHOOSER" ; then
+-    AC_MSG_ERROR([Cannot find 'qtchooser'])
+-else
+-    QT_LABELS="$(qtchooser -list-versions)"
+-    if grep -q "qt5" <<< "$QT_LABELS" ; then
+-        QT5_NAME="qt5"
+-    elif grep -q "5-64" <<< "$QT_LABELS" ; then
+-        QT5_NAME="5-64"
+-    elif grep -q "5" <<< "$QT_LABELS" ; then
+-        QT5_NAME="5"
+-    else
+-        AC_MSG_ERROR([Cannot find a version of 'qt5' within 'qtchooser'])
+-    fi
+-    MOC="qtchooser -run-tool=moc -qt=$QT5_NAME"
+-    UIC="qtchooser -run-tool=uic -qt=$QT5_NAME"
+-    RCC="qtchooser -run-tool=rcc -qt=$QT5_NAME"
+-fi
+-
+ CXXFLAGS="$CXXFLAGS $QT5_CFLAGS -fPIC"
+ 
+ AC_SUBST(QT5_LIBS)
