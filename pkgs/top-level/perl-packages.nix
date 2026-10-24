@@ -31696,10 +31696,10 @@ with self;
 
   Starman = buildPerlModule {
     pname = "Starman";
-    version = "0.4018";
+    version = "0.4019";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4018.tar.gz";
-      hash = "sha256-bY2yl9hRFB+k/3dI3/BVG+K6j5pELtnKrGRNvMmjbt0=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4019.tar.gz";
+      hash = "sha256-SjPyCmoyUJOPyF4hd540xW4VaJX+So+oyDrE6W7K72E=";
     };
     buildInputs = [
       LWP
