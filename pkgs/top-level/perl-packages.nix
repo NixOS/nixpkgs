@@ -15752,6 +15752,9 @@ with self;
       hash = "sha256-HURlEAvzvAR0opRppAb9AzVituNzYYgSEAA3KrKtqIQ=";
     };
     propagatedBuildInputs = [ Gtk3 ];
+    nativeCheckInputs = [ Gtk3 ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Simple interface to Gtk3's complex MVC list widget";
       homepage = "https://github.com/soig/Gtk3-SimpleList";
