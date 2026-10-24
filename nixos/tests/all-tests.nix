@@ -2075,6 +2075,7 @@ in
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zapret2 = runTest ./zapret2.nix;
+  zellij = runTest ./zellij/default.nix;
   zenohd = runTest ./zenohd.nix;
   zerobyte = runTest ./zerobyte.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
