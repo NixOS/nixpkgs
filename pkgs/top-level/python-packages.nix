@@ -21495,6 +21495,8 @@ self: super: with self; {
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
+  typedload = callPackage ../development/python-modules/typedload { };
+
   typedunits = callPackage ../development/python-modules/typedunits { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
