@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "pywhisker";
-  version = "0.1.0-unstable-2025-09-16";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
