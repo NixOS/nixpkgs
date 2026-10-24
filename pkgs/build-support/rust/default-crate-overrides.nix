@@ -2,6 +2,7 @@
   lib,
   stdenv,
   alsa-lib,
+  apriltag,
   atk,
   autoconf,
   automake,
@@ -53,6 +54,12 @@
   alsa-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ alsa-lib ];
+  };
+
+  apriltag-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ apriltag ];
+    env.APRILTAG_SYS_METHOD = "pkg-config";
   };
 
   # Force using the cmake backend. At least on Darwin, the build else gets confused and fails.
