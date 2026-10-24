@@ -129,7 +129,10 @@ buildNpmPackage rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit electron;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
