@@ -6,10 +6,10 @@
   copyDesktopItems,
   imagemagick,
   autoreconfHook,
-  SDL,
-  SDL_mixer,
-  SDL_image,
-  SDL_gfx,
+  pkg-config,
+  SDL2,
+  SDL2_mixer,
+  SDL2_image,
   libvorbis,
   libjpeg,
   libpng,
@@ -18,34 +18,31 @@
 
 stdenv.mkDerivation rec {
   pname = "freedroid";
-  version = "1.2.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "ReinhardPrix";
     repo = "FreedroidClassic";
-    rev = "release-${version}";
-    sha256 = "027wns25nyyc8afyhyp5a8wn13x9nlzmnqzqyyma1055xjy5imis";
+    rev = "freedroid-${version}-sdl2-port";
+    sha256 = "sha256-4w4d0hJEEZItLZLaujrFDgPDYSZxKz9tkE1S95dnkh8=";
   };
 
   nativeBuildInputs = [
+    SDL2
+    pkg-config
     copyDesktopItems
     imagemagick
     autoreconfHook
   ];
   buildInputs = [
-    SDL
-    SDL_image
-    SDL_gfx
-    SDL_mixer
+    SDL2
+    SDL2_image
+    SDL2_mixer
     libjpeg
     libpng
     libvorbis
     zlib
   ];
-
-  postPatch = ''
-    touch NEWS
-  '';
 
   # DOes not build on -std=c23 due to `bool` collision.
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
