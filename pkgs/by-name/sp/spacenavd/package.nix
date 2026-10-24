@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spacenavd";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spacenavd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O6gkd+9iW6X8eMN99Ajz9Z0tqZBtbVEYDb67yI1b/Bk=";
+    hash = "sha256-nqfu5Byd9ObPym3fjKdeAsAYqjN++33mX30onKhvOk0=";
   };
 
   buildInputs = [
