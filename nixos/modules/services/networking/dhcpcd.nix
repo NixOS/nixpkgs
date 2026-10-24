@@ -386,6 +386,7 @@ in
           ++ lib.optionals (!cfg.allowSetuid) [
             "~@privileged"
             "~@resources"
+            "@chown"
           ];
           SystemCallArchitectures = "native";
           UMask = "0027";
