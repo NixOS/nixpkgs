@@ -19,6 +19,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-pEwDSRnokQMI4Ckg8tvqzvkae+AyHEfk7CkdS8YS31c=";
 
+  __structuredAttrs = true;
+
   env.CGO_ENABLED = 0;
 
   ldflags = [
