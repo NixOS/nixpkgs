@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mbuffer";
-  version = "20260926";
+  version = "20260929";
   outputs = [
     "out"
     "man"
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.maier-komor.de/software/mbuffer/mbuffer-${finalAttrs.version}.tgz";
-    sha256 = "sha256-85kfZQJ51gsIpluJsc2SXy4xJGToT8YIeeBUtLsdXO4=";
+    sha256 = "sha256-dKSK0NcCe5NnmkTEhPR2kk5zLGKiOUdBu3RA3gSdaig=";
   };
 
   buildInputs = [
