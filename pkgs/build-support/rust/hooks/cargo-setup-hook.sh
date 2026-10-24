@@ -86,10 +86,30 @@ cargoSetupPostPatchHook() {
     echo "Finished cargoSetupPostPatchHook"
 }
 
+cargoBuildScriptOverrides() {
+  if [[ -n "$__structuredAttrs" ]]; then
+    if jq -e '. | has("rustNativeDeps")' "$NIX_ATTRS_JSON_FILE" > /dev/null; then
+      echo "cargoBuildScriptOverrides"
+    else
+      return 0
+    fi
+  fi
+
+  mkdir -p .cargo
+
+  jq \
+    --arg target '@rustcTargetSpec@' \
+    '.rustNativeDeps | { target: { $target: . } }' \
+    "$NIX_ATTRS_JSON_FILE" > .cargo/config.json
+
+  cat .cargo/config.json
+  cat .cargo/config.json | jsontoml > .cargo/config.toml
+}
+
 if [ -z "${dontCargoSetupPostUnpack-}" ]; then
   postUnpackHooks+=(cargoSetupPostUnpackHook)
 fi
 
 if [ -z ${cargoVendorDir-} ]; then
-  postPatchHooks+=(cargoSetupPostPatchHook)
+  postPatchHooks+=(cargoSetupPostPatchHook cargoBuildScriptOverrides)
 fi

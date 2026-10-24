@@ -57,6 +57,8 @@
         inherit runCommand rustc;
       };
 
+      native = callPackage ../../../build-support/rust/native.nix { };
+
       # Hooks
       inherit
         (callPackages ../../../build-support/rust/hooks {
