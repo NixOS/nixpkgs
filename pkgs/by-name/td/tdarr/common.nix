@@ -103,7 +103,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.87.01";
+  version = "3.00.00";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -202,10 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = {
-      command = [ ./update-hashes.sh ];
-      supportedFeatures = [ "commit" ];
-    };
     tests.nixos = nixosTests.tdarr;
   }
   // passthru;

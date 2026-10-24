@@ -108,16 +108,10 @@ echo "Successfully updated tdarr to version $LATEST_VERSION" >&2
 cat << EOF
 [
   {
-    "attrPath": "tdarr-server",
+    "attrPath": "tdarr",
     "oldVersion": "$CURRENT_VERSION",
     "newVersion": "$LATEST_VERSION",
-    "files": ["$COMMON_FILE", "$SERVER_FILE"]
-  },
-  {
-    "attrPath": "tdarr-node",
-    "oldVersion": "$CURRENT_VERSION",
-    "newVersion": "$LATEST_VERSION",
-    "files": ["$COMMON_FILE", "$NODE_FILE"]
+    "files": ["$COMMON_FILE", "$SERVER_FILE", "$NODE_FILE"]
   }
 ]
 EOF
