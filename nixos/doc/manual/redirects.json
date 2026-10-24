@@ -1,4 +1,19 @@
 {
+  "module-services-buzz-relay": [
+    "index.html#module-services-buzz-relay"
+  ],
+  "module-services-buzz-relay-admin": [
+    "index.html#module-services-buzz-relay-admin"
+  ],
+  "module-services-buzz-relay-basic-usage": [
+    "index.html#module-services-buzz-relay-basic-usage"
+  ],
+  "module-services-buzz-relay-pairing": [
+    "index.html#module-services-buzz-relay-pairing"
+  ],
+  "module-services-buzz-relay-updates": [
+    "index.html#module-services-buzz-relay-updates"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],
