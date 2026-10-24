@@ -10,12 +10,7 @@
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = _final: prev: {
-      wtforms = prev.wtforms_3_3;
-    };
-  };
+  python = python3;
   version = "0.4.3";
   src = fetchFromGitLab {
     owner = "yaal";
