@@ -40,6 +40,9 @@ gccStdenv.mkDerivation (finalAttrs: {
   pname = "7kaa";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "the3dfxdude";
     repo = "7kaa";
@@ -51,12 +54,12 @@ gccStdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     autoconf-archive
     pkg-config
+    SDL2
   ];
 
   buildInputs = [
     openal
     enet
-    SDL2
     curl
     gettext
     libiconv
