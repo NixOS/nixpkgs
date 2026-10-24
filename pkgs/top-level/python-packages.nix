@@ -17932,6 +17932,8 @@ self: super: with self; {
 
   radixtarget = callPackage ../development/python-modules/radixtarget { };
 
+  radvel = callPackage ../development/python-modules/radvel { };
+
   radon = callPackage ../development/python-modules/radon { };
 
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
@@ -22081,6 +22083,8 @@ self: super: with self; {
   ultralytics = callPackage ../development/python-modules/ultralytics { };
 
   ultralytics-thop = callPackage ../development/python-modules/ultralytics-thop { };
+
+  ultranest = callPackage ../development/python-modules/ultranest { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
