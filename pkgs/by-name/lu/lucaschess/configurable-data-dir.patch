@@ -1,0 +1,275 @@
+diff --git a/bin/Code/Analysis/RunAnalysis.py b/bin/Code/Analysis/RunAnalysis.py
+index c976ebe..5e9cd84 100644
+--- a/bin/Code/Analysis/RunAnalysis.py
++++ b/bin/Code/Analysis/RunAnalysis.py
+@@ -303,7 +303,7 @@ class CPU:
+ def run(filebase: str) -> None:
+     """Función principal para iniciar el análisis"""
+     if not __debug__:
+-        sys.stderr = Util.Log("./bug.analysis")
++        sys.stderr = Util.Log(Code.writable_path("./bug.analysis", "bug.analysis"))
+ 
+     app = QtWidgets.QApplication([])
+     cpu = CPU(filebase)
+diff --git a/bin/Code/Board/Eboard.py b/bin/Code/Board/Eboard.py
+index fcfe9c1..212d162 100644
+--- a/bin/Code/Board/Eboard.py
++++ b/bin/Code/Board/Eboard.py
+@@ -45,7 +45,7 @@ class Eboard:
+     def log(cad):
+         import traceback
+ 
+-        with open("dgt.log", "at", encoding="utf-8", errors="ignore") as q:
++        with open(Code.writable_path("dgt.log", "dgt.log"), "at", encoding="utf-8", errors="ignore") as q:
+             q.write(f"\n[{Util.today()}] {cad}\n")
+             q.writelines(f"    {line.strip()}\n" for line in traceback.format_stack())
+ 
+diff --git a/bin/Code/Config/ConfigPaths.py b/bin/Code/Config/ConfigPaths.py
+index 4039165..9cc09b6 100644
+--- a/bin/Code/Config/ConfigPaths.py
++++ b/bin/Code/Config/ConfigPaths.py
+@@ -5,8 +5,8 @@ from Code.Z import Util
+ 
+ 
+ class ConfigPaths:
+-    LCFILEFOLDER: str = os.path.realpath("../lc.folder")
+-    LCBASEFOLDER: str = os.path.realpath("../UserData")
++    LCFILEFOLDER: str = os.path.realpath(Code.writable_path("../lc.folder", "lc.folder"))
++    LCBASEFOLDER: str = os.path.realpath(Code.writable_path("../UserData", "UserData"))
+ 
+     def __init__(self, configuration, user):
+         self.configuration = configuration
+diff --git a/bin/Code/Engines/Engines.py b/bin/Code/Engines/Engines.py
+index 6ce3327..b9ceea6 100644
+--- a/bin/Code/Engines/Engines.py
++++ b/bin/Code/Engines/Engines.py
+@@ -284,19 +284,39 @@ class Engine:
+         stat = os.stat(self.path_exe)
+         return f"{os.path.basename(self.path_exe)}_{stat.st_size}_{stat.st_mtime}"
+ 
++    def bundled_uci_options(self):
++        # The cache shipped in the program folder describes the engines shipped there
++        path_uci_options = os.path.join(Code.folder_os, self.uci_options_sqlite)
++        folder_os = os.path.realpath(Code.folder_os) + os.sep
++        if not os.path.isfile(path_uci_options) or not os.path.realpath(self.path_exe).startswith(folder_os):
++            return None
++        with UtilSQL.DictTextSQL(path_uci_options) as dbuci:
++            key = self.key_engine()
++            return dbuci[key].split("\n") if key in dbuci else None
++
+     def read_uci_options(self):
+         if self.type == ENG_EXTERNAL:
+             path_uci_options = os.path.join(Code.configuration.paths.folder_config(), self.uci_options_sqlite)
+         else:
+-            path_uci_options = os.path.join(Code.folder_os, self.uci_options_sqlite)
++            path_uci_options = Code.writable_path(
++                os.path.join(Code.folder_os, self.uci_options_sqlite), self.uci_options_sqlite
++            )
+ 
++        in_home = self.type != ENG_EXTERNAL and Code.folder_home
+         with UtilSQL.DictTextSQL(path_uci_options) as dbuci:
+             key = self.key_engine()
++            if in_home:
++                # Invalidate when the engine executable changes
++                real_exe = os.path.realpath(self.path_exe)
++                st = os.stat(real_exe)
++                key = f"{real_exe}_{st.st_size}_{st.st_mtime}"
+             if key in dbuci:
+                 clines = dbuci[key]
+                 lines = clines.split("\n")
+             else:
+-                lines = get_uci_options(self.path_exe)
++                lines = self.bundled_uci_options() if in_home else None
++                if lines is None:
++                    lines = get_uci_options(self.path_exe)
+                 if lines:
+                     try:
+                         dbuci[key] = "\n".join(lines)
+diff --git a/bin/Code/GM/WindowGM.py b/bin/Code/GM/WindowGM.py
+index 6a37b36..a9003fa 100644
+--- a/bin/Code/GM/WindowGM.py
++++ b/bin/Code/GM/WindowGM.py
+@@ -779,7 +779,7 @@ def importar_gm(owner_gm):
+                 gm_display = f"{gm[0].upper()}{gm[1:].lower()}"
+                 with QTMessages.WaitingMessage(owner_gm, _X(_("Import %1"), gm_display), opacity=1.0):
+                     # Descargamos
+-                    fzip = f"{gm}.zip"
++                    fzip = Code.writable_path(f"{gm}.zip", f"{gm}.zip")
+                     si_bien = Util.urlretrieve(f"{web}/{gm}.zip", fzip)
+ 
+                     if si_bien:
+diff --git a/bin/Code/Kibitzers/RunKibitzer.py b/bin/Code/Kibitzers/RunKibitzer.py
+index 9214b60..4d5a932 100644
+--- a/bin/Code/Kibitzers/RunKibitzer.py
++++ b/bin/Code/Kibitzers/RunKibitzer.py
+@@ -233,7 +233,7 @@ class CPU:
+ 
+ def run(fdb):
+     if not __debug__:
+-        sys.stderr = Util.Log("./bug.kibitzers")
++        sys.stderr = Util.Log(Code.writable_path("./bug.kibitzers", "bug.kibitzers"))
+ 
+     cpu = CPU(fdb)
+     cpu.run()
+diff --git a/bin/Code/Leagues/RunLeague.py b/bin/Code/Leagues/RunLeague.py
+index 1da2b3d..79df546 100644
+--- a/bin/Code/Leagues/RunLeague.py
++++ b/bin/Code/Leagues/RunLeague.py
+@@ -70,7 +70,7 @@ class LeagueWorker(RunWorker.RunWorker):
+ 
+ def run(user, file_league_work):
+     if not __debug__:
+-        sys.stderr = Util.Log("./bug.league")
++        sys.stderr = Util.Log(Code.writable_path("./bug.league", "bug.league"))
+ 
+     app = QtWidgets.QApplication([])
+ 
+diff --git a/bin/Code/Main/Init.py b/bin/Code/Main/Init.py
+index e3916bc..b6f9f59 100644
+--- a/bin/Code/Main/Init.py
++++ b/bin/Code/Main/Init.py
+@@ -12,9 +12,9 @@ def init():
+     if __debug__:
+         from Code.Z import Debug
+ 
+-        sys.stderr = Debug.LogDebug("bug.log")
++        sys.stderr = Debug.LogDebug(Code.writable_path("bug.log", "bug.log"))
+     else:
+-        sys.stderr = Util.Log("bug.log")
++        sys.stderr = Util.Log(Code.writable_path("bug.log", "bug.log"))
+ 
+     main_procesador = Procesador.Procesador()
+     main_procesador.set_version(Code.VERSION)
+diff --git a/bin/Code/Swiss/RunSwiss.py b/bin/Code/Swiss/RunSwiss.py
+index 5a185e1..76ed617 100644
+--- a/bin/Code/Swiss/RunSwiss.py
++++ b/bin/Code/Swiss/RunSwiss.py
+@@ -69,7 +69,7 @@ class SwissWorker(RunWorker.RunWorker):
+ 
+ def run(user, file_swiss_work):
+     if not __debug__:
+-        sys.stderr = Util.Log("./bug.swiss")
++        sys.stderr = Util.Log(Code.writable_path("./bug.swiss", "bug.swiss"))
+ 
+     app = QtWidgets.QApplication([])
+ 
+diff --git a/bin/Code/Tournaments/RunTournament.py b/bin/Code/Tournaments/RunTournament.py
+index f0142f9..51a5dde 100644
+--- a/bin/Code/Tournaments/RunTournament.py
++++ b/bin/Code/Tournaments/RunTournament.py
+@@ -79,7 +79,7 @@ class TournamentWorker(RunWorker.RunWorker):
+ 
+ def run(user, file_tournament):
+     if not __debug__:
+-        sys.stderr = Util.Log("./bug.tournaments")
++        sys.stderr = Util.Log(Code.writable_path("./bug.tournaments", "bug.tournaments"))
+ 
+     app = QtWidgets.QApplication([])
+ 
+diff --git a/bin/Code/Translations/RunTranslate.py b/bin/Code/Translations/RunTranslate.py
+index 4b23624..6b69c56 100644
+--- a/bin/Code/Translations/RunTranslate.py
++++ b/bin/Code/Translations/RunTranslate.py
+@@ -22,7 +22,7 @@ from Code.QT import (
+     ScreenUtils,
+     SelectFiles,
+ )
+-from Code.Translations import RunTranslateOpenings, WorkTranslate
++from Code.Translations import RunTranslateOpenings, Translate, WorkTranslate
+ from Code.Z import Util
+ 
+ 
+@@ -644,7 +644,11 @@ class WTranslate(LCDialog.LCDialog):
+             path_mo = os.path.abspath(path_mo)
+             folder = os.path.dirname(path_mo)
+             self.configuration.write_variables("PATH_MO", folder)
+-            path_mo_ori = Code.path_resource("Locale", self.tr_actual, "LC_MESSAGES", "lucaschess.mo")
++            path_mo_ori = Code.writable_path(
++                Code.path_resource("Locale", self.tr_actual, "LC_MESSAGES", "lucaschess.mo"),
++                Util.opj("Locale", Code.VERSION, self.tr_actual, "LC_MESSAGES", "lucaschess.mo"),
++            )
++            os.makedirs(os.path.dirname(path_mo_ori), exist_ok=True)
+             shutil.copy(path_mo, path_mo_ori)
+             self.dic_translate = self.work_translate.read_dic()
+             for key, dic in self.dic_translate.items():
+@@ -674,7 +678,7 @@ class WTranslate(LCDialog.LCDialog):
+     def read_language(self, lng):
+         if lng in self.dic_languages:
+             return
+-        path_mo = Code.path_resource("Locale", lng, "LC_MESSAGES", "lucaschess.mo")
++        path_mo = Translate.Translations.get_path(lng)
+         mofile = polib.mofile(path_mo)
+         self.dic_languages[lng] = {entry.msgid: entry.msgstr for entry in mofile}
+ 
+@@ -724,7 +728,7 @@ class WTranslate(LCDialog.LCDialog):
+ 
+ def run_wtranslation(path_db):
+     if not __debug__:
+-        sys.stderr = Util.Log("./bug.wtranslation")
++        sys.stderr = Util.Log(Code.writable_path("./bug.wtranslation", "bug.wtranslation"))
+     configuration = Code.configuration = Configuration.Configuration("")
+     configuration.lee()
+ 
+diff --git a/bin/Code/Translations/Translate.py b/bin/Code/Translations/Translate.py
+index 9179257..8fa5700 100644
+--- a/bin/Code/Translations/Translate.py
++++ b/bin/Code/Translations/Translate.py
+@@ -97,6 +97,10 @@ class Translations:
+ 
+     @staticmethod
+     def get_path(lang):
++        # Prefer a catalog imported with the translation tool in this version
++        imported = Code.writable_path("", Util.opj("Locale", Code.VERSION, lang, "LC_MESSAGES", "lucaschess.mo"))
++        if imported and os.path.isfile(imported):
++            return imported
+         path_locale = Code.path_resource("Locale")
+         return f"{path_locale}/{lang}/LC_MESSAGES/lucaschess.mo"
+ 
+diff --git a/bin/Code/Translations/WorkTranslate.py b/bin/Code/Translations/WorkTranslate.py
+index 15cd549..37f4076 100644
+--- a/bin/Code/Translations/WorkTranslate.py
++++ b/bin/Code/Translations/WorkTranslate.py
+@@ -7,6 +7,7 @@ import traceback
+ import polib
+ 
+ import Code
++from Code.Translations import Translate
+ from Code.Z import XRun
+ 
+ 
+@@ -128,7 +129,7 @@ class WorkTranslate:
+         path_po = Code.path_resource("Locale", "messages.pot")
+         pofile = polib.pofile(path_po)
+ 
+-        path_mo = Code.path_resource("Locale", self.tr_actual, "LC_MESSAGES", "lucaschess.mo")
++        path_mo = Translate.Translations.get_path(self.tr_actual)
+         mofile = polib.mofile(path_mo)
+         dmo = {entry.msgid: entry.msgstr for entry in mofile}
+ 
+diff --git a/bin/Code/__init__.py b/bin/Code/__init__.py
+index 9b97439..ce166e9 100644
+--- a/bin/Code/__init__.py
++++ b/bin/Code/__init__.py
+@@ -10,9 +10,22 @@ BASE_VERSION = "C"
+ Util.randomize()
+ 
+ current_dir = os.path.abspath(os.path.realpath(os.path.dirname(sys.argv[0])))
++
++# Where to write user data, logs and caches instead of the program folder, which may be read-only
++folder_home: str | None = None
++if os.environ.get("LUCASCHESS_HOME"):
++    folder_home = os.path.realpath(os.path.expanduser(os.environ["LUCASCHESS_HOME"]))
++    os.makedirs(folder_home, exist_ok=True)
++    os.environ["LUCASCHESS_HOME"] = folder_home  # for the helper processes, which start from bin/
++
+ if current_dir:
+     os.chdir(current_dir)
+ 
++
++def writable_path(default: str, name: str) -> str:
++    return Util.opj(folder_home, name) if folder_home else default
++
++
+ lucas_chess: str | None = None  # asignado en Translate
+ 
+ if sys.platform == "win32":
