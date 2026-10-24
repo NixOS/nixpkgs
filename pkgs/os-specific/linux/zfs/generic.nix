@@ -180,6 +180,7 @@ let
           attr
           libtirpc
           pam
+          systemdMinimal
         ]
         ++ optional buildUser openssl
         ++ optional buildUser curl
