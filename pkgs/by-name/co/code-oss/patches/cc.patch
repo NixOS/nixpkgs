@@ -1,0 +1,15 @@
+diff --git a/build/npm/postinstall.js b/build/npm/postinstall.js
+index a66b28cfb9c..f566dbd1fb2 100644
+--- a/build/npm/postinstall.js
++++ b/build/npm/postinstall.js
+@@ -134,10 +134,6 @@ for (let dir of dirs) {
+ 				...process.env
+ 			},
+ 		}
+-		if (process.env['CC']) { opts.env['CC'] = 'gcc'; }
+-		if (process.env['CXX']) { opts.env['CXX'] = 'g++'; }
+-		if (process.env['CXXFLAGS']) { opts.env['CXXFLAGS'] = ''; }
+-		if (process.env['LDFLAGS']) { opts.env['LDFLAGS'] = ''; }
+ 
+ 		setNpmrcConfig('build', opts.env);
+ 		npmInstall('build', opts);
