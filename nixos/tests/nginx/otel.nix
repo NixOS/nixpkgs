@@ -1,5 +1,10 @@
 {
-  name = "nginx-otel";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-otel-${name}";
 
   nodes.machine =
     { pkgs, ... }:
@@ -17,6 +22,7 @@
       };
       services.nginx = {
         enable = true;
+        package = mkPackage pkgs;
         additionalModules = [ pkgs.nginxModules.otel ];
         commonHttpConfig = ''
           otel_exporter {

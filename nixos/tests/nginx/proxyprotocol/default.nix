@@ -1,12 +1,17 @@
 let
   certs = import ./snakeoil-certs.nix;
 in
-{ pkgs, ... }:
 {
-  name = "nginx-proxyprotocol";
+  lib,
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-proxyprotocol-${name}";
 
   meta = {
-    maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 
   nodes = {
@@ -28,6 +33,7 @@ in
         '';
         services.nginx = {
           enable = true;
+          package = mkPackage pkgs;
           defaultListen = [
             {
               addr = "127.0.0.1";
