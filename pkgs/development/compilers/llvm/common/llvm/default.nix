@@ -140,6 +140,14 @@ stdenv.mkDerivation (
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
       [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
       ++ [
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/93b261436572e4caab9a7f162c8dc12527951670.patch";
+          hash = "sha256-G5b+rzHJVV0j4W5GRfTvOb0PZkdGrguXsEusF0DX/CQ=";
+          relative = "llvm";
+        })
+      ]
+
+      ++ [
         # Running the tests involves invoking binaries (like `opt`) that depend on
         # the LLVM dylibs and reference them by absolute install path (i.e. their
         # nix store path).
