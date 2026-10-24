@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomlc17";
-  version = "20260501";
+  version = "20260515";
 
   src = fetchFromGitHub {
     owner = "cktan";
     repo = "tomlc17";
     tag = "R${finalAttrs.version}";
-    hash = "sha256-7LThGIHC9xXLAksNkm6uJm15mt2IGEnDHEnmBm/bPxM=";
+    hash = "sha256-L0xeNgG58fxXt5eH+DJZ8olthCcAb2rKQhWdKhl8QN8=";
   };
 
   doCheck = false; # tries to download toml-test suite
