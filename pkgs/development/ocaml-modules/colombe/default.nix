@@ -12,14 +12,14 @@
 
 let
   pname = "colombe";
-  version = "0.12.1";
+  version = "0.13.1";
 in
 buildDunePackage {
   inherit pname version;
   minimalOCamlVersion = "4.03";
   src = fetchurl {
     url = "https://github.com/mirage/colombe/releases/download/v${version}/colombe-${version}.tbz";
-    hash = "sha256-6LHsxHUe5zGuNvgcIpJjg17gmx4QrKiO4UDIZcTB2CM=";
+    hash = "sha256-3fWcyj4GNw1qgw9Ggp3lGPKfHPpgerT5+5bmI/CMyQY=";
   };
   propagatedBuildInputs = [
     angstrom
