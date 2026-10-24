@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   pyflakes,
   pytestCheckHook,
@@ -12,9 +12,11 @@ buildPythonPackage rec {
   version = "2.4.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-73xJbZvOnSzvBJ8k5ILR0wkMN/vUTl6F37ANs8eO4Ww=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = "autoflake";
+    tag = "v${version}";
+    hash = "sha256-Th2MyC6Yu+OLF7WZCG1e5VQqBIGz6Eaxx2dTaEpqTtA=";
   };
 
   build-system = [ hatchling ];
@@ -25,14 +27,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoflake" ];
 
-  disabledTests = [
-    # AssertionError: True is not false
-    "test_is_literal_or_name"
+  enabledTestPaths = [
+    "test_autoflake.py"
+    "test_fuzz.py"
   ];
 
   meta = {
     description = "Tool to remove unused imports and unused variables";
-    homepage = "https://github.com/myint/autoflake";
+    homepage = "https://github.com/PyCQA/autoflake";
     changelog = "https://github.com/PyCQA/autoflake/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yuriaisaka ];
