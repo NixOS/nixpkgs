@@ -13,7 +13,7 @@
 
 flutter341.buildFlutterApplication (finalAttrs: {
   pname = "alisthelper";
-  version = "0.2.0-unstable-2026-03-13";
+  version = "beta-unstable-2026-03-13";
 
   src = fetchFromGitHub {
     owner = "Xmarmalade";
