@@ -43,11 +43,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyyaml
   ]);
 
-  makeWrapperArgs = [
-    "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
-    "--prefix XDG_DATA_DIRS : $out/share"
-    "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH")
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : "$out/share")
+    makeWrapperArgs+=(--suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH")
+  '';
 
   pythonImportsCheck = [ "rednotebook" ];
 

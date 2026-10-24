@@ -55,7 +55,10 @@ python3.pkgs.buildPythonPackage (finalAttrs: {
       ];
     in
     [
-      "--prefix PATH : ${binPath}"
+      "--prefix"
+      "PATH"
+      ":"
+      binPath
     ];
 
   meta = {
