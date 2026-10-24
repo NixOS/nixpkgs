@@ -31,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
+  outputs = [
+    "out"
+    "utils"
+  ];
+
   depsBuildBuild = [
     pkg-config
   ];
@@ -64,6 +69,23 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "osmesa" false)
     (lib.mesonEnable "wayland" (lib.meta.availableOn stdenv.hostPlatform wayland))
   ];
+
+  # Split the essential utilities into a `utils` output (re-exposed top-level
+  # as `mesa-utils`). For backwards compatibility, symlink them back into
+  # `$out/bin/` so existing consumers of `mesa-demos` keep working unchanged.
+  postInstall = ''
+    for bin in \
+      eglinfo eglgears_wayland eglgears_x11 eglkms \
+      egltri_wayland egltri_x11 peglgears xeglgears xeglthreads \
+      es2_info es2gears_wayland es2gears_x11 es2tri \
+      glxinfo glxgears \
+      vkgears; do
+      if [ -e "$out/bin/$bin" ]; then
+        moveToOutput "bin/$bin" "$utils"
+        ln -s "$utils/bin/$bin" "$out/bin/$bin"
+      fi
+    done
+  '';
 
   meta = {
     inherit (mesa.meta) homepage platforms;

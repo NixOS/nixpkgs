@@ -8,7 +8,7 @@
   coreutils,
   curl,
   gawk,
-  mesa-demos,
+  mesa-utils,
   gnugrep,
   gnused,
   jq,
@@ -51,7 +51,7 @@ let
     zsync
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    mesa-demos
+    mesa-utils
     usbutils
     xdg-user-dirs
   ];

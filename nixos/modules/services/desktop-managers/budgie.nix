@@ -200,7 +200,7 @@ in
         gammastep
         grim
         killall
-        mesa-demos # eglinfo
+        mesa-utils # eglinfo
         slurp
         swaybg
         swayidle

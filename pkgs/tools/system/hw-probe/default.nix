@@ -39,7 +39,7 @@
   hdparm,
   acpica-tools,
   drm_info,
-  mesa-demos,
+  mesa-utils,
   memtester,
   sysstat,
   cpuid,
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
         hdparm
         acpica-tools
         drm_info
-        mesa-demos
+        mesa-utils
         memtester
         sysstat # (iostat)
         util-linuxMinimal # (rfkill)

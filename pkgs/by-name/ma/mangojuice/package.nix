@@ -17,7 +17,7 @@
   wrapGAppsHook4,
 
   mangohud,
-  mesa-demos,
+  mesa-utils,
   vulkan-tools,
   vkbasalt,
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       path = lib.makeBinPath [
         mangohud
-        mesa-demos # glxgears
+        mesa-utils # glxgears
         pciutils # lspci
         vulkan-tools # vkcube
       ];
