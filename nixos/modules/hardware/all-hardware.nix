@@ -140,8 +140,20 @@ in
       #  - early storage (e.g. USB) support
 
       # Broadcom
-
       "pcie-brcmstb"
+
+      # MediaTek
+      "pwm-mtk-disp"
+      "mediatek-drm"
+      "mtk_dp"
+      "phy-mtk-dp"
+      "phy-mtk-mipi-dsi-drv"
+      "spmi-mtk-pmif"
+
+      # Qualcomm
+      "phy-qcom-qusb2"
+      "phy-qcom-qmp-combo"
+      "msm"
 
       # Rockchip
       "dw-hdmi"
@@ -153,9 +165,25 @@ in
 
       # Misc. uncategorized hardware
 
-      # Used for some platform's integrated displays
+      # Panels for some platform's integrated displays
       "panel-simple"
+      "panel-edp"
+      "panel-boe-tv101wum-nl6"
+      "panel-himax-hx83102"
+      "panel-ilitek-ili9882t"
+      "panel-samsung-atna33xc20"
+      "panel-visionox-rm69299"
+
+      # DRM bridges for some platform's integrated displays
+      "analogix-anx6345"
+      "anx7625"
+      "ite-it6505"
+      "parade-ps8640"
+      "ti-sn65dsi86"
+
+      # PWM backlight
       "pwm-bl"
+      "pwm-cros-ec"
 
       # Power supply drivers, some platforms need them for USB
       "axp20x-ac-power"
@@ -166,9 +194,9 @@ in
       # Reset controllers
       "reset-raspberrypi" # Triggers USB chip firmware load.
 
-      # Misc "weak" dependencies
-      "analogix-dp"
-      "analogix-anx6345" # For DP or eDP (e.g. integrated display)
+      # Keyboard
+      "cros_ec_keyb" # Clamshell / 360 Chromebooks
+      "hid-google-hammer" # Detachables Chromebooks
     ];
 
     # Include lots of firmware.
