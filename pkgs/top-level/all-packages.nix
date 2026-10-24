@@ -6987,6 +6987,9 @@ with pkgs;
         inherit callPackage;
         directory = ../servers/home-assistant/custom-lovelace-modules;
       }
+      // lib.optionalAttrs config.allowAliases {
+        card-mod = throw "home-assistant-custom-lovelace-modules.card-mod has been removed in favor of its successor UIX. Remove it from `services.home-assistant.customLovelaceModules` and add `home-assistant-custom-components.uix` to `services.home-assistant.customComponents` instead; existing `card_mod:` configuration keeps working."; # Added 2026-10-23
+      }
     )
   );
 
