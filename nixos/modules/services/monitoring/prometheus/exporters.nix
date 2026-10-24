@@ -74,6 +74,7 @@ let
         "imap-mailstat"
         "influxdb"
         "ipmi"
+        "jellyfin"
         "jitsi"
         "json"
         "junos-czerwonk"
