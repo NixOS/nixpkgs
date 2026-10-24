@@ -211,6 +211,7 @@
   ./programs/droidcam.nix
   ./programs/dublin-traceroute.nix
   ./programs/dux-calendar.nix
+  ./programs/dux-files.nix
   ./programs/dux-search.nix
   ./programs/ente-auth.nix
   ./programs/environment.nix
