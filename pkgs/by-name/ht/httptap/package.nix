@@ -32,5 +32,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
     mainProgram = "httptap";
+    platforms = lib.platforms.linux;
   };
 })

@@ -307,7 +307,13 @@ lib.extendMkDerivation {
 
                 local OUT
                 if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
-                  if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
+                  # Skip `$dir` only if it has no Go files for this platform.
+                  # A transitive import with no Go files is an error.
+                  local absDir
+                  absDir="$(cd "$dir" 2>/dev/null && pwd)"
+                  if ! echo "$OUT" \
+                    | sed -nE 's/.*(no( buildable| non-test)?|build constraints exclude all) Go (source )?files in //p' \
+                    | grep -qxF "$absDir"; then
                     echo "$OUT" >&2
                     return 1
                   fi
