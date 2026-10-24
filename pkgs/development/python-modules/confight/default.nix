@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   toml,
 }:
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   version = "2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-iodoexnh9tG4dgkjDXCUzWRFDhRlJ3HRgaNhxG2lwPY=";
+  src = fetchFromGitHub {
+    owner = "Avature";
+    repo = "confight";
+    tag = version;
+    hash = "sha256-3tsTVCtnFk9qNv3oGg96OKoRIke0Q//pW3iZAdh1g4s=";
   };
 
   build-system = [ setuptools ];
@@ -26,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python context manager for managing pid files";
-    homepage = "https://github.com/avature/confight";
+    homepage = "https://github.com/Avature/confight";
     changelog = "https://github.com/Avature/confight/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mkg20001 ];
