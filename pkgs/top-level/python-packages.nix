@@ -6540,6 +6540,8 @@ self: super: with self; {
 
   foundrytools = callPackage ../development/python-modules/foundrytools { };
 
+  foundrytools-cli = callPackage ../development/python-modules/foundrytools-cli { };
+
   fountains = callPackage ../development/python-modules/fountains { };
 
   foxdot = callPackage ../development/python-modules/foxdot { };
