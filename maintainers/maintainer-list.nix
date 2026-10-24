@@ -2251,6 +2251,11 @@
     githubId = 25783780;
     name = "aos";
   };
+  aozora-wings = {
+    github = "Aozora-Wings";
+    githubId = 105466891;
+    name = "Aozora Wings";
+  };
   apcamargo = {
     email = "antoniop.camargo@gmail.com";
     github = "apcamargo";
