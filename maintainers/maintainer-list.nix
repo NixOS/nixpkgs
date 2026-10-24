@@ -32436,6 +32436,12 @@
     githubId = 5121426;
     name = "Albert Safin";
   };
+  yafizrug = {
+    name = "Alexander";
+    email = "sanko.veselkin@bk.ru";
+    github = "YAFIZRUG";
+    githubId = 162494043;
+  };
   yah = {
     email = "yah@singularpoint.cc";
     github = "wangxiaoerYah";
