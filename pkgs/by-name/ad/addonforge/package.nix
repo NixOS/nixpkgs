@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "addonforge";
   version = "0.3.0-b17";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Topher121";
     repo = "AddonForge";
