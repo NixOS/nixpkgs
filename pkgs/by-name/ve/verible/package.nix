@@ -101,6 +101,10 @@ buildBazelPackage {
   bazelTestFlags = [ "-c opt" ];
 
   buildAttrs = {
+    preConfigure = ''
+      patchShebangs $bazelOut/external/rules_cc~/cc/private/toolchain/generate_system_module_map.sh
+    '';
+
     installPhase = ''
       mkdir -p "$out/bin"
       .github/bin/simple-install.sh "$out/bin"
