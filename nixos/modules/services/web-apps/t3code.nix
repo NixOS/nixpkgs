@@ -11,13 +11,7 @@ let
 in
 {
   options.services.t3code = {
-    enable = lib.mkEnableOption "T3 Code, a web GUI for coding agents" // {
-      description = ''
-        Whether to enable T3 Code, a web GUI for coding agents.
-        Do not also run `t3 service install`: it installs a second,
-        self-updating copy from npm outside the Nix store.
-      '';
-    };
+    enable = lib.mkEnableOption "T3 Code, a web GUI for coding agents";
 
     package = lib.mkPackageOption pkgs "t3code-cli" {
       example = "t3code-cli.override { enableClaude = true; }";
