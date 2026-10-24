@@ -1,0 +1,29 @@
+Do not install libonnxruntime.so* into $out/lib.
+
+SpeedyNote links ONNX Runtime as a private dependency. Upstream bundles the
+prebuilt .so next to the binary and resolves it via INSTALL_RPATH=$ORIGIN/../lib,
+which suits FHS layouts. In nixpkgs we link the nixpkgs-built onnxruntime and
+resolve it from the store via RPATH; installing a copy into the output only
+duplicates ~28 MB of store per closure and leaves $out/lib holding a library
+that nothing else consumes.
+
+CMake keeps the absolute path to an external library in the install RPATH
+(it is no longer "installed by this project"), so removing this rule is what
+makes the nix store path survive into the final binary.
+
+Upstream-status: not submitted (packaging-specific).
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index da38dc8..fb997c8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1355,9 +1355,5 @@ elseif(UNIX AND NOT ANDROID)
+         if(OCR_MODEL_FILES)
+             install(FILES ${OCR_MODEL_FILES} DESTINATION share/speedynote/ocr-models)
+         endif()
+-        file(GLOB ONNXRUNTIME_SO_FILES "${ONNXRUNTIME_ROOT}/lib/libonnxruntime.so*")
+-        if(ONNXRUNTIME_SO_FILES)
+-            install(FILES ${ONNXRUNTIME_SO_FILES} DESTINATION lib)
+-        endif()
+     endif()
+ endif()
