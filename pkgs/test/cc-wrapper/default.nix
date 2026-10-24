@@ -154,7 +154,9 @@ stdenv.mkDerivation {
     ${lib.optionalString sanitizersWorking ''
       echo "checking whether sanitizers are fully functional... ">&2
       ${CC} -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
-      ASAN_OPTIONS=use_sigaltstack=0 ${emulator} ./sanitizers
+      # Sanitizer initialization can deadlock, so bound execution.
+      ASAN_OPTIONS=use_sigaltstack=0 \
+        ${lib.getExe' buildPackages.coreutils "timeout"} --verbose --kill-after=5s 30s ${emulator} ./sanitizers
     ''}
 
     echo "Check whether CC and LD with NIX_X_USE_RESPONSE_FILE hardcodes all required binaries..." >&2
