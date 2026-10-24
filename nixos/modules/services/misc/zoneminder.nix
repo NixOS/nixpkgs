@@ -331,6 +331,21 @@ in
           };
         };
       };
+
+      logrotate = {
+        enable = true;
+        settings."/var/log/zoneminder/*.log" = {
+          # https://github.com/ZoneMinder/zoneminder/blob/master/misc/logrotate.conf.in
+          missingok = true;
+          notifempty = true;
+          delaycompress = true;
+          compress = true;
+          sharedscripts = true;
+          postrotate = ''
+            ${pkgs.zoneminder}/bin/zmpkg.pl logrot 2>/dev/null >/dev/null || true
+          '';
+        };
+      };
     };
 
     systemd.services = {
