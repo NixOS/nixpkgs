@@ -11515,6 +11515,8 @@ self: super: with self; {
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
 
+  mvcrender = callPackage ../development/python-modules/mvcrender { };
+
   mvg = callPackage ../development/python-modules/mvg { };
 
   mwcli = callPackage ../development/python-modules/mwcli { };
