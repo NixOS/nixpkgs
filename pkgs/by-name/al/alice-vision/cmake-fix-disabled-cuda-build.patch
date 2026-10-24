@@ -1,0 +1,10 @@
+--- a/src/software/utils/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/software/utils/CMakeLists.txt	2026-03-04 13:51:53.928332074 +0100
+@@ -564,7 +564,6 @@
+               aliceVision_cmdline
+               aliceVision_mvsData
+               aliceVision_mvsUtils
+-              aliceVision_depthMap
+               aliceVision_sfmData
+               aliceVision_sfmDataIO
+               Boost::program_options
