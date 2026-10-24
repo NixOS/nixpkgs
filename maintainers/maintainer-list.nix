@@ -11168,6 +11168,11 @@
     github = "GZGavinZhao";
     githubId = 74938940;
   };
+  h-yuqi = {
+    name = "Yuqi Huang";
+    github = "h-yuqi";
+    githubId = 62862318;
+  };
   h0nIg = {
     name = "Hans-Joachim Kliemeck";
     email = "git@kliemeck.de";
