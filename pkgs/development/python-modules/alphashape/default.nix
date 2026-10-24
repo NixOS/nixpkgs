@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -56,6 +57,16 @@ buildPythonPackage (finalAttrs: {
     # TypeError
     "test_given_a_four_point_polygon_with_no_alpha_return_input"
     "test_given_a_point_return_a_point"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # The tests compare the exact vertex order and orientation of every face
+    # against a hard-coded Delaunay triangulation of a point set containing
+    # exactly co-spherical subsets, for which the triangulation is not unique
+    # and the resulting face order varies with the architecture's floating
+    # point behavior: fails on aarch64 (darwin and linux) with an otherwise
+    # equivalent shape. The substring match also deselects the
+    # _with_dynamic_alpha variant of the test.
+    "test_3_dimensional_regression"
   ];
 
   pythonImportsCheck = [ "alphashape" ];
