@@ -33,7 +33,7 @@
 }:
 
 let
-  inherit (builtins) unsafeGetAttrPos;
+  inherit (builtins) unsafeGetAttrPos warn;
   inherit (lib)
     elem
     extendDerivation
@@ -389,7 +389,17 @@ lib.extendMkDerivation {
           python
         ];
 
-      inherit __structuredAttrs strictDeps;
+      __structuredAttrs =
+        if attrs.__structuredAttrs or false then
+          warn "Explicitly setting `__structuredAttrs = true;` for Python package ${name} is redundant" __structuredAttrs
+        else
+          __structuredAttrs;
+
+      strictDeps =
+        if attrs.strictDeps or false then
+          warn "Explicitly setting `strictDeps = true;` for Python package ${name} is redundant" strictDeps
+        else
+          strictDeps;
 
       env = {
         LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
