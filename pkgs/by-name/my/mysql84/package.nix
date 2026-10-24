@@ -38,7 +38,8 @@ let
 
     patches = [
       ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
-    ];
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin ./mysqld-safe-find-proc-darwin.patch;
 
     ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
     postPatch = ''
