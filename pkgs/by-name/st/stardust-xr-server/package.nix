@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-server";
-  version = "0.51.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-ntVc5fc1qMjR1FDqoNq35Y6PkG9VPNDVplyTpO6VhKA=";
+    hash = "sha256-tQOjYiUDXvZdDV+7DcdLLGMIDTVy975Bo9Zf5aPyYKc=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./fix-seat-unwrap-panic.patch
   ];
 
-  cargoHash = "sha256-5HQkrkupBohmopGJh9t3JndVTU6cjbW0LgtBPb+YAr0=";
+  cargoHash = "sha256-Y8OnHdyXGup1/AzPhdm97bt1gsgl2d7N2dIR2FN/+EA=";
 
   __structuredAttrs = true;
   nativeBuildInputs = [
