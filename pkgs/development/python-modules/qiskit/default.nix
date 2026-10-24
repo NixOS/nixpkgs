@@ -22,6 +22,7 @@
   typing-extensions,
 
   # optional dependencies
+  qiskit-qasm3-import,
   matplotlib,
   pydot,
   pillow,
@@ -73,6 +74,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
+    qasm3-import = [
+      qiskit-qasm3-import
+    ];
     visualization = [
       matplotlib
       pydot
