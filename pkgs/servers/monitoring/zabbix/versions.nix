@@ -4,11 +4,11 @@ generic: {
     hash = "sha256-uouF3zlrg76SFpxk7EAn1+HsedZzGG/0gcKqqOUka+w=";
   };
   v70 = generic {
-    version = "7.0.27";
-    hash = "sha256-FeTCM+Zch5IoJNAautYk80Eou7SvAhp1446Jto4T6FE=";
+    version = "7.0.28";
+    hash = "sha256-AgomSaRQpkLD10V361g+wXX0vYXr4sPTnt45lIfh2jM=";
   };
   v60 = generic {
-    version = "6.0.46";
-    hash = "sha256-WwI1cv8iHXyOBhzBis/n0Wom9GQgFnCZoJrbOcpc4Ao=";
+    version = "6.0.47";
+    hash = "sha256-OxmVVCablDeDLogGq9dnNYHHfWhl3XZgoDa7oKgUuQ0=";
   };
 }
