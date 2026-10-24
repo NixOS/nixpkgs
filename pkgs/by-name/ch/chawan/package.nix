@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4MrJoBNQ4Sbx02/Cl/JdTux5UUu8ioSwRNvDxCH6gcY=";
+    hash = "sha256-xQMu+xqKSjm+jn8KM0BoRLEHu9is1Ejqzf2xV6BNKjc=";
   };
 
   nativeBuildInputs = [
