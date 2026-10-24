@@ -1,19 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   buildNpmPackage,
   nix-update-script,
 }:
 
 let
-  version = "1.5.2-stable";
+  version = "2.0.2-stable";
 
   src = fetchFromGitHub {
     owner = "gtsteffaniak";
     repo = "filebrowser";
     tag = "v${version}";
-    hash = "sha256-1qG6IayTqL4x3CqJyvVSG8Fu4s6ywhWI9t1j9c+wTZM=";
+    hash = "sha256-xzbEB0V+0Yfmc42dAAGMCfSIwPaWoNgwAKYcSFINcmc=";
   };
 
   frontend = buildNpmPackage {
@@ -21,12 +21,12 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
-    npmDepsHash = "sha256-J1PddXU79T0GVcAgxYEW/vraqYxbTvASw8RmW8dDeOw=";
+    npmDepsHash = "sha256-ZJZtHaeNpHV7n3cT0m7YmBuIGM8CObp3IdQWdSiqbKc=";
 
     buildPhase = ''
       runHook preBuild
 
-      npm run build:docker
+      npm run build:docker -- --outDir dist
 
       runHook postBuild
     '';
@@ -42,17 +42,23 @@ let
   };
 
 in
-buildGoModule {
+buildGo127Module {
   pname = "filebrowser-quantum";
   inherit version src;
 
   sourceRoot = "${src.name}/backend";
 
-  vendorHash = "sha256-YAMh0WMe1zDCJq8BuPcekb1J8RvRoxOmsZarKI1ZWcs=";
+  excludedPackages = [ "/scripts/" ];
+
+  vendorHash = "sha256-P3H5kESEd1X5tl0EQyIm680fKz/18KegoPBp1jb69vo=";
+
+  # Tests open database fixtures in _docker for writing
+  postUnpack = ''
+    chmod -R u+w ${src.name}/_docker
+  '';
 
   preBuild = ''
-    mkdir -p http/embed
-    cp -r ${frontend}/* http/embed/
+    cp -r ${frontend}/* internal/web/embed/
   '';
 
   postInstall = ''
@@ -62,8 +68,8 @@ buildGoModule {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/gtsteffaniak/filebrowser/backend/version.CommitSHA=testingCommit"
-    "-X github.com/gtsteffaniak/filebrowser/backend/version.Version=testing"
+    "-X github.com/gtsteffaniak/filebrowser/backend/internal/version.CommitSHA=testingCommit"
+    "-X github.com/gtsteffaniak/filebrowser/backend/internal/version.Version=testing"
   ];
 
   passthru.updateScript = nix-update-script { };
