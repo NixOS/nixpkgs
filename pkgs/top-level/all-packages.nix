@@ -9608,9 +9608,9 @@ with pkgs;
 
   inherit (callPackage ../desktops/gnome/extensions { })
     gnomeExtensions
-    gnome48Extensions
     gnome49Extensions
     gnome50Extensions
+    gnome51Extensions
     ;
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
