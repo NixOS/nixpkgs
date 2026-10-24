@@ -27607,12 +27607,6 @@
     github = "sledgehammervampire";
     githubId = 47207223;
   };
-  sleexyz = {
-    email = "freshdried@gmail.com";
-    github = "sleexyz";
-    githubId = 1505617;
-    name = "Sean Lee";
-  };
   sleroq = {
     name = "Sleroq";
     email = "sleroq@cum.army";
