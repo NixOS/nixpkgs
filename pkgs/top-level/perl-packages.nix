@@ -35895,6 +35895,22 @@ with self;
     };
   };
 
+  TestTimer = buildPerlModule {
+    pname = "Test-Timer";
+    version = "2.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Test-Timer-2.12.tar.gz";
+      hash = "sha256-6xtcGZeTzBxZGj0f5dFcFv2lOXVbptXdITjVY4gh8vw=";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ Error ];
+    meta = {
+      description = "Test module to test/assert response times";
+      homepage = "https://jonasbn.github.io/perl-test-timer/";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   TestToolbox = buildPerlModule {
     pname = "Test-Toolbox";
     version = "0.4";
