@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "gowrap";
-  version = "1.4.3";
+  version = "1.5.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hexdigest";
     repo = "gowrap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VIb1jxoLKDUXcm7SK0AlEF7+rR0Tsry0vMdU8KBp0cU=";
+    hash = "sha256-aeyrz8gF6IAr9DZvB2ei7NKPJiIgCK/t+Hf/hkpIU6g=";
   };
 
-  vendorHash = "sha256-mjz+nJNl3csr/gAw7aF6D/phESZvqR4uXyGuOCXeKlA=";
+  vendorHash = "sha256-J3aqbOrfaJth0kCm1lucYdwLZh2lNuGG9D+hPzqYq10=";
 
   subPackages = [ "cmd/gowrap" ];
 
