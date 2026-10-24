@@ -441,6 +441,82 @@ checkConfigOutput '^"hello"$' config.packageInvalidIdentifier.pname ./declare-mk
 checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifier.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifierExample.example.text ./declare-mkPackageOption.nix
 
+# Check nestedAttrsOf
+checkConfigOutput '^3$' config.value.b.d.e ./declare-nested-attrs.nix
+checkConfigOutput '^true$' config.value.b.c.merged ./declare-nested-attrs-attrs-leaf.nix
+checkConfigOutput '^2$' config.value.a.b ./declare-nested-attrs-properties.nix
+checkConfigOutput '^3$' config.value.a.c ./declare-nested-attrs-properties.nix
+checkConfigOutput '^4$' config.value.d.e ./declare-nested-attrs-properties.nix
+checkConfigError 'A definition for option .* is not of type .*' config.value.a.b ./declare-nested-attrs-properties.nix ./declare-nested-attrs-properties-invalid.nix
+checkConfigError 'A definition for option .* is not of type .*' config.value.b.f ./declare-nested-attrs-unsound.nix
+checkConfigError 'expected an attribute set with keys from \[request, result\]' config.value.consumer ./declare-nested-attrs-misshapen.nix
+
+# contracts: find the provider option from `module` and `contract`
+checkConfigOutput '^11$' config.contracts.number.results.consumer.a.value ./contracts-provider-path.nix
+checkConfigOutput '^12$' config.contracts.number.results.consumer.b.value ./contracts-provider-path.nix
+checkConfigOutput '^13$' config.contracts.number.results.consumer.c.value ./contracts-provider-path.nix
+checkConfigOutput '^14$' config.contracts.number.results.consumer.d.value ./contracts-provider-path.nix
+STRICT_EVAL=1 checkConfigOutput '^\["services","two","numbers"\]$' config.contracts.number.providers.two.loc ./contracts-provider-path.nix
+STRICT_EVAL=1 checkConfigOutput '^\["services","four","number"\]$' config.contracts.number.providers.four.loc ./contracts-provider-path.nix
+checkConfigError 'a provider `module` must be an option' config.contracts.number.providers.wrong.loc ./contracts-provider-path.nix ./contracts-provider-path-wrong.nix
+
+# contracts: route nested `want` entries to a provider and back
+checkConfigOutput '^112$' config.contracts.sum.results.c1.x.value ./contracts-nested.nix
+checkConfigOutput '^3$' config.contracts.sum.results.c2.x.value ./contracts-nested.nix
+checkConfigOutput '^6$' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix
+checkConfigOutput '^"c1:x,c2:x,c3:db,c5:x"$' config.wantedEntries ./contracts-nested.nix
+# contracts: `results` also has the request, and a consumer option of `mkContract` type can hold it
+checkConfigOutput '^10$' config.contracts.sum.results.c1.x.a ./contracts-nested.nix
+checkConfigOutput '^22$' config.consumer.response.value ./contracts-nested.nix
+checkConfigOutput '^20$' config.consumer.response.a ./contracts-nested.nix
+checkConfigOutput '^2$' config.consumer.response.b ./contracts-nested.nix
+checkConfigError 'contracts.sum.want.c3.db.primary: no provider' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix ./contracts-nested-no-provider.nix
+checkConfigOutput '^"c1:x,c2:x,c5:x"$' config.wantedEntries ./contracts-nested.nix ./contracts-nested-manual.nix
+checkConfigOutput '^112$' config.contracts.sum.results.c1.x.value ./contracts-nested.nix ./contracts-nested-manual.nix
+checkConfigError 'contracts.sum.want.c3.db.primary: no provider. Set .* or `contracts.sum.instances.c3.db.primary`' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix ./contracts-nested-manual.nix
+
+# contracts: `mkContract` adds overrides to the options of the interface
+checkConfigOutput '^42$' config.consumer.request.value ./contracts-mkcontract.nix
+checkConfigError 'The option .consumer.request.value. is read-only' config.consumer.request.value ./contracts-mkcontract.nix ./contracts-mkcontract-set-readonly.nix
+checkConfigError 'is not of type .signed integer.' config.consumer.response.value ./contracts-mkcontract.nix ./contracts-mkcontract-wrong-type.nix
+checkConfigOutput '^"0400 me me /run/secret"$' config.secretSummary ./contracts-mkcontract.nix
+
+# contracts: `mkProviderType` makes the response of each entry with `fulfill` or `fulfill'`
+checkConfigOutput '^11$' config.contracts.number.results.app.x.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^0$' config.contracts.number.results.app.db.primary.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^6$' config.increment.direct.response.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^21$' config.locate.a.b.response.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^"b locate.a.b"$' config.locate.a.b.response.text ./contracts-mkprovidertype.nix
+checkConfigOutput '^"postgresql://db.example.com:5432"$' config.contracts.connection.results.app.db.url ./contracts-mkprovidertype.nix
+checkConfigError 'defaultProviderName. is not of type .null or value "urlbuilder"' config.contracts.connection.results.app.db.url ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-unknown-name.nix
+checkConfigError 'is not of type .signed integer.' config.contracts.number.results.app.x.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-wrong-request.nix
+checkConfigError "set .fulfill. or .fulfill'., not the two" config.both.x.request.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-two-fulfill.nix
+
+# contracts: connect a consumer and a provider in two different evaluations
+checkConfigOutput '^6$' config.consumerValue ./contracts-cross-node.nix
+checkConfigOutput '^"consumer-value"$' config.providerEntries ./contracts-cross-node.nix
+checkConfigError 'contracts.number.want.consumer-value: no provider' config.consumerOnlyValue ./contracts-cross-node.nix
+
+# contracts: a consumer can set an alias from `requestAliases`, and the provider does not get the alias
+checkConfigOutput '^6$' config.contracts.number.results.app.x.value ./contracts-request-alias.nix
+checkConfigOutput '^7$' config.consumer.request.value ./contracts-request-alias.nix
+checkConfigOutput '^"value"$' config.providerRequestNames ./contracts-request-alias.nix
+checkConfigOutput '^"value"$' config.resultNames ./contracts-request-alias.nix
+# contracts: the warnings of the aliases, for each entry that sets an alias
+STRICT_EVAL=1 checkConfigOutput '^\["contracts.number.want.app.x.request: The option .oldValue. defined in [^"]*contracts-request-alias.nix. has been renamed to .value..","contracts.number.want.forward.old.request: The option .oldValue. defined in [^"]*contracts-request-alias.nix. has been renamed to .value.."\]$' config.contracts.number.warnings ./contracts-request-alias.nix
+# contracts: a consumer forwards its `request` to `want`, and the aliases do not apply two times
+checkConfigOutput '^8$' config.contracts.number.results.forward.old.value ./contracts-request-alias.nix
+checkConfigOutput '^4$' config.contracts.number.results.forward.new.value ./contracts-request-alias.nix
+
+# contracts: rename a contract type, and send the requests of the old name to the provider of the new name
+checkConfigOutput '^6$' config.contracts.number.results.old.x.value ./contracts-type-rename.nix
+checkConfigOutput '^2$' config.contracts.count.results.new.x.value ./contracts-type-rename.nix
+checkConfigOutput '^"new,old"$' config.wantedNames ./contracts-type-rename.nix
+STRICT_EVAL=1 checkConfigOutput '^\["The option .number. defined in [^"]*contracts-type-rename.nix. has been renamed to .count.\."\]$' config.contracts.warnings ./contracts-type-rename.nix
+checkConfigError 'contracts.count.want.old.x: no provider' config.contracts.number.results.old.x.value ./contracts-type-rename.nix ./contracts-type-rename-no-provider.nix
+# contracts: a contract type cannot have the name `warnings`
+checkConfigError 'The option .contracts.warnings. in .* is already declared in' config.contracts.warnings ./contracts-type-name-warnings.nix
+
 # submoduleWith
 
 ## specialArgs should work
