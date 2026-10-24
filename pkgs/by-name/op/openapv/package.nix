@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/openapv/releases/tag/v${finalAttrs.version}";
     description = "Reference implementation of the APV codec";
