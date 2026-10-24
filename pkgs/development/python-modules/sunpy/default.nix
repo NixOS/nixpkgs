@@ -61,7 +61,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sunpy";
-  version = "8.0.0";
+  version = "8.1dev";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -69,7 +69,7 @@ buildPythonPackage (finalAttrs: {
     owner = "sunpy";
     repo = "sunpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VR0FvIkskjL1rvc0xOp+DSS+ocTJAAk4NYkO8+kpqmA=";
+    hash = "sha256-L1pQoGw9uIce4wZMeh8eItbMDjiMqlnEtLbyweJUKmM=";
   };
 
   build-system = [
