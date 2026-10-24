@@ -334,7 +334,8 @@ let
           ${lib.getExe hostPkgs.virtiofsd} \
             --socket-path="$NIX_VIRTIOFS_DIR"/"${tag}" \
             --shared-dir="$(readlink -f "${share.source}")" \
-            ${if share.writable then "--writeback" else "--readonly"} \
+            ${lib.optionalString (!share.writable) "--readonly"} \
+            ${lib.optionalString (share.writable && share.writeback) "--writeback"} \
             --sandbox=none \
             --seccomp=none \
             --cache=${share.cache} \
@@ -594,6 +595,17 @@ in
           };
           options.writable = lib.mkEnableOption "" // {
             description = "Whether the directory is writable on the host and guest.";
+          };
+          options.writeback = lib.mkEnableOption "" // {
+            description = ''
+              Whether to enable writeback caching for a writable directory.
+
+              This speeds up writes from the guest, but makes the guest ignore changes to file size and modification time made on the host.
+              Only enable it if the guest is the only one writing to the directory.
+
+              Effective on Linux hosts only.
+              Ignored when using VirtFS (9P) (the default on non-Linux hosts).
+            '';
           };
           options.cache = mkOption {
             type = types.enum [
