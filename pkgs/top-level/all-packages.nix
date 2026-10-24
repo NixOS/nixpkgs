@@ -8797,6 +8797,11 @@ with pkgs;
     cinny-unwrapped = sable-unwrapped;
   };
 
+  sable-next = callPackage ../by-name/ci/cinny/package.nix {
+    pname = "sable-next";
+    cinny-unwrapped = sable-next-unwrapped;
+  };
+
   sweethome3d = recurseIntoAttrs (
     (callPackage ../applications/misc/sweethome3d { })
     // (callPackage ../applications/misc/sweethome3d/editors.nix {
