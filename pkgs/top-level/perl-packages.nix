@@ -28383,12 +28383,24 @@ with self;
       CompilerLexer
       Coro
       DataDump
+      EncodeLocale
       HashSafeKeys
       IOAIO
       JSON
       Moose
       PadWalker
     ];
+    # Upstream tests load only Perl::LanguageServer, but the method roles and the debugger
+    # interface are loaded at runtime; the latter connects on load, so only compile it
+    postCheck = ''
+      perl -Iblib/lib -e '
+        use Perl::LanguageServer::Methods::DebugAdapter;
+        use Perl::LanguageServer::Methods::DebugAdapterInterface;
+        use Perl::LanguageServer::Methods::textDocument;
+        use Perl::LanguageServer::Methods::workspace;
+      '
+      perl -Iblib/lib -c blib/lib/Perl/LanguageServer/DebuggerInterface.pm
+    '';
     meta = {
       description = "Language Server and Debug Protocol Adapter for Perl";
       license = lib.licenses.artistic2;
