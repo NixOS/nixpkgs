@@ -14,7 +14,7 @@
   yourdfpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robot-descriptions";
   version = "3.3.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robot-descriptions";
     repo = "robot_descriptions.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CEEIiSzBDb+MGPi8qHbPtbhBIjkGmsqhVIjsTzsRdTk=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Access 125+ robot descriptions from the main Python robotics frameworks";
     homepage = "https://github.com/robot-descriptions/robot_descriptions.py";
-    changelog = "https://github.com/robot-descriptions/robot_descriptions.py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/robot-descriptions/robot_descriptions.py/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})
