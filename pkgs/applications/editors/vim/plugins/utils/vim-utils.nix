@@ -15,6 +15,7 @@
   makeSetupHook,
   linkFarm,
   config,
+  neovimUtils,
 }:
 
 /*
@@ -523,7 +524,14 @@ rec {
       finalAttrs: oldAttrs:
       let
         getRequiredLuaModules = attrs: attrs.requiredLuaModules or attrs.passthru.requiredLuaModules or [ ];
-        modules = getRequiredLuaModules finalAttrs;
+        checkPlugins = lib.filter (p: p.passthru.vimPlugin or false) (finalAttrs.checkInputs or [ ]);
+        checkDependencies = lib.unique (
+          findDependenciesRecursively ((finalAttrs.dependencies or [ ]) ++ checkPlugins)
+        );
+        vimPackageInfo = neovimUtils.makeVimPackageInfo (
+          lib.filter (p: p.passthru.vimPlugin or false) checkDependencies
+        );
+        modules = lib.unique (getRequiredLuaModules finalAttrs ++ vimPackageInfo.luaDependencies);
         luaEnv = lua.withPackages (_: modules);
       in
       {
@@ -552,6 +560,9 @@ rec {
 
         nvimRequireCheckLuaPath = lib.optionalString (modules != [ ]) (lua.pkgs.getLuaPath luaEnv);
         nvimRequireCheckLuaCPath = lib.optionalString (modules != [ ]) (lua.pkgs.getLuaCPath luaEnv);
+        nvimRequireCheckPackPath = neovimUtils.packDir {
+          plugins = vimPackageInfo.vimPackage;
+        };
 
         passthru = (oldAttrs.passthru or { }) // {
           vimPlugin = true;
