@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gradle-native-platform ? null,
   jdk11,
-  jdk17,
   jdk21,
   jdk25,
   nix-update-script,
@@ -397,16 +396,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.8.0";
-    hash = "sha256-uv1c6c+uoPvM/chDmhrEL71M2cidyamIIo2KJjmljmw=";
+    version = "9.8.2";
+    hash = "sha256-Ib1dot5JtkKQQHfzjA79x3eOkrPtCIk5LcphuX44lgc=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
     extraNativePlatformJars =
       if stdenv.hostPlatform.isRiscV64 then gradle-native-platform-m29 else null;
   };
   gradle_8 = mkGradle {
-    version = "8.14.4";
-    hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
+    version = "8.14.6";
+    hash = "sha256-eYjtBxsqB5AOLscV/KFcarcrzm20M68wH6f6fpQHvSQ=";
     defaultJava = jdk21;
     updateScriptMajorVersion = "8";
     extraNativePlatformJars = if stdenv.hostPlatform.isRiscV64 then gradle-native-platform else null;
