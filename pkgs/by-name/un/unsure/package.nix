@@ -13,6 +13,8 @@ buildDartApplication rec {
   pname = "unsure";
   version = "0.4.0-unstable-2025-04-15";
 
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "filiph";
     repo = "unsure";
