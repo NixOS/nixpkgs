@@ -21,6 +21,7 @@ let
     2 # Ensure consistent permissions. See https://github.com/NixOS/nixpkgs/pull/422975
     3 # Build a reproducible tarball. See https://github.com/NixOS/nixpkgs/pull/469950
     4 # Dump SQLite database to an SQL file. See https://github.com/NixOS/nixpkgs/pull/522703
+    5 # Keep virtual store materializations out of the archived store. See https://github.com/NixOS/nixpkgs/pull/565315
   ];
 in
 {
@@ -144,6 +145,19 @@ in
 
               # Run any additional pnpm configuration commands that users provide.
               ${prePnpmInstall}
+
+              if [[ ${toString fetcherVersion} -ge 5 ]]; then
+                # The virtual store is a derived installation artifact. Keep it
+                # outside the content-addressable store archived by this fetcher.
+                virtualStorePath=$(mktemp -d)
+                if versionAtLeast "$pnpmVersion" "11"; then
+                  export pnpm_config_virtual_store_dir="$virtualStorePath"
+                  export pnpm_config_global_virtual_store_dir="$virtualStorePath"
+                else
+                  export npm_config_virtual_store_dir="$virtualStorePath"
+                  export npm_config_global_virtual_store_dir="$virtualStorePath"
+                fi
+              fi
 
               echo "Final pnpm config:"
               pnpm config list
