@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   which,
   buildPackages,
   libxcrypt,
@@ -25,6 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-eZz8s0+jUMGZ3QJ4vX3nXGl+JFJhqfvxDaNJQ8RTHLk=";
   };
+
+  patches = [
+    # fix darwin build
+    (fetchpatch2 {
+      name = "macos-drop-readahead.patch";
+      url = "https://github.com/landley/toybox/commit/6a0c0ef5eeb2c43e4feef9781398c1718b8bddcb.patch";
+      hash = "sha256-KSHWHmLXSieyTHshTbYbTOi/DW27X+iAQnxes7uszwQ=";
+    })
+  ];
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
