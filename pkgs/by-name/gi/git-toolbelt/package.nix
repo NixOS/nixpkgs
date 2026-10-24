@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "git-toolbelt";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "nvie";
     repo = "git-toolbelt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5ywYbZeMqHU7/nnnINeR0BfVBxxgYmeXvjIuC45V43g=";
+    hash = "sha256-xkgLJFm24ZYPQA6hcBT3db1jQD61Mh8t07Zm8l2oVdU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
