@@ -5,6 +5,8 @@
   fetchFromGitHub,
   buildPackages,
   cmake,
+  pkg-config,
+  zstd,
   installShellFiles,
   versionCheckHook,
   _experimental-update-script-combinators,
@@ -69,8 +71,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     installShellFiles
   ];
+
+  buildInputs = [ zstd ];
 
   doCheck =
     with stdenv.buildPlatform;
