@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "antsimulator";
-  version = "3.1";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "johnBuffer";
     repo = "AntSimulator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1KWoGbdjF8VI4th/ZjAzASgsLEuS3xiwObulzxQAppA=";
+    hash = "sha256-s3edG1NR0MoOMUkxDnaKWEYztlX8kCECcBHumxV9V8U=";
   };
 
   nativeBuildInputs = [ cmake ];
