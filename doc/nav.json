@@ -624,6 +624,10 @@
                 {
                   "id": "xfce4-dev-tools",
                   "file": "hooks/xfce4-dev-tools.section.md"
+                },
+                {
+                  "id": "xtool-build-hook",
+                  "file": "hooks/xtool-build-hook.section.md"
                 }
               ]
             },
