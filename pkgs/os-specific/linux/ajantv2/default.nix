@@ -1,13 +1,17 @@
 {
   stdenv,
+  lib,
+  buildPackages,
   kernel,
   kernelModuleMakeFlags,
   libajantv2,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "${finalAttrs.version}-${finalAttrs.version}-${kernel.version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "ajantv2-module";
   version = libajantv2.version;
+
+  __structuredAttrs = true;
 
   inherit (libajantv2) src;
   sourceRoot = "${libajantv2.src.name}/driver/linux";
@@ -21,7 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   preBuild = ''
     chmod -R +w ../../
@@ -29,13 +35,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  env.KMODIGEST = lib.getExe buildPackages.kmodigest;
+  kmods = [
+    "ajantv2"
+    "ajardma"
   ];
 
+  postBuild = ''
+    for kmod in "''${kmods[@]}"; do
+      # ajantv2 uses its own build system and not the proper out-of-tree kernel bits
+      # so we have to do this ourselves. Very dull.
+      echo "kmodigest-ing $kmod" >&2
+      $KMODIGEST ''${kmod}.ko
+      echo "compressing $kmod" >&2
+      xz -k ''${kmod}.ko
+    done
+  '';
+
   installPhase = ''
-    install -D ajantv2.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajantv2.ko
-    install -D ajardma.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajardma.ko
+    for kmod in "''${kmods[@]}"; do
+      install -D ''${kmod}.ko.cer $out/lib/modules/${kernel.modDirVersion}/misc/''${kmod}.ko.cer
+      install ''${kmod}.ko.xz $out/lib/modules/${kernel.modDirVersion}/misc/''${kmod}.ko.xz
+    done
   '';
 
   meta = {
