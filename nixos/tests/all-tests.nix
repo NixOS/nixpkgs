@@ -581,6 +581,7 @@ in
   drawterm = discoverTests (import ./drawterm.nix);
   drbd = runTest ./drbd.nix;
   drbd-driver = runTest ./drbd-driver.nix;
+  driftwm = runTest ./driftwm.nix;
   druid = handleTestOn [ "x86_64-linux" ] ./druid { };
   drupal = runTest ./drupal.nix;
   dublin-traceroute = runTest ./dublin-traceroute.nix;
