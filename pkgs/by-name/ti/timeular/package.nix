@@ -17,7 +17,7 @@ let
     inherit pname version src;
   };
 in
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
@@ -26,7 +26,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/timeular.desktop $out/share/applications/timeular.desktop
     install -m 444 -D ${appimageContents}/timeular.png $out/share/icons/hicolor/512x512/apps/timeular.png
     substituteInPlace $out/share/applications/timeular.desktop \
-      --replace "Exec=AppRun --no-sandbox %U" "Exec=$out/bin/${pname}"
+      --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=timeular"
   '';
 
   meta = {
