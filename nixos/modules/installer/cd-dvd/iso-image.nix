@@ -1,5 +1,5 @@
 # This module creates a bootable ISO image containing the given NixOS
-# configuration.  The derivation for the ISO image will be placed in
+# configuration. The derivation for the ISO image will be placed in
 # config.system.build.isoImage.
 {
   config,
