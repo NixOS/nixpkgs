@@ -5,26 +5,27 @@
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
+
+  # passthru
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "base91";
-  version = "0.3.2";
-
+  version = "0.3.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "douzebis";
     repo = "base91";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1v/kvv+IUoYmrs6MrBmnA4UYIRjN4KICW/Q0zaiiGq0=";
+    hash = "sha256-6rZ2eenDxQcAAi6CA8EejVwqQxlqlEsniBwjBRZytDw=";
   };
 
   cargoRoot = "rust";
   buildAndTestSubdir = "rust/base91-cli";
 
-  cargoHash = "sha256-5ubqTQQz0OBZoe3Ql/e1H5S1cL1EhYVabcZ9FkfQzao=";
+  cargoHash = "sha256-ytaZPSdttJaiK9aPPJ/CiFwxWJp61VYoL3e/1K+3dpE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
