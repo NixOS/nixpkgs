@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    getoptlong (0.2.1)
     logger (1.7.0)
     mime (0.4.4)
     mime-types (3.7.0)
@@ -25,6 +26,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  getoptlong
   mime
   mime-types (>= 3.3.1)
   mini_exiftool
