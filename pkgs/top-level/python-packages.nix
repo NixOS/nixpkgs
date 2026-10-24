@@ -4687,6 +4687,8 @@ self: super: with self; {
 
   django-elasticsearch-dsl = callPackage ../development/python-modules/django-elasticsearch-dsl { };
 
+  django-embed-video = callPackage ../development/python-modules/django-embed-video { };
+
   django-encrypted-model-fields =
     callPackage ../development/python-modules/django-encrypted-model-fields
       { };
