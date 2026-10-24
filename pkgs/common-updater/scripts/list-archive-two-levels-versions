@@ -40,14 +40,12 @@ fi
 
 # by default set url to the base dir of the first url in src.urls
 if [[ -z "$url" ]]; then
-    url="$(nix-instantiate $systemArg --eval -E \
-               "with import ./. {}; dirOf (dirOf (lib.head $attr_path.src.urls))" \
-            | tr -d '"')"
+    url="$(nix-instantiate --eval --raw -E "with import ./. {}; dirOf (dirOf (lib.head $attr_path.src.urls))")"
 fi
 
 # print a debugging message
 if [[ -n "$file" ]]; then
-    echo "# Listing versions for '$pname' at $url" >> $file
+    echo "# Listing versions for '$pname' at $url" >> "$file"
 fi
 
 # list all major-minor versions from url
