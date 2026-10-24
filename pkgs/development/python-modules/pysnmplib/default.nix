@@ -6,12 +6,17 @@
   pycryptodomex,
   pysnmp-pyasn1,
   pysnmp-pysmi,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmplib";
   version = "5.0.24";
   pyproject = true;
+
+  # https://github.com/pysnmp/pysnmp/issues/83
+  # https://github.com/pysnmp/pysnmp/issues/56
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "pysnmp";
