@@ -6,25 +6,38 @@
   hatchling,
   hatch-vcs,
   hypothesis,
+  mypy-extensions,
   pylama,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "8.0.1";
+  version = "9.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     tag = version;
-    hash = "sha256-adEAWbRY+bCji4TfnS8W5p5KvuSjmLQrqhi+n8mSQPA=";
+    hash = "sha256-y0Uh2OU3aVrHwyXsdAWpZBYW1qhItzTMTVA46wvNawU=";
   };
+
+  # Drop hatch-mypyc from build-system; hatchling still resolves its mypy/ast-serialize chain.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requires = ["hatchling", "hatch-vcs", "hatch-mypyc"]' \
+                     'requires = ["hatchling", "hatch-vcs"]'
+  '';
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  # isort imports mypy_extensions at runtime unconditionally.
+  dependencies = [
+    mypy-extensions
   ];
 
   nativeCheckInputs = [
@@ -35,12 +48,11 @@ buildPythonPackage rec {
   ];
 
   postCheck = ''
-    # Confirm that the produced executable script is wrapped correctly and runs
-    # OK, by launching it in a subshell without PYTHONPATH
+    # Verify the wrapped executable runs without PYTHONPATH.
     (
       unset PYTHONPATH
-      echo "Testing that `isort --version-number` returns OK..."
-      $out/bin/isort --version-number
+      echo "Testing that `isort --version` returns OK..."
+      $out/bin/isort --version
     )
   '';
 
@@ -66,12 +78,11 @@ buildPythonPackage rec {
     "test_encoding_not_in_comment" # not python 3.9 compatible
     "test_encoding_not_in_first_two_lines" # not python 3.9 compatible
     "test_requirements_dir" # requires network
-    # plugin not available
-    "test_isort_literals_issue_1358"
-    "test_isort_supports_formatting_plugins_issue_1353"
+    # requires `black` (a dev dependency, not needed for isort)
+    "test_sort_reexports_output_is_black_stable_issue_2280"
+    # needs example-isort-sorting-plugin (unpackaged) for the `natural_plus` sort
     "test_sort_configurable_sort_issue_1732"
-    "test_value_assignment_list"
-    # profiles not available
+    # needs example-shared-isort-profile (unpackaged) for the `example` profile
     "test_isort_supports_shared_profiles_issue_970"
     # https://github.com/PyCQA/isort/issues/2234
     "test_isort_should_warn_on_empty_custom_config_issue_1433"
@@ -81,7 +92,10 @@ buildPythonPackage rec {
     description = "Python utility / library to sort Python imports";
     homepage = "https://github.com/PyCQA/isort";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ couchemar ];
+    maintainers = with lib.maintainers; [
+      couchemar
+      lonerOrz
+    ];
     mainProgram = "isort";
   };
 }
