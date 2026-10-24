@@ -18700,6 +18700,8 @@ self: super: with self; {
 
   saneyaml = callPackage ../development/python-modules/saneyaml { };
 
+  sangfor-scp = callPackage ../development/python-modules/sangfor-scp { };
+
   sanic = callPackage ../development/python-modules/sanic {
     # Don't pass any `sanic` to avoid dependency loops.  `sanic-testing`
     # has special logic to disable tests when this is the case.
