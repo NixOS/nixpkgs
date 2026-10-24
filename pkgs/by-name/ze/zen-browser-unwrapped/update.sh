@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts curl jq nix-update
+#!nix-shell -i bash -p common-updater-scripts curl jq nix-update yq-go
 
 set -euo pipefail
 
@@ -24,6 +24,18 @@ firefoxVersion=$(jq -er .version.version "$sourcePath/surfer.json")
 
 update-source-version "$attribute" "$firefoxVersion" \
   --version-key=firefoxVersion --source-key=firefoxSource --file="$packageFile"
+
+firefoxL10nRev=$(cat "$sourcePath/build/firefox-cache/l10n-last-commit-hash")
+update-source-version "$attribute" "$firefoxL10nRev" \
+  --version-key=firefoxL10nRev --source-key=firefoxL10n --file="$packageFile"
+
+firefoxSource=$(nix-build --no-out-link -A "$attribute.firefoxSource")
+pgoCorpusUrl=$(tar -xOf "$firefoxSource" --wildcards '*/taskcluster/kinds/fetch/benchmarks.yml' \
+  | yq -er '.["pgo-extended-corpus"].fetch.url')
+pgoCorpusRev=${pgoCorpusUrl##*/}
+pgoCorpusRev=${pgoCorpusRev%.tar.gz}
+update-source-version "$attribute" "$pgoCorpusRev" \
+  --version-key=pgoCorpusRev --source-key=pgoCorpus --file="$packageFile"
 
 nix-update --version=skip --no-src --override-filename "$packageFile" "$attribute.ffprefs"
 nix-update --version=skip --no-src --override-filename "$packageFile" "$attribute.src"
