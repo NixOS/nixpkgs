@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_98,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -31,13 +31,16 @@
   libx11,
   libxext,
   livekit-libwebrtc,
+  lld,
   testers,
   writableTmpDirAsHomeHook,
+  bubblewrap,
 
   buildRemoteServer ? true,
 }:
 
 let
+  inherit (rustPackages_1_98) rustPlatform;
   channel = "stable";
   executableName = "zeditor";
   # Based on vscode.fhs
@@ -97,7 +100,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.3.6";
+  version = "1.25.3";
 
   outputs = [
     "out"
@@ -110,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GUjKj2p1EP9Sn2eihF745JzKH2t01h7JH4HyAyiJfDI=";
+    hash = "sha256-jkaDP0sIyzMQDvT9IIbFe3KeMxcPeC+8vN5imwLzpAQ=";
   };
 
   postPatch = ''
@@ -133,13 +136,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  # remove package that has a broken Cargo.toml
-  # see: https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
-  depsExtraArgs.postBuild = ''
-    rm -r $out/git/*/candle-book/
-  '';
-
-  cargoHash = "sha256-OptshSughuv3ZRtM+7syxagtZSdvsUjHuYSKEHvYIWc=";
+  cargoHash = "sha256-WlBlkGqqHV1MYY7HuzbhYUqb60XqiuwCud4VOYzVppU=";
 
   __structuredAttrs = true;
 
@@ -152,6 +149,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cargo-bundle
+    lld
     rustPlatform.bindgenHook
   ];
 
@@ -175,6 +173,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libx11
     libxext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # required by installPhase
+    git
   ];
 
   cargoBuildFlags = [
@@ -197,6 +199,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ finalAttrs.buildFeatures;
 
   env = {
+    # Installed binaries are stripped during fixup, so delete.
+    CARGO_PROFILE_RELEASE_DEBUG = "false";
+
     ALLOW_MISSING_LICENSES = true;
     OPENSSL_NO_VENDOR = true;
     LIBGIT2_NO_VENDOR = true;
@@ -208,6 +213,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
+    # ARM64 branch thunks for this binary, producing `b(l) ARM64 branch out of range`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   preBuild = ''
@@ -222,7 +232,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         wayland
       ]
     }
-    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
+    wrapProgram $out/libexec/zed-editor --suffix PATH : ${
+      lib.makeBinPath [
+        nodejs
+        bubblewrap # required for sandboxing
+      ]
+    }
   '';
 
   nativeCheckInputs = [
@@ -230,6 +245,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   useNextest = true;
+
+  checkFlags = [
+    # GPUI debug selectors are disabled in release builds, so this UI test
+    # cannot look up the footer's bounds.
+    # https://github.com/zed-industries/zed/issues/65611
+    "--skip"
+    "watcher_debug::tests::tabs_separate_rows_and_keep_footer_visible"
+  ];
 
   remoteServerExecutableName = "zed-remote-server-${channel}-${finalAttrs.version}+${channel}";
   installPhase = ''
@@ -242,10 +265,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/zed target/release/zed
 
     pushd crates/zed
-    # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
-    sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+    # Select the stable bundle for cargo-bundle 0.9 on release-26.05.
+    substituteInPlace Cargo.toml \
+      --replace-fail '[package.metadata.bundle-stable]' '[package.metadata.bundle]'
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
     popd
 
     mkdir -p $out/Applications $out/bin
