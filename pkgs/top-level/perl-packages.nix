@@ -17053,13 +17053,14 @@ with self;
 
   HTTPHeadersActionPack = buildPerlPackage {
     pname = "HTTP-Headers-ActionPack";
-    version = "0.09";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTTP-Headers-ActionPack-0.09.tar.gz";
-      hash = "sha256-x4ERq4V+SMaYJJA9S2zoKT/v/GtdZw21UKdn+FOsx9o=";
+      url = "mirror://cpan/authors/id/R/RR/RRWO/HTTP-Headers-ActionPack-0.10.tar.gz";
+      hash = "sha256-ZCl9SVHCtwWZNJs1bqmo9/c/k2fmSsYts5z52iBQaVY=";
     };
     buildInputs = [
       TestFatal
+      TestTimer
       TestWarnings
     ];
     propagatedBuildInputs = [
