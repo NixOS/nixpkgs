@@ -8,39 +8,43 @@
   alsa-lib,
   libjack2,
   liblo,
-  qt5,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seq66";
-  version = "0.99.22";
+  version = "0.99.24";
 
   src = fetchFromGitHub {
     owner = "ahlstromcj";
     repo = "seq66";
     tag = finalAttrs.version;
-    hash = "sha256-KtbMRRxKh+BuYujzh8kqKAbSN8xWUz/ktkCHBnTRaPw=";
+    hash = "sha256-5HugVdLrwvL/JupqrNC+wRrGXTL0udPJ011sLM9b2pY=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    qt5.qttools
+    qt6.qttools
     which
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
     libjack2
     liblo
-    qt5.qtbase
+    qt6.qtbase
   ];
 
   postPatch = ''
     for d in libseq66/src libsessions/include libsessions/src seq_qt5/src seq_rtmidi/src; do
       substituteInPlace "$d/Makefile.am" --replace-fail '$(git_info)' '${finalAttrs.version}'
     done
+  '';
+
+  preConfigure = ''
+    export PATH="$PATH:${qt6.qtbase}/libexec"
   '';
 
   enableParallelBuilding = true;
