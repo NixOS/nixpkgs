@@ -61,6 +61,8 @@ buildPythonPackage (finalAttrs: {
     "test_cli_structure"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python client for Twente Milieu";
     homepage = "https://github.com/frenck/python-twentemilieu";
