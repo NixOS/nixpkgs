@@ -183,20 +183,7 @@ in
                 config.systemd.package # To allow systemd-based container healthchecks
               ]
               ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-            extraRuntimes =
-              cfg.extraRuntimes
-              ++
-                lib.optionals
-                  (
-                    config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or ""
-                    == "slirp4netns"
-                  )
-                  (
-                    with pkgs;
-                    [
-                      slirp4netns
-                    ]
-                  );
+            inherit (cfg) extraRuntimes;
           };
       };
 
@@ -252,18 +239,13 @@ in
 
       # containers cannot reach aardvark-dns otherwise
       networking.firewall = lib.mkIf (config.networking.firewall.backend != "firewalld") {
-        interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
-      };
-
-      virtualisation.containers = {
-        enable = true; # Enable common /etc/containers configuration
-        containersConf.settings = {
-          network = {
-            network_backend = "netavark";
-            firewall_driver = lib.mkIf config.networking.nftables.enable "nftables";
-          };
+        interfaces.${network_interface} = {
+          allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
+          allowedTCPPorts = lib.mkIf dns_enabled [ 53 ];
         };
       };
+
+      virtualisation.containers.enable = true;
 
       systemd.packages = [ cfg.package ];
 
