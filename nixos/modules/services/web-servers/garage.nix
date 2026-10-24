@@ -22,6 +22,16 @@ in
   };
 
   options.services.garage = {
+    defaultBucket = mkOption {
+      default = false;
+      example = true;
+      description = ''
+        Starts garage with the `--default-bucket` flag, available since version `2.3.0`. See <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server>.
+        To function properly, the environment variables `GARAGE_DEFAULT_ACCESS_KEY`, `GARAGE_DEFAULT_SECRET_KEY` and `GARAGE_DEFAULT_BUCKET` need to be set. See <https://garagehq.deuxfleurs.fr/documentation/quick-start/#configuring-initial-access-credentials>.
+      '';
+      type = lib.types.bool;
+    };
+
     enable = mkEnableOption "Garage Object Storage (S3 compatible)";
 
     extraEnvironment = mkOption {
@@ -82,6 +92,13 @@ in
       description = "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
     };
 
+    singleNode = mkOption {
+      default = false;
+      example = true;
+      description = "Starts garage with the `--single-node` flag, available since version `2.3.0`. See <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server>.";
+      type = lib.types.bool;
+    };
+
     package = mkOption {
       type = types.package;
       description = "Garage package to use, needs to be set explicitly. If you are upgrading from a major version, please read NixOS and Garage release notes for upgrade instructions.";
@@ -139,7 +156,10 @@ in
           isDefaultStateDirectory = lib.any isDefault paths;
         in
         {
-          ExecStart = "${cfg.package}/bin/garage server";
+          ExecStart =
+            "${cfg.package}/bin/garage server"
+            + lib.optionalString cfg.singleNode " --single-node"
+            + lib.optionalString cfg.defaultBucket " --default-bucket";
 
           StateDirectory = lib.mkIf isDefaultStateDirectory "garage";
           DynamicUser = lib.mkDefault true;
