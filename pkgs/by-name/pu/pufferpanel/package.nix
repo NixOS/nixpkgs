@@ -8,29 +8,21 @@
   nixosTests,
   testers,
   pufferpanel,
+  yarn,
 }:
 
 buildGoModule rec {
   pname = "pufferpanel";
-  version = "2.6.9";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "PufferPanel";
     repo = "PufferPanel";
     rev = "v${version}";
-    hash = "sha256-+ZZUoqCiSbrkaeYrm9X8SuX0INsGFegQNwa3WjBvgHQ=";
+    hash = "sha256-h8DWaj/gVCS9UELmb9RdjHlL9vlsVYouDYWNPy6pIqQ=";
   };
 
   patches = [
-    # Bump sha1cd package, otherwise i686-linux fails to build.
-    # Also bump github.com/swaggo/swag for PR 257790.
-    ./deps.patch
-
-    # Seems to be an anti-feature. Startup is the only place where user/group is
-    # hardcoded and checked.
-    #
-    # There is no technical reason PufferPanel cannot run as a different user,
-    # especially for simple commands like `pufferpanel version`.
     ./disable-group-checks.patch
 
     # Some tests do not have network requests stubbed :(
@@ -40,8 +32,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pufferpanel/pufferpanel/v2.Hash=none"
-    "-X=github.com/pufferpanel/pufferpanel/v2.Version=${version}-nixpkgs"
+    "-X=github.com/pufferpanel/pufferpanel/v3.Hash=none"
+    "-X=github.com/pufferpanel/pufferpanel/v3.Version=${version}-nixpkgs"
   ];
 
   frontend = buildNpmPackage {
@@ -50,13 +42,14 @@ buildGoModule rec {
 
     src = "${src}/client";
 
-    npmDepsHash = "sha256-oWFXtV/dxzHv3sfIi01l1lHE5tcJgpVq87XgS6Iy62g=";
+    npmDepsHash = "sha256-Mx/DmHDJ8J8y9ec9JJ8nI8bnk8ueNBcIREMhXFiEbVI=";
+
+    nativeBuildInputs = [ yarn ];
 
     NODE_OPTIONS = "--openssl-legacy-provider";
-    npmBuildFlags = [
-      "--"
-      "--dest=${placeholder "out"}"
-    ];
+    installPhase = ''
+      cp -r frontend/dist $out
+    '';
     dontNpmInstall = true;
   };
 
@@ -65,7 +58,7 @@ buildGoModule rec {
     go-swag
   ];
 
-  vendorHash = "sha256-1U7l7YW1fu5M0/pPHTLamLsTQdEltesRODUn21SuP8w=";
+  vendorHash = "sha256-GOHv3xaJKmO08pyeIb0jGn0eCx3quQITE8G18otKq/4=";
   proxyVendor = true;
 
   # Generate code for Swagger documentation endpoints (see web/swagger/docs.go).
@@ -73,7 +66,8 @@ buildGoModule rec {
   # with -trimpath (see https://go.dev/cl/399214). It looks like go-swag skips
   # file paths that start with $GOROOT, thus all files when it is empty.
   preBuild = ''
-    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --output web/swagger --generalInfo web/loader.go
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --parseDependency --markdownFiles . --output web/swagger --generalInfo web/loader.go
+    cp -r ${frontend} client/frontend/dist
   '';
 
   installPhase = ''
@@ -82,16 +76,12 @@ buildGoModule rec {
     # Set up directory structure similar to the official PufferPanel releases.
     mkdir -p $out/share/pufferpanel
     cp "$GOPATH"/bin/cmd $out/share/pufferpanel/pufferpanel
-    cp -r $frontend $out/share/pufferpanel/www
-    cp -r $src/assets/email $out/share/pufferpanel/email
     cp web/swagger/swagger.{json,yaml} $out/share/pufferpanel
 
     # Wrap the binary with the path to the external files, but allow setting
     # custom paths if needed.
     makeWrapper $out/share/pufferpanel/pufferpanel $out/bin/pufferpanel \
-      --set-default GIN_MODE release \
-      --set-default PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/email/emails.json \
-      --set-default PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www
+      --set-default GIN_MODE release
 
     runHook postInstall
   '';
