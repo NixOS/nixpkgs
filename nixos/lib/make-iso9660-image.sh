@@ -9,13 +9,22 @@ escapeEquals() {
     echo "$1" | sed -e 's/\\/\\\\/g' -e 's/=/\\=/g'
 }
 
+# Stage independent file copies: NAR copying removes hardlinks, while store
+# optimisation can introduce them. Neither may affect the resulting ISO's
+# Rock Ridge link counts or file extents. Preserve symlinks, not hardlinks.
+mkdir staged
+stagedPaths=0
+
 # Queues an file/directory to be placed on the ISO.
 # An entry consists of a local source path (2) and
 # a destination path on the ISO (1).
 addPath() {
     target="$1"
     source="$2"
-    echo "$(escapeEquals "$target")=$(escapeEquals "$source")" >> pathlist
+    stagedSource="staged/$stagedPaths"
+    stagedPaths=$((stagedPaths + 1))
+    cp -R --reflink=auto --no-preserve=links "$source" "$stagedSource"
+    echo "$(escapeEquals "$target")=$(escapeEquals "$stagedSource")" >> pathlist
 }
 
 stripSlash "$bootImage"; bootImage="$res"
