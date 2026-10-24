@@ -121,6 +121,16 @@ let
         else
           x;
 
+      # Embed the chart's nix store hash in the chart URL so that swapping
+      # the chart derivation changes the on-disk manifest, which makes
+      # ${name} re-apply the HelmChart CR and helm-controller upgrade the
+      # chart. The query string is ignored by the static file server.
+      # Only derivations and store paths carry the hash in their name, so any
+      # other path is copied to the store first, just like the chart file that
+      # ends up being served.
+      chartStorePath = pkg: if lib.isPath pkg then builtins.path { path = pkg; } else pkg;
+      chartRevision = pkg: builtins.head (builtins.split "-" (baseNameOf (chartStorePath pkg)));
+
       # Generate a HelmChart custom resource.
       mkHelmChartCR =
         name: value:
@@ -131,6 +141,11 @@ let
               builtins.toJSON value.values
             else
               builtins.readFile (toString value.values);
+          chartBase =
+            if staticContentPort == null then
+              "https://%{KUBERNETES_API}%/static/charts/${name}.tgz"
+            else
+              "https://localhost:${toString staticContentPort}/static/charts/${name}.tgz";
         in
         # merge with extraFieldDefinitions to allow setting advanced values and overwrite generated
         # values
@@ -144,11 +159,7 @@ let
           spec = {
             inherit valuesContent;
             inherit (value) targetNamespace createNamespace;
-            chart =
-              if staticContentPort == null then
-                "https://%{KUBERNETES_API}%/static/charts/${name}.tgz"
-              else
-                "https://localhost:${toString staticContentPort}/static/charts/${name}.tgz";
+            chart = "${chartBase}?v=${chartRevision value.package}";
             bootstrap = staticContentPort != null; # needed for host network access
           };
         } value.extraFieldDefinitions;
