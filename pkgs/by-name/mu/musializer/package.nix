@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musializer";
-  version = "alpha2";
+  version = "appimage-test";
 
   src = fetchFromGitHub {
     owner = "tsoding";
     repo = "musializer";
     tag = finalAttrs.version;
-    hash = "sha256-EKmdv1gVrsajyjFnV6hngGnct4NAZ5SwtPHA43VZDlI=";
+    hash = "sha256-jeLZ0Wm0scKPLVE5ocPVqFTvndHChsSajGqPUorGfWI=";
   };
 
   postPatch = ''
