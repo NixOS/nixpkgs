@@ -9,6 +9,7 @@
   libarchive,
   libpkgconf,
   pkgconf,
+  replaceVars,
   samurai,
   zlib,
   embedSamurai ? false,
@@ -23,6 +24,12 @@
   pkg-config,
   python3,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
+  # tests.mpd
+  meson,
+  mpd,
+  muonStandalone,
+  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
@@ -36,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkgconf
+    versionCheckHook
   ]
   ++ lib.optionals (!embedSamurai) [ samurai ]
   ++ lib.optionals buildDocs [
@@ -153,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
+  versionCheckProgramArg = [ "version" ];
+  doInstallCheck = true;
+
   checkPhase = ''
     runHook preCheck
 
@@ -168,6 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  setupHook = replaceVars ./setup-hook.sh {
+    embedSamurai = lib.boolToString embedSamurai;
+    isFreeBSD = lib.boolToString stdenv.hostPlatform.isFreeBSD;
+  };
 
   passthru.srcsAttrs = {
     muon-src = fetchFromSourcehut {
@@ -203,6 +219,22 @@ stdenv.mkDerivation (finalAttrs: {
     runTests = true;
   };
 
+  # try to build a meson + ninja derivation with muon + embedded samu instead
+  passthru.tests.mpd =
+    let
+      # replace meson+ninja with muonStandalone
+      mesonToMuon = inputs: (lib.subtractLists [ meson ninja ] inputs) ++ [ muonStandalone ];
+    in
+    mpd.overrideAttrs (prevAttrs: {
+      nativeBuildInputs = mesonToMuon (prevAttrs.nativeBuildInputs ++ [ versionCheckHook ]);
+
+      doInstallCheck = true;
+
+      # muon needs the meson attrs
+      muonAutoFeatures = prevAttrs.mesonAutoFeatures;
+      muonFlags = prevAttrs.mesonFlags;
+    });
+
   passthru.updateScript = callPackage ./update.nix { };
 
   meta = {
@@ -214,5 +246,3 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "muon";
   };
 })
-# TODO LIST:
-# 1. setup hook
