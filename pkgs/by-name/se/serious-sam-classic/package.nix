@@ -17,6 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "serious-sam-classic";
   version = "1.10.7";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tx00100xt";
     repo = "SeriousSamClassic";
