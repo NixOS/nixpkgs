@@ -9274,6 +9274,11 @@ with pkgs;
 
   zed-editor-fhs = zed-editor.fhs;
 
+  zen-browser = wrapFirefox zen-browser-unwrapped {
+    pname = "zen-browser";
+    hasMozSystemDirPatch = true;
+  };
+
   zynaddsubfx-fltk = zynaddsubfx.override {
     guiModule = "fltk";
   };

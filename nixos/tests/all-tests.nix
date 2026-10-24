@@ -2079,6 +2079,12 @@ in
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zapret2 = runTest ./zapret2.nix;
+  zen-browser = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.zen-browser.override {
+      extraPrefs = ''lockPref("zen.welcome-screen.seen", true);'';
+    };
+  };
   zenohd = runTest ./zenohd.nix;
   zerobyte = runTest ./zerobyte.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
