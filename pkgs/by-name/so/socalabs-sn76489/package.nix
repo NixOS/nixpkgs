@@ -18,8 +18,6 @@
   xvfb,
   freetype,
   fontconfig,
-  expat,
-  libGL,
   libjack2,
   curl,
   ninja,
@@ -83,11 +81,9 @@ stdenv.mkDerivation {
     libxdmcp
     libxext
     xvfb
-    libGL
     libjack2
     freetype
     fontconfig
-    expat
     curl
   ];
 
