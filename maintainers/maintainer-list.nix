@@ -29179,6 +29179,12 @@
     githubId = 2084639;
     name = "Manu";
   };
+  Tenshock = {
+    email = "cedric.prezelin@gmail.com";
+    github = "Tenshock";
+    githubId = 8899608;
+    name = "Cédric Prezelin";
+  };
   tensor5 = {
     github = "tensor5";
     githubId = 1545895;
