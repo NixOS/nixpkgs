@@ -23,6 +23,7 @@
   tqdm,
 
   # tests
+  expecttest,
   onnxscript,
   pytestCheckHook,
   torchvision,
@@ -35,7 +36,7 @@
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "apex";
-  version = "25.09";
+  version = "26.09";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,38 +44,29 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     owner = "nvidia";
     repo = "apex";
     tag = finalAttrs.version;
-    hash = "sha256-/WcFCDjNXWbCnWoprYYAUcLt9p1CqJLzPXcBkPn+ics=";
+    hash = "sha256-JGyPm25GuKYYv04yUYCeBg73rPdd7kmVRiIR8PU4n5s=";
   };
 
-  patches = [
-    # Fix incompatibility with more recent versions of cudnn to de-vendor it:
-    #   error: ‘throw_if’ is not a member of ‘cudnn_frontend’
-    ./fix-cudnn-frontend-compat.patch
-
-    # By default apex's setup.py will target all capabilities instead of using TORCH_CUDA_ARCH_LIST
-    # This result in the build failing on recent versions of CUDA.
-    # Instead, use TORCH_CUDA_ARCH_LIST as the source of truth for selecting capabilities
-    ./fix-cuda-capabilities-selection.patch
-  ];
-
   postPatch =
-    # Don't use git submodules for cuda dependencies
+    # Fix incompatibility with more recent versions of cudnn-frontend to de-vendor it:
+    #   error: ‘throw_if’ is not a member of ‘cudnn_frontend’
     ''
+      substituteInPlace \
+        apex/contrib/csrc/bottleneck/bottleneck.cpp \
+        apex/contrib/csrc/conv_bias_relu/conv_bias_relu.cpp \
+        apex/contrib/csrc/cudnn_gbn/norm_sample.cpp \
+        --replace-fail \
+          'cudnn_frontend::throw_if([status]() { return (status != CUDNN_STATUS_SUCCESS); }, "Plan execute error", status);' \
+          'if (status != CUDNN_STATUS_SUCCESS) { throw cudnn_frontend::cudnnException("Plan execute error", status); }'
+    ''
+    # Don't fetch the cudnn-frontend git submodule (cudnn-frontend comes from buildInputs): its only uses of git are
+    # `subprocess.run(["git", "submodule", "update", "--init", "apex/contrib/csrc/cudnn-frontend/"])`, which would
+    # raise FileNotFoundError without git. Run `true` instead.
+    + ''
       substituteInPlace setup.py \
         --replace-fail \
-          'subprocess.run(["git", "submodule", "update", "--init", "apex/contrib/csrc/multihead_attn/cutlass"])' \
-          "" \
-        --replace-fail \
-          'subprocess.run(["git", "submodule", "update", "--init", "apex/contrib/csrc/cudnn-frontend/"])' \
-          ""
-    ''
-    # Disambiguate apex's local `lerp` from `std::lerp`, which is now reachable through ATen/torch
-    # headers with CUDA 13's C++20 standard and gcc 15's <cmath>.
-    + ''
-      substituteInPlace apex/contrib/csrc/optimizers/multi_tensor_distopt_adam_kernel.cu \
-        --replace-fail \
-          "lerp(" \
-          "apex_lerp("
+          '"git",' \
+          '"true",'
     ''
     # Upstream hardcodes `version="0.1"` in setup.py, which fails the metadata check
     + ''
@@ -95,17 +87,19 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     APEX_CUDA_EXT = 1;
 
     # Enable all contrib extensions at once
-    # https://github.com/NVIDIA/apex/tree/25.09#custom-ccuda-extensions-and-install-options
+    # https://github.com/NVIDIA/apex/tree/26.09#custom-ccuda-extensions-and-install-options
     APEX_ALL_CONTRIB_EXT = 1;
-
-    NVCC_APPEND_FLAGS = lib.toString [
-      # Make kernel compilation slightly more parallel
-      "--threads 2"
-    ];
   };
 
+  # Keep the number of concurrent compiler processes within NIX_BUILD_CORES. Parallelism multiplies across two levels:
+  # setup.py builds APEX_PARALLEL_BUILD extensions at once (a build_ext thread pool), and torch's cpp_extension builds
+  # each extension with ninja, running MAX_JOBS jobs (when unset, ninja's default: every CPU of the machine). Each job
+  # (cc1plus, cicc, cudafe++) can take ~2 GB, so APEX_PARALLEL_BUILD=$NIX_BUILD_CORES without MAX_JOBS ran
+  # cores x CPUs jobs and exhausted the builder's memory. Most extensions have only a few sources, so favour building
+  # extensions in parallel, with two ninja jobs each. nvcc's --threads is not used, as it would multiply this again.
   preBuild = ''
-    export APEX_PARALLEL_BUILD=$NIX_BUILD_CORES
+    export MAX_JOBS=2
+    export APEX_PARALLEL_BUILD=$(( NIX_BUILD_CORES > 2 ? NIX_BUILD_CORES / 2 : 1 ))
   '';
 
   build-system = [
@@ -124,9 +118,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       cuda_profiler_api # cuda_profiler_api.h
       cudnn # cudnn.h
       cudnn-frontend # cudnn_frontend.h
-      cutlass # cutlass/cutlass.h
       libcublas # cublas_v2.h
-      libcufile # cufile.h
       libcurand # curand_kernel.h
       libcusolver # cusolverDn.h
       libcusparse # cusparse.h
@@ -152,18 +144,17 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "apex_C"
   ]
   ++ lib.optionals cudaSupport [
-    "_apex_gpu_direct_storage"
     "_apex_nccl_allocator"
     "amp_C"
     "apex_C"
     "bnp"
-    "fmhalib"
     "fused_layer_norm_cuda"
     "nccl_p2p_cuda"
     "syncbn"
   ];
 
   nativeCheckInputs = [
+    expecttest # torch.testing._internal.common_utils
     onnxscript
     pytestCheckHook
     torchvision
@@ -178,10 +169,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   '';
   doCheck = false;
   disabledTestPaths = [
-    # Try to read the driver version from nvidia-smi (failing in the sandbox)
-    #   TypeError: expected string or bytes-like object, got 'NoneType'
-    "tests/L0/run_transformer/"
-
     # apex.parallel was removed in https://github.com/NVIDIA/apex/pull/1896, but some tests still
     # try to import it
     "tests/distributed/DDP/ddp_race_condition_test.py"
