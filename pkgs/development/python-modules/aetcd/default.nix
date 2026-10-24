@@ -25,8 +25,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "setuptools_scm==6.3.2" "setuptools_scm"
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "setuptools-scm[toml]==10.0.5" "setuptools_scm"
   '';
 
   pythonRelaxDeps = [ "protobuf" ];
