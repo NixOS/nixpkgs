@@ -539,7 +539,7 @@ rec {
 
       # To match up until trailing whitespace, we need to capture a
       # group that ends with a non-whitespace character.
-      regex =
+      matchRegex = match (
         if start && end then
           "[${chars}]*(.*[^${chars}])[${chars}]*"
         else if start then
@@ -547,13 +547,14 @@ rec {
         else if end then
           "(.*[^${chars}])[${chars}]*"
         else
-          "(.*)";
+          "(.*)"
+      );
     in
     s:
     let
       # If the string was empty or entirely whitespace,
       # then the regex may not match and `res` will be `null`.
-      res = match regex s;
+      res = matchRegex s;
     in
     optionalString (res != null) (head res);
 
