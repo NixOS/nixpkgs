@@ -28,6 +28,7 @@
   makeWrapper,
   libiconv,
   libiconvReal,
+  libintl,
   pkgsHostHost,
   runtimeShellPackage,
   svnSupport ? false,
@@ -201,7 +202,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withLibsecret [
     glib
     libsecret
-  ];
+  ]
+  # git's ./configure disables NLS unless it finds libintl.h, which darwin's libc does not provide
+  ++ lib.optionals (nlsSupport && stdenv.hostPlatform.isDarwin) [ libintl ];
 
   # This is required for building the rust build.rs script when cross compiling
   depsBuildBuild = lib.optionals (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) [
