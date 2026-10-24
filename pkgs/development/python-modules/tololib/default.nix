@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tololib";
   version = "1.2.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "MatthiasLohr";
     repo = "tololib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dfyc96VcauERv2E5I6nOIXAHbmTHiRLqS+0XH0GB5HM=";
   };
 
@@ -40,9 +40,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
     homepage = "https://gitlab.com/MatthiasLohr/tololib";
-    changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tolo-cli";
   };
-}
+})
