@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highscore-stella";
-  version = "0-unstable-2026-06-01";
+  version = "0-unstable-2026-06-27";
 
   src = fetchFromGitHub {
     owner = "highscore-emu";
     repo = "stella";
-    rev = "f1572c44150d1e772e4d1f4e6ff4284ac8609905";
-    hash = "sha256-ly5jkz6LewoZXon2z77EdPnnGqnp4cbTQQuJsRffuxg=";
+    rev = "c68db640e50a9c88b3d01ad9e8470dc1e112c496";
+    hash = "sha256-7h6zLnpj0TikPmvr7Lrx5HvQRUmXjslQJXTSSU1CZgA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/os/highscore";
