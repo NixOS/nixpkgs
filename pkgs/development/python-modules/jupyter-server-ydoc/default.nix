@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
   # no tests
   doCheck = false;
 
-  passthru.tests = jupyter-collaboration;
+  passthru.tests.jupyter-collaboration = jupyter-collaboration;
 
   meta = {
     description = "Jupyter-server extension integrating collaborative shared models";

@@ -149,7 +149,7 @@ buildPythonPackage (finalAttrs: {
 
   doCheck = false; # use passthru.tests instead to prevent circularity with `scanpy`
 
-  passthru.tests = finalAttrs.finalPackage.overrideAttrs {
+  passthru.tests.pytest = finalAttrs.finalPackage.overrideAttrs {
     doInstallCheck = true;
   };
 

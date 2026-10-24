@@ -113,7 +113,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   # Circular dependency with crewai
-  passthru.tests = finalAttrs.finalPackage.overrideAttrs (old: {
+  passthru.tests.pytest = finalAttrs.finalPackage.overrideAttrs (old: {
     nativeInstallCheckInputs = [
       aiohttp
       crewai
