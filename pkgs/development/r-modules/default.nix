@@ -3076,10 +3076,6 @@ let
       ];
     });
 
-    trajeR = old.trajeR.overrideAttrs (attrs: {
-      patches = [ ./patches/trajeR.patch ];
-    });
-
     trigger = old.trigger.overrideAttrs (attrs: {
       postPatch = ''
         # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
