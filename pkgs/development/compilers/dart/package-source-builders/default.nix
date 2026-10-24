@@ -12,6 +12,7 @@
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
   olm = callPackage ./olm { };
+  onenote_parser = callPackage ./onenote_parser { };
   pdfium_dart = callPackage ./pdfium_dart { };
   pdfium_flutter = callPackage ./pdfium_flutter { };
   pdfrx = callPackage ./pdfrx { };
