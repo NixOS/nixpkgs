@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tdlib-purple";
-  version = "2.0.1";
+  version = "2.1.1";
 
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "adrighem";
     repo = "tdlib-purple";
     tag = "tdlib-purple-v${finalAttrs.version}";
-    hash = "sha256-jWUXBBfpUE/fShLsy7MKsrCFa9tRyl+pLTLVWLNAceE=";
+    hash = "sha256-8e4m+P20iM3FOZrmWzIm7/bIrohmyN2M1R2cJa+7ruA=";
   };
 
   preConfigure = ''
