@@ -119,6 +119,15 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "graphify" ];
 
+  # `graphify update` re-execs the interpreter. The child interpreter needs the graphify package
+  # and its dependencies.
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "out"}/${python3.sitePackages}:${python3Packages.makePythonPath dependencies}"
+  ];
+
   # The attribute and the command are `graphify`, but upstream publishes the
   # distribution as `graphifyy`. pythonMetadataCheckPhase resolves the
   # distribution by `pname`, so it cannot find it:
