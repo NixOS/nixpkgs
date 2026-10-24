@@ -17816,6 +17816,8 @@ self: super: with self; {
 
   qiskit-optimization = callPackage ../development/python-modules/qiskit-optimization { };
 
+  qiskit-qasm3-import = callPackage ../development/python-modules/qiskit-qasm3-import { };
+
   qnapstats = callPackage ../development/python-modules/qnapstats { };
 
   qpageview = callPackage ../development/python-modules/qpageview { };
