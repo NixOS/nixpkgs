@@ -377,7 +377,17 @@ let
           rm -rf $dev/lib/cmake
         '';
 
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      passthru.tests = {
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        certificate-discovery = testers.runNixOSTest (
+          import ./tests/certificate-discovery.nix {
+            inherit lib;
+            openssl = finalAttrs.finalPackage;
+          }
+        );
+      };
 
       strictDeps = true;
       __structuredAttrs = true;
@@ -424,13 +434,8 @@ in
       # This patch disables build-time detection.
       ./3.5/openssl-disable-kernel-detection.patch
 
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
-        else
-          ./3.5/use-etc-ssl-certs.patch
-      )
+      # Prefer the system CA bundle, then fall back to the default Nix profile.
+      ./3.5/use-etc-ssl-certs.patch
     ];
 
     withDocs = true;
@@ -453,13 +458,8 @@ in
       # This patch disables build-time detection.
       ./3.5/openssl-disable-kernel-detection.patch
 
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
-        else
-          ./3.5/use-etc-ssl-certs.patch
-      )
+      # Prefer the system CA bundle, then fall back to the default Nix profile.
+      ./3.5/use-etc-ssl-certs.patch
     ];
 
     withDocs = true;
@@ -482,13 +482,8 @@ in
       # This patch disables build-time detection.
       ./3.5/openssl-disable-kernel-detection.patch
 
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
-        else
-          ./3.5/use-etc-ssl-certs.patch
-      )
+      # Prefer the system CA bundle, then fall back to the default Nix profile.
+      ./3.5/use-etc-ssl-certs.patch
     ];
 
     withDocs = true;
