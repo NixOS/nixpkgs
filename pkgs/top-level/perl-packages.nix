@@ -28386,10 +28386,10 @@ with self;
 
   PerlLanguageServer = buildPerlPackage {
     pname = "Perl-LanguageServer";
-    version = "2.6.1";
+    version = "2.6.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.6.1.tar.gz";
-      hash = "sha256-IDM0uwsEXMeHAu9DA0CdCB87aN3XRoNEdGOIJ8NMsZg=";
+      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.6.2.tar.gz";
+      hash = "sha256-bQk3kK/nBOvdjH4SnI8GA1LvgULb2884cnZnCzWAvWo=";
     };
     propagatedBuildInputs = [
       AnyEvent
@@ -28398,12 +28398,24 @@ with self;
       CompilerLexer
       Coro
       DataDump
+      EncodeLocale
       HashSafeKeys
       IOAIO
       JSON
       Moose
       PadWalker
     ];
+    # Upstream tests load only Perl::LanguageServer, but the method roles and the debugger
+    # interface are loaded at runtime; the latter connects on load, so only compile it
+    postCheck = ''
+      perl -Iblib/lib -e '
+        use Perl::LanguageServer::Methods::DebugAdapter;
+        use Perl::LanguageServer::Methods::DebugAdapterInterface;
+        use Perl::LanguageServer::Methods::textDocument;
+        use Perl::LanguageServer::Methods::workspace;
+      '
+      perl -Iblib/lib -c blib/lib/Perl/LanguageServer/DebuggerInterface.pm
+    '';
     meta = {
       description = "Language Server and Debug Protocol Adapter for Perl";
       license = lib.licenses.artistic2;
