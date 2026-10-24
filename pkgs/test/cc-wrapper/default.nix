@@ -3,14 +3,13 @@
   stdenv,
   glibc,
   buildPackages,
+  darwin,
 }:
 
 let
-  # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
   sanitizersWorking =
     (stdenv.buildPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isDarwin
     && !stdenv.hostPlatform.isMusl
     && (
       (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "5.0.0")
@@ -19,6 +18,7 @@ let
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
   emulator = stdenv.hostPlatform.emulator buildPackages;
   isCxx = stdenv.cc.libcxx != null;
+  canLinkLibcxxStatically = !stdenv.hostPlatform.isDarwin || stdenv.cc.libcxx != darwin.libcxx;
   libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
   CC = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}";
   CXX = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}c++"}";
@@ -61,15 +61,22 @@ stdenv.mkDerivation {
       ${READELF} -d ./atomics.so | grep libatomic.so && echo "ok" >&2 || echo "failed" >&2
     ''}
 
-    # Test that linking libc++ works, and statically.
+    # Test that linking libc++ works.
     ${lib.optionalString isCxx ''
       echo "checking whether can link with libc++... " >&2
       NIX_DEBUG=1 ${CXX} ${./cxx-main.cc} -c -o cxx-main.o
       NIX_DEBUG=1 ${CC} cxx-main.o -lc++ -o cxx-main
-      NIX_DEBUG=1 ${CC} cxx-main.o ${lib.getLib stdenv.cc.libcxx}/lib/libc++.a -o cxx-main-static
       ${emulator} ./cxx-main
-      ${emulator} ./cxx-main-static
-      rm cxx-main{,-static,.o}
+
+      # Apple's system libc++ only provides dynamic linker stubs in the SDK.
+      ${lib.optionalString canLinkLibcxxStatically ''
+        echo "checking whether can link with libc++ statically... " >&2
+        NIX_DEBUG=1 ${CC} cxx-main.o ${lib.getLib stdenv.cc.libcxx}/lib/libc++.a -o cxx-main-static
+        ${emulator} ./cxx-main-static
+        rm cxx-main-static
+      ''}
+
+      rm cxx-main{,.o}
     ''}
 
     ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.cc.isClang) ''
