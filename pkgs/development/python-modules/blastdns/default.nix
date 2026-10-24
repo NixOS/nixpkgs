@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
@@ -60,6 +61,9 @@ buildPythonPackage (finalAttrs: {
     "--import-mode=importlib"
     "tests"
   ];
+
+  # Copying of the tests doesn't work on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Tests requires host system DNS config files that are absent in sandboxed builds
