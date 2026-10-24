@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "narwhals";
-  version = "2.25.0";
+  version = "2.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zw45xT54D8LeaJRyMxWhFGUBzSmDmLTzpISk2zPSbLY=";
+    hash = "sha256-9YBjXLG7YwwsWgExwfRN4VNVfZjYQLgw1ZIZAuEgmBs=";
   };
 
   postPatch = ''
@@ -81,15 +81,8 @@ buildPythonPackage (finalAttrs: {
     "test_convert_time_zone_to_connection_tz_pyspark"
     "test_replace_time_zone_to_connection_tz_pyspark"
     "test_lazy"
-    # Incompatible with ibis 11
-    "test_unique_3069"
     # DuckDB 1.4.x compatibility - empty result schema handling with PyArrow
     "test_skew_expr"
-    # ibis improvements cause strict XPASS failures (tests expected to fail now pass)
-    "test_empty_scalar_reduction_with_columns"
-    "test_collect_empty"
-    "test_first_last_expr_over_order_by"
-    "test_first_expr_broadcasting"
     # sqlframe improvements cause strict XPASS failures (tests expected to fail now pass)
     "test_unique_expr"
     # sqlframe issues
@@ -98,6 +91,9 @@ buildPythonPackage (finalAttrs: {
     "test_join_duplicate_column_names"
     # PySpark does not yet fully support pandas >= 3.0.0
     "test_backend_version[pyspark[connect]]"
+    # Polars issues
+    "test_length_changing_operand_is_not_scalar"
+    "test_contains_chunked"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
