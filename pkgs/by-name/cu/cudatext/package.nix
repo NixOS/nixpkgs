@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  cacert,
   coreutils,
   lazarus,
   fpc,
@@ -129,6 +130,11 @@ stdenv.mkDerivation (finalAttrs: {
       exit 1
     fi
   '') additionalLexers;
+
+  postFixup = ''
+    rm $out/share/cudatext/py/sys/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/cudatext/py/sys/certifi/cacert.pem
+  '';
 
   passthru.updateScript = ./update.sh;
 
