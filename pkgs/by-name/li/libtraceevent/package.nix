@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtraceevent";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
     tag = "libtraceevent-${finalAttrs.version}";
-    hash = "sha256-4KuF+UNMWxfxXYVlS0cBY5/p242UQ/NoRRVK+wmn04E=";
+    hash = "sha256-ZsY9ahMjqFUXTP+Vy2iyjEOsX/keA5F8OEylarOqE0M=";
   };
 
   postPatch = ''
