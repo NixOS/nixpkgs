@@ -10,12 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "execnb";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-cj0By2OIwRKtDroUJGN8EFrS++2Vx4m6/3IWB4+uQdo=";
+    hash = "sha256-0Ca35QfhrNEyBdYf9KCl5tBJjOPDla79h8W0oOGHWu0=";
   };
 
   pythonRelaxDeps = [ "fastcore" ];
