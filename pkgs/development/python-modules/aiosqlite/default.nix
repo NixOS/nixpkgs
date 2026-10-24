@@ -7,16 +7,16 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosqlite";
-  version = "0.21.0";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "aiosqlite";
-    tag = "v${version}";
-    hash = "sha256-3l/uR97WuLlkAEdogL9iYoXp89bsAcpH6XEtMELsX9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-voOOFo1OwaRQ3JsDHlBrngP+8ajf0kTNKXJyOaJiTs4=";
   };
 
   build-system = [ flit-core ];
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asyncio bridge to the standard sqlite3 module";
     homepage = "https://github.com/jreese/aiosqlite";
-    changelog = "https://github.com/omnilib/aiosqlite/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/omnilib/aiosqlite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
