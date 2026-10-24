@@ -1,0 +1,18 @@
+--- a/cmake/svs.cmake
++++ b/cmake/svs.cmake
+@@ -104,14 +104,7 @@
+         set(SVS_LVQ_HEADER "svs/extensions/vamana/lvq.h")
+         set(SVS_LEANVEC_HEADER "svs/extensions/vamana/leanvec.h")
+     else()
+-        # This file is included from both CMakeLists.txt and python_bindings/CMakeLists.txt
+-        # Set `root` relative to this file, regardless of where it is included from.
+-        get_filename_component(root ${CMAKE_CURRENT_LIST_DIR}/.. ABSOLUTE)
+-        set(SVS_EXPERIMENTAL_CHECK_BOUNDS OFF CACHE BOOL "Disable SVS bounds checking" FORCE)
+-        add_subdirectory(
+-            ${root}/deps/ScalableVectorSearch
+-            deps/ScalableVectorSearch
+-        )
++        find_package(svs REQUIRED)
+         set(SVS_LVQ_HEADER "svs/quantization/lvq/impl/lvq_impl.h")
+         set(SVS_LEANVEC_HEADER "svs/leanvec/impl/leanvec_impl.h")
+     endif()
