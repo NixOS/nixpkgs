@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     fmt
-    (glaze.override { enableSSL = false; })
+    glaze
   ];
 
   installPhase = ''
