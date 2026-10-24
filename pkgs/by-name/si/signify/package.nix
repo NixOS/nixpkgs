@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "signify";
-  version = "32";
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "aperezdc";
     repo = "signify";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
+    sha256 = "sha256-cBeCnhLwhRnIVa/naNl5AysSg5RncnOtQpmTHNicHAo=";
   };
 
   doCheck = true;
