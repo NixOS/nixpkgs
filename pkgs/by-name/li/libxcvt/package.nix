@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "VESA CVT standard timing modeline generation library & utility";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcvt";
