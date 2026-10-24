@@ -17920,6 +17920,8 @@ self: super: with self; {
 
   radixtarget = callPackage ../development/python-modules/radixtarget { };
 
+  radvel = callPackage ../development/python-modules/radvel { };
+
   radon = callPackage ../development/python-modules/radon { };
 
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
