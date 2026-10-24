@@ -108,8 +108,11 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.config.CREATE_ADMIN == 0 || cfg.adminCredentialsFile != null;
-        message = "services.miniflux.adminCredentialsFile must be set if services.miniflux.config.CREATE_ADMIN is 1";
+        assertion =
+          cfg.config.CREATE_ADMIN == 0
+          || cfg.adminCredentialsFile != null
+          || cfg.config ? ADMIN_PASSWORD_FILE;
+        message = "services.miniflux.adminCredentialsFile or services.miniflux.config.ADMIN_PASSWORD_FILE must be set if services.miniflux.config.CREATE_ADMIN is 1";
       }
     ];
 
