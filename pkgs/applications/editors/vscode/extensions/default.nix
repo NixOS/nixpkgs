@@ -3934,6 +3934,23 @@ let
         };
       };
 
+      radicle-ide-plugins-team.radicle = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "radicle-ide-plugins-team";
+          name = "radicle";
+          version = "0.7.1";
+          hash = "sha256-5ik0RYo8IFV//y8UY9MXcjbVCg8jeYRereni07GXVTM=";
+        };
+
+        meta = {
+          description = "Bring support for the Radicle network to your VS code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=radicle-ide-plugins-team.radicle";
+          homepage = "https://github.com/maninak/radicle-vscode-extension";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.liamthexpl0rer ];
+        };
+      };
+
       rangav.vscode-thunder-client = callPackage ./rangav.vscode-thunder-client { };
 
       rebornix.ruby = buildVscodeMarketplaceExtension {
@@ -5058,6 +5075,11 @@ let
         postInstall = ''
           cd "$out/$installPrefix"
           jq '.contributes.configuration.properties."ltex.java.path".default = "${jdk}"' package.json | sponge package.json
+
+          # drop the bundled JDK (unpatched, stale CA keystore); ltex-ls runs on jdk
+          rm -r lib/ltex-ls-*/jdk-*
+          substituteInPlace lib/ltex-ls-*/bin/ltex-ls lib/ltex-ls-*/bin/ltex-cli \
+            --replace-fail '"$BASEDIR"/jdk-11.0.12+7' '${jdk}'
         '';
 
         meta = {

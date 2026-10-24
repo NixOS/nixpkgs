@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ollaya";
-  version = "0.12.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "ollaya-dev";
     repo = "ollaya";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NDESJkL+VAETrKi4PNYKuFQJtaV0Eta7gaqOWdBNmAQ=";
+    hash = "sha256-BemzvBFi6c4Y7xhG9u62vga4yYYjW9O5ZQhEH+QHKtM=";
   };
 
-  cargoHash = "sha256-Xkwj8ATewNtIV7QbMaIYs+fb0xWgrjxCEiGTjPNAo/M=";
+  cargoHash = "sha256-x7X9wPnrrg65v0fgEtOsfOFvPIhOYgTj9L+fj3K5FM4=";
 
   buildInputs = [ onnxruntime ];
 

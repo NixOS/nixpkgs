@@ -6067,6 +6067,8 @@ self: super: with self; {
 
   favicon = callPackage ../development/python-modules/favicon { };
 
+  fdp-scan = callPackage ../development/python-modules/fdp-scan { };
+
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
   feather-format = callPackage ../development/python-modules/feather-format { };
@@ -14217,6 +14219,10 @@ self: super: with self; {
 
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
+  prototext-codec = callPackage ../development/python-modules/prototext-codec { };
+
+  prototext-graph = callPackage ../development/python-modules/prototext-graph { };
+
   prov = callPackage ../development/python-modules/prov { };
 
   prowlpy = callPackage ../development/python-modules/prowlpy { };
@@ -21273,6 +21279,8 @@ self: super: with self; {
   tree-sitter-rust = callPackage ../development/python-modules/tree-sitter-rust { };
 
   tree-sitter-sql = callPackage ../development/python-modules/tree-sitter-sql { };
+
+  tree-sitter-textproto = callPackage ../development/python-modules/tree-sitter-textproto { };
 
   tree-sitter-typescript = callPackage ../development/python-modules/tree-sitter-typescript { };
 

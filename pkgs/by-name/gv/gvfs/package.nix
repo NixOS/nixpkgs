@@ -12,7 +12,6 @@
   udevSupport ? stdenv.hostPlatform.isLinux,
   libgudev,
   udisks,
-  libgcrypt,
   libcap,
   polkit,
   libgphoto2,
@@ -77,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    libgcrypt
     dbus
     libgphoto2
     avahi
@@ -111,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
+    "-Dgcrypt=false"
   ]
   ++ lib.optionals (!udevSupport) [
     "-Dgudev=false"
