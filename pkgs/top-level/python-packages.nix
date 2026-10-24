@@ -20932,7 +20932,7 @@ self: super: with self; {
 
   tkinter-gl = callPackage ../development/python-modules/tkinter-gl {
     inherit (pkgs) mesa;
-    inherit (pkgs.tclPackages) tkgl;
+    inherit (pkgs.tclPackages.override { inherit (tkinter) tcl tk; }) tkgl;
   };
 
   tld = callPackage ../development/python-modules/tld { };
