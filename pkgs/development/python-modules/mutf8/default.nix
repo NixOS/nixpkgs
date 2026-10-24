@@ -3,25 +3,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mutf8";
-  version = "1.0.6";
-  format = "setuptools";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "TkTech";
     repo = "mutf8";
-    rev = "v${version}";
-    hash = "sha256-4Ojn3t0EbOVdrYEiY8JegJuvW9sz8jt9tKFwOluiGQo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vtfdik+g2jnadslfthGXJWJidzR1BJibod10Wla6lSg=";
   };
 
-  nativeCheckInputs = [ pytest ];
+  __structuredAttrs = true;
 
+  pyproject = true;
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
+    runHook preCheck
     # Using pytestCheckHook results in test failures
     pytest
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "mutf8" ];
@@ -32,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
