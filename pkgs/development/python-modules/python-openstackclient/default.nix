@@ -12,6 +12,7 @@
   aodhclient,
   python-barbicanclient,
   python-designateclient,
+  python-gnocchiclient,
   python-heatclient,
   python-ironicclient,
   python-keystoneclient,
@@ -99,6 +100,7 @@ buildPythonPackage (finalAttrs: {
       python-barbicanclient
       # python-cyborgclient not packaged
       python-designateclient
+      python-gnocchiclient
       python-heatclient
       python-ironicclient
       # python-ironic-inspector-client not packaged
