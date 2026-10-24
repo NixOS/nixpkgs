@@ -11,17 +11,18 @@
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nh-unwrapped";
-  version = "4.4.2";
+  pname = "nh";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-6wwzxJNcArC4i1vH3xJlT9wVUw7vQ+q1u11h3tRu/X4=";
+    rev = "53506bf81d5bf7decbe7dc258f7092cad820159c";
+    hash = "sha256-UYbjRGQWCBC03ARSpiL0DzhwpOr1O+0KPw4O84D9s6E=";
   };
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   cargoBuildFlags = [
     "-p"
@@ -104,17 +105,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm $out/bin/xtask
     '';
 
-  cargoHash = "sha256-aAIBwCMQONQ+odceLzD675i8Y1KRaukSVvndbdjaf8s=";
+  cargoHash = "sha256-SzAhzhgs32vDJTkGDsEVfRzNcRgZ+n+i8M4afiUrgJw=";
+
+  useNextest = true;
 
   passthru.updateScript = nix-update-script { };
 
   env = {
-    NH_REV = finalAttrs.src.tag;
+    NH_REV = finalAttrs.src.rev;
     LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
   };
 
   meta = {
-    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Yet another nix cli helper";
     homepage = "https://github.com/nix-community/nh";
     license = lib.licenses.eupl12;
