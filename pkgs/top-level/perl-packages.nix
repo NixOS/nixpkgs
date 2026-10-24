@@ -29846,10 +29846,10 @@ with self;
 
   podlators = buildPerlPackage {
     pname = "podlators";
-    version = "5.01";
+    version = "6.1.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RR/RRA/podlators-5.01.tar.gz";
-      hash = "sha256-zP0d+fGkfwlbzm1xj61a9A94ziSR8scjlibhW3AgvHE=";
+      url = "mirror://cpan/authors/id/R/RR/RRA/podlators-v6.1.1.tar.gz";
+      hash = "sha256-cJp9xKIlloPrL4nghexwz3Q3ENlQUQ5Insbdyj64DGg=";
     };
     preCheck = ''
       # remove failing spdx check
