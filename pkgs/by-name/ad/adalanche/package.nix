@@ -18,6 +18,12 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-3HulDSR6rWyxvImWBH1m5nfUwnUDQO9ALfyT2D8xmJc=";
 
+  # The collectors are for Windows only.
+  excludedPackages = [
+    "collector"
+    "localmachine/collect"
+  ];
+
   buildInputs = [
     libpcap
   ];
