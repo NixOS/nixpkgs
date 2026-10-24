@@ -4,6 +4,7 @@
   electron_44,
   fetchFromGitHub,
   installShellFiles,
+  jq,
   lib,
   libicns,
   libsecret,
@@ -28,7 +29,7 @@
 stdenv.mkDerivation (
   finalAttrs:
   let
-    appName = "T3 Code (Alpha)";
+    appName = "T3 Code (Beta)";
     electron = electron_44;
     pnpm = pnpm_11;
     desktopIcon =
@@ -63,6 +64,7 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [
       installShellFiles
+      jq
       makeBinaryWrapper
       node-gyp
       nodejs
@@ -145,8 +147,14 @@ stdenv.mkDerivation (
       cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
       cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
       cp --recursive --no-preserve=mode \
-        apps/desktop/{package.json,node_modules,dist-electron} \
+        apps/desktop/{node_modules,dist-electron} \
         "$out"/libexec/t3code/apps/desktop
+
+      # Electron derives the app name, and with it the safeStorage keyring /
+      # Keychain identity, from `productName` or `name`. Use `t3code` like the
+      # official builds so encrypted data stays readable across rebrands.
+      jq '.name = "t3code" | del(.productName)' apps/desktop/package.json \
+        > "$out"/libexec/t3code/apps/desktop/package.json
 
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
       install --mode=444 ${desktopIcon} \
