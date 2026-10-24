@@ -21262,6 +21262,8 @@ with self;
     patches = lib.optionals stdenv.hostPlatform.isDarwin [
       ../development/perl-modules/Math-Pari-darwin-callback-abi.patch
     ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Perl interface to PARI";
       license = with lib.licenses; [
