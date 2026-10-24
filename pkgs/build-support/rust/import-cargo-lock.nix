@@ -233,7 +233,7 @@ let
         # but only in nested directories.
         # Only check the top-level Cargo.toml, if it actually exists
         if [[ -f $tree/Cargo.toml ]]; then
-          crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
+          crateCargoTOML=$(cd "$tree" && ${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $tree/Cargo.toml | \
           ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path')
         fi
 
@@ -241,7 +241,7 @@ let
         if [[ -z $crateCargoTOML ]]; then
           for manifest in $(find $tree -name "Cargo.toml"); do
             echo Looking at $manifest
-            crateCargoTOML=$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path "$manifest" | ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path' || :)
+            crateCargoTOML=$(cd "$(dirname "$manifest")" && ${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path "$manifest" | ${jq}/bin/jq -r '.packages[] | select(.name == "${pkg.name}") | .manifest_path' || :)
             if [[ ! -z $crateCargoTOML ]]; then
               break
             fi
@@ -261,7 +261,7 @@ let
 
         if grep -q workspace "$out/Cargo.toml"; then
           chmod u+w "$out/Cargo.toml"
-          ${replaceWorkspaceValues} "$out/Cargo.toml" "$(${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $crateCargoTOML | ${jq}/bin/jq -r .workspace_root)/Cargo.toml"
+          ${replaceWorkspaceValues} "$out/Cargo.toml" "$(cd "$tree" && ${cargo}/bin/cargo metadata --format-version 1 --no-deps --manifest-path $crateCargoTOML | ${jq}/bin/jq -r .workspace_root)/Cargo.toml"
         fi
 
         # Cargo is happy with empty metadata.
