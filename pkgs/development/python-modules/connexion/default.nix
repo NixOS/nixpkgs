@@ -33,7 +33,7 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "connexion";
   version = "3.3.0";
   pyproject = true;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spec-first";
     repo = "connexion";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mUnot9kdUgpxMXjKnkRzK9Dp2c7ibJzv4qX61ZPuJHM=";
   };
 
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     pytestCheckHook
     testfixtures
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "connexion" ];
 
@@ -95,9 +95,9 @@ buildPythonPackage rec {
   meta = {
     description = "Swagger/OpenAPI First framework on top of Flask";
     homepage = "https://github.com/spec-first/connexion";
-    changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
+    changelog = "https://github.com/spec-first/connexion/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "connexion";
   };
-}
+})
