@@ -4671,6 +4671,8 @@ self: super: with self; {
 
   django-crossdomainmedia = callPackage ../development/python-modules/django-crossdomainmedia { };
 
+  django-crum = callPackage ../development/python-modules/django-crum { };
+
   django-csp = callPackage ../development/python-modules/django-csp { };
 
   django-cte = callPackage ../development/python-modules/django-cte { };
@@ -8947,6 +8949,8 @@ self: super: with self; {
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
+
+  jsonmodels = callPackage ../development/python-modules/jsonmodels { };
 
   jsonnet = callPackage ../development/python-modules/jsonnet { };
 
@@ -18853,6 +18857,8 @@ self: super: with self; {
   scooby = callPackage ../development/python-modules/scooby { };
 
   scour = callPackage ../development/python-modules/scour { };
+
+  scout-apm = callPackage ../development/python-modules/scout-apm { };
 
   scp = callPackage ../development/python-modules/scp { };
 
