@@ -15,6 +15,7 @@ let
   inherit (lib)
     foldr
     fromJSON
+    isAttrs
     isString
     readFile
     ;
@@ -1078,11 +1079,17 @@ in
     setFunctionArgs : (a -> b) -> { [String] :: Bool } -> (a -> b)
     ```
   */
-  setFunctionArgs = f: args: {
-    # TODO: Should we add call-time "type" checking like built in?
-    __functor = self: f;
-    __functionArgs = args;
-  };
+  setFunctionArgs =
+    f:
+    if isAttrs f then
+      # Preserve additional attributes f may carry.
+      args: f // { __functionArgs = args; }
+    else
+      args: {
+        # TODO: Should we add call-time "type" checking like built in?
+        __functor = self: f;
+        __functionArgs = args;
+      };
 
   /**
     Extract the expected function arguments from a function.
@@ -1179,10 +1186,14 @@ in
     let
       fArgs = functionArgs f;
     in
-    g: {
-      __functor = self: g;
-      __functionArgs = fArgs;
-    };
+    g:
+    if isAttrs g then
+      g // { __functionArgs = fArgs; }
+    else
+      {
+        __functor = self: g;
+        __functionArgs = fArgs;
+      };
 
   /**
     Turns any non-callable values into constant functions.
