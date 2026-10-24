@@ -342,8 +342,8 @@ in
           '';
 
           extraStopCommands = ''
-            ip46tables -D nixos-fw -p vrrp -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
-            ip46tables -D nixos-fw -p ah -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
+            ip46tables -D nixos-fw -p vrrp -m comment --comment "services.keepalived.openFirewall" -j ACCEPT 2>/dev/null || true
+            ip46tables -D nixos-fw -p ah -m comment --comment "services.keepalived.openFirewall" -j ACCEPT 2>/dev/null || true
           '';
         }
     );
