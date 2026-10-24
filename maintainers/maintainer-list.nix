@@ -29490,6 +29490,14 @@
     githubId = 71843723;
     keys = [ { fingerprint = "0636 56A5 6E31 5FFD BE46  8522 6D22 B068 2CCF 9294"; } ];
   };
+  TheOneWithTheBraid = {
+    name = "The one with the braid";
+    github = "TheOneWithTheBraid";
+    githubId = 29313398;
+    email = "info@braid.business";
+    matrix = "@braid:alsace.hair";
+    keys = [ { fingerprint = "A09B 408A 7864 577B 0126  6D7C 79D2 235B C19F F56A"; } ];
+  };
   theonlymrcat = {
     name = "Max Guppy";
     email = "theonly@mrcat.au";
