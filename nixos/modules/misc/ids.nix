@@ -133,7 +133,7 @@ in
       rabbitmq = 85;
       activemq = 86;
       gnunet = 87;
-      oidentd = 88;
+      # oidentd = 88; # dynamically allocated as of 2026-07-23
       quassel = 89;
       amule = 90;
       minidlna = 91;
@@ -475,7 +475,7 @@ in
       rabbitmq = 85;
       activemq = 86;
       gnunet = 87;
-      oidentd = 88;
+      # oidentd = 88; # dynamically allocated as of 2026-07-23
       quassel = 89;
       amule = 90;
       minidlna = 91;
