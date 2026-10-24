@@ -266,7 +266,16 @@ let
         url = "https://github.com/Dao-AILab/flash-attention/commit/dad67c88d4b6122c69d0bed1cebded0cded71cea.patch";
         hash = "sha256-JSgXWItOp5KRpFbTQj/cZk+Tqez+4mEz5kmH5EUeQN4=";
       })
+      # fix build with newer CUTLASS
+      (fetchpatch {
+        url = "https://github.com/Dao-AILab/flash-attention/commit/e26dd28e487117ee3e6bc4908682f41f31e6f83a.patch";
+        hash = "sha256-NkCEowXSi+tiWu74Qt+VPKKavx0H9JeteovSJKToK9A=";
+      })
     ];
+
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace-fail 'PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13"' 'PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13" "3.14"'
+    '';
 
     dontConfigure = true;
 
@@ -457,6 +466,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     "tilelang"
     "fastsafetensors"
     "instanttensor"
+
+    "PyNvVideoCodec" # Optional dep not in nixpkgs
+    "nvtx" # Optional dep not in nixpkgs
 
     # QuACK and Cutlass DSL seem to be added only for FA4
     # which in our case handles its own deps
@@ -702,6 +714,15 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       "VLLM_NCCL_SO_PATH"
       "${cudaPackages.nccl}/lib/libnccl.so"
     ]
+    ++ lib.optionals cudaSupport [
+      "--set"
+      "CUDA_HOME"
+      "${cudaPackages.cudatoolkit}"
+
+      "--set"
+      "CUDA_PATH"
+      "${cudaPackages.cudatoolkit}"
+    ]
     ++ lib.optionals rocmSupport [
       "--set"
       "HIP_DEVICE_LIB_PATH"
@@ -741,6 +762,5 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       #   RISC-V support.
       "aarch64-darwin"
     ];
-    broken = cudaSupport;
   };
 })
