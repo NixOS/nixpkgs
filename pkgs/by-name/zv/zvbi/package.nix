@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     tzdata
   ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
