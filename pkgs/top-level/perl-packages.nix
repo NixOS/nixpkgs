@@ -7761,11 +7761,16 @@ with self;
       FileWhich
       pkgs.openssl
     ];
+    nativeCheckInputs = [
+      pkgs.openssl # runs openssl executable to get version
+    ];
+    strictDeps = true;
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     # Needed on Darwin so Crypt::OpenSSL::Guess does not pick /usr/bin/openssl and mix
     # system libcrypto with the Nix one (perl aborts: "loading libcrypto in an unsafe way").
     env.OPENSSL_PREFIX = pkgs.openssl;
+    __structuredAttrs = true;
     meta = {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with lib.licenses; [
