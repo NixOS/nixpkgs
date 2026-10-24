@@ -60,12 +60,6 @@ in
         unitConfig.RequiresMountsFor = [ cfg.dataDir ];
       };
 
-      tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = lib.mkIf isCustomDataDir {
-        user = "root";
-        group = "root";
-        mode = "0700";
-      };
-
       mounts = lib.optional isCustomDataDir {
         what = cfg.dataDir;
         where = "/var/lib/private/prowlarr";
