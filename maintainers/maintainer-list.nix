@@ -9642,6 +9642,12 @@
     github = "fitzgibbon";
     githubId = 617048;
   };
+  fkania2 = {
+    name = "Filip Kania";
+    email = "hello@fkrq.me";
+    github = "filipkania";
+    githubId = 36205125;
+  };
   fkautz = {
     name = "Frederick F. Kautz IV";
     email = "fkautz@alumni.cmu.edu";
