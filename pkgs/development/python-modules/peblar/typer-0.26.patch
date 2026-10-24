@@ -1,0 +1,30 @@
+commit b5660786c0f054db557e8941a5ad857b54d0dbf8
+Author: Sandro Jäckel <sandro.jaeckel@gmail.com>
+Date:   Sat, 24 Oct 2026 01:49:59 +0200
+
+    Fix CLI structure test with typer 0.26
+
+diff --git a/tests/cli/test_cli.py b/tests/cli/test_cli.py
+index b9d8b42..cd8a4c5 100644
+--- a/tests/cli/test_cli.py
++++ b/tests/cli/test_cli.py
+@@ -6,9 +6,9 @@
+ from typing import TYPE_CHECKING
+ from unittest.mock import AsyncMock, MagicMock, patch
+ 
+-import click
+ import orjson
+ import pytest
++from typer.core import TyperGroup
+ from typer.main import get_command
+ from typer.testing import CliRunner
+ 
+@@ -114,7 +114,7 @@ def _invoke(
+ def test_cli_structure(snapshot: SnapshotAssertion) -> None:
+     """The CLI exposes the expected commands and options."""
+     group = get_command(cli)
+-    assert isinstance(group, click.Group)
++    assert isinstance(group, TyperGroup)
+     structure = {
+         name: sorted(param.name for param in subcommand.params)
+         for name, subcommand in sorted(group.commands.items())

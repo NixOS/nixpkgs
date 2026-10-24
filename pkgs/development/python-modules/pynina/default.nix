@@ -8,12 +8,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pynina";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-dLY+rAGN2oO7AN+Q02YYYvB9XtdtGSyNrGiJ4fe1GOc=";
+    hash = "sha256-c9J9g6oCxR7YdeGekO2fjTO/WMunPZ6rA9sX8YEpIrM=";
   };
 
   postPatch = ''
