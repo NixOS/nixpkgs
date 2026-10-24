@@ -19,15 +19,15 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-RkuHmZWKQOQKERQ/b86oIYF8QAd90tanzkREtKoj7eM=";
+      hash = "sha256-Dngj14heqL5h9RVIW7L1Js6FVWCSqt25RTDoB7MPhs0=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-me1xSE0Laa+3cfQ5Vx17pZZ8z3BtUU9SnOYWcuA26R4=";
+      hash = "sha256-MYcp9VpiFDYvb86aGjPmAvij+Vtu8epBvJk4U6Z+tnM=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-3ZPSwjLFUG8QaIsj7XgvwrA4TTXm3StGdSTd3qg0TJ4=";
+      hash = "sha256-CjfdDau1dN27MuBzshFMThIfEMqgRIYrQ8BaLFnidKc=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -35,12 +35,12 @@ let
     availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
   inherit (binary) platform hash;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cypress";
-  version = "15.19.0";
+  version = "16.2.0";
 
   src = fetchzip {
-    url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
+    url = "https://cdn.cypress.io/desktop/${finalAttrs.version}/${platform}/cypress.zip";
     inherit hash;
     stripRoot = !stdenv.hostPlatform.isDarwin;
   };
@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://docs.cypress.io/app/references/changelog";
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     mainProgram = "Cypress";
@@ -127,8 +128,5 @@ stdenv.mkDerivation rec {
       Crafter
       jonhermansen
     ];
-    knownVulnerabilities = [
-      "Uses Electron 37.6.0, EOL on October 4, 2025, Several CVEs known."
-    ];
   };
-}
+})
