@@ -14,7 +14,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gh-signoff";
-  version = "0.2.1"; # version is in the script
+  version = "0.4.1"; # version is in the script
 
   src = fetchFromGitHub {
     owner = "basecamp";
