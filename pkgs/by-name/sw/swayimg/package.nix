@@ -31,17 +31,18 @@
   bash-completion,
   testers,
   nix-update-script,
+  minizip-ng,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "5.6";
+  version = "5.7";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R+tdrKnQXLMu+nrcZRiH9SoiMYoV2LTFHS+jYXLJb7g=";
+    hash = "sha256-peRcF/r45Nb/EAJaIM7xxgjK9M2guvXlhYYrfkm2svM=";
   };
 
   strictDeps = true;
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     luajit
     openexr
     openjpeg
+    minizip-ng
   ];
 
   passthru = {
