@@ -1560,8 +1560,6 @@ with pkgs;
 
   klaus = with python3Packages; toPythonApplication klaus;
 
-  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
-
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
   # Less secure variant of lowdown for use inside Nix builds.
