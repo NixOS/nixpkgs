@@ -6,10 +6,10 @@
 
 buildDunePackage (finalAttrs: {
   pname = "grenier";
-  version = "0.16";
+  version = "0.17";
   src = fetchurl {
     url = "https://github.com/let-def/grenier/releases/download/v${finalAttrs.version}/grenier-${finalAttrs.version}.tbz";
-    hash = "sha256-j9Iqv59FicIGAIZU+p7rsc9KWHN+uzQTjGcJUg82t18=";
+    hash = "sha256-j312Ow0emwjIJEYQ0kH0t4FjdHW5tojQNRbjtSOd2d4=";
   };
 
   doCheck = true;
