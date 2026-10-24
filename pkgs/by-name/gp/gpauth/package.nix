@@ -1,7 +1,7 @@
 {
   rustPlatform,
   lib,
-  fetchFromGitHub,
+  gpclient,
   glib-networking,
   openssl,
   pkg-config,
@@ -10,24 +10,20 @@
   wrapGAppsHook3,
   stdenv,
   nixosTests,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpauth";
-  version = "2.6.5";
 
-  src = fetchFromGitHub {
-    owner = "yuezk";
-    repo = "GlobalProtect-openconnect";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WCCSd20qkDtJ88ru+ufFZrNQZSKkCzYo5fZpbB7Sn7o=";
-    fetchSubmodules = true;
-  };
+  # Anchor automatic updates on gpclient so the bot builds both packages.
+  # nixpkgs-update: no auto update
+  inherit (gpclient)
+    cargoHash
+    src
+    version
+    ;
 
   buildAndTestSubdir = "apps/gpauth";
-
-  cargoHash = "sha256-6+x5SRQHIchtkdYZAZl+b28hMCaiQHrp9i3tMsN3DhE=";
 
   nativeBuildInputs = [
     perl
@@ -51,7 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests.runtime-tls = nixosTests.gpauth-tls;
   };
 
