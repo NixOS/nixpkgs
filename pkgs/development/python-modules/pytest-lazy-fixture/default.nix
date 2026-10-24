@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytest,
   pytestCheckHook,
 }:
 
@@ -23,6 +24,8 @@ buildPythonPackage rec {
   ];
 
   build-system = [ setuptools ];
+
+  dependencies = [ pytest ];
 
   pythonImportsCheck = [ "pytest_lazyfixture" ];
 
