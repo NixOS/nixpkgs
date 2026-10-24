@@ -343,7 +343,9 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 
 #### pnpmConfigHook {#javascript-pnpm-pnpmConfigHook}
 
-`pnpmConfigHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
+#### pnpmConfigHook {#javascript-pnpm-pnpmConfigHook}
+
+`pnpmConfigHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags`:
 
 ```nix
 {
@@ -357,7 +359,34 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 }
 ```
 
-If needed, set `dontPnpmConfigure = true;` to fully disable `pnpmConfigHook` without removing it from inputs manually.
+If you need to disable `pnpmConfigHook`, set `dontPnpmConfigure = true;`.
+
+By default, `pnpmConfigHook` deletes all instances of `.modules.yaml` and `.pnpm-workspace-state-v1.json` (these contain a build timestamp and path, either of which prevents a reproducible build).
+
+You can set `dontPnpmStripInstallState = true;` to keep the state files.
+
+::: {.note}
+When using `makeWrapper` to call `pnpm run`:
+
+Since version 11, pnpm checks at startup whether `node_modules` is up to date and reinstalls dependencies if not.
+Point pnpm at a writable store directory and disable the check:
+
+```nix
+{
+  # ...
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    makeWrapper ${lib.getExe pnpm} $out/bin/foo \
+      --chdir $out/share/foo \
+      --add-flag "--config.store-dir=/tmp/pnpm-store" \
+      --add-flag "--config.verify-deps-before-run=false" \
+      --add-flag run \
+      --add-flag start
+  '';
+}
+```
+:::
 
 #### pnpmBuildHook {#javascript-pnpm-pnpmBuildHook}
 
