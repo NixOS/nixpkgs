@@ -31,6 +31,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   inherit (cudaPackages.cudnn-frontend)
     version
     src
+    patches
     meta
     ;
 
