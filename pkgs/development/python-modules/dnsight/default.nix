@@ -98,6 +98,8 @@ buildPythonPackage (finalAttrs: {
     "test_spf_overlay_flatten_and_generate"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "SDK and CLI tool for DNS, email and web security hygiene";
     homepage = "https://github.com/dnsight/dnsight";
