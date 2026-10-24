@@ -131,6 +131,9 @@ rec {
           u_boot_pylib
         ];
 
+      # libfdt (dtc) is installed by meson without dist-info metadata
+      pythonRemoveDeps = [ "pylibfdt" ];
+
       preFixup = ''
         wrapProgram "$out/bin/binman" --prefix PATH : "${lib.makeBinPath btools}"
       '';
