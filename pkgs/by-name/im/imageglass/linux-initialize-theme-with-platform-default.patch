@@ -1,0 +1,47 @@
+--- a/source/ImageGlass.Lib/App.axaml.cs
++++ b/source/ImageGlass.Lib/App.axaml.cs
+@@ -101,0 +102 @@
++        PlatformSettings?.ColorValuesChanged += PlatformSettings_ColorValuesChanged;
+@@ -103 +103,0 @@
+-        PlatformSettings?.ColorValuesChanged += PlatformSettings_ColorValuesChanged;
+@@ -609,21 +609,19 @@
+-        // load theme for the first time
+-        // NOTE: on Linux, we skip this because we need to wait for the first ColorValuesChanged event
+-        // to get the system dark mode.
+-        if (BHelper.OS != OSType.Linux)
+-        {
+-            var info = PlatformSettings!.GetColorValues();
+-            var isSystemDarkMode = info.ThemeVariant == PlatformThemeVariant.Dark;
+-
+-            // sync the global: ColorValuesChanged only fires on later OS theme changes, so without
+-            // this Core.IsSystemDarkMode would stay at its default and mis-resolve live theme re-applies
+-            Core.IsSystemDarkMode = isSystemDarkMode;
+-
+-            try
+-            {
+-                await ApplyThemePackAsync(isSystemDarkMode, info.AccentColor1);
+-            }
+-            catch (Exception ex)
+-            {
+-                var isContinue = await ModalWindow.ShowUnhandledErrorAsync(ex);
+-                if (!isContinue) return;
+-            }
++        // Seed the initial theme from the platform's current values on every OS. On Linux,
++        // Avalonia populates these asynchronously from the desktop portal; in a portal-less
++        // X11 session no ColorValuesChanged event may arrive, so waiting for it prevents the
++        // main window (and initial image load) from ever starting. The listener is already
++        // registered above and reapplies the theme when portal values arrive later.
++        var info = PlatformSettings!.GetColorValues();
++        var isSystemDarkMode = info.ThemeVariant == PlatformThemeVariant.Dark;
++
++        // sync the global so later theme re-applies use the current platform appearance
++        Core.IsSystemDarkMode = isSystemDarkMode;
++
++        try
++        {
++            await ApplyThemePackAsync(isSystemDarkMode, info.AccentColor1);
++        }
++        catch (Exception ex)
++        {
++            var isContinue = await ModalWindow.ShowUnhandledErrorAsync(ex);
++            if (!isContinue) return;
