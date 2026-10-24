@@ -1,0 +1,56 @@
+From: Nix Packaging <nix@nixos.org>
+Subject: [PATCH] build: fix Perl install path for absolute prefixes
+
+When PERL_INSTALL_BASE is an absolute path (e.g., /nix/store/xxx) and
+DIST_ROOT is empty, the path concatenation "$$DIST_ROOT/$(PERL_INSTALL_BASE)"
+creates "//nix/store/xxx" (double slash), causing find commands to fail.
+
+Since PERL_INSTALL_BASE is derived from --prefix and always starts with /,
+remove the redundant / in the concatenation. This affects both the Gentoo
+and default (RPM-based) packaging code paths in PERL_GET_FILELIST.
+
+---
+ src/include/builddefs.in | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+--- a/src/include/builddefs.in
++++ b/src/include/builddefs.in
+@@ -642,9 +642,9 @@ PERL_GET_FILELIST = \
+ 	if [ -s $(2) ]; then rm -f pack.list; \
+ 	else echo "Arrgh ... no files to include in package via $(2), see pack.list"; exit 1; \
+ 	fi; \
+-	find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name perllocal.pod -exec rm -f '{}' ';' ; \
+-	find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name \*.bs  -exec rm -f '{}' ';' ; \
+-	find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name $(3).so -exec chmod 755 '{}' ';'
++	find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name perllocal.pod -exec rm -f '{}' ';' ; \
++	find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name \*.bs  -exec rm -f '{}' ';' ; \
++	find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name $(3).so -exec chmod 755 '{}' ';'
+ else
+ ifeq "$(PACKAGE_DISTRIBUTION)" "freebsd"
+ # FreeBSD Perl packaging is a broken mystery at this point in time
+@@ -661,14 +661,14 @@ endif
+ PERL_GET_FILELIST = \
+ 	$(PERLMAKE) -f Makefile $(1) DESTDIR="$$DIST_ROOT"; \
+-	find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name .packlist -exec mv '{}' $(2) ';' ; \
++	find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name .packlist -exec mv '{}' $(2) ';' ; \
+ 	if [ -s $(2) ] ; then \
+ 	    $(MANPAGE_SUFFIX) \
+             if [ "$(HAVE_MANPAGES)" = "false" ] ; then \
+ 		sed -e '/.*man[1-9].*/d' -e '/.*3pm.*/d' $(2) >$(2).tmp; \
+ 		mv $(2).tmp $(2); \
+-		find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name "*3pm*" -exec rm -rf '{}' ';' ; \
++		find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name "*3pm*" -exec rm -rf '{}' ';' ; \
+ 	    fi ;\
+ 	    sed -n -e '/\.bs$$/d' -e 's/\.[0-9]pm$$/&'"$$_sfx/" -e "s@^$$DIST_ROOT@@p" $(2) >$(2).tmp; \
+ 	    mv $(2).tmp $(2); \
+ 	else echo "Arrgh ... no files to include in package via $(2)"; exit 1; \
+ 	fi; \
+-	find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name perllocal.pod -exec rm -f '{}' ';' ; \
+-	find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name \*.bs  -exec rm -f '{}' ';' ; \
+-	find "$$DIST_ROOT/$(PERL_INSTALL_BASE)" -name $(3).so -exec chmod 755 '{}' ';'
++	find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name perllocal.pod -exec rm -f '{}' ';' ; \
++	find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name \*.bs  -exec rm -f '{}' ';' ; \
++	find "$$DIST_ROOT$(PERL_INSTALL_BASE)" -name $(3).so -exec chmod 755 '{}' ';'
+ endif
+ endif
+ endif
