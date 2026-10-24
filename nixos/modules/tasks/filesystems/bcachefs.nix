@@ -215,6 +215,13 @@ in
         ];
 
         boot.initrd.systemd.packages = [ cfg.package ];
+        # Link bcachefs-mount-generator to set TimeoutSec=infinity on mounts.
+        # Versions before 1.39.7 don't read $SYSTEMD_SYSROOT_FSTAB, so they
+        # would find no filesystems in our initrd.
+        boot.initrd.systemd.contents = lib.mkIf (lib.versionAtLeast cfg.package.version "1.39.7") {
+          "/etc/systemd/system-generators/bcachefs-mount-generator".source =
+            "${cfg.package}/lib/systemd/system-generators/bcachefs-mount-generator";
+        };
         boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
       })
 
