@@ -1,0 +1,45 @@
+From ed031cac1cd20d15f62406c1f839c8d174c8bde4 Mon Sep 17 00:00:00 2001
+From: Paul Grandperrin <paul.grandperrin@gmail.com>
+Date: Sun, 18 Oct 2026 01:55:57 +0200
+Subject: [PATCH 1/2] Let GE_ROOT override the exe-relative data directory
+
+The port keeps midas.ini, Data/Saves, Data/Profiles, Data/Logs and the
+controller mapping files in the directory holding the executable, which it
+derives from /proc/self/exe. That does not work when the executable is in a
+read-only location, as in a Nix store, so let GE_ROOT name that directory
+instead.
+---
+ port/src/main.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/port/src/main.c b/port/src/main.c
+index 71ff41d..c9b15f2 100644
+--- a/port/src/main.c
++++ b/port/src/main.c
+@@ -599,6 +599,26 @@ static void portInitRootDir(const char *argv0)
+     }
+     (void) argv0;
+ #else
++    /* The executable may live in a read-only location (NixOS, AppImage,
++     * read-only mounts) while Data/ (saves, profiles, logs) and midas.ini must
++     * be writable, so GE_ROOT overrides the directory they are looked up in. */
++    {
++        const char *root = getenv("GE_ROOT");
++        int len;
++
++        if (root != NULL && root[0] != '\0') {
++            len = snprintf(sPortRootDir, sizeof(sPortRootDir), "%s", root);
++            if (len > 0 && (size_t) len < sizeof(sPortRootDir) - 1) {
++                if (sPortRootDir[len - 1] != '/') {
++                    sPortRootDir[len] = '/';
++                    sPortRootDir[len + 1] = '\0';
++                }
++                portConLogf("ge: root: %s (GE_ROOT)\n", sPortRootDir);
++                return;
++            }
++            sPortRootDir[0] = '\0';
++        }
++    }
+     /* argv[0] is not authoritative on Linux (PATH launches have no slash,
+      * launchers/symlinks point elsewhere), and a cwd fallback scattered
+      * eeprom.bin/midas.ini across directories. So use /proc/self/exe, the Linux
