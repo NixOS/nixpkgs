@@ -18860,6 +18860,12 @@ self: super: with self; {
 
   scrap-engine = callPackage ../development/python-modules/scrap-engine { };
 
+  scrapli = callPackage ../development/python-modules/scrapli { };
+
+  scrapli-cfg = callPackage ../development/python-modules/scrapli-cfg { };
+
+  scrapli-community = callPackage ../development/python-modules/scrapli-community { };
+
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
@@ -23237,6 +23243,8 @@ self: super: with self; {
   ziamath = callPackage ../development/python-modules/ziamath { };
 
   zict = callPackage ../development/python-modules/zict { };
+
+  ziglang = callPackage ../development/python-modules/ziglang { };
 
   ziggo-mediabox-xl = callPackage ../development/python-modules/ziggo-mediabox-xl { };
 
