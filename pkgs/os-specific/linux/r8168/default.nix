@@ -6,10 +6,6 @@
   kernelModuleMakeFlags,
 }:
 
-let
-  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}-${kernel.version}";
   pname = "r8168";
@@ -32,12 +28,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  # avoid using the Makefile directly -- it doesn't understand
-  # any kernel but the current.
-  # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
   makeFlags = kernelModuleMakeFlags ++ [
+    # avoid using the Makefile directly -- it doesn't understand
+    # any kernel but the current.
+    # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "modules"
+
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/net/wireless/realtek/r8168"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
   ];
   preBuild = ''
     absSrc=$(realpath src)
@@ -47,11 +48,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p ${modDestDir}
-    find . -name '*.ko' -exec cp --parents '{}' ${modDestDir} \;
-    find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
-  '';
+  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Realtek r8168 driver";
