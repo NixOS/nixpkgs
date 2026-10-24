@@ -32235,6 +32235,11 @@
     githubId = 68678258;
     name = "Renato German Chavez Chicoma";
   };
+  xcl0716 = {
+    github = "xcl0716";
+    githubId = 122443427;
+    name = "xcl0716";
+  };
   xddxdd = {
     email = "b980120@hotmail.com";
     github = "xddxdd";
