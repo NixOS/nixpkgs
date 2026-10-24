@@ -3,40 +3,23 @@
   python3Packages,
   qt6,
   fetchFromGitHub,
-  writeText,
   copyDesktopItems,
   makeDesktopItem,
-  makeWrapper,
   onedrive,
 
   nix-update-script,
 }:
 
-let
-  version = "1.3.2";
-
-  setupPy = writeText "setup.py" ''
-    from setuptools import setup
-    setup(
-      name='onedrivegui',
-      version='${version}',
-      scripts=[
-        'src/OneDriveGUI.py',
-      ],
-    )
-  '';
-
-in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onedrivegui";
-  inherit version;
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bpozdena";
     repo = "OneDriveGUI";
-    tag = "v${version}";
-    hash = "sha256-KgpQShjSjZHNBC/aovpl/VQO5zhJZ8+8GLup75m0gJo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lzSfWVI43JnyOvrbnFVRoeaFFe2yvWPaY7/CA8BHFp8=";
   };
 
   build-system = with python3Packages; [
@@ -46,7 +29,6 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     copyDesktopItems
     qt6.wrapQtAppsHook
-    makeWrapper
   ];
 
   buildInputs = [
@@ -59,12 +41,21 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  # wrap manually to avoid having a bash script in $out/bin with a .py extension
-  dontWrapPythonPrograms = true;
+  pythonRemoveDeps = [
+    "PySide6_Essentials"
+  ];
+
   dontWrapQtApps = true;
 
   doCheck = false; # No tests defined
   # pythonImportsCheck = [ "OneDriveGUI" ]; # requires a display
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ onedrive ])
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -81,25 +72,19 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     # Patch global_config.py so DIR_PATH points to shared files location
-    sed -i src/global_config.py -e "s@^DIR_PATH =.*@DIR_PATH = '$out/share/OneDriveGUI'@"
-    cp ${setupPy} ${setupPy.name}
+    sed -i src/onedrive_gui/global_config.py -e "s@^DIR_PATH =.*@DIR_PATH = '$out/share/OneDriveGUI'@"
   '';
 
   postInstall = ''
     mkdir -p $out/share/OneDriveGUI
     # we do not need the `ui` directory - only resources
-    cp -r src/resources $out/share/OneDriveGUI
-    install -Dm444 -t $/out/share/icons/hicolor/48x48/apps src/resources/images/OneDriveGUI.png
-    # we put our own executable wrapper in place instead
-    rm -r $out/bin/*
+    cp -r $out/${python3Packages.python.sitePackages}/onedrive_gui/resources $out/share/OneDriveGUI
+    install -Dm444 -t $out/share/icons/hicolor/48x48/apps $out/share/OneDriveGUI/resources/images/OneDriveGUI.png
+  '';
 
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
-      ''${qtWrapperArgs[@]} \
-      --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
-      --prefix PYTHONPATH : ${
-        python3Packages.makePythonPath (dependencies ++ [ (placeholder "out") ])
-      } \
-      --add-flags $out/${python3Packages.python.sitePackages}/OneDriveGUI.py
+  postFixup = ''
+    # Rename executable
+    mv $out/bin/onedrive-gui $out/bin/onedrivegui
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -112,4 +97,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ philipdb ];
     platforms = lib.platforms.linux;
   };
-}
+})
