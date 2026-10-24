@@ -4,31 +4,26 @@
   appimageTools,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "mobilecoin-wallet";
   version = "1.9.2";
   src = fetchurl {
-    url = "https://github.com/mobilecoinofficial/desktop-wallet/releases/download/v${version}/MobileCoin.Wallet-${version}.AppImage";
+    url = "https://github.com/mobilecoinofficial/desktop-wallet/releases/download/v${finalAttrs.version}/MobileCoin.Wallet-${finalAttrs.version}.AppImage";
     hash = "sha256-JfG+eHsPFXZKi9Vjbw7CPvhmeMvfPWSDS65Ey4Lb8iQ=";
   };
-  appimageContents = appimageTools.extract { inherit pname version src; };
-
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/${pname}
-    cp -a ${appimageContents}/locales $out/share/${pname}
-    cp -a ${appimageContents}/resources $out/share/${pname}
-    cp -a ${appimageContents}/usr/share/icons $out/share/
+    mkdir -p $out/share/${finalAttrs.pname}
+    cp -a ${finalAttrs.contents}/locales $out/share/${finalAttrs.pname}
+    cp -a ${finalAttrs.contents}/resources $out/share/${finalAttrs.pname}
+    cp -a ${finalAttrs.contents}/usr/share/icons $out/share/
 
-    install -Dm 644 ${appimageContents}/${pname}.desktop -t $out/share/applications/
+    install -Dm 644 ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications/
 
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace "AppRun" "${pname}"
+    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
+      --replace "AppRun" "${finalAttrs.pname}"
   '';
 
   meta = {
@@ -39,4 +34,4 @@ appimageTools.wrapType2 {
     mainProgram = "mobilecoin-wallet";
     platforms = [ "x86_64-linux" ];
   };
-}
+})
