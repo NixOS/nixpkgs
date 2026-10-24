@@ -69,7 +69,12 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Secure terminal-session sharing";
     homepage = "https://upterm.dev";
+    changelog = "https://github.com/owenthereal/upterm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hax404 ];
+    maintainers = with lib.maintainers; [
+      hax404
+      debtquity
+    ];
+    mainProgram = "upterm";
   };
 })
