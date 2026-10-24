@@ -1276,6 +1276,7 @@
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix
   ./services/networking/haproxy.nix
+  ./services/networking/happier-server.nix
   ./services/networking/harmonia.nix
   ./services/networking/headplane.nix
   ./services/networking/headscale.nix
