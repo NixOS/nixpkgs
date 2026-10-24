@@ -69,6 +69,7 @@ let
             secrets_file = ${secretsFile}
           }
         }
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = \"${v}\"") cfg.extraCharonSettings)}
       }
 
       starter {
@@ -164,6 +165,18 @@ in
       description = ''
         A list of additional plugins to enable if
         {option}`managePlugins` is true.
+      '';
+    };
+
+    extraCharonSettings = lib.mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = {
+        install_routes = "no";
+        install_virtual_ip = "no";
+      };
+      description = ''
+        Extra configuration to include in the charon section of strongswan.conf.
       '';
     };
   };
