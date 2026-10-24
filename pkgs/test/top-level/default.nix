@@ -129,4 +129,130 @@ lib.recurseIntoAttrs {
     in
     assert pkgs.config.allowVariants -> (all.hello == all-reversed.hello);
     pkgs.emptyFile;
+
+  # `makeDesktopItem`'s `passthru` and file-parsed info have to agree
+  desktopEntries =
+    let
+      inherit (import ../../top-level/desktop-entries.nix { inherit lib; })
+        entriesOf
+        parseDesktopEntry
+        ;
+
+      item = pkgs.makeDesktopItem {
+        name = "test-entry";
+        desktopName = "Test Entry";
+        genericName = "Tester";
+        comment = "Exercises the desktop entry index";
+        exec = "test-entry %U";
+        icon = "test-entry";
+        keywords = [
+          "one"
+          "two"
+        ];
+        mimeTypes = [
+          "text/plain"
+          "x-scheme-handler/test"
+        ];
+        categories = [
+          "Utility"
+          "Development"
+        ];
+        noDisplay = true;
+        extraConfig = {
+          "Name[de]" = "Testeintrag";
+          "Comment[de]" = "Uebt den Index";
+          "Keywords[de]" = "eins;zwei";
+          "X-Test-Not-Localized" = "ignored";
+        };
+      };
+
+      # Entries not from `makeDesktopItem` won't expose their info by `passthru`
+      rendered = pkgs.writeText "test-entry.desktop" item.text;
+
+      entry = {
+        type = "Application";
+        desktopName = "Test Entry";
+        genericName = "Tester";
+        comment = "Exercises the desktop entry index";
+        icon = "test-entry";
+        keywords = [
+          "one"
+          "two"
+        ];
+        mimeTypes = [
+          "text/plain"
+          "x-scheme-handler/test"
+        ];
+        categories = [
+          "Utility"
+          "Development"
+        ];
+        noDisplay = true;
+        localized.de = {
+          desktopName = "Testeintrag";
+          comment = "Uebt den Index";
+          keywords = [
+            "eins"
+            "zwei"
+          ];
+        };
+      };
+
+      tests = {
+        passthru = {
+          expr = entriesOf { desktopItems = [ item ]; };
+          expected = [ entry ];
+        };
+
+        # The rendered file must parse back to what the passthru gave
+        renderedFallback = {
+          expr = entriesOf { desktopItems = [ rendered ]; };
+          expected = [ entry ];
+        };
+
+        # `desktopItems` is not always a list; some packages assign a bare item
+        bareItem = {
+          expr = entriesOf { desktopItems = item; };
+          expected = [ entry ];
+        };
+
+        # The other way an item reaches a package
+        passthruDesktopItem = {
+          expr = entriesOf { passthru.desktopItem = item; };
+          expected = [ entry ];
+        };
+
+        # A plain path into `$src` has nothing to read, so it is skipped
+        plainPath = {
+          expr = entriesOf { desktopItems = [ "share/applications/test-entry.desktop" ]; };
+          expected = [ ];
+        };
+
+        # What almost every package is
+        noItems = {
+          expr = entriesOf { };
+          expected = [ ];
+        };
+
+        # A trailing action section must not leak into the entry
+        firstSectionOnly = {
+          expr =
+            (parseDesktopEntry ''
+              [Desktop Entry]
+              Type=Application
+              Name=First
+
+              [Desktop Action new]
+              Name=Second
+            '').desktopName;
+          expected = "First";
+        };
+      };
+
+      failed = lib.filterAttrs (_: test: test.expr != test.expected) tests;
+    in
+    assert lib.assertMsg (failed == { }) ''
+      tests.top-level.desktopEntries: ${lib.concatStringsSep ", " (lib.attrNames failed)} failed
+      ${lib.generators.toPretty { } failed}'';
+    pkgs.emptyFile;
 }
