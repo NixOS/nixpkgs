@@ -12,13 +12,13 @@ buildDotnetModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "source2viewer-cli";
-  version = "19.2";
+  version = "20.0";
 
   src = fetchFromGitHub {
     owner = "ValveResourceFormat";
     repo = "ValveResourceFormat";
     tag = finalAttrs.version;
-    hash = "sha256-4aUJlJWfNOqRXeLEHf8ZlXdcASGbmV2o1oFCcHpJG0w=";
+    hash = "sha256-GgDRWrZKqAaWL145r6sAqPA31B8KmqW9XlxG75vzESM=";
   };
 
   projectFile = "CLI/CLI.csproj";

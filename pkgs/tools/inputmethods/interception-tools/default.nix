@@ -11,13 +11,13 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "interception-tools";
   version = "0.6.8";
   src = fetchFromGitLab {
     owner = "interception/linux";
     repo = "tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jhdgfCWbkF+jD/iXsJ+fYKOtPymxcC46Q4w0aqpvcek=";
   };
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Minimal composable infrastructure on top of libudev and libevdev";
     homepage = "https://gitlab.com/interception/linux/tools";
-    changelog = "https://gitlab.com/interception/linux/tools/-/tags/v${version}";
+    changelog = "https://gitlab.com/interception/linux/tools/-/tags/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

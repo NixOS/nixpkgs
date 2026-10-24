@@ -1,6 +1,7 @@
 {
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   cmake,
   pkg-config,
   makeWrapper,
@@ -15,16 +16,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "concord-tui";
-  version = "2.5.17";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "concord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W/kpLLz9W9e5f4ja85MeaUGHGpOqiZmRIL4rmBvnT0Y=";
+    hash = "sha256-B0bIwhU/hOIqap3nRwWXQUB4UvXqQs+PDwfaiSBOaA8=";
   };
 
-  cargoHash = "sha256-7YdNA6UPVaMT3vC6c91e4vnPN7q1p93ezI0PkNHpIME=";
+  cargoHash = "sha256-ovHqPjnkPUbulFmnnePJemBhwJZbqjNCMtUqRTWPv1U=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -41,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [ nasm ];
+
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ cacert ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram "$out/bin/concord" \

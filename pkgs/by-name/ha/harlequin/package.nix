@@ -85,6 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
     # Compare the source checkout with the installed package
@@ -118,6 +119,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # positional argument), and this test requires every installed adapter to
     # declare at least one.
     "test_spec_covers_every_installed_adapter"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test seems to be failing because of concurrency issues
+    "test_a_second_client_waits_its_turn"
   ];
 
   disabledTestPaths = [

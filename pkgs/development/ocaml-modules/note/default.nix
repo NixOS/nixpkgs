@@ -9,11 +9,11 @@
   brr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-note";
   version = "0.0.3";
   src = fetchurl {
-    url = "https://erratique.ch/software/note/releases/note-${version}.tbz";
+    url = "https://erratique.ch/software/note/releases/note-${finalAttrs.version}.tbz";
     hash = "sha256-ZZOvCnyz7UWzFtGFI1uC0ZApzyylgZYM/HYIXGVXY2k=";
   };
   buildInputs = [
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
-}
+})

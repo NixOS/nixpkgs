@@ -5,7 +5,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "buildkite-agent-metrics";
-  version = "5.12.4";
+  version = "5.13.0";
 
   __darwinAllowLocalNetworking = true;
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "buildkite";
     repo = "buildkite-agent-metrics";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0pQhybD6RREqpB6Fa4L5HnPb54mh0QEylqHhl6mgGSQ=";
+    hash = "sha256-mO+exMGQMHZUpwT5IqlDcLdYL+e0Fo+2/arhHFjixZI=";
   };
 
-  vendorHash = "sha256-kaObR5j6vsqRnU2jP4hJjC+Ek8X5v82T0AJsiHx6lvc=";
+  vendorHash = "sha256-r2QeG5/6IOMhr+f53Xn3ehJ59+ZsOgW2oFfkJT04u6w=";
 
   # This is a Google Cloud Function and is not needed for compiling the binary
   excludedPackages = [ "./cloud_function" ];

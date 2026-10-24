@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "adext";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ajschmidt8";
     repo = "adext";
     tag = "v${version}";
-    hash = "sha256-cZMA8/t24xk5b1At2LQWeDWuRfPcXBCXpl2T70YxZeA=";
+    hash = "sha256-2jhMlEMEVDY/LJPH+pr+hmPGq1ygth7DlBY26LqBX7w=";
   };
 
   build-system = [ setuptools-scm ];
