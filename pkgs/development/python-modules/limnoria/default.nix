@@ -16,12 +16,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "limnoria";
-  version = "2026.5.8";
+  version = "2026.10.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-rJzXMC98+SNQlNnkdMK/YL7jln0UYL57rmzHQetUrvk=";
+    hash = "sha256-sh6Yasf5kFqWU9/5GdtG3p4nBo+otouHiyxXbN6rfHw=";
   };
 
   postPatch = ''
