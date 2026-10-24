@@ -478,7 +478,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # NSS
     (lib.mesonEnable "nss-mymachines" (withNss && withMachined))
-    (lib.mesonEnable "nss-resolve" withNss)
+    (lib.mesonEnable "nss-resolve" (withNss && withResolved))
     (lib.mesonBool "nss-myhostname" withNss)
     (lib.mesonBool "nss-systemd" withNss)
 
