@@ -8,13 +8,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mcp-server-memory";
-  version = "2026.8.18";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
-    tag = finalAttrs.version;
-    hash = "sha256-tRx/ZCyHnDP3BmK/xOgVKtjlKCyKUfIll8y1sSDgzV8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sg1006mrZiVZTCiBjuYXqurWM5yDPxMKVOyOC+e7C4U=";
   };
 
   postPatch = ''

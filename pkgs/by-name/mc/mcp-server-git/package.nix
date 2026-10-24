@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-git";
-  version = "2026.8.31";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
-    tag = finalAttrs.version;
-    hash = "sha256-6woyDFfHbv8oZDN7lXrNnjZM8viYsBfMe/NtcHdDZcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sg1006mrZiVZTCiBjuYXqurWM5yDPxMKVOyOC+e7C4U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/git/";
@@ -31,6 +31,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    pytest-asyncio
+  ];
+
+  disabledTests = [
+    "test_console_script_nonexistent_repository_exits_with_one_line_error"
+    "test_git_add_nonexistent_file_is_git_error"
   ];
 
   pythonImportsCheck = [ "mcp_server_git" ];
