@@ -5,6 +5,17 @@
   nodes =
     let
       commonConfig = user: {
+        # use the nftables-based firewall backend so `verify_trusted_interfaces`
+        # can inspect a native nftables ruleset (the default backend is
+        # iptables-nft, whose rules don't carry the "trusted interfaces" comment)
+        networking.nftables.enable = true;
+
+        # a user outside the nordvpn group.
+        users.users.mallory = {
+          isNormalUser = true;
+          linger = true;
+        };
+
         # norduserd reads DBUS_SESSION_BUS_ADDRESS which the
         # desktopManager sets on user session creation (i.e. login)
         services.xserver.enable = true;
@@ -100,6 +111,7 @@
         self.verify_nordvpn_group()
         self.verify_services()
         self.verify_polkit_rules()
+        self.verify_trusted_interfaces()
         self.verify_kernel_modules_loaded()
 
         # nordvpnd related tests
@@ -108,6 +120,12 @@
         self.verify_nordvpnd_can_access_tun()
         self.verify_nordvpnd_runtime_directory()
         self.verify_nordvpnd_state_directory()
+
+        # norduserd/fileshare related tests
+        # (vet socket changes applied via source patch)
+        self.verify_norduserd_socket()
+        self.verify_fileshare_socket()
+        self.verify_nonmember_service()
 
         self.machine.shutdown()
 
@@ -137,6 +155,14 @@
         expected = f'subject.isInGroup("{self.nordvpn_group}")'
         assert expected in rules, f"expected polkit rules to reference group {self.nordvpn_group}"
 
+      def verify_trusted_interfaces(self):
+        ruleset = self.machine.succeed("${lib.getExe pkgs.nftables} list ruleset")
+        trusted_line = next(
+          (line for line in ruleset.splitlines() if "trusted interfaces" in line), None
+        )
+        assert trusted_line is not None, "expected a trusted interfaces rule in the nftables ruleset"
+        assert "nordlynx" in trusted_line, f"expected nordlynx to be a trusted interface, got: {trusted_line}"
+
       def verify_kernel_modules_loaded(self):
         lines = self.machine.succeed("lsmod").splitlines()
         loaded = {line.split()[0] for line in lines[1:] if line.strip()}
@@ -160,11 +186,11 @@
             key, value = line.split(":")
             caps[key.strip()] = int(value.strip(), base=16)
 
-        # CAP_NET_ADMIN (bit 12)
-        expected = (1 << 12)
+        # CAP_NET_ADMIN (bit 12) and CAP_NET_RAW (bit 13)
+        expected = (1 << 12) | (1 << 13)
         for cap_set in ["CapAmb", "CapBnd", "CapEff", "CapPrm"]:
           assert caps[cap_set] == expected, (
-            f"expected {cap_set} to be exactly CAP_NET_ADMIN"
+            f"expected {cap_set} to be exactly CAP_NET_ADMIN|CAP_NET_RAW "
             f"({expected:#x}), got {caps[cap_set]:#x}"
           )
 
@@ -181,6 +207,28 @@
 
       def verify_nordvpnd_state_directory(self):
         self.__verify_group_and_permissions("/var/lib/nordvpn", perm="750")
+
+      def verify_norduserd_socket(self):
+        # norduserd listens on /tmp/<uid>-norduserd.sock
+        uid = self.machine.succeed(f"id -u {self.machine_user}").strip()
+        self.__verify_group_and_permissions(f"/tmp/{uid}-norduserd.sock", perm="660")
+
+      def verify_fileshare_socket(self):
+        # fileshare is only spawned by norduserd once meshnet is enabled,
+        # which requires a logged in account. Instead, run nordfileshare directly.
+        self.machine.execute(f"sudo -u {self.machine_user} nordfileshare")
+        self.__verify_group_and_permissions("/tmp/fileshare.sock", perm="660")
+
+      def verify_nonmember_service(self):
+        uid = self.machine.succeed("id -u mallory").strip()
+        self.machine.wait_for_file(f"/run/user/{uid}/bus")
+        status, output = self.machine.systemctl("start norduserd.service", user="mallory")
+        assert status == 0, f"expected norduserd to be skipped for a non-member: {output}"
+        for prop, expected in [("ConditionResult", "no"), ("ActiveState", "inactive"), ("NRestarts", "0")]:
+          actual = self.machine.get_unit_property("norduserd.service", prop, user="mallory")
+          assert actual == expected, f"expected {prop}={expected} for a non-member, got {actual}"
+        self.machine.fail(f"test -e /tmp/{uid}-norduserd.sock")
+        self.machine.fail("sudo -u mallory nordvpn status")
 
       def __verify_group_and_permissions(self, path, perm):
         # has the correct group
