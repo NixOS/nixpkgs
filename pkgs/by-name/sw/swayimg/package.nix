@@ -2,36 +2,36 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  wayland,
-  wayland-protocols,
-  json_c,
-  libxkbcommon,
+  bash-completion,
   exiv2,
+  ffmpeg,
   fontconfig,
   giflib,
-  ffmpeg,
+  json_c,
+  libavif,
+  libdrm,
   libheif,
   libjpeg,
-  libwebp,
-  libtiff,
-  librsvg,
-  libpng,
   libjxl,
-  libavif,
-  libsixel,
+  libpng,
   libraw,
-  libdrm,
+  librsvg,
+  libsixel,
+  libtiff,
+  libwebp,
+  libxkbcommon,
   luajit,
+  meson,
+  minizip-ng,
+  ninja,
+  nix-update-script,
   openexr,
   openjpeg,
-  bash-completion,
+  pkg-config,
   testers,
-  nix-update-script,
-  minizip-ng,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,29 +64,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash-completion
-    wayland
-    wayland-protocols
-    json_c
-    libxkbcommon
     exiv2
+    ffmpeg
     fontconfig
     giflib
-    ffmpeg
+    json_c
+    libavif
+    libdrm
     libheif
     libjpeg
-    libwebp
-    libtiff
-    librsvg
-    libpng
     libjxl
-    libavif
-    libsixel
+    libpng
     libraw
-    libdrm
+    librsvg
+    libsixel
+    libtiff
+    libwebp
+    libxkbcommon
     luajit
+    minizip-ng
     openexr
     openjpeg
-    minizip-ng
+    wayland
+    wayland-protocols
   ];
 
   passthru = {
