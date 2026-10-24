@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-declare -A SELECTORS=( [handle]= [email]= [github]= [githubId]= [matrix]= [name]= )
+declare -A SELECTORS=( [handle]= [email]= [github]= [githubId]= [matrix]= [name]= [affiliation]= )
 HELP_MESSAGE="usage: '$0' [selector] value
 examples:
   get-maintainer.sh nicoo
@@ -27,7 +27,7 @@ die() {
 }
 
 listAsJSON() {
-  nix-instantiate --eval --strict --json "${MAINTAINERS_DIR}/maintainer-list.nix"
+  nix-instantiate --eval --strict --json -A maintainer-list "${MAINTAINERS_DIR}/default.nix"
 }
 
 parseArgs() {
@@ -61,6 +61,9 @@ query() {
   case "$selector" in
     githubId)
       select="select(.${selector} == $value)"
+      ;;
+    affiliation)
+      select="select(.${selector} | has(\"$value\"))"
       ;;
     *)
       select="select(.${selector} == \"$value\")"
