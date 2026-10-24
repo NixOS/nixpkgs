@@ -138,6 +138,7 @@ in
       noto-fonts
       open-sans
     ];
+    i18n.spellcheck.enable = lib.mkDefault true;
 
     qt = {
       enable = lib.mkDefault true;
