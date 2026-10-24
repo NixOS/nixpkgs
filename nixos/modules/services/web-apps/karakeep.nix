@@ -222,6 +222,10 @@ in
         RestrictRealtime = true;
       };
     };
+
+    # If Fontconfig is not enabled, the browser service will crash with a message like:
+    # FATAL:third_party/skia/src/ports/SkFontMgr_FontConfigInterface.cpp:163 Not implemented.
+    fonts.fontconfig.enable = lib.mkIf cfg.browser.enable true;
   };
 
   meta = {
