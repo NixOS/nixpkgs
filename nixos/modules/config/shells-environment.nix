@@ -270,10 +270,23 @@ in
     system.activationScripts.binsh = lib.stringAfter [ "stdio" ] ''
       # Create the required /bin/sh symlink; otherwise lots of things
       # (notably the system() function) won't work.
-      mkdir -p /bin
-      chmod 0755 /bin
-      ln -sfn "${cfg.binsh}" /bin/.sh.tmp
-      mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
+      # The symlink lives in /usr/bin and /bin is a symlink to usr/bin,
+      # otherwise systemd taints the system with unmerged-usr.
+      mkdir -p /usr/bin
+      chmod 0755 /usr/bin
+      ln -sfn "${cfg.binsh}" /usr/bin/.sh.tmp
+      mv /usr/bin/.sh.tmp /usr/bin/sh # atomically replace /usr/bin/sh
+
+      ln -sfn usr/bin /.bin.tmp
+      if [ -d /bin ] && [ ! -L /bin ]; then
+        # Older generations created /bin as a directory that only contains
+        # sh. Exchange it atomically so that /bin/sh never disappears.
+        mv --exchange --no-target-directory /.bin.tmp /bin
+        rm /.bin.tmp/sh
+        rmdir /.bin.tmp
+      else
+        mv --no-target-directory /.bin.tmp /bin # atomically replace /bin
+      fi
     '';
 
   };

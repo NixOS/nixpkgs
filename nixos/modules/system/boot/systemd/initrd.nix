@@ -169,6 +169,14 @@ let
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
+    # Merged /usr layout, otherwise systemd taints the initrd with
+    # unmerged-usr and unmerged-bin.
+    symlinks = {
+      "/bin" = "usr/bin";
+      "/sbin" = "usr/sbin";
+      "/usr/sbin" = "bin";
+    };
+
     contents = lib.filter (
       { source, enable, ... }: (!lib.elem source cfg.suppressedStorePaths) && enable
     ) cfg.storePaths;
@@ -572,10 +580,7 @@ in
           in
           "root:${if access then passwd else "*"}:::::::";
 
-        "/bin".source = "${initrdBinEnv}/bin";
-        "/sbin".source = "${initrdBinEnv}/sbin";
         "/usr/bin".source = "${initrdBinEnv}/bin";
-        "/usr/sbin".source = "${initrdBinEnv}/sbin";
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
         "/etc/initrd-release".source = config.boot.initrd.osRelease;
@@ -642,7 +647,11 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
-      ++ [ unitEnv ]
+      ++ [
+        unitEnv
+        # initrdBin packages may be referenced by store path
+        initrdBinEnv
+      ]
       ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
       ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
