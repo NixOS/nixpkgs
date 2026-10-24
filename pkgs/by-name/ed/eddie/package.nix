@@ -19,6 +19,8 @@
 
   libayatana-indicator,
 
+  cacert,
+
   mono,
 
   versionCheckHook,
@@ -83,6 +85,7 @@ buildDotnetModule (finalAttrs: {
 
   postPatch = ''
     patchShebangs src
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt resources/cacert.pem
   '';
 
   postBuild = ''
