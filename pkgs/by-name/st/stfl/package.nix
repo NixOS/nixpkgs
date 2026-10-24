@@ -40,12 +40,14 @@ stdenv.mkDerivation {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
   ''
-  # upstream builds shared library unconditionally. Also, it has no
-  # support for cross-compilation.
-  + lib.optionalString stdenv.hostPlatform.isStatic ''
-    sed -i 's/all:.*/all: libstfl.a stfl.pc/' Makefile
+  # upstream has no support for cross-compilation.
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i 's/\tar /\t${stdenv.cc.targetPrefix}ar /' Makefile
     sed -i 's/\tranlib /\t${stdenv.cc.targetPrefix}ranlib /' Makefile
+  ''
+  # upstream builds shared library unconditionally.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed -i 's/all:.*/all: libstfl.a stfl.pc/' Makefile
     sed -i '/install -m 644 libstfl.so./d' Makefile
     sed -i '/ln -fs libstfl.so./d' Makefile
   '';
