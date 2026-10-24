@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autoflake";
   version = "2.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "autoflake";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Th2MyC6Yu+OLF7WZCG1e5VQqBIGz6Eaxx2dTaEpqTtA=";
   };
 
@@ -35,9 +35,9 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to remove unused imports and unused variables";
     homepage = "https://github.com/PyCQA/autoflake";
-    changelog = "https://github.com/PyCQA/autoflake/releases/tag/v${version}";
+    changelog = "https://github.com/PyCQA/autoflake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yuriaisaka ];
     mainProgram = "autoflake";
   };
-}
+})
