@@ -527,6 +527,7 @@ in
   crowdsec = import ./crowdsec/default.nix { inherit runTest; };
   cryptpad = runTest ./cryptpad.nix;
   cups-pdf = runTest ./cups-pdf.nix;
+  cups-v3 = handleTest ./cups-v3.nix { };
   curl-impersonate = runTest ./curl-impersonate.nix;
   custom-ca = import ./custom-ca.nix { inherit pkgs runTest; };
   cyrus-imap = runTest ./cyrus-imap.nix;
