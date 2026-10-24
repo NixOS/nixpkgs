@@ -1,35 +1,35 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   boost,
   python3,
   fmt,
   versionCheckHook,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avro-c++";
-  version = "1.12.0";
+  version = "1.12.2";
 
-  src = fetchurl {
-    url = "mirror://apache/avro/avro-${finalAttrs.version}/cpp/avro-cpp-${finalAttrs.version}.tar.gz";
-    hash = "sha256-8u33cSanWw7BrRZncr4Fg1HOo9dESL5+LO8gBQwPmKs=";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "avro";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-hzUXgOcZbLDH9zqhtrCUQFWtYSE1ty4ucGZz23PMVSk=";
   };
 
-  # TODO: remove fmt formatter patches when updating to next version
-  # Patches exist upstream but don't apply cleanly.
-  patches = [
-    ./0001-get-rid-of-fmt-fetchcontent.patch
-    ./0002-fix-fmt-name-formatter.patch
-    ./0003-fix-fmt-type-formatter.patch
-    ./0004-remove-boost-system-component.patch
+  preConfigure = "cd lang/c++";
+  cmakeFlags = [
+    (lib.cmakeFeature "AVRO_BUILD_TESTS" "OFF")
   ];
 
   nativeBuildInputs = [
     cmake
     python3
+    zlib
   ];
 
   propagatedBuildInputs = [
@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/avrogencpp";
 
   meta = {
     description = "C++ library which implements parts of the Avro Specification";
