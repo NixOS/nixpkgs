@@ -31,7 +31,6 @@ in
 
   config = lib.mkIf cfg.enable {
     users.groups.timekpr = {
-      gid = 2000;
       members = cfg.adminUsers;
     };
 
