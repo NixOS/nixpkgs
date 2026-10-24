@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "triforce-lv2";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "chadmed";
     repo = "triforce";
     tag = finalAttrs.version;
-    hash = "sha256-f4i0S6UaVfs1CUeQRqo22PRgMNwYDNoMunHidI1XzBk=";
+    hash = "sha256-lW0uaGxL+umIAYrX6CBIV82QbKK6sCOcUThJbSDCMzg=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                      "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
-  cargoHash = "sha256-2FC6wlFJkQryA/bcjF0GjrMQVb8hlUY+muFqPqShWss=";
+  cargoHash = "sha256-Gn+ywsOnYkNcfKn4AIj3yQI4ymNLFwxcS0+oiCgt2ik=";
 
   dontCargoInstall = true;
 
