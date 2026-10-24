@@ -821,6 +821,11 @@ stdenv.mkDerivation (finalAttrs: {
       inherit src;
       name = "python${pythonVersion}-${version}-doc";
 
+      patches = lib.optionals (pythonVersion == "3.12") [
+        ./3.12/docutils-0.22.patch
+        ./3.12/sphinx-glossary.patch
+      ];
+
       dontConfigure = true;
 
       dontBuild = true;
