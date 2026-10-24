@@ -1,0 +1,30 @@
+From c29857d56f9f74d11b7b087de1951c8b584be151 Mon Sep 17 00:00:00 2001
+From: Kirill Elagin <kirelagin@gmail.com>
+Date: Sat, 15 Nov 2025 13:21:11 +0100
+Subject: [PATCH] tests: Generate proto for self_recusive
+
+The new functionality and the test for it were backported in
+d31100c9195819edb0a12f44705dfc2da111ea9b, however the `setup.py` file
+was not updated accordingly, so the proto for the test case was not
+actually generated.
+
+Generate the proto in `setup.py`.
+---
+ python/setup.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/python/setup.py b/python/setup.py
+index 057414d8f..c1eeeee39 100755
+--- a/setup.py
++++ b/setup.py
+@@ -135,6 +135,7 @@ def GenerateUnittestProtos():
+   GenProto('google/protobuf/internal/more_messages.proto', False)
+   GenProto('google/protobuf/internal/no_package.proto', False)
+   GenProto('google/protobuf/internal/packed_field_test.proto', False)
++  GenProto('google/protobuf/internal/self_recursive.proto', False)
+   GenProto('google/protobuf/internal/test_bad_identifiers.proto', False)
+   GenProto('google/protobuf/internal/test_proto3_optional.proto', False)
+   GenProto('google/protobuf/pyext/python.proto', False)
+-- 
+2.51.0
+
