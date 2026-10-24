@@ -133,6 +133,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       viperML
       midischwarz12
       faukah
+      qweered
     ];
   };
 })
