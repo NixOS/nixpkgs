@@ -53,6 +53,14 @@ in
         '';
       };
 
+      configurationFile = mkOption {
+        default = "extlinux/extlinux.conf";
+        type = types.str;
+        description = ''
+          Path to the configuration file relative to each boot directory.
+        '';
+      };
+
       configurationLimit = mkOption {
         default = 20;
         example = 10;
@@ -105,7 +113,7 @@ in
   config =
     let
       builderArgs =
-        "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
+        "-f ${cfg.configurationFile} -g ${toString cfg.configurationLimit} -t ${timeoutStr}"
         + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
         + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
       installBootLoader = pkgs.writeScript "install-extlinux-conf.sh" (
