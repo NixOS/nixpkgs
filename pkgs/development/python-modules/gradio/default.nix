@@ -66,7 +66,7 @@
   gradio-pdf,
   ffmpeg,
   ipython,
-  mcp,
+  mcp_1,
   polars,
   pytest-asyncio,
   respx,
@@ -178,7 +178,7 @@ buildPythonPackage (finalAttrs: {
     gradio-pdf
     hypothesis
     ipython
-    mcp
+    mcp_1
     polars
     pytest-asyncio
     pytestCheckHook
@@ -483,7 +483,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    broken = lib.versionAtLeast mcp.version "2"; # https://github.com/gradio-app/gradio/pull/13921
     homepage = "https://www.gradio.app/";
     changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for easily interacting with trained machine learning models";
