@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highscore-prosystem";
-  version = "0-unstable-2026-05-16";
+  version = "0-unstable-2026-06-27";
 
   src = fetchFromGitLab {
     owner = "highscore-emu";
     repo = "prosystem";
-    rev = "c371e250cc01b8be99955671b93d4e3769535e05";
-    hash = "sha256-XTOOfcJo5/T6JtirG0wH7LTdjBoNzdaxNKqFkhc9RO8=";
+    rev = "8787e0ee4af7234c72811437db974024620d94b3";
+    hash = "sha256-RojEZLPurjBy1o2BUVrr5k7cLsTMn4Dl4+SPrSGpOvA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/highscore";
