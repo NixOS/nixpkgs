@@ -1,6 +1,10 @@
-{ ... }:
 {
-  name = "nginx-more-headers";
+  mkPackage ? builtins.getAttr "stable",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-more-headers-${name}";
 
   nodes = {
     webserver =
@@ -8,6 +12,7 @@
       {
         services.nginx = {
           enable = true;
+          package = mkPackage pkgs;
 
           virtualHosts.test = {
             locations = {

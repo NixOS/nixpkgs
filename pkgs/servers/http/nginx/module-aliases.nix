@@ -4,6 +4,7 @@ self: {
   # keep-sorted start case=no numeric=yes block=yes
 
   auth-a2aclr = throw "auth-a2aclr was removed because its upstream is unmaintained and its pinned arpa2common dependency no longer builds"; # Added 2026-09-02
+  brotli = throw "brotli was removed from nginxModules because it's a dynamic module now. Use services.nginx.dynamicModules to install it."; # Added 2026-10-19
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   fluentd = throw "fluentd was removed due to lack of maintenance"; # Added 2026-08-02
   http_proxy_connect_module_v24 = throw "http_proxy_connect_module_v24 was removed because it was not compatible with any supported nginx version"; # Added 2026-07-29
@@ -12,6 +13,7 @@ self: {
   naxsi = throw "naxsi was removed because the build was broken & the repo is archived"; # Added 2026-08-02
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
   opentracing = throw "opentracing-cpp was removed because opentracing as been archived upstream"; # Added 2025-10-19
+  otel = throw "otel was removed from nginxModules because it's a dynamic module now. Use services.nginx.dynamicModules to install it."; # Added 2026-10-19
   pagespeed = throw "pagespeed was removed because the upstream repo is archived & the build was broken"; # Added 2026-08-02
   statsd = throw "statsd was removed because its upstream source vanished"; # Added 2026-07-28
   # keep-sorted end

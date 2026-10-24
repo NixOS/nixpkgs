@@ -1,6 +1,10 @@
-{ ... }:
 {
-  name = "nginx-grpc-error-pages";
+  name ? "default",
+  mkPackage ? builtins.getAttr "default",
+  ...
+}:
+{
+  name = "nginx-grpc-error-pages-${name}";
 
   containers = {
     webserver =
@@ -8,6 +12,7 @@
       {
         services.nginx = {
           enable = true;
+          package = mkPackage pkgs;
 
           virtualHosts.test = {
             locations = {

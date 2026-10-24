@@ -1,5 +1,10 @@
-_: {
-  name = "nginx-njs";
+{
+  name ? "default",
+  mkPackage ? builtins.getAttr "nginx",
+  ...
+}:
+{
+  name = "nginx-njs-${name}";
 
   nodes.machine =
     {
@@ -9,6 +14,7 @@ _: {
     {
       services.nginx = {
         enable = true;
+        package = mkPackage pkgs;
         additionalModules = [ pkgs.nginxModules.njs ];
         commonHttpConfig = ''
           js_import http from ${builtins.toFile "http.js" ''

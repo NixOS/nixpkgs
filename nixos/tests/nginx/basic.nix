@@ -4,18 +4,29 @@
 #   2. whether the ETag header is properly generated whenever we're serving
 #      files in Nix store paths
 #   3. nginx doesn't restart on configuration changes (only reloads)
-{ ... }:
 {
-  name = "nginx";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  lib,
+  ...
+}:
+{
+  name = "nginx-${name}";
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ma27 ];
   };
 
   nodes = {
     webserver =
-      { pkgs, lib, ... }:
+      {
+        config,
+        pkgs,
+        lib,
+        ...
+      }:
       {
         services.nginx.enable = true;
+        services.nginx.package = mkPackage pkgs;
         services.nginx.commonHttpConfig = ''
           log_format ceeformat '@cee: {"status":"$status",'
             '"request_time":$request_time,'
@@ -45,34 +56,38 @@
 
         services.nginx.enableReload = true;
 
-        specialisation.etagSystem.configuration = {
-          services.nginx.virtualHosts.localhost = {
-            root = lib.mkForce (
-              pkgs.runCommand "testdir2" { } ''
-                mkdir "$out"
-                echo content changed > "$out/index.html"
-              ''
-            );
-          };
-        };
+        specialisation = lib.mkMerge [
+          {
+            etagSystem.configuration = {
+              services.nginx.virtualHosts.localhost = {
+                root = lib.mkForce (
+                  pkgs.runCommand "testdir2" { } ''
+                    mkdir "$out"
+                    echo content changed > "$out/index.html"
+                  ''
+                );
+              };
+            };
+            justReloadSystem.configuration = {
+              services.nginx.virtualHosts."1.my.test".listen = [
+                {
+                  addr = "127.0.0.1";
+                  port = 8080;
+                }
+              ];
+            };
+          }
+          (lib.mkIf (config.services.nginx.package.flavor == "stable") {
+            reloadRestartSystem.configuration = {
+              services.nginx.package = lib.mkForce pkgs.nginxMainline;
+            };
 
-        specialisation.justReloadSystem.configuration = {
-          services.nginx.virtualHosts."1.my.test".listen = [
-            {
-              addr = "127.0.0.1";
-              port = 8080;
-            }
-          ];
-        };
-
-        specialisation.reloadRestartSystem.configuration = {
-          services.nginx.package = pkgs.nginxMainline;
-        };
-
-        specialisation.reloadWithErrorsSystem.configuration = {
-          services.nginx.package = pkgs.nginxMainline;
-          services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
-        };
+            reloadWithErrorsSystem.configuration = {
+              services.nginx.package = lib.mkForce pkgs.nginxMainline;
+              services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
+            };
+          })
+        ];
       };
   };
 
@@ -81,8 +96,6 @@
     let
       etagSystem = "${nodes.webserver.system.build.toplevel}/specialisation/etagSystem";
       justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/justReloadSystem";
-      reloadRestartSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadRestartSystem";
-      reloadWithErrorsSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
     in
     ''
       url = "http://localhost/index.html"
@@ -128,23 +141,31 @@
           webserver.fail("journalctl -u nginx | grep -q -i stopped")
           webserver.succeed("journalctl -u nginx | grep -q -i reloaded")
 
-      with subtest("restart when nginx package changes"):
-          webserver.succeed(
-              "${reloadRestartSystem}/bin/switch-to-configuration test >&2"
-          )
-          wait_for_nginx_on_port(80)
-          webserver.succeed("journalctl -u nginx | grep -q -i stopped")
+      ${lib.optionalString (nodes.webserver.services.nginx.package.flavor == "stable") (
+        let
+          reloadRestartSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadRestartSystem";
+          reloadWithErrorsSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
+        in
+        ''
+          with subtest("restart when nginx package changes"):
+              webserver.succeed(
+                  "${reloadRestartSystem}/bin/switch-to-configuration test >&2"
+              )
+              wait_for_nginx_on_port(80)
+              webserver.succeed("journalctl -u nginx | grep -q -i stopped")
 
-      with subtest("nixos-rebuild --switch should fail when there are configuration errors"):
-          webserver.fail(
-              "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
-          )
-          webserver.succeed("[[ $(systemctl is-failed nginx-config-reload) == failed ]]")
-          webserver.succeed("[[ $(systemctl is-failed nginx) == active ]]")
-          # just to make sure operation is idempotent. During development I had a situation
-          # when first time it shows error, but stops showing it on subsequent rebuilds
-          webserver.fail(
-              "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
-          )
+          with subtest("nixos-rebuild --switch should fail when there are configuration errors"):
+              webserver.fail(
+                  "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
+              )
+              webserver.succeed("[[ $(systemctl is-failed nginx-config-reload) == failed ]]")
+              webserver.succeed("[[ $(systemctl is-failed nginx) == active ]]")
+              # just to make sure operation is idempotent. During development I had a situation
+              # when first time it shows error, but stops showing it on subsequent rebuilds
+              webserver.fail(
+                  "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
+              )
+        ''
+      )}
     '';
 }

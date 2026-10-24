@@ -1,12 +1,18 @@
-{ lib, ... }:
 {
-  name = "nginx-lua";
+  lib,
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-lua-${name}";
 
   meta.maintainers = [ lib.maintainers.kranzes ];
 
-  nodes.machine = {
+  nodes.machine = { pkgs, ... }: {
     services.nginx = {
       enable = true;
+      package = mkPackage pkgs;
       lua = {
         enable = true;
         extraPackages = p: [

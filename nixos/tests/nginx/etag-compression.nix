@@ -1,12 +1,17 @@
-{ ... }:
 {
-  name = "nginx-etag-compression";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-etag-compression-${name}";
 
-  nodes.machine =
+  containers.machine =
     { pkgs, lib, ... }:
     {
       services.nginx = {
         enable = true;
+        package = mkPackage pkgs;
         recommendedGzipSettings = true;
         virtualHosts.default = {
           root = pkgs.runCommandLocal "testdir" { } ''

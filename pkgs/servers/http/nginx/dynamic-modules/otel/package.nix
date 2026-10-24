@@ -5,7 +5,6 @@
   fetchFromGitHub,
   grpc,
   lib,
-  mkNginxPlugin,
   nixosTests,
   nlohmann_json,
   openssl,
@@ -14,9 +13,11 @@
   protobuf,
   re2,
   zlib,
+  stdenv,
+  nginx,
 }:
 
-mkNginxPlugin (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otel";
   version = "0.1.2";
 
@@ -26,9 +27,6 @@ mkNginxPlugin (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-pGe+1nPH8zUQhcyVxH5/nxwNFMsoOYCUecuDVs1rS4o=";
   };
-
-  # nginx-otel can only be loaded dynamically.
-  dynamic = true;
 
   nativeBuildInputs = [
     cmake
@@ -47,19 +45,22 @@ mkNginxPlugin (finalAttrs: {
     nlohmann_json
     openssl
     zlib
+    nginx
+  ] ++ nginx.buildInputs;
+
+  strictDeps = true;
+
+  cmakeFlags = [
+    "-DNGX_OTEL_GRPC=package"
+    "-DNGX_OTEL_SDK=package"
+    "-DNGX_OTEL_PROTO_DIR=${opentelemetry-cpp.opentelemetry-proto}"
+    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=${placeholder "out"}/modules"
   ];
 
-  # Read by the module's config script. nginx's install step does not know
-  # about the cmake-built .so, so cmake writes it into the modules dir itself.
-  preConfigure = ''
-    export NGX_OTEL_CMAKE_OPTS="-DNGX_OTEL_GRPC=package -DNGX_OTEL_SDK=package -DNGX_OTEL_PROTO_DIR=${opentelemetry-cpp.opentelemetry-proto} -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$out/modules"
-  '';
+  dontInstall = true;
 
   passthru = {
-    # cmake's setup hook would replace nginx's configurePhase.
-    forNginx.dontUseCmakeConfigure = true;
-
-    tests = { inherit (nixosTests) nginx-otel; };
+    tests = { inherit (nixosTests.nginx.stable) otel; };
   };
 
   meta = {

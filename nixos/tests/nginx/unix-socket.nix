@@ -1,17 +1,22 @@
-{ ... }:
+{
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
 let
   defaultNginxSocketPath = "/var/run/nginx/default-test.sock";
   nginxSocketPath = "/var/run/nginx/test.sock";
 in
 {
-  name = "nginx-unix-socket";
+  name = "nginx-unix-socket-${name}";
 
-  nodes = {
+  containers = {
     webserver =
       { pkgs, lib, ... }:
       {
         services.nginx = {
           enable = true;
+          package = mkPackage pkgs;
 
           defaultListen = [ { addr = "unix:${defaultNginxSocketPath}"; } ];
           virtualHosts.defaultLocalhost = {

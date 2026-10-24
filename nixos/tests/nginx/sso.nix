@@ -1,11 +1,17 @@
-{ pkgs, ... }:
 {
-  name = "nginx-sso";
+  lib,
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-sso-${name}";
   meta = {
-    maintainers = with pkgs.lib.maintainers; [ ambroisie ];
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
 
-  nodes.machine = {
+  nodes.machine = { pkgs, ... }: {
+    services.nginx.package = mkPackage pkgs;
     services.nginx.sso = {
       enable = true;
       configuration = {

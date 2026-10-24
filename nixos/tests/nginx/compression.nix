@@ -1,4 +1,9 @@
-{ lib, ... }:
+{
+  name ? "default",
+  mkPackage ? builtins.getAttr "nginx",
+  ...
+}:
+
 let
   # defaultMimeTypes holds file extensions, selected by the property that nginx's mime.types maps
   # each one to a MIME type that gzip ought to cover. The test doesn't assert a specific
@@ -30,13 +35,14 @@ let
   ];
 in
 {
-  name = "nginx-compression";
+  name = "nginx-compression-${name}";
 
   containers.machine =
-    { pkgs, ... }:
+    { pkgs, lib, ... }:
     {
       services.nginx = {
         enable = true;
+        package = mkPackage pkgs;
         recommendedGzipSettings = true;
         virtualHosts.default.root = pkgs.runCommandLocal "nginx-compression-testdir" { } ''
           mkdir "$out"
