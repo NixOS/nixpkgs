@@ -1,0 +1,171 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 83023c26..09cc0199 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -37,7 +37,7 @@ set(WITH_LIBUV ON)
+ set(WITH_ZLIB ON)
+ 
+ # Set the correct libuv library name for uWebSockets
+-set(LIBUV_LIBRARY uv_a)
++set(LIBUV_LIBRARY uv)
+ include(uSockets)
+ include(uWebSockets)
+ 
+diff --git a/lute/batteries/CMakeLists.txt b/lute/batteries/CMakeLists.txt
+index 83d7e046..83f6f04d 100644
+--- a/lute/batteries/CMakeLists.txt
++++ b/lute/batteries/CMakeLists.txt
+@@ -10,7 +10,7 @@ target_sources(Lute.Batteries PRIVATE
+ 
+ target_compile_features(Lute.Batteries PUBLIC cxx_std_17)
+ target_include_directories(Lute.Batteries PUBLIC include generated)
+-target_link_libraries(Lute.Batteries PRIVATE uv_a)
++target_link_libraries(Lute.Batteries PRIVATE uv)
+ target_compile_options(Lute.Batteries PRIVATE ${LUTE_OPTIONS})
+ 
+ set(BATTERIES_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+diff --git a/lute/cli/CMakeLists.txt b/lute/cli/CMakeLists.txt
+index 14a71c43..d6e55fcc 100644
+--- a/lute/cli/CMakeLists.txt
++++ b/lute/cli/CMakeLists.txt
+@@ -48,7 +48,7 @@ target_sources(Lute.CLI.lib PRIVATE
+ 
+ target_compile_features(Lute.CLI.lib PUBLIC cxx_std_17)
+ target_include_directories(Lute.CLI.lib PUBLIC include ${CLI_GENERATED_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR})
+-target_link_libraries(Lute.CLI.lib PRIVATE Luau.Common Luau.Compiler Luau.Config Luau.CodeGen Luau.Analysis Luau.VM Lute.CLI.Commands Lute.Luau Lute.Process Lute.Require Lute.Runtime Luau.CLI.lib Lute.Common zlibstatic)
++target_link_libraries(Lute.CLI.lib PRIVATE Luau.Common Luau.Compiler Luau.Config Luau.CodeGen Luau.Analysis Luau.VM Lute.CLI.Commands Lute.Luau Lute.Process Lute.Require Lute.Runtime Luau.CLI.lib Lute.Common z)
+ target_compile_options(Lute.CLI.lib PRIVATE ${LUTE_OPTIONS})
+ 
+ add_executable(Lute.CLI)
+diff --git a/lute/crypto/CMakeLists.txt b/lute/crypto/CMakeLists.txt
+index 8407e685..7ab82620 100644
+--- a/lute/crypto/CMakeLists.txt
++++ b/lute/crypto/CMakeLists.txt
+@@ -8,5 +8,5 @@ target_sources(Lute.Crypto PRIVATE
+ 
+ target_compile_features(Lute.Crypto PUBLIC cxx_std_17)
+ target_include_directories(Lute.Crypto PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.Crypto PRIVATE Lute.Runtime Luau.VM uv_a ssl crypto sodium)
++target_link_libraries(Lute.Crypto PRIVATE Lute.Runtime Luau.VM uv ssl crypto sodium)
+ target_compile_options(Lute.Crypto PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/fs/CMakeLists.txt b/lute/fs/CMakeLists.txt
+index 57f0b5a1..4daec2e7 100644
+--- a/lute/fs/CMakeLists.txt
++++ b/lute/fs/CMakeLists.txt
+@@ -10,5 +10,5 @@ target_sources(Lute.Fs PRIVATE
+ 
+ target_compile_features(Lute.Fs PUBLIC cxx_std_17)
+ target_include_directories(Lute.Fs PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.Fs PRIVATE Lute.Common Lute.Runtime Lute.Time Luau.VM uv_a)
++target_link_libraries(Lute.Fs PRIVATE Lute.Common Lute.Runtime Lute.Time Luau.VM uv)
+ target_compile_options(Lute.Fs PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/io/CMakeLists.txt b/lute/io/CMakeLists.txt
+index 6d3c9c9f..e621a4d9 100644
+--- a/lute/io/CMakeLists.txt
++++ b/lute/io/CMakeLists.txt
+@@ -8,5 +8,5 @@ target_sources(Lute.IO PRIVATE
+ 
+ target_compile_features(Lute.IO PUBLIC cxx_std_17)
+ target_include_directories(Lute.IO PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.IO PRIVATE Lute.Runtime Luau.VM uv_a)
++target_link_libraries(Lute.IO PRIVATE Lute.Runtime Luau.VM uv)
+ target_compile_options(Lute.IO PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/luau/CMakeLists.txt b/lute/luau/CMakeLists.txt
+index 3d69a257..afe7c3a8 100644
+--- a/lute/luau/CMakeLists.txt
++++ b/lute/luau/CMakeLists.txt
+@@ -16,5 +16,5 @@ target_sources(Lute.Luau PRIVATE
+ 
+ target_compile_features(Lute.Luau PUBLIC cxx_std_17)
+ target_include_directories(Lute.Luau PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.Luau PRIVATE Lute.Common Lute.Require Lute.Runtime uv_a Luau.Analysis Luau.Ast Luau.Compiler Luau.CLI.lib Luau.Require Luau.VM)
++target_link_libraries(Lute.Luau PRIVATE Lute.Common Lute.Require Lute.Runtime uv Luau.Analysis Luau.Ast Luau.Compiler Luau.CLI.lib Luau.Require Luau.VM)
+ target_compile_options(Lute.Luau PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/net/CMakeLists.txt b/lute/net/CMakeLists.txt
+index a6037e5e..6fef2afd 100644
+--- a/lute/net/CMakeLists.txt
++++ b/lute/net/CMakeLists.txt
+@@ -11,5 +11,5 @@ target_sources(Lute.Net PRIVATE
+ 
+ target_compile_features(Lute.Net PUBLIC cxx_std_17)
+ target_include_directories(Lute.Net PUBLIC "include" ${LIBUV_INCLUDE_DIR} ${UWEBSOCKETS_INCLUDE_DIR})
+-target_link_libraries(Lute.Net PRIVATE Lute.Common Lute.Runtime Luau.VM uv_a libcurl uWS zlibstatic)
++target_link_libraries(Lute.Net PRIVATE Lute.Common Lute.Runtime Luau.VM uv curl uWS z)
+ target_compile_options(Lute.Net PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/process/CMakeLists.txt b/lute/process/CMakeLists.txt
+index 2dd1391a..5efa6ea3 100644
+--- a/lute/process/CMakeLists.txt
++++ b/lute/process/CMakeLists.txt
+@@ -8,5 +8,5 @@ target_sources(Lute.Process PRIVATE
+ 
+ target_compile_features(Lute.Process PUBLIC cxx_std_17)
+ target_include_directories(Lute.Process PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.Process PRIVATE Lute.Common Lute.Runtime Luau.VM uv_a)
++target_link_libraries(Lute.Process PRIVATE Lute.Common Lute.Runtime Luau.VM uv)
+ target_compile_options(Lute.Process PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/runtime/CMakeLists.txt b/lute/runtime/CMakeLists.txt
+index 7cdabb8d..9e4399b6 100644
+--- a/lute/runtime/CMakeLists.txt
++++ b/lute/runtime/CMakeLists.txt
+@@ -16,5 +16,5 @@ target_sources(Lute.Runtime PRIVATE
+ target_compile_features(Lute.Runtime PUBLIC cxx_std_17)
+ target_include_directories(Lute.Runtime PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+ target_link_libraries(Lute.Runtime PUBLIC Lute.Common)
+-target_link_libraries(Lute.Runtime PRIVATE Luau.Require Luau.Compiler Luau.VM uv_a)
++target_link_libraries(Lute.Runtime PRIVATE Luau.Require Luau.Compiler Luau.VM uv)
+ target_compile_options(Lute.Runtime PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/std/CMakeLists.txt b/lute/std/CMakeLists.txt
+index fcbdc909..03611a7c 100644
+--- a/lute/std/CMakeLists.txt
++++ b/lute/std/CMakeLists.txt
+@@ -10,5 +10,5 @@ target_sources(Lute.Std PRIVATE
+ 
+ target_compile_features(Lute.Std PUBLIC cxx_std_17)
+ target_include_directories(Lute.Std PUBLIC "include")
+-target_link_libraries(Lute.Std PRIVATE Lute.Runtime Luau.VM uv_a)
++target_link_libraries(Lute.Std PRIVATE Lute.Runtime Luau.VM uv)
+ target_compile_options(Lute.Std PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/system/CMakeLists.txt b/lute/system/CMakeLists.txt
+index 61e62693..020f98bc 100644
+--- a/lute/system/CMakeLists.txt
++++ b/lute/system/CMakeLists.txt
+@@ -8,5 +8,5 @@ target_sources(Lute.System PRIVATE
+ 
+ target_compile_features(Lute.System PUBLIC cxx_std_17)
+ target_include_directories(Lute.System PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.System PRIVATE Lute.Runtime Luau.VM uv_a)
++target_link_libraries(Lute.System PRIVATE Lute.Runtime Luau.VM uv)
+ target_compile_options(Lute.System PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/task/CMakeLists.txt b/lute/task/CMakeLists.txt
+index 01d9daa0..2828a254 100644
+--- a/lute/task/CMakeLists.txt
++++ b/lute/task/CMakeLists.txt
+@@ -8,5 +8,5 @@ target_sources(Lute.Task PRIVATE
+ 
+ target_compile_features(Lute.Task PUBLIC cxx_std_17)
+ target_include_directories(Lute.Task PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.Task PRIVATE Lute.Runtime Lute.Common Lute.Time Luau.VM uv_a)
++target_link_libraries(Lute.Task PRIVATE Lute.Runtime Lute.Common Lute.Time Luau.VM uv)
+ target_compile_options(Lute.Task PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/time/CMakeLists.txt b/lute/time/CMakeLists.txt
+index 39a69393..874a9601 100644
+--- a/lute/time/CMakeLists.txt
++++ b/lute/time/CMakeLists.txt
+@@ -8,5 +8,5 @@ target_sources(Lute.Time PRIVATE
+ 
+ target_compile_features(Lute.Time PUBLIC cxx_std_17)
+ target_include_directories(Lute.Time PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.Time PRIVATE Lute.Runtime Luau.VM uv_a)
++target_link_libraries(Lute.Time PRIVATE Lute.Runtime Luau.VM uv)
+ target_compile_options(Lute.Time PRIVATE ${LUTE_OPTIONS})
+diff --git a/lute/vm/CMakeLists.txt b/lute/vm/CMakeLists.txt
+index 6a7d134b..c1962680 100644
+--- a/lute/vm/CMakeLists.txt
++++ b/lute/vm/CMakeLists.txt
+@@ -10,5 +10,5 @@ target_sources(Lute.VM PRIVATE
+ 
+ target_compile_features(Lute.VM PUBLIC cxx_std_17)
+ target_include_directories(Lute.VM PUBLIC "include" ${LIBUV_INCLUDE_DIR})
+-target_link_libraries(Lute.VM PRIVATE Lute.Require Lute.Runtime Luau.VM Luau.Require uv_a)
++target_link_libraries(Lute.VM PRIVATE Lute.Require Lute.Runtime Luau.VM Luau.Require uv)
+ target_compile_options(Lute.VM PRIVATE ${LUTE_OPTIONS})
