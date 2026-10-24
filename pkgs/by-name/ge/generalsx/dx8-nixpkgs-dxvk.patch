@@ -1,0 +1,25 @@
+--- a/cmake/dx8.cmake
++++ b/cmake/dx8.cmake
+@@ -29,6 +29,14 @@
+   message(STATUS "Using DirectX 8 SDK (Windows native)")
+ 
+ elseif(APPLE AND SAGE_USE_MOLTENVK)
++  if(FETCHCONTENT_SOURCE_DIR_DXVK)
++    message(STATUS "Using pre-built DXVK from FETCHCONTENT_SOURCE_DIR_DXVK: ${FETCHCONTENT_SOURCE_DIR_DXVK}")
++    set(DXVK_SOURCE_DIR "${FETCHCONTENT_SOURCE_DIR_DXVK}")
++    set(DXVK_BUILD_DIR "${FETCHCONTENT_SOURCE_DIR_DXVK}")
++    set(DXVK_D3D8_LIB "${FETCHCONTENT_SOURCE_DIR_DXVK}/x64/libdxvk_d3d8.0.dylib")
++    set(DXVK_D3D9_LIB "${FETCHCONTENT_SOURCE_DIR_DXVK}/x64/libdxvk_d3d9.0.dylib")
++    set(dxvk_SOURCE_DIR "${FETCHCONTENT_SOURCE_DIR_DXVK}")
++  else()
+   # macOS: Build DXVK 2.6 from source using Meson + MoltenVK
+   # GeneralsX @build BenderAI 24/02/2026 - Phase 5 macOS port (Session 61)
+   find_program(MESON_EXECUTABLE meson HINTS /usr/local/bin /opt/homebrew/bin)
+@@ -182,6 +190,7 @@
+   message(STATUS "DXVK source directory: ${DXVK_SOURCE_DIR}")
+   message(STATUS "DXVK d3d8 library:     ${DXVK_D3D8_LIB}")
+ 
++  endif()
+ else()
+   # Linux: Fetch pre-built DXVK native binary for DirectX→Vulkan translation
+   # Native 32-bit and 64-bit Linux binaries (.so)
