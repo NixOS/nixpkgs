@@ -52,7 +52,6 @@
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
-  ./hardware/amd-npu.nix
   ./hardware/apple-touchbar.nix
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
@@ -60,6 +59,7 @@
   ./hardware/coral.nix
   ./hardware/corectrl.nix
   ./hardware/cpu/amd-microcode.nix
+  ./hardware/cpu/amd-npu.nix
   ./hardware/cpu/amd-ryzen-smu.nix
   ./hardware/cpu/amd-sev.nix
   ./hardware/cpu/intel-microcode.nix
