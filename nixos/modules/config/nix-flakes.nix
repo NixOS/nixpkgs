@@ -46,6 +46,10 @@ in
               options = {
                 from = mkOption {
                   type = referenceAttrs;
+                  default = {
+                    type = "indirect";
+                    id = name;
+                  };
                   example = {
                     type = "indirect";
                     id = "nixpkgs";
@@ -88,10 +92,6 @@ in
                 };
               };
               config = {
-                from = mkDefault {
-                  type = "indirect";
-                  id = name;
-                };
                 to = mkIf (config.flake != null) (
                   mkDefault (
                     {
