@@ -16,7 +16,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pywal16";
   version = "3.8.15";
   pyproject = true;
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eylles";
     repo = "pywal16";
-    tag = version;
+    tag = "${finalAttrs.version}";
     hash = "sha256-2KlVeOrF/nfRZk12gthDJ08xNvVbP5em3eXPMudo1Vs=";
   };
 
@@ -33,11 +33,11 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ installShellFiles ];
 
   dependencies =
-    lib.optionals withColorthief optional-dependencies.colorthief
-    ++ lib.optionals withColorz optional-dependencies.colorz
-    ++ lib.optionals withFastColorthief optional-dependencies.fast-colorthief
-    ++ lib.optionals withHaishoku optional-dependencies.haishoku
-    ++ lib.optionals withModernColorthief optional-dependencies.modern_colorthief;
+    lib.optionals withColorthief finalAttrs.passthru.optional-dependencies.colorthief
+    ++ lib.optionals withColorz finalAttrs.passthru.optional-dependencies.colorz
+    ++ lib.optionals withFastColorthief finalAttrs.passthru.optional-dependencies.fast-colorthief
+    ++ lib.optionals withHaishoku finalAttrs.passthru.optional-dependencies.haishoku
+    ++ lib.optionals withModernColorthief finalAttrs.passthru.optional-dependencies.modern_colorthief;
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
@@ -46,7 +46,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath ([ imagemagick ] ++ lib.optional withColorz colorz)}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath ([ imagemagick ] ++ lib.optional withColorz colorz)}"
   ];
 
   postInstall = ''
@@ -75,9 +78,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "16 colors fork of pywal";
     homepage = "https://github.com/eylles/pywal16";
-    changelog = "https://github.com/eylles/pywal16/blob/refs/tags/${version}/CHANGELOG.md";
+    changelog = "https://github.com/eylles/pywal16/blob/refs/tags/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "wal";
   };
-}
+})

@@ -39,7 +39,6 @@
   riemann_c_client,
   rrdtool,
   udev,
-  varnish,
   xen,
   yajl,
   # Defaults to `null` for all supported plugins (except xen, which is marked as
@@ -145,10 +144,6 @@ let
     ];
     snmp.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ net-snmp ];
     snmp_agent.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ net-snmp ];
-    varnish.buildInputs = [
-      curl
-      varnish
-    ];
     virt.buildInputs = [
       libvirt
       libxml2

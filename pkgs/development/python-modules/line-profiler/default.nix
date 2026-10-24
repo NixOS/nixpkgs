@@ -1,20 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  isPyPy,
-  ipython,
-  scikit-build,
   cmake,
+  cython,
+  fetchFromGitHub,
+  ipython,
+  isPyPy,
   pytestCheckHook,
+  scikit-build,
+  setuptools,
+  typing-extensions,
   ubelt,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "line-profiler";
   version = "5.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = isPyPy;
 
@@ -25,11 +27,15 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-GWByg1TxFWmLm6hDjaMk2kJE6VgX1kxoVT4OH3XA0GI=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
     cython
     cmake
     scikit-build
   ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -64,9 +70,10 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Line-by-line profiler";
-    mainProgram = "kernprof";
     homepage = "https://github.com/pyutils/line_profiler";
     changelog = "https://github.com/pyutils/line_profiler/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
+    mainProgram = "kernprof";
   };
 })

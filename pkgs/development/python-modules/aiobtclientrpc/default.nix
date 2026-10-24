@@ -13,6 +13,7 @@
   python-socks,
   rencode,
   setuptools,
+  sniffio,
   tiny-proxy,
 }:
 
@@ -49,6 +50,7 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    sniffio
     tiny-proxy
   ];
 
@@ -75,6 +77,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Asynchronous low-level communication with BitTorrent clients";
     homepage = "https://aiobtclientrpc.readthedocs.io";
+    changelog = "https://codeberg.org/plotski/aiobtclientrpc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
