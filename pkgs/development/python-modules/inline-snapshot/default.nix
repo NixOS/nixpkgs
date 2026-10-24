@@ -16,6 +16,7 @@
   pytest-xdist,
   pytestCheckHook,
   rich,
+  stdenv,
   typing-extensions,
 }:
 
@@ -66,6 +67,9 @@ buildPythonPackage rec {
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
     # Sensitive to formatter versions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # docs formatting checks diverge from committed examples on slow hardware
     "tests/test_docs.py"
   ];
 
