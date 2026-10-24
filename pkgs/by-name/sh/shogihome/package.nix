@@ -4,7 +4,8 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_42,
+  # Both upstream stable and latest releases often stay on EOL Electron.
+  electron,
   cacert,
   makeDesktopItem,
   copyDesktopItems,
@@ -12,14 +13,11 @@
   nix-update-script,
   _experimental-update-script-combinators,
   writeShellApplication,
-  nix,
+  curl,
+  common-updater-scripts,
   jq,
-  gnugrep,
 }:
 
-let
-  electron = electron_42;
-in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
   version = "1.29.1";
@@ -130,28 +128,28 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script {
-        extraArgs = [
-          "--version-regex=^v([\\d\\.]+)$"
-        ];
-      })
       (lib.getExe (writeShellApplication {
-        name = "${finalAttrs.pname}-electron-updater";
+        name = "${finalAttrs.pname}-version-updater";
+
         runtimeInputs = [
-          nix
+          curl
           jq
-          gnugrep
+          common-updater-scripts
         ];
-        runtimeEnv = {
-          PNAME = finalAttrs.pname;
-          PKG_FILE = toString ./package.nix;
-        };
+
+        # Use release.json as the primary source rather than git tags or GitHub releases:
+        # https://github.com/sunfish-shogi/shogihome/issues/1704#issuecomment-5105936699
         text = ''
-          new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-          new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-          sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+          version="$(curl -s 'https://sunfish-shogi.github.io/shogihome/release.json' | jq -r '.latest.version')"
+          update-source-version '${finalAttrs.pname}' "$version"
         '';
       }))
+      # Update src.hash and npmDepsHash
+      (nix-update-script {
+        extraArgs = [
+          "--version=skip"
+        ];
+      })
     ];
   };
 

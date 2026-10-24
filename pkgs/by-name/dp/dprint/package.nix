@@ -4,6 +4,8 @@
   fetchFromGitHub,
   rustPlatform,
   buildPackages,
+  makeBinaryWrapper,
+  fetchpatch2,
   installShellFiles,
   pkg-config,
   zstd,
@@ -14,7 +16,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.60.1";
+  version = "0.61.1";
   __structuredAttrs = true;
 
   # Prefer repository rather than crate here
@@ -24,12 +26,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dprint";
     repo = "dprint";
     tag = finalAttrs.version;
-    hash = "sha256-frvCKrRWH2m1DhYf26LflyL5npG0xkcW9s9+Ji4Nl1Q=";
+    hash = "sha256-MEcz5dmCp7pzxJOlU/2+1+60KB2XkFN7dtBMZaEpvVk=";
   };
 
-  cargoHash = "sha256-wPN+gsanyM57BK9KYkRoFN3tf8ZboIaYf+pJxK2CW40=";
+  cargoPatches = [
+    # Because of a rustc version mismatch between dprint-0.64.1 and release-26.05, we can only cherry-pick the webpki-roots update to fix #576544
+    (fetchpatch2 {
+      url = "https://github.com/dprint/dprint/commit/9c6121aa33ef760ef92f10d31a32cfe878932f5d.patch?full_index=1";
+      hash = "sha256-mYzJj+BlCOwuDMGmj5bio0UrrUH86tS6/3Pfn7EgUNk=";
+    })
+  ];
+
+  cargoHash = "sha256-9Wl2tjExyxjDpwcDhr5SOrn2+7n4jKqwsNirKYA1Z/g=";
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     installShellFiles
     pkg-config
   ];
@@ -59,13 +70,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    # Require creating directory and network access
-    "--skip=plugins::cache_fs_locks::test"
-    "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
-    # Requires deno for the testing, and making unstable results on darwin
-    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
   postInstall =
@@ -76,8 +82,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         else
           lib.getExe buildPackages.dprint;
     in
+    # dprint only supports a runtime switch (DPRINT_TLS_CA_STORE) to prefer system certs.
+    # Avoid the upstream default `mozilla,system` to reduce risks like https://github.com/NixOS/nixpkgs/issues/576485
     ''
       rm "$out/bin/test-process-plugin"
+      wrapProgram "$out/bin/dprint" \
+        --set-default DPRINT_TLS_CA_STORE system
       export DPRINT_CACHE_DIR="$(mktemp -d)"
       installShellCompletion --cmd dprint \
         --bash <(${dprint} completions bash) \

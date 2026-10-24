@@ -6732,10 +6732,10 @@ with self;
 
   CpanelJSONXS = buildPerlPackage {
     pname = "Cpanel-JSON-XS";
-    version = "4.42";
+    version = "4.80";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.42.tar.gz";
-      hash = "sha256-4awvqx46bS2ZjTRAxgAGc2W9x9vwyPKyBZy85LTIMXM=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.80.tar.gz";
+      hash = "sha256-CAwSU3epKmCESuydRTKDbKFEcDmG4xmMyjgjrXkJqiU=";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
@@ -36220,10 +36220,10 @@ with self;
 
   TextCSV_XS = buildPerlPackage {
     pname = "Text-CSV_XS";
-    version = "1.62";
+    version = "1.65";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.62.tgz";
-      hash = "sha256-FxBpPt2u/dVudNpCuqntZ25+rtKOvTA60jyYL+8rFBU=";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.65.tgz";
+      hash = "sha256-TwwWRXyH3vKVqZTpxLo5eouq+tls768tYUgxJfkP+XQ=";
     };
     meta = {
       description = "Comma-Separated Values manipulation routines";

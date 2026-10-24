@@ -41,7 +41,7 @@ jobs:
             system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs]
             desc: shell, docs
-          - runner: macos-14
+          - runner: macos-15
             system: aarch64-darwin
             builds: [shell]
             desc: shell
@@ -55,7 +55,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31.11.2
         with:
           # Sandbox is disabled on MacOS by default.
           extra_nix_config: sandbox = true

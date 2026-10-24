@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   fetchPypi,
+  python,
   requests,
   flit-core,
   typing-extensions,
@@ -26,6 +28,11 @@ buildPythonPackage rec {
 
   # Tests require network connectivity and there's no easy way to disable them
   doCheck = false;
+
+  postFixup = ''
+    rm $out/${python.sitePackages}/stripe/data/ca-certificates.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/${python.sitePackages}/stripe/data/ca-certificates.crt
+  '';
 
   pythonImportsCheck = [ "stripe" ];
 
