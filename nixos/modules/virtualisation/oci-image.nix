@@ -26,6 +26,7 @@ in
     system.build.OCIImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
       inherit (config.virtualisation) diskSize;
+      inherit (cfg) copyChannel;
       name = "oci-image";
       baseName = config.image.baseName;
       configFile = ./oci-config-user.nix;
