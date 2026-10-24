@@ -1,12 +1,11 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (p: [ p.waybackpy ])" _7zz
+#! nix-shell -i python3 -p "python3.withPackages (p: [ p.waybackpy ])" dpkg
 
 import argparse
 import base64
 import hashlib
 import json
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -24,9 +23,9 @@ UPDATE_CONFIG_URL = (
 )
 MACUPDATE_XML = "MacUpdate_universal.xml"
 
-LINUX_APPIMAGE_URLS = {
-    "x86_64-linux": "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage",
-    "aarch64-linux": "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage",
+LINUX_URLS = {
+    "x86_64-linux": "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.deb",
+    "aarch64-linux": "https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.deb",
 }
 
 DMG_RE = re.compile(
@@ -133,46 +132,17 @@ def hash_file(path: Path) -> str:
     return f"sha256-{digest}"
 
 
-def extract_version_from_appimage(appimage_path: Path) -> str | None:
-    seven_z = shutil.which("7zz") or shutil.which("7z")
-    if not seven_z:
-        raise RuntimeError(
-            "Neither '7zz' nor '7z' was found in PATH. "
-            "Please ensure '_7zz' is available in PATH."
+def extract_version_linux(package_path: Path) -> str:
+    if package_path.suffix == ".deb":
+        proc = subprocess.run(
+            ["dpkg-deb", "-f", str(package_path), "Version"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=True,
+            text=True,
         )
-
-    base_version = None
-    proc_desktop = subprocess.run(
-        [seven_z, "e", str(appimage_path), "wechat.desktop", "-so"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-    )
-    if proc_desktop.returncode == 0 and proc_desktop.stdout:
-        for line in proc_desktop.stdout.decode("utf-8", "ignore").splitlines():
-            if line.startswith("X-AppImage-Version="):
-                base_version = line.split("=", 1)[1].strip()
-                break
-
-    proc = subprocess.run(
-        [seven_z, "e", str(appimage_path), "opt/wechat/wechat", "-so"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-    )
-    if proc.returncode == 0 and proc.stdout:
-        if base_version:
-            pattern = re.escape(base_version.encode()) + rb"\.\d+"
-            matches = re.findall(pattern, proc.stdout)
-            if matches:
-                return matches[0].decode()
-        matches = re.findall(rb"\b\d+\.\d+\.\d+\.\d+\b", proc.stdout)
-        if matches:
-            valid = [match for match in matches if match.startswith(b"4.")]
-            if valid:
-                return max(
-                    valid, key=lambda match: tuple(map(int, match.split(b".")))
-                ).decode()
-
-    return base_version
+        return proc.stdout.strip()
+    raise NotImplementedError(f"Unsupported package format: {package_path.name}")
 
 
 def macupdate_package_url(config_xml: bytes) -> str:
@@ -279,7 +249,15 @@ def save_to_wayback(url: str) -> str:
     except Exception as exc:
         log(f"Wayback save request failed ({exc}); checking newest snapshot...")
         availability_api = waybackpy.WaybackMachineAvailabilityAPI(url, USER_AGENT)
-        saved_url = availability_api.newest().archive_url
+        saved_url = None
+        for attempt in range(5):
+            try:
+                saved_url = availability_api.newest().archive_url
+                break
+            except Exception:
+                if attempt == 4:
+                    raise
+                time.sleep(2)
     return format_wayback_url(saved_url)
 
 
@@ -329,10 +307,10 @@ def update_darwin(sources: dict) -> bool:
 
 
 def update_linux(platform: str, sources: dict) -> bool:
-    appimage_url = LINUX_APPIMAGE_URLS[platform]
+    url = LINUX_URLS[platform]
 
-    log(f"[{platform}] Checking upstream headers: {appimage_url}")
-    headers = fetch_head_headers(appimage_url)
+    log(f"[{platform}] Checking upstream headers: {url}")
+    headers = fetch_head_headers(url)
 
     current = sources.get(platform, {})
     current_upstream = current.get("upstream", {})
@@ -340,7 +318,9 @@ def update_linux(platform: str, sources: dict) -> bool:
     crc = headers.get("x-cos-hash-crc64ecma")
     version_id = headers.get("x-cos-version-id")
 
-    if crc is not None:
+    if current_upstream.get("url") != url:
+        is_unchanged = False
+    elif crc is not None:
         is_unchanged = current_upstream.get("x-cos-hash-crc64ecma") == crc
     elif version_id is not None:
         is_unchanged = current_upstream.get("x-cos-version-id") == version_id
@@ -353,23 +333,23 @@ def update_linux(platform: str, sources: dict) -> bool:
         )
         return False
 
-    log(f"[{platform}] Upstream updated or not recorded. Downloading AppImage...")
+    log(f"[{platform}] Upstream updated or not recorded. Downloading package...")
 
     with tempfile.TemporaryDirectory(prefix=f"wechat-update-{platform}-") as tmp:
-        appimage_path = Path(tmp) / Path(appimage_url).name
-        log(f"[{platform}] Downloading AppImage...")
-        download(appimage_url, appimage_path)
+        package_path = Path(tmp) / Path(url).name
+        log(f"[{platform}] Downloading package...")
+        download(url, package_path)
 
-        version = extract_version_from_appimage(appimage_path)
+        version = extract_version_linux(package_path)
         if not version:
             raise RuntimeError(f"Could not determine version for {platform}")
 
         log(f"[{platform}] Resolved version: {version}")
         log(f"[{platform}] Computing hash...")
-        hash_value = hash_file(appimage_path)
+        hash_value = hash_file(package_path)
 
     log(f"[{platform}] Archiving to Wayback Machine...")
-    archived_url = save_to_wayback(appimage_url)
+    archived_url = save_to_wayback(url)
     log(f"[{platform}] Archived URL: {archived_url}")
 
     sources[platform] = {
@@ -379,7 +359,7 @@ def update_linux(platform: str, sources: dict) -> bool:
             "hash": hash_value,
         },
         "upstream": {
-            "url": appimage_url,
+            "url": url,
             **({"x-cos-hash-crc64ecma": crc} if crc else {}),
             **({"x-cos-version-id": version_id} if version_id else {}),
         },
