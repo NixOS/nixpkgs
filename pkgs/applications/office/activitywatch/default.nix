@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   fetchFromGitHub,
   rustPlatform,
   makeWrapper,
@@ -17,16 +18,29 @@
 }:
 
 let
-  version = "0.13.2";
+  version = "0.14.1";
   sources = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "activitywatch";
     rev = "v${version}";
-    sha256 = "sha256-Z3WAg3b1zN0nS00u0zIose55JXRzQ7X7qy39XMY7Snk=";
+    sha256 = "sha256-Euom8p8pdwPRX7C4FuUZYp+6mhFaWIeGcVR4xOi+zXE=";
     fetchSubmodules = true;
   };
 in
 rec {
+  # Relax peewee 3.x bound and disable tests broken by peewee 4.x in nixpkgs
+  python3Packages = pkgs.python3Packages.overrideScope (
+    self: super: {
+      aw-core = super.aw-core.overridePythonAttrs (oldAttrs: {
+        nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [
+          self.pythonRelaxDepsHook
+        ];
+        pythonRelaxDeps = (oldAttrs.pythonRelaxDeps or [ ]) ++ [ "peewee" ];
+        doCheck = false;
+      });
+    }
+  );
+
   aw-watcher-afk = python3Packages.buildPythonApplication {
     pname = "aw-watcher-afk";
     inherit version;
@@ -99,6 +113,10 @@ rec {
       python3Packages.setuptools
     ];
 
+    pythonRelaxDeps = [
+      "aw-core"
+    ];
+
     dependencies = with python3Packages; [
       aw-core
       qt6.qtbase
@@ -115,7 +133,10 @@ rec {
     dontWrapQtApps = true;
 
     makeWrapperArgs = [
-      "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+      "--suffix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath [ xdg-utils ]}"
     ];
 
     postInstall = ''
@@ -149,31 +170,22 @@ rec {
     };
   };
 
-  aw-notify = python3Packages.buildPythonApplication {
+  aw-notify = rustPlatform.buildRustPackage {
     pname = "aw-notify";
     inherit version;
+    __structuredAttrs = true;
 
     src = "${sources}/aw-notify";
 
-    pyproject = true;
-    build-system = [ python3Packages.poetry-core ];
+    cargoHash = "sha256-yAio+ZuoaNvfbZf+VjOrlV/MfLHGlOlCtaUNlSFciOU=";
 
-    patches = [
-      # Backport desktop-notifier 6 / rubicon-objc 0.5 support.
-      # https://github.com/ActivityWatch/aw-notify/pull/10
-      ./aw-notify-desktop-notifier-6.patch
+    nativeBuildInputs = [
+      pkg-config
     ];
 
-    dependencies = with python3Packages; [
-      aw-client
-      desktop-notifier
+    buildInputs = [
+      openssl
     ];
-
-    pythonRelaxDeps = [
-      "desktop-notifier"
-    ];
-
-    pythonImportsCheck = [ "aw_notify" ];
 
     meta = {
       description = "Desktop notification service for ActivityWatch";
@@ -190,14 +202,7 @@ rec {
 
     src = "${sources}/aw-server-rust";
 
-    cargoHash = "sha256-E89E/LWBPHtb6vX94swodmE+UrWMrzQnm8AO5GeyuoA=";
-
-    patches = [
-      # Override version string with hardcoded value as it may be outdated upstream.
-      (replaceVars ./override-version.patch {
-        version = sources.rev;
-      })
-    ];
+    cargoHash = "sha256-x6Qp8nW3EbQbeVPrvV1UQdKMkU83qachrtNOGh30HWw=";
 
     nativeBuildInputs = [
       makeWrapper
@@ -209,6 +214,10 @@ rec {
       openssl
       rust-jemalloc-sys
     ];
+
+    # Build only aw-server package to bypass broken aw-sync features
+    cargoTestFlags = [ "--package aw-server" ];
+    cargoBuildFlags = [ "--package aw-server" ];
 
     env.AW_WEBUI_DIR = aw-webui;
 
@@ -234,17 +243,15 @@ rec {
     src = "${sources}/aw-server-rust/aw-webui";
 
     nodejs = nodejs_22;
-    npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
+    npmDepsHash = "sha256-8/eM6t9bOdqXkCTgqF4tcDwnTXdcq1jPL6Wayijt+is=";
 
     makeCacheWritable = true;
     npmFlags = [ "--legacy-peer-deps" ];
 
-    patches = [
-      # Hardcode version to avoid the need to have the Git repo available at build time.
-      (replaceVars ./commit-hash.patch {
-        commit_hash = sources.rev;
-      })
-    ];
+    postPatch = ''
+      substituteInPlace vue.config.js \
+        --replace-fail "child_process.execSync('git rev-parse --short HEAD').toString().trim()" '"${sources.rev}"'
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -253,7 +260,9 @@ rec {
       runHook postInstall
     '';
 
-    doCheck = true;
+    # npm test requires network/browser environment unavailable in sandbox
+    doCheck = false;
+
     checkPhase = ''
       runHook preCheck
       npm test
