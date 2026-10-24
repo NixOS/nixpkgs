@@ -8,6 +8,7 @@
   logger,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.nixos = nixosTests.rsnapshot;
   };
 
   meta = {
