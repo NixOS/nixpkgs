@@ -361,6 +361,18 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "contracts": [
+    "index.html#contracts"
+  ],
+  "contracts-consumers": [
+    "index.html#contracts-consumers"
+  ],
+  "contracts-providers": [
+    "index.html#contracts-providers"
+  ],
+  "contracts-connect": [
+    "index.html#contracts-connect"
+  ],
   "modular-service-composition": [
     "index.html#modular-service-composition"
   ],

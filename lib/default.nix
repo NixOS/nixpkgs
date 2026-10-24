@@ -72,6 +72,9 @@ let
       options = callLibs ./options.nix;
       types = callLibs ./types.nix;
 
+      # contracts
+      contracts = callLibs ./contracts/definitions;
+
       # constants
       licenses = callLibs ./licenses;
       sourceTypes = callLibs ./source-types.nix;
