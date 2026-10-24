@@ -378,24 +378,24 @@ in
           lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { })
         );
 
-        nvidia_x11 = nvidiaPackages.stable;
-        nvidia_x11_beta = nvidiaPackages.beta;
-        nvidia_x11_latest = nvidiaPackages.latest;
-        nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
-        nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
-        nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
-        nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
-        nvidia_x11_production = nvidiaPackages.production;
-        nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
-        nvidia_dc = nvidiaPackages.dc;
+        nvidia_x11 = lib.warn "nvidia_x11 has been renamed to linuxPackages.nvidiaPackages.stable" nvidiaPackages.stable;
+        nvidia_x11_beta = lib.warn "nvidia_x11_beta has been renamed to linuxPackages.nvidiaPackages.beta" nvidiaPackages.beta;
+        nvidia_x11_latest = lib.warn "nvidia_x11_latest has been renamed to linuxPackages.nvidiaPackages.latest" nvidiaPackages.latest;
+        nvidia_x11_legacy340 = lib.warn "nvidia_x11_legacy340 has been renamed to linuxPackages.nvidiaPackages.legacy_340" nvidiaPackages.legacy_340;
+        nvidia_x11_legacy390 = lib.warn "nvidia_x11_legacy390 has been renamed to linuxPackages.nvidiaPackages.legacy_390" nvidiaPackages.legacy_390;
+        nvidia_x11_legacy470 = lib.warn "nvidia_x11_legacy470 has been renamed to linuxPackages.nvidiaPackages.legacy_470" nvidiaPackages.legacy_470;
+        nvidia_x11_legacy535 = lib.warn "nvidia_x11_legacy535 has been renamed to linuxPackages.nvidiaPackages.legacy_535" nvidiaPackages.legacy_535;
+        nvidia_x11_production = lib.warn "nvidia_x11_production has been renamed to linuxPackages.nvidiaPackages.production" nvidiaPackages.production;
+        nvidia_x11_vulkan_beta = lib.warn "nvidia_x11_vulkan_beta has been renamed to linuxPackages.nvidiaPackages.vulkan_beta" nvidiaPackages.vulkan_beta;
+        nvidia_dc = lib.warn "nvidia_dc has been renamed to linuxPackages.nvidiaPackages.dc" nvidiaPackages.dc;
 
         # this is not a replacement for nvidia_x11*
         # only the opensource kernel driver exposed for hydra to build
-        nvidia_x11_beta_open = nvidiaPackages.beta.open;
-        nvidia_x11_latest_open = nvidiaPackages.latest.open;
-        nvidia_x11_production_open = nvidiaPackages.production.open;
-        nvidia_x11_stable_open = nvidiaPackages.stable.open;
-        nvidia_x11_vulkan_beta_open = nvidiaPackages.vulkan_beta.open;
+        nvidia_x11_beta_open = lib.warn "nvidia_x11_beta_open has been renamed to linuxPackages.nvidiaPackages.beta.open" nvidiaPackages.beta.open;
+        nvidia_x11_latest_open = lib.warn "nvidia_x11_latest_open has been renamed to linuxPackages.nvidiaPackages.latest.open" nvidiaPackages.latest.open;
+        nvidia_x11_production_open = lib.warn "nvidia_x11_production_open has been renamed to linuxPackages.nvidiaPackages.production.open" nvidiaPackages.production.open;
+        nvidia_x11_stable_open = lib.warn "nvidia_x11_stable_open has been renamed to linuxPackages.nvidiaPackages.stable.open" nvidiaPackages.stable.open;
+        nvidia_x11_vulkan_beta_open = lib.warn "nvidia_x11_vulkan_beta_open has been renamed to linuxPackages.nvidiaPackages.vulkan_beta.open" nvidiaPackages.vulkan_beta.open;
 
         nxp-pn5xx = callPackage ../os-specific/linux/nxp-pn5xx { };
 
