@@ -22,7 +22,7 @@
   extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
-  defaultPythonPackageOverrides = final: prev: {
+  defaultPythonPackageOverrides = _final: prev: {
     django = prev.django_5;
 
     # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective

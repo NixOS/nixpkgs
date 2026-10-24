@@ -1140,15 +1140,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2719-1";
+      version = "0.0.2756-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2719-1.rockspec";
-          sha256 = "0xnkw1ng8z8y6hizv1p8sgb4mrs5yi6i5shmhxh893danbraj556";
+          url = "mirror://luarocks/fzf-lua-0.0.2756-1.rockspec";
+          sha256 = "1n9h8hyq6hbsw8f2lynkakpk4ycxjq3sdsh9f6hg3k5qjpzvggp1";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/3868dcc78d2c2766c9510ab18b6d3815071b389e.zip";
-        sha256 = "0ps9snlkxl26s1a3ig6qycfr10n4gc4yb8h5na1qnxr7skh9gjv4";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/5dca84ef44f37b960a128a43d044ee348ff86fb4.zip";
+        sha256 = "1824l20b68hh55hbiq64y9ld1c6xi3imhpnaj2a8mniplyqz01p5";
       };
 
       disabled = luaOlder "5.1";
@@ -1460,8 +1460,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "daurnimator";
         repo = "ldbus";
-        rev = "5cc933bfad2b73674bc005ebcce771555a614792";
-        hash = "sha256-MyldeKaqe7axZ423cKDE7+P2w26uRcjs0huuqlaVxQs=";
+        rev = "75de901b8f25f47a07bc552bcb6a5ff6fbb9d4ec";
+        hash = "sha256-K7sijzogLsPJUV6n5gmr1aFwEHTScwVWLVEZ6ejy6zo=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.5";
@@ -4481,21 +4481,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lyaml";
-      version = "6.2.9-2";
+      version = "6.2.10-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lyaml-6.2.9-2.rockspec";
-          sha256 = "0i2q30zc7h3iaydwkcslkda5rryh6y0c4m4zcfxr9lr54cvs6vsl";
+          url = "mirror://luarocks/lyaml-6.2.10-1.rockspec";
+          sha256 = "074irwkv89lmq4i3akiz3cmw6b9kclf0iwv066gxbdgs0ivyfjrj";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/gvvaughan/lyaml/archive/v6.2.9.zip";
-        sha256 = "1hijc4jp6g10cg6ib10xghv6x22r58lbkd6ch6piilpqafr3bzl7";
+        url = "https://github.com/gvvaughan/lyaml/archive/v6.2.10.zip";
+        sha256 = "0izkbwfb8zhrwhs6syxkh75f3li8vcllyg0pbnaz0mbyak5pnix0";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
-        homepage = "http://github.com/gvvaughan/lyaml";
+        homepage = "https://github.com/gvvaughan/lyaml";
         maintainers = with lib.maintainers; [ lblasc ];
         license = lib.licenses.AND [
           lib.licenses.mit
@@ -4954,8 +4954,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "leafo";
         repo = "moonscript";
-        rev = "26d68f20f4a7f0091ca7f62de9f09b939d8a0787";
-        hash = "sha256-ONpL+F+iwR1bxfoekX//Kq8oIegBs/Q1yisv4C/NsUU=";
+        rev = "abc95ab98f87dba1e875397edf32e246582ae353";
+        hash = "sha256-/YXSp2G/uZloA+lIa9rDPHaC54Qc5kNQAflahcXhD7w=";
       };
 
       disabled = luaOlder "5.1";
@@ -4966,7 +4966,7 @@ final: prev: {
       ];
 
       meta = {
-        homepage = "http://moonscript.org";
+        homepage = "https://moonscript.org";
         maintainers = with lib.maintainers; [ arobyn ];
         license = lib.licenses.mit;
         description = "A programmer friendly language that compiles to Lua";
@@ -6116,21 +6116,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "std._debug";
-      version = "1.1.0-1";
+      version = "1.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/std._debug-1.1.0-1.rockspec";
-          sha256 = "14dv8qq00w0ri87yaaqjfgllc6q87067h7wjrniryg008vmcli4l";
+          url = "mirror://luarocks/std._debug-1.2-1.rockspec";
+          sha256 = "16bi65q8b9znpqrrirl7bzsypaklsrfidd7d3y595k3j3y95ymwm";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/lua-stdlib/_debug/archive/v1.1.0.zip";
-        sha256 = "1sy10l61m228l6c80wrh8hsjvlgahlcdmg09p1n0m940wamf9zp5";
+        url = "https://github.com/lua-stdlib/_debug/archive/v1.2.zip";
+        sha256 = "0dgm62jqdsnam6vm3wvd5yc6ik1sixm8gx0w4frb6raz5is4as9j";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
-        homepage = "http://lua-stdlib.github.io/_debug";
+        homepage = "https://lua-stdlib.github.io/_debug";
         license = lib.licenses.AND [
           lib.licenses.mit
           lib.licenses.x11
@@ -6148,27 +6148,23 @@ final: prev: {
       buildLuarocksPackage,
       fetchurl,
       fetchzip,
-      ldoc,
       luaAtLeast,
       luaOlder,
-      std-_debug,
     }:
     buildLuarocksPackage {
       pname = "std.normalize";
-      version = "2.0.4-1";
+      version = "3-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/std.normalize-2.0.4-1.rockspec";
-          sha256 = "0w53z4430hd722jbdr1p93k8fllqlrbvmyvp7w034l7ziqv3zbdj";
+          url = "mirror://luarocks/std.normalize-3-1.rockspec";
+          sha256 = "0b1f570ccidj85c2xp1zzkr5s808ff68absp2f95az25bzzaignc";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/lua-stdlib/normalize/archive/v2.0.4.zip";
-        sha256 = "0my9q65a4pgmjd88b8ljc53x0wp1aq19b19inahk304q6ay92whq";
+        url = "https://github.com/lua-stdlib/normalize/archive/v3.zip";
+        sha256 = "0iqmbkk5180pdn6d4j3lnv6iljlfv2ddkiwv7549n7pbmfx8ixs4";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
-      nativeBuildInputs = [ ldoc ];
-      propagatedBuildInputs = [ std-_debug ];
 
       meta = {
         homepage = "https://lua-stdlib.github.io/normalize";
@@ -6281,15 +6277,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "telescope-manix";
-      version = "1.0.3-1";
+      version = "2.0.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/telescope-manix-1.0.3-1.rockspec";
-          sha256 = "0avqlglmki244q3ffnlc358z3pn36ibcqysxrxw7h6qy1zcwm8sr";
+          url = "mirror://luarocks/telescope-manix-2.0.0-1.rockspec";
+          sha256 = "1lifzyq0mljj107fqqwl7g8sfq9aky8xpw5nyipj7ilhx7z74x3i";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/telescope-manix/archive/1.0.3.zip";
-        sha256 = "186rbdddpv8q0zcz18lnkarp0grdzxp80189n4zj2mqyzqnw0svj";
+        url = "https://github.com/mrcjkb/telescope-manix/archive/2.0.0.zip";
+        sha256 = "1v175x5k9kirg9dc9h1dnp1zz079cfpi7z638pvrszb9w6bgy8m1";
       };
 
       disabled = luaOlder "5.1";

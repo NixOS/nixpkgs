@@ -8,7 +8,7 @@
 let
   cfg = config.services.paperless;
   opt = options.services.paperless;
-
+  pythonPkgs = cfg.package.python.pkgs;
   defaultUser = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
 
@@ -19,6 +19,8 @@ let
   # Runtime-generated PAPERLESS_SECRET_KEY (see paperless-secret-key.service),
   # shared with every service and the paperless-manage wrapper via EnvironmentFile.
   secretKeyFile = "${cfg.dataDir}/nixos-paperless-secret-key.env";
+
+  extraPythonPath = pythonPkgs.makePythonPath (cfg.extraPythonPackages pythonPkgs);
 
   env = {
     PAPERLESS_DATA_DIR = cfg.dataDir;
@@ -40,8 +42,11 @@ let
   // lib.optionalAttrs (cfg.settings.PAPERLESS_AI_ENABLED or true) {
     TIKTOKEN_CACHE_DIR = cfg.package.tiktokenCacheDir;
   }
-  // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
+  // lib.optionalAttrs cfg.openMPThreadingWorkaround {
     OMP_NUM_THREADS = "1";
+  }
+  // lib.optionalAttrs (cfg.extraPythonPackages pythonPkgs != [ ]) {
+    PYTHONPATH = extraPythonPath;
   }
   // (lib.mapAttrs (
     _: s:
@@ -409,6 +414,18 @@ in
       '';
     };
 
+    extraPythonPackages = lib.mkOption {
+      type = with lib.types; functionTo (listOf package);
+      default = _: [ ];
+      defaultText = lib.literalExpression "_: [ ]";
+      example = lib.literalExpression "with ps; [ paperless-ngx-erechnung ]";
+      description = ''
+        Additional Python packages to add to add to Paperless-ngx' Python environment.
+
+        This is mainly used to add and automatically load Paperless-ngx Plugins as defined in <https://docs.paperless-ngx.com/development#plugin-discovery>.
+      '';
+    };
+
     manage = lib.mkOption {
       type = lib.types.package;
       readOnly = true;
@@ -665,7 +682,7 @@ in
           ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
-            ExecStart = "${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application";
+            ExecStart = "${lib.getExe pythonPkgs.granian} --interface asginl --ws paperless.asgi:application";
             Restart = "on-failure";
 
             LimitNOFILE = 65536;
@@ -675,7 +692,12 @@ in
             PrivateNetwork = false;
           };
           environment = env // {
-            PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src";
+            PYTHONPATH = lib.concatStringsSep ":" (
+              lib.optional (env ? PYTHONPATH) env.PYTHONPATH
+              ++ [
+                "${pythonPkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src"
+              ]
+            );
           };
           # Allow the web interface to access the private /tmp directory of the server.
           # This is required to support uploading files via the web interface.
@@ -697,9 +719,9 @@ in
 
         services.gotenberg = lib.mkIf cfg.configureTika {
           enable = true;
-          # https://github.com/paperless-ngx/paperless-ngx/blob/v2.18.2/docker/compose/docker-compose.sqlite-tika.yml#L60-L65
+          # https://github.com/paperless-ngx/paperless-ngx/blob/v3.3.1/docker/compose/docker-compose.sqlite-tika.yml#L64-L66
           chromium.disableJavascript = true;
-          extraArgs = [ "--chromium-allow-list=file:///tmp/.*" ];
+          extraArgs = [ "--chromium-allow-list=^file:///tmp/.*" ];
         };
 
         services.tika = lib.mkIf cfg.configureTika {
