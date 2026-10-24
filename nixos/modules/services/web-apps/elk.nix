@@ -22,7 +22,17 @@ in
   options.services.elk = {
     enable = mkEnableOption "Elk, a nimble Mastodon web client";
 
-    package = mkPackageOption pkgs "elk" { };
+    package = mkPackageOption pkgs "elk" { } // {
+      apply =
+        pkg:
+        pkg.override {
+          extraBuildEnv = removeAttrs cfg.settings [
+            "HOST"
+            "PORT"
+            "NUXT_STORAGE_FS_BASE"
+          ];
+        };
+    };
 
     openFirewall = mkOption {
       type = types.bool;
