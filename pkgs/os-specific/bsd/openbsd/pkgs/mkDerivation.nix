@@ -91,7 +91,10 @@ lib.makeOverridable (
       strictDeps = true;
 
       meta = {
-        maintainers = with lib.maintainers; [ ericson2314 ];
+        maintainers = with lib.maintainers; [
+          ericson2314
+          iamanaws
+        ];
         platforms = lib.platforms.openbsd;
         license = lib.licenses.bsd2;
       };

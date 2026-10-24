@@ -14,6 +14,7 @@
   libcxx,
   linuxHeaders,
   freebsd,
+  openbsd,
 
   # Some platforms have switched to using compiler-rt, but still want a
   # libgcc.a for ABI compat purposes. The use case would be old code that
@@ -152,6 +153,10 @@ stdenv.mkDerivation (finalAttrs: {
         # wrong, or perhaps there is a way to provide an assert.h.
         "-Wno-error=implicit-function-declaration"
       ]
+      ++ lib.optionals (!haveLibc && stdenv.hostPlatform.isOpenBSD) [
+        # Bootstrap headers must not propagate into libc++ consumers through pkgsStatic.
+        "-idirafter ${lib.getDev openbsd.include}/include"
+      ]
     );
 
     # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
@@ -270,10 +275,10 @@ stdenv.mkDerivation (finalAttrs: {
             substituteInPlace lib/builtins/cpu_model/aarch64.c \
               --replace-fail "#elif defined(__linux__)" "#elif defined(__linux__) && __has_include(<sys/auxv.h>)"
           ''
-      + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
-        # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
+      + (lib.optionalString (!(stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isOpenBSD))
+        # On FreeBSD and OpenBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
         # see description above for why we're nuking assert.h normally but that doesn't work here.
-        # instead, we add the freebsd.include dependency explicitly
+        # instead, we add the freebsd.include or openbsd.include dependency explicitly
         ''
           substituteInPlace lib/builtins/clear_cache.c \
             --replace-fail "#include <assert.h>" ""
