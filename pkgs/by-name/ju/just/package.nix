@@ -17,12 +17,10 @@
   # run the compiled `generate-book` utility to prepare the files for mdbook
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-let
-  version = "1.58.0";
-in
-rustPlatform.buildRustPackage {
-  inherit version;
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "just";
+  version = "1.59.0";
   outputs = [
     "out"
   ]
@@ -36,11 +34,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";
-    tag = version;
-    hash = "sha256-yAjirHM3/+Pv9AhcaW7Ab992vwQhh20axK42Gl2LNEA=";
+    tag = finalAttrs.version;
+    hash = "sha256-3VMa1BhVIstQNg9Vl0WsVwWe9OKoqGywWZvmdWJOiBM=";
   };
 
-  cargoHash = "sha256-zpP5XLmgQFH4+B97zMhh+iE6kS+PHTh9heH89rXCQo0=";
+  cargoHash = "sha256-eFHruoEJXQdyryoQMH88vfqo3gXfjdFqlcqq2usNPC8=";
 
   nativeBuildInputs = [
     installAgentSkills
@@ -84,6 +82,7 @@ rustPlatform.buildRustPackage {
     "--skip=config::tests::show_arguments" # interferes with JUST_CHOOSER being set
     "--skip=edit::editor_precedence" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=shebang::run_shebang" # test case very rarely fails with "Text file busy"
+    "--skip=shebang::powershell_shebang_on_unix_has_no_bom" # requires powershell
   ];
 
   postInstall =
@@ -113,7 +112,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/casey/just";
-    changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/casey/just/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
@@ -123,4 +122,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "just";
   };
-}
+})
