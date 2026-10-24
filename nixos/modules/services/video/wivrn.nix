@@ -61,7 +61,9 @@ let
     optionalAttrs applicationCheck { application = applicationConcat; }
   );
   configFile = configFormat.generate "config.json" applicationUpdate;
-  enabledConfig = optionalString cfg.config.enable "-f ${configFile}";
+
+  # config.file, by default, points to configFile
+  enabledConfig = optionalString cfg.config.enable "-f ${cfg.config.file}";
 
   # Manage server executables and flags
   serverCmdline = concatStringsSep " " (
@@ -162,6 +164,14 @@ in
               ];
               application = [ pkgs.wayvr ];
             }
+          '';
+        };
+        file = lib.mkOption {
+          type = lib.types.path;
+          default = configFile;
+          defaultText = lib.literalExpression "configFile";
+          description = ''
+            Overridable config file to use for WiVRn. By default, uses a generated file through `config.json`.
           '';
         };
       };
