@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.hackedbox;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.hackedbox.enable = mkEnableOption "hackedbox";
+  options.services.xserver.windowManager.hackedbox = {
+    enable = lib.mkEnableOption "hackedbox";
+    package = lib.mkPackageOption pkgs "hackedbox" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "hackedbox";
       start = ''
-        ${pkgs.hackedbox}/bin/hackedbox &
+        ${cfg.package}/bin/hackedbox &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.hackedbox ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
