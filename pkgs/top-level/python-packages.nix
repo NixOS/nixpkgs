@@ -14179,6 +14179,8 @@ self: super: with self; {
 
   protobuf-py-ext = callPackage ../development/python-modules/protobuf-py-ext { };
 
+  protobuf-py-pure = callPackage ../development/python-modules/protobuf-py-pure { };
+
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
   # Protobuf 4.x
