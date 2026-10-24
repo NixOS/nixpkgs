@@ -12,13 +12,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "immichframe";
-  version = "1.0.37.0";
+  version = "1.0.39.0";
 
   src = fetchFromGitHub {
     owner = "immichFrame";
     repo = "immichFrame";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZS6lkfDdMSq1cffIIeXqG3/eIaQFGSZcRYPXiDCHA/U=";
+    hash = "sha256-Zs5j5krUjSZlcmObYdWRLdylSir/mKivo3P8povG1i8=";
   };
 
   projectFile = "ImmichFrame.WebApi/ImmichFrame.WebApi.csproj";
@@ -34,7 +34,7 @@ buildDotnetModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-RyMY5ooC6Q+W+Y24ILv+WCcWLMDToZ52yefFuoAYubY=";
+    hash = "sha256-xApz29ZMxGt5sZR6lE/Adxx/CBxcom63Dy1qBfZOVP0=";
   };
 
   preBuild = ''
