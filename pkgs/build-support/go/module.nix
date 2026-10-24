@@ -26,12 +26,7 @@ lib.extendMkDerivation {
       # The SRI hash of the vendored dependencies.
       # If `null`, it means the project either has no external dependencies
       # or the vendored dependencies are already present in the source tree.
-      vendorHash ? throw (
-        if args ? vendorSha256 then
-          "buildGoModule: Expect vendorHash instead of vendorSha256"
-        else
-          "buildGoModule: vendorHash is missing"
-      ),
+      vendorHash ? throw "buildGoModule: vendorHash is missing",
 
       # The go.sum file to track which can cause rebuilds.
       goSum ? null,
