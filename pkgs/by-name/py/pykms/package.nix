@@ -36,7 +36,7 @@ let
 in
 pypkgs.buildPythonApplication (finalAttrs: {
   pname = "pykms";
-  version = "0-unstable-2024-07-06";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Py-KMS-Organization";
