@@ -12929,8 +12929,10 @@ with self;
       url = "mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-F77-1.26.tar.gz";
       hash = "sha256-q90dPuxMpPyuXxUrQLyqhi48gG4H5KqRI3V/aqSLndY=";
     };
-    buildInputs = [ pkgs.gfortran ];
     propagatedBuildInputs = [ FileWhich ];
+    nativeCheckInputs = [ pkgs.gfortran ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Simple interface to F77 libs";
       license = with lib.licenses; [
