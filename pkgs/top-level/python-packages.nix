@@ -12784,6 +12784,8 @@ self: super: with self; {
 
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
+  openqasm3 = callPackage ../development/python-modules/openqasm3 { inherit (pkgs) antlr4; };
+
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
