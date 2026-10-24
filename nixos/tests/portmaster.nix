@@ -203,6 +203,13 @@ in
         secretsFile = lib.mkForce null;
         profiles = lib.mkForce { };
       };
+
+      nestedDevMode.configuration.services.portmaster = {
+        settings = lib.mkForce { core.devMode = true; };
+        settingsFile = lib.mkForce null;
+        secretsFile = lib.mkForce null;
+        profiles = lib.mkForce { };
+      };
     };
 
     systemd.services.portmaster-test-inputs = {
@@ -216,6 +223,9 @@ in
       script = ''
         cat > /run/portmaster-settings.json <<'EOF'
         {
+          "core": {
+            "apiKeys": [ "0123456789abcdef?read=user&write=user" ]
+          },
           "core/log/level": "error",
           "nested": {
             "fromFile": true,
@@ -238,14 +248,29 @@ in
     };
   };
 
+  # The real package. The VM has no network, so Portmaster runs without intel data.
+  nodes.real = {
+    environment.systemPackages = [ pkgs.iptables ];
+
+    services.portmaster = {
+      enable = true;
+      # Also checks that the profile sync uses the configured API address.
+      settings."core/listenAddress" = "127.0.0.1:818";
+      profiles.Curl.packages = [ pkgs.curl ];
+    };
+  };
+
   testScript =
     { nodes, ... }:
     let
       rejected = "${nodes.machine.system.build.toplevel}/specialisation/rejected";
       unmanaged = "${nodes.machine.system.build.toplevel}/specialisation/unmanaged";
       development = "${nodes.machine.system.build.toplevel}/specialisation/development";
+      nestedDevMode = "${nodes.machine.system.build.toplevel}/specialisation/nestedDevMode";
     in
     ''
+      start_all()
+
       machine.wait_for_unit("portmaster.service")
       machine.wait_for_unit("portmaster-managed-profiles.service")
       machine.succeed("grep -Fx nfnetlink_queue /etc/modules-load.d/nixos.conf")
@@ -254,6 +279,7 @@ in
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--bin-dir=${fakePortmaster}/lib/portmaster'")
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--data-dir=${stateDir}'")
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--log-dir=${stateDir}/logs'")
+      machine.succeed("test \"$(stat -c %a ${stateDir}/logs)\" = 700")
       machine.succeed("systemctl cat portmaster.service | grep -F 'ReadOnlyPaths=/nix/store'")
       machine.fail("systemctl cat portmaster.service | grep -F -- '--devmode'")
 
@@ -262,9 +288,11 @@ in
       machine.succeed("jq -e '.\"core/devMode\" == false' ${stateDir}/config.json")
       machine.succeed("jq -e 'has(\"devmode\") | not' ${stateDir}/config.json")
       machine.succeed("jq -e '.\"core/log/level\" == \"error\"' ${stateDir}/config.json")
-      machine.succeed("jq -e '.nested.fromSettings == true' ${stateDir}/config.json")
-      machine.succeed("jq -e '.nested.fromFile == true' ${stateDir}/config.json")
-      machine.succeed("jq -e '.nested.shared == \"secrets-file\"' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"nested/fromSettings\" == true' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"nested/fromFile\" == true' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"nested/shared\" == \"secrets-file\"' ${stateDir}/config.json")
+      machine.succeed("jq -e 'has(\"core\") or has(\"nested\") | not' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"core/apiKeys\" | index(\"0123456789abcdef?read=user&write=user\")' ${stateDir}/config.json")
       machine.succeed("jq -e '.\"secret/value\" == \"kept-out-of-store\"' ${stateDir}/config.json")
       machine.succeed("test -f ${stateDir}/.config.json.nix-managed")
       machine.succeed("test \"$(stat -c %a ${stateDir}/.config.json.nix-managed)\" = 600")
@@ -302,7 +330,7 @@ in
       machine.succeed("printf '%s\n' '{\"manual\":true}' > ${stateDir}/config.json")
       machine.succeed("chmod 0600 ${stateDir}/config.json")
 
-      machine.succeed("${unmanaged}/bin/switch-to-configuration test >&2")
+      machine.succeed("systemctl restart portmaster.service")
       machine.wait_for_unit("portmaster.service")
       machine.succeed("test -f ${stateDir}/config.json")
       machine.succeed("jq -e '.manual == true' ${stateDir}/config.json")
@@ -311,5 +339,17 @@ in
       machine.succeed("${development}/bin/switch-to-configuration test >&2")
       machine.wait_for_unit("portmaster.service")
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--devmode'")
+
+      machine.succeed("${nestedDevMode}/bin/switch-to-configuration test >&2")
+      machine.wait_for_unit("portmaster.service")
+      machine.succeed("jq -e '. == {\"core/devMode\": true}' ${stateDir}/config.json")
+
+      real.wait_for_unit("portmaster-managed-profiles.service")
+      real.succeed("ss -lnt | grep -F 127.0.0.1:818")
+      real.wait_until_succeeds("ss -lnu | grep -F 127.0.0.17:53")
+      real.wait_until_succeeds("iptables-save | grep -F -- '-A OUTPUT -j PORTMASTER-INGEST-OUTPUT'")
+      real.succeed("test \"$(stat -c %a /var/lib/portmaster/logs)\" = 700")
+      real.succeed("systemctl stop portmaster.service")
+      real.fail("iptables-save | grep -F PORTMASTER")
     '';
 }

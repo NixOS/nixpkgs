@@ -253,7 +253,20 @@ let
   runtimeConfigManagedMarkerPath = "${stateDir}/.config.json.nix-managed";
   profilesApiKeyPath = "${configDir}/nix-managed-profiles-api-key";
 
-  profilesApiBaseUrl = "http://127.0.0.1:817/api/v1";
+  # Portmaster ignores a listen address that doesn't match this validation
+  # regex from base/api/config.go and listens on the default address instead.
+  apiListenAddressRegex = "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}|\\[[:0-9A-Fa-f]+]:[0-9]{1,5}";
+  configuredApiListenAddress =
+    cfg.settings."core/listenAddress" or cfg.settings.core.listenAddress or null;
+  apiListenAddress =
+    if
+      builtins.isString configuredApiListenAddress
+      && builtins.match apiListenAddressRegex configuredApiListenAddress != null
+    then
+      configuredApiListenAddress
+    else
+      "127.0.0.1:817";
+  profilesApiBaseUrl = "http://${apiListenAddress}/api/v1";
   profilesPingUrl = "${profilesApiBaseUrl}/ping";
   profilesImportUrl = "${profilesApiBaseUrl}/sync/profile/import?allowReplace";
 
@@ -263,9 +276,11 @@ let
   shouldGenerateManagedConfig = configSettings != { } || hasExternalConfigInputs || profilesEnabled;
 
   managedConfigSettings =
-    optionalAttrs (shouldGenerateManagedConfig && !builtins.hasAttr "core/devMode" cfg.settings) {
-      "core/devMode" = cfg.settings.devmode;
-    }
+    optionalAttrs
+      (shouldGenerateManagedConfig && !(cfg.settings ? "core/devMode" || cfg.settings ? core.devMode))
+      {
+        "core/devMode" = cfg.settings.devmode;
+      }
     // configSettings;
   generatedManagedConfigFile = settingsFormat.generate "portmaster-config.json" managedConfigSettings;
   managedConfigMergeInputs =
@@ -450,7 +465,16 @@ let
     ''}
 
     ${getExe pkgs.jq} "''${jq_merge_args[@]}" '
-      reduce .[] as $item ({}; . * $item)
+      # Portmaster flattens nested objects into "a/b" keys in random order when
+      # loading, so merge per flattened key to get a deterministic result.
+      def flatten_config($prefix):
+        reduce to_entries[] as $entry ({};
+          if ($entry.value | type) == "object" then
+            . + ($entry.value | flatten_config($prefix + $entry.key + "/"))
+          else
+            . + { ($prefix + $entry.key): $entry.value }
+          end);
+      map(flatten_config("")) | add
       ${lib.optionalString profilesEnabled ''
           | if has("core/apiKeys") and (."core/apiKeys" | type != "array") then
               error("core/apiKeys must be an array")
@@ -489,9 +513,11 @@ in
           type = types.bool;
           default = false;
           description = ''
-            Enable development mode, which relaxes local API authentication
-            for debugging and browser access to 127.0.0.1:817. The packaged
-            desktop client does not require this option.
+            Enable development mode for debugging. It turns off authentication
+            of the local API on 127.0.0.1:817, so every local process and user
+            gets full control over Portmaster, and pages served from
+            `localhost` can access the API. The packaged desktop client does
+            not require this option.
           '';
         };
       };
@@ -503,8 +529,10 @@ in
         Global Portmaster settings for runtime {file}`config.json`.
         Per-application profiles are managed by {option}`profiles`.
 
-        Merge order is recursive and later inputs win: this option,
-        {option}`settingsFile`, then {option}`secretsFile`.
+        Inputs are merged per Portmaster setting key and later inputs win:
+        this option, {option}`settingsFile`, then {option}`secretsFile`.
+        Nested objects are flattened first, so `core.devMode` and
+        `"core/devMode"` refer to the same setting.
 
         When declarative configuration is active, the module owns runtime
         {file}`config.json`; global changes made only through the UI are not
@@ -562,7 +590,7 @@ in
                 default = [ ];
                 example = literalExpression ''
                   [
-                    pkgs.firefox
+                    pkgs.curl
                     {
                       package = pkgs.go;
                       directory = "share/go/bin";
@@ -627,7 +655,12 @@ in
       example = literalExpression ''
         {
           Firefox = {
-            packages = [ pkgs.firefox ];
+            packages = [
+              {
+                package = pkgs.firefox;
+                directory = "lib/firefox";
+              }
+            ];
             settings.filter.defaultAction = "permit";
           };
         }
@@ -642,6 +675,11 @@ in
         fingerprints creates a different Portmaster identity and can leave the
         previous imported profile behind. Removing a declaration does not delete
         a previously imported profile.
+
+        The profiles are imported through the API address set with
+        `core/listenAddress` in {option}`settings`; an address set only in
+        {option}`settingsFile`, in {option}`secretsFile` or with
+        `--api-address` in {option}`extraArgs` is not used for this.
       '';
     };
 
@@ -674,8 +712,9 @@ in
     boot.kernelModules = [ "nfnetlink_queue" ];
 
     systemd = {
-      tmpfiles.settings."10-portmaster" = genAttrs tmpfileDirectories (_: {
-        d = tmpfileDir;
+      tmpfiles.settings."10-portmaster" = genAttrs tmpfileDirectories (dir: {
+        # Logs can contain sensitive data; upstream creates this directory as 0700.
+        d = tmpfileDir // optionalAttrs (dir == logsDir) { mode = "0700"; };
       });
 
       services.portmaster = {
@@ -730,7 +769,6 @@ in
             ExecStopPost = "-${getExe' cfg.package "portmaster-core"} recover-iptables";
             Restart = "on-failure";
             RestartSec = "10";
-            RestartPreventExitStatus = "24";
             User = "root";
             Group = "root";
             LockPersonality = true;
@@ -738,7 +776,6 @@ in
             MemoryLow = "2G";
             NoNewPrivileges = true;
             PrivateTmp = true;
-            PIDFile = "${stateDir}/core-lock.pid";
             WorkingDirectory = stateDir;
             ProtectSystem = true;
             ReadOnlyPaths = [ builtins.storeDir ];
@@ -757,7 +794,6 @@ in
               "AF_INET"
               "AF_INET6"
             ];
-            Environment = [ "LOGLEVEL=info" ];
           };
       };
 
