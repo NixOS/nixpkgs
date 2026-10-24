@@ -2,6 +2,7 @@
   fetchFromGitHub,
   fetchNpmDeps,
   lib,
+  nix-update-script,
   nodejs,
   npmHooks,
   pkg-config,
@@ -46,6 +47,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SQL-only webapp builder, empowering data analysts to build websites and applications quickly";
