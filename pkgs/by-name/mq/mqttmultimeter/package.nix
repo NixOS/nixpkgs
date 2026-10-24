@@ -2,7 +2,6 @@
   lib,
   stdenv,
   dotnetCorePackages,
-  dotnet-runtime_8,
   buildDotnetModule,
   fetchFromGitHub,
   libglvnd,
@@ -12,21 +11,21 @@
 
 buildDotnetModule rec {
   pname = "mqttmultimeter";
-  version = "1.8.2.272";
+  version = "1.10.0.318";
 
   src = fetchFromGitHub {
     owner = "chkr1011";
     repo = "mqttMultimeter";
     rev = "v" + version;
-    hash = "sha256-vL9lmIhNLwuk1tmXLKV75xAhktpdNOb0Q4ZdvLur5hw=";
+    hash = "sha256-I11ax0npLGxb/2LIdTuzCmBKmCM6HnWXKtErlRP+9gw=";
   };
 
   sourceRoot = "${src.name}/Source";
 
   projectFile = [ "mqttMultimeter.sln" ];
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnet-runtime_8;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
   executables = [ "mqttMultimeter" ];
 
   nativeBuildInputs = [
