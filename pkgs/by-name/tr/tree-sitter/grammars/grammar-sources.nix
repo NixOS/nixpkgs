@@ -1192,7 +1192,7 @@
   };
 
   hare = {
-    version = "0-unstable-2025-10-07";
+    version = "stable-unstable-2025-10-07";
     url = "github:tree-sitter-grammars/tree-sitter-hare";
     rev = "eed7ddf6a66b596906aa8ca3d40521b8278adc6f";
     hash = "sha256-qXLRb+5SgfBrOXta10P04ErV5z8eSM/J0Od5pk06OCc=";
