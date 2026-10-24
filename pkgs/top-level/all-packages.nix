@@ -6956,6 +6956,20 @@ with pkgs;
   freshrss = callPackage ../servers/web-apps/freshrss { };
   freshrss-extensions = recurseIntoAttrs (callPackage ../servers/web-apps/freshrss/extensions { });
 
+  inherit (callPackage ../servers/web-apps/fluxer { })
+    fluxer-admin
+    fluxer-api
+    fluxer-app-proxy
+    fluxer-gateway
+    fluxer-gifs
+    fluxer-media-proxy
+    fluxer-messages
+    fluxer-push
+    fluxer-snowflakes
+    fluxer-static
+    fluxer-unfurl
+    fluxer-users;
+
   grafanaPlugins = recurseIntoAttrs (callPackages ../servers/monitoring/grafana/plugins { });
 
   inherit (callPackage ../servers/hbase { })
