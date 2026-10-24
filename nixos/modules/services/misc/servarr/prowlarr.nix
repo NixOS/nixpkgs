@@ -57,7 +57,7 @@ in
           ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
           Restart = "on-failure";
         };
-        unitConfig.RequiresMountsFor = [ cfg.dataDir ];
+        unitConfig.RequiresMountsFor = [ "/var/lib/private/prowlarr" ];
       };
 
       mounts = lib.optional isCustomDataDir {
