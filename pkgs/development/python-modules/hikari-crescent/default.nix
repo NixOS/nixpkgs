@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Command handler for Hikari that keeps your project neat and tidy";
-    license = lib.licenses.mit;
+    license = lib.licenses.mpl20;
     homepage = "https://github.com/hikari-crescent/hikari-crescent";
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "hikari-crescent";

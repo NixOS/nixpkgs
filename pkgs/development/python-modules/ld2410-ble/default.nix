@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library for the LD2410B modules from HiLinks";
     homepage = "https://github.com/930913/ld2410-ble";
     changelog = "https://github.com/930913/ld2410-ble/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

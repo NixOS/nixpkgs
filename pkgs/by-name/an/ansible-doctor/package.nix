@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "ansible-doctor";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
     changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.lgpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tboerger ];
   };
 })

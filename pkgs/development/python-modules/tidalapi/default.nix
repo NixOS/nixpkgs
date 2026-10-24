@@ -47,7 +47,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/tamland/python-tidal/blob/v${version}/HISTORY.rst";
     description = "Unofficial Python API for TIDAL music streaming service";
     homepage = "https://github.com/tamland/python-tidal";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       drafolin
       drawbu
