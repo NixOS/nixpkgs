@@ -143,6 +143,11 @@ in
         serviceConfig = {
           Type = "exec";
           ExecStart = "${portCfg.package}/bin/kissattach ${portCfg.tty} ${portName}";
+          # kissattach has a race condition that can sometimes lead to dependent services
+          # being unable to start when the ax* device has not yet been created.
+          ExecStartPost = pkgs.writeShellScript "wait-for-ax25-axports" ''
+            until ${pkgs.iproute2}/bin/ip --json link show | ${pkgs.jq}/bin/jq -re '.[] | select(.address == "${portCfg.callsign}") | .ifname'; do sleep 0.5; done
+          '';
         };
         postStart = optionalString (portCfg.kissParams != null) ''
           ${portCfg.package}/bin/kissparms -p ${portName} ${portCfg.kissParams}
