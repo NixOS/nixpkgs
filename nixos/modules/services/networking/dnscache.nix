@@ -22,14 +22,15 @@ let
       '') cfg.domainServers
     )}
 
-    # if a list of root servers was not provided in config, copy it
-    # over. (this is also done by dnscache-conf, but we 'rm -rf
-    # /var/lib/dnscache/root' below & replace it wholesale with this,
-    # so we have to ensure servers/@ exists ourselves.)
+    # dnscache chroots into this directory, so servers/@ (the list of root
+    # servers) must exist. If the config did not provide one, fall back to
+    # the packaged list.
     if [ ! -e $out/servers/@ ]; then
       # symlink does not work here, due chroot
       cp ${cfg.package}/etc/dnsroots.global $out/servers/@;
     fi
+
+    ${cfg.postBuild}
   '';
 
 in
@@ -89,6 +90,22 @@ in
         '';
       };
 
+      postBuild = lib.mkOption {
+        default = "";
+        type = lib.types.lines;
+        description = ''
+          Shell commands run after the dnscache root directory has been
+          assembled. They execute during the build of the root with the
+          directory available as `$out`, allowing extra files to be
+          created.
+        '';
+        example = lib.literalExpression ''
+          '''
+            echo 1.2.3.4 > "$out/servers/example.org"
+          '''
+        '';
+      };
+
     };
   };
 
@@ -105,21 +122,27 @@ in
     systemd.services.dnscache = {
       description = "djbdns dnscache server";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [
-        bash
-        daemontools
-        cfg.package
-      ];
-      environment.FORWARDONLY = lib.mkIf cfg.forwardOnly "1";
-      serviceConfig.StateDirectory = "dnscache";
-      serviceConfig.WorkingDirectory = "/var/lib/dnscache";
-      serviceConfig.ExecStartPre = [
-        "${lib.getExe' pkgs.coreutils "rm"} -rf /var/lib/dnscache"
-        "${lib.getExe' cfg.package "dnscache-conf"} dnscache dnscache /var/lib/dnscache ${config.services.dnscache.ip}"
-        "${lib.getExe' pkgs.coreutils "rm"} -rf /var/lib/dnscache/root"
-        "${lib.getExe' pkgs.coreutils "ln"} -sf ${dnscache-root} /var/lib/dnscache/root"
-      ];
-      serviceConfig.ExecStart = "/var/lib/dnscache/run";
+
+      # dnscache needs no writable state: it binds :53, chroots into the
+      # read-only root from the store, drops privileges, and keeps its cache
+      # in memory. It does its own setgroups/setgid/setuid, so it must start
+      # as root; envuidgid passes it the dnscache uid/gid via $UID/$GID and it
+      # drops itself, ending unprivileged. The 128-byte RNG seed is read from
+      # stdin, which we feed from /dev/urandom.
+      environment = {
+        IP = cfg.ip;
+        IPSEND = "0.0.0.0";
+        CACHESIZE = "1000000";
+        ROOT = dnscache-root;
+        FORWARDONLY = lib.mkIf cfg.forwardOnly "1";
+      };
+      serviceConfig = {
+        StandardInput = "file:/dev/urandom";
+        # djbdns softlimit: -d DATALIMIT and -o250 open files.
+        LimitDATA = 3000000;
+        LimitNOFILE = 250;
+        ExecStart = "${lib.getExe' pkgs.daemontools "envuidgid"} dnscache ${lib.getExe' cfg.package "dnscache"}";
+      };
     };
   };
 }

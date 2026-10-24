@@ -555,6 +555,7 @@ in
     imports = [ ./discourse.nix ];
     _module.args.package = pkgs.discourseAllPlugins;
   };
+  dnscache = runTest ./dnscache.nix;
   dnscrypt-proxy = runTestOn [ "x86_64-linux" ] ./dnscrypt-proxy.nix;
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
