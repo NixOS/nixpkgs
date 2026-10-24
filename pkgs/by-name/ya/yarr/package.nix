@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "yarr";
-  version = "2.9";
+  version = "2.9-pre";
 
   src = fetchFromGitHub {
     owner = "nkanaev";
     repo = "yarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NvYcl+i3JW18zjYUT1C+ksMJgUJQGP+90UhTQkZRhD4=";
+    hash = "sha256-+hRg11amom7m0PJifPgbUSd5ynVFbu2ebfguqyIR+iI=";
   };
 
   assets = buildNpmPackage {
