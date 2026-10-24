@@ -256,11 +256,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Fails to find `O_LARGEFILE` otherwise.
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
-  # Set minimum macOS version to 10.12 for x86_64-darwin to support clock_gettime()
-  env.SBCL_MACOSX_VERSION_MIN = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "10.12";
-
   buildPhase = ''
     runHook preBuild
 
@@ -271,11 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  # Tests on ofBorg’s x86_64-darwin platforms are so unstable that a random one
-  # will fail every other run. There’s a deeper problem here; we might as well
-  # disable them entirely so at least the other platforms get to benefit from
-  # testing.
-  doCheck = stdenv.hostPlatform.system != "x86_64-darwin";
+  doCheck = true;
 
   # From the INSTALL docs
   checkPhase = ''
@@ -322,8 +313,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    # Broken since 2025-09-05 https://hydra.nixos.org/job/nixpkgs/staging-next/sbcl.x86_64-darwin
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
     license = lib.licenses.publicDomain; # and FreeBSD

@@ -426,8 +426,6 @@ let
   platformTag =
     if effectiveStdenv.hostPlatform.isLinux then
       "manylinux2014_${arch}"
-    else if effectiveStdenv.system == "x86_64-darwin" then
-      "macosx_10_9_${arch}"
     else if effectiveStdenv.system == "aarch64-darwin" then
       "macosx_11_0_${arch}"
     else

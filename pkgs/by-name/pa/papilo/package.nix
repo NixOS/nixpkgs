@@ -19,20 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # skip SEGFAULT tests
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace test/CMakeLists.txt \
-        --replace-fail '"matrix-buffer"' "" \
-        --replace-fail '"vector-comparisons"' "" \
-        --replace-fail '"matrix-comparisons"' "" \
-        --replace-fail '"presolve-activity-is-updated-correctly-huge-values"' "" \
-        --replace-fail '"problem-comparisons"' "" \
-        --replace-fail "Boost_IOSTREAMS_FOUND" "FALSE"
-    ''
-    + (lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-      substituteInPlace test/CMakeLists.txt \
-        --replace-fail '"happy-path-replace-variable"' ""
-    '');
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/CMakeLists.txt \
+      --replace-fail '"matrix-buffer"' "" \
+      --replace-fail '"vector-comparisons"' "" \
+      --replace-fail '"matrix-comparisons"' "" \
+      --replace-fail '"presolve-activity-is-updated-correctly-huge-values"' "" \
+      --replace-fail '"problem-comparisons"' "" \
+      --replace-fail "Boost_IOSTREAMS_FOUND" "FALSE"
+  '';
 
   nativeBuildInputs = [ cmake ];
 
