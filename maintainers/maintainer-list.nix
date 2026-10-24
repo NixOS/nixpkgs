@@ -25914,12 +25914,6 @@
     githubId = 1019641;
     name = "Rodney Lorrimar";
   };
-  rvlander = {
-    email = "rvlander@gaetanandre.eu";
-    github = "rvlander";
-    githubId = 5236428;
-    name = "Gaëtan André";
-  };
   rvnstn = {
     email = "github@rvnstn.de";
     github = "rvnstn";
