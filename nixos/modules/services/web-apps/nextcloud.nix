@@ -860,6 +860,16 @@ in
       '';
     };
 
+    enableTaskprocessingWorker = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to run a dedicated `occ taskprocessing:worker` service which continuously
+        processes queued TaskProcessing tasks instead of waiting for background jobs.
+        See the [upstream documentation](https://docs.nextcloud.com/server/stable/admin_manual/occ_system.html#task-processing).
+      '';
+    };
+
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = jsonFormat.type;
@@ -1446,6 +1456,30 @@ in
               LoadCredential = runtimeSystemdCredentials;
             };
             startAt = cfg.autoUpdateApps.startAt;
+          };
+          nextcloud-taskprocessing-worker = lib.mkIf cfg.enableTaskprocessingWorker {
+            description = "Nextcloud TaskProcessing worker";
+            after = [
+              "nextcloud-setup.service"
+            ]
+            ++ lib.optional mysqlLocal "mysql.service"
+            ++ lib.optional pgsqlLocal "postgresql.target";
+            wants = [ "nextcloud-setup.service" ];
+            wantedBy = [ "multi-user.target" ];
+            restartTriggers = [
+              webroot
+              overrideConfig
+            ];
+            startLimitIntervalSec = 60;
+            startLimitBurst = 20;
+            serviceConfig = {
+              Type = "simple";
+              User = "nextcloud";
+              ExecStart = "${lib.getExe occ} taskprocessing:worker -v";
+              Restart = "on-failure";
+              RestartSec = 2;
+              LoadCredential = runtimeSystemdCredentials;
+            };
           };
           nextcloud-update-db = {
             after = [ "nextcloud-setup.service" ];
