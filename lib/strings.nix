@@ -3025,8 +3025,8 @@ rec {
     a: b:
     let
       # Two dimensional array with dimensions (stringLength a + 1, stringLength b + 1)
-      arr = genList (i: genList (j: dist i j) (stringLength b + 1)) (stringLength a + 1);
-      d = x: y: elemAt (elemAt arr x) y;
+      arr = genList (i: genList (dist i) (stringLength b + 1)) (stringLength a + 1);
+      d = x: elemAt (elemAt arr x);
       dist =
         i: j:
         let
