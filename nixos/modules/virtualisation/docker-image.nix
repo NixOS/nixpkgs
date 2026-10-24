@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   imports = [
@@ -9,6 +9,15 @@
     # Set virtualisation to docker
     echo "docker" > /run/systemd/container
   '';
+
+  # Prevent resolvconf from overriding Docker-managed resolv.conf.
+  # Docker bind-mounts /etc/resolv.conf at container runtime and uses
+  # its own embedded DNS server (127.0.0.11) for resolution. The
+  # resolvconf service must not manage the file or it will conflict
+  # with Docker's DNS handling. mkForce is needed because other
+  # modules or user configuration may set these options.
+  environment.etc."resolv.conf".enable = lib.mkForce false;
+  networking.resolvconf.enable = lib.mkForce false;
 
   # Iptables do not work in Docker.
   networking.firewall.enable = false;
