@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "3.32.0";
+  version = "4.2.0";
 
   kata-images-all = callPackage ./kata-images.nix { inherit version; };
 
@@ -39,12 +39,12 @@ buildGoModule rec {
     owner = "kata-containers";
     repo = "kata-containers";
     rev = version;
-    hash = "sha256-dnbzjYDKeAp0wFQcO5VK71vkf7ubVK5Lh9R9jjuro28=";
+    hash = "sha256-afEm5lcXD4qC2Ezhx7wyZXD5pj4uLPoSnJrvFJL+7qU=";
   };
 
   sourceRoot = "${src.name}/src/runtime";
 
-  vendorHash = "sha256-HAWobIcqwHL7jgawpOk1ZNx6vG8NApF5Nn60eZ9Fc1c=";
+  vendorHash = "sha256-4xSlafTf/CccSWiSs3S56xIt1hzG+U+7jxIawbTyj8k=";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
