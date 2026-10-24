@@ -24,15 +24,6 @@ tcl.mkTclDerivation {
       --replace-fail "-arch x86_64 -arch arm64" ""
   '';
 
-  configureFlags = [
-    "--with-tk=${lib.getLib tk}/lib"
-    "--with-tkinclude=${lib.getDev tk}/include"
-  ];
-
-  installTargets = [
-    "install-lib-binaries"
-  ];
-
   nativeBuildInputs = [
     autoreconfHook
   ];
@@ -40,6 +31,15 @@ tcl.mkTclDerivation {
   buildInputs = [
     tk
     libGL
+  ];
+
+  configureFlags = [
+    "--with-tk=${lib.getLib tk}/lib"
+    "--with-tkinclude=${lib.getDev tk}/include"
+  ];
+
+  installTargets = [
+    "install-lib-binaries"
   ];
 
   meta = {
