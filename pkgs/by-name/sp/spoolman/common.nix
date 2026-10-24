@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.23.1";
+  version = "0.26.1";
 in
 {
   inherit version;
@@ -9,7 +9,7 @@ in
     owner = "Donkie";
     repo = "Spoolman";
     rev = "v${version}";
-    hash = "sha256-Oa/cNmpc0hWRf0EQI5aXIE/p9//Sos5Nj3QFEjKgj5o=";
+    hash = "sha256-tBHU4WvknqkRNxlQJ/wuzM3mrQVyMS3eED1Kimi6rsU=";
   };
 
   meta = {
@@ -20,6 +20,5 @@ in
       MayNiklas
       pinpox
     ];
-    mainProgram = "spoolman";
   };
 }

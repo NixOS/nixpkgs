@@ -1,5 +1,5 @@
 {
-  python312,
+  python3,
   lib,
   callPackage,
   writeShellScript,
@@ -9,13 +9,22 @@
 let
   common = callPackage ./common.nix { };
   frontend = callPackage ./frontend.nix { };
-  python = python312;
-  hishel_0_1 = python.pkgs.hishel.overrideAttrs (old: rec {
+  frontend-v2 = callPackage ./frontend-v2.nix { };
+  python = python3;
+  # Spoolman still uses the Hishel 0.1 cache API, but nixpkgs has Hishel 1.x.
+  hishel_0_1 = python.pkgs.hishel.overridePythonAttrs (old: rec {
     version = "0.1.5";
     src = old.src.override {
       tag = version;
       hash = "sha256-OyQR/ruowNk5z4ITRHcIJn1kc0xLZiofmxajf6hNR9k=";
     };
+    dependencies =
+      old.dependencies
+      ++ (with python.pkgs; [
+        anyio
+        anysqlite
+        httpx
+      ]);
   });
 in
 
@@ -26,27 +35,21 @@ python.pkgs.buildPythonPackage rec {
 
   pyproject = true;
 
+  build-system = [ python.pkgs.setuptools ];
+
   nativeBuildInputs = [
     makeWrapper
-    python.pkgs.setuptools
     python.pkgs.pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "setuptools"
-    "websockets"
-  ];
+  pythonRelaxDeps = [ "websockets" ];
 
   postPatch = ''
+    # nixpkgs provides psycopg2 instead of the bundled-binary distribution.
     substituteInPlace pyproject.toml --replace-fail psycopg2-binary psycopg2
 
-    # upstream removed [build-system] in 0.23.x, causing setuptools
-    # to fail on the flat layout with multiple top-level directories
+    # Limit setuptools discovery to the Python package in upstream's flat tree.
     cat >> pyproject.toml <<EOF
-
-    [build-system]
-    requires = ["setuptools"]
-    build-backend = "setuptools.build_meta"
 
     [tool.setuptools.packages.find]
     include = ["spoolman*"]
@@ -57,7 +60,6 @@ python.pkgs.buildPythonPackage rec {
     uvloop
     alembic
     aiomysql
-    anysqlite
     asyncpg
     fastapi
     hishel_0_1
@@ -85,9 +87,10 @@ python.pkgs.buildPythonPackage rec {
       '';
     in
     ''
-      mkdir -p $out/runpath/client/dist $out/bin
+      mkdir -p $out/runpath/client/dist $out/runpath/client_v2/build $out/bin
       cp -r $src/* $out/runpath
       cp -r ${frontend}/* $out/runpath/client/dist
+      cp -r ${frontend-v2}/* $out/runpath/client_v2/build
 
       makeWrapper ${start_script} $out/bin/spoolman \
       --chdir $out/runpath \
