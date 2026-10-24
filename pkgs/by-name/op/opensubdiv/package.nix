@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   libxxf86vm,
@@ -42,6 +43,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   patches = [
     # Prevent CMake from generating a redundant nested path like /nix/store/.../nix/store/...
     ./cmake-config.patch
+    (fetchpatch2 {
+      # Fix https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
+      url = "https://github.com/PixarAnimationStudios/OpenSubdiv/commit/44829e1f4b3cac5b5f3c01874eaa32c8135d48eb.patch?full_index=1";
+      hash = "sha256-//GLW/2qF5US+93jFEnZh3k+QFqvjUe/H5ZPh9/rBd4=";
+    })
   ];
 
   # cudaThreadSynchronize was deprecated and removed in CUDA 13
@@ -110,15 +116,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "OSD_CUDA_NVCC_FLAGS" (lib.concatStringsSep " " cudaPackages.flags.gencode))
     ];
-
-  preBuild =
-    let
-      maxBuildCores = 12;
-    in
-    # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
-    lib.optionalString cudaSupport ''
-      NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
-    '';
 
   postInstall =
     if hostPlatform.isWindows then
