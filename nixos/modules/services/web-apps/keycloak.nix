@@ -164,14 +164,30 @@ in
 
         host = mkOption {
           type = str;
-          default = "localhost";
+          default =
+            if !cfg.database.createLocally then
+              "localhost"
+            else if cfg.database.type == "postgresql" then
+              "/run/postgresql"
+            else
+              "/run/mysqld/mysqld.sock";
+          defaultText = literalMD ''
+            `/run/postgresql` for PostgreSQL or `/run/mysqld/mysqld.sock` for
+            MySQL/MariaDB if [](#opt-services.keycloak.database.createLocally)
+            is enabled, otherwise `localhost`
+          '';
           description = ''
-            Hostname of the database to connect to.
+            Hostname of the database to connect to, or the path of a Unix
+            socket to connect through using socket authentication.
 
-            For PostgreSQL, this can also be a path to a Unix socket
-            directory (e.g., `/run/postgresql`) to use peer authentication.
-            This requires adding `junixsocket-common` and `junixsocket-native-common`
-            to [](#opt-services.keycloak.plugins).
+            For PostgreSQL, a socket path is the directory containing the
+            socket (e.g. `/run/postgresql`). For MySQL and MariaDB, it is the
+            socket file itself (e.g. `/run/mysqld/mysqld.sock`). The
+            `junixsocket` plugins needed for PostgreSQL and MySQL socket
+            connections are added automatically.
+
+            Must be a socket path if
+            [](#opt-services.keycloak.database.createLocally) is enabled.
           '';
         };
 
@@ -185,10 +201,21 @@ in
           in
           mkOption {
             type = port;
-            default = dbPorts.${cfg.database.type};
-            defaultText = literalMD "default port of selected database";
+            default =
+              if cfg.database.createLocally && cfg.database.type == "postgresql" then
+                config.services.postgresql.settings.port
+              else
+                dbPorts.${cfg.database.type};
+            defaultText = literalMD ''
+              [](#opt-services.postgresql.settings.port) for a locally created
+              PostgreSQL database, otherwise the default port of the selected database.
+            '';
             description = ''
               Port of the database to connect to.
+
+              For PostgreSQL socket connections, this selects the socket file
+              (`.s.PGSQL.<port>`) within the socket directory. It is unused for
+              MySQL and MariaDB socket connections.
             '';
           };
 
@@ -222,10 +249,9 @@ in
           type = bool;
           default = true;
           description = ''
-            Whether a database should be automatically created on the
-            local host. Set this to false if you plan on provisioning a
-            local database yourself. This has no effect if
-            services.keycloak.database.host is customized.
+            Whether to create the database and user on the local host. Set
+            this to `false` if you use an external database or provision a
+            local one yourself.
           '';
         };
 
@@ -233,13 +259,8 @@ in
           type = str;
           default = "keycloak";
           description = ''
-            Database name to use when connecting to an external or
-            manually provisioned database; has no effect when a local
-            database is automatically provisioned.
-
-            To use this with a local database, set [](#opt-services.keycloak.database.createLocally) to
-            `false` and create the database and user
-            manually.
+            Name of the database to connect to. Must be `keycloak` if
+            [](#opt-services.keycloak.database.createLocally) is enabled.
           '';
         };
 
@@ -247,13 +268,8 @@ in
           type = str;
           default = "keycloak";
           description = ''
-            Username to use when connecting to an external or manually
-            provisioned database; has no effect when a local database is
-            automatically provisioned.
-
-            To use this with a local database, set [](#opt-services.keycloak.database.createLocally) to
-            `false` and create the database and user
-            manually.
+            Username to connect to the database with. Must be `keycloak` if
+            [](#opt-services.keycloak.database.createLocally) is enabled.
           '';
         };
 
@@ -265,8 +281,8 @@ in
           description = ''
             The path to a file containing the database password.
 
-            Not required when using Unix socket authentication (peer auth)
-            by setting `host` to a socket path like `/run/postgresql`.
+            Not required if [](#opt-services.keycloak.database.host) is a Unix
+            socket path.
           '';
         };
       };
@@ -436,16 +452,18 @@ in
 
   config =
     let
-      # We only want to create a database if we're actually going to
-      # connect to it.
-      databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == "localhost";
-      createLocalPostgreSQL = databaseActuallyCreateLocally && cfg.database.type == "postgresql";
+      # Database connection paths:
+      # - createLocally creates the database and user locally, host must be a socket path
+      # - createLocally = false with a socket path connects through the socket without a password
+      # - createLocally = false with a hostname connects over TCP using passwordFile
+      createLocalPostgreSQL = cfg.database.createLocally && cfg.database.type == "postgresql";
       createLocalMySQL =
-        databaseActuallyCreateLocally
+        cfg.database.createLocally
         && elem cfg.database.type [
           "mysql"
           "mariadb"
         ];
+      isUnixSocket = hasPrefix "/" cfg.database.host;
 
       mySqlCaKeystore = pkgs.runCommand "mysql-ca-keystore" { } ''
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
@@ -518,7 +536,16 @@ in
           ++ (with cfg.package.plugins; [
             quarkus-systemd-notify
             quarkus-systemd-notify-deployment
-          ]);
+          ])
+          # the MariaDB driver supports Unix sockets natively
+          ++ optionals (isUnixSocket && cfg.database.type != "mariadb") (
+            with cfg.package.plugins;
+            [
+              junixsocket-common
+              junixsocket-native-common
+            ]
+            ++ optionals (cfg.database.type == "mysql") [ junixsocket-mysql ]
+          );
       };
     in
     mkIf cfg.enable {
@@ -527,11 +554,6 @@ in
           assertion =
             (cfg.database.useSSL && cfg.database.type == "postgresql") -> (cfg.database.caCert != null);
           message = "A CA certificate must be specified (in 'services.keycloak.database.caCert') when PostgreSQL is used with SSL";
-        }
-        {
-          assertion =
-            createLocalPostgreSQL -> config.services.postgresql.settings.standard_conforming_strings or true;
-          message = "Setting up a local PostgreSQL db for Keycloak requires `standard_conforming_strings` turned on to work reliably";
         }
         {
           assertion = cfg.settings.hostname != null || !cfg.settings.hostname-strict or true;
@@ -564,10 +586,28 @@ in
           '';
         }
         {
-          assertion = cfg.database.passwordFile != null || hasPrefix "/" cfg.database.host;
+          assertion = cfg.database.createLocally -> isUnixSocket;
           message = ''
-            services.keycloak.database.passwordFile must be set unless using
-            Unix socket authentication (host starting with /).
+            services.keycloak.database.host must be a Unix socket path (starting with /)
+            when services.keycloak.database.createLocally is enabled. To connect over TCP,
+            set services.keycloak.database.createLocally = false.
+          '';
+        }
+        {
+          assertion =
+            cfg.database.createLocally
+            -> cfg.database.name == "keycloak" && cfg.database.username == "keycloak";
+          message = ''
+            services.keycloak.database.name and services.keycloak.database.username must be
+            "keycloak" when services.keycloak.database.createLocally is enabled. To use other
+            names, set services.keycloak.database.createLocally = false.
+          '';
+        }
+        {
+          assertion = !isUnixSocket -> cfg.database.passwordFile != null;
+          message = ''
+            services.keycloak.database.passwordFile must be set when connecting over TCP
+            (services.keycloak.database.host not starting with /).
           '';
         }
       ];
@@ -600,17 +640,21 @@ in
             ]
           );
 
-          dbName = if databaseActuallyCreateLocally then "keycloak" else cfg.database.name;
+          dbName = cfg.database.name;
           dbProps = if cfg.database.type == "postgresql" then postgresParams else mariadbParams;
 
-          # Unix socket connection requires junixsocket library and special JDBC URL
-          isUnixSocket = hasPrefix "/" cfg.database.host;
-          unixSocketUrl = "jdbc:postgresql://localhost/${dbName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=${cfg.database.host}/.s.PGSQL.${toString cfg.database.port}&sslMode=disable";
+          unixSocketUrl =
+            {
+              postgresql = "jdbc:postgresql://localhost/${dbName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=${cfg.database.host}/.s.PGSQL.${toString cfg.database.port}&sslMode=disable";
+              mariadb = "jdbc:mariadb://address=(localSocket=${cfg.database.host})/${dbName}";
+              mysql = "jdbc:mysql://localhost/${dbName}?socketFactory=org.newsclub.net.mysql.AFUNIXDatabaseSocketFactoryCJ&junixsocket.file=${cfg.database.host}&sslMode=DISABLED";
+            }
+            .${cfg.database.type};
         in
         mkMerge [
           {
             db = if cfg.database.type == "postgresql" then "postgres" else cfg.database.type;
-            db-username = if databaseActuallyCreateLocally then "keycloak" else cfg.database.username;
+            db-username = cfg.database.username;
             db-password = mkIf (cfg.database.passwordFile != null) {
               _secret = cfg.database.passwordFile;
             };
@@ -631,70 +675,62 @@ in
           })
         ];
 
-      systemd.services.keycloakPostgreSQLInit = mkIf createLocalPostgreSQL {
-        after = [ "postgresql.target" ];
-        before = [ "keycloak.service" ];
-        bindsTo = [ "postgresql.target" ];
-        path = [ config.services.postgresql.package ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          User = "postgres";
-          Group = "postgres";
-          LoadCredential = [ "db_password:${cfg.database.passwordFile}" ];
-        };
-        script = ''
-          set -o errexit -o pipefail -o nounset -o errtrace
-          shopt -s inherit_errexit
-
-          create_role="$(mktemp)"
-          trap 'rm -f "$create_role"' EXIT
-
-          # Read the password from the credentials directory and
-          # escape any single quotes by adding additional single
-          # quotes after them, following the rules laid out here:
-          # https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-CONSTANTS
-          db_password="$(<"$CREDENTIALS_DIRECTORY/db_password")"
-          db_password="''${db_password//\'/\'\'}"
-
-          echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB" > "$create_role"
-          psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tA --file="$create_role"
-          psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || psql -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
-        '';
-        enableStrictShellChecks = true;
+      services.postgresql = mkIf createLocalPostgreSQL {
+        enable = mkDefault true;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.username;
+            ensureDBOwnership = true;
+          }
+        ];
       };
 
-      systemd.services.keycloakMySQLInit = mkIf createLocalMySQL {
-        after = [ "mysql.service" ];
-        before = [ "keycloak.service" ];
-        bindsTo = [ "mysql.service" ];
-        path = [ config.services.mysql.package ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          User = config.services.mysql.user;
-          Group = config.services.mysql.group;
-          LoadCredential = [ "db_password:${cfg.database.passwordFile}" ];
-        };
-        script = ''
-          set -o errexit -o pipefail -o nounset -o errtrace
-          shopt -s inherit_errexit
-
-          # Read the password from the credentials directory and
-          # escape any single quotes by adding additional single
-          # quotes after them, following the rules laid out here:
-          # https://dev.mysql.com/doc/refman/8.0/en/string-literals.html
-          db_password="$(<"$CREDENTIALS_DIRECTORY/db_password")"
-          db_password="''${db_password//\'/\'\'}"
-
-          ( echo "SET sql_mode = 'NO_BACKSLASH_ESCAPES';"
-            echo "CREATE USER IF NOT EXISTS 'keycloak'@'localhost' IDENTIFIED BY '$db_password';"
-            echo "CREATE DATABASE IF NOT EXISTS keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-            echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
-          ) | mysql -N
-        '';
-        enableStrictShellChecks = true;
+      services.mysql = mkIf createLocalMySQL {
+        enable = mkDefault true;
+        package = mkDefault (if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql84);
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.username;
+            ensurePermissions."${cfg.database.name}.*" = "ALL PRIVILEGES";
+          }
+        ];
       };
+
+      # Older versions of this module created the keycloak user with password authentication,
+      # which ensureUsers leaves as is, so switch it to socket authentication once.
+      # This uses the same plugin check and ALTER USER as mysql.nix does for root@localhost.
+      systemd.services.keycloakMySQLAuthMigration =
+        let
+          account = "'${cfg.database.username}'@'localhost'";
+          socketPlugin = if cfg.database.type == "mariadb" then "unix_socket" else "auth_socket";
+          identifiedBySocket =
+            if cfg.database.type == "mariadb" then "VIA unix_socket" else "WITH auth_socket";
+        in
+        mkIf createLocalMySQL {
+          after = [ "mysql.service" ];
+          before = [ "keycloak.service" ];
+          bindsTo = [ "mysql.service" ];
+          path = [ config.services.mysql.package ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            User = config.services.mysql.user;
+            Group = config.services.mysql.group;
+          };
+          script = ''
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
+
+            plugin="$(mysql -N -e "SELECT plugin FROM mysql.user WHERE user = '${cfg.database.username}' AND host = 'localhost'")"
+            if [[ "$plugin" != ${socketPlugin} ]]; then
+              echo "Switching ${account} from $plugin to ${socketPlugin} authentication"
+              mysql -N -e "ALTER USER ${account} IDENTIFIED ${identifiedBySocket}"
+            fi
+          '';
+          enableStrictShellChecks = true;
+        };
 
       systemd.tmpfiles.settings."10-keycloak" =
         let
@@ -718,13 +754,10 @@ in
         let
           databaseServices =
             if createLocalPostgreSQL then
-              [
-                "keycloakPostgreSQLInit.service"
-                "postgresql.target"
-              ]
+              [ "postgresql.target" ]
             else if createLocalMySQL then
               [
-                "keycloakMySQLInit.service"
+                "keycloakMySQLAuthMigration.service"
                 "mysql.service"
               ]
             else
@@ -797,14 +830,6 @@ in
           '';
           enableStrictShellChecks = true;
         };
-
-      services.postgresql.enable = mkDefault createLocalPostgreSQL;
-      services.mysql.enable = mkDefault createLocalMySQL;
-      services.mysql.package =
-        let
-          dbPkg = if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql84;
-        in
-        mkIf createLocalMySQL (mkDefault dbPkg);
     };
 
   meta.doc = ./keycloak.md;
