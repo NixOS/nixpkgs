@@ -8,6 +8,7 @@
   hatch-fancy-pypi-readme,
   hatchling,
   httpx,
+  httpx2,
   inline-snapshot,
   msgpack,
   pytest-asyncio,
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     tag = version;
-    hash = "sha256-KVfbWhGpbLGzK3fQOuT+KtBi13z5ZZBP8NOsIIfObMc=";
+    hash = "sha256-55hoTxa8rQB4ZPQQ7dwTk0t3juUU2QJ0bjieXj9+MM4=";
   };
 
   postPatch = ''
@@ -53,6 +54,11 @@ buildPythonPackage rec {
     ];
     requests = [ requests ];
     httpx = [ httpx ];
+    httpx2 = [
+      anyio
+      anysqlite
+      httpx2
+    ];
     fastapi = [ fastapi ];
     redis = [ redis ];
   };
