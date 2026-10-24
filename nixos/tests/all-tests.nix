@@ -1395,6 +1395,7 @@ in
     _module.args.name = "opencloud-production";
   };
   openldap = runTest ./openldap.nix;
+  openobserve = runTest ./openobserve.nix;
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
   opensearch-dashboards = handleTest ./opensearch-dashboards.nix { };
