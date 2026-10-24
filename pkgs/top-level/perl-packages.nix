@@ -12331,6 +12331,8 @@ with self;
       url = "mirror://cpan/authors/id/A/AU/AUDREYT/Encode-HanExtra-0.23.tar.gz";
       hash = "sha256-H9SwbK2nCFgAOvFT+UyGOzuV8uPQO6GNBFGoHVHbRDo=";
     };
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Extra sets of Chinese encodings";
       license = lib.licenses.mit;
