@@ -413,5 +413,5 @@ rec {
   };
 
   # Default version of Gradle in nixpkgs.
-  gradle = gradle_8;
+  gradle = gradle_9;
 }

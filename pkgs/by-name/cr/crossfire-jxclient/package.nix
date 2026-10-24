@@ -3,11 +3,14 @@
   lib,
   fetchgit,
   makeWrapper,
-  gradle,
+  gradle_8,
   jre,
   ffmpeg,
 }:
-
+let
+  # A couple of deprecated features get used here; see git log for details
+  gradle = gradle_8;
+in
 stdenv.mkDerivation rec {
   pname = "crossfire-jxclient";
   version = "2025-01";

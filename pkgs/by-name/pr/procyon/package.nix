@@ -5,7 +5,7 @@
   makeShellWrapper,
   jdk_headless,
   jre_minimal,
-  gradle,
+  gradle_8,
 }:
 
 let
@@ -22,6 +22,8 @@ let
     tag = "1.78";
     hash = "sha256-zoPymohdU8HhVmw7ACoPbgNGgzdsIDVD3bl7Fh3qf2g=";
   };
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 in
 
 stdenv.mkDerivation rec {

@@ -5,7 +5,7 @@
   replaceVars,
   slimevr,
   jdk17,
-  gradle,
+  gradle_8,
   hidapi,
   makeWrapper,
 }:
@@ -29,6 +29,9 @@ let
         libhidapi
       ]
     }'";
+
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 in
 
 stdenv.mkDerivation (finalAttrs: {

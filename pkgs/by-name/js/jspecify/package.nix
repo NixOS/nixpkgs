@@ -4,11 +4,14 @@
   fetchFromGitHub,
   writeShellScript,
   nix-update,
-  gradle,
+  gradle_8,
   jdk21,
   jre_minimal,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jspecify";
   version = "1.0.0";

@@ -3,12 +3,15 @@
   stdenv,
   fetchFromGitHub,
   buildGoModule,
-  gradle,
+  gradle_8,
   makeWrapper,
   jre,
   symlinkJoin,
 }:
 let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+
   pname = "alda";
   version = "2.3.2";
   src = fetchFromGitHub {
