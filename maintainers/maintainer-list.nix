@@ -4053,12 +4053,6 @@
     githubId = 71633864;
     name = "Bodie";
   };
-  bodil = {
-    email = "nix@bodil.org";
-    github = "bodil";
-    githubId = 17880;
-    name = "Bodil Stokke";
-  };
   body20002 = {
     email = "body20002.test@gmail.com";
     github = "body20002";
