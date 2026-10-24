@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-core";
-  version = "2.90.0";
+  version = "2.92.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "docling-project";
     repo = "docling-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-giPdZKVwR+Gvo4hpn/hUhACMuZwCEqhZwqph+wOrqgk=";
+    hash = "sha256-OD9cB1WaFaQcbRnYJ3wsMROSjTb4Jgy6t3W0pJDO0DA=";
   };
 
   build-system = [
