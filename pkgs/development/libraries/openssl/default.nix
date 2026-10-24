@@ -10,6 +10,7 @@
   withCryptodev ? false,
   cryptodev,
   withZlib ? false,
+  withUpki ? false,
   zlib,
   enableSSL2 ? false,
   enableSSL3 ? false,
@@ -37,6 +38,8 @@
 
 # check from time to time, if this range is still correct
 assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
+# upki integration uses dlopen
+assert (withUpki -> !static);
 
 let
   useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
@@ -431,6 +434,9 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
+    ]
+    ++ lib.optionals withUpki [
+      ./3.5/verify-upki-by-default.patch
     ];
 
     withDocs = true;
@@ -460,6 +466,9 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
+    ]
+    ++ lib.optionals withUpki [
+      ./3.5/verify-upki-by-default.patch
     ];
 
     withDocs = true;
@@ -489,6 +498,9 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
+    ]
+    ++ lib.optionals withUpki [
+      ./3.5/verify-upki-by-default.patch
     ];
 
     withDocs = true;
