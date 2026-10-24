@@ -7,7 +7,7 @@
 let
   pypkgs = python3Packages;
 
-  version = "2.1-unstable-2025-03-28";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "JelmerT";
