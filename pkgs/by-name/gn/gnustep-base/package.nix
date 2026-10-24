@@ -101,10 +101,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-    ];
+    maintainers = with lib.maintainers; [ dblsaiko ];
     platforms = lib.platforms.linux;
   };
 })

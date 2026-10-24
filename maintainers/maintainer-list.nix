@@ -2659,12 +2659,6 @@
     githubId = 91414737;
     keys = [ { fingerprint = "C5C8 4658 CCFD 7E8E 71DE  E933 AF3A E54F C3A3 5C9F"; } ];
   };
-  ashalkhakov = {
-    email = "artyom.shalkhakov@gmail.com";
-    github = "ashalkhakov";
-    githubId = 1270502;
-    name = "Artyom Shalkhakov";
-  };
   ashgillman = {
     email = "gillmanash@gmail.com";
     github = "ashgillman";
