@@ -75,6 +75,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Asynchronous low-level communication with BitTorrent clients";
     homepage = "https://aiobtclientrpc.readthedocs.io";
+    changelog = "https://codeberg.org/plotski/aiobtclientrpc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
