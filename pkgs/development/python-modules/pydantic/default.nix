@@ -80,6 +80,12 @@ buildPythonPackage rec {
 
     # avoid cyclic dependency
     "tests/test_docs.py"
+
+    # typing_extensions 4.16.0 made sentinels pickleable, which this test
+    # assumes is not the case. fixed upstream by conditionally disabling the
+    # test, but patch does not cleanly apply.
+    # https://github.com/pydantic/pydantic/commit/a37f3aff090ca342dc5f48304889963530b993f8
+    "tests/test_missing_sentinel.py::test_missing_sentinel_pickle"
   ];
 
   pythonImportsCheck = [ "pydantic" ];
