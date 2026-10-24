@@ -138,8 +138,8 @@ let
     name = "cutlass-source";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v4.4.2";
-    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
+    tag = "v4.7.1";
+    hash = "sha256-z/jASQGRj9fYwgyJKvzWgowG7j2zNKb3xeFUzYwwLQA=";
   };
 
   # FlashMLA's Blackwell (SM100) kernels were developed against CUTLASS v3.9.0
@@ -159,10 +159,10 @@ let
   # grep for DEEPGEMM_UPSTREAM_TAG in the following file
   # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/deepgemm.cmake
   deepgemm = fetchFromGitHub {
-    owner = "deepseek-ai";
+    owner = "vllm-project";
     repo = "DeepGEMM";
-    rev = "8b1392b978f5a03c828dd1711090d7fb50958b8a";
-    hash = "sha256-Dy3s3LJXkvgKAOMOwyissYjr47OjkwqlShVKUthL/II=";
+    rev = "1e1842a833699298f7afc02eefb2ed168fff6938";
+    hash = "sha256-IZDD9si9G+0/7CxwYgK7ldBm8qOaPWxvRXXLXmFPU7k=";
     fetchSubmodules = true;
   };
 
@@ -177,8 +177,8 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "0397728d511c4e3d94ea3a01d8dda8654525a611";
-      hash = "sha256-AE0VpRZSeTSqUzV+qXTAOkVGxEvfmyUOyZPbTxEokiI=";
+      rev = "0eee43b12f034b657133cf2afca6a72ebb6efccf";
+      hash = "sha256-uqTjdPcvSjE3Wl479/ux7uOJyGDwlL/F1Guk+CQI+64=";
     };
 
     dontConfigure = true;
@@ -199,12 +199,12 @@ let
   fmha-sm100 = fetchFromGitHub {
     owner = "vllm-project";
     repo = "MSA";
-    rev = "087c161814d4d9c735b46c21212a09e5f8eb92fa";
-    hash = "sha256-y1NZBwmpiILIDb4ph1NJ+0jU1Tg4qP3y4w3tOCN4gEw=";
+    rev = "968061ab16cb14991a5c7d4c0e8eabf531be0dcf";
+    hash = "sha256-KDDjfMXys47XeYTMS3eQC+qa257XU88PikoEsMaCO9g=";
     fetchSubmodules = true;
   };
 
-  # grep for DEFAULT_TRITON_KERNELS_TAG in the following file
+  # grep for TRITON_KERNELS_TAG in the following file
   # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/triton_kernels.cmake
   triton-kernels = fetchFromGitHub {
     owner = "triton-lang";
@@ -219,8 +219,8 @@ let
     name = "tml-fa4-source";
     owner = "vllm-project";
     repo = "tml-fa4";
-    rev = "b206834606ed5b5f21f8eed6b0683f528ea9cf7d";
-    hash = "sha256-LDA5bW4Bf5+w41K9aJ5flz372hy+Ukm//RT55L7nbbU=";
+    rev = "75765e76a9c2c012c1f6ecd64577eb646eb4d303";
+    hash = "sha256-zw19GAgsA0+5XzJNGLInIMN4GMRXqJsLkiVViRkv6fI=";
   };
 
   # grep for GIT_TAG in the following file
@@ -229,8 +229,19 @@ let
     name = "FlashKDA-source";
     owner = "vllm-project";
     repo = "FlashKDA";
-    rev = "ee0be888cd0e972f9409bf53756f8c38c6652173";
-    hash = "sha256-tXxHmu+LdEg6b0UT2hubn7S2qgt+mm4xQ+lPPuxasFE=";
+    rev = "17a037d98da546deb4591e967cf961a43c034d8b";
+    hash = "sha256-1IYJcMN70jY9gT/OWNhyEZswc1h1+b+HsSbZ8uLPQSQ=";
+    fetchSubmodules = true;
+  };
+
+  # grep for GIT_TAG in the following file
+  # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/deepselect.cmake
+  deepselect = fetchFromGitHub {
+    name = "DeepSelect-source";
+    owner = "vllm-project";
+    repo = "DeepSelect";
+    rev = "d96d33afe1fab0d6066da49cdc91e64c2bee65ea";
+    hash = "sha256-4515RDdI1fYfeK5igyR970FjlgusbHDYxTcpcqPwQoI=";
     fetchSubmodules = true;
   };
 
@@ -255,8 +266,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "06bdd47c0d0383daf6a2ff0c418faff9c6da16e5";
-      hash = "sha256-vaQLkdUQsCGUrzMlkyGfOfz8KJD3GuY0osxQSwh2gKU=";
+      rev = "9cd61de38763d712bb6ce56e2a02cc2bf718c89f";
+      hash = "sha256-aix4Xh2qWXiFgpUXl3TbMKMdo+o0IaChbYR5D6uxiKk=";
     };
 
     patches = [
@@ -386,7 +397,7 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.29.0";
+  version = "0.32.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -394,7 +405,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SPxnCItBgeOJk+io4R4f4JXfH2GSlqRKoIXCw+gpsqE=";
+    hash = "sha256-0PCIVC0PuW4uiKRoy159HmwIBg26Chq65XFiWyZ0CMM=";
   };
 
   cargoRoot = "rust";
@@ -405,17 +416,14 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-eXCartOeDjzIq8WY/EwV7symrUEHTRkEf4uaehsiPAM=";
+    hash = "sha256-4vcO3YoqQytvw+se2chd9tXzR9lM7P0DKIwsJVJPUaE=";
   };
 
   patches = [
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
-    ./0005-drop-intel-reqs.patch
+    ./0005-drop-cpu-extra-reqs.patch
     ./0006-drop-rocm-extra-reqs.patch
-    # Fix MoE models on RDNA3 (gfx1100)
-    # https://github.com/vllm-project/vllm/pull/55522
-    ./0007-fix-rdna3-wna16-moe-intermediate-size.patch
   ];
 
   postPatch = ''
@@ -465,6 +473,13 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
 
     # Optional Humming kernels for quantization
     "humming-kernels"
+
+    # Not packaged in nixpkgs. Fork of openai-harmony (which we use instead) providing the same
+    # `openai_harmony` module, but with embedded tiktoken vocabularies.
+    "oss-harmony"
+
+    # ROCm-only, not packaged in nixpkgs
+    "mooncake-transfer-engine-rocm"
   ];
 
   nativeBuildInputs = [
@@ -640,6 +655,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "DEEPGEMM_SRC_DIR" (lib.getDev deepgemm).outPath)
+    (lib.cmakeFeature "DEEPSELECT_SRC_DIR" (lib.getDev deepselect).outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" (lib.getDev cutlass).outPath)
     (lib.cmakeFeature "FLASH_KDA_SRC_DIR" (lib.getDev flashkda).outPath)
     (lib.cmakeFeature "FLASH_MLA_SRC_DIR" (lib.getDev flashmla).outPath)
