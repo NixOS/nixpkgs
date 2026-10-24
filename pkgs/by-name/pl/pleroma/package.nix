@@ -19,14 +19,14 @@ let
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.10.2";
+  version = "2.11.0";
 
   src = fetchFromForgejo {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    hash = "sha256-5BFzV2alNDjO/bS08+V4idzFaXQLr+4pNlLLXayBqIE=";
+    hash = "sha256-yQcvmoqKepL5l1YbWsgTBN0XGKSBLF4Rz9n+SJTcfo0=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -34,53 +34,8 @@ beamPackages.mixRelease rec {
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = final: prev: {
-      # Upstream is pointing to
-      # https://github.com/feld/phoenix/commits/v1.7.14-websocket-headers/
-      # which is v1.7.14 with an extra patch applied on top.
-      phoenix = beamPackages.buildMix {
-        name = "phoenix";
-        version = "1.7.14-websocket-headers";
-        src = fetchFromGitHub {
-          owner = "phoenixframework";
-          repo = "phoenix";
-          tag = "v1.7.14";
-          hash = "sha256-hb8k0bUl28re1Bv2AIs17VHOP8zIyCfbpaVydu1Dh24=";
-        };
-        patches = [
-          (fetchpatch {
-            name = "0001-Support-passing-through-the-value-of-the-sec-websocket-protocol-header.patch";
-            url = "https://github.com/feld/phoenix/commit/fb6dc76c657422e49600896c64aab4253fceaef6.patch";
-            hash = "sha256-eMla+D3EcVTc1WwlRaKvLPV5eXwGfAgZOxiYlGSkBIQ=";
-          })
-        ];
-        beamDeps = with final; [
-          phoenix_pubsub
-          plug
-          plug_crypto
-          telemetry
-          phoenix_template
-          websock_adapter
-          phoenix_view
-          castore
-          plug_cowboy
-          jason
-        ];
-      };
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
-      captcha = beamPackages.buildMix {
-        name = "captcha";
-        version = "0.1.0";
-
-        src = fetchFromForgejo {
-          domain = "git.pleroma.social";
-          owner = "pleroma/elixir-libraries";
-          repo = "elixir-captcha";
-          rev = "e7b7cc34cc16b383461b966484c297e4ec9aeef6";
-          hash = "sha256-gcsZ8BzmKfSeX2QsWDxQd34nKxIM0eJKBAaxxYyFSlg=";
-        };
-        beamDeps = [ ];
-      };
       prometheus_ex = beamPackages.buildMix {
         name = "prometheus_ex";
         version = "3.0.5";
@@ -93,34 +48,20 @@ beamPackages.mixRelease rec {
         };
         beamDeps = with final; [ prometheus ];
       };
-      oban_plugins_lazarus = beamPackages.buildMix {
-        name = "oban_plugins_lazarus";
-        version = "0.1.0";
-        src = fetchFromForgejo {
-          domain = "git.pleroma.social";
-          owner = "pleroma/elixir-libraries";
-          repo = "oban_plugins_lazarus";
-          rev = "e49fc355baaf0e435208bf5f534d31e26e897711";
-          hash = "sha256-zSzPniRN7jQLAEGGOuwserDSLy2lSZ74NFMD/IOBsC8=";
-        };
-        beamDeps = with final; [ oban ];
-      };
-      remote_ip = beamPackages.buildMix {
-        name = "remote_ip";
-        version = "0.1.5";
 
-        src = fetchFromForgejo {
-          domain = "git.pleroma.social";
-          owner = "pleroma/elixir-libraries";
-          repo = "remote_ip";
-          rev = "b647d0deecaa3acb140854fe4bda5b7e1dc6d1c8";
-          hash = "sha256-pgON0uhTPVeeAC866Qz24Jvm1okoAECAHJrRzqaq+zA=";
+      syslog = beamPackages.buildRebar3 {
+        name = "syslog";
+        # the pleroma lockfile points to this git rev.
+        # erlang-syslog did not get a release since 2021. A bunch of
+        # fixes appeared since on main :/
+        version = "unstable-614a1fde7a8654bee2815b599bbdaae1bb0323b5";
+        src = fetchFromGitHub {
+          owner = "Vagabond";
+          repo = "erlang-syslog";
+          rev = "614a1fde7a8654bee2815b599bbdaae1bb0323b5";
+          hash = "sha256-Zs4gBs1bm2Grs+TRjtR89tPA0NmRN48yAtl1v4vU4KA=";
         };
-        beamDeps = with final; [
-          combine
-          plug
-          inet_cidr
-        ];
+        buildPlugins = with beamPackages; [ pc ];
       };
       majic = prev.majic.override { buildInputs = [ file ]; };
       # Some additional build inputs and build fixes
@@ -133,8 +74,6 @@ beamPackages.mixRelease rec {
         nativeBuildInputs = [ cmake ];
         dontUseCmakeConfigure = true;
       };
-
-      syslog = prev.syslog.override { buildPlugins = with beamPackages; [ pc ]; };
 
       phoenix_live_view = prev.phoenix_live_view.override {
         # This listener breaks with elixir 1.18.
