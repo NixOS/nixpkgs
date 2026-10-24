@@ -1,0 +1,49 @@
+--- a/Wobble/Wobble/Logging/Logger.cs
++++ b/Wobble/Wobble/Logging/Logger.cs
+@@ -23,7 +23,7 @@ static Logger() =>
+         /// <summary>
+         ///     The folder which contains all the logs.
+         /// </summary>
+-        public static string LogsFolder => Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Logs");
++        public static string LogsFolder => Path.Join(WobbleGame.WorkingDirectory, "Logs");
+ 
+         /// <summary>
+         ///     The minimum log level required to log messages.
+--- a/Wobble/Wobble/WobbleGame.cs
++++ b/Wobble/Wobble/WobbleGame.cs
+@@ -34,10 +34,34 @@ public abstract class WobbleGame : Game
+     {
+         static readonly Predicate<SpriteBatch> _beginCalled;
+ 
++        private static string _workingDirectory;
++
+         /// <summary>
+         ///     The current working directory of the executable.
+         /// </summary>
+-        public static string WorkingDirectory => AppDomain.CurrentDomain.BaseDirectory;
++        public static string WorkingDirectory
++        {
++            get
++            {
++                if (!string.IsNullOrEmpty(_workingDirectory))
++                {
++                    return _workingDirectory;
++                }
++                _workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
++                try
++                {
++                    File.WriteAllText(Path.Join(_workingDirectory, ".WritableTest"), "test");
++                    File.Delete(Path.Join(_workingDirectory, ".WritableTest"));
++                }
++                catch (Exception e)
++                when (e is UnauthorizedAccessException || e is IOException)
++                {
++                    _workingDirectory = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Quaver");
++                    Directory.CreateDirectory(_workingDirectory);
++                }
++                return _workingDirectory;
++            }
++        }
+ 
+         /// <summary>
+         ///     Device period to pass to AudioManager.Initialize().
