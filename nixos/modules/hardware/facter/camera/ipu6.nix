@@ -101,15 +101,4 @@ in
       else
         throw "Unexpected CPU generation for ipu6 detected.";
   };
-
-  config.warnings =
-    let
-      isKernel6_16OrLater = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.16";
-      inherit (detected.camera) ipu6;
-    in
-    lib.optional (isKernel6_16OrLater && ipu6.enable) ''
-      A regression bug can occur when combining ipu6 with kernel version 6.16 or later.
-      This will most likely prevent your system from properly suspending or shutting down.
-      For more information see: https://github.com/intel/ipu6-drivers/issues/381
-    '';
 }
