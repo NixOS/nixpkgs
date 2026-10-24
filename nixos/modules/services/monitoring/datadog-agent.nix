@@ -32,32 +32,39 @@ let
   }
   // cfg.extraConfig;
 
-  # Generate Datadog configuration files for each configured checks.
-  # This works because check configurations have predictable paths,
-  # and because JSON is a valid subset of YAML.
-  makeCheckConfigs =
-    entries:
-    lib.mapAttrs' (name: conf: {
-      name = "datadog-agent/conf.d/${name}.d/conf.yaml";
-      value.source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
-    }) entries;
-
   defaultChecks = {
     disk = cfg.diskCheck;
     network = cfg.networkCheck;
   };
 
-  # Assemble all check configurations and the top-level agent
-  # configuration.
-  etcfiles =
-    with pkgs;
-    with builtins;
-    {
-      "datadog-agent/datadog.yaml" = {
-        source = writeText "datadog.yaml" (toJSON ddConf);
-      };
-    }
-    // makeCheckConfigs (cfg.checks // defaultChecks);
+  # Assemble the configuration directory from the agent package defaults,
+  # including integration data directories, overlaid with the user's check
+  # configurations converted to JSON (as YAML subset).
+  confDir =
+    let
+      checks = cfg.checks // defaultChecks;
+    in
+    pkgs.runCommand "datadog-agent-conf.d" { } (
+      ''
+        cp -r ${datadogPkg}/share/datadog-agent/conf.d $out
+        chmod -R u+w $out
+      ''
+      + lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (name: conf: ''
+          mkdir -p $out/${name}.d
+          cp ${pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf)} $out/${name}.d/conf.yaml
+        '') checks
+      )
+    );
+
+  etcfiles = {
+    "datadog-agent/datadog.yaml" = {
+      source = pkgs.writeText "datadog.yaml" (builtins.toJSON ddConf);
+    };
+    "datadog-agent/conf.d" = {
+      source = confDir;
+    };
+  };
 
   # Apply the configured extraIntegrations to the provided agent
   # package. See the documentation of `dd-agent/integrations-core.nix`
