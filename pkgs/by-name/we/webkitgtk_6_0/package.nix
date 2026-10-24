@@ -83,7 +83,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.54.1";
+  version = "2.54.2";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -98,7 +98,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6gu7AtvbxZaHSk5601tmZFs+CiMr0OQIHeXtkusKOX0=";
+    hash = "sha256-p2NFs5G+9iEftats+rLoayhdGM2hfLua3llfElK4YGU=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
