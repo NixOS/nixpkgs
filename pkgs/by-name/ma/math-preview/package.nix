@@ -8,7 +8,7 @@
 
 buildNpmPackage {
   pname = "math-preview";
-  version = "5.1.2-unstable-2024-08-01";
+  version = "5.1.1";
   inherit nodejs;
 
   src = fetchFromGitLab {
