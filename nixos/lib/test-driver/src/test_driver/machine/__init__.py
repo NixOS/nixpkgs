@@ -1737,7 +1737,7 @@ class NspawnMachine(BaseMachine):
         _warn_if_numeric_duration(timeout, "wait_for_x")
 
         def check_x(_last_try: bool) -> bool:
-            status, _ = self.execute("xwininfo -root >/dev/null 2>&1")
+            status, _ = self.execute("xwininfo -root >/dev/null")
             return status == 0
 
         with self.nested("waiting for the X11 server"):
