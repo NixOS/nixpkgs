@@ -150,6 +150,9 @@
   # The root file system type.
   fsType ? "ext4",
 
+  # i.e. [ "-i 256" ] for ext4
+  extraFsOptions ? [ ],
+
   # Filesystem label
   label ? if onlyNixStore then "nix-store" else "nixos",
 
@@ -616,11 +619,11 @@ let
           # Get start & length of the root partition in sectors to $START and $SECTORS.
           eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+          mkfs.${fsType} -b ${blockSize} -F -L ${label} ${lib.escapeShellArgs extraFsOptions} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
         ''
       else
         ''
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
+          mkfs.${fsType} -b ${blockSize} -F -L ${label} ${lib.escapeShellArgs extraFsOptions} $diskImage
         ''
     }
 
