@@ -5,6 +5,7 @@
   fetchFromGitLab,
   fetchpatch,
   marlin-calc,
+  nix-update-script,
 }:
 
 self: super:
@@ -19,6 +20,9 @@ let
         propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
         # none of the following have tests
         doCheck = false;
+        passthru = (args.passthru or { }) // {
+          updateScript = nix-update-script { };
+        };
       }
     );
 in
@@ -68,14 +72,14 @@ in
 
   bedlevelvisualizer = buildPlugin rec {
     pname = "bedlevelvisualizer";
-    version = "1.1.1";
+    version = "1.1.2";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-BedLevelVisualizer";
       rev = version;
-      sha256 = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
+      sha256 = "sha256-TaKmb0reZObPxmZ7KuT1S+V8168pzDGFmUiU+RSyuss=";
     };
 
     meta = {
@@ -88,14 +92,14 @@ in
 
   costestimation = buildPlugin rec {
     pname = "costestimation";
-    version = "3.4.0";
+    version = "3.5.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = "OctoPrint-CostEstimation";
       rev = version;
-      sha256 = "sha256-04OPa/RpM8WehUmOp195ocsAjAvKdVY7iD5ybzQO7Dg=";
+      sha256 = "sha256-zlUXg+UHx3DOo8RJXlt1tMoXJZPwFydkKMds/z1ZnQY=";
     };
 
     meta = {
@@ -148,14 +152,14 @@ in
 
   displaylayerprogress = buildPlugin rec {
     pname = "displaylayerprogress";
-    version = "1.26.0";
+    version = "1.28.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = "OctoPrint-DisplayLayerProgress";
       rev = version;
-      sha256 = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
+      sha256 = "sha256-FoQGv7a3ktodyQKOwR69/9Up+wPoW5NDq+k5LfP9WYs=";
     };
 
     meta = {
@@ -188,14 +192,14 @@ in
 
   firmwareupdater = buildPlugin rec {
     pname = "firmwareupdater";
-    version = "1.14.0";
+    version = "1.15.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-FirmwareUpdater";
       rev = version;
-      sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
+      sha256 = "sha256-Q/I2QkLM21DgwT/mM7ppAJRoIBOx1QMvI/FPUnRTrfs=";
     };
 
     propagatedBuildInputs = with super; [ pyserial ];
@@ -230,14 +234,14 @@ in
 
   gcodeeditor = buildPlugin rec {
     pname = "gcodeeditor";
-    version = "0.2.12";
+    version = "0.2.14";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "ieatacid";
       repo = "OctoPrint-GcodeEditor";
       rev = version;
-      sha256 = "sha256-1Sk2ri3DKW8q8VJ/scFjpRsz65Pwt8OEURP1k70aydE=";
+      sha256 = "sha256-RpRyTR/iHUsVtzEVVoJ0iCOBWwOJa/oerPOGW/9WdrA=";
     };
 
     meta = {
@@ -250,14 +254,14 @@ in
 
   marlingcodedocumentation = buildPlugin rec {
     pname = "marlingcodedocumentation";
-    version = "0.13.0";
+    version = "0.20.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "costas-basdekis";
       repo = "MarlinGcodeDocumentation";
       rev = "v${version}";
-      sha256 = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
+      sha256 = "sha256-UuSDrepr5ey2EFxQnOG+cqetRLrrqZEqs4kXAxMjoQc=";
     };
 
     meta = {
@@ -270,14 +274,14 @@ in
 
   mqtt = buildPlugin rec {
     pname = "mqtt";
-    version = "0.8.16";
+    version = "0.8.17";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-MQTT";
       rev = version;
-      sha256 = "sha256-K8DydzmsDzWn5GXpxPGvAHDFpgk/mbyVBflCgOoB94U=";
+      sha256 = "sha256-+6pOdBew38NbYOV1/syJdw+4tP1I+sJRuiDXqelef34=";
     };
 
     propagatedBuildInputs = with super; [ paho-mqtt ];
@@ -334,15 +338,19 @@ in
 
   obico = buildPlugin rec {
     pname = "obico";
-    version = "2.5.0";
-    format = "setuptools";
+    version = "2.7.0";
+    # Upstream switched from setup.py to a pyproject.toml-only build
+    # (setuptools backend) somewhere between 2.5.0 and this release.
+    format = "pyproject";
 
     src = fetchFromGitHub {
       owner = "TheSpaghettiDetective";
       repo = "OctoPrint-Obico";
       rev = version;
-      sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
+      sha256 = "sha256-dkBnrnyw153+z3cj0/h5E/onZropi1K1vtI5lgp88rQ=";
     };
+
+    build-system = with super; [ setuptools ];
 
     propagatedBuildInputs = with super; [
       backoff
@@ -361,14 +369,14 @@ in
 
   octopod = buildPlugin rec {
     pname = "octopod";
-    version = "0.3.18";
+    version = "0.3.20";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "gdombiak";
       repo = "OctoPrint-OctoPod";
       rev = version;
-      sha256 = "sha256-HLR5402hFlUX0MLg3HXE7bIHKNnOI0buGAViqDt8mLc=";
+      sha256 = "sha256-Nf795I/VuonbyGuNeCYABTQjcIRlZIDxrwyKqWyytu8=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
@@ -383,14 +391,14 @@ in
 
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
-    version = "2.4.0";
+    version = "2.5.1";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
       rev = version;
-      sha256 = "sha256-+EmM61s8HHcTIf0xoHkxEP7eqaNYB6ls61YwSXiVzyA=";
+      sha256 = "sha256-DkFcfud291RmIBzr9dG61dE1BaXhZCp01FaV9NCeo1M=";
     };
 
     propagatedBuildInputs = with super; [
@@ -414,14 +422,14 @@ in
 
   prusaslicerthumbnails = buildPlugin rec {
     pname = "prusaslicerthumbnails";
-    version = "1.0.8";
+    version = "1.2.3";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-PrusaSlicerThumbnails";
       rev = version;
-      sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
+      sha256 = "sha256-lcBdUPWffQqQi+JwAywXUilw9m/kGlx3nW5tDTmG3pk=";
     };
 
     propagatedBuildInputs = with super; [ psutil ];
@@ -465,14 +473,14 @@ in
 
   resource-monitor = buildPlugin rec {
     pname = "resource-monitor";
-    version = "0.3.16";
+    version = "0.5.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "Renaud11232";
       repo = "OctoPrint-Resource-Monitor";
       rev = version;
-      sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
+      sha256 = "sha256-Q7IvHXp+iWQZORVHZoiJPewC+CY506Oe8WeYJGXnp50=";
     };
 
     propagatedBuildInputs = with super; [ psutil ];
@@ -487,14 +495,14 @@ in
 
   simpleemergencystop = buildPlugin rec {
     pname = "simpleemergencystop";
-    version = "1.0.5";
+    version = "1.0.7";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "Sebclem";
       repo = "OctoPrint-SimpleEmergencyStop";
       rev = version;
-      sha256 = "sha256-MbP3cKa9FPElQ/M8ykYh9kVXl8hNvmGiCHDvjgWvm9k=";
+      sha256 = "sha256-GUi5SBTM32EI0VmkPYCMrDg4cE+2WUqoV3mTdQ67XaA=";
     };
 
     meta = {
@@ -507,14 +515,14 @@ in
 
   stlviewer = buildPlugin rec {
     pname = "stlviewer";
-    version = "0.4.2";
+    version = "0.4.3";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-STLViewer";
       tag = version;
-      sha256 = "sha256-S7zjEbyo59OJpa7INCv1o4ybQ+Sy6a3EJ5AJ6wiBe1Y=";
+      sha256 = "sha256-mCrh8JrCSdrvlYVpCayMXmvdM3yWISB2aMD1mlUkdi8=";
     };
 
     meta = {
@@ -527,14 +535,14 @@ in
 
   telegram = buildPlugin rec {
     pname = "telegram";
-    version = "1.6.5";
+    version = "1.12.1";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "fabianonline";
       repo = "OctoPrint-Telegram";
       rev = version;
-      sha256 = "sha256-SckJCbPNCflgGYLHFiXy0juCtpvo8YS1BQsFpc1f5rg=";
+      sha256 = "sha256-ITpqj0aiJbpPbXRWnNe4XrO7tnslOynvGo8NkVUTsoE=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
@@ -629,14 +637,14 @@ in
 
   octoklipper = buildPlugin rec {
     pname = "octoklipper";
-    version = "0.3.8.3";
+    version = "0.3.9.5";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "AliceGrey";
       repo = "OctoprintKlipperPlugin";
       rev = version;
-      sha256 = "sha256-6r5jJDSR0DxlDQ/XWmQgYUgeL1otNNBnwurX7bbcThg=";
+      sha256 = "sha256-Ctxg6jyrXIR9sQQDu/Tjo+6+pOuSKgdDTYbnOKlU5ak=";
     };
 
     meta = {
@@ -649,14 +657,14 @@ in
 
   dashboard = buildPlugin rec {
     pname = "dashboard";
-    version = "1.18.3";
+    version = "1.19.13";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "StefanCohen";
       repo = "OctoPrint-Dashboard";
       rev = version;
-      sha256 = "sha256-hLHT3Uze/6PlOCEICVZ2ieFTyXgcqCvgHOlIIEquujg=";
+      sha256 = "sha256-3PLUW6U8PPADHrQ2DtT6vfQb42hDZDfxT8UWfas6oDU=";
     };
 
     meta = {
