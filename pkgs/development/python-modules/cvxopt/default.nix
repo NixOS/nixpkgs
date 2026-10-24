@@ -36,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     blas
     lapack
+    suitesparse
   ];
 
   build-system = [
