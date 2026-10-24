@@ -2586,6 +2586,7 @@ mapAliases {
   syncthingtray-qt6 = throw "'syncthingtray-qt6' has been renamed to/replaced by 'syncthingtray'"; # Converted to throw 2025-10-27
   syndicate_utils = throw "'syndicate_utils' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   synth = throw "'synth' has been removed because it is unmaintained"; # Added 2025-11-15
+  syrics = throw "'syrics' has been removed because it has been archived upstream 2026-02-22. Upstream suggests librelyrics as a replacement, which is not yet packaged in nixpkgs."; # Added 2026-10-23
   system = warnAlias "'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'" stdenv.hostPlatform.system; # Converted to warning 2025-10-28
   t1lib = throw "'t1lib' has been removed as it was broken and unmaintained upstream."; # Added 2025-06-11
   tabnine = throw "'tabnine' has been removed as its source is unavailable"; # Added 2026-10-03
