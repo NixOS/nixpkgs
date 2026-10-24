@@ -630,9 +630,11 @@ with self;
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-m4-0.21.tar.gz";
       hash = "sha256-qypAXIA5RP0BxR+h6fK+/VhxqwPxdE3sKlZonyFI02E=";
     };
+    nativeBuildInputs = [
+      pkgs.gnum4
+    ];
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [
-      pkgs.gnum4
       Alienpatch
       IOSocketSSL
       MojoDOM58
@@ -641,6 +643,8 @@ with self;
       Test2Suite
       URI
     ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Find or build GNU m4";
       homepage = "https://metacpan.org/pod/Alien::m4";
