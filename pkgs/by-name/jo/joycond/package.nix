@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "joycond";
-  version = "0-unstable-2026-03-02";
+  version = "0.1.0-unstable-2026-02-01";
 
   src = fetchFromGitHub {
     owner = "DanielOgorchock";
