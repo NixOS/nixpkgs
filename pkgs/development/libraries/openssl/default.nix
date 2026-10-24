@@ -169,6 +169,20 @@ let
           else if stdenv.hostPlatform.isLinux then
             if stdenv.hostPlatform.isx86_64 then
               "./Configure linux-x86_64"
+            else if stdenv.hostPlatform.isx86_32 then
+              "./Configure linux-x86"
+            else if stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLittleEndian then
+              "./Configure linux-aarch64"
+            else if stdenv.hostPlatform.isAarch32 then
+              "./Configure linux-armv4"
+            else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+              "./Configure linux-ppc64le"
+            else if stdenv.hostPlatform.isS390x then
+              "./Configure linux64-s390x"
+            else if stdenv.hostPlatform.isLoongArch64 then
+              "./Configure linux64-loongarch64"
+            else if stdenv.hostPlatform.isAlpha then
+              "./Configure linux-alpha-gcc"
             else if stdenv.hostPlatform.isMicroBlaze then
               "./Configure linux-latomic"
             else if stdenv.hostPlatform.isMips32 then
