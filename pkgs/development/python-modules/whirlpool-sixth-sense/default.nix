@@ -50,6 +50,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "whirlpool" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python library for Whirlpool 6th Sense appliances";
     homepage = "https://github.com/abmantis/whirlpool-sixth-sense/";
