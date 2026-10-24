@@ -226,13 +226,13 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           bubblewrap
           coreutils
-          gitMinimal
           lsb-release
           nodejs-slim
           nodejs-slim.npm
           xdg-utils
         ]
       } \
+      --suffix PATH : ${lib.makeBinPath [ gitMinimal ]} \
       --set-default CODEX_BROWSER_USE_NODE_PATH ${lib.getExe nodejs-slim} \
       --set-default NODE_REPL_NODE_PATH ${lib.getExe nodejs-slim} \
       ${lib.escapeShellArgs (
