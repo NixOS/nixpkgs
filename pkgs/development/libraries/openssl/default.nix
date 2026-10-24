@@ -387,7 +387,7 @@ let
         changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
         donationPage = "https://openssl.foundation/donate/ways-to-give";
         description = "Cryptographic library that implements the SSL and TLS protocols";
-        license = lib.licenses.openssl;
+        license = lib.licenses.asl20;
         mainProgram = "openssl";
         maintainers = with lib.maintainers; [ thillux ];
         teams = [ lib.teams.security-review ];
@@ -434,10 +434,6 @@ in
     ];
 
     withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 
   openssl_3_6 = common {
@@ -463,15 +459,11 @@ in
     ];
 
     withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 
-  openssl_4_0 = common {
-    version = "4.0.3";
-    hash = "sha256-MltcgGFnwTtAsf/q3+AkgZfADszEzxI+weKNLS/SFtk=";
+  openssl_4_1 = common {
+    version = "4.1.0";
+    hash = "sha256-UMF7r1TLAI9s5C1Q3rSygFChqtcRY2yr1LJBx+kMwv0=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
@@ -492,9 +484,5 @@ in
     ];
 
     withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 }

@@ -6147,7 +6147,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_3_5
     openssl_3_6
-    openssl_4_0
+    openssl_4_1
     ;
 
   inherit
@@ -7075,7 +7075,7 @@ with pkgs;
   nginx = nginxStable;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
-    openssl = openssl_4_0;
+    openssl = openssl_4_1;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -7086,7 +7086,7 @@ with pkgs;
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
-    openssl = openssl_4_0;
+    openssl = openssl_4_1;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withKTLS = true;
     withPerl = false;
