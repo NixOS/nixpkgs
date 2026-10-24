@@ -17,6 +17,9 @@
   numpy,
   pandas,
   pillow,
+
+  # tests
+  pytest,
 }:
 let
   external = {
@@ -89,7 +92,7 @@ buildPythonPackage (finalAttrs: {
 
   unpackPhase = ''
     cp -r $src/* .
-    find . -type d -exec chmod +w {} +
+    chmod -R u+w .
 
     mkdir External/AvalonTools/avalon
     # In buildPhase, CMake patches the file in this directory
@@ -148,6 +151,8 @@ buildPythonPackage (finalAttrs: {
   hardeningDisable = [ "format" ]; # required by yaehmop
 
   cmakeFlags = [
+    # Register the tests with ctest (the cmake hook disables it, as `doCheck` is false for python packages)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doInstallCheck)
     (lib.cmakeBool "Boost_NO_BOOST_CMAKE" true)
     (lib.cmakeBool "Boost_NO_SYSTEM_PATHS" true)
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) # fails to find libs in pythonImportsCheckPhase otherwise
@@ -184,11 +189,27 @@ buildPythonPackage (finalAttrs: {
     echo "nix" > "$distInfo/INSTALLER"
   '';
 
+  nativeCheckInputs = [ pytest ];
+
+  disabledCtests = [
+    # Drawing coordinates depend on the text rendering of the legend
+    "moldraw2DTestCatch"
+    # Runs pytest on the source tree, which shadows the installed (compiled) package
+    "pythonSourceTests"
+  ];
+
+  # Run the C++ and Python test suites through ctest, against the installed package
   checkPhase = ''
+    runHook preCheck
+
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-    (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
+    export LD_LIBRARY_PATH="$out/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+    ctest --output-on-failure -j $NIX_BUILD_CORES -E "^(${lib.concatStringsSep "|" finalAttrs.disabledCtests})$"
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [
