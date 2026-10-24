@@ -1,0 +1,58 @@
+diff -ruN a/src-tauri/pake.json b/src-tauri/pake.json
+--- a/src-tauri/pake.json	2026-10-01 15:27:19.935193448 +0530
++++ b/src-tauri/pake.json	2026-10-01 15:27:19.952193481 +0530
+@@ -27,7 +27,7 @@
+   ],
+   "user_agent": {
+     "macos": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15",
+-    "linux": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
++    "linux": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15",
+     "windows": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+   },
+   "system_tray": {
+diff -ruN a/src-tauri/src/main.rs b/src-tauri/src/main.rs
+--- a/src-tauri/src/main.rs	2026-10-01 15:27:19.944193466 +0530
++++ b/src-tauri/src/main.rs	2026-10-01 15:27:19.956193488 +0530
+@@ -4,5 +4,42 @@
+ )]
+ 
+ fn main() {
++    #[cfg(target_os = "linux")]
++    {
++        let gio_modules = "@GIO_EXTRA_MODULES@";
++        match std::env::var("GIO_EXTRA_MODULES") {
++            Ok(val) => {
++                if !val.split(':').any(|p| p == gio_modules) {
++                    std::env::set_var("GIO_EXTRA_MODULES", format!("{}:{}", gio_modules, val));
++                }
++            }
++            Err(_) => {
++                std::env::set_var("GIO_EXTRA_MODULES", gio_modules);
++            }
++        }
++        let gst_plugins = "@GST_PLUGIN_SYSTEM_PATH_1_0@";
++        match std::env::var("GST_PLUGIN_SYSTEM_PATH_1_0") {
++            Ok(val) => {
++                if !val.split(':').any(|p| p == gst_plugins) {
++                    std::env::set_var("GST_PLUGIN_SYSTEM_PATH_1_0", format!("{}:{}", gst_plugins, val));
++                }
++            }
++            Err(_) => {
++                std::env::set_var("GST_PLUGIN_SYSTEM_PATH_1_0", gst_plugins);
++            }
++        }
++        if std::env::var_os("WEBKIT_GST_ALLOWED_URI_PROTOCOLS").is_none() {
++            std::env::set_var("WEBKIT_GST_ALLOWED_URI_PROTOCOLS", "asset");
++        }
++        if std::env::var_os("__NV_DISABLE_EXPLICIT_SYNC").is_none() {
++            std::env::set_var("__NV_DISABLE_EXPLICIT_SYNC", "1");
++        }
++        if std::env::var_os("GST_PLUGIN_FEATURE_RANK").is_none() {
++            std::env::set_var("GST_PLUGIN_FEATURE_RANK", "vaav1dec:NONE,vavp9dec:NONE,vah264dec:NONE,vah265dec:NONE,vavp8dec:NONE");
++        }
++        if std::env::var("GDK_BACKEND").as_deref() == Ok("wayland,x11") && std::env::var_os("DISPLAY").is_some() {
++            std::env::set_var("GDK_BACKEND", "x11");
++        }
++    }
+     app_lib::run()
+ }
