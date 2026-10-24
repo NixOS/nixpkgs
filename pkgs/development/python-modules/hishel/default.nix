@@ -21,7 +21,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hishel";
   version = "1.4.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-55hoTxa8rQB4ZPQQ7dwTk0t3juUU2QJ0bjieXj9+MM4=";
   };
 
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     fakeredis
     time-machine
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # network access
@@ -85,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     description = "HTTP Cache implementation for HTTPX and HTTP Core";
     homepage = "https://github.com/karpetrosyan/hishel";
-    changelog = "https://github.com/karpetrosyan/hishel/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/karpetrosyan/hishel/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
