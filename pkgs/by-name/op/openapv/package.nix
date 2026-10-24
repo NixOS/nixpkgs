@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   passthru = {
