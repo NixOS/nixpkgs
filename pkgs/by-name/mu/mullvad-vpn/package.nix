@@ -69,7 +69,7 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/mullvad-vpn/
-    cp -r ../dist/*-unpacked/{locales,resources{,.pak}} $out/share/mullvad-vpn/
+    cp -r ../dist/*-unpacked/resources $out/share/mullvad-vpn/
     cp ../graphics/icon{-square,}.svg $out/share/mullvad-vpn/resources/
 
     install -D ../graphics/icon.svg $out/share/icons/hicolor/scalable/apps/mullvad-vpn.svg

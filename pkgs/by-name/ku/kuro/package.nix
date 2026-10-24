@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
     # resources
     mkdir -p "$out/share/lib/kuro"
-    cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/kuro"
+    cp -r ./dist/*-unpacked/resources "$out/share/lib/kuro"
 
     # icons
     magick static/Icon.png -resize 512x512 kuro.png # original icon is 1024x1024, which isn't supported by hicolor

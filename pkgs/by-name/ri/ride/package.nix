@@ -101,7 +101,7 @@ buildNpmPackage rec {
       install -Dm644 $src/D.svg $out/share/icons/hicolor/scalable/apps/ride.svg
 
       mkdir -p $out/share/ride
-      cp -r locales resources{,.pak} $out/share/ride
+      cp -r resources $out/share/ride
       makeShellWrapper ${lib.getExe electron} $out/bin/ride \
           --add-flags $out/share/ride/resources/app.asar \
           --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \

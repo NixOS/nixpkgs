@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       $out/share/applications/marktext.desktop
 
     # Copy the built app
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/lib/marktext
+    cp -r dist/*-unpacked/resources $out/lib/marktext
 
     pushd packages/desktop/build/icons/
     find -maxdepth 1 -mindepth 1 -type d -exec install -DT {}/marktext.png $out/share/icons/hicolor/{}/apps/marktext.png \;

@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p "$out/share/mqtt-explorer"/{app,icons/hicolor}
 
-      cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/share/mqtt-explorer/app"
+      cp -r build/*-unpacked/resources "$out/share/mqtt-explorer/app"
 
       for file in res/appx/Square44x44Logo.targetsize-*_altform-unplated.png; do
 

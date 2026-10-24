@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/share/whatsapp-electron"
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/whatsapp-electron"
+    cp -r dist/*-unpacked/resources "$out/share/whatsapp-electron"
 
     install -D assets/whatsapp-icon-512x512.png $out/share/icons/hicolor/512x512/apps/whatsapp.png
     install -D assets/whatsapp-icon-512x512.svg $out/share/icons/hicolor/scalable/apps/whatsapp.svg

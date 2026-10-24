@@ -72,7 +72,7 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/recordly
-    cp -r release/linux*-unpacked/{locales,resources{,.pak}} $out/share/recordly
+    cp -r release/linux*-unpacked/resources $out/share/recordly
 
     makeWrapper ${lib.getExe electron} $out/bin/recordly \
       --add-flags $out/share/recordly/resources/app.asar \

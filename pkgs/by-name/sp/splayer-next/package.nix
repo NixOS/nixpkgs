@@ -148,10 +148,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     # remove references to nodejs
-    find dist/*-unpacked/{locales,resources{,.pak}} -type f -exec remove-references-to -t ${nodejs} '{}' \;
+    find dist/*-unpacked/resources -type f -exec remove-references-to -t ${nodejs} '{}' \;
 
     mkdir -p "${shareDir}"
-    cp -Pr --no-preserve=ownership dist/*-unpacked/{locales,resources{,.pak}} "${shareDir}"
+    cp -Pr --no-preserve=ownership dist/*-unpacked/resources "${shareDir}"
 
     _icon_sizes=(16x16 32x32 96x96 192x192 256x256 512x512)
     for _icons in "''${_icon_sizes[@]}";do

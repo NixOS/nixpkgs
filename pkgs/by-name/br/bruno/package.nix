@@ -167,7 +167,7 @@ buildNpmPackage rec {
         ''
           mkdir -p $out/opt/bruno $out/bin
 
-          cp -r packages/bruno-electron/dist/linux*-unpacked/{locales,resources{,.pak}} $out/opt/bruno
+          cp -r packages/bruno-electron/dist/*-unpacked/resources $out/opt/bruno
 
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
