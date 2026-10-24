@@ -21,13 +21,13 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "4.0.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-M4oNx3nSe8hSAtZMVyXIW0qQIQkaOeQgpPsfjmmJ30E=";
+    hash = "sha256-VP7MrfmsH1A/p4Cik0T93+tENCAVYYCRPuPNxbNU/YA=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
@@ -36,7 +36,8 @@ buildNpmPackage rec {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-Jrlpztg1JxuPaLD4O9elOaU1eFH3dmr6oWwi4Ch9Zv8=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-knLLTC6xAw1ycqYLYfNtnZsfTjRHuV6vAXc8JQ6u8HM=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -81,11 +82,14 @@ buildNpmPackage rec {
     # disable remote image download to prevent network calls to comply with build sandboxing
     substituteInPlace packages/bruno-app/plugins/remote-images/loader.cjs \
       --replace-fail 'const urls = findRemoteImageUrls(source, domains);' 'const urls = [];'
+
+    # prevent 'prepare' from invoking tsx before patchShebangs fixes the interpreter
+    ${jq}/bin/jq 'del(.scripts.prepare)' packages/bruno-sqlite/package.json | ${moreutils}/bin/sponge packages/bruno-sqlite/package.json
   '';
 
   postConfigure = ''
-    # sh: line 1: /build/source/packages/bruno-common/node_modules/.bin/rollup: cannot execute: required file not found
-    patchShebangs packages/*/node_modules
+    # patch shebangs for node_modules binaries (rollup, tsx) to prevent bad interpreter errors
+    patchShebangs node_modules packages/*/node_modules
   '';
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -112,6 +116,7 @@ buildNpmPackage rec {
     npm run build --workspace=packages/bruno-query
     npm run build --workspace=packages/bruno-filestore
     npm run build --workspace=packages/bruno-requests
+    npm run build --workspace=packages/bruno-sqlite
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
 
@@ -203,6 +208,7 @@ buildNpmPackage rec {
       mattpolzin
       water-sucks
       starsep
+      samirbgno
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
