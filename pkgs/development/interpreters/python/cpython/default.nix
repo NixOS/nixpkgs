@@ -16,20 +16,26 @@
   withMinimalDeps ? false,
 
   # runtime dependencies
+  withBzip2 ? !withMinimalDeps,
   bzip2,
   withExpat ? !withMinimalDeps,
   expat,
+  withLibffi ? !withMinimalDeps,
   libffi,
+  withLibuuid ? !withMinimalDeps,
   libuuid,
   libxcrypt,
   withMpdecimal ? !withMinimalDeps,
   mpdecimal,
+  withNcurses ? !withMinimalDeps,
   ncurses,
   withOpenssl ? !withMinimalDeps,
   openssl,
   withSqlite ? !withMinimalDeps,
   sqlite,
+  withLzma ? !withMinimalDeps,
   xz,
+  withZlib ? !withMinimalDeps,
   zlib,
   withZstd ? !withMinimalDeps,
   zstd,
@@ -189,6 +195,7 @@ let
           "null"
         ])
         || n == "packageOverrides"
+        || n == "allowedReferenceNames"
       ) inputs;
       override =
         attr:
@@ -268,13 +275,23 @@ let
       ];
 
   buildInputs = lib.filter (p: p != null) (
-    optionals (!withMinimalDeps) [
-      bzip2
-      libffi
-      libuuid
-      ncurses
-      xz
+    optionals withZlib [
       zlib
+    ]
+    ++ optionals withBzip2 [
+      bzip2
+    ]
+    ++ optionals withLzma [
+      xz
+    ]
+    ++ optionals withLibffi [
+      libffi
+    ]
+    ++ optionals withLibuuid [
+      libuuid
+    ]
+    ++ optionals withNcurses [
+      ncurses
     ]
     ++ optionals withLibxcrypt [
       libxcrypt
