@@ -6,6 +6,7 @@
   pathspec,
   pytestCheckHook,
   pyyaml,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
+    versionCheckHook
   ];
 
   preCheck = ''
