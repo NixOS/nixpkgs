@@ -48,7 +48,7 @@ buildGoModule rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
   preBuild = lib.optionalString rebuildIpxe ''
     # don't run in our go-modules phase but only in the normal build phase
-    if echo $NIX_CFLAGS_COMPILE | grep -q xz; then
+    if echo "$name" | grep -qv go-modules; then
       rm -rf ./third_party/ipxe
       cp -r ${ipxe.src} ./third_party/ipxe
       chmod -R u+w ./third_party/ipxe
