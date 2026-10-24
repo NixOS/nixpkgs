@@ -12153,10 +12153,10 @@ with self;
 
   EmailSender = buildPerlPackage {
     pname = "Email-Sender";
-    version = "2.600";
+    version = "2.603";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-2.600.tar.gz";
-      hash = "sha256-7MZ10DDXnZpPsGRWfqiFxmsXw4Yjea0w+CBaKBzY7ik=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-2.603.tar.gz";
+      hash = "sha256-nW8qShs3TAKFNZmWZz+Rn5rslRnYjFUQBnn4i56+AHU=";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [
