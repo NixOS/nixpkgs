@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cf";
-  version = "1.0.0-beta.18";
+  version = "1.0.0-beta.21";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cloudflare";
     repo = "cf";
     tag = "cf@${finalAttrs.version}";
-    hash = "sha256-3AjBiAO5mlEMMyzTrq5n3gnhyI7WL8vSTIHIo0bt9ig=";
+    hash = "sha256-KlNsEzd4dxNBKUtcD8XiFLbAbOluq6PB5vB+pRcJ+mo=";
   };
 
   pnpmWorkspaces = [ "cf" ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 4;
     # Avoid pnpm's macOS clone probe leaving v11/links in the dependency archive.
     pnpmInstallFlags = [ "--package-import-method=copy" ];
-    hash = "sha256-N7S2/X/5k1ae8c35K6If61V0cyFwj4TDmUkp+Ctdpes=";
+    hash = "sha256-+AIVKXMs2J62/VrwdMqqIGBjjvlXq2xAY02POQRSne0=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+    patchShebangs packages/cli/node_modules/.bin
     # Generated commands are committed; the build task regenerates them online.
     pnpm --filter cf exec vp pack
     runHook postBuild
