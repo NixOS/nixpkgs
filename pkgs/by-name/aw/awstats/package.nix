@@ -32,6 +32,8 @@ perlPackages.buildPerlPackage rec {
     TryTiny
   ];
 
+  strictDeps = true;
+
   preConfigure = ''
     touch Makefile.PL
     patchShebangs .
@@ -64,6 +66,8 @@ perlPackages.buildPerlPackage rec {
     mv README.md docs/
     mv docs "$doc/share/doc/awstats"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://www.awstats.org/docs/awstats_changelog.txt";
