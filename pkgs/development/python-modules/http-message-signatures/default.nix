@@ -5,6 +5,8 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
+  http-sf,
+  pytest-mypy,
   pytestCheckHook,
   requests,
   typing-extensions,
@@ -12,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "http-message-signatures";
-  version = "2.0.1";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyauth";
     repo = "http-message-signatures";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GFOdefqcAia4ZHqt1XMS2dw2bQ3AzbY0AQm7b8niYRI=";
+    hash = "sha256-oGUVWI/mk8NM56GyedF04Ifz3x3XeOjO9AZr9oUjqZs=";
   };
 
   build-system = [
@@ -27,9 +29,13 @@ buildPythonPackage (finalAttrs: {
     hatch-vcs
   ];
 
-  dependencies = [ cryptography ];
+  dependencies = [
+    cryptography
+    http-sf
+  ];
 
   nativeCheckInputs = [
+    pytest-mypy
     pytestCheckHook
     requests
     typing-extensions
