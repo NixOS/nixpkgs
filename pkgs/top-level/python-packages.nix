@@ -12370,6 +12370,8 @@ self: super: with self; {
 
   numba-cuda = callPackage ../development/python-modules/numba-cuda { };
 
+  numba-cuda-mlir = callPackage ../development/python-modules/numba-cuda-mlir { };
+
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
   numbaWithCuda = self.numba.override { cudaSupport = true; };
