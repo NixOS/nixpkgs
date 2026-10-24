@@ -2804,6 +2804,7 @@ mapAliases {
   wapp = throw "'wapp' has been renamed to/replaced by 'tclPackages.wapp'"; # Converted to throw 2025-10-27
   warmux = throw "'warmux' has been removed as it is unmaintained and broken"; # Added 2025-11-03
   warp-plus = throw "'warp-plus' has been removed as it is unmaintained and broken"; # Added 2026-07-05
+  warpd = throw "'warpd' has been removed as it is unmaintained upstream"; # Added 2026-10-13
   warsow = throw "'warsow' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
   warsow-engine = throw "'warsow-engine' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
   wasabibackend = throw "'wasabibackend' has been removed as it vendored ancient openssl and was unmaintained in nixpkgs. Consider using the upstream flake instead."; # Added 2026-10-16
