@@ -1,9 +1,9 @@
-diff --git a/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle b/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle
-index bc194f219..94b00fabd 100644
---- a/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle
-+++ b/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle
-@@ -82,7 +82,7 @@ dependencies {
- 	helpPath fileTree(dir: ghidraDir + '/Features/Base', include: "**/Base.jar")
+diff --git a/Ghidra/RuntimeScripts/support/buildExtension.gradle b/Ghidra/RuntimeScripts/support/buildExtension.gradle
+index a01ac955b5..ebca8510b9 100644
+--- a/Ghidra/RuntimeScripts/support/buildExtension.gradle
++++ b/Ghidra/RuntimeScripts/support/buildExtension.gradle
+@@ -71,7 +71,7 @@ dependencies {
+ 	api fileTree(dir: ghidraDir + '/Processors', include: "**/*.jar")
  }
  	
 -def ZIP_NAME_PREFIX = "${DISTRO_PREFIX}_${RELEASE_NAME}_${getCurrentDate()}"
@@ -12,7 +12,7 @@ index bc194f219..94b00fabd 100644
  	
  def pathInZip = "${project.name}"
 diff --git a/gradle/root/distribution.gradle b/gradle/root/distribution.gradle
-index f44c8267b..f6231c417 100644
+index 19fc78a075..283561d674 100644
 --- a/gradle/root/distribution.gradle
 +++ b/gradle/root/distribution.gradle
 @@ -32,7 +32,7 @@ apply from: "$rootProject.projectDir/gradle/support/sbom.gradle"
@@ -24,3 +24,4 @@ index f44c8267b..f6231c417 100644
  ext.ZIP_DIR_PREFIX = "${rootProject.DISTRO_PREFIX}"
  ext.ALL_REPOS = [rootProject.file('.').getName()]
  
+

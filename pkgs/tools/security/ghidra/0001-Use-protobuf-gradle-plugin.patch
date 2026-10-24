@@ -14,7 +14,7 @@ index 2db94ed67e..925f394cf0 100644
  
 +buildscript {
 +	dependencies {
-+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.10.0'
 +	}
 +}
 +
@@ -38,7 +38,7 @@ index 4fa3b9a539..2663aeaeb0 100644
  
 +buildscript {
 +	dependencies {
-+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.10.0'
 +	}
 +}
 +
@@ -78,13 +78,13 @@ index 159eb7dd7b..ef4add1ad8 100644
 +		}
  	}
  }
- else {	
+ else {
 diff --git a/gradle/hasProtobuf.gradle b/gradle/hasProtobuf.gradle
 deleted file mode 100644
-index a8c176bcbe..0000000000
+index 537c51fb65..0000000000
 --- a/gradle/hasProtobuf.gradle
 +++ /dev/null
-@@ -1,100 +0,0 @@
+@@ -1,103 +0,0 @@
 -/* ###
 - * IP: GHIDRA
 - *
@@ -139,6 +139,9 @@ index a8c176bcbe..0000000000
 -		else {
 -			protocArtifact "com.google.protobuf:protoc:${version}:osx-aarch_64@exe"
 -		}
+-	}
+-	if (isCurrentOpenBSD()) {
+-		protocArtifact files('/usr/local/bin/protoc')
 -	}
 -}
 -

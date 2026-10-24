@@ -2,12 +2,14 @@
   lib,
   stdenv,
   unzip,
-  jdk,
-  gradle,
+  jdk25,
+  gradle_9,
   ghidra,
 }:
 
 let
+  jdk = jdk25;
+  gradle = gradle_9;
   metaCommon =
     oldMeta:
     oldMeta

@@ -4,7 +4,7 @@
   lib,
   makeWrapper,
   autoPatchelfHook,
-  openjdk21,
+  openjdk25,
   pam,
   makeDesktopItem,
   copyDesktopItems,
@@ -12,15 +12,16 @@
 }:
 
 let
+  openjdk = openjdk25;
   pkg_path = "$out/lib/ghidra";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghidra";
-  version = "12.1.4";
-  versiondate = "20260921";
+  version = "12.2";
+  versiondate = "20261016";
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${finalAttrs.version}_build/ghidra_${finalAttrs.version}_PUBLIC_${finalAttrs.versiondate}.zip";
-    hash = "sha256-ZD4Vs1i7BMvrneAbAiOc7F9iBj64Rbom+PaVO//TzK8=";
+    hash = "sha256-ueJ5zUytJsXR6S3o/s/Qgp+MBWKFKsu3jhWQstTpqeI=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
 
     wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk ]}
   '';
 
   meta = {
