@@ -21,6 +21,7 @@ nvidia_x11: sha256:
   libglvnd,
   wrapGAppsHook3,
   addDriverRunpath,
+  versionCheckHook,
   withGtk2 ? false,
   withGtk3 ? true,
 }:
@@ -29,7 +30,7 @@ let
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-settings";
-    rev = nvidia_x11.settingsVersion;
+    tag = nvidia_x11.settingsVersion;
     inherit sha256;
   };
 
@@ -57,6 +58,19 @@ let
       "libXNVCtrl.a"
       "libXNVCtrl.so"
     ];
+
+    # The library carries no version of its own, so check version.mk in its
+    # source, catching a hash that was not bumped with the version.
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+      if ! grep -q "NVIDIA_VERSION = $version" $src/version.mk; then
+        echo "the source is not nvidia-settings $version:" >&2
+        grep -m1 NVIDIA_VERSION $src/version.mk >&2 || true
+        exit 1
+      fi
+      runHook postCheck
+    '';
 
     patches = [
       # Patch the Makefile to also produce a shared library.
@@ -125,6 +139,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
+
+  # `nvidia-settings --version` prints the built source's version, catching a stale hash.
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   preBuild = ''
     if [ -e src/libXNVCtrl/libXNVCtrl.a ]; then
