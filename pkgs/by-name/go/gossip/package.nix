@@ -91,6 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp $src/logo/gossip.png $out/logo/gossip.png
     mkdir -p $out/share/icons/hicolor/128x128/apps
     ln -s $out/logo/gossip.png $out/share/icons/hicolor/128x128/apps/gossip.png
+    install -Dm644 packaging/flatpak/com.mikedilger.gossip.metainfo.xml -t $out/share/metainfo
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

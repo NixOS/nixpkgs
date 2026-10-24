@@ -164,6 +164,8 @@ let
         for dir in "$out"/share/icons/hicolor/*/apps; do
           mv "$dir/DevPod Desktop.png" "$dir/DevPod-Desktop.png"
         done
+
+        install -Dm644 flatpak/DevPod.metainfo.xml $out/share/metainfo/sh.loft.devpod.metainfo.xml
       ''
       + ''
         # propagate the `devpod` command

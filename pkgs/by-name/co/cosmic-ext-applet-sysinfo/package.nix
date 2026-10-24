@@ -37,6 +37,10 @@ rustPlatform.buildRustPackage {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
+  postInstall = ''
+    install -Dm644 data/io.github.cosmic_utils.sysinfo-applet.metainfo.xml -t $out/share/metainfo
+  '';
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version"

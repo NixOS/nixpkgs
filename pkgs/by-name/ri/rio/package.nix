@@ -111,6 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -D -m 644 misc/rio.desktop -t $out/share/applications
+    install -D -m 644 misc/com.rioterm.Rio.metainfo.xml -t $out/share/metainfo
     install -D -m 644 misc/logo.svg \
                       $out/share/icons/hicolor/scalable/apps/rio.svg
 
