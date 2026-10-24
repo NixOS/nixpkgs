@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "djlint";
-  version = "1.43.1";
+  version = "1.44.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "djlint";
     repo = "djlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pw6EIlRJsHK5B1+WD59HzU2Fi6VzPmFXBauypqUwD+I=";
+    hash = "sha256-PnTGd5/O66Yq/nP8IYUpSKiBr3ImJaL8XVUv3E/JLY8=";
   };
 
   build-system = with python3.pkgs; [
@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pyyaml
     regex
     tomli
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "djlint" ];
