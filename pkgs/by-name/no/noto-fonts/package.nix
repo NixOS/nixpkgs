@@ -63,9 +63,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             install -m444 -Dt $out_font "$folder"unhinted/ttf/*.ttf
           fi
         done
+        install -Dm444 -t $out/etc/fonts/conf.d ${./conf.d}/*.conf
       ''
     else
       ''
+        mkdir -p $out/etc/fonts/conf.d
         for variant in ${lib.concatStringsSep " " _variants}; do
           if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
             install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
@@ -75,6 +77,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
           fi
         done
+        ${lib.concatMapStringsSep "\n" (
+          variant:
+          let
+            variantName = lib.toLower (lib.replaceStrings [ " " ] [ "-" ] variant);
+          in
+          ''
+            for cf in ${./conf.d}/*-${variantName}.conf; do
+              if [ -f "$cf" ]; then
+                install -Dm444 -t $out/etc/fonts/conf.d "$cf"
+              fi
+            done
+          ''
+        ) variants}
       ''
   )
   + ''
