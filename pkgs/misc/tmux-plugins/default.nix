@@ -1061,6 +1061,25 @@ in
     };
   };
 
+  tmux-fzf-links = mkTmuxPlugin {
+    pluginName = "tmux-fzf-links";
+    rtpFilePath = "fzf-links.tmux";
+    version = "1.4.16";
+    src = fetchFromGitHub {
+      owner = "alberti42";
+      repo = "tmux-fzf-links";
+      rev = "1.4.16";
+      hash = "sha256-KzqdB5JmWFUI95iwlB91KH/zrFNhB4RP6DAi4By6KUE=";
+    };
+    meta = {
+      homepage = "https://github.com/alberti42/tmux-fzf-links";
+      description = "Tmux plugin to open links in fzf";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ anned20 ];
+    };
+  };
+
   tmux-powerline = mkTmuxPlugin {
     pluginName = "powerline";
     version = "3.0.0";
