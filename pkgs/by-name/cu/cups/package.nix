@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
-      --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
+      --replace-fail 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
 
       # The cups.socket unit shouldn't be part of cups.service: stopping the
       # service would stop the socket and break subsequent socket activations.
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12")
       ''
         substituteInPlace backend/usb-darwin.c \
-          --replace "kIOMainPortDefault" "kIOMasterPortDefault"
+          --replace-fail "kIOMainPortDefault" "kIOMasterPortDefault"
       '';
 
   nativeBuildInputs = [
@@ -185,13 +185,13 @@ stdenv.mkDerivation (finalAttrs: {
         -i "$dev/bin/cups-config"
 
     for f in "$out"/lib/systemd/system/*; do
-      substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
+      substituteInPlace "$f" --replace-quiet "$lib/$libexec" "$out/$libexec"
     done
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Use xdg-open when on Linux
     substituteInPlace "$out"/share/applications/cups.desktop \
-      --replace "Exec=htmlview" "Exec=xdg-open"
+      --replace-fail "Exec=htmlview" "Exec=xdg-open"
   '';
 
   passthru.tests = {
@@ -213,7 +213,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openprinting.github.io/cups/";
     description = "Standards-based printing system for UNIX";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "cups" ];
   };
