@@ -1,0 +1,66 @@
+--- a/resources/gtest.cmake
++++ b/resources/gtest.cmake
+@@ -1,22 +1,4 @@
+-ExternalProject_Add(
+-    GTest-EP
+-	URL https://github.com/google/googletest/archive/release-${GTEST_VERSION}.zip
+-	URL_MD5 ${GTEST_ZIPHASH}
+-	DOWNLOAD_NO_PROGRESS 1
+-	UPDATE_COMMAND ""
+-	BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE} --target gtest
+-	COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE} --target gtest_main
+-	INSTALL_COMMAND ""
+-	BUILD_BYPRODUCTS ${PROJECT_BINARY_DIR}/resources/src/GTest-EP-build/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${STATIC_EXT} ${PROJECT_BINARY_DIR}/resources/src/GTest-EP-build/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${STATIC_EXT}
+-)
++find_package(GTest REQUIRED)
+ 
+-ExternalProject_Get_Property(GTest-EP source_dir)
+-ExternalProject_Get_Property(GTest-EP binary_dir)
++set(GTEST_LIBRARIES GTest::gtest GTest::gtest_main pthread dl)
+ 
+-add_imported_library(GTESTCORE STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${STATIC_EXT}" "${source_dir}/googletest/include")
+-add_imported_library(GTESTMAIN STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${STATIC_EXT}" "${source_dir}/googletest/include")
+-
+-set(GTEST_LIBRARIES GTESTCORE_STATIC GTESTMAIN_STATIC pthread dl)
+-
+-add_dependencies(GTESTCORE_STATIC GTest-EP)
+-add_dependencies(GTESTMAIN_STATIC GTest-EP)
+diff --git a/resources/resources.cmake b/resources/resources.cmake
+index 6dd86994..59225f0f 100644
+--- a/resources/resources.cmake
++++ b/resources/resources.cmake
+@@ -70,7 +70,7 @@ print_resource_info("Boost" Boost::headers ${Boost_VERSION})
+ 
+ ##### Eigen3
+ set(EIGEN3_VERSION "3.4.1-alpha")
+-include(resources/eigen3.cmake)
++INCLUDE_DIRECTORIES ( "${EIGEN3_INCLUDE_DIR}" )
+ print_resource_info("Eigen3" EIGEN3 ${EIGEN3_VERSION})
+ 
+ ##### bliss
+diff --git a/src/carl/CMakeLists.txt b/src/carl/CMakeLists.txt
+index 3d23c007..d4873eda 100644
+--- a/src/carl/CMakeLists.txt
++++ b/src/carl/CMakeLists.txt
+@@ -28,7 +28,7 @@ target_include_directories( lib_carl PUBLIC
+ 	$<INSTALL_INTERFACE:${CARL_INCLUDE_INSTALL_DIR}>
+ 	$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
+ )
+-target_link_libraries(lib_carl PUBLIC GMPXX_SHARED GMP_SHARED eigen3carl Boost::headers ${CMAKE_DL_LIBS} pthread)
++target_link_libraries(lib_carl PUBLIC GMPXX_SHARED GMP_SHARED Boost::headers ${CMAKE_DL_LIBS} pthread)
+ if(USE_BLISS)
+ 	target_link_libraries(lib_carl PUBLIC BLISS_SHARED)
+ endif()
+diff --git a/src/tests/CMakeLists.txt b/src/tests/CMakeLists.txt
+index fa18ce00..aa7c7f86 100644
+--- a/src/tests/CMakeLists.txt
++++ b/src/tests/CMakeLists.txt
+@@ -3,7 +3,7 @@ add_custom_target(all-tests)
+ 
+ add_library(TestCommon STATIC Common.cpp)
+ target_link_libraries(TestCommon lib_carl ${GTEST_LIBRARIES})
+-add_dependencies(TestCommon carl_resources lib_carl GTESTCORE_STATIC GTESTMAIN_STATIC)
++add_dependencies(TestCommon carl_resources lib_carl)
+ 
+ ################################
+ # Unit Tests
