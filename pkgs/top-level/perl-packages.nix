@@ -14692,6 +14692,8 @@ with self;
     };
     doCheck = false;
     propagatedBuildInputs = [ URI ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Extensions and convenience methods to manage background processes";
       license = with lib.licenses; [
