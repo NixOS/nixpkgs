@@ -53,9 +53,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/stern/stern";
     license = lib.licenses.asl20;
     mainProgram = "stern";
-    maintainers = with lib.maintainers; [
-      mbode
-      preisschild
-    ];
+    maintainers = with lib.maintainers; [ preisschild ];
   };
 })
