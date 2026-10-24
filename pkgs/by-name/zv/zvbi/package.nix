@@ -63,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Vertical Blanking Interval (VBI) utilities";
     homepage = "https://github.com/zapping-vbi/zvbi";
