@@ -5,6 +5,7 @@
   stdenv,
   nix-update-script,
   installShellFiles,
+  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
@@ -51,12 +52,22 @@ buildGoModule (finalAttrs: {
     # add symlink for vscode golang extension
     # https://github.com/golang/vscode-go/blob/master/docs/debugging.md#manually-installing-dlv-dap
     ln $out/bin/dlv $out/bin/dlv-dap
-
-    installShellCompletion --cmd dlv \
-      --bash <($out/bin/dlv completion bash) \
-      --fish <($out/bin/dlv completion fish) \
-      --zsh <($out/bin/dlv completion zsh)
-  '';
+  ''
+  + (
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "${placeholder "out"}/bin/dlv"
+        else
+          lib.getExe buildPackages.delve;
+    in
+    ''
+      installShellCompletion --cmd dlv \
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    ''
+  );
 
   # delve doesn't support --version
   doInstallCheck = false;
