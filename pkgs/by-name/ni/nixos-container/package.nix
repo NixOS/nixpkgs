@@ -4,6 +4,7 @@
   perl,
   shadow,
   util-linux,
+  e2fsprogs,
   installShellFiles,
   configurationDirectory ? "/etc/nixos-containers",
   stateDirectory ? "/var/lib/nixos-containers",
@@ -22,6 +23,7 @@ replaceVarsWith {
       p.IPCRun
     ]);
     su = "${shadow.su}/bin/su";
+    chattr = "${lib.getBin e2fsprogs}/bin/chattr";
     lib = "${path + "/lib"}";
 
     inherit configurationDirectory stateDirectory util-linux;
