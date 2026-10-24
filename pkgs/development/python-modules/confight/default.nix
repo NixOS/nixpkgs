@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyhamcrest,
+  pytestCheckHook,
   setuptools,
   toml,
 }:
@@ -22,9 +24,22 @@ buildPythonPackage rec {
 
   dependencies = [ toml ];
 
+  nativeCheckInputs = [
+    pyhamcrest
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "confight" ];
 
-  doCheck = false;
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
+
+  disabledTests = [
+    # CLI output issue
+    "test_it_should_print_help"
+    "test_it_should_show_config"
+  ];
 
   meta = {
     description = "Python context manager for managing pid files";
