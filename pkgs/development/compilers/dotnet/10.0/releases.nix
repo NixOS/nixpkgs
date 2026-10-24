@@ -42,6 +42,7 @@ let
   ];
 
   hostPackages = {
+    linux-riscv64 = [ ];
     linux-arm = [
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Crossgen2.linux-arm";
@@ -162,6 +163,7 @@ let
   };
 
   targetPackages = {
+    linux-riscv64 = [ ];
     linux-arm = [
       (fetchNupkg {
         pname = "Microsoft.AspNetCore.App.Runtime.linux-arm";
@@ -468,6 +470,10 @@ rec {
   aspnetcore_10_0 = buildAspNetCore {
     version = "10.0.12";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/10.0.111/dotnet-sdk-10.0.111-linux-riscv64.tar.gz";
+        hash = "sha512-+dA0vf63mVr1JREoVfK4c+qE8vgAdm/6jAFAyLGPiAPnbgUS8IjANEVolug/xPks3/bjpYEFx9+cRA3UWi0inA==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/10.0.12/aspnetcore-runtime-10.0.12-linux-arm.tar.gz";
         hash = "sha512-kZ/D+dwhWWpOtgRexTiZTyDrVN+xLu1oc2QbGGrGNSmWEYhLTsgs9S1H39jVtVnHQ9NrcCRkvcXh458iMO1Czw==";
@@ -506,6 +512,10 @@ rec {
   runtime_10_0 = buildNetRuntime {
     version = "10.0.12";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/10.0.111/dotnet-sdk-10.0.111-linux-riscv64.tar.gz";
+        hash = "sha512-+dA0vf63mVr1JREoVfK4c+qE8vgAdm/6jAFAyLGPiAPnbgUS8IjANEVolug/xPks3/bjpYEFx9+cRA3UWi0inA==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.12/dotnet-runtime-10.0.12-linux-arm.tar.gz";
         hash = "sha512-4VcijJxpOH4tCxBcxhdejEIS7A5NjZyuK+yI6mnVQB4kqW5/Nr3u1o52X0lAc1tG4S5oa74NQIDeTwErz5V0Pg==";
@@ -585,6 +595,10 @@ rec {
   sdk_10_0_1xx = buildNetSdk {
     version = "10.0.112";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/10.0.111/dotnet-sdk-10.0.111-linux-riscv64.tar.gz";
+        hash = "sha512-+dA0vf63mVr1JREoVfK4c+qE8vgAdm/6jAFAyLGPiAPnbgUS8IjANEVolug/xPks3/bjpYEFx9+cRA3UWi0inA==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.112/dotnet-sdk-10.0.112-linux-arm.tar.gz";
         hash = "sha512-hNUia7Oh4RTHnpaue1rNCaYf8EVb8tRaoYPKtmL57dEYz9yI5Y34qfHC6FjoYjmWG5CPM6fX9ay7LQtyK+nMcA==";
