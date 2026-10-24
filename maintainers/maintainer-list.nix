@@ -30251,12 +30251,6 @@
     githubId = 144389458;
     name = "sapii";
   };
-  treemo = {
-    email = "matthieu.chevrier@treemo.fr";
-    github = "treemo";
-    githubId = 207457;
-    name = "Matthieu Chevrier";
-  };
   trespaul = {
     email = "paul@trespaul.com";
     github = "trespaul";
