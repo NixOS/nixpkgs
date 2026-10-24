@@ -1911,7 +1911,9 @@ rec {
   removePrefix =
     prefix:
     let
-      preLen = stringLength prefix;
+      getPrefix = substring 0 (stringLength prefix);
+      # -1 will take the string until the end
+      stripPrefix = substring (stringLength prefix) (-1);
     in
     if isPath prefix then
       # Before 23.05, paths would be copied to the store before converting them
@@ -1921,12 +1923,7 @@ rec {
             There is almost certainly a bug in the calling code, since this function never removes any prefix in such a case.
             This function also copies the path to the Nix store, which may not be what you want.''
     else
-      str:
-      if substring 0 preLen str == prefix then
-        # -1 will take the string until the end
-        substring preLen (-1) str
-      else
-        str;
+      str: if getPrefix str == prefix then stripPrefix str else str;
 
   /**
     Returns a string without the specified suffix, if the suffix matches.
