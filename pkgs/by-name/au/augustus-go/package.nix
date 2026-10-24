@@ -29,6 +29,8 @@ buildGoModule (finalAttrs: {
     rm  internal/generators/bedrock/bedrock_test.go
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "LLM security testing framework for detecting prompt injection, jailbreaks and adversarial attacks";
     homepage = "https://github.com/praetorian-inc/augustus";
