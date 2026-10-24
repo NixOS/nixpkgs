@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-ndn";
-  version = "0.5.0";
+  version = "0.5.2";
 
   pyproject = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "named-data";
     repo = "python-ndn";
     tag = "v${version}";
-    hash = "sha256-8fcBIcZ2l6mkKe9YQe5+5fh7+vK9qxzBO2kLRUONumQ=";
+    hash = "sha256-STn1QnU1spxsACXjWGkGa18Rnqc7yC4NIgWkECA0wnA=";
   };
 
   nativeBuildInputs = [
