@@ -32,7 +32,7 @@ let
   frontend = stdenv.mkDerivation (finalAttrs: {
     name = "mealie-frontend";
     inherit version src;
-    sourceRoot = "${src.name}/frontend";
+    sourceRoot = "${finalAttrs.src.name}/frontend";
 
     __structuredAttrs = true;
 
@@ -48,6 +48,7 @@ let
       pname = "mealie-frontend";
       inherit pnpm;
       inherit (finalAttrs) version src;
+      sourceRoot = "${finalAttrs.src.name}/frontend";
       fetcherVersion = 4;
       hash = "sha256-y5w6hI6T+QOxmy65rN44/0H18eqmoNXhUE1NL7NtpqY=";
     };
