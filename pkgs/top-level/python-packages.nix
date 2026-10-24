@@ -21393,6 +21393,8 @@ self: super: with self; {
 
   ttstokenizer = callPackage ../development/python-modules/ttstokenizer { };
 
+  ttvfast = callPackage ../development/python-modules/ttvfast { };
+
   tubes = callPackage ../development/python-modules/tubes { };
 
   tubeup = callPackage ../development/python-modules/tubeup { };
