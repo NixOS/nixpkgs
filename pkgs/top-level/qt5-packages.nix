@@ -10,15 +10,12 @@
   __splicedPackages,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
-  pkgsHostTarget,
+  # Make it possible to override this
+  qt5,
 }:
 
 let
   pkgs = __splicedPackages;
-  # qt5 set should not be pre-spliced to prevent spliced packages being a part of an unspliced set
-  # 'pkgsCross.aarch64-multiplatform.pkgsBuildTarget.targetPackages.libsForQt5.qtbase' should not have a `__spliced` but if qt5 is pre-spliced then it will have one.
-  # pkgsHostTarget == pkgs
-  qt5 = pkgsHostTarget.qt5;
 in
 
 makeScopeWithSplicing' {
