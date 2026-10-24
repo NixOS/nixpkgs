@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
-  version = "2.5.11";
+  version = "2.5.12";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SUliVuQxnSk8rWOny0VAVOnQS2PQedyzN75QQLL8ELQ=";
+    hash = "sha256-gBYmWb3wHDdUg2i5nFL+srlYRXTOXBpgorNJDPLuuso=";
   };
 
   outputs = [
