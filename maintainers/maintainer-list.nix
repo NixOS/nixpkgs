@@ -4041,6 +4041,12 @@
     github = "bobby285271";
     githubId = 20080233;
   };
+  boborbt = {
+    name = "Roberto Esposito";
+    email = "boborbt@gmail.com";
+    github = "boborbt";
+    githubId = 204476;
+  };
   bobvanderlinden = {
     email = "bobvanderlinden@gmail.com";
     github = "bobvanderlinden";
