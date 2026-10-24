@@ -173,6 +173,6 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Plus
       bsd3
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })
