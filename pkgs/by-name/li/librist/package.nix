@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librist";
-  version = "0.2.11";
+  version = "0.2.20";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
+    hash = "sha256-TaO1vQsJ/sJ/YFW7Ykv9HywsrtEy/3R4+BfxS1v/ZBY=";
   };
 
   # avoid rebuild on Linux for now
