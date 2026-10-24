@@ -1663,6 +1663,18 @@ in
         "mount /dev/vda1 /mnt/boot",
       )
     '';
+
+    extraConfig = ''
+      testing.initrdBackdoor = true;
+    '';
+
+    # bcachefs-mount-generator must have lifted the mount timeout of the root.
+    postBootCommands = ''
+      target.wait_for_unit("sysroot.mount")
+      timeout = target.succeed("systemctl show --property=TimeoutUSec --value sysroot.mount").strip()
+      assert timeout == "infinity", f"sysroot.mount has TimeoutUSec={timeout}"
+      target.switch_root()
+    '';
   };
 
   bcachefsEncrypted = mkBcachefsEncryptedTest { };
