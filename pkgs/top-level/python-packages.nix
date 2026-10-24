@@ -10791,6 +10791,8 @@ self: super: with self; {
 
   memray = callPackage ../development/python-modules/memray { };
 
+  menshen-client = callPackage ../development/python-modules/menshen-client { };
+
   meraki = callPackage ../development/python-modules/meraki { };
 
   mercadopago = callPackage ../development/python-modules/mercadopago { };
