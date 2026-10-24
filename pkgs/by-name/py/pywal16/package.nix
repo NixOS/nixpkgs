@@ -44,7 +44,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath ([ imagemagick ] ++ lib.optional withColorz colorz)}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath ([ imagemagick ] ++ lib.optional withColorz colorz)}"
   ];
 
   postInstall = ''
