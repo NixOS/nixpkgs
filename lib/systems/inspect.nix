@@ -435,6 +435,9 @@ rec {
         muslabin32
         muslabi64
       ];
+    isMlibc = {
+      abi = abis.mlibc;
+    };
     isPicolibc = {
       abi = abis.picolibc;
     };
