@@ -98,18 +98,9 @@ let
     assert areLicenseListsValid;
     list:
     let
-      containsListLicenses = containsLicenses list;
+      containsListLicense = containsLicenses list;
     in
-    attrs:
-    attrs ? meta.license
-    && (
-      if isList attrs.meta.license then
-        any (l: elem l list) attrs.meta.license
-      else if attrs.meta.license ? "licenseType" then
-        containsListLicenses attrs.meta.license
-      else
-        elem attrs.meta.license list
-    );
+    attrs: attrs ? meta.license && containsListLicense attrs.meta.license;
 
   hasAllowlistedLicense = hasListedLicense allowlist;
 
@@ -118,24 +109,7 @@ let
   allowUnsupportedSystem =
     config.allowUnsupportedSystem || getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
-  isUnfree =
-    licenses:
-    # ? is non-strict in its type, so it doubles as performing an isAttrs check
-    if licenses ? licenseType then
-      !(isFree licenses)
-    else if isAttrs licenses then
-      !(licenses.free or true)
-    # TODO: Returning false in the case of a string is a bug that should be fixed.
-    # In a previous implementation of this function the function body
-    # was `licenses: lib.lists.any (l: !l.free or true) licenses;`
-    # which always evaluates to `!true` for strings.
-    else if isString licenses then
-      false
-    else
-      # on a list, check if any of the licenses weren't free (boolean AND)
-      any (l: !l.free or false) licenses;
-
-  hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
+  hasUnfreeLicense = attrs: attrs ? meta.license && !(isFree attrs.meta.license);
 
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
