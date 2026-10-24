@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "freekode";
     repo = "pyopenweathermap";
-    # https://github.com/freekode/pyopenweathermap/issues/2
     tag = "v${finalAttrs.version}";
     hash = "sha256-RdzIfiCFMPmaX6tV66JGDELzaHDIYoZBsMKlEfjZWoI=";
   };
