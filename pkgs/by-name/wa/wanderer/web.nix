@@ -15,7 +15,7 @@ buildNpmPackage {
 
   sourceRoot = "${wanderer.src.name}/web";
 
-  npmDepsHash = "sha256-b+0dIq0lb6FbSvR/FutHUSU4Rvt72O/ddJ7ltvpOUVI=";
+  npmDepsHash = "sha256-Rqy1n60BX0qziMuDznSqz9KxEFa5Yz510npS9IZ3ZkM=";
   npmDepsFetcherVersion = 2;
 
   nativeBuildInputs = [ makeWrapper ];
