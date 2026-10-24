@@ -33,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
+  env.VERGEN_GIT_SHA = finalAttrs.src.rev;
+
   nativeBuildInputs = [
     just
     libcosmicAppHook
@@ -63,8 +65,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  env.VERGEN_GIT_SHA = finalAttrs.src.rev;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
