@@ -37,6 +37,7 @@
 
   # tests
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -102,7 +103,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
