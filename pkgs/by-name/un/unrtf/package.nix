@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrtf";
-  version = "0.21.10";
+  version = "0.21.13";
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/unrtf/unrtf-${finalAttrs.version}.tar.gz";
-    sha256 = "1bil6z4niydz9gqm2j861dkxmqnpc8m7hvidsjbzz7x63whj17xl";
+    sha256 = "sha256-/yJ9GgrbhKnhpRteXDzsvaPWfIox29foWToECkOPtEw=";
   };
 
   nativeBuildInputs = [
