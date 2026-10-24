@@ -9,7 +9,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ghatm";
-  version = "1.0.0";
+  version = "1.0.0-0";
 
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
