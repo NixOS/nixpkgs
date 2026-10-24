@@ -18,6 +18,7 @@
   perf,
   callPackage,
   buildGoModule,
+  wrapGAppsHook3,
 }:
 let
   pname = "qtcreator";
@@ -48,6 +49,7 @@ stdenv'.mkDerivation {
     python3
     ninja
     go
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -98,6 +100,8 @@ stdenv'.mkDerivation {
     cp -r --reflink=auto ${goModules} src/libs/gocmdbridge/server/vendor
   '';
 
+  dontWrapGApps = true;
+
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
   ];
@@ -107,6 +111,10 @@ stdenv'.mkDerivation {
     cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX="''${!outputDev}"
 
     cmake --install . --prefix "''${!outputDev}" --component Devel
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # Remove prefix from the QtC config to make sane output path for 3rd-party plug-ins.
