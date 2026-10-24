@@ -5,6 +5,8 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
+  autoreconfHook,
   perl,
   buildPackages,
   busybox,
@@ -23,9 +25,26 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-dXF+ORbLzvvN5Y57/VFRUNdfdjI4Wy22vdL7wkKJ7NU=";
   };
 
+  # fcron-test-for-fdatasync.patch below modifies configure.in and config.h.in,
+  # so configure needs to be rebuilt.
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [ perl ];
 
-  patches = [ ./relative-fcronsighup.patch ];
+  patches = [
+    ./relative-fcronsighup.patch
+
+    # Needed to build successfully on Darwin.
+    # macOS has an fdatasync in its standard library, but doesn't declare it.
+    # Apple Clang suppresses the resulting warning/error, but upstream Clang
+    # doesn't. This patch tests for fdatasync support, and falls back to fsync.
+    # Can be removed if <https://github.com/yo8192/fcron/pull/55> gets merged.
+    (fetchpatch2 {
+      name = "fcron-test-for-fdatasync.patch";
+      url = "https://github.com/Rhys-T/fcron/commit/7382127f0c08b3e6b269ae4ee33eafe70f0993af.patch?full_index=1";
+      hash = "sha256-cbexMYns7k7T1kQBoRdPfnKGeTQrmwxfwayJr2ryZwA=";
+    })
+  ];
 
   configureFlags = [
     "--with-sendmail=${if sendmailProgram == null then "no" else sendmailProgram}"
