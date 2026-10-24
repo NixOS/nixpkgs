@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Active Directory time discovery toolkit";
     homepage = "https://github.com/JVBotelho/skewrun";
-    changelog = "https://github.com/JVBotelho/skewrun/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/JVBotelho/skewrun/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "skewrun";
