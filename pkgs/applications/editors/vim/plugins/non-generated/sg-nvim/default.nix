@@ -9,7 +9,7 @@
   vimUtils,
 }:
 let
-  version = "1.1.0-unstable-2025-01-21";
+  version = "0-unstable-2025-01-21";
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "sg.nvim";
