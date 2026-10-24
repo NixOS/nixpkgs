@@ -8,36 +8,44 @@
   perl,
   readline,
   texliveBasic,
+  withStatic ? false,
   withThread ? true,
 }:
 
 assert withThread -> libpthread-stubs != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pari";
-  version = "2.17.3";
+  version = "2.17.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     urls = [
-      "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz"
+      "https://pari.math.u-bordeaux.fr/pub/pari/unix/pari-${finalAttrs.version}.tar.gz"
       # old versions are at the url below
-      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
+      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor finalAttrs.version}/pari-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-jZxPzVhMRo0n4PI8NoNlhyhEUglMSxxATCDEuBBGLcs=";
+    hash = "sha256-AmUdmcORAH04Sz+tvCCrxpFrdwNvnklsmenOhojKS1M=";
   };
 
   buildInputs = [
     gmp
     libx11
-    perl
     readline
-    texliveBasic
   ]
   ++ lib.optionals withThread [
     libpthread-stubs
   ];
 
+  nativeBuildInputs = [
+    perl
+    texliveBasic
+  ];
+
   configureScript = "./Configure";
+
   configureFlags = [
     "--with-gmp=${lib.getDev gmp}"
     "--with-readline=${lib.getDev readline}"
@@ -48,7 +56,11 @@ stdenv.mkDerivation rec {
     export LD=$CC
   '';
 
-  makeFlags = [ "all" ];
+  buildFlags = [ "all" ];
+
+  enableParallelBuilding = true;
+
+  installTargets = [ "install" ] ++ lib.optional withStatic "install-lib-sta";
 
   meta = {
     homepage = "http://pari.math.u-bordeaux.fr";
@@ -82,4 +94,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "gp";
   };
-}
+})
