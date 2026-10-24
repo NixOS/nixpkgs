@@ -55,6 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isi686 {
+    CFLAGS = "-mfpmath=sse -msse2";
+    CXXFLAGS = "-mfpmath=sse -msse2";
+  };
+
   cmakeFlags = [
     (lib.cmakeBool "RAPIDJSON_BUILD_DOC" true)
     (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" true)
