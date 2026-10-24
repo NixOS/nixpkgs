@@ -26904,6 +26904,11 @@
     github = "yueneiqi";
     githubId = 26707756;
   };
+  severindupouy = {
+    name = "sdupouy";
+    github = "severindupouy";
+    githubId = 32488190;
+  };
   seylerius = {
     name = "Sable Seyler";
     email = "sable@seyleri.us";
