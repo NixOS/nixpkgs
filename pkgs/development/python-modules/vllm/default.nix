@@ -426,61 +426,36 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     ./0006-drop-rocm-extra-reqs.patch
   ];
 
-  postPatch = ''
+  postPatch =
     # Remove vendored pynvml entirely
-    rm vllm/third_party/pynvml.py
-    substituteInPlace tests/utils.py \
-      --replace-fail \
-        "from vllm.third_party.pynvml import" \
-        "from pynvml import"
-    substituteInPlace vllm/utils/import_utils.py \
-      --replace-fail \
-        "import vllm.third_party.pynvml as pynvml" \
-        "import pynvml"
-
+    ''
+      rm vllm/third_party/pynvml.py
+      substituteInPlace tests/utils.py \
+        --replace-fail \
+          "from vllm.third_party.pynvml import" \
+          "from pynvml import"
+      substituteInPlace vllm/utils/import_utils.py \
+        --replace-fail \
+          "import vllm.third_party.pynvml as pynvml" \
+          "import pynvml"
+    ''
     # pythonRelaxDeps does not cover build-system
-    substituteInPlace pyproject.toml \
-      --replace-fail "torch ==" "torch >=" \
-      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
-
+    + ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "torch ==" "torch >=" \
+        --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
+    ''
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
-    substituteInPlace CMakeLists.txt \
-      --replace-fail \
-        'set(PYTHON_SUPPORTED_VERSIONS' \
-        'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          'set(PYTHON_SUPPORTED_VERSIONS' \
+          'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
 
-    substituteInPlace tools/build_rust.py \
-      --replace-fail 'features=["native-tls-vendored"],' ""
-  '';
-
-  # fastapi and many other packages are pinned strictly in vllm
-  pythonRelaxDeps = true;
-
-  pythonRemoveDeps = [
-    # Not packaged in nixpkgs.
-    "flashinfer-cubin"
-    "nvidia-cudnn-frontend"
-    "apache-tvm-ffi" # vllm does not depend on it directly, its version is only pinned for compatibility with tilelang (also removed).
-    "tilelang"
-    "fastsafetensors"
-    "instanttensor"
-
-    # QuACK and Cutlass DSL seem to be added only for FA4
-    # which in our case handles its own deps
-    "nvidia-cutlass-dsl"
-    "quack-kernels"
-
-    # Optional Humming kernels for quantization
-    "humming-kernels"
-
-    # Not packaged in nixpkgs. Fork of openai-harmony (which we use instead) providing the same
-    # `openai_harmony` module, but with embedded tiktoken vocabularies.
-    "oss-harmony"
-
-    # ROCm-only, not packaged in nixpkgs
-    "mooncake-transfer-engine-rocm"
-  ];
+      substituteInPlace tools/build_rust.py \
+        --replace-fail 'features=["native-tls-vendored"],' ""
+    '';
 
   nativeBuildInputs = [
     which
@@ -560,6 +535,33 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     llvmPackages.openmp
   ];
 
+  # fastapi and many other packages are pinned strictly in vllm
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    # Not packaged in nixpkgs.
+    "flashinfer-cubin"
+    "nvidia-cudnn-frontend"
+    "apache-tvm-ffi" # vllm does not depend on it directly, its version is only pinned for compatibility with tilelang (also removed).
+    "tilelang"
+    "fastsafetensors"
+    "instanttensor"
+
+    # QuACK and Cutlass DSL seem to be added only for FA4
+    # which in our case handles its own deps
+    "nvidia-cutlass-dsl"
+    "quack-kernels"
+
+    # Optional Humming kernels for quantization
+    "humming-kernels"
+
+    # Not packaged in nixpkgs. Fork of openai-harmony (which we use instead) providing the same
+    # `openai_harmony` module, but with embedded tiktoken vocabularies.
+    "oss-harmony"
+
+    # ROCm-only, not packaged in nixpkgs
+    "mooncake-transfer-engine-rocm"
+  ];
   dependencies = [
     aioprometheus
     anthropic
