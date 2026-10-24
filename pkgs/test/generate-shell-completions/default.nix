@@ -1,0 +1,3 @@
+{ generateShellCompletions }:
+
+generateShellCompletions.tests

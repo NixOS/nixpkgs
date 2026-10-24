@@ -141,3 +141,5 @@ failure. To prevent this, guard the completion generation commands.
   '';
 }
 ```
+
+To run the program and skip it in cross builds without writing this guard, use [`generateShellCompletions`](#generateshellcompletions).

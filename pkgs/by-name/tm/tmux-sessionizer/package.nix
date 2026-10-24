@@ -1,10 +1,9 @@
 {
   fetchFromGitHub,
-  installShellFiles,
+  generateShellCompletions,
   lib,
   pkg-config,
   rustPlatform,
-  stdenv,
   versionCheckHook,
   git,
 }:
@@ -29,18 +28,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    installShellFiles
+    generateShellCompletions
   ];
 
   nativeCheckInputs = [
     git
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd tms \
-      --bash <(COMPLETE=bash $out/bin/tms) \
-      --fish <(COMPLETE=fish $out/bin/tms) \
-      --zsh <(COMPLETE=zsh $out/bin/tms)
+  postInstall = ''
+    generateShellCompletions --env COMPLETE={shell}
   '';
 
   meta = {
