@@ -1,0 +1,15 @@
+diff --git a/nautilus_my_computer/main.py b/nautilus_my_computer/main.py
+--- a/nautilus_my_computer/main.py
++++ b/nautilus_my_computer/main.py
+@@ -461,7 +461,10 @@ def _apply_native_place_visibility(
+ 
+ def _get_gsettings() -> Gio.Settings | None:
+     try:
+-        return Gio.Settings.new(SCHEMA_ID)
++        source = Gio.SettingsSchemaSource.new_from_directory(
++            "@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True
++        )
++        return Gio.Settings.new_full(source.lookup(SCHEMA_ID, False), None, None)
+     except Exception:
+         return None
+ 
