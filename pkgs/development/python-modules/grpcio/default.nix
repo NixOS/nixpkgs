@@ -2,12 +2,14 @@
   lib,
   stdenv,
   buildPythonPackage,
+  cacert,
   c-ares,
   cython,
   fetchPypi,
   openssl,
   pkg-config,
   protobuf,
+  python,
   typing-extensions,
   setuptools,
   zlib,
@@ -75,6 +77,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt \
+      $out/${python.sitePackages}/grpc/_cython/_credentials/roots.pem
+  '';
 
   pythonImportsCheck = [ "grpc" ];
 
