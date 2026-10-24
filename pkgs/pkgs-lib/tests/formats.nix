@@ -240,6 +240,17 @@ runBuildTests {
     '';
   };
 
+  # Regression test: https://sourceforge.net/p/ruamel-yaml/tickets/574/
+  yaml_1_2EscapedNewline = shouldPass {
+    format = formats.yaml_1_2 { };
+    input = {
+      valuesContent = "word word word word word word word word\\nname.of \\\"thing\\\" {\\n  more words";
+    };
+    expected = ''
+      valuesContent: word word word word word word word word\nname.of \"thing\" {\n  more words
+    '';
+  };
+
   yaml_1_1Tags = shouldPass {
     format = formats.yaml_1_1 { tags = true; };
     input = {
