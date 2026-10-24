@@ -13,6 +13,7 @@
   python-socks,
   rencode,
   setuptools,
+  sniffio,
   tiny-proxy,
 }:
 
@@ -49,6 +50,7 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    sniffio
     tiny-proxy
   ];
 
