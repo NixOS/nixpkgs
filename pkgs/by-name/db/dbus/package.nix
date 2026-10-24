@@ -178,6 +178,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-launch = "${dbus.lib}/bin/dbus-launch";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Simple interprocess messaging system";
     homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
