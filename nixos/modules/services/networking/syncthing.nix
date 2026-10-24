@@ -519,6 +519,24 @@ in
                         '';
                       };
 
+                      addresses = lib.mkOption {
+                        type = lib.types.listOf lib.types.str;
+                        default = [ "dynamic" ];
+                        example = [
+                          "tcp://192.0.2.42:12345"
+                          "tcp://[2001:db8::23:42]:12345"
+                        ];
+                        description = ''
+                          Addresses to use when connecting to this device, such as
+                          `tcp://host:port`. Multiple addresses may be specified.
+                          The special value `dynamic` enables local and global
+                          discovery and may be combined with explicit addresses.
+                          To use only explicit addresses, omit `dynamic`.
+
+                          See <https://docs.syncthing.net/users/config.html#config-option-device.address>.
+                        '';
+                      };
+
                       autoAcceptFolders = lib.mkOption {
                         type = lib.types.bool;
                         default = false;

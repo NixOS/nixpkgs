@@ -16,6 +16,10 @@ in
       enable = true;
       settings.devices.testDevice = {
         id = testId;
+        addresses = [
+          "tcp://192.0.2.42:12345"
+          "tcp://[2001:db8::23:42]:12345"
+        ];
       };
       settings.folders.testFolder = {
         path = "/tmp/test";
@@ -32,5 +36,7 @@ in
     assert "testFolder" in config
     assert "${testId}" in config
     assert "guiUser" in config
+    assert "tcp://192.0.2.42:12345" in config
+    assert "tcp://[2001:db8::23:42]:12345" in config
   '';
 }
