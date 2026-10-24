@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
-  version = "1.15.6.0";
+  version = "1.15.7.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UOto23uF2WabTraR+pkLkg0zEPUUnDVmgnctZYzhqWk=";
+    hash = "sha256-4g999ebJr5vBX3uGPR/BzwmIbvZ/kNxIN8lAzE+5/Rg=";
   };
 
   patches = [ ./libclang-no-shared.patch ];
