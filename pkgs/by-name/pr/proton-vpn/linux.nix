@@ -3,6 +3,7 @@
   meta,
   python3Packages,
   fetchFromGitHub,
+  gettext,
   gobject-introspection,
   libappindicator,
   libayatana-appindicator,
@@ -14,17 +15,19 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proton-vpn";
-  version = "4.16.5";
+  version = "4.18.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wClBUF5bz+bVt9w7LQGfU3mKnEtgax8GXnGNyH2/obU=";
+    hash = "sha256-YR3hbM4ALFpxiTR0uMoOOxsGzaD+4vV7534tlxtBMZg=";
   };
 
   nativeBuildInputs = [
+    # Compiles the application's .po translation files
+    gettext
     # Needed for the NM namespace
     gobject-introspection
     wrapGAppsHook4
@@ -46,11 +49,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     dbus-python
+    distro
     packaging
     proton-core
     proton-keyring-linux
     proton-vpn-api-core
-    proton-vpn-local-agent
+    # Required for split tunneling
+    proton-vpn-daemon
+    requests
     pycairo
     pygobject3
   ];
@@ -83,10 +89,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]);
 
   disabledTestPaths = [
+    # Segmentation fault while creating GTK demo screens in a headless build
+    "tests/unit/demo"
     # Segmentation fault during widgets tests
     "tests/unit/widgets"
     # Segmentation fault during GObject signal test
     "tests/unit/utils/test_safe_signal_connect.py"
+    # Creates GTK windows and segfaults without a display
+    "tests/unit/utils/test_window.py"
   ];
 
   passthru.updateScript = nix-update-script { };
