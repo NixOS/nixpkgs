@@ -1,0 +1,58 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 6c47ed2..69bfbad 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4019,10 +4019,15 @@ version = "0.3.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "814b44c24cd2cb236c3b8a41c7f08237b452a8e76ecaa81f1cec40b5b678215b"
+ dependencies = [
++ "async-executor",
++ "async-io",
++ "async-lock",
++ "futures-channel",
++ "futures-lite 2.6.1",
+  "futures-util",
+  "pastey 0.2.3",
+  "serde",
+- "tokio",
++ "task-local",
+  "zbus",
+ ]
+ 
+@@ -7207,6 +7212,15 @@ version = "0.12.16"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1"
+ 
++[[package]]
++name = "task-local"
++version = "0.1.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2972044a9e5e448a506a7ff6f0d03b566d8ef4cd6918a58fc59835a0f8666626"
++dependencies = [
++ "pin-project-lite",
++]
++
+ [[package]]
+ name = "tempfile"
+ version = "3.27.0"
+@@ -9178,7 +9192,6 @@ dependencies = [
+  "rustix 1.1.4",
+  "serde",
+  "serde_repr",
+- "tokio",
+  "tracing",
+  "uds_windows",
+  "uuid",
+diff --git a/gui/Cargo.toml b/gui/Cargo.toml
+index d9d87ef..1586785 100644
+--- a/gui/Cargo.toml
++++ b/gui/Cargo.toml
+@@ -23,7 +23,7 @@ rust-i18n = "3"
+ sys-locale = "0.3"
+ 
+ [target.'cfg(target_os = "linux")'.dependencies]
+-ksni = "0.3"
++ksni = { version = "0.3", default-features = false, features = ["async-io"] }
+ 
+ [target.'cfg(any(target_os = "windows", target_os = "macos"))'.dependencies]
+ tray-icon = "0.24"
