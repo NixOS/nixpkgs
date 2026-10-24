@@ -256,6 +256,10 @@ let
               ssl_session_timeout 1d;
             ''}
 
+            ${optionalString cfg.encryptedClientHello.enable ''
+              ssl_ech_file ${cfg.encryptedClientHello.configFile};
+            ''}
+
             ${optionalString cfg.recommendedBrotliSettings ''
               brotli on;
               brotli_static on;
@@ -644,6 +648,43 @@ in
         description = ''
           Enable recommended TLS settings.
         '';
+      };
+
+      encryptedClientHello = {
+        enable = mkEnableOption "Encrypted Client Hello extension for TLS 1.3";
+
+        configFile = mkOption {
+          type = types.pathWith { inStore = false; };
+          default = "/var/lib/nginx/ech.pem";
+          example = "/run/keys/nginx.ech.pem";
+          description = ''
+            Path to the file containing both private key and ECHConfig in PEM
+            format.
+
+            This file will be generated if it does not exist and
+            {option}`services.nginx.encryptedClientHello.publicName` is set.
+
+            ::: {.info}
+            The `ECHConfig` value must be published into a HTTPS resource
+            record ([RFC 9460]) so clients can retrieve it before setting up
+            the TLS socket.
+            :::
+
+            [RFC 9460](https://www.rfc-editor.org/info/rfc9460/)
+          '';
+        };
+
+        publicName = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "ech.example.com";
+          description = ''
+            Public name advertised in the ECHConfig.
+
+            This name is visible in the outer ClientHello. This is not
+            necessarily the hostname of the requested website.
+          '';
+        };
       };
 
       recommendedOptimisation = mkOption {
@@ -1578,6 +1619,28 @@ in
         stopIfChanged = false;
         preStart = ''
           ${cfg.preStart}
+
+          ${lib.optionalString cfg.encryptedClientHello.enable ''
+            if [ ! -e "${cfg.encryptedClientHello.configFile}" ]; then
+              ${
+                if (cfg.encryptedClientHello.publicName != null) then
+                  ''
+                    (
+                      umask 077
+                      ${lib.getExe pkgs.openssl_4_0} ech \
+                        -public_name "${cfg.encryptedClientHello.publicName}" \
+                        -out "${cfg.encryptedClientHello.configFile}"
+                    )
+                  ''
+                else
+                  ''
+                    echo "ECH config file at ${cfg.encryptedClientHello.configFile} is missing and cannot be generated because `publicName` is not set." >&2
+                    exit 1
+                  ''
+              }
+            fi
+          ''}
+
           ${execCommand} -t
         '';
 
@@ -1602,6 +1665,9 @@ in
           # Logs directory and mode
           LogsDirectory = "nginx";
           LogsDirectoryMode = "0750";
+          # State directory and mode
+          StateDirectory = "nginx";
+          StateDirectoryMode = "0700";
           # Proc filesystem
           ProcSubset = "pid";
           ProtectProc = "invisible";
