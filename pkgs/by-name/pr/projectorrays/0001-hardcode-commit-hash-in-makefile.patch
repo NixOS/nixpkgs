@@ -1,0 +1,11 @@
+diff --git a/Makefile b/Makefile
+index 233347e..bc66445 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+ VERSION_NUMBER=0.2.1
+-GIT_SHA=$(shell git rev-parse --short HEAD)
++GIT_SHA=6f9bceb
+ 
+ CPPFLAGS+=-DVERSION_NUMBER=$(VERSION_NUMBER) -DGIT_SHA=$(GIT_SHA)
+ CXXFLAGS+=-std=c++17 -Wall -Wextra -Isrc
