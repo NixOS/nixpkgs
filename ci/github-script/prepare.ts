@@ -57,11 +57,16 @@ export default async ({
 
     if (baseClassification.type.includes('channel')) {
       const { stable, version } = baseClassification
-      const correctBranch = stable ? `release-${version}` : 'master'
+
+      let releaseStable = `release-*`
+      if (stable) {
+        releaseStable = `release-${version}`
+      }
+
       const body = [
         'The `nixos-*` and `nixpkgs-*` branches are pushed to by the channel release script and should not be merged into directly.',
         '',
-        `Please target \`${correctBranch}\` instead.`,
+        `Make sure you know the [right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions), then target the correct branch (probably \`${releaseStable}\` or \`master\`) instead.`,
       ].join('\n')
 
       await postReview({ github, context, core, dry, body, reviewKey })
