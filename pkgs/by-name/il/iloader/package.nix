@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   rustPlatform,
   nodejs,
@@ -111,6 +112,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p $out/bin
     makeWrapper $out/Applications/iloader.app/Contents/MacOS/iloader $out/bin/iloader
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "nodeModules"
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/nab138/iloader/releases/tag/v${finalAttrs.version}";
