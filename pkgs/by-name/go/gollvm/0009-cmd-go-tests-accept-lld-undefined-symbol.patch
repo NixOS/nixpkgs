@@ -1,0 +1,31 @@
+From 914a5eb47063568e98b3639d6a61da60feae9939 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 21:11:00 -0500
+Subject: [PATCH 9/10] cmd/go: accept lld wording in link_external_undef
+
+The `link_external_undef` script test checks that the external linker
+reports an undefined symbol instead of crashing. The current regex
+matches GNU ld's `undefined reference to` wording, but Nix builds
+gollvm with `lld`, which reports `undefined symbol`.
+
+Accept either spelling so the test keeps asserting the intended
+behavior without being tied to a specific linker implementation.
+---
+ gofrontend/libgo/go/cmd/go/testdata/script/link_external_undef.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gofrontend/libgo/go/cmd/go/testdata/script/link_external_undef.txt b/gofrontend/libgo/go/cmd/go/testdata/script/link_external_undef.txt
+--- a/gofrontend/libgo/go/cmd/go/testdata/script/link_external_undef.txt
++++ b/gofrontend/libgo/go/cmd/go/testdata/script/link_external_undef.txt
+@@ -8,7 +8,7 @@
+ 
+ ! go build -ldflags='-linkmode=external' .
+ ! stderr 'panic'
+ [!gccgo] stderr '^.*unreachable sym in relocation.*'
+-[gccgo] stderr '^.*undefined reference to.*'
++[gccgo] stderr '^.*undefined (reference to|symbol:).*$'
+ 
+ -- go.mod --
+ 
+-- 
+2.50.1

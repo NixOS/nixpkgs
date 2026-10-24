@@ -1,0 +1,28 @@
+From 1c4e52d3128575dcb2afde09f88f01ad5003c0dc Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 21:10:00 -0500
+Subject: [PATCH 8/10] gotools: vendor x/tools into cmd/go tests
+
+The copied `cmd/go` test tree now imports `golang.org/x/tools/txtar`,
+but the gotools check target only stages the `x/mod`, `x/crypto` and
+`x/xerrors` vendor directories. As a result, `check_go_tool` fails
+during package loading before any of the actual tests run.
+
+Copy the vendored `x/tools` tree into the temporary GOPATH as well.
+---
+ gotools/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gotools/CMakeLists.txt b/gotools/CMakeLists.txt
+--- a/gotools/CMakeLists.txt
++++ b/gotools/CMakeLists.txt
+@@ -169,6 +169,7 @@ add_custom_target(
+        "${cmd_srcroot}/go/testdata:src/cmd/go"
+        "${libgo_srcroot}/go/golang.org/x/mod:src/cmd/vendor/golang.org/x"
+        "${libgo_srcroot}/go/golang.org/x/crypto:src/cmd/vendor/golang.org/x"
++       "${libgo_srcroot}/go/golang.org/x/tools:src/cmd/vendor/golang.org/x"
+        "${libgo_srcroot}/go/golang.org/x/xerrors:src/cmd/vendor/golang.org/x"
+     "COPYFILES"
+        "${libgo_binroot}/zdefaultcc.go:src/cmd/go/internal/cfg/"
+-- 
+2.50.1
