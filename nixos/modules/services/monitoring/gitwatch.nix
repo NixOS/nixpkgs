@@ -6,11 +6,14 @@
 }:
 let
   inherit (lib)
+    escapeShellArg
+    escapeShellArgs
     maintainers
     mapAttrs'
     mkEnableOption
     mkOption
     nameValuePair
+    optionals
     optionalString
     types
     ;
@@ -18,7 +21,12 @@ let
     name: cfg:
     nameValuePair "gitwatch-${name}" (
       let
-        getvar = flag: var: optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
+        getvar =
+          flag: var:
+          optionals (cfg."${var}" != null) [
+            flag
+            cfg."${var}"
+          ];
         branch = getvar "-b" "branch";
         remote = getvar "-r" "remote";
         message = getvar "-m" "message";
@@ -35,10 +43,20 @@ let
           openssh
         ];
         script = ''
-          if [ -n "${cfg.remote}" ] && ! [ -d "${cfg.path}" ]; then
-            git clone ${branch} "${cfg.remote}" "${cfg.path}"
-          fi
-          gitwatch ${remote} ${message} ${branch} ${cfg.path}
+          ${optionalString (cfg.remote != null) ''
+            if ! [ -d ${escapeShellArg cfg.path} ]; then
+              git clone ${
+                escapeShellArgs (
+                  branch
+                  ++ [
+                    cfg.remote
+                    cfg.path
+                  ]
+                )
+              }
+            fi
+          ''}
+          exec gitwatch ${escapeShellArgs (remote ++ message ++ branch ++ [ cfg.path ])}
         '';
         serviceConfig.User = cfg.user;
       }
