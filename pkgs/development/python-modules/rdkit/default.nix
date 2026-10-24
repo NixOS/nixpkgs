@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchzip,
-  applyPatches,
   replaceVars,
   cmake,
   comic-neue,
@@ -18,6 +17,9 @@
   numpy,
   pandas,
   pillow,
+
+  # tests
+  pytest,
 }:
 let
   external = {
@@ -30,24 +32,20 @@ let
     chemdraw = fetchFromGitHub {
       owner = "Glysade";
       repo = "chemdraw";
-      tag = "v1.0.10";
-      hash = "sha256-ee2Oxvo2d7Yb59lN0zkrbFqy/3rOvVLo6qdS+f23wVQ=";
+      tag = "v1.0.14";
+      hash = "sha256-u3MSQqXzA0rGBH7KF96LlxBgR5twerQwY3cM0Rhf530=";
     };
-    yaehmop = applyPatches {
-      src = fetchFromGitHub {
-        owner = "greglandrum";
-        repo = "yaehmop";
-        rev = "v2025.03.1";
-        hash = "sha256-rhR7Ev+9Fk/Ks7R2x2SjWu1L/48a4zHDHUBohx1Dw/M=";
-      };
-
-      # Compatibility with CMake < 3.5 has been removed from CMake.
-      postPatch = ''
-        substituteInPlace tightbind/CMakeLists.txt \
-          --replace-fail \
-            "cmake_minimum_required(VERSION 3.0)" \
-            "cmake_minimum_required(VERSION 3.5)"
-      '';
+    yaehmop = fetchFromGitHub {
+      owner = "greglandrum";
+      repo = "yaehmop";
+      tag = "v2025.03.2";
+      hash = "sha256-YwP0uj6QLwby30hVESAtu1rv5pLTFhi0+EXN5IqICq8=";
+    };
+    ringdecomposerlib = fetchFromGitHub {
+      owner = "rareylab";
+      repo = "RingDecomposerLib";
+      tag = "v1.1.3_rdkit";
+      hash = "sha256-kYO37mHFCffQgM7jt+Op7cy8gNWE9d84ILHNebnQv+c=";
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";
@@ -75,25 +73,26 @@ let
   };
   boost' = boost.override { enableNumpy = true; };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rdkit";
-  version = "2025.03.6";
+  version = "2026.09.1";
   pyproject = false;
+  __structuredAttrs = true;
 
   src =
     let
-      versionTag = lib.replaceStrings [ "." ] [ "_" ] version;
+      versionTag = lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchFromGitHub {
       owner = "rdkit";
       repo = "rdkit";
       tag = "Release_${versionTag}";
-      hash = "sha256-DqnwfT+lX7OnArIcFlCBrDl+QDmNpbPO9u7OGwu8fJo=";
+      hash = "sha256-OH9g0qiOBT5f5sLf6944VjMt6obBzRoB3nUfhZd+gTk=";
     };
 
   unpackPhase = ''
     cp -r $src/* .
-    find . -type d -exec chmod +w {} +
+    chmod -R u+w .
 
     mkdir External/AvalonTools/avalon
     # In buildPhase, CMake patches the file in this directory
@@ -106,6 +105,10 @@ buildPythonPackage rec {
 
     mkdir External/YAeHMOP/yaehmop
     ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop
+
+    mkdir External/RingFamilies/RingDecomposerLib
+    cp -r ${external.ringdecomposerlib}/* External/RingFamilies/RingDecomposerLib
+    chmod -R +w External/RingFamilies/RingDecomposerLib
 
     mkdir External/FreeSASA/freesasa
     cp -r ${external.freesasa}/* External/FreeSASA/freesasa
@@ -128,18 +131,6 @@ buildPythonPackage rec {
     })
   ];
 
-  # Prevent linking to libpython which fails on darwin with:
-  # Undefined symbols for architecture arm64
-  # Reverts https://github.com/rdkit/rdkit/commit/470df8cd2fab78d64ef1dd254576097b651c3dd9
-  postPatch = ''
-    substituteInPlace \
-      CMakeLists.txt \
-      External/pubchem_shape/Wrap/CMakeLists.txt \
-      --replace-fail \
-        "find_package(Python3 COMPONENTS Interpreter Development.Module NumPy" \
-        "find_package(Python3 COMPONENTS Interpreter Development NumPy"
-  '';
-
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
@@ -160,6 +151,8 @@ buildPythonPackage rec {
   hardeningDisable = [ "format" ]; # required by yaehmop
 
   cmakeFlags = [
+    # Register the tests with ctest (the cmake hook disables it, as `doCheck` is false for python packages)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.doInstallCheck)
     (lib.cmakeBool "Boost_NO_BOOST_CMAKE" true)
     (lib.cmakeBool "Boost_NO_SYSTEM_PATHS" true)
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) # fails to find libs in pythonImportsCheckPhase otherwise
@@ -177,18 +170,46 @@ buildPythonPackage rec {
     (lib.cmakeBool "RDK_INSTALL_STATIC_LIBS" false)
     (lib.cmakeBool "RDK_TEST_MULTITHREADED" true)
     (lib.cmakeBool "RDK_USE_FLEXBISON" false)
-    (lib.cmakeBool "RDK_USE_URF" false)
     (lib.cmakeFeature "AVALONTOOLS_DIR" "avalon")
     (lib.cmakeFeature "FREESASA_SRC_DIR" "freesasa")
     (lib.cmakeFeature "maeparser_DIR" "${maeparser}/lib/cmake")
     (lib.cmakeFeature "coordgen_DIR" "${coordgenlibs}/lib/cmake")
   ];
 
+  # The CMake build does not produce any .dist-info, which makes the runtime dependency check of
+  # reverse dependencies fail. Install a minimal one so that `importlib.metadata` finds rdkit.
+  postInstall = ''
+    distInfo="$out/${python.sitePackages}/rdkit-${finalAttrs.version}.dist-info"
+    mkdir -p "$distInfo"
+    cat > "$distInfo/METADATA" <<EOF
+    Metadata-Version: 2.1
+    Name: rdkit
+    Version: ${finalAttrs.version}
+    EOF
+    echo "nix" > "$distInfo/INSTALLER"
+  '';
+
+  nativeCheckInputs = [ pytest ];
+
+  disabledCtests = [
+    # Drawing coordinates depend on the text rendering of the legend
+    "moldraw2DTestCatch"
+    # Runs pytest on the source tree, which shadows the installed (compiled) package
+    "pythonSourceTests"
+  ];
+
+  # Run the C++ and Python test suites through ctest, against the installed package
   checkPhase = ''
+    runHook preCheck
+
     export QT_QPA_PLATFORM='offscreen'
     export RDBASE=$(realpath ..)
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
-    (cd $RDBASE/rdkit/Chem && python $RDBASE/rdkit/TestRunner.py test_list.py)
+    export LD_LIBRARY_PATH="$out/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"
+    ctest --output-on-failure -j $NIX_BUILD_CORES -E "^(${lib.concatStringsSep "|" finalAttrs.disabledCtests})$"
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [
@@ -206,6 +227,6 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.bsd3;
     homepage = "https://www.rdkit.org";
-    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.tag}";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})
