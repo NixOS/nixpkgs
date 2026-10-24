@@ -6856,6 +6856,7 @@ with pkgs;
   freshrss-extensions = recurseIntoAttrs (callPackage ../servers/web-apps/freshrss/extensions { });
 
   inherit (callPackage ../servers/web-apps/fluxer { })
+    fluxer-rust-packages
     fluxer-admin
     fluxer-api
     fluxer-app-proxy
