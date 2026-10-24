@@ -8,15 +8,16 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setproctitle";
   version = "1.3.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dvarrazzo";
     repo = "py-setproctitle";
-    tag = "version-${version}";
+    tag = "version-${finalAttrs.version}";
     hash = "sha256-PGTaK9/Wwd5Lp2tZCVSrnPkfVwWvJIq8rWNQ83OH/eI=";
   };
 
@@ -30,9 +31,6 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Setting the process title fails on macOS in the Nix builder environment (regardless of sandboxing)
     "test_setproctitle_darwin"
-    # *** multi-threaded process forked ***; crashed on child side of fork pre-exec. fork without exec is unsafe.
-    "test_fork_segfault"
-    "test_thread_fork_segfault"
   ];
 
   pythonImportsCheck = [ "setproctitle" ];
@@ -40,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Allows a process to change its title (as displayed by system tools such as ps and top)";
     homepage = "https://github.com/dvarrazzo/py-setproctitle";
-    changelog = "https://github.com/dvarrazzo/py-setproctitle/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/dvarrazzo/py-setproctitle/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ exi ];
   };
-}
+})
