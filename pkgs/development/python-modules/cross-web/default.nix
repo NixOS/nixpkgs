@@ -71,8 +71,10 @@ buildPythonPackage (finalAttrs: {
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
-    # Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    # httpx with starlette.testclient is deprecated
     "-Wignore::starlette.exceptions.StarletteDeprecationWarning"
+    # Litestar deprecated this path parameter style
+    "-Wignore::litestar.exceptions.base_exceptions.LitestarDeprecationWarning"
   ];
 
   pythonImportsCheck = [ "cross_web" ];
