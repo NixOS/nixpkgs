@@ -40,7 +40,7 @@ in
         def can_connect(_last_try: bool) -> bool:
             return subprocess.call(
                 ["${lib.getExe hostPkgs.xdotool}", "getdisplaygeometry"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
             ) == 0
 
         retry(can_connect, timeout=dt.timedelta(seconds=30))
