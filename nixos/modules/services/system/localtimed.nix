@@ -37,8 +37,8 @@ in
     time.timeZone = null;
 
     services.geoclue2.appConfig.localtimed = {
-      isAllowed = true;
-      isSystem = true;
+      allowed = true;
+      system = true;
       users = [ (toString config.ids.uids.localtimed) ];
     };
 
