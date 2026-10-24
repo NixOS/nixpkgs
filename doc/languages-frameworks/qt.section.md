@@ -1,7 +1,6 @@
 # Qt {#sec-language-qt}
 
-Writing Nix expressions for Qt libraries and applications is largely similar to that for other C++ software.
-This section assumes some knowledge of the latter.
+Writing Nix expressions for Qt libraries and applications is largely similar to that for other C++ software, and requires the same knowledge.
 
 The major caveat with Qt applications is that Qt uses a plugin system to load additional modules at runtime.
 In Nixpkgs, we wrap Qt applications to inject environment variables telling Qt where to discover the required plugins and QML modules.

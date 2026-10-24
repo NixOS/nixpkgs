@@ -261,8 +261,6 @@ $ bundle config set --local force_ruby_platform true
 
 ### Adding a gem to the default gemset {#adding-a-gem-to-the-default-gemset}
 
-Now that you know how to get a working Ruby environment with Nix, it's time to go forward and start actually developing with Ruby. We will first have a look at how Ruby gems are packaged on Nix. Then, we will look at how you can use development mode with your code.
-
 All gems in the standard set are automatically generated from a single `Gemfile`. The dependency resolution is done with `bundler` and makes it more likely that all gems are compatible with each other.
 
 To add a new gem to nixpkgs, you can put it into the `/pkgs/development/ruby-modules/with-packages/Gemfile` and run `./maintainers/scripts/update-ruby-packages`.
@@ -301,7 +299,7 @@ bundlerApp {
 }
 ```
 
-All that's left to do is to generate the corresponding `Gemfile.lock` and `gemset.nix` as described above in the `Using an existing Gemfile` section.
+All that's left to do is to generate the corresponding `Gemfile.lock` and `gemset.nix` as described in [Using an existing Gemfile](#using-an-existing-gemfile).
 
 #### Packaging executables that require wrapping {#packaging-executables-that-require-wrapping}
 

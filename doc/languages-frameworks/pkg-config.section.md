@@ -47,7 +47,7 @@ This will populate environment variables like `PKG_CONFIG_PATH`, `PKG_CONFIG_PAT
 
  - how other dependencies are depended upon
 
-For more details see the section on [specifying dependencies in general](#ssec-stdenv-dependencies).
+For more details see [Specifying dependencies](#ssec-stdenv-dependencies).
 
 Normal pkg-config commands to look up dependencies by name will then work with those environment variables defined by the hook.
 

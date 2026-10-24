@@ -874,7 +874,7 @@ However, `fetchFromGitHub` will automatically switch to using `fetchgit` in any 
 - `sparseCheckout` contains any entries (is a non-empty list)
 - `rootDir` is set to a non-empty string
 
-When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
+When `fetchgit` is used, see [`fetchgit`](#fetchgit) for its available options.
 
 ## `fetchFromHuggingFace` {#fetchfromhuggingface}
 
@@ -938,7 +938,7 @@ However, `fetchFromBitbucket` will automatically switch to using `fetchgit` and 
 - `sparseCheckout` contains any entries (is a non-empty list)
 - `rootDir` is set to a non-empty string
 
-When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
+When `fetchgit` is used, see [`fetchgit`](#fetchgit) for its available options.
 
 ## `fetchFromRepoOrCz` {#fetchfromrepoorcz}
 

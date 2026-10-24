@@ -15,7 +15,7 @@ dependencies disabled and `vim-full` which has them configurable and enabled by 
 ::: {.note}
 `vim_configurable` is a deprecated alias for `vim-full` and refers to the fact that its
 build-time features are configurable. It has nothing to do with user configuration,
-and both the `vim` and `vim-full` packages can be customized as explained in the next section.
+and both the `vim` and `vim-full` packages can be customized.
 :::
 
 ## Custom configuration {#vim-custom-configuration}

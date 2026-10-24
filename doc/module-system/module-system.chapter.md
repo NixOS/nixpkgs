@@ -7,7 +7,7 @@ The module system is a language for handling configuration, implemented as a Nix
 Compared to plain Nix, it adds documentation, type checking and composition or extensibility.
 
 ::: {.note}
-This chapter is new and not complete yet.
+The module system documentation is incomplete.
 
 See also:
 - Introduction to the module system, in the context of NixOS, see [Writing NixOS Modules](https://nixos.org/manual/nixos/unstable/index.html#sec-writing-modules) in the NixOS manual.

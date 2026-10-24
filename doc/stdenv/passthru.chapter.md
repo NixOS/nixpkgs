@@ -41,7 +41,7 @@ hello.baz.value1
 
 ## Common `passthru`-attributes {#sec-common-passthru-attributes}
 
-Many `passthru` attributes are situational, so this section only lists recurring patterns.
+Many `passthru` attributes are situational, so only recurring patterns are listed here.
 They fall in one of these categories:
 
 - Global conventions, which are applied almost universally in Nixpkgs.

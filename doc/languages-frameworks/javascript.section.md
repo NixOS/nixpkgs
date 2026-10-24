@@ -502,7 +502,7 @@ Version 3 is the minimum supported value. Versions 1 and 2 were removed in the 2
 
 Yarn-based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies.
 
-To package Yarn-based applications, you need to distinguish by the version pointers in the `yarn.lock` file. See the following sections.
+To package Yarn-based applications, you need to distinguish by the version pointers in the `yarn.lock` file.
 
 #### Yarn v1 {#javascript-yarn-v1}
 

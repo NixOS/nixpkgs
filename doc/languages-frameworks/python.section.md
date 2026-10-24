@@ -616,8 +616,8 @@ python3.withPackages (ps: [ ps.pyramid ])
 Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
 
 As [`python.withPackages`](#python.withpackages-function) uses [`python.buildEnv`](#python.buildenv-function) under the hood, it also
-supports the `env` attribute. The `shell.nix` file from the previous section can
-thus be also written like this:
+supports the `env` attribute. The earlier `shell.nix` file can thus be also
+written like this:
 
 ```nix
 with import <nixpkgs> { };
@@ -806,8 +806,8 @@ b = np.array([3,4])
 print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 ```
 
-Executing this script requires a `python3` that has `numpy`. Using what we learned
-in the previous section, we could startup a shell and just run it like so:
+Executing this script requires a `python3` that has `numpy`. You can start up a
+shell and run it like so:
 
 ```ShellSession
 $ nix-shell -p 'python313.withPackages (ps: with ps; [ numpy ])' --run 'python3 foo.py'
@@ -1066,10 +1066,9 @@ when building the package. Since there are no tests, we rely on [`pythonImportsC
 to test whether the package can be imported. Furthermore, we specify some meta
 information. The output of the function is a derivation.
 
-An expression for `toolz` can be found in the Nixpkgs repository. As explained
-in the introduction of this Python section, a derivation of `toolz` is available
-for each interpreter version, e.g. `python313Packages.toolz` refers to the `toolz`
-derivation corresponding to the CPython 3.13 interpreter.
+An expression for `toolz` can be found in the Nixpkgs repository. A derivation of
+`toolz` is available for each interpreter version, e.g. `python313Packages.toolz`
+refers to the `toolz` derivation corresponding to the CPython 3.13 interpreter.
 
 The above example works when you're directly working on
 `pkgs/top-level/python-packages.nix` in the Nixpkgs repository. Often though,
@@ -1838,8 +1837,8 @@ in
 The requested package `blaze` depends on `pandas` which itself depends on `scipy`.
 
 If you want the whole of Nixpkgs to use your modifications, then you can use
-`overlays` as explained in this manual. In the following example we build a
-`inkscape` using a different version of `numpy`.
+[overlays](#chap-overlays). This example builds `inkscape` with a different
+version of `numpy`.
 
 ```nix
 let
@@ -2117,8 +2116,7 @@ final: prev: {
 
 ### How to use Intel’s MKL with numpy and scipy? {#how-to-use-intels-mkl-with-numpy-and-scipy}
 
-MKL can be configured using an overlay. See the section "[Using overlays to
-configure alternatives](#sec-overlays-alternatives-blas-lapack)".
+MKL can be configured using an overlay. See [BLAS/LAPACK](#sec-overlays-alternatives-blas-lapack).
 
 ### What inputs do `setup_requires`, `install_requires` and `tests_require` map to? {#what-inputs-do-setup_requires-install_requires-and-tests_require-map-to}
 
@@ -2194,7 +2192,7 @@ We recommend [nix-init](https://github.com/nix-community/nix-init) for creating 
 as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
 When using the tool, pull from the original source repository instead of PyPI, if possible.
 
-See also [contributing section](#contributing).
+See also [Contributing](#contributing).
 
 ### Are Python interpreters built deterministically? {#deterministic-builds}
 
