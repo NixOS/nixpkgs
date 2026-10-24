@@ -7,17 +7,18 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-scrobbler";
-  version = "2.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
-    pname = "Mopidy-Scrobbler";
-    sha256 = "11vxgax4xgkggnq4fr1rh2rcvzspkkimck5p3h4phdj3qpnj0680";
+    pname = "mopidy_scrobbler";
+    hash = "sha256-kYBah5eUZGwFTPlyN+ILjKcZVpW4e1+VFSu2OSlN9Sw=";
   };
 
   build-system = [
     pythonPackages.setuptools
+    pythonPackages.setuptools-scm
   ];
 
   dependencies = [
