@@ -20444,6 +20444,12 @@
     githubId = 6295090;
     name = "Mats";
   };
+  mylesbolton = {
+    email = "nixos.github@mylesbolton.com";
+    github = "MylesBolton";
+    githubId = 38015231;
+    name = "Myles Bolton";
+  };
   mymindstorm = {
     name = "Brendan Early";
     email = "mymindstorm@evermiss.net";
