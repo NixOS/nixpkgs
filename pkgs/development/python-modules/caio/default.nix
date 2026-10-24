@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caio";
-  version = "0.12.9";
+  version = "0.12.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mosquito";
     repo = "caio";
     tag = finalAttrs.version;
-    hash = "sha256-uP4g9dq+eIG6mYJM+/vJthMFSyuRLjaIYp77hTf9Yog=";
+    hash = "sha256-MVjvXdvJU3PN1veklNNO+ZhqCVq24LoRcl84diWbCso=";
   };
 
   postPatch = ''
