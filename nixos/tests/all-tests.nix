@@ -1270,6 +1270,7 @@ in
   nimdow = runTest ./nimdow.nix;
   nipap = runTest ./web-apps/nipap.nix;
   nitter = runTest ./nitter.nix;
+  nix-app-center = runTest ./nix-app-center.nix;
   nix-config = runTest ./nix-config.nix;
   nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
   nix-daemon-unprivileged = runTest ./nix-daemon-unprivileged.nix;

@@ -288,6 +288,7 @@
   ./programs/nethoscope.nix
   ./programs/nexttrace.nix
   ./programs/nh.nix
+  ./programs/nix-app-center.nix
   ./programs/nix-index.nix
   ./programs/nix-ld.nix
   ./programs/nix-required-mounts.nix
