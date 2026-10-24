@@ -15,7 +15,7 @@ import warnings
 import json
 from typing import NamedTuple, Any, Protocol, Sequence
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 # These values will be replaced with actual values during the package build
 EFI_SYS_MOUNT_POINT = Path("@efiSysMountPoint@")
@@ -39,6 +39,9 @@ CHECK_MOUNTPOINTS = "@checkMountpoints@"
 STORE_DIR = "@storeDir@"
 BOOT_COUNTING_TRIES = "@bootCountingTries@"
 BOOT_COUNTING = "@bootCounting@" == "True"
+LOADER_BOOT_COUNT_PATH = Path(
+    "/sys/firmware/efi/efivars/LoaderBootCountPath-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+)
 
 
 @dataclass(frozen=True)
@@ -620,8 +623,90 @@ def remove_extra_files() -> None:
     extra_files_dir.mkdir(parents=True, exist_ok=True)
 
 
+def booted_entry_gc_roots() -> set[Path]:
+    try:
+        variable = LOADER_BOOT_COUNT_PATH.read_bytes()
+    except FileNotFoundError:
+        return set()
+    except OSError as error:
+        print(
+            f"warning: failed to read {LOADER_BOOT_COUNT_PATH}: {error}",
+            file=sys.stderr,
+        )
+        return set()
+
+    try:
+        # efivarfs prefixes variable data with a native-endian uint32 containing
+        # its attributes. LoaderBootCountPath itself is a UTF-16LE EFI path.
+        boot_count_path = variable[4:].decode("utf-16-le").rstrip("\0")
+    except UnicodeDecodeError as error:
+        print(
+            f"warning: failed to decode {LOADER_BOOT_COUNT_PATH}: {error}",
+            file=sys.stderr,
+        )
+        return set()
+
+    match = re.fullmatch(
+        r"\\loader\\entries\\nixos-(?P<hash>[0-9a-f]{64})"
+        r"\+(?P<left>[0-9]+)(?:-(?P<done>[0-9]+))?\.conf",
+        boot_count_path,
+    )
+    if match is None:
+        return set()
+
+    contents_hash = match.group("hash")
+    prefix = f"nixos-{contents_hash}"
+    done = match.group("done")
+    failed_counter = "+0" + (f"-{done}" if done is not None else "")
+    entry_names = {
+        PurePosixPath(boot_count_path.replace("\\", "/")).name,
+        f"{prefix}.conf",
+        f"{prefix}{failed_counter}.conf",
+    }
+
+    keep: set[Path] = set()
+    entries_dir = BOOT_MOUNT_POINT / "loader/entries"
+    for entry_name in entry_names:
+        entry_path = entries_dir / entry_name
+        try:
+            contents = entry_path.read_bytes()
+        except FileNotFoundError:
+            continue
+        except OSError as error:
+            print(f"warning: failed to read {entry_path}: {error}", file=sys.stderr)
+            continue
+
+        # NixOS entry names are content-addressed. Do not trust an EFI variable
+        # to retain files unless the entry content matches the name it selected.
+        if hashlib.sha256(contents).hexdigest() != contents_hash:
+            continue
+
+        try:
+            lines = contents.decode("utf-8").splitlines()
+        except UnicodeDecodeError:
+            continue
+
+        keep.add(entry_path)
+        for line in lines:
+            field, separator, value = line.partition(" ")
+            if separator == "" or field not in {"linux", "initrd", "devicetree"}:
+                continue
+
+            referenced_path = PurePosixPath(value)
+            relative_parts = referenced_path.parts[1:]
+            if (
+                referenced_path.is_absolute()
+                and ".." not in referenced_path.parts
+                and relative_parts[: len(NIXOS_DIR.parts)] == NIXOS_DIR.parts
+            ):
+                keep.add(BOOT_MOUNT_POINT.joinpath(*relative_parts))
+
+    return keep
+
+
 def garbage_collect(gc_roots: BootFileList) -> None:
     keep = {BOOT_MOUNT_POINT / gc_root.path for gc_root in gc_roots}
+    keep.update(booted_entry_gc_roots())
 
     def delete_path(e: os.DirEntry) -> None:
         if e.is_file(follow_symlinks=True) and Path(e.path) not in keep:
