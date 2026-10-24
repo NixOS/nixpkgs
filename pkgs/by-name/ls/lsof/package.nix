@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
       from it).
     '';
     license = lib.licenses.lsof;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     platforms = lib.platforms.unix;
   };
 }
