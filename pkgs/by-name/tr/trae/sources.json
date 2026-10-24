@@ -1,0 +1,22 @@
+{
+  "version": "2.3.17433",
+  "vscodeVersion": "1.107.1",
+  "sources": {
+    "x86_64-linux": {
+      "url": "https://lf-cdn.trae.ai/obj/trae-ai-us/pkg/app/releases/stable/2.3.17433/linux/Trae-linux-x64.deb",
+      "hash": "sha256-KznVuafsXvocHmEX8keVQbfTwIcXNYZSqJ9imUpEiz4="
+    },
+    "aarch64-linux": {
+      "url": "https://lf-cdn.trae.ai/obj/trae-ai-us/pkg/app/releases/stable/2.3.17433/linux/Trae-linux-arm64.deb",
+      "hash": "sha256-7IeZ4PEvkQ3RC7Ec2bgJ9amISUfXxtorzW7qdB+p3eE="
+    },
+    "x86_64-darwin": {
+      "url": "https://lf-cdn.trae.ai/obj/trae-ai-us/pkg/app/releases/stable/2.3.17433/darwin/Trae-darwin-x64.dmg",
+      "hash": "sha256-J+5hbayhTwOcjh9/VSLFWxEwMh9ky7Pq4cWPro1QoC0="
+    },
+    "aarch64-darwin": {
+      "url": "https://lf-cdn.trae.ai/obj/trae-ai-us/pkg/app/releases/stable/2.3.17433/darwin/Trae-darwin-arm64.dmg",
+      "hash": "sha256-tSJWoebE6iMJLTtBHDisKdGQ+VvD8RjEbUagehFU7HM="
+    }
+  }
+}
