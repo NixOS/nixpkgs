@@ -1377,6 +1377,8 @@ self: super: with self; {
 
   art = callPackage ../development/python-modules/art { };
 
+  artemis-client = callPackage ../development/python-modules/artemis-client { };
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   arviz-base = callPackage ../development/python-modules/arviz-base { };
