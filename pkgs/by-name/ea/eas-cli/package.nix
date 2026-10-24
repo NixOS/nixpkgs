@@ -83,6 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  # Prune to only production deps to save space
+  preInstall = ''
+    yarn workspaces focus -A --production
+  '';
+
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.
   installPhase = ''
     runHook preInstall
