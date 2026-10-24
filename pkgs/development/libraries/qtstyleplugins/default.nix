@@ -5,7 +5,6 @@
   fetchpatch,
   qmake,
   pkg-config,
-  gtk2,
 }:
 
 mkDerivation {
@@ -36,7 +35,6 @@ mkDerivation {
     pkg-config
     qmake
   ];
-  buildInputs = [ gtk2 ];
 
   meta = {
     description = "Additional style plugins for Qt5, including BB10, GTK, Cleanlooks, Motif, Plastique";
