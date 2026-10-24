@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = [ lib.maintainers.fuerbringer ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     longDescription = ''
       diskus is a very simple program that computes the total size of the
