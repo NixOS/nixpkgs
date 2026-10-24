@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 {
   stdenv,
   lib,
@@ -232,6 +233,9 @@ let
       __structuredAttrs = true;
       strictDeps = true;
       inherit pname version;
+
+      # Keep update tools from treating the wrapper as the source package.
+      pos = __curPos;
 
       desktopItem = makeDesktopItem (
         {
