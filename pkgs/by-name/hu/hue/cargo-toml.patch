@@ -1,0 +1,17 @@
+--- a/Cargo.toml	2025-07-23 20:30:32.660138210 +0900
++++ b/Cargo.toml	2025-07-23 20:39:15.699161531 +0900
+@@ -12,11 +12,11 @@
+ 
+ [dependencies]
+ atomic_float = "0.1"
+-nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git", features = ["assert_process_allocs"] }
+-nih_plug_vizia = { git = "https://github.com/robbert-vdh/nih-plug.git" }
++nih_plug = { git = "https://github.com/robbert-vdh/nih-plug.git", features = ["assert_process_allocs"], rev = "efdffbd24589c4e8cbe4677e861bbd08e71c7145" }
++nih_plug_vizia = { git = "https://github.com/robbert-vdh/nih-plug.git", rev = "efdffbd24589c4e8cbe4677e861bbd08e71c7145" }
+ parking_lot = "0.12.1"
+ rand = "0.8.5"
+ rand_distr = "0.4.3"
+ realfft = "3.3.0"
+ triple_buffer = "6.2.0"
+-vizia = "0.1.0"
++vizia = { git = "https://github.com/robbert-vdh/vizia.git", tag = "patched-2024-05-06", default-features = false, features = ["baseview", "clipboard", "x11"] }
