@@ -2,120 +2,165 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nasm,
-  pkg-config,
+  SDL2,
+  SDL2_net,
+  a52dec,
   alsa-lib,
   curl,
+  discord-rpc,
+  faad2,
   flac,
   fluidsynth,
   freetype,
+  fribidi,
+  giflib,
+  gtk3,
+  libGL,
+  libGLU,
   libjpeg,
   libmad,
+  libmpcdec,
   libmpeg2,
   libogg,
+  libopenmpt,
+  libpng,
   libtheora,
   libvorbis,
-  libGLU,
-  libGL,
+  libvpx,
   libx11,
-  SDL2,
-  zlib,
-  cctools,
-  fetchpatch,
+  nasm,
   nix-update-script,
+  pkg-config,
+  python3,
+  sndio,
+  sonivox,
+  speechd-minimal,
+  versionCheckHook,
+  zlib,
+
+  withCloud ? true,
+  withDiscord ? true,
+  withFluidsynth ? true,
+  withGtk ? stdenv.hostPlatform.isLinux,
+  withNetworking ? true,
+  withTTS ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scummvm";
-  version = "2026.3.0";
+  version = "2026.4.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wFEYg3hRVNVlxpw3xP8O8s4ILKy487k5hyWENaLiOlw=";
+    hash = "sha256-GBPfByKCWP4/YGRXMapM1oo0MzZZ2bAzFRu4DmZQMrI=";
   };
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   nativeBuildInputs = [
     nasm
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libGLU
-      libGL
-    ]
-    ++ [
-      curl
-      freetype
-      flac
-      fluidsynth
-      libjpeg
-      libmad
-      libmpeg2
-      libogg
-      libtheora
-      libvorbis
-      SDL2
-      libx11
-      zlib
-    ];
+  buildInputs = [
+    SDL2
+    a52dec
+    faad2
+    flac
+    freetype
+    fribidi
+    giflib
+    libjpeg
+    libmad
+    libmpcdec
+    libmpeg2
+    libogg
+    libopenmpt
+    libpng
+    libtheora
+    libvorbis
+    libvpx
+    libx11
+    sndio
+    sonivox
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libGL
+    libGLU
+  ]
+  ++ lib.optional withCloud curl
+  ++ lib.optional withDiscord discord-rpc
+  ++ lib.optional withFluidsynth fluidsynth
+  ++ lib.optional withGtk gtk3
+  ++ lib.optional withNetworking SDL2_net
+  ++ lib.optional (withTTS && stdenv.hostPlatform.isLinux) speechd-minimal;
 
   dontDisableStatic = true;
-
   enableParallelBuilding = true;
 
-  configurePlatforms = [ "host" ];
   configureFlags = [
     "--enable-release"
-  ];
-
-  preConfigure = ''
-    PATH="${lib.getDev SDL2}/bin:$PATH"
-  '';
+    "--with-sdl-prefix=${lib.getDev SDL2}"
+  ]
+  ++ (
+    if withCloud then
+      [ "--with-libcurl-prefix=${lib.getDev curl}" ]
+    else
+      [
+        "--disable-cloud"
+        "--disable-libcurl"
+      ]
+  )
+  ++ lib.optional (!withDiscord) "--disable-discord"
+  ++ lib.optional (!withFluidsynth) "--disable-fluidsynth"
+  ++ lib.optional (!withGtk) "--disable-gtk"
+  ++ lib.optional (!withNetworking) "--disable-sdlnet"
+  ++ lib.optional (!withTTS) "--disable-tts";
 
   # They use 'install -s', that calls the native strip instead of the cross
   postConfigure = ''
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace config.mk \
-      --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
   '';
 
-  patches = [
-    # Nancy Drew build error. Remove after next release.
-    (fetchpatch {
-      url = "https://github.com/scummvm/scummvm/commit/e2ef63e84123c199ab55de445e406aa626147e10.patch";
-      hash = "sha256-sdabI0W6Apav/pgGBxY+usHUakxECZtYu2tdyi8gojk=";
-    })
-  ];
+  doCheck = true;
+  nativeCheckInputs = [ python3 ];
+  checkTarget = "test";
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
+  preCheck = ''
+    patchShebangs --build test/cxxtest/bin/cxxtestgen
+  '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = "SDL_VIDEODRIVER";
+
+  preVersionCheck = ''
+    export SDL_VIDEODRIVER=dummy
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     longDescription = ''
-      ScummVM is a program which allows you to run a variety of classic
-      graphical point-and-click adventure games and role-playing games,
-      provided you already have their data files. It reimplements the original
+      ScummVM allows you to play classic graphic point-and-click adventure games,
+      text adventure games, and RPGs. It reimplements the original
       engines (SCUMM, SCI, AGS, and many more) so those games can be played
       on systems and hardware they were never designed for.
     '';
     homepage = "https://www.scummvm.org/";
-    changelog = "https://github.com/scummvm/scummvm/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/scummvm/scummvm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ peterhoeg ];
-    mainProgram = "scummvm";
+    maintainers = with lib.maintainers; [
+      keenanweaver
+      peterhoeg
+    ];
     platforms = lib.platforms.unix;
+    mainProgram = "scummvm";
   };
 })
