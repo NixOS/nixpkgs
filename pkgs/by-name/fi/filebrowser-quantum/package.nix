@@ -61,6 +61,12 @@ buildGo127Module {
     cp -r ${frontend}/* internal/web/embed/
   '';
 
+  # goModules inherits preBuild, which would make it depend on the frontend;
+  # nix-update then records the npmDepsHash mismatch as vendorHash
+  overrideModAttrs = {
+    preBuild = "";
+  };
+
   postInstall = ''
     mv $out/bin/backend $out/bin/filebrowser-quantum
   '';
@@ -72,7 +78,15 @@ buildGo127Module {
     "-X github.com/gtsteffaniak/filebrowser/backend/internal/version.Version=testing"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+  };
 
   meta = {
     description = "Access and manage your files from the web";
