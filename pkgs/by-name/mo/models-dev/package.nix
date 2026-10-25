@@ -68,8 +68,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "b7ea0f2912b64f9d486a382aa2923279283fc8c0";
-    hash = "sha256-feTlt/WmSKbG31jmyQH5Ci8fcnrQpIhxsc6iCISZwhU=";
+    rev = "205c4d569b6670625f845d018429847f5dea7e3e";
+    hash = "sha256-iN5qc/t6gDfCP7KFsSXC/lxQTYcEBX+RnxbEemw8Ctg=";
   };
 
   node_modules = node_modules finalAttrs;
