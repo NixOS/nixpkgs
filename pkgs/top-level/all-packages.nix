@@ -1001,8 +1001,6 @@ with pkgs;
 
   mkosi-full = mkosi.override { withQemu = true; };
 
-  openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
-
   openusd = python3Packages.openusd.override {
     withTools = true;
     withUsdView = true;
