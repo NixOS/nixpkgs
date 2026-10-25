@@ -61,9 +61,9 @@
     services.udev.packages = [ pkgs.ipp-usb ];
     services.avahi = {
       enable = true;
-      publish = {
-        enable = true;
-        userServices = true;
+      settings.publish = {
+        disable-publishing = false;
+        publish-addresses = true;
       };
     };
     # enable printing and scanning by default, but not required.
