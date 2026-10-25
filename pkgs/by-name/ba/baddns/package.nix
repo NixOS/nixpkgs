@@ -77,6 +77,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "test_txt_with_cname_findings"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Tool to check subdomains for subdomain takeovers and other DNS issues";
     homepage = "https://github.com/blacklanternsecurity/baddns/";
