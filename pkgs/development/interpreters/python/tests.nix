@@ -292,6 +292,7 @@ let
   );
 
 in
-lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
-  environmentTests // integrationTests // overrideTests // condaTests // editableTests
+overrideTests
+// lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
+  environmentTests // integrationTests // condaTests // editableTests
 )
