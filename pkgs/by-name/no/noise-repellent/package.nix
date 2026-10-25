@@ -18,7 +18,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "noise-repellent";
-  version = "0.3.2";
+  version = "0.4.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lucianodato";
     repo = "noise-repellent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DDURrWUcFaJxOEg8+51caYnYPXZZJhSqTJd9HGvzZ3g=";
+    hash = "sha256-cv2eqY4x5Nj2nFVKTYwY1mYCkv5/icM2cGw4cN225ug=";
   };
 
   nativeBuildInputs = [
