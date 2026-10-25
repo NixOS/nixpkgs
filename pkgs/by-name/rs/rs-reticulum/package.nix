@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-reticulum";
-  version = "1.2.0";
+  version = "1.3.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";
     repo = "rsReticulum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gdup7PaYOQnBE3Mm4adpjQh5W3DaXWrdmuUhj5cF0ZE=";
+    hash = "sha256-EnmM9H6Ag6xUhROTBV5XUOE6jRF50g+nfw8/p1e59pY=";
   };
 
-  cargoHash = "sha256-n7r/80mLl/AiBxnkwT7MLQUmNnBNUmNEtwPWBpkT1hQ=";
+  cargoHash = "sha256-0xSFr02hvrPoUZ6ZPH0q8R+VWliKmWlVWBIKYqGhxcE=";
 
   nativeBuildInputs = [
     pkg-config

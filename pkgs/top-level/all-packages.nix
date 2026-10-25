@@ -2207,6 +2207,8 @@ with pkgs;
 
   keycloakPlugins = recurseIntoAttrs keycloak.plugins;
 
+  lean = lean4;
+
   limine-full = limine.override { enableAll = true; };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
@@ -2521,8 +2523,6 @@ with pkgs;
     etcDir = "/etc/ssh";
     withKerberos = true;
   };
-
-  sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
 
   openvpn = callPackage ../tools/networking/openvpn { };
 
@@ -9866,8 +9866,6 @@ with pkgs;
   };
 
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
-
-  lean3 = lean;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;

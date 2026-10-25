@@ -9,7 +9,7 @@
   cuda_nvcc,
   cuda_nvml_dev,
   cuda_nvrtc,
-  cuda_nvtx,
+  nvtx,
   cudaAtLeast,
   cudaMajorMinorVersion,
   cudaNamePrefix,
@@ -125,7 +125,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     cuda_cudart
     cuda_nvml_dev
     cuda_nvrtc
-    cuda_nvtx
+    nvtx
     libnvjitlink
     rdma-core
   ]
