@@ -4590,6 +4590,7 @@ with pkgs;
     electron-chromedriver_42
     electron-chromedriver_43
     electron-chromedriver_44
+    electron-chromedriver_45
     ;
 
   inherit
