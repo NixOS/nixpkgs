@@ -13176,12 +13176,6 @@
     githubId = 1131529;
     name = "Jan van Esdonk";
   };
-  javaguirre = {
-    email = "contacto@javaguirre.net";
-    github = "javaguirre";
-    githubId = 488556;
-    name = "Javier Aguirre";
-  };
   javimerino = {
     email = "merino.jav@gmail.com";
     name = "Javi Merino";
