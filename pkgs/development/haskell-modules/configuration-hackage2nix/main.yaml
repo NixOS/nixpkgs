@@ -25,6 +25,8 @@
 # not work.
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
+  # 2026-10-25: 0.7 needs Cabal-syntax 3.18, expected with GHC 10.0
+  - cabal-install-parsers < 0.7
   - clash-lib-hedgehog < 1.9 # needs to match clash-lib from Stackage
   # 2025-12-26: Needs to match egison-pattern-src from Stackage
   - egison-pattern-src-th-mode < 0.2.2
