@@ -66,13 +66,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.12.1";
+    version = "2.12.2";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-ZVLqxkM+73hwhB34SzXwnbobCW7Y+bdSCmeyFdRjpsg=";
+      hash = "sha256-+HsS8x4og3FpQEyn+YBZRYjVNYNTn0PkhOStrsbhWP8=";
       fetchSubmodules = true;
     };
 
@@ -144,11 +144,11 @@ stdenv.mkDerivation (
     ++ lib.optional withCloudUi (
       replaceVars ./dashboard-v3-add.patch {
         # FIXME web.archive.org link can be replace once https://github.com/netdata/netdata-cloud/issues/1081 resolved
-        # last update 12/10/2025 21:25:17
+        # last update 10/25/2026 01:43:42
         dashboardPath = fetchzip {
           # The `if_` suffix is intentional, with out it the hash will vary depending on the region
-          url = "https://web.archive.org/web/20251210212517if_/https://app.netdata.cloud/agent.tar.gz";
-          hash = "sha256-8ovYkvt324l6f0YT6wTG+Y2u7VaVqotAdssnNTtHIEk=";
+          url = "https://web.archive.org/web/20261025014342if_/https://app.netdata.cloud/agent.tar.gz";
+          hash = "sha256-SKPGpQLRo1CkwKyh5O1/jB7EsGzVqh7qxy4uuLrehJI=";
         };
       }
     );
