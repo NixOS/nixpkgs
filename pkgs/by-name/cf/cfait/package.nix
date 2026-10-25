@@ -7,10 +7,9 @@
   cacert,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "cfait";
   version = "1.2.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitea {
     domain = "git.disroot.org";
