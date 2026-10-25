@@ -26,22 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "lossless-cut";
     tag = "v${finalAttrs.version}";
     hash = "sha256-N53B2qylJR163M5FEg8qLGazxTio3E7GTfGJXvvLQ9s=";
-
-    # Remove after upstream updates to Yarn 4.15
-    # https://github.com/mifi/lossless-cut/blob/master/package.json#L492
-    postFetch = ''
-      cd $out
-      patch -p1 < ${
-        (substitute {
-          src = ./yarn-fix.patch;
-          substitutions = [
-            "--replace-fail"
-            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
-            yarn-berry.lockfileVersion
-          ];
-        })
-      }
-    '';
   };
 
   patches = [
