@@ -18,7 +18,6 @@ import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Callable, Generator
 from contextlib import _GeneratorContextManager, contextmanager, nullcontext
-from functools import cached_property
 from pathlib import Path
 from queue import Queue
 from typing import Any
@@ -32,6 +31,7 @@ from test_driver.duration import (
 from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
+from test_driver.machine.nspawn import NspawnProcess
 from test_driver.machine.nspawn_display import NspawnVnc, NspawnVncConfiguration
 from test_driver.machine.ocr import (
     perform_ocr_on_screenshot,
@@ -1685,8 +1685,7 @@ class NspawnMachine(BaseMachine):
     pid: int | None
 
     machine_sock_path: Path
-    machine_sock: socket.socket | None
-    notify_thread: threading.Thread | None
+    container: NspawnProcess | None
     vnc: NspawnVnc | None
 
     @staticmethod
@@ -1721,12 +1720,7 @@ class NspawnMachine(BaseMachine):
         self.vnc_configuration = vnc
         self.vnc = None
         self.process = None
-        self.notify_thread = None
-        # State maintained by the notify-socket drainer thread (see
-        # `_drain_notify_socket`). Guarded by `_notify_lock`.
-        self._notify_lock = threading.Lock()
-        self._notify_ready = False
-        self._notify_leader_pid: int | None = None
+        self.container = None
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
 
@@ -1735,13 +1729,13 @@ class NspawnMachine(BaseMachine):
         Wait until it is possible to connect to the X server.
         """
         _warn_if_numeric_duration(timeout, "wait_for_x")
+        timeout = as_timedelta(timeout)
 
-        def check_x(_last_try: bool) -> bool:
-            status, _ = self.execute("xwininfo -root >/dev/null 2>&1")
-            return status == 0
+        self.start()
+        assert self.container is not None
 
-        with self.nested("waiting for the X11 server"):
-            retry(check_x, as_timedelta(timeout))
+        # Keep checking the driver's polling conditions during public waits.
+        self.container.wait_for_x(timeout, before_probe=self.run_callbacks)
 
     def send_key(
         self,
@@ -1815,9 +1809,6 @@ class NspawnMachine(BaseMachine):
         if self.process is None:
             return
 
-        if self.machine_sock:
-            self.machine_sock.close()
-
         self.logger.info(f"kill NspawnMachine (pid {self.process.pid})")
         self.process.terminate()
         # Wait for the wrapper to finish its context-manager cleanups
@@ -1831,91 +1822,19 @@ class NspawnMachine(BaseMachine):
             )
             self.process.kill()
             self.process.wait()
+        assert self.container is not None
+        self.container.close()
+        self.container = None
         self.process = None
 
     def is_up(self) -> bool:
         return self.process is not None
 
-    def _drain_notify_socket(self) -> None:
-        """Continuously drain the container's `sd_notify` socket (NOTIFY_SOCKET)
-        for the whole lifetime of the container, recording readiness and the
-        leader PID as they arrive.
-
-        Draining must not stop after boot: the container's PID 1 re-sends
-        `READY=1` on every `systemctl daemon-reexec` (the same Manager.Reexecute
-        that switch-to-configuration issues on a systemd change). If nothing
-        reads the socket, its receive buffer fills and PID 1 blocks in
-        `sendmsg()` to NOTIFY_SOCKET while re-executing -- it never finishes
-        re-initializing, and every later `systemctl` call inside the container
-        hangs or fails with `Transport endpoint is not connected`.
-        """
-        assert self.machine_sock is not None
-        sock = self.machine_sock
-        proc = self.process
-        assert proc is not None
-        # Bound the thread to the container's lifetime: on
-        # `wait_for_shutdown()` only non-None `proc.poll()` ends the loop.
-        # On exit of PID 1, any datagrams still queued are stale, so drop them.
-        while proc.poll() is None:
-            try:
-                # Block (with a timeout so we notice the container exiting)
-                # rather than busy-poll; we just need to keep the buffer empty.
-                sock.settimeout(0.5)
-                data, _ = sock.recvfrom(4096)
-            except (TimeoutError, BlockingIOError):
-                continue
-            except OSError:
-                break
-            ready = False
-            leader_pid = None
-            for line in data.decode(errors="replace").splitlines():
-                if line == "READY=1":
-                    ready = True
-                if line.startswith("X_NSPAWN_LEADER_PID="):
-                    leader_pid = int(line.split("=")[1])
-            if ready or leader_pid is not None:
-                with self._notify_lock:
-                    if ready:
-                        self._notify_ready = True
-                    if leader_pid is not None:
-                        self._notify_leader_pid = leader_pid
-
-    @cached_property
+    @property
     def get_systemd_process(self) -> int:
-        """Block until startup is complete and return the PID of the container's systemd process.
-
-        Readiness and the leader PID are reported over NOTIFY_SOCKET, which is
-        drained by `_drain_notify_socket` (started in `start()`); we just wait
-        for that thread to record both.
-        """
-        assert self.process is not None
-
-        start_time = time.monotonic()
-        last_warning = start_time
-        delay = 0.01
-        max_delay = 0.5
-
-        # Poll the socket until we have the container leader PID
-        while True:
-            if self.process.poll() is not None:
-                raise MachineError("systemd-nspawn process exited unexpectedly")
-
-            with self._notify_lock:
-                is_ready = self._notify_ready
-                container_pid = self._notify_leader_pid
-            if is_ready and container_pid is not None:
-                return container_pid
-
-            # Print periodic warnings every 10s so the user knows we aren't deadlocked
-            now = time.monotonic()
-            if now - last_warning > 10.0:
-                self.log(
-                    f"still waiting for container '{self.name}' to reach ready state..."
-                )
-                last_warning = now
-
-            time.sleep(delay)
-            delay = min(delay * 2, max_delay)
+        """Wait for startup and return the container's systemd PID."""
+        assert self.container is not None
+        return self.container.wait_for_boot()
 
     def _execute(
         self,
@@ -1925,44 +1844,8 @@ class NspawnMachine(BaseMachine):
         timeout: dt.timedelta | None = dt.timedelta(minutes=15),
     ) -> tuple[int, str]:
         self.start()
-
-        container_pid = self.get_systemd_process
-        nsenter = shutil.which("nsenter")
-        assert nsenter is not None
-
-        # Sourcing /etc/profile on every call of `_execute` ensures a correct shell
-        # environment (correct PATH, etc.). This is slower than the QEMU version.
-        #
-        # NOTE If the test calls switch-to-configuration (with a differently configured specialization)
-        # this will use the /etc/profile of the new specialisation while `QemuMachine` nodes
-        # will continue to use the original /etc/profile.
-        command = (
-            "set -eo pipefail; "
-            "export USER=root HOME=/root DISPLAY=:0.0; "
-            f"source /etc/profile; set -u; {command}"
-        )
-
-        cp = subprocess.run(
-            [
-                nsenter,
-                "--target",
-                str(container_pid),
-                "--mount",
-                "--uts",
-                "--ipc",
-                "--net",
-                "--pid",
-                "--cgroup",
-                "/bin/sh",
-                "-c",
-                command,
-            ],
-            env={},
-            timeout=timeout.total_seconds() if timeout is not None else None,
-            stdout=subprocess.PIPE,
-            text=True,
-        )
-        return (cp.returncode, cp.stdout)
+        assert self.container is not None
+        return self.container.execute(command, timeout)
 
     def _stream_journal(self) -> None:
         assert self.process is not None, "Container not started"
@@ -2032,8 +1915,8 @@ class NspawnMachine(BaseMachine):
         if self.machine_sock_path is not None and self.machine_sock_path.exists():
             self.machine_sock_path.unlink()
 
-        self.machine_sock = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_DGRAM)
-        self.machine_sock.bind(str(self.machine_sock_path))
+        notify_socket = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_DGRAM)
+        notify_socket.bind(str(self.machine_sock_path))
 
         self.process = subprocess.Popen(
             [self.start_command],
@@ -2049,19 +1932,16 @@ class NspawnMachine(BaseMachine):
 
         self.log(f"systemd-nspawn running (pid {self.process.pid})")
 
-        # Keep the notify socket drained for the container's whole lifetime, so
-        # PID 1 never blocks re-sending `READY=1` on `daemon-reexec`.
-        self.notify_thread = threading.Thread(
-            target=self._drain_notify_socket, daemon=True
+        self.container = NspawnProcess(
+            self.process, notify_socket, self.name, self.shared_dir, self.logger
         )
-        self.notify_thread.start()
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
 
         if self.vnc_configuration is not None:
             if any(name in os.environ for name in ("DISPLAY", "WAYLAND_DISPLAY")):
-                self.vnc = NspawnVnc(self, self.vnc_configuration)
+                self.vnc = NspawnVnc(self.container, self.vnc_configuration)
                 self.vnc.start()
             else:
                 self.log("no graphical host display available; VNC viewer disabled")
@@ -2092,8 +1972,11 @@ class NspawnMachine(BaseMachine):
             self.process.wait(
                 timeout=timeout.total_seconds() if timeout is not None else None
             )
-            self.process = None
             self._stop_vnc()
+            assert self.container is not None
+            self.container.close()
+            self.container = None
+            self.process = None
 
 
 class MachineDeprecationWrapper:
