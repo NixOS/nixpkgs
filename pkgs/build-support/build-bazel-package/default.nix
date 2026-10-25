@@ -29,7 +29,11 @@ args@{
   # project depends on it via an external dependency.
   #
   # [1]: https://github.com/bazelbuild/rules_cc
-  removeRulesCC ? true,
+  removeRulesCC ? lib.versionOlder bazel.version "8",
+
+  # Starting with bazel 7, we don't want to include some toolchain-specific rules
+  # in the fixed derivation, as they are re-created anyway, but would make the hash
+  # very specificat to the platform. These should be deprecated.
   removeLocalConfigCc ? true,
   removeLocalConfigSh ? true,
   removeLocal ? true,
@@ -46,6 +50,10 @@ args@{
   # CROSSTOOL. Weirdly, we can still get the flags through the wrapped
   # compiler.
   dontAddBazelOpts ? false,
+
+  # Control --[no]incompatible_strict_action_env. Defaults to false for
+  # Bazel < 9 and true for Bazel >= 9, matching upstream Bazel defaults.
+  strictActionEnv ? lib.versionAtLeast bazel.version "9",
   ...
 }:
 
@@ -55,6 +63,7 @@ let
       "buildAttrs"
       "fetchAttrs"
       "removeRulesCC"
+      "strictActionEnv"
     ]
     // {
       inherit
@@ -78,6 +87,8 @@ let
       "hash"
       "sha256"
     ];
+  # Only for bazel_7; this can be retired once bazel_7 is EOL
+  useNixHacks = lib.functionArgs bazel.override ? enableNixHacks;
   bazelCmd =
     {
       cmd,
@@ -88,6 +99,11 @@ let
     lib.optionalString (targets != [ ]) ''
       concatTo bazelFlagsArray bazelFlags
 
+      vendorFlags=()
+      if [ -d "$bazelUserRoot/vendor_dir" ]; then
+        vendorFlags=( "--vendor_dir=$bazelUserRoot/vendor_dir" )
+      fi
+
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
@@ -97,6 +113,9 @@ let
         --output_user_root="$bazelUserRoot" \
         ${cmd} \
         --curses=no \
+        --repository_cache= \
+        --incompatible_strict_action_env=${lib.boolToString strictActionEnv} \
+        "''${vendorFlags[@]}" \
         "''${copts[@]}" \
         "''${host_copts[@]}" \
         "''${linkopts[@]}" \
@@ -190,16 +209,26 @@ stdenv.mkDerivation (
 
               # Remove all built in external workspaces, Bazel will recreate them when building
               rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
+
+              # rules_cc used to be built-in in bazel 7, so there is an option to remove it.
+              # However from bazel_8 it is encouraged (and bazel_9: enforced) that it comes from MODULE.bazel,
+              # so must _not_ be removed.
               ${lib.optionalString removeRulesCC "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}"}
 
               rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
               ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/{local_config_cc,\\@local_config_cc.marker}"}
               ${lib.optionalString removeLocal "rm -rf $bazelOut/external/{local_*,\\@local_*.marker}"}
 
-              # For bazel version >= 6 with bzlmod.
+              # For bazel version >= 6 with bzlmod, the toolchains are part of the attribute derivation, but will
+              # be re-created at build-time. So we typically do _not_ want them, as they change the hash.
               ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/*[~+]{local_config_cc,local_config_cc.marker}"}
               ${lib.optionalString removeLocalConfigSh "rm -rf $bazelOut/external/*[~+]{local_config_sh,local_config_sh.marker}"}
               ${lib.optionalString removeLocal "rm -rf $bazelOut/external/*[~+]{local_jdk,local_jdk.marker}"}
+              ${lib.optionalString (!useNixHacks) ''
+                ${lib.optionalString removeLocalConfigCc "rm -rf $bazelOut/external/*[~+]{local_config_cc_toolchains,local_config_cc_toolchains.marker,local_config_apple_cc,local_config_apple_cc.marker,local_config_apple_cc_toolchains,local_config_apple_cc_toolchains.marker}"}
+                ${lib.optionalString removeLocalConfigSh "rm -rf $bazelOut/external/*[~+]{local_config_shell,local_config_shell.marker}"}
+                ${lib.optionalString removeLocal "rm -rf $bazelOut/external/*[~+]{local_config_xcode,local_config_xcode.marker,local_config_winsdk,local_config_winsdk.marker,host_platform,host_platform.marker}"}
+              ''}
 
               # Clear markers
               find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
@@ -262,7 +291,13 @@ stdenv.mkDerivation (
     );
 
     nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [ ] ++ [
-      (bazel.override { enableNixHacks = true; })
+      (
+        if useNixHacks then
+          # Only for bazel_7; this branch can be retired once bazel_7 is EOL
+          bazel.override { enableNixHacks = true; }
+        else
+          bazel
+      )
     ];
 
     preHook = fBuildAttrs.preHook or "" + ''
@@ -290,7 +325,30 @@ stdenv.mkDerivation (
         fi
       done
     ''
-    + fBuildAttrs.preConfigure or "";
+    + (fBuildAttrs.preConfigure or "")
+    # In `deps`, `.marker` files are cleared because they contain platform-specific
+    # digests (OS and CPU architecture) and build-directory paths that would make
+    # the fixed-output derivation hash differ across platforms.
+    # Starting with Bazel 8, `enableNixHacks` (which patched Bazel to ignore empty
+    # `.marker` files) was removed; instead, we move fetched repositories into
+    # `--vendor_dir` and `pin()` them in `VENDOR.bazel`. For pinned repositories,
+    # Bazel bypasses `.marker` digest verification and symlinks them from `vendor_dir`
+    # while still regenerating local/configure toolchains on the build machine.
+    + lib.optionalString (!useNixHacks) ''
+      mkdir -p "$bazelUserRoot/vendor_dir"
+      touch "$bazelUserRoot/vendor_dir/VENDOR.bazel"
+      find "$bazelOut/external" -mindepth 1 -maxdepth 1 -type d | while read repo; do
+        name="$(basename "$repo")"
+        mv "$repo" "$bazelUserRoot/vendor_dir/$name"
+        if [ ! -f "$bazelUserRoot/vendor_dir/$name/REPO.bazel" ] \
+           && [ ! -f "$bazelUserRoot/vendor_dir/$name/MODULE.bazel" ] \
+           && [ ! -f "$bazelUserRoot/vendor_dir/$name/WORKSPACE" ] \
+           && [ ! -f "$bazelUserRoot/vendor_dir/$name/WORKSPACE.bazel" ]; then
+          touch "$bazelUserRoot/vendor_dir/$name/REPO.bazel"
+        fi
+        echo "pin(\"@@$name\")" >> "$bazelUserRoot/vendor_dir/VENDOR.bazel"
+      done
+    '';
 
     buildPhase =
       fBuildAttrs.buildPhase or ''
@@ -320,6 +378,17 @@ stdenv.mkDerivation (
             host_linkopts+=( "--host_linkopt=-Wl,$flag" )
           done
         fi
+
+        # Ensure Bazel extracts its embedded binaries and patch their shebangs
+        # (e.g. tools/test/test-setup.sh and tools/test/generate-xml.sh).
+        BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
+        USER=homeless-shelter \
+        bazel \
+          --batch \
+          --output_base="$bazelOut" \
+          --output_user_root="$bazelUserRoot" \
+          info install_base >/dev/null
+        patchShebangs "$bazelUserRoot/install" >/dev/null
 
         ${bazelCmd {
           cmd = "test";
