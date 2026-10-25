@@ -8,14 +8,14 @@
 
 buildPythonPackage {
   pname = "nampa";
-  version = "1.0-unstable-2024-12-18";
+  version = "1.0-unstable-2026-07-10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thebabush";
     repo = "nampa";
-    rev = "cb6a63aae64324f57bdc296064bc6aa2b99ff99a";
-    hash = "sha256-4NEfrx5cR6Zk713oBRZBe52mrbHKhs1doJFAdjnobig=";
+    rev = "4ab5b33e767caef3ae1d64eec3cb894ba2f287f8";
+    hash = "sha256-sCI4QaG/hHZKIw7kAK9/OLo5MFZyR0lA3t8xQiGFHOY=";
   };
 
   build-system = [ setuptools ];
