@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nugget-doom";
-  version = "6.0.1";
+  version = "6.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MrAlaux";
     repo = "Nugget-Doom";
     tag = "nugget-doom-${finalAttrs.version}";
-    hash = "sha256-m2GGGqRY49Y9hBkPxeUcdEK9JwztOr3fcT3NCPO73Wc=";
+    hash = "sha256-hx5giDJVzlrKElH9qBSLP0qouCP/qxlBtW9y68Hi7FY=";
   };
 
   nativeBuildInputs = [
