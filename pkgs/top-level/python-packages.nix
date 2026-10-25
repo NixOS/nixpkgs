@@ -1365,11 +1365,14 @@ self: super: with self; {
 
   arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };
 
-  arro3-compute = (callPackage ../development/python-modules/arro3 { }).arro3-compute;
-
-  arro3-core = (callPackage ../development/python-modules/arro3 { }).arro3-core;
-
-  arro3-io = (callPackage ../development/python-modules/arro3 { }).arro3-io;
+  inherit
+    (callPackage ../development/python-modules/arro3 {
+      inherit (pkgs) zstd;
+    })
+    arro3-compute
+    arro3-core
+    arro3-io
+    ;
 
   arrow = callPackage ../development/python-modules/arrow { };
 
