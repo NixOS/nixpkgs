@@ -7097,6 +7097,9 @@ with pkgs;
     ];
   };
 
+  nginxMainlineDynamicModules = nginxMainline.allDynamicModules;
+  nginxStableDynamicModules = nginxStable.allDynamicModules;
+
   mkNginxPlugin = callPackage ../servers/http/nginx/modules/builder.nix { };
   nginxModules = recurseIntoAttrs (
     lib.makeExtensible (
@@ -7112,15 +7115,6 @@ with pkgs;
       packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
-
-  # We should move to dynamic modules and create a nginxFull package with all modules
-  nginxShibboleth = nginxStable.override {
-    modules = [
-      nginxModules.rtmp
-      nginxModules.moreheaders
-      nginxModules.shibboleth
-    ];
-  };
 
   nsdiff = perlPackages.nsdiff;
 

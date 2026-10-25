@@ -9,6 +9,8 @@ outer@{
   libxml2,
   libxslt,
   nginx-doc,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
 
   nixosTests,
   installShellFiles,
@@ -32,6 +34,8 @@ outer@{
   pname ? "nginx",
   version,
   nginxVersion ? version,
+  flavor ? "stable",
+  attrName ? "nginx${lib.toSentenceCase flavor}",
   src ? null, # defaults to upstream nginx ${version}
   hash ? null, # when not specifying src
   configureFlags ? [ ],
@@ -58,8 +62,6 @@ let
 
   moduleNames = map (mod: mod.pname) modules;
 
-  dynamicModules = lib.filter (mod: mod.dynamic or false) modules;
-
   mapModules =
     attrPath:
     lib.flip lib.concatMap modules (
@@ -85,12 +87,13 @@ in
 assert lib.assertMsg (lib.unique moduleNames == moduleNames)
   "nginx: duplicate modules: ${lib.concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
 
-mkDerivation {
+mkDerivation (finalAttrs: {
   inherit pname version nginxVersion;
 
   outputs = [
     "out"
     "doc"
+    "dev"
   ];
 
   src =
@@ -183,7 +186,6 @@ mkDerivation {
   ++ lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
   ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
-  ++ lib.optional (dynamicModules != [ ]) "--modules-path=${placeholder "out"}/modules"
   ++ configureFlags;
 
   env = {
@@ -298,40 +300,60 @@ mkDerivation {
   inherit stripDebugList;
 
   postInstall =
-    let
-      dynamicPost = lib.optionalString (dynamicModules != [ ]) ''
-        shopt -s nullglob
-        sofiles=("$out"/modules/*.so)
-        if (( ''${#sofiles[@]} == 0 )); then
-          echo "nginx: dynamic modules were requested but no .so was produced in $out/modules" >&2
-          exit 1
-        fi
-        mkdir -p "$out/etc/nginx"
-        printf 'load_module %s;\n' "''${sofiles[@]}" > "$out/etc/nginx/dynamic-modules.conf"
-      '';
-    in
-    postInstall + dynamicPost;
+    postInstall + ''
+      mkdir -p $dev/include/nginx $dev/nix-support/
+      find src objs -name '*.h' -not -path 'src/os/win32/*' -print0 | xargs -0 -I {} cp -v {} $dev/include/nginx
+
+      cat >$dev/nix-support/setup-hook <<EOF
+      appendToVar preConfigurePhases nginxCFlags
+      nginxCFlags() {
+        appendToVar NIX_CFLAGS_COMPILE "-I$dev/include/nginx"
+      }
+      EOF
+    '';
 
   passthru = {
-    inherit modules dynamicModules;
+    allDynamicModules = makeScopeWithSplicing' {
+      otherSplices = generateSplicesForMkScope "${attrName}DynamicModules";
+      f =
+        self:
+        let
+          packages = lib.packagesFromDirectoryRecursive {
+            inherit (self) callPackage;
+            directory = ./dynamic-modules;
+          };
+        in
+        packages
+        // {
+          nginx = finalAttrs.finalPackage;
+        };
+    };
+
+    inherit modules flavor;
     tests =
       passthru.tests or {
-        inherit (nixosTests)
-          nginx
-          nginx-auth
-          nginx-dynamic-modules
-          nginx-etag
-          nginx-etag-compression
-          nginx-globalredirect
-          nginx-http3
-          nginx-lua
-          nginx-proxyprotocol
-          nginx-pubhtml
-          nginx-sso
-          nginx-status-page
-          nginx-unix-socket
+        inherit (nixosTests.nginx.${flavor})
+          auth
+          basic
+          etag
+          etag-compression
+          dynamic-modules
+          http3
+          globalredirect
+          grpc-error-pages
+          lua
+          mime
+          modsecurity
+          moreheaders
+          njs
+          otel
+          proxyprotocol
+          pubhtml
+          sso
+          status-page
+          tmpdir
+          unix-socket
           ;
-        variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
         acme-integration = nixosTests.acme.nginx;
         acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
       };
@@ -357,4 +379,4 @@ mkDerivation {
           leona
         ];
       };
-}
+})

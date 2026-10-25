@@ -1,11 +1,18 @@
 {
-  name = "nginx-dynamic-modules";
+  name ? "default",
+  mkPackage ? builtins.getAttr "nginx",
+  ...
+}:
+
+{
+  name = "nginx-dynamic-modules-${name}";
 
   nodes.machine =
     { pkgs, ... }:
     {
       services.nginx = {
         enable = true;
+        package = mkPackage pkgs;
         additionalModules = [ (pkgs.nginxModules.echo // { dynamic = true; }) ];
         virtualHosts."localhost".locations."/".extraConfig = ''
           echo "dynamic-module-ok";
