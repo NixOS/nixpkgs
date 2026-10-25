@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  callPackage,
   cmake,
   pkg-config,
   libsndfile,
@@ -16,6 +17,9 @@
   liblo,
   curl,
   python3,
+  csound-plugins,
+  makeBinaryWrapper,
+  symlinkJoin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -93,6 +97,30 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/Library/Frameworks
     ln -s $out/lib/CsoundLib64.framework $out/Library/Frameworks
   '';
+
+  passthru = {
+    plugins = (csound-plugins.override { csound = finalAttrs.finalPackage; }).plugins;
+
+    withPlugins =
+      selectPlugins:
+      let
+        plugins = selectPlugins finalAttrs.finalPackage.plugins;
+      in
+      symlinkJoin {
+        pname = "csound-with-plugins";
+        inherit (finalAttrs) version meta;
+        paths = [ finalAttrs.finalPackage ] ++ plugins;
+        nativeBuildInputs = [ makeBinaryWrapper ];
+        postBuild = ''
+          for program in "$out"/bin/*; do
+            wrapProgram "$program" \
+              --prefix CS_USER_PLUGINDIR : ${lib.escapeShellArg (lib.makeSearchPath "lib/csound/plugins64-7.0" plugins)}
+          done
+        '';
+      };
+
+    tests = callPackage ./tests.nix { csound = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Sound synthesis and signal processing system";

@@ -1,0 +1,33 @@
+--- a/src/fluidOpcodes/fluidOpcodes.cpp
++++ b/src/fluidOpcodes/fluidOpcodes.cpp
+@@ -283,7 +283,7 @@
+     soundFontId = -1;
+     toa(csound, iFluidSynth, fluidSynth);
+     listPresets = (int32_t)*iListPresets;
+-    CS_TYPE *argType = GetTypeForArg(iFilename);
++    const CS_TYPE *argType = GetTypeForArg(iFilename);
+     if (strcmp("S", argType->varTypeName) == 0) {
+       filename = csound->Strdup(csound, ((STRINGDAT *)iFilename)->data);
+     } else {
+--- a/src/chua/ChuaOscillator.cpp
++++ b/src/chua/ChuaOscillator.cpp
+@@ -611,6 +611,8 @@
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     }};
+ 
++PUBLIC int32_t csoundModuleInfo(void) { return CSOUND_MODULE_INFO; }
++
+ PUBLIC int32_t csoundModuleCreate(CSOUND *csound) { return 0; }
+ 
+ PUBLIC int32_t csoundModuleInit(CSOUND *csound) {
+--- a/src/linear_algebra/linear_algebra.cpp
++++ b/src/linear_algebra/linear_algebra.cpp
+@@ -3926,6 +3926,8 @@
+ 
+ extern "C" {
+ 
++PUBLIC int32_t csoundModuleInfo(void) { return CSOUND_MODULE_INFO; }
++
+ PUBLIC int32_t csoundModuleCreate(CSOUND *csound) { return 0; }
+ 
+ PUBLIC int32_t csoundModuleInit(CSOUND *csound) {
