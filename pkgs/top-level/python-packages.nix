@@ -14669,6 +14669,8 @@ self: super: with self; {
 
   pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
 
+  pybind11_3_0 = callPackage ../development/python-modules/pybind11/3_0.nix { };
+
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
