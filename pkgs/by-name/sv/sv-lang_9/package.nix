@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sharzy
-      carlossless
+      karstx
     ];
     mainProgram = "slang";
     platforms = lib.platforms.all;

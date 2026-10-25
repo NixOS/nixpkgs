@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   writeText,
+  cacert,
   plugins ? [ ],
   nixosTests,
 }:
@@ -110,6 +111,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/moodle
     cp -r . $out/share/moodle
     cp ${phpConfig} $out/share/moodle/config.php
+
+    for f in public/lib/cacert.pem public/lib/google/src/Google/IO/cacerts.pem; do
+      rm $out/share/moodle/$f
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/moodle/$f
+    done
 
     ${lib.concatStringsSep "\n" (
       map (

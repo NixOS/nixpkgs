@@ -4850,13 +4850,6 @@
     githubId = 686190;
     name = "Carlos D'Agostino";
   };
-  carlossless = {
-    email = "contact@carlossless.io";
-    matrix = "@carlossless:matrix.org";
-    github = "carlossless";
-    githubId = 498906;
-    name = "Karolis Stasaitis";
-  };
   carlostome = {
     name = "Carlos Tomé Cortiñas";
     github = "carlostome";
@@ -15010,6 +15003,13 @@
     githubId = 11753414;
     email = "nixos@karpfen.dev";
     matrix = "@karpfen:matrix.org";
+  };
+  karstx = {
+    email = "contact@karstx.net";
+    matrix = "@karstx:matrix.org";
+    github = "karstx";
+    githubId = 498906;
+    name = "Karolis Stasaitis";
   };
   kashw2 = {
     email = "supra4keanu@hotmail.com";

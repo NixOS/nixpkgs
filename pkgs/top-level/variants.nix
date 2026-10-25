@@ -151,6 +151,11 @@ self: super: {
     ++ overlays;
   };
 
+  pkgsConfigured = nixpkgsFun {
+    config = super.config // {
+      configurePlatformsByDefault = true;
+    };
+  };
   pkgsChecked = nixpkgsFun {
     config = super.config // {
       doCheckByDefault = true;

@@ -1010,7 +1010,7 @@ with pkgs;
 
   py7zr = with python3Packages; toPythonApplication py7zr;
 
-  inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
+  inherit (callPackages ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
   sdkmanager = with python3Packages; toPythonApplication sdkmanager;
 

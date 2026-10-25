@@ -15,7 +15,7 @@
   yosys,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "amaranth";
   version = "0.5.10";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AJmZBDMTGAq2i6xWpFoLjijJ+nycgJvTdNDrudjd/v0=";
   };
 
@@ -64,10 +64,15 @@ buildPythonPackage rec {
     "tests/test_lib_fifo.py"
   ];
 
+  pythonRelaxDeps = [
+    # pyvcd<0.5,>=0.2.2 not satisfied by version 0.5.0
+    "pyvcd"
+  ];
+
   meta = {
     description = "Modern hardware definition language and toolchain based on Python";
     homepage = "https://amaranth-lang.org/docs/amaranth";
-    changelog = "https://github.com/amaranth-lang/amaranth/blob/${src.tag}/docs/changes.rst";
+    changelog = "https://github.com/amaranth-lang/amaranth/blob/${finalAttrs.src.tag}/docs/changes.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       thoughtpolice
@@ -75,4 +80,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "amaranth-rpc";
   };
-}
+})

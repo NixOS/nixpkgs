@@ -103,10 +103,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Strip cbindgen build steps
     find "$cargoDepsCopy" -path "*/ferrous-opencc-*/build.rs" \
       -exec sed -i -e '/cbindgen::Builder::new/{:l;/write_to_file/!{N;bl};d}' {} +
-
-    # Disable the in-app updater
-    substituteInPlace src/components/update-checker/UpdateChecker.tsx \
-      --replace-fail 'settings?.update_checks_enabled ?? false' 'false'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
@@ -210,6 +206,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gappsWrapperArgs+=(
       --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --set ALSA_PLUGIN_DIR "${finalAttrs.passthru.alsaPluginDirectory}"
+      # Disable the in-app updater
+      --set HANDY_DISABLE_UPDATER 1
     )
   '';
 
