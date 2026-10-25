@@ -2,11 +2,13 @@
   lib,
   fetchFromGitHub,
   fetchPnpmDeps,
+  nix-update-script,
   nodejs,
   pnpm_10,
   pnpmConfigHook,
   rustPlatform,
   stdenv,
+  versionCheckHook,
 }:
 
 let
@@ -80,6 +82,11 @@ rustPlatform.buildRustPackage (
     '';
 
     doCheck = false;
+
+    doInstallCheck = true;
+    nativeInstallCheckInputs = [ versionCheckHook ];
+
+    passthru.updateScript = nix-update-script { };
 
     meta = {
       homepage = "https://pitchfork.jdx.dev";
