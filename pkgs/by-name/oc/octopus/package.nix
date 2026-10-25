@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     cudaPackages.libcublas
     cudaPackages.libcufft
     cudaPackages.cuda_nvrtc
-    cudaPackages.cuda_nvtx
+    cudaPackages.nvtx
   ]
   ++ lib.optionals enableHip [
     rocmPackages.clr

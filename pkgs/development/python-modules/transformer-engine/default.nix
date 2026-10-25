@@ -222,7 +222,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     cudaPackages.cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
     cudaPackages.cuda_nvml_dev # nvml.h
     cudaPackages.cuda_nvrtc # nvrtc.h
-    cudaPackages.cuda_nvtx # nvToolsExt.h
+    cudaPackages.nvtx # nvToolsExt.h
     cudaPackages.cuda_profiler_api # cuda_profiler_api.h
     cudaPackages.cudnn # cudnn.h
     cudaPackages.libcublas
