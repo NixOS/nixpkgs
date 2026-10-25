@@ -66,6 +66,8 @@ makeScopeWithSplicing' {
 
         combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) { };
 
+        withWorkloads = sdk: workloadIds: callPackage (import ./with-workloads.nix sdk workloadIds) { };
+
         patchNupkgs = buildPackages.callPackage ./patch-nupkgs.nix { };
         nugetPackageHook = callPackage ./nuget-package-hook.nix { };
         autoPatchcilHook = callPackage ../../../build-support/dotnet/auto-patchcil-hook { };
