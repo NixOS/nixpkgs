@@ -14671,6 +14671,8 @@ self: super: with self; {
 
   pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
 
+  pybind11_3_0 = callPackage ../development/python-modules/pybind11/3_0.nix { };
+
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
@@ -20966,7 +20968,10 @@ self: super: with self; {
         tk = if pythonAtLeast "3.14" then pkgs.tk-9_0 else pkgs.tk-8_6;
       };
 
-  tkinter-gl = callPackage ../development/python-modules/tkinter-gl { };
+  tkinter-gl = callPackage ../development/python-modules/tkinter-gl {
+    inherit (pkgs) mesa;
+    inherit (pkgs.tclPackages.override { inherit (tkinter) tcl tk; }) tkgl;
+  };
 
   tld = callPackage ../development/python-modules/tld { };
 

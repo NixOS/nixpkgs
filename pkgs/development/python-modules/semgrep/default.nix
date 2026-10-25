@@ -205,5 +205,6 @@ buildPythonPackage (finalAttrs: {
   meta = common.meta // {
     description = common.meta.description + " - cli";
     inherit (semgrep-core.meta) platforms;
+    mainProgram = "semgrep";
   };
 })

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   cctools,
   cmake,
   expat,
@@ -8,6 +9,7 @@
   fetchpatch2,
   gn,
   linenoise,
+  musl-fts,
   ninja,
   nix-update-script,
   pkg-config,
@@ -24,6 +26,7 @@
 
 let
   inherit (stdenv.hostPlatform) isStatic isDarwin extensions;
+  isCross = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   libName = "libperfetto${if isStatic then ".a" else extensions.sharedLibrary}";
 
   # Required for both the SDK and tools output:
@@ -92,7 +95,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "perfetto";
-  version = "58.3";
+  version = "59.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "perfetto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-73aE+qoHOkdD2Br3NmUE48BM6uE6uIBdug0+ZR2nn94=";
+    hash = "sha256-411TMDlo9nDbr4RHO772zDJMxHW+cqjw+58RsMplbY8=";
   };
 
   outputs = [
@@ -109,29 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     "tools"
   ];
 
-  patches = [
-    # TODO: remove once included in a next release
-    (fetchpatch2 {
-      url = "https://github.com/google/perfetto/commit/e698e3903870da0317511334ee21d3ae830ecd66.patch?full_index=1";
-      hash = "sha256-L3/xAz1dc3KDZLs7nt7F945ZuvexyWlA9x0YqRNjdIo=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/google/perfetto/commit/5739344741e4b881952a2786f67355eefe0a2c8d.patch?full_index=1";
-      hash = "sha256-AplecRNDDLGpbYC6zg2Ie0LrX+0MBxodTC72SP6SSl8=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/google/perfetto/commit/25f6c94bf1321f61e63c7cd8d50b3b997b176ccb.patch?full_index=1";
-      hash = "sha256-AJLof+TbpGxNUedW2dzKmwS2j9XpnJqI+vEy4d4Qf1Q=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/google/perfetto/commit/38a4e881bec05dbf51a3defb66d7b201c2fd1ea1.patch?full_index=1";
-      hash = "sha256-j/X8GbioV2pNrTUvtaTf1YRaxX6/XhbPTwmJ+9f4bUY=";
-    })
-    (fetchpatch2 {
-      url = "https://github.com/google/perfetto/commit/782904b123a369e8c16b91c6eeab093fd3b9343e.patch?full_index=1";
-      hash = "sha256-lHEvJEigMtYXmHPx2cwQ+Wh5rdh7IQVdnNHUJN6I1Zg=";
-    })
-  ];
+  patches = [ ];
+
   # Upstream includes its own tooling to download its deps, we have to disable it to make it use the ones from the PATH.
   postPatch = ''
     echo '#!/usr/bin/env python3' > tools/install-build-deps
@@ -139,7 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "and sys_name == 'freebsd'" ""
 
     substituteInPlace gn/standalone/toolchain/BUILD.gn \
-      --replace-fail 'default_output_extension = ".so"' 'default_output_extension = "${extensions.sharedLibrary}"'
+      --replace-fail 'default_output_extension = ".so"' 'default_output_extension = "${
+        extensions.sharedLibrary or ".a"
+      }"'
   '';
 
   nativeBuildInputs = [
@@ -150,9 +134,20 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     validatePkgConfig
   ]
+  ++ lib.optionals isCross (sdkPropagatedBuildInputs ++ toolsInputs)
   ++ lib.optional isDarwin cctools.libtool;
 
-  buildInputs = sdkPropagatedBuildInputs ++ toolsInputs;
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+  ];
+
+  buildInputs =
+    sdkPropagatedBuildInputs ++ toolsInputs ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-lfts";
+  };
 
   gnFlags = toGnFlags (
     commonGnFlags
@@ -170,6 +165,34 @@ stdenv.mkDerivation (finalAttrs: {
     // (lib.optionalAttrs (!isStatic) {
       extra_ldflags = "-Wl,-rpath,${placeholder "out"}/lib";
     })
+    // (lib.optionalAttrs isCross (
+      let
+        prefix = stdenv.cc.targetPrefix;
+      in
+      {
+        target_os = if isDarwin then "mac" else "linux";
+        target_cpu =
+          {
+            aarch64 = "arm64";
+            armv7l = "arm";
+            i686 = "x86";
+            powerpc64le = "ppc64";
+            s390x = "s390x";
+            riscv64 = "riscv64";
+            x86_64 = "x64";
+          }
+          .${stdenv.hostPlatform.parsed.cpu.name};
+        target_triplet = stdenv.hostPlatform.config;
+        cc = "cc";
+        cxx = "c++";
+        ar = "ar";
+        target_cc = "${prefix}cc";
+        target_cxx = "${prefix}c++";
+        target_ar = "${prefix}ar";
+        target_strip = "${prefix}strip";
+        pkg_config = "${prefix}pkg-config";
+      }
+    ))
   );
 
   ninjaFlags = executablesToInstall ++ toolsToInstall;

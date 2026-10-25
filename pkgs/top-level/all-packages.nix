@@ -5310,12 +5310,18 @@ with pkgs;
       stdenv = clangStdenv;
     };
   };
-  factorPackages = factorPackages-0_101;
+  factorPackages-0_102 = callPackage ./factor-packages.nix {
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.102.nix {
+      stdenv = clangStdenv;
+    };
+  };
+  factorPackages = factorPackages-0_102;
 
   factor-lang-0_99 = factorPackages-0_99.factor-lang;
   factor-lang-0_100 = factorPackages-0_100.factor-lang;
   factor-lang-0_101 = factorPackages-0_101.factor-lang;
-  factor-lang = factor-lang-0_101;
+  factor-lang-0_102 = factorPackages-0_102.factor-lang;
+  factor-lang = factor-lang-0_102;
 
   inherit (callPackage ../development/libraries/ffmpeg { })
     ffmpeg_4
@@ -6142,7 +6148,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_3_5
     openssl_3_6
-    openssl_4_0
+    openssl_4_1
     ;
 
   inherit
@@ -7070,7 +7076,7 @@ with pkgs;
   nginx = nginxStable;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
-    openssl = openssl_4_0;
+    openssl = openssl_4_1;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -7081,7 +7087,7 @@ with pkgs;
   };
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
-    openssl = openssl_4_0;
+    openssl = openssl_4_1;
     zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withKTLS = true;
     withPerl = false;

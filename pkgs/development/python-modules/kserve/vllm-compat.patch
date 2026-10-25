@@ -1,5 +1,5 @@
 diff --git a/kserve/protocol/rest/openai/types/__init__.py b/kserve/protocol/rest/openai/types/__init__.py
-index d70e258..811aa95 100644
+index d70e258..b159675 100644
 --- a/kserve/protocol/rest/openai/types/__init__.py
 +++ b/kserve/protocol/rest/openai/types/__init__.py
 @@ -31,8 +31,8 @@ from vllm.entrypoints.openai.completion.protocol import (
@@ -13,3 +13,12 @@ index d70e258..811aa95 100644
      UsageInfo,
      ModelCard as Model,
      ModelList,
+@@ -47,7 +47,7 @@ from vllm.entrypoints.pooling.scoring.protocol import (
+     RerankRequest,
+     RerankResponse as Rerank,
+ )
+-from vllm.entrypoints.chat_utils import (
++from vllm.renderers.chat_utils import (
+     ChatCompletionContentPartParam,
+     CustomChatCompletionMessageParam,
+     ChatCompletionMessageParam,

@@ -31,7 +31,7 @@
   pango,
   gdk-pixbuf,
   gtk2,
-  libpng12,
+  libpng, # AUR builds with libpng 1.2, we are on 1.6. Teensyduino is broken no matter which version of libpng is used though, and libpng12 is being dropped.
   expat,
   freetype,
   cairo,
@@ -75,7 +75,7 @@ let
     gdk-pixbuf
     glib
     gtk2
-    libpng12
+    libpng
     libusb-compat-0_1
     pango
     udev
@@ -302,5 +302,6 @@ stdenv.mkDerivation rec {
       robberer
       bjornfor
     ];
+    broken = withTeensyduino; # /nix/store/[...]-stdenv-linux/setup: line 1809:   421 Segmentation fault         (core dumped) ./TeensyduinoInstall.linux64 --dir=$out/share/arduino
   };
 }

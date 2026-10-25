@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apm-cli";
-  version = "0.33.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "apm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MTxk7lBEoL9DRSxRxBN6BvjYAK7NOpmDVVId/4Ix8FA=";
+    hash = "sha256-bMitX/+lDi1ba+TuorfYdN5eSJb0U/vrDuEGLelDwxw=";
   };
 
   postPatch = ''
@@ -23,6 +23,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace src/apm_cli/runtime/manager.py \
       --replace-fail 'repo_root = current_file.parent.parent.parent.parent  # Go up to repo root' 'repo_root = Path("${placeholder "out"}/share/apm-cli")'
   '';
+
+  pythonRelaxDeps = [
+    "websockets"
+  ];
 
   pythonRemoveDeps = [
     # Not packaged in nixpkgs.
