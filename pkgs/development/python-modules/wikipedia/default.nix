@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   beautifulsoup4,
   requests,
@@ -10,12 +10,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wikipedia";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-2w+tGCn91EGxhSMG6YVjmCBNwHhtKZbdLgyLuOJhM7I=";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "goldsmith";
+    repo = "wikipedia";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/Wjg5TOdF9aHMq0QcyKWU0mxj5VlEgSRugYRiEmSByM=";
   };
 
   build-system = [ setuptools ];
