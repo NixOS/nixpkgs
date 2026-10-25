@@ -7,6 +7,8 @@
   django,
   fetchFromGitHub,
   gql,
+  mcp,
+  openai,
   pytestCheckHook,
   pyyaml,
   requests,
@@ -54,7 +56,15 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
+    ai = [ openai ];
+    all = [
+      openai
+      mcp
+      gql
+      deepl
+    ];
     ghostwriter = [ gql ] ++ gql.optional-dependencies.aiohttp;
+    mcp = [ mcp ];
     translate = [ deepl ];
   };
 
