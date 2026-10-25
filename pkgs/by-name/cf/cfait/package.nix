@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Fast, offline-first CalDAV and local task manager";
     homepage = "https://git.disroot.org/trougnouf/cfait";
+    changelog = "https://git.disroot.org/trougnouf/cfait/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ JorySeverijnse ];
     mainProgram = "cfait";
