@@ -36,9 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true; # runs some sanity checks against crypto library bindings
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Read BitLocker encrypted partitions in Linux";
