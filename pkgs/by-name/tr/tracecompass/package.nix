@@ -13,6 +13,7 @@
   libxtst,
   makeDesktopItem,
   makeWrapper,
+  wrapGAppsHook3,
   imagemagick,
   shared-mime-info,
   stdenv,
@@ -23,8 +24,8 @@
 }:
 
 let
-  version = "11.2.0";
-  buildId = "20251212-2003";
+  version = "12.1.0";
+  buildId = "20260909-1515";
   archiveName = "trace-compass-${version}-${buildId}-linux.gtk.x86_64.tar.gz";
 
   desktopItem = makeDesktopItem {
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   # would require a much heavier Eclipse/Tycho build pipeline.
   src = fetchurl {
     url = "https://download.eclipse.org/tracecompass/releases/${version}/rcp/${archiveName}";
-    hash = "sha256-QNJAJkgpV8v94IJx/jnQQ5HhX0kuASET3ywa/nfhsEs=";
+    hash = "sha256-HS+VnYPMgOxE4u1dZzNB6J3IOOq8OK0vvHCRzgSRpTs=";
   };
 
   sourceRoot = "trace-compass";
@@ -58,6 +59,11 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs = [
     makeWrapper
     imagemagick
+    wrapGAppsHook3
+  ];
+
+  buildInputs = [
+    gsettings-desktop-schemas
   ];
 
   postPatch = ''
@@ -69,17 +75,11 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   dontBuild = true;
   dontConfigure = true;
+  dontWrapGApps = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out
-    cp -r . $out/trace-compass
-
-    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/trace-compass/tracecompass
-
-    mkdir -p $out/bin
-    makeWrapper $out/trace-compass/tracecompass $out/bin/tracecompass \
+  preFixup = ''
+    makeShellWrapper $out/trace-compass/tracecompass $out/bin/tracecompass \
+      "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ jdk21 ]} \
       --set JAVA_HOME ${jdk21} \
       --prefix LD_LIBRARY_PATH : ${
@@ -95,12 +95,21 @@ stdenv.mkDerivation (finalAttrs: rec {
           zlib
         ]
       } \
-      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}" \
       --set-default GDK_BACKEND x11 \
       --run 'if [[ " $* " != *" -configuration "* ]]; then
          set -- -configuration "$HOME/.tracecompass/${version}/configuration" "$@"
        fi'
+  '';
 
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp -r . $out/trace-compass
+
+    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/trace-compass/tracecompass
+
+    mkdir -p $out/bin
 
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
