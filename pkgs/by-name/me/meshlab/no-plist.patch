@@ -1,0 +1,15 @@
+diff --git a/src/meshlab/CMakeLists.txt b/src/meshlab/CMakeLists.txt
+index 89d9c9316..e9209573e 100644
+--- a/src/meshlab/CMakeLists.txt
++++ b/src/meshlab/CMakeLists.txt
+@@ -91,10 +91,6 @@ if (APPLE)
+ 		MACOSX_BUNDLE_INFO_STRING "MeshLab ${MESHLAB_VERSION}"
+ 		MACOSX_BUNDLE_COPYRIGHT "Copyright VCG-ISTI-CNR © 2005-2021. All rights reserved."
+ 		)
+-	
+-	set_additional_settings_info_plist(
+-		TARGET meshlab
+-		FILE ${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)
+ endif()
+ 
+ install(

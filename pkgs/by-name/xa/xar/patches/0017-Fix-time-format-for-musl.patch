@@ -1,0 +1,75 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Tue, 30 Jul 2024 16:06:57 +0300
+Subject: [PATCH 17/19] Fix time format for musl
+
+Directive %F is not supported in musl (until recent versions).
+https://git.musl-libc.org/cgit/musl/commit/src/time/strptime.c?id=fced99e93daeefb0192fd16304f978d4401d1d77
+
+Avoid using it for str[fp]time.
+---
+ xar/lib/stat.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/xar/lib/stat.c b/xar/lib/stat.c
+index 81771dc..d71a613 100644
+--- a/xar/lib/stat.c
++++ b/xar/lib/stat.c
+@@ -82,6 +82,8 @@
+ #define LLONG_MAX LONG_LONG_MAX
+ #endif
+ 
++static const char time_format[] = "%Y-%m-%dT%H:%M:%SZ";
++
+ static struct {
+ 	const char *name;
+ 	mode_t type;
+@@ -513,24 +515,21 @@ int32_t xar_stat_archive(xar_t x, xar_file_t f, const char *file, const char *bu
+ 	if( xar_check_prop(x, "atime") ) {
+ 		gmtime_r(&XAR(x)->sbcache.st_atime, &t);
+ 		memset(time, 0, sizeof(time));
+-		strftime(time, sizeof(time), "%FT%T", &t);
+-		strcat(time, "Z");
++		strftime(time, sizeof(time), time_format, &t);
+ 		xar_prop_set(f, "atime", time);
+ 	}
+ 
+ 	if( xar_check_prop(x, "mtime") ) {
+ 		gmtime_r(&XAR(x)->sbcache.st_mtime, &t);
+ 		memset(time, 0, sizeof(time));
+-		strftime(time, sizeof(time), "%FT%T", &t);
+-		strcat(time, "Z");
++		strftime(time, sizeof(time), time_format, &t);
+ 		xar_prop_set(f, "mtime", time);
+ 	}
+ 
+ 	if( xar_check_prop(x, "ctime") ) {
+ 		gmtime_r(&XAR(x)->sbcache.st_ctime, &t);
+ 		memset(time, 0, sizeof(time));
+-		strftime(time, sizeof(time), "%FT%T", &t);
+-		strcat(time, "Z");
++		strftime(time, sizeof(time), time_format, &t);
+ 		xar_prop_set(f, "ctime", time);
+ 	}
+ 
+@@ -680,7 +679,7 @@ int32_t xar_set_perm(xar_t x, xar_file_t f, const char *file, char *buffer, size
+ 	xar_prop_get(f, "atime", &timestr);
+ 	if( timestr ) {
+ 		memset(&t, 0, sizeof(t));
+-		strptime(timestr, "%FT%T", &t);
++		strptime(timestr, time_format, &t);
+ 		tv[ATIME].tv_sec = timegm(&t);
+ 	} else {
+ 		tv[ATIME].tv_sec = time(NULL);
+@@ -689,7 +688,7 @@ int32_t xar_set_perm(xar_t x, xar_file_t f, const char *file, char *buffer, size
+ 	xar_prop_get(f, "mtime", &timestr);
+ 	if( timestr ) {
+ 		memset(&t, 0, sizeof(t));
+-		strptime(timestr, "%FT%T", &t);
++		strptime(timestr, time_format, &t);
+ 		tv[MTIME].tv_sec = timegm(&t);
+ 	} else {
+ 		tv[MTIME].tv_sec = time(NULL);
+-- 
+2.44.1
+

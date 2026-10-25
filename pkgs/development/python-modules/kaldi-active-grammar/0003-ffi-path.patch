@@ -1,0 +1,13 @@
+diff --git a/kaldi_active_grammar/ffi.py b/kaldi_active_grammar/ffi.py
+index 936ed35..1eb2f3d 100644
+--- a/kaldi_active_grammar/ffi.py
++++ b/kaldi_active_grammar/ffi.py
+@@ -15,7 +15,7 @@ from cffi import FFI
+ from .utils import exec_dir, platform
+ 
+ _ffi = FFI()
+-_library_binary_path = os.path.join(exec_dir, dict(windows='kaldi-dragonfly.dll', linux='libkaldi-dragonfly.so', macos='libkaldi-dragonfly.dylib')[platform])
++_library_binary_path = os.path.join('@kaldiFork@', dict(windows='kaldi-dragonfly.dll', linux='libkaldi-dragonfly.so', macos='libkaldi-dragonfly.dylib')[platform])
+ _c_source_ignore_regex = re.compile(r'(\b(extern|DRAGONFLY_API)\b)|("C")|(//.*$)', re.MULTILINE)  # Pattern for extraneous stuff to be removed
+ 
+ def encode(text):

@@ -1,0 +1,32 @@
+diff --git a/src/sage/libs/eclib/meson.build b/src/sage/libs/eclib/meson.build
+index 03eeac28d34..5e67b0e7f1c 100644
+--- a/src/sage/libs/eclib/meson.build
++++ b/src/sage/libs/eclib/meson.build
+@@ -22,7 +22,7 @@ foreach name, pyx : extension_data_cpp
+     install: true,
+     override_options: ['cython_language=cpp'],
+     include_directories: [inc_cpython, inc_ext, inc_flint, inc_ntl, inc_rings],
+-    dependencies: [py_dep, cysignals, ec, ecl, flint, gmp],
++    dependencies: [py_dep, cysignals, ec, ecl, flint, gmp, ntl],
+   )
+ endforeach
+
+diff --git a/src/sage/rings/polynomial/meson.build b/src/sage/rings/polynomial/meson.build
+index 5c2aaf2ae0a..2e7c574c33d 100644
+--- a/src/sage/rings/polynomial/meson.build
++++ b/src/sage/rings/polynomial/meson.build
+@@ -196,11 +196,11 @@ foreach name, pyx : extension_data_cpp
+   elif name == 'plural'
+     deps += [singular]
+   elif name == 'polynomial_zz_pex'
+-    deps += [cypari2]
++    deps += [cypari2, ntl]
+   elif name == 'polynomial_integer_dense_ntl' or name == 'polynomial_modn_dense_ntl'
+-    deps += [cypari2]
++    deps += [cypari2, ntl]
+   elif name == 'polynomial_gf2x'
+-    deps += [cypari2]
++    deps += [cypari2, ntl]
+   elif name == 'evaluation_ntl'
+     deps += [ntl, mpfr, mpfi]    # Runtime dependencies
+   endif

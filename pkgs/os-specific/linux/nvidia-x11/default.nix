@@ -1,0 +1,291 @@
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  fetchgit,
+  fetchpatch,
+  stdenv,
+  pkgsi686Linux,
+  kernel,
+  replaceVars,
+}:
+
+let
+  generic =
+    args:
+    let
+      imported = import ./generic.nix args;
+    in
+    callPackage imported {
+      lib32 =
+        (pkgsi686Linux.callPackage imported {
+          libsOnly = true;
+        }).out;
+    };
+
+  selectHighestVersion = a: b: if lib.versionOlder a.version b.version then b else a;
+in
+rec {
+  mkDriver = generic;
+
+  # Official Unix Drivers - https://www.nvidia.com/en-us/drivers/unix/
+  # Branch/Maturity data - http://people.freedesktop.org/~aplattner/nvidia-versions.txt
+
+  # Policy: use the highest stable version as the default (on our master).
+  stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
+
+  latest = selectHighestVersion production new_feature;
+
+  bleeding_edge = selectHighestVersion latest beta;
+
+  production = generic {
+    version = "595.112.07";
+    sha256_64bit = "sha256-Gjjs1Tii2mIypzMBhAY69Z6fyUbJCMylVb0HkJhIufA=";
+    sha256_aarch64 = "sha256-7qQuOKX9xS/wpKa+bEOqsS2euJjJu182vl+6UU6bxR0=";
+    openSha256 = "sha256-nQnXGCcvo4i7eGaVft3Xc9dRUPPH0v9Zi87cfI4i/Ys=";
+    settingsSha256 = "sha256-2bWSou/9J3EojhSRXBol/+yGGu2XZ6EuCptb5qXHM14=";
+    persistencedSha256 = "sha256-cGMEUXN7WPu822zZDLTSu6Owj8VXG4PNmhe9oKqMMKI=";
+  };
+
+  new_feature = generic {
+    version = "615.78.08";
+    sha256_64bit = "sha256-Pj9t3cLudnoIGFMAr3vjyyhuznZpjS3eNSRZl4LQf/4=";
+    sha256_aarch64 = "sha256-UHYBE1AYHoGgMfD9AS/jX+S+N8eCDWUft6qolK9Eejc=";
+    openSha256 = "sha256-HBINiOjL0ZJLIAJeNIBYHBnwgUXtNwPPtnFpAI1YwF4=";
+    settingsSha256 = "sha256-inDRpG02sdDgHmlqgu/DsgK8OFdOt1fZIYyXdhlGC/c=";
+    persistencedSha256 = "sha256-RzeR6Ldct6MUxjnXRyThdh5Y3jjMehTVg85MtwuWNX4=";
+  };
+
+  beta = generic {
+    version = "595.45.04";
+    sha256_64bit = "sha256-zUllSSRsuio7dSkcbBTuxF+dN12d6jEPE0WgGvVOj14=";
+    sha256_aarch64 = "sha256-jl6lQWsgF6ya22sAhYPpERJ9r+wjnWzbGnINDpUMzsk=";
+    openSha256 = "sha256-uqNfImwTKhK8gncUdP1TPp0D6Gog4MSeIJMZQiJWDoE=";
+    settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
+    persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
+  };
+
+  # Vulkan developer beta driver
+  # See here for more information: https://developer.nvidia.com/vulkan-driver
+  vulkan_beta = generic rec {
+    version = "595.44.16";
+    persistencedVersion = "595.45.04";
+    settingsVersion = "595.45.04";
+    sha256_64bit = "sha256-yCI8/jom9E2a9kBUK075B0yof+qHqkWBgVhG0l4hazE=";
+    sha256_aarch64 = "sha256-Bg5wta9AVvk1JAss3fTvU9FJkTr1jcofjF9JDStCt2U=";
+    openSha256 = "sha256-IuiWF0Sc9BJby7cd4/ThWuXffGPNbqXApTcW/lVbCso=";
+    settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
+    persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
+    url = "https://developer.nvidia.com/downloads/assets/gameworks/downloads/secure/Vulkan_Beta_Drivers/NVIDIA-Linux-${stdenv.hostPlatform.parsed.cpu.name}-${version}.run";
+  };
+
+  # data center driver compatible with current default cudaPackages
+  dc = dc_580;
+
+  dc_590 = generic rec {
+    version = "590.48.01";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
+    persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
+    fabricmanagerSha256 = "sha256-f/AQ8HrgoqBQyXNrXA/UaI4OMQ9QcjjYWIhr1/5uM74=";
+    openSha256 = "sha256-hECHfguzwduEfPo5pCDjWE/MjtRDhINVr4b1awFdP44=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
+  };
+
+  dc_580 = generic rec {
+    version = "580.196.07";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-CqsFGNtTz3PEEtx/MrvIUMqV6DnYkj0N5L/0LByRac4=";
+    persistencedSha256 = "sha256-s7nI5BlnUwwPVoDjdete6B2wjDcoVgDd0UK9aZBrk00=";
+    fabricmanagerSha256 = "sha256-94iScxCicvykcMzhBPnfdCJembwh/JOpi6xN4VZyihE=";
+    openSha256 = "sha256-vCC4RST8aILkEgmM9i29UEyLORLQ5eRvX2LgNypsO4U=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
+  };
+
+  dc_570 = generic rec {
+    version = "570.172.08";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-AlaGfggsr5PXsl+nyOabMWBiqcbHLG4ij617I4xvoX0=";
+    persistencedSha256 = "sha256-x4K0Gp89LdL5YJhAI0AydMRxl6fyBylEnj+nokoBrK8=";
+    fabricmanagerSha256 = "sha256-jSTKzeRVTUcYma1Cb0ajSdXKCi6KzUXCp2OByPSWSR4=";
+    openSha256 = "sha256-aTV5J4zmEgRCOavo6wLwh5efOZUG+YtoeIT/tnrC1Hg=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
+  };
+
+  # Update note:
+  # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
+  # adding to the `nvidia_x11_legacy*` entries.
+
+  # LTSB supported until Aug 2028
+  legacy_580 = generic {
+    version = "580.196.07";
+    sha256_64bit = "sha256-CqsFGNtTz3PEEtx/MrvIUMqV6DnYkj0N5L/0LByRac4=";
+    sha256_aarch64 = "sha256-W30jGaHlIoy0emfgdzOlq/thTNjUNQp1AhECI0PSfu0=";
+    openSha256 = "sha256-vCC4RST8aILkEgmM9i29UEyLORLQ5eRvX2LgNypsO4U=";
+    settingsSha256 = "sha256-j7ENxh4VYIirMJSVVs2ei+NQULW5an8s4VQEwhVAqhc=";
+    persistencedSha256 = "sha256-s7nI5BlnUwwPVoDjdete6B2wjDcoVgDd0UK9aZBrk00=";
+  };
+
+  # Last one without the bug reported here:
+  # https://bbs.archlinux.org/viewtopic.php?pid=2155426#p2155426
+  legacy_535 = generic {
+    version = "535.288.01";
+    sha256_64bit = "sha256-8gwy/W7NH3BcbfJ5fAwIQlPs9/9I8sNH+Co5YZiC7OE=";
+    sha256_aarch64 = "sha256-2d3RYzU+W4uS6mUvpCNCfoVcAJA/aerNwm7Xbg0YJBo=";
+    openSha256 = "sha256-kDM8jeHjcRCyhOs8AQk+ce3Qzf2cI5RGzzIraJrSmOE=";
+    settingsSha256 = "sha256-hN4IWAD/M+th7brbzdBtgOQ2P1QUVrrWITgVGiuCxWw=";
+    persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
+  };
+
+  # Last one supporting Kepler architecture
+  legacy_470 =
+    let
+      # Updated variant of AUR nvidia-470xx-dkms patches
+      aurPatches = fetchFromGitHub {
+        owner = "joanbm";
+        repo = "nvidia-470xx-linux-mainline";
+        rev = "b68e153b018bb0b5cd4cbd72cb66c84e3b7d18e9";
+        hash = "sha256-iXq5+UO1+Kk2C6wzodXqVeSjKKYV0c4AGtc00UYfeik=";
+      };
+    in
+    generic {
+      version = "470.256.02";
+      sha256_64bit = "sha256-1kUYYt62lbsER/O3zWJo9z6BFowQ4sEFl/8/oBNJsd4=";
+      sha256_aarch64 = "sha256-e+QvE+S3Fv3JRqC9ZyxTSiCu8gJdZXSz10gF/EN6DY0=";
+      settingsSha256 = "sha256-kftQ4JB0iSlE8r/Ze/+UMnwLzn0nfQtqYXBj+t6Aguk=";
+      persistencedSha256 = "sha256-iYoSib9VEdwjOPBP1+Hx5wCIMhW8q8cCHu9PULWfnyQ=";
+
+      patches = map (patch: "${aurPatches}/patches/${patch}") [
+        "0001-Fix-conftest-to-ignore-implicit-function-declaration.patch"
+        "0002-Fix-conftest-to-use-a-short-wchar_t.patch"
+        "0003-Fix-conftest-to-use-nv_drm_gem_vmap-which-has-the-se.patch"
+        "kernel-6.10.patch"
+        "kernel-6.12.patch"
+        "nvidia-470xx-fix-gcc-15.patch"
+        "nvidia-470xx-fix-linux-6.13.patch"
+        "nvidia-470xx-fix-linux-6.14.patch"
+        "nvidia-470xx-fix-linux-6.15.patch"
+        "nvidia-470xx-fix-linux-6.17.patch"
+        "nvidia-470xx-fix-linux-6.19-part1.patch"
+        "nvidia-470xx-fix-linux-6.19-part2.patch"
+        "nvidia-470xx-fix-linux-7.0.patch"
+        "nvidia-470xx-fix-linux-7.2-part1.patch"
+        "nvidia-470xx-fix-linux-7.2-part2.patch"
+        "nvidia-470xx-fix-linux-7.2-part3.patch"
+        "nvidia-470xx-fix-linux-7.3.patch"
+      ];
+      patchFlags = [
+        "-p1"
+        "--directory=kernel"
+      ];
+    };
+
+  # Last one supporting x86
+  legacy_390 =
+    let
+      # Source corresponding to https://aur.archlinux.org/packages/nvidia-390xx-dkms
+      aurPatches = fetchgit {
+        url = "https://aur.archlinux.org/nvidia-390xx-utils.git";
+        rev = "2df85fee07fffc9a889c3dde21899ef209ac2d55";
+        hash = "sha256-pWEH0GFuSD8rUafcg2weDFeOMqGrS437hUijOUMFz4k=";
+      };
+    in
+    generic {
+      version = "390.157";
+      sha256_32bit = "sha256-VdZeCkU5qct5YgDF8Qgv4mP7CVHeqvlqnP/rioD3B5k=";
+      sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
+      settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
+      persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
+
+      patches = map (patch: "${aurPatches}/${patch}") [
+        "kernel-4.16+-memory-encryption.patch"
+        "kernel-6.2.patch"
+        "kernel-6.3.patch"
+        "kernel-6.4.patch"
+        "kernel-6.5.patch"
+        "kernel-6.6.patch"
+        "kernel-6.8.patch"
+        "gcc-14.patch"
+        "kernel-6.10.patch"
+        "kernel-6.12.patch"
+        "kernel-6.13.patch"
+        "kernel-6.14.patch"
+        "gcc-15.patch"
+        "kernel-6.15.patch"
+        "kernel-6.17.patch"
+        "kernel-6.19.patch"
+        "kernel-6.18-nv_workqueue_flush.patch"
+        "kernel-7.0.patch"
+      ];
+      broken = kernel.kernelAtLeast "7.2";
+
+      # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+      # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+      # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+      postInstall = ''
+        mv $out/lib/tls/* $out/lib
+        rmdir $out/lib/tls
+      '';
+    };
+
+  legacy_340 =
+    let
+      # Source corresponding to https://aur.archlinux.org/packages/nvidia-340xx-dkms
+      aurPatches = fetchFromGitHub {
+        owner = "archlinux-jerry";
+        repo = "nvidia-340xx";
+        rev = "09154c494dbaa6368bf85c24d1d07956a4bf789a";
+        hash = "sha256-O6UaPV03c0XcN5F5yIGXDb0fBfhtAIzuj/PbKeSMjmg=";
+      };
+      patchset = [
+        "0001-kernel-5.7.patch"
+        "0002-kernel-5.8.patch"
+        "0003-kernel-5.9.patch"
+        "0004-kernel-5.10.patch"
+        "0005-kernel-5.11.patch"
+        "0006-kernel-5.14.patch"
+        "0007-kernel-5.15.patch"
+        "0008-kernel-5.16.patch"
+        "0009-kernel-5.17.patch"
+        "0010-kernel-5.18.patch"
+        "0011-kernel-6.0.patch"
+        "0012-kernel-6.2.patch"
+        "0013-kernel-6.3.patch"
+        "0014-kernel-6.5.patch"
+        "0015-kernel-6.6.patch"
+        "0016-kernel-6.8.patch"
+        "0017-gcc-14.patch"
+        "0018-gcc-15.patch"
+        "0019-kernel-6.15.patch"
+      ];
+    in
+    generic {
+      version = "340.108";
+      sha256_32bit = "1jkwa1phf0x4sgw8pvr9d6krmmr3wkgwyygrxhdazwyr2bbalci0";
+      sha256_64bit = "06xp6c0sa7v1b82gf0pq0i5p0vdhmm3v964v0ypw36y0nzqx8wf6";
+      settingsSha256 = "0zm29jcf0mp1nykcravnzb5isypm8l8mg2gpsvwxipb7nk1ivy34";
+      persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
+      useGLVND = false;
+
+      broken = kernel.kernelAtLeast "6.19";
+      patches = map (patch: "${aurPatches}/${patch}") patchset ++ [
+        (replaceVars ./legacy340-for-nix-kernel-modules.patch {
+          inherit (builtins) storeDir;
+        })
+      ];
+
+      # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
+      # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
+      # and https://bbs.archlinux.org/viewtopic.php?pid=2083699#p2083699
+      postInstall = ''
+        mv $out/lib/tls/* $out/lib
+        rmdir $out/lib/tls
+      '';
+    };
+}

@@ -1,0 +1,15 @@
+diff --git a/kserve/protocol/rest/openai/types/__init__.py b/kserve/protocol/rest/openai/types/__init__.py
+index d70e258..811aa95 100644
+--- a/kserve/protocol/rest/openai/types/__init__.py
++++ b/kserve/protocol/rest/openai/types/__init__.py
+@@ -31,8 +31,8 @@ from vllm.entrypoints.openai.completion.protocol import (
+     CompletionRequest,
+     CompletionResponse as Completion,
+ )
+-from vllm.entrypoints.openai.engine.protocol import (
+-    DeltaMessage as ChoiceDelta,
++from vllm.entrypoints.generate.base.protocol import DeltaMessage as ChoiceDelta
++from vllm.entrypoints.serve.engine.protocol import (
+     UsageInfo,
+     ModelCard as Model,
+     ModelList,

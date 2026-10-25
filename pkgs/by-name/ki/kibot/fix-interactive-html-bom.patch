@@ -1,0 +1,28 @@
+diff --git a/kibot/out_ibom.py b/kibot/out_ibom.py
+index ac300744..37f97a1c 100644
+--- a/kibot/out_ibom.py
++++ b/kibot/out_ibom.py
+@@ -10,12 +10,7 @@ Dependencies:
+     github: INTI-CMNB/InteractiveHtmlBom
+     command: generate_interactive_bom.py
+     no_cmd_line_version_old: true
+-    plugin_dirs:
+-      - InteractiveHtmlBom
+-      - InteractiveHtmlBom/InteractiveHtmlBom
+-      - org_openscopeproject_InteractiveHtmlBom
+-      - org_openscopeproject_InteractiveHtmlBom/InteractiveHtmlBom
+-    version: 2.7.0
++    version: 2.10.0
+     downloader: pytool
+     id: ibom
+ """
+@@ -204,9 +199,6 @@ class IBoMOptions(VariantOptions):
+                 else:
+                     logger.warning(W_NONETLIST+"The file name used in `extra_data_file` doesn't exist")
+         cmd = [tool, pcb_name, '--dest-dir', output_dir, '--no-browser', ]
+-        if not which(tool) and not os.access(tool, os.X_OK):
+-            # Plugin could be installed without execute flags
+-            cmd.insert(0, 'python3')
+         # Apply variants/filters
+         to_remove = ','.join(self.get_not_fitted_refs(parent=True))
+         if self.blacklist and to_remove:

@@ -1,0 +1,24 @@
+diff -ubr R-3.0.1-orig/configure R-3.0.1/configure
+--- R-3.0.1-orig/configure	2013-07-04 10:46:42.336133947 +0200
++++ R-3.0.1/configure	2013-07-04 10:46:17.181919960 +0200
+@@ -3800,13 +3800,13 @@
+ : ${LIBnn=$libnn}
+ ## We provide these defaults so that headers and libraries in
+ ## '/usr/local' are found (by the native tools, mostly).
+-if test -f "/sw/etc/fink.conf"; then
+-  : ${CPPFLAGS="-I/sw/include -I/usr/local/include"}
+-  : ${LDFLAGS="-L/sw/lib -L/usr/local/lib"}
+-else
+-  : ${CPPFLAGS="-I/usr/local/include"}
+-  : ${LDFLAGS="-L/usr/local/${LIBnn}"}
+-fi
++# if test -f "/sw/etc/fink.conf"; then
++#   : ${CPPFLAGS="-I/sw/include -I/usr/local/include"}
++#   : ${LDFLAGS="-L/sw/lib -L/usr/local/lib"}
++# else
++#   : ${CPPFLAGS="-I/usr/local/include"}
++#   : ${LDFLAGS="-L/usr/local/${LIBnn}"}
++# fi
+ 
+ ## take care not to  override the command-line setting
+ if test "${libdir}" = '${exec_prefix}/lib'; then

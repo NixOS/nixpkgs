@@ -1,0 +1,66 @@
+From 68efed87fabddd450c08f3112f62a73f61d493c9 Mon Sep 17 00:00:00 2001
+From: Petr Stodulka <pstodulk@redhat.com>
+Date: Mon, 14 Sep 2015 18:23:17 +0200
+Subject: [PATCH 1/2] upstream fix for heap overflow
+
+https://bugzilla.redhat.com/attachment.cgi?id=1073002
+---
+ crypt.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/crypt.c b/crypt.c
+index 784e411..a8975f2 100644
+--- a/crypt.c
++++ b/crypt.c
+@@ -465,7 +465,17 @@ int decrypt(__G__ passwrd)
+     GLOBAL(pInfo->encrypted) = FALSE;
+     defer_leftover_input(__G);
+     for (n = 0; n < RAND_HEAD_LEN; n++) {
+-        b = NEXTBYTE;
++        /* 2012-11-23 SMS.  (OUSPG report.)
++         * Quit early if compressed size < HEAD_LEN.  The resulting
++         * error message ("unable to get password") could be improved,
++         * but it's better than trying to read nonexistent data, and
++         * then continuing with a negative G.csize.  (See
++         * fileio.c:readbyte()).
++         */
++        if ((b = NEXTBYTE) == (ush)EOF)
++        {
++            return PK_ERR;
++        }
+         h[n] = (uch)b;
+         Trace((stdout, " (%02x)", h[n]));
+     }
+-- 
+2.4.6
+
+
+From bd8a743ee0a77e65ad07ef4196c4cd366add3f26 Mon Sep 17 00:00:00 2001
+From: Kamil Dudka <kdudka@redhat.com>
+Date: Mon, 14 Sep 2015 18:24:56 +0200
+Subject: [PATCH 2/2] fix infinite loop when extracting empty bzip2 data
+
+---
+ extract.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/extract.c b/extract.c
+index 7134bfe..29db027 100644
+--- a/extract.c
++++ b/extract.c
+@@ -2733,6 +2733,12 @@ __GDEF
+     int repeated_buf_err;
+     bz_stream bstrm;
+ 
++    if (G.incnt <= 0 && G.csize <= 0L) {
++        /* avoid an infinite loop */
++        Trace((stderr, "UZbunzip2() got empty input\n"));
++        return 2;
++    }
++
+ #if (defined(DLL) && !defined(NO_SLIDE_REDIR))
+     if (G.redirect_slide)
+         wsize = G.redirect_size, redirSlide = G.redirect_buffer;
+-- 
+2.4.6
+

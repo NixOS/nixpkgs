@@ -1,0 +1,19 @@
+{
+  "version": "5.14.0",
+  "darwin-amd64": {
+    "hash": "sha256-zVhaeCq1xLkAz1QHbyByfgLwB5PxJlKhAzv93O5R+F8=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.14.0/upsun_5.14.0_darwin_all.tar.gz"
+  },
+  "darwin-arm64": {
+    "hash": "sha256-zVhaeCq1xLkAz1QHbyByfgLwB5PxJlKhAzv93O5R+F8=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.14.0/upsun_5.14.0_darwin_all.tar.gz"
+  },
+  "linux-amd64": {
+    "hash": "sha256-7GcvBn4hudiMdnjytIZQUKvtlYCtNmyNlofMAHWoqsM=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.14.0/upsun_5.14.0_linux_amd64.tar.gz"
+  },
+  "linux-arm64": {
+    "hash": "sha256-dFz8h0BRfhLfuf06W5NEbGon66DOn+LyLPULRyff1uE=",
+    "url": "https://github.com/upsun/cli/releases/download/v5.14.0/upsun_5.14.0_linux_arm64.tar.gz"
+  }
+}

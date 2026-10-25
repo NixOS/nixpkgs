@@ -1,0 +1,69 @@
+--- /dev/null	2026-05-11 13:04:22
++++ ./pnpm-lock.yaml	2026-05-11 12:52:25
+@@ -0,0 +1,66 @@
++lockfileVersion: '9.0'
++
++importers:
++
++  .:
++    dependencies:
++      '@emnapi/core':
++        specifier: 1.11.1
++        version: 1.11.1
++      '@emnapi/runtime':
++        specifier: 1.11.1
++        version: 1.11.1
++      '@napi-rs/wasm-runtime':
++        specifier: ^1.1.6
++        version: 1.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
++
++packages:
++
++  '@emnapi/core@1.11.1':
++    resolution: {integrity: sha512-RSvbQmHzdKzNsLYa/wHrbc3KN4sYLKAdPZxqiM2HATqv/SBk2/ENSHpvXGaLOMcsAyz0poEGqkmmKYG3OWiJEQ==}
++
++  '@emnapi/runtime@1.11.1':
++    resolution: {integrity: sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw==}
++
++  '@emnapi/wasi-threads@1.2.2':
++    resolution: {integrity: sha512-c95qOXkHdydNKhscBTebqEC1CVAZpyqOfVfBzQ1qgzyl3gfeldUjIggDbIZgDKsHLgnsM+igH7TJ/eAasaVuMA==}
++
++  '@napi-rs/wasm-runtime@1.2.3':
++    resolution: {integrity: sha512-UMduMbqO5s5zF2NkNacMT/yK5Y5QiKvWr2+50bzIIxFDwVJ2h49b+oyjaCGPhJxd2/gC2x39EHv/gHVuu36x2Q==}
++    engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
++    peerDependencies:
++      '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.4
++      '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.4
++
++  '@tybys/wasm-util@0.10.3':
++    resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
++
++  tslib@2.8.1:
++    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
++
++snapshots:
++
++  '@emnapi/core@1.11.1':
++    dependencies:
++      '@emnapi/wasi-threads': 1.2.2
++      tslib: 2.8.1
++
++  '@emnapi/runtime@1.11.1':
++    dependencies:
++      tslib: 2.8.1
++
++  '@emnapi/wasi-threads@1.2.2':
++    dependencies:
++      tslib: 2.8.1
++
++  '@napi-rs/wasm-runtime@1.2.3(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
++    dependencies:
++      '@emnapi/core': 1.11.1
++      '@emnapi/runtime': 1.11.1
++      '@tybys/wasm-util': 0.10.3
++
++  '@tybys/wasm-util@0.10.3':
++    dependencies:
++      tslib: 2.8.1
++
++  tslib@2.8.1: {}

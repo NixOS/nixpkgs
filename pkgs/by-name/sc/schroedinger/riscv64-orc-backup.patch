@@ -1,0 +1,13 @@
+--- schroedinger/schro.c
++++ schroedinger/schro.c
+@@ -31,6 +31,10 @@
+ 
+   inited = TRUE;
+ 
++#if defined(__riscv)
++  setenv ("ORC_CODE", "backup,emulate", 0);
++#endif
++
+   orc_init ();
+   schro_orc_init ();
+ 

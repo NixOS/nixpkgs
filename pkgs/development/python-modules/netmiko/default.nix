@@ -1,0 +1,53 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ntc-templates,
+  paramiko,
+  poetry-core,
+  pyserial,
+  pyyaml,
+  rich,
+  ruamel-yaml,
+  scp,
+  textfsm,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "netmiko";
+  version = "4.7.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-lM97/l2u0dBYREzhY34QF33yL5A2g6U9H77kdVNIjGU=";
+  };
+
+  pythonRelaxDeps = [ "paramiko" ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    ntc-templates
+    paramiko
+    pyserial
+    pyyaml
+    rich
+    ruamel-yaml
+    scp
+    textfsm
+  ];
+
+  # Tests require closed-source pyats and genie packages
+  doCheck = false;
+
+  pythonImportsCheck = [ "netmiko" ];
+
+  meta = {
+    description = "Multi-vendor library to simplify Paramiko SSH connections to network devices";
+    homepage = "https://github.com/ktbyers/netmiko/";
+    changelog = "https://github.com/ktbyers/netmiko/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.astro ];
+  };
+})

@@ -1,0 +1,29 @@
+diff --git a/serapi/serapi_paths.ml b/serapi/serapi_paths.ml
+index b71fa60..0bec8c2 100644
+--- a/serapi/serapi_paths.ml
++++ b/serapi/serapi_paths.ml
+@@ -24,8 +24,8 @@ let coq_loadpath_default ~implicit ~coq_path =
+   let open Loadpath in
+   let mk_path prefix = coq_path ^ "/" ^ prefix in
+   (* let mk_ml = () in *)
+-  let mk_vo ~has_ml ~coq_path ~dir ~implicit =
+-    { unix_path = mk_path dir
++  let mk_vo ~has_ml ~coq_path ~dir ~implicit ~absolute =
++    { unix_path = if absolute then dir else mk_path dir
+     ; coq_path
+     ; has_ml
+     ; recursive = true
+@@ -40,10 +40,10 @@ let coq_loadpath_default ~implicit ~coq_path =
+     List.map fst plugins_dirs
+   in
+   ml_paths ,
+-  [ mk_vo ~has_ml:false ~coq_path:coq_root     ~implicit       ~dir:"theories"
+-  ; mk_vo ~has_ml:true  ~coq_path:default_root ~implicit:false ~dir:"user-contrib";
++  [ mk_vo ~has_ml:false ~coq_path:coq_root     ~implicit       ~dir:"theories" ~absolute:false
++  ; mk_vo ~has_ml:true  ~coq_path:default_root ~implicit:false ~dir:"user-contrib" ~absolute:false;
+   ] @
+-  List.map (fun dir -> mk_vo ~has_ml:true ~coq_path:default_root ~implicit:false ~dir)
++  List.map (fun dir -> mk_vo ~has_ml:true ~coq_path:default_root ~implicit:false ~dir ~absolute:true)
+     Envars.coqpath
+ 
+ (******************************************************************************)

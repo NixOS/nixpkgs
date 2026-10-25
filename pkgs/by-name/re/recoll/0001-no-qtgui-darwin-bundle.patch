@@ -1,0 +1,34 @@
+--- a/qtgui/recoll.pro.in
++++ b/qtgui/recoll.pro.in
+@@ -192,7 +192,7 @@
+     }
+ }
+ 
+-macx:macxbundlebuild() {
++if (false) {
+   QCBUILDLOC=Qt_6_7_3_for_macOS
+   RECOLLDEPS = $$PWD/../../..
+   QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
+@@ -402,7 +402,7 @@
+   QMAKE_BUNDLE_DATA = APP_EXAMPLES APP_EXAMPLES_MAC APP_FILTERS APP_IMAGES APP_DOC
+ }
+ 
+-unix:!macxbundlebuild() {
++unix {
+ 
+ VPATH = @srcdir@
+ # For SingleApplication
+@@ -425,6 +425,13 @@
+   SOURCES += crontool.cpp \
+         rtitool.cpp
+ 
++  macxbundlebuild() {
++    SOURCES += ../utils/closefrom.cpp \
++    ../utils/execmd.cpp \
++    ../utils/netcon.cpp \
++    ../utils/rclionice.cpp
++  }
++
+   FORMS  += crontool.ui \
+         rtitool.ui
+ 

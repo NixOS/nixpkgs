@@ -1,0 +1,50 @@
+--- a/packages/boot/app-boot/src/profile-resolution/resolver.ts
++++ b/packages/boot/app-boot/src/profile-resolution/resolver.ts
+@@ -517,20 +517,39 @@
+   }
+ }
+
++// Prefer a plain internal require when the launcher passes
++// --expose-internals, falling back to the native addon otherwise.
++// node-addon-require-builtin's binary scan does not recognize
++// toolchain-built Node (e.g. nixpkgs) and fails every profile boot with
++// Unsupported/no-getter. The dsh wrapper always passes the flag.
++// Mirrors vendor/loader's requireInternal. Drop once upstream branches on
++// execArgv here.
++function requireInternalOrAddon(
++  load: (moduleId: string) => unknown,
++  moduleId: string,
++): unknown {
++  if (process.execArgv.includes('--expose-internals')) {
++    try {
++      return load(moduleId)
++    } catch {}
++  }
++  const addon = load('node-addon-require-builtin') as { requireBuiltin(moduleId: string): unknown }
++  return addon.requireBuiltin(moduleId)
++}
++
+ function internalModules(): InternalModules {
+   const require = createRequire(import.meta.url)
+-  const addon = require('node-addon-require-builtin') as { requireBuiltin(moduleId: string): unknown }
+-  const esmModule = addon.requireBuiltin('internal/modules/esm/loader') as {
++  const esmModule = requireInternalOrAddon(require, 'internal/modules/esm/loader') as {
+     getOrInitializeCascadedLoader(): ModuleLoaderV1 | ModuleLoaderV2
+   }
+-  const cjsModule = addon.requireBuiltin('internal/modules/cjs/loader') as { Module: CommonJsModule }
+-  const cjsHelpers = addon.requireBuiltin('internal/modules/helpers') as {
++  const cjsModule = requireInternalOrAddon(require, 'internal/modules/cjs/loader') as { Module: CommonJsModule }
++  const cjsHelpers = requireInternalOrAddon(require, 'internal/modules/helpers') as {
+     getCjsConditions(): ReadonlySet<string>
+   }
+-  const esmUtils = addon.requireBuiltin('internal/modules/esm/utils') as {
++  const esmUtils = requireInternalOrAddon(require, 'internal/modules/esm/utils') as {
+     getDefaultConditions(): readonly string[]
+   }
+-  const esmResolve = addon.requireBuiltin('internal/modules/esm/resolve') as {
++  const esmResolve = requireInternalOrAddon(require, 'internal/modules/esm/resolve') as {
+     defaultResolve(
+       specifier: string,
+       context: { parentURL?: string; conditions?: readonly string[] },
+     ): ResolveResult
+   }
