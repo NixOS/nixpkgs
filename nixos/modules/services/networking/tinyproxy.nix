@@ -7,32 +7,28 @@
 
 let
   cfg = config.services.tinyproxy;
+
   mkValueStringTinyproxy =
     v:
     if true == v then
       "yes"
     else if false == v then
       "no"
-    else if lib.types.path.check v then
-      ''"${v}"''
     else
       lib.generators.mkValueStringDefault { } v;
-  mkKeyValueTinyproxy =
-    {
-      mkValueString ? lib.mkValueStringDefault { },
-    }:
-    sep: k: v:
-    if null == v then "" else "${lib.strings.escape [ sep ] k}${sep}${mkValueString v}";
 
   settingsFormat = (
     pkgs.formats.keyValue {
-      mkKeyValue = mkKeyValueTinyproxy {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
         mkValueString = mkValueStringTinyproxy;
       } " ";
       listsAsDuplicateKeys = true;
     }
   );
-  configFile = settingsFormat.generate "tinyproxy.conf" cfg.settings;
+
+  configFile = settingsFormat.generate "tinyproxy.conf" (
+    lib.filterAttrs (k: v: v != null) cfg.settings
+  );
 
 in
 {
@@ -42,16 +38,22 @@ in
       enable = lib.mkEnableOption "Tinyproxy daemon";
       package = lib.mkPackageOption pkgs "tinyproxy" { };
       settings = lib.mkOption {
-        description = "Configuration for [tinyproxy](https://tinyproxy.github.io/).";
+        description = ''
+          Configuration for [tinyproxy](https://tinyproxy.github.io/).
+
+          Note that whether a string-like value needs to double-quoted varies for
+          each configuration option, and, unless specified explicitly here needs
+          to be manually wrapped.
+        '';
         default = { };
         example = lib.literalExpression ''
           {
-            Port 8888;
-            Listen 127.0.0.1;
-            Timeout 600;
-            Allow 127.0.0.1;
-            Anonymous = ['"Host"' '"Authorization"'];
-            ReversePath = '"/example/" "http://www.example.com/"';
+            Port = 8888;
+            Listen = "127.0.0.1";
+            Timeout = 600;
+            Allow = "127.0.0.1";
+            Anonymous = ["\"Host\"" "\"Authorization\""];
+            ReversePath = "\"/example/\"" "\"http://www.example.com/\"";
           }
         '';
         type = lib.types.submodule (
@@ -83,8 +85,11 @@ in
               Filter = lib.mkOption {
                 type = lib.types.nullOr lib.types.path;
                 default = null;
+                apply = val: if val != null then "\"${val}\"" else val;
                 description = ''
-                  Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line.
+                  Tinyproxy supports filtering of web sites based on URLs or domains.
+                  This option specifies the location of the file containing the filter rules, one rule per line.
+                  The filename will be quoted.
                 '';
               };
             };
