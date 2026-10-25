@@ -193,7 +193,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       pinpox
-      yuka
       Br1ght0ne
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
