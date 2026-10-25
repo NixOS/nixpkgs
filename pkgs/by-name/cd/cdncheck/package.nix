@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "cdncheck";
-  version = "1.3.2";
+  version = "1.3.3";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "projectdiscovery";
     repo = "cdncheck";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QBggYJ8DOTi1mLJZCv2sQ9BeZHPQ1clj9zTb9Abu/Fw=";
+    hash = "sha256-k0sa2ti0fkm2tUPAaZ3cbpW8OHaUkBz635zCts0sX8I=";
   };
 
-  vendorHash = "sha256-TYCYAKhytk249YJkRrgFrH8RWl0yrxr5z0dNONKBufU=";
+  vendorHash = "sha256-Om5hTkWXyMrnzTcyZqS6YSYZv23mOh7pC7NL1iw18Tw=";
 
   subPackages = [ "cmd/cdncheck/" ];
 
