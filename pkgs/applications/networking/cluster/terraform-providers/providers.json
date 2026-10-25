@@ -1337,11 +1337,11 @@
     "vendorHash": "sha256-rD4W2PkRrIQfACm8UWdF0yfZ+Qc5hTjH1lA6U7GJxpE="
   },
   "tasansga_lldap": {
-    "hash": "sha256-P87NPce4yd9uQG76oNJcs07y74WvC9ZZR0IbaTOZU58=",
+    "hash": "sha256-GvdSuVeVIEbimFU2Mt/ENe4AlmHgGLnox7RGhjTC7Gw=",
     "homepage": "https://registry.terraform.io/providers/tasansga/lldap",
     "owner": "tasansga",
     "repo": "terraform-provider-lldap",
-    "rev": "v0.4.4",
+    "rev": "v0.4.5",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-5kRtjoxe0p3kt4/nNqR///jMm4x6PdoRUOdciqhp58s="
   },
