@@ -1,0 +1,26 @@
+diff --git a/config/Makefile b/config/Makefile
+index e0599f2..bbd3420 100644
+--- a/config/Makefile
++++ b/config/Makefile
+@@ -7,7 +7,7 @@ KBUILD_CPPFLAGS += -Werror -Wno-unused-variable -Wno-uninitialized -Wno-maybe-un
+ obj-m += $(DRIVER_NAME).o
+ $(DRIVER_NAME)-objs := main.o
+
+-KERNEL_DIR ?= /lib/modules/$(shell uname -r)/build
++KERNEL_DIR ?= @KERNEL_DIR@
+
+ modules:
+        $(MAKE) -C $(KERNEL_DIR) M=$(CURDIR) modules
+diff --git a/config/efa.cmake b/config/efa.cmake
+index fc601a2..67e6953 100644
+--- a/config/efa.cmake
++++ b/config/efa.cmake
+@@ -10,7 +10,7 @@ function(set_conf_tmp_dir prologue body)
+   set(tmp_dir "tmp_${rand}")
+   set(tmp_dir ${tmp_dir} PARENT_SCOPE)
+   configure_file(${CMAKE_SOURCE_DIR}/config/main.c.in ${tmp_dir}/main.c @ONLY)
+-  configure_file(${CMAKE_SOURCE_DIR}/config/Makefile ${tmp_dir} COPYONLY)
++  configure_file(${CMAKE_SOURCE_DIR}/config/Makefile ${tmp_dir} @ONLY)
+ endfunction()
+
+ function(try_compile_prog_test)
