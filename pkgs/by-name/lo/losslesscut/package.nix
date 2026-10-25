@@ -5,7 +5,7 @@
   stdenv,
   yarn-berry_4,
   nodejs_24,
-  electron_42,
+  electron_45,
   makeWrapper,
   ffmpeg-headless,
   copyDesktopItems,
@@ -16,7 +16,7 @@
 let
   yarn-berry = yarn-berry_4;
   nodejs = nodejs_24;
-  electron = electron_42;
+  electron = electron_45;
   resourcesDir =
     if stdenv.hostPlatform.isDarwin then
       "Applications/LosslessCut.app/Contents/Resources"
@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
-  version = "3.70.1";
+  version = "3.70.1-unstable-2026-10-24";
 
   src = fetchFromGitHub {
     owner = "mifi";
     repo = "lossless-cut";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-GT1oXlgg0uUdf171NRSXM5uZjetj7bRr3LgZQ8eLXK4=";
+    rev = "14b89b425213b447396e3c3cddc2ef2a7d45d61f";
+    hash = "sha256-9iYZT3/cQyU7uVHvXdHoM/jNzubZMX4XYkKhAePl6uo=";
   };
 
   patches = [
@@ -186,7 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-VtmrYuRBvouzEDrp3CDIT1GWoHkU5dHp8Y93VwMk1oY=";
+    # hash = "sha256-VtmrYuRBvouzEDrp3CDIT1GWoHkU5dHp8Y93VwMk1oY=";
+    hash = "sha256-xsw9AqsOTCGHDNPqt+dspXw7dvBhaKcQY35XZQ0Cmag=";
   };
 
   postConfigure = ''
@@ -255,7 +256,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Swiss army knife of lossless video/audio editing";
     homepage = "https://losslesscut.app/";
-    changelog = "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
+    ${if finalAttrs.src.tag != null then "changelog" else null} =
+      "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       shelvacu
