@@ -4,7 +4,19 @@
   gitMinimal,
   lib,
   stdenv,
+  callPackage,
 }:
+
+let
+  fetchGoModules = callPackage ./fetchGoModules.nix {
+    inherit
+      go
+      stdenv
+      cacert
+      gitMinimal
+      ;
+  };
+in
 
 lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
@@ -80,130 +92,51 @@ lib.extendMkDerivation {
         if (finalAttrs.vendorHash == null) then
           ""
         else
-          (stdenv.mkDerivation {
-            name =
-              let
-                prefix = "${finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}"}-";
+          (fetchGoModules (
+            {
+              name =
+                let
+                  prefix = "${finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}"}-";
 
-                # If "goSum" is supplied then it can cause "goModules" to rebuild.
-                # Attach the hash name of the "go.sum" file so we can rebuild when it changes.
-                suffix = lib.optionalString (
-                  finalAttrs.goSum != null
-                ) "-${(lib.removeSuffix "-go.sum" (lib.removePrefix "${builtins.storeDir}/" finalAttrs.goSum))}";
-              in
-              "${prefix}go-modules${suffix}";
+                  # If "goSum" is supplied then it can cause "goModules" to rebuild.
+                  # Attach the hash name of the "go.sum" file so we can rebuild when it changes.
+                  suffix = lib.optionalString (
+                    finalAttrs.goSum != null
+                  ) "-${(lib.removeSuffix "-go.sum" (lib.removePrefix "${builtins.storeDir}/" finalAttrs.goSum))}";
+                in
+                "${prefix}go-modules${suffix}";
 
-            nativeBuildInputs = (finalAttrs.nativeBuildInputs or [ ]) ++ [
-              go
-              gitMinimal
-              cacert
-            ];
+              nativeBuildInputs = finalAttrs.nativeBuildInputs or [ ];
 
-            inherit (finalAttrs) src modRoot goSum;
+              inherit (finalAttrs)
+                src
+                modRoot
+                goSum
+                deleteVendor
+                proxyVendor
+                ;
 
-            # The following inheritance behavior is not trivial to expect, and some may
-            # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
-            # out in the wild. In anycase, it's documented in:
-            # doc/languages-frameworks/go.section.md.
-            prePatch = finalAttrs.prePatch or "";
-            patches = finalAttrs.patches or [ ];
-            patchFlags = finalAttrs.patchFlags or [ ];
-            postPatch = finalAttrs.postPatch or "";
-            preBuild = finalAttrs.preBuild or "";
-            postBuild = finalAttrs.modPostBuild or "";
-            sourceRoot = finalAttrs.sourceRoot or "";
-            setSourceRoot = finalAttrs.setSourceRoot or "";
-            env = finalAttrs.env or { };
+              hash = finalAttrs.vendorHash;
 
-            impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-              "GIT_PROXY_COMMAND"
-              "SOCKS_SERVER"
-              "GOPROXY"
-            ];
-
-            configurePhase =
-              args.modConfigurePhase or ''
-                runHook preConfigure
-                export GOCACHE=$TMPDIR/go-cache
-                export GOPATH="$TMPDIR/go"
-                cd "$modRoot"
-                runHook postConfigure
-              '';
-
-            buildPhase =
-              args.modBuildPhase or (
-                ''
-                  runHook preBuild
-                ''
-                + lib.optionalString finalAttrs.deleteVendor ''
-                  if [ ! -d vendor ]; then
-                    echo "vendor folder does not exist, 'deleteVendor' is not needed"
-                    exit 10
-                  else
-                    rm -rf vendor
-                  fi
-                ''
-                + ''
-                  if [ -d vendor ]; then
-                    echo "vendor folder exists, please set 'vendorHash = null;' in your expression"
-                    exit 10
-                  fi
-
-                  export GIT_SSL_CAINFO=$NIX_SSL_CERT_FILE
-                  ${
-                    if finalAttrs.proxyVendor then
-                      ''
-                        mkdir -p "$GOPATH/pkg/mod/cache/download"
-                        go mod download
-                      ''
-                    else
-                      ''
-                        if (( "''${NIX_DEBUG:-0}" >= 1 )); then
-                          goModVendorFlags+=(-v)
-                        fi
-                        go mod vendor "''${goModVendorFlags[@]}"
-                      ''
-                  }
-
-                  mkdir -p vendor
-
-                  runHook postBuild
-                ''
-              );
-
-            installPhase =
-              args.modInstallPhase or ''
-                runHook preInstall
-
-                ${
-                  if finalAttrs.proxyVendor then
-                    ''
-                      rm -rf "$GOPATH/pkg/mod/cache/download/sumdb"
-                      cp -r --reflink=auto "$GOPATH/pkg/mod/cache/download" $out
-                    ''
-                  else
-                    ''
-                      cp -r --reflink=auto vendor $out
-                    ''
-                }
-
-                if ! [ "$(ls -A $out)" ]; then
-                  echo "vendor folder is empty, please set 'vendorHash = null;' in your expression"
-                  exit 10
-                fi
-
-                runHook postInstall
-              '';
-
-            dontFixup = true;
-
-            outputHashMode = "recursive";
-            outputHash = finalAttrs.vendorHash;
-            # Handle empty `vendorHash`; avoid error:
-            # empty hash requires explicit hash algorithm.
-            outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
+              # The following inheritance behavior is not trivial to expect, and some may
+              # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
+              # out in the wild. In anycase, it's documented in:
+              # doc/languages-frameworks/go.section.md.
+              prePatch = finalAttrs.prePatch or "";
+              patches = finalAttrs.patches or [ ];
+              patchFlags = finalAttrs.patchFlags or [ ];
+              postPatch = finalAttrs.postPatch or "";
+              preBuild = finalAttrs.preBuild or "";
+              postBuild = finalAttrs.modPostBuild or "";
+              sourceRoot = finalAttrs.sourceRoot or "";
+              setSourceRoot = finalAttrs.setSourceRoot or "";
+              env = finalAttrs.env or { };
+            }
+            // lib.optionalAttrs (args ? modConfigurePhase) { configurePhase = args.modConfigurePhase; }
+            // lib.optionalAttrs (args ? modBuildPhase) { buildPhase = args.modBuildPhase; }
+            // lib.optionalAttrs (args ? modInstallPhase) { installPhase = args.modInstallPhase; }
             # in case an overlay clears passthru by accident, don't fail evaluation
-          }).overrideAttrs
+          )).overrideAttrs
             (
               let
                 pos = builtins.unsafeGetAttrPos "passthru" finalAttrs;
