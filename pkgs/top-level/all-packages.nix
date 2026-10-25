@@ -1636,9 +1636,7 @@ with pkgs;
     rainloop-standard
     ;
 
-  roundcube = callPackage ../servers/roundcube { };
-
-  roundcubePlugins = recurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
+  roundcubePlugins = recurseIntoAttrs (callPackage ../by-name/ro/roundcube/plugins { });
 
   xmlsort = perlPackages.XMLFilterSort;
 
