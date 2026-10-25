@@ -2,28 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   autoreconfHook,
-  pkg-config,
   expat,
-  icu74,
+  icu,
   inih,
+  pkg-config,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblcf";
-  # When updating this package, you should probably also update
-  # easyrpg-player and libretro.easyrpg
   version = "0.8.1";
+
+  # nixpkgs-update: no auto update
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "liblcf";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jIk55+n8wSk3Z3FPR18SE7U3OuWwmp2zJgvSZQBB2l0=";
   };
 
-  strictDeps = true;
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -32,22 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     expat
-    icu74
+    icu
     inih
   ];
 
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   enableParallelBuilding = true;
   enableParallelChecking = true;
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  passthru.updateScript = nix-update-script { };
+  passthru.tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
     homepage = "https://github.com/EasyRPG/liblcf";
+    changelog = "https://github.com/EasyRPG/liblcf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ keenanweaver ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "liblcf" ];
   };
 })
