@@ -219,7 +219,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s -t $out/share/losslesscut/ ${lib.getExe' ffmpeg-headless "ffmpeg"} ${lib.getExe' ffmpeg-headless "ffprobe"}
 
     makeWrapper ${lib.getExe electron} $out/bin/losslesscut \
-      --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/share/losslesscut/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
