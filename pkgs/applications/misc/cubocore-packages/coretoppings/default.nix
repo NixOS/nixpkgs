@@ -19,7 +19,7 @@
   bluez,
   networkmanager,
   connman,
-  redshift,
+  gammastep,
   gawk,
   polkit,
   libnotify,
@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-fix-install-phase.patch
   ];
 
+  postPatch = ''
+    substituteInPlace qwikaccess/scripts/nightmode-{on,off}.sh --replace-fail redshift gammastep
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -68,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     bluez
     networkmanager
     connman
-    redshift
+    gammastep
     gawk
     polkit
     libnotify
