@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Audio plugin for broadband noise reduction (LV2, VST3)";
     homepage = "https://github.com/lucianodato/noise-repellent";
