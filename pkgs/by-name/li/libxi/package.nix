@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxi";
-  version = "1.8.3";
+  version = "1.8.4";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-etYAVvAa9PeGz+k7OncHRHcRYm/I2iY3vscakECbq+U=";
+    hash = "sha256-3dYFe4mpGQO8L4hNVchGdECQaUXkgsNlRyYN/yhmGvw=";
   };
 
   strictDeps = true;

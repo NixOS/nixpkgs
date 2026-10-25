@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/madler/zlib/pull/1171
   patches = [
     ./export-variable.patch
+    # CVE-2026-85091: buffer overflow in non-blocking gzwrite
+    ./cve-2026-85091.patch
   ];
 
   postPatch = ''
