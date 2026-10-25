@@ -1,6 +1,7 @@
 { buildRedist }:
 buildRedist {
   redistName = "cuda";
+  # NOTE: The redistributable is named cuda_nvtx in the manifests.
   pname = "cuda_nvtx";
 
   outputs = [

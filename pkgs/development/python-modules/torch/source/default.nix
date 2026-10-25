@@ -616,7 +616,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
       cuda_nvml_dev # <nvml.h>
       cuda_nvrtc
-      cuda_nvtx # -llibNVToolsExt
+      nvtx # -llibNVToolsExt
       libcublas
       libcufft
       libcurand
