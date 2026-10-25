@@ -20,6 +20,7 @@
   libxext,
   libx11,
   zlib,
+  patchelf,
   # extra params
   extraCLibs ? [ ],
   gtkSupport ? stdenv.hostPlatform.isLinux,
@@ -52,6 +53,7 @@ let
     "libxext"
     "libx11"
     "zlib"
+    "patchelf"
     "extraCLibs"
     "gtkSupport"
     "useMusl"
@@ -85,7 +87,7 @@ let
   binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv.cc ]);
 
   runtimeLibraryPath = lib.makeLibraryPath (
-    [ cups ]
+    [ cups zlib ]
     ++ lib.optionals gtkSupport [
       cairo
       glib
@@ -127,9 +129,13 @@ let
 
       dontStrip = true;
 
+      # patchelf --set-rpath corrupts native-image; it is patched below instead.
+      dontAutoPatchelf = lib.optional stdenv.hostPlatform.isLinux true;
+
       nativeBuildInputs = [
         unzip
         makeWrapper
+        patchelf
       ]
       ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
@@ -207,6 +213,19 @@ let
         for bin in $(find "$out/bin" -executable -type f); do
           wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
         done
+      '';
+
+      postFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
+        nativeImageBin="$out/lib/svm/bin/native-image"
+        if [ -f "$nativeImageBin" ]; then
+          nativeImageTmp="$(mktemp -d)/native-image"
+          mv "$nativeImageBin" "$nativeImageTmp"
+          autoPatchelf -- "$out"
+          mv "$nativeImageTmp" "$nativeImageBin"
+          patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" "$nativeImageBin"
+        else
+          autoPatchelf -- "$out"
+        fi
       '';
 
       doInstallCheck = true;
