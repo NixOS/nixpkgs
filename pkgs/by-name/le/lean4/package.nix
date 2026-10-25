@@ -4,7 +4,6 @@
   cmake,
   cctools,
   fetchFromGitHub,
-  fetchpatch,
   gitMinimal,
   gmp,
   cadical,
