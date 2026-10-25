@@ -6,7 +6,6 @@
   gitUpdater,
   pythonAtLeast,
   isPyPy,
-  fetchpatch,
 
   # build-system
   pathspec,
@@ -37,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "2.1.0";
+  version = "2.3.1";
   pyproject = true;
 
   # relies on several CPython internals
@@ -47,17 +46,8 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-sm/pxQGxH5XuPH7B8i3fpp30KaFU9aSp6BT67UcDPvU=";
+    hash = "sha256-EkZVBWlT8l3oIC9UuDEJua6dxFDIL0o9k/3FJJFqMB4=";
   };
-
-  patches = [
-    # fix build w/ glibc-2.44
-    # If Python.h isn't included first, a const redefinition error now occurs otherwise.
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/46acbe85c0e1703ebf2e6d4c699772edcdcf4652.patch";
-      hash = "sha256-KslHiKqinvvXZoxvCnZXOhCm7i8577PbSdNGudCsjZE=";
-    })
-  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -78,6 +68,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    ast-serialize
     librt
     mypy-extensions
     pathspec
