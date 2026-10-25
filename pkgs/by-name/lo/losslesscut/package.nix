@@ -11,11 +11,17 @@
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
+  darwin,
 }:
 let
   yarn-berry = yarn-berry_4;
   nodejs = nodejs_24;
   electron = electron_42;
+  resourcesDir =
+    if stdenv.hostPlatform.isDarwin then
+      "Applications/LosslessCut.app/Contents/Resources"
+    else
+      "share/losslesscut";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
@@ -98,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Hard-code resources path
     for f in src/main/ffmpeg.ts src/main/i18nCommon.ts; do
       substituteInPlace "$f" \
-        --replace-fail process.resourcesPath "'$out/share/losslesscut/'"
+        --replace-fail process.resourcesPath "'$out/${resourcesDir}/'"
     done
     catchUnreplacedFiles process.resourcesPath --include="*.ts" --include="*.tsx" src
   '';
@@ -118,9 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
     imagemagick
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
-  desktopItems = [
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "losslesscut";
       desktopName = "LosslessCut";
@@ -193,7 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
     yarn electron-builder \
       --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     runHook postBuild
   '';
@@ -201,23 +211,42 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/applications
+    mkdir -p $out/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/applications
 
-    cp -a dist/*-unpacked/resources $out/share/losslesscut
+    cp -a dist/*-unpacked/resources $out/${resourcesDir}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
 
-    ln -s -t $out/share/losslesscut/ ${lib.getExe' ffmpeg-headless "ffmpeg"} ${lib.getExe' ffmpeg-headless "ffprobe"}
-
+    mv dist/mac*/LosslessCut.app $out/Applications/
+  ''
+  + ''
+    ln -s -t $out/${resourcesDir}/ ${lib.getExe' ffmpeg-headless "ffmpeg"} ${lib.getExe' ffmpeg-headless "ffprobe"}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper ${lib.getExe electron} $out/bin/losslesscut \
-      --add-flags $out/share/losslesscut/app.asar \
+      --add-flags $out/${resourcesDir}/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     for size in 16 24 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
       magick src/renderer/src/icon.svg -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/losslesscut.png
     done
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapper $out/Applications/LosslessCut.app/Contents/MacOS/LosslessCut $out/bin/losslesscut
+  ''
+  + ''
     runHook postInstall
   '';
+
+  # Stripping the Electron frameworks breaks them
+  stripDebugList = lib.optionals stdenv.hostPlatform.isDarwin [
+    "Applications/LosslessCut.app/Contents/MacOS"
+  ];
 
   __structuredAttrs = true;
 
@@ -228,8 +257,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://losslesscut.app/";
     changelog = "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
-    # electron-builder needs `codesign` for ad-hoc signing on darwin
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       shelvacu
       ShamrockLee
