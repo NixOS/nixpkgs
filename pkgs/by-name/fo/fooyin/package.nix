@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "fooyin";
     repo = "fooyin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z1EtohIftZ7GN+uu28QrD2Ya8lfzE1TtreWh6dfEoI0=";
+    hash = "sha256-0EtAmgIZNHMvg9sKimAdiG1EnVBN5i4Jj3dIYFvNqKk=";
   };
 
   __structuredAttrs = true;
