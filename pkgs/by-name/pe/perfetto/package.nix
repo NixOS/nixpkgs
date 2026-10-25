@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   cctools,
   cmake,
   expat,
@@ -8,6 +9,7 @@
   fetchpatch2,
   gn,
   linenoise,
+  musl-fts,
   ninja,
   nix-update-script,
   pkg-config,
@@ -24,6 +26,7 @@
 
 let
   inherit (stdenv.hostPlatform) isStatic isDarwin extensions;
+  isCross = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   libName = "libperfetto${if isStatic then ".a" else extensions.sharedLibrary}";
 
   # Required for both the SDK and tools output:
@@ -131,9 +134,20 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     validatePkgConfig
   ]
+  ++ lib.optionals isCross (sdkPropagatedBuildInputs ++ toolsInputs)
   ++ lib.optional isDarwin cctools.libtool;
 
-  buildInputs = sdkPropagatedBuildInputs ++ toolsInputs;
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+  ];
+
+  buildInputs =
+    sdkPropagatedBuildInputs ++ toolsInputs ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-lfts";
+  };
 
   gnFlags = toGnFlags (
     commonGnFlags
@@ -151,6 +165,34 @@ stdenv.mkDerivation (finalAttrs: {
     // (lib.optionalAttrs (!isStatic) {
       extra_ldflags = "-Wl,-rpath,${placeholder "out"}/lib";
     })
+    // (lib.optionalAttrs isCross (
+      let
+        prefix = stdenv.cc.targetPrefix;
+      in
+      {
+        target_os = if isDarwin then "mac" else "linux";
+        target_cpu =
+          {
+            aarch64 = "arm64";
+            armv7l = "arm";
+            i686 = "x86";
+            powerpc64le = "ppc64";
+            s390x = "s390x";
+            riscv64 = "riscv64";
+            x86_64 = "x64";
+          }
+          .${stdenv.hostPlatform.parsed.cpu.name};
+        target_triplet = stdenv.hostPlatform.config;
+        cc = "cc";
+        cxx = "c++";
+        ar = "ar";
+        target_cc = "${prefix}cc";
+        target_cxx = "${prefix}c++";
+        target_ar = "${prefix}ar";
+        target_strip = "${prefix}strip";
+        pkg_config = "${prefix}pkg-config";
+      }
+    ))
   );
 
   ninjaFlags = executablesToInstall ++ toolsToInstall;
