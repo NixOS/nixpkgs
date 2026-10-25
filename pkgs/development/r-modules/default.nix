@@ -1763,6 +1763,7 @@ let
     ];
     ravetools = [ pkgs.fftw ];
     rawrr = [ pkgs.mono ];
+    rayrender = [ pkgs.libX11 ];
     rbedrock = [ pkgs.zlib ];
     rcdd = [ pkgs.gmp ];
     redux = [ pkgs.hiredis ];
