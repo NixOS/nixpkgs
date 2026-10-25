@@ -83,6 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       chillcicada
       dwt
       randoneering
+      sinelaw
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
