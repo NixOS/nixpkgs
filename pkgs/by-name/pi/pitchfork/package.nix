@@ -94,7 +94,10 @@ rustPlatform.buildRustPackage (
       changelog = "https://github.com/jdx/pitchfork/blob/${finalAttrs.src.tag}/CHANGELOG.md";
       license = lib.licenses.mit;
       mainProgram = "pitchfork";
-      maintainers = with lib.maintainers; [ esteve ];
+      maintainers = with lib.maintainers; [
+        esteve
+        anish
+      ];
     };
   }
 )
