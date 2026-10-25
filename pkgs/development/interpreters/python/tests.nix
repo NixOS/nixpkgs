@@ -19,9 +19,11 @@ let
   # we aim to support.
   environmentTests =
     let
+      inherit (python) pythonOnBuildForHost;
+
       environments =
         let
-          inherit python;
+          python = pythonOnBuildForHost;
           pythonEnv = python.withPackages (ps: [ ]);
           pythonVirtualEnv =
             if python.isPy3k then
@@ -43,7 +45,7 @@ let
             is_virtualenv = "False";
           };
         }
-        // lib.optionalAttrs (!python.isPyPy && !stdenv.hostPlatform.isDarwin) {
+        // lib.optionalAttrs (!python.isPyPy && !stdenv.buildPlatform.isDarwin) {
           # Use virtualenv from a Nix env.
           # Fails on darwin with
           #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
@@ -104,7 +106,7 @@ let
           (
             {
               inherit (python) pythonVersion;
-              pythonPrefix = python;
+              pythonPrefix = pythonOnBuildForHost;
             }
             // attrs
           )
@@ -372,6 +374,5 @@ let
 in
 overrideTests
 // editableTests
-// lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
-  environmentTests // integrationTests // condaTests
-)
+// environmentTests
+// lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (integrationTests // condaTests)
