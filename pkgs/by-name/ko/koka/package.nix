@@ -68,7 +68,7 @@ haskellPackages.mkDerivation {
     hashable
     isocline
     lens
-    lsp_2_8_0_0
+    lsp
     mtl
     network
     network-simple

@@ -1,0 +1,26 @@
+Compare https://github.com/yesodweb/yesod/pull/1916
+
+---
+
+diff --git a/yesod-static/yesod-static.cabal b/yesod-static/yesod-static.cabal
+index f91c905c..50881677 100644
+--- a/yesod-static.cabal
++++ b/yesod-static.cabal
+@@ -45,7 +45,7 @@ library
+                    , hashable              >= 1.1
+                    , hjsmin
+                    , http-types            >= 0.7
+-                   , memory
++                   , ram                   >= 0.21 && < 0.23
+                    , mime-types            >= 0.1
+                    , process
+                    , template-haskell
+@@ -106,7 +106,7 @@ test-suite tests
+                    , filepath
+                    , hjsmin
+                    , http-types
+-                   , memory
++                   , ram
+                    , mime-types
+                    , process
+                    , template-haskell
