@@ -46,7 +46,6 @@ let
       version,
       hash,
       patches ? [ ],
-      withDocs ? false,
       extraMeta ? { },
     }:
     stdenv.mkDerivation (finalAttrs: {
@@ -102,8 +101,8 @@ let
         "dev"
         "out"
         "man"
+        "doc"
       ]
-      ++ lib.optional withDocs "doc"
       # Separate output for the runtime dependencies of the static build.
       # Specifically, move OPENSSLDIR into this output, as its path will be
       # compiled into 'libcrypto.a'. This makes it a runtime dependency of
@@ -423,8 +422,6 @@ in
           ./3.5/use-etc-ssl-certs.patch
       )
     ];
-
-    withDocs = true;
   };
 
   openssl_4_1 = common {
@@ -448,7 +445,5 @@ in
           ./3.5/use-etc-ssl-certs.patch
       )
     ];
-
-    withDocs = true;
   };
 }
