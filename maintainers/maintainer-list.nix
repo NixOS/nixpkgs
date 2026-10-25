@@ -22754,6 +22754,12 @@
     githubId = 14935550;
     name = "Brad Pfannmuller";
   };
+  parkuman = {
+    email = "parker@prowe.ca";
+    github = "parkuman";
+    githubId = 44420929;
+    name = "Parker Rowe";
+  };
   parras = {
     email = "c@philipp-arras.de";
     github = "phiadaarr";
