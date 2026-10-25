@@ -13,7 +13,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    final: prev: {
+      # Upstream pins mcp==1.28.1; v2's OAuthClientProvider subclasses httpx2.Auth,
+      # which httpx rejects as the auth of the MCP OAuth flow
+      mcp = final.mcp_1;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
   version = "3.0.1";
   pyproject = true;
@@ -73,7 +82,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = true;
   dependencies =
-    with python3Packages;
+    with pythonPackages;
     [
       agent-client-protocol
       annotated-types
@@ -180,13 +189,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     # vibe.core.agent_loop.TeleportError: Teleport requires git to be installed.
     gitMinimal
-    python3Packages.pyte
-    python3Packages.pytest-asyncio
-    python3Packages.pytest-textual-snapshot
-    python3Packages.pytest-xdist
-    python3Packages.pytestCheckHook
-    python3Packages.respx
-    python3Packages.tomlkit
+    pythonPackages.pyte
+    pythonPackages.pytest-asyncio
+    pythonPackages.pytest-textual-snapshot
+    pythonPackages.pytest-xdist
+    pythonPackages.pytestCheckHook
+    pythonPackages.respx
+    pythonPackages.tomlkit
     uv
     versionCheckHook
     writableTmpDirAsHomeHook

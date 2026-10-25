@@ -114,12 +114,12 @@ mkDerivation {
     pcre2
     libxml2
     libxslt
-    perl
   ]
   ++ buildInputs
   ++ mapModules "buildInputs"
   ++ lib.optional withGeoIP geoip
-  ++ lib.optional withImageFilter gd;
+  ++ lib.optional withImageFilter gd
+  ++ lib.optional withPerl perl;
 
   dontAddStaticConfigureFlags = true;
 
