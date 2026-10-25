@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "e1s";
     maintainers = with lib.maintainers; [
       zelkourban
-      carlossless
+      karstx
     ];
   };
 })

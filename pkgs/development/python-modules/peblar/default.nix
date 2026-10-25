@@ -31,6 +31,10 @@ buildPythonPackage rec {
     hash = "sha256-co3440R9OVEdcLPNsBu1jz6WzZTz746IEFcyTlzNkc0=";
   };
 
+  patches = [
+    ./typer-0.26.patch
+  ];
+
   postPatch = ''
     # Upstream doesn't set a version for GitHub releases
     substituteInPlace pyproject.toml \

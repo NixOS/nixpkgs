@@ -7,21 +7,36 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "instawow";
-  version = "7.0.0.post1";
+  version = "7.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "layday";
     repo = "instawow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z7O3BHi0OECHSJF6v1ran5ALWe9PU4DxPijuN7yQJ+Q=";
+    hash = "sha256-nac3BWRvU0UKjNvwPAyklzRKkwtriony6cPns6tqyVk=";
   };
+
+  # No .git dir available in nix build
+  postPatch = ''
+    cat >> pyproject.toml <<EOF
+
+    [tool.versioningit]
+    default-version = "${finalAttrs.version}"
+    EOF
+  '';
+
+  # The versions available in nixpkgs don't match the ones requested exactly.
+  pythonRelaxDeps = [
+    "aiohttp"
+    "rapidfuzz"
+  ];
 
   extras = [ ]; # Disable GUI, most dependencies are not packaged.
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    hatch-vcs
+    versioningit
   ];
   propagatedBuildInputs =
     with python3.pkgs;
@@ -32,15 +47,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       cattrs
       click
       diskcache
-      iso8601
       loguru
-      multidict
       packaging
       pluggy
       prompt-toolkit
       rapidfuzz
       truststore
       typing-extensions
+      wcwidth
       yarl
     ]
     ++ plugins;
