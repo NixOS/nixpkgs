@@ -49,6 +49,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Module to ease the standardization of logging within omni:us";
     homepage = "https://github.com/omni-us/reconplogger";
+    changelog = "https://github.com/omni-us/reconplogger/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
