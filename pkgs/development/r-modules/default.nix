@@ -2074,6 +2074,7 @@ let
     "R_filesets"
     "R_rsp"
     "Rogue"
+    "SMTrackR"
     "ShinyQuickStarter"
     "SpatialDecon"
     "TBRDist"
