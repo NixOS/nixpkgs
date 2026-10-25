@@ -6,6 +6,7 @@
   aspell,
   audiofile,
   binutils-unwrapped,
+  cacert,
   cups,
   giflib,
   gmp,
@@ -93,6 +94,12 @@ clangStdenv.mkDerivation (finalAttrs: {
       hash = "sha256-r0qpxjpEM6y+F/gju6JhpDNxnFJNHFG/mt3NmC1hWrs=";
     })
   ];
+
+  postInstall = ''
+    bundle=$lib/lib/GNUstep/Libraries/gnustep-base/Versions/${lib.versions.majorMinor finalAttrs.version}/Resources/GSTLS/ca-certificates.crt
+    rm $bundle
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $bundle
+  '';
 
   meta = {
     changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${
