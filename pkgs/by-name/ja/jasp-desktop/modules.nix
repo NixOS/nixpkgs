@@ -332,7 +332,8 @@ let
       jaspBase
       jaspGraphs
       jaspDescriptives
-      jaspMetaAnalysis
+      metafor
+      metaBMA
     ];
     jaspDescriptives = [
       ggplot2
@@ -373,6 +374,7 @@ let
       jaspGraphs
       metaBMA
       TOSTER
+      knitr
       jaspTTests
     ];
     jaspEsci = [
@@ -411,7 +413,6 @@ let
       plyr
       stringr
       vcd
-      vcdExtra
     ];
     jaspJags = [
       coda
@@ -456,6 +457,7 @@ let
       igraph
       HDInterval
       metafor
+      psych
     ];
     jaspMachineLearning = [
       kknn
@@ -541,9 +543,10 @@ let
     ];
     jaspNetwork = [
       bootnet
-      easybgm
       corpcor
       dplyr
+      bgms
+      easybgm
       foreach
       ggplot2
       gtools
@@ -619,7 +622,7 @@ let
       jaspBase
       jaspDescriptives
       jaspGraphs
-      mle_tools
+      lubridate
       psych
       qcc
       rsm
@@ -720,10 +723,12 @@ let
     ];
     jaspSurvival = [
       survival
+      ggplot2
       ggsurvfit
       flexsurv
       jaspBase
       jaspGraphs
+      scales
     ];
     jaspTTests = [
       BayesFactor
@@ -735,17 +740,12 @@ let
       plotrix
       plyr
     ];
-    jaspTestModule = [
-      jaspBase
-      jaspGraphs
-      svglite
-      stringi
-    ];
     jaspTimeSeries = [
       jaspBase
       jaspGraphs
       jaspDescriptives
       forecast
+      lubridate
     ];
     jaspVisualModeling = [
       flexplot
@@ -756,8 +756,7 @@ let
   };
 in
 assert (
-  lib.sort lib.lessThan (lib.attrNames jaspModules)
-  == lib.sort lib.lessThan (lib.attrNames moduleInfo)
+  lib.sort lib.lessThan (lib.attrNames moduleDeps) == lib.sort lib.lessThan (lib.attrNames moduleInfo)
 );
 {
   inherit customRPackages jaspModules;
