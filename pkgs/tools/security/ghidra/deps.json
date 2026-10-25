@@ -334,9 +334,9 @@
   "com/google/protobuf#protobuf-bom/4.31.0": {
    "pom": "sha256-Y9iGmhie8C2+3XxnN+FsGYa0aYOufQyNG+8s92sz2Ac="
   },
-  "com/google/protobuf#protobuf-gradle-plugin/0.8.18": {
-   "jar": "sha256-RP2JrzepsvHdQcCUqbtzPAe/f8eg4jhooQuvbjUfpeA=",
-   "pom": "sha256-Gwqekab09LYqWmB4wibudwqo3FdnueRzwvwY8KOImAQ="
+  "com/google/protobuf#protobuf-gradle-plugin/0.10.0": {
+   "jar": "sha256-QhN92PXZUggB6eVAWLa9ZeSjOiM7q7PyQcxIz3OHDyc=",
+   "pom": "sha256-eXblGp381DjApRGWcEj1n5xLCgr35LX3sDV5uJEWz1w="
   },
   "com/google/protobuf#protobuf-java/3.25.5": {
    "pom": "sha256-51IDIVeno5vpvjeGaEB1RSpGzVhrKGWr0z5wdWikyK8="

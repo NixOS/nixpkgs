@@ -1,5 +1,18 @@
+From d3107c590446ab1587762972504b585db96280f8 Mon Sep 17 00:00:00 2001
+From: roblabla <unfiltered@roblab.la>
+Date: Sun, 25 Oct 2026 11:56:58 +0100
+Subject: [PATCH] Use protobuf gradle plugin
+
+---
+ Ghidra/Debug/Debugger-isf/build.gradle       |   8 +-
+ Ghidra/Debug/Debugger-rmi-trace/build.gradle |  18 ++--
+ build.gradle                                 |   6 ++
+ gradle/hasProtobuf.gradle                    | 103 -------------------
+ 4 files changed, 23 insertions(+), 112 deletions(-)
+ delete mode 100644 gradle/hasProtobuf.gradle
+
 diff --git a/Ghidra/Debug/Debugger-isf/build.gradle b/Ghidra/Debug/Debugger-isf/build.gradle
-index 2db94ed67e..925f394cf0 100644
+index 2db94ed67e..ec54abc690 100644
 --- a/Ghidra/Debug/Debugger-isf/build.gradle
 +++ b/Ghidra/Debug/Debugger-isf/build.gradle
 @@ -18,11 +18,17 @@ apply from: "${rootProject.projectDir}/gradle/javaProject.gradle"
@@ -14,7 +27,7 @@ index 2db94ed67e..925f394cf0 100644
  
 +buildscript {
 +	dependencies {
-+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.10.0'
 +	}
 +}
 +
@@ -22,7 +35,7 @@ index 2db94ed67e..925f394cf0 100644
  	api project(':ProposedUtils')
  }
 diff --git a/Ghidra/Debug/Debugger-rmi-trace/build.gradle b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
-index 4fa3b9a539..2663aeaeb0 100644
+index 9dd8522d88..5ea55bd8b2 100644
 --- a/Ghidra/Debug/Debugger-rmi-trace/build.gradle
 +++ b/Ghidra/Debug/Debugger-rmi-trace/build.gradle
 @@ -20,12 +20,17 @@ apply from: "${rootProject.projectDir}/gradle/jacocoProject.gradle"
@@ -38,7 +51,7 @@ index 4fa3b9a539..2663aeaeb0 100644
  
 +buildscript {
 +	dependencies {
-+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.10.0'
 +	}
 +}
 +
@@ -185,3 +198,6 @@ index a8c176bcbe..0000000000
 -	}
 -}
 -zipSourceSubproject.dependsOn generateProto
+-- 
+2.55.0
+
