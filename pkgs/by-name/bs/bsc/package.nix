@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "High performance block-sorting data compression library";
+    changelog = "https://github.com/IlyaGrebnov/libbsc/blob/v${finalAttrs.version}/CHANGES";
     homepage = "http://libbsc.com/";
     maintainers = with lib.maintainers; [ sigmanificient ];
     license = lib.licenses.asl20;
