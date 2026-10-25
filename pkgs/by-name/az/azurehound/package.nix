@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "azurehound";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zjuwz9DNqRLcFe0bnm7LIfdqkO5GxzyZvM2RAL3qRks=";
+    hash = "sha256-ny+yShWpL2OvZ5m1uehQADwj1oKPAt+/fefsztiaNVs=";
   };
 
-  vendorHash = "sha256-/5gVm4OAI94bg1QymXbN7O3r418y2F/pUgeZnz3UEbo=";
+  vendorHash = "sha256-buRaFYHQwaqVRig+94rLJ0rCSDV2ohb9HNUPxyIIq1g=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
