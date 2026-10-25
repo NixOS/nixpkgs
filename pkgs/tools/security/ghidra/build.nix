@@ -15,6 +15,7 @@
   ghidra-extensions,
   python3,
   python3Packages,
+  nix-update-script,
 }:
 
 let
@@ -197,6 +198,13 @@ stdenv.mkDerivation (finalAttrs: {
       ;
 
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "Ghidra_(.*)_build"
+      ];
+    };
   };
 
   meta = {
