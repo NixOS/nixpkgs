@@ -1104,9 +1104,22 @@ in
   */
   functionArgs =
     let
-      functionArgs = builtins.functionArgs;
+      functionArgsLambda = builtins.functionArgs;
     in
-    f: if f ? __functor then f.__functionArgs or (functionArgs (f.__functor f)) else functionArgs f;
+    f:
+    if f ? __functor then
+      f.__functionArgs or (
+        let
+          fInner = f.__functor f;
+        in
+        # Peel one recursion to avoid calling functionArgs
+        if fInner ? __functor then
+          fInner.__functionArgs or (functionArgs fInner)
+        else
+          functionArgsLambda fInner
+      )
+    else
+      functionArgsLambda f;
 
   /**
     Check whether something is a function or something
@@ -1126,9 +1139,21 @@ in
   */
   isFunction =
     let
-      isFunction = builtins.isFunction;
+      isLambda = builtins.isFunction;
     in
-    f: isFunction f || (f ? __functor && isFunction f.__functor && isFunction (f.__functor f));
+    f:
+    # Equivalent to `isLambda f || (f ? __functor && isFunction f.__functor && isFunction (f.__functor f))`
+    # but faster when `f.__functor` and `f.__functor f` are both lambdas.
+    isLambda f
+    || (
+      f ? __functor
+      && (
+        let
+          fFunctor = f.__functor;
+        in
+        (isLambda fFunctor || isFunction fFunctor) && (isLambda (fFunctor f) || isFunction (fFunctor f))
+      )
+    );
 
   /**
     `mirrorFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)
