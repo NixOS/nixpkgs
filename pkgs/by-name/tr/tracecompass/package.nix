@@ -138,13 +138,14 @@ stdenv.mkDerivation (finalAttrs: rec {
         export XDG_CACHE_HOME="$HOME/.cache"
         export XDG_CONFIG_HOME="$HOME/.config"
 
-        # Exercise the launcher's environment through the GSettings lookup
-        # used by GTK's file chooser during trace import.
+        # Replace only the launcher's final exec, keeping its environment setup.
+        # GTK's file chooser needs both schemas when importing a trace.
         sed '$c exec ${glib.bin}/bin/gsettings list-schemas' \
           ${lib.getExe finalAttrs.finalPackage} > "$HOME/schema-check"
         chmod +x "$HOME/schema-check"
-        "$HOME/schema-check" | grep -qx org.gtk.Settings.FileChooser
-        "$HOME/schema-check" | grep -qx org.gnome.desktop.interface
+        "$HOME/schema-check" > "$HOME/schemas"
+        grep -qx org.gtk.Settings.FileChooser "$HOME/schemas"
+        grep -qx org.gnome.desktop.interface "$HOME/schemas"
 
         workspace="$HOME/workspace"
         mkdir -p "$workspace"
