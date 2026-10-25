@@ -9,7 +9,7 @@
 
   # dependencies
   click,
-  httpx,
+  httpx2,
   pydantic,
   pydantic-settings,
   questionary,
@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
-  version = "1.2.7";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
-    hash = "sha256-fqbh1Ul1TzB2/HkTTlGFoUO6/hLNLNykcXjNb6I+Kpc=";
+    hash = "sha256-jUOciATMiZf6xtvgYSRZ1f/VvOQCizm1uv3ngz0tXpc=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
-    httpx
+    httpx2
     pydantic
     pydantic-settings
     questionary
@@ -74,6 +74,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     versionCheckHook
+  ];
+
+  disabledTests = [
+    # runs `echo` with an environment without PATH, so it is looked up in /bin:/usr/bin
+    "test_no_shell_expansion_of_args"
   ];
 
   __darwinAllowLocalNetworking = true;
