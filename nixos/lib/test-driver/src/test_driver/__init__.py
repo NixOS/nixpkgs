@@ -144,7 +144,7 @@ def main() -> None:
     if "--keep-vm-state" in sys.argv:
         warnings.warn(
             "The flag '--keep-vm-state' is deprecated. Use '--keep-machine-state' instead.",
-            DeprecationWarning,
+            FutureWarning,
         )
 
     output_directory = args.output_directory.resolve()
