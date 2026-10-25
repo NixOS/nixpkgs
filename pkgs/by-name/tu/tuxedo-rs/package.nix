@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   versionCheckHook,
 }:
@@ -16,6 +17,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rev = "tailor-v${finalAttrs.version}";
     hash = "sha256-+NzwUs8TZsA0us9hI1UmEKdiOo9IqTRmTOHs4xmC7MY=";
   };
+
+  # tailord 0.3.1 detects only one of the two fans on the InfinityBook Pro AMD
+  # Gen9 and Gen10, so the second fan stays idle. Both fixes are merged
+  # upstream but not released yet.
+  patches = [
+    # https://github.com/AaronErhardt/tuxedo-rs/pull/184
+    (fetchpatch {
+      url = "https://github.com/AaronErhardt/tuxedo-rs/commit/43c10db8c7796bd0533c2ceb10fe8adaa5ba8b2b.patch";
+      hash = "sha256-5k2RrfgW0eFxOUJgQ5Y1qYujnJVBDFNDDP9NLd9pppQ=";
+    })
+    # https://github.com/AaronErhardt/tuxedo-rs/pull/185
+    (fetchpatch {
+      url = "https://github.com/AaronErhardt/tuxedo-rs/commit/bfadc2e6cfd4b12dd7c14009d121262ea4b48f5d.patch";
+      includes = [ "tuxedo_ioctl/*" ];
+      hash = "sha256-+F4I2lG1WuRuA2wnC/kff31Th2CM/6EfnUkqMsbK4+g=";
+    })
+  ];
 
   # Some of the tests are impure and rely on files in /etc/tailord
   doCheck = false;
