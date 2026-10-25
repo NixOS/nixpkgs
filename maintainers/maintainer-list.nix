@@ -14457,6 +14457,12 @@
     githubId = 58953114;
     name = "Maxim Belyy";
   };
+  kitsunori = {
+    email = "kitsunori@g41.moe";
+    github = "Kihara777";
+    githubId = 24633616;
+    name = "狐莉";
+  };
   Kitt3120 = {
     email = "nixpkgs@schweren.dev";
     github = "Kitt3120";
