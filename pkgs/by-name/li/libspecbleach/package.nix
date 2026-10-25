@@ -8,6 +8,9 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libspecbleach";
+  # Must track the version pinned by noise-repellent's CMakeLists.txt.
+  # Updated together with noise-repellent via its update.sh.
+  # nixpkgs-update: no auto update
   version = "0.4.1";
 
   strictDeps = true;
