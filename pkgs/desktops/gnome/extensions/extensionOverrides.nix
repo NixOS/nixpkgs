@@ -13,7 +13,6 @@
   gobject-introspection,
   gsound,
   hddtemp,
-  libgda6,
   libgtop,
   libhandy,
   liquidctl,
@@ -79,12 +78,9 @@ lib.trivial.pipe super [
 
   (patchExtension "copyous@boerdereinar.dev" (old: {
     buildInputs = [
-      libgda6
       gsound
     ];
     preInstall = ''
-      sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${libgda6}/lib/girepository-1.0');\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/preferences/dependencies/dependencies.js
-      sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${libgda6}/lib/girepository-1.0');\n" lib/database/entryTracker.js
       sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/common/sound.js
       sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/preferences/general/feedbackSettings.js
     '';
