@@ -35,7 +35,23 @@ in
     };
 
     settings = lib.mkOption {
-      type = with lib.types; attrsOf anything;
+      type =
+        with lib.types;
+        attrsOf (
+          nullOr (
+            coercedTo
+              (oneOf [
+                bool
+                int
+              ])
+              lib.toJSON
+              (oneOf [
+                str
+                path
+                package
+              ])
+          )
+        );
       default = { };
       description = ''
         Configuration of the Mealie service.
@@ -91,14 +107,7 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment = {
-        PRODUCTION = "true";
-        API_PORT = toString cfg.port;
-        BASE_URL = "http://localhost:${toString cfg.port}";
-        DATA_DIR = "/var/lib/mealie";
-        NLTK_DATA = pkgs.nltk-data.averaged-perceptron-tagger-eng;
-      }
-      // (builtins.mapAttrs (_: val: toString val) cfg.settings);
+      environment = cfg.settings;
 
       serviceConfig = {
         DynamicUser = true;
@@ -111,12 +120,21 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+    services.mealie.settings = lib.mkMerge [
+      (lib.mapAttrs (lib.const lib.mkOptionDefault) {
+        PRODUCTION = true;
+        API_PORT = cfg.port;
+        BASE_URL = "http://localhost:${toString cfg.port}";
+        DATA_DIR = "/var/lib/mealie";
+        NLTK_DATA = pkgs.nltk-data.averaged-perceptron-tagger-eng;
+      })
+      (lib.mkIf cfg.database.createLocally {
+        DB_ENGINE = "postgres";
+        POSTGRES_URL_OVERRIDE = "postgresql://mealie:@/mealie?host=/run/postgresql";
+      })
+    ];
 
-    services.mealie.settings = lib.mkIf cfg.database.createLocally {
-      DB_ENGINE = "postgres";
-      POSTGRES_URL_OVERRIDE = "postgresql://mealie:@/mealie?host=/run/postgresql";
-    };
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
