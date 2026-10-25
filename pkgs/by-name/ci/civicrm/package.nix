@@ -2,6 +2,7 @@
   lib,
   php,
   fetchFromGitHub,
+  cacert,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "civicrm-core";
@@ -25,6 +26,16 @@ php.buildComposerProject2 (finalAttrs: {
     cp -R . $out/
     cp $out/bin/setup.conf.txt $out/bin/setup.conf
     runHook postInstall
+  '';
+
+  # CA_Config_Curl reads cacert.pem only on Windows, but the output still ships it.
+  postInstall = ''
+    for f in \
+      $out/vendor/totten/ca-config/src/CA/Config/cacert.pem \
+      $out/share/php/civicrm-core/vendor/totten/ca-config/src/CA/Config/cacert.pem; do
+      rm $f
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $f
+    done
   '';
 
   meta = {
