@@ -1,0 +1,24 @@
+diff -ubr a/resolv/Makefile b/resolv/Makefile
+--- a/resolv/Makefile	2026-10-08 16:24:35.292512811 +0100
++++ b/resolv/Makefile	2026-10-08 16:29:25.943174532 +0100
+@@ -154,7 +154,7 @@
+ # providing any functions in libidn2.so.0).
+ modules-names += tst-no-libidn2
+ extra-test-objs += tst-no-libidn2.os
+-LDFLAGS-tst-no-libidn2.so = -Wl,-soname,libidn2.so.0
++LDFLAGS-tst-no-libidn2.so = -Wl,-soname,@libidn2@/lib/libidn2.so.0
+ 
+ endif # $(build-shared)
+ 
+diff -ubr a/resolv/tst-resolv-ai_idn-common.c b/resolv/tst-resolv-ai_idn-common.c
+--- a/resolv/tst-resolv-ai_idn-common.c	2026-10-08 16:24:48.866252244 +0100
++++ b/resolv/tst-resolv-ai_idn-common.c	2026-10-08 16:29:25.943226272 +0100
+@@ -29,7 +29,7 @@
+ #include <support/support.h>
+ 
+ /* Name of the shared object for libidn2.  */
+-#define LIBIDN2_SONAME "libidn2.so.0"
++#define LIBIDN2_SONAME "@libidn2@/lib/libidn2.so.0"
+ 
+ #if TEST_USE_UTF8
+ /* UTF-8 encoding of "nämchen" (German for “namelet”).  */
