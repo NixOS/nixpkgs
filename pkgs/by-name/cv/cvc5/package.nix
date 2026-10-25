@@ -14,6 +14,8 @@
   boost,
   jdk,
   libpoly,
+
+  javaBindings ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,14 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
         tomli
       ]
     ))
-  ];
+  ]
+  ++ lib.optionals javaBindings [ jdk ];
   buildInputs = [
     cadical'.dev
     symfpu
     gmp
     gtest
     boost
-    jdk
     libpoly
   ];
 
@@ -60,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=1"
     "-DUSE_POLY=ON"
+    (lib.cmakeBool "BUILD_BINDINGS_JAVA" javaBindings)
   ];
 
   doCheck = true;
