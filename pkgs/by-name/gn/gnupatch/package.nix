@@ -13,21 +13,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "patch";
-  version = "2.8";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/patch/patch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
+    hash = "sha256-MkDHlZxTR8jtNH48QgHAM3v0JA1c8J1oiJ5Y7qujDhc=";
   };
-
-  patches = [
-    # Avoid a null pointer dereference with bad hunks.
-    # https://cgit.git.savannah.gnu.org/cgit/patch.git/commit/?id=e6d6a4e021660679d7fc9150f981d4920f722313
-    ./CVE-2026-56288.patch
-    # Do not loop forever on null ranges.
-    # https://cgit.git.savannah.gnu.org/cgit/patch.git/commit/?id=faba04ef4f2b410257f76c1b9dc85e350929c4b9
-    ./CVE-2026-56289.patch
-  ];
 
   # This test is filesystem-dependent - observed failing on ZFS.
   # It is also just plain flaky: it has been observed failing about 10%
