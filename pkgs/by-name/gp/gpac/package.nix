@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   gitUpdater,
   unstableGitUpdater,
   cctools,
@@ -111,6 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    rm $out/share/gpac/res/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/gpac/res/ca-bundle.crt
+  '';
 
   passthru.updateScript = channelToUse.updateScript;
 
