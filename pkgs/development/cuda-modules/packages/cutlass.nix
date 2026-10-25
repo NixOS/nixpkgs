@@ -158,7 +158,10 @@ backendStdenv.mkDerivation (finalAttrs: {
 
     # NOTE: Both CUDNN and CUBLAS can be used by the examples and the profiler. Since they are large dependencies, they
     #       are disabled by default.
-    (cmakeBool "CUTLASS_ENABLE_TOOLS" enableTools)
+    # NOTE: The unit tests use the utility headers of tools/util (the cutlass_tools_util_includes target), which is only
+    #       added with the tools. The CUTLASS library (and so the profiler) stays off unless enableTools is set.
+    (cmakeBool "CUTLASS_ENABLE_TOOLS" (enableTools || finalAttrs.finalPackage.doCheck))
+    (cmakeBool "CUTLASS_ENABLE_LIBRARY" enableTools)
     (cmakeBool "CUTLASS_ENABLE_CUBLAS" enableTools)
     (cmakeBool "CUTLASS_ENABLE_CUDNN" enableTools)
 
@@ -206,8 +209,8 @@ backendStdenv.mkDerivation (finalAttrs: {
       # Skip pre-releases, such as v4.8.0dev
       ignoredVersions = "dev|rc";
     };
-    # TODO:
-    # tests.test = cutlass.overrideAttrs { doCheck = true; };
+    # Builds and runs the unit tests, which need a GPU.
+    gpuCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
 
     # Include required architectures in compatibility check.
     # https://github.com/NVIDIA/cutlass/tree/main?tab=readme-ov-file#compatibility
