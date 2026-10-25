@@ -18023,6 +18023,7 @@ self: {
       description = "HFuse is a binding for the Linux FUSE library";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.linux;
+      broken = true;
     }
   ) { inherit (pkgs) fuse; };
 
