@@ -144,10 +144,10 @@ in
   });
   jitsi-meet = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-jitsi-meet";
-    version = "1.0.1";
+    version = "1.3.0";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/jitsi-meet/${finalAttrs.version}";
-      hash = "sha256-8HYA5Ihi3D9ia4RxxM/J3lfB1qxB3LDyVYx4TDTNSJo=";
+      hash = "sha256-gNdsf0g5z7u99UnUaEy0/YQgCsgFP9tyFh5OybyH1m0=";
       extension = "zip";
       stripRoot = false;
     };
