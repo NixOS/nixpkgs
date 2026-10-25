@@ -148,7 +148,7 @@ let
   # Test editable package support
   editableTests =
     let
-      testPython = python.override {
+      testPython = python.pythonOnBuildForHost.override {
         self = testPython;
         packageOverrides = pyfinal: pyprev: {
           # An editable package with a script that loads our mutable location
@@ -165,7 +165,8 @@ let
       };
 
     in
-    {
+    # mkPythonEditablePackage builds wheels with Hatchling.
+    lib.optionalAttrs (!testPython.pkgs.hatchling.disabled) {
       editable-script =
         runCommand "editable-test"
           {
@@ -180,7 +181,7 @@ let
             EOF
 
             test "$(my-script)" == "hello mutable"
-            test "$(python -c 'import sys; print(sys.path[1])')" == "$NIX_BUILD_TOP/src"
+            test "$(${testPython.executable} -c 'import sys; print(sys.path[1])')" == "$NIX_BUILD_TOP/src"
 
             touch $out
           '';
@@ -369,6 +370,7 @@ let
 
 in
 overrideTests
+// editableTests
 // lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
-  environmentTests // integrationTests // condaTests // editableTests
+  environmentTests // integrationTests // condaTests
 )
