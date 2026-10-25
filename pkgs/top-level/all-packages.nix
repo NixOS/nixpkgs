@@ -4434,8 +4434,6 @@ with pkgs;
   bundlerApp = callPackage ../development/ruby-modules/bundler-app { };
   bundlerUpdateScript = callPackage ../development/ruby-modules/bundler-update-script { };
 
-  bundler-audit = callPackage ../tools/security/bundler-audit { };
-
   solargraph = rubyPackages.solargraph;
 
   inherit
