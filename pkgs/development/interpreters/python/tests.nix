@@ -207,7 +207,7 @@ let
           '';
 
       extension = self: super: {
-        foobar = super.numpy;
+        foobar = super.six;
       };
       # `pythonInterpreters.pypy39_prebuilt` does not expose an attribute
       # name (is not present in top-level `pkgs`).
@@ -260,33 +260,49 @@ let
 
         test-packageOverrides =
           let
-            myPython =
-              let
-                self = python.override {
-                  packageOverrides = extension;
-                  inherit self;
-                };
-              in
-              self;
+            myPython = python.pythonOnBuildForHost.override {
+              packageOverrides = extension;
+              self = myPython;
+            };
           in
-          assert myPython.pkgs.foobar == myPython.pkgs.numpy;
-          assert myPython.pkgs.python.pkgs.foobar == myPython.pkgs.numpy;
+          assert myPython.pkgs.foobar == myPython.pkgs.six;
+          assert myPython.pkgs.python.pkgs.foobar == myPython.pkgs.six;
           assert
             myPython.pkgs.python.withPackages (ps: with ps; [ foobar ])
-            == myPython.withPackages (ps: with ps; [ numpy ]);
-          myPython.withPackages (ps: with ps; [ foobar ]);
+            == myPython.withPackages (ps: with ps; [ six ]);
+          runCommand "${python.name}-packageOverrides"
+            {
+              nativeBuildInputs = [ (myPython.withPackages (ps: [ ps.foobar ])) ];
+            }
+            ''
+              ${myPython.executable} -c 'import six'
+              touch "$out"
+            '';
         test-overrideScope =
           let
             myPackages = python.pkgs.overrideScope extension;
           in
-          assert myPackages.foobar == myPackages.numpy;
-          assert myPackages.python.pkgs.foobar == myPackages.numpy;
+          assert myPackages.foobar == myPackages.six;
+          assert myPackages.python.pkgs.foobar == myPackages.six;
           myPackages.python.withPackages (
             ps: with ps; [
               foobar
               ps.python.pkgs.foobar
             ]
           );
+
+        with-packages-overrideScope =
+          let
+            myPackages = python.pythonOnBuildForBuild.pkgs.overrideScope extension;
+          in
+          runCommand "${python.name}-with-packages-overrideScope"
+            {
+              nativeBuildInputs = [ (myPackages.python.withPackages (ps: [ ps.foobar ])) ];
+            }
+            ''
+              ${python.executable} -c 'import six'
+              touch "$out"
+            '';
         #
         # Have to skip prebuilt python as it's not present in top-level
         # `pkgs` as an attribute.
