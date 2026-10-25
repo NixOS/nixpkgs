@@ -128,22 +128,32 @@ let
     {
       # Make sure tkinter is importable. See https://github.com/NixOS/nixpkgs/issues/238990
       tkinter = callPackage ./tests/test_tkinter {
-        interpreter = python;
+        interpreter = python.pythonOnBuildForHost;
       };
     }
-    // lib.optionalAttrs (python.isPy3k && python.pythonOlder "3.13" && !stdenv.hostPlatform.isDarwin) {
-      # darwin has no split-debug
-      # fails on python3.13
-      cpython-gdb = callPackage ./tests/test_cpython_gdb {
-        interpreter = python;
-      };
-    }
+    //
+      lib.optionalAttrs
+        (
+          python.isPy3k
+          # Fails on Python 3.13.
+          && python.pythonOlder "3.13"
+          # Darwin has no split-debug.
+          && !stdenv.buildPlatform.isDarwin
+        )
+        {
+          cpython-gdb = callPackage ./tests/test_cpython_gdb {
+            interpreter = python.pythonOnBuildForHost;
+
+            # GDB must target the build platform to debug this interpreter.
+            gdb = pkgs.pkgsBuildBuild.gdb;
+          };
+        }
     // lib.optionalAttrs (python.isPy3k && python.pythonOlder "3.13") {
       # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
       # mypy does not yet support python3.13
       # https://github.com/python/mypy/issues/17264
       nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
-        interpreter = python;
+        interpreter = python.pythonOnBuildForHost;
       };
     }
   );
@@ -375,4 +385,5 @@ in
 overrideTests
 // editableTests
 // environmentTests
-// lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (integrationTests // condaTests)
+// integrationTests
+// lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) condaTests
