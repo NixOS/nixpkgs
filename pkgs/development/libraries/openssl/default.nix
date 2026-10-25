@@ -405,8 +405,8 @@ let
 in
 {
   # intended version "policy":
-  # - latest 3.x LTS
-  # - latest 3.x non-LTS as preview/for development
+  # - latest LTS
+  # - latest non-LTS as preview/for development
   #
   # - other versions in between only when reasonable need is stated for some package
   # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
@@ -414,31 +414,6 @@ in
   openssl_3_5 = common {
     version = "3.5.9";
     hash = "sha256-YD9WAuLu8A13+9Qp003NWCK7MBdXobyc2yTGcPHrhZo=";
-
-    patches = [
-      # Support for NIX_SSL_CERT_FILE, motivation:
-      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
-      ./3.5/nix-ssl-cert-file.patch
-
-      # openssl will only compile in KTLS if the current kernel supports it.
-      # This patch disables build-time detection.
-      ./3.5/openssl-disable-kernel-detection.patch
-
-      # Look up SSL certificates in /etc rather than the immutable installation directory
-      (
-        if stdenv.hostPlatform.isDarwin then
-          ./3.5/use-etc-ssl-certs-darwin.patch
-        else
-          ./3.5/use-etc-ssl-certs.patch
-      )
-    ];
-
-    withDocs = true;
-  };
-
-  openssl_3_6 = common {
-    version = "3.6.5";
-    hash = "sha256-ohV8KDDv3sN4iTmwDJsGODBtPwu7dtxIMu5QO7OX35g=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:

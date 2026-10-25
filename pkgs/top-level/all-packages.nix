@@ -6152,7 +6152,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_3_5
-    openssl_3_6
     openssl_4_1
     ;
 
