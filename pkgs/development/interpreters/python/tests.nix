@@ -339,16 +339,17 @@ let
       }
     );
 
-  # depends on mypy, which depends on CPython internals
-  condaTests = lib.optionalAttrs (!python.isPyPy) (
+  # Test importing a package installed from a Conda archive.
+  condaTests =
     let
-      requests = callPackage (
+      testPython = python.pythonOnBuildForHost;
+      requests = pkgs.pkgsBuildBuild.callPackage (
         {
           autoPatchelfHook,
           fetchurl,
           pythonCondaPackages,
         }:
-        python.pkgs.buildPythonPackage {
+        testPython.pkgs.buildPythonPackage {
           pname = "requests";
           version = "2.24.0";
           pyproject = false;
@@ -359,12 +360,12 @@ let
           nativeBuildInputs = [
             autoPatchelfHook
           ]
-          ++ (with python.pkgs; [
+          ++ (with testPython.pkgs; [
             condaUnpackHook
             condaInstallHook
           ]);
           buildInputs = pythonCondaPackages.condaPatchelfLibs;
-          propagatedBuildInputs = with python.pkgs; [
+          propagatedBuildInputs = with testPython.pkgs; [
             chardet
             idna
             urllib3
@@ -374,16 +375,15 @@ let
       ) { };
       pythonWithRequests = requests.pythonModule.withPackages (ps: [ requests ]);
     in
-    lib.optionalAttrs (python.isPy3k && stdenv.hostPlatform.isLinux) {
+    lib.optionalAttrs (!python.isPyPy && python.isPy3k && stdenv.buildPlatform.isLinux) {
       condaExamplePackage = runCommand "import-requests" { } ''
         ${pythonWithRequests.interpreter} -c "import requests" > $out
       '';
-    }
-  );
+    };
 
 in
 overrideTests
 // editableTests
 // environmentTests
 // integrationTests
-// lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) condaTests
+// condaTests
