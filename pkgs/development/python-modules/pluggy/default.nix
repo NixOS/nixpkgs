@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "1.6.0";
+  version = "1.7.0";
 
   pyproject = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = "pluggy";
     tag = version;
-    hash = "sha256-pkQjPJuSASWmzwzp9H/UTJBQDr2r2RiofxpF135lAgc=";
+    hash = "sha256-wQr2dFG8gh58v9CbmNhLX3Znuj+JeBAm3SHXJXMztXA=";
   };
 
   build-system = [ setuptools-scm ];
