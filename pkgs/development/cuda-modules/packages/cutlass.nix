@@ -46,13 +46,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "cutlass";
-  version = "4.7.1";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z/jASQGRj9fYwgyJKvzWgowG7j2zNKb3xeFUzYwwLQA=";
+    hash = "sha256-Gc3HqRZGTapmCisThmEQQqbn1NenObxGK/bM0rtKaPg=";
   };
 
   # TODO: As a header-only library, we should make sure we have an `include` directory or similar which is not a
