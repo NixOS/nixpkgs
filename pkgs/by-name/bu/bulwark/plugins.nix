@@ -193,12 +193,12 @@ in
   });
   pgp-true-end-to-end = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-pgp-true-end-to-end";
-    version = "2.0.0";
+    version = "2.0.1";
     src = fetchFromGitHub {
       owner = "paulhenry46";
       repo = "pgp-plugin";
       tag = finalAttrs.version;
-      hash = "sha256-VFX6kiOf0UclAT1Tntg3vmfBUK5Kevh0Vq57XEizcWA=";
+      hash = "sha256-r6Kop5M6hN85MnykA6uozIik3oxek+h89t18buqq/88=";
     };
     npmDepsHash = "sha256-O84i5VyIJ+MlhQAJhXRjmlzmwPl910HTFwFWg/vzrUE=";
     meta = {
