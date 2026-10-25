@@ -1,32 +1,31 @@
 {
-  rustPlatform,
-  pnpm_11,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  cargo-tauri,
-  nodejs,
-  pkg-config,
-  wrapGAppsHook3,
-  fetchFromGitHub,
-  gtk3,
-  librsvg,
-  openssl,
-  autoPatchelfHook,
   lib,
-  nix-update-script,
-  xdg-utils,
-
-  cef-binary,
-  autoAddDriverRunpath,
   addDriverRunpath,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
+  cargo-tauri,
+  cef-binary,
+  fetchFromGitHub,
+  fetchPnpmDeps,
+  gtk3,
   libGL,
   libpulseaudio,
-  # speechd-minimal,
+  librsvg,
   libx11,
-  libxrandr,
-  libxkbcommon,
   libxcursor,
   libxi,
+  libxkbcommon,
+  libxrandr,
+  nix-update-script,
+  nodejs,
+  openssl,
+  pkg-config,
+  pnpmConfigHook,
+  pnpm_11,
+  rustPlatform,
+  # speechd-minimal,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
@@ -40,12 +39,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
+
   patches = [
     # Use the installed desktop entry so URI launches go through the Nix wrapper.
     ./use-installed-uri-handlers.patch
   ];
+
   postUnpack = ''
-    # pnpm.configHook has to write to ../.., as our sourceRoot is set to
+    # pnpmConfigHook has to write to ../.., as our sourceRoot is set to
     # apps/readest-app
     chmod -R +w .
 
@@ -56,8 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp "$sourceRoot/src-tauri/.cargo/cef.toml" \
       "$sourceRoot/src-tauri/.cargo/config.toml"
   '';
-
-  sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
   pnpmRoot = "../..";
   pnpmDeps = fetchPnpmDeps {
@@ -153,6 +153,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p "$CEF_PATH"
 
     # The Rust bindings expect the runtime libraries and resources in one directory.
+    # https://github.com/chromiumembedded/cef/blob/be1e15d/tools/distrib/linux/README.minimal.txt
     ln -s ${cef-binary}/Release/* ${cef-binary}/Resources/* "$CEF_PATH/"
     ln -s ${cef-binary}/include "$CEF_PATH/include"
 
