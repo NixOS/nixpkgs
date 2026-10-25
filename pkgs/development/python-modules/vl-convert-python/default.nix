@@ -5,6 +5,7 @@
   rustPlatform,
   protobuf,
   libffi,
+  sqlite,
   callPackage,
   librusty_v8 ? callPackage ./librusty_v8.nix { },
   nix-update-script,
@@ -39,7 +40,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  buildInputs = [ libffi ];
+  buildInputs = [
+    libffi
+    sqlite
+  ];
 
   pythonImportsCheck = [ "vl_convert" ];
 
