@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bin"
     "defmt-print"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   # Fails with
   #
