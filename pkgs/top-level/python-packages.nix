@@ -3779,7 +3779,9 @@ self: super: with self; {
 
   cram = callPackage ../development/python-modules/cram { };
 
-  cramjam = callPackage ../development/python-modules/cramjam { };
+  cramjam = callPackage ../development/python-modules/cramjam {
+    inherit (pkgs) zstd;
+  };
 
   crashtest = callPackage ../development/python-modules/crashtest { };
 

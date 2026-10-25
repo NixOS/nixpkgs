@@ -4,6 +4,8 @@
   fetchFromGitHub,
   pyprojectVersionPatchHook,
   rustPlatform,
+  pkg-config,
+  zstd,
 
   # tests
   hypothesis,
@@ -33,7 +35,10 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     pyprojectVersionPatchHook
+    pkg-config
   ];
+
+  buildInputs = [ zstd ];
 
   nativeCheckInputs = [
     hypothesis
