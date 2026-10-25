@@ -63,6 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = ''
+    # Disable afterPack during build,
+    # as afterPack expects the upstream ffmpeg bundle.
+    substituteInPlace package.json \
+      --replace-fail '"afterPack": "./script/afterPack.ts",' ""
+
     # Disable update check by making enableUpdateCheck configuration always false
     # * Changge the configuration access.
     #   * Replace default value.
