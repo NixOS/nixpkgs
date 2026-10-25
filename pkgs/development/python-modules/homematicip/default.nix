@@ -18,6 +18,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.19.1";
   pyproject = true;
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
