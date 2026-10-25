@@ -16,7 +16,7 @@
   taskflow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rapidfuzz";
   version = "3.14.6";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yE0YH7WVjULPoxAp5keYIy5/kzdDxpWyHFSMObtCiXA=";
   };
 
@@ -84,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
