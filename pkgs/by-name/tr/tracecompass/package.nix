@@ -78,8 +78,19 @@ stdenv.mkDerivation (finalAttrs: rec {
   dontWrapGApps = true;
 
   preFixup = ''
+    wrapProgramShell $out/bin/tracecompass "''${gappsWrapperArgs[@]}"
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp -r . $out/trace-compass
+
+    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/trace-compass/tracecompass
+
+    mkdir -p $out/bin
     makeShellWrapper $out/trace-compass/tracecompass $out/bin/tracecompass \
-      "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ jdk21 ]} \
       --set JAVA_HOME ${jdk21} \
       --prefix LD_LIBRARY_PATH : ${
@@ -99,17 +110,6 @@ stdenv.mkDerivation (finalAttrs: rec {
       --run 'if [[ " $* " != *" -configuration "* ]]; then
          set -- -configuration "$HOME/.tracecompass/${version}/configuration" "$@"
        fi'
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out
-    cp -r . $out/trace-compass
-
-    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/trace-compass/tracecompass
-
-    mkdir -p $out/bin
 
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
