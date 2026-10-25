@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -17,11 +18,17 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-XC55zV7HTro9kJummsuEbMzFwyV/udbgVCQGa3A9ILU=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [ "-s" ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/pingtunnel
   '';
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-v" ];
 
   meta = {
     description = "Tool that send TCP/UDP traffic over ICMP";
