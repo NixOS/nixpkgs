@@ -6,13 +6,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-admin";
-  version = "2.4.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "admin-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0clBCOV5T734rmU3erZ7DHZpILP9I/zlMnEQdQ9jDA4=";
+    hash = "sha256-rLavWiGNyBjpbaFAsetmWAJvYXdzHLYawlHOUzhQ4/U=";
   };
 
   # TODO: Remove after upstream fixes resolved missing.
@@ -20,7 +20,8 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-pVTIKEhCgAa6UZKt0dJ1VlTKUvNMUjx4mqoeFZqJ1io=";
+  npmDepsHash = "sha256-6qQcsiIglaUcvdqcU6lm5MXNvfL0CvzZmC2TETWUXPI=";
+  npmFlags = [ "--legacy-peer-deps" ];
   npmPackFlags = [ "--ignore-scripts" ];
   npmBuildScript = "build-ignore-error";
 
@@ -39,7 +40,7 @@ buildNpmPackage (finalAttrs: {
     description = "Nezha monitoring admin frontend";
     homepage = "https://github.com/nezhahq/admin-frontend";
     changelog = "https://github.com/nezhahq/admin-frontend/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
 })
