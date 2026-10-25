@@ -30,6 +30,8 @@ appimageTools.wrapType2 {
     echo "StartupWMClass=app.hifile.www.HiFile" >> $out/share/applications/HiFile.desktop
   '';
 
+  extraPkgs = pkgs: [ pkgs.libgpg-error ];
+
   passthru.updateScript = ./update.sh;
 
   meta = {
