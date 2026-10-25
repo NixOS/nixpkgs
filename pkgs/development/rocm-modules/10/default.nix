@@ -96,6 +96,8 @@ let
       };
       rocprofiler-sdk = self.callPackage ./rocprofiler-sdk { };
 
+      hipfile = self.callPackage ./hipfile { };
+
       rocprof-compute-viewer = self.callPackage ../rocprof-compute-viewer { };
 
       rocprof-trace-decoder = self.callPackage ./rocprof-trace-decoder { };
