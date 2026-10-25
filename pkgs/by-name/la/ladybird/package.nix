@@ -65,13 +65,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-10-24";
+  version = "0-unstable-2026-10-25";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "7e15f8e935189b116dd178537849f2e1c94ed764";
-    hash = "sha256-xsvPE6mpbHreBvIfbmpONQywlUkE6uF6dZKzHU8M/eE=";
+    rev = "7abc8ff1286031d599c087ef21a02fda5c8ebb9a";
+    hash = "sha256-w7+HVeOiWuydkKdZpCcwocib00FwYe/jDeTSXGBKUKg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
