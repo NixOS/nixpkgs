@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
     homepage = "https://github.com/EasyRPG/liblcf";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ keenanweaver ];
     platforms = lib.platforms.all;
   };
 })
