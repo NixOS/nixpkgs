@@ -17,29 +17,29 @@ let
 
   versions = {
     "22" = rec {
-      version = "22.1.3";
+      version = "22.1.7";
       rev = "v${version}";
-      hash = "sha256-u/OytBH9LgAyGF9PX+5lmAbGPQ7iVv52w8mwQ+6fi/s=";
+      hash = "sha256-3yOvvT7cJ4Smz3aOJH6kh7CmfMNWaBAz6qxPnRA7zlE=";
     };
     "21" = rec {
-      version = "21.1.0";
+      version = "21.1.12";
       rev = "v${version}";
-      hash = "sha256-kk8BbPl/UBW1gaO/cuOQ9OsiNTEk0TkvRDLKUAh6exk=";
+      hash = "sha256-f/91YTqK3yBr/0oxceVKhJsDHj78T+Zt6Vf6iuiUpg4=";
     };
     "20" = rec {
-      version = "20.1.5";
+      version = "20.1.18";
       rev = "v${version}";
-      hash = "sha256-GdlC/Vl61nTNdua2s+CW2YOvkSKK6MNOvBc/393iths=";
+      hash = "sha256-jVnNi5VOqWx8o6AuMfmenrncKUqvb/ii5xb6AhhQ9lE=";
     };
     "19" = rec {
-      version = "19.1.10";
+      version = "19.1.23";
       rev = "v${version}";
-      hash = "sha256-VgA47AGMnOKYNeW95nxJZzmKnYK8D/9okgssPnPqXXI=";
+      hash = "sha256-b1fbUuHYoeT14ixuSgLstGSBwb+cIm5O+a24/ydITF0=";
     };
     "18" = rec {
-      version = "18.1.15";
+      version = "18.1.28";
       rev = "v${version}";
-      hash = "sha256-rt3RTZut41uDEh0YmpOzH3sOezeEVWtAIGMKCHLSJBw=";
+      hash = "sha256-JQQzbfZ0fVvEbjcmyFYZnzeXUjktOjWFpW6EsQykqr0=";
     };
   };
 
@@ -55,13 +55,11 @@ stdenv.mkDerivation {
   inherit (branch) version;
 
   src = fetchFromGitHub {
+    name = "spirv-llvm-translator-${branch.rev}-source";
     owner = "KhronosGroup";
     repo = "SPIRV-LLVM-Translator";
     inherit (branch) rev hash;
   };
-
-  # TODO: Remove.
-  patches = [ ];
 
   nativeBuildInputs = [
     pkg-config
