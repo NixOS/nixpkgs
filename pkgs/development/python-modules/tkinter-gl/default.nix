@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   python,
@@ -8,9 +9,13 @@
   tkgl,
   tkinter,
   nix-update-script,
+
+  mesa,
+  pyopengl,
+  xvfb-run,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tkinter-gl";
   version = "1.1";
   pyproject = true;
@@ -18,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "tkinter_gl";
-    tag = "v${version}_as_released";
+    tag = "v${finalAttrs.version}_as_released";
     hash = "sha256-PNxxjyVGoMw4J/SXWvVITuGMq/HypxUwDkSxeFy2Vag=";
   };
 
@@ -47,6 +52,23 @@ buildPythonPackage rec {
       ln -s ${tkgl}/lib/Tkgl* ${pkgDir}
     '';
 
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  nativeCheckInputs = [
+    xvfb-run
+    pyopengl
+    mesa.llvmpipeHook
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    export HOME=$TMPDIR
+    xvfb-run --auto-display ${python.interpreter} ${./square.py}
+
+    runHook postCheck
+  '';
+
   pythonImportsCheck = [ "tkinter_gl" ];
 
   passthru.updateScript = nix-update-script {
@@ -58,7 +80,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Base class for GL rendering surfaces in tkinter";
-    changelog = "https://github.com/3-manifolds/tkinter_gl/releases/tag/${src.tag}";
+    changelog = "https://github.com/3-manifolds/tkinter_gl/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/3-manifolds/tkinter_gl";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
@@ -66,4 +88,4 @@ buildPythonPackage rec {
       alejo7797
     ];
   };
-}
+})
