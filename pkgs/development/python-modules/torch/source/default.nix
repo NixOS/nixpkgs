@@ -237,6 +237,8 @@ let
         rocprofiler-sdk
         rocprofiler-sdk.dev
         amdsmi
+        # LoadHIP requires hipfile from ROCm 7.14 on
+        hipfile
       ]
       ++ lib.optionals (!vendorComposableKernel) [
         composable_kernel
