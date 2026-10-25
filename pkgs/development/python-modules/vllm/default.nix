@@ -360,7 +360,7 @@ let
     libcurand # curand_kernel.h
     libcusparse # cusparse.h
     libcusolver # cusolverDn.h
-    cuda_nvtx
+    nvtx
     cuda_nvrtc
     # cusparselt # cusparseLt.h
     libcublas
