@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron_43,
+  electron_44,
   rustPlatform,
   cargo,
   rustc,
@@ -17,6 +17,7 @@
   alsa-lib,
   libpulseaudio,
   pipewire,
+  dbus,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -24,19 +25,19 @@
   removeReferencesTo,
 }:
 let
-  electron = electron_43;
-  pnpm = pnpm_11;
+  electron = electron_44;
+  pnpm = pnpm_12;
   shareDir = "$out/share/SPlayer-Next";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer-next";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "SPlayer-Dev";
     repo = "SPlayer-Next";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ypdEoVtK7ZkrlUycfXgyE4Ki+WPHuzARj15WtbjlNCo=";
+    hash = "sha256-0t16eXRb0B1We6m8Ks1+uPgD1mW19HztChEgq1oap1Q=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-Ll+nfLfKQapsBc/vGabmd4xuSvYg/XnyLBg9w9hYlhY=";
+    hash = "sha256-LA1B96BjvaTHKFI1IxkNfnFAy2D9DgmRjKAegWkJtIw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-36PeEuqq/ZNUG+gmPiQbIUt8cpTGF7+9lhCX6YftMr4=";
+    hash = "sha256-9doP83tZlKM8Hsu+NHYOLLWq1RWFS+IGB2oOXwA4d2g=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libpulseaudio
     pipewire
+    dbus
   ];
 
   env = {
