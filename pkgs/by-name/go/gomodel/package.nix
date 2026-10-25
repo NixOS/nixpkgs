@@ -10,7 +10,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "gomodel";
-  version = "0.1.105";
+  version = "0.1.107";
 
   __structuredAttrs = true;
 
@@ -18,13 +18,13 @@ buildGo127Module (finalAttrs: {
     owner = "ENTERPILOT";
     repo = "GoModel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7mdpK2voohBtzQetzWLz632gwl2MS+BJv89ZyM1PmGQ=";
+    hash = "sha256-l1LX6YZWOsIDHiqqcVY6gJ+iRaXHxPUO4movK+L2ad4=";
   };
 
-  vendorHash = "sha256-WUb7dWr3sS/4Gpfm5lSkzhZ+EXe3aEeO+wExXojURGg=";
+  vendorHash = "sha256-miLdqw7XJEgX23cZPwL6C09cYXZfVM5uzJhYIJRKC/Y=";
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web/dashboard";
-    hash = "sha256-sASMrE9jlS68Kymc5rhWsYysSiL2Na5pX1joloKXIUo=";
+    hash = "sha256-w/Q0PQeX3HmbRRZi3uT5slPVmY/H5Y1nVOeYtgCpRVE=";
   };
 
   # paraglide-js plugins are resolved via `./node_modules/...` paths in
@@ -46,11 +46,11 @@ buildGo127Module (finalAttrs: {
   # Tests require network services (Redis, Postgres, etc.)
   doCheck = false;
 
-  # nixpkgs has Go 1.27.1; go.mod requires 1.27.2 (a patch release with no
+  # nixpkgs has Go 1.27.2; go.mod requires 1.27.3 (a patch release with no
   # new language features). Lower the directive to match the available
   # toolchain. `go mod tidy` later will restore the real value.
   prePatch = ''
-    sed -i 's/^go 1\.27\.2$/go 1.27.1/' go.mod
+    sed -i 's/^go 1\.27\.3$/go 1.27.2/' go.mod
   '';
 
   preBuild = ''
