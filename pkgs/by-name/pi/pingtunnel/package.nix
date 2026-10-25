@@ -17,10 +17,7 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-XC55zV7HTro9kJummsuEbMzFwyV/udbgVCQGa3A9ILU=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/pingtunnel
