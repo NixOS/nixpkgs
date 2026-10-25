@@ -189,6 +189,23 @@ let
   # Tests to ensure overriding works as expected.
   overrideTests =
     let
+      pythonEnv = python.pythonOnBuildForHost.withPackages (_: [ ]);
+      postBuildMarker = old: {
+        postBuild = old.postBuild + ''
+          echo preserved > "$out/override-marker"
+        '';
+      };
+      testPostBuild =
+        method:
+        runCommand "${python.name}-with-packages-${method}"
+          {
+            nativeBuildInputs = [ (pythonEnv.${method} postBuildMarker) ];
+          }
+          ''
+            test "$(cat "$(dirname "$(command -v ${python.executable})")/../override-marker")" = preserved
+            touch "$out"
+          '';
+
       extension = self: super: {
         foobar = super.numpy;
       };
@@ -198,6 +215,49 @@ let
     in
     lib.optionalAttrs (python.isPy3k) (
       {
+        with-packages-override =
+          runCommand "${python.name}-with-packages-override"
+            {
+              nativeBuildInputs = [
+                (pythonEnv.override {
+                  makeWrapperArgs = [ "--set PYTHON_ENV_TEST preserved" ];
+                })
+              ];
+            }
+            ''
+              ${python.executable} - <<'PY'
+              import os
+
+              assert os.environ.get("PYTHON_ENV_TEST") == "preserved", "Python environment override was lost"
+              PY
+
+              touch "$out"
+            '';
+
+        with-packages-overrideAttrs = testPostBuild "overrideAttrs";
+
+        with-packages-overrideDerivation = testPostBuild "overrideDerivation";
+
+        with-packages-override-chained =
+          runCommand "${python.name}-with-packages-override-chained"
+            {
+              nativeBuildInputs = [
+                ((pythonEnv.overrideAttrs postBuildMarker).override {
+                  makeWrapperArgs = [ "--set PYTHON_ENV_TEST preserved" ];
+                })
+              ];
+            }
+            ''
+              ${python.executable} - <<'PY'
+              import os
+
+              assert os.environ.get("PYTHON_ENV_TEST") == "preserved", "Python environment override was lost"
+              PY
+
+              test "$(cat "$(dirname "$(command -v ${python.executable})")/../override-marker")" = preserved
+              touch "$out"
+            '';
+
         test-packageOverrides =
           let
             myPython =
