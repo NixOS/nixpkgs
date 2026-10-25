@@ -1975,8 +1975,6 @@ with pkgs;
     guiSupport = false;
   };
 
-  gnused = callPackage ../tools/text/gnused { };
-
   inherit (callPackage ../development/tools/godot { })
     godot3
     godot3-export-templates
