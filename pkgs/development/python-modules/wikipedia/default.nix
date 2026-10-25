@@ -36,6 +36,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/goldsmith/Wikipedia";
     changelog = "https://github.com/goldsmith/Wikipedia/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      theobori
+    ];
   };
 })
