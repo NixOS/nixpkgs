@@ -37,7 +37,7 @@
 }:
 
 let
-  # https://github.com/scipp/scipp/blob/v26.9.0/pyproject.toml#L7-L10
+  # https://github.com/scipp/scipp/blob/26.9.0/pyproject.toml#L7-L10
   pybind11' = pybind11.overridePythonAttrs (old: {
     version = "3.0.4";
     src = old.src.override {
