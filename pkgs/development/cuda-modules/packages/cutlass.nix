@@ -203,6 +203,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater {
       inherit (finalAttrs) pname version;
       rev-prefix = "v";
+      # Skip pre-releases, such as v4.8.0dev
+      ignoredVersions = "dev|rc";
     };
     # TODO:
     # tests.test = cutlass.overrideAttrs { doCheck = true; };
