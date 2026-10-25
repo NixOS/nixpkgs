@@ -17,6 +17,9 @@ buildGoModule {
 
   vendorHash = "sha256-Layg1axFN86OFgxEyNFtIlm6Jtx317jZb/KH6IjJ8e4=";
 
+  # `plait` is for `GOOS=js` only.
+  excludedPackages = [ "plait" ];
+
   #add missing dependencies and hashes
   patches = [ ./go-modules.patch ];
 
