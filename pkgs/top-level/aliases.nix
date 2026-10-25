@@ -1434,6 +1434,7 @@ mapAliases {
   libfpx = throw "libfpx has been removed as it was unmaintained in Nixpkgs and had known vulnerabilities"; # Added 2025-05-20
   libFS = libfs; # Added 2026-02-04
   libgadu = throw "'libgadu' has been removed as upstream is unmaintained and has no dependents or maintainers in Nixpkgs"; # Added 2025-05-17
+  libgda5 = throw "'libgda5' has been removed as it was unmaintained upstream, which is problematic for a database client library"; # Added 2026-10-25
   libgda = throw "'libgda' has been renamed to/replaced by 'libgda5'"; # Converted to throw 2025-10-27
   libgdamm = throw "'libgdamm' has been removed due to being archived upstream."; # Added 2026-10-24
   libgdata = throw "'libgdata' has been removed due to being archived upstream."; # Added 2026-05-29
