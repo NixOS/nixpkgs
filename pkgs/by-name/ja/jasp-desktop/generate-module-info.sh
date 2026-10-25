@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq nix-prefetch-github
+#!nix-shell -i bash -p jq nix-prefetch-github R rPackages.desc
 #shellcheck shell=bash
 set -euo pipefail
 
@@ -19,19 +19,28 @@ jq -r '
   [.[0], .[3]] | @tsv
 ' "$bundlesJsonPath" | while IFS=$'\t' read -r pname tag; do
   echo "Prefetching jasp-stats-modules/$pname at rev $tag" >&2
-  prefetchData=$(nix-prefetch-github jasp-stats-modules "$pname" --rev "refs/tags/$tag")
+  prefetchDataJson=$(nix-prefetch-github jasp-stats-modules "$pname" --rev "refs/tags/$tag")
+
+  # sadly nix-prefetch-github doesn't emit the store path as of writing this
+  # so we'll fetch our DESCRIPTION file separately again
+  desc_path=$(mktemp)
+  curl -fsSL "https://raw.githubusercontent.com/jasp-stats-modules/$pname/refs/tags/$tag/DESCRIPTION" -o "$desc_path"
+  depsJson=$("$pkg_dir/parse-desc-for-deps.R" "$desc_path")
+  rm "$desc_path"
 
   jq -c -n \
     --arg pname "$pname" \
     --arg tag "$tag" \
-    --argjson prefetchData "$prefetchData" \
+    --argjson prefetchData "$prefetchDataJson" \
+    --argjson deps "$depsJson" \
     '{
       key: $pname,
       value: {
         pname: $pname,
         version: $tag | split("_R-")[0],
         tag: $tag,
-        hash: $prefetchData.hash
+        hash: $prefetchData.hash,
+        deps: $deps
       }
     }'
 done | jq -s 'from_entries' > "$pkg_dir/module-info.json"
