@@ -405,8 +405,8 @@ let
 in
 {
   # intended version "policy":
-  # - latest 3.x LTS
-  # - latest 3.x non-LTS as preview/for development
+  # - latest LTS
+  # - latest non-LTS as preview/for development
   #
   # - other versions in between only when reasonable need is stated for some package
   # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
