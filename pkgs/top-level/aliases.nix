@@ -497,6 +497,7 @@ mapAliases {
   catnip-gtk4 = throw "'catnip-gtk4' has been removed, as it has been unmaintained upstream since June 2023, use cavasik instead"; # Added 2026-01-01
   cavalier = throw "'cavalier' has been removed due to lack of maintenance upstream. Consider using cavasik instead"; # Added 2026-09-26
   cb2bib = throw "'cb2bib' has been removed as it depends on insecure&unmaintained qtwebkit"; # Added 2026-04-26
+  ccal = throw "'ccal' has been removed because its upstream source is no longer available"; # Added 2026-10-26
   cdktf-cli = warnAlias "'cdktf-cli' has been renamed to/replaced by 'cdktn-cli'" cdktn-cli; # Added 2026-02-18
   cdparanoiaIII = cdparanoia-iii; # Added 2026-02-08
   cdwe = throw "'cdwe' has been removed, as it has been unmaintained upstream since June 2023"; # Added 2026-01-01
