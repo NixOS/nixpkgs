@@ -12438,6 +12438,12 @@ self: super: with self; {
 
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
 
+  nvtx = callPackage ../development/python-modules/nvtx {
+    # Only for its source and versions. Every CUDA package set from 12.9 on has the same source build, while earlier
+    # ones (possibly the default cudaPackages) use the redistributable.
+    nvtx = pkgs.cudaPackages_13.nvtx;
+  };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
@@ -21327,6 +21333,8 @@ self: super: with self; {
   triton-bin = callPackage ../development/python-modules/triton/bin.nix { };
 
   triton-cuda = self.triton.override { cudaSupport = true; };
+
+  triton-kernels = callPackage ../development/python-modules/triton-kernels { };
 
   triton-no-cuda = self.triton.override { cudaSupport = false; };
 

@@ -9150,12 +9150,6 @@
     githubId = 449463;
     name = "Reno Reckling";
   };
-  exlevan = {
-    email = "exlevan@gmail.com";
-    github = "exlevan";
-    githubId = 873530;
-    name = "Alexey Levan";
-  };
   exploitoverload = {
     email = "nix@exploitoverload.com";
     github = "exploitoverload";
@@ -13175,12 +13169,6 @@
     github = "javaes";
     githubId = 1131529;
     name = "Jan van Esdonk";
-  };
-  javaguirre = {
-    email = "contacto@javaguirre.net";
-    github = "javaguirre";
-    githubId = 488556;
-    name = "Javier Aguirre";
   };
   javimerino = {
     email = "merino.jav@gmail.com";
@@ -17390,12 +17378,6 @@
     githubId = 44255157;
     name = "Ludovico Piero";
     keys = [ { fingerprint = "72CA 4F61 46C6 0DAB 6193  4D35 3911 DD27 6CFE 779C"; } ];
-  };
-  lufia = {
-    email = "lufia@lufia.org";
-    github = "lufia";
-    githubId = 1784379;
-    name = "Kyohei Kadota";
   };
   Luflosi = {
     name = "Luflosi";
@@ -28095,12 +28077,6 @@
     github = "sshine";
     githubId = 50879;
     name = "Simon Shine";
-  };
-  SShrike = {
-    email = "severen@shrike.me";
-    github = "severen";
-    githubId = 4061736;
-    name = "Severen Redwood";
   };
   ssnoer = {
     email = "ssnoer@proton.me";

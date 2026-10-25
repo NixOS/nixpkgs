@@ -121,7 +121,7 @@ let
       (lib.getDev cuda_cupti) # cupti.h
       (lib.getDev cuda_nvcc) # See https://github.com/google/jax/issues/19811
       (lib.getDev cuda_nvml_dev) # nvml.h
-      (lib.getDev cuda_nvtx) # nvToolsExt.h
+      (lib.getDev nvtx) # nvToolsExt.h
       (lib.getDev libcublas) # cublas_api.h
       (lib.getDev libcufft) # cufft.h
       (lib.getDev libcurand) # curand.h

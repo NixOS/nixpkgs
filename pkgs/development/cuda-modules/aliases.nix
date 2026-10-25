@@ -16,4 +16,10 @@ builtins.mapAttrs mkRenamed {
     path = "cccl";
     package = final.cccl;
   };
+
+  # NVTX is built from source when possible, so it is no longer named after the redistributable.
+  cuda_nvtx = {
+    path = "nvtx";
+    package = final.nvtx;
+  };
 }

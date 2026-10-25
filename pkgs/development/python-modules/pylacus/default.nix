@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylacus";
-  version = "1.26.0";
+  version = "1.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "PyLacus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C6mVGmvchtD/HL9gJJUF57PmGVbfD4P354MtaiD7hQY=";
+    hash = "sha256-4plXvT5L4PgfKzOq45yZWgV88XsX+Qm2LqpDt4V2Hls=";
   };
 
   build-system = [ poetry-core ];
