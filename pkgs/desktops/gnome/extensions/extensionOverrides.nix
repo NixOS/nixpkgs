@@ -24,7 +24,6 @@
   smartmontools,
   replaceVars,
   stdenvNoCC,
-  touchegg,
   util-linux,
   vte,
   wrapGAppsHook3,
@@ -254,22 +253,6 @@ lib.trivial.pipe super [
       })
     ];
   }))
-
-  (patchExtension "x11gestures@joseexposito.github.io" (old: {
-    # Extension can't find Touchegg
-    # https://github.com/NixOS/nixpkgs/issues/137621
-    postPatch = ''
-      substituteInPlace "src/touchegg/ToucheggConfig.js" \
-        --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
-    '';
-  }))
-
-  (patchExtension "pwcalc@thilomaurer.de" {
-    postPatch = ''
-      # remove unused dangling symlink
-      rm settings-importexport.ui
-    '';
-  })
 
   (patchExtension "TeaTimer@zener.sbg.at" {
     postPatch = ''
