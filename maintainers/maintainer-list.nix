@@ -9150,12 +9150,6 @@
     githubId = 449463;
     name = "Reno Reckling";
   };
-  exlevan = {
-    email = "exlevan@gmail.com";
-    github = "exlevan";
-    githubId = 873530;
-    name = "Alexey Levan";
-  };
   exploitoverload = {
     email = "nix@exploitoverload.com";
     github = "exploitoverload";
