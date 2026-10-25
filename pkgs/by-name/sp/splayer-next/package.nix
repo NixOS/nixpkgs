@@ -13,7 +13,6 @@
   python3,
   pkg-config,
   openssl,
-  ffmpeg-headless,
   alsa-lib,
   libpulseaudio,
   pipewire,
@@ -85,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    ffmpeg-headless
     alsa-lib
     libpulseaudio
     pipewire
@@ -94,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    FFMPEG_MODE = "system";
   };
 
   strictDeps = true;
@@ -113,8 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'import { execSync } from "child_process";' 'import { readFileSync } from "fs";' \
       --replace-fail 'execSync("git rev-parse HEAD").toString()' 'readFileSync("COMMIT", "utf8")' \
       --replace-fail 'execSync("git log -1 --format=%cI").toString()' 'readFileSync("SOURCE_DATE_EPOCH", "utf8")'
-
-    sed -i '/^[[:space:]]*\.atleast_version/d' "$cargoDepsCopy"/{.,*}/ffmpeg_audio_sys-*/build.rs
   '';
 
   buildPhase = ''
@@ -165,10 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
-      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libavformat.so" \
-      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libavcodec.so" \
-      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libavutil.so" \
-      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libswresample.so" \
       --inherit-argv0
 
     runHook postInstall
@@ -200,7 +191,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform desktop music player with rich lyric support and wide audio format compatibility";
     homepage = "https://github.com/SPlayer-Dev/SPlayer-Next";
     changelog = "https://github.com/SPlayer-Dev/SPlayer-Next/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = with lib.licenses; [
+      agpl3Only
+      gpl3Only # ffmpeg_audio_sys
+      lgpl21Plus # bundled FFmpeg
+    ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # resources/afp/afp.wasm.mjs
