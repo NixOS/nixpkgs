@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-mpv-jsonipc";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = "python-mpv-jsonipc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fSZ2xPWkdkXubSvgT0pGEvTtnQepBkfYHRVlCGoH6Tg=";
+    hash = "sha256-m+FFj86bOGgt8IMV3SRzFK1zLYvU9T4D5DXVIxYeRro=";
   };
 
   build-system = [ setuptools ];
