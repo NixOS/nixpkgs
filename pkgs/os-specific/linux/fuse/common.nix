@@ -9,6 +9,7 @@
   util-linux,
   gettext,
   shadow,
+  freebsd,
   meson,
   ninja,
   pkg-config,
@@ -19,6 +20,7 @@
 
 let
   isFuse3 = lib.hasPrefix "3" version;
+  suPkg = if stdenv.hostPlatform.isFreeBSD then freebsd.su else shadow.su;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse";
@@ -71,13 +73,17 @@ stdenv.mkDerivation (finalAttrs: {
         gettext
       ];
 
-  outputs = [
+  outputs = lib.optionals stdenv.hostPlatform.isLinux [
     "bin"
+  ]
+  ++ [
     "out"
     "dev"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "man"
   ]
-  ++ lib.optional isFuse3 "udev";
+  ++ lib.optional (isFuse3 && stdenv.hostPlatform.isLinux) "udev";
 
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
@@ -89,7 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Ensure that FUSE calls the setuid wrapper, not
   # $out/bin/fusermount. It falls back to calling fusermount in
   # $PATH, so it should also work on non-NixOS systems.
-  env.NIX_CFLAGS_COMPILE = ''-DFUSERMOUNT_DIR="/run/wrappers/bin"'';
+  env = {
+    NIX_CFLAGS_COMPILE = ''-DFUSERMOUNT_DIR="/run/wrappers/bin"'';
+  } // lib.optionalAttrs (!isFuse3 && !stdenv.hostPlatform.isLinux) {
+    # symbol version def file is linux-only I think
+    NIX_LDFLAGS = "--undefined-version";
+  };
 
   preConfigure = ''
     substituteInPlace lib/mount_util.c \
@@ -108,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     # This is for `setuid=`, and needs root permission anyway.
     # No need to use the SUID wrapper.
     substituteInPlace util/mount.fuse.c \
-      --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
+      --replace-fail '"su"' '"${lib.getBin suPkg}/bin/su"'
   '';
 
   # v2: no tests, v3: all tests get skipped in a sandbox
@@ -117,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Drop `/etc/fuse.conf` because it is a no-op config and
   # would conflict with our fuse module.
-  postInstall = lib.optionalString isFuse3 ''
+  postInstall = lib.optionalString (isFuse3 && stdenv.hostPlatform.isLinux) ''
     rm $out/etc/fuse.conf
     mkdir $udev
     mv $out/etc $udev
@@ -138,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/libfuse/libfuse";
     changelog = "https://github.com/libfuse/libfuse/releases/tag/fuse-${version}";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     license = with lib.licenses; [
       gpl2Only
       lgpl21Only
