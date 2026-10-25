@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "RIME essay grammar plugin";
     homepage = "https://github.com/lotem/librime-octagram";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ azuwis ];
   };
 }
