@@ -15595,6 +15595,12 @@
     githubId = 12898828;
     keys = [ { fingerprint = "B44A DFDF F869 A66A 3FDF  DD8B 8609 A7B5 19E5 E342"; } ];
   };
+  kmalone42 = {
+    email = "kmalone42@outlook.com";
+    name = "Kristin Malone";
+    github = "kmalone42";
+    githubId = 159460593;
+  };
   kmatasfp = {
     email = "el-development@protonmail.com";
     name = "Kaur Matas";
