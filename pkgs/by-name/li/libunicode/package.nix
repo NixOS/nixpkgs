@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunicode";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "libunicode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-teyo4KYVdS6+WIjOdS5p7fXZJoMQsL7lPugoaAQ07r4=";
+    hash = "sha256-vHJ1o3rP5LjKZzhSFN5RUWAgY69z80H8oWi86h/CjVI=";
   };
 
   nativeBuildInputs = [

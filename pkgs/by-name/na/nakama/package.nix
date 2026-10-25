@@ -1,18 +1,18 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "nakama";
-  version = "3.40.0";
+  version = "3.41.0";
 
   src = fetchFromGitHub {
     owner = "heroiclabs";
     repo = "nakama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oQX3xxBNO+lluaq2PZnOCovM8O8bFpXEoi5e2H70wwM=";
+    hash = "sha256-2ogc3Qqk8Eorz9ETvLqQa18QubvtwZ07fDJpZWVMPBA=";
   };
 
   vendorHash = null;

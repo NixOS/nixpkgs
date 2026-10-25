@@ -11,11 +11,13 @@
   wrapGAppsHook4,
   webkitgtk_4_1,
   apple-sdk_15,
+  zenity,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tikz-editor";
-  version = "0.6.0";
+  version = "1.0.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -23,16 +25,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "DominikPeters";
     repo = "tikz-editor";
     tag = "app-v${finalAttrs.version}";
-    hash = "sha256-uhdATteczoelvZtyClVa48PINf5FUkAhTcQPADkhIeY=";
+    hash = "sha256-qr3+KZi12GWLTy89iw1i2WXC7GTfLPC2QTDSx64u6Bw=";
   };
 
   cargoRoot = "apps/desktop/src-tauri";
-  cargoHash = "sha256-tIhjljsgDkVHvUKpPAjZUQvmEWNopE/NXjbcIt9LBv4=";
+  cargoHash = "sha256-AHw082R5Ow2FpPujJStDQKIjxEkn8SLp3ZL9wxX7vQE=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-dUrnaZ5nVJTHbA5mkigAsa7xhuAnOV8gO3GqqJFQBJQ=";
+    hash = "sha256-440dfBtZE6KOfDIf6SIdMCyY30OFTQG6AYN3XFjZ8rU=";
   };
 
   preBuild = ''
@@ -58,6 +60,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_15
     ];
+
+  # tikz-editor shells out to zenity for message dialogs (e.g. the unsaved changes prompt)
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ zenity ]})
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "WYSIWYG editor for TikZ diagrams in LaTeX";

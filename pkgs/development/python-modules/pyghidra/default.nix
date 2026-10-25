@@ -7,16 +7,17 @@
   pytest-datadir,
   pytestCheckHook,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyghidra";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-IQasEx65pJkKee6E3C05p5LPey0N5eqvGw5tfS0pC7Y=";
+    hash = "sha256-EihZeU4xOUf4dci9GAerY4a5Zk0ayfGB9r8/rmoYPY4=";
   };
 
   pythonRelaxDeps = [ "jpype1" ];
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     jpype1
     packaging
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -55,7 +57,7 @@ buildPythonPackage (finalAttrs: {
     description = "Native CPython for Ghidra";
     homepage = "https://pypi.org/project/pyghidra";
     license = lib.licenses.asl20;
-    mainProgram = "pyghidra";
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pyghidra";
   };
 })

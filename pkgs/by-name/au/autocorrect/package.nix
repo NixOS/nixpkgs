@@ -16,7 +16,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-SRG603v6yP8/p3aUgGKRdbZScd818A+WqizcyPXaGB4=";
   };
 
-  cargoHash = "sha256-4CuvHOXGXUPN46HbiblVa6gSVA+jkYbo7i4uRFWc5+0=";
+  cargoPatches = [
+    # TODO: remove once upstream updates reqwest and webpki-roots
+    #  reqwest 0.11.18 -> 0.12.20 (sync with the latest version of `reqwest` in `Cargo.lock`)
+    #  webpki-roots 1.0.1 -> 1.0.11
+    ./update-reqwest-and-webpki-roots.patch
+  ];
+
+  cargoHash = "sha256-HBzR5A0Y5XI81/LbsI20E7kwBPIikHLrrxZv6F42+Cw=";
 
   cargoBuildFlags = [
     "-p"

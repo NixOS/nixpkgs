@@ -6,28 +6,22 @@
   writeScript,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "fiddler-everywhere";
   version = "8.2.0";
-
   src = fetchurl {
-    url = "https://downloads.getfiddler.com/linux/fiddler-everywhere-${version}.AppImage";
+    url = "https://downloads.getfiddler.com/linux/fiddler-everywhere-${finalAttrs.version}.AppImage";
     hash = "sha256-cP9DEnDUj0m3DJ71ASe3b3AH7ljUHOdw4bkQrHkey6I=";
   };
-
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.icu ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/fiddler-everywhere.desktop \
+    install -m 444 -D ${finalAttrs.contents}/fiddler-everywhere.desktop \
       $out/share/applications/fiddler-everywhere.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/256x256/apps/fiddler-everywhere.png \
+    install -m 444 -D ${finalAttrs.contents}/usr/share/icons/hicolor/256x256/apps/fiddler-everywhere.png \
       $out/share/icons/hicolor/256x256/apps/fiddler-everywhere.png
     substituteInPlace $out/share/applications/fiddler-everywhere.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=fiddler-everywhere'
@@ -50,10 +44,10 @@ appimageTools.wrapType2 {
     description = "Web debugging proxy by Telerik";
     homepage = "https://www.telerik.com/fiddler/fiddler-everywhere";
     downloadPage = "https://www.telerik.com/download/fiddler-everywhere";
-    changelog = "https://www.telerik.com/support/whats-new/fiddler-everywhere/release-history/fiddler-everywhere-v${version}";
+    changelog = "https://www.telerik.com/support/whats-new/fiddler-everywhere/release-history/fiddler-everywhere-v${finalAttrs.version}";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ RoGreat ];
     mainProgram = "fiddler-everywhere";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

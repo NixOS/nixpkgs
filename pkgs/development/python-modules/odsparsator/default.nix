@@ -8,14 +8,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "odsparsator";
-  version = "1.16.0";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdum";
     repo = "odsparsator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f/xrIcERB+rPK27lG+R2Dfy0/Qemqgn9PIch7KE17gs=";
+    hash = "sha256-RM0wFFdJh+6qxIW4akKsEhTMbg04xl02wfsbLnahU8E=";
   };
 
   build-system = [ uv-build ];

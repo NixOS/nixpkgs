@@ -118,7 +118,7 @@ let
       changelog = "https://nbqa.readthedocs.io/en/latest/history.html";
       description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ l0b0 ];
+      maintainers = [ ];
       mainProgram = "nbqa";
     };
   };

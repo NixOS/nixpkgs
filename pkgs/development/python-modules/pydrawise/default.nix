@@ -8,23 +8,24 @@
   freezegun,
   gql,
   graphql-core,
+  pydantic,
   pytest-asyncio,
   pytestCheckHook,
   requests,
-  setuptools,
   setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pydrawise";
-  version = "2026.9.1";
+  version = "2026.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pydrawise";
     tag = finalAttrs.version;
-    hash = "sha256-KlQ1SGqCx2PD+x0OfHYCgOemRZJovsXHg6UbAIf1QSs=";
+    hash = "sha256-1Ips30vk+utFL2IOaXZ3ApbaCxscY41h2pBOenB5AWM=";
   };
 
   build-system = [
@@ -37,6 +38,7 @@ buildPythonPackage (finalAttrs: {
     apischema
     gql
     graphql-core
+    pydantic
     requests
   ];
 

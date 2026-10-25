@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      carlossless
+      karstx
     ];
     mainProgram = "sby";
     platforms = lib.platforms.all;
