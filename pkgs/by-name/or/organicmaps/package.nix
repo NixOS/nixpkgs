@@ -29,21 +29,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2026.05.27-11";
+  version = "2026.09.29-32";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     tag = "${finalAttrs.version}-android";
-    hash = "sha256-zLNQk9CCCk3linmAyAT5qsS5GhrOrlSVOdDf5koBwrc=";
+    hash = "sha256-9L5hsJVNENM5ORkykX2uoCzXATncDHQng5zFjiJipok=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Needs the very old protobuf 3.3, so we use the vendored one
-    # https://github.com/organicmaps/organicmaps/pull/6310
-    ./force-vendored-protobuf.patch
-  ];
 
   nativeBuildInputs = [
     cmake
