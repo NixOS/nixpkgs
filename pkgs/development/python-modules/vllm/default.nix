@@ -93,6 +93,7 @@
   # cuda-only
   cupy,
   flashinfer-cubin,
+  flashinfer-jit-cache,
   flashinfer-python,
   nvidia-cudnn-frontend,
   nvidia-ml-py,
@@ -640,6 +641,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ++ lib.optionals cudaSupport [
     cupy
     flashinfer-cubin
+    flashinfer-jit-cache
     flashinfer-python
     nvidia-cudnn-frontend
     nvidia-ml-py
