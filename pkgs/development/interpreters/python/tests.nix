@@ -104,6 +104,7 @@ let
           (
             {
               inherit (python) pythonVersion;
+              pythonPrefix = python;
             }
             // attrs
           )
