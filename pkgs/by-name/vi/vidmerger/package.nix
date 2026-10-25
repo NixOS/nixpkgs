@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vidmerger";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "TGotwig";
     repo = "vidmerger";
     tag = finalAttrs.version;
-    hash = "sha256-N/iX0EN5R4oG4XHhpd/VaihrEHv5uT+grAJ6/KfSORE=";
+    hash = "sha256-KWszN+l9M9KjduOkuRLyEyOlWq4zuQU7aYSoDyQBoKs=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
