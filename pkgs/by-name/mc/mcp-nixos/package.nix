@@ -13,14 +13,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S6elg+nneCdUwpG6Y9ABMr/bbRfzCvls0ba2Vva22Lk=";
+    hash = "sha256-dugBcQqUWItvuO3VYFANm/istcVwGilwzZ33cfaSW3g=";
   };
 
   build-system = [ pythonPackages.hatchling ];
