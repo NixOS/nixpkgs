@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     inih
   ];
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "[icu-i18n]" "[icu-i18n icu-uc]"
+  '';
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   enableParallelBuilding = true;
   enableParallelChecking = true;
