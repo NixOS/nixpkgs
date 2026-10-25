@@ -7,13 +7,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-sonic";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "py_sonic";
     inherit (finalAttrs) version;
-    hash = "sha256-WzygTPYcqqifF2K21DfMw4bjALVglGS3MOijYXwb0dk=";
+    hash = "sha256-3POR5A4viyQxVqdLzYIJ75sqKUgyKbpAA0g8K5t2rXg=";
   };
 
   build-system = [ setuptools ];
