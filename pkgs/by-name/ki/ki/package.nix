@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   anki,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonApplication {
@@ -50,6 +51,7 @@ python3Packages.buildPythonApplication {
     loguru
     pytest-mock
     pytestCheckHook
+    gitMinimal
   ];
 
   disabledTests = [
