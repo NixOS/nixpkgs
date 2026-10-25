@@ -14,6 +14,8 @@
   # tests
   pytest-mock,
   pytestCheckHook,
+  python,
+  toPythonModule,
   vermin,
 }:
 
@@ -44,7 +46,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
-    vermin
+    (toPythonModule (vermin.override { python3Packages = python.pkgs; }))
   ];
 
   meta = {
