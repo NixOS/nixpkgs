@@ -29,6 +29,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Tool that send TCP/UDP traffic over ICMP";
     homepage = "https://github.com/esrrhs/pingtunnel";
+    changelog = "https://github.com/esrrhs/pingtunnel/releases/tag/v${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "pingtunnel";
