@@ -128,10 +128,10 @@ in
   });
   impersonation-notice = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-impersonation-notice";
-    version = "1.2.5";
+    version = "1.4.0";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/impersonation-notice/${finalAttrs.version}";
-      hash = "sha256-BuE+51gOAMFAsfrRK8O+1SNJ2G/L1NQ9WBYZZq7tlko=";
+      hash = "sha256-wUoZ3Pa7AvRYryaDqm+4jcty4cVf3e5xCJKW18tCGyY=";
       extension = "zip";
       stripRoot = false;
     };
