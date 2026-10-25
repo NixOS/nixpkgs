@@ -21,6 +21,7 @@ buildPythonPackage (finalAttrs: {
   pname = "ha-mcp";
   version = "8.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
@@ -40,6 +41,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = true;
+  pythonRemoveDeps = [
+    # nixpkgs' pydantic-monty provides the `pydantic_monty` module as
+    # `pydantic-monty-client`; `pydantic-monty` is only an upstream metapackage
+    "pydantic-monty"
+  ];
 
   dependencies = [
     cryptography
