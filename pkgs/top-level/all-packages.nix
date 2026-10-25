@@ -2688,10 +2688,6 @@ with pkgs;
 
   rpatool = with python3Packages; toPythonApplication rpatool;
 
-  rpm = callPackage ../tools/package-management/rpm {
-    lua = lua5_4;
-  };
-
   rubocop = rubyPackages.rubocop;
 
   ruby-lsp = rubyPackages.ruby-lsp;

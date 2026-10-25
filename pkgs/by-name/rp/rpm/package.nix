@@ -14,7 +14,7 @@
   popt,
   xz,
   python3,
-  lua,
+  lua5_4,
   llvmPackages,
   sqlite,
   zstd,
@@ -34,6 +34,9 @@
   disableUnshare ? true,
 }:
 
+let
+  lua = lua5_4;
+in
 stdenv.mkDerivation rec {
   pname = "rpm";
   version = "4.20.1";
