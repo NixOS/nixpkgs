@@ -33358,5 +33358,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  akrine346b = {
+    email = "akrine346b@qq.com";
+    github = "akrine346b";
+    githubId = 76834320;
+    name = "LightMaster";
+  };
   # keep-sorted end
 }
