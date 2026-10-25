@@ -88,6 +88,11 @@ buildGo127Module (finalAttrs: {
     "sqlite_fts5"
   ];
 
+  # Required for navidrome without any plugins to launch
+  postInstall = ''
+    mkdir -p "$out/share/plugins"
+  '';
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 

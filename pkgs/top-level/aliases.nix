@@ -277,6 +277,7 @@ mapAliases {
   abseil-cpp_202501 = throw "abseil-cpp_202501 has been removed as it was unused in tree"; # Added 2025-09-15
   acd-cli = throw "adc-cli has been removed as it was unmaintained"; # Added 2026-05-02
   adb-sync = throw "'adb-sync' has been removed. Use 'better-adb-sync' instead."; # Added 2026-09-04
+  adbfs-rootless = throw "'adbfs-rootless' has been removed, as it depends on fuse2"; # Added 2026-05-22
   adjustor = throw "adjustor has been removed as it part of the 'handheld-daemon' package"; # Added 2025-11-16
   adl = throw "'adl' has been removed as it is archived upstream"; # Added 2026-08-16
   adminer-pematon = throw "'adminer-pematon' has been renamed to/replaced by 'adminneo'"; # Converted to throw 2025-10-27
@@ -367,6 +368,7 @@ mapAliases {
   astronomer = throw "'astronomer' has been removed, as it has been unmaintained upstream since August 2020"; # Added 2026-01-01
   atlassian-cli = appfire-cli; # Added 2025-09-29
   ats = throw "'ats' has been removed as it is unmaintained for 10 years and broken"; # Added 2025-05-17
+  atuin-desktop = throw "'atuin-desktop' has been removed because it has been archived upstream on 2026-09-30"; # Added 2026-10-24
   audacity_4 = audacity; # Added 2026-09-05
   audio-recorder = throw "'audio-recorder' has been removed, as it is unmaintained upstream and broken. Consider using 'gnome-sound-recorder' or 'reco' instead"; # Added 2026-01-02
   august = throw "'august' has been removed, as it has been unmaintained since august 2023"; # Added 2025-12-25
@@ -823,6 +825,8 @@ mapAliases {
   encfs = throw "'encfs' has been removed as it depends on fuse2, which is deprecated"; # Added 2026-05-05
   enchant2 = warnAlias "'enchant2' has been renamed to 'enchant_2'" enchant_2; # Added 2026-01-14
   encodings = font-encodings; # Added 2026-01-19
+  envision = throw "'envision' has been removed as it has been broken on NixOS"; # Added 2026-10-01
+  envision-unwrapped = throw "'envision-unwrapped' has been removed as it has been broken on NixOS"; # Added 2026-10-01
   enyo-doom = throw "'enyo-doom' has been renamed to/replaced by 'enyo-launcher'"; # Converted to throw 2025-10-27
   epapirus-icon-theme = throw "'epapirus-icon-theme' has been removed because 'papirus-icon-theme' no longer supports building with elementaryOS icon support"; # Added 2025-06-15
   epick = throw "'epick' has been removed as it has been unmaintained upstream since November 2022"; # Added 2026-02-07
@@ -1346,6 +1350,9 @@ mapAliases {
   kodiPlain = throw "'kodiPlain' has been renamed to/replaced by 'kodi'"; # Converted to throw 2025-10-27
   kodiPlainWayland = throw "'kodiPlainWayland' has been renamed to/replaced by 'kodi-wayland'"; # Converted to throw 2025-10-27
   kodiPlugins = throw "'kodiPlugins' has been renamed to/replaced by 'kodiPackages'"; # Converted to throw 2025-10-27
+  kops_1_31 = throw "'kops_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-17
+  kops_1_32 = throw "'kops_1_32' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-17
+  kops_1_33 = throw "'kops_1_33' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-17
   krb5Full = throw "'krb5Full' has been renamed to/replaced by 'krb5'"; # Converted to throw 2025-10-27
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
@@ -2209,6 +2216,7 @@ mapAliases {
   proj_7 = throw "proj_7 has been removed, as it was broken and unused"; # Added 2025-09-16
   prometheus-dmarc-exporter = throw "'prometheus-dmarc-exporter' has been renamed to/replaced by 'dmarc-metrics-exporter'"; # Converted to throw 2025-10-27
   prometheus-dovecot-exporter = throw "'prometheus-dovecot-exporter' has been renamed to/replaced by 'dovecot_exporter'"; # Converted to throw 2025-10-27
+  prometheus-varnish-exporter = throw "'prometheus-varnish-exporter' has been removed from Nixpkgs, as it is unmaintained and depends on the EOL 'varnish' package.";
   promtail = throw "promtail has been removed, as it reached its end of life. Consider migrating to 'grafana-alloy' or 'fluent-bit'"; # Added 2026-03-30
   prosody-filer = throw "'prosody-filer' has been removed because it was discontinued upstream. Use Prosody's built-in 'services.prosody.httpFileShare' support or Rusty Filer instead."; # Added 2026-09-02
   protobuf3_21 = throw "'protobuf3_21' has been renamed to/replaced by 'protobuf_21'"; # Converted to throw 2025-10-27
@@ -2378,6 +2386,7 @@ mapAliases {
   runCommandNoCCLocal = warnAlias "'runCommandNoCCLocal' has been renamed to/replaced by 'runCommandLocal'" runCommandLocal; # Converted to warning 2025-10-28
   runescape = throw "'runescape' was removed due to a lack of maintenance, insecure dependencies, and incompatibility with Jagex accounts. Please consider using 'bolt-launcher' instead."; # Added 2026-02-24
   rust-hypervisor-firmware = throw "rust-hypervisor-firmware was removed, as it is no longer needed by Cloud Hypervisor and was broken"; # Added 2026-02-19
+  rust-paddle-ocr = throw "'rust-paddle-ocr' has been renamed to/replaced by 'newbee-ocr'"; # Added 2026-10-19
   rust-synapse-state-compress = throw "'rust-synapse-state-compress' has been renamed to/replaced by 'rust-synapse-compress-state'"; # Converted to throw 2025-10-27
   rustc-wasm32 = throw "'rustc-wasm32' has been renamed to/replaced by 'rustc'"; # Converted to throw 2025-10-27
   rustic-rs = throw "'rustic-rs' has been renamed to/replaced by 'rustic'"; # Converted to throw 2025-10-27
@@ -2737,7 +2746,10 @@ mapAliases {
   varnish60 = throw "varnish 6.0 has been removed as it used unmaintaned dependencies. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish60Packages = throw "varnish 6.0 has been removed as it used unmaintained dependencies.  Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish77 = throw "varnish 7.7 is EOL. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-01
-  varnish77Packages = throw "varnish 7.7 is EOL. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-01
+  varnish80 = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnish80Packages = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnish = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnishPackages = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
   vaults = throw "'vaults' has been removed as it depends on 'fuse2', which is deprecated and no longer available in Nixpkgs."; # Added 2026-07-12
   vaultwarden-vault = throw "'vaultwarden-vault' has been renamed to/replaced by 'vaultwarden.webvault'"; # Converted to throw 2025-10-27
   vazir-fonts = throw "'vazir-fonts' has been renamed to 'vazirmatn'"; # Added 2026-06-15

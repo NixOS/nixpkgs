@@ -584,6 +584,13 @@
     githubId = 2321000;
     name = "Abdurrahman Hussain";
   };
+  abus-sh = {
+    email = "git@abus.sh";
+    github = "abus-sh";
+    githubId = 58699376;
+    name = "Abus";
+    keys = [ { fingerprint = "E067 7933 2AD2 D3D2 2498  9136 5CA4 ADDB 1AE3 1E49"; } ];
+  };
   abustany = {
     email = "adrien@bustany.org";
     github = "abustany";
@@ -16323,6 +16330,12 @@
     github = "langsjo";
     githubId = 104687438;
   };
+  lanovets = {
+    name = "lanovets";
+    email = "freelanovets@proton.me";
+    github = "lanovets";
+    githubId = 179950869;
+  };
   larry0x = {
     name = "Larry Engineer";
     email = "nixpkgs@larry.engineer";
@@ -16916,6 +16929,12 @@
     github = "listx";
     githubId = 725613;
     name = "Linus Arver";
+  };
+  linusemr618 = {
+    email = "emmerichlinus@gmail.com";
+    github = "linusemr618";
+    githubId = 96724651;
+    name = "Linus Emmerich";
   };
   linuxissuper = {
     email = "m+nix@linuxistcool.de";

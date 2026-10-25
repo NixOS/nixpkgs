@@ -43,7 +43,7 @@
 }:
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "tilelang";
-  version = "0.1.13";
+  version = "0.1.15";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -52,7 +52,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "tilelang";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-mUma33LlPw2bwB+mryshlY5wuVSDmPSMjWmDAefdN/w=";
+    hash = "sha256-2I1GcoFoinm63K5Ebpw/QiUSjOzvcXkOp880hbNKmuU=";
   };
 
   postPatch =
@@ -100,7 +100,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   env = {
     NO_GIT_VERSION = true;
-    USE_CUDA = cudaSupport;
+    USE_CUDA = if cudaSupport then "ON" else "OFF";
   };
 
   dontUseCmakeConfigure = true;

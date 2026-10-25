@@ -6067,6 +6067,8 @@ self: super: with self; {
 
   favicon = callPackage ../development/python-modules/favicon { };
 
+  fdp-scan = callPackage ../development/python-modules/fdp-scan { };
+
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
   feather-format = callPackage ../development/python-modules/feather-format { };
@@ -10783,6 +10785,8 @@ self: super: with self; {
 
   memestra = callPackage ../development/python-modules/memestra { };
 
+  memoization = callPackage ../development/python-modules/memoization { };
+
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
   memory-profiler = callPackage ../development/python-modules/memory-profiler { };
@@ -13261,6 +13265,10 @@ self: super: with self; {
 
   paperbush = callPackage ../development/python-modules/paperbush { };
 
+  paperless-ngx-erechnung = callPackage ../development/python-modules/paperless-ngx-erechnung {
+    inherit (pkgs) fop;
+  };
+
   papermill = callPackage ../development/python-modules/papermill { };
 
   paperwork-backend = callPackage ../applications/office/paperwork/paperwork-backend.nix { };
@@ -14173,6 +14181,8 @@ self: super: with self; {
 
   protobuf-py-ext = callPackage ../development/python-modules/protobuf-py-ext { };
 
+  protobuf-py-pure = callPackage ../development/python-modules/protobuf-py-pure { };
+
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
   # Protobuf 4.x
@@ -14210,6 +14220,10 @@ self: super: with self; {
   proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
 
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
+
+  prototext-codec = callPackage ../development/python-modules/prototext-codec { };
+
+  prototext-graph = callPackage ../development/python-modules/prototext-graph { };
 
   prov = callPackage ../development/python-modules/prov { };
 
@@ -14817,7 +14831,7 @@ self: super: with self; {
 
   pyctr = callPackage ../development/python-modules/pyctr { };
 
-  pycuda = callPackage ../development/python-modules/pycuda { inherit (pkgs.stdenv) mkDerivation; };
+  pycuda = callPackage ../development/python-modules/pycuda { };
 
   pycups = callPackage ../development/python-modules/pycups { };
 
@@ -21267,6 +21281,8 @@ self: super: with self; {
   tree-sitter-rust = callPackage ../development/python-modules/tree-sitter-rust { };
 
   tree-sitter-sql = callPackage ../development/python-modules/tree-sitter-sql { };
+
+  tree-sitter-textproto = callPackage ../development/python-modules/tree-sitter-textproto { };
 
   tree-sitter-typescript = callPackage ../development/python-modules/tree-sitter-typescript { };
 

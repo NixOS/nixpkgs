@@ -210,10 +210,11 @@
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
   ./programs/dublin-traceroute.nix
+  ./programs/dux-calendar.nix
+  ./programs/dux-files.nix
   ./programs/dux-search.nix
   ./programs/ente-auth.nix
   ./programs/environment.nix
-  ./programs/envision.nix
   ./programs/ergohaven-entropy.nix
   ./programs/evince.nix
   ./programs/extra-container.nix
@@ -1933,7 +1934,6 @@
   ./services/web-servers/ttyd.nix
   ./services/web-servers/tusd.nix
   ./services/web-servers/uwsgi.nix
-  ./services/web-servers/varnish/default.nix
   ./services/web-servers/vinyl-cache/default.nix
   ./services/x11/clight.nix
   ./services/x11/colord.nix

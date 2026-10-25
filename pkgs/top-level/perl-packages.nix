@@ -599,8 +599,12 @@ with self;
     };
     postPatch = ''
       substituteInPlace Build.PL \
-        --replace "gtk+-2.0" "gtk+-3.0"
+        --replace-fail "gtk+-2.0" "gtk+-3.0"
     '';
+    nativeBuildInputs = [
+      pkgs.pkg-config
+      pkgs.wxwidgets_3_2
+    ];
     propagatedBuildInputs = [
       pkgs.pkg-config
       pkgs.gtk3
@@ -608,6 +612,8 @@ with self;
       ModulePluggable
     ];
     buildInputs = [ LWPProtocolHttps ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Building, finding and using wxWidgets binaries";
       license = with lib.licenses; [
@@ -15539,8 +15545,10 @@ with self;
     };
 
     # XXX: It'd be nicer it `GraphViz.pm' could record the path to graphviz.
-    buildInputs = [
+    nativeBuildInputs = [
       pkgs.graphviz
+    ];
+    buildInputs = [
       TestPod
     ];
     propagatedBuildInputs = [
@@ -15551,6 +15559,8 @@ with self;
       XMLXPath
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = lib.licenses.artistic2;
