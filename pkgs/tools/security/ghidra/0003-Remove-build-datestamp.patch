@@ -1,9 +1,19 @@
-diff --git a/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle b/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle
-index bc194f219..94b00fabd 100644
---- a/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle
-+++ b/Ghidra/RuntimeScripts/Common/support/buildExtension.gradle
-@@ -82,7 +82,7 @@ dependencies {
- 	helpPath fileTree(dir: ghidraDir + '/Features/Base', include: "**/Base.jar")
+From 1f4f96052fdfb18173e6275936449a6a441ac6eb Mon Sep 17 00:00:00 2001
+From: roblabla <unfiltered@roblab.la>
+Date: Sun, 25 Oct 2026 12:09:49 +0100
+Subject: [PATCH] Remove build datestamp from the zip name
+
+---
+ Ghidra/RuntimeScripts/support/buildExtension.gradle | 2 +-
+ gradle/root/distribution.gradle                     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Ghidra/RuntimeScripts/support/buildExtension.gradle b/Ghidra/RuntimeScripts/support/buildExtension.gradle
+index a01ac955b5..ebca8510b9 100644
+--- a/Ghidra/RuntimeScripts/support/buildExtension.gradle
++++ b/Ghidra/RuntimeScripts/support/buildExtension.gradle
+@@ -71,7 +71,7 @@ dependencies {
+ 	api fileTree(dir: ghidraDir + '/Processors', include: "**/*.jar")
  }
  	
 -def ZIP_NAME_PREFIX = "${DISTRO_PREFIX}_${RELEASE_NAME}_${getCurrentDate()}"
@@ -12,7 +22,7 @@ index bc194f219..94b00fabd 100644
  	
  def pathInZip = "${project.name}"
 diff --git a/gradle/root/distribution.gradle b/gradle/root/distribution.gradle
-index f44c8267b..f6231c417 100644
+index 19fc78a075..283561d674 100644
 --- a/gradle/root/distribution.gradle
 +++ b/gradle/root/distribution.gradle
 @@ -32,7 +32,7 @@ apply from: "$rootProject.projectDir/gradle/support/sbom.gradle"
@@ -24,3 +34,6 @@ index f44c8267b..f6231c417 100644
  ext.ZIP_DIR_PREFIX = "${rootProject.DISTRO_PREFIX}"
  ext.ALL_REPOS = [rootProject.file('.').getName()]
  
+-- 
+2.55.0
+

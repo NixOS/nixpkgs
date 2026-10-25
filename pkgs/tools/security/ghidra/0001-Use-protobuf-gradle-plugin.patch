@@ -76,10 +76,10 @@ index 9dd8522d88..5ea55bd8b2 100644
  		generateProtoPy.args "--python_out=${generateProtoPy.outdir}"
  		generateProtoPy.args "--pyi_out=${generateProtoPy.stubsOutdir}"
 diff --git a/build.gradle b/build.gradle
-index 159eb7dd7b..ef4add1ad8 100644
+index 706d97f3e4..2c47e38453 100644
 --- a/build.gradle
 +++ b/build.gradle
-@@ -79,6 +79,12 @@ if (flatRepo.isDirectory()) {
+@@ -94,6 +94,12 @@ if (flatRepo.isDirectory()) {
  			mavenCentral()
  			flatDir name: "flat", dirs:["$flatRepo"]
  		}
@@ -94,10 +94,10 @@ index 159eb7dd7b..ef4add1ad8 100644
  else {	
 diff --git a/gradle/hasProtobuf.gradle b/gradle/hasProtobuf.gradle
 deleted file mode 100644
-index a8c176bcbe..0000000000
+index 537c51fb65..0000000000
 --- a/gradle/hasProtobuf.gradle
 +++ /dev/null
-@@ -1,100 +0,0 @@
+@@ -1,103 +0,0 @@
 -/* ###
 - * IP: GHIDRA
 - *
@@ -152,6 +152,9 @@ index a8c176bcbe..0000000000
 -		else {
 -			protocArtifact "com.google.protobuf:protoc:${version}:osx-aarch_64@exe"
 -		}
+-	}
+-	if (isCurrentOpenBSD()) {
+-		protocArtifact files('/usr/local/bin/protoc')
 -	}
 -}
 -

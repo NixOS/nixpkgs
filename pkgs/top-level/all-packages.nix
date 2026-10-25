@@ -1540,6 +1540,7 @@ with pkgs;
 
   ghidra = callPackage ../tools/security/ghidra/build.nix {
     protobuf = protobuf_21;
+    gradle = gradle_9;
   };
 
   ghidra-extensions = recurseIntoAttrs (callPackage ../tools/security/ghidra/extensions.nix { });
