@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   clang-tools,
   cmake,
   cython,
@@ -19,28 +18,23 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.14.5";
+  version = "3.14.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
-    hash = "sha256-wF7eeSD6GQfN0EOwDvrgjMqN5u2wxXFlktQS7nIKgkU=";
+    hash = "sha256-yE0YH7WVjULPoxAp5keYIy5/kzdDxpWyHFSMObtCiXA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/rapidfuzz/RapidFuzz/pull/486
-      name = "support-taskflow-4.1.0.patch";
-      url = "https://github.com/rapidfuzz/RapidFuzz/commit/76fa54bf8c3f2d24879ca1966ea98bbba7b3c9d6.patch";
-      hash = "sha256-hJZtYNLSqK5NgcBAcvrf9NPh3Z0+pSlyy0W+uJ96kBQ=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "Cython >=3.1.6, <3.3.0" "Cython >=3.1.6"
+
+    # https://github.com/rapidfuzz/RapidFuzz/commit/377d0c0ace35bbb4683180ebf110414dfff11abb
+    substituteInPlace tests/distance/test_init.py \
+      --replace-fail 'str_len = 2**32' 'str_len = 2**32 - 1'
   '';
 
   build-system = [
