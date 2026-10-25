@@ -30,9 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Read BitLocker encrypted partitions in Linux";
