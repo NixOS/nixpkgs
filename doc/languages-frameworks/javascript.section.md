@@ -343,7 +343,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "...";
   };
 })
@@ -494,14 +494,14 @@ In this example, `prePnpmInstall` will be run by both `pnpmConfigHook` and by th
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`. New packages should use `4`:
+This is the version of the output of `fetchPnpmDeps`. New packages should use `5`:
 
 ```nix
 {
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "..."; # clear this hash and generate a new one
   };
 }
@@ -520,6 +520,7 @@ Version 3 is the recommended value for new packages. Versions 1 and 2 are deprec
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 - 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
+- 5: [Keep virtual store materializations out of the archived store](https://github.com/NixOS/nixpkgs/pull/565315)
 
 ### Yarn {#javascript-yarn}
 
