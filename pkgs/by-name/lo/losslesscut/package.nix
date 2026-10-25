@@ -45,8 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # fixes a few things that try to guess whether it's a dev build
-    ./undev.patch
+    # Disable update check (both the configuration option and execution)
     ./disable-update-check.patch
     # LosslessCut will retrieve a URL from mifi.no (the author's domain) and directly embed the HTML in the app.
     # This was previously used to show a Ukraine flag, which I don't have strong opinions on.
@@ -56,11 +55,45 @@ stdenv.mkDerivation (finalAttrs: {
     ./stub-load-mifi.patch
   ];
 
+  prePatch = ''
+    # Catch unreplaced files
+    catchUnreplacedFiles() {
+      local pattern="$1"
+      shift
+      local -i status=0
+      local unreplacedFiles
+      unreplacedFiles=$(grep -r -l "$pattern" "$@") || status="$?"
+      case $status in
+      0)
+        echo "ERROR: Found unreplaced $pattern in files:" >&2
+        printf '%s\n' "$unreplacedFiles" >&2
+        return 1
+        ;;
+      1)
+        # No unmatched file found. Good.
+        ;;
+      *)
+        # Grep failed
+        return "$status"
+        ;;
+      esac
+    }
+  '';
+
   postPatch = ''
+    # Hard-code app.isPackaged as true
+    for f in src/main/ffmpeg.ts src/main/i18nCommon.ts src/main/logger.ts; do
+      substituteInPlace "$f" \
+        --replace-fail app.isPackaged "true"
+    done
+    catchUnreplacedFiles app.isPackaged --include="*.ts" --include="*.tsx" src
+
+    # Hard-code resources path
     for f in src/main/ffmpeg.ts src/main/i18nCommon.ts; do
       substituteInPlace "$f" \
-        --subst-var-by losslesscut_resources_path $out/share/losslesscut
+        --replace-fail process.resourcesPath "'$out/share/losslesscut/'"
     done
+    catchUnreplacedFiles process.resourcesPath --include="*.ts" --include="*.tsx" src
   '';
 
   env = {
