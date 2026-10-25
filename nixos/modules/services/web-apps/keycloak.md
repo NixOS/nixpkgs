@@ -130,12 +130,11 @@ more information.
 
 ## Secret vault {#module-services-keycloak-vault}
 
-The Keycloak vault is a useful tool for managing secrets, and can easily
-integrate with secret management tools like [sops-nix](https://github.com/Mic92/sops-nix)
-through the file based nature. See the
-[Using a vault section of the Keycloak Server Administration Guide](
+The Keycloak vault can be used to integrate Keycloak with
+secret management tools like [sops-nix](https://github.com/Mic92/sops-nix).
+See the [Using a vault section of the Keycloak Server Administration Guide](
   https://www.keycloak.org/server/vault
-) and the description of the NixOS option for more information.
+) and the description of the NixOS option [](#opt-services.keycloak.vault) for more information.
 
 ## Configuration file settings {#module-services-keycloak-settings}
 
