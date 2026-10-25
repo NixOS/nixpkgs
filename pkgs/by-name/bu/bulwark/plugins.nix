@@ -112,10 +112,10 @@ in
   });
   gravatar = mkBulwarkPlugin (finalAttrs: {
     pname = "bulwark-plugin-gravatar";
-    version = "1.3.1";
+    version = "1.4.0";
     src = fetchzip {
       url = "https://extensions.bulwarkmail.org/api/v1/bundle/gravatar/${finalAttrs.version}";
-      hash = "sha256-Rz+xgBw4mfQcdGvQnPLrrW5i4nDQYwMt5Y37gZ2WxyE=";
+      hash = "sha256-7ddS1P364rYdDaxn8yivedlolmz0ZBSImL29wDCcmXA=";
       extension = "zip";
       stripRoot = false;
     };
