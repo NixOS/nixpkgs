@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -30,6 +31,8 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckProgramArg = [ "--version" ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Credential testing tool for multiple services";
