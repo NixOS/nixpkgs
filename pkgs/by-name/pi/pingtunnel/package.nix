@@ -30,6 +30,8 @@ buildGoModule (finalAttrs: {
 
   versionCheckProgramArg = [ "-v" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Tool that send TCP/UDP traffic over ICMP";
     homepage = "https://github.com/esrrhs/pingtunnel";
