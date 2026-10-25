@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  nativeCheckInputs = [ cacert ];
 
   meta = {
     description = "Fast, offline-first CalDAV and local task manager";
