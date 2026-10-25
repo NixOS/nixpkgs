@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  openmp ? null,
+  llvmPackages,
+  openmp ? llvmPackages.openmp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
