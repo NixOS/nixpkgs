@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "entrypoints";
-  version = "0.4";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-twbt2qkhihnrzWe1aBjwW7J1ibHKno15e3Sv+tTMrNQ=";
+    hash = "sha256-O+vZos0F4IsSO+dMJ3s23ko46JnbpqhKyZYuvgwi7OY=";
   };
 
   nativeBuildInputs = [ flit-core ];
