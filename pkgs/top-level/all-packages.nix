@@ -5315,12 +5315,18 @@ with pkgs;
       stdenv = clangStdenv;
     };
   };
-  factorPackages = factorPackages-0_101;
+  factorPackages-0_102 = callPackage ./factor-packages.nix {
+    factor-unwrapped = callPackage ../development/compilers/factor-lang/0.102.nix {
+      stdenv = clangStdenv;
+    };
+  };
+  factorPackages = factorPackages-0_102;
 
   factor-lang-0_99 = factorPackages-0_99.factor-lang;
   factor-lang-0_100 = factorPackages-0_100.factor-lang;
   factor-lang-0_101 = factorPackages-0_101.factor-lang;
-  factor-lang = factor-lang-0_101;
+  factor-lang-0_102 = factorPackages-0_102.factor-lang;
+  factor-lang = factor-lang-0_102;
 
   inherit (callPackage ../development/libraries/ffmpeg { })
     ffmpeg_4
