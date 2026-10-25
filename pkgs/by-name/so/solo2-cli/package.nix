@@ -54,7 +54,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
       mit
     ]; # either at your option
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [
+      magicquark
+      lukegb
+    ];
     mainProgram = "solo2";
   };
 })
