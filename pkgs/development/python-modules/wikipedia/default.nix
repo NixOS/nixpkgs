@@ -1,23 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   beautifulsoup4,
   requests,
-  unittestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "wikipedia";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-2w+tGCn91EGxhSMG6YVjmCBNwHhtKZbdLgyLuOJhM7I=";
+  src = fetchFromGitHub {
+    owner = "goldsmith";
+    repo = "wikipedia";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/Wjg5TOdF9aHMq0QcyKWU0mxj5VlEgSRugYRiEmSByM=";
   };
 
   build-system = [ setuptools ];
@@ -27,10 +28,7 @@ buildPythonPackage (finalAttrs: {
     requests
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  unittestFlagsArray = [ "tests/ '*test.py'" ];
-
+  # The 'unittestCheckHook' is not set because the unit tests need Internet
   pythonImportsCheck = [ "wikipedia" ];
 
   meta = {
