@@ -4,6 +4,7 @@
   aioresponses,
   awesomeversion,
   buildPythonPackage,
+  click,
   fetchFromGitHub,
   mashumaro,
   orjson,
@@ -59,6 +60,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    click
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
