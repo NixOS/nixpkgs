@@ -4,6 +4,7 @@
   fetchzip,
   python3Packages,
   makeWrapper,
+  cacert,
 }:
 
 with python3Packages;
@@ -29,6 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/bin $out/share/
     cp -r "$src" "$out/share/go_appengine"
+
+    for f in lib/cacerts/cacerts.txt lib/cacerts/urlfetch_cacerts.txt \
+      lib/httplib2/httplib2/cacerts.txt lib/requests/requests/cacert.pem; do
+      chmod u+w "$(dirname "$out/share/go_appengine/$f")"
+      rm "$out/share/go_appengine/$f"
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt "$out/share/go_appengine/$f"
+    done
 
     # create wrappers with correct env
     for i in goapp go-app-stager *.py; do
