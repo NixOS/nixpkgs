@@ -48,6 +48,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "python_overseerr" ];
 
+  disabledTests = [
+    # Test requires network access to the Overseerr API
+    "test_search_with_encoded_spaces"
+  ];
+
   meta = {
     description = "Client for Overseerr";
     homepage = "https://github.com/joostlek/python-overseerr";
