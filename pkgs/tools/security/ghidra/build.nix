@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
+  cmake,
   gradle,
   makeBinaryWrapper,
   openjdk21,
@@ -15,6 +16,7 @@
   ghidra-extensions,
   python3,
   python3Packages,
+  zulu8,
 }:
 
 let
@@ -44,6 +46,48 @@ let
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
+  sevenzipjbinding = stdenv.mkDerivation (finalAttrs: {
+    pname = "sevenzipjbinding";
+    # Match Ghidra/Features/FileFormats/build.gradle
+    version = "16.02-2.01";
+
+    src = fetchFromGitHub {
+      owner = "borisbrodski";
+      repo = "sevenzipjbinding";
+      tag = "Release-${finalAttrs.version}";
+      hash = "sha256-MtdPBjXUNFc9KwMNMtxmQ1R+cW6dhum73d3KX76GjG0=";
+    };
+
+    nativeBuildInputs = [
+      cmake
+      zulu8 # Upstream uses javah and Java 5 source compatibility
+    ];
+
+    postPatch = ''
+      # CMake 4 removed the LOCATION policy workaround
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_policy(SET CMP0026 OLD)" "" \
+        --replace-fail "GET_TARGET_PROPERTY(SEVENZIP_JBINDING_LIB 7-Zip-JBinding LOCATION)" \
+          'SET(SEVENZIP_JBINDING_LIB "''${CMAKE_SHARED_LIBRARY_PREFIX}7-Zip-JBinding''${CMAKE_SHARED_LIBRARY_SUFFIX}")'
+    '';
+
+    cmakeFlags = [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+      "-DCMAKE_CXX_STANDARD=98"
+      "-DJAVA_SYSTEM=Mac"
+      "-DJAVA_ARCH=arm64"
+      "-DJAVA_JDK=${zulu8.home}"
+      "-DJAVA_INCLUDE_PATH2=${zulu8.home}/include/darwin"
+    ];
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm444 sevenzipjbinding-Mac-arm64.jar \
+        "$out/share/java/sevenzipjbinding-Mac-arm64.jar"
+      runHook postInstall
+    '';
+  });
 
   patches = [
     # Use our own protoc binary instead of the prebuilt one
@@ -165,6 +209,19 @@ stdenv.mkDerivation (finalAttrs: {
     f=("${pkg_path}"/*)
     mv "${pkg_path}"/*/* "${pkg_path}"
     rmdir "''${f[@]}"
+
+    ${lib.optionalString isMacArm64 ''
+      # Ghidra also reads platform metadata from the JAR
+      fileFormats="${pkg_path}/Ghidra/Features/FileFormats"
+      rm -f "$fileFormats/lib"/sevenzipjbinding-all-platforms-*.jar
+      rm -rf "$fileFormats/data/sevenzipnativelibs"
+      cp ${sevenzipjbinding}/share/java/sevenzipjbinding-Mac-arm64.jar "$fileFormats/lib/"
+      substituteInPlace "$fileFormats/Module.manifest" \
+        --replace-fail "lib/sevenzipjbinding-all-platforms-16.02-2.01.jar LGPL 2.1" \
+          "lib/sevenzipjbinding-Mac-arm64.jar LGPL 2.1"
+      unzip -q ${sevenzipjbinding}/share/java/sevenzipjbinding-Mac-arm64.jar "Mac-arm64/*" \
+        -d "$fileFormats/data/sevenzipnativelibs"
+    ''}
 
     for f in Ghidra/Framework/Gui/src/main/resources/images/GhidraIcon*.png; do
       res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -c11-)
