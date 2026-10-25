@@ -1957,8 +1957,7 @@ in
   unifi = runTest ./unifi.nix;
   unit-perl = runTest ./web-servers/unit-perl.nix;
   unpackerr = runTest ./unpackerr.nix;
-  upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
-  upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
+  upnp = handleTest ./upnp.nix { };
   uptermd = runTest ./uptermd.nix;
   uptime-kuma = runTest ./uptime-kuma.nix;
   urn-timer = runTest ./urn-timer.nix;
