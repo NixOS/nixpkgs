@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchmd-net";
-  version = "3.0.3";
+  version = "3.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "torchmd";
     repo = "torchmd-net";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FBeeNkc7mJQYmMwlsW3Un+3RHvErJM7rWKUqSCYYUCM=";
+    hash = "sha256-YfD9W7EFgDfFEnGPW3WCOQ1kcNCTX+hUgwBU+9F2OmI=";
   };
 
   build-system = [
