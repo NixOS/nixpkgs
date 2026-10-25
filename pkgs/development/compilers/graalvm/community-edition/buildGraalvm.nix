@@ -87,7 +87,10 @@ let
   binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv.cc ]);
 
   runtimeLibraryPath = lib.makeLibraryPath (
-    [ cups zlib ]
+    [
+      cups
+      zlib
+    ]
     ++ lib.optionals gtkSupport [
       cairo
       glib
