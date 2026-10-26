@@ -20,7 +20,7 @@
   nix-update-script,
   versionCheckHook,
   cargo-bundle,
-  git,
+  gitMinimal,
   testers,
   writableTmpDirAsHomeHook,
 
@@ -31,6 +31,16 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gram";
   version = "3.4.1";
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
+    owner = "GramEditor";
+    repo = "gram";
+    tag = finalAttrs.version;
+    hash = "sha256-+arejkex6DnnIVivt4ACuGUUNfePIXC0Y5WRGIBB9Hw=";
+  };
+
+  cargoHash = "sha256-0sTtUSCtjvdJPkpzNgd4Rk0g7Fn3w8uttfuEtl53kbQ=";
 
   outputs = [
     "out"
@@ -42,17 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "extension_cli"
   ];
 
-  src = fetchFromCodeberg {
-    owner = "GramEditor";
-    repo = "gram";
-    tag = finalAttrs.version;
-    hash = "sha256-+arejkex6DnnIVivt4ACuGUUNfePIXC0Y5WRGIBB9Hw=";
-  };
-
-  cargoHash = "sha256-0sTtUSCtjvdJPkpzNgd4Rk0g7Fn3w8uttfuEtl53kbQ=";
-
-  __structuredAttrs = true;
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -62,8 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-bundle
     rustPlatform.bindgenHook
   ];
-
-  dontUseCmakeConfigure = true;
 
   buildInputs = [
     openssl
@@ -77,8 +74,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxkbcommon
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    git
+    gitMinimal
   ];
+
+  dontUseCmakeConfigure = true;
 
   cargoBuildFlags = [
     "--package=gram"
@@ -128,7 +127,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p $out/Applications $out/bin
     # Gram expects git next to its own binary
-    ln -s ${lib.getExe git} $app_path/Contents/MacOS/git
+    ln -s ${lib.getExe gitMinimal} $app_path/Contents/MacOS/git
     mv $release_target/cli $app_path/Contents/MacOS/cli
     mv $app_path $out/Applications/
 
