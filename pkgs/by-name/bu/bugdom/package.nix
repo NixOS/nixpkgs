@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $out/bin/Bugdom --run "cd $out/share/bugdom"
         install -Dm644 $src/packaging/io.jor.bugdom.desktop $out/share/applications/io.jor.bugdom.desktop
         install -Dm644 $src/packaging/io.jor.bugdom.png -t $out/share/icons/hicolor/512x512/apps
+        install -Dm644 $src/packaging/io.jor.bugdom.appdata.xml -t $out/share/metainfo
       ''
   )
   + ''
