@@ -6,12 +6,11 @@
   dotnetCorePackages,
   sqlite,
   fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs-slim_24,
   nixosTests,
   nix-update-script,
-  prefetch-yarn-deps,
 }:
 let
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
@@ -32,29 +31,9 @@ buildDotnetModule (finalAttrs: {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [
-    nodejs
-    yarn
-    prefetch-yarn-deps
-    fixup-yarn-lock
-  ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-Jq2O7gvB+PKcz6uDBMg7ox6/Bu+pikXH6JGuLfKG5fI=";
-  };
-
-  postConfigure = ''
-    yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs --build node_modules
-  '';
-  postBuild = ''
-    yarn --offline run build --env production
-  '';
   postInstall = ''
-    cp -a -- _output/UI "$out/lib/lidarr/UI"
+    cp -a -- ${finalAttrs.passthru.frontend} "$out"/lib/lidarr/UI
   '';
 
   nugetDeps = ./deps.json;
@@ -134,10 +113,40 @@ buildDotnetModule (finalAttrs: {
   ];
 
   passthru = {
+    frontend = stdenvNoCC.mkDerivation {
+      inherit (finalAttrs) src version;
+      pname = "${finalAttrs.pname}-frontend";
+
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      nativeBuildInputs = [
+        nodejs-slim_24
+        yarnConfigHook
+        yarnBuildHook
+      ];
+
+      yarnOfflineCache = fetchYarnDeps {
+        yarnLock = "${finalAttrs.src}/yarn.lock";
+        hash = "sha256-Jq2O7gvB+PKcz6uDBMg7ox6/Bu+pikXH6JGuLfKG5fI=";
+      };
+
+      yarnBuildFlags = [ "--env=production" ];
+
+      installPhase = ''
+        runHook preInstall
+        mv _output/UI "$out"
+        runHook postInstall
+      '';
+    };
+
     tests = { inherit (nixosTests) lidarr; };
 
     updateScript = nix-update-script {
-      extraArgs = lib.cli.toCommandLineGNU { } { use-github-releases = true; };
+      extraArgs = lib.cli.toCommandLineGNU { } {
+        subpackage = "frontend";
+        use-github-releases = true;
+      };
     };
   };
 
