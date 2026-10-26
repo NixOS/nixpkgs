@@ -20187,6 +20187,13 @@
     github = "mse63";
     githubId = 81396550;
   };
+  mserajnik = {
+    email = "dev@mser.at";
+    github = "mserajnik";
+    githubId = 80664890;
+    name = "Michael Serajnik";
+    keys = [ { fingerprint = "09BB CB46 76A3 6C0C A872  36A3 E3FE B9F7 A595 BB01"; } ];
+  };
   msgilligan = {
     email = "sean@msgilligan.com";
     github = "msgilligan";
