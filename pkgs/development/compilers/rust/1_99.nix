@@ -25,7 +25,7 @@
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
-  llvmPackages,
+  llvmPackages_23,
   llvm,
   cargo-auditable,
   wrapCCWith,
@@ -35,7 +35,7 @@
 let
   llvmSharedFor =
     pkgSet:
-    pkgSet.llvmPackages.libllvm.override (
+    pkgSet.llvmPackages_23.libllvm.override (
       {
         enableSharedLibraries = true;
       }
@@ -43,7 +43,7 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.pkgsBuildHost.llvmPackages.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages_23.clangUseLLVM;
         };
       }
     );
@@ -57,7 +57,8 @@ import ./default.nix
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
     llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
 
-    inherit llvmPackages cargo-auditable;
+    llvmPackages = llvmPackages_23;
+    inherit cargo-auditable;
 
     # For use at runtime
     llvmShared = llvmSharedFor pkgsHostTarget;
@@ -93,7 +94,7 @@ import ./default.nix
 
   (
     removeAttrs args [
-      "llvmPackages"
+      "llvmPackages_23"
       "llvm"
       "wrapCCWith"
       "overrideCC"
