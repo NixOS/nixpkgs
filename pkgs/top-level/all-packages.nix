@@ -7412,8 +7412,7 @@ with pkgs;
       util-linux = util-linuxMinimal;
     }
   );
-  fuse = fuse2;
-  fuse2 = lowPrio (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fusePackages.fuse_2);
+  fuse = fuse3;
   fuse3 = lowPrio (
     if stdenv.hostPlatform.isDarwin then
       macfuse-stubs.override { isFuse3 = true; }
