@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "brotlicffi";
-  version = "1.2.0.1";
+  version = "1.2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "brotlicffi";
     tag = "v${version}";
-    hash = "sha256-NRPjTtAlsDohdn5PQ6TOYCrm2xlU9mpfMIplNv4zVMk=";
+    hash = "sha256-N2zxPLsCaXcLpthGvbaKerWayo3ZGMOQ0Is5cpgXGKA=";
   };
 
   build-system = [ setuptools ];
