@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonschema-cli";
-  version = "0.58.6";
+  version = "0.60.1";
   __structuredAttrs = true;
 
   src = fetchCrate {
     pname = "jsonschema-cli";
     inherit (finalAttrs) version;
-    hash = "sha256-QiJK8SDVun44n6eDBERFXH9UMI/NHBXB/6J7pRqH/8E=";
+    hash = "sha256-vEoShzy7njIE96JPPtn3P2gMqUOwcwbAYGbgK/clEKM=";
   };
 
-  cargoHash = "sha256-aAuBbdAgO9AW2TtHyVsR0o0DOZYZ7ixaGQRQS4eeFl4=";
+  cargoHash = "sha256-gm91KHXJFAjlBTgFfbxMymBvu+SQpVa7azS3jaGHmaE=";
 
   nativeBuildInputs = [
     pkg-config
