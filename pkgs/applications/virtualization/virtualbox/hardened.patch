@@ -179,3 +179,16 @@ index f9d1ecf..042e599 100644
  
  RTR3DECL(const char *) RTProcShortName(void)
  {
+diff --git a/src/VBox/Main/src-server/linux/PerformanceLinux.cpp b/src/VBox/Main/src-server/linux/PerformanceLinux.cpp
+index cc33777..c436d70 100644
+--- a/src/VBox/Main/src-server/linux/PerformanceLinux.cpp
++++ b/src/VBox/Main/src-server/linux/PerformanceLinux.cpp
+@@ -529,7 +529,7 @@ void CollectorLinux::addVolumeDependencies(const char *pcszVolume, DiskList& lis
+     static const char s_szSlashExeNameSpace[] = "/" VBOXVOLINFO_EXE_NAME " ";
+     size_t const cchVolume = strlen(pcszVolume);
+     char szVolInfo[RTPATH_MAX];
+-    int vrc = RTPathAppPrivateArch(szVolInfo, sizeof(szVolInfo) - sizeof(s_szSlashExeNameSpace) - cchVolume);
++    int vrc = RTPathSuidDir(szVolInfo, sizeof(szVolInfo) - sizeof(s_szSlashExeNameSpace) - cchVolume);
+     if (RT_FAILURE(vrc))
+     {
+         LogRel(("VolInfo: Failed to get program path, vrc=%Rrc\n", vrc));
