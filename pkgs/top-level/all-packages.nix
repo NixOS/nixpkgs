@@ -6360,8 +6360,6 @@ with pkgs;
     avrlibc = pkgsCross.avr.libc;
   };
 
-  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_4; };
-
   skawarePackages = recurseIntoAttrs (callPackage ../development/skaware-packages { });
 
   inherit (skawarePackages)
