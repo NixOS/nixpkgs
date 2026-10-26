@@ -103,11 +103,12 @@ buildGo127Module (finalAttrs: {
       Nixpkgs build adds a `--landlock-allow-read` flag, which lets the sandbox
       read files and list directories in a further path. On NixOS, many paths
       in /etc are symlinks into the Nix store, so run ghostunnel with
-      `--landlock-allow-read=/nix/store` there. When ghostunnel cannot set up
+      `--landlock-allow-read=''${builtins.storeDir}` there. When ghostunnel cannot set up
       the sandbox, for example because a `--landlock-allow-read` path is a file
       or does not exist, it logs a warning and runs without the sandbox. The
       Nixpkgs build adds a `--require-landlock` flag, which makes it exit
-      instead.
+      instead. The NixOS module and the modular service pass both flags by
+      default.
     '';
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/${finalAttrs.src.rev}";

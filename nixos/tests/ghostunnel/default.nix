@@ -33,6 +33,35 @@
           allowCN = [ "client" ];
           unsafeTarget = true;
         };
+        # A server for each value of the landlock option.
+        services.ghostunnel.servers."required-missing-path" = {
+          listen = "localhost:2443";
+          cert = "/root/service-cert.pem";
+          key = "/root/service-key.pem";
+          disableAuthentication = true;
+          target = "backend:80";
+          unsafeTarget = true;
+          extraArguments = "--landlock-allow-read=/missing";
+        };
+        services.ghostunnel.servers."best-effort-missing-path" = {
+          listen = "localhost:3443";
+          cert = "/root/service-cert.pem";
+          key = "/root/service-key.pem";
+          disableAuthentication = true;
+          target = "backend:80";
+          unsafeTarget = true;
+          landlock = "best-effort";
+          extraArguments = "--landlock-allow-read=/missing";
+        };
+        services.ghostunnel.servers."disabled" = {
+          listen = "localhost:4443";
+          cert = "/root/service-cert.pem";
+          key = "/root/service-key.pem";
+          disableAuthentication = true;
+          target = "backend:80";
+          unsafeTarget = true;
+          landlock = "disabled";
+        };
         networking.firewall.allowedTCPPorts = [
           443
           1443
@@ -95,9 +124,11 @@
 
     # The servers start before the certificates are copied, and can reach
     # systemd's start limit before then. Restart them now that the files exist.
-    service.succeed("systemctl reset-failed && systemctl restart ghostunnel-server-plain-old ghostunnel-server-client-cert")
+    service.succeed("systemctl reset-failed && systemctl restart ghostunnel-server-plain-old ghostunnel-server-client-cert ghostunnel-server-required-missing-path ghostunnel-server-best-effort-missing-path ghostunnel-server-disabled")
     service.wait_for_open_port(443)
     service.wait_for_open_port(1443)
+    service.wait_for_open_port(3443)
+    service.wait_for_open_port(4443)
 
     # Check assumptions before the real test
     client.succeed("bash -c 'diff <(curl -v --no-progress-meter http://backend/hi.txt) <(echo hi)'")
@@ -110,6 +141,46 @@
 
     # Client can authenticate with certificate
     client.succeed("bash -c 'diff <(curl -v --no-progress-meter --cert /root/client-cert.pem --key /root/client-key.pem --cacert /root/ca.pem https://service:1443/hi.txt) <(echo hi)'")
+
+    # Each server has set up its landlock sandbox. Ghostunnel logs its
+    # landlock messages before it listens, so after the requests above the
+    # journal has all of them.
+    failures = [
+      "unable to set up landlock",
+      # Without landlock, ghostunnel exits with this message. Without landlock
+      # network rules, it logs this message as a note and runs without them.
+      "kernel does not support landlock",
+      # Below ABI 6, the sandbox lacks some restrictions.
+      "the landlock sandbox is incomplete",
+    ]
+    for failure in failures:
+      # Sanity check: message occurs in source, so it can plausibly be logged.
+      cmd(f"${hostPkgs.gnugrep}/bin/grep --recursive --quiet --fixed-strings '{failure}' ${hostPkgs.srcOnly hostPkgs.ghostunnel}")
+    setup = "setting up landlock rules to limit process privileges"
+    service.succeed("journalctl --sync")
+    for unit in ["ghostunnel-server-plain-old", "ghostunnel-server-client-cert"]:
+      invocation = service.succeed(f"systemctl show --property InvocationID --value {unit}").strip()
+      journal = f"journalctl _SYSTEMD_INVOCATION_ID={invocation}"
+      service.succeed(f"{journal} --grep '{setup}'")
+      for failure in failures:
+        # journalctl exits with 1 when no entry matches, and also on errors.
+        # An error also fails the grep above, which reads the same journal.
+        service.succeed(f"rc=0; {journal} --grep '{failure}' || rc=$?; test $rc = 1")
+
+    def grep_journal(unit, needle):
+      return f"journalctl --unit {unit} --output cat | grep --fixed-strings '{needle}'"
+
+    missing_path_error = 'unable to set up landlock: populating ruleset for "/missing" with access {read_file,read_dir}: open: no such file or directory'
+
+    # "required" exits.
+    service.wait_until_succeeds(grep_journal("ghostunnel-server-required-missing-path", f"error: {missing_path_error}"))
+
+    # "best-effort" runs without the sandbox, which is why it listens.
+    service.succeed(grep_journal("ghostunnel-server-best-effort-missing-path", f"warning: {missing_path_error}"))
+
+    # "disabled" does not set up the sandbox. grep exits with 1 when no line
+    # matches. The servers above share the needle, so a typo fails there.
+    service.succeed(f"rc=0; {grep_journal('ghostunnel-server-disabled', setup)} || rc=$?; test $rc = 1")
 
     # Client must authenticate with certificate
     client.fail("bash -c 'diff <(curl -v --no-progress-meter --cacert /root/ca.pem https://service:1443/hi.txt) <(echo hi)'")
