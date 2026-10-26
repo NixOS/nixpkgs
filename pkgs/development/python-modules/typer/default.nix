@@ -19,7 +19,7 @@
   procps,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typer";
   version = "0.27.2";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vBHSJoyIQawkqqhbPJGKzPjBPm42OR/Ref/k6XFJTi8=";
   };
 
@@ -37,9 +37,11 @@ buildPythonPackage rec {
       sed -z -i 's/"-m",\n\?\s*"coverage",\n\?\s*"run",//g' "$f"
       sed -i 's/-m coverage run//g' "$f"
     done
-    # These are already included in the PYTHONPATH.
-    # Overriding PYTHONPATH breaks the tests when executed by Nix
-    # ("No module named 'typer'" error) because it's used to find `typer` too.
+  ''
+  # These are already included in the PYTHONPATH.
+  # Overriding PYTHONPATH breaks the tests when executed by Nix ("No module named 'typer'" error)
+  # because it's used to find `typer` too.
+  + ''
     substituteInPlace tests/test_tutorial/test_subcommands/test_tutorial001.py \
       --replace-fail 'env["PYTHONPATH"] = ":".join(list(tutorial001_py310.__path__))' ""
     substituteInPlace tests/test_tutorial/test_subcommands/test_tutorial003.py \
@@ -82,8 +84,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
-    changelog = "https://github.com/tiangolo/typer/releases/tag/${version}";
+    changelog = "https://github.com/tiangolo/typer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ winpat ];
   };
-}
+})
