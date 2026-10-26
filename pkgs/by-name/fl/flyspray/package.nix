@@ -56,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$DIR"
     cp -Tr "$src" "$DIR"
 
-    chmod u+w "$DIR/vendor/guzzle/guzzle/src/Guzzle/Http/Resources"
+    chmod -R u+w "$DIR"
+    # rm directories where content is generated at runtime
+    rm -rf "$DIR/cache" "$DIR/attachments" "$DIR/avatars"
+    # replace bundled cacerts
     rm "$DIR/vendor/guzzle/guzzle/src/Guzzle/Http/Resources/cacert.pem"
     ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
       "$DIR/vendor/guzzle/guzzle/src/Guzzle/Http/Resources/cacert.pem"
