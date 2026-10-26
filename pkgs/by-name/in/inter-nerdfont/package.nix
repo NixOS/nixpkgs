@@ -27,10 +27,19 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://gitlab.com/mid_os/inter-nerdfont";
+    homepage = "https://rsms.me/inter/";
     description = "NerdFont patch of the Inter font";
-    license = lib.licenses.ofl;
+    license =
+      with lib.licenses;
+      AND [
+        ofl
+        mit
+        asl20
+        cc-by-40
+        unlicense
+      ];
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.midischwarz12 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 }
