@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = lib.optionals (!finalAttrs.finalPackage.doCheck) [ "-DBUILD_TESTS:BOOL=OFF" ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://hyperrealm.github.io/libconfig/";
     changelog = "https://github.com/hyperrealm/libconfig/blob/v${finalAttrs.version}/ChangeLog";
