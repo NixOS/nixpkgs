@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5Z/7kC3Vcx1dTk+4HTuYlpdhX+q3Lf18MGGBZ7kaQu4=";
   };
 
+  strictDeps = true;
+
   inherit doCheck;
 
   configureFlags =
