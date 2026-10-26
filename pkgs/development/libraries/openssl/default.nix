@@ -39,7 +39,9 @@
 assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
 
 let
-  useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
+  # On WASI, there is no `openssl` executable to wrap (see `no-apps`).
+  useBinaryWrapper =
+    !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isWasi);
 
   common =
     {
@@ -173,6 +175,8 @@ let
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
           else if stdenv.hostPlatform.isCygwin then
             "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
+          else if stdenv.hostPlatform.isWasi then
+            "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -228,6 +232,21 @@ let
       # intent was that this would be configured properly automatically,
       # but that doesn't appear to be the case.
       ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
+      # WASI has no assembly, threads, sockets, `dlopen`, `mmap` or terminal control.
+      # The `openssl` executable needs `alarm` and `fork`, which WASI does not have.
+      ++ lib.optionals stdenv.hostPlatform.isWasi [
+        "no-afalgeng"
+        "no-apps"
+        "no-asm"
+        "no-devcryptoeng"
+        "no-dso"
+        "no-secure-memory"
+        "no-sock"
+        "no-threads"
+        "no-ui-console"
+        "-D_WASI_EMULATED_GETPID"
+        "-lwasi-emulated-getpid"
+      ]
       ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
         # This is necessary in order to avoid openssl adding -march
         # flags which ultimately conflict with those added by
