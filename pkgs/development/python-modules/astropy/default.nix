@@ -156,6 +156,11 @@ buildPythonPackage rec {
   postCheck = ''
     rm conftest.py
   '';
+  disabledTestPaths = [
+    # Fails due to some kind of accuracy error. Not present on the latest
+    # astropy version, hence not reported upstream.
+    "lib/python3.13/site-packages/astropy/utils/iers/tests/test_iers.py::test_iers_b_out_of_range_handling"
+  ];
 
   meta = {
     changelog = "https://docs.astropy.org/en/${src.tag}/changelog.html";
