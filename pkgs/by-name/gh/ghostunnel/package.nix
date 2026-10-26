@@ -33,6 +33,7 @@ buildGo127Module (finalAttrs: {
 
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
+    nixos-modular = nixosTests.ghostunnel-modular;
     podman = nixosTests.podman-tls-ghostunnel;
   };
 
