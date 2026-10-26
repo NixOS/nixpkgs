@@ -28381,6 +28381,12 @@
     githubId = 1694705;
     name = "Sam Stites";
   };
+  stonega = {
+    email = "xijieyin@gmail.com";
+    github = "stonega";
+    githubId = 2262007;
+    name = "stonegate";
+  };
   storopoli = {
     email = "jose@storopoli.com";
     github = "storopoli";
