@@ -28,10 +28,22 @@
   fetchhg,
   electron,
   writableTmpDirAsHomeHook,
+  patchelf,
 }:
 
 let
   java = openjdk21;
+
+  #FIXME: avoid pulling explicit patchelf after resolving https://github.com/NixOS/patchelf/pull/672
+  patchelf' = patchelf.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "0.15.2";
+      src = fetchurl {
+        url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+        hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+      };
+    }
+  );
 
   platforms = {
     x86_64-linux = "x86_64-linux";
@@ -161,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
   nativeBuildInputs = [
+    patchelf'
     java
     copyDesktopItems
     writableTmpDirAsHomeHook
