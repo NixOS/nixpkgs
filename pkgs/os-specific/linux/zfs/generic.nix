@@ -14,6 +14,7 @@ let
       configFile ? "all",
 
       # Userspace dependencies
+      bashNonInteractive,
       zlib,
       libuuid,
       python3,
@@ -111,6 +112,8 @@ let
             --replace-fail '"/usr/bin/env", "mount"'  '"${util-linux}/bin/mount", "-n"'
         ''
         + optionalString buildUser ''
+          # zfs-tests.sh runs during the build; postFixup re-patches the installed copies for the host
+          patchShebangs --build scripts
           substituteInPlace ./lib/libshare/os/linux/nfs.c --replace-fail "/usr/sbin/exportfs" "${
             # We don't *need* python support, but we set it like this to minimize closure size:
             # If it's disabled by default, no need to enable it, even if we have python enabled
@@ -180,9 +183,10 @@ let
           attr
           libtirpc
           pam
+          bashNonInteractive
+          openssl
+          curl
         ]
-        ++ optional buildUser openssl
-        ++ optional buildUser curl
         ++ optional (buildUser && enablePython) python3;
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
@@ -290,6 +294,9 @@ let
           for i in $out/libexec/zfs/zpool.d/*; do
             sed -i '2i${path}' $i
           done
+        ''
+        + optionalString buildUser ''
+          patchShebangs --update --host $out/share/zfs $out/libexec/zfs
         '';
 
       outputs = [
