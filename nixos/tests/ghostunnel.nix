@@ -93,6 +93,12 @@
     service.wait_for_unit("multi-user.target")
     client.wait_for_unit("multi-user.target")
 
+    # The servers start before the certificates are copied, and can reach
+    # systemd's start limit before then. Restart them now that the files exist.
+    service.succeed("systemctl reset-failed && systemctl restart ghostunnel-server-plain-old ghostunnel-server-client-cert")
+    service.wait_for_open_port(443)
+    service.wait_for_open_port(1443)
+
     # Check assumptions before the real test
     client.succeed("bash -c 'diff <(curl -v --no-progress-meter http://backend/hi.txt) <(echo hi)'")
 
