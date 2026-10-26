@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/Nanosaur2 --chdir "$out/share/Nanosaur2"
     install -Dm644 $src/packaging/io.jor.nanosaur2.desktop $out/share/applications/nanosaur2.desktop
     install -Dm644 $src/packaging/io.jor.nanosaur2.png -t $out/share/icons/hicolor/256x256/apps
+    install -Dm644 $src/packaging/io.jor.nanosaur2.appdata.xml -t $out/share/metainfo
     runHook postInstall
   '';
 
