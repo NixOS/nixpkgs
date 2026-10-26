@@ -23454,6 +23454,12 @@
     githubId = 56401138;
     name = "Philipp Jungkamp";
   };
+  pk82869 = {
+    name = "Prathik Kaliyambath";
+    email = "contact@prathikkaliyambath.com";
+    github = "pk82869";
+    githubId = 24224755;
+  };
   pkharvey = {
     email = "kayharvey@protonmail.com";
     github = "pkharvey";
