@@ -33,13 +33,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "10.0.4";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F4XI924K4YxREEjqP0XLeFcvaW/9v5Iyuy9n75c9Osc=";
+    hash = "sha256-UqsZsefjTYaybA2QRQ+7GjV3o3YF7VQMU3cdR/cri48=";
   };
 
   strictDeps = true;
@@ -83,14 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "man"
-  ];
-
-  # remove when next release is out
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/kmscon/kmscon/commit/153db63d679df719a99dd36505f9c2f55d9c59f6.patch?full_index=1";
-      hash = "sha256-aAH+drUZnj1wrKcdsphqacmqRRnZAKEwCNLwA2vSTmg=";
-    })
   ];
 
   mesonFlags = [ (lib.mesonEnable "libseat" true) ];
