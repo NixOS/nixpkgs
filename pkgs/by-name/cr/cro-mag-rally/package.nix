@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/CroMagRally --chdir $out/share/CroMagRally
     install -Dm644 ../packaging/io.jor.cromagrally.desktop $out/share/applications/cromagrally.desktop
     install -Dm644 ../packaging/io.jor.cromagrally.png -t $out/share/icons/hicolor/256x256/apps/
+    install -Dm644 ../packaging/io.jor.cromagrally.appdata.xml -t $out/share/metainfo
 
     runHook postInstall
   '';
