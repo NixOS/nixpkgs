@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  openssl,
   versionCheckHook,
   nix-update-script,
 }:
@@ -20,10 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-yoAlrPOdgbJA6Y0mBKDEzPrayHZuhgMX7/ant+0PhaY=";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
 
   # `test_setup_io` requires to be executed in an interactive shell
   checkFlags = [
