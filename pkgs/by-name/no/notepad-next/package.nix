@@ -102,13 +102,17 @@ stdenv.mkDerivation (finalAttrs: {
     echo "target_link_libraries(lexilla PRIVATE scintilla)" >> thirdparty/CMakeLists.txt
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/NotepadNext.app $out/Applications/
-    rm -rf $out/share
-    mkdir -p $out/bin
-    ln -s $out/Applications/NotepadNext.app/Contents/MacOS/NotepadNext $out/bin/NotepadNext
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 ../deploy/linux/com.github.dail8859.NotepadNext.metainfo.xml -t $out/share/metainfo
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/NotepadNext.app $out/Applications/
+      rm -rf $out/share
+      mkdir -p $out/bin
+      ln -s $out/Applications/NotepadNext.app/Contents/MacOS/NotepadNext $out/bin/NotepadNext
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/dail8859/NotepadNext";
