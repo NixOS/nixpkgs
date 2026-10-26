@@ -35,6 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ))
   ];
 
+  strictDeps = true;
+
   buildPhase = ''
     runHook preBuild
     # The font files already exist, force a rebuild
@@ -56,6 +58,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/OpenTTD/OpenTTD-TTF";
