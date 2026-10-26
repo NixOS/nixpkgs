@@ -97,21 +97,27 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FORCE_APPLE_BIN" true)
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
-    # bundle. That adds alot of overhead for not much benefit (CPack is currently abit broken, and needs impure access
-    # to /usr/bin/hdiutil). So we'll manually assemble & install everything instead.
+  # CMake generates the AppStream metainfo only from a git checkout (res/make-appdata.sh adds the releases from the git tags)
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p $out/share/metainfo
+      { cat ../res/furnace.appdata.xml.in; echo '</component>'; } > $out/share/metainfo/org.tildearrow.furnace.metainfo.xml
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
+      # bundle. That adds alot of overhead for not much benefit (CPack is currently abit broken, and needs impure access
+      # to /usr/bin/hdiutil). So we'll manually assemble & install everything instead.
 
-    mkdir -p $out/{Applications/Furnace.app/Contents/{MacOS,Resources},share/{,doc,licenses}/furnace}
-    mv $out/{bin,Applications/Furnace.app/Contents/MacOS}/furnace
-    makeWrapper $out/{Applications/Furnace.app/Contents/MacOS,bin}/furnace
+      mkdir -p $out/{Applications/Furnace.app/Contents/{MacOS,Resources},share/{,doc,licenses}/furnace}
+      mv $out/{bin,Applications/Furnace.app/Contents/MacOS}/furnace
+      makeWrapper $out/{Applications/Furnace.app/Contents/MacOS,bin}/furnace
 
-    install -m644 {../res,$out/Applications/Furnace.app/Contents}/Info.plist
-    install -m644 ../res/icon.icns $out/Applications/Furnace.app/Contents/Resources/Furnace.icns
-    install -m644 {..,$out/share/licenses/furnace}/LICENSE
-    cp -r ../papers $out/share/doc/furnace/
-    cp -r ../demos $out/share/furnace/
-  '';
+      install -m644 {../res,$out/Applications/Furnace.app/Contents}/Info.plist
+      install -m644 ../res/icon.icns $out/Applications/Furnace.app/Contents/Resources/Furnace.icns
+      install -m644 {..,$out/share/licenses/furnace}/LICENSE
+      cp -r ../papers $out/share/doc/furnace/
+      cp -r ../demos $out/share/furnace/
+    '';
 
   passthru = {
     updateScript = ./update.sh;
