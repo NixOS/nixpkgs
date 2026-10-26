@@ -236,7 +236,11 @@ stdenv.mkDerivation {
   ''
   # use brotli from nixpkgs instead of the bundled copy (see also buildFlags)
   + lib.optionalString hasRuntime (
-    lib.optionalString (lib.versionOlder version "9") ''
+    ''
+      # make sure that the build cannot use the bundled copy
+      rm -r src/runtime/src/native/external/brotli
+    ''
+    + lib.optionalString (lib.versionOlder version "9") ''
       substituteInPlace \
         src/runtime/eng/SourceBuild.props \
         --replace-fail \
