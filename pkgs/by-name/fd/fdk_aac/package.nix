@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   configureFlags = lib.optional exampleSupport "--enable-example";
