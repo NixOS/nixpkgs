@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iamb";
-  version = "0.0.12";
+  version = "0.13.1";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ulyssa";
     repo = "iamb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-66DN5tIqR5ppTVDqo3xoG3gl6rZrnikLsls/hqXAhb8=";
+    hash = "sha256-Bu/BDaf9KPoevx/yTQktWUF36REGVyJamuPdrXdMZ/A=";
   };
 
-  cargoHash = "sha256-gtkloBKCFdKskKmHw0YWX/x13I/ZyUHycm/7ZrRQCBI=";
+  cargoHash = "sha256-GZQk7bw8VFq6gEiJ2sLgbkvTACKxZlNbkI54cHt5dVc=";
 
   nativeBuildInputs = [
     installShellFiles
