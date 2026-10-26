@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/abaddon
     cp -r ../res/{css,res} $out/share/abaddon
+    install -Dm644 ../res/desktop/io.github.uowuo.abaddon.metainfo.xml -t $out/share/metainfo
     mkdir $out/bin
     cp abaddon $out/bin
     wrapProgram $out/bin/abaddon \
