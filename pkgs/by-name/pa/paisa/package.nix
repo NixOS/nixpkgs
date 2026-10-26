@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   buildNpmPackage,
+  fetchpatch,
   fetchFromGitHub,
   nodejs_22,
   versionCheckHook,
@@ -32,6 +33,14 @@ buildGoModule (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-GuD0X1Im8pc8arVX/c2KMBZwp/yXyaqPnRObvPe4G5c=";
   };
+  patches = [
+    # https://github.com/ananthakumaran/paisa/issues/420
+    (fetchpatch {
+      name = "CVE-2026-116067.patch";
+      url = "https://github.com/ananthakumaran/paisa/commit/035949351f7c0d0f90ecf767aa1e28b4d5a0ae31.patch";
+      hash = "sha256-zscWvcjFOajwYloDIy2sHLuh3QDIODP7/wNx9ayJraw=";
+    })
+  ];
 
   subPackages = [ "." ];
 
