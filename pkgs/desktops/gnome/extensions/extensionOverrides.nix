@@ -73,7 +73,9 @@ lib.trivial.pipe super [
   }))
 
   (patchExtension "caffeine@patapon.info" (old: {
-    meta.maintainers = with lib.maintainers; [ eperuffo ];
+    meta = old.meta // {
+      maintainers = with lib.maintainers; [ eperuffo ];
+    };
   }))
 
   (patchExtension "copyous@boerdereinar.dev" (old: {
@@ -90,7 +92,9 @@ lib.trivial.pipe super [
   }))
 
   (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
-    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
+    meta = old.meta // {
+      maintainers = with lib.maintainers; [ rhoriguchi ];
+    };
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
@@ -232,7 +236,9 @@ lib.trivial.pipe super [
         typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [ libgtop ];
       })
     ];
-    meta.maintainers = with lib.maintainers; [ andersk ];
+    meta = old.meta // {
+      maintainers = with lib.maintainers; [ andersk ];
+    };
   }))
 
   (patchExtension "user-theme-x@tuberry.github.io" (old: {
