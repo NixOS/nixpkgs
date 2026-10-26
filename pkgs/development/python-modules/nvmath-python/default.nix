@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  cudaPackages_13_1,
+  cudaPackages,
   cython,
   setuptools,
   tomli,
@@ -19,7 +19,7 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage.override { stdenv = cudaPackages_13_1.backendStdenv; } (finalAttrs: {
+buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "nvmath-python";
   version = "1.0.0";
   pyproject = true;
@@ -54,11 +54,11 @@ buildPythonPackage.override { stdenv = cudaPackages_13_1.backendStdenv; } (final
   ];
 
   nativeBuildInputs = [
-    cudaPackages_13_1.cuda_nvcc
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
-    cudaPackages_13_1.cuda_cudart
+    cudaPackages.cuda_cudart
   ];
 
   pythonImportsCheck = [
@@ -74,6 +74,6 @@ buildPythonPackage.override { stdenv = cudaPackages_13_1.backendStdenv; } (final
       cuda
       ngi
     ];
-    broken = !cudaSupport;
+    broken = !cudaSupport || cudaPackages.cudaOlder "13.1" || cudaPackages.cudaAtLeast "14";
   };
 })
