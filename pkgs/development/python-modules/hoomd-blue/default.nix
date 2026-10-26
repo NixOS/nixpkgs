@@ -90,10 +90,17 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [ "hoomd" ];
 
   meta = {
+    description = "Molecular dynamics and Monte Carlo soft matter simulation on GPUs";
+    longDescription = ''
+      HOOMD-blue is a Python package that performs hard particle Monte Carlo simulations of a
+      variety of shape classes and molecular dynamics simulations of particles with a range of pair,
+      bond, angle, and other potentials.
+    '';
     homepage = "https://glotzerlab.engin.umich.edu/software/";
-    description = "HOOMD-blue is a general-purpose particle simulation toolkit";
     changelog = "https://github.com/glotzerlab/hoomd-blue/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })
