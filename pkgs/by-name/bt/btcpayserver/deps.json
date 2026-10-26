@@ -61,8 +61,8 @@
   },
   {
     "pname": "BTCPayServer.Lightning.All",
-    "version": "1.7.12",
-    "hash": "sha256-WbFETXdbhxDinZsuDRlDKEqejHAH0W01/g7EnTy0RqQ="
+    "version": "1.7.13",
+    "hash": "sha256-038ETMvX3jSa6wea9tRuh6VNN2jGSx/JCWC1TXLWnk0="
   },
   {
     "pname": "BTCPayServer.Lightning.CLightning",
@@ -91,8 +91,8 @@
   },
   {
     "pname": "BTCPayServer.Lightning.LNDhub",
-    "version": "1.7.5",
-    "hash": "sha256-tl0hJp0s5XsJKNkfIj+nN8620zmhmYl+bfimqzqGv8M="
+    "version": "1.7.6",
+    "hash": "sha256-+am0ud+oezteBCAMHZq4slBpGze3OKbyO49a5t++IDk="
   },
   {
     "pname": "BTCPayServer.Lightning.Phoenixd",
@@ -121,18 +121,18 @@
   },
   {
     "pname": "Fido2",
-    "version": "4.2.0",
-    "hash": "sha256-gXeukm5xaOjGkgYWS+gpokGux7Gu/fzugkjQ3Zexig0="
+    "version": "4.3.1",
+    "hash": "sha256-ZCqifOuxSkAWKaRthpf2NYNjYSstl/2ir+vDkUyWfFM="
   },
   {
     "pname": "Fido2.AspNet",
-    "version": "4.2.0",
-    "hash": "sha256-AoUUOwEjhlMhZceryBvalbQwGnIVQ1jMWl8PoNFIF6E="
+    "version": "4.3.1",
+    "hash": "sha256-7/8fIPWPTT2JiZq+IP7wMQMBg3Qj8pMc3XwI/l2W+Gc="
   },
   {
     "pname": "Fido2.Models",
-    "version": "4.2.0",
-    "hash": "sha256-NKbLJt5l8X7P3X4xsGJ77Lda1VmV0qGJvjqGwHhRMZk="
+    "version": "4.3.1",
+    "hash": "sha256-+lSNvhRhfK/EJrcl41FtMI+aO+LjgIokKo7fDcjlIeI="
   },
   {
     "pname": "Google.Api.Gax",
@@ -211,8 +211,8 @@
   },
   {
     "pname": "MailKit",
-    "version": "4.18.1",
-    "hash": "sha256-w3ncBmlPkTTfKH87ZPhKg4ZaLseFmwfcttqsO6NuBjo="
+    "version": "4.18.2",
+    "hash": "sha256-y/cZhRYPJK6AorAgqWhweCoWBr2mzxEw/lXXNbKdI1U="
   },
   {
     "pname": "Microsoft.AspNet.SignalR.Client",
@@ -231,23 +231,33 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
-    "version": "10.0.12",
-    "hash": "sha256-0BKkIV0vClC3mTrjSGdmz/X3DxesYgy5IzkgKZLGWLg="
+    "version": "10.0.14",
+    "hash": "sha256-yZ3855cjCfCcAnFKYm7vK02+mNW1weHK5Q7p5X4hmcE="
   },
   {
     "pname": "Microsoft.AspNetCore.JsonPatch",
-    "version": "10.0.12",
-    "hash": "sha256-gt6McrmzZRLoBv8dbi+aLPDp7n2c9q9GCbj+xTOJ+WI="
+    "version": "10.0.13",
+    "hash": "sha256-8NGCu/6bEQ6FTzdy1Fim4vfdAsIe/DTOStaVEDyrR/M="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.JsonPatch",
+    "version": "10.0.14",
+    "hash": "sha256-zLk3g2vrYm9xgbV7R0uUOJsnZJ5Y9EMtlOOWek0rPLM="
   },
   {
     "pname": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
-    "version": "10.0.12",
-    "hash": "sha256-NO2A2Lk7bB3LTum3kDT1rHdjwc2nYhLRjNm0fShE0II="
+    "version": "10.0.13",
+    "hash": "sha256-V7TAULWuaFI7qskFda1vSJdv5c881SrAX+1QR/r2QWw="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
+    "version": "10.0.14",
+    "hash": "sha256-9hnstCqkUQiUnbxPlPfZoZ8Re4bOtvfVYDPkbnJnYZ4="
   },
   {
     "pname": "Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson",
-    "version": "10.0.12",
-    "hash": "sha256-RZ0ERD60bcyLkEOyEPWt2A8Z83m06GJNwFeVmCtAWDM="
+    "version": "10.0.14",
+    "hash": "sha256-2NuGGCMedcbEMDsEaA+iXBolBYiBeCI0DMYZeG79kPk="
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
@@ -326,8 +336,8 @@
   },
   {
     "pname": "Microsoft.EntityFrameworkCore",
-    "version": "10.0.12",
-    "hash": "sha256-fp+YNwzgQXjXBNG8ajuGvaHCVCMPHkh+T6Zm8suDI/U="
+    "version": "10.0.14",
+    "hash": "sha256-ISn7Cc7bF8HUlSniBR5cWsJe3nhS4WvSJlvk0WoVZuU="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore",
@@ -336,23 +346,23 @@
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Abstractions",
-    "version": "10.0.12",
-    "hash": "sha256-a11Hrsmscf9c9CSCEMuqgQvUAxv4+rxo1UQKiq06Z9E="
+    "version": "10.0.14",
+    "hash": "sha256-MNijMSsCCksBDQPfMFvEVFZbmRJUoZy4l10V+82Ysmo="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Analyzers",
-    "version": "10.0.12",
-    "hash": "sha256-zzmR8wvC/Cv8CMNymH+l7sTf2ZBusYcSM8QXL4KbJxQ="
+    "version": "10.0.14",
+    "hash": "sha256-hJePLMTRCBELmZgMaiYK1GC8nJzpSDOLHLDrJIhltRk="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Design",
-    "version": "10.0.12",
-    "hash": "sha256-ELwF0de3m7iO5RZZBMJEyjzjgn7PyswFdPmMFQuqk+8="
+    "version": "10.0.14",
+    "hash": "sha256-/PHTATJ/YavLh5SrhJ3nd7WScttUYsTU5wOVa2ibPeY="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Relational",
-    "version": "10.0.12",
-    "hash": "sha256-mTqJgn7ceg0204YefpZa9PNFcX8CFUhB/D807gh8V5I="
+    "version": "10.0.14",
+    "hash": "sha256-Ra56SY6M7ANJtS07ND72T4rQRWgEEkIJdD9Oow4YY70="
   },
   {
     "pname": "Microsoft.EntityFrameworkCore.Relational",
@@ -391,8 +401,8 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyModel",
-    "version": "10.0.12",
-    "hash": "sha256-tHviUAsJyfG4vHsZPqqnpRXoIYsN+1pDsD9Fss6zF/8="
+    "version": "10.0.14",
+    "hash": "sha256-2O39+CABDxPH3+nlb4+6eMuubsQabp/y1UV/Eia95iE="
   },
   {
     "pname": "Microsoft.Extensions.FileProviders.Abstractions",
@@ -496,8 +506,8 @@
   },
   {
     "pname": "MimeKit",
-    "version": "4.18.1",
-    "hash": "sha256-W15tP12RW7aPyzlHD0eJ+5TDwggQkjZ3Hih+qDyyQYs="
+    "version": "4.18.2",
+    "hash": "sha256-AGBgvj6gFnh8UdBAA5WXJMIB9Tj6Akc0h6I9lGo5IM8="
   },
   {
     "pname": "Mono.TextTemplating",
@@ -511,18 +521,13 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "10.0.14",
-    "hash": "sha256-HtMOQQ8O5YGcint08JbbptlNDAG8S4RuY7ngW9zF4ZU="
-  },
-  {
-    "pname": "NBitcoin",
-    "version": "10.0.15",
-    "hash": "sha256-Clrc42hzcWJ2dY/c9T6n4X4tKtJCwkUCqso1O7DEPdI="
+    "version": "10.0.17",
+    "hash": "sha256-aUmn6R+diAhVFAA/cmuBIxI++tYPrsX7q4lEei6ikoI="
   },
   {
     "pname": "NBitcoin.Altcoins",
-    "version": "6.0.9",
-    "hash": "sha256-4diSOFjJzbALFCOZCkg6qQtk3898BWaL3gC7JvvA0V0="
+    "version": "6.0.11",
+    "hash": "sha256-NKQypNarm9nE3sU3eXJiMR5OHb+i1I71w3VhsjUcETY="
   },
   {
     "pname": "NBitpayClient",
@@ -531,8 +536,8 @@
   },
   {
     "pname": "NBXplorer.Client",
-    "version": "5.0.11",
-    "hash": "sha256-cxXGB+AgshzmFvA63srMKkpoPFRxrlZG8ZwmMvxUnbY="
+    "version": "5.0.12",
+    "hash": "sha256-SS687mU+qfWCEnGtif4RTur77V/cfvn6nrRiSx2v0cg="
   },
   {
     "pname": "NETStandard.Library",
@@ -611,8 +616,8 @@
   },
   {
     "pname": "QRCoder",
-    "version": "1.8.0",
-    "hash": "sha256-UvOeFFxUZ/bddmDs6IamiYGDIfgxybE/CSpPyy5DMxI="
+    "version": "1.8.1",
+    "hash": "sha256-0/5cgMdCtqLvijFzTAZgDi1nSAapfzb0r5ew0ocd4wk="
   },
   {
     "pname": "runtime.any.System.Collections",
@@ -916,8 +921,13 @@
   },
   {
     "pname": "System.Security.Cryptography.Pkcs",
-    "version": "10.0.0",
-    "hash": "sha256-d3sLG+LZ3+N/h/6gdJcVKOgbBO6wYb66NfXalAEDqnE="
+    "version": "10.0.13",
+    "hash": "sha256-VO0kV46tNLW1DSWQhCQ0MvEXM+J1S4sZbnmdNBjTBKc="
+  },
+  {
+    "pname": "System.Security.Cryptography.Pkcs",
+    "version": "10.0.14",
+    "hash": "sha256-k1RCkYhTIV19QLXvWUCnZKQ4f0+YVK4nAJLjSSxQ2aI="
   },
   {
     "pname": "System.Security.Cryptography.ProtectedData",
