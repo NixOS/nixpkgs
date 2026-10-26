@@ -10,9 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anki-mac-helper";
-  version = "0.1.1";
-
-  inherit (anki) src;
+  inherit (anki) version src;
   pyproject = true;
 
   sourceRoot = "${finalAttrs.src.name}/qt/mac";
