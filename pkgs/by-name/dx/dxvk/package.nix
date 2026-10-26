@@ -1,7 +1,6 @@
 {
   lib,
   stdenvNoCC,
-  overrideCC,
   pkgsCross,
   bash,
 }:
@@ -9,18 +8,13 @@
 stdenvNoCC.mkDerivation (
   finalAttrs:
   let
-    useWin32ThreadModel =
-      stdenv:
-      overrideCC stdenv (
-        stdenv.cc.override (old: {
-          cc = old.cc.override {
-            threadsCross = null;
-          };
-        })
-      );
+    # No threading library apart from the libc, which on MinGW means the
+    # `win32` model. The compiler is built for the package set it targets, so
+    # this has to be an overlay rather than an override of one package.
+    useWin32ThreadModel = pkgs: (pkgs.appendOverlays [ (final: prev: { threads = null; }) ]).stdenv;
 
-    mingw32Stdenv = useWin32ThreadModel pkgsCross.mingw32.stdenv;
-    mingwW64Stdenv = useWin32ThreadModel pkgsCross.mingwW64.stdenv;
+    mingw32Stdenv = useWin32ThreadModel pkgsCross.mingw32;
+    mingwW64Stdenv = useWin32ThreadModel pkgsCross.mingwW64;
 
     dxvk32 =
       if stdenvNoCC.hostPlatform.isDarwin then
