@@ -116,6 +116,8 @@ in
 
     in
     {
+      users.groups.openvswitch = { };
+
       assertions = [
         {
           assertion = !(builtins.hasAttr markerKey cfg.externalIds);
@@ -138,6 +140,7 @@ in
         socketConfig = {
           ListenStream = "${runDir}/db.sock";
           Service = "ovsdb.service";
+          SocketGroup = "openvswitch";
           SocketMode = "0770";
         };
       };
@@ -230,6 +233,9 @@ in
         after = [ "ovsdb.socket" ];
         path = [ cfg.package ];
         serviceConfig = {
+          Group = "openvswitch";
+          # Preserve group write access when OVS binds its Unix sockets.
+          UMask = "0007";
           ExecStart = ''
             ${cfg.package}/bin/ovs-vswitchd \
             --pidfile=/run/openvswitch/ovs-vswitchd.pid \
