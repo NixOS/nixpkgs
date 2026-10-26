@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   accountsservice,
@@ -48,15 +47,25 @@
   xvfb-run,
 }:
 
+let
+  qtQmlPaths = lib.makeSearchPathOutput "bin" qtbase.qtQmlPrefix (
+    [
+      qtdeclarative
+      lomiri-ui-toolkit
+      lomiri-settings-components
+    ]
+    ++ lomiri-ui-toolkit.propagatedBuildInputs
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
     tag = finalAttrs.version;
-    hash = "sha256-tFdAWPoMJlkKXaWg4H/pv2VJGCutprcjL4CyBSRPXeI=";
+    hash = "sha256-pPczShoVwEoAga/tT6WQV5EjU+SWDraWOYFNKumDxoY=";
   };
 
   outputs = [
@@ -65,49 +74,58 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when version > 1.4.0
-    (fetchpatch {
-      name = "0001-lomiri-system-settings-Avoid-UB-when-VARIANT_ID-is-not-set.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/78b462aed589213e7a26064ec1bd27d201bb8f04.patch";
-      hash = "sha256-Xb6x/AlL+m8qD29bHeiU20Je2GeHzybcUprPLQuh8fk=";
-    })
-
     ./2000-Support-wrapping-for-Nixpkgs.patch
   ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail \
+        "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" \
+        "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   ''
   # Port from lomiri-keyboard to maliit-keyboard
   + ''
-    substituteInPlace plugins/language/{PageComponent,SpellChecking,ThemeValues}.qml plugins/language/onscreenkeyboard-plugin.cpp plugins/sound/PageComponent.qml \
-      --replace-fail 'com.lomiri.keyboard.maliit' 'org.maliit.keyboard.maliit'
+    substituteInPlace \
+      plugins/language/{PageComponent,SpellChecking,ThemeValues}.qml \
+      plugins/language/onscreenkeyboard-plugin.cpp \
+      plugins/sound/PageComponent.qml \
+      --replace-fail \
+        'com.lomiri.keyboard.maliit' 'org.maliit.keyboard.maliit'
   ''
   # Gets list of available localisations from current system, but later drops any language that doesn't cover LSS
   # So just give it its own prefix
   + ''
     substituteInPlace plugins/language/language-plugin.cpp \
-      --replace-fail '/usr/share/locale' '${placeholder "out"}/share/locale'
+      --replace-fail \
+        '/usr/share/locale' \
+        '${placeholder "out"}/share/locale'
   ''
   # Decide which entries should be visible based on the current system
   + ''
     substituteInPlace plugins/*/*.settings \
-      --replace-warn '/etc' '/run/current-system/sw/etc'
+      --replace-warn \
+        '/etc' \
+        '/run/current-system/sw/etc'
   ''
   # Don't use absolute paths in desktop file
   + ''
     substituteInPlace lomiri-system-settings.desktop.in.in \
-      --replace-fail 'Icon=@SETTINGS_SHARE_DIR@/system-settings.svg' 'Icon=lomiri-system-settings' \
-      --replace-fail 'X-Lomiri-Splash-Image=@SETTINGS_SHARE_DIR@/system-settings-app-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-system-settings.svg'
+      --replace-fail \
+        'Icon=@SETTINGS_SHARE_DIR@/system-settings.svg' \
+        'Icon=lomiri-system-settings' \
+      --replace-fail \
+        'X-Lomiri-Splash-Image=@SETTINGS_SHARE_DIR@/system-settings-app-splash.svg' \
+        'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-system-settings.svg'
   ''
-  # https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/547
-  # Remove when version > 1.4.0
+  # Include our QML2_IMPORT_PATH
   + ''
-    substituteInPlace plugins/printing/CMakeLists.txt \
-      --replace-fail 'GLIB_LD_FLAGS' 'GLIB_LDFLAGS'
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail \
+        'QML2_IMPORT_PATH=''${dir}:''${CMAKE_BINARY_DIR}/plugins:''${CMAKE_BINARY_DIR}/tests/mocks' \
+        'QML2_IMPORT_PATH=''${dir}:''${CMAKE_BINARY_DIR}/plugins:''${CMAKE_BINARY_DIR}/tests/mocks:${qtQmlPaths}'
   '';
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -170,9 +188,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_LIBDEVICEINFO" true)
-    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "LOMIRI_KEYBOARD_PLUGIN_PATH" "${lib.getLib maliit-keyboard}/lib/maliit/keyboard2/languages")
+    (lib.strings.cmakeBool "ENABLE_LIBDEVICEINFO" true)
+    (lib.strings.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.strings.cmakeFeature "LOMIRI_KEYBOARD_PLUGIN_PATH" "${lib.getLib maliit-keyboard}/lib/maliit/keyboard2/languages")
   ];
 
   # The linking for this normally ignores missing symbols, which is inconvenient for figuring out why subpages may be
@@ -184,18 +202,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Parallelism breaks D-Bus tests
   enableParallelChecking = false;
 
+  # Not all tests use the wrapper that sets QML2_IMPORT_PATH, so need to export it here still
   preCheck = ''
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${
-      lib.makeSearchPathOutput "bin" qtbase.qtQmlPrefix (
-        [
-          qtdeclarative
-          lomiri-ui-toolkit
-          lomiri-settings-components
-        ]
-        ++ lomiri-ui-toolkit.propagatedBuildInputs
-      )
-    }
+    export QML2_IMPORT_PATH=${qtQmlPaths}
   '';
 
   postInstall = ''

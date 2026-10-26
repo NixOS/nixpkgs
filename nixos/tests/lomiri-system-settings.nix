@@ -64,54 +64,54 @@
         {
           name = "appearance";
           type = "internal";
-          element = "Background image|blur effects";
+          element = "Global theme|dark mode|Visual effects|blur effects|Background image";
         }
         {
           name = "desktop";
           type = "internal";
-          element = "workspaces|Icon size";
+          element = "workspaces|Icon size|Side stage|Indicator menu";
         }
         {
           name = "sound";
           type = "internal";
-          element = "Silent Mode|Message sound";
+          element = "Silent Mode|Message sound|Vibrate|Calendar reminder sound|Calendar sound";
         }
         {
           name = "language";
           type = "internal";
-          element = "Display language|External keyboard";
+          element = "Display language|External keyboard|Spell checking|Auto correction|Word suggestions";
         }
         {
           name = "notification";
           type = "internal";
-          element = "Apps that notify";
+          element = "alert you|notification bubbles|Apps that notify";
         }
         {
           name = "gestures";
           type = "internal";
-          element = "Edge drag";
+          element = "Edge drag|Screenshot editor|editing screenshots";
         }
 
         # System
         {
           name = "printing";
           type = "internal";
-          element = "Configured printers|no printers configured";
-        }
-        {
-          name = "mouse";
-          type = "internal";
-          element = "Cursor speed|Wheel scrolling speed";
+          element = "Configured printers|pdf";
         }
         {
           name = "timedate";
           type = "internal";
-          element = "Time zone|Set the time and date";
+          element = "Set the time and date|Time zone|week numbers";
+        }
+        {
+          name = "mouse";
+          type = "internal";
+          element = "Cursor speed|Wheel scrolling speed|Primary button";
         }
         {
           name = "security-privacy";
           type = "internal";
-          element = "Locking|unlocking|permissions";
+          element = "Locking|unlocking|Location|permissions";
         }
       ];
     in
