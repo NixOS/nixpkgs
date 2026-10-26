@@ -58,7 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Save a copy of persistenced for mounting in containers
     mkdir $out/origBin
     cp $out/{bin,origBin}/nvidia-persistenced
-    patchelf --set-interpreter /lib64/ld-linux-x86-64.so.2 $out/origBin/nvidia-persistenced
+    patchelf --set-interpreter ${
+      if stdenv.hostPlatform.isx86_64 then
+        "/lib64/ld-linux-x86-64.so.2"
+      else if stdenv.hostPlatform.isAarch64 then
+        "/lib/ld-linux-aarch64.so.1"
+      else
+        throw "nvidia-persistenced: no container loader for ${stdenv.hostPlatform.system}"
+    } $out/origBin/nvidia-persistenced
 
     addDriverRunpath $out/bin/nvidia-persistenced
   '';
