@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     tzdata
   ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Vertical Blanking Interval (VBI) utilities";
