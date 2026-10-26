@@ -15,7 +15,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "jellyfin";
-  version = "12.2"; # ensure that jellyfin-web has matching version
+  version = "12.2";
 
   src = fetchFromGitHub {
     owner = "jellyfin";

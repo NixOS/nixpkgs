@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildNpmPackage,
   nodejs_24,
-  nix-update-script,
   pkg-config,
   xcbuild,
   pango,
@@ -16,6 +15,7 @@ buildNpmPackage (finalAttrs: {
   version = "12.2";
 
   src =
+    # updated together with jellyfin by its update script
     assert finalAttrs.version == jellyfin.version;
     fetchFromGitHub {
       owner = "jellyfin";
@@ -57,8 +57,6 @@ buildNpmPackage (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Web Client for Jellyfin";
