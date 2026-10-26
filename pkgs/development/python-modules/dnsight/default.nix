@@ -45,6 +45,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    click
     cryptography
     dnspython
     httpx
@@ -55,7 +56,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    click
     hypothesis
     pytest-asyncio
     pytest-cov-stub
