@@ -129,7 +129,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
         shaderc
       ];
     in
-    [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
+    [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      libs
+    ];
 
   dontWrapGApps = true;
 

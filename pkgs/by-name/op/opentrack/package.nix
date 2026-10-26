@@ -139,10 +139,15 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
   qtWrapperArgs =
     lib.optionals isLinux [
-      "--prefix PATH : ${lib.makeBinPath [ v4l-utils ]}"
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [ v4l-utils ])
     ]
     ++ lib.optionals isDarwin [
-      "--set DYLD_LIBRARY_PATH ${placeholder "out"}/Library"
+      "--set"
+      "DYLD_LIBRARY_PATH"
+      "${placeholder "out"}/Library"
     ];
   preFixup =
     lib.optionalString isLinux ''

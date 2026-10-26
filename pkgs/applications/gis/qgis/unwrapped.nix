@@ -206,7 +206,9 @@ stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
+    "--set"
+    "QT_QPA_PLATFORM_PLUGIN_PATH"
+    "${qtbase}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
   dontWrapGApps = true; # wrapper params passed below

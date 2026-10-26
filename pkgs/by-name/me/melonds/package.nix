@@ -67,15 +67,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      "--prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libpcap
-          wayland
-        ]
-      }"
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [
+        libpcap
+        wayland
+      ])
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+      "--prefix"
+      "DYLD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [ libpcap ])
     ];
 
   passthru = {

@@ -114,21 +114,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Add runtime dependencies to PATH for all wrapped binaries
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        bash
-        binutils
-        coreutils
-        desktop-file-utils
-        erofs-utils
-        fuse3
-        fuse-overlayfs
-        glib
-        gnutar
-        shared-mime-info
-        linyaps-box
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bash
+      binutils
+      coreutils
+      desktop-file-utils
+      erofs-utils
+      fuse3
+      fuse-overlayfs
+      glib
+      gnutar
+      shared-mime-info
+      linyaps-box
+    ])
   ];
 
   # Note: ll-init must be statically linked and should not be wrapped

@@ -48,7 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Ricochet Refresh expects the Tor executable to be available in PATH.
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ tor ]}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ tor ])
+  ];
 
   enableParallelBuilding = true;
 

@@ -97,8 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--unset QT_QPA_PLATFORMTHEME"
-    "--unset QT_STYLE_OVERRIDE"
+    "--unset"
+    "QT_QPA_PLATFORMTHEME"
+
+    "--unset"
+    "QT_STYLE_OVERRIDE"
   ];
 
   dontWrapGApps = true;

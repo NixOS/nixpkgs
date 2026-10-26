@@ -89,7 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${vulkan-loader}/lib"
   ];
 
   pythonPath = [
