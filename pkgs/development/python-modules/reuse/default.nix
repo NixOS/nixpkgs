@@ -8,6 +8,7 @@
   myst-parser,
   pbr,
   sphinxcontrib-apidoc,
+  python,
 
   # dependencies
   attrs,
@@ -40,8 +41,13 @@ buildPythonPackage (finalAttrs: {
   outputs = [
     "out"
     "doc"
-    "man"
+    # "man"
   ];
+
+  postPatch = ''
+    substituteInPlace docs/conf.py \
+      --replace-fail '("https://docs.python.org/3", None)' "(\"https://docs.python.org/3\", \"$(ls ${python.doc}/share/doc/python*/html/objects.inv)\")"
+  '';
 
   build-system = [
     poetry-core
