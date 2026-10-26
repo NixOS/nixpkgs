@@ -8,7 +8,7 @@
   util-linux,
   pkg-config,
   boost,
-  pcre,
+  pcre2,
   withStatic ? false, # build only shared libs by default, build static+shared if true
 }:
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = lib.optionalString withStatic (
     ''
       mkdir -p pcre
-      tar xvf ${pcre.src} --strip-components 1 -C pcre
+      tar xvf ${pcre2.src} --strip-components 1 -C pcre
     ''
     # - CMake 4 dropped support of versions lower than 3.5, versions lower than 3.10 are deprecated.
     #   https://github.com/NixOS/nixpkgs/issues/445447
@@ -115,7 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    broken = stdenv.hostPlatform.isStatic; # A minimum of SSSE3 compiler support is required
+    broken =
+      withStatic
+      # broken due to pcre v1 removal
+      || stdenv.hostPlatform.isStatic; # A minimum of SSSE3 compiler support is required
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.

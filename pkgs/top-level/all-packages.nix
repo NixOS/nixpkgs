@@ -4019,7 +4019,7 @@ with pkgs;
       libcxx ? null,
       extraPackages ? lib.optional (
         cc.isGNU or false && stdenv.targetPlatform.isMinGW
-      ) targetPackages.threads.package,
+      ) targetPackages.threads,
       nixSupport ? { },
       ...
     }@extraArgs:
@@ -5511,14 +5511,23 @@ with pkgs;
     else
       throw "Unknown libc ${libc}";
 
+  # An optional threading library to be used by GCC's runtime libraries.
+  #
+  # When non-null, this package will be used for that purpose. When null, libc
+  # will be used instead.
+  #
+  # The package (like libc, for the sake of the fallback case when this is
+  # null) declares its model as `passthru.threadModel`.
+  #
+  # On MinGW the libc offers only `win32`; `windows.mcfgthreads` gives `mcf`,
+  # and `windows.pthreads` would give `posix`. `windows.mcfgthreads` is our
+  # default there because it is both fast / minimally diverged from native and
+  # featureful.
   threads =
-    lib.optionalAttrs (stdenv.hostPlatform.isMinGW && !(stdenv.hostPlatform.useLLVM or false))
-      {
-        # other possible values: win32 or posix
-        model = "mcf";
-        # For win32 or posix set this to null
-        package = windows.mcfgthreads;
-      };
+    if stdenv.hostPlatform.isMinGW && !(stdenv.hostPlatform.useLLVM or false) then
+      windows.mcfgthreads
+    else
+      null;
 
   # Only supported on Linux and only on glibc
   glibcLocales =

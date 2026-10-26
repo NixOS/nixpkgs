@@ -300,6 +300,7 @@ mapAliases {
   amber-theme = throw "'amber-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   amdvlk = throw "'amdvlk' has been removed since it was deprecated by AMD. Its replacement, RADV, is enabled by default."; # Added 2025-09-20
   ams-lv2 = throw "'ams-lv2' has been removed due to being archived upstream."; # Added 2025-10-26
+  analyze-build = throw "'analyze-build' hase been removed a a stand-alone binary, please use 'clang-tools' instead."; # Added 2026-10-24
   ananicy = throw "'ananicy' has been removed due to being archived upstream. Use ananicy-cpp instead."; # Added 2026-07-14
   android-udev-rules = throw "'android-udev-rules' has been removed due to being superseded by built-in systemd uaccess rules."; # Added 2025-10-21
   androidndkPkgs_21 = throw "androidndkPkgs_21 has been removed, as it is EOL"; # Added 2025-08-09
@@ -856,6 +857,7 @@ mapAliases {
   expidus = throw "'expidus' has been removed from nixpkgs due to it not being maintained"; # Added 2026-07-28
   exrtools = throw "'exrtools' has been removed as it was unmaintained upstream since 2004 and depended on the removed libpng12 package"; # Added 2026-10-23
   ext4fuse = throw "'ext4fuse' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # added 2026-08-12
+  f1viewer = throw "'f1viewer' has been removed because it has been archived upstream on 2023-02-10"; # Added 2026-10-25
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # Added 2025-07-18
   Fabric = fabric; # Added 2026-06-29
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
@@ -1208,6 +1210,7 @@ mapAliases {
   gxneur = throw "'gxneur' has been removed due to lack of maintenance and reliance on gnome2 and 2to3."; # Added 2025-08-17
   gyroflow-bin = warnAlias "'gyroflow-bin' has been replaced by 'gyroflow'" gyroflow; # Added 2026-08-02
   hacpack = throw "hacpack has been removed from nixpkgs, as it has been taken down upstream"; # Added 2025-09-26
+  hamsket = throw "hamsket is no longer actively maintained by upstream"; # Added 2026-10-26
   harmony-music = throw "harmony-music is unmaintained and has been removed"; # Added 2025-08-26
   hasmail = throw "'hasmail' has been removed, as the GTK 2 project is no longer maintained upstream."; # Added 2026-05-22
   haxe_4_0 = throw "'haxe_4_0' has been removed as it reached its end of life. Migrate to 'haxe_4_3'.";
@@ -1302,6 +1305,7 @@ mapAliases {
   jdk24 = throw "OpenJDK 24 was removed as it has reached its end of life"; # Added 2025-10-04
   jdk24_headless = throw "OpenJDK 24 was removed as it has reached its end of life"; # Added 2025-10-04
   jellyfin-media-player = jellyfin-desktop; # Added 2025-12-14
+  jellyfin-rpc = throw "'jellyfin-rpc' has been removed because it has been archived upstream on 2026-09-25"; # Added 2026-10-24
   jellyseerr = warnAlias "'jellyseerr' has been renamed to 'seerr'" seerr; # Added 2026-03-17
   jesec-rtorrent = throw "'jesec-rtorrent' has been removed due to lack of maintenance upstream."; # Added 2025-11-20
   jetty_11 = throw "'jetty_11' has been removed as it has reached end of life. Please migrate to 'jetty_12'."; # Added 2026-08-04
@@ -1351,6 +1355,7 @@ mapAliases {
   khd = throw "'khd' has been removed as it has been pulled upstream"; # Added 2025-12-18
   khoj = throw "khoj has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   kilocode-cli = warnAlias "'kilocode-cli' has been renamed to/replaced by 'kilo'" kilo; # Added 2026-04-30
+  kind2 = throw "'kind2' has been removed since it is no longer maintained upstream. Consider using 'bend' instead"; # Added 2026-10-22
   kio-fuse = throw "'kio-fuse' has been removed, as Plasma 5 has reached end of life. Use 'kdePackages.kio-fuse' for Plasma 6."; # Added 2026-05-01
   kmplayer = throw "'kmplayer' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   knot-resolver = warnAlias "'knot-resolver' is currently aliased to 'knot-resolver_5'. This will change with the knot-resolver 6 being declared as stable. Please explicitly use the 'knot-resolver_5' or 'knot-resolver_6' package until then." knot-resolver_5; # Added 2025-11-30
@@ -1397,6 +1402,7 @@ mapAliases {
   layan-gtk-theme = throw "'layan-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   layan-kde = throw "'layan-kde' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   lazarus-qt = throw "'lazarus-qt' has been renamed to/replaced by 'lazarus-qt5'"; # Converted to throw 2025-10-27
+  ldash = throw "'ldash' has been removed due to lack of maintenance"; # Add 2026-10-26
   leaf = throw "'leaf' has been removed as it is unmaintained. Consider using 'fastfetch' instead"; # Added 2026-04-24
   leafnode = throw "'leafnode' has been removed as it is unmaintained and depends on EOL library PCRE. Consider using leafnode1 instead"; # Added 2026-07-30
   ledger-agent = throw "ledger-agent has been removed because upstream dropped Ledger support"; # Added 2026-03-11
@@ -2095,6 +2101,7 @@ mapAliases {
   pcmciaUtils = warnAlias "'pcmciaUtils' has been renamed to 'pcmciautils'" pcmciautils; # Added 2026-02-12
   pcp = throw "'pcp' has been removed because the upstream repo was archived and it hasn't been updated since 2021"; # Added 2025-09-23
   pcre16 = throw "'pcre16' has been removed because it is obsolete. Consider migrating to 'pcre2' instead."; # Added 2025-05-29
+  pcre = throw "'pcre' has been removed because it is end of life and was not updated upstream since 2015"; # Added 2026-10-25
   pcre-cpp = throw "'pcre-cpp' has been removed because it is obsolete. Consider migrating to 'pcre2' instead."; # Added 2026-10-20
   pcsctools = throw "'pcsctools' has been renamed to/replaced by 'pcsc-tools'"; # Converted to throw 2025-10-27
   pcsx2-bin = throw "pcsx2-bin has been removed as it only supported x86_64-darwin"; # Added 2026-06-26
@@ -2697,6 +2704,7 @@ mapAliases {
   tor-browser-bundle-bin = throw "'tor-browser-bundle-bin' has been renamed to/replaced by 'tor-browser'"; # Converted to throw 2025-10-27
   tora = throw "'tora' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   torrent7z = throw "torrent7z is unmaintained and used a p7zip version from 2009. Consider using p7zip with the arguments to remove entropy instead"; # added 2026-05-09
+  tpacpi-bat = throw "'tpacpi-bat' has been removed because it was superseded by the thinkpad_acpi kernel module."; # Added 2026-10-22
   tpm-luks = throw "'tpm-luks' has been removed due to a lack of maintenance"; # Added 2026-07-27
   tracker = throw "'tracker' has been renamed to/replaced by 'tinysparql'"; # Converted to throw 2025-10-27
   tracker-miners = throw "'tracker-miners' has been renamed to/replaced by 'localsearch'"; # Converted to throw 2025-10-27

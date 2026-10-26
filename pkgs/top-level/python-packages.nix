@@ -2869,6 +2869,8 @@ self: super: with self; {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
+  calendaring-config = callPackage ../development/python-modules/calendaring-config { };
+
   callee = callPackage ../development/python-modules/callee { };
 
   calmjs = callPackage ../development/python-modules/calmjs { };

@@ -9,7 +9,7 @@
   file,
   linuxHeaders,
   openssl,
-  pcre,
+  pcre2,
   perlPackages,
   python3,
   # recommended dependencies
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    pcre
+    pcre2
     perlPackages.perl
   ]
   ++ lib.optional withBrotli brotli
@@ -182,6 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = { inherit (nixosTests) trafficserver; };
 
   meta = {
+    broken = true; # stuck on legacy pcre
     homepage = "https://trafficserver.apache.org";
     changelog = "https://raw.githubusercontent.com/apache/trafficserver/${finalAttrs.version}/CHANGELOG-${finalAttrs.version}";
     description = "Fast, scalable, and extensible HTTP caching proxy server";
