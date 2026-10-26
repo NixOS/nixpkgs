@@ -17766,6 +17766,20 @@ self: super: with self; {
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
 
+  pyzfs_2_3 = toPythonModule (
+    pkgs.zfs_2_3.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
+
+  pyzfs_2_4 = toPythonModule (
+    pkgs.zfs_2_4.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
+
   pyzhuyin = callPackage ../development/python-modules/pyzhuyin { };
 
   pyzipper = callPackage ../development/python-modules/pyzipper { };
