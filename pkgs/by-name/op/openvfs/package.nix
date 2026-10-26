@@ -2,6 +2,7 @@
   lib,
   stdenv,
   cmake,
+  ctestCheckHook,
   fetchFromGitHub,
   fuse3,
   kdePackages,
@@ -10,7 +11,7 @@
   qt6,
 }:
 #
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvfs";
   version = "0-unstable-2026-10-21";
 
@@ -33,6 +34,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [ ctestCheckHook ];
 
   buildInputs = [
     fuse3
@@ -60,4 +68,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.linux;
   };
-}
+})
