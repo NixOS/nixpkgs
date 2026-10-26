@@ -19365,6 +19365,8 @@ self: super: with self; {
 
   smpp-pdu = callPackage ../development/python-modules/smpp-pdu { };
 
+  smpp-twisted3 = callPackage ../development/python-modules/smpp-twisted3 { };
+
   smpplib = callPackage ../development/python-modules/smpplib { };
 
   smtpdfix = callPackage ../development/python-modules/smtpdfix { };
