@@ -672,7 +672,6 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   cmakeFlags = [
   ]
   ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "DEEPGEMM_SRC_DIR" (lib.getDev deepgemm).outPath)
     (lib.cmakeFeature "DEEPSELECT_SRC_DIR" (lib.getDev deepselect).outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" (lib.getDev cutlass).outPath)
     (lib.cmakeFeature "FLASH_KDA_SRC_DIR" (lib.getDev flashkda).outPath)
@@ -723,6 +722,11 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # See: https://github.com/vllm-project/vllm/blob/v0.7.1/setup.py#L75-L109
     # There's also NVCC_THREADS but Nix/Nixpkgs doesn't really have this concept.
     export MAX_JOBS="$NIX_BUILD_CORES"
+  ''
+  # DeepGEMM is built in-place, so need to copy it into src
+  + lib.optionalString cudaSupport ''
+    cp -r --no-preserve=mode ${(lib.getDev deepgemm).outPath} deepgemm-src
+    export DEEPGEMM_SRC_DIR=deepgemm-src
   '';
 
   pythonImportsCheck = [ "vllm" ];
