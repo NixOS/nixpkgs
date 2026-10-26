@@ -2193,6 +2193,8 @@ self: super: with self; {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  bacpypes3 = callPackage ../development/python-modules/bacpypes3 { };
+
   badauth = callPackage ../development/python-modules/badauth { };
 
   badges = callPackage ../development/python-modules/badges { };
