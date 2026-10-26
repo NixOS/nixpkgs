@@ -50,8 +50,6 @@
   testScript =
     { nodes, ... }: # py
     ''
-      from datetime import timedelta
-
       # Wait for everything to be ready.
       server.start()
       server.wait_for_unit("multi-user.target")
@@ -80,7 +78,7 @@
         """)
 
       # Verify there is a ban and the port is unreachable from the client.
-      server.sleep(duration=timedelta(seconds=2))
+      server.sleep(2)
       output = server.succeed("reaction show")
       print(output)
       assert client_addr in output, f"client did not get banned, {client_addr}"

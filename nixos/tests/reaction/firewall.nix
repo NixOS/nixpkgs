@@ -30,8 +30,6 @@
 
   testScript = # py
     ''
-      from datetime import timedelta
-
       start_all()
 
       machine.wait_for_unit("multi-user.target")
@@ -40,7 +38,7 @@
 
       def check_reaction_in_iptables(context = ""):
         with subtest("check reaction chain exists"):
-          machine.sleep(duration=timedelta(seconds=3))
+          machine.sleep(3)
           output = machine.succeed("iptables -nvL")
           assert "reaction" in output, f"error: reaction chain missing in iptables, {context}"
 
@@ -62,7 +60,7 @@
 
       with subtest("stop reaction manually and verify chains are cleaned up"):
         machine.succeed("systemctl stop reaction")
-        machine.sleep(duration=timedelta(seconds=3))
+        machine.sleep(3)
         output = machine.succeed("iptables -nvL")
         assert "reaction" not in output, "reaction chain still exists after the service was stopped"
 
