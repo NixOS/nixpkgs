@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DgRPC_ZLIB_PROVIDER=package"
     "-DgRPC_CARES_PROVIDER=package"
