@@ -38,6 +38,10 @@ in
         };
       };
       environment.etc."stirling-test.pdf".source = fixture;
+      environment.etc."stirling-test.csv".text = ''
+        Item,Amount
+        OFFICE WORDS,42
+      '';
       environment.systemPackages = [
         pkgs.curl
         pkgs.poppler-utils
@@ -75,5 +79,13 @@ in
     )
     machine.succeed("pdfinfo /tmp/image-redacted.pdf | grep -q 'Pages:.*1'")
     machine.succeed("! pdftotext /tmp/image-redacted.pdf - | grep -q 'REMOVE ME 12345'")
+
+    # Office documents are converted by LibreOffice running inside the
+    # service's sandbox.
+    machine.succeed(
+        "curl -fsS -X POST http://127.0.0.1:${toString port}/api/v1/convert/file/pdf "
+        "-F fileInput=@/etc/stirling-test.csv -o /tmp/office.pdf"
+    )
+    machine.succeed("pdftotext /tmp/office.pdf - | grep -q 'OFFICE WORDS'")
   '';
 }
