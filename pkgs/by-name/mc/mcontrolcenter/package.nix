@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 mcontrolcenter $out/bin/mcontrolcenter
     install -Dm755 helper/mcontrolcenter-helper $out/libexec/mcontrolcenter-helper
     install -Dm644 ../resources/mcontrolcenter.svg $out/share/icons/hicolor/scalable/apps/mcontrolcenter.svg
+    install -Dm644 ../resources/mcontrolcenter.appdata.xml -t $out/share/metainfo
     install -Dm644 ../src/helper/mcontrolcenter-helper.conf $out/share/dbus-1/system.d/mcontrolcenter-helper.conf
     install -Dm644 ../src/helper/mcontrolcenter.helper.service $out/share/dbus-1/system-services/mcontrolcenter.helper.service
     runHook postInstall
