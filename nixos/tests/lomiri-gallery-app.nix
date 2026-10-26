@@ -19,6 +19,14 @@ let
 
       let
         format = lib.lists.last (lib.strings.splitString "." file);
+        burgerMenuCategory = lib.lists.head (lib.strings.splitString "/" file);
+        burgerMenuYCoord =
+          {
+            "Pictures" = "180";
+            "Videos" = "220";
+          }
+          .${burgerMenuCategory}
+            or (throw "nixosTests.lomiri-gallery-app.format-${format}: don't know at what Y coordinate the '${burgerMenuCategory} category is");
       in
 
       {
@@ -134,7 +142,7 @@ let
 
           with subtest("lomiri gallery finds files"):
               machine.succeed("lomiri-gallery-app >&2 &")
-              machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
+              machine.wait_for_console_text("media files loaded")
               machine.sleep(10)
               machine.send_key("alt-f10")
               machine.sleep(5)
@@ -142,7 +150,7 @@ let
 
               machine.succeed("xdotool mousemove 30 40 click 1") # burger menu for categories
               machine.sleep(2)
-              machine.succeed("xdotool mousemove 30 180 click 1") # photos
+              machine.succeed("xdotool mousemove 30 ${burgerMenuYCoord} click 1") # category for file
               machine.sleep(2)
               machine.screenshot("lomiri-gallery_photos")
 
@@ -240,7 +248,7 @@ in
 
         with subtest("lomiri gallery launches"):
             machine.succeed("lomiri-gallery-app >&2 &")
-            machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
+            machine.wait_for_console_text("media files loaded")
             machine.sleep(10)
             machine.send_key("alt-f10")
             machine.sleep(5)
@@ -254,7 +262,7 @@ in
 
         with subtest("lomiri gallery localisation works"):
             machine.succeed("env LANG=de_DE.UTF-8 lomiri-gallery-app >&2 &")
-            machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
+            machine.wait_for_console_text("media files loaded")
             machine.sleep(10)
             machine.send_key("alt-f10")
             machine.sleep(5)
