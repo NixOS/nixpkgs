@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qt5.qtbase ];
 
+  postInstall = ''
+    install -Dm644 ../assets/rclone-browser.appdata.xml $out/share/metainfo/org.kapitainsky.rclone_browser.metainfo.xml
+  '';
+
   meta = {
     changelog = "https://github.com/kapitainsky/RcloneBrowser/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/kapitainsky/RcloneBrowser";
