@@ -1,0 +1,12 @@
+--- a/dist/shaders/liquid-metal.js
++++ b/dist/shaders/liquid-metal.js
+@@ -69,4 +69,9 @@
+ float getImgFrame(vec2 uv, float th) {
++  // Modified by Wallshader Nix packaging: define the zero-width image frame.
++  // Use step to avoid equal-edge smoothstep.
++  if (th == 0.) {
++    return step(0., uv.x) * step(0., uv.y) * step(uv.x, 1.) * step(uv.y, 1.);
++  }
+   float frame = 1.;
+   frame *= smoothstep(0., th, uv.y);
+   frame *= 1.0 - smoothstep(1. - th, 1., uv.y);
