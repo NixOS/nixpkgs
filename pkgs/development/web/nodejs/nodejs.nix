@@ -135,19 +135,15 @@ let
 
   sharedLibDeps = {
     # TODO: remove this on staging and land with https://github.com/NixOS/nixpkgs/pull/576792
-    brotli =
-      if majorVersion == "24" then
-        brotli
-      else
-        brotli.overrideAttrs (old: {
-          patches = old.patches ++ [
-            # Fix for CVE-2026-111497
-            (fetchurl {
-              url = "https://github.com/google/brotli/commit/0ed4268a4401abcb4472096340477cf4af7d1a2b.patch?full_index=1";
-              hash = "sha256-1vliUJAAIj3vcGKVgim9CEV+XgMuftDR2U+3kLBUsfw=";
-            })
-          ];
-        });
+    brotli = brotli.overrideAttrs (old: {
+      patches = old.patches ++ [
+        # Fix for CVE-2026-111497
+        (fetchurl {
+          url = "https://github.com/google/brotli/commit/0ed4268a4401abcb4472096340477cf4af7d1a2b.patch?full_index=1";
+          hash = "sha256-1vliUJAAIj3vcGKVgim9CEV+XgMuftDR2U+3kLBUsfw=";
+        })
+      ];
+    });
 
     inherit
       libuv
@@ -158,7 +154,21 @@ let
       uvwasi
       zlib
       ;
-    cares = c-ares;
+    # TODO: remove when https://github.com/NixOS/nixpkgs/pull/576217 reaches master.
+    cares = c-ares.overrideAttrs (
+      finalAttrs: oldAttrs: {
+        version = "1.34.9";
+        src = fetchurl {
+          url = "https://github.com/c-ares/c-ares/releases/download/v${finalAttrs.version}/c-ares-${finalAttrs.version}.tar.gz";
+          hash = "sha256-k2S3ChLrWaBoMPtIjZNX+QEA3/DZiyPqNZOhg9Q+by8=";
+        };
+        meta = oldAttrs.meta // {
+          changelog = "https://c-ares.org/changelog.html#${
+            lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+          }";
+        };
+      }
+    );
     http-parser = llhttp;
   }
   // (lib.optionalAttrs useSharedAbseilAndHighway {
