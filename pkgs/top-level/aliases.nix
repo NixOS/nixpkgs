@@ -856,6 +856,7 @@ mapAliases {
   expidus = throw "'expidus' has been removed from nixpkgs due to it not being maintained"; # Added 2026-07-28
   exrtools = throw "'exrtools' has been removed as it was unmaintained upstream since 2004 and depended on the removed libpng12 package"; # Added 2026-10-23
   ext4fuse = throw "'ext4fuse' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # added 2026-08-12
+  f1viewer = throw "'f1viewer' has been removed because it has been archived upstream on 2023-02-10"; # Added 2026-10-25
   f3d_egl = warnAlias "'f3d' now build with egl support by default, so `f3d_egl` is deprecated, consider using 'f3d' instead." f3d; # Added 2025-07-18
   Fabric = fabric; # Added 2026-06-29
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
