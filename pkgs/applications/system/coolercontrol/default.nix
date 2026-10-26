@@ -24,7 +24,6 @@ let
     ];
     maintainers = with lib.maintainers; [
       codifryed
-      OPNA2608
     ];
   };
 
