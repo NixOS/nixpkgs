@@ -176,7 +176,7 @@ in
     };
 
     meta = {
-      description = "Firefox-based browser with vertical tabs and workspaces";
+      description = "Firefox-based browser with workspaces";
       homepage = "https://zen-browser.app/";
       changelog = "https://github.com/zen-browser/desktop/releases/tag/${version}";
       license = lib.licenses.mpl20;
