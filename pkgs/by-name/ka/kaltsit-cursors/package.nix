@@ -10,6 +10,9 @@ stdenvNoCC.mkDerivation {
   pname = "kaltsit-cursors";
   version = "1.0.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "JohnSmith-dink";
     repo = "kaltsit-cursors";
