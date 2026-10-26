@@ -126897,7 +126897,10 @@ self: {
       description = "Formats package descriptions";
       license = lib.meta.getLicenseFromSpdxId "MIT";
       mainProgram = "cabal-gild";
-      maintainers = [ lib.maintainers.turion ];
+      maintainers = [
+        lib.maintainers.tfausak
+        lib.maintainers.turion
+      ];
     }
   ) { };
 
@@ -126955,7 +126958,10 @@ self: {
       license = lib.meta.getLicenseFromSpdxId "MIT";
       hydraPlatforms = lib.platforms.none;
       mainProgram = "cabal-gild";
-      maintainers = [ lib.maintainers.turion ];
+      maintainers = [
+        lib.maintainers.tfausak
+        lib.maintainers.turion
+      ];
     }
   ) { };
 
