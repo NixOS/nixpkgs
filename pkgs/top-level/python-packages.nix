@@ -4404,6 +4404,8 @@ self: super: with self; {
 
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
+  dfir_ntfs = callPackage ../development/python-modules/dfir_ntfs { };
+
   dftd4 = callPackage ../by-name/df/dftd4/python.nix {
     inherit (pkgs) dftd4;
   };
