@@ -168,6 +168,7 @@ buildDotnetModule {
     maintainers = with lib.maintainers; [
       ramonacat
       karaolidis
+      connor-grady
     ];
     mainProgram = "Lidarr";
     # platforms inherited from dotnet-sdk.
