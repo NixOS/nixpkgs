@@ -29,7 +29,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "freud";
+  pname = "freud-analysis";
   version = "3.5.0";
   pyproject = true;
 
