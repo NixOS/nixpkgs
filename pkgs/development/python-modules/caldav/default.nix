@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  calendaring-config,
   dnspython,
   fetchFromGitHub,
   httpx,
@@ -8,7 +9,7 @@
   icalendar-searcher,
   lxml,
   manuel,
-  pytest9_0CheckHook,
+  pytestCheckHook,
   python,
   radicale,
   recurring-ical-events,
@@ -29,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caldav";
-  version = "3.4.0";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5wYmN3jKoL/AsfQPdJcud7hnIMH9RwJGvCP6dJtu3DQ=";
+    hash = "sha256-mRaWWR1/YkJ5+eRc/ylT/ntYzBJVpCyuBVHGzAYOB+I=";
   };
 
   build-system = [
@@ -45,6 +46,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    calendaring-config
     dnspython
     lxml
     niquests
@@ -61,7 +63,7 @@ buildPythonPackage (finalAttrs: {
     proxy-py
     pyfakefs
     pytest-asyncio
-    pytest9_0CheckHook
+    pytestCheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
     vobject
