@@ -10,33 +10,26 @@
   fixup-yarn-lock,
   nodejs,
   nixosTests,
-  # update script
-  writers,
-  python3Packages,
-  nix,
+  nix-update-script,
   prefetch-yarn-deps,
-  applyPatches,
 }:
 let
-  version = "3.1.0.4875";
-  # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
-  # the already patched lockfile to `fetchYarnDeps`.
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "Lidarr";
-      repo = "Lidarr";
-      tag = "v${version}";
-      hash = "sha256-RCJlToQw96U8seZaD/QCPL1Pn42yw5iXFWGJCHSHwQw=";
-    };
-    postPatch = ''
-      mv src/NuGet.config NuGet.Config
-    '';
-  };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
-buildDotnetModule {
+buildDotnetModule (finalAttrs: {
   pname = "lidarr";
-  inherit version src;
+  version = "3.1.0.4875";
+
+  src = fetchFromGitHub {
+    owner = "Lidarr";
+    repo = "Lidarr";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RCJlToQw96U8seZaD/QCPL1Pn42yw5iXFWGJCHSHwQw=";
+  };
+
+  postPatch = ''
+    mv src/NuGet.config NuGet.Config
+  '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -47,7 +40,7 @@ buildDotnetModule {
   ];
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-Jq2O7gvB+PKcz6uDBMg7ox6/Bu+pikXH6JGuLfKG5fI=";
   };
 
@@ -99,8 +92,8 @@ buildDotnetModule {
     "--property:EnableAnalyzers=false"
     "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
     # Override defaults in src/Directory.Build.props that use current time.
-    "--property:Copyright=Copyright 2014-2025 lidarr.audio (GNU General Public v3)"
-    "--property:AssemblyVersion=${version}"
+    "--property:Copyright=Copyright lidarr.audio (${finalAttrs.meta.license.fullName})"
+    "--property:AssemblyVersion=${finalAttrs.versionForDotnet}"
     "--property:AssemblyConfiguration=master"
     "--property:RuntimeIdentifier=${rid}"
   ];
@@ -141,29 +134,17 @@ buildDotnetModule {
   ];
 
   passthru = {
-    tests = {
-      inherit (nixosTests) lidarr;
-    };
+    tests = { inherit (nixosTests) lidarr; };
 
-    updateScript = writers.writePython3 "lidarr-updater" {
-      libraries = with python3Packages; [ requests ];
-      flakeIgnore = [ "E501" ];
-      makeWrapperArgs = [
-        "--prefix"
-        "PATH"
-        ":"
-        (lib.makeBinPath [
-          nix
-          prefetch-yarn-deps
-        ])
-      ];
-    } ./update.py;
+    updateScript = nix-update-script {
+      extraArgs = lib.cli.toCommandLineGNU { } { use-github-releases = true; };
+    };
   };
 
   meta = {
     description = "Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio";
-    changelog = "https://github.com/Lidarr/Lidarr/releases/tag/v${version}";
+    changelog = "https://github.com/Lidarr/Lidarr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       ramonacat
@@ -171,6 +152,11 @@ buildDotnetModule {
       connor-grady
     ];
     mainProgram = "Lidarr";
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+      fromSource
+    ];
     # platforms inherited from dotnet-sdk.
   };
-}
+})
