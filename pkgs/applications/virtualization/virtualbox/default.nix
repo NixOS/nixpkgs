@@ -43,6 +43,7 @@
   xz,
   yasm,
   glslang,
+  vulkan-loader,
   wrapGAppsHook3,
   nixosTests,
   # If open-watcom-bin is not passed, VirtualBox will fall back to use
@@ -398,6 +399,12 @@ stdenv.mkDerivation (finalAttrs: {
     + optionalString (!headless && !enableHardening) ''
       wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
     '';
+
+  postFixup = optionalString stdenv.hostPlatform.isLinux ''
+    # VBoxDxVk loads Vulkan dynamically; add its path after RPATH shrinking.
+    patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} \
+      "$out/libexec/virtualbox/VBoxDxVk.so"
+  '';
 
   passthru = {
     inherit extensionPack; # for inclusion in profile to prevent gc
