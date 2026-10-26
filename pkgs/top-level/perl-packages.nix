@@ -16862,10 +16862,10 @@ with self;
 
   HTTPBody = buildPerlPackage {
     pname = "HTTP-Body";
-    version = "1.23";
+    version = "1.24_01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.23.tar.gz";
-      hash = "sha256-7OmB9BYWNaL7piFdAlcZXlOMTyNDhFMFAd/bahvY1jY=";
+      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.24_01.tar.gz";
+      hash = "sha256-lvoSm0qQMhz7N1QZcyPgEz3ekYUCkQt2R20HFn3FO2o=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
