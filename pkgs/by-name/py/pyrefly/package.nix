@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       cybardev
       QuiNzX
+      evanwporter
     ];
   };
 })
