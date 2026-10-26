@@ -12,20 +12,15 @@
 
 buildPythonPackage rec {
   pname = "motionblindsble";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LennP";
     repo = "motionblindsble";
     tag = version;
-    hash = "sha256-1dA3YTjoAhe+p5vk6Xb42a+rE63m2mn5iHhVV/6tlQ0=";
+    hash = "sha256-UG8+hId743z3UIR6DcWuEgQCbKaY5CD+Bw8mqIeWscY=";
   };
-
-  patches = [
-    # https://github.com/LennP/motionblindsble/pull/3
-    ./asyncio-compat.patch
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
