@@ -3,7 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   cython,
+  libuchardet,
   meson-python,
+  pkg-config,
   pytestCheckHook,
   python,
 }:
@@ -24,6 +26,18 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     cython
     meson-python
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  mesonFlags = [
+    "-Dsystem-uchardet=auto"
+  ];
+
+  buildInputs = [
+    libuchardet
   ];
 
   postFixup = ''
