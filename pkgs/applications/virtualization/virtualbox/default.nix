@@ -380,6 +380,14 @@ let
       ln -s "${finalAttrs.virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
     '';
 
+    postFixup = ''
+      # VBoxVolInfo dlopens libdevmapper via RTLdrLoadSystem in VBoxRT.
+      # VBOX_WITH_RUNPATH replaces the RPATH normally provided for buildInputs,
+      # so add the library path back to VBoxRT.
+      if [ -e "$out/libexec/virtualbox/VBoxVolInfo" ]; then
+        patchelf --add-rpath "${lib.makeLibraryPath [ lvm2 ]}" "$out/libexec/virtualbox/VBoxRT.so"
+      fi
+    '';
     passthru = {
       inherit extensionPack; # for inclusion in profile to prevent gc
       tests = nixosTests.virtualbox;
