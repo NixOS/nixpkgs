@@ -11,6 +11,7 @@ buildGoModule (finalAttrs: {
   pname = "asnmap";
   version = "1.2.0";
 
+  __darwinAllowLocalNetworking = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
