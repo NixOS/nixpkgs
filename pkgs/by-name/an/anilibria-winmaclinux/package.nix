@@ -82,11 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
     gstreamer
   ]);
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/Applications
-    mv $out/AniLiberty.app $out/Applications/
-    makeWrapper $out/Applications/AniLiberty.app/Contents/MacOS/AniLiberty $out/bin/${finalAttrs.meta.mainProgram}
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 $src/tv.anilibria.anilibria.appdata.xml -t $out/share/metainfo
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/Applications
+      mv $out/AniLiberty.app $out/Applications/
+      makeWrapper $out/Applications/AniLiberty.app/Contents/MacOS/AniLiberty $out/bin/${finalAttrs.meta.mainProgram}
+    '';
 
   desktopItems = [
     (makeDesktopItem {
