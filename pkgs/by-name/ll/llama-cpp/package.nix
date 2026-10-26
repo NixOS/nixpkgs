@@ -5,7 +5,6 @@
   cmake,
   ctestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   stdenv,
 
@@ -120,9 +119,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pEDYgI3AMTU+cekvRX7NNt5wddznydQSNuerswvEpsA=";
   };
 
-  patches = [
-  ];
-
   nativeBuildInputs = [
     cmake
     installShellFiles
@@ -168,7 +164,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   npmDepsHash = "sha256-hqYzdp1FwPhYkBP278fQXgY9NCKB6Q3P6Gko7BfP0m0=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src patches;
+    inherit (finalAttrs) src;
+    patches = finalAttrs.patches or [ ];
     preBuild = ''
       pushd ${finalAttrs.npmRoot}
     '';
