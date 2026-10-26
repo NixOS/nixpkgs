@@ -1,17 +1,20 @@
-{ ... }:
 {
-  name = "nginx-modsecurity";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-modsecurity-${name}";
 
   nodes.machine =
     {
-      config,
-      lib,
       pkgs,
       ...
     }:
     {
       services.nginx = {
         enable = true;
+        package = mkPackage pkgs;
         additionalModules = [ pkgs.nginxModules.modsecurity ];
         virtualHosts.localhost =
           let

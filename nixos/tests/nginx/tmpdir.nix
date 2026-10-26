@@ -1,11 +1,15 @@
 let
   dst-dir = "/run/nginx-test-tmpdir-uploads";
 in
-{ ... }:
 {
-  name = "nginx-tmpdir";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-tmpdir-${name}";
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       environment.etc."tmpfiles.d/nginx-uploads.conf".text = "d ${dst-dir} 0755 nginx nginx 1d";
@@ -16,6 +20,7 @@ in
       ];
 
       services.nginx.enable = true;
+      services.nginx.package = mkPackage pkgs;
       # simple upload service using the nginx client body temp path
       services.nginx.virtualHosts = {
         localhost = {
