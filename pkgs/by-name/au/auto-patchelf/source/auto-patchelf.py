@@ -498,6 +498,7 @@ def auto_patchelf(
         runtime_deps: list[Path],
         recursive: bool = True,
         ignore_missing: list[str] = [],
+        ignore_files: list[str] = [],
         append_rpaths: list[Path] = [],
         keep_libc: bool = False,
         preserve_origin: bool = False,
@@ -519,6 +520,15 @@ def auto_patchelf(
     for containing_path in paths_to_patch:
         for path in glob(containing_path, '*', recursive):
             if not path.is_symlink() and path.is_file():
+                # Skip files explicitly excluded from patching.
+                try:
+                    rel = path.relative_to(containing_path)
+                except ValueError:
+                    rel = path
+                if any(fnmatch(rel.as_posix(), pat) or fnmatch(path.name, pat)
+                       for pat in ignore_files):
+                    logger.log(SkipFile(file=path, reason="it is explicitly excluded"))
+                    continue
                 dependencies += auto_patchelf_file(
                     logger=logger,
                     runtime_deps=runtime_deps,
@@ -563,6 +573,16 @@ def main() -> None:
         type=str,
         default=[],
         help="Do not fail when some dependencies are not found."
+    )
+    parser.add_argument(
+        "--ignore-files",
+        nargs="*",
+        type=str,
+        default=[],
+        help="Shell-style glob patterns of files to skip patching. Patterns match "
+             "against the file path relative to the patched root, as well as the bare "
+             "file name. Useful for ELF files that must keep their original layout, "
+             "e.g. PyInstaller bootloaders that crash when patchelf rewrites them."
     )
     parser.add_argument(
         "--no-recurse",
@@ -655,6 +675,7 @@ def main() -> None:
         args.runtime_dependencies,
         args.recursive,
         args.ignore_missing,
+        ignore_files=args.ignore_files,
         append_rpaths=args.append_rpaths,
         keep_libc=args.keep_libc,
         preserve_origin=args.preserve_origin,
