@@ -97,5 +97,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/fla-org/flash-linear-attention/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ BatteredBunny ];
+    teams = [ lib.teams.cuda ];
   };
 })
