@@ -104,6 +104,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/glotzerlab/freud";
     changelog = "https://github.com/glotzerlab/freud/blob/${finalAttrs.src.tag}/ChangeLog.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      debtquity
+    ];
   };
 })
