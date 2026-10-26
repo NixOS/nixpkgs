@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openttd-ttf";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
     repo = "openttd-ttf";
     tag = finalAttrs.version;
-    hash = "sha256-ZV74ZQ4Z4jw2tjG3kXj4Vo1J+W3BF0SJIFIae9DWLAc=";
+    hash = "sha256-tn9DktwXCdG3DMeV6jpk31IO0ZncT6givjk3hJp5K18=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+    # https://github.com/OpenTTD/OpenTTD-TTF/commit/2ae6c643f507bc1ab6dcd12abdc2fb48190e249e
+    # Remove this after next release
+    rm -r ./ttf
     # The font files already exist, force a rebuild
     make -B
     runHook postBuild
