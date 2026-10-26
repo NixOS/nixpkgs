@@ -89,6 +89,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       matthuszagh
       jleightcap
+      evanwporter
     ];
   };
 }
