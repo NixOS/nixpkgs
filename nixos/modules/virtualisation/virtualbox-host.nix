@@ -111,6 +111,12 @@ in
         ];
         environment.systemPackages = [ virtualbox ];
 
+        # Setuid entry points cannot be wrapped with an environment variable,
+        # so make the extension pack directory discoverable system-wide.
+        environment.variables = lib.mkIf cfg.enableExtensionPack {
+          VBOX_NIX_APP_SHARE_DIR = "${virtualbox}/share/virtualbox";
+        };
+
         security.wrappers =
           let
             mkSuid = program: {
