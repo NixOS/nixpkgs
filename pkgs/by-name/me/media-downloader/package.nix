@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath extraPackages}" ];
 
+  # CMake installs the metainfo only for Flatpak builds (`BUILD_FLATPAK`)
+  postInstall = ''
+    install -Dm644 ../src/flatpak/io.github.mhogomchungu.media-downloader.metainfo.xml -t $out/share/metainfo
+  '';
+
   meta = {
     description = "Qt/C++ GUI front end for yt-dlp and others";
     longDescription = ''
