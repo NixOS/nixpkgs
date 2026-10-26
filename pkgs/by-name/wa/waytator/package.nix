@@ -23,6 +23,8 @@
   wl-clipboard,
   gifski,
   tesseract,
+
+  enableOcr ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytator";
@@ -64,11 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/waytator \
       --prefix PATH : ${
-        lib.makeBinPath [
-          tesseract
-          wl-clipboard
-          gifski
-        ]
+        lib.makeBinPath (
+          [
+            wl-clipboard
+            gifski
+          ]
+          ++ lib.optional enableOcr tesseract
+        )
       }
   '';
 
