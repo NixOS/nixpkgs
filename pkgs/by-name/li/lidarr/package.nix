@@ -11,6 +11,7 @@
   nodejs-slim_24,
   nixosTests,
   nix-update-script,
+  writeText,
 }:
 let
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
@@ -32,8 +33,11 @@ buildDotnetModule (finalAttrs: {
 
   strictDeps = true;
 
+  installPath = "${placeholder "out"}/lib/lidarr/bin";
+
   postInstall = ''
-    cp -a -- ${finalAttrs.passthru.frontend} "$out"/lib/lidarr/UI
+    cp -a -- ${finalAttrs.passthru.frontend} "$dotnetInstallPath"/UI
+    cp -- ${finalAttrs.passthru.package_info} "$dotnetInstallPath"/../package_info
   '';
 
   nugetDeps = ./deps.json;
@@ -139,6 +143,15 @@ buildDotnetModule (finalAttrs: {
         runHook postInstall
       '';
     };
+
+    package_info = writeText "${finalAttrs.pname}-package_info" (
+      lib.generators.toKeyValue { } {
+        PackageAuthor = "[NixOS](https://nixos.org)";
+        PackageVersion = finalAttrs.version;
+        UpdateMethod = "External";
+        UpdateMethodMessage = "Lidarr is managed by Nix. Update it through your system configuration.";
+      }
+    );
 
     tests = { inherit (nixosTests) lidarr; };
 
