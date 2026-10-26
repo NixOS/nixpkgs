@@ -4005,8 +4005,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "vscode-yaml";
-          version = "1.25.0";
-          hash = "sha256-KoM0gNl1TYOvtk33WMUHNSAddZtTzbKb57eoEU3KKuQ=";
+          version = "2.0.0";
+          hash = "sha256-S7pizNqWK3INywgp6Fz0EJyU6GZT3NOf11AMNoetjGA=";
         };
         meta = {
           description = "YAML Language Support by Red Hat, with built-in Kubernetes syntax support";
