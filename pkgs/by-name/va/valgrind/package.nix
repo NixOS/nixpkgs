@@ -11,14 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.27.1";
+  version = "3.28.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/valgrind-${version}.tar.bz2";
-    hash = "sha256-XViRUuuAccAv6rjOarcZ5DGh+8PisXAPVDJjKouSZNw=";
+    hash = "sha256-n3oY0SjwXTqA/qU+aVPzSq1yAKQlzq7kYJmop5in3Zw=";
   };
 
   patches = [
+    # i686 test fix
+    (fetchpatch {
+      name = "i686-test.patch";
+      url = "https://sourceware.org/git/?p=valgrind.git;a=patch;h=492dde29d21760699ee6d0d7aa0a87e0de57d76e";
+      excludes = [ "NEWS" ];
+      hash = "sha256-WfkLKR/h1J1NBHUFv0rlfhuWP4mc3SsQzTnTo7ij9Ps=";
+    })
+
     # Fix checks on Musl.
     # https://bugs.kde.org/show_bug.cgi?id=453929
     (fetchpatch {
@@ -29,11 +37,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=186451";
       hash = "sha256-IGmyHwwGoy00hcz3XxQSDcwcU8zHLBJ9dfqTvWDQ520=";
-    })
-    (fetchpatch {
-      name = "reallocarray-test-musl.patch";
-      url = "https://sourceware.org/git/?p=valgrind.git;a=patch;h=991961ece87e4cdc0771a05c956c55baa437bb07";
-      hash = "sha256-U16384rLXMhLE5Em9z8FKYbshPlnq8l9ejC2+epL7M4=";
     })
 
     # Fix build on armv7l.
