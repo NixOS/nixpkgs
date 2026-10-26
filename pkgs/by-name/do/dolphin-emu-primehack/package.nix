@@ -129,10 +129,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${vulkan-loader}/lib"
     # https://bugs.dolphin-emu.org/issues/11807
     # The .desktop file should already set this, but Dolphin may be launched in other ways
-    "--set QT_QPA_PLATFORM xcb"
+    "--set"
+    "QT_QPA_PLATFORM"
+    "xcb"
   ];
 
   # - Allow Dolphin to use nix-provided libraries instead of building them

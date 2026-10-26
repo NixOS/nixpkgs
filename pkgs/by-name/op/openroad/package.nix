@@ -159,7 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED -Wno-error=deprecated-declarations")
   ];
 
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ yosys ])
+  ];
 
   # Some tests are unstable on Darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

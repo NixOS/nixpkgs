@@ -67,8 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec"
-    "--set QT_QPA_PLATFORM xcb"
+    "--suffix"
+    "PATH"
+    ":"
+    "${nx-libs}/bin:${openssh}/libexec"
+
+    "--set"
+    "QT_QPA_PLATFORM"
+    "xcb"
   ];
 
   meta = {

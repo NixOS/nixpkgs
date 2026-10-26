@@ -50,7 +50,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # python is run during runtime to do various tasks
-  qtWrapperArgs = [ " --prefix PATH : ${python3}/bin" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${python3}/bin"
+  ];
 
   meta = {
     changelog = "https://www.lyx.org/announce/${lib.replaceString "." "_" version}.txt";

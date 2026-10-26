@@ -31,12 +31,13 @@ stdenv.mkDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        qpdf
-        ghostscript
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      qpdf
+      ghostscript
+    ])
   ];
 
   buildInputs = [

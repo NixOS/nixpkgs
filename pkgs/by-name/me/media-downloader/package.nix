@@ -35,7 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
-  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath extraPackages}" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath extraPackages)
+  ];
 
   meta = {
     description = "Qt/C++ GUI front end for yt-dlp and others";

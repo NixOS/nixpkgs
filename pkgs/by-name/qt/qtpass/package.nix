@@ -54,14 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        git
-        gnupg
-        pass
-        pwgen
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      gnupg
+      pass
+      pwgen
+    ])
   ];
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''

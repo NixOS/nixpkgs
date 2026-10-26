@@ -169,7 +169,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Currently crashes on wayland; must force X11
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM xcb"
+    "--set"
+    "QT_QPA_PLATFORM"
+    "xcb"
   ];
 
   doCheck = true;
