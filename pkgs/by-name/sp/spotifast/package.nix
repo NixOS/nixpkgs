@@ -38,7 +38,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "spotifast";
-  version = "0.14.1";
+  version = "0.14.2";
 
   __structuredAttrs = true;
 
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage rec {
     owner = "crmne";
     repo = "spotifast";
     tag = "v${version}";
-    hash = "sha256-RYeHaD3c5UfkF3f7dsfMlyKNL4u2CPBO2Zxq0bUg5x0=";
+    hash = "sha256-LdhBPj7ZrXXMvQpM/DqYH5m7zH7duTZ/tZbHO3XI5CQ=";
   };
 
-  cargoHash = "sha256-olyivbujtAcdAoJwBPIeW7OxpRABH11Fc0aqHtezz4I=";
+  cargoHash = "sha256-q6wmUeh102dRN4yIwPogq726Zx4AcefUT4lDiqhSnMU=";
 
   # projectm-sys only searches lib, while CMake may otherwise install to lib64.
   postPatch = ''
