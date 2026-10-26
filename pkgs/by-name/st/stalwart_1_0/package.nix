@@ -248,10 +248,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webui = callPackage ./webui.nix { };
+    spam-filter = callPackage ./spam-filter.nix { };
     # subpackages have distinct version numbers, so we can't use nix-update's `--subpackage`
     updateScript = _experimental-update-script-combinators.sequence [
       (nix-update-script { })
       (nix-update-script { attrPath = "stalwart_1_0.webui"; })
+      (nix-update-script { attrPath = "stalwart_1_0.spam-filter"; })
     ];
   };
 
