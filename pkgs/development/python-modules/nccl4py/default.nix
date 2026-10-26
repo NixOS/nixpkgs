@@ -118,6 +118,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
       GaetanLepage
       thefossguy
     ];
-    inherit (cudaPackages.nccl.meta) platforms badPlatforms;
+    inherit (cudaPackages.nccl.meta) platforms problems;
   };
 })

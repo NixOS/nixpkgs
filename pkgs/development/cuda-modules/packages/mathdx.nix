@@ -156,7 +156,7 @@ buildRedist (finalAttrs: {
     requiredSystemFeatures = [ "cuda" ];
 
     meta = {
-      inherit (finalAttrs.finalPackage.meta) badPlatforms platforms teams;
+      inherit (finalAttrs.finalPackage.meta) platforms problems teams;
     };
   };
 

@@ -55,8 +55,6 @@ buildPythonPackage {
 
     # Explicitly inherit from TensorRT's meta to avoid pulling in attributes added by stdenv.mkDerivation.
     inherit (meta)
-      badPlatforms
-      broken
       changelog
       downloadPage
       homepage
@@ -64,6 +62,7 @@ buildPythonPackage {
       longDescription
       maintainers
       platforms
+      problems
       sourceProvenance
       teams
       ;

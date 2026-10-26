@@ -50,14 +50,6 @@ buildRedist {
     popd >/dev/null
   '';
 
-  brokenAssertions = [
-    {
-      # TODO(@connorbaker): Figure out which are supported.
-      message = "python 3 version is supported";
-      assertion = true;
-    }
-  ];
-
   meta = {
     description = "NVIDIA tool for debugging CUDA applications on Linux and QNX systems";
     longDescription = ''

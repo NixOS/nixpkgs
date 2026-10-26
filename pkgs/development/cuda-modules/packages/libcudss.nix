@@ -36,16 +36,6 @@ buildRedist {
     "libnccl.so.2"
   ];
 
-  # https://docs.nvidia.com/cuda/cudss/index.html
-  platformAssertions = [
-    {
-      message =
-        "cuDSS supports CUDA compute capabilities 6.0 and newer"
-        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "6.0") backendStdenv.cudaCapabilities;
-    }
-  ];
-
   # Update the CMake configurations
   postFixup = ''
     pushd "''${!outputDev:?}/lib/cmake/cudss" >/dev/null
@@ -84,5 +74,16 @@ buildRedist {
     '';
     homepage = "https://developer.nvidia.com/cudss";
     changelog = "https://docs.nvidia.com/cuda/cudss/release_notes.html";
+    # https://docs.nvidia.com/cuda/cudss/index.html
+    problems =
+      lib.optionalAttrs (!lib.all (lib.flip lib.versionAtLeast "6.0") backendStdenv.cudaCapabilities)
+        {
+          capabilityBelow60 = {
+            kind = "unsupported";
+            message =
+              "cuDSS requires CUDA compute capabilities 6.0 and newer"
+              + " (found ${builtins.toJSON backendStdenv.cudaCapabilities}).";
+          };
+        };
   };
 }

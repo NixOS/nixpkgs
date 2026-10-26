@@ -51,23 +51,6 @@ buildRedist (
       "libnvidia-ml.so.1"
     ];
 
-    # https://docs.nvidia.com/cuda/cuquantum/latest/getting-started/index.html#dependencies
-    platformAssertions = [
-      {
-        message = "cuQuantum supports CUDA compute capabilities 7.5 and newer (found ${builtins.toJSON cudaCapabilities})";
-        assertion = lib.all (lib.flip lib.versionAtLeast "7.5") cudaCapabilities;
-      }
-    ];
-
-    brokenAssertions = [
-      {
-        message =
-          "cuQuantum releases since 26.09.0 (found ${finalAttrs.version})"
-          + " require cuTENSOR 2.8.0 or newer (found ${libcutensor.version})";
-        assertion = cuquantumAtLeast "26.09" -> lib.versionAtLeast libcutensor.version "2.8";
-      }
-    ];
-
     meta = {
       description = "Set of high-performance libraries and tools for accelerating quantum computing simulations at both the circuit and device level by orders of magnitude";
       longDescription = ''
@@ -76,6 +59,23 @@ buildRedist (
       '';
       homepage = "https://developer.nvidia.com/cuquantum-sdk";
       changelog = "https://docs.nvidia.com/cuda/cuquantum/latest/cuquantum-sdk-release-notes.html";
+
+      # https://docs.nvidia.com/cuda/cuquantum/latest/getting-started/index.html#dependencies
+      problems =
+        lib.optionalAttrs (!lib.all (lib.flip lib.versionAtLeast "7.5") cudaCapabilities) {
+          capabilityBelow75 = {
+            kind = "unsupported";
+            message = "cuQuantum requires CUDA compute capabilities 7.5 and newer (found ${builtins.toJSON cudaCapabilities}).";
+          };
+        }
+        // lib.optionalAttrs (cuquantumAtLeast "26.09" && !(lib.versionAtLeast libcutensor.version "2.8")) {
+          cutensorTooOld = {
+            kind = "broken";
+            message =
+              "cuQuantum releases since 26.09.0 (found ${finalAttrs.version})"
+              + " require cuTENSOR 2.8.0 or newer (found ${libcutensor.version}).";
+          };
+        };
     };
   }
 )
