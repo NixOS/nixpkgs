@@ -175,5 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
       "gdk-x11-2.0"
       "gtk+-x11-2.0"
     ];
+    problems.removal = {
+      message = "GTK 2 has reached end of life on 2020-12-16 and will be removed in 27.05.";
+      urls = [
+        "https://github.com/NixOS/nixpkgs/issues/410814"
+        "https://blog.gtk.org/2020/12/16/gtk-4-0/#:~:text=What%E2%80%99s%20old"
+      ];
+    };
   };
 })
