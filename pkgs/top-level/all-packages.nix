@@ -7258,6 +7258,9 @@ with pkgs;
     enableAirplay2 = true;
   };
 
+  stalwart-migrate-oss = stalwart-migrate.oss;
+  stalwart-migrate-fdb = stalwart-migrate.fdb;
+
   stalwart-webadmin = stalwart_0_15.webadmin;
   stalwart-spam-filter = stalwart_0_15.spam-filter;
 
