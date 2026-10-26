@@ -145,6 +145,15 @@
     "spdx": "MIT",
     "vendorHash": "sha256-dEVFIT1iTk/SgQHTT5DA+O/40dIt0bi13EZjxBHr3mY="
   },
+  "bunnyway_bunnynet": {
+    "hash": "sha256-6furaPvQSWkirDi/DXOkbpdJtvOlPErG2lscgJSDsl4=",
+    "homepage": "https://registry.terraform.io/providers/BunnyWay/bunnynet",
+    "owner": "BunnyWay",
+    "repo": "terraform-provider-bunnynet",
+    "rev": "v0.19.2",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-8hKnunwXJbI2SdwcyqLPWAHIZGu0m7IEKpqBsIiqaJs="
+  },
   "camptocamp_pass": {
     "hash": "sha256-GQ2g7VyK+eeBqW3LMR4U0gMYsvQnG3y+KEKKkvnmfsk=",
     "homepage": "https://registry.terraform.io/providers/camptocamp/pass",
