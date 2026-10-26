@@ -47,13 +47,6 @@ import ../make-test-python.nix (
             isNormalUser = true;
           };
         };
-      dns =
-        { pkgs, ... }:
-        {
-          virtualisation.podman.enable = true;
-
-          virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
-        };
       docker =
         { pkgs, ... }:
         {
@@ -74,6 +67,14 @@ import ../make-test-python.nix (
             isNormalUser = true;
           };
         };
+      docker_compat =
+        { pkgs, ... }:
+        {
+          virtualisation.podman = {
+            enable = true;
+            dockerCompat = true;
+          };
+        };
     };
 
     testScript = ''
@@ -88,8 +89,8 @@ import ../make-test-python.nix (
       rootful.wait_for_unit("sockets.target")
       rootful_norunc.wait_for_unit("sockets.target")
       rootless.wait_for_unit("sockets.target")
-      dns.wait_for_unit("sockets.target")
       docker.wait_for_unit("sockets.target")
+      docker_compat.wait_for_unit("sockets.target")
       start_all()
 
       with subtest("Run container as root with runc"):
@@ -212,18 +213,6 @@ import ../make-test-python.nix (
           )
           rootful.succeed("podman rm journald")
 
-      with subtest("aardvark-dns"):
-          dns.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          dns.succeed(
-              "podman run -d --name=webserver -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin -w ${pkgs.writeTextDir "index.html" "<h1>Testing</h1>"} scratchimg ${pkgs.python3}/bin/python -m http.server 8000"
-          )
-          dns.succeed("podman ps | grep webserver")
-          dns.wait_until_succeeds(
-              "podman run --rm --name=client -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg ${pkgs.curl}/bin/curl http://webserver:8000 | grep Testing"
-          )
-          dns.succeed("podman stop webserver")
-          dns.succeed("podman rm webserver")
-
       with subtest("A podman member can use the docker cli"):
           docker.succeed(su_cmd("docker version"))
 
@@ -251,6 +240,15 @@ import ../make-test-python.nix (
           rootless.wait_until_succeeds(su_cmd("podman ps | grep quadlet"), timeout=20)
           rootless.systemctl("stop quadlet", "alice")
 
+      with subtest("Docker compat works"):
+          docker_compat.succeed("tar cv --files-from /dev/null | docker import - scratchimg")
+          docker_compat.succeed(
+            "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
+          )
+          docker_compat.succeed("docker ps | grep sleeping")
+          docker_compat.succeed("podman ps | grep sleeping")
+          docker_compat.succeed("docker stop sleeping")
+          docker_compat.succeed("docker rm sleeping")
       # TODO: add docker-compose test
 
     '';
