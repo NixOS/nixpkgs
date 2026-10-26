@@ -80,6 +80,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/glotzerlab/parsnip";
     changelog = "https://github.com/glotzerlab/parsnip/blob/${finalAttrs.src.tag}/changelog.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      debtquity
+    ];
   };
 })
