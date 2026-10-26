@@ -15,14 +15,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "4.4";
+  version = "5.0.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = "healthchecks";
     tag = "v${version}";
-    sha256 = "sha256-4TG6K52sY2Cqu8K+9Gg2Zh1lL0tWQY9B+jKdDf1Vg+0=";
+    sha256 = "sha256-WZz1o1Y0/eHdA3deQvtu/QIfhEomjxnpNiNq7i3dF8k=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
