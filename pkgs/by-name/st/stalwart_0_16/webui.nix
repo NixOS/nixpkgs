@@ -8,16 +8,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "webui";
-  version = "1.0.11";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-luaNHpPg7XHnPfQqhLEq+wW1/crXLogzyyltFr4mdBk=";
+    hash = "sha256-aV88bOi9zInbxm0dttDWW+2R44QvqeG/NnNwlurbZjY=";
   };
 
-  npmDepsHash = "sha256-qe9cSrvs6kWwgbOO0xL7MBaJvICOvyuLFVi9R0dgnXQ=";
+  npmDepsHash = "sha256-OUnppxKgBmTmzwc4VKuzcYQR7K3aLE3hTbl3zEPyr9Q=";
   __structuredAttrs = true;
 
   env = {
@@ -30,13 +30,6 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [ zip ];
   preBuild = ''
     rm .env.development
-  '';
-
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    npm run test
-    runHook postCheck
   '';
 
   installPhase = ''

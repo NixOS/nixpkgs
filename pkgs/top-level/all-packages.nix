@@ -7259,6 +7259,8 @@ with pkgs;
     enableAirplay2 = true;
   };
 
+  stalwart-webui = stalwart_0_16.webui;
+
   stalwart-webadmin = stalwart_0_15.webadmin;
   stalwart-spam-filter = stalwart_0_15.spam-filter;
 
