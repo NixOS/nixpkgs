@@ -273,6 +273,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
       "--disable-docs"
     ]
+    ++ optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      # error_index_generator is built for the host and run at build time.
+      "--disable-docs"
+    ]
+    ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # https://github.com/rust-lang/rust/issues/92173
+      "--set=rust.jemalloc"
+    ]
     ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
       # https://github.com/NixOS/nixpkgs/issues/311930
       "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
