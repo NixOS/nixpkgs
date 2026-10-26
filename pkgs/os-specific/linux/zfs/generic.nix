@@ -17,7 +17,7 @@ let
       bashNonInteractive,
       zlib,
       libuuid,
-      python3,
+      python3Packages,
       attr,
       openssl,
       libtirpc,
@@ -38,6 +38,9 @@ let
       kernel ? null,
       kernelModuleMakeFlags ? [ ],
       enablePython ? true,
+      # Build and install the pyzfs Python bindings for libzfs_core.
+      # Exposed as python3Packages.pyzfs_*.
+      enablePyzfs ? false,
       ...
     }@outerArgs:
 
@@ -75,6 +78,7 @@ let
         "user"
         "all"
       ];
+      buildPyzfs = buildUser && enablePython && enablePyzfs;
       kernelIsCompatible =
         kernel:
         (lib.versionAtLeast kernel.version kernelMinSupportedMajorMinor)
@@ -100,7 +104,7 @@ let
         inherit rev hash;
       };
 
-      patches = extraPatches;
+      patches = extraPatches ++ optionals buildPyzfs [ ./pyzfs-dlopen-absolute-path.patch ];
 
       postPatch =
         optionalString buildKernel ''
@@ -152,6 +156,9 @@ let
             --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
               "bashcompletiondir=$out/share/bash-completion/completions"
         ''
+        + optionalString buildPyzfs ''
+          substituteInPlace ./contrib/pyzfs/libzfs_core/bindings/__init__.py --subst-var out
+        ''
         + lib.optionalString (lib.versionOlder version "2.4.0") ''
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
         ''
@@ -175,7 +182,8 @@ let
       ++ optionals buildUser [
         pkg-config
         udevCheckHook
-      ];
+      ]
+      ++ optionals buildPyzfs [ python3Packages.pythonImportsCheckHook ];
       buildInputs =
         optionals buildUser [
           zlib
@@ -187,7 +195,12 @@ let
           openssl
           curl
         ]
-        ++ optional (buildUser && enablePython) python3;
+        ++ optionals (buildUser && enablePython) [ python3Packages.python ]
+        ++ optionals buildPyzfs [
+          python3Packages.packaging
+          python3Packages.setuptools
+        ];
+      propagatedBuildInputs = optionals buildPyzfs [ python3Packages.cffi ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       env.NIX_CFLAGS_LINK = "-lgcc_s";
@@ -201,7 +214,7 @@ let
       configureFlags = [
         "--with-config=${configFile}"
         "--with-tirpc=1"
-        (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+        (lib.withFeatureAs (buildUser && enablePython) "python" python3Packages.python.interpreter)
       ]
       ++ optional enableUnsupportedExperimentalKernel "--enable-linux-experimental"
       ++ optionals buildUser [
@@ -217,6 +230,7 @@ let
         "--enable-systemd"
         "--enable-pam"
       ]
+      ++ optionals buildPyzfs [ "--enable-pyzfs" ]
       ++ optionals buildKernel (
         [
           "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
@@ -233,6 +247,8 @@ let
 
       doInstallCheck = true;
 
+      ${if buildPyzfs then "pythonImportsCheck" else null} = [ "libzfs_core" ];
+
       installFlags = [
         "sysconfdir=\${out}/etc"
         "DEFAULT_INITCONF_DIR=\${out}/default"
@@ -245,6 +261,11 @@ let
         if [ -z "$enableParallelBuilding" ]; then
           export TEST_JOBS=1
         fi
+      ''
+      + optionalString buildPyzfs ''
+        # Otherwise, the contrib/pyzfs Makefile will attempt to install into the
+        # site-packages in the Python interpreter's derivation:
+        export PYTHON_SITE_PKG="$out/${python3Packages.python.sitePackages}"
       '';
 
       # Enabling BTF causes zfs to be build with debug symbols.
