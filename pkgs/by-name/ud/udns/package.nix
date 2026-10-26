@@ -5,11 +5,11 @@
 }:
 
 # this expression is mostly based on debian's packaging
-# https://tracker.debian.org/media/packages/u/udns/rules-0.6-1
+# https://tracker.debian.org/media/packages/u/udns/rules-0.7-1
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "udns";
-  version = "0.6";
+  version = "0.7";
 
   configurePhase = "./configure --enable-ipv6";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.corpit.ru/mjt/udns/udns-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-aWotDVGNqYXZdaZeEdFm8/V829HUI3aguFMH9JYBxug=";
+    sha256 = "sha256-ad813EK20RcQzhq99KDhYT/rqPygCfnJqT0XFpJsysM=";
   };
 
   # udns uses a very custom build and hardcodes a .so name in a few places.
