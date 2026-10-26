@@ -390,10 +390,19 @@ let
         wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
       '';
 
-    postFixup = optionalString stdenv.hostPlatform.isLinux ''
+    postFixup = ''
+      # VBoxVolInfo dlopens libdevmapper via RTLdrLoadSystem in VBoxRT.
+      # VBOX_WITH_RUNPATH replaces the RPATH normally provided for buildInputs,
+      # so add the library path back to VBoxRT.
+      if [ -e "$out/libexec/virtualbox/VBoxVolInfo" ]; then
+        patchelf --add-rpath "${lib.makeLibraryPath [ lvm2 ]}" "$out/libexec/virtualbox/VBoxRT.so"
+      fi
+
       # VBoxDxVk loads Vulkan dynamically; add its path after RPATH shrinking.
-      patchelf --add-rpath "${lib.makeLibraryPath [ vulkan-loader ]}" \
-        "$out/libexec/virtualbox/VBoxDxVk.so"
+      if [ -e "$out/libexec/virtualbox/VBoxDxVk.so" ]; then
+        patchelf --add-rpath "${lib.makeLibraryPath [ vulkan-loader ]}" \
+          "$out/libexec/virtualbox/VBoxDxVk.so"
+      fi
     '';
 
     passthru = {
