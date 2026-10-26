@@ -29,13 +29,13 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bend2";
-  version = "2.0.37";
+  version = "2.0.39";
 
   src = fetchFromGitHub {
     owner = "bendlang";
     repo = "bend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BtOznD2a757sWIqHU57fRJdjEGDOcYnwHO3dp9YxBIY=";
+    hash = "sha256-qXKvDzQux6FyESeXoJKz7T0tCXymDgt9SAJNGRBnQWo=";
   };
 
   __structuredAttrs = true;
