@@ -24,6 +24,8 @@
 mkKdeDerivation {
   pname = "k3b";
 
+  __structuredAttrs = true;
+
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
@@ -42,7 +44,10 @@ mkKdeDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : /run/wrappers/bin:${
+    "--prefix"
+    "PATH"
+    ":"
+    "/run/wrappers/bin:${
       lib.makeBinPath [
         cdrdao
         cdrtools
@@ -56,12 +61,13 @@ mkKdeDerivation {
     }"
 
     # FIXME: this should really be done with patchelf --add-rpath, but it breaks the binary somehow
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        cdparanoia
-        libdvdcss
-      ]
-    }"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      cdparanoia
+      libdvdcss
+    ])
   ];
 
   meta.mainProgram = "k3b";

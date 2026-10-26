@@ -22,6 +22,8 @@
 mkKdeDerivation {
   pname = "kwin";
 
+  __structuredAttrs = true;
+
   patches = [
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
@@ -35,7 +37,9 @@ mkKdeDerivation {
   # TZDIR may be unset when running through the kwin_wayland wrapper,
   # but we need it for the lockscreen clock to render
   qtWrapperArgs = [
-    "--set-default TZDIR /etc/zoneinfo"
+    "--set-default"
+    "TZDIR"
+    "/etc/zoneinfo"
   ];
 
   extraNativeBuildInputs = [
