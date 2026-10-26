@@ -37,8 +37,6 @@ perlPackages.buildPerlPackage rec {
     Gtk3
   ];
 
-  strictDeps = true;
-
   preConfigure = "touch Makefile.PL";
   # no tests implemented
   doCheck = false;
@@ -82,8 +80,6 @@ perlPackages.buildPerlPackage rec {
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
     )
   '';
-
-  __structuredAttrs = true;
 
   meta = {
     description = ''

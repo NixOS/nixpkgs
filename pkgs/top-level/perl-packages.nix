@@ -482,7 +482,6 @@ with self;
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.19.tar.gz";
       hash = "sha256-9KZ0CZu9V0fAw7derYQfOyRJNdnvQro1NoAkvWERdMk=";
     };
-    strictDeps = true;
     nativeBuildInputs = [ pkgs.pkg-config ];
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [
@@ -612,8 +611,6 @@ with self;
       ModulePluggable
     ];
     buildInputs = [ LWPProtocolHttps ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Building, finding and using wxWidgets binaries";
       license = with lib.licenses; [
@@ -643,8 +640,6 @@ with self;
       Test2Suite
       URI
     ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Find or build GNU m4";
       homepage = "https://metacpan.org/pod/Alien::m4";
@@ -1971,8 +1966,6 @@ with self;
       DevelChecklib
       FileWhich
     ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "XS bindings for Kerberos 5";
       license = with lib.licenses; [
@@ -7773,13 +7766,11 @@ with self;
     nativeCheckInputs = [
       pkgs.openssl # runs openssl executable to get version
     ];
-    strictDeps = true;
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     # Needed on Darwin so Crypt::OpenSSL::Guess does not pick /usr/bin/openssl and mix
     # system libcrypto with the Nix one (perl aborts: "loading libcrypto in an unsafe way").
     env.OPENSSL_PREFIX = pkgs.openssl;
-    __structuredAttrs = true;
     meta = {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with lib.licenses; [
@@ -10070,7 +10061,6 @@ with self;
       TestPod
     ];
     propagatedBuildInputs = [ DBI ];
-    strictDeps = true;
     meta = {
       description = "MariaDB and MySQL driver for the Perl5 Database Interface (DBI)";
       homepage = "https://github.com/gooddata/DBD-MariaDB";
@@ -12345,8 +12335,6 @@ with self;
       url = "mirror://cpan/authors/id/A/AU/AUDREYT/Encode-HanExtra-0.23.tar.gz";
       hash = "sha256-H9SwbK2nCFgAOvFT+UyGOzuV8uPQO6GNBFGoHVHbRDo=";
     };
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Extra sets of Chinese encodings";
       license = lib.licenses.mit;
@@ -12947,8 +12935,6 @@ with self;
     };
     propagatedBuildInputs = [ FileWhich ];
     nativeCheckInputs = [ pkgs.gfortran ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Simple interface to F77 libs";
       license = with lib.licenses; [
@@ -14710,8 +14696,6 @@ with self;
     };
     doCheck = false;
     propagatedBuildInputs = [ URI ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Extensions and convenience methods to manage background processes";
       license = with lib.licenses; [
@@ -15349,8 +15333,6 @@ with self;
       MooXHandlesVia
       MooXlate
     ];
-    strictDeps = true;
-    __structuredAttrs = true;
     doCheck = false;
     meta = {
       description = "Supply object methods for interacting with GnuPG";
@@ -15398,8 +15380,6 @@ with self;
     nativeCheckInputs = [
       Gtk3
     ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Perl binding for GooCanvas2 widget using Glib::Object::Introspection";
       license = with lib.licenses; [
@@ -15586,8 +15566,6 @@ with self;
       XMLXPath
     ];
 
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = lib.licenses.artistic2;
@@ -15622,13 +15600,10 @@ with self;
       XMLXPath
       DataSectionSimple
     ];
-    strictDeps = true;
 
     # needed for fontconfig tests
     env.HOME = "/build";
     env.FONTCONFIG_PATH = "${lib.getOutput "out" pkgs.fontconfig}/etc/fonts";
-
-    __structuredAttrs = true;
 
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
@@ -15760,12 +15735,10 @@ with self;
     checkInputs = [
       pkgs.librsvg
     ];
-    strictDeps = true;
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
     '';
-    __structuredAttrs = true;
     meta = {
       description = "Image viewer widget for Gtk3";
       homepage = "https://github.com/carygravel/gtk3-imageview";
@@ -15785,8 +15758,6 @@ with self;
     };
     propagatedBuildInputs = [ Gtk3 ];
     nativeCheckInputs = [ Gtk3 ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Simple interface to Gtk3's complex MVC list widget";
       homepage = "https://github.com/soig/Gtk3-SimpleList";
@@ -17432,7 +17403,6 @@ with self;
     nativeCheckInputs = [
       pkgs.fontconfig
     ];
-    strictDeps = true;
     makeMakerFlags = [
       "--incpath"
       "${pkgs.libjpeg.dev}/include"
@@ -17443,7 +17413,6 @@ with self;
       "--libpath"
       "${pkgs.libpng.out}/lib"
     ];
-    __structuredAttrs = true;
     meta = {
       changelog = "https://metacpan.org/release/TONYC/Imager-${version}/source/Changes";
       description = "Perl extension for Generating 24 bit Images";
@@ -18450,15 +18419,12 @@ with self;
 
     buildInputs = [ FileWhich ];
     propagatedBuildInputs = [ Inline ];
-    strictDeps = true;
 
     # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
     makeMakerFlags = [ "J2SDK=${pkgs.jdk8}" ];
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;
-
-    __structuredAttrs = true;
 
     meta = {
       description = "Write Perl classes in Java";
@@ -18944,7 +18910,6 @@ with self;
       ExtUtilsXSBuilder
     ];
     propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
-    strictDeps = true;
     # Avoid libtool misdetecting gcc as the linker.
     configureFlags = [ "LD=ld" ];
     makeMakerFlags = [
@@ -18990,7 +18955,6 @@ with self;
     doCheck = false; # test would need to start apache httpd
     # Apache::Test resolves localhost while generating glue/perl (Makefile.PL / t/TEST).
     __darwinAllowLocalNetworking = true;
-    __structuredAttrs = true;
     meta = {
       description = "Wrapper for libapreq2's module/handle API";
       license = lib.licenses.asl20;
@@ -19621,7 +19585,6 @@ with self;
   LocaleGettext = buildPerlPackage {
     pname = "gettext";
     version = "1.07";
-    strictDeps = true;
     buildInputs = [ pkgs.gettext ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.07.tar.gz";
@@ -21265,8 +21228,6 @@ with self;
     patches = lib.optionals stdenv.hostPlatform.isDarwin [
       ../development/perl-modules/Math-Pari-darwin-callback-abi.patch
     ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Perl interface to PARI";
       license = with lib.licenses; [
@@ -22894,8 +22855,6 @@ with self;
       hash = "sha256-DTimWxenrFGI1zh8/+f6oSY4Rw3JNxYevz2kh7fR+Dw=";
     };
     nativeBuildInputs = [ pkgs.unzip ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Handle versions of loaded modules with flexible result interface";
       license = with lib.licenses; [
@@ -22945,11 +22904,9 @@ with self;
 
     makeMakerFlags = [ "MP_AP_DESTDIR=$out" ];
     nativeBuildInputs = [ pkgs.apacheHttpd ];
-    strictDeps = true;
     doCheck = false; # would try to start Apache HTTP server
     passthru.tests = nixosTests.mod_perl;
     __darwinAllowLocalNetworking = true;
-    __structuredAttrs = true;
     meta = {
       description = "Embed a Perl interpreter in the Apache/2.x HTTP server";
       license = lib.licenses.asl20;
@@ -25036,7 +24993,6 @@ with self;
       hash = "sha256-UDhQk6owAFa8Jiu2pACpbiGVl3wcXh6/FaXgdak3e4Y=";
     };
     nativeBuildInputs = [ pkgs.unzip ];
-    strictDeps = true;
 
     postPatch = ''
       substituteInPlace Makefile.PL --replace "'PL_FILES'" "#'PL_FILES'"
@@ -25045,7 +25001,6 @@ with self;
       perl data_pod.PL PERL5LIB:$PERL5LIB
     '';
     outputs = [ "out" ];
-    __structuredAttrs = true;
     meta = {
       description = "Module for reading tags of MP3 audio files";
       license = lib.licenses.artistic1;
@@ -25742,9 +25697,7 @@ with self;
     nativeCheckInputs = [
       pkgs.cups
     ];
-    strictDeps = true;
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.cups}/lib -lcups";
-    __structuredAttrs = true;
     meta = {
       description = "Common Unix Printing System Interface";
       homepage = "https://github.com/niner/perl-Net-CUPS";
@@ -38431,9 +38384,7 @@ with self;
       ];
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
     nativeBuildInputs = [ pkgs.curl ];
-    strictDeps = true;
     doCheck = false; # performs network access
-    __structuredAttrs = true;
     meta = {
       description = "Perl extension interface for libcurl";
       license = lib.licenses.mit;
@@ -38699,13 +38650,11 @@ with self;
       pkgs.libGLU
       Wx
     ];
-    strictDeps = true;
     # Build system attempts to compile c++ files with clang.
     preConfigure = ''
       export CC=$CXX
     '';
     doCheck = false;
-    __structuredAttrs = true;
     meta = {
       description = "wxPerl demo helper for Wx::GLCanvas";
       license = with lib.licenses; [
@@ -38852,8 +38801,6 @@ with self;
       hash = "sha256-5yhGSIDLtMHz/XceCQOoUmzWV7OUuzchYDUkXPHihu4=";
     };
     nativeBuildInputs = [ pkgs.libxml2 ];
-    strictDeps = true;
-    __structuredAttrs = true;
     meta = {
       description = "Perl extension for inclusive (1.0 and 1.1) and exclusive canonicalization of XML using libxml2";
       license = with lib.licenses; [
@@ -38872,7 +38819,6 @@ with self;
       hash = "sha256-o4zHukGIzAvSfcc2nwOQZ3IEcIehxU8bkzVdXpEDwwQ=";
     };
     nativeBuildInputs = [ pkgs.xapian ];
-    strictDeps = true;
     preConfigure = ''
       # FIXME: doesn't work for cross
       export PERL_LIB="$out/lib/perl5/site_perl/${perl.version}"
@@ -38887,7 +38833,6 @@ with self;
     checkPhase = null;
     checkTarget = "check";
     installPhase = null;
-    __structuredAttrs = true;
     meta = {
       description = "Bindings allowing Xapian to be used from Perl";
       homepage = "https://xapian.org";

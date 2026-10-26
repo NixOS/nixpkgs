@@ -32,8 +32,6 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-BIR93ABiE3wzuw9Q0fZMm7ClKyDmsxE+UcPTYd6P7No=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs =

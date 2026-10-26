@@ -37,8 +37,6 @@ perlPackages.buildPerlPackage {
     RegexpIPv6
   ]);
 
-  strictDeps = true;
-
   postInstall =
     let
       perlDeps = with perlPackages; [
@@ -70,8 +68,6 @@ perlPackages.buildPerlPackage {
       cp $src/new-cope $out/bin/cope
       cp -f $src/new-cope $out/libexec/cope
     '';
-
-  __structuredAttrs = true;
 
   meta = {
     description = "Colourful wrapper for terminal programs";

@@ -42,8 +42,6 @@ buildPerlPackage rec {
     ./gettext-1.0-msginit-compat.patch
   ];
 
-  strictDeps = true;
-
   nativeBuildInputs =
     # the tests for the tex-format use kpsewhich -- texlive's file finding utility.
     # We don't want to depend on texlive here, so we replace it with a minimal

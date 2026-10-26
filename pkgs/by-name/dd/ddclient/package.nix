@@ -36,8 +36,6 @@ perlPackages.buildPerlPackage rec {
     myPerl
   ];
 
-  strictDeps = true;
-
   # Prevent ddclient from picking up build time perl which is implicitly added
   # by buildPerlPackage.
   configureFlags = [
@@ -55,8 +53,6 @@ perlPackages.buildPerlPackage rec {
 
   # TODO: run upstream tests
   doCheck = false;
-
-  __structuredAttrs = true;
 
   meta = {
     description = "Client for updating dynamic DNS service entries";

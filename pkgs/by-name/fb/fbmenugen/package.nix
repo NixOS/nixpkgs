@@ -49,8 +49,6 @@ perlPackages.buildPerlPackage rec {
     xmessage
   ];
 
-  strictDeps = true;
-
   dontConfigure = true;
 
   dontBuild = true;
@@ -71,8 +69,6 @@ perlPackages.buildPerlPackage rec {
   '';
 
   passthru.updateScript = gitUpdater { };
-
-  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/trizen/fbmenugen";
