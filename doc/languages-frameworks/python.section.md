@@ -1643,6 +1643,14 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
   Default to `false` as most projects uses `pytest discover`.
 
+`enabledTests` (`null` or list of strings, default to `null`)
+
+: White-listed patterns (sub-strings or globs) to match the tests.
+  Each specified pattern is passed via the `-k` flag,
+  and will be matched against the fully qualified test method name as imported by the test loader.
+
+  The default value `null` opts out from the white-listing.
+
 `unittestFlags` (list, default to `[ ]`)
 
 : Additional flags to append to the `python3 -m unittest` command.

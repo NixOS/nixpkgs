@@ -14,6 +14,17 @@ unittestCheckPhase() {
     flagsArray+=("discover")
   fi
 
+  if [[ -n "${enabledTests[*]-}" ]]; then
+    # Process enabledTests
+    local -a _patterns=()
+    concatTo _patterns enabledTests
+    local _pattern
+    for _pattern in "${_patterns[@]}"; do
+      flagsArray+=(-k"$_pattern")
+    done
+    unset _pattern _patterns
+  fi
+
   # Compatibility layer to the obsolete unittestFlagsArray
   eval "flagsArray+=(${unittestFlagsArray[*]-})"
 
