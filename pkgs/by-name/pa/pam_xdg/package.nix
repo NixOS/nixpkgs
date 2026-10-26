@@ -5,12 +5,12 @@
   pam,
   coreutils,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_xdg";
   version = "0.8.5";
 
   src = fetchurl {
-    url = "https://ftp.sdaoden.eu/pam_xdg-${version}.tar.gz";
+    url = "https://ftp.sdaoden.eu/pam_xdg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-o4Fol6LouBQVLiGMAszEB+zBkBj8C1xMp057AvH3nl4=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib; [ maintainers.aanderse ];
   };
-}
+})

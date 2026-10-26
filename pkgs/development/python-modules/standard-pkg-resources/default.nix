@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "standard-pkg-resources";
   version = "1.0.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stephenfin";
     repo = "standard-pkg_resources";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MdibVeBssPa/kiNAw7f4jTl4Y6JKFnDLshvrc/cFWXw=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ a-peirogon ];
   };
-}
+})

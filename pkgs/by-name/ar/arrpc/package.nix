@@ -3,14 +3,14 @@
   buildNpmPackage,
   fetchFromGitHub,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "arrpc";
   version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "OpenAsar";
     repo = "arrpc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2SYlCOgeaPsYIQmGj4/fdme0S36COolXxER3rDjIe20=";
   };
 
@@ -25,7 +25,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/OpenAsar/arrpc/blob/${version}/changelog.md";
+    changelog = "https://github.com/OpenAsar/arrpc/blob/${finalAttrs.version}/changelog.md";
     description = "Open Discord RPC server for atypical setups";
     homepage = "https://arrpc.openasar.dev/";
     license = lib.licenses.mit;
@@ -36,4 +36,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "arrpc";
   };
-}
+})

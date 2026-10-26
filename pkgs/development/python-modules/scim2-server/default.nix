@@ -11,7 +11,7 @@
   time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scim2-server";
   version = "0.1.9";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-scim";
     repo = "scim2-server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wXs7E+7jke2y7Rndek4mj7jdhizNJPHpd16DafaY5+w=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight SCIM2 server prototype";
     homepage = "https://github.com/python-scim/scim2-server";
-    changelog = "https://github.com/python-scim/scim2-server/releases/tag/${version}";
+    changelog = "https://github.com/python-scim/scim2-server/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

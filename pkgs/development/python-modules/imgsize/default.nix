@@ -6,7 +6,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imgsize";
   version = "4.0.2";
   pyproject = true;
@@ -14,12 +14,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ojii";
     repo = "imgsize";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pHLYDC3UjrCKOdfgo2OreE5hGyIyWVSIsQR6piJZe6k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-AXBd6cCpBVEYnU/uqynnO8wsVypV34r023kwzwSsbe4=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ twey ];
   };
-}
+})

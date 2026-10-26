@@ -17,7 +17,7 @@
   stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-barbicanclient";
   version = "7.3.0";
   pyproject = true;
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-barbicanclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SFAldyA/M0rkKb2o6ePp+9ITWrUszyTz5jvCnUadufo=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   postPatch = ''
     # Disable rsvgconverter not needed to build manpage
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     mainProgram = "barbican";
     teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -12,14 +12,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "myhdl";
   version = "0.11.52";
   pyproject = true;
 
   # No recent tags on GitHub
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gUz3hyyBan+4q+ltmLJDuBXanomAVt/bvbaAY9ruZJY=";
   };
 
@@ -89,4 +89,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

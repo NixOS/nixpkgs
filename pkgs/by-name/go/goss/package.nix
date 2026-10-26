@@ -13,14 +13,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goss";
   version = "0.4.10";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = "goss";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4DCPPeTL2x6mMpcP/cdyQWpqehGWkk7MWM7P93WzwCA=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/goss-org/goss/util.Version=v${version}"
+    "-X github.com/goss-org/goss/util.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +55,7 @@ buildGoModule rec {
       version = testers.testVersion {
         command = "goss --version";
         package = goss;
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
       };
     };
     updateScript = nix-update-script { };
@@ -63,7 +63,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/goss-org/goss/";
-    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${finalAttrs.version}";
     description = "Quick and easy server validation";
     longDescription = ''
       Goss is a YAML based serverspec alternative tool for validating a server’s configuration.
@@ -79,4 +79,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

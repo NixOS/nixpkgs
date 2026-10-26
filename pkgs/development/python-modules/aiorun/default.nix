@@ -8,7 +8,7 @@
   uvloop,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiorun";
   version = "2025.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "aiorun";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YqUlWf79EbC47BETBDjo8hzg5jhL4LiWLKGr1Qy4AbM=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Boilerplate for asyncio applications";
     homepage = "https://github.com/cjrh/aiorun";
-    changelog = "https://github.com/cjrh/aiorun/blob/v${version}/CHANGES";
+    changelog = "https://github.com/cjrh/aiorun/blob/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -16,13 +16,13 @@
   pymongo-inmemory,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymongo";
   version = "4.17.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "pymongo";
     hash = "sha256-cP+gi6ZBRozAaM9GwGs08BqM40ifZBEwn8tc6r5rL8A=";
   };
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

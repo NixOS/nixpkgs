@@ -13,7 +13,7 @@
   opencv-python,
   requests-mock,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylette";
   version = "5.3.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qTipTip";
     repo = "Pylette";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EpmMgbCVUJ86BlWq2LgPKLKjPsfwom7RhrlvqWq/rh8=";
   };
 
@@ -63,10 +63,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/qTipTip/Pylette/releases/tag/${src.tag}";
+    changelog = "https://github.com/qTipTip/Pylette/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for extracting color palettes from images";
     homepage = "https://qtiptip.github.io/Pylette/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DataHearth ];
   };
-}
+})

@@ -10,7 +10,7 @@
   nix-update-script,
   cffi,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mozjpeg_lossless_optimization";
   version = "1.3.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "wanadev";
     repo = "mozjpeg-lossless-optimization";
     # https://github.com/NixOS/nixpkgs/issues/26302
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0w0e7QbYi3W6MahY8fnI+dYkQHqheOXQn3mJN/UfHlk=";
     fetchSubmodules = true;
   };
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to optimize JPEGs losslessly using MozJPEG";
     homepage = "https://github.com/wanadev/mozjpeg-lossless-optimization";
-    changelog = "https://github.com/wanadev/mozjpeg-lossless-optimization/releases/tag/${src.tag}";
+    changelog = "https://github.com/wanadev/mozjpeg-lossless-optimization/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.adfaure ];
   };
-}
+})

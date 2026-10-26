@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stupidartnet";
   version = "1.6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cpvalente";
     repo = "stupidArtnet";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-prLIQn1vFp0Q8FR2WBaU1tr6eKJpEY1ul4ldd4c35ls=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library implementation of the Art-Net protocol";
     homepage = "https://github.com/cpvalente/stupidArtnet";
-    changelog = "https://github.com/cpvalente/stupidArtnet/releases/tag/${version}";
+    changelog = "https://github.com/cpvalente/stupidArtnet/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-citybikes";
   version = "0.3.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eskerda";
     repo = "python-citybikes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-it/QCUwNc6g88IrtMTS8wr/t4Apb2ovSheufOnu4fCM=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

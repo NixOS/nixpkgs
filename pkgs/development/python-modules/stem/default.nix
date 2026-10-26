@@ -9,7 +9,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stem";
   version = "1.8.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "torproject";
     repo = "stem";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FK7ldpOGEQ+VYLgwL7rGSGNtD/2iz11b0YOa78zNGDk=";
   };
 
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/torproject/stem/blob/${src.tag}/docs/change_log.rst";
+    changelog = "https://github.com/torproject/stem/blob/${finalAttrs.src.tag}/docs/change_log.rst";
     description = "Controller library that allows applications to interact with Tor";
     mainProgram = "tor-prompt";
     downloadPage = "https://github.com/torproject/stem";
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

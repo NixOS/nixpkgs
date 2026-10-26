@@ -9,7 +9,7 @@
   mashumaro,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-snoo";
   version = "0.11.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "python-snoo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IbBNdtRZdXrN6dyR0cdKsrx3kxxBTUmfAxmuJy4p5x4=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/Lash-L/python-snoo/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Lash-L/python-snoo/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Control Snoo devices via python and get auto updates";
     homepage = "https://github.com/Lash-L/python-snoo";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

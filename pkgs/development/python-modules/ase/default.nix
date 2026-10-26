@@ -26,7 +26,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ase";
   version = "3.29.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "ase";
     repo = "ase";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hMeGeQFoC+eWfHkJize21IdxLKAR7Oc0Txwg2BQIvWg=";
   };
 
@@ -88,4 +88,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

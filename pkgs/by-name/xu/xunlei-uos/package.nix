@@ -19,7 +19,7 @@
 let
   sources = import ./sources.nix;
 
-  xunlei-unwrapped = stdenv.mkDerivation rec {
+  xunlei-unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "xunlei-uos";
     version = sources.version;
 
@@ -39,7 +39,7 @@ let
         };
       }
       .${stdenv.hostPlatform.system}
-        or (throw "${pname}-${version}: ${stdenv.hostPlatform.system} is unsupported.");
+        or (throw "${finalAttrs.pname}-${finalAttrs.version}: ${stdenv.hostPlatform.system} is unsupported.");
 
     buildInputs = [
       nss
@@ -83,7 +83,7 @@ let
         "loongarch64-linux"
       ];
     };
-  };
+  });
 in
 buildFHSEnv {
   inherit (xunlei-unwrapped) pname version meta;

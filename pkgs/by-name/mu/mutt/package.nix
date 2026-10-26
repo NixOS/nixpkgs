@@ -29,7 +29,7 @@
 assert smimeSupport -> sslSupport;
 assert gpgmeSupport -> sslSupport;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mutt";
   version = "2.4.3";
   outputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
+    url = "http://ftp.mutt.org/pub/mutt/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-zpFU46/t5iLZi5CiLIfQbzIFHJMKmvsrfvQWVsTbyUg=";
   };
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
       # Expect the text in format of "The current stable public release version is 2.2.6."
       new_version="$(curl -s http://www.mutt.org/download.html |
           pcre2grep -o1 'The current stable public release version is ([0-9.]+).')"
-      update-source-version ${pname} "$new_version"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };
 
@@ -134,4 +134,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

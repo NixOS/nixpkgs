@@ -5,13 +5,13 @@
   setuptools,
   conda-package-streaming,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "conda-package-handling";
   version = "2.4.0";
   src = fetchFromGitHub {
     owner = "conda";
     repo = "conda-package-handling";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AvuxHl3gUH7zIyMhZGeXqpMy0rJ99wj1/SrdTvlaX9A=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];
   };
-}
+})

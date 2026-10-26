@@ -11,7 +11,7 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-futures";
   version = "1.0.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ross";
     repo = "requests-futures";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eUu+M9rPyvc7OaOCCnUvGliK4gicYh6hfB0Jo19Yy1g=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python HTTP Requests for Humans using Futures";
     homepage = "https://github.com/ross/requests-futures";
-    changelog = "https://github.com/ross/requests-futures/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ross/requests-futures/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ applePrincess ];
   };
-}
+})

@@ -6,7 +6,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "russound";
   version = "0.1.8";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "laf";
     repo = "russound";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iAhHOZwgaLhgkN/oW3Oz9bazyoqlP8GIsaXpqyXs3/Y=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for select Russound RNET commands to provide Russound support within home-assistant.io";
     homepage = "https://github.com/laf/russound";
-    changelog = "https://github.com/laf/russound/releases/tag/${version}";
+    changelog = "https://github.com/laf/russound/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

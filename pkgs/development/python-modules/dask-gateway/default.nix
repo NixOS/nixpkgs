@@ -8,7 +8,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
   version = "2025.4.0";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ezt5QkA21SDfuCMm+XY8d+xso8SDb4lmK/yd89Guu0Y=";
   };
 
-  sourceRoot = "${src.name}/dask-gateway";
+  sourceRoot = "${finalAttrs.src.name}/dask-gateway";
 
   build-system = [ hatchling ];
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

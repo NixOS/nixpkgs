@@ -10,7 +10,7 @@
   pandas,
   requests,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mygene";
   version = "3.2.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biothings";
     repo = "mygene.py";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/KxlzOTbZTN5BA0PrJyivVFh4cLtW90/EFwczda61Tg=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mygene" ];
 
   meta = {
-    changelog = "https://github.com/biothings/mygene.py/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/biothings/mygene.py/blob/v${finalAttrs.version}/CHANGES.txt";
     description = "REST web services to query/retrieve gene annotation data";
     homepage = "https://github.com/biothings/mygene.py";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rayhem ];
   };
-}
+})

@@ -6,13 +6,13 @@
   hidapi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-u2flib-host";
   version = "3.0.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-q2eLncKUZqd578qi8BUNzjUFmn0XaA/CYFf6WZpT/Ao=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

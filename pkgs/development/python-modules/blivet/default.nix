@@ -33,7 +33,7 @@
 let
   libblockdevPython = (libblockdev.override { python3 = python; }).python;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blivet";
   version = "3.13.2";
   format = "setuptools";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
-    tag = "blivet-${version}";
+    tag = "blivet-${finalAttrs.version}";
     hash = "sha256-Yq8lIgu2S4L2PNeJ+ybn6daaPA2XlDJkUPihHiH2n+w=";
   };
 
@@ -105,4 +105,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ cybershadow ];
     platforms = lib.platforms.linux;
   };
-}
+})

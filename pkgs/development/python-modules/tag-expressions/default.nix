@@ -6,20 +6,20 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tag-expressions";
   version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "tag_expressions";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-EbSwfAH+sL3JGW+COfDA2f7cLGyKmQMsbyyDGy13Lkg=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'version=read_version()' 'version="${version}"'
+      --replace-fail 'version=read_version()' 'version="${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kalbasit ];
   };
-}
+})

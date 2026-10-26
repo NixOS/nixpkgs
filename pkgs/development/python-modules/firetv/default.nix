@@ -9,13 +9,13 @@
   pyyaml,
   rsa,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "firetv";
   version = "1.0.9";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YC3ndBHCyv+zIuT/Y/psxO65pQxfSxThOTDtfNh89RM=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.makefu ];
   };
-}
+})

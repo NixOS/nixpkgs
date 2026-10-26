@@ -9,7 +9,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litemapy";
   version = "0.11.0b0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SmylerMC";
     repo = "litemapy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jqJYiggAs/JA+CJ35HzpsIQA/5p8PRFkbmPlwJvTI28=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to read and edit Litematica's schematic file format";
     homepage = "https://github.com/SmylerMC/litemapy";
-    changelog = "https://github.com/SmylerMC/litemapy/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/SmylerMC/litemapy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       gdd
       kuflierl
     ];
   };
-}
+})

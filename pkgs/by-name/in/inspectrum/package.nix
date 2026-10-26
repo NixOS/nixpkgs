@@ -11,14 +11,14 @@
   liquid-dsp,
 }:
 
-gnuradioMinimal.pkgs.mkDerivation rec {
+gnuradioMinimal.pkgs.mkDerivation (finalAttrs: {
   pname = "inspectrum";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "miek";
     repo = "inspectrum";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-yY2W2hQpj8TIxiQBSbQHq0J16n74OfIwMDxFt3mLZYc=";
   };
 
@@ -55,4 +55,4 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

@@ -16,7 +16,7 @@ let
     exec ${qt6.qtbase}/libexec/rcc -g python "$@"
   '';
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nanovna-saver";
   version = "0.7.3";
   pyproject = true;
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = "nanovna-saver";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Asx4drb9W2NobdgOlbgdm1aAzB69hnIWvOM915F7sgA=";
   };
 
@@ -79,4 +79,4 @@ python3.pkgs.buildPythonApplication rec {
       tmarkus
     ];
   };
-}
+})

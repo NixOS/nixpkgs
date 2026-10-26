@@ -7,14 +7,14 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "valentina";
   version = "0.7.53";
 
   src = fetchFromGitLab {
     owner = "smart-pattern";
     repo = "valentina";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vIlqrK7wyFaXKfvcJ3FtkAwUt6Xb/47qxcDGy1Ty2uk=";
   };
 
@@ -53,9 +53,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source sewing pattern drafting software";
     homepage = "https://smart-pattern.com.ua/";
-    changelog = "https://gitlab.com/smart-pattern/valentina/-/blob/v${version}/ChangeLog.txt";
+    changelog = "https://gitlab.com/smart-pattern/valentina/-/blob/v${finalAttrs.version}/ChangeLog.txt";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

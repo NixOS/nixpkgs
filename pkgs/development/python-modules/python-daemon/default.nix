@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-daemon";
   version = "3.1.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_daemon";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-97BDNa3Ec96Hf1EX4m1fEUL0yffNdlQI8Id3V75a+/Q=";
   };
 
@@ -73,4 +73,4 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

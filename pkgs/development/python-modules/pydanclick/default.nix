@@ -10,7 +10,7 @@
   pydantic-settings,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydanclick";
   version = "0.5.1";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "felix-martel";
     repo = "pydanclick";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Cgjq+9j6v7KILjfhK+4Y5joZPU2/ufJiIsdAfnSG9x4=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Add click options from a Pydantic model";
     homepage = "https://github.com/felix-martel/pydanclick";
-    changelog = "https://github.com/felix-martel/pydanclick/releases/tag/${src.tag}";
+    changelog = "https://github.com/felix-martel/pydanclick/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.erictapen ];
   };
-}
+})

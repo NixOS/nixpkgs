@@ -8,13 +8,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sievelib";
   version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VcEa0/QEqsX/D07J4K41Th2AOu1yxEUkWY0l3qyGsLg=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
        * Imap4flags (RFC 5232)
     '';
     homepage = "https://github.com/tonioo/sievelib";
-    changelog = "https://github.com/tonioo/sievelib/releases/tag/${version}";
+    changelog = "https://github.com/tonioo/sievelib/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
   };
-}
+})

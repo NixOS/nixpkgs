@@ -4,12 +4,12 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "recursive";
   version = "1.085";
 
   src = fetchzip {
-    url = "https://github.com/arrowtype/recursive/releases/download/v${version}/ArrowType-Recursive-${version}.zip";
+    url = "https://github.com/arrowtype/recursive/releases/download/v${finalAttrs.version}/ArrowType-Recursive-${finalAttrs.version}.zip";
     sha256 = "sha256-hnGnKnRoQN8vFStW8TjLrrTL1dWsthUEWxfaGF0b0vM=";
   };
 
@@ -25,4 +25,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.eadwu ];
     platforms = lib.platforms.all;
   };
-}
+})

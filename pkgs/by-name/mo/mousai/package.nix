@@ -22,19 +22,19 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mousai";
   version = "0.7.10";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Mousai";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xOP/lmJcZSdTeAMsV/vDpA2cDC7e8NJU6W1PImzLhZ4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-pVPS8+J9crn/Rt/PIW7yiVRmB1Y87vgNVojulU4tr7w=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
-}
+})

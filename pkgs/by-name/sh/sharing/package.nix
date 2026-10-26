@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "sharing";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "parvardegr";
     repo = "sharing";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-y5tAbyRGxr6lagU/+pLBN0VIpk3+SzKyXOehQk6NW+M=";
   };
 
@@ -30,4 +30,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ChaosAttractor ];
   };
-}
+})

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymdstat";
   version = "0.5.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "pymdstat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZpAXD77bNJ+YpXCW0es7jR+Hs3uDDfxWVeHiWz3sDRs=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ rhoriguchi ];
     license = lib.licenses.mit;
   };
-}
+})

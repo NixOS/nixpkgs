@@ -7,14 +7,14 @@
   gtest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ethash";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "chfast";
     repo = "ethash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sLa+lXC+UvqFEoC/ZfoRlotkNhUaqhLtDKHtbH2xa/k=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

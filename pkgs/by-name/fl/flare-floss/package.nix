@@ -5,7 +5,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "flare-floss";
   version = "3.1.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "flare-floss";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # for tests
     hash = "sha256-ciyF1Pt5KdUsmpTgvfgE81hhTHBM5zMBcZpom99R5GY=";
   };
@@ -62,9 +62,9 @@ python3.pkgs.buildPythonPackage rec {
   meta = {
     description = "Automatically extract obfuscated strings from malware";
     homepage = "https://github.com/mandiant/flare-floss";
-    changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
+    changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "floss";
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

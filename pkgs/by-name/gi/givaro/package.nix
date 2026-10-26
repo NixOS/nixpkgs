@@ -9,14 +9,14 @@
   autoreconfHook,
   gmpxx,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "givaro";
   version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
     repo = "givaro";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-vSkWmKqpbVk1qdsqCU7qF7o+YgV5YRc9p4mlgl6yrto=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

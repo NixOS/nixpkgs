@@ -18,7 +18,7 @@
   udevCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "liquidctl";
   version = "1.16.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liquidctl";
     repo = "liquidctl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NN/LPcRwj1c9xIIBmNCSLkb+8LHPIqH/YuLPm3kxqEQ=";
   };
 
@@ -76,11 +76,11 @@ buildPythonPackage rec {
   meta = {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidctl";
-    changelog = "https://github.com/liquidctl/liquidctl/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/liquidctl/liquidctl/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       arturcygan
     ];
     mainProgram = "liquidctl";
   };
-}
+})

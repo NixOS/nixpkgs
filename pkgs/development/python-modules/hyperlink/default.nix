@@ -5,13 +5,13 @@
   idna,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyperlink";
   version = "21.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Qnr5V9qli8kJRxxsQPdMVFD6Ej3Qk/xT79LpHScFpWs=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

@@ -7,7 +7,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wizer";
   version = "11.0.3";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wizer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gGO09/aHkSN8Q7EcKc7FO761YOkliHt9t7iXP4EB1Fc=";
   };
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--bin"
-    pname
+    finalAttrs.pname
   ];
 
   buildFeatures = [
@@ -42,4 +42,4 @@ rustPlatform.buildRustPackage rec {
       lucperkins
     ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdd";
   version = "1.7";
   pyproject = false;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "pdd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jQCjqQxvJU2oYLSWpFriJIfD0EbqBx59AvRX77pX0Cg=";
   };
 
@@ -50,4 +50,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "pdd";
   };
-}
+})

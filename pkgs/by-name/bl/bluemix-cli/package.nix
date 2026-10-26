@@ -4,21 +4,21 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bluemix-cli";
   version = "0.8.0";
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
-        name = "linux32-${version}.tar.gz";
-        url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux32";
+        name = "linux32-${finalAttrs.version}.tar.gz";
+        url = "https://clis.ng.bluemix.net/download/bluemix-cli/${finalAttrs.version}/linux32";
         sha256 = "1ryngbjlw59x33rfd32bcz49r93a1q1g92jh7xmi9vydgqnzsifh";
       }
     else
       fetchurl {
-        name = "linux64-${version}.tar.gz";
-        url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux64";
+        name = "linux64-${finalAttrs.version}.tar.gz";
+        url = "https://clis.ng.bluemix.net/download/bluemix-cli/${finalAttrs.version}/linux64";
         sha256 = "056zbaca430ldcn0s86vy40m5abvwpfrmvqybbr6fjwfv9zngywx";
       };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
   };
-}
+})

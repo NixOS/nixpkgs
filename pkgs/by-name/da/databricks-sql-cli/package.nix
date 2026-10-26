@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "databricks-sql-cli";
   version = "0.3.3";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wmwXw1o+pRsRjA7ai9x5o1el7mNBqM6xlGrvw0IqfMo=";
   };
 
@@ -46,8 +46,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "CLI for querying Databricks SQL";
     mainProgram = "dbsqlcli";
     homepage = "https://github.com/databricks/databricks-sql-cli";
-    changelog = "https://github.com/databricks/databricks-sql-cli/releases/tag/v${version}";
+    changelog = "https://github.com/databricks/databricks-sql-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.databricks;
     maintainers = with lib.maintainers; [ kfollesdal ];
   };
-}
+})

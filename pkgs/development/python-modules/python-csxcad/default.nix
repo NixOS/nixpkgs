@@ -8,14 +8,14 @@
   matplotlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-csxcad";
   version = csxcad.version;
   format = "setuptools";
 
   src = csxcad.src;
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   nativeBuildInputs = [ cython ];
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ matthuszagh ];
     platforms = lib.platforms.linux;
   };
-}
+})

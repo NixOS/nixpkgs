@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "andrew-codechimp";
   domain = "battery_notes";
   version = "3.7.2";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "HA-Battery-Notes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Cf/MK9NBsU8TOdLz0c3jgzLdh88idQ0TxSFGrPG3NrA=";
   };
 
@@ -22,8 +22,8 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Home Assistant integration to provide battery details of devices";
     homepage = "https://github.com/andrew-codechimp/HA-Battery-Notes";
-    changelog = "https://github.com/andrew-codechimp/HA-Battery-Notes/releases/tag/${src.tag}";
+    changelog = "https://github.com/andrew-codechimp/HA-Battery-Notes/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.mit;
   };
-}
+})

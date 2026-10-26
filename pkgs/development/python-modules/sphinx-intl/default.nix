@@ -12,7 +12,7 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-intl";
   version = "2.4.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-intl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Q8k/XOT2s7u7IuQ85XrcARLPwMUC9Z6yeRshrIGbJdA=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ thornycrackers ];
   };
-}
+})

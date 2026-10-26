@@ -10,14 +10,14 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aspectlib";
   version = "2.0.0";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-pLRhudoLUxrry5PvzePegIpyxgIm3Y2QLEZ9E/r3zpI=";
   };
 
@@ -58,10 +58,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/ionelmc/python-aspectlib/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ionelmc/python-aspectlib/blob/v${finalAttrs.version}/CHANGELOG.rst";
     description = "Aspect-oriented programming, monkey-patch and decorators library";
     homepage = "https://github.com/ionelmc/python-aspectlib";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

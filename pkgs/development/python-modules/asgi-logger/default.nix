@@ -6,13 +6,13 @@
   asgiref,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asgi-logger";
   version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-son1ML9J0UMgJCpWdYD/yK0FO6VmfuzifSWpeCLToKo=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/Kludex/asgi-logger";
     license = lib.licenses.mit;
   };
-}
+})

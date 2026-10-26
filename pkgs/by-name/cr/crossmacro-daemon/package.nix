@@ -12,14 +12,14 @@
   zlib,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "crossmacro-daemon";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "alper-han";
     repo = "CrossMacro";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2L25A2OO2Ju6n1QlblNBtKva1PfbidFz/QESjLBVuSU=";
   };
 
@@ -52,7 +52,7 @@ buildDotnetModule rec {
     "-p:IlcTrimMetadata=true"
     "-p:DebugType=None"
     "-p:DebugSymbols=false"
-    "-p:Version=${version}"
+    "-p:Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -71,10 +71,10 @@ buildDotnetModule rec {
   meta = {
     description = "Privileged input daemon for CrossMacro";
     homepage = "https://github.com/alper-han/CrossMacro";
-    changelog = "https://github.com/alper-han/CrossMacro/releases/tag/v${version}";
+    changelog = "https://github.com/alper-han/CrossMacro/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "CrossMacro.Daemon";
     maintainers = with lib.maintainers; [ alper-han ];
   };
-}
+})

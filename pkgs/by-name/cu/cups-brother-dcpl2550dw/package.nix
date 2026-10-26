@@ -31,12 +31,12 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-brother-dcpl2550dw";
   version = "4.0.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf103577/dcpl2550dwpdrv-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf103577/dcpl2550dwpdrv-${finalAttrs.version}.i386.deb";
     hash = "sha256-gGW8KDXlmYSMxvI29pfXd/lusg4rd4HaXiGkbBnUuQY=";
   };
 
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=dcpl2550dw_us_as&os=128";
     maintainers = with lib.maintainers; [ typedrat ];
   };
-}
+})

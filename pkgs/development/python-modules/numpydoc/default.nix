@@ -17,14 +17,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpydoc";
   version = "1.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname;
-    inherit version;
+    inherit (finalAttrs) pname;
+    inherit (finalAttrs) version;
     hash = "sha256-P3lw9u7jCRImCmsxrHK7okMoMM1nIlaewX7o0+9f+gE=";
   };
 
@@ -59,10 +59,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "numpydoc" ];
 
   meta = {
-    changelog = "https://github.com/numpy/numpydoc/releases/tag/v${version}";
+    changelog = "https://github.com/numpy/numpydoc/releases/tag/v${finalAttrs.version}";
     description = "Sphinx extension to support docstrings in Numpy format";
     mainProgram = "validate-docstrings";
     homepage = "https://github.com/numpy/numpydoc";
     license = lib.licenses.free;
   };
-}
+})

@@ -9,7 +9,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-simple-history";
   version = "3.11.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-simple-history";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pTWorV++YSr/oIdcShrJTBUFfn5ekJ29rNn6ltDhN5Q=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to store Django model state on every create/update/delete";
     homepage = "https://github.com/jazzband/django-simple-history/";
-    changelog = "https://github.com/jazzband/django-simple-history/releases/tag/${src.tag}";
+    changelog = "https://github.com/jazzband/django-simple-history/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

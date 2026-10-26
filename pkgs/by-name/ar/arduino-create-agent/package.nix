@@ -6,14 +6,14 @@
   go-task,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "arduino-create-agent";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduino-create-agent";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-L77LDMe6KTwQ2qAx3OT1O27h4DhAjZzcs8WL/N7E8hI=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   vendorHash = "sha256-Nrw7l3nV1sMVWs1HECQJYohKiD0gPvWQOLD7eohEd1A=";
 
   ldflags = [
-    "-X github.com/arduino/arduino-create-agent/version.versionString=${version}"
+    "-X github.com/arduino/arduino-create-agent/version.versionString=${finalAttrs.version}"
     "-X github.com/arduino/arduino-create-agent/version.commit=unknown"
   ];
 
@@ -37,8 +37,8 @@ buildGoModule rec {
   meta = {
     description = "Agent to upload code to any USB connected Arduino board directly from the browser";
     homepage = "https://github.com/arduino/arduino-create-agent";
-    changelog = "https://github.com/arduino/arduino-create-agent/releases/tag/${version}";
+    changelog = "https://github.com/arduino/arduino-create-agent/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ kilimnik ];
   };
-}
+})

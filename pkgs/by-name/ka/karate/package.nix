@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "karate";
   version = "2.1.1";
 
   src = fetchurl {
-    url = "https://github.com/karatelabs/karate/releases/download/v${version}/karate-${version}.jar";
+    url = "https://github.com/karatelabs/karate/releases/download/v${finalAttrs.version}/karate-${finalAttrs.version}.jar";
     sha256 = "sha256-XrDmWpl1aforNvsnJU4V4TUUoCTU+7D8NTgTrJHjmOE=";
   };
   dontUnpack = true;
@@ -36,9 +36,9 @@ stdenvNoCC.mkDerivation rec {
       you can run tests in parallel for speed.
     '';
     homepage = "https://github.com/karatelabs/karate";
-    changelog = "https://github.com/karatelabs/karate/releases/tag/v${version}";
+    changelog = "https://github.com/karatelabs/karate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kephasp ];
     platforms = jre.meta.platforms;
   };
-}
+})

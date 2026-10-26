@@ -34,7 +34,7 @@ let
   };
 in
 
-buildGo127Module rec {
+buildGo127Module (finalAttrs: {
   pname = "evcc";
   inherit version src vendorHash;
 
@@ -68,7 +68,7 @@ buildGo127Module rec {
   ];
 
   ldflags = [
-    "-X github.com/evcc-io/evcc/util.Version=${version}"
+    "-X github.com/evcc-io/evcc/util.Version=${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -107,7 +107,7 @@ buildGo127Module rec {
   meta = commonMeta // {
     description = "EV Charge Controller";
     homepage = "https://evcc.io";
-    changelog = "https://github.com/evcc-io/evcc/releases/tag/${version}";
+    changelog = "https://github.com/evcc-io/evcc/releases/tag/${finalAttrs.version}";
     mainProgram = "evcc";
   };
-}
+})

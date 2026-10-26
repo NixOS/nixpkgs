@@ -5,7 +5,7 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ltpycld2";
   version = "0.42";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "LTpycld2";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lI0MGrVRirTvy8w81zuyn4CfHfsw9NL72BsXWh/+tRY=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})

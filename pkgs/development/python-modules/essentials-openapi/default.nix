@@ -16,7 +16,7 @@
   setuptools,
   stdenv,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "essentials-openapi";
   version = "1.4.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials-openapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m2N6iOWfDBSRU99XqKs0T3a3iJWkPb2DuXW0Wm72r9g=";
   };
 
@@ -70,11 +70,11 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Neoteroi/essentials-openapi";
     description = "Functions to handle OpenAPI Documentation";
-    changelog = "https://github.com/Neoteroi/essentials-openapi/releases/${src.tag}";
+    changelog = "https://github.com/Neoteroi/essentials-openapi/releases/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];
   };
-}
+})

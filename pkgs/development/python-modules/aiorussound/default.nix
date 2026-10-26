@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiorussound";
   version = "5.0.2";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noahhusby";
     repo = "aiorussound";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mzehFObsX8+A8OZsGUN1hXeyXYyfxBft/SWJtIMfMYE=";
   };
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiorussound" ];
 
   meta = {
-    changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${src.tag}";
+    changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${finalAttrs.src.tag}";
     description = "Async python package for interfacing with Russound RIO hardware";
     homepage = "https://github.com/noahhusby/aiorussound";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

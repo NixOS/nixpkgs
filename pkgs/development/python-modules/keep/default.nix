@@ -9,13 +9,13 @@
   terminaltables3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keep";
   version = "2.11";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Brwvu/Zevr8sOE3KAwakDDzVMc2VoFxIb1orXAes2U0=";
   };
 
@@ -36,9 +36,9 @@ buildPythonPackage rec {
   meta = {
     description = "Meta CLI toolkit to keep personal shell command keeper and manage snippets";
     homepage = "https://github.com/OrkoHunter/keep";
-    changelog = "https://github.com/OrkoHunter/keep/releases/tag/${version}";
+    changelog = "https://github.com/OrkoHunter/keep/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
     mainProgram = "keep";
   };
-}
+})

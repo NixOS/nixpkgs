@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meshio";
   version = "5.3.5";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "meshio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2j+5BYftCiy+g33UbsgCMWBRggGBJBx5VoEdSqQ/mV0=";
   };
 
@@ -105,9 +105,9 @@ buildPythonPackage rec {
   meta = {
     description = "I/O for mesh files";
     homepage = "https://github.com/nschloe/meshio";
-    changelog = "https://github.com/nschloe/meshio/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nschloe/meshio/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "meshio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wd15 ];
   };
-}
+})

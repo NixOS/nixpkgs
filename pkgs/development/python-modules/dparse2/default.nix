@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dparse2";
   version = "0.7.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "dparse2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JUTL+SVf1RRIXQqwFR7MnExsgGseSiO0a5YzzcqdXHw=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to parse Python dependency files";
     homepage = "https://github.com/nexB/dparse2";
-    changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/nexB/dparse2/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

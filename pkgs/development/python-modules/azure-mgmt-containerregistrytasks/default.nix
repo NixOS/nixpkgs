@@ -9,14 +9,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-containerregistrytasks";
   version = "1.0.0b1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_containerregistrytasks";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-1nMN1cm/yp/fD+D5M3BtPH+4VcoQxWhQZQsHDpxsr1E=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

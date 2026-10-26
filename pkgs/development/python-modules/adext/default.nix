@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "adext";
   version = "0.4.8";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ajschmidt8";
     repo = "adext";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2jhMlEMEVDY/LJPH+pr+hmPGq1ygth7DlBY26LqBX7w=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python extension for AlarmDecoder";
     homepage = "https://github.com/ajschmidt8/adext";
-    changelog = "https://github.com/ajschmidt8/adext/releases/tag/${src.tag}";
+    changelog = "https://github.com/ajschmidt8/adext/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

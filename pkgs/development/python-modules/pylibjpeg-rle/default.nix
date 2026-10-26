@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylibjpeg-rle";
   version = "2.2.0";
   pyproject = true;
@@ -19,12 +19,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg-rle";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hAtseH4akBCKhlWsPGXeQRYUK0BiytFrLFCmeg7nUXY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-QprjrR/AelrC+6n7uWZicO9QH0OAJCR7DSE1JuQOMCI=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast DICOM RLE plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-rle";
-    changelog = "https://github.com/pydicom/pylibjpeg-rle/releases/tag/${src.tag}";
+    changelog = "https://github.com/pydicom/pylibjpeg-rle/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

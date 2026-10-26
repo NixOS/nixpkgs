@@ -9,7 +9,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parse-type";
   version = "0.6.6";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jenisys";
     repo = "parse_type";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4ZQNxvYWqYXcMj3vEtaEdikuJ38llGpmuutIOtr3lz0=";
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace "--metadata PACKAGE_UNDER_TEST parse_type" "" \
-      --replace "--metadata PACKAGE_VERSION ${version}" "" \
+      --replace "--metadata PACKAGE_VERSION ${finalAttrs.version}" "" \
       --replace "--html=build/testing/report.html --self-contained-html" "" \
       --replace "--junit-xml=build/testing/report.xml" ""
   '';
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ alunduil ];
   };
-}
+})

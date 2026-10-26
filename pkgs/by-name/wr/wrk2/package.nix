@@ -7,9 +7,9 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wrk2";
-  version = "4.0.0-${builtins.substring 0 7 src.rev}";
+  version = "4.0.0-${builtins.substring 0 7 finalAttrs.src.rev}";
 
   src = fetchFromGitHub {
     owner = "giltene";
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "wrk2";
   };
-}
+})

@@ -9,7 +9,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elvia";
   version = "0.1.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andersem";
     repo = "elvia-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oGXs+EwEIykkq8KjK7qNnZfLj4ZoKlgkldUiJlAI1gA=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Unofficial API bindings for Elvia's consumer facing APIs";
     homepage = "https://github.com/andersem/elvia-python";
-    changelog = "https://github.com/andersem/elvia-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/andersem/elvia-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
   };
-}
+})

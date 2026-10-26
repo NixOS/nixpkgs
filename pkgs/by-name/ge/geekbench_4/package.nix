@@ -9,12 +9,12 @@
   vulkan-loader,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geekbench";
   version = "4.4.4";
 
   src = fetchurl {
-    url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
+    url = "https://cdn.geekbench.com/Geekbench-${finalAttrs.version}-Linux.tar.gz";
     sha256 = "sha256-KVsBE0ueWewmoVY/vzxX2sKhRTzityPNR+wmTwZBWiI=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "geekbench4";
   };
-}
+})

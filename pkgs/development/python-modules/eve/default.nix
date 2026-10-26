@@ -10,7 +10,7 @@
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eve";
   version = "2.3.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyeve";
     repo = "eve";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y0QfxLDoTKNZuAKcPqrLjwkZ0mRseBVq7OyflwUd+Lk=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Open source Python REST API framework designed for human beings";
     homepage = "https://python-eve.org/";
-    changelog = "https://github.com/pyeve/eve/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pyeve/eve/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

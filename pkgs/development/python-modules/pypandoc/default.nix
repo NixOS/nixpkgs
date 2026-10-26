@@ -9,7 +9,7 @@
   texliveSmall,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypandoc";
   version = "1.16.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JessicaTegner";
     repo = "pypandoc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h0Ur5kWyKz1NCEMdnE0eNCYMAEqjx3g/tnfXs1h9zCs=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
       bennofs
     ];
   };
-}
+})

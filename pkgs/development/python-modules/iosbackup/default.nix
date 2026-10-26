@@ -7,13 +7,13 @@
   pycrypto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iosbackup";
   version = "0.9.925";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "iOSbackup";
     hash = "sha256-M1Rakknls/qq3x7ngv5r3823D64N77oazuM2pl+T0co=";
   };
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ PapayaJackal ];
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mystem";
   version = "3.1";
 
   src = fetchurl {
-    url = "https://download.cdn.yandex.net/mystem/${pname}-${version}-linux-64bit.tar.gz";
+    url = "https://download.cdn.yandex.net/mystem/${finalAttrs.pname}-${finalAttrs.version}-linux-64bit.tar.gz";
     sha256 = "0qha7jvkdmil3jiwrpsfhkqsbkqn9dzgx3ayxwjdmv73ikmg95j6";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "mystem";
   };
-}
+})

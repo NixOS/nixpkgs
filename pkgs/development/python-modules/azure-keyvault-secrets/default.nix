@@ -8,14 +8,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-keyvault-secrets";
   version = "4.11.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_keyvault_secrets";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-I7Ecvs9FJQgRIeaKgtfzpCEVVvbbtN27OQqU24tyyTg=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure Key Vault Secrets Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/keyvault/azure-keyvault-secrets";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-keyvault-secrets_${version}/sdk/keyvault/azure-keyvault-secrets";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-keyvault-secrets_${finalAttrs.version}/sdk/keyvault/azure-keyvault-secrets";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

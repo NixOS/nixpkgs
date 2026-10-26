@@ -5,14 +5,14 @@
   testers,
   todoist-cli,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "todoist-cli";
   version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "Doist";
     repo = "todoist-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kVPEL89MeAhGrrYKakFw0Q/XAW3F0FOuYhDoZDjsj0o=";
   };
 
@@ -33,4 +33,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ joaosreis ];
     mainProgram = "td";
   };
-}
+})

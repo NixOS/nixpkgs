@@ -13,13 +13,13 @@
   trustme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unearth";
   version = "0.18.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FAZ88RQckG94fW2dBwy8/dRD/RBYrsqmUM6VGaoQ29w=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
   meta = {
     description = "Utility to fetch and download Python packages";
     homepage = "https://github.com/frostming/unearth";
-    changelog = "https://github.com/frostming/unearth/releases/tag/${version}";
+    changelog = "https://github.com/frostming/unearth/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ betaboon ];
     mainProgram = "unearth";
   };
-}
+})

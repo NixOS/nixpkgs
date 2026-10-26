@@ -6,15 +6,15 @@
   music-assistant-client,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "droans";
   domain = "mass_queue";
   version = "0.10.4";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "mass_queue";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VLX32fDcqnwYqbcHUPNtfjPgw0grxNSbUjkMce4pKDA=";
   };
 
@@ -27,10 +27,10 @@ buildHomeAssistantComponent rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/droans/mass_queue/releases/tag/${src.tag}";
+    changelog = "https://github.com/droans/mass_queue/releases/tag/${finalAttrs.src.tag}";
     description = "Actions to control player queues for Music Assistant";
     homepage = "https://github.com/droans/mass_queue";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.mit;
   };
-}
+})

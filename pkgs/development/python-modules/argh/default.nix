@@ -8,13 +8,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argh";
   version = "0.31.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8wAj2L4Uyl7msbPuq4KRUde72kZK4H3E3VNHkZxYkvk=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "argh" ];
 
   meta = {
-    changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/neithere/argh/blob/v${finalAttrs.version}/CHANGELOG.rst";
     homepage = "https://github.com/neithere/argh";
     description = "Unobtrusive argparse wrapper with natural syntax";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

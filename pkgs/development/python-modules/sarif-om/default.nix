@@ -6,14 +6,14 @@
   pbr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sarif-om";
   version = "1.0.4";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "sarif_om";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-zV9BazCD4A1AKpLkSaf/Z69G8RJBBz7qBGGAKjta75g=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

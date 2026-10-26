@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "feedparser";
   version = "6.0.14";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kurtmckee";
     repo = "feedparser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b2NnirUFJ1uAqIl4h/UoAff5am/D2pIuundZyzzQFfU=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

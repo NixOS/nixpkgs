@@ -9,7 +9,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pinecone";
   version = "10.0.0";
   pyproject = true;
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pinecone-io";
     repo = "pinecone-python-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DvCPMhuVDGO9Bidz07rUOBM5L91Q+GHUuiX7rxLoJwI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-qhH2TmnxfUpFzmTVqG4MihaqbEQiWAtV5WHspsLTdSo=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pinecone Python SDK";
     homepage = "https://www.pinecone.io/";
-    changelog = "https://github.com/pinecone-io/python-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/pinecone-io/python-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

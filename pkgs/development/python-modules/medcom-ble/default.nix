@@ -7,14 +7,14 @@
   bleak-retry-connector,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "medcom-ble";
   version = "0.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "medcom_ble";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-PQ0ZOFLGVllz/Jxw2CN6D5Ypza5/Ck3dtk3DuB+eHiA=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

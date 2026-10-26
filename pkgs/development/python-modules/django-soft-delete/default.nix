@@ -6,14 +6,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-soft-delete";
   version = "1.0.23";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_soft_delete";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-gUZZ8NGdTyr8WLMf9z+I8K9mcVzO87T82PazoBHVmyo=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -9,7 +9,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huawei-lte-api";
   version = "2.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "huawei-lte-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5BXVzTt6M8sEJtsoz/CYezJWNQTcLEw8rLJd4mAPQks=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "API For huawei LAN/WAN LTE Modems";
     homepage = "https://github.com/Salamek/huawei-lte-api";
-    changelog = "https://github.com/Salamek/huawei-lte-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/Salamek/huawei-lte-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

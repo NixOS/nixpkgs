@@ -13,7 +13,7 @@
   docfd,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "docfd";
   version = "12.3.2";
 
@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "darrenldl";
     repo = "docfd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-d7c72jXadwBtUqarfdGnEDo9yFwCAeEX0GGVqCe70Ak=";
   };
 
@@ -92,4 +92,4 @@ ocamlPackages.buildDunePackage rec {
     platforms = lib.platforms.all;
     mainProgram = "docfd";
   };
-}
+})

@@ -18,7 +18,7 @@
   torchvision,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorboardx";
   version = "2.6.4";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GZQUJCiCKVthO95jHMIzNFcBM3R85BkyxO74CKCzizc=";
   };
 
@@ -87,7 +87,7 @@ buildPythonPackage rec {
     description = "Library for writing tensorboard-compatible logs";
     homepage = "https://tensorboardx.readthedocs.io";
     downloadPage = "https://github.com/lanpa/tensorboardX";
-    changelog = "https://github.com/lanpa/tensorboardX/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/lanpa/tensorboardX/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lebastr
@@ -95,4 +95,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

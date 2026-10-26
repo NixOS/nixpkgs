@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mno16";
   version = "1.0";
 
   src = fetchzip {
-    url = "https://github.com/sevmeyer/mno16/releases/download/${version}/mno16-${version}.zip";
+    url = "https://github.com/sevmeyer/mno16/releases/download/${finalAttrs.version}/mno16-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-xJQ9V7GlGUTEeYhqYFl/SemS6iqV0eW85YOn/tLgA+M=";
   };
@@ -24,4 +24,4 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://sev.dev/fonts/mno16";
     license = lib.licenses.cc0;
   };
-}
+})

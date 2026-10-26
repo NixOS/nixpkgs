@@ -8,14 +8,14 @@
   flask,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-testing";
   version = "0.8.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Testing";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-CnNNe2jmOpQQtBPNex+WRW+ahYvQmmIi1GVlDMeC6wE=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mic92 ];
   };
-}
+})

@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-graphiql-debug-toolbar";
   version = "0.2.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flavors";
     repo = "django-graphiql-debug-toolbar";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vKVw1AeYcyKqe5Pa8ZDExHeLL67exSanw9KgQ/vJMzo=";
   };
 
@@ -62,10 +62,10 @@ buildPythonPackage rec {
   doCheck = false; # tests broke with django-debug-toolbar 6.0
 
   meta = {
-    changelog = "https://github.com/flavors/django-graphiql-debug-toolbar/releases/tag/${src.rev}";
+    changelog = "https://github.com/flavors/django-graphiql-debug-toolbar/releases/tag/${finalAttrs.src.rev}";
     description = "Django Debug Toolbar for GraphiQL IDE";
     homepage = "https://github.com/flavors/django-graphiql-debug-toolbar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

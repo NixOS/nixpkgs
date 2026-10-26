@@ -22,14 +22,14 @@
 let
   phpPackage = php.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in
-phpPackage.buildComposerProject2 rec {
+phpPackage.buildComposerProject2 (finalAttrs: {
   pname = "librenms";
   version = "26.9.1.1";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-If82E9XkjtC4v5hixf8JMxV3mp7wdgKF8B13IrxgZrE=";
   };
 
@@ -128,4 +128,4 @@ phpPackage.buildComposerProject2 rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

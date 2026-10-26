@@ -5,13 +5,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yakut";
   version = "0.14.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Z/lzUZwUKQne0iGRPvXiATPgegoSbNE4GBgU+i6H5q0=";
   };
 
@@ -48,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kip93 ];
   };
-}
+})

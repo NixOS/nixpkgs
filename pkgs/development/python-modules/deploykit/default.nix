@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deploykit";
   version = "1.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "deploykit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RONE/oJdNmVjLYdJWDTzyXnmStkLIx92GsydaYYG5O4=";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Execute commands remote via ssh and locally in parallel with python";
     homepage = "https://github.com/numtide/deploykit";
-    changelog = "https://github.com/numtide/deploykit/releases/tag/${version}";
+    changelog = "https://github.com/numtide/deploykit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mic92
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

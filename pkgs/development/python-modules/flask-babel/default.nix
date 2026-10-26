@@ -22,7 +22,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-babel";
   version = "4.1.0";
   pyproject = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-babel";
     repo = "flask-babel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NcwcMLGabWrjbFZhDU1MVWpqAm0prBlqHfTdLV7EqoI=";
   };
 
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/python-babel/flask-babel/releases/tag/v${version}";
+    changelog = "https://github.com/python-babel/flask-babel/releases/tag/v${finalAttrs.version}";
     description = "Adds i18n/l10n support to Flask applications";
     longDescription = ''
       Implements i18n and l10n support for Flask.
@@ -82,4 +82,4 @@ buildPythonPackage rec {
     teams = [ lib.teams.sage ];
     homepage = "https://github.com/python-babel/flask-babel";
   };
-}
+})

@@ -5,13 +5,13 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastimport";
   version = "0.9.16";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-agpvtWqjYH3nGtTnq9VRr+m9rJS6uNLddNjg+Y9S414=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ koral ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

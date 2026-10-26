@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proxy-tools";
   version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "proxy_tools";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-zLN1H1KcBH4tilhEDYayBTA88P6BRveE0cvNlPCigBA=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})

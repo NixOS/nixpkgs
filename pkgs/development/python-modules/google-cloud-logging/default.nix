@@ -21,14 +21,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-logging";
   version = "3.16.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_logging";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-CKMHa48PckIZ1vc7KiQu9p1R6LziJhM66+QaJfI/VAA=";
   };
 
@@ -87,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-logging";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${version}/packages/google-cloud-logging/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.version}/packages/google-cloud-logging/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

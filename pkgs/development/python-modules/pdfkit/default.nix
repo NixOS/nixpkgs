@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdfkit";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-mS+CHh4Y/IoOcB7K4ktRotWYKWoYDK7gokwK8YHaAqk=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
     license = lib.licenses.mit;
   };
-}
+})

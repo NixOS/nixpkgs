@@ -6,7 +6,7 @@
   git,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gigalixir";
   version = "1.15.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gigalixir";
     repo = "gigalixir-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OCPxOVWHUvH3Tj9bR+aj2VUNNuY5GWhnDaSKRDqLSvI=";
   };
 
@@ -70,4 +70,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "gigalixir";
   };
-}
+})

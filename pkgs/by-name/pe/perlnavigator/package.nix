@@ -43,7 +43,7 @@ let
     '';
   };
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "perlnavigator";
   inherit version src;
 
@@ -76,11 +76,11 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/bscan/PerlNavigator/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bscan/PerlNavigator/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Perl Language Server that includes syntax checking, perl critic, and code navigation";
     homepage = "https://github.com/bscan/PerlNavigator/tree/main/server";
     license = lib.licenses.mit;
     mainProgram = "perlnavigator";
     maintainers = [ ];
   };
-}
+})

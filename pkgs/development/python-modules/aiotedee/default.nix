@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiotedee";
   version = "0.3.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "aiotedee";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0+wUQRsMb9y8XUwwUX3exIzkaAFLYNUpsAr0MgnkMIo=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Tedee locks";
     homepage = "https://github.com/zweckj/aiotedee";
-    changelog = "https://github.com/zweckj/aiotedee/releases/tag/${src.tag}";
+    changelog = "https://github.com/zweckj/aiotedee/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

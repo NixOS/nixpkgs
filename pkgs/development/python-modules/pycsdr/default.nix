@@ -5,7 +5,7 @@
   csdr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycsdr";
   version = "0.18.2";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "pycsdr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-OzkH1L9bFXf+kK8OPjRXpGz+fPCs67spJfXyV28NWWQ=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     description = "Bindings for the csdr library";
     license = lib.licenses.gpl3Only;
   };
-}
+})

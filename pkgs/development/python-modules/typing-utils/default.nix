@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typing-utils";
   version = "0.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bojiang";
     repo = "typing_utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eXVGpe1wCH1JG+7ZP0evlxhw189GrrRzTwNDCALn3JI=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utils to inspect Python type annotations";
     homepage = "https://github.com/bojiang/typing_utils";
-    changelog = "https://github.com/bojiang/typing_utils/releases/tag/${src.tag}";
+    changelog = "https://github.com/bojiang/typing_utils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wulpine ];
   };
-}
+})

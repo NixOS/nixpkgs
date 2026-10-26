@@ -11,7 +11,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "base2048";
   version = "0.1.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ionite34";
     repo = "base2048";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OXlfycJB1IrW2Zq0xPDGjjwCdRTWtX/ixPGWcd+YjAg=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Binary encoding with base-2048 in Python with Rust";
     homepage = "https://github.com/ionite34/base2048";
-    changelog = "https://github.com/ionite34/base2048/releases/tag/v${version}";
+    changelog = "https://github.com/ionite34/base2048/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

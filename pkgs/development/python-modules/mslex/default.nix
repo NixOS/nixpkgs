@@ -6,7 +6,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mslex";
   version = "1.3.0";
   pyproject = true; # fallback to setup.py if pyproject.toml is not present
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smoofra";
     repo = "mslex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vr36OTCTJFZRXlkeGgN4UOlH+6uAkMvqTEO9qL8X98w=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yzx9 ];
   };
-}
+})

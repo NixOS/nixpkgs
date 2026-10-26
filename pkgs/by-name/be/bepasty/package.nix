@@ -33,7 +33,7 @@ in
 # This is needed for services.bepasty
 # https://github.com/NixOS/nixpkgs/pull/38300
 
-bepastyPython.pkgs.buildPythonPackage rec {
+bepastyPython.pkgs.buildPythonPackage (finalAttrs: {
   pname = "bepasty";
   version = "1.2.2";
   pyproject = true;
@@ -57,7 +57,7 @@ bepastyPython.pkgs.buildPythonPackage rec {
   buildInputs = with bepastyPython.pkgs; [ setuptools-scm ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-teazPj+IrgbVeUkWqgWhpIldgfCTbZYJAqn5Q5blcm8=";
   };
 
@@ -90,4 +90,4 @@ bepastyPython.pkgs.buildPythonPackage rec {
       makefu
     ];
   };
-}
+})

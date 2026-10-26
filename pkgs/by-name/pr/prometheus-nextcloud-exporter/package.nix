@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-nextcloud-exporter";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "xperimental";
     repo = "nextcloud-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-inUdo7LVx5EreYnw/5UKGu1frIeK2fHnNPAAXowRCn4=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "nextcloud-exporter";
   };
-}
+})

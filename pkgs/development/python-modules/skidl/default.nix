@@ -8,7 +8,7 @@
   sexpdata,
   simp-sexp,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skidl";
   version = "2.2.1";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devbisme";
     repo = "skidl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7rauFhaLXyZ5SGtEF7qoAbrj/VgP4qpl+BWUeERefb4=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthuszagh ];
   };
-}
+})

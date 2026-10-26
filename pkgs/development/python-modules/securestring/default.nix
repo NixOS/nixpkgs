@@ -6,7 +6,7 @@
   openssl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "securestring";
   version = "0.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dnet";
     repo = "pysecstr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FV5NUPberA5nqHad8IwkQLMldT1DPqTGpqOwgQ2zSdI=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ethancedwards8 ];
   };
-}
+})

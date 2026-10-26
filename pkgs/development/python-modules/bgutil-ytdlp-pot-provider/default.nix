@@ -14,7 +14,7 @@
   yt-dlp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bgutil-ytdlp-pot-provider";
   version = "2.0.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Brainicism";
     repo = "bgutil-ytdlp-pot-provider";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rV85jle5R8je7iR8uZaXEdDuQEh2lf/Eoht+9k6bpC4=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   '';
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    src = src + "/server";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = finalAttrs.src + "/server";
     npmDepsFetcherVersion = 3;
     hash = "sha256-Ffse1RelOmLpfYM50zZ/xqkfy9l2TGYE8CumK0b9cQg=";
   };
@@ -83,4 +83,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "bgutil-ytdlp-pot-provider";
   };
-}
+})

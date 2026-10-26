@@ -12,7 +12,7 @@
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "home-assistant-chip-core";
   inherit (home-assistant-chip-wheels) version;
   format = "wheel";
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python-base APIs and tools for CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
-    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

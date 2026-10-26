@@ -7,19 +7,19 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "node-client";
   version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "node-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bhO52di2NmXk2VI8eFwxVKkPh1yEGJCeWXp3xLBWFFQ=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-Vl6VPcwDrYAC4HWeY+6eWPl/2+Mw6fkScS5fsrLlWxw=";
   };
 
@@ -51,9 +51,9 @@ buildNpmPackage rec {
   meta = {
     description = "Nvim msgpack API client and remote plugin provider";
     homepage = "https://github.com/neovim/node-client";
-    changelog = "https://github.com/neovim/node-client/releases/tag/v${version}";
+    changelog = "https://github.com/neovim/node-client/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fidgetingbits ];
     mainProgram = "neovim-node-host";
   };
-}
+})

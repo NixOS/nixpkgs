@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "notifications-android-tv";
   version = "1.2.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "engrbm87";
     repo = "notifications_android_tv";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JUvxxVCiQtywAWU5AYnPm4SueIWIXkzLxPYveVXpc2E=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for sending notifications to Android/Fire TVs";
     homepage = "https://github.com/engrbm87/notifications_android_tv";
-    changelog = "https://github.com/engrbm87/notifications_android_tv/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/engrbm87/notifications_android_tv/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dominikh ];
   };
-}
+})

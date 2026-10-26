@@ -15,7 +15,7 @@
   wheel-filename,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wheel-inspect";
   version = "1.8.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "wheel-inspect";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yECgJLShCLiEyZmw9azNP5lwLeas10AfRu/RVMQGejg=";
   };
 
@@ -59,9 +59,9 @@ buildPythonPackage rec {
   meta = {
     description = "Extract information from wheels";
     homepage = "https://github.com/jwodder/wheel-inspect";
-    changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/${src.tag}";
+    changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];
     mainProgram = "wheel2json";
   };
-}
+})

@@ -6,14 +6,14 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "querystring-parser";
   version = "1.2.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "querystring_parser";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ZE/OHP/gUwRTtDqDo4CU2+QizLqMmy8qHAAoDhTKimI=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to handle nested dictionaries";
     homepage = "https://github.com/bernii/querystring-parser";
-    changelog = "https://github.com/bernii/querystring-parser/releases/tag/${version}";
+    changelog = "https://github.com/bernii/querystring-parser/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

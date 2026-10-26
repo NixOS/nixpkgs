@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tokenlib";
   version = "2.0.0";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "tokenlib";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-+KybaLb4XAcuBARJUhL5gK71jfNMb8YL8dV5Vzf7yXI=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     description = "Generic support library for signed-token-based auth schemes";
     license = lib.licenses.mpl20;
   };
-}
+})

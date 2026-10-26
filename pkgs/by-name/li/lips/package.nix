@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "lips";
   version = "1.0.0-beta.20";
 
   src = fetchFromGitHub {
     owner = "jcubic";
     repo = "lips";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zvdtFfa+1Ols3TZSe2XCbGX9hColwGV/ReTJcTrrA4k=";
   };
 
@@ -34,10 +34,10 @@ buildNpmPackage rec {
   meta = {
     description = "Powerful Scheme based Lisp in JavaScript";
     homepage = "https://lips.js.org";
-    changelog = "https://github.com/jcubic/lips/releases/tag/${version}";
+    changelog = "https://github.com/jcubic/lips/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DimitarNestorov ];
     platforms = lib.platforms.all;
     mainProgram = "lips";
   };
-}
+})

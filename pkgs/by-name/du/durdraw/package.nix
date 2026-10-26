@@ -9,7 +9,7 @@
   tzdata,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "durdraw";
   version = "0.31.0";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "durdraw";
     repo = "durdraw";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jbyCmqCIWAxirKciqeHMvVcvJKEcKNHHkHHrcEXak7M=";
   };
 
@@ -66,10 +66,10 @@ python3Packages.buildPythonApplication rec {
       block characters, and PNG/GIF export via ansilove.
     '';
     homepage = "https://durdraw.org";
-    changelog = "https://github.com/durdraw/durdraw/releases/tag/${version}";
+    changelog = "https://github.com/durdraw/durdraw/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tahuffman1s ];
     mainProgram = "durdraw";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -26,13 +26,13 @@
   gobject-introspection,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py3status";
   version = "3.64";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7hafyW7jq/8Xk4POAohX6sNViJ+Azuqs5/0i1JqCqr0=";
   };
 
@@ -80,8 +80,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extensible i3status wrapper";
     homepage = "https://github.com/ultrabug/py3status";
-    changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/ultrabug/py3status/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

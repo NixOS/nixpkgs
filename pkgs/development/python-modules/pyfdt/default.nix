@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfdt";
   version = "0.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "pyfdt";
     hash = "sha256:1w7lp421pssfgv901103521qigwb12i6sk68lqjllfgz0lh1qq31";
   };
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ralismark ];
   };
-}
+})

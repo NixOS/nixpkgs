@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thttp";
   version = "1.3.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sesh";
     repo = "thttp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-e15QMRMpTcWo8TfH3tk23ybSlXFb8F4B/eqAp9oyK8g=";
   };
 
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight wrapper around urllib";
     homepage = "https://github.com/sesh/thttp";
-    changelog = "https://github.com/sesh/thttp/releases/tag/${version}";
+    changelog = "https://github.com/sesh/thttp/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

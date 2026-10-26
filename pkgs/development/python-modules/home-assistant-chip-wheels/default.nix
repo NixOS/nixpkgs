@@ -22,14 +22,14 @@
   zap-chip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "home-assistant-chip-wheels";
   version = "2025.7.0";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = false;
     leaveDotGit = true;
     hash = "sha256-SfhsM2RPghFPx0qtoHsXVymwmOWFiEGAyLx6FeB++dg=";
@@ -227,7 +227,7 @@ stdenv.mkDerivation rec {
     "chip_config_memory_debug_dmalloc=false"
     ''chip_mdns="minimal"''
     ''chip_minmdns_default_policy="libnl"''
-    ''chip_python_version="${version}"''
+    ''chip_python_version="${finalAttrs.version}"''
     ''chip_python_platform_tag="any"''
     ''chip_python_package_prefix="home-assistant-chip"''
     ''custom_toolchain="custom"''
@@ -256,9 +256,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Python wheels for APIs and tools related to CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
-    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };
-
-}
+})

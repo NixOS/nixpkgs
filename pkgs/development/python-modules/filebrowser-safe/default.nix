@@ -5,14 +5,14 @@
   django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "filebrowser-safe";
   version = "1.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "filebrowser_safe";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-SZxdvZ4RLfxDbK53E7L7ZkpZAVAh9snRMeO3mArrXJQ=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ prikhi ];
     platforms = lib.platforms.unix;
   };
-}
+})

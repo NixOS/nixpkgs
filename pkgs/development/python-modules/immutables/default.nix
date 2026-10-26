@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "immutables";
   version = "0.21";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MagicStack";
     repo = "immutables";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wZuCZEVXzycqA/h27RIe59e2QQALem8mfb3EdjwQr9w=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Immutable mapping type";
     homepage = "https://github.com/MagicStack/immutables";
-    changelog = "https://github.com/MagicStack/immutables/releases/tag/v${version}";
+    changelog = "https://github.com/MagicStack/immutables/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
   };
-}
+})

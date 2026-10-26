@@ -23,7 +23,7 @@
   # tests
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinterp";
   version = "2025.8.1";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CNES";
     repo = "pangeo-pyinterp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9DZIPiqt0JbadeGIkVrg+XuPu4XfVlHm36sBKZ2G7ww=";
   };
 
@@ -45,12 +45,12 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace-fail 'backend-path = ["_custom_build"]' ""
 
     substituteInPlace setup.py \
-      --replace-fail 'version=revision(),' 'version="${version}",'
+      --replace-fail 'version=revision(),' 'version="${finalAttrs.version}",'
 
     substituteInPlace src/pyinterp/__init__.py \
      --replace-fail 'from . import geodetic, geohash, version' 'from . import geodetic, geohash' \
-     --replace-fail '__version__ = version.release()' '__version__ = "${version}"' \
-     --replace-fail '__date__ = version.date()' '__date__ = "${version}"' \
+     --replace-fail '__version__ = version.release()' '__version__ = "${finalAttrs.version}"' \
+     --replace-fail '__date__ = version.date()' '__date__ = "${finalAttrs.version}"' \
      --replace-fail 'del version' ""
   '';
 
@@ -99,8 +99,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for optimized geo-referenced interpolation";
     homepage = "https://github.com/CNES/pangeo-pyinterp";
-    changelog = "https://github.com/CNES/pangeo-pyinterp/releases/tag/${src.tag}";
+    changelog = "https://github.com/CNES/pangeo-pyinterp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

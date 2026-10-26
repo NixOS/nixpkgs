@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "botocore";
   version = "1.43.79"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boto";
     repo = "botocore";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TfrwQiVf7Uc298xllNUcyjAk4btDcjSWVrXt2gfHGew=";
   };
 
@@ -66,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
-    changelog = "https://github.com/boto/botocore/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/boto/botocore/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

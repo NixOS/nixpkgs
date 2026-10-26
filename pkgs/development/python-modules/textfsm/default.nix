@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textfsm";
   version = "2.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "textfsm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ygVcDdT85mRN+qYfTZqraRVyp2JlLwwujBW1e/pPJNc=";
   };
 
@@ -23,11 +23,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/google/textfsm/releases/tag/${src.tag}";
+    changelog = "https://github.com/google/textfsm/releases/tag/${finalAttrs.src.tag}";
     description = "Python module for parsing semi-structured text into python tables";
     mainProgram = "textfsm";
     homepage = "https://github.com/google/textfsm";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

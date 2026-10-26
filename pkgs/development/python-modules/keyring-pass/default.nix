@@ -7,7 +7,7 @@
   pass,
   poetry-core,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keyring-pass";
   version = "0.9.3";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nazarewk";
     repo = "keyring_pass";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EsM+RUhYtelslRpxR5NQbqpOt8KaeCsFqkqZ1ZFx0I0=";
   };
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nazarewk ];
   };
-}
+})

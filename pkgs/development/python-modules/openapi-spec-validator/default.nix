@@ -17,7 +17,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openapi-spec-validator";
   version = "0.8.4";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openapi";
     repo = "openapi-spec-validator";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KY9mDnF/R2UO8WZ0WyBzpZQsVBxzxnTK6zyqvUb+hVw=";
   };
 
@@ -61,10 +61,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${src.tag}";
+    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${finalAttrs.src.tag}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
     mainProgram = "openapi-spec-validator";
     homepage = "https://github.com/p1c2u/openapi-spec-validator";
     license = lib.licenses.asl20;
   };
-}
+})

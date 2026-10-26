@@ -21,14 +21,14 @@
   yt-dlp,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radiance";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "zbanks";
     repo = "radiance";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RWPcbUg7/gggPuUZLyMJ/m2S5GGfrdE6SWyXERIXsdk=";
   };
 
@@ -89,4 +89,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "radiance";
     platforms = lib.platforms.linux;
   };
-}
+})

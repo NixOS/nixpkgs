@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "filecheck";
   version = "1.0.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AntonLydike";
     repo = "filecheck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ml8RUk2zgDuU8rZbedjSv3mk6TdIxCBVECA6kMcig5o=";
   };
 
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "filecheck" ];
 
   meta = {
-    changelog = "https://github.com/antonlydike/filecheck/releases/tag/${src.tag}";
+    changelog = "https://github.com/antonlydike/filecheck/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/antonlydike/filecheck";
     license = lib.licenses.asl20;
     description = "Python-native clone of LLVMs FileCheck tool";
     mainProgram = "filecheck";
     maintainers = with lib.maintainers; [ yorickvp ];
   };
-}
+})

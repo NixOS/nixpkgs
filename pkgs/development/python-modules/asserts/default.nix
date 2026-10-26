@@ -13,7 +13,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asserts";
   version = "0.14.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "srittau";
     repo = "python-asserts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nSL28LaKWVkzOmyI1TpCXJxyKdqpvK/YHRLUJ77sRA8=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Stand-alone Assertions for Python";
     homepage = "https://github.com/srittau/python-asserts";
-    changelog = "https://github.com/srittau/python-asserts/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/srittau/python-asserts/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

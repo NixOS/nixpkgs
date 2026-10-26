@@ -18,14 +18,14 @@ let
   jdk = jdk17;
   buildNumber = "1310";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "processing";
   version = "4.4.10";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
-    rev = "processing-${buildNumber}-${version}";
+    rev = "processing-${buildNumber}-${finalAttrs.version}";
     sha256 = "sha256-u2wQl/VGCNJPd+k3DX2eW7gkA/RARMTSNGcoQuS/Oh8=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   mitmCache = gradle.fetchDeps {
-    inherit pname;
+    inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     cp -dpr app/build/compose/binaries/main/app/Processing/bin $out/unwrapped
 
     mkdir -p $out/share/applications/
-    cp -dp build/linux/${pname}.desktop $out/share/applications/
+    cp -dp build/linux/${finalAttrs.pname}.desktop $out/share/applications/
 
     rm -r $out/lib/app/resources/jdk
     ln -s ${jdk}/lib/openjdk $out/lib/app/resources/jdk
@@ -141,4 +141,4 @@ stdenv.mkDerivation rec {
       binaryBytecode
     ];
   };
-}
+})

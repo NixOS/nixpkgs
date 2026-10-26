@@ -15,7 +15,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wikipedia2vec";
   version = "2.0.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wikipedia2vec";
     repo = "wikipedia2vec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vrBLlNm0bVIStSBWDHRCtuRpazu8JMCtBl4qJPtHGvU=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
     description = "Tool for learning vector representations of words and entities from Wikipedia";
     mainProgram = "wikipedia2vec";
     homepage = "https://wikipedia2vec.github.io/wikipedia2vec/";
-    changelog = "https://github.com/wikipedia2vec/wikipedia2vec/releases/tag/v${version}";
+    changelog = "https://github.com/wikipedia2vec/wikipedia2vec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

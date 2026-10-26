@@ -11,7 +11,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nessclient";
   version = "1.3.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nickw444";
     repo = "nessclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E4gkrhQzA1TDmjM+NPWl1Fyoagn/pLm7BRjGSpw6LXY=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation/abstraction of the Ness D8x/D16x Serial Interface ASCII protocol";
     homepage = "https://github.com/nickw444/nessclient";
-    changelog = "https://github.com/nickw444/nessclient/releases/tag/${src.tag}";
+    changelog = "https://github.com/nickw444/nessclient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ness-cli";
   };
-}
+})

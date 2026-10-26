@@ -9,15 +9,15 @@
   pytest-homeassistant-custom-component,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "JeffSteinbok";
   domain = "dreo";
   version = "1.11.2";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "hass-dreo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OY8VFBZXCKgluJB3k/fXrDtEv17xu7Qw6dVQh4RgUAU=";
   };
 
@@ -35,10 +35,10 @@ buildHomeAssistantComponent rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/JeffSteinbok/hass-dreo/releases/tag/${src.tag}";
+    changelog = "https://github.com/JeffSteinbok/hass-dreo/releases/tag/${finalAttrs.src.tag}";
     description = "Dreo Smart Device Integration for Home Assistant";
     homepage = "https://github.com/JeffSteinbok/hass-dreo";
     maintainers = with lib.maintainers; [ CodedNil ];
     license = lib.licenses.mit;
   };
-}
+})

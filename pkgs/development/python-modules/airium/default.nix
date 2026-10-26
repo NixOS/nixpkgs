@@ -7,7 +7,7 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "airium";
   version = "0.2.7";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "kamichal";
     repo = "airium";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sXyqGYBjyQ3Ig1idw+omrjj+ElknN9oemzob7NxFppo=";
   };
 
@@ -35,9 +35,9 @@ buildPythonPackage rec {
   meta = {
     description = "Bidirectional HTML-python translator";
     homepage = "https://gitlab.com/kamichal/airium";
-    changelog = "https://gitlab.com/kamichal/airium/-/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/kamichal/airium/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hulr ];
     mainProgram = "airium";
   };
-}
+})

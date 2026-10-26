@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqids";
   version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-WsCPDFybaBS8Lnx57lkx4ISdJdlcUOQVdxsCKkT1ivk=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ panicgh ];
   };
-}
+})

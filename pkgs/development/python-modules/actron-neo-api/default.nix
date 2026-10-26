@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "actron-neo-api";
   version = "0.5.16";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kclif9";
     repo = "actronneoapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2iMZVWXC1LK4zh7CtWbtFnipj47lwOGMKWyslpIIaUE=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/kclif9/actronneoapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/kclif9/actronneoapi/releases/tag/${finalAttrs.src.tag}";
     description = "Communicate with Actron Air systems via the Actron Neo API";
     homepage = "https://github.com/kclif9/actronneoapi";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

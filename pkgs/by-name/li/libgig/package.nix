@@ -10,12 +10,12 @@
   libuuid,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgig";
   version = "4.6.0";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
+    url = "https://download.linuxsampler.org/packages/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-/DMSAiEJGeMXLE02qyQjHeo2Z9hyIUHwx5OcpUURnQE=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

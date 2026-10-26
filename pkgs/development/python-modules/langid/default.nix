@@ -7,14 +7,14 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langid";
   version = "1.1.6";
   format = "setuptools";
 
   src = fetchPypi {
     # use PyPi as source, github repository does not contain tags or release branches
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BEvK4ZEtq4XDPY6Y8oEbj0/xIT5emp6VEBN7hNosspM=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

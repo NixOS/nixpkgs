@@ -13,7 +13,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "psycopg2cffi";
   version = "2.9.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chtd";
     repo = "psycopg2cffi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9r5MYxw9cvdbLVj8StmMmn0AKQepOpCc7TIBGXZGWe4=";
   };
 
@@ -74,4 +74,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

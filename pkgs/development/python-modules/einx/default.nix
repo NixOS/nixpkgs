@@ -9,7 +9,7 @@
   frozendict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "einx";
   version = "0.4.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fferflo";
     repo = "einx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xYnlIN+O2s0tTBpqiGiiA6p6QpF5olPFbYaiLPT8B1s=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Universal Tensor Operations in Einstein-Inspired Notation for Python";
     homepage = "https://github.com/fferflo/einx";
-    changelog = "https://github.com/fferflo/einx/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/fferflo/einx/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

@@ -7,13 +7,13 @@
   markdown,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "markdown-macros";
   version = "0.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-m6tlxZqMZGEpB3wnIfFXEzpwE8NYLBXE9UJEZs/K+9M=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.abigailbuccaneer ];
   };
-}
+})

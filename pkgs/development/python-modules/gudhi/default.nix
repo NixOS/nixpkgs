@@ -19,7 +19,7 @@
   enableTBB ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gudhi";
   version = "3.11.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GUDHI";
     repo = "gudhi-devel";
-    tag = "tags/gudhi-release-${version}";
+    tag = "tags/gudhi-release-${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-EebPvmioTYBv3VR6SNEfiqi2GC4sZn8WEj0fu42B8yM=";
   };
@@ -94,4 +94,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ yl3dy ];
   };
-}
+})

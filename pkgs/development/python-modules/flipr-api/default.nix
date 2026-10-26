@@ -10,7 +10,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flipr-api";
   version = "1.6.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cnico";
     repo = "flipr-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/px8NuBwukAPMxdXvHdyfO/j/a9UatKbdrjDNuT0f4k=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
     description = "Python client for Flipr API";
     mainProgram = "flipr-api";
     homepage = "https://github.com/cnico/flipr-api";
-    changelog = "https://github.com/cnico/flipr-api/releases/tag/${version}";
+    changelog = "https://github.com/cnico/flipr-api/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

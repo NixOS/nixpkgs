@@ -8,7 +8,7 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "virtual-glob";
   version = "0.2.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrisjsewell";
     repo = "virtual-glob";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ocCa8m7mPPvzOZHPrraSEdSJZwRJoYO/Q7nyDbhIFu8=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ PopeRigby ];
     license = lib.licenses.mit;
   };
-}
+})

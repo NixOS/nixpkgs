@@ -6,7 +6,7 @@
   malduck,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-config-extractor";
   version = "2.3.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-config-extractor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JtR4Vwm0Qd6SNf2h872+fPTB4cegpuh1QH0wYSVGRgY=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
     description = "Static configuration extractor for the Karton framework";
     mainProgram = "karton-config-extractor";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
-    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${src.tag}";
+    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

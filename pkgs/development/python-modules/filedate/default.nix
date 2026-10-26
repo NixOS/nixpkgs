@@ -6,7 +6,7 @@
   python-dateutil,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "filedate";
   version = "3.0";
   pyproject = true;
@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kubinka0505";
     repo = "filedate";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HvuGP+QlUlfAUfFmaVVvtPHGdrbWVxghQipnqTTvAQc=";
   };
 
-  sourceRoot = "${src.name}/Files";
+  sourceRoot = "${finalAttrs.src.name}/Files";
 
   # The repo stores everything in "src" and uses setup.py to move "src" ->
   # "filedate" before calling setup() and then tries to rename "filedate" back
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple, convenient and cross-platform file date changing library";
     homepage = "https://github.com/kubinka0505/filedate";
-    changelog = "https://github.com/kubinka0505/filedate/blob/${src.rev}/Documents/ChangeLog.md";
+    changelog = "https://github.com/kubinka0505/filedate/blob/${finalAttrs.src.rev}/Documents/ChangeLog.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ thornycrackers ];
   };
-}
+})

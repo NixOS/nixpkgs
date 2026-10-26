@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lockfile";
   version = "0.12.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-au0C3gPLok76vNYAswVAFAY0/AbPpgOCLVCNU2Hp95k=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     description = "Platform-independent advisory file locking capability for Python applications";
     license = lib.licenses.asl20;
   };
-}
+})

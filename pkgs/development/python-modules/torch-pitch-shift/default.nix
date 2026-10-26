@@ -9,7 +9,7 @@
   torchaudio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torch-pitch-shift";
   version = "1.2.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KentoNishi";
     repo = "torch-pitch-shift";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QuDz9IpmBdzfMjwAuG2Ln0x2OL/w3RVd/EfO4Ws78dw=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pitch-shift audio clips quickly with PyTorch (CUDA supported)! Additional utilities for searching efficient transformations are included";
     homepage = "https://github.com/KentoNishi/torch-pitch-shift";
-    changelog = "https://github.com/KentoNishi/torch-pitch-shift/releases/tag/v${version}";
+    changelog = "https://github.com/KentoNishi/torch-pitch-shift/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
-}
+})

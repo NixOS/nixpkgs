@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "goslide-api";
   version = "0.7.4";
   pyproject = true;
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ualex73";
     repo = "goslide-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Z3+GijoI+351zV7IpLSBQu6LE2OhhXho4ygNMVbg2xs=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version='0.7.3'" "version='${version}'"
+      --replace-fail "version='0.7.3'" "version='${finalAttrs.version}'"
   '';
 
   build-system = [ setuptools ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

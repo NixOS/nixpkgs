@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nasin-nanpa-ucsur";
   version = "4.0.2";
 
   src = fetchurl {
-    url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${version}/nasin-nanpa-${version}-UCSUR.otf";
+    url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${finalAttrs.version}/nasin-nanpa-${finalAttrs.version}-UCSUR.otf";
     hash = "sha256-9DkY7wbB22IFsIAAgyg8gYALpkfROKzzc5AhpYKt6oI=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ feathecutie ];
   };
-}
+})

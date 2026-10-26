@@ -7,13 +7,13 @@
   pass,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bundlewrap-pass";
   version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3KmUTTOQ46TiKXNkKLRweMEe5m/zJ1gvAVJttJBdzik=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
   };
-}
+})

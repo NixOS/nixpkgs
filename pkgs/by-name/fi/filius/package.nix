@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "filius";
   version = "2.14.0";
 
   src = fetchFromGitLab {
     owner = "filius1";
     repo = "filius";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LXedyREtdinbxwg4CiC2ei7w5v/bZp8H6vwwHQ3GTwg=";
   };
 
@@ -38,16 +38,16 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
-    cp -r target/* $out/share/${pname}
+    mkdir -p $out/bin $out/share/${finalAttrs.pname}
+    cp -r target/* $out/share/${finalAttrs.pname}
 
     # GTK_THEME is not just set to adwaita, but to the *light* adwaita because otherwise the application is sort of unusable. the terminal still has unreadable text though (light on light).
     # Without _JAVA_AWT_WM_NONREPARENTING, if you launch filius, it's just a white window, i.e. broken.
-    makeWrapper ${lib.getExe' jre "java"} $out/bin/${pname} \
+    makeWrapper ${lib.getExe' jre "java"} $out/bin/${finalAttrs.pname} \
       --set GTK_THEME 'Adwaita' \
       --set _JAVA_AWT_WM_NONREPARENTING '1' \
       --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd' \
-      --add-flags "-jar $out/share/${pname}/${pname}.jar" \
+      --add-flags "-jar $out/share/${finalAttrs.pname}/${finalAttrs.pname}.jar" \
 
     runHook postInstall
   '';
@@ -90,4 +90,4 @@ maven.buildMavenPackage rec {
     mainProgram = "filius";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

@@ -10,7 +10,7 @@
   python-socketio-v4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sisyphus-control";
   version = "3.1.4";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "sisyphus-control";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1/trJ/mfiXljNt7ZIBwQ45mIBbqg68e29lvVsPDPzoU=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Control your Sisyphus Kinetic Art Table";
     homepage = "https://github.com/jkeljo/sisyphus-control";
-    changelog = "https://github.com/jkeljo/sisyphus-control/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/jkeljo/sisyphus-control/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

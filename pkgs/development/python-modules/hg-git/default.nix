@@ -8,14 +8,14 @@
   mercurial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hg-git";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hg_git";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Pr+rNkqBubVlsQCyqd5mdr8D357FzSd3Kuz5EWeez8M=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})

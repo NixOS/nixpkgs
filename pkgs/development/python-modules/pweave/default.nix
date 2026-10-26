@@ -11,14 +11,14 @@
   ipykernel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pweave";
   version = "0.30.3";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Pweave";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-XlKY2Q4GQUoB9I4NaqTDanDF8iPZKfKpx+LTiEUcc1c=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     homepage = "https://mpastell.com/pweave/";
     license = lib.licenses.bsd3;
   };
-}
+})

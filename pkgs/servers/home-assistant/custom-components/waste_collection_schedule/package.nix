@@ -17,15 +17,15 @@
   requests,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "mampfes";
   domain = "waste_collection_schedule";
   version = "2.36.0";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "hacs_waste_collection_schedule";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uCWvglnDeJ4/QE1+gnLqM4i6tb5XVb7aQDQC3xOZjfg=";
   };
 
@@ -49,10 +49,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mampfes/hacs_waste_collection_schedule/releases/tag/${src.tag}";
+    changelog = "https://github.com/mampfes/hacs_waste_collection_schedule/releases/tag/${finalAttrs.src.tag}";
     description = "Home Assistant integration framework for (garbage collection) schedules";
     homepage = "https://github.com/mampfes/hacs_waste_collection_schedule";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.mit;
   };
-}
+})

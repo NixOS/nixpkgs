@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "targ";
   version = "0.7.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "piccolo-orm";
     repo = "targ";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1Xv2d/5R1lXcJ90GF353hhiKh7MdaJzJBRlu+DnUyfc=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python CLI using type hints and docstrings";
     homepage = "https://github.com/piccolo-orm/targ/";
-    changelog = "https://github.com/piccolo-orm/targ/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/piccolo-orm/targ/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

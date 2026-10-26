@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-reverse";
   version = "1.9.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "pytest-reverse";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-d9wx4N3RnPbOk+dZuJaCdbtXfQQwjGo5MwVNrNVGtlo=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to reverse test order";
     homepage = "https://github.com/adamchainz/pytest-reverse";
-    changelog = "https://github.com/adamchainz/pytest-reverse/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/adamchainz/pytest-reverse/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

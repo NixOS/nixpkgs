@@ -22,14 +22,14 @@
 let
   # The bcrypt package requires a gyp build and its dev dependencies.
   # Linkwarden uses yarn for dependencies, bycrypt npm. Mixing the two causes issues.
-  bcrypt = buildNpmPackage rec {
+  bcrypt = buildNpmPackage (finalAttrs: {
     pname = "bcrypt";
     version = "5.1.1";
 
     src = fetchFromGitHub {
       owner = "kelektiv";
       repo = "node.bcrypt.js";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-mgfYEgvgC5JwgUhU8Kn/f1D7n9ljnIODkKotEcxQnDQ=";
     };
 
@@ -40,7 +40,7 @@ let
     postInstall = ''
       cp -r lib $out/lib/node_modules/bcrypt/
     '';
-  };
+  });
 
   google-fonts' = google-fonts.override {
     fonts = [

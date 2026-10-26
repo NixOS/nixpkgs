@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "orgparse";
   version = "0.4.20251020";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karlicoss";
     repo = "orgparse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RJ+1HVI9OgbylBxdEztpQ4v0MG0PUFqXlFfe0vsDaTg=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Emacs org-mode parser in Python";
     homepage = "https://github.com/karlicoss/orgparse";
-    changelog = "https://github.com/karlicoss/orgparse/releases/tag/${src.tag}";
+    changelog = "https://github.com/karlicoss/orgparse/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ twitchy0 ];
   };
-}
+})

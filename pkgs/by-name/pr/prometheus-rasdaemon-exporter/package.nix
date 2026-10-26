@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prometheus-rasdaemon-exporter";
   version = "0-unstable-2025-01-02";
   pyproject = true;
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev+g${lib.substring 0 7 src.rev}";
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.1.dev+g${lib.substring 0 7 finalAttrs.src.rev}";
 
   dependencies = with python3Packages; [
     prometheus-client
@@ -43,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "prometheus-rasdaemon-exporter";
   };
-}
+})

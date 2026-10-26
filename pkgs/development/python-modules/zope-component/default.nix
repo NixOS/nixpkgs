@@ -15,7 +15,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-component";
   version = "7.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.component";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3Hl2sm2M0we+fpdt4GSjAStLSAJ1c4Za1vfm9Bj8z8s=";
   };
 
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopefoundation/zope.component";
     description = "Zope Component Architecture";
-    changelog = "https://github.com/zopefoundation/zope.component/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.component/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

@@ -9,7 +9,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydeako";
   version = "0.6.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DeakoLights";
     repo = "pydeako";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GEYuVKE3DOXJzCqTW2Ngoi6l0e4JvE9lUnZtjrNXTVk=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module used to discover and communicate with Deako devices over the network locally";
     homepage = "https://github.com/DeakoLights/pydeako";
-    changelog = "https://github.com/DeakoLights/pydeako/releases/tag/${version}";
+    changelog = "https://github.com/DeakoLights/pydeako/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

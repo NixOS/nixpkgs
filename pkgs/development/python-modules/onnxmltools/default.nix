@@ -21,7 +21,7 @@
   lightgbm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onnxmltools";
   version = "1.16.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnxmltools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2cAxk/Qvu39N/IaIofuTFMciKyxVv3kwsnH4xpGrkIg=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "ONNXMLTools enables conversion of models to ONNX";
     homepage = "https://github.com/onnx/onnxmltools";
-    changelog = "https://github.com/onnx/onnxmltools/blob/${src.tag}/CHANGELOGS.md";
+    changelog = "https://github.com/onnx/onnxmltools/blob/${finalAttrs.src.tag}/CHANGELOGS.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

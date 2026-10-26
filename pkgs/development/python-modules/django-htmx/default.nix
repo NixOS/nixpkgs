@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-htmx";
   version = "1.28.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-htmx";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-24TVOaV0VKFq506XSJ9q86sYifKOjNHeAjSskyhcst0=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extensions for using Django with htmx";
     homepage = "https://github.com/adamchainz/django-htmx";
-    changelog = "https://github.com/adamchainz/django-htmx/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/adamchainz/django-htmx/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ minijackson ];
   };
-}
+})

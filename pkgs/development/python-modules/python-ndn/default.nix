@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ndn";
   version = "0.5.0";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "python-ndn";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8fcBIcZ2l6mkKe9YQe5+5fh7+vK9qxzBO2kLRUONumQ=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "NDN client library with AsyncIO support";
     homepage = "https://github.com/named-data/python-ndn";
-    changelog = "https://github.com/named-data/python-ndn/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/named-data/python-ndn/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

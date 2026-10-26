@@ -6,14 +6,14 @@
   vips,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "snapweb";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "snapcast";
     repo = "snapweb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7W7rvJPVcRtXcQt+wWAvrl0DOIh7zEfXZdFDcH23/ls=";
   };
 
@@ -37,4 +37,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ ettom ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

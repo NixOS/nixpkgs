@@ -7,14 +7,14 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sigstore-protobuf-specs";
   version = "0.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sigstore_protobuf_specs";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-zvnrMrLGwlHeNuIoWkCq8glIJ+rhifXngE10jMw9W4E=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

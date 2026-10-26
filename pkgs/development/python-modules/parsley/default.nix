@@ -4,13 +4,13 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parsley";
   version = "1.3";
   format = "setuptools";
   src = fetchPypi {
     pname = "Parsley";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lEQnjUcWHV8r52p2eAmjy+bbTbgi9GpP10gdQFcgjUE=";
   };
   # Tests fail although the package works just fine.  Unfortunately
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     description = "Parser generator library based on OMeta, and other useful parsing tools";
     maintainers = with lib.maintainers; [ seppeljordan ];
   };
-}
+})

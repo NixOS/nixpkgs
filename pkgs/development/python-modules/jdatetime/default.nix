@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jdatetime";
   version = "6.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KRF4HsZBolMOnFfhBjoa2PLiDsf+7Jy86/arnbXvpHo=";
   };
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   meta = {
     description = "Jalali datetime binding";
     homepage = "https://github.com/slashmili/python-jalali";
-    changelog = "https://github.com/slashmili/python-jalali/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/slashmili/python-jalali/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.psfl;
     maintainers = [ ];
   };
-}
+})

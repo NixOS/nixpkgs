@@ -4,13 +4,13 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.1.2";
   format = "setuptools";
   pname = "pyro-api";
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-obkA2VgKocL6s7Ejq3/zNBN0TafF9EC9Sq3E1A0U2SA=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ georgewhewell ];
   };
-}
+})

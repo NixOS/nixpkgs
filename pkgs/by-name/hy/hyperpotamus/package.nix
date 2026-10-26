@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "hyperpotamus";
   version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "pmarkert";
     repo = "hyperpotamus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dExkvObz+PNjqAZnigZHs/DCSHq31jDg9pgFmmtPmWk=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     mainProgram = "hyperpotamus";
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

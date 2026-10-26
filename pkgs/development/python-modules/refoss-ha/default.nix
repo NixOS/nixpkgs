@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "refoss-ha";
   version = "1.2.6";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ashionky";
     repo = "refoss_ha";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hU4PzkJNacCLRkMr9mRqORNhEkqiztkprYssyVTpoOQ=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/ashionky/refoss_ha/releases/tag/v${version}";
+    changelog = "https://github.com/ashionky/refoss_ha/releases/tag/v${finalAttrs.version}";
     description = "Refoss support for Home Assistant";
     homepage = "https://github.com/ashionky/refoss_ha";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

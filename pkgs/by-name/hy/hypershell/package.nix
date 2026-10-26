@@ -6,7 +6,7 @@
   patchelfUnstable,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "hypershell";
   version = "0.0.15";
 
@@ -17,7 +17,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "hypershell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UWXlcY65elw+xKLte5KE5eyFLDZmEVQBSwsSpv9G7ng=";
   };
 
@@ -60,4 +60,4 @@ buildNpmPackage rec {
     mainProgram = "hypershell";
     platforms = lib.platforms.all;
   };
-}
+})

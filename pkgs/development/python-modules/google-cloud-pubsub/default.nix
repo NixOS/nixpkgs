@@ -18,14 +18,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-pubsub";
   version = "2.41.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_pubsub";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-THtCwjwUV1Q2ZewWLXXguhsdTJitzJx1PzUXFk95N9c=";
   };
 
@@ -71,9 +71,9 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Pub/Sub API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-pubsub";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-pubsub-v${version}/packages/google-cloud-pubsub/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-pubsub-v${finalAttrs.version}/packages/google-cloud-pubsub/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "fixup_pubsub_v1_keywords.py";
   };
-}
+})

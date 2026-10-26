@@ -9,13 +9,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "retry";
   version = "0.9.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+L+ouZtpxFBtb1vTsKq/d/mM2xfzyfw/XKggAzM2+6Q=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/invl/retry";
     license = lib.licenses.asl20;
   };
-}
+})

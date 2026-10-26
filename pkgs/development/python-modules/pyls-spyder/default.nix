@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyls-spyder";
   version = "0.4.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "pyls-spyder";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-c8J20xL7z/knRUkZvBpzybRwsdorm2p0YqQBo6JeUoU=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

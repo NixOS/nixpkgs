@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "liberty-parser";
   version = "0.0.29";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "tok";
     repo = "liberty-parser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rPEZIRxvmNrDTVD4NG7v2BT3jJXtTisfs4txCG4OfnQ=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ eljamm ];
     teams = with lib.teams; [ ngi ];
   };
-}
+})

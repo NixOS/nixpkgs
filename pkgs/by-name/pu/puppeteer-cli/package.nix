@@ -6,14 +6,14 @@
   chromium,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "puppeteer-cli";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "JarvusInnovations";
     repo = "puppeteer-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0xrb8r4qc9ds7wmfd30nslnkqylxqfwr4gqf7b30v651sjyds29x";
   };
 
@@ -39,4 +39,4 @@ buildNpmPackage rec {
     mainProgram = "puppeteer";
     maintainers = with lib.maintainers; [ chessai ];
   };
-}
+})

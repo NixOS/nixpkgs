@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rospkg";
   version = "1.6.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ros-infrastructure";
     repo = "rospkg";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-I6LiqL/eyM8HnSL4VZ5MfhOipV3Tu/ioCrQNziorksI=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "ROS package library for Python";
     homepage = "http://wiki.ros.org/rospkg";
-    changelog = "https://github.com/ros-infrastructure/rospkg/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ros-infrastructure/rospkg/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

@@ -17,7 +17,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysnmp";
   version = "7.1.27";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BFdPdEa5aZAYa6i7714k33wM36Sq1ExJO/6dmsGLzVg=";
   };
 
@@ -88,8 +88,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmp";
-    changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/lextudio/pysnmp/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

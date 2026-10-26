@@ -12,7 +12,7 @@
   typst,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mpl-typst";
   version = "0.3.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "daskol";
     repo = "mpl-typst";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RVzovICoDqEnjq0HngSe4vLlPszSgkq1FF0/Jrnw34Y=";
   };
 
@@ -77,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Typst backend for matplotlib";
     homepage = "https://github.com/daskol/mpl-typst";
-    changelog = "https://github.com/daskol/mpl-typst/releases/tag/${src.tag}";
+    changelog = "https://github.com/daskol/mpl-typst/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
   };
-}
+})

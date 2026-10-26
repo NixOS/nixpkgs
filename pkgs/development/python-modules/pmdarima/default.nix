@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pmdarima";
   version = "2.1.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alkaline-ml";
     repo = "pmdarima";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NSBmii+2AQidZo8sPARxtLELk5Ec6cHaZddswifFqwQ=";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   env = {
-    GITHUB_REF = "refs/tags/v${version}";
+    GITHUB_REF = "refs/tags/v${finalAttrs.version}";
   };
 
   build-system = [
@@ -77,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Statistical library designed to fill the void in Python's time series analysis capabilities, including the equivalent of R's auto.arima function";
     homepage = "https://github.com/alkaline-ml/pmdarima";
-    changelog = "https://github.com/alkaline-ml/pmdarima/releases/tag/v${version}";
+    changelog = "https://github.com/alkaline-ml/pmdarima/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

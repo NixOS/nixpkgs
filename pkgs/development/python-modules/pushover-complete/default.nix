@@ -9,14 +9,14 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pushover-complete";
   version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pushover_complete";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-JPx9hNc0JoQOdnj+6A029A3wEUyzA1K6T5mrOELtIac=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mic92 ];
   };
-}
+})

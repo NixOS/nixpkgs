@@ -9,13 +9,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yapf";
   version = "0.43.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ANOqJL/t/5QgsuDV2fWrbZ1CaOcq+/Wbs/pUJ4HVIY4=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/google/yapf/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/google/yapf/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/google/yapf";
     description = "Yet Another Python Formatter";
     longDescription = ''
@@ -59,4 +59,4 @@ buildPythonPackage rec {
       siddharthist
     ];
   };
-}
+})

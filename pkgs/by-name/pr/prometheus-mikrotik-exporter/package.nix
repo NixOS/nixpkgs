@@ -6,7 +6,7 @@
   stdenv, # for meta.broken
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mikrotik-exporter-unstable";
   version = "2021-08-10";
 
@@ -26,10 +26,10 @@ buildGoModule rec {
   meta = {
     # last successful hydra build on darwin was in 2024
     broken = stdenv.hostPlatform.isDarwin;
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Prometheus MikroTik device(s) exporter";
     mainProgram = "mikrotik-exporter";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmilata ];
   };
-}
+})

@@ -11,13 +11,13 @@
   uritools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlextract";
   version = "1.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VckUA+CfTh99NroO+4iIPkdu8UyNQjvdzgmDlckL4dg=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
     description = "Collects and extracts URLs from given text";
     mainProgram = "urlextract";
     homepage = "https://github.com/lipoja/URLExtract";
-    changelog = "https://github.com/lipoja/URLExtract/releases/tag/v${version}";
+    changelog = "https://github.com/lipoja/URLExtract/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ilkecan ];
   };
-}
+})

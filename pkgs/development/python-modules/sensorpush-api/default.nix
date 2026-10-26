@@ -10,7 +10,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sensorpush-api";
   version = "2.1.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sstallion";
     repo = "sensorpush-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-T/qROLlzgiRN4T8lwyXoD/8EtTqQY2+D8AXNKu5MeNE=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/sstallion/sensorpush-api/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sstallion/sensorpush-api/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "SensorPush Public API for Python";
     homepage = "https://github.com/sstallion/sensorpush-api";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -9,7 +9,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osmapi";
   version = "6.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "metaodi";
     repo = "osmapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-troBx/rTRWmKm/KV49D3ZE4pAnP5TLlJk0LDaznXqw0=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the OSM API";
     homepage = "https://github.com/metaodi/osmapi";
-    changelog = "https://github.com/metaodi/osmapi/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/metaodi/osmapi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gtfs-realtime-bindings";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "gtfs_realtime_bindings";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-HhhAdf9qrh+OjJGuKOuUavXltla3Q6Qae8o3gYeEiGs=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

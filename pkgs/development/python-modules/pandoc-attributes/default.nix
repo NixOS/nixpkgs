@@ -5,13 +5,13 @@
   pandocfilters,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandoc-attributes";
   version = "0.1.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aSIVAtrHT13xMXARzmLIWoPu9do7ccY7GQjpgiQwSow=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vcanadi ];
   };
-}
+})

@@ -5,14 +5,14 @@
   pyramid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyramid-exclog";
   version = "1.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "pyramid_exclog";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Tl2rYH/GifNfB9w4nG9UIqAQz0O6kujCED/4iZnPKDw=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

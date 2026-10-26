@@ -6,7 +6,7 @@
   django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-treenode";
   version = "0.25.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "django-treenode";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MsMNKptwxBNHgW+0juIkJCD8qdXvXzorwL/DnL+FqgQ=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Deciduous_tree: probably the best abstract model/admin for your tree based stuff";
     homepage = "https://github.com/fabiocaccamo/django-treenode";
-    changelog = "https://github.com/fabiocaccamo/django-treenode/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/fabiocaccamo/django-treenode/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leona ];
   };
-}
+})

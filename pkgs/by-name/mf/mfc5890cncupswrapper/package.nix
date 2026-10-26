@@ -12,12 +12,12 @@
   psutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfc5890cncupswrapper";
   version = "1.1.2-2";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf006170/${pname}-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf006170/${finalAttrs.pname}-${finalAttrs.version}.i386.deb";
     hash = "sha256-UOCwzB09/a1/2rliY+hTrslSvO5ztVj51auisPx7OIQ=";
   };
 
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ martinramm ];
   };
-}
+})

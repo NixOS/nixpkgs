@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorly";
   version = "0.10.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tensorly";
     repo = "tensorly";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7jtEuD8mR7VUZI7EC5XyKrMyZM0bkGtL31Qalyk9vkI=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
-    changelog = "https://github.com/tensorly/tensorly/releases/tag/${version}";
+    changelog = "https://github.com/tensorly/tensorly/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

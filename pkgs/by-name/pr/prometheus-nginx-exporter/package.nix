@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nginx_exporter";
   version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "nginx-prometheus-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TrLgMYzlvTWgGfFkpGziflx6t7k0zee7IlpTraBEinw=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
@@ -44,4 +44,4 @@ buildGoModule rec {
       globin
     ];
   };
-}
+})

@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ms-cv";
   version = "0.1.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpenXbox";
     repo = "ms_cv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TVahUtjwCu4nF2Sec31+tne6t+7fttEzuSzguidQdl4=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

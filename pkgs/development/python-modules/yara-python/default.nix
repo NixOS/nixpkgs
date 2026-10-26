@@ -7,7 +7,7 @@
   yara,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yara-python";
   version = "4.5.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3MElqZALdwmyUA7xTWp6mG8mhRJuUZbYTkvvQc4UfVc=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for YARA";
     homepage = "https://github.com/VirusTotal/yara-python";
-    changelog = "https://github.com/VirusTotal/yara-python/releases/tag/v${version}";
+    changelog = "https://github.com/VirusTotal/yara-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

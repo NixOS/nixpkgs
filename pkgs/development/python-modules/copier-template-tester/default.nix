@@ -6,7 +6,7 @@
   lib,
   uv-build,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "copier-template-tester";
   version = "3.0.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "copier-template-tester";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-eWTrrvZGucHYJVZfhCZSJJQGSqhXLSf8Rp4ZPsGxsIw=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

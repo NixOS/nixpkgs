@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spake2";
   version = "0.9";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "warner";
     repo = "python-spake2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WPMGH1OzG+5O+2lNl2sv06/dNardY+BHYDS290Z36vQ=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/warner/python-spake2/blob/v${version}/NEWS";
+    changelog = "https://github.com/warner/python-spake2/blob/v${finalAttrs.version}/NEWS";
     description = "SPAKE2 password-authenticated key exchange library";
     homepage = "https://github.com/warner/python-spake2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openpyxl";
   version = "3.1.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     domain = "foss.heptapod.net";
     owner = "openpyxl";
     repo = "openpyxl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vp+TIWcHCAWlDaBcmC7w/kV7DZTZpa6463NusaJmqKo=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to read/write Excel 2010 xlsx/xlsm files";
     homepage = "https://openpyxl.readthedocs.org";
-    changelog = "https://foss.heptapod.net/openpyxl/openpyxl/-/blob/${version}/doc/changes.rst";
+    changelog = "https://foss.heptapod.net/openpyxl/openpyxl/-/blob/${finalAttrs.version}/doc/changes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lihop ];
   };
-}
+})

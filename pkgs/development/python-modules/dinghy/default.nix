@@ -16,7 +16,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dinghy";
   version = "1.4.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = "dinghy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-51BXQdDxlI6+3ctDSa/6tyRXBb1E9BVej9qy7WtkOGM=";
   };
 
@@ -53,11 +53,11 @@ buildPythonPackage rec {
     description = "GitHub activity digest tool";
     mainProgram = "dinghy";
     homepage = "https://github.com/nedbat/dinghy";
-    changelog = "https://github.com/nedbat/dinghy/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/nedbat/dinghy/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       trundle
       veehaitch
     ];
   };
-}
+})

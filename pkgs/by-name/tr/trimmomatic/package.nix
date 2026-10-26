@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "trimmomatic";
   version = "0.40";
 
   src = fetchFromGitHub {
     owner = "usadellab";
     repo = "Trimmomatic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pLUjSVePN++G2XZrdKEdobgBO+UD0PZ9wlhSUlZ7na8=";
   };
 
@@ -29,11 +29,11 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 target/trimmomatic-${version}.jar -t $out/share/trimmomatic
+    install -Dm644 target/trimmomatic-${finalAttrs.version}.jar -t $out/share/trimmomatic
     cp -r adapters $out/share/trimmomatic
 
     makeWrapper ${lib.getBin jre_minimal}/bin/java $out/bin/trimmomatic \
-        --add-flags "-jar $out/share/trimmomatic/trimmomatic-${version}.jar"
+        --add-flags "-jar $out/share/trimmomatic/trimmomatic-${finalAttrs.version}.jar"
 
     runHook postInstall
   '';
@@ -43,7 +43,7 @@ maven.buildMavenPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/usadellab/Trimmomatic/releases/tag/v${version}";
+    changelog = "https://github.com/usadellab/Trimmomatic/releases/tag/v${finalAttrs.version}";
     description = "Flexible read trimming tool for Illumina NGS data";
     longDescription = ''
       Trimmomatic performs a variety of useful trimming tasks for illumina
@@ -61,4 +61,4 @@ maven.buildMavenPackage rec {
     mainProgram = "trimmomatic";
     maintainers = [ lib.maintainers.kupac ];
   };
-}
+})

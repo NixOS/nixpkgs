@@ -6,13 +6,13 @@
   defusedxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python3-openid";
   version = "3.2.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-M/v2ko9AHgt5AVHtK1KQsCVF6HdfmCSFIFoGb4dKrq8=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/necaris/python3-openid";
     license = lib.licenses.asl20;
   };
-}
+})

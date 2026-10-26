@@ -6,7 +6,7 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-reverse-proxy-fix";
   version = "0.2.1";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "antarctica";
     repo = "flask-reverse-proxy-fix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZRZI1psr1dnY2FbuLZXOQvLMJd4TF7BfBNZnW9kxeck=";
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   # This is needed so that setup.py does not add "devNone" to the version,
   # after which setuptools throws an error for an invalid version.
-  env.CI_COMMIT_TAG = "v${version}";
+  env.CI_COMMIT_TAG = "v${finalAttrs.version}";
 
   propagatedBuildInputs = [
     flask
@@ -40,4 +40,4 @@ buildPythonPackage rec {
 
     license = lib.licenses.ogluk30;
   };
-}
+})

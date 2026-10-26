@@ -6,13 +6,13 @@
   flutter332,
   quickemu,
 }:
-flutter332.buildFlutterApplication rec {
+flutter332.buildFlutterApplication (finalAttrs: {
   pname = "quickgui";
   version = "1.2.10";
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickgui";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-M2Qy66RqsjXg7ZpHwaXCN8qXRIsisnIyaENx3KqmUfQ=";
   };
 
@@ -64,4 +64,4 @@ flutter332.buildFlutterApplication rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "quickgui";
   };
-}
+})

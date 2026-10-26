@@ -10,7 +10,7 @@
   protobuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "in-toto-attestation";
   version = "0.9.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # Tags on GitHub do not match the Pypi versions
   src = fetchPypi {
     pname = "in_toto_attestation";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-zAz5dBfZSVO5/ubp1BWhHFm01HzuTxN0b/6TWyjj6MQ=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

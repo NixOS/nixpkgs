@@ -71,12 +71,12 @@ let
   useInotify = if stdenv.hostPlatform.isLinux then "true" else "false";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "recoll";
   version = "1.43.9";
 
   src = fetchurl {
-    url = "https://www.recoll.org/${pname}-${version}.tar.gz";
+    url = "https://www.recoll.org/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-irloDtMO9CBvtI+oEicUOy2myrGskieWoqNk5eapzU8=";
   };
 
@@ -215,4 +215,4 @@ stdenv.mkDerivation rec {
       stdenv.hostPlatform.isDarwin
       || (withPython && !stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
-}
+})

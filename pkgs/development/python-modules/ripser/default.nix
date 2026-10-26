@@ -18,7 +18,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ripser";
   version = "0.6.15";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "ripser.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zzqyTVhoL8l/fN0nnkzmyxNG4t1s9z0ZueKkc/NO5FA=";
   };
 
@@ -83,8 +83,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lean Persistent Homology Library for Python";
     homepage = "https://ripser.scikit-tda.org";
-    changelog = "https://github.com/scikit-tda/ripser.py/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/scikit-tda/ripser.py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

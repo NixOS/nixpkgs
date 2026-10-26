@@ -19,14 +19,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (sqlite-vec-c) pname version src;
   pyproject = true;
 
   # The actual source root is bindings/python but the patches
   # apply to the bindings directory.
   # This is a known issue, see https://discourse.nixos.org/t/how-to-apply-patches-with-sourceroot/59727
-  sourceRoot = "${src.name}/bindings";
+  sourceRoot = "${finalAttrs.src.name}/bindings";
 
   patches = [
     (fetchpatch {
@@ -86,4 +86,4 @@ buildPythonPackage rec {
     description = "Python bindings for sqlite-vec";
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynecil";
   version = "4.2.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pynecil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nZaWiaEAIsubvSSsJZLQVfpaElWx7WKeRlYK80tUohg=";
   };
 
@@ -51,10 +51,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/tr4nt0r/pynecil/releases/tag/${src.tag}";
+    changelog = "https://github.com/tr4nt0r/pynecil/releases/tag/${finalAttrs.src.tag}";
     description = "Python library to communicate with Pinecil V2 soldering irons via Bluetooth";
     homepage = "https://github.com/tr4nt0r/pynecil";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

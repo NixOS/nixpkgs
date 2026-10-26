@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rars";
   version = "1.6";
 
   src = fetchurl {
-    url = "https://github.com/TheThirdOne/rars/releases/download/v${version}/rars1_6.jar";
+    url = "https://github.com/TheThirdOne/rars/releases/download/v${finalAttrs.version}/rars1_6.jar";
     hash = "sha256-eA9zDrRXsbpgnpaKzMLIt32PksPZ2/MMx/2zz7FOjCQ=";
   };
 
@@ -21,9 +21,9 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    export JAR=$out/share/java/${pname}/${pname}.jar
+    export JAR=$out/share/java/${finalAttrs.pname}/${finalAttrs.pname}.jar
     install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
       --add-flags "-jar $JAR"
     runHook postInstall
   '';
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ athas ];
     platforms = lib.platforms.all;
   };
-}
+})

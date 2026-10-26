@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "javascript-typescript-langserver";
   version = "2.11.3";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "javascript-typescript-langserver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vd7Hj0jPFgK0u3CBlMfOFERmW+w9CnKIY9nvs48KqsI=";
   };
 
@@ -27,4 +27,4 @@ buildNpmPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dywedir ];
   };
-}
+})

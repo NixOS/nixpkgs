@@ -8,13 +8,13 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-moderncmakedomain";
   version = "4.4.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinxcontrib_moderncmakedomain";
     hash = "sha256-I/gBiLskGk2miG+eSyBNxiuudgYKQapZe5DwTSd0EKg=";
   };
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jhol ];
   };
-}
+})

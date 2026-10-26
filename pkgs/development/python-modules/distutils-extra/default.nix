@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "distutils-extra";
   version = "2.50";
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://salsa.debian.org/python-team/modules/python-distutils-extra/-/archive/${version}/python-${pname}-${version}.tar.bz2";
+    url = "https://salsa.debian.org/python-team/modules/python-distutils-extra/-/archive/${finalAttrs.version}/python-${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     hash = "sha256-aq5+JjlzD3fS4+CPxZNjyz2QNfqsChC0w6KRVgbTGwI=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -11,7 +11,7 @@
   which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "neo";
   version = "0.14.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NeuralEnsemble";
     repo = "python-neo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IB+RuQBJTu0Ss7PLdBpONBl50xdTiR512ni+w3Z+DEM=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Package for representing electrophysiology data";
     homepage = "https://neuralensemble.org/neo/";
-    changelog = "https://neo.readthedocs.io/en/${src.tag}/releases/${src.tag}.html";
+    changelog = "https://neo.readthedocs.io/en/${finalAttrs.src.tag}/releases/${finalAttrs.src.tag}.html";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

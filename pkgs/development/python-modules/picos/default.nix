@@ -11,13 +11,13 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "picos";
   version = "2.6.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-869PnpjwxEnrS2Atfk4CzAkn56kJSqU/XXmnSHZZ5DM=";
   };
 
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ tobiasBora ];
   };
-}
+})

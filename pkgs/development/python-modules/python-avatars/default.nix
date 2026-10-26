@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-avatars";
   version = "1.4.1";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ibonn";
     repo = "python_avatars";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8/uhzOr0AukH0VgUhnsPNSEGJ2D5z1tqdIKzNHyHCgY=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Avatar generation package for Python";
     homepage = "https://github.com/ibonn/python_avatars";
-    changelog = "https://github.com/ibonn/python_avatars/releases/tag/${src.tag}";
+    changelog = "https://github.com/ibonn/python_avatars/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.erictapen ];
   };
-}
+})

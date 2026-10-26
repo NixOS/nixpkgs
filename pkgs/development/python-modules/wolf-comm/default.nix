@@ -10,7 +10,7 @@
   shortuuid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wolf-comm";
   version = "0.0.52";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "janrothkegel";
     repo = "wolf-comm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IdV52+/2GTsAtlN3mvdtSf6B2WS6w3SvAOaZyZA/e+I=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/janrothkegel/wolf-comm/releases/tag/${src.tag}";
+    changelog = "https://github.com/janrothkegel/wolf-comm/releases/tag/${finalAttrs.src.tag}";
     description = "Communicate with Wolf SmartSet Cloud";
     homepage = "https://github.com/janrothkegel/wolf-comm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

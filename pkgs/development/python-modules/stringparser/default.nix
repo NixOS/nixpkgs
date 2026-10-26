@@ -8,7 +8,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stringparser";
   version = "0.7";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "stringparser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gj0ooeb869JhlB9Mf5nBydiV2thTes8ys+BLJ516iSA=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Easy to use pattern matching and information extraction";
     homepage = "https://github.com/hgrecco/stringparser";
-    changelog = "https://github.com/hgrecco/stringparser/blob/${version}/CHANGES";
+    changelog = "https://github.com/hgrecco/stringparser/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ evilmav ];
   };
-}
+})

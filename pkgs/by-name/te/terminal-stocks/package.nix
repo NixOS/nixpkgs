@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "terminal-stocks";
   version = "1.0.20";
 
   src = fetchFromGitHub {
     owner = "shweshi";
     repo = "terminal-stocks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YrdOw5le+gR8eANS57/uSGwrBfRJiLNkTR8InrEAI7o=";
   };
 
@@ -28,4 +28,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "terminal-stocks";
   };
-}
+})

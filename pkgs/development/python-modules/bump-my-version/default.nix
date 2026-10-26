@@ -29,7 +29,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bump-my-version";
   version = "1.2.7";
   pyproject = true;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fqbh1Ul1TzB2/HkTTlGFoUO6/hLNLNykcXjNb6I+Kpc=";
   };
 
@@ -89,9 +89,9 @@ buildPythonPackage rec {
       by the correct increment and optionally commit and tag the changes.
     '';
     homepage = "https://github.com/callowayproject/bump-my-version";
-    changelog = "https://github.com/callowayproject/bump-my-version/releases/tag/${src.tag}";
+    changelog = "https://github.com/callowayproject/bump-my-version/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daspk04 ];
     mainProgram = "bump-my-version";
   };
-}
+})

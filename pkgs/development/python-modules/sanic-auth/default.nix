@@ -8,14 +8,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sanic-auth";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Sanic-Auth";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-KAU066S70GO1hURQrW0n+L5/kFzpgen341hlia0ngjU=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
-}
+})

@@ -16,7 +16,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysam";
   version = "0.23.3";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysam-developers";
     repo = "pysam";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yOLnfuGQW+j0nHy4MRlwurZMpeRHTGmQ9eLmihcAGoQ=";
   };
 
@@ -85,10 +85,10 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for reading, manipulating and writing genome data sets";
     downloadPage = "https://github.com/pysam-developers/pysam";
-    changelog = "https://github.com/pysam-developers/pysam/releases/tag/${src.tag}";
+    changelog = "https://github.com/pysam-developers/pysam/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://pysam.readthedocs.io";
     maintainers = with lib.maintainers; [ unode ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

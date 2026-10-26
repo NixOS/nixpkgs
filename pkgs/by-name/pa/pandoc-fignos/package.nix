@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pandoc-fignos";
   version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomduck";
-    repo = pname;
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     sha256 = "sha256-eDwAW0nLB4YqrWT3Ajt9bmX1A43wl+tOPm2St5VpCLk=";
   };
 
@@ -32,4 +32,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ppenguin ];
     mainProgram = "pandoc-fignos";
   };
-}
+})

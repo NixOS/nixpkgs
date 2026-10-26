@@ -21,14 +21,14 @@
   onlyQOS ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firehol";
   version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "firehol";
     repo = "firehol";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-6O3AoQs7Qzcin8VXQgJfCVsNOI74H6fE1DgqdY+e4bA=";
   };
 
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

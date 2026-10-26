@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycm";
   version = "4.6";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = "pycm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Yi82FBy+kUPKSXS8X6EOK+6hmR0xZgwlGqFjvc9bYEY=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multiclass confusion matrix library";
     homepage = "https://pycm.io";
-    changelog = "https://github.com/sepandhaghighi/pycm/releases/tag/${src.tag}";
+    changelog = "https://github.com/sepandhaghighi/pycm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

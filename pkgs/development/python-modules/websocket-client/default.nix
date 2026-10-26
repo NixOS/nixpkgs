@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "websocket-client";
   version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "websocket_client";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-noE2JLbrYZmZqX3HlYRpIXwxdjErOhakvRvH4IpG7Jg=";
   };
 
@@ -34,9 +34,9 @@ buildPythonPackage rec {
   meta = {
     description = "Websocket client for Python";
     homepage = "https://github.com/websocket-client/websocket-client";
-    changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/websocket-client/websocket-client/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wsdump";
   };
-}
+})

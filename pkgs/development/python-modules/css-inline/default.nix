@@ -22,7 +22,7 @@
   writeShellApplication,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "css-inline";
   version = "0.23.0";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
-    rev = "python-v${version}";
+    rev = "python-v${finalAttrs.version}";
     hash = "sha256-8K3LDhuvT++m+l1sauEdMPZqbJKNquwoyJR1/RukGP4=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     postPatch = ''
       cd crates/css-inline-python
       ln -s ${./Cargo.lock} Cargo.lock
@@ -96,7 +96,7 @@ buildPythonPackage rec {
 
       (
         cd "$(mktemp -d)"
-        git clone "${src.gitRepoUrl}" .
+        git clone "${finalAttrs.src.gitRepoUrl}" .
         git checkout "$TAG"
         pushd crates/css-inline-python
         rm -rf .cargo # unstable build std
@@ -112,8 +112,8 @@ buildPythonPackage rec {
   meta = {
     description = "Inline CSS into style attributes";
     homepage = "https://github.com/Stranger6667/css-inline";
-    changelog = "https://github.com/Stranger6667/css-inline/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Stranger6667/css-inline/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

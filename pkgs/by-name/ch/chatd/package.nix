@@ -12,14 +12,14 @@
   vips,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "chatd";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "BruceMacD";
     repo = "chatd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6z5QoJk81NEP115uW+2ah7vxpDz8XQUmMLESPsZT9uU=";
   };
 
@@ -88,10 +88,10 @@ buildNpmPackage rec {
   meta = {
     description = "Chat with your documents using local AI";
     homepage = "https://github.com/BruceMacD/chatd";
-    changelog = "https://github.com/BruceMacD/chatd/releases/tag/v${version}";
+    changelog = "https://github.com/BruceMacD/chatd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "chatd";
     platforms = electron.meta.platforms;
   };
-}
+})

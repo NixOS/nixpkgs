@@ -10,7 +10,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tessie-api";
   version = "0.1.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrewgierens";
     repo = "tessie_python_api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ia5J7dGbcfEa6rEKyJzEnzVnMC3HyI7l5g20v7d7Gjo=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the Tessie API";
     homepage = "https://github.com/andrewgierens/tessie_python_api";
-    changelog = "https://github.com/andrewgierens/tessie_python_api/releases/tag/${version}";
+    changelog = "https://github.com/andrewgierens/tessie_python_api/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

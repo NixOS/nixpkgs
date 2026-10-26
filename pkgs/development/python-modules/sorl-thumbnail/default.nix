@@ -7,14 +7,14 @@
   django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sorl-thumbnail";
   version = "12.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sorl_thumbnail";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-GRuJwn7LQLXCo1VJ1VfRfEhBxq/0ObLhe5OLke6kY7M=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://sorl-thumbnail.readthedocs.org/en/latest/";
     description = "Thumbnails for Django";
-    changelog = "https://github.com/jazzband/sorl-thumbnail/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/jazzband/sorl-thumbnail/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
   };
-}
+})

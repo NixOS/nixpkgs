@@ -7,7 +7,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cron-descriptor";
   version = "2.2.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-V+NzYUg+8umSgUZmxIa4N2gJ0ojm3kyanJJx5JdV7e4=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library that converts cron expressions into human readable strings";
     homepage = "https://github.com/Salamek/cron-descriptor";
-    changelog = "https://github.com/Salamek/cron-descriptor/releases/tag/${version}";
+    changelog = "https://github.com/Salamek/cron-descriptor/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phaer ];
   };
-}
+})

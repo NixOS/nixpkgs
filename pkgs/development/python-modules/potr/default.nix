@@ -5,13 +5,13 @@
   pycrypto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-potr";
   version = "1.0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+Vuaf+r446aqqJhgn4oq2lVRjPUvwJFSd1xMWcmbjqY=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

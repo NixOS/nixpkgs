@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flake8-quotes";
   version = "3.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zheller";
     repo = "flake8-quotes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A8PBdYQzOBpMYBQGchZouuZiZqmwhhjp2PJblnNZOFU=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

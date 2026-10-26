@@ -9,7 +9,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lyricwikia";
   version = "0.1.11";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "enricobacis";
     repo = "lyricwikia";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-P88DrRAa2zptt8JLy0/PLi0oZ/BghF/XGSP0kOObi7E=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
     description = "LyricWikia API for song lyrics";
     mainProgram = "lyrics";
     homepage = "https://github.com/enricobacis/lyricwikia";
-    changelog = "https://github.com/enricobacis/lyricwikia/releases/tag/${version}";
+    changelog = "https://github.com/enricobacis/lyricwikia/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kmein ];
   };
-}
+})

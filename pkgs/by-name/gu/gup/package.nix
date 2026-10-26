@@ -8,13 +8,13 @@
   runtimeShell,
   pylint,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.2";
   src = fetchFromGitHub {
     hash = "sha256-bV5HauM0xmRI/9Pxp1cYLPLA8PbFvPER2y4mAMmgchs=";
     owner = "timbertson";
     repo = "gup";
-    rev = "version-${version}";
+    rev = "version-${finalAttrs.version}";
   };
   pname = "gup";
   nativeBuildInputs = [
@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     ''
   ];
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Better make, inspired by djb's redo";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ lib.maintainers.timbertson ];
     platforms = lib.platforms.all;
   };
-}
+})

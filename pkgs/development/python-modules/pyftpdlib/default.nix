@@ -11,13 +11,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyftpdlib";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-S6BkIHh5LfY907LpyPg48qPs9CjHUY1ZIcBTDVNRKs8=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous FTP server library";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
-    changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
+    changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ftpbench";
   };
-}
+})

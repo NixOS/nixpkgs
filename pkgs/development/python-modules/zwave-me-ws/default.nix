@@ -7,7 +7,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zwave-me-ws";
   version = "0.4.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Z-Wave-Me";
     repo = "zwave-me-ws";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bTchtgr+UbHCpcXMaQA3bTrhasJ79TguvAqLNlpD/2c=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to connect to a ZWave-Me instance";
     homepage = "https://github.com/Z-Wave-Me/zwave-me-ws";
-    changelog = "https://github.com/Z-Wave-Me/zwave-me-ws/releases/tag/v${version}";
+    changelog = "https://github.com/Z-Wave-Me/zwave-me-ws/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

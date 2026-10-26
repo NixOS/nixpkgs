@@ -5,13 +5,13 @@
   watchman,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywatchman";
   version = "3.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-79MqFzkaWHIRjFUEHacaIJYORrpLc0QMJO+sKH7qkR4=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     homepage = "https://facebook.github.io/watchman/";
     license = lib.licenses.bsd3;
   };
-}
+})

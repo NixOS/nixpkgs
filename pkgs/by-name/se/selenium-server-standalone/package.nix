@@ -14,12 +14,12 @@ let
   patchVersion = "59";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "selenium-server-standalone";
   version = "${minorVersion}.${patchVersion}";
 
   src = fetchurl {
-    url = "https://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
+    url = "https://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${finalAttrs.version}.jar";
     sha256 = "1jzkx0ahsb27zzzfvjqv660x9fz2pbcddgmhdzdmasxns5vipxxc";
   };
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
-    mkdir -p $out/share/lib/${pname}-${version}
-    cp $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar
+    mkdir -p $out/share/lib/${finalAttrs.pname}-${finalAttrs.version}
+    cp $src $out/share/lib/${finalAttrs.pname}-${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.jar
     makeWrapper ${jre}/bin/java $out/bin/selenium-server \
-      --add-flags "-cp $out/share/lib/${pname}-${version}/${pname}-${version}.jar:${htmlunit-driver}/share/lib/${htmlunit-driver.name}/${htmlunit-driver.name}.jar" \
+      --add-flags "-cp $out/share/lib/${finalAttrs.pname}-${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.jar:${htmlunit-driver}/share/lib/${htmlunit-driver.name}/${htmlunit-driver.name}.jar" \
       ${lib.optionalString chromeSupport "--add-flags -Dwebdriver.chrome.driver=${chromedriver}/bin/chromedriver"} \
       --add-flags "org.openqa.grid.selenium.GridLauncherV3"
   '';
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     mainProgram = "selenium-server";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -8,7 +8,7 @@
   pytest9_0CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aionut";
   version = "4.3.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aionut";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mpWAxv6RUTecGp6Zdka+gC+12JWcPQaKgJlqGgEINu0=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asyncio Network UPS Tools";
     homepage = "https://github.com/bdraco/aionut";
-    changelog = "https://github.com/bdraco/aionut/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/aionut/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

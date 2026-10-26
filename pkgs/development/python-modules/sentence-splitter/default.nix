@@ -7,7 +7,7 @@
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentence-splitter";
   version = "1.4";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mediacloud";
     repo = "sentence-splitter";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-FxRi8fhKB9++lCTFpCAug0fxjkSVTKChLY84vkshR34=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

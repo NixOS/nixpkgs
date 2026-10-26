@@ -20,7 +20,7 @@
   shapely,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libpysal";
   version = "4.15.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "libpysal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ltDrTbx4Z0ZVZHg+v45ETgMGHLDeEX71Qpbe2NykxKw=";
   };
 
@@ -81,8 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of spatial analysis functions";
     homepage = "https://pysal.org/libpysal/";
-    changelog = "https://github.com/pysal/libpysal/releases/tag/${src.tag}";
+    changelog = "https://github.com/pysal/libpysal/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

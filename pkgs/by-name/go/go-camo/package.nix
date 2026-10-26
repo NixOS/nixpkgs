@@ -7,14 +7,14 @@
   scdoc,
 }:
 
-buildGo127Module rec {
+buildGo127Module (finalAttrs: {
   pname = "go-camo";
   version = "2.7.7";
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = "go-camo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dDQ+xupAeug9OxftnwhYjcrgIU+knCM9+g38ytoiKF8=";
   };
 
@@ -30,7 +30,7 @@ buildGo127Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.ServerVersion=${version}"
+    "-X=main.ServerVersion=${finalAttrs.version}"
   ];
 
   postBuild = ''
@@ -53,9 +53,9 @@ buildGo127Module rec {
   meta = {
     description = "Camo server is a special type of image proxy that proxies non-secure images over SSL/TLS";
     homepage = "https://github.com/cactus/go-camo";
-    changelog = "https://github.com/cactus/go-camo/releases/tag/v${version}";
+    changelog = "https://github.com/cactus/go-camo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "go-camo";
     maintainers = with lib.maintainers; [ viraptor ];
   };
-}
+})

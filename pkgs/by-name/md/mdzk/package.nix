@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdzk";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "mdzk-rs";
     repo = "mdzk";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-V//tVcIzhCh03VjwMC+R2ynaOFm+dp6qxa0oqBfvGUs=";
   };
 
@@ -33,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "mdzk";
   };
-}
+})

@@ -10,7 +10,7 @@
   telegram-text,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-telegram";
   version = "0.19.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexander-akhmetov";
     repo = "python-telegram";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JnU59DZXpnaZXIY/apXQ2gBgiwT12rJIeVqzaP0l7Zk=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for the Telegram's tdlib";
     homepage = "https://github.com/alexander-akhmetov/python-telegram";
-    changelog = "https://github.com/alexander-akhmetov/python-telegram/releases/tag/${version}";
+    changelog = "https://github.com/alexander-akhmetov/python-telegram/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

@@ -10,7 +10,7 @@
   simpleitk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "medpy";
   version = "0.5.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "loli";
     repo = "medpy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-M46d8qiR3+ioiuRhzIaU5bV1dnfDm819pjn78RYlcG0=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Medical image processing library";
     homepage = "https://loli.github.io/medpy";
-    changelog = "https://github.com/loli/medpy/releases/tag/${version}";
+    changelog = "https://github.com/loli/medpy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

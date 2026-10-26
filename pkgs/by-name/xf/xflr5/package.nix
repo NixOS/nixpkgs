@@ -5,11 +5,11 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xflr5";
   version = "6.61";
 
-  sourceRoot = "${src.name}/xflr5";
+  sourceRoot = "${finalAttrs.src.name}/xflr5";
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xflr5/code/trunk";
     rev = "1480";
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.esclear ];
     platforms = lib.platforms.linux;
   };
-}
+})

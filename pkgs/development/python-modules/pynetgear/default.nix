@@ -5,7 +5,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynetgear";
   version = "0.10.10";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatMaul";
     repo = "pynetgear";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5Lj2cK/SOGgaPu8dI9X3Leg4dPAY7tdIHCzFnNaube8=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with Netgear wireless routers";
     homepage = "https://github.com/MatMaul/pynetgear";
-    changelog = "https://github.com/MatMaul/pynetgear/releases/tag/${version}";
+    changelog = "https://github.com/MatMaul/pynetgear/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

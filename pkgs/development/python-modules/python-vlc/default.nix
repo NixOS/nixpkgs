@@ -7,14 +7,14 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-vlc";
   version = "3.0.21203";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_vlc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-UtBUSydrEeWLbAt0jD4FGPlPdLG0zTKMg6WerKvq0ew=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

@@ -9,7 +9,7 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uplink-protobuf";
   version = "0.1.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "prkumar";
     repo = "uplink-protobuf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HeA5bGmYSysidhz8YbST0uTqZ9BKFYQENrWuhcUZ7qY=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Protocol Buffers (Protobuf) support for Uplink";
     homepage = "https://github.com/prkumar/uplink-protobuf";
-    changelog = "https://github.com/prkumar/uplink-protobuf/releases/tag/${src.tag}";
+    changelog = "https://github.com/prkumar/uplink-protobuf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

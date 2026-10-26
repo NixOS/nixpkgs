@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-sslify";
   version = "0.1.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Flask-SSLify";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-0z4dPAnNlRVBdqqKcxlBjlISn8SC3VbYqK18JFANVD4=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
-}
+})

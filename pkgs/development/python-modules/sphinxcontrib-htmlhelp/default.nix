@@ -5,14 +5,14 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-htmlhelp";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_htmlhelp";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-yeKRas6KrWTME6DSM+4iMX8rkCW5zzKVJJ+phcxwguk=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-htmlhelp";
     license = lib.licenses.bsd2;
   };
-}
+})

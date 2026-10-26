@@ -5,14 +5,14 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hsaudiotag3k";
   version = "1.1.3.post1";
   format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-72DpIQ1HJ+gvAJWmhssHtnbQVZGPDFnFv6hZjaA+WdE=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/chrrrisw/hsaudiotag";
     license = lib.licenses.bsd3;
   };
-}
+})

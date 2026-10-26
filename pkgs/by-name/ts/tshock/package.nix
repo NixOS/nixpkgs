@@ -6,14 +6,14 @@
   dotnet-runtime_9,
   nix-update-script,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "tshock";
   version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "Pryaxis";
     repo = "TShock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yLYcpEaDzF7hzjIbjh//G1FO1mpBtAodf3yL5ILHCsI=";
     fetchSubmodules = true;
   };
@@ -44,4 +44,4 @@ buildDotnetModule rec {
     maintainers = [ lib.maintainers.proggerx ];
     mainProgram = "TShock.Server";
   };
-}
+})

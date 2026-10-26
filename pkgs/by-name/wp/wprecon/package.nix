@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wprecon";
   version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "ffx64";
     repo = "wprecon";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-23zJD3Nnkeko+J2FjPq5RA5dIjORMXvwt3wtAYiVlQs=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

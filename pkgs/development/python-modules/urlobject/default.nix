@@ -6,7 +6,7 @@
   setuptoolsBuildHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlobject";
   version = "2.4.3";
   pyproject = false;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zacharyvoase";
     repo = "urlobject";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4UuQZTkVre8jXlchW7/TjeaADYvLnGMpGbJR/sdeKv4=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

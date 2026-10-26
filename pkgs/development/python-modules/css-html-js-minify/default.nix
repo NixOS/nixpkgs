@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "css-html-js-minify";
   version = "2.5.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-Sp8R9+BJb1KE0SER87pP9f8gI9EvFdGVycSL2XATdGw=";
   };
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ FlorianFranzen ];
     mainProgram = "css-html-js-minify";
   };
-}
+})

@@ -6,13 +6,13 @@
   markdown,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-markdown-tables";
   version = "0.0.17";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-a8bT1ADqzP7r0ohEa8CN2DCDNnxYuF1A/mwS1371kvE=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/ryanfox/sphinx-markdown-tables";
     license = lib.licenses.gpl3;
   };
-}
+})

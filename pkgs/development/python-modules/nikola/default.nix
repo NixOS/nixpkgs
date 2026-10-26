@@ -43,13 +43,13 @@
   yapsy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nikola";
   version = "8.3.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Y219b/wqsk9MJknoaV+LtWBOMJFT6ktgt4b6yuA6scc=";
   };
 
@@ -129,9 +129,9 @@ buildPythonPackage rec {
   meta = {
     description = "Static website and blog generator";
     homepage = "https://getnikola.com/";
-    changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/getnikola/nikola/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
     mainProgram = "nikola";
   };
-}
+})

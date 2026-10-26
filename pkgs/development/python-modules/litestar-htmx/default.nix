@@ -6,13 +6,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litestar-htmx";
   version = "0.5.0";
 
   src = fetchPypi {
     pname = "litestar_htmx";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-4C0aOpIXLIdINfo+Z0nWWun8Ym0N9GcZSQoWKT4hRvs=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     description = "HTMX Integration for Litesstar";
   };
-}
+})

@@ -6,14 +6,14 @@
   altcoinSupport ? false,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "btcpayserver";
   version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "btcpayserver";
     repo = "btcpayserver";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bH6VPue4P+XUGFaaBBChdc8lSHFjsGBIfNw4fznE72A=";
   };
 
@@ -35,11 +35,11 @@ buildDotnetModule rec {
   meta = {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
-    changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${finalAttrs.version}/Changelog.md";
     maintainers = with lib.maintainers; [
       kcalvinalvin
     ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

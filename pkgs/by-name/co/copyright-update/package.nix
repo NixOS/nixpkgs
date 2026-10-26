@@ -5,15 +5,15 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "copyright-update";
   version = "2025.0404";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-src";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-src";
     owner = "jaalto";
     repo = "project--copyright-update";
-    rev = "release/${version}";
+    rev = "release/${finalAttrs.version}";
     sha256 = "sha256-FeKWCgCDA77iJ/cWtfx6hXSyWxwmlkW4EidPxy1W9VY=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

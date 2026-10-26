@@ -11,7 +11,7 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-unsign";
   version = "1.2.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Paradoxis";
     repo = "Flask-Unsign";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/WK3g6Ef3mSKeT3aaSAh5J8estUN4sNmM9Tq9An/18A=";
   };
 
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   meta = {
     description = "Command line tool to fetch, decode, brute-force and craft session cookies of Flask applications";
     homepage = "https://github.com/Paradoxis/Flask-Unsign";
-    changelog = "https://github.com/Paradoxis/Flask-Unsign/releases/tag/${src.tag}";
+    changelog = "https://github.com/Paradoxis/Flask-Unsign/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "flask-unsign";
   };
-}
+})

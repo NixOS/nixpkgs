@@ -9,7 +9,7 @@
   ipython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "matplotlib-inline";
   version = "0.2.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "matplotlib-inline";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pLJGwykQ0+LK+cljGQmkSDuBSAdGq+SCPYGQ0ZF7nq0=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

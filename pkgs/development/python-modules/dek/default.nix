@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dek";
   version = "1.4.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rec";
     repo = "dek";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DYODdImTRCukGmGbkZ+9TQeI9DYaeRd/EHS6VND5IDs=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Decorator-decorator";
     homepage = "https://github.com/rec/dek";
-    changelog = "https://github.com/rec/dek/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/rec/dek/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

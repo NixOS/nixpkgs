@@ -11,14 +11,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-wtf";
   version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_wtf";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YdXavFDD34hcKX3L2AgQRDpdYyEGyKacq4znQPDN18w=";
   };
 
@@ -49,6 +49,6 @@ buildPythonPackage rec {
       anthonyroussel
     ];
     homepage = "https://github.com/pallets-eco/flask-wtf/";
-    changelog = "https://github.com/pallets-eco/flask-wtf/releases/tag/v${version}";
+    changelog = "https://github.com/pallets-eco/flask-wtf/releases/tag/v${finalAttrs.version}";
   };
-}
+})

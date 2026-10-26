@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinstaller-hooks-contrib";
   version = "2026.8";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "pyinstaller_hooks_contrib";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-TYJXhq16m328xS1hJ0ijRWL+JzRhvP2I9NVJxZS7+Pk=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ h7x4 ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "prettier-d-slim";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mikew";
     repo = "prettier_d_slim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M+qlFKtIro3geVsVaYu6dIfOrJIlUQY98LSBikKNV/I=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     mainProgram = "prettier_d_slim";
     maintainers = [ ];
   };
-}
+})

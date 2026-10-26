@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aggregate6";
   version = "1.0.15";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "job";
     repo = "aggregate6";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GXIZ2aNZUeiVkhmo2jdwIEk9jL/in2KuuKgi//TQGq0=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ marcel ];
   };
-}
+})

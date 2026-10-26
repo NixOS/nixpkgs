@@ -10,7 +10,7 @@
   unicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slothy";
   version = "0.2.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slothy-optimizer";
     repo = "slothy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pyES6ithBVAFSVdjsM61kp6eeEUxNsLs7jdekpX+YuA=";
   };
 
@@ -58,9 +58,9 @@ buildPythonPackage rec {
   meta = {
     description = "Assembly superoptimization via constraint solving";
     homepage = "https://slothy-optimizer.github.io/slothy";
-    changelog = "https://github.com/slothy-optimizer/slothy/releases/tag/${version}";
+    changelog = "https://github.com/slothy-optimizer/slothy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mkannwischer ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

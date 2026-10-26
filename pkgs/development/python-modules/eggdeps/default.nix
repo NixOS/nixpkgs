@@ -6,13 +6,13 @@
   zope-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tl-eggdeps";
   version = "1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "tl.eggdeps";
     hash = "sha256-oJTteWGj3Tj8qqac96WGcAOKzf8YY2AWbZ49lkt6cyM=";
   };
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     homepage = "https://thomas-lotze.de/en/software/eggdeps/";
     license = lib.licenses.zpl20;
   };
-}
+})

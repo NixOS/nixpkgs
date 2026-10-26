@@ -12,7 +12,7 @@
   psutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trx-python";
   version = "0.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tee-ar-ex";
     repo = "trx-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gKPgP3GJ7QY0Piylk5L0HxnscRCREP1Hm5HZufL2h5g=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the TRX file format";
     homepage = "https://github.com/tee-ar-ex/trx-python";
-    changelog = "https://github.com/tee-ar-ex/trx-python/releases/tag/${version}";
+    changelog = "https://github.com/tee-ar-ex/trx-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

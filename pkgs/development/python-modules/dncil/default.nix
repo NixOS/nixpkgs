@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dncil";
   version = "1.0.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "dncil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bndkiXkIYTd071J+mgkmJmA+9J5yJ+9/oDfAypN7wYo=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to disassemble Common Intermediate Language (CIL) instructions";
     homepage = "https://github.com/mandiant/dncil";
-    changelog = "https://github.com/mandiant/dncil/releases/tag/v${version}";
+    changelog = "https://github.com/mandiant/dncil/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

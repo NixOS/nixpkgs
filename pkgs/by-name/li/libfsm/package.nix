@@ -7,9 +7,9 @@
   libxslt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfsm";
-  version = "0.1pre2987_${builtins.substring 0 8 src.rev}";
+  version = "0.1pre2987_${builtins.substring 0 8 finalAttrs.src.rev}";
 
   src = fetchFromGitHub {
     owner = "katef";
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

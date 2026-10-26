@@ -9,7 +9,7 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autopxd2";
   version = "3.2.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "autopxd2";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Zf44gmkuWvp8lfrScq4GAhOisLYu4scyuNp1Cn3lnVc=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     description = "Generates .pxd files automatically from .h files";
   };
-}
+})

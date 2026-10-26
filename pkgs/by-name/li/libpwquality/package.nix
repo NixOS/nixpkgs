@@ -15,7 +15,7 @@
 # python binding generates a shared library which are unavailable with musl build
 assert enablePython -> !stdenv.hostPlatform.isStatic;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpwquality";
   version = "1.4.5";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libpwquality";
     repo = "libpwquality";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     sha256 = "sha256-YjvHzd4iEBvg+qHOVJ7/y9HqyeT+QDalNE/jdNM9BNs=";
   };
 
@@ -105,4 +105,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jk ];
     platforms = lib.platforms.unix;
   };
-}
+})

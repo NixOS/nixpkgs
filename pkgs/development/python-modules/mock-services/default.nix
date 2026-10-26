@@ -10,7 +10,7 @@
   setuptools_80,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mock-services";
   version = "0.3.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peopledoc";
     repo = "mock-services";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ycFbOhl+lhJhd9tha9wPctrIVJc5BqRS0z3EZ7nzHuc=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

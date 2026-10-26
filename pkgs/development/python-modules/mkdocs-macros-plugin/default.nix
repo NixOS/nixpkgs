@@ -18,7 +18,7 @@
   mkdocs-macros-test,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-macros-plugin";
   version = "1.3.9";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fralau";
     repo = "mkdocs-macros-plugin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bL7oWWDoF+zH34XSwFY2H9op/97zO43HS+oO6lNFEr4=";
   };
 
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Create richer and more beautiful pages in MkDocs, by using variables and calls to macros in the markdown code";
     homepage = "https://github.com/fralau/mkdocs-macros-plugin";
-    changelog = "https://github.com/fralau/mkdocs-macros-plugin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/fralau/mkdocs-macros-plugin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tljuniper ];
   };
-}
+})

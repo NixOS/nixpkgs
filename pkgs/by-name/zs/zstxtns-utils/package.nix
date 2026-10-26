@@ -8,12 +8,12 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zstxtns-utils";
   version = "0.0.3";
 
   src = fetchurl {
-    url = "https://ytrizja.de/distfiles/zstxtns-utils-${version}.tar.gz";
+    url = "https://ytrizja.de/distfiles/zstxtns-utils-${finalAttrs.version}.tar.gz";
     sha256 = "I/Gm7vHUr29NClYWQ1kwu8HrNZpdLXfE/nutTNoqcdU=";
   };
 
@@ -48,4 +48,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

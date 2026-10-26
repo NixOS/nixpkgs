@@ -8,11 +8,11 @@
 }:
 
 # v2.1: last version with NHM/WSM arch support
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iaca";
   version = "2.1";
   src = requireFile {
-    name = "iaca-version-${version}-lin64.zip";
+    name = "iaca-version-${finalAttrs.version}-lin64.zip";
     sha256 = "11s1134ijf66wrc77ksky9mnb0lq6ml6fzmr86a6p6r5xclzay2m";
     url = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer-download";
   };
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ kazcw ];
   };
-}
+})

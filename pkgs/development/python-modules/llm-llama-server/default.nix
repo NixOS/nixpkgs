@@ -9,7 +9,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-llama-server";
   version = "0.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-llama-server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jtFSfGu3JhNUfTsspY+OFLTMt9jQrh6R05sK9KBOKTE=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin for interacting with llama-server models";
     homepage = "https://github.com/simonw/llm-llama-server";
-    changelog = "https://github.com/simonw/llm-llama-server/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-llama-server/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

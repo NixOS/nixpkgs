@@ -16,7 +16,7 @@
   pyprojectVersionPatchHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "notify-py";
   version = "0.3.43";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ms7m";
     repo = "notify-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4PJ/0dLG3bWDuF1G/qUmvNaIUFXgPP2S/0uhZz86WRA=";
   };
 
@@ -86,11 +86,11 @@ buildPythonPackage rec {
     description = "Cross-platform desktop notification library for Python";
     mainProgram = "notifypy";
     homepage = "https://github.com/ms7m/notify-py";
-    changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
+    changelog = "https://github.com/ms7m/notify-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       austinbutler
       dotlambda
     ];
   };
-}
+})

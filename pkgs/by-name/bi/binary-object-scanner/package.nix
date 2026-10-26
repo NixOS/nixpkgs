@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "BinaryObjectScanner";
   version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "SabreTools";
     repo = "BinaryObjectScanner";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FiSBJO4ic/KjokUEP0uB1WNfFRcOWH/x0y9yJMKnl4Q=";
   };
 
@@ -38,4 +38,4 @@ buildDotnetModule rec {
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     mainProgram = "ProtectionScan";
   };
-}
+})

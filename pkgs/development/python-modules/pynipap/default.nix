@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynipap";
   pyproject = true;
 
   inherit (nipap) version src;
 
-  sourceRoot = "${src.name}/pynipap";
+  sourceRoot = "${finalAttrs.src.name}/pynipap";
 
   build-system = [
     setuptools
@@ -28,11 +28,11 @@ buildPythonPackage rec {
       challenging classical IP address management (IPAM) systems in many areas.
     '';
     homepage = "https://github.com/SpriteLink/NIPAP";
-    changelog = "https://github.com/SpriteLink/NIPAP/releases/tag/v${version}";
+    changelog = "https://github.com/SpriteLink/NIPAP/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lukegb
     ];
     platforms = lib.platforms.all;
   };
-}
+})

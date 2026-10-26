@@ -14,7 +14,7 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paypalhttp";
   version = "1.0.0";
   format = "setuptools";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "paypal";
     repo = "paypalhttp_python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3ihcpYtpcejPkiyf4g4jveyNU6flQB2sv9EZ5Pd7tUc=";
   };
 
@@ -51,10 +51,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/paypal/paypalhttp_python/releases/tag/${version}";
+    changelog = "https://github.com/paypal/paypalhttp_python/releases/tag/${finalAttrs.version}";
     description = "PayPalHttp is a generic HTTP Client";
     homepage = "https://github.com/paypal/paypalhttp_python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

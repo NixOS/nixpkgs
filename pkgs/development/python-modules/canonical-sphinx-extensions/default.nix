@@ -10,14 +10,14 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "canonical-sphinx-extensions";
   version = "0.0.34";
   pyproject = true;
 
   src = fetchPypi {
     pname = "canonical_sphinx_extensions";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-y9wiXj4FOkOt3Pt2EFbX5xO+f8V5eaI0G6LzuGbdY0o=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

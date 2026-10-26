@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "monitorcontrol";
   version = "4.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "monitorcontrol";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KyVLNZLpzmxABQQiHGniCcND7DwZwpT4gJC+sJihoag=";
   };
 
@@ -25,15 +25,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ pname ];
+  pythonImportsCheck = [ finalAttrs.pname ];
 
   meta = {
     description = "Python monitor controls using DDC-CI";
     mainProgram = "monitorcontrol";
     homepage = "https://github.com/newAM/monitorcontrol";
-    changelog = "https://github.com/newAM/monitorcontrol/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/newAM/monitorcontrol/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ newam ];
   };
-}
+})

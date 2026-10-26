@@ -12,13 +12,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "duecredit";
   version = "0.11.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-e1wa4Qkn+eAs9NVOLHSoqgDNKcONY33v48lI09jp8zo=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/duecredit/duecredit";
     description = "Simple framework to embed references in code";
     mainProgram = "duecredit";
-    changelog = "https://github.com/duecredit/duecredit/releases/tag/${version}";
+    changelog = "https://github.com/duecredit/duecredit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bcdarwin ];
   };
-}
+})

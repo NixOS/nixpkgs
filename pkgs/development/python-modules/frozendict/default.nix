@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "frozendict";
   version = "2.4.7";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ehx8X3jbKls/DVgCzWJ+nTX+m/Cdknnu/sjrAMxnJFo=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for immutable dictionary";
     homepage = "https://github.com/Marco-Sulla/python-frozendict";
-    changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
+    changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

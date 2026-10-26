@@ -16,14 +16,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-astropy";
   version = "0.12.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_astropy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-C9/x+menhW7Imcb3gQqGkRJT12IBowgi1+TvFLZxvcA=";
   };
 
@@ -51,9 +51,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Meta-package containing dependencies for testing";
-    changelog = "https://github.com/astropy/pytest-astropy/releases/tag/v${version}";
+    changelog = "https://github.com/astropy/pytest-astropy/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/astropy/pytest-astropy";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

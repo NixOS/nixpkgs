@@ -11,19 +11,19 @@
   nixosTests,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "homer";
   version = "26.08.3";
 
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-25XQH6Kn+ydtUUKiIlQQ1WEBXfljkams+yyCht/bLQ8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -82,4 +82,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -23,7 +23,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atproto";
   version = "0.0.69";
   pyproject = true;
@@ -32,11 +32,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MarshalX";
     repo = "atproto";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BA8gnGVR+vgfwgKHBgq+EDcmycYAVBGu/WWDVMI7gkw=";
   };
 
-  env.POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = finalAttrs.version;
 
   build-system = [
     poetry-core
@@ -97,8 +97,8 @@ buildPythonPackage rec {
   meta = {
     description = "AT Protocol (Bluesky) SDK for Python";
     homepage = "https://github.com/MarshalX/atproto";
-    changelog = "https://github.com/MarshalX/atproto/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/MarshalX/atproto/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vji ];
   };
-}
+})

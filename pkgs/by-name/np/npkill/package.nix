@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "npkill";
   version = "0.12.2-1";
 
   src = fetchFromGitHub {
     owner = "voidcosmos";
     repo = "npkill";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-I0qo8sRkG9GVAA4oLDiTDsHtdrmnkdAk7QOXMWWDKmA=";
   };
 
@@ -25,9 +25,9 @@ buildNpmPackage rec {
   meta = {
     description = "Easily find and remove old and heavy node_modules folders";
     homepage = "https://npkill.js.org";
-    changelog = "https://github.com/voidcosmos/npkill/releases/tag/v${version}";
+    changelog = "https://github.com/voidcosmos/npkill/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ averyanalex ];
     mainProgram = "npkill";
   };
-}
+})

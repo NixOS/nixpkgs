@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "junos-czerwonk-exporter";
   version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "junos_exporter";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-RCh81CHdFjJ6R/3wMons4v/xO+kvNa9ohnlWVGSkiyU=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ johannwagner ];
   };
-}
+})

@@ -22,7 +22,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-console";
   version = "6.6.3";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_console";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jdSeZCspcjEQVBpJyxVnwJ5SAq+SS1bW9kqp/F/zwCQ=";
   };
 
@@ -82,8 +82,8 @@ buildPythonPackage rec {
     description = "Jupyter terminal console";
     mainProgram = "jupyter-console";
     homepage = "https://github.com/jupyter/jupyter_console";
-    changelog = "https://github.com/jupyter/jupyter_console/releases/tag/v${version}";
+    changelog = "https://github.com/jupyter/jupyter_console/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

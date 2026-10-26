@@ -7,14 +7,14 @@
   prometheus-nats-exporter,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-nats-exporter";
   version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "prometheus-nats-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+5X4qWlVMMbsyHZgVeRaxpyOsyfSYXgdWv2cNu9PMRQ=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -46,4 +46,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})

@@ -5,12 +5,12 @@
   brotli,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8.2";
   pname = "angie-console-light";
 
   src = fetchurl {
-    url = "https://download.angie.software/files/${pname}/${pname}-${version}.tar.gz";
+    url = "https://download.angie.software/files/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-q27UPgWvOoEXa8Ih3sEFuoO7u5gvLtpoe7ZJYMmZtRc=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

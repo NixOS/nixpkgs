@@ -13,14 +13,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "compton-conf";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "compton-conf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GNS0GdkQOEFQHCeXFVNDdT35KCRhfwmkL78tpY71mz0=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

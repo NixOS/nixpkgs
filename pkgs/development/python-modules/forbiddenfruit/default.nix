@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.1.4";
   pname = "forbiddenfruit";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clarete";
     repo = "forbiddenfruit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yHIZsVn2UVmWeBNIzWDE6AOwAXZilPqXo+bVtXqGkJk=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Patch python built-in objects";
     homepage = "https://github.com/clarete/forbiddenfruit";
-    changelog = "https://github.com/clarete/forbiddenfruit/releases/tag/${version}";
+    changelog = "https://github.com/clarete/forbiddenfruit/releases/tag/${finalAttrs.version}";
     license =
       with lib.licenses;
       OR [
@@ -37,4 +37,4 @@ buildPythonPackage rec {
       ];
     maintainers = [ ];
   };
-}
+})

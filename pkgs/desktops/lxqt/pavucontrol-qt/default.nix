@@ -14,14 +14,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pavucontrol-qt";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "pavucontrol-qt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Ja+9Tb88SxdvsJPiQadeziCgFtOnInTBSHcisNjrSpA=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

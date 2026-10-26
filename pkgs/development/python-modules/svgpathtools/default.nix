@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "svgpathtools";
   version = "1.8.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mathandy";
     repo = "svgpathtools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m+sjXVSF1gUksbq09DQvazn3IxadX9YJXqw3kTRO7Ac=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

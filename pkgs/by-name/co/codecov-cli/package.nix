@@ -17,7 +17,7 @@ let
   });
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "codecov-cli";
   version = "11.2.8";
   pyproject = true;
@@ -25,11 +25,11 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "prevent-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1CVl8X05e0Fm7TCKlZtQk+o9i26O9KVdnlUIBYqa8IE=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -52,4 +52,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veehaitch ];
   };
-}
+})

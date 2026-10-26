@@ -9,7 +9,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "synology-srm";
   version = "0.2.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aerialls";
     repo = "synology-srm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qQxctw1UUs3jYve//irBni8rNKeld5u/bVtOwD2ofEQ=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python 3 library for Synology SRM (Router Manager)";
     homepage = "https://github.com/aerialls/synology-srm";
-    changelog = "https://github.com/aerialls/synology-srm/releases/tag/v${version}";
+    changelog = "https://github.com/aerialls/synology-srm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

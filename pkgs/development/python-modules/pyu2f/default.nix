@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyu2f";
   version = "0.1.5a";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "pyu2f";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-G2TrvngU7n8cdKfsPvE+fsEUDhuPC6S67w7YcYNdp1c=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

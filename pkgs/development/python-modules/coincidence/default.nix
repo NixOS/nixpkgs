@@ -10,7 +10,7 @@
   whey,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coincidence";
   version = "0.6.6";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-coincidence";
     repo = "coincidence";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ktSuUzAwMych6Y2eJWMUfG1a3mGypg8L20f/105RFXc=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Helper functions for pytest";
     homepage = "https://github.com/python-coincidence/coincidence";
-    changelog = "https://github.com/python-coincidence/coincidence/releases/tag/${src.tag}";
+    changelog = "https://github.com/python-coincidence/coincidence/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

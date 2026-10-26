@@ -20,12 +20,12 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ds-server-lib";
   inherit (dep-scan) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/packages/server-lib";
+  sourceRoot = "${finalAttrs.src.name}/packages/server-lib";
 
   build-system = [
     setuptools
@@ -57,4 +57,4 @@ buildPythonPackage rec {
       teams
       ;
   };
-}
+})

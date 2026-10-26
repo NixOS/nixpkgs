@@ -8,14 +8,14 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-embeddings-ollama";
   version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_ollama";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-/CbP6NnQFfdrYVWNTJochUU16gFA3Yfxad52C0CvPOo=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

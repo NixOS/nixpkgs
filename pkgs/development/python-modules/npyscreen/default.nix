@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "npyscreen";
   version = "4.10.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Yi7g+aXa6UbmNbfG4PbWXh7TyeoNILidq39Y1YDlEm4=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ dump_stack ];
     license = lib.licenses.bsd3;
   };
-}
+})

@@ -9,7 +9,7 @@
   libev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "https-dns-proxy";
   # there are no stable releases (yet?)
   version = "0-unstable-2024-11-18";
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/${pname} ../{LICENSE,*.md}
-    install -Dm444 -t $out/share/${pname}/munin ../munin/*
+    install -Dm444 -t $out/share/doc/${finalAttrs.pname} ../{LICENSE,*.md}
+    install -Dm444 -t $out/share/${finalAttrs.pname}/munin ../munin/*
     # the systemd service definition is garbage, and we use our own with NixOS
-    mv $out/lib/systemd $out/share/${pname}
+    mv $out/lib/systemd $out/share/${finalAttrs.pname}
     rmdir $out/lib
   '';
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "https_dns_proxy";
   };
-}
+})

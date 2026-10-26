@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wget";
   version = "3.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-NeYw7KKqUM6Zi5saEnuyazDf7lc3AngqqYL4dePxYGE=";
     extension = "zip";
   };
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

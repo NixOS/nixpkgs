@@ -5,7 +5,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "exitcode";
   version = "0.1.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rumpelsepp";
     repo = "exitcode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MZeLwU1gODqH752y/nc9WkUArl48pyq9Vun7tX620No=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Preferred system exit codes as defined by sysexits.h";
     homepage = "https://github.com/rumpelsepp/exitcode";
-    changelog = "https://github.com/rumpelsepp/exitcode/releases/tag/v${version}";
+    changelog = "https://github.com/rumpelsepp/exitcode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

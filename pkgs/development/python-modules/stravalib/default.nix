@@ -12,7 +12,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stravalib";
   version = "2.6.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stravalib";
     repo = "stravalib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lvdxu22nhjB8ZJ+kkJkvrIzVo6WY9j1AI0FQcVp3v7I=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with Strava v3 REST API";
     homepage = "https://github.com/stravalib/stravalib";
-    changelog = "https://github.com/stravalib/stravalib/releases/tag/${src.tag}";
+    changelog = "https://github.com/stravalib/stravalib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

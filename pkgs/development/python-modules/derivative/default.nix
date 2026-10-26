@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "derivative";
   version = "0.6.3";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andgoldschmidt";
     repo = "derivative";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vsN1zlD9x0CEOtRIwr/DrtkV+OjiyrI8QL9Z8pB3wrY=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     homepage = "https://derivative.readthedocs.io/en/latest/";
     maintainers = with lib.maintainers; [ conny ];
   };
-}
+})

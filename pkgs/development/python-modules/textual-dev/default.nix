@@ -15,7 +15,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-dev";
   version = "1.8.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual-dev";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0NOFc0FKbVEeZ6rNZGX8lo5W8RU3lKJlH+AqRCifuOE=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
   meta = {
     description = "Development tools for Textual";
     homepage = "https://github.com/Textualize/textual-dev";
-    changelog = "https://github.com/Textualize/textual-dev/releases/tag/v${version}";
+    changelog = "https://github.com/Textualize/textual-dev/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yannip ];
     mainProgram = "textual";
   };
-}
+})

@@ -19,14 +19,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcmanfm-qt";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "pcmanfm-qt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-c3DLzaTcdfWWnsjrYV552zNAHIfE/oF3mmQ73kjQXA0=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

@@ -5,13 +5,13 @@
   httplib2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-pipedrive";
   version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-9JImnHOx3mukWakHuysIQOg7d9uGHMEl7/wugaiPGDk=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mrmebelman ];
   };
-}
+})

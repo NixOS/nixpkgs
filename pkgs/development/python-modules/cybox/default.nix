@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cybox";
   version = "2.1.0.21";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CybOXProject";
     repo = "python-cybox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Gn/gH7pvvOqLIGExgCNa5KswPazIZUZXdQe3LRAUVjw=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for parsing, manipulating, and generating CybOX content";
     homepage = "https://github.com/CybOXProject/python-cybox/";
-    changelog = "https://github.com/CybOXProject/python-cybox/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/CybOXProject/python-cybox/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

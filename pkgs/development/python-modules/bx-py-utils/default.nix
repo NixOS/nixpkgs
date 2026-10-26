@@ -16,7 +16,7 @@
   typeguard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bx-py-utils";
   version = "121";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ma0+hDuysbDsDIySAGCqhd74vjzUw0R4j7CRyASDNK8=";
   };
 
@@ -95,8 +95,8 @@ buildPythonPackage rec {
     description = "Various Python utility functions";
     mainProgram = "bx_py_utils";
     homepage = "https://github.com/boxine/bx_py_utils";
-    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.tag}";
+    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

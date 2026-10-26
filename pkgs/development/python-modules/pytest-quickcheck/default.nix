@@ -7,13 +7,13 @@
   pytest-flakes,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-quickcheck";
   version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UFF8ldnaImXU6al4kGjf720mbwXE6Nut9VlvNVrMVoY=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     description = "Pytest plugin to generate random data inspired by QuickCheck";
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

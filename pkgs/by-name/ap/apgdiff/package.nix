@@ -5,7 +5,7 @@
   jre,
   makeWrapper,
 }:
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "apgdiff";
   version = "2.7.0";
 
@@ -13,13 +13,13 @@ maven.buildMavenPackage rec {
     sparseCheckout = [ "src" ];
     owner = "fordfrog";
     repo = "apgdiff";
-    tag = "release_${version}";
+    tag = "release_${finalAttrs.version}";
     hash = "sha256-2m+9QNwQV2tJwOabTXE2xjRB5gDrSwyL6zL2op+wmkM=";
   };
 
   # Fix wrong version string in --help
   postPatch = ''
-    sed -i 's/VersionNumber=.*/VersionNumber=${version}/' \
+    sed -i 's/VersionNumber=.*/VersionNumber=${finalAttrs.version}/' \
       src/main/resources/cz/startnet/utils/pgdiff/Resources.properties
   '';
 
@@ -28,7 +28,7 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    install -Dm644 target/apgdiff-${version}.jar $out/lib/apgdiff.jar
+    install -Dm644 target/apgdiff-${finalAttrs.version}.jar $out/lib/apgdiff.jar
 
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/apgdiff \
@@ -44,4 +44,4 @@ maven.buildMavenPackage rec {
     inherit (jre.meta) platforms;
     maintainers = [ lib.maintainers.misterio77 ];
   };
-}
+})

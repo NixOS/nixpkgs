@@ -21,14 +21,14 @@
   openexr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencolorio";
   version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b4tdQ9VH9M7hAD5Uuxu4QKwwpaVwroj/Bvg+Zsy0M1M=";
   };
 
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rytone ];
     platforms = lib.platforms.unix;
   };
-}
+})

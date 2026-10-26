@@ -5,7 +5,7 @@
   amshan,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "toreamun";
   domain = "amshan";
   version = "2024.12.0";
@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "toreamun";
     repo = "amshan-homeassistant";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-L7TGdUjDvIRP9dHIkng9GYwilmRzhGbUK6ivx8PVtQ4=";
   };
 
@@ -31,4 +31,4 @@ buildHomeAssistantComponent rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

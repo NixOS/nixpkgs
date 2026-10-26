@@ -20,11 +20,11 @@
 assert enableNtfs -> ntfs3g != null;
 assert enableExtFs -> e2fsprogs != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "testdisk";
   version = "7.2";
   src = fetchurl {
-    url = "https://www.cgsecurity.org/testdisk-${version}.tar.bz2";
+    url = "https://www.cgsecurity.org/testdisk-${finalAttrs.version}.tar.bz2";
     hash = "sha256-+DQ74gy0ABxdkaLjvNkYOY8Arm2DEIlKWp8v64E8KD8=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
       ryand56
     ];
   };
-}
+})

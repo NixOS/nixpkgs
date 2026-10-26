@@ -12,7 +12,7 @@
   django-app-helper,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-app-helper";
   version = "3.3.5";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nephila";
     repo = "django-app-helper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gnTEzmQ4h4FWc2+s68VW/yVAkKFdj4U2VMkJKTAnQOM=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Helper for Django applications development";
     homepage = "https://django-app-helper.readthedocs.io";
-    changelog = "https://github.com/nephila/django-app-helper/releases/tag/${src.tag}";
+    changelog = "https://github.com/nephila/django-app-helper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})

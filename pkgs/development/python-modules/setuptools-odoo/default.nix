@@ -9,7 +9,7 @@
   writeScript,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-odoo";
   version = "3.3.2";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "setuptools-odoo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cGvE/AioSX2R74dsElx4eb2Rp5irA65w/gBE6DFaUiI=";
   };
 
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Setuptools plugin for Odoo addons";
     homepage = "https://github.com/acsone/setuptools-odoo";
-    changelog = "https://github.com/acsone/setuptools-odoo/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/acsone/setuptools-odoo/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

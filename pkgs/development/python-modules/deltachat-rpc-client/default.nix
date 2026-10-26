@@ -7,12 +7,12 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deltachat-rpc-client";
   inherit (deltachat-rpc-server) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/deltachat-rpc-client";
+  sourceRoot = "${finalAttrs.src.name}/deltachat-rpc-client";
 
   postPatch = ''
     substituteInPlace src/deltachat_rpc_client/rpc.py \
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     description = "Python client for Delta Chat core JSON-RPC interface";
     homepage = "https://github.com/deltachat/deltachat-core-rust/tree/main/deltachat-rpc-client";
   };
-}
+})

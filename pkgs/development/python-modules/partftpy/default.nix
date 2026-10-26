@@ -5,14 +5,14 @@
   fetchFromGitHub,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "partftpy";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "9001";
     repo = "partftpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9+zY9OpGQ3LbORwtjEYZF1lRaQCLmSyQ9KQdxaOzMuM=";
   };
 
@@ -30,9 +30,9 @@ buildPythonPackage rec {
   meta = {
     description = "Pure Python TFTP library (copyparty fork of tftpy)";
     homepage = "https://github.com/9001/partftpy";
-    changelog = "https://github.com/9001/partftpy/releases/tag/${version}";
+    changelog = "https://github.com/9001/partftpy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.shelvacu ];
     platforms = lib.platforms.all;
   };
-}
+})

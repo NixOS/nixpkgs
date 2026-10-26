@@ -7,7 +7,7 @@
   tox,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "routeros-api";
   version = "0.21.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "socialwifi";
     repo = "routeros-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1g37fDB+/6bVwgtgE1YzGnUpDaLEfwDpQWoqjHgeeqk=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API to RouterBoard devices produced by MikroTik";
     homepage = "https://github.com/socialwifi/RouterOS-api";
-    changelog = "https://github.com/socialwifi/RouterOS-api/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/socialwifi/RouterOS-api/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ quentin ];
   };
-}
+})

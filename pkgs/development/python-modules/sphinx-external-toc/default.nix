@@ -9,14 +9,14 @@
   sphinx-multitoc-numbering,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-external-toc";
   version = "1.1.0";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinx_external_toc";
     hash = "sha256-+BgzhlAG9rSpslUKJHSm49fn8ssjuiMwkmBXfqZVUvY=";
   };
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     description = "Sphinx extension that allows the site-map to be defined in a single YAML file";
     mainProgram = "sphinx-etoc";
     homepage = "https://github.com/executablebooks/sphinx-external-toc";
-    changelog = "https://github.com/executablebooks/sphinx-external-toc/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/sphinx-external-toc/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

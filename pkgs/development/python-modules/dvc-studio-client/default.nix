@@ -9,7 +9,7 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-studio-client";
   version = "0.23.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-studio-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Zc6DQ/memnEwxHkSMPi1/fLBgvinqaMpWSOBfAI4sUk=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library to post data from DVC/DVCLive to Iterative Studio";
     homepage = "https://github.com/iterative/dvc-studio-client";
-    changelog = "https://github.com/iterative/dvc-studio-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/iterative/dvc-studio-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
   };
-}
+})

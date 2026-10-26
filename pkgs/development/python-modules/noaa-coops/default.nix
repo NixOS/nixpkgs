@@ -8,14 +8,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "noaa-coops";
   version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "noaa_coops";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-VF7mYnaZ2Qnk0DX64U9c2PQ1mMzWMk6IhA1qoYEAP94=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

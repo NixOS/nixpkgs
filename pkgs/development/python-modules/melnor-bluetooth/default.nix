@@ -16,7 +16,7 @@
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "melnor-bluetooth";
   version = "0.0.25";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vanstinator";
     repo = "melnor-bluetooth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BQKXQrPT/+qm9cRO7pfScPwW0iwdhliTfX4XJ/kRQG0=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Melnor and Eden bluetooth watering timers";
     homepage = "https://github.com/vanstinator/melnor-bluetooth";
-    changelog = "https://github.com/vanstinator/melnor-bluetooth/releases/tag/v${version}";
+    changelog = "https://github.com/vanstinator/melnor-bluetooth/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

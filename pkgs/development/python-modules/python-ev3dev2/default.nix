@@ -6,7 +6,7 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ev3dev2";
   version = "2.1.0";
   format = "setuptools";
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ev3dev";
     repo = "ev3dev-lang-python";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XxsiQs3k5xKb+3RewARbvBbxaztdvdq3w5ZMgTq+kRc=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    echo "${version}" > RELEASE-VERSION
+    echo "${finalAttrs.version}" > RELEASE-VERSION
   '';
 
   propagatedBuildInputs = [ pillow ];
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

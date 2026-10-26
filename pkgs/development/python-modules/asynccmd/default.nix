@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asynccmd";
   version = "0.2.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "valentinmk";
     repo = "asynccmd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0AjOKAEiwHi3AkzMGRvE/czTCfShXQAm8mDz98EESgs=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asyncio implementation of Cmd Python library";
     homepage = "https://github.com/valentinmk/asynccmd";
-    changelog = "https://github.com/valentinmk/asynccmd/releases/tag/${version}";
+    changelog = "https://github.com/valentinmk/asynccmd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

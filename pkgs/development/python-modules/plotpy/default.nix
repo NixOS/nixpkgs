@@ -30,7 +30,7 @@
   pyside2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotpy";
   version = "2.9.0";
   pyproject = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "PlotPy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6nLkpzwQEvaX9dlrpK6IKaDSOX6hAks9p4FjpXFTJjI=";
   };
 
@@ -117,8 +117,8 @@ buildPythonPackage rec {
   meta = {
     description = "Curve and image plotting tools for Python/Qt applications";
     homepage = "https://github.com/PlotPyStack/PlotPy";
-    changelog = "https://github.com/PlotPyStack/PlotPy/blob/master/doc/release_notes/release_${lib.versions.major version}.${
-      lib.pipe version [
+    changelog = "https://github.com/PlotPyStack/PlotPy/blob/master/doc/release_notes/release_${lib.versions.major finalAttrs.version}.${
+      lib.pipe finalAttrs.version [
         lib.versions.minor
         (lib.fixedWidthString 2 "0")
       ]
@@ -126,4 +126,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

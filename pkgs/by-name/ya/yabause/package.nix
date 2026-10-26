@@ -10,12 +10,12 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabause";
   version = "0.9.15";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20250129091147/http://free.downloads.tuxfamily.net/yabause/releases/${version}/yabause-${version}.tar.gz";
+    url = "https://web.archive.org/web/20250129091147/http://free.downloads.tuxfamily.net/yabause/releases/${finalAttrs.version}/yabause-${finalAttrs.version}.tar.gz";
     sha256 = "1cn2rjjb7d9pkr4g5bqz55vd4pzyb7hg94cfmixjkzzkw0zw8d23";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

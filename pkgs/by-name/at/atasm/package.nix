@@ -5,14 +5,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atasm";
   version = "1.29";
 
   src = fetchFromGitHub {
     owner = "CycoPH";
     repo = "atasm";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-TGSmlNz8kxsHlIhq4ZNDBU8uhpsZGK0oEp2qD4SndE8=";
   };
 
@@ -43,24 +43,24 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p $out/bin/
-    install -d $out/share/doc/${pname} $out/man/man1
+    install -d $out/share/doc/${finalAttrs.pname} $out/man/man1
     installFlagsArray+=(
       DESTDIR=$out/bin/
-      DOCDIR=$out/share/doc/${pname}
+      DOCDIR=$out/share/doc/${finalAttrs.pname}
       MANDIR=$out/man/man1
     )
   '';
 
   postInstall = ''
-    mv docs/* $out/share/doc/${pname}
+    mv docs/* $out/share/doc/${finalAttrs.pname}
   '';
 
   meta = {
     homepage = "https://github.com/CycoPH/atasm";
     description = "Commandline 6502 assembler compatible with Mac/65";
     license = lib.licenses.gpl2Plus;
-    changelog = "https://github.com/CycoPH/atasm/releases/tag/V${version}";
+    changelog = "https://github.com/CycoPH/atasm/releases/tag/V${finalAttrs.version}";
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

@@ -25,12 +25,12 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glade";
   version = "3.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glade/${lib.versions.majorMinor version}/glade-${version}.tar.xz";
+    url = "mirror://gnome/sources/glade/${lib.versions.majorMinor finalAttrs.version}/glade-${finalAttrs.version}.tar.xz";
     sha256 = "McmtrqhJlyq5UXtWThmsGZd8qXdYsQntwxZwCPU+PZw=";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ttn-client";
   version = "1.3.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Fh2l3SL72D0yXwOil73VFQjCLli3GZwsatNIYVmOoTA=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to fetch/receive and parse uplink messages from The Thinks Network";
     homepage = "https://github.com/angelnu/thethingsnetwork_python_client";
-    changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${src.tag}";
+    changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

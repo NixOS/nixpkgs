@@ -20,7 +20,7 @@
   sybil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "svcs";
   version = "26.2.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "svcs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GgfuCZ1LvcPD3p9/YSrUUXZHS86GTMjLwmXivYmwgCQ=";
   };
 
@@ -66,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible Service Locator for Python";
     homepage = "https://github.com/hynek/svcs";
-    changelog = "https://github.com/hynek/svcs/releases/tag/${version}";
+    changelog = "https://github.com/hynek/svcs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ taranarmo ];
   };
-}
+})

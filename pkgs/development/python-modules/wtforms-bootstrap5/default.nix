@@ -8,7 +8,7 @@
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wtforms-bootstrap5";
   version = "0.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "wtforms-bootstrap5";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TJJ3KOeC9JXnxK0YpnfeBNq1KHwaAZ4+t9CXbc+85Ro=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple library for rendering WTForms in HTML as Bootstrap 5 form controls";
     homepage = "https://github.com/LaunchPlatform/wtforms-bootstrap5";
-    changelog = "https://github.com/LaunchPlatform/wtforms-bootstrap5/releases/tag/${version}";
+    changelog = "https://github.com/LaunchPlatform/wtforms-bootstrap5/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
   };
-}
+})

@@ -38,7 +38,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyppeteer-ng";
   version = "2.0.0rc13";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "pyppeteer-ng";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zx3uzD0y5FIw2ZWU3fPzY3nmnuhLRo7Ml+rTY1HUA9Q=";
   };
 
@@ -153,8 +153,8 @@ buildPythonPackage rec {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     mainProgram = "pyppeteer-install";
     homepage = "https://github.com/dgtlmoon/pyppeteer-ng";
-    changelog = "https://github.com/dgtlmoon/pyppeteer-ng/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dgtlmoon/pyppeteer-ng/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thanegill ];
   };
-}
+})

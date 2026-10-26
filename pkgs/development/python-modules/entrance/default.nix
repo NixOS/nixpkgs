@@ -33,13 +33,13 @@ let
       };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "entrance";
   version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fr7ixTFA4N2nYFE2mmaAkmIAxFGfuF/Pou/DQYd1WyY=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ simonchatts ];
   };
-}
+})

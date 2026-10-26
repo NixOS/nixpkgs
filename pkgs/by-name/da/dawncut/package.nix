@@ -4,14 +4,14 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dawncut";
   version = "1.54a";
 
   src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
+    name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     url = "https://geant4.kek.jp/~tanaka/src/dawncut_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.taz";
     hash = "sha256-Ux4fDi7TXePisYAxCMDvtzLYOgxnbxQIO9QacTRrT6k=";
   };
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

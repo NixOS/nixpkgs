@@ -6,14 +6,14 @@
   jre,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "tabula-java";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "tabulapdf";
     repo = "tabula-java";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lg8/diyGhfkUU0w7PEOlxb1WNpJZVDDllxMMsTIU/Cw=";
   };
 
@@ -26,7 +26,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/{bin,lib}
-    cp target/tabula-${version}-jar-with-dependencies.jar $out/lib/tabula.jar
+    cp target/tabula-${finalAttrs.version}-jar-with-dependencies.jar $out/lib/tabula.jar
 
     makeWrapper ${jre}/bin/java $out/bin/tabula-java \
       --add-flags "-cp $out/lib/tabula.jar" \
@@ -48,4 +48,4 @@ maven.buildMavenPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "tabula-java";
   };
-}
+})

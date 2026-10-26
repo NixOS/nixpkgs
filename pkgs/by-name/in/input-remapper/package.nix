@@ -30,7 +30,7 @@
 let
   maybeXmodmap = lib.optional withXmodmap xmodmap;
 in
-(python3Packages.buildPythonApplication rec {
+(python3Packages.buildPythonApplication (finalAttrs: {
   pname = "input-remapper";
   version = "2.2.1";
   pyproject = true;
@@ -38,7 +38,7 @@ in
   src = fetchFromGitHub {
     owner = "sezanzeb";
     repo = "input-remapper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CFg/AvmZseU1f9bWI4CtYp9blvAhCgGzVWE8csVDbyE=";
   };
 
@@ -173,7 +173,7 @@ in
     maintainers = with lib.maintainers; [ LunNova ];
     mainProgram = "input-remapper-gtk";
   };
-}).overrideAttrs
+})).overrideAttrs
   (
     final: prev: {
       # Set in an override as buildPythonApplication doesn't yet support

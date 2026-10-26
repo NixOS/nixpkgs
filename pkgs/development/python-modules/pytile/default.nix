@@ -12,7 +12,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytile";
   version = "2024.12.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pytile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6vcFGMj7E1xw01yHOq/WDpqMxd7OIiRBCmw5LForAR0=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
       Bluetooth trackers (including last location and more).
     '';
     homepage = "https://github.com/bachya/pytile";
-    changelog = "https://github.com/bachya/pytile/releases/tag/${version}";
+    changelog = "https://github.com/bachya/pytile/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

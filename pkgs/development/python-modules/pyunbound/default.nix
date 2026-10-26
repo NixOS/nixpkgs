@@ -12,7 +12,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyunbound";
   inherit (unbound) version src;
   pyproject = false; # Built with configure script
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   preInstall = ''
-    mkdir -p $out/${python.sitePackages} $out/etc/${pname}
+    mkdir -p $out/${python.sitePackages} $out/etc/${finalAttrs.pname}
     cp .libs/_unbound.so .libs/libunbound.so* $out/${python.sitePackages}
     substituteInPlace _unbound.la \
       --replace "-L.libs $PWD/libunbound.la" "-L$out/${python.sitePackages}"
@@ -71,8 +71,8 @@ buildPythonPackage rec {
   postInstall = ''
     # Generate the built in root anchor and root key and store these in a logical place
     # to be used by tools depending only on the Python module
-    $out/bin/unbound-anchor -l | head -1 > $out/etc/${pname}/root.anchor
-    $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${pname}/root.key
+    $out/bin/unbound-anchor -l | head -1 > $out/etc/${finalAttrs.pname}/root.anchor
+    $out/bin/unbound-anchor -l | tail --lines=+2 - > $out/etc/${finalAttrs.pname}/root.key
     # We don't need anything else
     rm -r $out/bin $out/share $out/include $out/etc/unbound
   ''
@@ -87,4 +87,4 @@ buildPythonPackage rec {
     homepage = "https://www.unbound.net";
     platforms = lib.platforms.unix;
   };
-}
+})

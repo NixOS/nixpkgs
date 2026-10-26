@@ -11,7 +11,7 @@
   extraLibs ? [ ],
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
   version = "3.35-unstable-2026-10-02";
@@ -87,7 +87,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/${pname}-python-interpreter \
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/${finalAttrs.pname}-python-interpreter \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       ''${makeWrapperArgs[@]}
   '';
@@ -109,4 +109,4 @@ python3Packages.buildPythonApplication rec {
       lucasew
     ];
   };
-}
+})

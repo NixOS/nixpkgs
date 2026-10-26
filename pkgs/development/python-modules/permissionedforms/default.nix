@@ -7,7 +7,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "permissionedforms";
   version = "0.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "django-permissionedforms";
     owner = "wagtail";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DQzPGmh5UEVpGWnW3IrEVPkZZ8mdiW9J851Ej4agTDc=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django extension for creating forms that vary according to user permissions";
     homepage = "https://github.com/wagtail/django-permissionedforms";
-    changelog = "https://github.com/wagtail/django-permissionedforms/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wagtail/django-permissionedforms/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

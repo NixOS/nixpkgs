@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "solaredge-web";
   version = "0.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Solarlibs";
     repo = "solaredge-web";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8XZN288QNJxXjIAGl6fD4wFaqWVxDw03GH56nfhTu2k=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Solarlibs/solaredge-web/releases/tag/${src.tag}";
+    changelog = "https://github.com/Solarlibs/solaredge-web/releases/tag/${finalAttrs.src.tag}";
     description = "Library for fetching SolarEdge energy data for each inverter/string/module via the web API";
     homepage = "https://github.com/Solarlibs/solaredge-web";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

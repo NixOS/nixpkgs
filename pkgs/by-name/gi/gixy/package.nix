@@ -23,7 +23,7 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gixy";
   version = "0.1.21";
   pyproject = true;
@@ -32,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "gixy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Ak2UTP0gDKoac/rR2h1XCUKld1b41O466ogZNQ1yQN0=";
   };
 
@@ -78,4 +78,4 @@ python.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

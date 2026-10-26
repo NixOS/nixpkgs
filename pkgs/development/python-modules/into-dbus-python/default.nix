@@ -9,7 +9,7 @@
   hs-dbus-signature,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "into-dbus-python";
   version = "0.8.2";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = "into-dbus-python";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ld/DyhVaDiWUXgqmvSmEHqFW2dcoRNM0O4X5DXE3UtM=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

@@ -14,13 +14,13 @@
   vtk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mayavi";
   version = "4.9.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0Sz7Nipliw2Z8IgYSrttyoBdiszEN71egTHCIZh3g94=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "mayavi2";
   };
-}
+})

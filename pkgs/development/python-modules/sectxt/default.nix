@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sectxt";
   version = "0.9.8";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DigitalTrustCenter";
     repo = "sectxt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-x8HcERUZpOijTEXbbtnG0Co5PiQlO4v5bxKM4CAExnI=";
   };
 
@@ -43,9 +43,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/DigitalTrustCenter/sectxt";
-    changelog = "https://github.com/DigitalTrustCenter/sectxt/releases/tag/${src.tag}";
+    changelog = "https://github.com/DigitalTrustCenter/sectxt/releases/tag/${finalAttrs.src.tag}";
     description = "Security.txt parser and validator";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ networkexception ];
   };
-}
+})

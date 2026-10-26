@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "Boogie";
   version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0jlL5bxaqpuy/er0rmf9Bxik5jZZL4IX13n+sLjTEiA=";
   };
 
@@ -54,7 +54,7 @@ buildDotnetModule rec {
 
   meta = {
     description = "Intermediate verification language";
-    changelog = "https://github.com/boogie-org/boogie/releases/tag/${src.tag}";
+    changelog = "https://github.com/boogie-org/boogie/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/boogie-org/boogie";
     longDescription = ''
       Boogie is an intermediate verification language (IVL), intended as a
@@ -67,4 +67,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ taktoa ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

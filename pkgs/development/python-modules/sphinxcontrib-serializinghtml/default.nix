@@ -5,14 +5,14 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-serializinghtml";
   version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_serializinghtml";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-6dkSgn+HLAKQF6U/DvIYCzJ8P3/SPIcin3qOi3ADHU0=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-serializinghtml";
     license = lib.licenses.bsd2;
   };
-}
+})

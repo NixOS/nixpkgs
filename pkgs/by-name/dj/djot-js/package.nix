@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "djot-js";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "jgm";
     repo = "djot.js";
-    rev = "@djot/djot@${version}";
+    rev = "@djot/djot@${finalAttrs.version}";
     hash = "sha256-SkE7ssWC62sYZNshB8ncfMVI4NEyEbzO5IVIDsKtynU=";
   };
 
@@ -39,9 +39,9 @@ buildNpmPackage rec {
   meta = {
     description = "JavaScript implementation of djot";
     homepage = "https://github.com/jgm/djot.js";
-    changelog = "https://github.com/jgm/djot.js/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jgm/djot.js/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rpqt ];
     mainProgram = "djot";
   };
-}
+})

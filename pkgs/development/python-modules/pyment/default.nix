@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyment";
   version = "0.3.3";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Pyment";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lRpMUtZ5HM7FW8c5gRFp7taZF9OHT1/nIoZmI6aX850=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jethro ];
   };
-}
+})

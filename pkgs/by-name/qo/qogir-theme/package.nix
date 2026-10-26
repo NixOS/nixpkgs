@@ -26,14 +26,14 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
   tweaks
 
   stdenv.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2025-08-17";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "qogir-theme";
-      rev = version;
+      rev = finalAttrs.version;
       hash = "sha256-LS1BE2jR08/JW2+rixYhTmctAfK2yZVWIE4QnAX9PDQ=";
     };
 
@@ -77,4 +77,4 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
       platforms = lib.platforms.unix;
       maintainers = [ lib.maintainers.romildo ];
     };
-  }
+  })

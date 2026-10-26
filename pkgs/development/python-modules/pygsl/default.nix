@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygsl";
   version = "2.6.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o1bJUebv9nP7oMI/UscLe7Bya82wwl3NPr8WerZ1K9I=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for GNU Scientific Library";
     homepage = "https://github.com/pygsl/pygsl";
-    changelog = "https://github.com/pygsl/pygsl/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/pygsl/pygsl/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

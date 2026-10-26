@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gbinder-python";
   version = "1.3.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "gbinder-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bXuvGTzYifiCPDkcNvkgh+RAZfckcyR8weaRkgbfCyA=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

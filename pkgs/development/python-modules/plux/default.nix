@@ -8,7 +8,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plux";
   version = "1.13.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "plux";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-daAFv5tIekWDq0iI/yolmuak0MMXXVCfAcbHcYY7Qd4=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

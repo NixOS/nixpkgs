@@ -6,7 +6,7 @@
   sockio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "serialio";
   version = "2.4.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
     repo = "serialio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9TRGT0wpoRRcHqnH1XzlMBh0IcVzdEcOzN7hkeYnoW4=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

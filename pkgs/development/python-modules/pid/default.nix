@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pid";
   version = "3.0.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DjNnDoP2oz67CCLkOmCcMkcXjUo3X/UKRoniZthT62Y=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/trbs/pid/";
     license = lib.licenses.asl20;
   };
-}
+})

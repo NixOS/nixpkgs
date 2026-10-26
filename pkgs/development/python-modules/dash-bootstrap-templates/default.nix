@@ -9,7 +9,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dash-bootstrap-templates";
   version = "3.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AnnMarieW";
     repo = "dash-bootstrap-templates";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-GYL8shd8B5kdBhjurirtAMBIbPyQNbZL4+3WyTn2Qsw=";
   };
   build-system = [
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of 52 Plotly figure templates with a Bootstrap theme";
     homepage = "https://github.com/AnnMarieW/dash-bootstrap-templates";
-    changelog = "https://github.com/AnnMarieW/dash-bootstrap-templates/releases/tag/${src.tag}";
+    changelog = "https://github.com/AnnMarieW/dash-bootstrap-templates/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

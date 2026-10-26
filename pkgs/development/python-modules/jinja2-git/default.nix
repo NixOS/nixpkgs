@@ -6,7 +6,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jinja2-git";
   version = "1.4.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "jinja2-git";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZcKRLHcZ/rpiUyYK4ifDJaZriN+YyRF1RKCjIKum98U=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/wemake-services/jinja2-git";
     description = "Jinja2 extension to handle git-specific things";
-    changelog = "https://github.com/wemake-services/jinja2-git/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/wemake-services/jinja2-git/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

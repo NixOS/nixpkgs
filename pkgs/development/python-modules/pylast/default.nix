@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylast";
   version = "7.0.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NA49V9s4k0l0icoiKVjxTAdhC+MuNgbbeImAjzGB8Xo=";
   };
 
@@ -42,11 +42,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to last.fm (and compatibles)";
     homepage = "https://github.com/pylast/pylast";
-    changelog = "https://github.com/pylast/pylast/releases/tag/${src.tag}";
+    changelog = "https://github.com/pylast/pylast/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
       rvolosatovs
     ];
   };
-}
+})

@@ -6,14 +6,14 @@
 
 with python3.pkgs;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shell-genie";
   version = "0.2.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "shell_genie";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-z7LiAq2jLzqjg4Q/r9o7M6VbedeT34NyPpgctfqBp+8=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "shell-genie";
   };
-}
+})

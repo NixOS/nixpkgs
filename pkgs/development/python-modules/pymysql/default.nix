@@ -6,14 +6,14 @@
   cryptography,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymysql";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pymysql";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-bHsXymhpiBBNdCbCeJW0Vc3uo+nTzrEnDww3BP6tjDM=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kalbasit ];
   };
-}
+})

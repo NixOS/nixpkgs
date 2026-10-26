@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "netfoil";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "tinfoil-factory";
     repo = "netfoil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WKtyNdb3hwveLpg3vkKFTXceE6b4AjVrzZoj9eEkdx4=";
   };
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     ];
     mainProgram = "netfoil";
   };
-}
+})

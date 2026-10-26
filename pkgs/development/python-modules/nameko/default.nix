@@ -18,13 +18,13 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nameko";
   version = "2.14.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-J1NXi7Tca5KAGuozTSkwuX37dEhucF7daRmDBqlGjIg=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
     description = "Microservices framework that lets service developers concentrate on application logic and encourages testability";
     mainProgram = "nameko";
     homepage = "https://www.nameko.io/";
-    changelog = "https://github.com/nameko/nameko/releases/tag/v${version}";
+    changelog = "https://github.com/nameko/nameko/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siddharthdhakane ];
   };
-}
+})

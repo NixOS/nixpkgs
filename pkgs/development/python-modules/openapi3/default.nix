@@ -13,7 +13,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openapi3";
   version = "1.8.2";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Dorthu";
     repo = "openapi3";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Crn+nRbptRycnWJzH8Tm/BBLcBSRCcNtLX8NoKnSDdA=";
   };
 
@@ -52,10 +52,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "openapi3" ];
 
   meta = {
-    changelog = "https://github.com/Dorthu/openapi3/releases/tag/${version}";
+    changelog = "https://github.com/Dorthu/openapi3/releases/tag/${finalAttrs.version}";
     description = "Python3 OpenAPI 3 Spec Parser";
     homepage = "https://github.com/Dorthu/openapi3";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ techknowlogick ];
   };
-}
+})

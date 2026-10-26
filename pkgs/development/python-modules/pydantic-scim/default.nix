@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydantic-scim";
   version = "0.0.8";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chalk-ai";
     repo = "pydantic-scim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Hbc94v/+slXRGDKKbMui8WPwn28/1XcKvHkbLebWtj0=";
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version=get_version(),' 'version="${version}",'
+      --replace 'version=get_version(),' 'version="${finalAttrs.version}",'
   '';
 
   propagatedBuildInputs = [ pydantic ] ++ pydantic.optional-dependencies.email;
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

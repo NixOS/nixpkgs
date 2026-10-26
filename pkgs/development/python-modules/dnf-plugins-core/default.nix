@@ -22,7 +22,7 @@ let
   pyMajor = lib.versions.major python.version;
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dnf-plugins-core";
   version = "4.10.1";
   pyproject = false;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf-plugins-core";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nZyM61bQ9L4t3/fa9cP+xo9ke00e6w2Obt80OpqOG8A=";
   };
 
@@ -125,8 +125,8 @@ buildPythonPackage rec {
   meta = {
     description = "Core plugins to use with DNF package manager";
     homepage = "https://github.com/rpm-software-management/dnf-plugins-core";
-    changelog = "https://github.com/rpm-software-management/dnf-plugins-core/releases/tag/${version}";
+    changelog = "https://github.com/rpm-software-management/dnf-plugins-core/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ katexochen ];
   };
-}
+})

@@ -13,7 +13,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiopinboard";
   version = "2024.01.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aiopinboard";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/N9r17e0ZvPmcqW/XtRyAENKCGRzWqeOSKPpWHHYomg=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interact with the Pinboard API";
     homepage = "https://github.com/bachya/aiopinboard";
-    changelog = "https://github.com/bachya/aiopinboard/releases/tag/${version}";
+    changelog = "https://github.com/bachya/aiopinboard/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

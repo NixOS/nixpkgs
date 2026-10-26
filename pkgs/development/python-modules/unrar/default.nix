@@ -8,13 +8,13 @@
   pytestCheckHook,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unrar";
   version = "0.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-skRHpbkwJL5gDvglVmi6I6MPRRF2V3tpFVnqE1n30WQ=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "http://github.com/matiasb/python-unrar";
-    changelog = "https://github.com/matiasb/python-unrar/releases/tag/v${version}";
+    changelog = "https://github.com/matiasb/python-unrar/releases/tag/v${finalAttrs.version}";
     description = "Wrapper for UnRAR library, plus a rarfile module on top of it";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ DrymarchonShaun ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,13 +5,13 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "micawber";
   version = "0.7.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-q5xZx1ac/Eh902fcTtoT45S6UhbhnQLxhxrFbQoaGUQ=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     '';
     maintainers = with lib.maintainers; [ davidak ];
   };
-}
+})

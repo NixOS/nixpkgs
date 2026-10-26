@@ -5,7 +5,7 @@
   sphinxHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-better-theme";
   version = "0.13";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irskep";
     repo = "sphinx-better-theme";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eFA1U2jMeOH7xabonYg/bV6eTAFBew6+WaK2uKWlsUc=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rclone-python";
   version = "0.1.23";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Johannes11833";
     repo = "rclone_python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vvsiXS3uI0TcL+X8+75BQmycrF+EGIgQE1dmGef35rI=";
   };
 
@@ -60,10 +60,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rclone_python" ];
 
   meta = {
-    changelog = "https://github.com/Johannes11833/rclone_python/releases/tag/${src.tag}";
+    changelog = "https://github.com/Johannes11833/rclone_python/releases/tag/${finalAttrs.src.tag}";
     description = "Python wrapper for rclone";
     homepage = "https://github.com/Johannes11833/rclone_python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ CaptainJawZ ];
   };
-}
+})

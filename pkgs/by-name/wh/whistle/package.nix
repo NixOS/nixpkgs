@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "whistle";
   version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "avwo";
     repo = "whistle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Rql8aSUVZiKbLOZFpIN8GCadloeNcab84mrRJzopV6k=";
   };
 
@@ -22,9 +22,9 @@ buildNpmPackage rec {
   meta = {
     description = "HTTP, HTTP2, HTTPS, Websocket debugging proxy";
     homepage = "https://github.com/avwo/whistle";
-    changelog = "https://github.com/avwo/whistle/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/avwo/whistle/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "whistle";
   };
-}
+})

@@ -11,13 +11,13 @@
   tinycss2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "svglib";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-veXF+bDgkfHiELiq/doHpJvY6/IcDpDWc4OmZcg1l6w=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
   meta = {
     description = "Pure-Python library for reading and converting SVG";
     homepage = "https://github.com/deeplook/svglib";
-    changelog = "https://github.com/deeplook/svglib/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/deeplook/svglib/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
     mainProgram = "svg2pdf";
   };
-}
+})

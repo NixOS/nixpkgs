@@ -12,7 +12,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "radon";
   version = "6.0.1";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rubik";
     repo = "radon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yY+j9kuX0ou/uDoVI/Qfqsmq0vNHv735k+vRl22LwwY=";
   };
 
@@ -58,9 +58,9 @@ buildPythonPackage rec {
   meta = {
     description = "Various code metrics for Python code";
     homepage = "https://radon.readthedocs.io";
-    changelog = "https://github.com/rubik/radon/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/rubik/radon/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ t4ccer ];
     mainProgram = "radon";
   };
-}
+})

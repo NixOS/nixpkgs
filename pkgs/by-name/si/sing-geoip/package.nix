@@ -7,14 +7,14 @@
 }:
 
 let
-  generator = buildGoModule rec {
+  generator = buildGoModule (finalAttrs: {
     pname = "sing-geoip";
     version = "20240312";
 
     src = fetchFromGitHub {
       owner = "SagerNet";
       repo = "sing-geoip";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-nIrbiECK25GyuPEFqMvPdZUShC2JC1NI60Y10SsoWyY=";
     };
 
@@ -32,7 +32,7 @@ let
       maintainers = with lib.maintainers; [ linsui ];
       mainProgram = "sing-geoip";
     };
-  };
+  });
 in
 stdenvNoCC.mkDerivation {
   inherit (generator) pname;

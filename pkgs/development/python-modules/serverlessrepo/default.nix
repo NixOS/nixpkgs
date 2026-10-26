@@ -9,13 +9,13 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "serverlessrepo";
   version = "0.1.10";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Zx9IA4Ej8SFDe3F+1R8lOlV3VZDwD7q2+8agH40FwBc=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dhkl ];
   };
-}
+})

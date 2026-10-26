@@ -7,14 +7,14 @@
   coreutils,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "script-directory";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ianthehenry";
     repo = "sd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-X5RWCJQUqDnG2umcCk5KS6HQinTJVapBHp6szEmbc4U=";
   };
 
@@ -39,9 +39,9 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Cozy nest for your scripts";
     homepage = "https://github.com/ianthehenry/sd";
-    changelog = "https://github.com/ianthehenry/sd/tree/${src.rev}#changelog";
+    changelog = "https://github.com/ianthehenry/sd/tree/${finalAttrs.src.rev}#changelog";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "sd";
   };
-}
+})

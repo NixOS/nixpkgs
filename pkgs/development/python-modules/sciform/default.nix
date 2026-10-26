@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sciform";
   version = "0.39.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jagerber48";
     repo = "sciform";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-t43v3xnZap6NayzqBVvw2PzPzHZ5QPSEO5aRzS8AKKE=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
     description = "Package for formatting numbers into scientific formatted strings";
     homepage = "https://sciform.readthedocs.io/en/stable/";
     downloadPage = "https://github.com/jagerber48/sciform";
-    changelog = "https://github.com/jagerber48/sciform/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/jagerber48/sciform/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

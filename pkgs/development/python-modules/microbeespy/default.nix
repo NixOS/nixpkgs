@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microbeespy";
   version = "0.3.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microBeesTech";
     repo = "pythonSDK";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-h3IbWdZ/iHsNlAr/DfASj4dKNkQ4t1mUUeUIs00L8iU=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

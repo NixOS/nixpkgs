@@ -11,13 +11,13 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-socketio-v4";
   version = "4.6.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3VzLPYT4p4Uh2U4DMpxu6kq1NPZXlOqWOljLOe0bM40=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     longDescription = "This is a release of 4.6.1 under the “socketio_v4” namespace for old systems.";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

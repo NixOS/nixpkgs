@@ -11,14 +11,14 @@ let
   inherit (dotnetCorePackages) sdk_8_0 sdk_9_0 runtime_8_0;
 in
 let
-  finalPackage = buildDotnetModule rec {
+  finalPackage = buildDotnetModule (finalAttrs: {
     pname = "omnisharp-roslyn";
     version = "1.39.14";
 
     src = fetchFromGitHub {
       owner = "OmniSharp";
       repo = "omnisharp-roslyn";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-yWrb+Ov1syKjeer7CxmGzkf9qUJxQ0IoIRfyIiO8eI8=";
     };
 
@@ -35,10 +35,10 @@ let
     ];
     dotnetFlags = [
       # These flags are set by the cake build.
-      "-property:PackageVersion=${version}"
-      "-property:AssemblyVersion=${version}.0"
-      "-property:FileVersion=${version}.0"
-      "-property:InformationalVersion=${version}"
+      "-property:PackageVersion=${finalAttrs.version}"
+      "-property:AssemblyVersion=${finalAttrs.version}.0"
+      "-property:FileVersion=${finalAttrs.version}.0"
+      "-property:InformationalVersion=${finalAttrs.version}"
       "-property:RuntimeFrameworkVersion=${runtime_8_0.version}"
       "-property:RollForward=LatestMajor"
     ];
@@ -105,7 +105,7 @@ let
     meta = {
       description = "OmniSharp based on roslyn workspaces";
       homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-      changelog = "https://github.com/OmniSharp/omnisharp-roslyn/blob/v${version}/CHANGELOG.md";
+      changelog = "https://github.com/OmniSharp/omnisharp-roslyn/blob/v${finalAttrs.version}/CHANGELOG.md";
       sourceProvenance = with lib.sourceTypes; [
         fromSource
         binaryNativeCode # dependencies
@@ -120,6 +120,6 @@ let
       ];
       mainProgram = "OmniSharp";
     };
-  };
+  });
 in
 finalPackage

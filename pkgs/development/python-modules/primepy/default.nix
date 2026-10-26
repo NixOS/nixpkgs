@@ -6,14 +6,14 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "primepy";
   version = "1.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "primePy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Jf1+JTRLB4mlmEx12J8FT88fGAvvIMmY5L77rJLeRmk=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
-}
+})

@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp-cors";
   version = "0.8.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp-cors";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AbMuUeCNM8+oZj/hutG3zxHOwYN8uZlLFBeYTlu1fh4=";
   };
 
@@ -53,10 +53,10 @@ buildPythonPackage rec {
   disabledTestPaths = [ "tests/integration" ];
 
   meta = {
-    changelog = "https://github.com/aio-libs/aiohttp-cors/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/aiohttp-cors/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "CORS support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp-cors";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sh";
   version = "2.3.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amoffat";
     repo = "sh";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xtrT8fac7eJeGZ15yQqdYUqILcY1jUCVajX/j0ljl7Q=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
-}
+})

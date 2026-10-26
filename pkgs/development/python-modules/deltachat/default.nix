@@ -11,10 +11,10 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deltachat";
   inherit (libdeltachat) version src;
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   pyproject = true;
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     description = "Python bindings for the Delta Chat Core library";
     homepage = "https://github.com/deltachat/deltachat-core-rust/tree/master/python";
   };
-}
+})

@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysnmpcrypto";
   version = "0.1.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmpcrypto";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gNRD8mSWVVLXwJjb3nT7IKnjTdwTutFDnQybgZTY2b0=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Strong crypto support for Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmpcrypto";
-    changelog = "https://github.com/lextudio/pysnmpcrypto/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/lextudio/pysnmpcrypto/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

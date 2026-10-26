@@ -12,7 +12,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymemcache";
   version = "4.0.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pinterest";
     repo = "pymemcache";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WgtHhp7lE6StoOBfSy9+v3ODe/+zUC7lGrc2S4M68+M=";
   };
 
@@ -45,10 +45,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymemcache" ];
 
   meta = {
-    changelog = "https://github.com/pinterest/pymemcache/blob/${src.rev}/ChangeLog.rst";
+    changelog = "https://github.com/pinterest/pymemcache/blob/${finalAttrs.src.rev}/ChangeLog.rst";
     description = "Python memcached client";
     homepage = "https://pymemcache.readthedocs.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

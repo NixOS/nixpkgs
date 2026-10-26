@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-picklefield";
   version = "3.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gintas";
     repo = "django-picklefield";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SvKJGOSsTZhAYJkGO+slL81EjcJtXmaFN7YWCGSX6Ac=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
-    changelog = "https://github.com/gintas/django-picklefield/releases/tag/${src.tag}";
+    changelog = "https://github.com/gintas/django-picklefield/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

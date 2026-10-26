@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "json-api-doc";
   version = "0.15.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "julien-duponchelle";
     repo = "json-api-doc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-r6XduJ2GIr2hGen6hoNIdE3yqPzHJ9xAFOSbMgErsNA=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "JSON API parser returning a simple Python dictionary";
     homepage = "https://github.com/julien-duponchelle/json-api-doc";
-    changelog = "https://github.com/julien-duponchelle/json-api-doc/releases/tag/v${version}";
+    changelog = "https://github.com/julien-duponchelle/json-api-doc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

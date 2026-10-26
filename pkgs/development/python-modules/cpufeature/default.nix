@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cpufeature";
   version = "0.2.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robbmcleod";
     repo = "cpufeature";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dp569Tp8E5/avQpYvhPNPgS/A+q2e/ie+7BR7h2Ip+I=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
       "x86_64-windows"
     ];
   };
-}
+})

@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-plus";
   version = "0.8.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-plus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XlEtekOASIjZretTbQAf0eyQN6qZ9c6zI1ESss/hxfI=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "pytest-plus adds new features to pytest";
     homepage = "https://github.com/pytest-dev/pytest-plus";
-    changelog = "https://github.com/pytest-dev/pytest-plus/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytest-dev/pytest-plus/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ robsliwi ];
   };
-}
+})

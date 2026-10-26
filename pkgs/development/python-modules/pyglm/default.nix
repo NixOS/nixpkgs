@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyglm";
   version = "2.8.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Zuzu-Typ";
     repo = "PyGLM";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7IN/kqFCwAMeVUrBB/CfCm9bSt1dHMbbLtqVInRFCk0=";
     fetchSubmodules = true;
   };
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Zuzu-Typ/PyGLM";
     description = "OpenGL Mathematics (GLM) library for Python written in C++";
-    changelog = "https://github.com/Zuzu-Typ/PyGLM/releases/tag/${src.tag}";
+    changelog = "https://github.com/Zuzu-Typ/PyGLM/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ sund3RRR ];
   };
-}
+})

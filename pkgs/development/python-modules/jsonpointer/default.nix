@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonpointer";
   version = "3.1.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-C4AcfbM6kEAk9gBNUm3MU7u4pKD04yv9EL6t9grfGQA=";
   };
 
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/stefankoegl/python-json-pointer";
     license = lib.licenses.bsd2; # "Modified BSD license, says pypi"
   };
-}
+})

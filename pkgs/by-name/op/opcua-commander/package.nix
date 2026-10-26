@@ -8,14 +8,14 @@
   makeWrapper,
   nodejs,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "opcua-commander";
   version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "node-opcua";
     repo = "opcua-commander";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-qoBpYN0EiXiuhH+hXjVPK2ET8Psjz52rocohU8ccVIg=";
   };
 
@@ -55,4 +55,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ jonboh ];
     mainProgram = "opcua-commander";
   };
-}
+})

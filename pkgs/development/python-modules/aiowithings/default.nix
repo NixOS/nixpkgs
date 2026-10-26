@@ -13,7 +13,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiowithings";
   version = "3.1.6";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-withings";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YC1rUyPXWbJ/xfUus5a7vw44gw7PIAdwhrUstXB/+nI=";
   };
 
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Withings";
     homepage = "https://github.com/joostlek/python-withings";
-    changelog = "https://github.com/joostlek/python-withings/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-withings/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

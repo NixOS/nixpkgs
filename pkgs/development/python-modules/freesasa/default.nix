@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "freesasa";
   version = "2.2.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "freesasa";
     repo = "freesasa-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/7ymItwXOemY0+IL0k6rWnJI8fAwTFjNXzTV+uf9x9A=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "FreeSASA Python Module";
     homepage = "https://github.com/freesasa/freesasa-python";
-    changelog = "https://github.com/freesasa/freesasa-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/freesasa/freesasa-python/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "orchard";
   version = "0.56.1";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "orchard";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-axzEWud7hY321RkbaFtVKhSn7WFHeYOFHDdKRh25zaY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/cirruslabs/orchard/internal/version.Version=${version}"
+    "-X github.com/cirruslabs/orchard/internal/version.Version=${finalAttrs.version}"
   ];
 
   # ldflags based on metadata from git and source
@@ -57,4 +57,4 @@ buildGoModule rec {
     license = lib.licenses.fairsource09;
     maintainers = with lib.maintainers; [ techknowlogick ];
   };
-}
+})

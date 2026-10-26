@@ -25,7 +25,7 @@
   sqlparse,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-silk";
   version = "5.6.0";
   format = "setuptools";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IMJ7xm3LXDmBwXWLqWXlk/V0r9K9arhUqWeDuq4gxaM=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     substituteInPlace project/tests/test_silky_profiler.py \
       --replace "def test_time_taken" "def _test_time_taken"
     substituteInPlace setup.py \
-      --replace 'use_scm_version=True' 'version="${version}"'
+      --replace 'use_scm_version=True' 'version="${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -86,8 +86,8 @@ buildPythonPackage rec {
   meta = {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
-    changelog = "https://github.com/jazzband/django-silk/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jazzband/django-silk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

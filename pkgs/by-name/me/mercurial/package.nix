@@ -38,12 +38,12 @@ let
     pip
     ;
 
-  self = python3Packages.buildPythonApplication rec {
+  self = python3Packages.buildPythonApplication (finalAttrs: {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
     version = "7.2.2";
 
     src = fetchurl {
-      url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
+      url = "https://mercurial-scm.org/release/mercurial-${finalAttrs.version}.tar.gz";
       hash = "sha256-8uyOfu7wUAWRcG03RVXwzrEYgiBo51+jsyvgfdIYT2w=";
     };
 
@@ -54,10 +54,10 @@ let
     cargoDeps =
       if rustSupport then
         rustPlatform.fetchCargoVendor {
-          inherit src;
-          name = "mercurial-${version}";
+          inherit (finalAttrs) src;
+          name = "mercurial-${finalAttrs.version}";
           hash = "sha256-OGsHK3Bh47V4n+7HYpVp/jymCz1QY45rkWlAW0Hob7g=";
-          sourceRoot = "mercurial-${version}/rust";
+          sourceRoot = "mercurial-${finalAttrs.version}/rust";
         }
       else
         null;
@@ -125,7 +125,7 @@ let
       description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
-      changelog = "https://wiki.mercurial-scm.org/Release${lib.versions.majorMinor version}";
+      changelog = "https://wiki.mercurial-scm.org/Release${lib.versions.majorMinor finalAttrs.version}";
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
         lukegb
@@ -135,7 +135,7 @@ let
       platforms = lib.platforms.unix;
       mainProgram = "hg";
     };
-  };
+  });
 
   makeTests =
     {

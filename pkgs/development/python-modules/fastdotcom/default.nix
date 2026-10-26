@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastdotcom";
   version = "0.0.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "fastdotcom";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ozQ0d1CIIsMOdvK9UhRnr2c2fmIzkZcpjZrjZjfnknI=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

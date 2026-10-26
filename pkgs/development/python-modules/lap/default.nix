@@ -9,13 +9,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lap";
   version = "0.5.13";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nv9xaePKRSmVrwSTzCDTVFLEv9BhIsNsBkVxGf+9QRs=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   meta = {
     description = "Linear Assignment Problem solver (LAPJV/LAPMOD)";
     homepage = "https://github.com/gatagat/lap";
-    changelog = "https://github.com/gatagat/lap/releases/tag/v${version}";
+    changelog = "https://github.com/gatagat/lap/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
       doronbehar
       tebriel
     ];
   };
-}
+})

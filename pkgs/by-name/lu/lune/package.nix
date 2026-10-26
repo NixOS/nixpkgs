@@ -5,14 +5,14 @@
   pkg-config,
   cmake,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lune";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "lune-org";
     repo = "lune";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LOwLCA1j3lxj+jiphNlJxSnnN70w7NKhVKm6LdXFI5s=";
     fetchSubmodules = true;
   };
@@ -48,8 +48,8 @@ rustPlatform.buildRustPackage rec {
     description = "Standalone Luau script runtime";
     mainProgram = "lune";
     homepage = "https://github.com/lune-org/lune";
-    changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/lune-org/lune/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ lammermann ];
   };
-}
+})

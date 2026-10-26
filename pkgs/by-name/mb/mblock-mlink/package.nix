@@ -6,12 +6,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mblock-mlink";
   version = "1.2.0";
 
   src = fetchurl {
-    url = "https://archive.org/download/mLink-${version}-amd64/mLink-${version}-amd64.deb";
+    url = "https://archive.org/download/mLink-${finalAttrs.version}-amd64/mLink-${finalAttrs.version}-amd64.deb";
     sha256 = "sha256-KLxj81ZjbEvhhaz0seNB4WXX5ybeZ7/WcT1dGfdWle0=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.mausch ];
   };
-}
+})

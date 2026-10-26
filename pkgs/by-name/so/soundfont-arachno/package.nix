@@ -5,7 +5,7 @@
   unzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "soundfont-arachno";
   version = "1.0";
 
@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchurl {
     # Linked on http://www.arachnosoft.com/main/download.php?id=soundfont-sf2:
     url = "https://www.dropbox.com/s/2rnpya9ecb9m4jh/arachno-soundfont-${
-      builtins.replaceStrings [ "." ] [ "" ] version
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }-sf2.zip";
     hash = "sha256-XAxXOr5sXho8zOul1SpCKdskKDYgyaPrH0AwGOKqIt8=";
   };
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mrtnvgr ];
   };
-}
+})

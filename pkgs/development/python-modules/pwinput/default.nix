@@ -4,14 +4,14 @@
   setuptools,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pwinput";
   version = "1.0.3";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "pwinput";
     hash = "sha256-yhqL0G4ohy11Hb1BMthjcSfCW0COo6NJN3MUpUkUJvM=";
   };
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bwkam ];
   };
-}
+})

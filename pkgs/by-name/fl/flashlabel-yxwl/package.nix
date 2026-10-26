@@ -6,13 +6,13 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashlabel-yxwl";
   version = "1.2.3";
 
   # The source URL redirects to Google Drive, which resists direct downloads.
   src = requireFile {
-    name = "A4_Linux_Driver_Ver${version}.run";
+    name = "A4_Linux_Driver_Ver${finalAttrs.version}.run";
     url = "https://flashlabel.net/YXWL-A4driver-linux";
     hash = "sha256-LqVQKkh6B+zGl5swknHefaB0EfHYVXXEEqDb6NUaxqc=";
   };
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
       AndrewKvalheim
     ];
   };
-}
+})

@@ -10,12 +10,12 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (scikits-odes-core) version src;
   pname = "scikits.odes";
   pyproject = true;
 
-  sourceRoot = "${src.name}/packages/scikits-odes";
+  sourceRoot = "${finalAttrs.src.name}/packages/scikits-odes";
 
   patches = [
     # https://github.com/bmcage/odes/pull/205
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     description = "Scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
     homepage = "https://github.com/bmcage/odes/blob/master/packages/scikits-odes";
   };
-}
+})

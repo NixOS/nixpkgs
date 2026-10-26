@@ -10,16 +10,16 @@
   zookeeper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zookeeper_mt";
   version = lib.getVersion zookeeper;
 
   src = fetchurl {
-    url = "mirror://apache/zookeeper/${zookeeper.pname}-${version}/apache-${zookeeper.pname}-${version}.tar.gz";
+    url = "mirror://apache/zookeeper/${zookeeper.pname}-${finalAttrs.version}/apache-${zookeeper.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha512-Zb6uvLbvf2m4RMLwpZ3E2S9ChFvcOpyp/TH+WSfTe6tOmecAnv/YM6gz4z5PyBulyg0j7jqc3BmQvotvyPt5tw==";
   };
 
-  sourceRoot = "apache-${zookeeper.pname}-${version}/zookeeper-client/zookeeper-client-c";
+  sourceRoot = "apache-${zookeeper.pname}-${finalAttrs.version}/zookeeper-client/zookeeper-client-c";
 
   # Fix build w/ glibc-2.44
   env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     mkdir generated
     cd generated
-    java -cp ${zookeeper}/lib/${zookeeper.pname}-jute-${version}.jar \
+    java -cp ${zookeeper}/lib/${zookeeper.pname}-jute-${finalAttrs.version}.jar \
         org.apache.jute.compiler.generated.Rcc -l c \
         ../../../zookeeper-jute/src/main/resources/zookeeper.jute
     cd ..
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

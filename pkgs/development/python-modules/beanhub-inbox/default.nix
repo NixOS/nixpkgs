@@ -15,7 +15,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beanhub-inbox";
   version = "0.2.3";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-inbox";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WWfZsJRm2rJI85vmFt/AtV++5vpSTJZpRrk3PdHMhAA=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Email processing engine for archiving and extracting financial data with LLM";
     homepage = "https://github.com/LaunchPlatform/beanhub-inbox";
-    changelog = "https://github.com/LaunchPlatform/beanhub-inbox/releases/tag${src.tag}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-inbox/releases/tag${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,7 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prodict";
   version = "0.8.6";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ramazanpolat";
     repo = "prodict";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-c46JEQFg4KRwerqpMSgh6+tYRpKTOX02Lzsq4/meS3o=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

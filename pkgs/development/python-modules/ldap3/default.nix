@@ -11,7 +11,7 @@
   withGssapi ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ldap3";
   version = "2.9.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cannatag";
     repo = "ldap3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B+Sb6zMifkSKfaPYrXML5ugHGanbH5CPKeVdHshe3R4=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     # patch fails to apply because of line endings
     dos2unix ldap3/utils/asn1.py
     substituteInPlace _version.json \
-      --replace-fail '"version": "2.9",' '"version": "${version}",'
+      --replace-fail '"version": "2.9",' '"version": "${finalAttrs.version}",'
   '';
 
   patches = [
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

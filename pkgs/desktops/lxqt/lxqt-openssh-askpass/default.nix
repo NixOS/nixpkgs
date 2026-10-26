@@ -15,14 +15,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-openssh-askpass";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-openssh-askpass";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-87soVKVcC3B6Wm7iRy15k/rjLb9OX/2se0btIOyKA6Q=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.lxqt ];
     mainProgram = "lxqt-openssh-askpass";
   };
-}
+})

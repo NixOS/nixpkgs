@@ -5,14 +5,14 @@
   zsh,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-autocomplete";
   version = "26.08.04";
 
   src = fetchFromGitHub {
     owner = "marlonrichert";
     repo = "zsh-autocomplete";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-aba38Cmnps2n6Tr/1i3BjPZ4TbQPsDBURXF1fcd8cDI=";
   };
 
@@ -48,4 +48,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.leona ];
   };
-}
+})

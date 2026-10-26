@@ -14,13 +14,13 @@
   watchfiles,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anywidget";
   version = "0.11.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ZpX775RJz4wn9CG5bFg3qjf5CewfYM+jOt0zPhtwsWk=";
   };
 
@@ -71,8 +71,8 @@ buildPythonPackage rec {
   meta = {
     description = "Custom jupyter widgets made easy";
     homepage = "https://github.com/manzt/anywidget";
-    changelog = "https://github.com/manzt/anywidget/releases/tag/anywidget%40${version}";
+    changelog = "https://github.com/manzt/anywidget/releases/tag/anywidget%40${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

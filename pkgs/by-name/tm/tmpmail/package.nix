@@ -10,14 +10,14 @@
   xclip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tmpmail";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "tmpmail";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-s4c1M4YHK/CNpH7nPt7rRqlkLUZrpBXvAVS/qxCai9c=";
   };
 
@@ -51,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "tmpmail";
   };
-}
+})

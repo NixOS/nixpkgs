@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brotli";
   inherit (brotli) version src;
   pyproject = true;
@@ -31,10 +31,10 @@ buildPythonPackage rec {
   enabledTestPaths = [ "python/tests" ];
 
   meta = {
-    changelog = "https://github.com/google/brotli/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/google/brotli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/google/brotli";
     description = "Generic-purpose lossless compression algorithm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

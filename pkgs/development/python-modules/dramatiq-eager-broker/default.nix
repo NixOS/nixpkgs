@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dramatiq-eager-broker";
   version = "0.3.0";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "yaal";
     repo = "dramatiq-eager-broker";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tz4Gy31y5oaTHFAzb5L7bg0AhG1U/JKDySGloA7/A/8=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.erictapen ];
   };
-}
+})

@@ -9,14 +9,14 @@
   batchSize ? 2048,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mkp224o";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "cathugger";
     repo = "mkp224o";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OL3xhoxIS1OqfVp0QboENFdNH/e1Aq1R/MFFM9LNFbQ=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
         install -D ${
           stdenv.mkDerivation {
             pname = "mkp224o-${suffix}";
-            inherit version src;
+            inherit (finalAttrs) version src;
             configureFlags =
               configureFlags
               ++ [ "--enable-batchnum=${builtins.toString batchSize}" ]
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

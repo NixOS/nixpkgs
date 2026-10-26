@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "idbutils";
   version = "1.0.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tcgoetz";
     repo = "utilities";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-niscY7sURrJ7YcPKbI6ByU03po6Hfxm0gHbvmDa6TgM=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tcgoetz/utilities";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

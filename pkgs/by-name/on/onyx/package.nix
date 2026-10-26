@@ -6,18 +6,18 @@
   makeDesktopItem,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter335.buildFlutterApplication (finalAttrs: {
   pname = "onyx";
   version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "onyx-lyon1";
     repo = "onyx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WQH1qhu5UFB/RToraO/zEU6BjzwhNWrsk+U8ZIs1VLM=";
   };
 
-  sourceRoot = "${src.name}/apps/onyx";
+  sourceRoot = "${finalAttrs.src.name}/apps/onyx";
 
   buildInputs = [
     libsecret
@@ -61,4 +61,4 @@ flutter335.buildFlutterApplication rec {
     maintainers = with lib.maintainers; [ eymeric ];
     platforms = lib.platforms.linux;
   };
-}
+})

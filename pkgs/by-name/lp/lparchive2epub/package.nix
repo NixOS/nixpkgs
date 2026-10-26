@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lparchive2epub";
   version = "1.3.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Arwalk";
     repo = "lparchive2epub";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h1i/p14Zzzr0SK+OjcCnXpsVjJl7mrbeLJ5JlnA0wPU=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nsnelson ];
   };
-}
+})

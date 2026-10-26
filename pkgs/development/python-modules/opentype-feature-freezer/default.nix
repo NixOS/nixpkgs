@@ -10,7 +10,7 @@
   biplist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opentype-feature-freezer";
   version = "1.32.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twardoch";
     repo = "fonttools-opentype-feature-freezer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uwU9lsTK6XlKwar46DLTzjwtD/zQDJnC+Kq/sVNCNE0=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   dependencies = [ fonttools ];
 
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     mainProgram = "pyftfeatfreeze";
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
-}
+})

@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "rtlcss";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "MohammadYounes";
     repo = "rtlcss";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KdAf7jzt8o/YEzT/bLCXj546HX0oC90kr44u3p3qv/k=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

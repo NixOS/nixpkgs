@@ -14,14 +14,14 @@ let
   dotnet = dotnetCorePackages.dotnet_8;
 in
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "tagger";
   version = "2024.6.0-1";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Tagger";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4OfByQYhLXmeFWxzhqt8d7pLUyuMLhDM20E2YcA9Q3s=";
   };
 
@@ -65,4 +65,4 @@ buildDotnetModule rec {
       ratcornu
     ];
   };
-}
+})

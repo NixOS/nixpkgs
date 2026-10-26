@@ -15,7 +15,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "superqt";
   version = "0.8.3";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "superqt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-URvP2cCnfLN/ncBC3sP3Dbmir84PfZw1DTjRZxF0sv0=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Missing widgets and components for Qt-python (napari/superqt)";
     homepage = "https://github.com/napari/superqt";
-    changelog = "https://github.com/pyapp-kit/superqt/releases/tag/${src.tag}";
+    changelog = "https://github.com/pyapp-kit/superqt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

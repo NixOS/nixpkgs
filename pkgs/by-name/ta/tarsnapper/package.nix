@@ -6,7 +6,7 @@
   tarsnap,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tarsnapper";
   version = "0.5";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "miracle2k";
     repo = "tarsnapper";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5i9eum9hbh6VFhvEIDq5Uapy6JtIbf9jZHhRYZVoC1w=";
   };
 
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ gmacon ];
     mainProgram = "tarsnapper";
   };
-}
+})

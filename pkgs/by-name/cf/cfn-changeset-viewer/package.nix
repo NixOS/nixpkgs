@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "cfn-changeset-viewer";
   version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "trek10inc";
     repo = "cfn-changeset-viewer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xJ9rPHJRSJivaou1bl/3q51f4IFMjJT1w49GP5Fk98M=";
   };
 
@@ -35,4 +35,4 @@ buildNpmPackage rec {
     mainProgram = "cfn-changeset-viewer";
     maintainers = with lib.maintainers; [ surfaceflinger ];
   };
-}
+})

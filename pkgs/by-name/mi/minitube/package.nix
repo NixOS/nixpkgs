@@ -9,14 +9,14 @@
   withAPIKey ? "AIzaSyBQvZXseEVvgu5Ega_DI-AIJ55v0OsHmVY",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minitube";
   version = "4.0";
 
   src = fetchFromGitHub {
     repo = "minitube";
     owner = "flaviotordini";
-    tag = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-JAxdPiiPDpmhJBiNtlaMbdcC/YEGJyc9mP3kBvee/74=";
   };
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "minitube";
   };
-}
+})

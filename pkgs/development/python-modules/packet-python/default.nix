@@ -8,13 +8,13 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "packet-python";
   version = "1.44.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-WVfMELOoml7Hx78jy6TAwlFRLuSQu9dtsb6Khs6/cgI=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for the Packet API";
     homepage = "https://github.com/packethost/packet-python";
-    changelog = "https://github.com/packethost/packet-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/packethost/packet-python/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ dipinhora ];
   };
-}
+})

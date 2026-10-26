@@ -16,7 +16,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trie";
   version = "3.1.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "py-trie";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QDywlAyFbQGgkATVifdixlnob4Tmsvr/VZ1rafzWKrU=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library which implements the Ethereum Trie structure";
     homepage = "https://github.com/ethereum/py-trie";
-    changelog = "https://github.com/ethereum/py-trie/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ethereum/py-trie/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

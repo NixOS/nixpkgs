@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cppreference-doc";
   version = "20250209";
 
   src = fetchurl {
-    url = "https://github.com/PeterFeicht/cppreference-doc/releases/download/v${version}/html-book-${version}.tar.xz";
+    url = "https://github.com/PeterFeicht/cppreference-doc/releases/download/v${finalAttrs.version}/html-book-${finalAttrs.version}.tar.xz";
     hash = "sha256-rFBnGh9S1/CrCRHRRFDrNejC+BLt0OQmss0ePZ25HW8=";
   };
 
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = { inherit pname version; };
+  passthru = { inherit (finalAttrs) pname version; };
 
   meta = {
     description = "C++ standard library reference";
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ panicgh ];
     platforms = lib.platforms.all;
   };
-}
+})

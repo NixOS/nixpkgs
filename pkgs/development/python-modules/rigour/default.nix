@@ -19,7 +19,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rigour";
   version = "1.8.2";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "opensanctions";
     repo = "rigour";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Rh1JCLj1lSwsSrhXaBlQBdBTnG33LVJd1nAOx4mReyo=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

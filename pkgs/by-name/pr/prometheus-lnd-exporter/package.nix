@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lndmon";
   version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndmon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PzmDotyuG8Fgkr6SlBWofqQamDG39v65fFjRUKjIWWM=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmilata ];
   };
-}
+})

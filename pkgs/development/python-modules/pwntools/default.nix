@@ -31,13 +31,13 @@
 let
   debuggerName = lib.strings.getName debugger;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pwntools";
   version = "4.15.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2ZqRcpjBynJBtRu6mtIhLyr0Qe9mSIBZskJlCOmip3Y=";
   };
 
@@ -101,7 +101,7 @@ buildPythonPackage rec {
   meta = {
     description = "CTF framework and exploit development library";
     homepage = "https://pwntools.com";
-    changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
+    changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bennofs
@@ -109,4 +109,4 @@ buildPythonPackage rec {
       pamplemousse
     ];
   };
-}
+})

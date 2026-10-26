@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argon2-cffi-bindings";
   version = "25.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "argon2-cffi-bindings";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UDPxwqEpsmByAPM7lz3cxZz8jWwCEdghPlKXt8zQrfc=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "_argon2_cffi_bindings" ];
 
   meta = {
-    changelog = "https://github.com/hynek/argon2-cffi-bindings/releases/tag/${src.tag}";
+    changelog = "https://github.com/hynek/argon2-cffi-bindings/releases/tag/${finalAttrs.src.tag}";
     description = "Low-level CFFI bindings for Argon2";
     homepage = "https://github.com/hynek/argon2-cffi-bindings";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

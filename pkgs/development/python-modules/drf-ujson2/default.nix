@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-ujson2";
   version = "1.8.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Amertz08";
     repo = "drf_ujson2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NtloZWsEmRbPl7pdxPQqpzIzTyyOEFO9KtZ60F7VuUQ=";
   };
 
@@ -48,10 +48,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Amertz08/drf_ujson2/releases/tag/v${version}";
+    changelog = "https://github.com/Amertz08/drf_ujson2/releases/tag/v${finalAttrs.version}";
     description = "JSON parser and renderer using ujson for Django Rest Framework";
     homepage = "https://github.com/Amertz08/drf_ujson2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

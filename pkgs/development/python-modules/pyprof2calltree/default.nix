@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyprof2calltree";
   version = "1.4.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pwaller";
     repo = "pyprof2calltree";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PrIYpvcoD+zVIoOdcON41JmqzpA5FyRKhI7rqDV8cSo=";
   };
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";
     mainProgram = "pyprof2calltree";
     homepage = "https://github.com/pwaller/pyprof2calltree";
-    changelog = "https://github.com/pwaller/pyprof2calltree/releases/tag/${src.tag}";
+    changelog = "https://github.com/pwaller/pyprof2calltree/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sfrijters ];
   };
-}
+})

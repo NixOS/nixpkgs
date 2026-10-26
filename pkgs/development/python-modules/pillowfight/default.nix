@@ -5,13 +5,13 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pillowfight";
   version = "0.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SSP00eeL4V8Z8Dpgj7NLqctxv1IF3jyf50YcSQeBZ6c=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/beanbaginc/pillowfight";
     license = lib.licenses.mit;
   };
-}
+})

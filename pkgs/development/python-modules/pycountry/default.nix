@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycountry";
   version = "26.2.16";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycountry";
     repo = "pycountry";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VmPCQszEaDNsSnMfAo5xyDZySJcC4TiWZrmQMfebKKQ=";
   };
 
@@ -31,9 +31,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pycountry/pycountry";
-    changelog = "https://github.com/pycountry/pycountry/blob/${src.tag}/HISTORY.txt";
+    changelog = "https://github.com/pycountry/pycountry/blob/${finalAttrs.src.tag}/HISTORY.txt";
     description = "ISO country, subdivision, language, currency and script definitions and their translations";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

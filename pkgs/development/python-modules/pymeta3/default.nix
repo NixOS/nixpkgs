@@ -3,13 +3,13 @@
   fetchPypi,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymeta3";
   version = "0.5.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "PyMeta3";
     hash = "sha256-GL2jJtmpu/WHv8DuC8loZJZNeLBnKIvPVdTZhoHQW8s=";
   };
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   meta = {
     description = "Pattern-matching language based on OMeta for Python 3 and 2";
     homepage = "https://github.com/wbond/pymeta3";
-    changelog = "https://github.com/wbond/pymeta3/releases/tag/${version}";
+    changelog = "https://github.com/wbond/pymeta3/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jfly
       matusf
     ];
   };
-}
+})

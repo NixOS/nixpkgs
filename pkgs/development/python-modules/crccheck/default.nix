@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crccheck";
   version = "1.3.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinScharrer";
     repo = "crccheck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hT+8+moni7turn5MK719b4Xy336htyWWmoMnhgxKkYo=";
   };
 
@@ -31,9 +31,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for CRCs and checksums";
     homepage = "https://github.com/MartinScharrer/crccheck";
-    changelog = "https://github.com/MartinScharrer/crccheck/releases/tag/${src.tag}";
+    changelog = "https://github.com/MartinScharrer/crccheck/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

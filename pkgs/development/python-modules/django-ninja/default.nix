@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-ninja";
   version = "1.7.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/KsFq6LgaRMxMHmWO5vuzeVZTsmnERTbuS2ne4jc6eA=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/vitalik/django-ninja/releases/tag/${src.tag}";
+    changelog = "https://github.com/vitalik/django-ninja/releases/tag/${finalAttrs.src.tag}";
     description = "Web framework for building APIs with Django and Python type hints";
     homepage = "https://django-ninja.dev";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

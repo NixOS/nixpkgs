@@ -14,14 +14,14 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblxqt";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "liblxqt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-kGKgKpgiK40933O3T/astH0X1Y4oIH6kEKjjMBh43MA=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

@@ -11,7 +11,7 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonschema-path";
   version = "0.5.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "jsonschema-path";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CDDwhIlwytUPVwq/+0T5kVzl8viJfSalSIxC5VrQdgs=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/p1c2u/jsonschema-path/releases/tag/${version}";
+    changelog = "https://github.com/p1c2u/jsonschema-path/releases/tag/${finalAttrs.version}";
     description = "JSONSchema Spec with object-oriented paths";
     homepage = "https://github.com/p1c2u/jsonschema-path";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

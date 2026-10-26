@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "render-cli";
   version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "render-oss";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-n0umMoIhJsWYliqt6ABjR13DAeIceI946nfCpQ26yOw=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/render-oss/cli/pkg/cfg.Version=${version}"
+    "-X github.com/render-oss/cli/pkg/cfg.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -33,9 +33,9 @@ buildGoModule rec {
   meta = {
     description = "Official command-line interface for Render cloud hosting platform";
     homepage = "https://github.com/render-oss/cli";
-    changelog = "https://github.com/render-oss/cli/releases/tag/v${version}";
+    changelog = "https://github.com/render-oss/cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jtamagnan ];
     mainProgram = "render";
   };
-}
+})

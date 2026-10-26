@@ -8,7 +8,7 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyebox";
   version = "1.1.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "titilambert";
     repo = "pyebox";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-87u16rJmwdGiUz3DxThCsNXnz0tpH/9i26eyYwSqpDg=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

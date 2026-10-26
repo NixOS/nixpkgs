@@ -19,7 +19,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastcan";
   version = "0.5.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "fastcan";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1ncdzBMJYEwTkpLXS64g+SaEbsiYslX7zN4xbGjUsAA=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for fast canonical-correlation-based search algorithm";
     homepage = "https://github.com/scikit-learn-contrib/fastcan";
-    changelog = "https://github.com/scikit-learn-contrib/fastcan/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-learn-contrib/fastcan/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

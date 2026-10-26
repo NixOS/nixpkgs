@@ -9,7 +9,7 @@
   jupyterlab,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipylab";
   version = "1.1.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # This needs to be fetched from Pypi, as we rely on the nodejs build to be skipped,
   # which only happens if ipylab/labextension/style.js is present.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-85hYpNnvbsuC+O/uufa1oBo6ZNTzxPKl/i1YrllN4hI=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Control JupyterLab from Python notebooks";
     homepage = "https://github.com/jtpio/ipylab";
-    changelog = "https://github.com/jtpio/ipylab/releases/tag/v${version}";
+    changelog = "https://github.com/jtpio/ipylab/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-cache-memoize";
   version = "0-unstable-2026-03-01";
   pyproject = true;
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django utility for a memoization decorator that uses the Django cache framework";
     homepage = "https://github.com/peterbe/django-cache-memoize";
-    changelog = "https://github.com/peterbe/django-cache-memoize/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/peterbe/django-cache-memoize/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     teams = [ lib.teams.ngi ];
   };
-}
+})

@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyindego";
   version = "3.2.3";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sander1988";
     repo = "pyIndego";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fg9fYL+xXchRHjEh6rb+rMEyUpm11rPsIuDknspzbf8=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for Bosch API for lawnmowers";
     homepage = "https://github.com/sander1988/pyIndego";
-    changelog = "https://github.com/sander1988/pyIndego/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sander1988/pyIndego/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

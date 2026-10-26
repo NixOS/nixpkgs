@@ -45,13 +45,13 @@ let
     hash = "sha256-+3y9UJAMfMDIO4feHTyb5IWIelRSsH6KF6WAtx7rric=";
   };
 
-  unvanquished-binary-deps = stdenv.mkDerivation rec {
+  unvanquished-binary-deps = stdenv.mkDerivation (finalAttrs: {
     # DISCLAIMER: this is selected binary crap from the NaCl SDK
     pname = "unvanquished-binary-deps";
     version = binary-deps-version;
 
     src = fetchzip {
-      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz";
+      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${finalAttrs.version}.tar.xz";
       hash = "sha256-1PPqQYnMBFR7Jr48qiqQEduEjiFWx3XyvfPBwX/PzIY=";
     };
 
@@ -83,7 +83,7 @@ let
 
       runHook postInstall
     '';
-  };
+  });
 
   libstdcpp-preload-for-unvanquished-nacl = stdenv.mkDerivation {
     name = "libstdcpp-preload-for-unvanquished-nacl";
@@ -136,7 +136,7 @@ let
 
   # this really is the daemon game engine, the game itself is in the assets
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unvanquished";
   inherit version src binary-deps-version;
 
@@ -222,7 +222,7 @@ stdenv.mkDerivation rec {
     ${wrapBinary "daemon-tty" "unvanquished-tty"}
     ${wrapBinary "daemonded" "unvanquished-server"}
 
-    for d in ${src}/dist/icons/*; do
+    for d in ${finalAttrs.src}/dist/icons/*; do
       install -Dm0644 -t $out/share/icons/hicolor/$(basename $d)/apps/ $d/unvanquished.png
     done
 
@@ -253,4 +253,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ afontain ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

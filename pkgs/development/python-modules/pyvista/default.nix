@@ -16,7 +16,7 @@
   vtk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvista";
   version = "0.49.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-djX8p9k+jHA1qDwDT3hQBuubAUaNr96vaqmay+wo8q8=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Easier Pythonic interface to VTK";
     homepage = "https://pyvista.org";
-    changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";
+    changelog = "https://github.com/pyvista/pyvista/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

@@ -7,7 +7,7 @@
   py-vapid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ntfy-webpush";
   version = "0.1.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dschep";
     repo = "ntfy-webpush";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VvQ/kCrq7KSMQdYb8p5P0REdek5oNhjslB45+gbetLc=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

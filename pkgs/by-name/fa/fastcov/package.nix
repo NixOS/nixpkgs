@@ -7,7 +7,7 @@
   libgcc,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "fastcov";
   version = "1.17";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RPGillespie6";
     repo = "fastcov";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2WrgLNC3FU4b8DdcoK3rk0+JBiv60JmlBktg0tMx6CM=";
   };
 
@@ -67,10 +67,10 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Massively parallelized gcov wrapper";
     homepage = "https://github.com/RPGillespie6/fastcov";
-    changelog = "https://github.com/RPGillespie6/fastcov/releases/tag/v${version}";
+    changelog = "https://github.com/RPGillespie6/fastcov/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     mainProgram = "fastcov";
   };
-}
+})

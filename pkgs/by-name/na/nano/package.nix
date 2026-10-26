@@ -29,12 +29,12 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nano";
   version = "9.3";
 
   src = fetchurl {
-    url = "mirror://gnu/nano/nano-${version}.tar.xz";
+    url = "mirror://gnu/nano/nano-${finalAttrs.version}.tar.xz";
     hash = "sha256-qa/8UslZbuBoK83UzrPAsjXrIh2D1zPf2bDf9FiXyw0=";
   };
 
@@ -90,13 +90,13 @@ stdenv.mkDerivation rec {
         ]
       }
 
-      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${finalAttrs.pname}" | tr -d '"')"
       latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags git://git.savannah.gnu.org/nano.git '*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
 
       if [ ! "$oldVersion" = "$latestTag" ]; then
-        update-source-version ${pname} "$latestTag" --version-key=version --print-changes
+        update-source-version ${finalAttrs.pname} "$latestTag" --version-key=version --print-changes
       else
-        echo "${pname} is already up-to-date"
+        echo "${finalAttrs.pname} is already up-to-date"
       fi
     '';
   };
@@ -111,4 +111,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "nano";
   };
-}
+})

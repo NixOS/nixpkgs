@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvisa-py";
   version = "0.8.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fXLT3W48HQ744LkwZn784KKmUE8gxDCR+lkcL9xX45g=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module that implements the Virtual Instrument Software Architecture";
     homepage = "https://github.com/pyvisa/pyvisa-py";
-    changelog = "https://github.com/pyvisa/pyvisa-py/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/pyvisa/pyvisa-py/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mvnetbiz ];
   };
-}
+})

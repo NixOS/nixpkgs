@@ -6,12 +6,12 @@
   asciidoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eweb";
   version = "9.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/eweb/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/eweb/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     sha256 = "1xy7vm2sj5q6s620fm25klmnwnz9xkrxmx4q2f8h6c85ydisayd5";
   };
 
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -d $out/bin $out/share/doc/${pname}-${version}
+    install -d $out/bin $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
     cp etangle.py $out/bin
-    cp etangle.w etangle.html $out/share/doc/${pname}-${version}
+    cp etangle.w etangle.html $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
   '';
 
   meta = {
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

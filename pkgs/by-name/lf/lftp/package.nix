@@ -13,14 +13,14 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lftp";
   version = "4.9.3";
 
   src = fetchurl {
     urls = [
-      "https://lftp.yar.ru/ftp/${pname}-${version}.tar.xz"
-      "https://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${pname}-${version}.tar.xz"
+      "https://lftp.yar.ru/ftp/${finalAttrs.pname}-${finalAttrs.version}.tar.xz"
+      "https://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${finalAttrs.pname}-${finalAttrs.version}.tar.xz"
     ];
     sha256 = "sha256-lucZnXk1vjPPaxFh6VWyqrQKt37N8qGc6k/BGT9Fftw=";
   };
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

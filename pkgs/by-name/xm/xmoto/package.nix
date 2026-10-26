@@ -28,14 +28,14 @@ let
   lua = lua5_2_compat;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmoto";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "xmoto";
     repo = "xmoto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DNljUd7FSH0fTgQx8LMqItZ54aLZtwMUPzqR8Z820SM=";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

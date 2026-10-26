@@ -19,7 +19,7 @@
   directoryListingUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gst-python";
   version = "1.28.6";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${version}.tar.xz";
+    url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${finalAttrs.version}.tar.xz";
     hash = "sha256-NNWEQMU7VJWhI9Ckt7ervG6XkqWyGVTbhqB5Gxb24BI=";
   };
 
@@ -104,4 +104,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
-}
+})

@@ -16,12 +16,12 @@
   wrapGAppsHook3,
   dpkg,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyroam-connect-desktop";
   version = "1.4.3";
 
   src = fetchurl {
-    url = "https://packages.easyroam.de/repos/easyroam-desktop/pool/main/e/easyroam-desktop/easyroam_connect_desktop-${version}+${version}-linux.deb";
+    url = "https://packages.easyroam.de/repos/easyroam-desktop/pool/main/e/easyroam-desktop/easyroam_connect_desktop-${finalAttrs.version}+${finalAttrs.version}-linux.deb";
     hash = "sha256-03PLAUQQWlaAO+0cYcCorc1Q6wAhvLQGXNu0mqh8Lvw=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

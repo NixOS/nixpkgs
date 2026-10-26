@@ -14,7 +14,7 @@
 let
   jre = jre_headless;
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "jsign";
   # For build from non-release, increment version by one and add -SNAPSHOT
   # e.g. 7.3-SNAPSHOT
@@ -23,7 +23,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "ebourg";
     repo = "jsign";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Eg23jy5K4F8pL0qqt7Ut/9NOXR9UfnQD7S7qtX9vAjk=";
   };
 
@@ -38,7 +38,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    install -Dm644 jsign/target/jsign-${version}.jar $out/share/jsign.jar
+    install -Dm644 jsign/target/jsign-${finalAttrs.version}.jar $out/share/jsign.jar
 
     makeWrapper ${jre}/bin/java $out/bin/jsign \
       --prefix LD_LIBRARY_PATH : ${
@@ -64,4 +64,4 @@ maven.buildMavenPackage rec {
     # Build doesn't work, upstream says running the .jar is supported on darwin though
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

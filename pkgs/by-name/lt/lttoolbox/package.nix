@@ -11,14 +11,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lttoolbox";
   version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "apertium";
     repo = "lttoolbox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-g9mWHd9MzVKg/6zF7Fh7owFM3uX9vOQzX0IkrEzr5LY=";
   };
 
@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
     description = "Finite state compiler, processor and helper tools used by apertium";
     homepage = "https://github.com/apertium/lttoolbox";
     maintainers = with lib.maintainers; [ onthestairs ];
-    changelog = "https://github.com/apertium/lttoolbox/releases/tag/v${version}";
+    changelog = "https://github.com/apertium/lttoolbox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # last successful hydra build on darwin was in 2025
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

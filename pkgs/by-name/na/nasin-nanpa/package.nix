@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nasin-nanpa";
   version = "4.0.2";
 
   src = fetchurl {
-    url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${version}/nasin-nanpa-${version}.otf";
+    url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${finalAttrs.version}/nasin-nanpa-${finalAttrs.version}.otf";
     hash = "sha256-eWPcFUo0yE2r4cL3kyFBcdHp0RBKUF3kgYqV5B55w0M=";
   };
 
@@ -38,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
       feathecutie
     ];
   };
-}
+})

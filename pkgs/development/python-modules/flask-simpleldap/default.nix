@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-simpleldap";
   version = "2.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexferl";
     repo = "flask-simpleldap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WcedTtEwaSc3BYFE3L0FZrtKKdbwk7r3qSPP8evtYlc=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kip93 ];
   };
-}
+})

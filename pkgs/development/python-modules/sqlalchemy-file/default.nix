@@ -12,7 +12,7 @@
   sqlmodel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy-file";
   version = "0.7.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "sqlalchemy-file";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xnd1Y7gyh8Kz9Ns5BQTfWUUnlwC9xWqvGntLFUTdsOs=";
   };
 
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "SQLAlchemy extension for attaching files to SQLAlchemy model and uploading them to various storage with Apache Libcloud";
     homepage = "https://github.com/jowilf/sqlalchemy-file";
-    changelog = "https://github.com/jowilf/sqlalchemy-file/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jowilf/sqlalchemy-file/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

@@ -32,12 +32,12 @@
   libGL,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "deezer-enhanced";
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://github.com/duzda/deezer-enhanced/releases/download/v${version}/deezer-enhanced_${version}_amd64.deb";
+    url = "https://github.com/duzda/deezer-enhanced/releases/download/v${finalAttrs.version}/deezer-enhanced_${finalAttrs.version}_amd64.deb";
     hash = "sha256-iMqQ6mqP5/1nKjqH58kfiQERUeOF54gHvAOiI8narKI=";
   };
 
@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation rec {
     mv usr/* $out
 
     ### Wrap deezer-enhanced to include all libraries in the environment
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/${finalAttrs.pname} \
       --set LD_LIBRARY_PATH ${
         lib.makeLibraryPath [
           ### Xorg libs
@@ -125,11 +125,11 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/duzda/deezer-enhanced";
-    changelog = "https://github.com/duzda/deezer-enhanced/releases/tag/v${version}";
+    changelog = "https://github.com/duzda/deezer-enhanced/releases/tag/v${finalAttrs.version}";
     description = "Unofficial application for Deezer with enhanced features";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     mainProgram = "deezer-enhanced";
     maintainers = with lib.maintainers; [ minegameYTB ];
   };
-}
+})

@@ -16,7 +16,7 @@
   webrtc-models,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "go2rtc-client";
   version = "0.4.0";
   pyproject = true;
@@ -26,13 +26,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-go2rtc-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+/ko59AeFl8R/fRNjB5SykFPXm8PR3s6Imccj/bHkJI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   pythonRelaxDeps = [ "orjson" ];
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with go2rtc";
     homepage = "https://github.com/home-assistant-libs/python-go2rtc-client";
-    changelog = "https://github.com/home-assistant-libs/python-go2rtc-client/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/python-go2rtc-client/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

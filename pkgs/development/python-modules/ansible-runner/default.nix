@@ -28,7 +28,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-runner";
   version = "2.4.3";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-runner";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kKG6Jn0RRa6rglUrE8fJmXj+nbeKNUbL/GVWqT20Hfk=";
   };
 
@@ -112,9 +112,9 @@ buildPythonPackage rec {
   meta = {
     description = "Helps when interfacing with Ansible";
     homepage = "https://github.com/ansible/ansible-runner";
-    changelog = "https://github.com/ansible/ansible-runner/releases/tag/${version}";
+    changelog = "https://github.com/ansible/ansible-runner/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "ansible-runner";
   };
-}
+})

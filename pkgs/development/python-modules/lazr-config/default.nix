@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lazr-config";
   version = "3.1";
   pyproject = true;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Create configuration schemas, and process and validate configurations";
     homepage = "https://launchpad.net/lazr.config";
-    changelog = "https://git.launchpad.net/lazr.config/tree/NEWS.rst?h=${version}";
+    changelog = "https://git.launchpad.net/lazr.config/tree/NEWS.rst?h=${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
   };
-}
+})

@@ -6,7 +6,7 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "piexif";
   version = "1.1.3";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hMatoba";
     repo = "Piexif";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-C1067c4vavfypahQqPVFVCo92goUK8Xh4yhLFnBXdao=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

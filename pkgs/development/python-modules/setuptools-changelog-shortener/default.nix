@@ -7,7 +7,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-changelog-shortener";
   version = "0.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fschulze";
     repo = "setuptools-changelog-shortener";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-K8oVcX40K5j2CwQnulK55HykkEXAmOiUg4mZPg5T+YI=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Setuptools-changelog-shortener: add only newest changelog entries to long_description";
     homepage = "https://github.com/fschulze/setuptools-changelog-shortener";
-    changelog = "https://github.com/fschulze/setuptools-changelog-shortener/blob/${src.rev}/README.rst#changelog";
+    changelog = "https://github.com/fschulze/setuptools-changelog-shortener/blob/${finalAttrs.src.rev}/README.rst#changelog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

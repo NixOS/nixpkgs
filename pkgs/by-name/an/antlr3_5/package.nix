@@ -7,11 +7,11 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "antlr";
   version = "3.5.2";
   jar = fetchurl {
-    url = "https://www.antlr3.org/download/antlr-${version}-complete.jar";
+    url = "https://www.antlr3.org/download/antlr-${finalAttrs.version}-complete.jar";
     sha256 = "0srjwxipwsfzmpi0v32d1l5lzk9gi5in8ayg33sq8wyp8ygnbji6";
   };
   src = fetchFromGitHub {
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin,include}
-    cp "$jar" "$out/lib/antlr/antlr-${version}-complete.jar"
+    cp "$jar" "$out/lib/antlr/antlr-${finalAttrs.version}-complete.jar"
     cp runtime/Cpp/include/* $out/include/
 
     echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
-    echo "'${jre}/bin/java' -cp '$out/lib/antlr/antlr-${version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
+    echo "'${jre}/bin/java' -cp '$out/lib/antlr/antlr-${finalAttrs.version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
 
     chmod a+x "$out/bin/antlr"
     ln -s "$out/bin/antlr"{,3}
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.workflow ];
   };
-}
+})

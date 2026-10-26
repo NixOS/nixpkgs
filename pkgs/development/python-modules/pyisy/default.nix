@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyisy";
   version = "3.8.0";
   pyproject = true;
@@ -18,13 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "automicus";
     repo = "PyISY";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-edrZFJYAbV9ImjWak9Ly+YWTXpQc5uHyOMOXbq9WOvA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version_format="{tag}"' 'version="${version}"'
+      --replace 'version_format="{tag}"' 'version="${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to talk to ISY994 from UDI";
     homepage = "https://github.com/automicus/PyISY";
-    changelog = "https://github.com/automicus/PyISY/releases/tag/${src.tag}";
+    changelog = "https://github.com/automicus/PyISY/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

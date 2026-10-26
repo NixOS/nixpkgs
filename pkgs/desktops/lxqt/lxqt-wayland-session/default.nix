@@ -18,14 +18,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-wayland-session";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-wayland-session";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-7wNp1a+JCnFu2h391KUeNRlZqybA5gY3ZCciYbIx5Rs=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

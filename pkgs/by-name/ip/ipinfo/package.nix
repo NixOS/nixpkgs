@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipinfo";
   version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "ipinfo";
     repo = "cli";
-    tag = "${pname}-${version}";
+    tag = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-/0n6DhJlRvTpS7ed0IM9mcKTLuXPx9Y4TMM4xjijKck=";
   };
 
@@ -23,8 +23,8 @@ buildGoModule rec {
   meta = {
     description = "Command Line Interface for the IPinfo API";
     homepage = "https://github.com/ipinfo/cli";
-    changelog = "https://github.com/ipinfo/cli/releases/tag/ipinfo-${version}";
+    changelog = "https://github.com/ipinfo/cli/releases/tag/ipinfo-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

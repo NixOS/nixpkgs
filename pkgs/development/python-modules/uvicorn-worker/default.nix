@@ -10,7 +10,7 @@
   uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uvicorn-worker";
   version = "0.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "uvicorn-worker";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qfk3lkHwuGbRWj4D65EontmEgKtk7ILq6gZCrxcrrJU=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Uvicorn worker for Gunicorn";
     homepage = "https://github.com/Kludex/uvicorn-worker";
-    changelog = "https://github.com/Kludex/uvicorn-worker/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kludex/uvicorn-worker/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

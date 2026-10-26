@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apkinspector";
   version = "1.3.7";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erev0s";
     repo = "apkInspector";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6efXoiyjTEzadZ5aut4lFbjth03Uyw8REIYQYjvWS/c=";
   };
 
@@ -27,9 +27,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module designed to provide detailed insights into the zip structure of APK files";
     homepage = "https://github.com/erev0s/apkInspector";
-    changelog = "https://github.com/erev0s/apkInspector/releases/tag/${src.tag}";
+    changelog = "https://github.com/erev0s/apkInspector/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "apkInspector";
   };
-}
+})

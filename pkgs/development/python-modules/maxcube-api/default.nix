@@ -5,15 +5,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maxcube-api";
   version = "0.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hackercowboy";
-    repo = "python-${pname}";
-    rev = "V${version}";
+    repo = "python-${finalAttrs.pname}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-1Zu+sv0g2gbF2antSDJL6hh5cD8pdzzucJJie90LZoI=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

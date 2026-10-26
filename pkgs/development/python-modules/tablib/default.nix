@@ -16,13 +16,13 @@
   xlwt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tablib";
   version = "3.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eBz6mkLejzPFKv+Ff9CgTkg95P0cU+qqmmrqxiutEd4=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Format-agnostic tabular dataset library";
     homepage = "https://tablib.readthedocs.io/";
-    changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
+    changelog = "https://github.com/jazzband/tablib/raw/v${finalAttrs.version}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

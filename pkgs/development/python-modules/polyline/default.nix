@@ -8,7 +8,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "polyline";
   version = "2.0.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frederickjansen";
     repo = "polyline";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PaQLHz256ZZ+0PdSSeGM+rjubSnT4fQfpD1Uj3JfBt8=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
       essentially a port of https://github.com/mapbox/polyline.
     '';
     homepage = "https://github.com/frederickjansen/polyline";
-    changelog = "https://github.com/frederickjansen/polyline/releases/tag/${src.tag}";
+    changelog = "https://github.com/frederickjansen/polyline/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ersin ];
   };
-}
+})

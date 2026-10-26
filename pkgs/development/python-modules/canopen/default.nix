@@ -8,13 +8,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "canopen";
   version = "2.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IKhLxJizTa3XnOzkZ9O74ZWRwcAqjzkzG8xgZcTYsus=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "CANopen stack implementation";
     homepage = "https://github.com/christiansandberg/canopen/";
-    changelog = "https://github.com/christiansandberg/canopen/releases/tag/v${version}";
+    changelog = "https://github.com/christiansandberg/canopen/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sorki ];
   };
-}
+})

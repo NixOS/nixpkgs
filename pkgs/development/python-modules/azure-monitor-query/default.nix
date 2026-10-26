@@ -9,7 +9,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-monitor-query";
   version = "2.0.0";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "azure_monitor_query";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ewXy/KxPtn/J93p9TF2YoPMJn7c7V8aewbCAdzmUZxs=";
   };
 
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-monitor-query_${version}/sdk/monitor/azure-monitor-query/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-monitor-query_${finalAttrs.version}/sdk/monitor/azure-monitor-query/CHANGELOG.md";
     description = "Microsoft Azure Monitor Query Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/monitor/azure-monitor-query";
     license = lib.licenses.mit;
     maintainers = azure-cli.meta.maintainers;
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "essent-dynamic-pricing";
   version = "0.3.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaapp";
     repo = "py-essent-dynamic-pricing";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-98dh9XNXIVDI0w0/RqEGnDbDpQQoaZz/TvMIl6t3c3o=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jaapp/py-essent-dynamic-pricing/releases/tag/${src.tag}";
+    changelog = "https://github.com/jaapp/py-essent-dynamic-pricing/releases/tag/${finalAttrs.src.tag}";
     description = "Async client for Essent dynamic energy prices";
     homepage = "https://github.com/jaapp/py-essent-dynamic-pricing";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

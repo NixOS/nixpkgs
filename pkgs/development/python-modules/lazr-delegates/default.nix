@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lazr-delegates";
   version = "2.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lazr_delegates";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-rs6yYW5Rtz8yf78SxOwrfXZwy4IL1eT2hRIV+3lsAtw=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = {
     description = "Easily write objects that delegate behavior";
     homepage = "https://launchpad.net/lazr.delegates";
-    changelog = "https://git.launchpad.net/lazr.delegates/tree/NEWS.rst?h=${version}";
+    changelog = "https://git.launchpad.net/lazr.delegates/tree/NEWS.rst?h=${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
   };
-}
+})

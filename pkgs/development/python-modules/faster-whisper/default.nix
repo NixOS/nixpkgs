@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "faster-whisper";
   version = "1.2.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SYSTRAN";
     repo = "faster-whisper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pWVYxC1h0kIhhBxAt9oT2USuvoarlcwwYmaLUJlZZwY=";
   };
 
@@ -66,10 +66,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/${src.tag}";
+    changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/${finalAttrs.src.tag}";
     description = "Faster Whisper transcription with CTranslate2";
     homepage = "https://github.com/SYSTRAN/faster-whisper";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

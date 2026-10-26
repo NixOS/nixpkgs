@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyquaternion";
   version = "0.9.9";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KieranWynn";
     repo = "pyquaternion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L0wT9DFUDRcmmN7OpmIDNvtQWQrM7iFnZt6R2xrJ+3A=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   # The VERSION.txt file is required for setup.py
   # See: https://github.com/KieranWynn/pyquaternion/blob/master/setup.py#L14-L15
   postPatch = ''
-    echo "${version}" > VERSION.txt
+    echo "${finalAttrs.version}" > VERSION.txt
   '';
 
   build-system = [ setuptools ];
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

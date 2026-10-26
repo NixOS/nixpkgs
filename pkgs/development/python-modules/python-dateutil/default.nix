@@ -6,13 +6,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-dateutil";
   version = "2.9.0.post0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-N91UII2n4c2HU4ghfV4A69QXkkn5D7ckN+kaNUWaCtM=";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/dateutil/dateutil/blob/${version}/NEWS";
+    changelog = "https://github.com/dateutil/dateutil/blob/${finalAttrs.version}/NEWS";
     description = "Powerful extensions to the standard datetime module";
     homepage = "https://github.com/dateutil/dateutil/";
     license = with lib.licenses; [
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -9,14 +9,14 @@
   bc,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "capitaine-cursors";
   version = "4";
 
   src = fetchFromGitHub {
     owner = "keeferrourke";
     repo = "capitaine-cursors";
-    rev = "r${version}";
+    rev = "r${finalAttrs.version}";
     sha256 = "0652ydy73x29z7wc6ccyqihmfg4bk0ksl7yryycln6c7i0iqfmc9";
   };
 
@@ -62,4 +62,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ eadwu ];
   };
-}
+})

@@ -18,7 +18,7 @@
   sqlite,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kaleido";
   version = "0.2.1";
   format = "wheel";
@@ -27,20 +27,20 @@ buildPythonPackage rec {
     {
       # This library is so cursed that I have to use fetchurl instead of fetchPypi. I am not happy.
       x86_64-linux = fetchurl {
-        url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${version}-py2.py3-none-manylinux1_x86_64.whl";
+        url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${finalAttrs.version}-py2.py3-none-manylinux1_x86_64.whl";
         hash = "sha256-qiHPG/HHj4+lCp99ReEAPDh709b+CnZ8+780S5W9w6g=";
       };
       aarch64-linux = fetchurl {
-        url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${version}-py2.py3-none-manylinux2014_aarch64.whl";
+        url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${finalAttrs.version}-py2.py3-none-manylinux2014_aarch64.whl";
         hash = "sha256-hFgZhEyAgslGnZwX5CYh+/hcKyN++KhuyKhSf5i2USo=";
       };
       aarch64-darwin = fetchurl {
-        url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${version}-py2.py3-none-macosx_11_0_arm64.whl";
+        url = "https://files.pythonhosted.org/packages/py2.py3/k/kaleido/kaleido-${finalAttrs.version}-py2.py3-none-macosx_11_0_arm64.whl";
         hash = "sha256-u5pdH3EDV9XUMu4kDvZlim0STD5hCTWBe0tC2px4fAU=";
       };
     }
     ."${stdenv.hostPlatform.system}"
-      or (throw "Unsupported system for ${pname}: ${stdenv.hostPlatform.system}");
+      or (throw "Unsupported system for ${finalAttrs.pname}: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = (lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]) ++ [
     makeWrapper
@@ -101,4 +101,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pandapip1 ];
   };
-}
+})

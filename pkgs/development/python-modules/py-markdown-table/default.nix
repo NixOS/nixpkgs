@@ -5,7 +5,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-markdown-table";
   version = "1.3.0";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hvalev";
     repo = "py-markdown-table";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BZDyBDW6Ok9WUb5FEAevVqkYM1S12pvkUCGbZ0XxxV4=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})

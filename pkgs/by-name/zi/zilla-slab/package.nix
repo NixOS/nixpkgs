@@ -5,7 +5,7 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zilla-slab";
   version = "1.002";
 
@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   src = fetchzip {
-    url = "https://github.com/mozilla/zilla-slab/releases/download/v${version}/Zilla-Slab-Fonts-v${version}.zip";
+    url = "https://github.com/mozilla/zilla-slab/releases/download/v${finalAttrs.version}/Zilla-Slab-Fonts-v${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-yOHu+dSWlyI7w1N1teED9R1Fphso2bKAlYDC1KdqBCc=";
   };
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ caugner ];
     platforms = lib.platforms.all;
   };
-}
+})

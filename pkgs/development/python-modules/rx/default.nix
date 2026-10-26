@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rx";
   version = "3.2.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # Use fetchPypi to avoid the updater script to migrate it to `reactivex` which
   # is being developed in the same repository
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Rx";
     hash = "sha256-tlfKK0WqSF2i99z9CfrC5VT3rFH/PC+PL/li7Nlj2Rw=";
   };
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ thanegill ];
     license = lib.licenses.asl20;
   };
-}
+})

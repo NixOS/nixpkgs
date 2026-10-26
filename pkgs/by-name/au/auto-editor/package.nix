@@ -17,14 +17,14 @@
   python3Packages,
 }:
 
-buildNimPackage rec {
+buildNimPackage (finalAttrs: {
   pname = "auto-editor";
   version = "31.7.2";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lbVF0PT48cxnm6hR43ULLx7QWV4nIUPeGUkeOuRr2Y0=";
   };
 
@@ -68,7 +68,7 @@ buildNimPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${src.tag}";
+    changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${finalAttrs.src.tag}";
     description = "Command line application for automatically editing video and audio by analyzing a variety of methods, most notably audio loudness";
     homepage = "https://auto-editor.com/";
     license = lib.licenses.unlicense;
@@ -79,4 +79,4 @@ buildNimPackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

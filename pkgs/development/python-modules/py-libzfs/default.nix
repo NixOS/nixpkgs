@@ -7,7 +7,7 @@
   zfs_2_3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libzfs";
   version = "2.4.1-4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "python3-libzfs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0VSjCwGuo2khGKs7eTRhqpZBiFWGSwyRRyLPew4jAt8=";
   };
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version='1.1'" "version='${version}'"
+      --replace-fail "version='1.1'" "version='${finalAttrs.version}'"
   '';
 
   build-system = [
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     # I don't have a machine to test out, thus only packaged for Linux
     platforms = lib.platforms.linux;
   };
-}
+})

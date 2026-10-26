@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmarty2";
   version = "0.10.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martinssipenko";
     repo = "pysmarty2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-an66TysXGPfKq9bPozwLM3M9E2sq3CC1if/uc47Ns5w=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

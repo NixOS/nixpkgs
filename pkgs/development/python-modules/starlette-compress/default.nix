@@ -14,7 +14,7 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "starlette-compress";
   version = "1.6.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Zaczero";
     repo = "starlette-compress";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JRg0WeMVTYnSh2an+/duSXzAigbjbCZ9NUsSNpXlFg8=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
       Zaczero
     ];
   };
-}
+})

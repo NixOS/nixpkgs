@@ -5,7 +5,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "2.0.1";
   format = "setuptools";
   pname = "path-and-address";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joeyespo";
     repo = "path-and-address";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BpYpMQuyTXGgyR/KENh7KjOuqkP1LkjHrgbUqPR1Ciw=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})

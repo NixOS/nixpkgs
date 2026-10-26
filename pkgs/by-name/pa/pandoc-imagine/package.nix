@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pandoc-imagine";
   version = "0.1.7";
   format = "setuptools";
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "imagine";
     owner = "hertogp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-IJAXrJakKjROF2xi9dsLvGzyGIyB+GDnx/Z7BRlwSqc=";
   };
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     description = ''
       A pandoc filter that will turn code blocks tagged with certain classes
       into images or ASCII art
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "pandoc-imagine";
   };
-}
+})

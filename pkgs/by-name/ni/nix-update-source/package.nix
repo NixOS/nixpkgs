@@ -7,7 +7,7 @@
   runtimeShell,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-update-source";
   version = "0.7.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-+49Yb+rZ3CzFnwEpwj5xrcMUVBiYOJtCk9YeZ15IM/U=";
     owner = "timbertson";
     repo = "nix-update-source";
-    rev = "version-${version}";
+    rev = "version-${finalAttrs.version}";
   };
 
   propagatedBuildInputs = [ nix-prefetch-scripts ];
@@ -76,4 +76,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     mainProgram = "nix-update-source";
   };
-}
+})

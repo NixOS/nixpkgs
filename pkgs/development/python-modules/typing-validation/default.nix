@@ -14,7 +14,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typing-validation";
   version = "1.2.12";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hashberg-io";
     repo = "typing-validation";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-N0VAxlxB96NA01c/y4xtoLKoiqAxfhJJV0y/3w6H9ek=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple library for runtime type-checking";
     homepage = "https://github.com/hashberg-io/typing-validation";
-    changelog = "https://github.com/hashberg-io/typing-validation/releases/tag/${src.tag}";
+    changelog = "https://github.com/hashberg-io/typing-validation/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

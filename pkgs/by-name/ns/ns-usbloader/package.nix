@@ -20,14 +20,14 @@ let
 
   jreWithJavaFX = jre.override { enableJavaFX = true; };
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "ns-usbloader";
   version = "7.2";
 
   src = fetchFromGitHub {
     owner = "developersu";
     repo = "ns-usbloader";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-nZfAZ+IjoYXEWwH9oOhOQ5TOYUNiAGAqhHRhskyx/Vo=";
   };
 
@@ -68,7 +68,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/share/java
-    install -Dm644 target/ns-usbloader-${version}.jar $out/share/java/ns-usbloader.jar
+    install -Dm644 target/ns-usbloader-${finalAttrs.version}.jar $out/share/java/ns-usbloader.jar
 
     mkdir -p $out/lib/udev/rules.d
     install -Dm644 ${./99-ns-usbloader.rules} $out/lib/udev/rules.d/99-ns-usbloader.rules
@@ -117,4 +117,4 @@ maven.buildMavenPackage rec {
     ];
     mainProgram = "ns-usbloader";
   };
-}
+})

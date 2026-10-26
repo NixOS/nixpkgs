@@ -10,7 +10,7 @@
   sentry-sdk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "notus-scanner";
   version = "23.0.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "notus-scanner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZrGomSGeFX07XJnlk/etcq7JVMS7OvCW8O1uUqfqm60=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Helper to create results from local security checks";
     homepage = "https://github.com/greenbone/notus-scanner";
-    changelog = "https://github.com/greenbone/notus-scanner/releases/tag/${src.tag}";
+    changelog = "https://github.com/greenbone/notus-scanner/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

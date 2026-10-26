@@ -5,14 +5,14 @@
   xpdf,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdfdiff";
   version = "0.93";
 
   src = fetchFromGitHub {
     owner = "cascremers";
     repo = "pdfdiff";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NPki/PFm0b71Ksak1mimR4w6J2a0jBCbQDTMQR4uZFI=";
   };
 
@@ -40,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

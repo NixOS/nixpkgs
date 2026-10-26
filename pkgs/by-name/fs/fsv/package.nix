@@ -11,14 +11,14 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsv";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "jabl";
     repo = "fsv";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-fxsA3qcBPvK4H5P4juGTe6eg1lkygvzFpNW36B9lsE4=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rnhmjoj ];
     mainProgram = "fsv";
   };
-}
+})

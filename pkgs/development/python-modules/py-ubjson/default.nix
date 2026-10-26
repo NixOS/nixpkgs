@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-ubjson";
   version = "0.16.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Iotic-Labs";
     repo = "py-ubjson";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y5cKM3P0b68kXCnBCyGjMPoB2A2zbXuryx8h5fpJNrs=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

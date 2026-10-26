@@ -5,13 +5,13 @@
   decorator,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ratelim";
   version = "0.1.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gm0yF34R+aEoMZAcn9pmef1bvqNgWRCCAWcIj1rLsR0=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dgliwka ];
   };
-}
+})

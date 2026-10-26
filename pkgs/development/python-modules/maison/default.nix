@@ -11,7 +11,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maison";
   version = "2.0.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbatten5";
     repo = "maison";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F0mxOeLFDCiPhhKaaUy4qV//Pb2JXCtOLNB1uW2KWZY=";
   };
 
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library to read settings from config files";
     homepage = "https://github.com/dbatten5/maison";
-    changelog = "https://github.com/dbatten5/maison/releases/tag/${src.tag}";
+    changelog = "https://github.com/dbatten5/maison/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "maison";
   };
-}
+})

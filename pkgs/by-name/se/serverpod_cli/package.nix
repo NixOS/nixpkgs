@@ -6,7 +6,7 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
-buildDartApplication rec {
+buildDartApplication (finalAttrs: {
   pname = "serverpod_cli";
   version = "3.4.13";
 
@@ -14,11 +14,11 @@ buildDartApplication rec {
   src = fetchFromGitHub {
     owner = "serverpod";
     repo = "serverpod";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IDIeYvjv4JqhzT39dQiVuNhwQ0STg/EwkwPRFqh5hCw=";
   };
 
-  sourceRoot = "${src.name}/tools/serverpod_cli";
+  sourceRoot = "${finalAttrs.src.name}/tools/serverpod_cli";
 
   dartEntryPoints = {
     "bin/serverpod" = "bin/serverpod_cli.dart";
@@ -62,8 +62,8 @@ buildDartApplication rec {
       database with minimal effort. Serverpod is open-source,
       and you can host your server anywhere.
     '';
-    changelog = "https://raw.githubusercontent.com/serverpod/serverpod/${version}/CHANGELOG.md";
+    changelog = "https://raw.githubusercontent.com/serverpod/serverpod/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ KristijanZic ];
   };
-}
+})

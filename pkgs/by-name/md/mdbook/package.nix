@@ -10,14 +10,14 @@
 let
   version = "0.5.4";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   inherit version;
   pname = "mdbook";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1bUMFxPpb9H/pRdCOX0u8Tn8RPmJElDs7o9t5JtRFuU=";
   };
 
@@ -42,11 +42,11 @@ rustPlatform.buildRustPackage rec {
     description = "Create books from MarkDown";
     mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
-    changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rust-lang/mdBook/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       Frostman
       matthiasbeyer
     ];
   };
-}
+})

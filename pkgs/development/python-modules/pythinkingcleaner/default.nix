@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pythinkingcleaner";
   version = "0.0.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TheRealLink";
     repo = "pythinkingcleaner";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YaHBZwJvgI3uFkFtZ4KWrKKGRPuNhBBrhCvGC65Jsks=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to control ThinkingCleaner devices";
     homepage = "https://github.com/TheRealLink/pythinkingcleaner";
-    changelog = "https://github.com/TheRealLink/pythinkingcleaner/releases/tag/${version}";
+    changelog = "https://github.com/TheRealLink/pythinkingcleaner/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

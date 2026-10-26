@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-tap";
   version = "3.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-tap";
     repo = "pytest-tap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IuVtH1hrynbFDmz7IZ6vef9bAwl8L1eqR9WYQVL6CCA=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Test Anything Protocol (TAP) reporting plugin for pytest";
     homepage = "https://github.com/python-tap/pytest-tap";
-    changelog = "https://github.com/python-tap/pytest-tap/blob/v${version}/docs/releases.rst";
+    changelog = "https://github.com/python-tap/pytest-tap/blob/v${finalAttrs.version}/docs/releases.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})

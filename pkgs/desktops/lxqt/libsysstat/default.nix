@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsysstat";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libsysstat";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CwQz0vaBhMe32xBoSgFkxSwx3tnIHutp9Vs32FvTNVU=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

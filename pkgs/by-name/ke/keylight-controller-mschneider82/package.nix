@@ -15,14 +15,14 @@
   xinput,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "keylight-controller-mschneider82";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "mschneider82";
     repo = "keylight-control";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xC/JRM8vyqAsxPpf37P3pZv6i73s+CLQt6Sh4nMxwzM=";
   };
 
@@ -58,7 +58,7 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "keylight-control";
   };
-}
+})
 
 # Note: Application errors on first executions but works on re-runs.
 

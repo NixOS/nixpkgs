@@ -6,14 +6,14 @@
   prometheus-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uptime-kuma-monitor";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "uptime_kuma_monitor";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-aVoqh5MoWUYV3egn3vzHCNo++jRmHNiiJ1kVCU1BJH4=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

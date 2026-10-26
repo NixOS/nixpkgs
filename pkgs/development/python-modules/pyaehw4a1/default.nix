@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyaehw4a1";
   version = "0.3.9";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bannhead";
     repo = "pyaehw4a1";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-W+rTKprj0nwIAPetzl+N10lu6Zuze8Hrx5x+6OM8Oj8=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

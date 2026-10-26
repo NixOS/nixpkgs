@@ -9,7 +9,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyflume";
   version = "0.8.7";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ChrisMandich";
     repo = "PyFlume";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/8gLKe+6GaPQe0J3YBmOVcAcAcqfrWM7UQCoX+qOEmw=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to work with Flume sensors";
     homepage = "https://github.com/ChrisMandich/PyFlume";
-    changelog = "https://github.com/ChrisMandich/PyFlume/releases/tag/v${version}";
+    changelog = "https://github.com/ChrisMandich/PyFlume/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

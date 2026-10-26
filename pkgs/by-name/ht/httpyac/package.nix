@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "httpyac";
   version = "6.16.7";
 
   src = fetchFromGitHub {
     owner = "anweber";
     repo = "httpyac";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6qhKOb2AJrDhZLRU6vrDfuW9KED+5TLf4hHH/0iADeA=";
   };
 
@@ -28,7 +28,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/anweber/httpyac/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/anweber/httpyac/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Command Line Interface for *.http and *.rest files. Connect with http, gRPC, WebSocket and MQTT";
     homepage = "https://github.com/anweber/httpyac";
     license = lib.licenses.mit;
@@ -36,4 +36,4 @@ buildNpmPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

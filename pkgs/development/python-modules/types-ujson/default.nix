@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-ujson";
   version = "5.10.0.20250822";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_ujson";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-CnlVWOH3hTI3PPPwPzWx8IvGDVLZJBh7l5le41l7oAY=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ centromere ];
   };
-}
+})

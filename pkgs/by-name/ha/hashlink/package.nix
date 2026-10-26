@@ -16,14 +16,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hashlink";
   version = "1.15";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "hashlink";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
   # append default installPhase with library install for haxe
   postInstall =
     let
-      haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
+      haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] finalAttrs.version}";
     in
     ''
       mkdir -p "${haxelibPath}"
-      echo -n "${version}" > "${haxelibPath}/../.current"
+      echo -n "${finalAttrs.version}" > "${haxelibPath}/../.current"
       cp -r ../other/haxelib/* "${haxelibPath}"
     '';
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
       logo
     ];
   };
-}
+})

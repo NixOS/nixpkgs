@@ -17,7 +17,7 @@ let
   frontend = callPackage ./frontend.nix { inherit src version; };
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lauti";
   inherit version src;
 
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.revision=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.revision=${finalAttrs.src.rev}"
   ];
 
   preConfigure = ''
@@ -52,4 +52,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "lauti";
   };
-}
+})

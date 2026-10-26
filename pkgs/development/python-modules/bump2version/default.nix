@@ -7,7 +7,7 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bump2version";
   version = "1.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c4urself";
     repo = "bump2version";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
       all version strings in your source code by the correct increment.
     '';
     homepage = "https://github.com/c4urself/bump2version";
-    changelog = "https://github.com/c4urself/bump2version/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/c4urself/bump2version/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jefflabonte ];
   };
-}
+})

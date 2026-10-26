@@ -6,14 +6,14 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "heapdict";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "HeapDict";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hJX1ez4D2ORtXxssxiyogayjkv1cwEjcCqLhptI+zbY=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };
-}
+})

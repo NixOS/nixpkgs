@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fluent-logger";
   version = "0.11.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-logger-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-i6S5S2ZUwC5gQPdVjefUXrKj43iLIqxd8tdXbMBJNnA=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/fluent/fluent-logger-python";
     license = lib.licenses.asl20;
   };
-}
+})

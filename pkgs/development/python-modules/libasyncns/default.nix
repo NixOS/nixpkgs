@@ -7,13 +7,13 @@
   pkg-config,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libasyncns-python";
   version = "0.7.1";
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://launchpad.net/libasyncns-python/trunk/${version}/+download/libasyncns-python-${version}.tar.bz2";
+    url = "https://launchpad.net/libasyncns-python/trunk/${finalAttrs.version}/+download/libasyncns-python-${finalAttrs.version}.tar.bz2";
     hash = "sha256-D/dX+Nm/HwcFSretLQNDTeTPprnWy0u6KQcnKFY4lOA=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.mic92 ];
     homepage = "https://launchpad.net/libasyncns-python";
   };
-}
+})

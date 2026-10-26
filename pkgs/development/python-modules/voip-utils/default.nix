@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "voip-utils";
   version = "0.5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voip-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m2fcBjmXwI2rCkmILgWdtCVb89Yj5SMaeKiXv2Ep9hg=";
   };
 
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/home-assistant-libs/voip-utils/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant-libs/voip-utils/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Voice over IP Utilities";
     homepage = "https://github.com/home-assistant-libs/voip-utils";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -8,7 +8,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "metaflow";
   version = "2.19.22";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "metaflow";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-e7mYwMKBc1IUpnlg3B6KDwYwA34mw0m0kTvAA3fJFA0=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Open Source AI/ML Platform";
     homepage = "https://metaflow.org/";
-    changelog = "https://github.com/Netflix/metaflow/releases/tag/${src.tag}";
+    changelog = "https://github.com/Netflix/metaflow/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kr7x ];
   };
-}
+})

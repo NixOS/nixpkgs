@@ -8,7 +8,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdoc3";
   version = "0.11.6";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pdoc3";
     repo = "pdoc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-I8EPsjwA9dHOLvM2Oa4dbtB0N4dVczeGfzk+BVyfBcQ=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/pdoc3/pdoc/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/pdoc3/pdoc/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Auto-generate API documentation for Python projects";
     homepage = "https://pdoc3.github.io/pdoc/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "pdoc";
   };
-}
+})

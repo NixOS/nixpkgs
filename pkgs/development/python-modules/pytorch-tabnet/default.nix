@@ -13,7 +13,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-tabnet";
   version = "4.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dreamquark-ai";
     repo = "tabnet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WyNGgAkNn5CaEuHWQ6Fjnvnrp+KONnxUQudd5ckvcsM=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch implementation of TabNet";
     homepage = "https://github.com/dreamquark-ai/tabnet";
-    changelog = "https://github.com/dreamquark-ai/tabnet/releases/tag/v${version}";
+    changelog = "https://github.com/dreamquark-ai/tabnet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

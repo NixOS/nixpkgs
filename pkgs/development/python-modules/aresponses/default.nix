@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aresponses";
   version = "3.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aresponses";
     repo = "aresponses";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RklXlIsbdq46/7D6Hv4mdskunqw1a7SFF09OjhrvMRY=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aresponses" ];
 
   meta = {
-    changelog = "https://github.com/aresponses/aresponses/blob/${src.rev}/README.md#changelog";
+    changelog = "https://github.com/aresponses/aresponses/blob/${finalAttrs.src.rev}/README.md#changelog";
     description = "Asyncio testing server";
     homepage = "https://github.com/aresponses/aresponses";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})

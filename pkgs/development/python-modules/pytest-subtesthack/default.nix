@@ -5,13 +5,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-subtesthack";
   version = "0.2.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-67UEIDycAf3TedKvp0dofct7HtG+H8DD9Tmy3oEnYgA=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/untitaker/pytest-subtesthack";
     license = lib.licenses.publicDomain;
   };
-}
+})

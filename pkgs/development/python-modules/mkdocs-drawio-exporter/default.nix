@@ -10,14 +10,14 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-drawio-exporter";
   version = "0.10.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mkdocs_drawio_exporter";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-LbHnV6WLIgab6CrripZnnqc5kkVyF4E+Ls00h1bXjHc=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
       Exports your Draw.io diagrams at build time for easier embedding into your documentation.
     '';
     homepage = "https://github.com/LukeCarrier/mkdocs-drawio-exporter/";
-    changelog = "https://github.com/LukeCarrier/mkdocs-drawio-exporter/releases/tag/v${version}";
+    changelog = "https://github.com/LukeCarrier/mkdocs-drawio-exporter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ snpschaaf ];
   };
-}
+})

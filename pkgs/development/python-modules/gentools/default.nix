@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gentools";
   version = "1.2.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "gentools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+6KTFxOpwvGOCqy6JU87gOZmDa6MvjR10qES5wIfrjI=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for generators, generator functions, and generator-based coroutines";
     homepage = "https://gentools.readthedocs.io/";
-    changelog = "https://github.com/ariebovenberg/gentools/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ariebovenberg/gentools/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

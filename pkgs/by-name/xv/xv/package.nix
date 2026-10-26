@@ -14,14 +14,14 @@
   libexif,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xv";
   version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "xv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LylTpHTifH/n2vAPlLQooVM3Oox2BJ9eoQYx3USQ/No=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     };
     maintainers = with lib.maintainers; [ galen ];
   };
-}
+})

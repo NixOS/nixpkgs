@@ -8,14 +8,14 @@
   withOpenSCAD ? false,
   openscad,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "solidpython2";
   version = "2.1.3";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "jeff-dh";
     repo = "SolidPython";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3A1vYqIHFUiOH2cEx/XSOien3PmNpMAhLOe3T1yubx4=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ jonboh ];
   };
-}
+})

@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyproject-metadata";
   version = "0.12.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyproject_metadata";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-iAmk32/ggnmzmoiQZpUG7TFY4GF4Vaya/wmPy+dyrkw=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "PEP 621 metadata parsing";
     homepage = "https://github.com/FFY00/python-pyproject-metadata";
-    changelog = "https://github.com/pypa/pyproject-metadata/releases/tag/${version}";
+    changelog = "https://github.com/pypa/pyproject-metadata/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
   };
-}
+})

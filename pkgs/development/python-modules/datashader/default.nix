@@ -22,7 +22,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datashader";
   version = "0.19.1";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "datashader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jP6e7YmLyg3wd8QQZ4Vzr7vRFsRmttjIrEgIFqd6+hQ=";
   };
 
@@ -71,11 +71,11 @@ buildPythonPackage rec {
     description = "Data visualization toolchain based on aggregating into a grid";
     mainProgram = "datashader";
     homepage = "https://datashader.org";
-    changelog = "https://github.com/holoviz/datashader/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/holoviz/datashader/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       nickcao
       locnide
     ];
   };
-}
+})

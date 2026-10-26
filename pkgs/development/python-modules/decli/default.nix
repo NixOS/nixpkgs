@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "decli";
   version = "0.6.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "woile";
     repo = "decli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W4GURqlkHzDwrPAlmiBjc2ZqN//nUK084uRMM7GIme0=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Minimal, easy to use, declarative command line interface tool";
     homepage = "https://github.com/Woile/decli";
-    changelog = "https://github.com/woile/decli/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/woile/decli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

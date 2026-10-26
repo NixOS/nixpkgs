@@ -4,19 +4,19 @@
   fetchMavenArtifact,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite-jdbc";
   version = "3.49.1.0";
 
   src = fetchMavenArtifact {
     groupId = "org.xerial";
     artifactId = "sqlite-jdbc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-XIYJ0so0HeuMb3F3iXS1ukmVx9MtfHyJ2TkqPnLDkpE=";
   };
 
   installPhase = ''
-    install -m444 -D ${src}/share/java/*${pname}-${version}.jar "$out/share/java/${pname}-${version}.jar"
+    install -m444 -D ${finalAttrs.src}/share/java/*${finalAttrs.pname}-${finalAttrs.version}.jar "$out/share/java/${finalAttrs.pname}-${finalAttrs.version}.jar"
   '';
 
   meta = {
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

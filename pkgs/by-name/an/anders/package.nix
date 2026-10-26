@@ -4,7 +4,7 @@
   ocamlPackages,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "anders";
   version = "5.0.0";
 
@@ -13,7 +13,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "groupoid";
     repo = "anders";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-8T/+faVsmgghjxC4SkXQ5B6KDuhVO9NdwMvu7UDlk/0=";
   };
 
@@ -29,4 +29,4 @@ ocamlPackages.buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

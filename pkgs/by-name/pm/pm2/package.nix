@@ -5,14 +5,14 @@
   npm-lockfile-fix,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "pm2";
   version = "6.0.14";
 
   src = fetchFromGitHub {
     owner = "Unitech";
     repo = "pm2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-s/ehFytny7UzXtw+0JhpZuWNAP4/Gl0tac7zK6eZCyM=";
 
     # Requested patch upstream: https://github.com/Unitech/pm2/pull/5985
@@ -26,11 +26,11 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
-    changelog = "https://github.com/Unitech/pm2/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Unitech/pm2/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Node.js production process manager with a built-in load balancer";
     homepage = "https://github.com/Unitech/pm2";
     license = lib.licenses.agpl3Only;
     mainProgram = "pm2";
     maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
-}
+})

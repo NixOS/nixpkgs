@@ -5,14 +5,14 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "retroarch-joypad-autoconfig";
   version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "retroarch-joypad-autoconfig";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j49K3uvi3cJeAfwC1olgmLAAOjK9IAv6fJYuamQJjDk=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     teams = [ lib.teams.libretro ];
     platforms = lib.platforms.all;
   };
-}
+})

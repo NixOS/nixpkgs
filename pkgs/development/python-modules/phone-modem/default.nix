@@ -5,14 +5,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "phone-modem";
   version = "0.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "phone_modem";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-7NahK9l67MdT/dDVXsq+y0Z4cZxZ/WUW2kPpE4Wz6j0=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

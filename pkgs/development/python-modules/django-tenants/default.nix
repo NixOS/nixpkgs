@@ -7,7 +7,7 @@
   psycopg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-tenants";
   version = "3.14.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-tenants";
     repo = "django-tenants";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3A4ClGinyN1t5bt441BVZncpw9Ie7b81M/5Tfsbz4kw=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django tenants using PostgreSQL Schemas";
     homepage = "https://github.com/django-tenants/django-tenants";
-    changelog = "https://github.com/django-tenants/django-tenants/releases/tag/${src.tag}";
+    changelog = "https://github.com/django-tenants/django-tenants/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

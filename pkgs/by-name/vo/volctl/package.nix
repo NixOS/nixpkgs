@@ -11,7 +11,7 @@
   libxfixes,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "volctl";
   version = "0.9.5";
   format = "setuptools";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "buzz";
     repo = "volctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zL1m/DeSOrNkjt9B+8pdy2jUgjSp7tt81UpAueGsIwQ=";
   };
 
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "volctl" ];
 
   preFixup = ''
-    glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    glib-compile-schemas ${glib.makeSchemaPath "$out" "${finalAttrs.pname}-${finalAttrs.version}"}
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib")
   '';
 
@@ -71,4 +71,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.romildo ];
     mainProgram = "volctl";
   };
-}
+})

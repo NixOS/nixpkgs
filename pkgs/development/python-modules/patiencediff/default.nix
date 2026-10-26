@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "patiencediff";
   version = "0.2.19";
   pyproject = true;
@@ -18,12 +18,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "patiencediff";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xynrYf5oCIPk22jqjvXNYTyaXzVaUjRpn35vbx+t8vU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-JW2Oj1oxAVf9K3lyJQpbHqw9eeNYDg3Agb189bduqlI=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
     description = "C implementation of patiencediff algorithm for Python";
     mainProgram = "patiencediff";
     homepage = "https://github.com/breezy-team/patiencediff";
-    changelog = "https://github.com/breezy-team/patiencediff/releases/tag/${src.tag}";
+    changelog = "https://github.com/breezy-team/patiencediff/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wildsebastian ];
   };
-}
+})

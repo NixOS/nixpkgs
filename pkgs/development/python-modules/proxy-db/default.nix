@@ -11,7 +11,7 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proxy-db";
   version = "0.3.1";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Nekmo";
     repo = "proxy-db";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NdbvK2sJKKoWNYsuBaCMWtKEvuMhgyKXcKZXQgTC4bY=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
     description = "Module to manage proxies in a local database";
     mainProgram = "proxy-db";
     homepage = "https://github.com/Nekmo/proxy-db/";
-    changelog = "https://github.com/Nekmo/proxy-db/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/Nekmo/proxy-db/blob/v${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

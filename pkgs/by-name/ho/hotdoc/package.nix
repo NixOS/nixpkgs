@@ -15,13 +15,13 @@
   gst_all_1,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hotdoc";
   version = "0.17.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xNXf9kfwOqh6HS0GA10oGe3QmbkWNeOy7jkIKTV66fw=";
   };
 
@@ -118,4 +118,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

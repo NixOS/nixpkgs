@@ -29,7 +29,7 @@
   uritemplate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-spectacular";
   version = "0.30.0";
   pyproject = true;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CuN3ZmFQBLUlRteXVcWF/oE9vvLcaFAoEbkF3hHQLgQ=";
   };
 
@@ -93,8 +93,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework";
     homepage = "https://github.com/tfranzel/drf-spectacular";
-    changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
+    changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

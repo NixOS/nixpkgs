@@ -9,14 +9,14 @@
 let
   libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nvfancontrol";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "foucault";
     repo = "nvfancontrol";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0WBQSnTYVc3sNmZf/KFzznMg9AVsyaBgdx/IvG1dZAw=";
   };
 
@@ -36,10 +36,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Nvidia dynamic fan control for Linux";
     homepage = "https://github.com/foucault/nvfancontrol";
-    changelog = "https://github.com/foucault/nvfancontrol/releases/tag/${version}";
+    changelog = "https://github.com/foucault/nvfancontrol/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ devins2518 ];
     mainProgram = "nvfancontrol";
   };
-}
+})

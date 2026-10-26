@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "i18next-cli";
   version = "1.75.3";
 
   src = fetchFromGitHub {
     owner = "i18next";
     repo = "i18next-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Mak6+mtE9LjXwNr67pBcKKwsZeXR5lm17CtntvNan2w=";
   };
 
@@ -29,10 +29,10 @@ buildNpmPackage rec {
 
   meta = {
     description = "A unified, high-performance i18next CLI";
-    changelog = "https://github.com/i18next/i18next-cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/i18next/i18next-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://www.locize.com/blog/i18next-cli";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pbek ];
     mainProgram = "i18next-cli";
   };
-}
+})

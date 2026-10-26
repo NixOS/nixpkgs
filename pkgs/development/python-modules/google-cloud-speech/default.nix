@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-speech";
   version = "2.41.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_speech";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-8avwwyYPvzpMPfnt6KgBO7Qr3Vg8u/7rp1LHpPeB0mE=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Speech API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-speech";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-speech-v${version}/packages/google-cloud-speech/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-speech-v${finalAttrs.version}/packages/google-cloud-speech/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

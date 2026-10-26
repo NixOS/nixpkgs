@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyyaml-ft";
   version = "8.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "pyyaml-ft";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GiXYpcAccKgROw144eOPY0gS0xW+3K/jRUl+JnBEaO8=";
   };
 
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/Quansight-Labs/pyyaml-ft/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/Quansight-Labs/pyyaml-ft/blob/${finalAttrs.src.tag}/CHANGES";
     description = "YAML parser and emitter for Python with support for free-threading";
     homepage = "https://github.com/Quansight-Labs/pyyaml-ft";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

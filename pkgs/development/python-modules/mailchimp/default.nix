@@ -6,13 +6,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "2.0.10";
   format = "setuptools";
   pname = "mailchimp";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UieZmQQjOn0unOXqxSJbml+sAxiuUQfj7QnIv4koZ2g=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     homepage = "http://apidocs.mailchimp.com/api/2.0/";
     license = lib.licenses.mit;
   };
-}
+})

@@ -7,13 +7,13 @@
   domdf-python-tools,
   idna,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apeye-core";
   version = "1.1.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "apeye_core";
     hash = "sha256-Xecu09AMybIP6lXlS3q49e+FAOszpTaLwWKlWF4jilU=";
   };
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };
-}
+})

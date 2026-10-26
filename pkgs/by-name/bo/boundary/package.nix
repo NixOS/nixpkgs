@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boundary";
   version = "0.21.2";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       };
     in
     fetchzip {
-      url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
+      url = "https://releases.hashicorp.com/boundary/${finalAttrs.version}/boundary_${finalAttrs.version}_${suffix}.zip";
       inherit hash;
       stripRoot = false;
     };
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://boundaryproject.io/";
-    changelog = "https://github.com/hashicorp/boundary/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hashicorp/boundary/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Enables identity-based access management for dynamic infrastructure";
     longDescription = ''
       Boundary provides a secure way to access hosts and critical systems
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "boundary";
   };
-}
+})

@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "defuddle";
   version = "0.19.5";
 
   src = fetchFromGitHub {
     owner = "kepano";
     repo = "defuddle";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-szAaa2g3BDCi3QiTYqvrCWpBzKl/jenvowA+1c2jpI0=";
   };
 
@@ -29,4 +29,4 @@ buildNpmPackage rec {
     mainProgram = "defuddle";
     maintainers = with lib.maintainers; [ surfaceflinger ];
   };
-}
+})

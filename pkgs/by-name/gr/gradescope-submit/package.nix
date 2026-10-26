@@ -4,14 +4,14 @@
   ocamlPackages,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "gradescope_submit";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "nmittu";
     repo = "gradescope-submit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-BVNXipgw0wz3PRGYvur8jrXZw/6i0fZ+MOZHzXzlFOk=";
   };
 
@@ -33,4 +33,4 @@ ocamlPackages.buildDunePackage rec {
     maintainers = [ ];
     mainProgram = "submit";
   };
-}
+})

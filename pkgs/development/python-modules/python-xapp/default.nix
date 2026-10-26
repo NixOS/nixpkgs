@@ -13,7 +13,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-xapp";
   version = "3.0.3";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-KJ5mzilUg//FvwyhTHjzaUI3661RhN74r5qDIzdDOl8=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

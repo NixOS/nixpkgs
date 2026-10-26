@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydeconz";
   version = "120";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-L9v6j8CFc19TlcFBTm3YCQG1nS78uIUfERB6mfwzMNM=";
   };
 
@@ -51,9 +51,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library wrapping the Deconz REST API";
     homepage = "https://github.com/Kane610/deconz";
-    changelog = "https://github.com/Kane610/deconz/releases/tag/v${version}";
+    changelog = "https://github.com/Kane610/deconz/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pydeconz";
   };
-}
+})

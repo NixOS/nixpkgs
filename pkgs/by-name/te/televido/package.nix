@@ -17,19 +17,19 @@
   clapper-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "televido";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "d-k-bo";
     repo = "televido";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9hoKX1fGjMOlvU3kNx4aLMV++k+nynDIK1UQRrw242k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-D9gchFS5zrD1cttq/gveT7wY2Y/5hfiUrwBa7qHD9cs=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ seineeloquenz ];
     platforms = lib.platforms.linux;
   };
-}
+})

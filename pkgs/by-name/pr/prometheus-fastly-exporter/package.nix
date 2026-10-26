@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fastly-exporter";
   version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "fastly-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zxbbvdgEWbBWKjdWKzu0GTqwE3IOnBYK2WjkSJ8Rb9w=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "fastly-exporter";
   };
-}
+})

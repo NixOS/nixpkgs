@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smhi-pkg";
   version = "1.0.19";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joysoftware";
     repo = "pypi_smhi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8jx2lDBXflnt/Ou+7rnetPEnvpsJ72OWenw8lct+u3M=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for accessing SMHI open forecast data";
     homepage = "https://github.com/joysoftware/pypi_smhi";
-    changelog = "https://github.com/joysoftware/pypi_smhi/releases/tag/${version}";
+    changelog = "https://github.com/joysoftware/pypi_smhi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

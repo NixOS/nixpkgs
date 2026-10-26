@@ -16,13 +16,13 @@
 let
   boost' = boost187;
 in
-stdenv.mkDerivation rec {
-  name = "${pname}-${lib.optionalString contribPlugins "full-"}${version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${lib.optionalString contribPlugins "full-"}${finalAttrs.version}";
   pname = "codeblocks";
   version = "25.03";
 
   src = fetchurl {
-    url = "mirror://sourceforge/codeblocks/Sources/${version}/codeblocks_${version}.tar.xz";
+    url = "mirror://sourceforge/codeblocks/Sources/${finalAttrs.version}/codeblocks_${finalAttrs.version}.tar.xz";
     hash = "sha256-sPaqWQjTNtf0H5V2skGKx9J++8WSgqqMkXHYjOp0BJ4=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     homepage = "http://www.codeblocks.org";
     license = lib.licenses.gpl3;
   };
-}
+})

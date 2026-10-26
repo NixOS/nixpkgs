@@ -7,7 +7,7 @@
   texinfo,
   mpfr,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpfi";
   version = "1.5.4";
 
@@ -20,12 +20,16 @@ stdenv.mkDerivation rec {
     # Conditional to allow auto-updaters to try new releases
     # TODO: remove the conditional after an upstream update
     # rev = version;
-    rev = if version == "1.5.4" then "feab26bc54529417af983950ddbffb3a4c334d4f" else version;
+    rev =
+      if finalAttrs.version == "1.5.4" then
+        "feab26bc54529417af983950ddbffb3a4c334d4f"
+      else
+        finalAttrs.version;
 
     hash = "sha256-aj/QmJ38ifsW36JFQcbp55aIQRvOpiqLHwEh/aFXsgo=";
   };
 
-  sourceRoot = "${src.name}/mpfi";
+  sourceRoot = "${finalAttrs.src.name}/mpfi";
 
   patches = [
     (fetchpatch {
@@ -49,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

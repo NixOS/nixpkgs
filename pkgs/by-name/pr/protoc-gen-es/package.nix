@@ -5,14 +5,14 @@
   npm-lockfile-fix,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "protoc-gen-es";
   version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protobuf-es";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+na4Gfnl+xfyeDO5r1WHgmG9SpDwamhfJvoFchAzhns=";
 
     postFetch = ''
@@ -50,7 +50,7 @@ buildNpmPackage rec {
   meta = {
     description = "Protobuf plugin for generating ECMAScript code";
     homepage = "https://github.com/bufbuild/protobuf-es";
-    changelog = "https://github.com/bufbuild/protobuf-es/releases/tag/v${version}";
+    changelog = "https://github.com/bufbuild/protobuf-es/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       felschr
@@ -58,4 +58,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "protoc-gen-es";
   };
-}
+})

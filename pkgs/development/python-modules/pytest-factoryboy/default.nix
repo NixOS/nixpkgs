@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-factoryboy";
   version = "2.8.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-factoryboy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9dMsUujMCk89Ze4H9VJRS+ihjk0PAxKb8xqlw0+ROEI=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ winpat ];
     license = lib.licenses.mit;
   };
-}
+})

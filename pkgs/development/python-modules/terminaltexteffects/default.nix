@@ -5,14 +5,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "terminaltexteffects";
   version = "0.15.0";
   pyproject = true;
 
   # no tests on pypi, no tags on github
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-9LMchr+pQ9W/Oyxey/rqDeZe1KlRAoxA+OTLVO/QZDk=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "tte";
   };
-}
+})

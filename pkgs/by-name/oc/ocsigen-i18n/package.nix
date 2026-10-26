@@ -4,7 +4,7 @@
   ocamlPackages,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "ocsigen-i18n";
   version = "4.0.0";
 
@@ -13,7 +13,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-i18n";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NIl1YUTws8Ff4nrqdhU7oS/TN0lxVQgrtyEZtpS1ojM=";
   };
 
@@ -23,5 +23,4 @@ ocamlPackages.buildDunePackage rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
-
-}
+})

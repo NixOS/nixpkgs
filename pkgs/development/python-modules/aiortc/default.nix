@@ -19,7 +19,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiortc";
   version = "1.15.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiortc";
     repo = "aiortc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XuqitZv0VJmbcvLZK3tLsN0TLfjujL35mbcyBche5SQ=";
   };
 
@@ -73,4 +73,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gesperon ];
   };
-}
+})

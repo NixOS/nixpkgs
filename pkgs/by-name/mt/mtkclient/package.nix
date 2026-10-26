@@ -8,7 +8,7 @@
   udevCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mtkclient";
   version = "2.1.4.1";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bkerler";
     repo = "mtkclient";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8Y9tyw+dmhhc4tFo3slr4wQIPXIrmIk/wuCK4aM6oLY=";
   };
 
@@ -85,4 +85,4 @@ python3Packages.buildPythonApplication rec {
     ];
     maintainers = [ lib.maintainers.timschumi ];
   };
-}
+})

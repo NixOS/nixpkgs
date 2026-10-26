@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-buildDubPackage rec {
+buildDubPackage (finalAttrs: {
   pname = "luneta";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "fbeline";
     repo = "luneta";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pYE8hccXT87JIMh71PtXzVQBegTzU7bdpVEaV2VkaEk=";
   };
 
@@ -34,11 +34,11 @@ buildDubPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/fbeline/luneta/releases/tag/${src.rev}";
+    changelog = "https://github.com/fbeline/luneta/releases/tag/${finalAttrs.src.rev}";
     description = "Interactive filter and fuzzy finder for the command-line";
     homepage = "https://github.com/fbeline/luneta";
     license = lib.licenses.gpl2Only;
     mainProgram = "luneta";
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

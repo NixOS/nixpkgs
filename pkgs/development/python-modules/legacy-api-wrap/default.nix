@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "legacy-api-wrap";
   version = "1.5";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flying-sheep";
     repo = "legacy-api-wrap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UvOkVNtH3MbD+ExF0dQ+XAfDx9v7YD3GCNUsEaH7zzM=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wrap legacy APIs in python projects";
     homepage = "https://github.com/flying-sheep/legacy-api-wrap";
-    changelog = "https://github.com/flying-sheep/legacy-api-wrap/releases/tag/${src.tag}";
+    changelog = "https://github.com/flying-sheep/legacy-api-wrap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

@@ -7,13 +7,13 @@
   functiontrace-server,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "functiontrace";
   version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dVJQ28Z+fohSQOk0rXCCKrhYmBL7QB/CGO/9pBhabFE=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
       tehmatt
     ];
   };
-}
+})

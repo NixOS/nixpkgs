@@ -6,14 +6,14 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-script";
   version = "2.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-Script";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ZCWWPZEFTPzBhYBxQccxSpxa1GMlkRvSTctIm9AWHGU=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ekey-bionyxpy";
   version = "1.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "richardpolzer";
     repo = "ekey-bionyx-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-V4xYv+mjU4QO/+hOq3TH8b/X9PVP95i6apYkcqVDIWY=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interact with the bionyx third party API of the ekey biometric systems";
     homepage = "https://github.com/richardpolzer/ekey-bionyx-api";
-    changelog = "https://github.com/richardpolzer/ekey-bionyx-api/releases/tag/${version}";
+    changelog = "https://github.com/richardpolzer/ekey-bionyx-api/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

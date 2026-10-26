@@ -10,7 +10,7 @@
   khanaa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wunsen";
   version = "0.0.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cakimpei";
     repo = "wunsen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lMEhtcWG+S3vAz+Y/qDxhaZslsO0pbs5xUn5QgZNs2U=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Transliterate/transcribe other languages into Thai Topics";
     homepage = "https://github.com/cakimpei/wunsen";
-    changelog = "https://github.com/cakimpei/wunsen/releases/tag/v${version}";
+    changelog = "https://github.com/cakimpei/wunsen/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

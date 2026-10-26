@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyduotecno";
   version = "2024.10.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "pyDuotecno";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-I/ZA2ooa6nunUr/4K+FWAGMOdcJDfGzE99jJ8zTe2Po=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Duotecno IP interfaces";
     homepage = "https://github.com/Cereal2nd/pyDuotecno";
-    changelog = "https://github.com/Cereal2nd/pyDuotecno/releases/tag/${version}";
+    changelog = "https://github.com/Cereal2nd/pyDuotecno/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

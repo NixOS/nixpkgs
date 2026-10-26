@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sunweg";
   version = "3.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rokam";
     repo = "sunweg";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-T67eH5WjS7J2pcNjq9psNmD4MwMfH+HRvk9llqI3FoQ=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to access the WEG solar energy platform";
     homepage = "https://github.com/rokam/sunweg";
-    changelog = "https://github.com/rokam/sunweg/releases/tag/${version}";
+    changelog = "https://github.com/rokam/sunweg/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

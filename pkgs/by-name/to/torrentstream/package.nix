@@ -5,18 +5,18 @@
   dotnetCorePackages,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "torrentstream";
   version = "1.0.1.11";
 
   src = fetchFromGitHub {
     owner = "trueromanus";
     repo = "TorrentStream";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3lmQWx00Ulp0ZyQBEhFT+djHBi84foMlWGJEp/UOGek=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -42,4 +42,4 @@ buildDotnetModule rec {
     mainProgram = "TorrentStream";
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
   };
-}
+})

@@ -13,12 +13,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsound";
   version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gsound/${lib.versions.majorMinor version}/gsound-${version}.tar.xz";
+    url = "mirror://gnome/sources/gsound/${lib.versions.majorMinor finalAttrs.version}/gsound-${finalAttrs.version}.tar.xz";
     sha256 = "06l80xgykj7x1kqkjvcq06pwj2rmca458zvs053qc55x3sg06bfa";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

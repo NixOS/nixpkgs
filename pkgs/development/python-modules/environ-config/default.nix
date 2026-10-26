@@ -10,7 +10,7 @@
   pytestCheckHook,
   moto,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "environ-config";
   version = "26.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "environ-config";
     owner = "hynek";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-baj61mS4rSLMngrAdmSwupN/2ewo/GDwbZqFTr8fVuE=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Application Configuration With Environment Variables";
     homepage = "https://github.com/hynek/environ-config";
-    changelog = "https://github.com/hynek/environ-config/releases/tag/${version}";
+    changelog = "https://github.com/hynek/environ-config/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lykos153 ];
   };
-}
+})

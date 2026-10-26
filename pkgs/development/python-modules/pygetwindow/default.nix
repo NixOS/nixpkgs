@@ -4,14 +4,14 @@
   fetchPypi,
   pyrect,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygetwindow";
   version = "0.0.9";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyGetWindow";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-F4lDVefSswXNgy1xdwg4QBfBaYqQziT29/vwJC3Qpog=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

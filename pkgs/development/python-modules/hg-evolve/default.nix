@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hg-evolve";
   version = "11.1.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hg_evolve";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ccFq7sASkOkFJ4Or5dhZpfKR0FdZAmbziDfK3FGcaYM=";
   };
 
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

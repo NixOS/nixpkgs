@@ -16,14 +16,14 @@ let
     ++ extraPerlPackages
   );
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "perl-debug-adapter";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "Nihilus118";
     repo = "perl-debug-adapter";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IXXKhk4rzsWSPA0RT0L3CZuKlgTWtweZ4dQtruTigRs=";
   };
 
@@ -44,9 +44,9 @@ buildNpmPackage rec {
   meta = {
     description = "Debug adapter, invokes perl -d and handles communication with VS Code or other editors";
     homepage = "https://github.com/Nihilus118/perl-debug-adapter";
-    changelog = "https://github.com/Nihilus118/perl-debug-adapter/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Nihilus118/perl-debug-adapter/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "perl-debug-adapter";
   };
-}
+})

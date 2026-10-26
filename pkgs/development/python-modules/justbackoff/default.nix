@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "justbackoff";
   version = "0.6.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexferl";
     repo = "justbackoff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1HxBY9zW4Px7fgruMNBO2e5BDAg/+dQN+WMR+ro08iQ=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

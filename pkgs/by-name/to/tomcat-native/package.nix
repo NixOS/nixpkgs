@@ -7,16 +7,16 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tomcat-native";
   version = "2.0.16";
 
   src = fetchurl {
-    url = "mirror://apache/tomcat/tomcat-connectors/native/${version}/source/${pname}-${version}-src.tar.gz";
+    url = "mirror://apache/tomcat/tomcat-connectors/native/${finalAttrs.version}/source/${finalAttrs.pname}-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-eF/dmaIC9EKwhbxxjS++s5O4WXmqSilDMCEYxKzWhjA=";
   };
 
-  sourceRoot = "${pname}-${version}-src/native";
+  sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}-src/native";
 
   buildInputs = [
     apr
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aanderse ];
   };
-}
+})

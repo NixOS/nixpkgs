@@ -5,13 +5,13 @@
   rpi-gpio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pad4pi";
   version = "1.1.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+oVYlqF5PQAFz4EO1ap6pjmYTLg9xQy6UbQja4utt2Q=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

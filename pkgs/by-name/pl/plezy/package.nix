@@ -63,7 +63,7 @@ let
     );
   };
 
-  linux = flutter347.buildFlutterApplication rec {
+  linux = flutter347.buildFlutterApplication (finalAttrs: {
     inherit pname version src;
 
     # upstream targets 3.12 until its freezed 4 migration: https://github.com/edde746/plezy/blob/2.21.0/pubspec.yaml#L6-L9
@@ -132,7 +132,7 @@ let
     passthru.updateScript = ./update.sh;
 
     inherit meta;
-  };
+  });
 
   darwin = stdenvNoCC.mkDerivation {
     inherit pname version;

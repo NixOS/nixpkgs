@@ -4,18 +4,18 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "htmlunit-driver-standalone";
   version = "2.27";
 
   src = fetchurl {
-    url = "https://github.com/SeleniumHQ/htmlunit-driver/releases/download/${version}/htmlunit-driver-${version}-with-dependencies.jar";
+    url = "https://github.com/SeleniumHQ/htmlunit-driver/releases/download/${finalAttrs.version}/htmlunit-driver-${finalAttrs.version}-with-dependencies.jar";
     sha256 = "1sd3cwpamcbq9pv0mvcm8x6minqrlb4i0r12q3jg91girqswm2dp";
   };
 
   dontUnpack = true;
 
-  installPhase = "install -D $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar";
+  installPhase = "install -D $src $out/share/lib/${finalAttrs.pname}-${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.jar";
 
   meta = {
     homepage = "https://github.com/SeleniumHQ/htmlunit-driver";
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
   };
-}
+})

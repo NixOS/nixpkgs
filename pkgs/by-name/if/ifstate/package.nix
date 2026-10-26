@@ -54,7 +54,7 @@ let
       runHook postBuild
     '';
   };
-  self = python3Packages.buildPythonApplication rec {
+  self = python3Packages.buildPythonApplication (finalAttrs: {
     pname = "ifstate";
     inherit version src;
 
@@ -113,12 +113,12 @@ let
     meta = {
       description = "Manage host interface settings in a declarative manner";
       homepage = "https://ifstate.net";
-      changelog = "https://codeberg.org/liske/ifstate/src/tag/${src.tag}/CHANGELOG.md";
+      changelog = "https://codeberg.org/liske/ifstate/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
       platforms = lib.platforms.linux;
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ marcel ];
       mainProgram = "ifstatecli";
     };
-  };
+  });
 in
 self

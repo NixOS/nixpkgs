@@ -21,7 +21,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yamlfix";
   version = "1.19.1";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+bD/kKOI19zptPhO6vB2Q0bQWjkBr+vgqBgAyaoSLJc=";
   };
 
@@ -69,9 +69,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python YAML formatter that keeps your comments";
     homepage = "https://github.com/lyz-code/yamlfix";
-    changelog = "https://github.com/lyz-code/yamlfix/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/lyz-code/yamlfix/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ koozz ];
     mainProgram = "yamlfix";
   };
-}
+})

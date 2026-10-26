@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "midiutil";
   version = "1.2.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "MIDIUtil";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-efqYO9HvxgeF9oqP54+o9FuNfsWJi/fLfz9/MzbWqQo=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,7 +6,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybbox";
   version = "0.0.5-alpha";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HydrelioxGitHub";
     repo = "pybbox";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xealTlH/rMlqEnENZXq0/EVDlF8lc/B8qeUmQPM6fUc=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

@@ -8,7 +8,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onetimepass";
   version = "1.0.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tadeck";
     repo = "onetimepass";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cHJg3vdUpWp5+HACIeTGrqkHKUDS//aQICSjPKgwu3I=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "One-time password library for HMAC-based (HOTP) and time-based (TOTP) passwords";
     homepage = "https://github.com/tadeck/onetimepass";
-    changelog = "https://github.com/tadeck/onetimepass/releases/tag/v${version}";
+    changelog = "https://github.com/tadeck/onetimepass/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
   };
-}
+})

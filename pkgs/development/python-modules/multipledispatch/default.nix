@@ -5,13 +5,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "multipledispatch";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XIOZFUZcaCBsPpxHM1eQghbCg4O0JTYeXRRFlL+Fp+A=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     description = "Relatively sane approach to multiple dispatch in Python";
     license = lib.licenses.bsd3;
   };
-}
+})

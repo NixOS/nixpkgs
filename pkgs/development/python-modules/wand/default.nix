@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wand";
   version = "0.7.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emcconville";
     repo = "wand";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1ZkvJxlv47rQ2BOBnEWPczcjIM2muywemrxwY2ZN2UA=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   passthru.imagemagick = imagemagickBig;
 
   meta = {
-    changelog = "https://docs.wand-py.org/en/${version}/changes.html";
+    changelog = "https://docs.wand-py.org/en/${finalAttrs.version}/changes.html";
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

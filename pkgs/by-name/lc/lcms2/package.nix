@@ -7,12 +7,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcms2";
   version = "2.19.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lcms/lcms2-${version}.tar.gz";
+    url = "mirror://sourceforge/lcms/lcms2-${finalAttrs.version}.tar.gz";
     hash = "sha256-v8VPe6tZ+8khASAUqAMuTLpKvUbbR9RrdkFqjAsoFcg=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -22,7 +22,7 @@
 let
   inherit (python) stdenv;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pythran";
   version = "0.19.0";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+ZHp6cExAi1dFPS+LhNRyFCUhNeDdtAPSWRT5T03dcg=";
   };
 
@@ -77,10 +77,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.tag}/Changelog";
+    changelog = "https://github.com/serge-sans-paille/pythran/blob/${finalAttrs.src.tag}/Changelog";
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

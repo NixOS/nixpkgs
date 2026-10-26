@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "eslint_d";
   version = "15.0.3";
 
   src = fetchFromGitHub {
     owner = "mantoni";
     repo = "eslint_d.js";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pcwU4WB1aIHYV50DMbuobsh3dQm+IJ6ByMUz4zvnwHE=";
   };
 
@@ -23,7 +23,7 @@ buildNpmPackage rec {
 
   passthru.tests.version = testers.testVersion {
     package = eslint_d;
-    version = src.rev;
+    version = finalAttrs.src.rev;
   };
 
   meta = {
@@ -33,4 +33,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.ehllie ];
     mainProgram = "eslint_d";
   };
-}
+})

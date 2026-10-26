@@ -22,12 +22,12 @@
   kmod,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-openconnect";
   version = "1.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/NetworkManager-openconnect-${version}.tar.xz";
+    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor finalAttrs.version}/NetworkManager-openconnect-${finalAttrs.version}.tar.xz";
     sha256 = "hEtr9k7K25e0pox3bbiapebuflm9JLAYAihAaGMTZGQ=";
   };
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       attrPath = "networkmanager-openconnect";
       versionPolicy = "odd-unstable";
     };
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     inherit (networkmanager.meta) maintainers teams platforms;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

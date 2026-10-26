@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pan-python";
   version = "0.25.0";
   format = "wheel";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for Palo Alto Networks Next-Generation Firewalls, WildFire and AutoFocus";
     homepage = "https://github.com/kevinsteves/pan-python";
-    changelog = "https://github.com/kevinsteves/pan-python/releases/tag/v${version}";
+    changelog = "https://github.com/kevinsteves/pan-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

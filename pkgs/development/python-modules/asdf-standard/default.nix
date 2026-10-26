@@ -5,14 +5,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asdf-standard";
   version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "asdf_standard";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-WULK99FD859y9jRIQ3PH9AzkhXHR2zwnHhOFjjP+WWY=";
   };
 
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standards document describing ASDF";
     homepage = "https://github.com/asdf-format/asdf-standard";
-    changelog = "https://github.com/asdf-format/asdf-standard/releases/tag/${version}";
+    changelog = "https://github.com/asdf-format/asdf-standard/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

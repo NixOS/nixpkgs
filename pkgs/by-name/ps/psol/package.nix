@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "psol";
   version = "1.13.35.2"; # Latest stable, 2018-02-05
 
   src = fetchurl {
-    url = "https://dl.google.com/dl/page-speed/psol/${version}-x64.tar.gz";
+    url = "https://dl.google.com/dl/page-speed/psol/${finalAttrs.version}-x64.tar.gz";
     hash = "sha256-3zujyPxU4ThF0KHap6bj2YMSbCORKFG7+Lo1vmRqQ08=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     # TODO: Build PSOL from source to support more platforms.
     platforms = lib.platforms.linux;
   };
-}
+})

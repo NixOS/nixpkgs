@@ -13,7 +13,7 @@
   typst,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "touying";
   version = "0.14.4";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "touying-typ";
     repo = "touying-exporter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3e5LWI3ysklTj9WY0PF4+7spEARZYel/aS1R+elfMp0=";
   };
 
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Export presentation slides in various formats for Touying";
-    changelog = "https://github.com/touying-typ/touying-exporter/releases/tag/${version}";
+    changelog = "https://github.com/touying-typ/touying-exporter/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/touying-typ/touying-exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "touying";
   };
-}
+})

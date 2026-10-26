@@ -27,14 +27,14 @@ assert portaudioSupport -> portaudio != null;
 # audio backends are mutually exclusive
 assert !(pulseaudioSupport && portaudioSupport);
 
-gnuradioMinimal.pkgs.mkDerivation rec {
+gnuradioMinimal.pkgs.mkDerivation (finalAttrs: {
   pname = "gqrx";
   version = "2.17.7";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uvKIxppnNkQge0QE5d1rw0qKo1fT8jwJPTiHilYaT28=";
   };
 
@@ -108,4 +108,4 @@ gnuradioMinimal.pkgs.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

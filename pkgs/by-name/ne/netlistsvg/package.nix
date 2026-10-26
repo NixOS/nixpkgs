@@ -7,14 +7,14 @@
   yosys,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "netlistsvg";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "nturley";
     repo = "netlistsvg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H37zhjfv7c/TV+pAk70eDiE6ZQ9JjZq1TFvac6OOKBk=";
   };
 
@@ -58,4 +58,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

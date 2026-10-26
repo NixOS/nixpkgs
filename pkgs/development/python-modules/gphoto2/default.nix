@@ -9,7 +9,7 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gphoto2";
   version = "2.6.4";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-gphoto2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fxrgHFVfTs7PZFHafld5uNmvaqW2uLAs01GatdxtbAU=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gphoto2" ];
 
   meta = {
-    changelog = "https://github.com/jim-easterbrook/python-gphoto2/blob/${src.tag}/CHANGELOG.txt";
+    changelog = "https://github.com/jim-easterbrook/python-gphoto2/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     description = "Python interface to libgphoto2";
     homepage = "https://github.com/jim-easterbrook/python-gphoto2";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

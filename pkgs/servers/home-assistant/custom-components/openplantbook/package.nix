@@ -8,15 +8,15 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "olen";
   domain = "openplantbook";
   version = "1.6.0";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "home-assistant-openplantbook";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Lk+dyrBwTqRil64fVm28bhN+q57bA5U9FpX2wFf/g8I=";
   };
 
@@ -38,8 +38,8 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Integration to search and fetch data from Openplantbook.io";
     homepage = "https://github.com/Olen/home-assistant-openplantbook";
-    changelog = "https://github.com/Olen/home-assistant-openplantbook/releases/tag/${src.tag}";
+    changelog = "https://github.com/Olen/home-assistant-openplantbook/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.gpl3Only;
   };
-}
+})

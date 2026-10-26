@@ -14,13 +14,13 @@
   bash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clustershell";
   version = "1.10.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-snrwuqnRsQrGonKXALA+WieWyDjLtqrxkCaYImq56oo=";
   };
 
@@ -93,4 +93,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.alexvorobiev ];
   };
-}
+})

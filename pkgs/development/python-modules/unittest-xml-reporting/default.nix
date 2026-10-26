@@ -9,7 +9,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unittest-xml-reporting";
   version = "4.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xmlrunner";
     repo = "unittest-xml-reporting";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9gV/DX/G12bthonBJlMDKaS6Iwt9nF5DrNG33KK7KbU=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Unittest-based test runner with Ant/JUnit like XML reporting";
     homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
-    changelog = "https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/${src.tag}";
+    changelog = "https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ rprospero ];
   };
-}
+})

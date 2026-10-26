@@ -38,7 +38,7 @@ let
     hash = "sha256-dpuRIMqDQ+oKrvK1VAQxPG6vijZMxT6MB8xOswPwv5o=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymoo";
   version = "0.6.1.6";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tLkXH0Ig/yWZbaFwzsdIdmbnlNd9UAruVSziaL3iW4U=";
   };
 
@@ -135,8 +135,8 @@ buildPythonPackage rec {
     description = "Multi-objective Optimization in Python";
     homepage = "https://pymoo.org/";
     downloadPage = "https://github.com/anyoptimization/pymoo";
-    changelog = "https://github.com/anyoptimization/pymoo/releases/tag/${src.tag}";
+    changelog = "https://github.com/anyoptimization/pymoo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

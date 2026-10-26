@@ -10,7 +10,7 @@
   texliveSmall,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylatex";
   version = "1.4.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JelteF";
     repo = "PyLaTeX";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gZKMYGMp7bzDY5+Xx9h1AFP4l0Zd936fDfSXyW5lY1k=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MayNiklas ];
   };
-}
+})

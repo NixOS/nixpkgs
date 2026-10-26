@@ -7,7 +7,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmb";
   version = "1.2.15";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miketeo";
     repo = "pysmb";
-    tag = "pysmb-${version}";
+    tag = "pysmb-${finalAttrs.version}";
     hash = "sha256-Unc5CfLOyaoy25x7vhe3wqO2+bocvCbu3yrDwX3K06U=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Experimental SMB/CIFS library to support file sharing between Windows and Linux machines";
     homepage = "https://pysmb.readthedocs.io/";
-    changelog = "https://github.com/miketeo/pysmb/releases/tag/${src.tag}";
+    changelog = "https://github.com/miketeo/pysmb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = [ ];
   };
-}
+})

@@ -12,7 +12,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swagger-ui-py";
   version = "25.7.1";
   pyproject = true;
@@ -20,11 +20,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PWZER";
     repo = "swagger-ui-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yPGt7EG8KvGoI7Unz0E7fn7nG9Ei/h8Q3TDKnuVVRkQ=";
   };
 
-  env.VERSION = version;
+  env.VERSION = finalAttrs.version;
 
   build-system = [
     setuptools
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/PWZER/swagger-ui-py/releases/tag/${src.tag}";
+    changelog = "https://github.com/PWZER/swagger-ui-py/releases/tag/${finalAttrs.src.tag}";
     description = "Swagger UI for Python web framework, such Tornado, Flask and Sanic. https://pwzer.github.io/swagger-ui-py";
     homepage = "https://github.com/PWZER/swagger-ui-py";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

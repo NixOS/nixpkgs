@@ -12,7 +12,7 @@
   structlog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-google-analytics-app";
   version = "6.0.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praekeltfoundation";
     repo = "django-google-analytics";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0KLfGZY8qq5JGb+LJXpQRS76+qXtrf/hv6QLenm+BhQ=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django Google Analytics brings the power of server side/non-js Google Analytics to your Django projects";
     homepage = "https://github.com/praekeltfoundation/django-google-analytics/";
-    changelog = "https://github.com/praekeltfoundation/django-google-analytics/releases/tag/${version}";
+    changelog = "https://github.com/praekeltfoundation/django-google-analytics/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

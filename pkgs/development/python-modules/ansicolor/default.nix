@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansicolor";
   version = "0.3.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numerodix";
     repo = "ansicolor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ndChpcHjsGWmlw0uvPF0RvRvi99b3cnajHRXudmQXBw=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

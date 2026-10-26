@@ -13,7 +13,7 @@
   assay,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skyfield";
   version = "1.54";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skyfielders";
     repo = "python-skyfield";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-oZEmc8BVqs3eSaqrjyR/wQu1WTLv4A0a/dpEZduCXqk=";
   };
 
@@ -65,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zane ];
   };
-}
+})

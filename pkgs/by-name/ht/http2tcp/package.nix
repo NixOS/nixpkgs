@@ -5,12 +5,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "http2tcp";
   version = "0.5";
 
   src = fetchurl {
-    url = "https://www.linta.de/~aehlig/http2tcp/${pname}-${version}.tar.gz";
+    url = "https://www.linta.de/~aehlig/http2tcp/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "34fb83c091689dee398ca80db76487e0c39abb17cef390d845ffd888009a5caa";
   };
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/{bin,share/${pname}}
+    mkdir -p $out/{bin,share/${finalAttrs.pname}}
     cp http2tcp* $out/bin
-    cp Protocol $out/share/${pname}/
+    cp Protocol $out/share/${finalAttrs.pname}/
   '';
 
   meta = {
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };
-}
+})

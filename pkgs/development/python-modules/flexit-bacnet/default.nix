@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flexit-bacnet";
   version = "2.2.3";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "piotrbulinski";
     repo = "flexit_bacnet";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MudBn+ki/jqeFK1iz/vAXaXkkddLThO+1T4BXFJ90lk=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/piotrbulinski/flexit_bacnet/releases/tag/${version}";
+    changelog = "https://github.com/piotrbulinski/flexit_bacnet/releases/tag/${finalAttrs.version}";
     description = "Client BACnet library for Flexit Nordic series of air handling units";
     homepage = "https://github.com/piotrbulinski/flexit_bacnet";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

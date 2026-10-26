@@ -4,13 +4,13 @@
   buildPythonPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorboard_plugin_wit";
   version = "1.7.0";
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     python = "py3";
     hash = "sha256-7ndfBIIRhckNmg6cVpcO5D18QUA762YpOFs5UXEpaFs=";
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

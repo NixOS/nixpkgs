@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jtds";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/jtds/${version}/${pname}-${version}-dist.zip";
+    url = "mirror://sourceforge/jtds/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}-dist.zip";
     sha256 = "sha256-eV0P8QdjfuHXzYssH8yHhynuH0Clg7MAece2Up3S9M0";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
   };
-}
+})

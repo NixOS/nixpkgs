@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "assemblyscript";
   version = "0.28.20";
 
   src = fetchFromGitHub {
     owner = "AssemblyScript";
     repo = "assemblyscript";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GacSQeJ7ddvQxsUU8qEEnpVvqDguud4HEZ4tpBJSuL0=";
   };
 
@@ -23,4 +23,4 @@ buildNpmPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

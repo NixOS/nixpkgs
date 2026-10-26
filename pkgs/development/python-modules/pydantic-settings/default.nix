@@ -11,7 +11,7 @@
 }:
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "pydantic-settings";
     version = "2.14.2";
     pyproject = true;
@@ -19,7 +19,7 @@ let
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-settings";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-7h0Jr/0qGJmve6fav9hKR1npDz29zD6Cci8h1TmuK4M=";
     };
 
@@ -62,6 +62,6 @@ let
       broken = lib.versionOlder pydantic.version "2.0.0";
       maintainers = [ ];
     };
-  };
+  });
 in
 self

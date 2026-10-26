@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ahocorapy";
   version = "1.8.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abusix";
     repo = "ahocorapy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mRSWkWCHjdSq9Rxj+GuflTBHEDRQCBMnKsb6LcbJudo=";
   };
 
@@ -33,10 +33,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/abusix/ahocorapy/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/abusix/ahocorapy/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Pure python Aho-Corasick library";
     homepage = "https://github.com/abusix/ahocorapy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

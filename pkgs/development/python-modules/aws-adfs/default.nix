@@ -16,7 +16,7 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aws-adfs";
   version = "2.13.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "venth";
     repo = "aws-adfs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FqE4v6Ao8Gc0S1w4GN9rytXqIt2CMQOlO81mXe8xZtM=";
   };
 
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
-    changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
+    changelog = "https://github.com/venth/aws-adfs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.psfl;
     mainProgram = "aws-adfs";
   };
-}
+})

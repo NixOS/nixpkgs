@@ -8,14 +8,14 @@
   watchdog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "watchdog-gevent";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "watchdog_gevent";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-rmuU0PjIzhxZVs2GX2ErYfRWzxmAF0S7olo0n+jowzc=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

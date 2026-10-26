@@ -7,14 +7,14 @@
   xdg-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mytetra";
   version = "1.44.232";
 
   src = fetchFromGitHub {
     owner = "xintrea";
     repo = "mytetra_dev";
-    rev = "v.${version}";
+    rev = "v.${finalAttrs.version}";
     sha256 = "sha256-eku8bwFcQd0Hjffzg/GyiMzJ4S19PtviR0RIjQ+Ysdc=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "seedir";
   version = "0.5.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "earnestt1234";
     repo = "seedir";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o2CUK00WdoYyLqbDlh+wa30Q23ZkWZC+RvGDCSiCwH4=";
   };
 
@@ -30,9 +30,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module for creating, editing, and reading folder tree diagrams";
     homepage = "https://github.com/earnestt1234/seedir";
-    changelog = "https://github.com/earnestt1234/seedir/releases/tag/v${version}";
+    changelog = "https://github.com/earnestt1234/seedir/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "seedir";
   };
-}
+})

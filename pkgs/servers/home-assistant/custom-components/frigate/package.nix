@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "blakeblackshear";
   domain = "frigate";
   version = "5.15.6";
@@ -24,7 +24,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xh8+X4C6QCb2Y4fbo60xCX3QuXEktbopB2DbOTfzAhA=";
   };
 
@@ -80,8 +80,8 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Provides Home Assistant integration to interface with a separately running Frigate service";
     homepage = "https://github.com/blakeblackshear/frigate-hass-integration";
-    changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${version}";
+    changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ presto8 ];
     license = lib.licenses.mit;
   };
-}
+})

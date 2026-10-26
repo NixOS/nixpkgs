@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "npm-check-updates";
   version = "23.1.0";
 
   src = fetchFromGitHub {
     owner = "raineorshine";
     repo = "npm-check-updates";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YLATcN4n/QOpUk4w6cl9GJkugUrX82LRuvLBbPHTClA=";
   };
 
@@ -24,11 +24,11 @@ buildNpmPackage rec {
   makeCacheWritable = true;
 
   meta = {
-    changelog = "https://github.com/raineorshine/npm-check-updates/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/raineorshine/npm-check-updates/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Find newer versions of package dependencies than what your package.json allows";
     homepage = "https://github.com/raineorshine/npm-check-updates";
     license = lib.licenses.asl20;
     mainProgram = "ncu";
     maintainers = with lib.maintainers; [ flosse ];
   };
-}
+})

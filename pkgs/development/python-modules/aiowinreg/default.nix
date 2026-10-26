@@ -7,7 +7,7 @@
   winacl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiowinreg";
   version = "0.0.13";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aiowinreg";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vY5SrGTFH/xsv9k2WciE0xNx9r3W53sxxLGXFX34EuE=";
   };
 
@@ -34,9 +34,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to parse the registry hive";
     homepage = "https://github.com/skelsec/aiowinreg";
-    changelog = "https://github.com/skelsec/aiowinreg/releases/tag/${version}";
+    changelog = "https://github.com/skelsec/aiowinreg/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "awinreg";
   };
-}
+})

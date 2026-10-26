@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "epion";
   version = "0.0.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "devenzo-com";
     repo = "epion_python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9tE/SqR+GHZXeE+bOtXkLu+4jy1vO8WoiLjb6MJazxQ=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to access Epion sensor data";
     homepage = "https://github.com/devenzo-com/epion_python";
-    changelog = "https://github.com/devenzo-com/epion_python/releases/tag/${version}";
+    changelog = "https://github.com/devenzo-com/epion_python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

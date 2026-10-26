@@ -18,13 +18,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "portalocker";
   version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HzAClWpUqMNzBYbFx3vxj65BSeB+rxwp/D+vTVo/iaw=";
   };
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "portalocker" ];
 
   meta = {
-    changelog = "https://github.com/wolph/portalocker/releases/tag/v${version}";
+    changelog = "https://github.com/wolph/portalocker/releases/tag/v${finalAttrs.version}";
     description = "Library to provide an easy API to file locking";
     homepage = "https://github.com/WoLpH/portalocker";
     license = lib.licenses.psfl;
     maintainers = [ ];
   };
-}
+})

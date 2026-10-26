@@ -20,13 +20,13 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rst2pdf";
   version = "0.105";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hX6HQQFOxQFfegCq+13Mu1Y3jvTB2lWoKNRLz1/zrNs=";
   };
 
@@ -79,8 +79,8 @@ buildPythonPackage rec {
     description = "Convert reStructured Text to PDF via ReportLab";
     mainProgram = "rst2pdf";
     homepage = "https://rst2pdf.org/";
-    changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/rst2pdf/rst2pdf/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

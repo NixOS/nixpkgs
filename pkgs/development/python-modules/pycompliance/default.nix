@@ -6,7 +6,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycompliance";
   version = "0.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhmdnd";
     repo = "pycompliance";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-gCrKbKqRDlh9q9bETQ9NEPbf+40WKF1ltfBy6LYjlVw=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tochiaha ];
   };
-}
+})

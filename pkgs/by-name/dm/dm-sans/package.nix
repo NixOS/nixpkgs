@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dm-sans";
   version = "1.002";
 
   src = fetchzip {
-    url = "https://github.com/googlefonts/dm-fonts/releases/download/v${version}/DeepMindSans_v${version}.zip";
+    url = "https://github.com/googlefonts/dm-fonts/releases/download/v${finalAttrs.version}/DeepMindSans_v${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-RSHHxiCac18qqF+hW5M3BbBcra4AQpNLLlUmhiWj9f8=";
   };
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ gilice ];
   };
-}
+})

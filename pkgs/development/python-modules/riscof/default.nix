@@ -7,7 +7,7 @@
   riscv-isac,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "riscof";
   version = "1.25.3";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "riscof";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ToI2xI0fvnDR+hJ++T4ss5X3gc4G6Cj1uJHx0m2X7GY=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
     description = "RISC-V Architectural Test Framework";
     mainProgram = "riscof";
     homepage = "https://github.com/riscv-software-src/riscof";
-    changelog = "https://github.com/riscv-software-src/riscof/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/riscv-software-src/riscof/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = [ ];
     license = lib.licenses.bsd3;
   };
-}
+})

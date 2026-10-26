@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "json-flatten";
   version = "0.3.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "json-flatten";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zAaunWuFAokC16FwHRHgyvq27pNUEGXJfSqTQ1wvXE8=";
   };
 
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     homepage = "https://github.com/simonw/json-flatten";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
-    changelog = "https://github.com/simonw/json-flatten/releases/tag/${version}";
+    changelog = "https://github.com/simonw/json-flatten/releases/tag/${finalAttrs.version}";
   };
-}
+})

@@ -21,13 +21,13 @@
   faiss,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colbert-ai";
   version = "0.2.22";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "colbert_ai";
     hash = "sha256-AK/P711xXw06cGvpDStbdKK7fEAgc4B861UVwAJqiIY=";
   };
@@ -64,4 +64,4 @@ buildPythonPackage rec {
       bachp
     ];
   };
-}
+})

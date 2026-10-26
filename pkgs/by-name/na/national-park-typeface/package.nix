@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "national-park-typeface";
   version = "206464";
 
   src = fetchzip {
-    url = "https://files.cargocollective.com/c${version}/NationalPark.zip";
+    url = "https://files.cargocollective.com/c${finalAttrs.version}/NationalPark.zip";
     stripRoot = false;
     hash = "sha256-VUboZZVJfKupnoHXo3RxetEEYimrr1DxghVZaaWnnw4=";
   };
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     maintainers = [ ];
   };
-}
+})

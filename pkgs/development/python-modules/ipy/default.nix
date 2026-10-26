@@ -6,14 +6,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipy";
   version = "1.01";
   pyproject = true;
 
   src = fetchPypi {
     pname = "IPy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-7eynQd6i1UrKVo+iN0AojD/obA8+pwA0RXHp7xSnzBo=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/autocracy/python-ipy";
     license = lib.licenses.bsdOriginal;
   };
-}
+})

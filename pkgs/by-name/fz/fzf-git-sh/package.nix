@@ -18,7 +18,7 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fzf-git-sh";
   version = "0-unstable-2026-08-06";
 
@@ -49,26 +49,26 @@ stdenv.mkDerivation rec {
       -e "s,\bxdg-open\b,${xdg-utils}/bin/xdg-open," \
       -e "s,\bzsh\b,${zsh}/bin/zsh," \
       -e "/display-message\|fzf-git-\$o-widget\|\burl=\|\$remote_url =~ /!s,\bgit\b,${git}/bin/git,g" \
-      -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/${pname}/fzf-git.sh," \
+      -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/${finalAttrs.pname}/fzf-git.sh," \
       -e "/__fzf_git=.*readlink.*/d" \
       fzf-git.sh
 
     sed -i \
       -e "s,\bbash\b,${bash}/bin/bash," \
-      -e "s,\''$fzf_git_sh_path\b,$out/share/${pname}," \
+      -e "s,\''$fzf_git_sh_path\b,$out/share/${finalAttrs.pname}," \
       fzf-git.fish
   '';
 
   installPhase = ''
-    install -D fzf-git.sh $out/share/${pname}/fzf-git.sh
-    install -D fzf-git.fish $out/share/${pname}/fzf-git.fish
+    install -D fzf-git.sh $out/share/${finalAttrs.pname}/fzf-git.sh
+    install -D fzf-git.fish $out/share/${finalAttrs.pname}/fzf-git.fish
   '';
 
   # Smoke test
   installCheckPhase = ''
     export HOME=$(mktemp -d)
-    ${bash}/bin/bash -c "source $out/share/${pname}/fzf-git.sh"
-    ${fish}/bin/fish -c "source $out/share/${pname}/fzf-git.fish"
+    ${bash}/bin/bash -c "source $out/share/${finalAttrs.pname}/fzf-git.sh"
+    ${fish}/bin/fish -c "source $out/share/${finalAttrs.pname}/fzf-git.fish"
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ deejayem ];
     platforms = lib.platforms.all;
   };
-}
+})

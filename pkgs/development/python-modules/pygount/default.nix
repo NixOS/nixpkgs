@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygount";
   version = "3.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "roskakori";
     repo = "pygount";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1Ws/8znFusdn2jKFvbiPD7ZRbOnPDqBZceMizWfeVlM=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
     description = "Count lines of code for hundreds of languages using pygments";
     mainProgram = "pygount";
     homepage = "https://github.com/roskakori/pygount";
-    changelog = "https://github.com/roskakori/pygount/blob/${src.tag}/docs/changes.md";
+    changelog = "https://github.com/roskakori/pygount/blob/${finalAttrs.src.tag}/docs/changes.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

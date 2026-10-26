@@ -7,14 +7,14 @@
   colorama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pretty-errors";
   version = "1.2.25";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pretty_errors";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-oWulx1LIfCY7+S+LS1hiTjseKScak5H1ZPErhuk8Z1U=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -4,7 +4,7 @@
   buildNpmPackage,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "mw";
   version = "0-unstable-2023-08-04";
 
@@ -24,7 +24,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/mark-when/mw/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mark-when/mw/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Markwhen CLI";
     homepage = "https://github.com/mark-when/mw";
     license = lib.licenses.mit;
@@ -34,4 +34,4 @@ buildNpmPackage rec {
     mainProgram = "mw";
     maintainers = [ ];
   };
-}
+})

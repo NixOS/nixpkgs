@@ -15,7 +15,7 @@ let
     ln -s ${_7zz}/bin/7zz $out/bin/7z
   '';
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gamma-launcher";
   version = "3.1";
   pyproject = true;
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Mord3rca";
     repo = "gamma-launcher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FLxJfP1fl3efRk9iAIAsMUrjQcUNa04GjiAKrYequF8=";
   };
 
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Python cli to download S.T.A.L.K.E.R. GAMMA";
-    changelog = "https://github.com/Mord3rca/gamma-launcher/releases/tag/v${version}";
+    changelog = "https://github.com/Mord3rca/gamma-launcher/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/Mord3rca/gamma-launcher";
     mainProgram = "gamma-launcher";
     license = lib.licenses.gpl3Plus;
@@ -69,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

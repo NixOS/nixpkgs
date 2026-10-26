@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "docker-buildx";
   version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Q4f7tejn0LO4eiEq+ske53WJ1oe5JxtCVZA2Im+7dv8=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-w"
     "-s"
     "-X github.com/docker/buildx/version.Package=github.com/docker/buildx"
-    "-X github.com/docker/buildx/version.Version=v${version}"
+    "-X github.com/docker/buildx/version.Version=v${finalAttrs.version}"
   ];
 
   installPhase = ''
@@ -45,4 +45,4 @@ buildGoModule rec {
       developer-guy
     ];
   };
-}
+})

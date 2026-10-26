@@ -5,7 +5,7 @@
   buildGoModule,
   installShellFiles,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-pkgs";
   version = "0.21.0";
 
@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "git-pkgs";
     repo = "git-pkgs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-riT+LhjO3VU9dAHpqoC94l/nP2FMlMrgOJyUflhSoNk=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-X github.com/git-pkgs/git-pkgs/cmd.version=${version}"
+    "-X github.com/git-pkgs/git-pkgs/cmd.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,4 +48,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "git-pkgs";
   };
-}
+})

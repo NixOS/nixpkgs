@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-unordered";
   version = "0.8.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "utapyngo";
     repo = "pytest-unordered";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0Zh58qWKJIUL/7ELiZmyFNVKUyiJeckpYTQBnqKROo4=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_unordered" ];
 
   meta = {
-    changelog = "https://github.com/utapyngo/pytest-unordered/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/utapyngo/pytest-unordered/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Test equality of unordered collections in pytest";
     homepage = "https://github.com/utapyngo/pytest-unordered";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

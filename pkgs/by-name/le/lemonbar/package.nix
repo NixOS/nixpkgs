@@ -6,14 +6,14 @@
   libxcb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lemonbar";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "LemonBoy";
     repo = "bar";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OLhgu0kmMZhjv/VST8AXvIH+ysMq72m4TEOypdnatlU=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "lemonbar";
   };
-}
+})

@@ -9,7 +9,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "segyio";
   version = "1.9.14";
   pyproject = false; # Built with cmake
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "equinor";
     repo = "segyio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Gprxxz4wUDrThCghW1Z1dHTjeJCrcDxuwguVC+i+ydc=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
-}
+})

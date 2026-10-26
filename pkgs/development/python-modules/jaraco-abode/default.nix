@@ -23,7 +23,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-abode";
   version = "6.4.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nnnVtNXQ7Sa4wXl0ay3OyjvOq2j90pTwhK24WR8mrBo=";
   };
 
@@ -83,7 +83,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.abode/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.abode/blob/${finalAttrs.src.tag}/NEWS.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
     license = lib.licenses.mit;
@@ -92,4 +92,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})

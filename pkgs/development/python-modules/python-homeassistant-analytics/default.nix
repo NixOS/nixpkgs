@@ -21,7 +21,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-homeassistant-analytics";
   version = "0.9.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-homeassistant-analytics";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Deh3pZKpqdrlgv6LQk3NHuATz3porWiM8dewjbdbR7M=";
   };
 
@@ -58,9 +58,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Asynchronous Python client for Home Assistant Analytics";
-    changelog = "https://github.com/joostlek/python-homeassistant-analytics/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-homeassistant-analytics/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/joostlek/python-homeassistant-analytics";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

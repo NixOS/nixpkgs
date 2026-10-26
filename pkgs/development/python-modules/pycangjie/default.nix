@@ -11,7 +11,7 @@
   cmake,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycangjie";
   version = "1.5.0";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     domain = "gitlab.freedesktop.org";
     owner = "cangjie";
     repo = "pycangjie";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-REWX6u3Rc72+e5lIImBwV5uFoBBUTMM5BOfYdKIFL4k=";
   };
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

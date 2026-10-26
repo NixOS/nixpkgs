@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytouchlinesl";
   version = "0.6.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jnsgruk";
     repo = "pytouchlinesl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-o9/K+0ADbU9qTtjLCGM2+aBQsQDP22qdwsgimo9oKns=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API client for Roth's TouchlineSL API";
     homepage = "https://github.com/jnsgruk/pytouchlinesl";
-    changelog = "https://github.com/jnsgruk/pytouchlinesl/releases/tag/${version}";
+    changelog = "https://github.com/jnsgruk/pytouchlinesl/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jnsgruk ];
   };
-}
+})

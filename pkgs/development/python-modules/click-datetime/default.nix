@@ -6,14 +6,14 @@
   click,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-datetime";
   version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "click_datetime";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-nzXtP6sT9VMiHOjFqJXlGF1zYJk8Ud1/hii5tPY2kws=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

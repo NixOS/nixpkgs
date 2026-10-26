@@ -17,7 +17,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-zunclient";
   version = "5.4.0";
   pyproject = true;
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zunclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ps4V05obkbiy4dbPBOff3WQ1d502Ie303jAmtatNOdc=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -82,4 +82,4 @@ buildPythonPackage rec {
     mainProgram = "zun";
     teams = [ lib.teams.openstack ];
   };
-}
+})

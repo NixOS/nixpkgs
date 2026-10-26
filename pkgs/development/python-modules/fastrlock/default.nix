@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastrlock";
   version = "0.8.4";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scoder";
     repo = "fastrlock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yUPptWzmJ6vr4vMR6AQUQGAxymF4e9Otu3wr6NsCbmg=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

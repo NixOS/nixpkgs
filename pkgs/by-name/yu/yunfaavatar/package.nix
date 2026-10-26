@@ -5,14 +5,14 @@
   imagemagick,
   makeWrapper,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yunfaavatar";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "yunfachi";
     repo = "yunfaAvatar";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hCpbe+gW9hkiVOKq7a55n5s3bMpyCNGWiY3D2b4VYxg=";
   };
 
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ yunfachi ];
     mainProgram = "yunfaavatar";
   };
-}
+})

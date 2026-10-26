@@ -11,7 +11,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ripe-atlas-cousteau";
   version = "2.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-cousteau";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-z8ZXOiCVYughrbmXfnwtks7NPmYpII2BA0+8mr1cdSQ=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for RIPE ATLAS API";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-cousteau";
-    changelog = "https://github.com/RIPE-NCC/ripe-atlas-cousteau/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/RIPE-NCC/ripe-atlas-cousteau/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

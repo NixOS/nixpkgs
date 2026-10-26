@@ -15,14 +15,14 @@ let
     enableJavaFX = true;
   };
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "scenebuilder";
   version = "21.0.1";
 
   src = fetchFromGitHub {
     owner = "gluonhq";
     repo = "scenebuilder";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YEcW1yQK6RKDqSstsrpdOqMt972ZagenGDxcJ/gP+SA=";
   };
 
@@ -60,7 +60,7 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 app/target/lib/scenebuilder-${version}-SNAPSHOT-all.jar $out/share/scenebuilder/scenebuilder.jar
+    install -Dm644 app/target/lib/scenebuilder-${finalAttrs.version}-SNAPSHOT-all.jar $out/share/scenebuilder/scenebuilder.jar
     install -Dm644 app/src/main/resources/com/oracle/javafx/scenebuilder/app/SB_Logo.png $out/share/icons/hicolor/128x128/apps/scenebuilder.png
 
     runHook postInstall
@@ -91,7 +91,7 @@ maven.buildMavenPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/gluonhq/scenebuilder/releases/tag/${src.rev}";
+    changelog = "https://github.com/gluonhq/scenebuilder/releases/tag/${finalAttrs.src.rev}";
     description = "Visual, drag'n'drop, layout tool for designing JavaFX application user interfaces";
     homepage = "https://gluonhq.com/products/scene-builder/";
     license = lib.licenses.bsd3;
@@ -103,4 +103,4 @@ maven.buildMavenPackage rec {
       binaryBytecode # deps
     ];
   };
-}
+})

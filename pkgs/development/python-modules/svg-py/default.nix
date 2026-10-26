@@ -7,7 +7,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "svg-py";
   version = "1.10.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "orsinium-labs";
     repo = "svg.py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZbMDjo2p0DnLB5iwQ4J3NIP/zjPsBLq7vKStF9SzF9Y=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Type-safe Python library to generate SVG files";
     homepage = "https://github.com/orsinium-labs/svg.py";
-    changelog = "https://github.com/orsinium-labs/svg.py/releases/tag/${src.tag}";
+    changelog = "https://github.com/orsinium-labs/svg.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

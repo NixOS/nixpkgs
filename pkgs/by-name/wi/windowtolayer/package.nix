@@ -6,7 +6,7 @@
   rustfmt,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "windowtolayer";
   version = "0.3.1";
 
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "windowtolayer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TUet9DqLMsY34Mb9t4IKr3Z/JxrPgvufzanHI4D9dZg=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with lib.platforms; linux ++ freebsd;
     maintainers = with lib.maintainers; [ anomalocaris ];
   };
-}
+})

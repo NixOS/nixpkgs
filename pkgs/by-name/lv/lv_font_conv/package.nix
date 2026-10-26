@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "lv_font_conv";
   version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "lvgl";
     repo = "lv_font_conv";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tm6xPOW0pOO02M10O1H7ww+yXWq/DJtbDmlfrJ6Lp4Y=";
   };
 
@@ -31,4 +31,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -8,14 +8,14 @@
   libxtst,
   libsForQt5,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qjoypad";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "panzi";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256:1w26ddxb1xirb7qjf7kv9llxzjhbhcb7warnxbx41qhbni46g26y";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "qjoypad";
   };
-}
+})

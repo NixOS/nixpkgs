@@ -6,7 +6,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zhon";
   version = "2.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tsroten";
     repo = "zhon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ghZp+5YXmTWf1EJKvdSlqccnxnaLliYR5HxX5DcWXiw=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Constants used in Chinese text processing";
     homepage = "https://github.com/tsroten/zhon";
-    changelog = "https://github.com/tsroten/zhon/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/tsroten/zhon/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

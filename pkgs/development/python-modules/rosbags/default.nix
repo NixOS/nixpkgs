@@ -23,7 +23,7 @@
   declinate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rosbags";
   version = "0.11.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "ternaris";
     repo = "rosbags";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CSRJIGLhQwuaGatfWIbnYNdjUva+klBYPyDbjHfUNlM=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pure Python library to read, modify, convert, and write rosbag files";
     homepage = "https://gitlab.com/ternaris/rosbags";
-    changelog = "https://gitlab.com/ternaris/rosbags/-/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://gitlab.com/ternaris/rosbags/-/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lcgit";
   version = "3.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "lcgit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nCsTA0BKE/0afcqqqEx0mUrLOFbta14TPtNXHD67mas=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic Linear Congruential Generator iterator";
     homepage = "https://github.com/cisagov/lcgit";
-    changelog = "https://github.com/cisagov/lcgit/releases/tag/${src.tag}";
+    changelog = "https://github.com/cisagov/lcgit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

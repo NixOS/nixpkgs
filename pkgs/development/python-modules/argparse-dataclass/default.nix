@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argparse-dataclass";
   version = "2.0.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mivade";
     repo = "argparse_dataclass";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ASdP6LOEeTszyppYV6vRQX8BKOHYUimI36tMSZTQfTk=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Declarative CLIs with argparse and dataclasses";
     homepage = "https://github.com/mivade/argparse_dataclass";
-    changelog = "https://github.com/mivade/argparse_dataclass/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mivade/argparse_dataclass/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tm-drtina ];
   };
-}
+})

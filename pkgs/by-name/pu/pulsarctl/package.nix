@@ -10,14 +10,14 @@
   pulsarctl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulsarctl";
   version = "4.0.4.3";
 
   src = fetchFromGitHub {
     owner = "streamnative";
     repo = "pulsarctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-acNd3nF1nHkYlw7tPoD01IjEc97dLvyAZ7yC1UDWN7s=";
   };
 
@@ -28,9 +28,9 @@ buildGoModule rec {
   ldflags =
     let
       buildVars = {
-        ReleaseVersion = version;
+        ReleaseVersion = finalAttrs.version;
         BuildTS = "None";
-        GitHash = src.rev;
+        GitHash = finalAttrs.src.rev;
         GitBranch = "None";
         GoVersion = "go${go.version}";
       };
@@ -63,7 +63,7 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = pulsarctl;
       command = "pulsarctl --version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -75,4 +75,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "pulsarctl";
   };
-}
+})

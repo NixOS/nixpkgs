@@ -12,7 +12,7 @@
 }:
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "opentelemetry-api";
     version = "1.43.0";
     pyproject = true;
@@ -21,11 +21,11 @@ let
     src = fetchFromGitHub {
       owner = "open-telemetry";
       repo = "opentelemetry-python";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-NnRx0sMVlht2CVXeKjP7mZlzhyOqU/YyveDMWRbmAD8=";
     };
 
-    sourceRoot = "${src.name}/opentelemetry-api";
+    sourceRoot = "${finalAttrs.src.name}/opentelemetry-api";
 
     build-system = [ hatchling ];
 
@@ -62,10 +62,10 @@ let
     meta = {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
       description = "OpenTelemetry Python API";
-      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${src.tag}";
+      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.asl20;
       maintainers = [ lib.maintainers.natsukium ];
     };
-  };
+  });
 in
 self

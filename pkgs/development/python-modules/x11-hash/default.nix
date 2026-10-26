@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "1.4";
   pname = "x11-hash";
   pyproject = true;
 
   src = fetchPypi {
     pname = "x11_hash";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-QtzqxEzpVGK48/lvOEr8VtPUYexLdXKD3zGv1VOdWpw=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ np ];
   };
-}
+})

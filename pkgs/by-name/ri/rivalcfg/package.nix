@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "rivalcfg";
   version = "4.17.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flozz";
     repo = "rivalcfg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-MUbt8beVG6UjpLFqxGC8nTaSswvHN3PJ/jE28BBL8bs=";
   };
 
@@ -49,4 +49,4 @@ python3Packages.buildPythonPackage rec {
     maintainers = with lib.maintainers; [ ornxka ];
     mainProgram = "rivalcfg";
   };
-}
+})

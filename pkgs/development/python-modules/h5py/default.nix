@@ -19,13 +19,13 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.16.0";
   pname = "h5py";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oNuq15aEDMqmekwUSg0MgIAHPDTHbVppQdaBhnjvJzg=";
   };
 
@@ -85,10 +85,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/h5py/h5py/blob/${version}/docs/whatsnew/${lib.versions.majorMinor version}.rst";
+    changelog = "https://github.com/h5py/h5py/blob/${finalAttrs.version}/docs/whatsnew/${lib.versions.majorMinor finalAttrs.version}.rst";
     description = "Pythonic interface to the HDF5 binary data format";
     homepage = "http://www.h5py.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

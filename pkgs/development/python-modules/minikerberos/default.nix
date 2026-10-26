@@ -11,13 +11,13 @@
   unicrypto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "minikerberos";
   version = "0.4.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CVqYChl2rf9Iw94fc9de/ps52nIU3HyJGiNjJAcWqec=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Kerberos manipulation library in Python";
     homepage = "https://github.com/skelsec/minikerberos";
-    changelog = "https://github.com/skelsec/minikerberos/releases/tag/${version}";
+    changelog = "https://github.com/skelsec/minikerberos/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

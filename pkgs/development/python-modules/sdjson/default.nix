@@ -7,7 +7,7 @@
   whey,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sdjson";
   version = "0.5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domdfcoding";
     repo = "singledispatch-json";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7qwmPhij2X2GLtjeaoMCoOyT0qzYt9oFccWrQOq6LXw=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

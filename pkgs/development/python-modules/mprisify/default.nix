@@ -7,7 +7,7 @@
   setuptools,
   strenum,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mprisify";
   version = "1.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "mprisify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ir/zv6GGU1TMPoUB05oqWUNt4eEcFzfQ9gShlKYdUfc=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ quadradical ];
   };
-}
+})

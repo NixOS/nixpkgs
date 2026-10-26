@@ -10,7 +10,7 @@
   greenlet,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-webtest";
   version = "0.1.6";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "level12";
     repo = "flask-webtest";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wcEc9j62bQXAmXczsunITQP3sU040d6Ws8cz0w7+5r4=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utilities for testing Flask applications with WebTest";
     homepage = "https://github.com/level12/flask-webtest";
-    changelog = "https://github.com/level12/flask-webtest/blob/${src.rev}/changelog.rst";
+    changelog = "https://github.com/level12/flask-webtest/blob/${finalAttrs.src.rev}/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

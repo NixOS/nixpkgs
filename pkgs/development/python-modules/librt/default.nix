@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "librt";
   version = "0.13.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mypyc";
     repo = "librt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DeeuUmMwm1Lg078qsdye1ZG08pZ36jBF2PdfV3f+fOs=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

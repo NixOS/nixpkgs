@@ -10,7 +10,7 @@
   setuptools_80,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "masky";
   version = "0.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Z4kSec";
     repo = "Masky";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-npRuszHkxwjJ+B+q8eQywXPd0OX0zS+AfCro4TM83Uc=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
     description = "Library to remotely dump domain credentials";
     mainProgram = "masky";
     homepage = "https://github.com/Z4kSec/Masky";
-    changelog = "https://github.com/Z4kSec/Masky/releases/tag/v${version}";
+    changelog = "https://github.com/Z4kSec/Masky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

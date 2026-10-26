@@ -34,14 +34,14 @@ let
       self = python;
     };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickder";
   version = "1.7.2";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-der";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IxoE9h+ISExNys2egvjSEb3phkrf4ices7k5oYgOL4A=";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = with lib.teams; [ ngi ];
   };
-}
+})

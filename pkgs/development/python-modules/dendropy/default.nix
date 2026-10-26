@@ -13,7 +13,7 @@
 let
   paupPath = if paupIntegration then lib.getExe paup-cli else "NONE";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dendropy";
   version = "5.1.1";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeetsukumaran";
     repo = "dendropy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Kg0we/hi3HgvFHoF93Qq/JuGgxqKS08vkA2ILCzxhZg=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
       pandapip1
     ];
   };
-}
+})

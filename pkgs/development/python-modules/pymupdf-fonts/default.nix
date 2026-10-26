@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymupdf-fonts";
   version = "1.0.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pymupdf_fonts";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-rBLj7Er/o16aCsopE170HCO9vldYwzVdrCNphjCea8Y=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.ofl;
     maintainers = [ ];
   };
-}
+})

@@ -13,14 +13,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-dataproc";
   version = "5.31.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_dataproc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Vu3IMbQZCrtLPDuVGukO1RHh31lvCzqWQ15ceolLCRw=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Dataproc API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-dataproc";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dataproc-v${version}/packages/google-cloud-dataproc/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dataproc-v${finalAttrs.version}/packages/google-cloud-dataproc/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

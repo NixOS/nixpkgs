@@ -5,13 +5,13 @@
   libsixel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = libsixel.version;
   format = "setuptools";
   pname = "libsixel";
 
   src = libsixel.src;
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   prePatch = ''
     substituteInPlace libsixel/__init__.py --replace \
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rmcgibbo ];
   };
-}
+})

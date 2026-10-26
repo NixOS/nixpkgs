@@ -16,14 +16,14 @@
   systemdLibs,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "igir";
   version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-atLfSkOw6nga8PY3rqEmUu4KZxPnmg3R+ocXuKYRs7s=";
   };
 
@@ -54,9 +54,9 @@ buildNpmPackage rec {
     description = "Video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
     mainProgram = "igir";
     homepage = "https://igir.io";
-    changelog = "https://github.com/emmercm/igir/releases/tag/${src.rev}";
+    changelog = "https://github.com/emmercm/igir/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mjm ];
     platforms = lib.platforms.linux;
   };
-}
+})

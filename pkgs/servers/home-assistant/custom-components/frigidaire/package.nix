@@ -4,15 +4,15 @@
   fetchFromGitHub,
   frigidaire,
 }:
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "bm1549";
   domain = "frigidaire";
   version = "1.0.0b2";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "home-assistant-frigidaire";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-t5NgHh96Chyz8u1djcopEfkHLIhmnEqQYoQ/GzzrbXE=";
   };
 
@@ -28,4 +28,4 @@ buildHomeAssistantComponent rec {
     maintainers = with lib.maintainers; [ nullcube ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -13,14 +13,14 @@
   conf ? config.lightdm-tiny-greeter.conf or "",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm-tiny-greeter";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "tobiohlala";
     repo = "lightdm-tiny-greeter";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "08azpj7b5qgac9bgi1xvd6qy6x2nb7iapa0v40ggr3d1fabyhrg6";
   };
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     mkdir -p $out/bin $out/share/xgreeters
-    make ${pname}
-    mv ${pname} $out/bin/.
+    make ${finalAttrs.pname}
+    mv ${finalAttrs.pname} $out/bin/.
     mv lightdm-tiny-greeter.desktop $out/share/xgreeters
   '';
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
   };
-}
+})

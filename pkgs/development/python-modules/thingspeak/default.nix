@@ -11,7 +11,7 @@
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thingspeak";
   version = "1.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mchwalisz";
     repo = "thingspeak";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9YvudzksWp130hkG8WxiX9WHegAVH2TT1vwMbLJ13qE=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client library for the thingspeak.com API";
     homepage = "https://github.com/mchwalisz/thingspeak";
-    changelog = "https://github.com/mchwalisz/thingspeak/releases/tag/v${version}";
+    changelog = "https://github.com/mchwalisz/thingspeak/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

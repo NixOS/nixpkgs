@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "heh";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "ndd7xv";
     repo = "heh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Fo8hsa1+H97t/f90hDNyQOXKGbLVPv2/r5erlHXALbc=";
   };
 
@@ -21,9 +21,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cross-platform terminal UI used for modifying file data in hex or ASCII";
     homepage = "https://github.com/ndd7xv/heh";
-    changelog = "https://github.com/ndd7xv/heh/releases/tag/${src.rev}";
+    changelog = "https://github.com/ndd7xv/heh/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ piturnah ];
     mainProgram = "heh";
   };
-}
+})

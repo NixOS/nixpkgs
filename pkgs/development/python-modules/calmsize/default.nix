@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "calmsize";
   version = "0.1.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Stonesjtu";
     repo = "calmsize";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-D4UMzgYq++w6+Od0t9mDP4S+3Tc/ME5++NOlozXXALQ=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Take a number of bytes and return a human-readable string";
     homepage = "https://github.com/Stonesjtu/calmsize";
-    changelog = "https://github.com/Stonesjtu/calmsize/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/Stonesjtu/calmsize/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

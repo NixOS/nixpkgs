@@ -14,7 +14,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autarco";
   version = "3.2.0";
   pyproject = true;
@@ -22,14 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+j7limAYKFj9DZjetXnaFKIolitRppU1QLFRB94DlgE=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${finalAttrs.version}"
   '';
 
   build-system = [ poetry-core ];
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for the Autarco Inverter";
     homepage = "https://github.com/klaasnicolaas/python-autarco";
-    changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/${src.tag}";
+    changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

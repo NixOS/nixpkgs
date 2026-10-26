@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "standard-mailcap";
   version = "3.13.0";
   pyproject = true;
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "youknowone";
     repo = "python-deadlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9mtQi5ufxP6xRonTrFC3oWFpWLbJraAmdQYozP3evgc=";
     sparseCheckout = [ "mailcap" ];
   };
 
   build-system = [ setuptools ];
-  sourceRoot = "${src.name}/mailcap";
+  sourceRoot = "${finalAttrs.src.name}/mailcap";
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "mailcap" ];
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = [ lib.maintainers.lucc ];
   };
-}
+})

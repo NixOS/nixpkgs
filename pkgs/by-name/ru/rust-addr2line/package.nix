@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-addr2line";
   version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "gimli-rs";
     repo = "addr2line";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+GrX5/AgKlU0rNIKkt4XAQFab6G6F4DN4Qkol8Jd5DQ=";
   };
 
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "addr2line";
   };
-}
+})

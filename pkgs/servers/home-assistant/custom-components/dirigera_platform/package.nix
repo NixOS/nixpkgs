@@ -5,7 +5,7 @@
   dirigera,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "sanjoyg";
   domain = "dirigera_platform";
   version = "2.7.1";
@@ -13,13 +13,13 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "sanjoyg";
     repo = "dirigera_platform";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-N4H07CmIEqUqv1VkLlL1f924TvZ4Cb4IuVKlRYJA9CM=";
   };
 
   postPatch = ''
     substituteInPlace custom_components/dirigera_platform/manifest.json \
-      --replace-fail "0.0.1" "${version}"
+      --replace-fail "0.0.1" "${finalAttrs.version}"
   '';
 
   dependencies = [ dirigera ];
@@ -32,4 +32,4 @@ buildHomeAssistantComponent rec {
     maintainers = with lib.maintainers; [ rhoriguchi ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnsmasq_exporter";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "dnsmasq_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2sOOJWEEseWwozIyZ7oes400rBjlxIrOOtkP3rSNFXo=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) dnsmasq; };
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Dnsmasq exporter for Prometheus";
     mainProgram = "dnsmasq_exporter";
     license = lib.licenses.asl20;
@@ -35,4 +35,4 @@ buildGoModule rec {
     # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

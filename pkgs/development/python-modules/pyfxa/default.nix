@@ -15,13 +15,13 @@
   parameterized,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfxa";
   version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-a2BfT4Yq6OR0znESJoXB9eoELr5PHryW/+D4L3bFlV0=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };
-}
+})

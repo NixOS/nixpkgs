@@ -10,14 +10,14 @@
   libglvnd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openhantek6022";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenHantek";
     repo = "OpenHantek6022";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-FT+DyfD5WHBblRXWXFnyB2xwoIgoh84oB+QN32wx78c=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ baracoder ];
     platforms = libsForQt5.qtbase.meta.platforms;
   };
-}
+})

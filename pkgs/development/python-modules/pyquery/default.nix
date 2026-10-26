@@ -11,13 +11,13 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyquery";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dSODiHUPxuJUt6UvdxAnub6zpiAriASL71KgCwq+rbs=";
   };
 
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
-    changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/gawel/pyquery/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
   };
-}
+})

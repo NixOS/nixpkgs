@@ -12,7 +12,7 @@
   openssl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proton-client";
   version = "0.7.1";
   format = "setuptools";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-python-client";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-mhPq9O/LCu3+E1jKlaJmrI8dxbA9BIwlc34qGwoxi5g=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

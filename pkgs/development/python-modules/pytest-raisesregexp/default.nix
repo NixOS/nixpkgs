@@ -7,13 +7,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-raisesregexp";
   version = "2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tUNySU/B8ROIsbk0ius2tpYJaZ649G4OAQr8cz14I2o=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/Walkman/pytest_raisesregexp";
     license = lib.licenses.mit;
   };
-}
+})

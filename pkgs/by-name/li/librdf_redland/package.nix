@@ -20,12 +20,12 @@
   withBdb ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redland";
   version = "1.0.17";
 
   src = fetchurl {
-    url = "https://download.librdf.org/source/redland-${version}.tar.gz";
+    url = "https://download.librdf.org/source/redland-${finalAttrs.version}.tar.gz";
     hash = "sha256-3hhH97WQIcFr3HKrtNji2Rh81hJNaRVvMybdNO4ENoE=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
   };
-}
+})

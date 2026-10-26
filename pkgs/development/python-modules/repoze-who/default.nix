@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "repoze-who";
   version = "3.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "repoze";
     repo = "repoze.who";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vc4McZ0Mve2F/KjT/63NZwy5wl11WG2G/w5sUI71NWg=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "WSGI Authentication Middleware / API";
     homepage = "http://www.repoze.org";
-    changelog = "https://github.com/repoze/repoze.who/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/repoze/repoze.who/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

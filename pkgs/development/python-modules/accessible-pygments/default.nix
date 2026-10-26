@@ -8,14 +8,14 @@
   pygments,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "accessible-pygments";
   version = "0.0.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "accessible_pygments";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-QJGNPmorYZrUJMuR5Va9O9iGVEPZ8i8dzfeeM8gEaHI=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of accessible pygments styles";
     homepage = "https://github.com/Quansight-Labs/accessible-pygments";
-    changelog = "https://github.com/Quansight-Labs/accessible-pygments/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Quansight-Labs/accessible-pygments/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

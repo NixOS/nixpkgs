@@ -7,13 +7,13 @@
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ofxparse";
   version = "0.21";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BXq2jTEnDezk0aR2Yglqp2NBloqu4UX/xxHLRMvVxKc=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     description = "Tools for working with the OFX (Open Financial Exchange) file format";
     license = lib.licenses.mit;
   };
-}
+})

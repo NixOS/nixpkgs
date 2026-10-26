@@ -9,7 +9,7 @@
   freezegun,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-logging-loki";
   version = "0.3.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GreyZmeem";
     repo = "python-logging-loki";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1qHuv+xzATo11au+QAhD1lHcLJtnVKZDdQDGohHUhiI=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python logging handler for Loki";
     homepage = "https://github.com/GreyZmeem/python-logging-loki";
-    changelog = "https://github.com/GreyZmeem/python-logging-loki/releases/tag/v${version}";
+    changelog = "https://github.com/GreyZmeem/python-logging-loki/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})

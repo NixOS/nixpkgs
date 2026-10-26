@@ -10,7 +10,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bugsnag";
   version = "4.9.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bugsnag";
     repo = "bugsnag-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+ZYtlvkb5J6yOcEQWaB3I6WFyctqXKOFBl4W5o8PkcM=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Automatic error monitoring for Python applications";
     homepage = "https://github.com/bugsnag/bugsnag-python";
-    changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

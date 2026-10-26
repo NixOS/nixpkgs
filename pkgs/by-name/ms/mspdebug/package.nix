@@ -16,13 +16,13 @@ assert stdenv.hostPlatform.isDarwin -> hidapi != null && pkg-config != null;
 assert enableReadline -> readline != null;
 assert enableMspds -> mspds != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.26";
   pname = "mspdebug";
   src = fetchFromGitHub {
     owner = "dlbeer";
     repo = "mspdebug";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-4TisC0Nm3lYMWCJ3TtaHDAfLDejMQZJIruh2f7fCndU=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ aerialx ];
   };
-}
+})

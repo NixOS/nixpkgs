@@ -6,19 +6,19 @@
   clickgen,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bibata-cursors";
   version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "Bibata_Cursor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kIKidw1vditpuxO1gVuZeUPdWBzkiksO/q2R/+DUdEc=";
   };
 
   bitmaps = fetchzip {
-    url = "https://github.com/ful1e5/Bibata_Cursor/releases/download/v${version}/bitmaps.zip";
+    url = "https://github.com/ful1e5/Bibata_Cursor/releases/download/v${finalAttrs.version}/bitmaps.zip";
     hash = "sha256-4VjyNWry0NPnt5+s0od/p18gry2O0ZrknYZh+PAPM8Q=";
   };
 
@@ -66,4 +66,4 @@ stdenvNoCC.mkDerivation rec {
       rawkode
     ];
   };
-}
+})

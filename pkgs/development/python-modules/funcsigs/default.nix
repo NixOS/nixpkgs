@@ -6,13 +6,13 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "funcsigs";
   version = "1.0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-p7sPLPOj/Rqycyy0nrpCUsKvQkBEJBW0q847hwIqj1A=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

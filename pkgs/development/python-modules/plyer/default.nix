@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plyer";
   version = "2.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kivy";
     repo = "plyer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7Icb2MVj5Uit86lRHxal6b7y9gIJ3UT2HNqpA9DYWVE=";
   };
 
@@ -91,4 +91,4 @@ buildPythonPackage rec {
       lib.teams.ngi
     ];
   };
-}
+})

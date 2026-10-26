@@ -17,13 +17,13 @@
   pillow,
   ase,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nglview";
   version = "4.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HhW4Gbn4raPlIeWH0kzDdUVzIDzJnuXYAc7yjZkoZaU=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "IPython/Jupyter widget to interactively view molecular structures and trajectories";
     homepage = "https://github.com/nglviewer/nglview";
-    changelog = "https://github.com/nglviewer/nglview/releases/tag/v${version}";
+    changelog = "https://github.com/nglviewer/nglview/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

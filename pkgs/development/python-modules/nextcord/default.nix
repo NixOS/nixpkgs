@@ -19,7 +19,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nextcord";
   version = "3.2.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nextcord";
     repo = "nextcord";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4/3RM32kEYt5J4bL7/SsPvKhnT1eGS3o0+9lNMqbSj8=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   postPatch = ''
     # disable dynamic versioning
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"' \
       --replace-fail 'enable = true' 'enable = false'
   '';
 
@@ -74,10 +74,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/nextcord/nextcord/blob/${src.tag}/docs/whats_new.rst";
+    changelog = "https://github.com/nextcord/nextcord/blob/${finalAttrs.src.tag}/docs/whats_new.rst";
     description = "Python wrapper for the Discord API forked from discord.py";
     homepage = "https://github.com/nextcord/nextcord";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

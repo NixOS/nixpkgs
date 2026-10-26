@@ -8,7 +8,7 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlite-anyio";
   version = "0.2.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "davidbrochart";
     repo = "sqlite-anyio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1riZiLBccg7Vqq+a8xT5Lr4vxjkeMbf1wqXnTTgY8iY=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous client for SQLite using AnyIO";
     homepage = "https://github.com/davidbrochart/sqlite-anyio";
-    changelog = "https://github.com/davidbrochart/sqlite-anyio/releases/tag/v${version}";
+    changelog = "https://github.com/davidbrochart/sqlite-anyio/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

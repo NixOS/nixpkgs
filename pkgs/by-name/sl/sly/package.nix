@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter335.buildFlutterApplication (finalAttrs: {
   pname = "sly";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "Sly";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pFTP+oDY3pCSgO26ZtqUR+puMJSFZAEdbM2AqmfkNX8=";
   };
 
@@ -51,4 +51,4 @@ flutter335.buildFlutterApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

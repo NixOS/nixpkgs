@@ -26,15 +26,14 @@ let
         webarchive = "20220519080430";
       };
 in
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "yandex-disk";
   version = "0.1.6.1080";
 
   src = fetchurl {
     urls = [
-      "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm"
-      "https://web.archive.org/web/${p.webarchive}/https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm"
+      "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${finalAttrs.pname}-${finalAttrs.version}-1.fedora.${p.arch}.rpm"
+      "https://web.archive.org/web/${p.webarchive}/https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${finalAttrs.pname}-${finalAttrs.version}-1.fedora.${p.arch}.rpm"
     ];
     sha256 = p.sha256;
   };
@@ -88,4 +87,4 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "yandex-disk";
   };
-}
+})

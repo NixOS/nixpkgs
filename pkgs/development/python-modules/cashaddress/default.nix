@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cashaddress";
   version = "1.0.6-unstable-2019-05-15";
   pyproject = true;
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool for convert bitcoin cash legacy addresses";
     homepage = "https://github.com/oskyk/cashaddress";
-    changelog = "https://github.com/oskyk/cashaddress/releases/tag/${version}";
+    changelog = "https://github.com/oskyk/cashaddress/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

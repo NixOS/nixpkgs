@@ -4,16 +4,16 @@
   flatbuffers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (flatbuffers) pname version src;
 
   format = "setuptools";
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   # flatbuffers needs VERSION environment variable for setting the correct
   # version, otherwise it uses the current date.
-  env.VERSION = version;
+  env.VERSION = finalAttrs.version;
 
   pythonImportsCheck = [ "flatbuffers" ];
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ wulfsta ];
     mainProgram = "flatc";
   };
-}
+})

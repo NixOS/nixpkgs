@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "traitlets";
   version = "5.15.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "traitlets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c4OZSC2MrX6Jx8x49lOzlkgwpwz+/2l+GGVCzpO/P+8=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ipython/traitlets/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ipython/traitlets/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Traitlets Python config system";
     homepage = "https://github.com/ipython/traitlets";
     license = lib.licenses.bsd3;
   };
-}
+})

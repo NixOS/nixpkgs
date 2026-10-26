@@ -7,14 +7,14 @@
   maven,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   version = "0.3.0";
   pname = "open-pdf-sign";
 
   src = fetchFromGitHub {
     owner = "open-pdf-sign";
     repo = "open-pdf-sign";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4PkTm9nsIsCrXaLJePDvGalO726BVKhbK2bpFzg9ec0=";
   };
 
@@ -31,7 +31,7 @@ maven.buildMavenPackage rec {
   # Disable test requires the network, we also set the version
   mvnParameters = lib.escapeShellArgs [
     "-Dtest=!SignerTest#testSignPdf"
-    "-Dexternal.version=${version}"
+    "-Dexternal.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/open-pdf-sign
-    mv target/openpdfsign-${version}-jar-with-dependencies.jar $out/share/open-pdf-sign/open-pdf-sign.jar
+    mv target/openpdfsign-${finalAttrs.version}-jar-with-dependencies.jar $out/share/open-pdf-sign/open-pdf-sign.jar
 
     makeWrapper ${lib.getExe jre} $out/bin/open-pdf-sign \
       --add-flags "-jar $out/share/open-pdf-sign/open-pdf-sign.jar"
@@ -61,4 +61,4 @@ maven.buildMavenPackage rec {
     maintainers = [ ];
     mainProgram = "open-pdf-sign";
   };
-}
+})

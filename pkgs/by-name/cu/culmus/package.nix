@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "culmus";
   version = "0.133";
 
   src = fetchurl {
-    url = "mirror://sourceforge/culmus/culmus/${version}/culmus-${version}.tar.gz";
+    url = "mirror://sourceforge/culmus/culmus/${finalAttrs.version}/culmus-${finalAttrs.version}.tar.gz";
     hash = "sha256-wMaHN0LQdUT2us8q1S65yzkpdNVkJ5ONwd+8g5nGTQU=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     homepage = "http://culmus.sourceforge.net/";
     downloadPage = "http://culmus.sourceforge.net/download.html";
   };
-}
+})

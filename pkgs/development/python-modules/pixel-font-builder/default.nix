@@ -12,7 +12,7 @@
   pypng,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pixel-font-builder";
   version = "0.0.55";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pixel-font-builder";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WMwmhGspseqTkGUPrMNR16sZBB+n/lvthHX7JTtdlsQ=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
       h7x4
     ];
   };
-}
+})

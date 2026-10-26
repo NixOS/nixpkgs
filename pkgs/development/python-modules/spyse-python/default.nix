@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spyse-python";
   version = "2.2.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyse-com";
     repo = "spyse-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c7BAJOplWNcd9v7FrEZuMHHdMpqtHljF7YpbdQYAMxA=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for spyse.com API";
     homepage = "https://github.com/spyse-com/spyse-python";
-    changelog = "https://github.com/spyse-com/spyse-python/releases/tag/v${version}";
+    changelog = "https://github.com/spyse-com/spyse-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

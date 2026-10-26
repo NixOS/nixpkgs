@@ -20,7 +20,7 @@
   tkinter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "biosppy";
   version = "2.2.4";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scientisst";
     repo = "BioSPPy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ED25/4WmLbXfEfa4KuUJMN+Fc9hd/AdUqgw8mwQes8Y=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Biosignal Processing in Python";
     homepage = "https://biosppy.readthedocs.io/";
-    changelog = "https://github.com/scientisst/BioSPPy/releases/tag/${src.tag}";
+    changelog = "https://github.com/scientisst/BioSPPy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ genga898 ];
   };
-}
+})

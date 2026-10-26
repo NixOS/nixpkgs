@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pentapy";
   version = "1.4.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "pentapy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lw512rZCrwumDunoWFfd0HxCv0HAn/bAmIz8l8VeBP8=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "A Python toolbox for pentadiagonal linear systems";
     homepage = "https://github.com/GeoStat-Framework/pentapy";
-    changelog = "https://github.com/GeoStat-Framework/pentapy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/GeoStat-Framework/pentapy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

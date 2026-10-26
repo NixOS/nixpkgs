@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-hijack";
   version = "3.7.9";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-hijack";
     repo = "django-hijack";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TH0Zw2p75Q/zbPHbmWB3JgBGKwbE7dgq2xsLnm2BaR8=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
     homepage = "https://github.com/django-hijack/django-hijack";
-    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${src.tag}";
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

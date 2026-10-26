@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flashtext";
   version = "2.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ob4rk+CdTw3u5KrXK5GnEnth+4uANMqanHjqdF2LBc8=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ aanderse ];
     license = lib.licenses.mit;
   };
-}
+})

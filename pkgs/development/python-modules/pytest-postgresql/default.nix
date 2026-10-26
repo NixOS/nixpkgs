@@ -14,7 +14,7 @@
   postgresql,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-postgresql";
   version = "7.0.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbfixtures";
     repo = "pytest-postgresql";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/EekUveW3wb8NlcKacMJpjjU7bpFvnNMpAuZ9h0sbpw=";
   };
 
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://pypi.org/project/pytest-postgresql/";
     description = "Pytest plugin that enables you to test code on a temporary PostgreSQL database";
-    changelog = "https://github.com/dbfixtures/pytest-postgresql/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/dbfixtures/pytest-postgresql/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

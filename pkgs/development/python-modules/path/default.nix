@@ -8,13 +8,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "path";
   version = "17.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Lfy/7ItNlg80acUqzxMxE8KovxKse5jWKfqRr4ckjUI=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Object-oriented file system path manipulation";
     homepage = "https://github.com/jaraco/path";
-    changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/jaraco/path/blob/v${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

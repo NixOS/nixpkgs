@@ -10,14 +10,14 @@
   azure-cli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-ai-agents";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_ai_agents";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-651yJigtAyBsP6s/PuCi/HHgrTjlLS9PGaksVu2VGuo=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = azure-cli.meta.maintainers;
   };
-}
+})

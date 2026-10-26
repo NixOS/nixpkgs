@@ -10,7 +10,7 @@
   structlog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diffsync";
   version = "2.2.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "diffsync";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SFPWz1A0Dpy1dzKaPp2Hx/1Supy0/PFwztm/NK0psHQ=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utility library for comparing and synchronizing different datasets";
     homepage = "https://github.com/networktocode/diffsync";
-    changelog = "https://github.com/networktocode/diffsync/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/networktocode/diffsync/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ clerie ];
   };
-}
+})

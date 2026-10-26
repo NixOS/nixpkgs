@@ -6,13 +6,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colorama";
   version = "0.4.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CGlfXLftbgUxogVyaXKXJzxHuMrlpj/8bW7VwgG+bkQ=";
   };
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cross-platform colored terminal text";
     homepage = "https://github.com/tartley/colorama";
-    changelog = "https://github.com/tartley/colorama/raw/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/tartley/colorama/raw/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

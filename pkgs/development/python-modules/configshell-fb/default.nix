@@ -7,7 +7,7 @@
   pyparsing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "configshell-fb";
   version = "2.0.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "configshell-fb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-q/Tx/9BBnxW6busbrigeesxNa5NvBgfKYDNeDquDTOc=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for building configuration shells";
     homepage = "https://github.com/open-iscsi/configshell-fb";
-    changelog = "https://github.com/open-iscsi/configshell-fb/releases/tag/${src.tag}";
+    changelog = "https://github.com/open-iscsi/configshell-fb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -13,7 +13,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scooby";
   version = "0.12.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "banesullivan";
     repo = "scooby";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-41GPjsfue7w1Wu9WCKxOttoxKRYHwQIsmrEAOgkeY7U=";
   };
 
@@ -63,11 +63,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
+    changelog = "https://github.com/banesullivan/scooby/releases/tag/v${finalAttrs.version}";
     description = "Lightweight tool for reporting Python package versions and hardware resources";
     mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

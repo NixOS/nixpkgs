@@ -44,7 +44,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = [ main_src ] ++ optional useProprietaryAssets assets_src;
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
       'cmake_minimum_required(VERSION 2.8...4.1)'
   ''
   + optionalString useProprietaryAssets ''
-    cp -r ../koboredux-${version}-Linux/sfx/redux data/sfx/
-    cp -r ../koboredux-${version}-Linux/gfx/redux data/gfx/
-    cp -r ../koboredux-${version}-Linux/gfx/redux_fullscreen data/gfx/
+    cp -r ../koboredux-${finalAttrs.version}-Linux/sfx/redux data/sfx/
+    cp -r ../koboredux-${finalAttrs.version}-Linux/gfx/redux data/gfx/
+    cp -r ../koboredux-${finalAttrs.version}-Linux/gfx/redux_fullscreen data/gfx/
   '';
 
   nativeBuildInputs = [
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ fgaz ];
   };
-}
+})

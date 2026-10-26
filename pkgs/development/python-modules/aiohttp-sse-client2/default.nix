@@ -11,7 +11,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp-sse-client2";
   version = "0.3.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "compat-fork";
     repo = "aiohttp-sse-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uF39gpOYzNotVVYQShUoiuvYAhSRex2T1NfuhgwSCR4=";
   };
 
@@ -48,10 +48,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/compat-fork/aiohttp-sse-client/blob/${src.rev}/README.rst#fork-changelog";
+    changelog = "https://github.com/compat-fork/aiohttp-sse-client/blob/${finalAttrs.src.rev}/README.rst#fork-changelog";
     description = "Server-Sent Event python client library based on aiohttp";
     homepage = "https://github.com/compat-fork/aiohttp-sse-client";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

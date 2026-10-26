@@ -7,7 +7,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "names";
   version = "0.3.0";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "treyhunner";
     repo = "names";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IRi093LJNx0jFuOEtXLrlEIqooibOMDxxGMWQFcI1kk=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

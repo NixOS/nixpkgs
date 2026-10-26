@@ -7,14 +7,14 @@
   jupyter-lsp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-lsp";
   version = "5.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_lsp";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-vfAU/rwOwpf/aQh+lXVJ1yTrDCnfPyTU9MQHWKca/D8=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

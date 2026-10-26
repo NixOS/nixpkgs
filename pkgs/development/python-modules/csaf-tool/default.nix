@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "csaf-tool";
   version = "0.3.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "csaf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LR6r03z0nvvAQgFHaTWfukoJmLZ6SLPXfbp/G8N/HtM=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "CSAF generator and validator";
     homepage = "https://github.com/anthonyharrison/csaf";
-    changelog = "https://github.com/anthonyharrison/csaf/releases/tag/${src.tag}";
+    changelog = "https://github.com/anthonyharrison/csaf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teatwig ];
   };
-}
+})

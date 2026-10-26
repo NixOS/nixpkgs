@@ -16,7 +16,7 @@
   time-machine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "virtualenv";
   version = "21.6.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "virtualenv";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8LOmA1Mhfqbl3hsGZa8tQutjfjEVeDlpOKyVut5rDVI=";
   };
 
@@ -75,8 +75,8 @@ buildPythonPackage rec {
     description = "Tool to create isolated Python environments";
     mainProgram = "virtualenv";
     homepage = "https://virtualenv.pypa.io/en/latest/";
-    changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/pypa/virtualenv/blob/${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

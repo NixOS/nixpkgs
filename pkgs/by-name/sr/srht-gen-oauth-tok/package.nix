@@ -13,7 +13,7 @@ let
     pps.XMLLibXML
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srht-gen-oauth-tok";
   version = "0.1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     domain = "entropic.network";
     owner = "~nessdoor";
     repo = "srht-gen-oauth-tok";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GcqP3XbVw2sR5n4+aLUmA4fthNkuVAGnhV1h7suJYdI=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

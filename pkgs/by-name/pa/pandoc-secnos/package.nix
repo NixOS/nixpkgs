@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pandoc-secnos";
   version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomduck";
-    repo = pname;
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     sha256 = "sha256-J9KLZvioYM3Pl2UXjrEgd4PuLTwCLYy9SsJIzgw5/jU=";
   };
 
@@ -36,4 +36,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ppenguin ];
     mainProgram = "pandoc-secnos";
   };
-}
+})

@@ -6,14 +6,14 @@
   streamlit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit-avatar";
   version = "0.1.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "streamlit_avatar";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-AjiTvYDbWpI9OX/GTSfHqXIQfaTwvqD+uZoy+TY/JpE=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

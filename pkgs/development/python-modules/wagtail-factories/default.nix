@@ -8,7 +8,7 @@
   wagtail,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wagtail-factories";
   version = "4.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "wagtail-factories";
     owner = "wagtail";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mVxLnP++j116bfJMJa7GoH1Rqvj7rdj0JsNFm7fJ7h0=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Factory boy classes for wagtail";
     homepage = "https://github.com/wagtail/wagtail-factories";
-    changelog = "https://github.com/wagtail/wagtail-factories/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/wagtail/wagtail-factories/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

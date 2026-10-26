@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-cache-url";
   version = "3.4.6";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "epicserve";
     repo = "django-cache-url";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nXn/aDTMla4Pi6v93LoElxCpL6AFbbWKTd4TMFaK+Nk=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Use Cache URLs in your Django application";
     homepage = "https://github.com/epicserve/django-cache-url";
-    changelog = "https://github.com/epicserve/django-cache-url/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/epicserve/django-cache-url/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

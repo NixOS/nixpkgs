@@ -13,7 +13,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "buienradar";
   version = "1.0.9";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjj4791";
     repo = "python-buienradar";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DTdxzBe9fBOH5fHME++oq62xMtBKnjY7BCevwjl8VZ8=";
   };
 
@@ -73,11 +73,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mjj4791/python-buienradar/blob/${src.tag}/CHANGLOG.rst";
+    changelog = "https://github.com/mjj4791/python-buienradar/blob/${finalAttrs.src.tag}/CHANGLOG.rst";
     description = "Library and CLI tools for interacting with buienradar";
     mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -18,11 +18,11 @@ let
     ."${version}";
   pname = "scheherazade${lib.optionalString new "-new"}";
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+    url = "https://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${finalAttrs.version}.zip";
     inherit hash;
   };
 
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})

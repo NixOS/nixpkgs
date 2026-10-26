@@ -14,7 +14,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-melcloud";
   version = "0.1.3";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "python-melcloud";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-i0/Ra5V3W/TOW+wRZZfKXuGtJTJeHqs+tPuS6KBZasE=";
   };
 
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/erwindouna/python-melcloud/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/erwindouna/python-melcloud/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Asynchronous Python client for controlling Melcloud devices";
     homepage = "https://github.com/erwindouna/python-melcloud";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

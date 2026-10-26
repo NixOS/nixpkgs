@@ -8,7 +8,7 @@
   build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-autorun";
   version = "1.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "hatch-autorun";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-79k3KolvmjGf8ubCQMhtOH5+OeqQrmz2Q6r0ZG98424=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

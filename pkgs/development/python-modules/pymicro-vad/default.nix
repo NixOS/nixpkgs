@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymicro-vad";
   version = "1.0.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pymicro-vad";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yKy/oD6nl2qZW64+aAHZRAEFextCXT6RpMfPThB8DXE=";
   };
 
@@ -33,10 +33,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymicro_vad" ];
 
   meta = {
-    changelog = "https://github.com/rhasspy/pymicro-vad/releases/tag/${version}";
+    changelog = "https://github.com/rhasspy/pymicro-vad/releases/tag/${finalAttrs.version}";
     description = "Self-contained voice activity detector";
     homepage = "https://github.com/rhasspy/pymicro-vad";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -10,7 +10,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp-middlewares";
   version = "2.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "playpauseandstop";
     repo = "aiohttp-middlewares";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jUH1XhkytRwR76wUTsGQGu6m8s+SZ/GO114Lz9atwE8=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of useful middlewares for aiohttp.web applications";
     homepage = "https://github.com/playpauseandstop/aiohttp-middlewares";
-    changelog = "https://github.com/playpauseandstop/aiohttp-middlewares/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/playpauseandstop/aiohttp-middlewares/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

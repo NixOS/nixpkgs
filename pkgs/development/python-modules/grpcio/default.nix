@@ -16,13 +16,13 @@
 # This package should be updated together with the main grpc package and other
 # related python grpc packages.
 # nixpkgs-update: no auto update
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grpcio";
   version = "1.84.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Garxcvwu2+/Mzj9uksUVCXXb5WxFdE6eh89y69+Fv74=";
   };
 
@@ -81,8 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "HTTP/2-based RPC framework";
     homepage = "https://grpc.io/grpc/python/";
-    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

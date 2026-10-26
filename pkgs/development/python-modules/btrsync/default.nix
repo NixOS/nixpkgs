@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "btrsync";
   version = "0.3.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andreittr";
     repo = "btrsync";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FTN2YOGoaGwUww6HWuZbZdrERdDSPAgIzGrTfHL/9NU=";
   };
 
@@ -30,9 +30,9 @@ buildPythonPackage rec {
   meta = {
     description = "Btrfs replication made easy";
     homepage = "https://github.com/andreittr/btrsync";
-    changelog = "https://github.com/andreittr/btrsync/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/andreittr/btrsync/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "btrsync";
     maintainers = with lib.maintainers; [ bcyran ];
   };
-}
+})

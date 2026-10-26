@@ -10,7 +10,7 @@
   torchaudio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "encodec";
   version = "0.1.1";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "encodec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+iJZkX1HoyuNFu9VRxMO6aAzNQybkH9lrQJ5Ao9+/CY=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "State-of-the-art deep learning based audio codec supporting both mono 24 kHz audio and stereo 48 kHz audio";
     homepage = "https://github.com/facebookresearch/encodec";
-    changelog = "https://github.com/facebookresearch/encodec/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/facebookresearch/encodec/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})

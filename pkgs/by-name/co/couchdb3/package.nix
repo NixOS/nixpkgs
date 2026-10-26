@@ -9,12 +9,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "couchdb";
   version = "3.5.2";
 
   src = fetchurl {
-    url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
+    url = "mirror://apache/couchdb/source/${finalAttrs.version}/apache-${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-5WEQKqrf3aHkmebp4S0kc0MykbYIvNOQvLz1kLu2z2g=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

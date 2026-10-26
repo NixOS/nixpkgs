@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "valdi";
   version = "1.1.0";
 
@@ -17,7 +17,7 @@ buildNpmPackage rec {
 
   passthru.updateScript = ./update.sh;
 
-  sourceRoot = "${src.name}/npm_modules/cli";
+  sourceRoot = "${finalAttrs.src.name}/npm_modules/cli";
 
   npmDepsHash = "sha256-UFdWHEdi6VQYLBQ7gmwxcLNRfoHLKwx4l0ANe5lZnZc=";
 
@@ -28,4 +28,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ jonasfranke ];
     mainProgram = "valdi";
   };
-}
+})

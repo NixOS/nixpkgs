@@ -7,7 +7,7 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylibdmtx";
   version = "0.1.11";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NaturalHistoryMuseum";
     repo = "pylibdmtx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HSHh80iRCbDM/eihepEzY7KCLAfgTSZS3PP1Q9JFNPo=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/NaturalHistoryMuseum/pylibdmtx/";
     license = lib.licenses.mit;
   };
-}
+})

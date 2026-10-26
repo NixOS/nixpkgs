@@ -15,7 +15,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "niaaml";
   version = "2.2.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaAML";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-j3vnslVvktfhtRsR1hw+WfLGbhmjdUzhY+HLR9EWD7o=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python automated machine learning framework";
     homepage = "https://github.com/firefly-cpp/NiaAML";
-    changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${src.tag}";
+    changelog = "https://github.com/firefly-cpp/NiaAML/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
   };
-}
+})

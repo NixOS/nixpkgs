@@ -6,13 +6,13 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "syntax";
   version = "0.1.27";
   src = fetchFromGitHub {
     owner = "DmitrySoshnikov";
     repo = "syntax";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5ZbelnZQvJ9k4GbWR+lDEgxXGLt4VsXput9nBV8nUdc=";
   };
 
@@ -30,4 +30,4 @@ buildNpmPackage rec {
     mainProgram = "syntax-cli";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

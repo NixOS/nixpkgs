@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nominal";
   version = "1.104.3";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nominal-io";
     repo = "nominal-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+hJzDQND+eQ/za+V7HXHhwoGfIusXBUUWWSYwWu39ew=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Automate Nominal workflows in Python";
     homepage = "https://github.com/nominal-io/nominal-client";
-    changelog = "https://github.com/nominal-io/nominal-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/nominal-io/nominal-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alkasm ];
   };
-}
+})

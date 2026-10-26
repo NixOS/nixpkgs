@@ -40,7 +40,7 @@
   tinydb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "starlette-admin";
   version = "1.0.3";
   pyproject = true;
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "starlette-admin";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-eWcACxkTkYJtKuU0oXvIvnsH1DbmlWyvGjgQv/G15uc=";
   };
 
@@ -154,4 +154,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

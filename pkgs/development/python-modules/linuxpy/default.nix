@@ -7,14 +7,14 @@
   ward,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linuxpy";
   version = "0.25.0";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eyNCkbq8YXah/iOWJPjhkH/IncX3OXgJNg5Q4FMcd1I=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ willow ];
     platforms = lib.platforms.linux;
   };
-}
+})

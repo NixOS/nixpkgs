@@ -6,13 +6,13 @@
   invoke,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylnk3";
   version = "0.4.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "pylnk3";
     hash = "sha256-+8X1ErWBOCwqTBHm3zeW+Zdbz9meP8oq/lMephs8SsI=";
   };
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fedx-sudo ];
   };
-}
+})

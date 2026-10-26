@@ -7,20 +7,20 @@
   nix-update-script,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "slipshow";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "panglesd";
     repo = "slipshow";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6i7zbfk0uBgwoXlg5fLvC+onZMYKBJwUd74FUakt3jc=";
   };
 
   postPatch = ''
     substituteInPlace ./src/cli/main.ml \
-      --replace-fail '%%VERSION%%' '${version}'
+      --replace-fail '%%VERSION%%' '${finalAttrs.version}'
   '';
 
   nativeBuildInputs = with ocamlPackages; [
@@ -69,4 +69,4 @@ ocamlPackages.buildDunePackage rec {
     teams = [ lib.teams.ngi ];
     mainProgram = "slipshow";
   };
-}
+})

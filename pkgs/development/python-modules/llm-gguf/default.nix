@@ -13,7 +13,7 @@
   llm-gguf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-gguf";
   version = "0.2";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-gguf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ihMOiQnTfgZKICVDoQHLOMahrd+GiB+HwWFBMyIcs0A=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Run models distributed as GGUF files using LLM";
     homepage = "https://github.com/simonw/llm-gguf";
-    changelog = "https://github.com/simonw/llm-gguf/releases/tag/${src.tag}";
+    changelog = "https://github.com/simonw/llm-gguf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

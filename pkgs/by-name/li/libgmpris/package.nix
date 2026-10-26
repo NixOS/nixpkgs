@@ -7,12 +7,12 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgmpris";
   version = "2.2.1-8";
 
   src = fetchurl {
-    url = "https://www.sonarnerd.net/src/focal/src/libgmpris_${version}.tar.gz";
+    url = "https://www.sonarnerd.net/src/focal/src/libgmpris_${finalAttrs.version}.tar.gz";
     sha256 = "sha256-iyKNmg6sf+mxlY/4vt5lKdrKfJzkoCYU2j1O8uwk8K4=";
   };
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ];
 
   postInstall = ''
-    mkdir -p $out/share/doc/${pname}
-    cp ./AUTHORS $out/share/doc/${pname}
-    cp ./README $out/share/doc/${pname}
+    mkdir -p $out/share/doc/${finalAttrs.pname}
+    cp ./AUTHORS $out/share/doc/${finalAttrs.pname}
+    cp ./README $out/share/doc/${finalAttrs.pname}
   '';
 
   meta = {
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

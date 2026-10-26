@@ -11,13 +11,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deepmerge";
   version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-NbOaTLks8yjW7KYcu/ZfaKN8LOswhfD4U8uy5SpZ/CM=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "deepmerge" ];
 
   meta = {
-    changelog = "https://github.com/toumorokoshi/deepmerge/releases/tag/v${version}";
+    changelog = "https://github.com/toumorokoshi/deepmerge/releases/tag/v${finalAttrs.version}";
     description = "Toolset to deeply merge python dictionaries";
     downloadPage = "https://github.com/toumorokoshi/deepmerge";
     homepage = "http://deepmerge.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

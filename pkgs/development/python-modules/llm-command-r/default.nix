@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-command-r";
   version = "0.3.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-command-r";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PxICRds9NJQP64HwoL7Oxd39yaIrMdAyQEbhaumJCgo=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Access the Cohere Command R family of models";
     homepage = "https://github.com/simonw/llm-command-r";
-    changelog = "https://github.com/simonw/llm-command-r/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-command-r/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

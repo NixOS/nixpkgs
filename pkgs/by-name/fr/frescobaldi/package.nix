@@ -7,7 +7,7 @@
   qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frescobaldi";
   version = "4.0.7";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "frescobaldi";
     repo = "frescobaldi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tCFK6UHLxDwouqyMbGPLXMtHsMdZ9SURGHV5GJm7z/4=";
   };
 
@@ -67,4 +67,4 @@ python3Packages.buildPythonApplication rec {
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/frescobaldi.x86_64-darwin
     mainProgram = "frescobaldi";
   };
-}
+})

@@ -5,7 +5,7 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alabaster";
   version = "1.0.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "alabaster";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aQEhFZUJs0TptfpjQVoIVI9V9a+xKjE2OfStSaJKHGI=";
   };
 
@@ -25,9 +25,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/sphinx-doc/alabaster/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/sphinx-doc/alabaster/blob/${finalAttrs.src.rev}/docs/changelog.rst";
     homepage = "https://github.com/sphinx-doc/alabaster";
     description = "Light, configurable Sphinx theme";
     license = lib.licenses.bsd3;
   };
-}
+})

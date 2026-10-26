@@ -15,7 +15,7 @@
   orjson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crate";
   version = "2.0.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crate";
     repo = "crate-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-K09jezBINTw4sUl1Xvm4lJa68ZpwMy9ju/pxdRwnaE4=";
   };
 
@@ -67,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/crate/crate-python";
     description = "Python client library for CrateDB";
-    changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/crate/crate-python/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

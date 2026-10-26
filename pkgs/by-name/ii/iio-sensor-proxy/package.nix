@@ -15,7 +15,7 @@
   libssc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iio-sensor-proxy";
   version = "3.9";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "iio-sensor-proxy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2N/4Fp6QtAhgEzX9cHEDJhFtRsyrtZ80I2jdHdeEmxA=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _999eagle ];
     platforms = lib.platforms.linux;
   };
-}
+})

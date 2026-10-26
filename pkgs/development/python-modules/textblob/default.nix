@@ -7,13 +7,13 @@
   nltk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textblob";
   version = "0.20.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+9GjMHUy6d3bj1AoSHRVngECDnm1/lrkwdpwmp4gh+o=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "textblob" ];
 
   meta = {
-    changelog = "https://github.com/sloria/TextBlob/releases/tag/${version}";
+    changelog = "https://github.com/sloria/TextBlob/releases/tag/${finalAttrs.version}";
     description = "Simplified Text processing";
     homepage = "https://textblob.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ idlip ];
   };
-}
+})

@@ -11,15 +11,15 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "luuquangvu";
   domain = "blueprints_updater";
   version = "2.16.1";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "blueprints-updater";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0o9J57KNMG6KXvrRYx+p/jG9CClHjMciNOUPBVCiqbs=";
   };
 
@@ -54,8 +54,8 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Automatically update Home Assistant blueprints via native update entities";
     homepage = "https://github.com/luuquangvu/blueprints-updater/";
-    changelog = "https://github.com/luuquangvu/blueprints-updater/releases/tag/${src.tag}";
+    changelog = "https://github.com/luuquangvu/blueprints-updater/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.mit;
   };
-}
+})

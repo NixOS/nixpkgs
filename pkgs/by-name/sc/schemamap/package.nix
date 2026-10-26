@@ -9,18 +9,18 @@
 let
   version = "0.4.3";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "schemamap";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "schemamap";
     repo = "schemamap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YR7Ucd8/Z1hOUNokmfSVP2ZxDL7qLb6SZ86/S7V/GKk=";
   };
 
-  sourceRoot = "${src.name}/rust";
+  sourceRoot = "${finalAttrs.src.name}/rust";
 
   cargoHash = "sha256-8UmLAT7Etb9MARoGhvOHPhkdR/8jCEAjAK/mWRHL9hk=";
 
@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   meta = {
-    changelog = "https://github.com/schemamap/schemamap/releases/tag/v${version}";
+    changelog = "https://github.com/schemamap/schemamap/releases/tag/v${finalAttrs.version}";
     description = "Instant batch data import for Postgres";
     homepage = "https://github.com/schemamap/schemamap";
     license = lib.licenses.mit;
     mainProgram = "schemamap";
     maintainers = with lib.maintainers; [ thenonameguy ];
   };
-}
+})

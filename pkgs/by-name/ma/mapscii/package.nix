@@ -3,14 +3,14 @@
   fetchFromGitHub,
   buildNpmPackage,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "mapscii";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "rastapasta";
     repo = "mapscii";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IFVX3l2b3pu0nfMZebVix0mwHUvnE2NUNrB3+jr3G2Q=";
   };
 
@@ -31,4 +31,4 @@ buildNpmPackage rec {
     mainProgram = "mapscii";
     platforms = lib.platforms.all;
   };
-}
+})

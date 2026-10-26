@@ -14,13 +14,13 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-fedora";
   version = "1.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VrnYQaObQDDjiOkMe3fazUefHOXi/5sYw5VNl9Vwmhk=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with the infrastructure of the Fedora Project";
     homepage = "https://github.com/fedora-infra/python-fedora";
-    changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/${version}";
+    changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

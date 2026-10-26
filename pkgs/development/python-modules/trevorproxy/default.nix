@@ -6,13 +6,13 @@
   sh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trevorproxy";
   version = "1.0.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ZUOqtJmLiZbe2LBkpTGELeKFkmzA0WCJ/TXPi9eyRXs=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "trevorproxy";
   };
-}
+})

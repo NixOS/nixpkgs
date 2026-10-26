@@ -30,7 +30,7 @@ in
 #
 # See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102051
 # See: https://gerrit.lix.systems/c/lix/+/1874
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "capnproto";
   version = "1.5.0";
 
@@ -38,7 +38,7 @@ clangStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2J3FYwPAtbahHI1y1KMqU8Gn2YlKyIW8kZIJz2Ja31w=";
   };
 
@@ -96,4 +96,4 @@ clangStdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     teams = [ lib.teams.lix ];
   };
-}
+})

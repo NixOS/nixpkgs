@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chainstream";
   version = "1.0.2";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-syl107PRwDClB6wpgETCj6PKMNUnq9+uKB7dUydmF7M=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.cc-by-sa-40;
     maintainers = with lib.maintainers; [ cbley ];
   };
-}
+})

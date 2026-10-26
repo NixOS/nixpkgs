@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentence-stream";
   version = "1.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "sentence-stream";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UVoRto2zGf+GZFcYt4NC63Fm9iS7DWgwH7sJrrHxvXs=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Small sentence splitter for text streams";
     homepage = "https://github.com/OHF-Voice/sentence-stream";
-    changelog = "https://github.com/OHF-Voice/sentence-stream/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/OHF-Voice/sentence-stream/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

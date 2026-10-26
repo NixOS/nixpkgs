@@ -9,7 +9,7 @@
   wcmatch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycasbin";
   version = "2.8.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "casbin";
     repo = "pycasbin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jK6zmT5trj6qBcS6edXPmK8eHfqw58seraswEQQzhZ0=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Authorization library that supports access control models like ACL, RBAC and ABAC";
     homepage = "https://github.com/casbin/pycasbin";
-    changelog = "https://github.com/casbin/pycasbin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/casbin/pycasbin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

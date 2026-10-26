@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flexcache";
   version = "0.3";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "flexcache";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MAbTe7NxzfRPzo/Wnb5SnPJvJWf6zVeYsaw/g9OJYSE=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Robust and extensible package to cache on disk the result of expensive calculations";
     homepage = "https://github.com/hgrecco/flexcache";
-    changelog = "https://github.com/hgrecco/flexcache/blob/${src.rev}/CHANGES";
+    changelog = "https://github.com/hgrecco/flexcache/blob/${finalAttrs.src.rev}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

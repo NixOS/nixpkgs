@@ -11,12 +11,12 @@ let
   inherit (lib) optionalString;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsm";
   version = "1.0.24";
 
   src = fetchurl {
-    url = "https://www.quut.com/gsm/gsm-${version}.tar.gz";
+    url = "https://www.quut.com/gsm/gsm-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-o8QMZHGSg4P0q/yy6PJAEqH1Yr4vF7jWchRdWYZoGpI=";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

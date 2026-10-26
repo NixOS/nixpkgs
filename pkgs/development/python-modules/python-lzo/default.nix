@@ -8,7 +8,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-lzo";
   version = "1.16";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jd-boyd";
     repo = "python-lzo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iXAvOCzHPvNERMkE5y4QTHi4ZieW1wrYWYScs7zyb2c=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the LZO data compression library";
     homepage = "https://github.com/jd-boyd/python-lzo";
-    changelog = "https://github.com/jd-boyd/python-lzo/releases/tag/v${version}";
+    changelog = "https://github.com/jd-boyd/python-lzo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jbedo ];
   };
-}
+})

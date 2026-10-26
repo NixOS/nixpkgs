@@ -14,15 +14,15 @@
   tag-expressions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "radish-bdd";
   version = "0.18.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = finalAttrs.pname;
     repo = "radish";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pnZ/vqjMd1Q/wF1W6joYrIulZSXAzS2G3E5Ke5VSAQg=";
   };
 
@@ -47,11 +47,11 @@ buildPythonPackage rec {
   meta = {
     description = "Behaviour-Driven-Development tool for python";
     homepage = "https://radish-bdd.github.io/";
-    changelog = "https://github.com/radish-bdd/radish/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/radish-bdd/radish/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kalbasit
       l33tname
     ];
   };
-}
+})

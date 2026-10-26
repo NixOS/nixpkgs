@@ -11,14 +11,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-compute";
   version = "1.42.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_compute";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-CLHbxXWLqlSRCHvO+1dOWdkRUgtxTtp5tOvxy0KdjZg=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "API Client library for Google Cloud Compute";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-compute";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-compute-v${version}/packages/google-cloud-compute/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-compute-v${finalAttrs.version}/packages/google-cloud-compute/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

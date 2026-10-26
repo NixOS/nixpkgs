@@ -20,14 +20,14 @@
 let
   gradle = gradle_9;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ed-odyssey-materials-helper";
   version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vQn45gHcMRLH5ta5+h3QXLODUlmDWeG1PSRRl/hgfiE=";
   };
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   mitmCache = gradle.fetchDeps {
-    inherit pname;
+    inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
@@ -145,8 +145,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Helper for managing materials in Elite Dangerous Odyssey";
     homepage = "https://github.com/jixxed/ed-odyssey-materials-helper";
-    downloadPage = "https://github.com/jixxed/ed-odyssey-materials-helper/releases/tag/${version}";
-    changelog = "https://github.com/jixxed/ed-odyssey-materials-helper/releases/tag/${version}";
+    downloadPage = "https://github.com/jixxed/ed-odyssey-materials-helper/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/jixxed/ed-odyssey-materials-helper/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
@@ -162,4 +162,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mistletoe";
   version = "1.5.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miyuchina";
     repo = "mistletoe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h2gKvh3P4pUUPwVYTIjz43/3CwZdWbhO3aJnwFBNR+Q=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
     description = "Fast and extensible Markdown parser";
     mainProgram = "mistletoe";
     homepage = "https://github.com/miyuchina/mistletoe";
-    changelog = "https://github.com/miyuchina/mistletoe/releases/tag/${src.tag}";
+    changelog = "https://github.com/miyuchina/mistletoe/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eadwu ];
   };
-}
+})

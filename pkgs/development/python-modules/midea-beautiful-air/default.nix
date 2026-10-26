@@ -10,7 +10,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "midea-beautiful-air";
   version = "0.10.7";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nbogojevic";
     repo = "midea-beautiful-air";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9smuLzgJPO/GoYP8NqfY9Ky9q2E3/cjEQLtWHIx7BxI=";
   };
 
@@ -45,9 +45,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for accessing Midea air conditioners and dehumidifiers (Midea, Comfee, Inventor EVO) via local network";
     homepage = "https://github.com/nbogojevic/midea-beautiful-air";
-    changelog = "https://github.com/nbogojevic/midea-beautiful-air/releases/tag/v${version}";
+    changelog = "https://github.com/nbogojevic/midea-beautiful-air/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "midea-beautiful-air-cli";
     license = lib.licenses.mit;
   };
-}
+})

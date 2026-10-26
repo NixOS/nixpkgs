@@ -11,13 +11,13 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deepgit";
   version = "4.4";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/deepgit/deepgit-linux-${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
     hash = "sha256-ILqwXDyW7/hZzoSxxaxv4bF5xsB/JFaOBYAJFb7xmdk=";
   };
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "deepgit";
   };
-}
+})

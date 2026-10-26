@@ -11,7 +11,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cs50";
   version = "9.5.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "python-cs50";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jJji5EyvKfJ9vkzETsh0CJ9WIi7hWF2amHrOvf4/JbI=";
   };
 
@@ -42,11 +42,11 @@ buildPythonPackage rec {
   meta = {
     description = "CS50 Library for Python";
     homepage = "https://github.com/cs50/python-cs50/";
-    changelog = "https://github.com/cs50/python-cs50/releases/tag/v${version}";
+    changelog = "https://github.com/cs50/python-cs50/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       amadejkastelic
       ethancedwards8
     ];
   };
-}
+})

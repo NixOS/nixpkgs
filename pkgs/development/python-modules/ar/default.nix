@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ar";
   version = "1.0.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vidstige";
     repo = "ar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uaEkp2uCiRMj8pTBgA6NESJO3Eh5pVc+FfX/enIBcNA=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "itanium-demangler";
   version = "1.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "python-itanium_demangler";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I6NUfckt2cocQt5dZSFadpshTCuA/6bVNauNXypWh+A=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
       pamplemousse
     ];
   };
-}
+})

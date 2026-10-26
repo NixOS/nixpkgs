@@ -7,14 +7,14 @@
   jupyter-book,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-book-theme";
   version = "1.4.0";
 
   format = "wheel";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     format = "wheel";
     dist = "py3";
     python = "py3";
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Clean book theme for scientific explanations and documentation with Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
-    changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

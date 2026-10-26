@@ -12,13 +12,13 @@
   certifi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "miraie-ac";
   version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "miraie_ac";
     hash = "sha256-q4CXdJrNr9nhkY74eHllmRchrQx770vQJMqRtggxxlw=";
   };
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ananthb ];
   };
-}
+})

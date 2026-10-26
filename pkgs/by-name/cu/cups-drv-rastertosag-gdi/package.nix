@@ -7,17 +7,17 @@
   patchPpdFilesHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rastertosag-gdi";
   version = "0.1";
   src = fetchzip {
-    url = "https://www.openprinting.org/download/printing/${pname}/${pname}-${version}.tar.gz";
+    url = "https://www.openprinting.org/download/printing/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1ldplpv497j8vhw24sksg3fiw8c5pqr0wajajh7p5xpvb6zlcmvw";
   };
   patches = [
     # port to python 3
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/r/${pname}/0.1-7/debian/patches/0001-${pname}-python3.patch";
+      url = "https://sources.debian.org/data/main/r/${finalAttrs.pname}/0.1-7/debian/patches/0001-${finalAttrs.pname}-python3.patch";
       sha256 = "1l3xbrs67025595k9ba5794q3s74anizpbxwsshcfhmbrzd9h8hg";
     })
   ];
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
       Therefore they do not work with Ricoh's PPD files.
     '';
   };
-}
+})

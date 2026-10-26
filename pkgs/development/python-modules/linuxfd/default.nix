@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linuxfd";
   version = "1.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uMABCXJLaOCT+bVW7deOQe1l+42Wn9DoMYape10xObQ=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3Plus;
   };
-}
+})

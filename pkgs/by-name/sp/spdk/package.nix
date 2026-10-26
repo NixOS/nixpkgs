@@ -28,7 +28,7 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spdk";
 
   version = "26.01";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E52VozjnoGnIC7viXrsualaaKXiUU9Fx8zGylTjBzX0=";
     fetchSubmodules = true;
   };
@@ -148,4 +148,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ ths-on ];
   };
-}
+})

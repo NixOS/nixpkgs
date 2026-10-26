@@ -15,7 +15,7 @@
   google-cloud-storage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sapi-python-client";
   version = "0.9.5";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "keboola";
     repo = "sapi-python-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-i+SI5F48C90Af04boedEk72obctHp9PJIv8m0ewpGR0=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Keboola Connection Storage API client";
     homepage = "https://github.com/keboola/sapi-python-client";
-    changelog = "https://github.com/keboola/sapi-python-client/releases/tag/${version}";
+    changelog = "https://github.com/keboola/sapi-python-client/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mrmebelman ];
   };
-}
+})

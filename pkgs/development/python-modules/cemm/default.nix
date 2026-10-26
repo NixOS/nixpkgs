@@ -12,7 +12,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cemm";
   version = "0.5.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-cemm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BorgGHxoEeIGyJKqe9mFRDpcGHhi6/8IV7ubEI8yQE4=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"'
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with CEMM devices";
     homepage = "https://github.com/klaasnicolaas/python-cemm";
-    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/${src.tag}";
+    changelog = "https://github.com/klaasnicolaas/python-cemm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

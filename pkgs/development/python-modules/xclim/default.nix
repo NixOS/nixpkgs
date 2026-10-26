@@ -33,7 +33,7 @@
   # test
   versionCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xclim";
   version = "0.62.0";
   pyproject = true;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ouranosinc";
     repo = "xclim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1XuviMw8roOmrzRJZOX9x7Xf7HjElmbE1GC50RKg9XY=";
   };
 
@@ -91,9 +91,9 @@ buildPythonPackage rec {
   meta = {
     description = "Operational Python library supporting climate services, based on xarray";
     homepage = "https://github.com/Ouranosinc/xclim";
-    changelog = "https://github.com/Ouranosinc/xclim/releases/tag/${src.tag}";
+    changelog = "https://github.com/Ouranosinc/xclim/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
     mainProgram = "xclim";
   };
-}
+})

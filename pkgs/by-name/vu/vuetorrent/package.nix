@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "vuetorrent";
   version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "VueTorrent";
     repo = "VueTorrent";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tbsn+MWlq2cghArB7UIr9zthzQud81p7UqSc9c8VrmQ=";
   };
 
@@ -32,9 +32,9 @@ buildNpmPackage rec {
   meta = {
     description = "Full-featured BitTorrent client written in Vue";
     homepage = "https://github.com/VueTorrent/VueTorrent";
-    changelog = "https://github.com/VueTorrent/VueTorrent/releases/tag/${src.tag}";
+    changelog = "https://github.com/VueTorrent/VueTorrent/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ redxtech ];
   };
-}
+})

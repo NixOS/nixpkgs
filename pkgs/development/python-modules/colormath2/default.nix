@@ -8,7 +8,7 @@
   pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colormath2";
   version = "3.0.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bkmgit";
     repo = "python-colormath2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-G8b0L8A2RzbVQFPNg2fuBklqTNjo3yqvek/+GnqtsHc=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Color math and conversion library (fork)";
     homepage = "https://github.com/bkmgit/python-colormath2";
-    changelog = "https://github.com/bkmgit/python-colormath2/releases/tag/${version}";
+    changelog = "https://github.com/bkmgit/python-colormath2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ apraga ];
   };
-}
+})

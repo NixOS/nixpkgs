@@ -8,7 +8,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rdbtools";
   version = "0.1.15";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sripathikrishnan";
     repo = "redis-rdb-tools";
-    tag = "rdbtools-${version}";
+    tag = "rdbtools-${finalAttrs.version}";
     hash = "sha256-6Ht8NuyvzbS7+MeJoVC/AtlXgKwtWwUQ+n5v+mtv/2g=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Parse Redis dump.rdb files, Analyze Memory, and Export Data to JSON";
     homepage = "https://github.com/sripathikrishnan/redis-rdb-tools";
-    changelog = "https://github.com/sripathikrishnan/redis-rdb-tools/blob/rdbtools-${version}/CHANGES";
+    changelog = "https://github.com/sripathikrishnan/redis-rdb-tools/blob/rdbtools-${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

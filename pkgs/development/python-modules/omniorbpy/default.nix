@@ -7,13 +7,13 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omniorbpy";
   version = "4.3.2";
   pyproject = false;
 
   src = fetchurl {
-    url = "https://downloads.sourceforge.net/omniorb/omniORBpy-${version}.tar.bz2";
+    url = "https://downloads.sourceforge.net/omniorb/omniORBpy-${finalAttrs.version}.tar.bz2";
     hash = "sha256-y1cX1BKhAbr0MPWYysfWkjGITa5DctjirfPd7rxffrs=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix;
   };
-}
+})

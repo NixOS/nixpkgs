@@ -10,14 +10,14 @@
   sip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqtdatavisualization";
   version = "5.15.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "PyQtDataVisualization";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ntM7IOdHvGnh1hnxR7sWJcwA1u9ATb8Ha6E6n/b2Bh0=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ panicgh ];
   };
-}
+})

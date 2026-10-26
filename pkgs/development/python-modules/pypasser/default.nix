@@ -11,7 +11,7 @@
   speechrecognition,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypasser";
   version = "0.0.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xHossein";
     repo = "PyPasser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vqa+Xap9dYvjJMiGNGNmegh7rmAqwf3//MH47xwr/T0=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

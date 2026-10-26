@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "tolwi";
   domain = "ecoflow_cloud";
   version = "1.7.2";
@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "tolwi";
     repo = "hassio-ecoflow-cloud";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mr09xZG/IyOdCmFNm0kP7bR6t2LZ6PRcMCvcaleCzcs=";
   };
 
@@ -33,10 +33,10 @@ buildHomeAssistantComponent rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/tolwi/hassio-ecoflow-cloud/releases/tag/v${version}";
+    changelog = "https://github.com/tolwi/hassio-ecoflow-cloud/releases/tag/v${finalAttrs.version}";
     description = "Home Assistant component for EcoFlow Cloud";
     homepage = "https://github.com/tolwi/hassio-ecoflow-cloud";
     maintainers = with lib.maintainers; [ ananthb ];
     license = lib.licenses.asl20;
   };
-}
+})

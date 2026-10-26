@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-apidoc";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_apidoc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-MpuYENZpiPSOEnpr0YzI77vRzSC43rRpGjVzivSa2I0=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     teams = [ lib.teams.openstack ];
   };
-}
+})

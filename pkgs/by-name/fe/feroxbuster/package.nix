@@ -9,14 +9,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "feroxbuster";
   version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "epi052";
     repo = "feroxbuster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x0oNgDEuRIHDUUSAiIgcjmm6NadyBFuvz/hOcqquM3g=";
   };
 
@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Recursive content discovery tool";
     homepage = "https://github.com/epi052/feroxbuster";
-    changelog = "https://github.com/epi052/feroxbuster/releases/tag/${src.tag}";
+    changelog = "https://github.com/epi052/feroxbuster/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.unix;
     mainProgram = "feroxbuster";
   };
-}
+})

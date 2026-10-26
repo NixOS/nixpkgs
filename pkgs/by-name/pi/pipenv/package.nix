@@ -32,7 +32,7 @@ let
   pythonEnv = python3.withPackages runtimeDeps;
 
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "pipenv";
   version = "2026.5.1";
   pyproject = true;
@@ -40,7 +40,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+8xUbpGIEuFboeK+JVVAt46gNcw1tfkmnTYt/IrISik=";
   };
 
@@ -87,7 +87,7 @@ buildPythonApplication rec {
   ];
 
   passthru.tests = {
-    verify-venv-patch = runCommand "${pname}-test-verify-venv-patch" { } ''
+    verify-venv-patch = runCommand "${finalAttrs.pname}-test-verify-venv-patch" { } ''
       export PIPENV_VENV_IN_PROJECT=1
 
       # "pipenv install" should be able to create a venv
@@ -119,4 +119,4 @@ buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "pipenv";
   };
-}
+})

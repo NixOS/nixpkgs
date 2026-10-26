@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "karma";
   version = "6.4.4";
 
   src = fetchFromGitHub {
     owner = "karma-runner";
     repo = "karma";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RfEmzUMzgOY6YG0MBheCgwmwOU3C5G8hybH40gLmsr4=";
   };
 
@@ -32,4 +32,4 @@ buildNpmPackage rec {
     mainProgram = "karma";
     maintainers = [ ];
   };
-}
+})

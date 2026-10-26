@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rmscene";
   version = "0.8.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ricklupton";
     repo = "rmscene";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AejIkrvNIgUoNtDJwqPvMMToa12dnZQDKWvNztOgAvc=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ricklupton/rmscene/blob/${src.tag}/README.md#changelog";
+    changelog = "https://github.com/ricklupton/rmscene/blob/${finalAttrs.src.tag}/README.md#changelog";
     description = "Read v6 .rm files from the reMarkable tablet";
     homepage = "https://github.com/ricklupton/rmscene";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

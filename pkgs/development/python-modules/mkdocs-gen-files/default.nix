@@ -8,7 +8,7 @@
   pytest-golden,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-gen-files";
   version = "0.6.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oprypin";
     repo = "mkdocs-gen-files";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9mOLRZZugaGCWR/Ms9z8CTvDp8QgAiGcKqiB/LGTApk=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "MkDocs plugin to programmatically generate documentation pages during the build";
     homepage = "https://oprypin.github.io/mkdocs-gen-files/";
-    changelog = "https://github.com/oprypin/mkdocs-gen-files/releases/tag/${src.tag}";
+    changelog = "https://github.com/oprypin/mkdocs-gen-files/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erooke ];
   };
-}
+})

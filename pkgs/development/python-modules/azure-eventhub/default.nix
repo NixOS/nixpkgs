@@ -8,7 +8,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-eventhub";
   version = "5.15.1";
   pyproject = true;
@@ -16,11 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    tag = "azure-eventhub_${version}";
+    tag = "azure-eventhub_${finalAttrs.version}";
     hash = "sha256-+Qx7sPdm1jwB0RYsN2dwB+GJJjqPMQsl8TI2GFCRWKA=";
   };
 
-  sourceRoot = "${src.name}/sdk/eventhub/azure-eventhub";
+  sourceRoot = "${finalAttrs.src.name}/sdk/eventhub/azure-eventhub";
 
   build-system = [ setuptools ];
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure Event Hubs Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/eventhub/azure-eventhub";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/${src.tag}/sdk/eventhub/azure-eventhub/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/${finalAttrs.src.tag}/sdk/eventhub/azure-eventhub/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -36,7 +36,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rasterio";
   version = "1.5.1";
   pyproject = true;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-sg7c18+Gd6KObPQS7h9Jwj5iXUx5Cz1lcKSRERDMdL0=";
   };
 
@@ -134,8 +134,8 @@ buildPythonPackage rec {
     description = "Python package to read and write geospatial raster data";
     mainProgram = "rio";
     homepage = "https://rasterio.readthedocs.io/";
-    changelog = "https://github.com/rasterio/rasterio/blob/${src.tag}/CHANGES.txt";
+    changelog = "https://github.com/rasterio/rasterio/blob/${finalAttrs.src.tag}/CHANGES.txt";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

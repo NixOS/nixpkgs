@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-docstring-description";
   version = "1.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flying-sheep";
     repo = "hatch-docstring-description";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ouor0FV3qdXYJx5EWFUWSKp8Cc/EuD1WXrtLvbYG+XI=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
       samuela
     ];
   };
-}
+})

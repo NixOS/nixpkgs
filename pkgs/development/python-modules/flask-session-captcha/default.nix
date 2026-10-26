@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-session-captcha";
   version = "1.5.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tethik";
     repo = "flask-session-captcha";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2JPJx8yQIl0bbcbshONJtja7BnSiieHzHi64A6jLpc0=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Captcha implementation for flask";
     homepage = "https://github.com/Tethik/flask-session-captcha";
-    changelog = "https://github.com/Tethik/flask-session-captcha/releases/tag/v${version}";
+    changelog = "https://github.com/Tethik/flask-session-captcha/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Flakebi ];
   };
-}
+})

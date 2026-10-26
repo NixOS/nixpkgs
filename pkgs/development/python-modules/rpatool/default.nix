@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rpatool";
   version = "1.0.0";
 
   src = fetchFromCodeberg {
     owner = "shiz";
     repo = "rpatool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AHFL0pahwS8/MH13NgPiKtKAP+nBqfbcUVWzV+Jdco0=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ ulysseszhan ];
   };
-}
+})

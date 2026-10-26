@@ -14,13 +14,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcengine";
   version = "0.52.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-K9zJPTOkOot5n0fYFS7DtK4CND6X2h7LZW10HIzpMOg=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sheepforce ];
     mainProgram = "qcengine";
   };
-}
+})

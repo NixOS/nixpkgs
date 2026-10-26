@@ -5,13 +5,13 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-jinja";
   version = "2.0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xiMrWaiUE5dwvh3G0LAKN55CiM54FXkE4fhHPeo+Bxg=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.mit;
   };
-}
+})

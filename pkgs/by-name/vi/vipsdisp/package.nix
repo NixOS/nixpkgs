@@ -12,14 +12,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vipsdisp";
   version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "vipsdisp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DXXDU/EtpWfNvV0PhQ+qjlxTBNERn9GGNeD00n9ejN0=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

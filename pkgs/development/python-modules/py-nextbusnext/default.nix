@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-nextbusnext";
   version = "2.3.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ViViDboarder";
     repo = "py_nextbus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zTOP2wj1ZseXYbWGNgehIkgZQkV4u74yjI0mhn35e4E=";
   };
 
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ViViDboarder/py_nextbusnext/releases/tag/${src.tag}";
+    changelog = "https://github.com/ViViDboarder/py_nextbusnext/releases/tag/${finalAttrs.src.tag}";
     description = "Minimalistic Python client for the NextBus public API";
     homepage = "https://github.com/ViViDboarder/py_nextbus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

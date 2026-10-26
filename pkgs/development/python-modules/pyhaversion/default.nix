@@ -11,7 +11,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhaversion";
   version = "24.6.1";
   pyproject = true;
@@ -21,14 +21,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pyhaversion";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UZ9236mERoz3WG9MfeN1ALKc8OjqpcbbIhiEsRYzn4I=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the tagged releases
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0"' 'version = "${version}"'
+      --replace-fail 'version = "0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to the newest version number of Home Assistant";
     homepage = "https://github.com/ludeeus/pyhaversion";
-    changelog = "https://github.com/ludeeus/pyhaversion/releases/tag/${version}";
+    changelog = "https://github.com/ludeeus/pyhaversion/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})

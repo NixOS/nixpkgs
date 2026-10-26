@@ -13,7 +13,7 @@
   python-daemon,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mirakuru";
   version = "3.0.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3WyjvHxr+6kG+cLSCEZkHoA70mSoT66ubmp0W9g2yJM=";
   };
 
@@ -67,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/dbfixtures/mirakuru";
     description = "Process orchestration tool designed for functional and integration tests";
-    changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

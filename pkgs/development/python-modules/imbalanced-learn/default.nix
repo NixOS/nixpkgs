@@ -17,7 +17,7 @@
   sklearn-compat,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imbalanced-learn";
   version = "0.14.2";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "imbalanced-learn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uWln6+r9QsGnH4I4JQm2/y80zTQkAflVPlIN9KQNzy0=";
   };
 
@@ -79,11 +79,11 @@ buildPythonPackage rec {
   meta = {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
-    changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rmcgibbo
       jadewilk
     ];
   };
-}
+})

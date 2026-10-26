@@ -23,7 +23,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dynaconf";
   version = "3.2.13";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dynaconf";
     repo = "dynaconf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3qUGLEQ0x/WTF/M/SEts6v9w1yGYSB6LYEcxKQcbqSk=";
   };
 
@@ -97,9 +97,9 @@ buildPythonPackage rec {
   meta = {
     description = "Dynamic configurator for Python Project";
     homepage = "https://github.com/dynaconf/dynaconf";
-    changelog = "https://github.com/dynaconf/dynaconf/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/dynaconf/dynaconf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "dynaconf";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

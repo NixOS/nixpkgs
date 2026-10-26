@@ -9,7 +9,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-oxmsg";
   version = "0.0.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scanny";
     repo = "python-oxmsg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ramM27+SylBeJyb3kkRm1xn3qAefiLuBOvI/iucK2wM=";
   };
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/scanny/python-oxmsg/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/scanny/python-oxmsg/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Extract attachments from Outlook .msg files";
     homepage = "https://github.com/scanny/python-oxmsg";
     license = lib.licenses.mit;
     mainProgram = "oxmsg";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

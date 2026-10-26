@@ -12,11 +12,11 @@ let
   pname = "image";
   version = "1.5.33";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit pname version;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uqLgkXgnfapQ8i/W0dUex48ZwSaIkhy5q1gIdD8JcSY=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ulysseszhan ];
   };
-}
+})

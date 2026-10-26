@@ -5,14 +5,14 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twiggy";
   version = "0.5.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Twiggy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-eTiEAnWXL2zomZSlvfsLhPA4YwGgQ6lgr2NklS54/+Q=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pierron ];
   };
-}
+})

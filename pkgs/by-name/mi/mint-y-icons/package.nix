@@ -7,14 +7,14 @@
   gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mint-y-icons";
   version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-y-icons";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-EBVjQgCOStNFLUwuQLvFTN+695s93TpINdXJezeDOA0=";
   };
 
@@ -49,4 +49,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

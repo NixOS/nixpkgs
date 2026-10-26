@@ -9,7 +9,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-archive";
   version = "1.8";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.archive";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HNbnluJPn275BYEdfBQdGtXlXlvZKFvDkJTpe0zgpdc=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing parsers for various archive and backup formats";
     homepage = "https://github.com/fox-it/dissect.archive";
-    changelog = "https://github.com/fox-it/dissect.archive/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.archive/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

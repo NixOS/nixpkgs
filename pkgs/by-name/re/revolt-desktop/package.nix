@@ -7,7 +7,7 @@
   makeWrapper,
   electron,
 }:
-(stdenvNoCC.mkDerivation rec {
+(stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "revolt-desktop";
   version = "1.0.8";
   dontConfigure = true;
@@ -15,7 +15,7 @@
   meta = {
     description = "Open source user-first chat platform";
     homepage = "https://revolt.chat/";
-    changelog = "https://github.com/revoltchat/desktop/releases/tag/v${version}";
+    changelog = "https://github.com/revoltchat/desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       heyimnova
@@ -26,7 +26,7 @@
     mainProgram = "revolt-desktop";
   };
   nativeBuildInputs = [ makeWrapper ];
-}).overrideAttrs
+})).overrideAttrs
   (
     final: prev:
     let

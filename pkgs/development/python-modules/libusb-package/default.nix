@@ -11,7 +11,7 @@
   libusb1,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libusb-package";
   version = "1.0.26.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "libusb-package";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4zTyaidpSlledTcEztWzRgwj43oNV7xWrhMXCE9Qz3k=";
   };
 
@@ -50,9 +50,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for simplified libusb distribution and usage with pyOCD";
     homepage = "https://github.com/pyocd/libusb-package";
-    changelog = "https://github.com/pyocd/libusb-package/releases/tag/v${version}";
+    changelog = "https://github.com/pyocd/libusb-package/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brianmcgillion ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

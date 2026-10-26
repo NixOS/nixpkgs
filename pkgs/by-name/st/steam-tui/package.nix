@@ -11,14 +11,14 @@
   wine,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steam-tui";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dmadisetti";
     repo = "steam-tui";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-3vBIpPIsh+7PjTuNNqp7e/pdciOYnzuGkjb/Eks6QJw=";
   };
 
@@ -56,4 +56,4 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "steam-tui";
   };
-}
+})

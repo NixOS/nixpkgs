@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-gravatar2";
   version = "1.4.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_gravatar2";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-LbtWRl45Xdizkg1AF+J6R1aRLMKtmxG6SM8UOHGoA2Q=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/twaddington/django-gravatar";
     license = lib.licenses.mit;
   };
-}
+})

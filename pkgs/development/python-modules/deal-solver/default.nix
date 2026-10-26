@@ -11,7 +11,7 @@
   z3-solver,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deal-solver";
   version = "0.1.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "life4";
     repo = "deal-solver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Z3-powered solver (theorem prover) for deal";
     homepage = "https://github.com/life4/deal-solver";
-    changelog = "https://github.com/life4/deal-solver/releases/tag/${version}";
+    changelog = "https://github.com/life4/deal-solver/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

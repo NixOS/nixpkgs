@@ -6,7 +6,7 @@
   python-dateutil,
   python,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cron-converter";
   version = "1.3.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Sonic0";
     repo = "cron-converter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zNDEBckvSwnqBfNyh5Gv7ICOsPaSx2NKl92ZlyDfukw=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cron string parser and iteration for the datetime object with a cron like format";
     homepage = "https://github.com/Sonic0/cron-converter";
-    changelog = "https://github.com/Sonic0/cron-converter/releases/tag/v${version}";
+    changelog = "https://github.com/Sonic0/cron-converter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b4dm4n ];
   };
-}
+})

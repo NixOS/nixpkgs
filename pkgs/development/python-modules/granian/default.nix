@@ -19,7 +19,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "granian";
   version = "2.8.4";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5Op0WgE2fobetMu7jZsV88bBlU9+5SOzGhBYoPFArmo=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "granian";
-    inherit version src;
+    inherit (finalAttrs) version src;
     hash = "sha256-xmXvssOrsrYSazqH6fVH3baGpFH9cqTEUiARmYJoafs=";
   };
 
@@ -134,7 +134,7 @@ buildPythonPackage rec {
   meta = {
     description = "Rust HTTP server for Python ASGI/WSGI/RSGI applications";
     homepage = "https://github.com/emmett-framework/granian";
-    changelog = "https://github.com/emmett-framework/granian/releases/tag/v${version}";
+    changelog = "https://github.com/emmett-framework/granian/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "granian";
     maintainers = with lib.maintainers; [
@@ -143,4 +143,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,7 +8,7 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncclick";
   version = "8.4.2.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "asyncclick";
-    tag = "${version}+async";
+    tag = "${finalAttrs.version}+async";
     hash = "sha256-KTWNftj/nYoknBPyFfz//S2AwJNp1RCUT2QsTU3DISg=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python composable command line utility";
     homepage = "https://github.com/python-trio/asyncclick";
-    changelog = "https://github.com/python-trio/asyncclick/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/python-trio/asyncclick/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

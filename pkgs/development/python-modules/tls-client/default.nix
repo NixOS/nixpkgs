@@ -6,7 +6,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tls-client";
   version = "1.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FlorianREGAZ";
     repo = "Python-Tls-Client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0eH9fA/oQzrgXcQilUdg4AaTqezj1Q9hP9olhZEDeBc=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Advanced HTTP Library";
     homepage = "https://github.com/FlorianREGAZ/Python-Tls-Client";
-    changelog = "https://github.com/FlorianREGAZ/Python-Tls-Client/releases/tag/${version}";
+    changelog = "https://github.com/FlorianREGAZ/Python-Tls-Client/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

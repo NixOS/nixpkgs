@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-speech-features";
   version = "0.6.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jameslyons";
     repo = "python_speech_features";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IAQujxQ5hOXFNOIEhWsGOTeWqxyBmqL5HSVD4KYEn3U=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

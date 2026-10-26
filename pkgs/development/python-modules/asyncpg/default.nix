@@ -12,13 +12,13 @@
   distro,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncpg";
   version = "0.31.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yYk4bIOUC/vXhxgPKxUZQV4tPWJ3pw2dDwFFrHNQBzU=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asyncio PosgtreSQL driver";
     homepage = "https://github.com/MagicStack/asyncpg";
-    changelog = "https://github.com/MagicStack/asyncpg/releases/tag/v${version}";
+    changelog = "https://github.com/MagicStack/asyncpg/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Asyncpg is a database interface library designed specifically for
       PostgreSQL and Python/asyncio. asyncpg is an efficient, clean
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eadwu ];
   };
-}
+})

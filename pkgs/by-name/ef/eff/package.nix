@@ -8,14 +8,14 @@ let
   inherit (ocaml-ng.ocamlPackages_5_2) buildDunePackage js_of_ocaml menhir;
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "eff";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "matijapretnar";
     repo = "eff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0U61y41CA0YaoNk9Hsj7j6eb2V6Ku3MAjW9lMEimiC0=";
   };
 
@@ -41,4 +41,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.jirkamarsik ];
   };
-}
+})

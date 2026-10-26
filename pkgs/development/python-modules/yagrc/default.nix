@@ -11,7 +11,7 @@
   pytest-grpc,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yagrc";
   version = "1.1.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sparky8512";
     repo = "yagrc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7Bfelh4U/TyKkFzu/orBZ2BwI3CrXMgfzh9psTgF4vQ=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

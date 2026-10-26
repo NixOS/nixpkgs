@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "mariadb-connector-java";
   version = "3.5.10";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6xdqlk+B7h19M2BxtH00u+No/znlN4qNAP0ozxy8+W8=";
   };
 
@@ -22,7 +22,7 @@ maven.buildMavenPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -m444 -D target/mariadb-java-client-${version}.jar $out/share/java/mariadb-java-client.jar
+    install -m444 -D target/mariadb-java-client-${finalAttrs.version}.jar $out/share/java/mariadb-java-client.jar
     runHook postInstall
   '';
 
@@ -36,4 +36,4 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ anthonyroussel ];
     platforms = lib.platforms.all;
   };
-}
+})

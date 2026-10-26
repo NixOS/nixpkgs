@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vault-bin";
   version = "2.2.0";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       };
     in
     fetchzip {
-      url = "https://releases.hashicorp.com/vault/${version}/vault_${version}_${suffix}.zip";
+      url = "https://releases.hashicorp.com/vault/${finalAttrs.version}/vault_${finalAttrs.version}_${suffix}.zip";
       stripRoot = false;
       inherit hash;
     };
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

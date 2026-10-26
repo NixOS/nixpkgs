@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlman";
   version = "2.0.3";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrewgodwin";
     repo = "urlman";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-uhIFH8/zRTIGV4ABO+0frp0z8voWl5Ji6rSVRzcx4Og=";
   };
 
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django URL pattern helpers";
     homepage = "https://github.com/andrewgodwin/urlman";
-    changelog = "https://github.com/andrewgodwin/urlman/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/andrewgodwin/urlman/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

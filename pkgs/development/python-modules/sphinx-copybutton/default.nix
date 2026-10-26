@@ -5,7 +5,7 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-copybutton";
   version = "0.5.2";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-copybutton";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LM2LtQuYsPRJ2XX9aAW36xRtwghTkzug6A6fpVJ6hbk=";
     fetchSubmodules = true;
   };
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

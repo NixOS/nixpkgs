@@ -6,14 +6,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rictydiminished-with-firacode";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "hakatashi";
     repo = "RictyDiminished-with-FiraCode";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-twh3yLAM4MUjWzSDNmo8gNIRf01hieXeOS334sNdFk4=";
     fetchSubmodules = true;
   };
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mt-caret ];
   };
-}
+})

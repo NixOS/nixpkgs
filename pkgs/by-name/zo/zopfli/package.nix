@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zopfli";
   version = "1.0.3";
   outputs = [
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "zopfli";
-    rev = "${pname}-${version}";
-    name = "${pname}-${version}-src";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-src";
     sha256 = "0dr8n4j5nj2h9n208jns56wglw59gg4qm3s7c6y3hs75d0nnkhm4";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Very good, but slow, deflate or zlib compression";
     longDescription = ''
       Zopfli Compression Algorithm is a compression library programmed
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
       edef
     ];
   };
-}
+})

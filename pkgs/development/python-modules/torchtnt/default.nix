@@ -19,14 +19,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchtnt";
   version = "0.2.4";
   pyproject = true;
 
   # no tag / releases on github
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Js9OcYllr8KT52FYtHKDciBVvPeelNDmfnC12/YcDJs=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

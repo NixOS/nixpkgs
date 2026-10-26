@@ -18,7 +18,7 @@ let
   };
 in
 
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nixos-render-docs";
   version = "0.0";
   pyproject = true;
@@ -62,7 +62,7 @@ python.pkgs.buildPythonApplication rec {
   # NOTE this is a CI test rather than a build-time test because we want to keep the
   # build closures small. mypy has an unreasonably large build closure for docs builds.
   passthru.tests.typing =
-    runCommand "${pname}-mypy"
+    runCommand "${finalAttrs.pname}-mypy"
       {
         nativeBuildInputs = [
           (python3.withPackages (
@@ -76,7 +76,7 @@ python.pkgs.buildPythonApplication rec {
         ];
       }
       ''
-        mypy --strict ${src}
+        mypy --strict ${finalAttrs.src}
         touch $out
       '';
 
@@ -86,4 +86,4 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

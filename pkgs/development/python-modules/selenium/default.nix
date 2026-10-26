@@ -21,7 +21,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "selenium";
   version = "4.40.0";
   pyproject = true;
@@ -29,7 +29,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
-    tag = "selenium-${version}" + lib.optionalString (lib.versions.patch version != "0") "-python";
+    tag =
+      "selenium-${finalAttrs.version}"
+      + lib.optionalString (lib.versions.patch finalAttrs.version != "0") "-python";
     hash = "sha256-Yfm2kpAmmEUP+m48PQf09UvFPeGBxd0ukqTtVah5h+E=";
   };
 
@@ -122,4 +124,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

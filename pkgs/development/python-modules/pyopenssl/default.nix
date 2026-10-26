@@ -14,7 +14,7 @@
   pytest-rerunfailures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopenssl";
   version = "26.4.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "pyopenssl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZWlY/dnOs5bDt7VSM6Juyr/I34WHSu2UemvzGmrDfio=";
   };
 
@@ -98,8 +98,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper around the OpenSSL library";
     homepage = "https://github.com/pyca/pyopenssl";
-    changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/pyca/pyopenssl/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

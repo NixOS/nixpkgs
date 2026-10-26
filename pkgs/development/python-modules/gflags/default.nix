@@ -6,13 +6,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.1.2";
   format = "setuptools";
   pname = "python-gflags";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-QK4THome9o6eFKpTygY4OcNPahaK/mIiF7W4dUkqHuI=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     description = "Module for command line handling, similar to Google's gflags for C++";
     license = lib.licenses.bsd3;
   };
-}
+})

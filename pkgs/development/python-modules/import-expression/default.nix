@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "import-expression";
   version = "2.2.1.post1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "import_expression";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-HIMb8mvvft82qXs0xoe5Yuer4GEWxm8A4U+aMhhiPU8=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Transpiles a superset of python to allow easy inline imports";
     homepage = "https://github.com/ioistired/import-expression-parser";
-    changelog = "https://github.com/ioistired/import-expression/releases/tag/v${version}";
+    changelog = "https://github.com/ioistired/import-expression/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       psfl
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "import-expression";
   };
-}
+})

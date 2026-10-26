@@ -20,14 +20,14 @@
   testscenarios,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-db";
   version = "18.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_db";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Ujm6BZuUw4HGG1q+YHrc0V6u6N8RXerduKNtyzZuRPo=";
   };
 
@@ -65,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

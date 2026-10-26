@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flake8-deprecated";
   version = "2.3.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gforcada";
     repo = "flake8-deprecated";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KF0hWhMZEWuSPUyfStayNa5Nfss9NpTvMXPeemWbQXU=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flake8_deprecated" ];
 
   meta = {
-    changelog = "https://github.com/gforcada/flake8-deprecated/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/gforcada/flake8-deprecated/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Flake8 plugin that warns about deprecated method calls";
     homepage = "https://github.com/gforcada/flake8-deprecated";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ lopsided98 ];
   };
-}
+})

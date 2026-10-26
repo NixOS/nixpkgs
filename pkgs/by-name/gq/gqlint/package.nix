@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "gqlint";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "happylinks";
     repo = "gqlint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-m/Y7i3+93UdPnKQlZUHgtRbfSmJ1xYjao+bU+zxMgHw=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     mainProgram = "gqlint";
     maintainers = with lib.maintainers; [ hardselius ];
   };
-}
+})

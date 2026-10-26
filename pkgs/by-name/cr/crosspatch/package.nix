@@ -28,13 +28,13 @@ let
     ps.requests
   ]);
 
-  parser = buildDotnetModule rec {
+  parser = buildDotnetModule (finalAttrs: {
     inherit version src;
     pname = "crosspatch-parser";
-    sourceRoot = "${src.name}/tools/CrossPatchParser";
+    sourceRoot = "${finalAttrs.src.name}/tools/CrossPatchParser";
     nugetDeps = ./dependencies.json;
     meta.mainProgram = "CrossPatchParser";
-  };
+  });
 in
 stdenv.mkDerivation {
   inherit version src;

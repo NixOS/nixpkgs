@@ -5,7 +5,7 @@
   unittestCheckHook,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdutils";
   version = "1.8.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "didix21";
     repo = "mdutils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qUCiiFzbOccS7wy0LqgyZH04KlwG/FzE3a+R3z7tPF8=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
       this way, mdutils will make things easy for creating Markdown files.
     '';
     homepage = "https://github.com/didix21/mdutils";
-    changelog = "https://github.com/didix21/mdutils/releases/tag/${src.tag}";
+    changelog = "https://github.com/didix21/mdutils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

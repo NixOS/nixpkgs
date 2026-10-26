@@ -8,14 +8,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-odoo-contrib";
   version = "1.24";
   pyproject = true;
 
   src = fetchPypi {
     pname = "click_odoo_contrib";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-fOBMQ8tLdawozwSp02g5NnAqKciu6TuTJrn4tFacX7s=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

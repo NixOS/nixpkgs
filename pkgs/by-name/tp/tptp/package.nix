@@ -9,14 +9,14 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "TPTP";
   version = "9.1.0";
 
   src = fetchurl {
     urls = [
-      "https://tptp.org/TPTP/Distribution/TPTP-v${version}.tgz"
-      "https://tptp.org/TPTP/Archive/TPTP-v${version}.tgz"
+      "https://tptp.org/TPTP/Distribution/TPTP-v${finalAttrs.version}.tgz"
+      "https://tptp.org/TPTP/Archive/TPTP-v${finalAttrs.version}.tgz"
     ];
     hash = "sha256-KylCpKEdjvXTzYU2MOi0FDrr4e6je2YB366+dxy3Xmo=";
   };
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     homepage = "https://tptp.org/TPTP/";
   };
-}
+})

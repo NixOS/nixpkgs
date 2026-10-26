@@ -9,7 +9,7 @@
   libssh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ssh-python";
   version = "1.2.0.post1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ParallelSSH";
     repo = "ssh-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ix6UzyC/mFDVOvfJujwppijmsTrwNtuDAkmikrKKc2o=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for libssh C library";
     homepage = "https://github.com/ParallelSSH/ssh-python";
-    changelog = "https://github.com/ParallelSSH/ssh-python/blob/${src.tag}/Changelog.rst";
+    changelog = "https://github.com/ParallelSSH/ssh-python/blob/${finalAttrs.src.tag}/Changelog.rst";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ infinidoge ];
   };
-}
+})

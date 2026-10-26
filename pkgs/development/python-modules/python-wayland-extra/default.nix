@@ -10,13 +10,13 @@
   ruff,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-wayland-extra";
   version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python_wayland_extra";
     hash = "sha256-HSBOCWP3o/BHmg3LO+LU+GpYkEYSqdljjYcEPdOnxZk=";
   };
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = lib.platforms.linux;
   };
-}
+})

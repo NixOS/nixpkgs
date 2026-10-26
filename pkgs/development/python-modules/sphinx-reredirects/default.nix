@@ -6,14 +6,14 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-reredirects";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_reredirects";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+5sZUzWrFLQ/gnMofQx+62N7psVsZlgcEbRyAvZxiyk=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

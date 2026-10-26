@@ -14,7 +14,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-recording";
   version = "0.13.4";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-S++MnI0GgpQxS6kFkt05kcE4JMW7jyFjJ3o7DhfYoVA=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jbgosselin ];
   };
-}
+})

@@ -19,7 +19,7 @@
   withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdmapsharing";
   version = "3.9.13";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libdmapsharing";
-    rev = "${lib.toUpper pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "${lib.toUpper finalAttrs.pname}_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-oR9lpOFxgGfrtzncFT6dbmhKQfcuH/NvhOR/USHAHQc=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

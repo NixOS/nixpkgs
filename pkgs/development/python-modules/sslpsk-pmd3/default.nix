@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sslpsk-pmd3";
   version = "1.0.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "sslpsk-pmd3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZOPrMZhtHIpE7QMEYGti+ZjqVv93jzb74rG5Fwhjgyw=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/doronz88/sslpsk-pmd3/releases/tag/${src.tag}";
+    changelog = "https://github.com/doronz88/sslpsk-pmd3/releases/tag/${finalAttrs.src.tag}";
     description = "Adds TLS-PSK support to the Python ssl package";
     homepage = "https://github.com/doronz88/sslpsk-pmd3";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

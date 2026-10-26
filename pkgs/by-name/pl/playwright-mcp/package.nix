@@ -6,7 +6,7 @@
   playwright-driver,
   playwright-test,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "playwright-mcp";
   # nixpkgs-update: no auto update
   version = "0.0.83";
@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright-mcp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Pkm4kmnWgLX7wmPjL3hM3LWfkPwIVUoW3Wp/RHjX/hA=";
   };
 
@@ -45,11 +45,11 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Microsoft/playwright-mcp/releases/tag/v${version}";
+    changelog = "https://github.com/Microsoft/playwright-mcp/releases/tag/v${finalAttrs.version}";
     description = "Playwright MCP server";
     homepage = "https://github.com/Microsoft/playwright-mcp";
     license = lib.licenses.asl20;
     mainProgram = "playwright-mcp";
     maintainers = [ lib.maintainers.kalekseev ];
   };
-}
+})

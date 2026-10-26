@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydantic-compat";
   version = "0.1.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "pydantic-compat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     leaveDotGit = true;
     hash = "sha256-YJUfWu+nyGlwpJpxYghCKzj3CasdAaqYoNVCcfo/7YE=";
   };
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Compatibility layer for pydantic v1/v2";
     homepage = "https://github.com/pyapp-kit/pydantic-compat";
-    changelog = "https://github.com/pyapp-kit/pydantic-compat/releases/tag/v${version}";
+    changelog = "https://github.com/pyapp-kit/pydantic-compat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

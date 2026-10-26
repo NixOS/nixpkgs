@@ -9,14 +9,14 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydle";
   version = "1.2.0";
   pyproject = true;
   src = fetchFromCodeberg {
     owner = "shiz";
     repo = "pydle";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-460oY68PSmmgXq4bLOr8SB9RiMy3wc5EwEV7s5AKePY=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ polyfloyd ];
   };
-}
+})

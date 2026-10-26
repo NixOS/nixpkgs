@@ -13,18 +13,18 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "raygeo";
   version = "1.67.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+86l3GLmbHAp0THhkce33+kTUdso6xp8FqTDZ3vxqBU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-21lko71TEJSXXoDKkq5jzW2TqXrWXkHaGf45FgRJPhc=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kanagawamarcos ];
   };
-}
+})

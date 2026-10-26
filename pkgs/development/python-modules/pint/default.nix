@@ -21,7 +21,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pint";
   version = "0.25.3";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-l2wbcS2mlamCBXr9KOWmq10WN5pNVH4Iu65UuZ0vQmU=";
   };
 
@@ -62,11 +62,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";
+    changelog = "https://github.com/hgrecco/pint/blob/${finalAttrs.version}/CHANGES";
     description = "Physical quantities module";
     mainProgram = "pint-convert";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

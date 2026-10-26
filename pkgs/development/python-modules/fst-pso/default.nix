@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fst-pso";
   version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "fst_pso";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-znf1A/Vcz5ELFGFrpDzdj8O3XEDxpu+mCCb35GfWqN8=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fuzzy Self-Tuning PSO global optimization library";
     homepage = "https://github.com/aresio/fst-pso";
-    changelog = "https://github.com/aresio/fst-pso/releases/tag/${version}";
+    changelog = "https://github.com/aresio/fst-pso/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

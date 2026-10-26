@@ -9,7 +9,7 @@
   unar,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reusables";
   version = "1.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Reusables";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-l8nARlyLPMLZnIdV5IT2HeZ8duUA94cc2jWEVrBJ5wc=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Commonly consumed code commodities for Python";
     homepage = "https://github.com/cdgriffith/Reusables";
-    changelog = "https://github.com/cdgriffith/Reusables/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/cdgriffith/Reusables/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sophronesis ];
   };
-}
+})

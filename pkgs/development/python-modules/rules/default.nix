@@ -12,7 +12,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rules";
   version = "3.5.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dfunckt";
     repo = "django-rules";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8Kay2b2uwaI/ml/cPpcj9svoDQI0ptV8tyGeZ76SgZw=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Awesome Django authorization, without the database";
     homepage = "https://github.com/dfunckt/django-rules";
-    changelog = "https://github.com/dfunckt/django-rules/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dfunckt/django-rules/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

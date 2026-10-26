@@ -8,13 +8,13 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfluidsynth";
   version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ap4duvRp/RH0UYTzfsKOGYsdZJWtdPYdxKV3JrKxujE=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

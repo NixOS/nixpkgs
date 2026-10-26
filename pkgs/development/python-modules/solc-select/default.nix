@@ -8,7 +8,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "solc-select";
   version = "1.2.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "solc-select";
-    tag = "v.${version}";
+    tag = "v.${finalAttrs.version}";
     hash = "sha256-pPDiP8GNE/KAFS4Jm6jLpKozktxy70+f00QFUa4wMiQ=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ arturcygan ];
   };
-}
+})

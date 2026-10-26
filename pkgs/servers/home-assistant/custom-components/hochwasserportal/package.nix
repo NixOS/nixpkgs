@@ -8,7 +8,7 @@
   lhpapi,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "stephan192";
   domain = "hochwasserportal";
   version = "1.0.9";
@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "stephan192";
     repo = "hochwasserportal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/mnAQc+s6L9NVzk6gDA5p1+DfY3AZ5Sy6AWhnpkT++Q=";
   };
 
@@ -29,10 +29,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/stephan192/hochwasserportal/releases/tag/${version}";
+    changelog = "https://github.com/stephan192/hochwasserportal/releases/tag/${finalAttrs.version}";
     description = "Home Assistant integration for Länderübergreifendes Hochwasser Portal";
     homepage = "https://github.com/stephan192/hochwasserportal";
     maintainers = with lib.maintainers; [ _9R ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -6,7 +6,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "electrickiwi-api";
   version = "0.9.14";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mikey0000";
     repo = "EK-API";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UXweOz5olwx3ZI2M7eI1n729tqfLiWszV2zTWbrA9CM=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

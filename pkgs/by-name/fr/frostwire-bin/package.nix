@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.13.3";
   pname = "frostwire";
 
   src = fetchurl {
-    url = "https://github.com/frostwire/frostwire/releases/download/frostwire-desktop-${version}-build-322/frostwire-${version}.amd64.tar.gz";
+    url = "https://github.com/frostwire/frostwire/releases/download/frostwire-desktop-${finalAttrs.version}-build-322/frostwire-${finalAttrs.version}.amd64.tar.gz";
     hash = "sha256-wRT8Oo+niOFBpEnq3pgjO9jpagZMgSE44V9RBYnGwig=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ gavin ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

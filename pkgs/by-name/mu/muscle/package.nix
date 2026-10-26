@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "muscle";
   version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "rcedgar";
     repo = "muscle";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NpnJziZXga/T5OavUt3nQ5np8kJ9CFcSmwyg4m6IJsk=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   patches = [
     ./muscle-darwin-g++.patch
@@ -38,4 +38,4 @@ gccStdenv.mkDerivation rec {
       unode
     ];
   };
-}
+})

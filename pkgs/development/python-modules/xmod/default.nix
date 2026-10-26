@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmod";
   version = "1.8.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rec";
     repo = "xmod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pfFxtDQ4kaBrx4XzYMQO1vE4dUr2zs8jgGUQUdXB798=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Turn any object into a module";
     homepage = "https://github.com/rec/xmod";
-    changelog = "https://github.com/rec/xmod/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/rec/xmod/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,7 +6,7 @@
   cmake,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "editorconfig";
   version = "0.17.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3wEW2FMBKBS9mekYgmYG3Ohd3plCtYDFejwG3W6B9IA=";
     fetchSubmodules = true;
   };
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

@@ -23,12 +23,12 @@
   libsecret,
   p11-kit,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "microsoft-identity-broker";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${version}-noble_amd64.deb";
+    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${finalAttrs.version}-noble_amd64.deb";
     hash = "sha256-A+YNfbcZflkDllxd97YBrhvbcvzphsz7zb7y/abyx/k=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };
-}
+})

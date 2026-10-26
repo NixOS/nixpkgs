@@ -13,7 +13,7 @@
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-filer";
   version = "3.4.4";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-filer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HB82YDS6RV4wg10XUxGpfRzebIbI5QMvyzYq01AWWj0=";
   };
 
@@ -50,10 +50,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/django-cms/django-filer/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/django-cms/django-filer/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "File management application for Django";
     homepage = "https://github.com/django-cms/django-filer";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})

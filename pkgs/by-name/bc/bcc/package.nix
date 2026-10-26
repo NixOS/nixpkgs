@@ -21,7 +21,7 @@
   zip,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bcc";
   version = "0.37.0";
   pyproject = false;
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OfQWqZ7yyN+rs6PJP5QUIn07QdxOiBoUEetGQPp6KJo=";
   };
 
@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
 
   cmakeFlags = [
     (lib.cmakeFeature "BCC_KERNEL_MODULES_DIR" "/run/booted-system/kernel-modules/lib/modules")
-    (lib.cmakeFeature "REVISION" version)
+    (lib.cmakeFeature "REVISION" finalAttrs.version)
     (lib.cmakeBool "ENABLE_USDT" true)
     (lib.cmakeBool "ENABLE_CPP_API" true)
     (lib.cmakeBool "CMAKE_USE_LIBBPF_PACKAGE" true)
@@ -147,4 +147,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

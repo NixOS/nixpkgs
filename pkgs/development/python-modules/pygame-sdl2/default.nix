@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygame-sdl2";
   version = "8.5.3.26051504";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "pygame_sdl2";
-    tag = "renpy-${version}";
+    tag = "renpy-${finalAttrs.version}";
     hash = "sha256-I4zk19aNfVZstkVDLkwI/TBXliGAqVmOjeQLbRFri8Y=";
   };
 
@@ -43,9 +43,9 @@ buildPythonPackage rec {
   doCheck = true;
 
   postUnpack = ''
-    substituteInPlace source/setup.py --replace-fail "2.1.0" "${version}"
+    substituteInPlace source/setup.py --replace-fail "2.1.0" "${finalAttrs.version}"
     substituteInPlace source/src/pygame_sdl2/version.py --replace-fail "2, 1, 0" "${
-      builtins.replaceStrings [ "." ] [ ", " ] version
+      builtins.replaceStrings [ "." ] [ ", " ] finalAttrs.version
     }"
 
     headers=$(mktemp -d)
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ raskin ];
   };
-}
+})

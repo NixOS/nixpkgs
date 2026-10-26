@@ -8,14 +8,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-monitor-ingestion";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_monitor_ingestion";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-l6/ueA2a4waRKM3ncCfUzGL6gk/mTVusiArEpksKDE4=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-monitor-ingestion_${version}/sdk/monitor/azure-monitor-ingestion/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-monitor-ingestion_${finalAttrs.version}/sdk/monitor/azure-monitor-ingestion/CHANGELOG.md";
     description = "Send custom logs to Azure Monitor using the Logs Ingestion API";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/monitor/azure-monitor-ingestion";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

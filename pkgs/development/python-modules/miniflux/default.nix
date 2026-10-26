@@ -6,7 +6,7 @@
   requests,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "miniflux";
   version = "1.1.6";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "python-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xzQozsf6FURdf5HI6U8/26jbFmVYWDqXFt77iZ7pqP8=";
   };
   build-system = [ setuptools ];
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wariuccio ];
   };
-}
+})

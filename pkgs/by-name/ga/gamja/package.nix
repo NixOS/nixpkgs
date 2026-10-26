@@ -6,14 +6,14 @@
   # https://codeberg.org/emersion/gamja/src/branch/master/doc/config-file.md
   gamjaConfig ? null,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "gamja";
   version = "1.0.0-beta.11";
 
   src = fetchFromCodeberg {
     owner = "emersion";
     repo = "gamja";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-amwJ6PWS0In7ERcvZr5XbJyHedSwJGAUUS2vWIqktNE=";
   };
 
@@ -39,4 +39,4 @@ buildNpmPackage rec {
       apfelkuchen6
     ];
   };
-}
+})

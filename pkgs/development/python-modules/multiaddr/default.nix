@@ -16,7 +16,7 @@
   trio-typing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "multiaddr";
   version = "0.0.11";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = "py-multiaddr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mlHcuLVtczp3APXJFkWbjeY7xU39eFERa8hhiOEwBSU=";
   };
 
@@ -62,11 +62,11 @@ buildPythonPackage rec {
   meta = {
     description = "Composable and future-proof network addresses";
     homepage = "https://github.com/multiformats/py-multiaddr";
-    changelog = "https://github.com/multiformats/py-multiaddr/releases/tag/${src.tag}";
+    changelog = "https://github.com/multiformats/py-multiaddr/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       mit
       asl20
     ];
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

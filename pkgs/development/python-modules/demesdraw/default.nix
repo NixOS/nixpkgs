@@ -14,13 +14,13 @@
   mpmath,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "demesdraw";
   version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-sPxdSXWRh6qnUKmP9g/AghOX5Ydrxv2Le2iadefQDws=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aw-client";
   version = "0.5.15";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "aw-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AS29DIfEQ6/vh8idcMMQoGmiRM8MMf3eVQzvNPsXgpA=";
   };
 
@@ -51,9 +51,9 @@ buildPythonPackage rec {
   meta = {
     description = "Client library for ActivityWatch";
     homepage = "https://github.com/ActivityWatch/aw-client";
-    changelog = "https://github.com/ActivityWatch/aw-client/releases/tag/v${version}";
+    changelog = "https://github.com/ActivityWatch/aw-client/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ huantian ];
     mainProgram = "aw-client";
   };
-}
+})

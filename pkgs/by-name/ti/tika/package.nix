@@ -38,14 +38,14 @@ let
     jdk = jdk17;
   };
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "tika";
   version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tika";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nuiE+MWJNA4PLprAC0vDBadk34TFsVEDBcCZct1XRxo=";
   };
 
@@ -109,12 +109,12 @@ maven.buildMavenPackage rec {
       # Note: using * instead of version would match multiple files
     ''
     + lib.optionalString enableGui ''
-      install -Dm644 tika-app/target/tika-app-${version}.jar $out/share/tika/tika-app.jar
+      install -Dm644 tika-app/target/tika-app-${finalAttrs.version}.jar $out/share/tika/tika-app.jar
       makeWrapper ${jdk}/bin/java $out/bin/tika-app \
           --add-flags "${flags} -jar $out/share/tika/tika-app.jar"
     ''
     + ''
-      install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${version}.jar $out/share/tika/tika-server.jar
+      install -Dm644 tika-server/tika-server-standard/target/tika-server-standard-${finalAttrs.version}.jar $out/share/tika/tika-server.jar
       makeWrapper ${jdk}/bin/java $out/bin/tika-server \
           --prefix PATH : ${binPath} \
           --add-flags "-jar $out/share/tika/tika-server.jar"
@@ -127,7 +127,7 @@ maven.buildMavenPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/apache/tika/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/apache/tika/blob/${finalAttrs.src.rev}/CHANGES.txt";
     description = "Toolkit for extracting metadata and text from over a thousand different file types";
     longDescription = ''
       The Apache Tika™ toolkit detects and extracts metadata and text
@@ -145,4 +145,4 @@ maven.buildMavenPackage rec {
       binaryBytecode # maven dependencies
     ];
   };
-}
+})

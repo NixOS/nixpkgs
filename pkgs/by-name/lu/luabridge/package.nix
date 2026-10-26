@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "luabridge";
   version = "2.10";
 
   src = fetchFromGitHub {
     owner = "vinniefalco";
     repo = "LuaBridge";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-pHJU9FxG1/vAakaXxJeXFDdDbOvmgL9/88jM6CWXzjg=";
   };
 
@@ -28,9 +28,9 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Lightweight, dependency-free library for binding Lua to C++";
     homepage = "https://github.com/vinniefalco/LuaBridge";
-    changelog = "https://github.com/vinniefalco/LuaBridge/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/vinniefalco/LuaBridge/blob/${finalAttrs.version}/CHANGES.md";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

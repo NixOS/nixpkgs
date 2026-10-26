@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiofiles";
   version = "25.1.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tinche";
     repo = "aiofiles";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NBmzoUb2una3+eWqR1HraVPibaRb9I51aYwskrjxskQ=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "File support for asyncio";
     homepage = "https://github.com/Tinche/aiofiles";
-    changelog = "https://github.com/Tinche/aiofiles/releases/tag/${src.tag}";
+    changelog = "https://github.com/Tinche/aiofiles/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

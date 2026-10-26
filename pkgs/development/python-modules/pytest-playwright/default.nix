@@ -11,7 +11,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-playwright";
   version = "0.10.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-pytest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qnh0J0RVCtIZzaHnsauArmttG60zd2uncDVr4HTCeRU=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to write end-to-end browser tests with Playwright";
     homepage = "https://github.com/microsoft/playwright-pytest";
-    changelog = "https://github.com/microsoft/playwright-pytest/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/playwright-pytest/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

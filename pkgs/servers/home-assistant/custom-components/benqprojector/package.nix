@@ -5,15 +5,15 @@
   benqprojector,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "rrooggiieerr";
   domain = "benqprojector";
   version = "0.1.4";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "homeassistant-benqprojector";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BiAqEVZSbroxw46thsU1psjP9JEEZaGRLWgpT/lQTHI=";
   };
 
@@ -22,8 +22,8 @@ buildHomeAssistantComponent rec {
   meta = rec {
     description = "Home Assistant integration for BenQ projectors";
     homepage = "https://github.com/rrooggiieerr/homeassistant-benqprojector";
-    changelog = "${homepage}/releases/tag/${version}";
+    changelog = "${homepage}/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sephalon ];
   };
-}
+})

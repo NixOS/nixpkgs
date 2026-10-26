@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tiny-proxy";
   version = "0.2.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "tiny-proxy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-59T09qcOstl/yfzQmNlTNxGerQethZntwDAHwz/5FFM=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "SOCKS5/SOCKS4/HTTP proxy server";
     homepage = "https://github.com/romis2012/tiny-proxy";
-    changelog = "https://github.com/romis2012/tiny-proxy/releases/tag/v${version}";
+    changelog = "https://github.com/romis2012/tiny-proxy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
   };
-}
+})

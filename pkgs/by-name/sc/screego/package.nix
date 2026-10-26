@@ -48,7 +48,7 @@ let
 
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit src version;
 
   pname = "screego-server";
@@ -58,8 +58,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commitHash=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commitHash=${finalAttrs.src.rev}"
     "-X=main.mode=prod"
   ];
 
@@ -81,4 +81,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ pinpox ];
     mainProgram = "screego";
   };
-}
+})

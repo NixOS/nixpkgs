@@ -6,14 +6,14 @@
   python-socketio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uptime-kuma-api";
   version = "1.2.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "uptime_kuma_api";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-tZ5ln3sy6W5RLcwjzLbhobCNLbHXIhXIzrcOVCG+Z+E=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the Uptime Kuma Socket.IO API";
     homepage = "https://github.com/lucasheld/uptime-kuma-api";
-    changelog = "https://github.com/lucasheld/uptime-kuma-api/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/lucasheld/uptime-kuma-api/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ julienmalka ];
   };
-}
+})

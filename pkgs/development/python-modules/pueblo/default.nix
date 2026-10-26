@@ -9,7 +9,7 @@
   tomli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pueblo";
   version = "0.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # package, we can rely on upstream to run the tests before releasing, and it
   # should work for us as well.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-21jTu9XEXXiYpVN1FKJeZR95L6XBKOdy9pXEmY8Qj4Q=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

@@ -8,14 +8,14 @@
   opensc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chrome-token-signing";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "open-eid";
     repo = "chrome-token-signing";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wKy/RVR7jx5AkMJgHXsuV+jlzyfH5nDRggcIUgh2ML4=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.mmahut ];
     platforms = lib.platforms.linux;
   };
-}
+})

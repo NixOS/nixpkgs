@@ -29,7 +29,7 @@ let
   loadersPath = "${gdk-pixbuf.binaryDir}/jxl-loaders.cache";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjxl";
   version = "0.12.0";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rJyvJo1ZveE1pvMErK9ilFQA0NXkD2ka93L+1gXeqf8=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
@@ -206,4 +206,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = lib.platforms.all;
   };
-}
+})

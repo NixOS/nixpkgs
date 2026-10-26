@@ -14,13 +14,13 @@
   nss,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "morgen";
   version = "4.0.6";
 
   src = fetchurl {
-    name = "morgen-${version}.deb";
-    url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
+    name = "morgen-${finalAttrs.version}.deb";
+    url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${finalAttrs.version}/linux/deb";
     hash = "sha256-ZT8HC8uXDgIjDaAhivCQ9SfYYtPjYgcfCCRYkOWpLhE=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ justanotherariel ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

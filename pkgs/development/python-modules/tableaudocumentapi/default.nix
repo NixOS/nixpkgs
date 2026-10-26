@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tableaudocumentapi";
   version = "0.11";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-g6V1UBf+P21FcZkR3PHoUmdmrQwEvjdd1VKhvNmvOys=";
   };
   patches = [
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for working with Tableau files";
     homepage = "https://github.com/tableau/document-api-python";
-    changelog = "https://github.com/tableau/document-api-python/releases/tag/v${version}";
+    changelog = "https://github.com/tableau/document-api-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

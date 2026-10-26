@@ -7,8 +7,7 @@
   libdrm,
 }:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "radeon-profile";
   version = "20200824";
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
       owner = "marazmista";
       repo = "radeon-profile";
-      rev = version;
+      rev = finalAttrs.version;
       sha256 = "0z6a9w79s5wiy8cvwcdp5wmgf6702d0wzw95f6176yhp4cwy4cq2";
     })
     + "/radeon-profile";
@@ -44,5 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "radeon-profile";
   };
-
-}
+})

@@ -9,7 +9,7 @@
   pyqt5,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lightparam";
   version = "0.4.6";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "portugueslab";
     repo = "lightparam";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cWgycEw2r+gI1WloCHWLizFJjJJbeezohlR8z+SeFI4=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

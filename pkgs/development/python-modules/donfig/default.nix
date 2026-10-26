@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "donfig";
   version = "0.8.1.post1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = "donfig";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hF4hzI1MTLgUexRIqwBEEEMV7Az2oDkp5GQQ5282vwE=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for configuring a package including defaults, env variable loading, and yaml loading";
     homepage = "https://github.com/pytroll/donfig";
-    changelog = "https://github.com/pytroll/donfig/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pytroll/donfig/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

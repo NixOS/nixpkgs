@@ -5,7 +5,7 @@
   mrustc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mrustc-minicargo";
   inherit (mrustc) src version;
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       Designed to work with mrustc to build Rust projects
       (like the Rust compiler itself).
     '';
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       progval
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

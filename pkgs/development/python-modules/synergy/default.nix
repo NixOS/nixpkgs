@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "synergy";
   version = "1.0.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "djwooten";
     repo = "synergy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-df5CBEcRx55/rSMc6ygMVrHbbEcnU1ISJheO+WoBSCI=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

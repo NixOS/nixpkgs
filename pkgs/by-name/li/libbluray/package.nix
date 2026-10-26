@@ -34,12 +34,12 @@ let
     jdk = jdk21;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbluray";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "https://get.videolan.org/libbluray/${version}/libbluray-${version}.tar.xz";
+    url = "https://get.videolan.org/libbluray/${finalAttrs.version}/libbluray-${finalAttrs.version}.tar.xz";
     hash = "sha256-drXcQAl/KNyk67AJyY7VEyGyknRT91zHLPdKzQm59Ek=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.amarshall ];
     platforms = lib.platforms.unix;
   };
-}
+})

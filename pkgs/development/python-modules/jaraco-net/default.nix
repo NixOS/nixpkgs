@@ -30,7 +30,7 @@
   net-tools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-net";
   version = "10.2.3";
   pyproject = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.net";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yZbiCGUZqJQdV3/vtNLs+B9ZDin2PH0agR4kYvB5HxA=";
   };
 
@@ -86,10 +86,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.net/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.net/blob/${finalAttrs.src.tag}/NEWS.rst";
     description = "Networking tools by jaraco";
     homepage = "https://github.com/jaraco/jaraco.net";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

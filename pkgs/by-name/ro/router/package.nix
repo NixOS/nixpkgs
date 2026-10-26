@@ -12,14 +12,14 @@
   router,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "router";
   version = "1.56.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = "router";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4l9nTbtF8hy2x1fdRhmMKcYxTD6wWKXIfihLTWdtm7U=";
   };
 
@@ -60,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ lib.maintainers.bbigras ];
   };
-}
+})

@@ -11,13 +11,13 @@
   torchvision,
   tqdm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sam2";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fg6iUtQ8ENhT46z84LV3CsaDwwSBvW3jETAOnUT0W3Q=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     platforms = lib.platforms.all;
   };
-}
+})

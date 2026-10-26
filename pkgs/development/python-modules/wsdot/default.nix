@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wsdot";
   version = "0.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ucodery";
     repo = "wsdot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZmQXa/C5AxqzAdmxqStWnCLrm3AJb/krxbDhtLYMWPw=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ucodery/wsdot/releases/tag/${src.tag}";
+    changelog = "https://github.com/ucodery/wsdot/releases/tag/${finalAttrs.src.tag}";
     description = "Python wrapper of the wsdot.wa.gov APIs";
     homepage = "https://github.com/ucodery/wsdot";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

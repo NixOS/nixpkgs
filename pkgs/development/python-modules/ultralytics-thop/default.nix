@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ultralytics-thop";
   version = "2.0.19";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "thop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-icBfJagsK2DabMC8xgWNT1o3EdDGL+U2UyIf/LfugYc=";
   };
 
@@ -39,9 +39,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/ultralytics/thop";
-    changelog = "https://github.com/ultralytics/thop/releases/tag/${src.tag}";
+    changelog = "https://github.com/ultralytics/thop/releases/tag/${finalAttrs.src.tag}";
     description = "Profile PyTorch models by computing the number of Multiply-Accumulate Operations (MACs) and parameters";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ osbm ];
   };
-}
+})

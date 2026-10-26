@@ -16,14 +16,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obconf-qt";
   version = "0.16.6";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "obconf-qt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Qd8vIfYjY/etv2IXEqQQM1ni0eS6Vuk/MnqtuLh4Mow=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

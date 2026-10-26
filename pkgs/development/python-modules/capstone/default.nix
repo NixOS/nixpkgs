@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "capstone";
   version = lib.getVersion capstone;
   pyproject = true;
 
   src = capstone.src;
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
   # libcapstone.a is not built with BUILD_SHARED_LIBS. For some reason setup.py
   # checks if it exists but it is not really needed. Most likely a bug in setup.py.
@@ -50,4 +50,4 @@ buildPythonPackage rec {
       ris
     ];
   };
-}
+})

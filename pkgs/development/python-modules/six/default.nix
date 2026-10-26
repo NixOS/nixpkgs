@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "six";
   version = "1.17.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "benjaminp";
     repo = "six";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tz99C+dz5xJhunoC45bl0NdSdV9NXWya9ti48Z/KaHY=";
   };
 
@@ -31,10 +31,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "six" ];
 
   meta = {
-    changelog = "https://github.com/benjaminp/six/blob/${version}/CHANGES";
+    changelog = "https://github.com/benjaminp/six/blob/${finalAttrs.version}/CHANGES";
     description = "Python 2 and 3 compatibility library";
     homepage = "https://github.com/benjaminp/six";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

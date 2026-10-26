@@ -6,13 +6,13 @@
   prompt-toolkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "noneprompt";
   version = "0.1.11";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aCJpGPKhVDqjgMqtpcOArlyjj1cpInjFv9O3KJ8axts=";
   };
 
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   meta = {
     description = "Prompt toolkit for console interaction";
     homepage = "https://github.com/nonebot/noneprompt";
-    changelog = "https://github.com/nonebot/noneprompt/releases/tag/v${version}";
+    changelog = "https://github.com/nonebot/noneprompt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "noneprompt";
   };
-}
+})

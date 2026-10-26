@@ -14,12 +14,12 @@
 let
   version = "1.8.4";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clutter-gtk";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/clutter-gtk/${lib.versions.majorMinor version}/clutter-gtk-${version}.tar.xz";
+    url = "mirror://gnome/sources/clutter-gtk/${lib.versions.majorMinor finalAttrs.version}/clutter-gtk-${finalAttrs.version}.tar.xz";
     sha256 = "01ibniy4ich0fgpam53q252idm7f4fn5xg5qvizcfww90gn9652j";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -14,7 +14,7 @@
   semver,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "milc";
   version = "1.10.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clueboard";
     repo = "milc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zy62VjtoNhl5hXywJO1p9rO19YAJeKOg+NkfCfgn1Xs=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     homepage = "https://milc.clueboard.co";
     license = lib.licenses.mit;
   };
-}
+})

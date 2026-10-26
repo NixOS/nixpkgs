@@ -6,14 +6,14 @@
   tkinter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymsgbox";
   version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pymsgbox";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-mNBVxJpRHcwQ+gjDBD5xAtRo9eSzqDxtPGHfcix9eY0=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

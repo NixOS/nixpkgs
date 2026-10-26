@@ -14,7 +14,7 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-tsp";
   version = "0.5.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fillipe-gsm";
     repo = "python-tsp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X4L0j6ZL8/Xj2YFcvwOl8voC2xHagMcdcj9F1f/6/5M=";
   };
 
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thattemperature ];
   };
-}
+})

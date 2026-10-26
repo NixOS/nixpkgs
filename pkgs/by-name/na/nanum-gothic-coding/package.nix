@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nanum-gothic-coding";
   version = "2.5";
 
   src = fetchzip {
-    url = "https://github.com/naver/nanumfont/releases/download/VER${version}/NanumGothicCoding-${version}.zip";
+    url = "https://github.com/naver/nanumfont/releases/download/VER${finalAttrs.version}/NanumGothicCoding-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-jHbbCMUxn54iQMKdAWI3r8CDxi+5LLJh8ucQzq2Ukdc=";
   };
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

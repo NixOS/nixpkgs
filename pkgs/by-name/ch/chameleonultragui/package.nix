@@ -7,18 +7,18 @@
   ninja,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter335.buildFlutterApplication (finalAttrs: {
   pname = "chameleonultragui";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "GameTec-live";
     repo = "ChameleonUltraGUI";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9Hwjx1nt/QD520eLMAB5xyFjOGfjZSwS83ARNn8GsFo=";
   };
 
-  sourceRoot = "${src.name}/chameleonultragui";
+  sourceRoot = "${finalAttrs.src.name}/chameleonultragui";
 
   # curl https://raw.githubusercontent.com/GameTec-live/ChameleonUltraGUI/main/chameleonultragui/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -47,10 +47,10 @@ flutter335.buildFlutterApplication rec {
   meta = {
     description = "Cross platform GUI for the Chameleon Ultra written in flutter";
     homepage = "https://github.com/GameTec-live/ChameleonUltraGUI";
-    changelog = "https://github.com/GameTec-live/ChameleonUltraGUI/releases/${version}";
+    changelog = "https://github.com/GameTec-live/ChameleonUltraGUI/releases/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "chameleonultragui";
     maintainers = with lib.maintainers; [ wilaz ];
   };
-}
+})

@@ -12,7 +12,7 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jeepney";
   version = "0.9";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "takluyver";
     repo = "jeepney";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-d8w/4PtDviTYDHO4EwaVbxlYk7CXtlv7vuR+o4LhfRs=";
   };
 
@@ -54,10 +54,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://gitlab.com/takluyver/jeepney/-/blob/${src.tag}/docs/release-notes.rst";
+    changelog = "https://gitlab.com/takluyver/jeepney/-/blob/${finalAttrs.src.tag}/docs/release-notes.rst";
     homepage = "https://gitlab.com/takluyver/jeepney";
     description = "Pure Python DBus interface";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

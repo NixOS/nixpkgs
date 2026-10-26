@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-greenlet";
   version = "3.5.0.20260518";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_greenlet";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-KrwLMaYNECRLukqfnl0ZtyVHSbFOqFyy9y7vKC+rOfQ=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

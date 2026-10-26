@@ -12,7 +12,7 @@
   myst-parser,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-tippy";
   version = "0.4.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-extensions2";
     repo = "sphinx-tippy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+EXvj8Q6eMu51Gh4hLD6h8I7PDZaeVH+2pZuQUMVH+4=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ minijackson ];
   };
-}
+})

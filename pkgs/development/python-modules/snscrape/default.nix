@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snscrape";
   version = "0.7.0.20230622";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JustAnotherArchivist";
     repo = "snscrape";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9xAUMr1SWFePEvIz6DFEexk9Txex3u8wPNfMAdxEUCA=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "snscrape";
   };
-}
+})

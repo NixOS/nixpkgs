@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cpace";
   version = "0.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arturpragacz";
     repo = "cpace-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KHN5bKSk/BoblxLd3HLukq20+M+XgyzV0oST1mQtzTg=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

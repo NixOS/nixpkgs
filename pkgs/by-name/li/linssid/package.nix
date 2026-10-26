@@ -9,12 +9,12 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linssid";
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/linssid/LinSSID_${version}/linssid_${version}.orig.tar.gz";
+    url = "mirror://sourceforge/project/linssid/LinSSID_${finalAttrs.version}/linssid_${finalAttrs.version}.orig.tar.gz";
     sha256 = "13d35rlcjncd8lx3khkgn9x8is2xjd5fp6ns5xsn3w6l4xj9b4gl";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "linssid";
   };
-}
+})

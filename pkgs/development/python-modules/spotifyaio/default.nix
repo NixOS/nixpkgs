@@ -14,7 +14,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spotifyaio";
   version = "2.0.2";
   pyproject = true;
@@ -22,14 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-spotify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Bob6JpbUaQkeH2c5YKVSUkY/FNyVTf+qtB2Rm1xCRX0=";
   };
 
   postPatch = ''
     # Version is wrong and not properly set by upstream's workflow
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.2.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.2.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with for Spotify";
     homepage = "https://github.com/joostlek/python-spotify/";
-    changelog = "https://github.com/joostlek/python-spotify/releases/tag/${src.tag}";
+    changelog = "https://github.com/joostlek/python-spotify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

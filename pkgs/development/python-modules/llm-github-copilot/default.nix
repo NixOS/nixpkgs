@@ -11,7 +11,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-github-copilot";
   version = "0.3.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmdaly";
     repo = "llm-github-copilot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BUVpt1Vv0+kxbTYHDdiYy3+ySJKWJ9b+dYexV7YS+NI=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin providing access to GitHub Copilot";
     homepage = "https://github.com/jmdaly/llm-github-copilot";
-    changelog = "https://github.com/jmdaly/llm-github-copilot/releases/tag/${src.tag}";
+    changelog = "https://github.com/jmdaly/llm-github-copilot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ afh ];
   };
-}
+})

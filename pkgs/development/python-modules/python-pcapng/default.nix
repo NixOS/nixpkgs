@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-pcapng";
   version = "2.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rshk";
     repo = "python-pcapng";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uyoutb4Hk2Wd3z7UopNxauMLGdYVOAhDNzRKclSr7No=";
   };
 
@@ -31,10 +31,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/rshk/python-pcapng/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/rshk/python-pcapng/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Library to read/write the pcap-ng format used by various packet sniffers";
     homepage = "https://github.com/rshk/python-pcapng";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

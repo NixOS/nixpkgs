@@ -10,7 +10,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beacontools";
   version = "2.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "citruz";
     repo = "beacontools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3a/HDssOqIfReSijRvmiXwuZjvWLJfDaDyUdA2vv/jA=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/citruz/beacontools/releases/tag/${src.tag}";
+    changelog = "https://github.com/citruz/beacontools/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for working with various types of Bluetooth LE Beacons";
     homepage = "https://github.com/citruz/beacontools";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -5,20 +5,20 @@
   versionCheckHook,
 }:
 
-buildDubPackage rec {
+buildDubPackage (finalAttrs: {
   pname = "dfmt";
   version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "dlang-community";
     repo = "dfmt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QjmYPIQFs+91jB1sdaFoenfWt5TLXyEJauSSHP2fd+M=";
   };
 
   preBuild = ''
     mkdir -p bin/
-    echo "v${version}" > bin/dubhash.txt
+    echo "v${finalAttrs.version}" > bin/dubhash.txt
   '';
 
   patches = [
@@ -44,10 +44,10 @@ buildDubPackage rec {
 
   meta = {
     description = "Formatter for D source code";
-    changelog = "https://github.com/dlang-community/dfmt/releases/tag/v${version}";
+    changelog = "https://github.com/dlang-community/dfmt/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/dlang-community/dfmt";
     maintainers = with lib.maintainers; [ ipsavitsky ];
     mainProgram = "dfmt";
     license = lib.licenses.boost;
   };
-}
+})

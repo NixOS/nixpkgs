@@ -18,7 +18,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "audible";
   version = "0.10.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "Audible";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ILGhjuPIxpRxu/dVDmz531FUgMWosk4P+onPJltuPIs=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/mkb79/Audible";
     maintainers = with lib.maintainers; [ jvanbruegge ];
   };
-}
+})

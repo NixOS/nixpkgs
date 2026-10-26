@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "nielsfaber";
   domain = "scheduler";
   version = "3.3.8";
@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "nielsfaber";
     repo = "scheduler-component";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QN7rkNuj9IBbV2ths7ZdL/EkXFJUpjNbgJNUnAHjLBA=";
   };
 
@@ -24,8 +24,8 @@ buildHomeAssistantComponent rec {
   meta = with lib; {
     description = "Custom component for HA that enables the creation of scheduler entities";
     homepage = "https://github.com/nielsfaber/scheduler-component";
-    changelog = "https://github.com/nielsfaber/scheduler-component/releases/tag/v${version}";
+    changelog = "https://github.com/nielsfaber/scheduler-component/releases/tag/v${finalAttrs.version}";
     maintainers = with maintainers; [ SuperSandro2000 ];
     license = licenses.gpl3Plus;
   };
-}
+})

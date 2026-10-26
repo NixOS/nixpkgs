@@ -6,7 +6,7 @@
   metasploit,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "social-engineer-toolkit";
   version = "8.0.3";
   pyproject = false;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trustedsec";
     repo = "social-engineer-toolkit";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "ePbmUvnzLO0Wfuhym3bNSPV1x8rcCPqKMeWSRcbJGAo=";
   };
 
@@ -77,4 +77,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

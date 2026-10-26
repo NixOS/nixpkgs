@@ -7,14 +7,14 @@
   conjure-python-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nominal-api";
   version = "0.1073.0";
   pyproject = true;
 
   # nixpkgs-update: no auto update
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "nominal_api";
     hash = "sha256-jumMX6YjQlmipCgaPPeG73OemP94otHvUUL2kq+QEQ4=";
   };
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ alkasm ];
     license = lib.licenses.unfree;
   };
-}
+})

@@ -4,7 +4,7 @@
   buildHomeAssistantComponent,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "tjhorner";
   domain = "luxer";
   version = "0.3.1";
@@ -12,15 +12,15 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "tjhorner";
     repo = "home-assistant-luxer-one";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cm8uNebJCml5cQCw3myi9FSYPBSxGc2Wewtn2bxZPrw=";
   };
 
   meta = {
-    changelog = "https://github.com/tjhorner/home-assistant-luxer-one/releases/tag/${src.tag}";
+    changelog = "https://github.com/tjhorner/home-assistant-luxer-one/releases/tag/${finalAttrs.src.tag}";
     description = "Home Assistant integration for Luxer One";
     homepage = "https://github.com/tjhorner/home-assistant-luxer-one";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.haylin ];
   };
-}
+})

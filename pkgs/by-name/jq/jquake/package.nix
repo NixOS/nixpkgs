@@ -9,12 +9,12 @@
   logOutput ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jquake";
   version = "1.8.5";
 
   src = fetchurl {
-    url = "https://github.com/fleneindre/fleneindre.github.io/raw/master/downloads/JQuake_${version}_linux.zip";
+    url = "https://github.com/fleneindre/fleneindre.github.io/raw/master/downloads/JQuake_${finalAttrs.version}_linux.zip";
     sha256 = "sha256-Q9R5Qhk8Qodw2d99nL2aG5WGpIyvKmjzfkRK7xJzoc0=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "JQuake";
   };
-}
+})

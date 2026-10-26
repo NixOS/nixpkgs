@@ -6,13 +6,13 @@
 
 # cannot be built as pythonApplication because the library functions are
 # required for home-assistant
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "speedtest-cli";
   version = "2.1.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XidzIzzttfo9gSDrf5e8xJdLUiGyVNM/8W4vHUE9kPA=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
       makefu
     ];
   };
-}
+})

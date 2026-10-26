@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "gremlinpython";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dslSvtne+0mobjhjZDiO7crQE3aW5wEMWw7l3LkBTV8=";
   };
 
@@ -88,10 +88,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/apache/tinkerpop/blob/${src.tag}/CHANGELOG.asciidoc";
+    changelog = "https://github.com/apache/tinkerpop/blob/${finalAttrs.src.tag}/CHANGELOG.asciidoc";
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

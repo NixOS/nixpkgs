@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hasklig";
   version = "1.1";
 
   src = fetchzip {
-    url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
+    url = "https://github.com/i-tu/Hasklig/releases/download/${finalAttrs.version}/Hasklig-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-jsPQtjuegMePt4tB1dZ9mq15LSxXBYwtakbq4od/sko=";
   };
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ davidrusu ];
   };
-}
+})

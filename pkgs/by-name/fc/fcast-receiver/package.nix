@@ -9,7 +9,7 @@
   rsync,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "fcast-receiver";
   version = "2.2.1";
 
@@ -21,7 +21,7 @@ buildNpmPackage rec {
     hash = "sha256-5ERnlX4Jw6kv0BSNNA2mnJCYoIQJDuUrZVoKIYuWBYA=";
   };
 
-  sourceRoot = "${src.name}/receivers/electron";
+  sourceRoot = "${finalAttrs.src.name}/receivers/electron";
 
   makeCacheWritable = true;
 
@@ -65,4 +65,4 @@ buildNpmPackage rec {
     mainProgram = "fcast-receiver";
     platforms = lib.platforms.linux;
   };
-}
+})

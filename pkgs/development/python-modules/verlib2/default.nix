@@ -6,7 +6,7 @@
   versioningit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "verlib2";
   version = "26.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # package, we can rely on upstream to run the tests before releasing, and it
   # should work for us as well.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-B0Cjs1dVqdjruTP/zpifN3YRP+MZq2LfX6IPfBQ0PVg=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

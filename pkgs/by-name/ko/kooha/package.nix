@@ -21,19 +21,19 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kooha";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Fdl6Oj5pXE/TLieQ03oCmlbHJJ2KDJmOgHXOeOp05Ys=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-GB70rsDfuqaUo39xGKporG8FJFFlmyiKA0JVEvgFzV0=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ austinbutler ];
     mainProgram = "kooha";
   };
-}
+})

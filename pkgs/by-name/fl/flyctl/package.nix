@@ -10,14 +10,14 @@
   rake,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "flyctl";
   version = "0.4.123";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     postCheckout = ''
       cd "$out"
       git rev-parse HEAD > COMMIT
@@ -34,7 +34,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
-    "-X github.com/superfly/flyctl/internal/buildinfo.buildVersion=${version}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.buildVersion=${finalAttrs.version}"
   ];
   tags = [ "production" ];
 
@@ -98,4 +98,4 @@ buildGoModule rec {
     ];
     mainProgram = "flyctl";
   };
-}
+})

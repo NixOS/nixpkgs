@@ -25,14 +25,14 @@ let
   inherit (darwin) autoSignDarwinBinariesHook;
 in
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "avalonia-ilspy";
   version = "7.2-rc";
 
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "AvaloniaILSpy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cCQy5cSpJNiVZqgphURcnraEM0ZyXGhzJLb5AThNfPQ=";
   };
 
@@ -132,4 +132,4 @@ buildDotnetModule rec {
     ];
     mainProgram = "ILSpy";
   };
-}
+})

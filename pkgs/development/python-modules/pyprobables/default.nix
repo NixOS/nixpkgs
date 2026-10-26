@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyprobables";
   version = "0.7.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "barrust";
     repo = "pyprobables";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wUeNmkDzDBXGtMBplS2Hv6rK+M3eijVpYtHMhjIpsy8=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Probabilistic data structures";
     homepage = "https://github.com/barrust/pyprobables";
-    changelog = "https://github.com/barrust/pyprobables/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/barrust/pyprobables/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

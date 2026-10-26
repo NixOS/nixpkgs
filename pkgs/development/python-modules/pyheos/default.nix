@@ -9,7 +9,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyheos";
   version = "1.0.6";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pyheos";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CqUeDIHRD+stIVr9nMqfKUExVHPq8gbIzsZg8U36E7I=";
   };
 
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyheos" ];
 
   meta = {
-    changelog = "https://github.com/andrewsayre/pyheos/releases/tag/${src.tag}";
+    changelog = "https://github.com/andrewsayre/pyheos/releases/tag/${finalAttrs.src.tag}";
     description = "Async python library for controlling HEOS devices through the HEOS CLI Protocol";
     homepage = "https://github.com/andrewsayre/pyheos";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -15,7 +15,7 @@
   svglib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xhtml2pdf";
   version = "0.2.17";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xhtml2pdf";
     repo = "xhtml2pdf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qp0JVp5efIrI98YT0rwFAMSEW+0aIhedfYGND4V7Mto=";
   };
 
@@ -61,11 +61,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/${src.tag}";
+    changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/${finalAttrs.src.tag}";
     description = "PDF generator using HTML and CSS";
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = lib.licenses.asl20;
     mainProgram = "xhtml2pdf";
     maintainers = [ ];
   };
-}
+})

@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "asn2quickder";
   version = "1.7.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-der";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-f+ph5PL+uWRkswpOLDwZFWjh938wxoJ6xocJZ2WZLEk=";
   };
 
@@ -46,4 +46,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
   };
-}
+})

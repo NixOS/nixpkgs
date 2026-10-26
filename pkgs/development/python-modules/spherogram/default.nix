@@ -22,7 +22,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spherogram";
   version = "2.4.1";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "spherogram";
-    tag = "${version}_as_released";
+    tag = "${finalAttrs.version}_as_released";
     hash = "sha256-zQoNuy2rj02GAuRNDufMwA/wQ4U8ZeIADb8LpIvMFOY=";
   };
 
@@ -85,11 +85,11 @@ buildPythonPackage rec {
   meta = {
     description = "Spherical diagrams for 3-manifold topology";
     homepage = "https://snappy.computop.org/spherogram.html";
-    changelog = "https://github.com/3-manifolds/Spherogram/releases/tag/${src.tag}";
+    changelog = "https://github.com/3-manifolds/Spherogram/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       noiioiu
       alejo7797
     ];
   };
-}
+})

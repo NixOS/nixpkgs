@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slapd";
   version = "0.1.6";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-ldap";
     repo = "python-slapd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xXIKC8xDJ3Q6yV1BL5Io0PkLqVbFRbbkB0QSXQGHMNg=";
   };
 
@@ -37,9 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Controls a slapd process in a pythonic way";
     homepage = "https://github.com/python-ldap/python-slapd";
-    changelog = "https://github.com/python-ldap/python-slapd/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/python-ldap/python-slapd/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-
-}
+})

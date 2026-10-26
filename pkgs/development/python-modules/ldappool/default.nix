@@ -14,14 +14,14 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ldappool";
   version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ldappool";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-S7WbfWsRQH9I7gGngSZ+PIupjZH0JoBqxyCGEq4Ie4Y=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
       gpl2Plus
     ];
   };
-}
+})

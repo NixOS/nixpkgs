@@ -6,7 +6,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytun-pmd3";
   version = "3.0.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pytun-pmd3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7kkQB+3MFq283JI2lbEBmpuV0S4KADibgIRBJWVp5Ug=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/doronz88/pytun-pmd3/releases/tag/${src.tag}";
+    changelog = "https://github.com/doronz88/pytun-pmd3/releases/tag/${finalAttrs.src.tag}";
     description = "TUN/TAP wrapper for Python with Darwin support";
     homepage = "https://github.com/doronz88/pytun-pmd3";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

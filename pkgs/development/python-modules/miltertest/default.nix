@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "miltertest";
   version = "1.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flowerysong";
     repo = "miltertest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8KpuIR+UxRcJbb2pwKDOkSmyXovlyOa4DpeUDn1oK0Y=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ lucasbergman ];
   };
-}
+})

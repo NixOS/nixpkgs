@@ -9,7 +9,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mficlient";
   version = "0.5.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uilibs";
     repo = "mficlient";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gr9E+3qYD3usK2AAk+autfFQVPL3RDtjG7vvsmZui80=";
   };
 
@@ -44,11 +44,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/uilibs/mficlient/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/uilibs/mficlient/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Remote control client for Ubiquiti's UVC NVR";
     homepage = "https://github.com/uilibs/mficlient";
     license = lib.licenses.mit;
     mainProgram = "mfi";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

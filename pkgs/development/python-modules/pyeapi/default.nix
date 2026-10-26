@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyeapi";
   version = "1.0.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arista-eosplus";
     repo = "pyeapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eGNBQSnYMC9YVCw5mBRH6XRq139AcqFm6HnO2FUzLEE=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client for Arista eAPI";
     homepage = "https://github.com/arista-eosplus/pyeapi";
-    changelog = "https://github.com/arista-eosplus/pyeapi/releases/tag/v${version}";
+    changelog = "https://github.com/arista-eosplus/pyeapi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ astro ];
   };
-}
+})

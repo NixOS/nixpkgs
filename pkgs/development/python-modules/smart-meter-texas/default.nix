@@ -10,7 +10,7 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smart-meter-texas";
   version = "0.5.6";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "grahamwetzler";
     repo = "smart-meter-texas";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jk3kWfiidflzLgkp2BGgTfkaYrLwyQx+IimnkzBVwRw=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

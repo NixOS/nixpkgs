@@ -15,14 +15,14 @@
   multiprocess,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-jenkins";
   version = "1.8.3";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "python_jenkins";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-j0dhw5GsEejB8j93EBCSDBBEBJdwWrcXXVI1j1oS3Jg=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

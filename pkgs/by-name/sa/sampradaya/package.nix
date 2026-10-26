@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sampradaya";
   version = "0.5.0";
 
   src = fetchurl {
-    url = "https://github.com/deepestblue/sampradaya/releases/download/v${version}/Sampradaya.ttf";
+    url = "https://github.com/deepestblue/sampradaya/releases/download/v${finalAttrs.version}/Sampradaya.ttf";
     hash = "sha256-ygKMNzHvbLR2A5HHrfY2C9ZUg0yng+JL3cyg6sBKqeQ=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl; # See font metadata
     platforms = lib.platforms.all;
   };
-}
+})

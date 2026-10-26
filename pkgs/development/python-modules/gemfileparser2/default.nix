@@ -7,13 +7,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gemfileparser2";
   version = "0.9.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ezfioBwlZMGb1cEzzwa1afXUrTnxsgpzX0CNOTyVzgY=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   meta = {
     description = "Library to parse Rubygem gemspec and Gemfile files";
     homepage = "https://github.com/aboutcode-org/gemfileparser2";
-    changelog = "https://github.com/aboutcode-org/gemfileparser2/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aboutcode-org/gemfileparser2/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = with lib.licenses; [
       mit # or
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ harvidsen ];
   };
-}
+})

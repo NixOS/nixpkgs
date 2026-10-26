@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plone-testing";
   version = "9.0.7";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plone";
     repo = "plone.testing";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5DaN0o/EaWwdMvmLW12zdNXJ3p6dowALJ10zrhUT3dA=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Testing infrastructure for Zope and Plone projects";
     homepage = "https://github.com/plone/plone.testing";
-    changelog = "https://github.com/plone/plone.testing/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/plone/plone.testing/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
   };
-}
+})

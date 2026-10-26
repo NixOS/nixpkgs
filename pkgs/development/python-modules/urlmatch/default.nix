@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlmatch";
   version = "1.0.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jessepollak";
     repo = "urlmatch";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-01QkkdtSDBB3s+F7lC/0kZ+r1jxd/S7QA8LkweG9SZI=";
   };
 
@@ -29,9 +29,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for easily pattern matching wildcard URLs";
-    changelog = "https://github.com/jessepollak/urlmatch/releases/tag/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jessepollak/urlmatch/releases/tag/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/jessepollak/urlmatch";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

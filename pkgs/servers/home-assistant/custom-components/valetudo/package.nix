@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
 }:
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "Hypfer";
   domain = "valetudo";
   version = "2026.08.0";
@@ -11,7 +11,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "Hypfer";
     repo = "hass-valetudo";
-    tag = "${version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-gUPlE+JeX9+Vm2MFg/FzMzLWrAhi8FcoG+YpZSlhNLs=";
   };
   meta = {
@@ -20,4 +20,4 @@ buildHomeAssistantComponent rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ benediktbroich ];
   };
-}
+})

@@ -9,7 +9,7 @@
   bless,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ble-serial";
   version = "3.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jakeler";
     repo = "ble-serial";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lbqu6VeE8XEIUvUILqKsTA+0/lxTr8GTbUBkSae/ruE=";
     fetchSubmodules = true;
   };
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ eljamm ];
     platforms = lib.platforms.unix;
   };
-}
+})

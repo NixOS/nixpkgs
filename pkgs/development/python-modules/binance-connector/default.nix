@@ -13,15 +13,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "binance-connector";
   version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binance";
-    repo = "${pname}-python";
-    tag = "v${version}";
+    repo = "${finalAttrs.pname}-python";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8O73+fli0HNbvGBcyg79ZGOTQvL0TF5SCfogI6btlrA=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ trishtzy ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "twspace-crawler";
   version = "1.12.9";
 
@@ -20,9 +20,9 @@ buildNpmPackage rec {
   meta = {
     description = "Script to monitor & download Twitter Spaces 24/7";
     homepage = "https://github.com/HitomaruKonpaku/twspace-crawler";
-    changelog = "https://github.com/HitomaruKonpaku/twspace-crawler/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/HitomaruKonpaku/twspace-crawler/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.isc;
     maintainers = [ ];
     mainProgram = "twspace-crawler";
   };
-}
+})

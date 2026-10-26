@@ -32,7 +32,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "model-signing";
   version = "1.1.1";
   pyproject = true;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "model-transparency";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-z6PaNVoA5VL5CNYDp7XRXOs9rLfsJggoCu7kyewRm+o=";
   };
 
@@ -97,8 +97,8 @@ buildPythonPackage rec {
   meta = {
     description = "Supply chain security for ML";
     homepage = "https://github.com/sigstore/model-transparency";
-    changelog = "https://github.com/sigstore/model-transparency/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sigstore/model-transparency/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

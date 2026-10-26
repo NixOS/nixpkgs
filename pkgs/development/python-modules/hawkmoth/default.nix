@@ -10,7 +10,7 @@
   strictyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hawkmoth";
   version = "0.22.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jnikula";
     repo = "hawkmoth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iFyTayPC4TWOfTZrfJJILJyi5BWrsVLwnSFnSeMpB2c=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx Autodoc for C";
     homepage = "https://jnikula.github.io/hawkmoth/";
-    changelog = "https://github.com/jnikula/hawkmoth/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/jnikula/hawkmoth/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.cynerd ];
   };
-}
+})

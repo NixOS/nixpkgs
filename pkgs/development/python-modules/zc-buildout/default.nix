@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zc-buildout";
   version = "5.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "buildout";
     repo = "buildout";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Z47j0RbQXP4DjJM+Fz0FXP2DuXwqluV64uCbioWtqW4=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ gotcha ];
   };
-}
+})

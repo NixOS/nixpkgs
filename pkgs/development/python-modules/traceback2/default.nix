@@ -6,13 +6,13 @@
   linecache2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "1.4.0";
   format = "setuptools";
   pname = "traceback2";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BazGegmYDC7P7dNCP3rgEEg57MtV/GRXc+HKoJUcMDA=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/traceback2/";
     license = lib.licenses.psfl;
   };
-}
+})

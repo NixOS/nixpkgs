@@ -10,7 +10,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-on-whales";
   version = "0.81.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gabrieldemarmiesse";
     repo = "python-on-whales";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aCIKWrOg+tzI9KJWcBK0ElssgOdxU/RTXgDOhSlBG3g=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Docker client for Python, designed to be fun and intuitive";
     homepage = "https://github.com/gabrieldemarmiesse/python-on-whales";
-    changelog = "https://github.com/gabrieldemarmiesse/python-on-whales/releases/tag/${src.tag}";
+    changelog = "https://github.com/gabrieldemarmiesse/python-on-whales/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

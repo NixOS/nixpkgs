@@ -19,13 +19,13 @@ let
     }
     .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pantum-driver";
   version = "1.1.167";
 
   src = fetchzip {
     url = "https://github.com/osguot/pantum-universal-driver/releases/download/release/Pantum.Linux.Driver.V${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.zip";
     hash = "sha256-0RyCgU00ZwGwcUhCkod971noVB7G10xnbH64/AdIFMA=";
   };
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    dpkg-deb -x ./Resources/pantum_${version}-1_${architecture}.deb .
+    dpkg-deb -x ./Resources/pantum_${finalAttrs.version}-1_${architecture}.deb .
 
     mkdir -p $out $out/lib
     cp -r etc $out/
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ deinferno ];
   };
-}
+})

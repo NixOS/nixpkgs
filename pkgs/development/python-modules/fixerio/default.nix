@@ -8,7 +8,7 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fixerio";
   version = "1.0.0-alpha";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amatellanes";
     repo = "fixerio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-a7+RWBRRPI4f+wFeogkpgHi6AUp0FWu/b72coH0NMAE=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

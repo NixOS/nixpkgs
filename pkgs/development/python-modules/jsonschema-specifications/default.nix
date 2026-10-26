@@ -8,14 +8,14 @@
   referencing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonschema-specifications";
   version = "2025.9.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jsonschema_specifications";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-tUCYfyOedFYTx6kXbz7bcrgypKxGXPAnEiiDl4MrXo0=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

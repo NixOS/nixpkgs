@@ -13,7 +13,7 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycobertura";
   version = "4.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aconrad";
     repo = "pycobertura";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OzOxoF3OmgtzWuNNyecyxFRcPq8gAPQZ2XAdrkJjnhk=";
   };
 
@@ -62,9 +62,9 @@ buildPythonPackage rec {
   meta = {
     description = "Cobertura coverage parser that can diff reports and show coverage progress";
     homepage = "https://github.com/aconrad/pycobertura";
-    changelog = "https://github.com/aconrad/pycobertura/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/aconrad/pycobertura/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
     mainProgram = "pycobertura";
   };
-}
+})

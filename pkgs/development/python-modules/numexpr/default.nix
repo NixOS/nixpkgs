@@ -13,13 +13,13 @@
   checkPhaseThreadLimitHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numexpr";
   version = "2.14.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5xROg+qeWB8ic+AwTxWDZzbE5HDivS43jOYXZiocong=";
   };
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

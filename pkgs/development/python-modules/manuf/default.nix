@@ -8,7 +8,7 @@
   manuf, # remove when buildPythonPackage supports finalAttrs
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manuf";
   version = "1.1.5";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coolbho3k";
     repo = "manuf";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-3CFs3aqwE8rZPwU1QBqAGxNHT5jg7ymG12yBD56gTNI=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manuf" ];
 
   passthru.tests = {
-    testMacAddress = runCommand "${pname}-test" { } ''
+    testMacAddress = runCommand "${finalAttrs.pname}-test" { } ''
       ${lib.getExe manuf} BC:EE:7B:00:00:00 > $out
       [ "$(cat $out | tr -d '\n')" = "Vendor(manuf='ASUSTekC', manuf_long='ASUSTek COMPUTER INC.', comment=None)" ]
     '';
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ dsuetin ];
   };
-}
+})

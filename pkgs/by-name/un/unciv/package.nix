@@ -36,12 +36,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unciv";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
+    url = "https://github.com/yairm210/Unciv/releases/download/${finalAttrs.version}/Unciv.jar";
     hash = "sha256-N2rZLncWXWrB+Ip3dZXvkNO75grnW2ovP3oPkmwFz4E=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/unciv \
       --prefix LD_LIBRARY_PATH : "${envLibPath}" \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --add-flags "-jar ${src}"
+      --add-flags "-jar ${finalAttrs.src}"
 
     install -Dm444 ${desktopIcon} $out/share/icons/hicolor/512x512/apps/unciv.png
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
   };
-}
+})

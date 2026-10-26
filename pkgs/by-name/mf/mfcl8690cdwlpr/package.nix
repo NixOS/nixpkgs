@@ -14,12 +14,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfcl8690cdwlpr";
   version = "1.5.0-3";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf103241/mfcl8690cdwlpr-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf103241/mfcl8690cdwlpr-${finalAttrs.version}.i386.deb";
     hash = "sha256-CXYo6ISUr0hFiHRVRnXbJ/21dK/2NUrCt2bnzQuHOXI=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
   };
-}
+})

@@ -11,12 +11,12 @@ let
   majorVersion = builtins.substring 0 6 version;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flexibee";
   inherit version;
 
   src = fetchurl {
-    url = "https://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
+    url = "https://download.flexibee.eu/download/${majorVersion}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-WorRyfjWucV8UhAjvuW+22CRzPcz5tjXF7Has4wrLMI=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.mmahut ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

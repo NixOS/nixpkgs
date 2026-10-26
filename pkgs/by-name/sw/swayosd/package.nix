@@ -20,19 +20,19 @@
   udev,
   udevCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swayosd";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jlwJw7PZCdJAGhB9/exAO95io1/0DiCTCR83u/yRpqI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-G7NuqFBTleUYW9b7EhmdLVl8XCnqwcmXqgpWYNA3r3Q=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,7 +6,7 @@
   git,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "versiontag";
   version = "1.2.0";
   pyproject = true;
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thelabnyc";
     repo = "python-versiontag";
-    rev = "r${version}";
+    rev = "r${finalAttrs.version}";
     hash = "sha256-FiT6jblJKGlmnJmU1c7ZKbviv9ggbKmaKvtNT4IQu6s=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "get_version(pypi=True)" '"${version}"'
+      --replace-fail "get_version(pypi=True)" '"${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ MaskedBelgian ];
   };
-}
+})

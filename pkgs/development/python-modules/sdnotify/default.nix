@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sdnotify";
   version = "0.3.2";
   format = "setuptools";
 
   src = fetchPypi {
     hash = "sha256-c5d/x0azbMQRhN1Dw/6BMj57iwbCuwgmxPWaIMVrufE=";
-    inherit pname version;
+    inherit (finalAttrs) pname version;
   };
 
   meta = {
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pmiddend ];
   };
-}
+})

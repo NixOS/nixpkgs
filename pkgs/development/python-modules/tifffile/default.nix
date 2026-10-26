@@ -11,13 +11,13 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tifffile";
   version = "2026.9.20";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-MOFFpwQs5xQ65QpQ/otyIbAHCq4irauPnnmiZL5rXNw=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
-    changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/cgohlke/tifffile/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lebastr ];
   };
-}
+})

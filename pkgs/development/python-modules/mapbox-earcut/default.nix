@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mapbox-earcut";
   version = "2.0.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skogler";
     repo = "mapbox_earcut_python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R5YDJbfDNf6jAvG3VJQMYay6i8dw616SUs0tPgrJt6I=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/skogler/mapbox_earcut_python";
-    changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/${src.tag}";
+    changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.isc;
     description = "Mapbox-earcut fast triangulation of 2D-polygons";
     longDescription = ''
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     '';
     maintainers = [ ];
   };
-}
+})

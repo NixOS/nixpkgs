@@ -24,19 +24,19 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spot";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7zWK0wkh53ojnoznv4T/X//JeyKJVKOrfYF0IkvciIY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-731aD+yJkyrNMmYtgKYzXIAyLegDBzTT2XqZs5usXiI=";
   };
 
@@ -87,10 +87,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
-    changelog = "https://github.com/xou816/spot/releases/tag/${src.rev}";
+    changelog = "https://github.com/xou816/spot/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "spot";
     platforms = lib.platforms.linux;
   };
-}
+})

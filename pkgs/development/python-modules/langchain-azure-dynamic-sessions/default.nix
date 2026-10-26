@@ -28,7 +28,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-azure-dynamic-sessions";
   version = "0.2.0";
   pyproject = true;
@@ -36,11 +36,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-azure-dynamic-sessions==${version}";
+    tag = "langchain-azure-dynamic-sessions==${finalAttrs.version}";
     hash = "sha256-tgvoOSr4tpi+tFBan+kw8FZUfUJHcQXv9e1nyeGP0so=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/azure-dynamic-sessions";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/azure-dynamic-sessions";
 
   build-system = [ poetry-core ];
 
@@ -86,11 +86,11 @@ buildPythonPackage rec {
   meta = {
     description = "Integration package connecting Azure Container Apps dynamic sessions and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/azure-dynamic-sessions";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
       sarahec
     ];
   };
-}
+})

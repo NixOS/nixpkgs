@@ -6,7 +6,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qemu-qmp";
   version = "0.0.6";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "qemu-project";
     repo = "python-qemu-qmp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iuYiYjUfAxXzG7w7s8I2l5oXROyTjswn++vYs9lauGA=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
 
     maintainers = with lib.maintainers; [ brianmcgillion ];
   };
-}
+})

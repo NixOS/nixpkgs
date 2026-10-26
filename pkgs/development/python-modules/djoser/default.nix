@@ -8,7 +8,7 @@
   social-auth-app-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djoser";
   version = "2.3.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sunscrapers";
     repo = "djoser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RFOKEjAh5k/Bx7cj6ty2vQsW61lsXfJIJDOZeqL6iCE=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "djoser" ];
 
   meta = {
-    changelog = "https://github.com/sunscrapers/djoser/releases/tag/${src.tag}";
+    changelog = "https://github.com/sunscrapers/djoser/releases/tag/${finalAttrs.src.tag}";
     description = "REST implementation of Django authentication system";
     homepage = "https://github.com/sunscrapers/djoser";
     maintainers = with lib.maintainers; [ MostafaKhaled ];
     license = lib.licenses.mit;
   };
-}
+})

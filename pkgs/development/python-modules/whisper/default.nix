@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whisper";
   version = "1.1.10";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphite-project";
     repo = "whisper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CnCbRmI2jc67mTtfupoE1uHtobrAiWoUXbfX8YeEV6A=";
   };
 
@@ -40,11 +40,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/graphite-project/whisper";
     description = "Fixed size round-robin style database";
     changelog = "https://graphite.readthedocs.io/en/latest/releases/${
-      builtins.replaceStrings [ "." ] [ "_" ] version
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.html";
     maintainers = with lib.maintainers; [
       basvandijk
     ];
     license = lib.licenses.asl20;
   };
-}
+})

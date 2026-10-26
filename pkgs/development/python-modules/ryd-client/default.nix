@@ -5,13 +5,13 @@
   setuptools,
   requests,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ryd-client";
   version = "0.0.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PxrVdVw+dAkF8WWzYyg2/B5CFurNPA5XRNtH9uu/SiY=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ericthemagician ];
   };
-}
+})

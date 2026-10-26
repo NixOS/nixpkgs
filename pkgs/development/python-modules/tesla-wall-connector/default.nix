@@ -10,7 +10,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tesla-wall-connector";
   version = "1.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "einarhauks";
     repo = "tesla-wall-connector";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CQG4upa+DTuRIvnJ7dPy7ANELks8TrlWNOWMylXJPr4=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for communicating with a Tesla Wall Connector";
     homepage = "https://github.com/einarhauks/tesla-wall-connector";
-    changelog = "https://github.com/einarhauks/tesla-wall-connector/releases/tag/${src.tag}";
+    changelog = "https://github.com/einarhauks/tesla-wall-connector/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

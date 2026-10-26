@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "open-meteo";
   version = "0.4.0";
   pyproject = true;
@@ -20,14 +20,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-open-meteo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J106XeSglyqrFfP1ckbnDwfE7IikaNiBQ+m14PE2SBc=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${finalAttrs.version}"
   '';
 
   nativeBuildInputs = [ poetry-core ];
@@ -53,10 +53,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "open_meteo" ];
 
   meta = {
-    changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${version}";
+    changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${finalAttrs.version}";
     description = "Python client for the Open-Meteo API";
     homepage = "https://github.com/frenck/python-open-meteo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

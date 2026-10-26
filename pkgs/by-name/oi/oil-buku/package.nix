@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "oil-buku";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "AndreiUlmeyda";
     repo = "oil";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "12g0fd7h11hh94b2pyg3pqwbf8bc7gcnrnm1qqbf18s6z02b6ixr";
   };
 
@@ -50,4 +50,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "oil";
     platforms = lib.platforms.unix;
   };
-}
+})

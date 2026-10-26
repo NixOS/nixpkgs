@@ -20,7 +20,7 @@ let
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) [
       # Built-in dependency
       (self: super: {
-        octoprint-filecheck = self.buildPythonPackage rec {
+        octoprint-filecheck = self.buildPythonPackage (finalAttrs: {
           pname = "OctoPrint-FileCheck";
           version = "2025.7.23";
           format = "setuptools";
@@ -28,16 +28,16 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FileCheck";
-            rev = version;
+            rev = finalAttrs.version;
             hash = "sha256-Y3JVfbe+bZz2t65OqdjvVVqTSa0VUPoCaxvE+zQ+Qts=";
           };
           doCheck = false;
-        };
+        });
       })
 
       # Built-in dependency
       (self: super: {
-        octoprint-firmwarecheck = self.buildPythonPackage rec {
+        octoprint-firmwarecheck = self.buildPythonPackage (finalAttrs: {
           pname = "OctoPrint-FirmwareCheck";
           version = "2025.7.23";
           format = "setuptools";
@@ -45,15 +45,15 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-FirmwareCheck";
-            rev = version;
+            rev = finalAttrs.version;
             hash = "sha256-QPchpyeotB5IKbfES74CJlhw3sz8Q1df/+n5dpbrHSs=";
           };
           doCheck = false;
-        };
+        });
       })
 
       (self: super: {
-        octoprint-pisupport = self.buildPythonPackage rec {
+        octoprint-pisupport = self.buildPythonPackage (finalAttrs: {
           pname = "OctoPrint-PiSupport";
           version = "2025.7.23";
           format = "setuptools";
@@ -61,7 +61,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint-PiSupport";
-            rev = version;
+            rev = finalAttrs.version;
             hash = "sha256-bXjRGxIwi+UnVts2HO9viOJqa2AmZ/CL7wuoyzRbAEw=";
           };
 
@@ -71,11 +71,11 @@ let
             substituteInPlace octoprint_pi_support/__init__.py \
               --replace /usr/bin/vcgencmd ${self.pkgs.libraspberrypi}/bin/vcgencmd
           '';
-        };
+        });
       })
 
       (self: super: {
-        octoprint = self.buildPythonPackage rec {
+        octoprint = self.buildPythonPackage (finalAttrs: {
           pname = "OctoPrint";
           version = "1.11.8";
           format = "setuptools";
@@ -83,7 +83,7 @@ let
           src = fetchFromGitHub {
             owner = "OctoPrint";
             repo = "OctoPrint";
-            rev = version;
+            rev = finalAttrs.version;
             hash = "sha256-yTHzBqwVxAP6EokiWqD/SR6P2X4gIGyiyzNH0UzzDB4=";
           };
 
@@ -233,7 +233,7 @@ let
               gador
             ];
           };
-        };
+        });
       })
       (callPackage ./plugins.nix { })
       packageOverrides

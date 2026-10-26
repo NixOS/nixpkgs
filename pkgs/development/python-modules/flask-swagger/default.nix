@@ -6,13 +6,13 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.2.14";
   format = "setuptools";
   pname = "flask-swagger";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tAhfW8Nt9MILZUjNFBOtyc81cZsPBpU2fNVCBlFFKU0=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     mainProgram = "flaskswagger";
     maintainers = with lib.maintainers; [ vanschelven ];
   };
-}
+})

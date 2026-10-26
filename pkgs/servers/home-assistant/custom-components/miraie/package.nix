@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "rkzofficial";
   domain = "miraie";
   version = "1.1.8";
@@ -15,7 +15,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "rkzofficial";
     repo = "ha-miraie-ac";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yBVPxhRPjbzcdXsks3pTLbjb0rJ4fuItrN8c7xNbErM=";
   };
 
@@ -27,10 +27,10 @@ buildHomeAssistantComponent rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/rkzofficial/ha-miraie-ac/releases/tag/v${version}";
+    changelog = "https://github.com/rkzofficial/ha-miraie-ac/releases/tag/v${finalAttrs.version}";
     description = "Home Assistant component for Miraie ACs";
     homepage = "https://github.com/rkzofficial/ha-miraie-ac";
     maintainers = with lib.maintainers; [ ananthb ];
     license = lib.licenses.asl20;
   };
-}
+})

@@ -14,7 +14,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "youtubeaio";
   version = "2.1.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-youtube";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GE06T3NSA2JdPSd2kS7rf3abI+b/zegS34n3Oxj2tnE=";
   };
 
@@ -49,10 +49,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/joostlek/python-youtube/releases/tag/${src.tag}";
+    changelog = "https://github.com/joostlek/python-youtube/releases/tag/${finalAttrs.src.tag}";
     description = "Asynchronous Python client for the YouTube V3 API";
     homepage = "https://github.com/joostlek/python-youtube";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -16,7 +16,7 @@
   unidic-lite,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manga-ocr";
   version = "0.1.16";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "manga-ocr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xYPjX8IKEfwbNW6wEBr62dwAOED2+Jh9UJuWhzcXj4E=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
     mainProgram = "manga_ocr";
     description = "Optical character recognition for Japanese text, with the main focus being Japanese manga";
     homepage = "https://github.com/kha-white/manga-ocr";
-    changelog = "https://github.com/kha-white/manga-ocr/releases/tag/${src.tag}";
+    changelog = "https://github.com/kha-white/manga-ocr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

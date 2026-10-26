@@ -7,14 +7,14 @@
   vips,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "btc-rpc-explorer";
   version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "janoside";
     repo = "btc-rpc-explorer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L7mW1WIbHga6/UjMx4sP0MUhJIRytUhHVIEWMD2amQo=";
   };
 
@@ -34,10 +34,10 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
-    changelog = "https://github.com/janoside/btc-rpc-explorer/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/janoside/btc-rpc-explorer/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Database-free, self-hosted Bitcoin explorer, via RPC to Bitcoin Core";
     homepage = "https://github.com/janoside/btc-rpc-explorer";
     license = lib.licenses.mit;
     mainProgram = "btc-rpc-explorer";
   };
-}
+})

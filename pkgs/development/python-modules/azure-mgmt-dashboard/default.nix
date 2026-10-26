@@ -8,14 +8,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-dashboard";
   version = "2.0.0";
   format = "wheel";
 
   src = fetchPypi {
     pname = "azure_mgmt_dashboard";
-    inherit version;
+    inherit (finalAttrs) version;
     format = "wheel";
     python = "py3";
     dist = "py3";
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ techknowlogick ];
   };
-}
+})

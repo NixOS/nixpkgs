@@ -15,7 +15,7 @@
   editdistpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "symspellpy";
   version = "6.9.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mammothb";
     repo = "symspellpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-isxANYSiwN8pQ7/XfMtO7cyoGdTyrXYOZ6C5rDJsJIs=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python port of SymSpell v6.7.1, which provides much higher speed and lower memory consumption";
     homepage = "https://github.com/mammothb/symspellpy";
-    changelog = "https://github.com/mammothb/symspellpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/mammothb/symspellpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

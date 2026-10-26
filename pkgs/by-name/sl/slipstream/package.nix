@@ -8,14 +8,14 @@
 let
   jdk = jdk8;
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "slipstream";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "Vhati";
     repo = "Slipstream-Mod-Manager";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
   };
 
@@ -28,7 +28,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/share/java
-    install -Dm644 target/ftl-mod-manager-${version}.jar $out/share/java
+    install -Dm644 target/ftl-mod-manager-${finalAttrs.version}.jar $out/share/java
     install -Dm644 target/modman.jar $out/share/java
 
     # slipstream is very finniky about having specific
@@ -37,7 +37,7 @@ maven.buildMavenPackage rec {
     # archive it comes from, but we can't do that since
     # we need the mods directory to be writable.
     # see: https://github.com/Vhati/Slipstream-Mod-Manager/blob/85cad4ffbef8583d908b189204d7d22a26be43f8/src/main/java/net/vhati/modmanager/cli/SlipstreamCLI.java#L105
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk}/bin/java $out/bin/${finalAttrs.pname} \
       --run '_dir="''${XDG_DATA_HOME:-$HOME/.local/share}/slipstream"' \
       --run 'mkdir -p $_dir/{mods,backup}' \
       --run 'cd $_dir' \
@@ -53,4 +53,4 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ mib ];
     mainProgram = "slipstream";
   };
-}
+})

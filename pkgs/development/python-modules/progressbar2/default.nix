@@ -10,13 +10,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "progressbar2";
   version = "4.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/kjIlVqEQor3e/8mQrpHBB4bj3yGelt8yU+LwlWo8M8=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Text progressbar library";
     homepage = "https://progressbar-2.readthedocs.io/";
-    changelog = "https://github.com/wolph/python-progressbar/releases/tag/v${version}";
+    changelog = "https://github.com/wolph/python-progressbar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ashgillman ];
   };
-}
+})

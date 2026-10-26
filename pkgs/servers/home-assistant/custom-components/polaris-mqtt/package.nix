@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "samoswall";
   domain = "polaris";
   version = "1.1.6";
@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "samoswall";
     repo = "polaris-mqtt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bSKxfBBWfIZnMD0Srm7NmeBpeGz3F9dyUCCNpEmLD7Q=";
   };
 
@@ -22,4 +22,4 @@ buildHomeAssistantComponent rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.k900 ];
   };
-}
+})

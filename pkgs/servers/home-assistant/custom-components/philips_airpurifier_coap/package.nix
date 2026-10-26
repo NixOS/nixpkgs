@@ -7,15 +7,15 @@
   getmac,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "kongo09";
   domain = "philips_airpurifier_coap";
   version = "0.37";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "philips-airpurifier-coap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oPdjf6eOkkywFQMavbeBty5E5zb215qIBHWND5zaJBs=";
   };
 
@@ -34,4 +34,4 @@ buildHomeAssistantComponent rec {
     license = lib.licenses.unfree; # See https://github.com/kongo09/philips-airpurifier-coap/issues/209
     maintainers = with lib.maintainers; [ justinas ];
   };
-}
+})

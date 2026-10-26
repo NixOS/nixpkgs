@@ -22,19 +22,19 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diebahn";
   version = "2.10.1";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "railway";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lmyseWTqOwMgKB3q+SQbpa4XNzZ+2hBe7Ct7o5oZjOc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-ADJTkR0Lmr2mmhSvLhqryZYKLFjTHA+pGUbZPEBM7r4=";
   };
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Travel with all your train information in one place. Also known as Railway";
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

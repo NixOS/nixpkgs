@@ -34,7 +34,7 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygerber";
   version = "2.4.3";
   pyproject = true;
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Argmaster";
     repo = "pygerber";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0AoRmIN1FNlummJSHdysO2IDBHtfNPhVnh9j0lyWNFI=";
   };
 
@@ -107,4 +107,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clemjvdm ];
   };
-}
+})

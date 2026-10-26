@@ -12,14 +12,14 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-packaging";
   version = "0.12.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_packaging";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
 
@@ -73,4 +73,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter-packaging";
     license = lib.licenses.bsd3;
   };
-}
+})

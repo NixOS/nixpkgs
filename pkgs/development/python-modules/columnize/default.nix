@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "columnize";
   version = "0.3.11";
   pyproject = true;
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to align a simple (not nested) list in columns";
     homepage = "https://github.com/rocky/pycolumnize";
-    changelog = "https://github.com/rocky/pycolumnize/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/rocky/pycolumnize/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fast";
   version = "0.1.0";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "fast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/Li5AAuuHkVqJzmh38g5CPQXWj4RY0TRwvtjlpydosg=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ yarn ];
     platforms = lib.platforms.unix;
   };
-}
+})

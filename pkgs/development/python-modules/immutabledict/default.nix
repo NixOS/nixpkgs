@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "immutabledict";
   version = "4.3.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BZ3qiYZtw5YcWTy2rtlDZE3J1Hia9/Yniy+I7xhq7AE=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fork of frozendict, an immutable wrapper around dictionaries";
     homepage = "https://github.com/corenting/immutabledict";
-    changelog = "https://github.com/corenting/immutabledict/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/corenting/immutabledict/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

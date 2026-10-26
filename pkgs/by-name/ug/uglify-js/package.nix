@@ -8,14 +8,14 @@
   uglify-js,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "uglify-js";
   version = "3.19.3";
 
   src = fetchFromGitHub {
     owner = "mishoo";
     repo = "UglifyJS";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sMLQSB1+ux/ya/J22KGojlAxWhtPQdk22KdHy43zdyg=";
   };
 
@@ -54,10 +54,10 @@ buildNpmPackage rec {
 
   meta = {
     homepage = "https://github.com/mishoo/UglifyJS";
-    changelog = "https://github.com/mishoo/UglifyJS/releases/tag/v" + version;
+    changelog = "https://github.com/mishoo/UglifyJS/releases/tag/v" + finalAttrs.version;
     description = "JavaScript parser / mangler / compressor / beautifier toolkit";
     mainProgram = "uglifyjs";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ lelgenio ];
   };
-}
+})

@@ -12,7 +12,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiodukeenergy";
   version = "1.1.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hunterjm";
     repo = "aiodukeenergy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-//sxl5eOaO6HIEJzxCSxSQaJu5F0sOItawpF3cNTXm0=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/hunterjm/aiodukeenergy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/hunterjm/aiodukeenergy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Asyncio Duke Energy";
     homepage = "https://github.com/hunterjm/aiodukeenergy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

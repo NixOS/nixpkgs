@@ -13,14 +13,14 @@
   nix-update-script,
   clang_20,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "vscode-js-debug";
   version = "1.140.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4bYss4fWLGrOsmfKYbaF9zSGl45jmUH73GCuba2IFw0=";
   };
 
@@ -42,7 +42,7 @@ buildNpmPackage rec {
       .scripts.postinstall |= empty |             # tries to install playwright, not necessary for build
       .scripts.build |= "gulp dapDebugServer" |   # there is no build script defined
       .bin |= "./dist/src/dapDebugServer.js"      # there is no bin output defined
-    ' ${src}/package.json > package.json
+    ' ${finalAttrs.src}/package.json > package.json
   '';
 
   makeCacheWritable = true;
@@ -61,7 +61,7 @@ buildNpmPackage rec {
   };
 
   passthru.tests.test =
-    runCommand "${pname}-test"
+    runCommand "${finalAttrs.pname}-test"
       {
         nativeBuildInputs = [ vscode-js-debug ];
         meta.timeout = 60;
@@ -88,9 +88,9 @@ buildNpmPackage rec {
       Studio proper.
     '';
     homepage = "https://github.com/microsoft/vscode-js-debug";
-    changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/vscode-js-debug/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "js-debug";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zeorin ];
   };
-}
+})

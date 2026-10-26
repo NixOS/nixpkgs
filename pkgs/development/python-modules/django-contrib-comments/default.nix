@@ -8,13 +8,13 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-contrib-comments";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SN4A8VZ34BaiFq7/IF1uAOQ5HJpXAhNsZBGcRytzVto=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     description = "Code formerly known as django.contrib.comments";
     license = lib.licenses.bsd3;
   };
-}
+})

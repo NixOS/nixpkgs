@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "knossosnet";
   version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hcAsKMm9e3yDSv1t8XpEU7CelRqLk2zH1j4GmBzUStk=";
   };
 
@@ -51,7 +51,7 @@ buildDotnetModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/KnossosNET/Knossos.NET/releases/tag/v${version}";
+    changelog = "https://github.com/KnossosNET/Knossos.NET/releases/tag/v${finalAttrs.version}";
     description = "Multi-platform launcher for Freespace 2 Open";
     homepage = "https://fsnebula.org/knossos/";
     license = lib.licenses.gpl3Only;
@@ -59,4 +59,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ cdombroski ];
     platforms = lib.platforms.unix;
   };
-}
+})

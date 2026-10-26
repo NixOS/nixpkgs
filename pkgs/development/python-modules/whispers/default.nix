@@ -20,7 +20,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whispers";
   version = "2.4.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adeptex";
     repo = "whispers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hmFz6RI52CylsBIqO14hFX+2bvrPjpUBnfoDyVh9TbU=";
   };
 
@@ -81,9 +81,9 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to identify hardcoded secrets in static structured text";
     homepage = "https://github.com/adeptex/whispers";
-    changelog = "https://github.com/adeptex/whispers/releases/tag/${src.tag}";
+    changelog = "https://github.com/adeptex/whispers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "whispers";
   };
-}
+})

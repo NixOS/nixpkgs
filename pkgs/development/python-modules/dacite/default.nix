@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dacite";
   version = "1.9.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "konradhalas";
     repo = "dacite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mAPqWvBpkTbtzHpwtCSDXMNkoc8/hbRH3OIEeK2yStU=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python helper to create data classes from dictionaries";
     homepage = "https://github.com/konradhalas/dacite";
-    changelog = "https://github.com/konradhalas/dacite/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/konradhalas/dacite/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

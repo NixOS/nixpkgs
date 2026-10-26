@@ -10,7 +10,7 @@
   pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbus-next";
   version = "0.2.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "altdesktop";
     repo = "python-dbus-next";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Zero-dependency DBus library for Python with asyncio support";
     homepage = "https://github.com/altdesktop/python-dbus-next";
-    changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
+    changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

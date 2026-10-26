@@ -11,7 +11,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ckzg";
   version = "2.1.8";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "c-kzg-4844";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-i7m1oFQ4WmY+TfETfQuznvQINt6+JfWztoRFnI/pV/s=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Minimal implementation of the Polynomial Commitments API for EIP-4844 and EIP-7594";
     homepage = "https://github.com/ethereum/c-kzg-4844";
-    changelog = "https://github.com/ethereum/c-kzg-4844/releases/tag/${src.tag}";
+    changelog = "https://github.com/ethereum/c-kzg-4844/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

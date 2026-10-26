@@ -8,7 +8,7 @@
   openssl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sipyco";
   version = "1.10";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "sipyco";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DkcgZ0K6lsxzBWc31GTyufuSOpcorVv5OsZLHphHBtg=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
     description = "Simple Python Communications - used by the ARTIQ experimental control package";
     mainProgram = "sipyco_rpctool";
     homepage = "https://github.com/m-labs/sipyco";
-    changelog = "https://github.com/m-labs/sipyco/releases/tag/${src.tag}";
+    changelog = "https://github.com/m-labs/sipyco/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ charlesbaynham ];
   };
-}
+})

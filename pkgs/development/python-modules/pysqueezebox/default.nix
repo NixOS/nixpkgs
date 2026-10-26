@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysqueezebox";
   version = "0.14.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rajlaud";
     repo = "pysqueezebox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aJKUgFTAfBZzzhtzklzOCgknk4Yk2i8YPqeVR6/444Q=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous library to control Logitech Media Server";
     homepage = "https://github.com/rajlaud/pysqueezebox";
-    changelog = "https://github.com/rajlaud/pysqueezebox/releases/tag/${src.tag}";
+    changelog = "https://github.com/rajlaud/pysqueezebox/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

@@ -5,13 +5,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openidc-client";
   version = "0.6.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aA6WnK4Ywwrb3dagh+0J9qKWtJN7TIvGm+gTvbv6mEc=";
   };
   propagatedBuildInputs = [ requests ];
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/puiterwijk";
     license = lib.licenses.mit;
   };
-}
+})

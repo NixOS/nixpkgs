@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-archon";
   version = "0.0.7";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jwbargsten";
     repo = "pytest-archon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0YBujBUBpW/FSIlJDRjL5mvYZfirHW07bRyygyoapw8=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

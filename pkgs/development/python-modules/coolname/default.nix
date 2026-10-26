@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coolname";
   version = "2.2.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexanderlukanin13";
     repo = "coolname";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6po9SJGVvOEoSSBtRsbbFE59APFrSkF7uQqaJA8ejoU=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-jet";
   version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "go-jet";
     repo = "jet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Kdwa3u+WNa2pay/kGsfo3/U0/R9dr35n1Lv+yiF5WqU=";
   };
 
@@ -54,4 +54,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "jet";
   };
-}
+})

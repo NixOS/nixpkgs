@@ -8,7 +8,7 @@
   plantuml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytm";
   version = "1.3.1";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "pytm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MseV1ucDCzSM36zx04g9v5euDX0t74KqUSB4+brHzt8=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ wamserma ];
   };
-}
+})

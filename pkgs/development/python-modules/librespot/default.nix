@@ -12,7 +12,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "librespot";
   version = "0.0.10";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kokarare1212";
     repo = "librespot-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VjVPrWttOYfWsxzZpRgpZVenmP0y9Fea6Bhv9U8BO9U=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Open Source Spotify Client";
     homepage = "https://github.com/kokarare1212/librespot-python";
-    changelog = "https://github.com/kokarare1212/librespot-python/releases/tag/v${version}";
+    changelog = "https://github.com/kokarare1212/librespot-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

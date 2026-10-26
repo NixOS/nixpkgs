@@ -7,7 +7,7 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vtjp";
   version = "0.2.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Miicroo";
     repo = "python-vasttrafik";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3/toHY2PkG87J5bIMNJZHF/4mUvWaeHamMzPa1St7Xo=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
     description = "Python wrapper and cli for Västtrafik public API";
     mainProgram = "vtjp";
     homepage = "https://github.com/Miicroo/python-vasttrafik";
-    changelog = "https://github.com/Miicroo/python-vasttrafik/releases/tag/v${version}";
+    changelog = "https://github.com/Miicroo/python-vasttrafik/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

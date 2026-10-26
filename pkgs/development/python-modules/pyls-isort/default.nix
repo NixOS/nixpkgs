@@ -7,7 +7,7 @@
   isort,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyls-isort";
   version = "0.2.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "pyls-isort";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pwCr/9X7IdqZdtLNeYLdnPJGEjVi9i+5TrE56aMCanU=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

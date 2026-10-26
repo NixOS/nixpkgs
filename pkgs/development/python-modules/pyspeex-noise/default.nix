@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyspeex-noise";
   version = "1.0.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pyspeex-noise";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XtLA5yVVCZdpALPu3fx+U+aaA729Vs1UeOJsIm6/S+k=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/rhasspy/pyspeex-noise/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/pyspeex-noise/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Noise suppression and automatic gain with speex";
     homepage = "https://github.com/rhasspy/pyspeex-noise";
     license = with lib.licenses; [
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

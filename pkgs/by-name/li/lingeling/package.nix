@@ -5,14 +5,14 @@
   aiger,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lingeling";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "lingeling";
-    tag = "rel-${version}";
+    tag = "rel-${finalAttrs.version}";
     hash = "sha256-gVFznoptP9Ukux+1jbUpXZDPbc45EAdQ4UyeaD2cX0M=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

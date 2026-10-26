@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyaftership";
   version = "23.1.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pyaftership";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-njlDScmxIYWxB4EL9lOSGCXqZDzP999gI9EkpcZyFlE=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace setup.py \
-      --replace 'version="main",' 'version="${version}",'
+      --replace 'version="main",' 'version="${finalAttrs.version}",'
   '';
 
   pythonImportsCheck = [ "pyaftership" ];
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper package for the AfterShip API";
     homepage = "https://github.com/ludeeus/pyaftership";
-    changelog = "https://github.com/ludeeus/pyaftership/releases/tag/${version}";
+    changelog = "https://github.com/ludeeus/pyaftership/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

@@ -16,7 +16,7 @@
   typing-validation,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bases";
   version = "0.3.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hashberg-io";
     repo = "bases";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CRXVxT9uYud1CKRcdRAD0OX5sTAttrUO9E4BaavTe6A=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for general Base-N encodings";
     homepage = "https://github.com/hashberg-io/bases";
-    changelog = "https://github.com/hashberg-io/bases/releases/tag/v${version}";
+    changelog = "https://github.com/hashberg-io/bases/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vizid ];
   };
-}
+})

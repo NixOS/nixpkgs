@@ -13,7 +13,7 @@
   llm-cmd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-cmd";
   version = "0.2a0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-cmd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RhwQEllpee/XP1p0nrgL4m+KjSZzf61J8l1jJGlg94E=";
   };
 
@@ -49,11 +49,11 @@ buildPythonPackage rec {
   meta = {
     description = "Use LLM to generate and execute commands in your shell";
     homepage = "https://github.com/simonw/llm-cmd";
-    changelog = "https://github.com/simonw/llm-cmd/releases/tag/${version}";
+    changelog = "https://github.com/simonw/llm-cmd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       erethon
       philiptaron
     ];
   };
-}
+})

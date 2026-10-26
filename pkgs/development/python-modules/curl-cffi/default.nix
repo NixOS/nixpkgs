@@ -23,7 +23,7 @@
   websockets,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "curl-cffi";
   version = "0.16.3";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KagVuHhsHmA5/CY/1y5GLOFXx2ETPud6xk2vn4sG1hI=";
   };
 
@@ -110,7 +110,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/lexiforest/curl_cffi/releases/tag/${src.tag}";
+    changelog = "https://github.com/lexiforest/curl_cffi/releases/tag/${finalAttrs.src.tag}";
     description = "Python binding for curl-impersonate via cffi";
     homepage = "https://curl-cffi.readthedocs.io";
     license = lib.licenses.mit;
@@ -119,4 +119,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

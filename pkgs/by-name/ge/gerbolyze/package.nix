@@ -17,11 +17,11 @@ let
     fetchSubmodules = true;
   };
 
-  svg-flatten = stdenv.mkDerivation rec {
+  svg-flatten = stdenv.mkDerivation (finalAttrs: {
     inherit version src;
     pname = "svg-flatten";
 
-    sourceRoot = "${src.name}/svg-flatten";
+    sourceRoot = "${finalAttrs.src.name}/svg-flatten";
 
     preInstall = ''
       mkdir -p $out/bin
@@ -37,7 +37,7 @@ let
       mainProgram = "svg-flatten";
       platforms = lib.platforms.linux;
     };
-  };
+  });
 in
 python3Packages.buildPythonApplication {
   inherit version src;

@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "riden";
   version = "1.2.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geeksville";
     repo = "riden";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uR1CsVsGn/QC4krHaxl6GqRnTPbFdRaqyMEl2RVMHPU=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for Riden RD power supplies";
     homepage = "https://github.com/geeksville/riden";
-    changelog = "https://github.com/geeksville/Riden/releases/tag/${version}";
+    changelog = "https://github.com/geeksville/Riden/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -39,15 +39,16 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peergos";
   version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "Peergos";
     repo = "web-ui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Gh3M7zhEBve61nAgAQ+3pVIGG5tkJGC1V6lDP7suV+o=";
+    hash = "sha256-F/Wqkna6T/L6PMwYlfGEovWUC35CyGAYK/NgG+8aNdw=";
     fetchSubmodules = true;
   };
 
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace build.xml \
-      --replace-fail '${"\${repository.version}"}' '${version}'
+      --replace-fail '${"\${repository.version}"}' '${finalAttrs.version}'
   '';
 
   buildPhase = ''
@@ -86,7 +87,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/Peergos/web-ui/releases/tag/v${version}";
+    changelog = "https://github.com/Peergos/web-ui/releases/tag/v${finalAttrs.version}";
     description = "P2P, secure file storage, social network and application protocol";
     downloadPage = "https://github.com/Peergos/web-ui";
     homepage = "https://peergos.org/";
@@ -101,4 +102,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -11,14 +11,14 @@
   stdenv,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "bicep-lsp";
   version = "0.34.44";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vyPRLPTvQkwN7unlIHs6DvpjXnXyW1PDtH9hhIOgN1A=";
   };
 
@@ -48,9 +48,9 @@ buildDotnetModule rec {
   meta = {
     description = "Domain Specific Language (DSL) for deploying Azure resources declaratively";
     homepage = "https://github.com/Azure/bicep/";
-    changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
+    changelog = "https://github.com/Azure/bicep/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-linux" ];
   };
-}
+})

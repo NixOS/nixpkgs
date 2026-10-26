@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ldapdomaindump";
   version = "0.10.0-unstable-2025-04-06";
   pyproject = true;
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Active Directory information dumper via LDAP";
     homepage = "https://github.com/dirkjanm/ldapdomaindump/";
-    changelog = "https://github.com/dirkjanm/ldapdomaindump/releases/tag/${src.rev}";
+    changelog = "https://github.com/dirkjanm/ldapdomaindump/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,7 +6,7 @@
   protobuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbt-protos";
   version = "1.0.455";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "proto-python-public";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o0H5sGXVxiZgc9Vdwgd5IUlzqHRqSuYbkwI/R9M8uY8=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

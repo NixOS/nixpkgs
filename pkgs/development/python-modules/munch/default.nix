@@ -13,7 +13,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "munch";
   version = "4.0.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Infinidat";
     repo = "munch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-p7DvOGRhkCmtJ32EfttyKXGGmO5kfb2bQGqok/RJtU8=";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     pbr
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/Infinidat/munch";
   };
-}
+})

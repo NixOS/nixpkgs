@@ -7,7 +7,7 @@
   openssl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-bitcoinlib";
   version = "0.12.2";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petertodd";
     repo = "python-bitcoinlib";
-    tag = "python-bitcoinlib-v${version}";
+    tag = "python-bitcoinlib-v${finalAttrs.version}";
     hash = "sha256-jfd2Buy6GSCH0ZeccRREC1NmlS6Mq1qtNv/NLNJOsX0=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/petertodd/python-bitcoinlib";
     description = "Easy interface to the Bitcoin data structures and protocol";
-    changelog = "https://github.com/petertodd/python-bitcoinlib/raw/${src.rev}/release-notes.md";
+    changelog = "https://github.com/petertodd/python-bitcoinlib/raw/${finalAttrs.src.rev}/release-notes.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jb55 ];
   };
-}
+})

@@ -9,14 +9,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-storage-file-datalake";
   version = "12.25.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_storage_file_datalake";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-NIE8bz6b8WNomM7GJSndLO0YnNLGdxYOxp74jDty2n8=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure File DataLake Storage Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-datalake";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-file-datalake_${version}/sdk/storage/azure-storage-file-datalake/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-file-datalake_${finalAttrs.version}/sdk/storage/azure-storage-file-datalake/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

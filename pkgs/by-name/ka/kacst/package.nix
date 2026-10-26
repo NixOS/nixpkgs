@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kacst";
   version = "2.01";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-kacst/fonts-kacst_${version}+mry.orig.tar.bz2";
+    url = "mirror://debian/pool/main/f/fonts-kacst/fonts-kacst_${finalAttrs.version}+mry.orig.tar.bz2";
     hash = "sha256-byiZzpYiMU6kJs+NSISfHPFzAnJtc8toNIbV/fKiMzg=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
   };
-}
+})

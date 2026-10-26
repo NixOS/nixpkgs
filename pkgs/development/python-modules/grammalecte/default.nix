@@ -6,13 +6,13 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grammalecte";
   version = "2.1.1";
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://grammalecte.net/grammalecte/zip/Grammalecte-fr-v${version}.zip";
+    url = "https://grammalecte.net/grammalecte/zip/Grammalecte-fr-v${finalAttrs.version}.zip";
     hash = "sha256-9kPspgNlJGmUfZvYX7DsCPjrD3tquSXS+xi/xv3Y0hw=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ apeyroux ];
   };
-}
+})

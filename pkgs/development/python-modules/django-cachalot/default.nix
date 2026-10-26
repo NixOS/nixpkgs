@@ -17,7 +17,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-cachalot";
   version = "2.9.1";
   format = "setuptools";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noripyt";
     repo = "django-cachalot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-s3TKk8YxWQviXpG/gH6o10hFDJFhJzKSL218REPcg5A=";
   };
 
@@ -77,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "No effort, no worry, maximum performance";
     homepage = "https://github.com/noripyt/django-cachalot";
-    changelog = "https://github.com/noripyt/django-cachalot/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/noripyt/django-cachalot/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

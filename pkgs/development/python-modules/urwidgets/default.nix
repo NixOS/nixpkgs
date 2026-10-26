@@ -6,7 +6,7 @@
   urwid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urwidgets";
   version = "0.2.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AnonymouX47";
     repo = "urwidgets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RgY7m0smcdUspGkCdzepxruEMDq/mAsVFNjHMLoWAyc=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of widgets for urwid";
     homepage = "https://github.com/AnonymouX47/urwidgets";
-    changelog = "https://github.com/AnonymouX47/urwidgets/releases/tag/${src.tag}";
+    changelog = "https://github.com/AnonymouX47/urwidgets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ huyngo ];
   };
-}
+})

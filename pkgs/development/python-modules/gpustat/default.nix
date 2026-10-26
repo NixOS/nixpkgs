@@ -10,13 +10,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpustat";
   version = "1.1.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wY0+1VGPwWMAxC1pTevHCuuzvlXK6R8dtk1jtfqK+dg=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
     description = "Simple command-line utility for querying and monitoring GPU status";
     mainProgram = "gpustat";
     homepage = "https://github.com/wookayin/gpustat";
-    changelog = "https://github.com/wookayin/gpustat/releases/tag/v${version}";
+    changelog = "https://github.com/wookayin/gpustat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ billhuang ];
   };
-}
+})

@@ -6,14 +6,14 @@
   textlint-rule-alex,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "textlint-rule-alex";
   version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "textlint-rule";
     repo = "textlint-rule-alex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1JoiUhiRXZWIyLAJXp5ZzFAa/NBCN79jYh5kMNbO0jI=";
   };
 
@@ -27,8 +27,8 @@ buildNpmPackage rec {
   meta = {
     description = "Textlint rule for alex";
     homepage = "https://github.com/textlint-rule/textlint-rule-alex";
-    changelog = "https://github.com/textlint-rule/textlint-rule-alex/releases/tag/v${version}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-alex/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

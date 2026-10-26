@@ -13,7 +13,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pvo";
   version = "4.0.0";
   pyproject = true;
@@ -21,14 +21,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eRk6lWeVga23G+eyiyKIww9R7hYJ+AYlcmXms+nwq5M=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}"
+      --replace "0.0.0" "${finalAttrs.version}"
   '';
 
   build-system = [ poetry-core ];
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to interact with the PVOutput API";
     homepage = "https://github.com/frenck/python-pvoutput";
-    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/${src.tag}";
+    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

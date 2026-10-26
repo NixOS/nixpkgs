@@ -8,7 +8,7 @@
   django-pgtrigger,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-pgpubsub";
   version = "1.3.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PaulGilmartin";
     repo = "django-pgpubsub";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gl6NfBaoj3WKLHwJElbb27CYVQ83s3f86NUOZE7lHCk=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight background tasks using Django Channels and PostgreSQL NOTIFY/LISTEN";
     homepage = "https://github.com/PaulGilmartin/django-pgpubsub";
-    changelog = "https://github.com/PaulGilmartin/django-pgpubsub/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/PaulGilmartin/django-pgpubsub/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

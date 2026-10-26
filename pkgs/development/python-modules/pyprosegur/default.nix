@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyprosegur";
   version = "0.0.14";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pyprosegur";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FMkz5zZ5+607gfmw4KRmCgfR+TJF2JGLRVEUzZAjTrc=";
   };
 
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to communicate with Prosegur Residential Alarms";
     homepage = "https://github.com/dgomes/pyprosegur";
-    changelog = "https://github.com/dgomes/pyprosegur/releases/tag/${version}";
+    changelog = "https://github.com/dgomes/pyprosegur/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pyprosegur";
   };
-}
+})

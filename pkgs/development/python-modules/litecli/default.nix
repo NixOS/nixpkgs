@@ -12,7 +12,7 @@
   cli-helpers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litecli";
   version = "1.17.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "litecli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YSPNtDL5rNgRh5lJBKfL1jjWemlmf3eesBMSLyJVRLY=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "CLI for SQLite Databases with auto-completion and syntax highlighting";
     homepage = "https://github.com/dbcli/litecli";
-    changelog = "https://github.com/dbcli/litecli/releases/tag/v${version}";
+    changelog = "https://github.com/dbcli/litecli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nullstring1 ];
     mainProgram = "litecli";
   };
-}
+})

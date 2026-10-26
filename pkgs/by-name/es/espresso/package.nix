@@ -6,13 +6,13 @@
   nix-update-script,
   asciidoctor,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "espresso";
   version = "2.5.1";
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "espresso";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dZigbd4md8ffFawpPB/N/TccBQL6sbMKN2VdGu+fhKY=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       heuristic Boolean minimization.
     '';
     homepage = "https://github.com/chipsalliance/espresso";
-    changelog = "https://github.com/chipsalliance/espresso/releases/tag/v${version}";
+    changelog = "https://github.com/chipsalliance/espresso/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ pineapplehunter ];
     mainProgram = "espresso";
     platforms = lib.platforms.all;
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     # See: https://github.com/chipsalliance/espresso/issues/4
     license = lib.licenses.unfree;
   };
-}
+})

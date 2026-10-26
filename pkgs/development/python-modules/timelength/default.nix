@@ -7,7 +7,7 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timelength";
   version = "3.0.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "EtorixDev";
     repo = "timelength";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iaAtDkx6jPPB7s+sTQsrfNFiwerSDZ+7y7C9oNNYEmg=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible python duration parser designed for human readable lengths of time";
     homepage = "https://github.com/EtorixDev/timelength/";
-    changelog = "https://github.com/EtorixDev/timelength/releases/tag/v${version}";
+    changelog = "https://github.com/EtorixDev/timelength/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinetos ];
   };
-}
+})

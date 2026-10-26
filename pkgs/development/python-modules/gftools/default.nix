@@ -58,7 +58,7 @@ let
   fontmake' = python.withPackages (ps: [ ps.fontmake ] ++ ps.fontmake.optional-dependencies.json);
   fonttools' = python.withPackages (ps: [ ps.fonttools ] ++ ps.fonttools.optional-dependencies.ufo);
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gftools";
   version = "0.10.4";
   pyproject = true;
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vy7OToJcTsTbCqOuaPxxoz0yL8CIMMFJSXLzeKD3ZY8=";
   };
 
@@ -207,9 +207,9 @@ buildPythonPackage rec {
   meta = {
     description = "Misc tools for working with the Google Fonts library";
     homepage = "https://github.com/googlefonts/gftools";
-    changelog = "https://github.com/googlefonts/gftools/releases/tag/${src.tag}";
+    changelog = "https://github.com/googlefonts/gftools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "gftools";
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
-}
+})

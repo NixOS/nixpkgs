@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysenz";
   version = "1.1.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nordicopen";
     repo = "pysenz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jUOIapzoDjfX6nVX4Dcc356uRnQNEu2OQIcm4D3ceh8=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/nordicopen/pysenz/releases/tag/${src.tag}";
+    changelog = "https://github.com/nordicopen/pysenz/releases/tag/${finalAttrs.src.tag}";
     description = "Async Typed Python package for the Chemelex (nVent) RAYCHEM SENZ RestAPI";
     homepage = "https://github.com/nordicopen/pysenz";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

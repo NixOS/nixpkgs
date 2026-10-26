@@ -10,14 +10,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aws-secretsmanager-caching";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aws_secretsmanager_caching";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-sDS6cVSgt9l1/SXhu5gFkiSUtv0GMunhF+GruGjzoGs=";
   };
 
@@ -63,11 +63,11 @@ buildPythonPackage rec {
   meta = {
     description = "Client-side AWS secrets manager caching library";
     homepage = "https://github.com/aws/aws-secretsmanager-caching-python";
-    changelog = "https://github.com/aws/aws-secretsmanager-caching-python/releases/tag/v${version}";
+    changelog = "https://github.com/aws/aws-secretsmanager-caching-python/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       The AWS Secrets Manager Python caching client enables in-process caching of secrets for Python applications.
     '';
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tomaskala ];
   };
-}
+})

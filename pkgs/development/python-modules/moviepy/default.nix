@@ -22,7 +22,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moviepy";
   version = "2.2.1";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Zulko";
     repo = "moviepy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3vt/EyEOv6yNPgewkgcWcjM0TbQ6IfkR6nytS/WpRyg=";
   };
 
@@ -90,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
-    changelog = "https://github.com/Zulko/moviepy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Zulko/moviepy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

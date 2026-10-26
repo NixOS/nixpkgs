@@ -7,14 +7,14 @@
   dos2unix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sumorobot-manager";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "robokoding";
     repo = "sumorobot-manager";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

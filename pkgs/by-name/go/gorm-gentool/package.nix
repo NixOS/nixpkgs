@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gorm-gentool";
   version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "go-gorm";
     repo = "gen";
-    rev = "tools/gentool/v${version}";
+    rev = "tools/gentool/v${finalAttrs.version}";
     hash = "sha256-8xuprFktGflx/5BR3Sbzx/MWerSp57q2Ky2Yn5P6Y28=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     mainProgram = "gentool";
     maintainers = with lib.maintainers; [ tembleking ];
   };
-}
+})

@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ziggo-mediabox-xl";
   version = "1.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "b10m";
     repo = "ziggo_mediabox_xl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ElULsHfZXYTZ1cFEdAjhURWGOmJw2uJWMy49whGAV7g=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to Ziggo's Mediabox XL";
     homepage = "https://github.com/b10m/ziggo_mediabox_xl";
-    changelog = "https://github.com/b10m/ziggo_mediabox_xl/releases/tag/${version}";
+    changelog = "https://github.com/b10m/ziggo_mediabox_xl/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

@@ -3,13 +3,13 @@
   fetchPypi,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-baseconv";
   version = "1.2.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BTn4vQRkATsFrWLgoWc/CskIbHa0Pr+fgzBTUnzZkxs=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

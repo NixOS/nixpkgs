@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cni-plugins";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3OhUvIJPU5Ayc4/po9Rj4Tfa5536aN8bj+51M6Xg5os=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=v${version}"
+    "-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=v${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -48,11 +48,11 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) cri-o; };
 
   meta = {
-    changelog = "https://github.com/containernetworking/plugins/releases/tag/${src.rev}";
+    changelog = "https://github.com/containernetworking/plugins/releases/tag/${finalAttrs.src.rev}";
     description = "Some standard networking plugins, maintained by the CNI team";
     homepage = "https://www.cni.dev/plugins/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.podman ];
   };
-}
+})

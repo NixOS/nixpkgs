@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "durationpy";
   version = "0.10";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "icholy";
     repo = "durationpy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tJ3zOCROkwFWzTgIKx+0H7J1rNkwy5XJPh8Zec7jJ5g=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

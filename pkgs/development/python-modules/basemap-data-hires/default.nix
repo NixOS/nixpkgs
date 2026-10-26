@@ -5,12 +5,12 @@
   basemap,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "basemap-data-hires";
   pyproject = true;
   inherit (basemap) version src;
 
-  sourceRoot = "${src.name}/data/basemap_data_hires";
+  sourceRoot = "${finalAttrs.src.name}/data/basemap_data_hires";
 
   build-system = [
     setuptools
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     teams = with lib.teams; [ geospatial ];
   };
-}
+})

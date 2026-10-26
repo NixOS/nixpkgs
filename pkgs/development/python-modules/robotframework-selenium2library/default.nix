@@ -5,13 +5,13 @@
   robotframework-seleniumlibrary,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.0.0";
   format = "setuptools";
   pname = "robotframework-selenium2library";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ko6UKweIsW3tJTA5AIs00rRhmSg0YbKU8PQaV5xw/ac=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

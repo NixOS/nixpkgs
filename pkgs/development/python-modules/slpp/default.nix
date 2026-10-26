@@ -7,14 +7,14 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slpp";
   version = "1.2.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "SLPP";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-If3ZMoNICQxxpdMnc+juaKq4rX7MMi9eDMAQEUy1Scg=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -8,12 +8,12 @@
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hfst";
   format = "setuptools";
   inherit (pkgs.hfst) version src;
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   postPatch = ''
     # omorfi-python looks for 'hfst' Python package
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ lurkki ];
   };
-}
+})

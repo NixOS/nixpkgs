@@ -9,7 +9,7 @@
   unixtools,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vpn-slice";
   version = "0.16.1";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dlenski";
     repo = "vpn-slice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
 
@@ -55,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
   };
-}
+})

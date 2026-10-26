@@ -34,13 +34,13 @@ let
     ];
   });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ctap-keyring-device";
   version = "1.0.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
   };
 
@@ -79,4 +79,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jbgosselin ];
   };
-}
+})

@@ -10,7 +10,7 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "everett";
   version = "3.5.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "willkg";
     repo = "everett";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5cjPV2pt2x8RmaGWTRWeX3Nb1QeDd7245FZ0tEmYCSk=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python configuration library for your app";
     homepage = "https://github.com/willkg/everett";
-    changelog = "https://github.com/willkg/everett/releases/tag/${src.tag}";
+    changelog = "https://github.com/willkg/everett/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

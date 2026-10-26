@@ -6,13 +6,13 @@
   flask,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-allowed-hosts";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "flask_allowed_hosts";
     hash = "sha256-LL0Vm33R0BYo8IKyjAzpvO7ls4EfcPx3cx3OU6OsE6s=";
   };
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

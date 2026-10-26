@@ -16,14 +16,14 @@
   tomli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diff-cover";
   version = "10.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "diff_cover";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-jRGU37U39wSArJfJxF3UByHPTDJsmQP76ZfbZ6TbYZU=";
   };
 
@@ -54,9 +54,9 @@ buildPythonPackage rec {
   meta = {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
-    changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
+    changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dzabraev ];
     mainProgram = "diff-cover";
   };
-}
+})

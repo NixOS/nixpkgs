@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "args";
   version = "0.1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-p4W42DdiXpthw5EIUy2VuFJ0rNZ5aTtx67UVaEj8+BQ=";
   };
 
@@ -19,4 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/kennethreitz/args";
     license = lib.licenses.bsd2;
   };
-}
+})

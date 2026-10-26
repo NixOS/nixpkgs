@@ -14,7 +14,7 @@
   respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydiscovergy";
   version = "3.1.0";
   pyproject = true;
@@ -22,13 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "pydiscovergy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OrMuMGN1zB4q6t4fWyZeQ9WRmNZHFyq+wIRq1kG2N30=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interacting with the Discovergy API";
     homepage = "https://github.com/jpbede/pydiscovergy";
-    changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${version}";
+    changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

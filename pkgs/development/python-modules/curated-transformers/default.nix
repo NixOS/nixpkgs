@@ -10,7 +10,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "curated-transformers";
   version = "2.0.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "curated-transformers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2sedBVpwCppviWix+d3tJFTrLBe+2IBlWnCKgV6MucA=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch library of curated Transformer models and their composable components";
     homepage = "https://github.com/explosion/curated-transformers";
-    changelog = "https://github.com/explosion/curated-transformers/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/curated-transformers/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danieldk ];
   };
-}
+})

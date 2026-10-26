@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-trace";
   version = "1.21.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_trace";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Xg4CtR253vC+0vg2J/pQQ6juzQDkd6f7mNHgTDGnE8A=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cloud Trace API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-trace";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${version}/packages/google-cloud-trace/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-trace-v${finalAttrs.version}/packages/google-cloud-trace/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

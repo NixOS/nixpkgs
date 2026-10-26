@@ -14,14 +14,14 @@
   wsgi-intercept,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lazr-restfulclient";
   version = "0.14.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lazr.restfulclient";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Q/EqHTlIRjsUYgOMR7Qp3LXkLgun8uFlEbArpdKt/9s=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

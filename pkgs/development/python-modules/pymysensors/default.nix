@@ -17,7 +17,7 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymysensors";
   version = "0.26.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "theolind";
     repo = "pymysensors";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iND3MEKEruqCdsqJJExm+SA4Z2e87I45fsI4wbnIPRc=";
   };
 
@@ -57,9 +57,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for talking to a MySensors gateway";
     homepage = "https://github.com/theolind/pymysensors";
-    changelog = "https://github.com/theolind/pymysensors/releases/tag/${src.tag}";
+    changelog = "https://github.com/theolind/pymysensors/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pymysensors";
   };
-}
+})

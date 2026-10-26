@@ -22,12 +22,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easytag";
   version = "2.4.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/easytag/${lib.versions.majorMinor version}/easytag-${version}.tar.xz";
+    url = "mirror://gnome/sources/easytag/${lib.versions.majorMinor finalAttrs.version}/easytag-${finalAttrs.version}.tar.xz";
     hash = "sha256-/FHukqcF48WXnf8WVfdJbv+2i5jxraBUfoy7wDO2fdU=";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matteopacini ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

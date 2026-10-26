@@ -3,7 +3,7 @@
   python3Packages,
   fetchPypi,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pdfposter";
   version = "0.9.1";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     pname = "pdfposter";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Y5gUrHI470vsORETxkpf3WH5YXgdIeTZvSb3v/UgD24=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wamserma ];
   };
-}
+})

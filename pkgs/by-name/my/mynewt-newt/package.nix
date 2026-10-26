@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mynewt-newt";
   version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "mynewt-newt";
-    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] version}_tag";
+    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}_tag";
     sha256 = "sha256-LHknQC9exvt11qLDvHGangXUVdq5WUHQwm4X9p/yAzA=";
   };
 
@@ -31,4 +31,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pjones ];
   };
-}
+})

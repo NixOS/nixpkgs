@@ -11,7 +11,7 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyseventeentrack";
   version = "1.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "shaiu";
     repo = "pyseventeentrack";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6XNPKNyJERT75RfRuiQXG9gI+gQ2yFzmsdX+bmbRVns=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/shaiu/pyseventeentrack/releases/tag/v${version}";
+    changelog = "https://github.com/shaiu/pyseventeentrack/releases/tag/v${finalAttrs.version}";
     description = "Simple Python API for 17track.net";
     homepage = "https://github.com/shaiu/pyseventeentrack";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

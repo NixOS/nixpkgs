@@ -11,7 +11,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eth-bloom";
   version = "3.1.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-bloom";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WrBLFICPyb+1bIitHZ172A1p1VYqLR75YfJ5/IBqDr8=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the Ethereum bloom filter";
     homepage = "https://github.com/ethereum/eth-bloom";
-    changelog = "https://github.com/ethereum/eth-bloom/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ethereum/eth-bloom/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

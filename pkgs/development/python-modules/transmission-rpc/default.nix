@@ -11,7 +11,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "transmission-rpc";
   version = "7.0.11";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Trim21";
     repo = "transmission-rpc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t07TuLLHfbxvWh+7854OMigfGC8jHzvpd4QO3v0M15I=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module that implements the Transmission bittorent client RPC protocol";
     homepage = "https://github.com/Trim21/transmission-rpc";
-    changelog = "https://github.com/trim21/transmission-rpc/releases/tag/v${version}";
+    changelog = "https://github.com/trim21/transmission-rpc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
-}
+})

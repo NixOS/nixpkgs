@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyblu";
   version = "2.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5vVdCrvBCLbLlXR2iDtVR6JuJcFYQnuaJMKeor5HvBI=";
   };
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/${src.tag}";
+    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/${finalAttrs.src.tag}";
     description = "BluOS API client";
     homepage = "https://github.com/LouisChrist/pyblu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

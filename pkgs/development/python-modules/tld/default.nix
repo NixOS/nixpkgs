@@ -10,13 +10,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tld";
   version = "0.13.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2YP6krnXF0AHQvyoROKdXhgnEHnHvPq/ZtAbObShQ0U=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Extracts the top level domain (TLD) from the URL given";
     homepage = "https://github.com/barseghyanartur/tld";
-    changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/barseghyanartur/tld/blob/${finalAttrs.version}/CHANGELOG.rst";
     # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
     # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
     license = with lib.licenses; [
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "update-tld-names";
   };
-}
+})

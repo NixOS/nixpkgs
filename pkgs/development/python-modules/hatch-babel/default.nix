@@ -7,7 +7,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-babel";
   version = "0.1.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NiklasRosenstein";
     repo = "hatch-babel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qAVuT3NuHAh1ELWzBT3/kvrDdSHqdy/YINCfKgpSk8g=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

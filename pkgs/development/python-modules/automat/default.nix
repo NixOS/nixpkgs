@@ -9,13 +9,13 @@
 }:
 
 let
-  automat = buildPythonPackage rec {
+  automat = buildPythonPackage (finalAttrs: {
     version = "25.4.16";
     pyproject = true;
     pname = "automat";
 
     src = fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       hash = "sha256-ABdZGlR3Bm6Q0msOaW3cFDuq/Ye1iM+sgQC8a+ljTeA=";
     };
 
@@ -47,6 +47,6 @@ let
       license = lib.licenses.mit;
       maintainers = [ ];
     };
-  };
+  });
 in
 automat

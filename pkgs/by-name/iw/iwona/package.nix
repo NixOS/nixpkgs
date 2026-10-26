@@ -4,8 +4,8 @@
   texlive,
 }:
 
-stdenvNoCC.mkDerivation rec {
-  inherit (src) pname version;
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit (finalAttrs.src) pname version;
 
   src = texlive.pkgs.iwona;
   dontUnpack = true;
@@ -24,8 +24,8 @@ stdenvNoCC.mkDerivation rec {
     # "[...] GUST Font License (GFL), which is a free license, legally
     # equivalent to the LaTeX Project Public # License (LPPL), version 1.3c or
     # later." - GUST website
-    license = src.meta.license;
+    license = finalAttrs.src.meta.license;
     maintainers = with lib.maintainers; [ siddharthist ];
     platforms = lib.platforms.all;
   };
-}
+})

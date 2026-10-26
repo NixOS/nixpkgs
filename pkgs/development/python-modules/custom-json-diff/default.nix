@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "custom-json-diff";
   version = "2.1.6";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "appthreat";
     repo = "custom-json-diff";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-09kSj4fJHQHyzsCk0bSVlwAgkyzWOSjRKxU1rcMXacQ=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

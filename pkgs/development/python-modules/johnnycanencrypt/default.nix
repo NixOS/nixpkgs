@@ -14,7 +14,7 @@
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "johnnycanencrypt";
   version = "0.18.0";
   pyproject = true;
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qpta6D5aslUwuJ0+voYrHFIDetlsUB6PkScrtl/plVs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-EzHbV/IBbGjoKFIbXSo2dlf+DU7ZXV16bVR93Sq0lis=";
   };
 
@@ -74,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for OpenPGP written in Rust";
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
-    changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${version}/changelog.md";
+    changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ _0x4A6F ];
   };
-}
+})

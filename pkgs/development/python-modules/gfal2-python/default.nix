@@ -11,14 +11,14 @@
   # For tests
   gfal2-util ? null,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gfal2-python";
   version = "1.13.1";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-python";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OUpsnKSsFOhiSg0npJW/9Htl4XNt/6zEPuB9nd6b43w=";
   };
   nativeBuildInputs = [
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

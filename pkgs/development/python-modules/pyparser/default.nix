@@ -5,7 +5,7 @@
   parse,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyparser";
   version = "1.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # Missing tests on Pypi
   src = fetchhg {
     url = "https://keep.imfreedom.org/grim/pyparser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DoKYZHSyysRsuDTUQPXhBacb8ckbSJy4qne92z5Z9Co=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.nico202 ];
   };
-}
+})

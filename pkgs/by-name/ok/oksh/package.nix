@@ -6,14 +6,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oksh";
   version = "7.9";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "oksh";
-    rev = "oksh-${version}";
+    rev = "oksh-${finalAttrs.version}";
     hash = "sha256-7YgKRlu/5FGZivANa2z6RQp7qKFX44xFuqNV6nwbAXI=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
   passthru = {
     shellPath = "/bin/oksh";
   };
-}
+})

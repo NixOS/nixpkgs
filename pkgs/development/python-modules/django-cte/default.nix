@@ -8,7 +8,7 @@
   pytest-unmagic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-cte";
   version = "3.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dimagi";
     repo = "django-cte";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pXTnk3Z+6jiqq7Q2JTpHxZSNHaTRT3lAAeuHTQIuzBM=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Common Table Expressions (CTE) for Django";
     homepage = "https://github.com/dimagi/django-cte";
-    changelog = "https://github.com/dimagi/django-cte/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dimagi/django-cte/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

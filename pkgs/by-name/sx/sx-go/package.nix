@@ -6,14 +6,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sx-go";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "v-byte-cpu";
     repo = "sx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HTIzA1QOVn3V/hGUu7wLIYUNYmcJ/FXi2yr6BGRizZA=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
 
   postFixup = ''
     # Rename binary to avoid conflict with sx
-    mv $out/bin/sx $out/bin/${pname}
+    mv $out/bin/sx $out/bin/${finalAttrs.pname}
   '';
 
   meta = {
@@ -44,4 +44,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sx-go";
   };
-}
+})

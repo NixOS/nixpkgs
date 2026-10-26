@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.3.2";
   pname = "libbraiding";
 
   src = fetchFromGitHub {
     owner = "miguelmarco";
     repo = "libbraiding";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Vo4nwzChjrI4PeNB+adPwDeL3gb++DEc4isX4/iDHMc=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
   };
-}
+})

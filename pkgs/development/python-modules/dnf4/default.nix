@@ -16,7 +16,7 @@ let
   pyMajor = lib.versions.major python.version;
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dnf4";
   version = "4.24.0";
   pyproject = false;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zzWOc2I9YW5gjsS2Umfx6GGgY4B3pdia0E2KHHtAH2s=";
   };
 
@@ -95,10 +95,10 @@ buildPythonPackage rec {
   meta = {
     description = "Package manager based on libdnf and libsolv. Replaces YUM";
     homepage = "https://github.com/rpm-software-management/dnf";
-    changelog = "https://github.com/rpm-software-management/dnf/releases/tag/${version}";
+    changelog = "https://github.com/rpm-software-management/dnf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "dnf";
     platforms = lib.platforms.unix;
   };
-}
+})

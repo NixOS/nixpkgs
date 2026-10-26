@@ -9,7 +9,7 @@
 
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gevent-eventemitter";
   version = "2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rossengeorgiev";
     repo = "gevent-eventemitter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aW4OsQi3N5yAMdbTd8rxbb2qYMfFJBR4WQFIXvxpiMw=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
       adda
     ];
   };
-}
+})

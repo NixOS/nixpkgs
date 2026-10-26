@@ -7,13 +7,13 @@
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykcs11";
   version = "1.5.18";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ev2HizaYIdgMG+ihQMheig+xNY/Kq6ZspmhpITaS8ic=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "PKCS#11 wrapper for Python";
     homepage = "https://github.com/LudovicRousseau/PyKCS11";
-    changelog = "https://github.com/LudovicRousseau/PyKCS11/releases/tag/${version}";
+    changelog = "https://github.com/LudovicRousseau/PyKCS11/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hulr ];
   };
-}
+})

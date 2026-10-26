@@ -11,7 +11,7 @@
   victron-mqtt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "victron-vrm";
   version = "0.1.14";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KSoft-Si";
     repo = "vrm-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uDQGfb5VM7ZAjWYr+3XGu1Z7RsOom4BNSvWU5AWtY/o=";
   };
 
@@ -45,10 +45,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/KSoft-Si/vrm-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/KSoft-Si/vrm-client/releases/tag/${finalAttrs.src.tag}";
     description = "Async Python client for the Victron Energy VRM API";
     homepage = "https://github.com/KSoft-Si/vrm-client";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

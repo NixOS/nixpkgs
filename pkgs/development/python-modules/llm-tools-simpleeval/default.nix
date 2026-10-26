@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-tools-simpleeval";
   version = "0.1.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-tools-simpleeval";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IOmYu7zoim7Co/xIm5VLaGkCPI0o+2Nb2Pu3U2fH0BU=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Make simple_eval available as an LLM tool";
     homepage = "https://github.com/simonw/llm-tools-simpleeval";
-    changelog = "https://github.com/simonw/llm-tools-simpleeval/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-tools-simpleeval/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

@@ -24,14 +24,14 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "localstack-ext";
   version = "4.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "localstack_ext";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-JTHK4YavQyp78tYloZvZ5er6w6U4wGGHDfgL345nNiY=";
   };
 
@@ -80,4 +80,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

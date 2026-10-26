@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ollama";
   version = "0.6.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aRpLVBgdEX8JDrKQJ63MklmEm+7H9iJsoT6okFL3gZU=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Ollama Python library";
     homepage = "https://github.com/ollama/ollama-python";
-    changelog = "https://github.com/ollama/ollama-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/ollama/ollama-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,7 +8,7 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "twilight";
   version = "unstable-2018-04-19";
 
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Redo of IRIX twilight backdrop in old school OpenGL";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "twilight";
   };
-}
+})

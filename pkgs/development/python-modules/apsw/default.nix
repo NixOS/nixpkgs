@@ -6,14 +6,14 @@
   sqlite,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apsw";
   version = "3.51.0.0";
   pyproject = true;
 
   # https://github.com/rogerbinns/apsw/issues/548
   src = fetchurl {
-    url = "https://github.com/rogerbinns/apsw/releases/download/${version}/apsw-${version}.tar.gz";
+    url = "https://github.com/rogerbinns/apsw/releases/download/${finalAttrs.version}/apsw-${finalAttrs.version}.tar.gz";
     hash = "sha256-8I1/HnGO9eOs9CUFwvN5BcpHtCxXD7qlF9WBA4E1Rls=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "apsw" ];
 
   meta = {
-    changelog = "https://github.com/rogerbinns/apsw/blob/${version}/doc/changes.rst";
+    changelog = "https://github.com/rogerbinns/apsw/blob/${finalAttrs.version}/doc/changes.rst";
     description = "Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

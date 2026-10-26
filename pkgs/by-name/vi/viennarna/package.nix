@@ -9,12 +9,12 @@
   perl,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "viennarna";
   version = "2.7.2";
 
   src = fetchurl {
-    url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_7_x/ViennaRNA-${version}.tar.gz";
+    url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_7_x/ViennaRNA-${finalAttrs.version}.tar.gz";
     hash = "sha256-GrX0pPdvyFoiQ1RgiORfXYXy16VsxlbpabAFzOm/q18=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prusnak ];
     platforms = lib.platforms.unix;
   };
-}
+})

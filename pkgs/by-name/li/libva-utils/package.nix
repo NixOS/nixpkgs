@@ -13,14 +13,14 @@
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libva-utils";
   version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libva-utils";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ezYoJ9hyG0pAficudoS4oiXbdrw4oCUU8C6qmJrNQRc=";
   };
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
       in accordance with the libva project.
     '';
     homepage = "https://github.com/intel/libva-utils";
-    changelog = "https://raw.githubusercontent.com/intel/libva-utils/${version}/NEWS";
+    changelog = "https://raw.githubusercontent.com/intel/libva-utils/${finalAttrs.version}/NEWS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,12 +7,12 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsibreak";
   version = "0.13.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/rsibreak/${lib.versions.majorMinor version}/rsibreak-${version}.tar.xz";
+    url = "mirror://kde/stable/rsibreak/${lib.versions.majorMinor finalAttrs.version}/rsibreak-${finalAttrs.version}.tar.xz";
     hash = "sha256-arLOCcV9D+UXgwjqlfh9675VrpjPs3QkkireJZO60SA=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.kde.org/applications/utilities/rsibreak/";
     maintainers = with lib.maintainers; [ vandenoever ];
   };
-}
+})

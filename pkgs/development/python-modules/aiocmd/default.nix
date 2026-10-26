@@ -5,13 +5,13 @@
   prompt-toolkit,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiocmd";
   version = "0.1.5";
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = "aiocmd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C8dpeMTaoOMgfNP19JUYKUf+Vyw36Ry6dHkhaSm/QNk=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.znaniye ];
     platforms = lib.platforms.linux;
   };
-}
+})

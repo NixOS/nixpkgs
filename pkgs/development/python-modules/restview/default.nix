@@ -10,13 +10,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "restview";
   version = "3.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-i011oL7Xa2e0Vu9wEfTrbJilVsn4N2Qt8iAscxL8zBo=";
   };
 
@@ -43,9 +43,9 @@ buildPythonPackage rec {
   meta = {
     description = "ReStructuredText viewer";
     homepage = "https://mg.pov.lt/restview/";
-    changelog = "https://github.com/mgedmin/restview/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/mgedmin/restview/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ koral ];
     mainProgram = "restview";
   };
-}
+})

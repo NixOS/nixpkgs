@@ -6,13 +6,13 @@
   qrcode,
   pillow,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qrcode-terminal";
   version = "0.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Hitp5mK5NG6Y3ZWYMDPp1Dz/BkPYr9oSYF9RVCjmZsA=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "qrcode-terminal-py";
   };
-}
+})

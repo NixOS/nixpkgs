@@ -15,13 +15,13 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msprime";
   version = "1.4.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VN62vj2A8tn6A7fwOYgwJM3r2xSFGokKEmUNetb+xWg=";
   };
 
@@ -78,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simulate genealogical trees and genomic sequence data using population genetic models";
     homepage = "https://github.com/tskit-dev/msprime";
-    changelog = "https://github.com/tskit-dev/msprime/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/tskit-dev/msprime/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

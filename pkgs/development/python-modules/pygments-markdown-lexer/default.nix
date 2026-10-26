@@ -5,13 +5,13 @@
   pygments,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygments-markdown-lexer";
   version = "0.1.0.dev39";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-TBKMJkULWIZSHGdNdZ+V/DdouJVafZyBhm7gITwv698=";
   };
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     description = "Pygments Markdown Lexer – A Markdown lexer for Pygments to highlight Markdown code snippets";
     license = lib.licenses.asl20;
   };
-}
+})

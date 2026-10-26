@@ -13,15 +13,15 @@
 
 assert withThread -> libpthread-stubs != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pari";
   version = "2.17.3";
 
   src = fetchurl {
     urls = [
-      "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz"
+      "https://pari.math.u-bordeaux.fr/pub/pari/unix/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
       # old versions are at the url below
-      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
+      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-jZxPzVhMRo0n4PI8NoNlhyhEUglMSxxATCDEuBBGLcs=";
   };
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "gp";
   };
-}
+})

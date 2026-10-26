@@ -17,14 +17,14 @@
   withGui ? true,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
   version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-om2oqjlk/Jg1q7HTdGv41PYRXViDtQkhYa6rqe3uCfI=";
   };
 
@@ -58,16 +58,16 @@ buildGoModule rec {
   ];
 
   # conditionally build with GUI or not (go2tv or go2tv-lite sub-packages)
-  subPackages = [ "cmd/${pname}" ];
+  subPackages = [ "cmd/${finalAttrs.pname}" ];
 
   doCheck = false;
 
   meta = {
     description = "Cast media files to UPnP/DLNA Media Renderers and Smart TVs";
     homepage = "https://github.com/alexballas/go2tv";
-    changelog = "https://github.com/alexballas/go2tv/releases/tag/v${version}";
+    changelog = "https://github.com/alexballas/go2tv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdamjan ];
-    mainProgram = pname;
+    mainProgram = finalAttrs.pname;
   };
-}
+})

@@ -23,7 +23,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-storage";
   version = "3.12.0";
   pyproject = true;
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-storage-v${version}";
+    tag = "google-cloud-storage-v${finalAttrs.version}";
     hash = "sha256-4rmrRvYW9FOpvYY4a+vbDzQRcLXfFHGSCnv7yL6S1FM=";
   };
 
-  sourceRoot = "${src.name}/packages/google-cloud-storage";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-storage";
 
   build-system = [ setuptools ];
 
@@ -135,8 +135,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-storage";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-storage/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-cloud-storage/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

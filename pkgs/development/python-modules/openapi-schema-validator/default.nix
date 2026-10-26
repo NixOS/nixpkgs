@@ -22,7 +22,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openapi-schema-validator";
   version = "0.8.1";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-schema-validator";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XOtSnlJJGEa6pOQDHTFRF0zqNxJIB2VlZvFv5kxwUIM=";
   };
 
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
   meta = {
-    changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${src.tag}";
+    changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${finalAttrs.src.tag}";
     description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0 and v3.1";
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lsprotocol";
   version = "2025.0.0";
   pyproject = true;
@@ -19,11 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "lsprotocol";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DrWXHMgDZSQQ6vsmorThMrUTX3UQU+DajSEOdxoXrFQ=";
   };
 
-  sourceRoot = "${src.name}/packages/python";
+  sourceRoot = "${finalAttrs.src.name}/packages/python";
 
   build-system = [
     flit-core
@@ -65,11 +65,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/microsoft/lsprotocol";
-    changelog = "https://github.com/microsoft/lsprotocol/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/lsprotocol/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       doronbehar
       fab
     ];
   };
-}
+})

@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "render50";
   version = "9.2.10";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "render50";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YaLLWrae8vgOYLmfFlPa6WkKGNlUj+n76NRpg0qm6QI=";
   };
 
@@ -43,10 +43,10 @@ python3Packages.buildPythonApplication rec {
     description = "Generate syntax-highlighted PDFs of source code";
     homepage = "https://cs50.readthedocs.io/render50/";
     downloadPage = "https://github.com/cs50/render50";
-    changelog = "https://github.com/cs50/render50/releases/tag/${src.tag}";
+    changelog = "https://github.com/cs50/render50/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "render50";
   };
-}
+})

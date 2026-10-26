@@ -9,7 +9,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trubar";
   version = "0.3.4";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "janezd";
     repo = "trubar";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ChKmeACEMnFcMYSdkdVlFiE3td171ihUS2A+qsP5ASk=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utility for translation of strings and f-strings in Python files";
     homepage = "https://github.com/janezd/trubar";
-    changelog = "https://github.com/janezd/trubar/releases/tag/${version}";
+    changelog = "https://github.com/janezd/trubar/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

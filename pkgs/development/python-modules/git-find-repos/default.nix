@@ -4,7 +4,7 @@
   lib,
   setuptools-scm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "git-find-repos";
   version = "2.1.1";
   pyproject = true;
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "acroz";
     repo = "git-find-repos";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+MiCMgIakpJaWWdN2grerlPbPAnfIXuclvRw8XQ1YiI=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     mainProgram = "git-find-repos";
     maintainers = [ lib.maintainers.yajo ];
   };
-}
+})

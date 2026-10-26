@@ -8,7 +8,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twitchapi";
   version = "4.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3kAR/9OS58sDRUiCcQAI7KCCPpnclBNR4SkwDNJs9mo=";
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Teekeks/pyTwitchAPI/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/Teekeks/pyTwitchAPI/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     description = "Python implementation of the Twitch Helix API, EventSub and Chat";
     homepage = "https://github.com/Teekeks/pyTwitchAPI";
     license = lib.licenses.mit;
@@ -57,4 +57,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})

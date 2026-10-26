@@ -28,14 +28,14 @@ lib.checkListOfEnum "${pname}: available color variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2025-08-21";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "Fluent-icon-theme";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-qAKNAbmSfVuzUGDJGVU0QF3LMc5tRzAy+l0ZwEXaJ28=";
     };
 
@@ -77,4 +77,4 @@ lib.checkListOfEnum "${pname}: available color variants"
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ icy-thought ];
     };
-  }
+  })

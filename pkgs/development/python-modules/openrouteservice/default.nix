@@ -6,15 +6,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openrouteservice";
   version = "2.3.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "GIScience";
-    repo = "${pname}-py";
-    rev = "v${version}";
+    repo = "${finalAttrs.pname}-py";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WHzujUc28D37m26rZNPvhew+MgpBhdocv9AFtJ5fuLQ=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
-}
+})

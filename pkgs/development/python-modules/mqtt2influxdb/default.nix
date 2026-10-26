@@ -16,7 +16,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mqtt2influxdb";
   version = "2.0.6";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-mqtt2influxdb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DS1k3JcTUK0yXRkJSFMeIZHSXpiIgSXJPZb3+72Wqko=";
   };
 
@@ -50,9 +50,9 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible MQTT to InfluxDB Bridge";
     homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
-    changelog = "https://github.com/hardwario/bch-mqtt2influxdb/releases/tag/${src.tag}";
+    changelog = "https://github.com/hardwario/bch-mqtt2influxdb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
     mainProgram = "mqtt2influxdb";
   };
-}
+})

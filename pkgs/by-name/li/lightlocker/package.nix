@@ -19,7 +19,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "light-locker";
   version = "1.9.0";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "the-cavalry";
     repo = "light-locker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
   };
-}
+})

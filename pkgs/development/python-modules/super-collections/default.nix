@@ -9,7 +9,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "super-collections";
   version = "0.6.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fralau";
     repo = "super-collections";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7QW5cL+TZlPX8ZMNNH+xZSGNIGr8Cy2jP1oSWy5tKaY=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marcel ];
   };
-}
+})

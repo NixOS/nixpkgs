@@ -13,7 +13,7 @@
   which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "monai";
   version = "1.6.1";
   pyproject = true;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-htzrk6ernF5LI9c1qKb1qrsHyzOTVz6nZ+msfDCmqN4=";
     # fix source non-reproducibility due to versioneer + git-archive, as with Numba, Pytensor etc. derivations:
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/monai/_version.py
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/monai/_version.py
     '';
   };
 
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytorch framework (based on Ignite) for deep learning in medical imaging";
     homepage = "https://github.com/Project-MONAI/MONAI";
-    changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${version}";
+    changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bcdarwin ];
   };
-}
+})

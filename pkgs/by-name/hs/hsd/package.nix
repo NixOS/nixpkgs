@@ -8,14 +8,14 @@
   cctools,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "hsd";
   version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "handshake-org";
     repo = "hsd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7hF8cJf9Oewfg5WvNpqQSrBZjpnERcdDAaxixOdArpo=";
   };
 
@@ -37,9 +37,9 @@ buildNpmPackage rec {
   meta = {
     # last successful hydra build on darwin was in 2025
     broken = stdenv.hostPlatform.isDarwin;
-    changelog = "https://github.com/handshake-org/hsd/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/handshake-org/hsd/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Implementation of the Handshake protocol";
     homepage = "https://github.com/handshake-org/hsd";
     license = lib.licenses.mit;
   };
-}
+})

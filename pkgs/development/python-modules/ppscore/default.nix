@@ -8,7 +8,7 @@
   scikit-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ppscore";
   version = "1.3.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "8080labs";
     repo = "ppscore";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GhmyVWNWpEMNqXW808UhBHk1r6vOVibxKHVv5wWshLE=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the Predictive Power Score (PPS)";
     homepage = "https://github.com/8080labs/ppscore/";
-    changelog = "https://github.com/8080labs/ppscore/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/8080labs/ppscore/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evax ];
   };
-}
+})

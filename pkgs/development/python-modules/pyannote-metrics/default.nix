@@ -24,7 +24,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyannote-metrics";
   version = "4.1";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-metrics";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-j0rNzHX9xIP9LB2Rk5D0EsD5BOWR4Kp5CEuKi8l8QgY=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     substituteInPlace src/pyannote/metrics/cli.py \
       --replace-fail \
         'version="Evaluation"' \
-        'version="${version}"'
+        'version="${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -77,4 +77,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "pyannote-metrics";
   };
-}
+})

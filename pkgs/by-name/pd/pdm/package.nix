@@ -21,7 +21,7 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pdm";
   version = "2.27.0";
   pyproject = true;
@@ -29,7 +29,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ju1UoyThWoPnU9HJzdgA9ry+G1pXOhXmPIoydTg7VXo=";
   };
 
@@ -134,7 +134,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://pdm-project.org";
-    changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
+    changelog = "https://github.com/pdm-project/pdm/releases/tag/${finalAttrs.version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -144,4 +144,4 @@ python.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "pdm";
   };
-}
+})

@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-randomly";
   version = "4.1.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pytest-randomly";
     owner = "pytest-dev";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+T0iWmfC3+8k6bWme3SQtqaWM+++sFeSotJ+3vyevvI=";
   };
 
@@ -45,10 +45,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_randomly" ];
 
   meta = {
-    changelog = "https://github.com/pytest-dev/pytest-randomly/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/pytest-dev/pytest-randomly/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Pytest plugin to randomly order tests and control random.seed";
     homepage = "https://github.com/pytest-dev/pytest-randomly";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

@@ -6,7 +6,7 @@
   pytestCheckHook,
   hypothesis,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "condense-json";
   version = "1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "condense-json";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IBYjDFhbQlZ/17nTo5FvJM7aeadKS5dW7J8IGy4956M=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python function for condensing JSON using replacement strings";
     homepage = "https://github.com/simonw/condense-json";
-    changelog = "https://github.com/simonw/condense-json/releases/tag/${src.tag}";
+    changelog = "https://github.com/simonw/condense-json/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       josh
       dwt
     ];
   };
-}
+})

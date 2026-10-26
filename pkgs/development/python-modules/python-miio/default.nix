@@ -23,13 +23,13 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-miio";
   version = "0.5.12";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
@@ -80,4 +80,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/rytilahti/python-miio";
     license = lib.licenses.gpl3Only;
   };
-}
+})

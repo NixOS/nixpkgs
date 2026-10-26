@@ -6,12 +6,12 @@
   click,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lexid";
   version = "2021.1006";
   format = "setuptools";
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UJo6TMkm09vyKyA7GKTGbCXmRz+3wODTA3RTOsKLr+U=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kfollesdal ];
   };
-}
+})

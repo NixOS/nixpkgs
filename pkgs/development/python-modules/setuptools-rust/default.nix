@@ -15,14 +15,14 @@
   python,
   targetPackages,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-rust";
   version = "1.13.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_rust";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-8q/PS67uaJkQzknPqKrU4IzOcvQXRJvMMokbhmT9xyY=";
   };
 
@@ -81,8 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "Setuptools plugin for Rust support";
     homepage = "https://github.com/PyO3/setuptools-rust";
-    changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
+    changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

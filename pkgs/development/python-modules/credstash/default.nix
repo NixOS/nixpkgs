@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "credstash";
   version = "1.17.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fugue";
     repo = "credstash";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a6OzffGt5piHgi0AWEXJED0R/+8RETh/9hYJi/lUVu0=";
   };
 
@@ -58,9 +58,9 @@ buildPythonPackage rec {
   meta = {
     description = "Utility for managing secrets in the cloud using AWS KMS and DynamoDB";
     homepage = "https://github.com/LuminalOSS/credstash";
-    changelog = "https://github.com/fugue/credstash/releases/tag/v${version}";
+    changelog = "https://github.com/fugue/credstash/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "credstash";
   };
-}
+})

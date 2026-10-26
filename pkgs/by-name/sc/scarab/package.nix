@@ -11,14 +11,14 @@
   makeDesktopItem,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "scarab";
   version = "2.7.0.0";
 
   src = fetchFromGitHub {
     owner = "fifty-six";
     repo = "scarab";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3sztodNIB05MHA2mMPAjizRHCjiOMYFNChsmXfQJq0I=";
   };
 
@@ -81,7 +81,7 @@ buildDotnetModule rec {
     description = "Hollow Knight mod installer and manager";
     homepage = "https://github.com/fifty-six/Scarab";
     downloadPage = "https://github.com/fifty-six/Scarab/releases";
-    changelog = "https://github.com/fifty-six/Scarab/releases/tag/v${version}";
+    changelog = "https://github.com/fifty-six/Scarab/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       huantian
@@ -90,4 +90,4 @@ buildDotnetModule rec {
     mainProgram = "Scarab";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,7 +5,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pythonegardia";
   version = "1.0.52";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeroenterheerdt";
     repo = "python-egardia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lQ/7tH74MllwFe2kF5OcYSb4rQd+yJU1W6ztG4Z6Y0U=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface with Egardia/Woonveilig alarms";
     homepage = "https://github.com/jeroenterheerdt/python-egardia";
-    changelog = "https://github.com/jeroenterheerdt/python-egardia/releases/tag/v${version}";
+    changelog = "https://github.com/jeroenterheerdt/python-egardia/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

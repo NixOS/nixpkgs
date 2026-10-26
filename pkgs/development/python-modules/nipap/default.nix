@@ -31,7 +31,7 @@
   python-ldap,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nipap";
   version = "0.32.7";
   pyproject = true;
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SpriteLink";
     repo = "NIPAP";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FnCHW/yEhWtx+2fU+G6vxz50lWC7WL3cYKYOQzmH8zs=";
   };
 
-  sourceRoot = "${src.name}/nipap";
+  sourceRoot = "${finalAttrs.src.name}/nipap";
 
   pythonRelaxDeps = true; # deps are tightly specified by upstream
 
@@ -90,11 +90,11 @@ buildPythonPackage rec {
       challenging classical IP address management (IPAM) systems in many areas.
     '';
     homepage = "https://github.com/SpriteLink/NIPAP";
-    changelog = "https://github.com/SpriteLink/NIPAP/releases/tag/v${version}";
+    changelog = "https://github.com/SpriteLink/NIPAP/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lukegb
     ];
     platforms = lib.platforms.all;
   };
-}
+})

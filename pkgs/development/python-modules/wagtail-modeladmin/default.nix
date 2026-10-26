@@ -8,7 +8,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wagtail-modeladmin";
   version = "2.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wagtail-nest";
     repo = "wagtail-modeladmin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yrmG1Qyx2ULkKhKY/ltip3RE1TdzZqtC8nwdU+7wMxM=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Add any model in your project to the Wagtail admin. Formerly wagtail.contrib.modeladmin";
     homepage = "https://github.com/wagtail-nest/wagtail-modeladmin";
-    changelog = "https://github.com/wagtail/wagtail-modeladmin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/wagtail/wagtail-modeladmin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

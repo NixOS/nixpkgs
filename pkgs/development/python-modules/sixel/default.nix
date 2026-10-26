@@ -6,7 +6,7 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sixel";
   version = "0.2.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lubosz";
     repo = "python-sixel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ALNdwuZIMS2oWO42LpjgIpAxcQh4Gk35nCwenINLQ64=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Display images in the terminal";
     homepage = "https://github.com/lubosz/python-sixel";
-    changelog = "https://github.com/lubosz/python-sixel/releases/tag/${version}";
+    changelog = "https://github.com/lubosz/python-sixel/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ atemu ];
   };
-}
+})

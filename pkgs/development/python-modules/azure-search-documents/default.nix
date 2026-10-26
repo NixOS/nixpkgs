@@ -9,7 +9,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-search-documents";
   version = "11.5.2";
   pyproject = true;
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    tag = "azure_search_documents_${version}";
+    tag = "azure_search_documents_${finalAttrs.version}";
     hash = "sha256-RcVdqI50lsYed9L6Kz7faNLec1Y9zq685SGnwaEw6Qc=";
   };
 
-  sourceRoot = "${src.name}/sdk/search/azure-search-documents";
+  sourceRoot = "${finalAttrs.src.name}/sdk/search/azure-search-documents";
 
   build-system = [ setuptools ];
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure Cognitive Search Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/search/azure-search-documents";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/${src.tag}/sdk/search/azure-search-documents/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/${finalAttrs.src.tag}/sdk/search/azure-search-documents/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

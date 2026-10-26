@@ -14,14 +14,14 @@
   libv4l,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webcamoid";
   version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "webcamoid";
     repo = "webcamoid";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KU5iJqCGbqTZebP5yWb5VcxRGcRjQYQHn+GP6W57D9I=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ robaca ];
     mainProgram = "webcamoid";
   };
-}
+})

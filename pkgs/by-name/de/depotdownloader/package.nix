@@ -5,14 +5,14 @@
   dotnetCorePackages,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "depotdownloader";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
-    rev = "DepotDownloader_${version}";
+    rev = "DepotDownloader_${finalAttrs.version}";
     hash = "sha256-zduNWIQi+ItNSh9RfRfY0giIw/tMQIMRh9woUzQ5pJw=";
   };
 
@@ -26,7 +26,7 @@ buildDotnetModule rec {
   meta = {
     description = "Steam depot downloader utilizing the SteamKit2 library";
     homepage = "https://github.com/SteamRE/DepotDownloader";
-    changelog = "https://github.com/SteamRE/DepotDownloader/releases/tag/DepotDownloader_${version}";
+    changelog = "https://github.com/SteamRE/DepotDownloader/releases/tag/DepotDownloader_${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.babbaj ];
     platforms = [
@@ -36,4 +36,4 @@ buildDotnetModule rec {
     ];
     mainProgram = "DepotDownloader";
   };
-}
+})

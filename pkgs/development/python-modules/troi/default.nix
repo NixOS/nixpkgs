@@ -24,7 +24,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "troi";
   version = "2026.07.31.0";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "troi-recommendation-playground";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SG2o6ng6aCVMNNv6nTO3FG4A8GCrMOsxSiM69r3QX0c=";
   };
 
@@ -82,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "ListenBrainz' empathic music recommendation/playlisting engine";
     homepage = "https://github.com/metabrainz/troi-recommendation-playground";
-    changelog = "https://github.com/metabrainz/troi-recommendation-playground/releases/tag/${src.tag}";
+    changelog = "https://github.com/metabrainz/troi-recommendation-playground/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.ngi ];
   };
-}
+})

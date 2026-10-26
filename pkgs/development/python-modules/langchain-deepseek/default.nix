@@ -20,7 +20,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-deepseek";
   version = "1.1.1";
   pyproject = true;
@@ -28,11 +28,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-deepseek==${version}";
+    tag = "langchain-deepseek==${finalAttrs.version}";
     hash = "sha256-vqH1kuFxgujQ6Xe1nay1QBEd0uG0XtZvPt1FWxtLJyQ=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/deepseek";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/deepseek";
 
   build-system = [
     hatchling
@@ -70,10 +70,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Integration package connecting DeepSeek and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/deepseek";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

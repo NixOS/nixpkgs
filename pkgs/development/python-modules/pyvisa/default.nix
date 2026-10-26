@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvisa";
   version = "1.16.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PHIhCiIfgLlvK490ue5DgLtkYYPMj+eC3ArYZbUANrc=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mvnetbiz ];
   };
-}
+})

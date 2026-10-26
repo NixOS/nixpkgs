@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "systemd-python";
   version = "235";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "python-systemd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8p4m4iM/z4o6PHRQIpuSXb64tPTWGlujEYCDVLiIt2o=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for native access to the systemd facilities";
     homepage = "https://www.freedesktop.org/software/systemd/python-systemd/";
-    changelog = "https://github.com/systemd/python-systemd/blob/v${version}/NEWS";
+    changelog = "https://github.com/systemd/python-systemd/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ raitobezarius ];
   };
-}
+})

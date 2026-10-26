@@ -93,12 +93,12 @@ let
     pulseaudio
   ];
 
-  derivation = stdenv.mkDerivation rec {
+  derivation = stdenv.mkDerivation (finalAttrs: {
     pname = "onlyoffice-desktopeditors";
     version = "9.4.0";
     minor = null;
     src = fetchurl {
-      url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
+      url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${finalAttrs.version}/onlyoffice-desktopeditors_amd64.deb";
       hash = "sha256-QnFDToG+QrFVn9mJ0kv21BNILyeNxqXjKCAqT8Ghhkk=";
     };
 
@@ -183,7 +183,7 @@ let
         # the bundled version of qt does not support wayland
       )
     '';
-  };
+  });
 
 in
 

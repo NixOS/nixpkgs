@@ -14,7 +14,7 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinsteon";
   version = "1.7.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyinsteon";
     repo = "pyinsteon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jzFZpoKd4QAnLZ2p/oy0qZvQtI/2D+rkfoVOWGDo0Fg=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
-    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "insteon_tools";
   };
-}
+})

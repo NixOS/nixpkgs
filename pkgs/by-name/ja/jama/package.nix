@@ -6,7 +6,7 @@
   tnt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jama";
   version = "1.2.5";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ tnt ];
 
   unpackPhase = ''
-    mkdir "${pname}-${version}"
+    mkdir "${finalAttrs.pname}-${finalAttrs.version}"
     unzip "$src"
   '';
   installPhase = ''
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.publicDomain;
   };
-}
+})

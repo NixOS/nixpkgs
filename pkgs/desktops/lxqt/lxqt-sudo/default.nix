@@ -16,14 +16,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-sudo";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-sudo";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wPkIvm6U/dZvf3sE/IsWfK1D647DmVZPV/JZbsRl/HI=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

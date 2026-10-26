@@ -32,13 +32,13 @@ let
     }
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-kernel";
   version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UJjm9FpmXSznXtaIR2rVv5YJS/H83FvRkNz09vwoe0c=";
   };
 
@@ -80,4 +80,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

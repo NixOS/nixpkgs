@@ -9,14 +9,14 @@
   dbip-country-lite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mmdbctl";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "ipinfo";
     repo = "mmdbctl";
-    tag = "mmdbctl-${version}";
+    tag = "mmdbctl-${finalAttrs.version}";
     hash = "sha256-5b7iHeR93afErMZLKbHVgDGVNHjK/QoUDhsX4v1vl8A=";
   };
 
@@ -37,7 +37,7 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
+    simple = runCommand "${finalAttrs.pname}-test" { } ''
       ${lib.getExe mmdbctl} verify ${dbip-country-lite.mmdb} | grep valid
       ${lib.getExe mmdbctl} metadata ${dbip-country-lite.mmdb} | grep DBIP-Country-Lite
       touch $out
@@ -47,9 +47,9 @@ buildGoModule rec {
   meta = {
     description = "MMDB file management CLI supporting various operations on MMDB database files";
     homepage = "https://github.com/ipinfo/mmdbctl";
-    changelog = "https://github.com/ipinfo/mmdbctl/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ipinfo/mmdbctl/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "mmdbctl";
   };
-}
+})

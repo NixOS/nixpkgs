@@ -8,7 +8,7 @@
   sysctl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-cpuinfo";
   version = "9.0.0-unstable-2022-11-20";
   pyproject = true;
@@ -43,8 +43,8 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://github.com/workhorsy/py-cpuinfo";
-    changelog = "https://github.com/workhorsy/py-cpuinfo/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/workhorsy/py-cpuinfo/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

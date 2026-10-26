@@ -17,7 +17,7 @@ let
     else
       "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "electrum-ecc";
   version = "0.0.8";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "electrum_ecc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lIaad94o7nm39+l0r1wgs5K5SZBYgKiyZQTiggJkQQY=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

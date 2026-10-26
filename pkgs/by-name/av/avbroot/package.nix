@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "avbroot";
   version = "3.37.0";
 
   src = fetchFromGitHub {
     owner = "chenxiaolong";
     repo = "avbroot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wr2yb5hTSaqPPSokr4iYNSWeaS2H6t5b2fk94BmnqAM=";
   };
 
@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Sign (and root) Android A/B OTAs with custom keys while preserving Android Verified Boot";
     homepage = "https://github.com/chenxiaolong/avbroot";
-    changelog = "https://github.com/chenxiaolong/avbroot/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/chenxiaolong/avbroot/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "avbroot";
   };
-}
+})

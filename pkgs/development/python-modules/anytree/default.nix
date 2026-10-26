@@ -15,7 +15,7 @@
   fontconfig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anytree";
   version = "2.13.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c0fec0de";
     repo = "anytree";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kFNYJMWagpqixs84+AaNkh/28asLBJhibTP8LEEe4XY=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Powerful and Lightweight Python Tree Data Structure";
     homepage = "https://github.com/c0fec0de/anytree";
-    changelog = "https://github.com/c0fec0de/anytree/releases/tag/${version}";
+    changelog = "https://github.com/c0fec0de/anytree/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

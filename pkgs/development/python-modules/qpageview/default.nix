@@ -7,7 +7,7 @@
   pycups,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qpageview";
   version = "1.0.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frescobaldi";
     repo = "qpageview";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oXZr35ZD+cFEgRNojpiW14xceGC9taMNTFvXHmyyeFg=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Page-based viewer widget for Qt6/PyQt6";
     homepage = "https://github.com/frescobaldi/qpageview";
-    changelog = "https://github.com/frescobaldi/qpageview/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/frescobaldi/qpageview/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ camillemndn ];
   };
-}
+})

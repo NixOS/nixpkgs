@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "open-hypergraphs";
   version = "0.1.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "statusfailed";
     repo = "open-hypergraphs";
-    tag = "pypi-${version}";
+    tag = "pypi-${finalAttrs.version}";
     hash = "sha256-sBF/+VENDajLN72UJ6iHekmk11pOqfxeKs8Kqszy6mQ=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of open hypergraphs for string diagrams";
     homepage = "https://github.com/statusfailed/open-hypergraphs";
-    changelog = "https://github.com/statusfailed/open-hypergraphs/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/statusfailed/open-hypergraphs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

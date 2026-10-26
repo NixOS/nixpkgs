@@ -32,12 +32,12 @@ let
       or (throw "Unsupported system architecture: ${stdenv.hostPlatform.system}");
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "open-interpreter";
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/openinterpreter/openinterpreter/releases/download/rust-v${version}/${sysAttrs.filename}";
+    url = "https://github.com/openinterpreter/openinterpreter/releases/download/rust-v${finalAttrs.version}/${sysAttrs.filename}";
     hash = sysAttrs.hash;
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "interpreter";
   };
-}
+})

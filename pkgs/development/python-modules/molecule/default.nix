@@ -21,13 +21,13 @@
   yamllint,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "molecule";
   version = "26.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UGoKBBZoP05ASkLOjFapgM2Tt8gCJYIiwalzaw9Ow3w=";
   };
 
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   passthru.tests.version =
     (testers.testVersion {
       package = molecule;
-      command = "PY_COLORS=0 ${pname} --version";
+      command = "PY_COLORS=0 ${finalAttrs.pname} --version";
     }).overrideAttrs
       (old: {
         # workaround the error: Permission denied: '/homeless-shelter'
@@ -68,9 +68,9 @@ buildPythonPackage rec {
   meta = {
     description = "Aids in the development and testing of Ansible roles";
     homepage = "https://github.com/ansible-community/molecule";
-    changelog = "https://github.com/ansible/molecule/releases/tag/v${version}";
+    changelog = "https://github.com/ansible/molecule/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "molecule";
   };
-}
+})

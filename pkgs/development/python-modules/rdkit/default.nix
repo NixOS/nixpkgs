@@ -75,14 +75,14 @@ let
   };
   boost' = boost.override { enableNumpy = true; };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rdkit";
   version = "2025.03.6";
   pyproject = false;
 
   src =
     let
-      versionTag = lib.replaceStrings [ "." ] [ "_" ] version;
+      versionTag = lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchFromGitHub {
       owner = "rdkit";
@@ -206,6 +206,6 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.bsd3;
     homepage = "https://www.rdkit.org";
-    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.tag}";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

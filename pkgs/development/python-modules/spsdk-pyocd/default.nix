@@ -19,7 +19,7 @@
   spsdk-pyocd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spsdk-pyocd";
   version = "0.3.10";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # Latest tag missing on GitHub
   src = fetchPypi {
     pname = "spsdk_pyocd";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-JKXrhhTyLFMNs4zZDC3Ke4xWvx33fAMsWNSrfaY5CW8=";
   };
 
@@ -72,4 +72,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

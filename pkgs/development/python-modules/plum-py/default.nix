@@ -7,7 +7,7 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plum-py";
   version = "0.8.7";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-q9UNRZYBLBm0mf/r3cktGnGG9LzmTDrSVgXDgGDBMok=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Classes and utilities for packing/unpacking bytes";
     homepage = "https://plum-py.readthedocs.io/";
-    changelog = "https://gitlab.com/dangass/plum/-/blob/${version}/docs/release_notes.rst";
+    changelog = "https://gitlab.com/dangass/plum/-/blob/${finalAttrs.version}/docs/release_notes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dnr ];
   };
-}
+})

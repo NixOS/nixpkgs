@@ -5,7 +5,7 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simpleaudio";
   version = "1.0.4";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hamiltron";
     repo = "py-simple-audio";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MXRIFrxEWlUeIL60Wlq4nqvCZLHxr/zJjZ6EGta/3oo=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucus16 ];
   };
-}
+})

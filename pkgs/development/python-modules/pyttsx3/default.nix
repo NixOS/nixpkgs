@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyttsx3";
   version = "2.99";
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     hash = "sha256-/z5P91bCTXK58/LzBODtqv0PWK2w5vS5DZMEQM2osgc=";
     dist = "py3";
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.ethindp ];
   };
-}
+})

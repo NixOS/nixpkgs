@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "supervise-api";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "supervise_api";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-EjD0IpSRDoNCG307CKlo0n1RCkpwnpZlB+1w212hud4=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

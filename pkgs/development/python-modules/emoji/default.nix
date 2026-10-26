@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "emoji";
   version = "2.16.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "carpedm20";
     repo = "emoji";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sDQ4KE9J7/0hlmXxyploRYGkIzj3YIFrxzq7yA5NFp0=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
-    changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/carpedm20/emoji/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -8,7 +8,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wirelesstagpy";
   version = "0.8.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sergeymaysak";
     repo = "wirelesstagpy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xmcXBlApteGAQwfNx6fmFkP7enRy3Iy19+6mAjc7LWA=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple python wrapper over wirelesstags REST API";
     homepage = "https://github.com/sergeymaysak/wirelesstagpy";
-    changelog = "https://github.com/sergeymaysak/wirelesstagpy/releases/tag/${version}";
+    changelog = "https://github.com/sergeymaysak/wirelesstagpy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

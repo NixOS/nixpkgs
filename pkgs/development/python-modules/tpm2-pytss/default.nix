@@ -22,13 +22,13 @@
 let
   isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tpm2-pytss";
   version = "3.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "tpm2_pytss";
     hash = "sha256-wZPPGQi0gvk8SqRkEykg/jo31LnYAuJnl0/y3+N9RDM=";
   };
@@ -85,7 +85,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
-    changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
@@ -93,4 +93,4 @@ buildPythonPackage rec {
       scottstephens
     ];
   };
-}
+})

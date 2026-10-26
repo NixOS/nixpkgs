@@ -116,7 +116,7 @@ assert enableCeph -> isLinux;
 assert enableGlusterfs -> isLinux;
 assert enableZfs -> isLinux;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvirt";
   # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
   version = "12.8.0";
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-eN03AyrtLp0+vhqwzpHOyY6MeHOU3J0SNGM+MN2w4eI=";
   };
@@ -415,7 +415,7 @@ stdenv.mkDerivation rec {
 
     libvirtVersion=$(curl https://gitlab.com/api/v4/projects/192693/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
     sysvirtVersion=$(curl https://gitlab.com/api/v4/projects/192677/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
-    update-source-version ${pname} "$libvirtVersion"
+    update-source-version ${finalAttrs.pname} "$libvirtVersion"
     update-source-version python3Packages.libvirt-python "$libvirtVersion"
     update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
   '';
@@ -425,7 +425,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
-    changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
+    changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -434,4 +434,4 @@ stdenv.mkDerivation rec {
       phip1611
     ];
   };
-}
+})

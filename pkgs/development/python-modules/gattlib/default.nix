@@ -14,7 +14,7 @@
   glib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gattlib";
   version = "0.20210616";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oscaracena";
     repo = "pygattlib";
-    tag = "v.${lib.removePrefix "0." version}";
+    tag = "v.${lib.removePrefix "0." finalAttrs.version}";
     hash = "sha256-n3D9CWKvgw4FYmbvsfhaHN963HARBG0p4CcZBC8Gkb0=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

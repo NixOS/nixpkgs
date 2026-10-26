@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "globus-cli";
   version = "3.41.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bTS4dXQU49asmPmgUnf4VjAWJ34+1YbXmCJ4KOeOoMI=";
   };
 
@@ -72,8 +72,8 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "globus";
     description = "Command-line interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
     homepage = "https://github.com/globus/globus-cli";
-    changelog = "https://github.com/globus/globus-cli/releases/tag/${src.tag}";
+    changelog = "https://github.com/globus/globus-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.richardjacton ];
   };
-}
+})

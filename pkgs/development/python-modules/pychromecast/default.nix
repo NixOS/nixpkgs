@@ -8,7 +8,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pychromecast";
   version = "14.0.10";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pychromecast";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-m9rucHSiApT0Xqkf4sjVRehcGGgvbaoGgbT/s3SLxKI=";
   };
 
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library for Python to communicate with the Google Chromecast";
     homepage = "https://github.com/home-assistant-libs/pychromecast";
-    changelog = "https://github.com/home-assistant-libs/pychromecast/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-libs/pychromecast/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

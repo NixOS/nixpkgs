@@ -14,7 +14,7 @@
   sphinxHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosql";
   version = "15.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nackjicholson";
     repo = "aiosql";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zKKp37tM0pBnWJuLmQhoQpWnUinLG/Nmnpv1rdM8wYM=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple SQL in Python";
     homepage = "https://nackjicholson.github.io/aiosql/";
-    changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${src.tag}";
+    changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

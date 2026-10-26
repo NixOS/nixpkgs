@@ -5,14 +5,14 @@
   tkinter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pmw";
   version = "2.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Pmw";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lIQSRXz8zwx3XdCOCRP7APkIlqM8eXN9VxxzEq6vVcY=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     homepage = "https://pmw.sourceforge.net/";
     license = lib.licenses.mit;
   };
-}
+})

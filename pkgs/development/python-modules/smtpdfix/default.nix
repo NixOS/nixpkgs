@@ -12,13 +12,13 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smtpdfix";
   version = "0.5.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LqSbIv4ITJy5KlLlboNRx1PJhe7PcTx38IUW7F4uf9A=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "SMTP server for use as a pytest fixture for testing";
     homepage = "https://github.com/bebleo/smtpdfix";
-    changelog = "https://github.com/bebleo/smtpdfix/releases/tag/v${version}";
+    changelog = "https://github.com/bebleo/smtpdfix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
   };
-}
+})

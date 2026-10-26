@@ -6,13 +6,13 @@
   cffi,
   pytest,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iwlib";
   version = "1.7.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qAX2WXpw7jABq6jwOft7Lct13BXE54UvVZT9Y3kZbaE=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ jcspeegs ];
     license = lib.licenses.gpl2Only;
   };
-}
+})

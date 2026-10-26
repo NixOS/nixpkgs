@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parameter-decorators";
   version = "0.0.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matan1008";
     repo = "parameter-decorators";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZTgUsBc2ArnRPR4k0Od2A571iFfu+oupCxEqzk2cTUQ=";
   };
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/matan1008/parameter-decorators/releases/tag/${src.tag}";
+    changelog = "https://github.com/matan1008/parameter-decorators/releases/tag/${finalAttrs.src.tag}";
     description = "Handy decorators for converting parameters";
     homepage = "https://github.com/matan1008/parameter-decorators";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

@@ -6,13 +6,13 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdbusmenu-qt5";
   version = "0.9.3+16";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/libdbusmenu-qt";
-    rev = "import/${version}.04.20160218-1";
+    rev = "import/${finalAttrs.version}.04.20160218-1";
     hash = "sha256-nXZv1m/dQv8vt+xPS7WTC8nKfbEJ45WtZ8vVBencPg0=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     inherit (libsForQt5.qtbase.meta) platforms;
     license = lib.licenses.lgpl2;
   };
-}
+})

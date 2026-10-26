@@ -8,14 +8,14 @@
   jaraco-text,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-collections";
   version = "5.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_collections";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-2rgZcLrW8KtTsgdF8bAdo3km5MD81CUEaqReDY76GO0=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Models and classes to supplement the stdlib 'collections' module";
     homepage = "https://github.com/jaraco/jaraco.collections";
-    changelog = "https://github.com/jaraco/jaraco.collections/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.collections/blob/v${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

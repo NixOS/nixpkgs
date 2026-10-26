@@ -5,14 +5,14 @@
   python3,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "balanceofsatoshis";
   version = "19.4.14";
 
   src = fetchFromGitHub {
     owner = "alexbosworth";
     repo = "balanceofsatoshis";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lXwE7/7ZWO6GD4SY0BPh/QXNpxkCYJS00Gjna0DkOE0=";
   };
 
@@ -25,11 +25,11 @@ buildNpmPackage rec {
   npmFlags = [ "--ignore-scripts" ];
 
   meta = {
-    changelog = "https://github.com/alexbosworth/balanceofsatoshis/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/alexbosworth/balanceofsatoshis/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Tool for working with the balance of your satoshis on LND";
     homepage = "https://github.com/alexbosworth/balanceofsatoshis";
     license = lib.licenses.mit;
     mainProgram = "bos";
     maintainers = with lib.maintainers; [ mariaa144 ];
   };
-}
+})

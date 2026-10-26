@@ -15,7 +15,7 @@ let
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fxlinuxprint";
   version = "1.1.2-1";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cups ];
 
   sourceRoot = ".";
-  unpackCmd = "dpkg-deb -x $curSrc/fxlinuxprint_${version}_${debPlatform}.deb .";
+  unpackCmd = "dpkg-deb -x $curSrc/fxlinuxprint_${finalAttrs.version}_${debPlatform}.deb .";
 
   dontConfigure = true;
   dontBuild = true;
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

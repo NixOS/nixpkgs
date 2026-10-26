@@ -8,14 +8,14 @@
   imgui,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "implot";
   version = "0.17";
 
   src = fetchFromGitHub {
     owner = "epezent";
     repo = "implot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HNzNRHPLr352EDkAci4nx5qQnPI308rGH8yHkF+n5OY=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ SomeoneSerge ];
     platforms = lib.platforms.all;
   };
-}
+})

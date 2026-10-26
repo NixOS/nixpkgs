@@ -16,7 +16,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pystrich";
   version = "0.20";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mmulqueen";
     repo = "pyStrich";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-08IKFJfcK0I+phUejUY7FHh2a7efR+UKrj+tsKEwSJ4=";
   };
 
@@ -57,9 +57,9 @@ buildPythonPackage rec {
   meta = {
     description = "Pure-Python module to generate 1D and 2D barcodes";
     homepage = "https://github.com/mmulqueen/pyStrich";
-    changelog = "https://github.com/mmulqueen/pyStrich/releases/tag/${version}";
+    changelog = "https://github.com/mmulqueen/pyStrich/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "pystrich";
     maintainers = with lib.maintainers; [ mmulqueen ];
   };
-}
+})

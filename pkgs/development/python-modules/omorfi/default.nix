@@ -5,12 +5,12 @@
   hfst,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omorfi";
   format = "setuptools";
   inherit (pkgs.omorfi) src version;
 
-  sourceRoot = "${src.name}/src/python";
+  sourceRoot = "${finalAttrs.src.name}/src/python";
 
   propagatedBuildInputs = [ hfst ];
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ lurkki ];
   };
-}
+})

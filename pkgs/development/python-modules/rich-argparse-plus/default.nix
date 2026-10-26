@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich-argparse-plus";
   version = "0.3.1.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "rich-argparse-plus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oF2wuvyLYwObVJ4fhJl9b/sdfmQ2ahgKkfd9ZwObfPw=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to help formatting argparse";
     homepage = "https://github.com/michelcrypt4d4mus/rich-argparse-plus";
-    changelog = "https://github.com/michelcrypt4d4mus/rich-argparse-plus/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/michelcrypt4d4mus/rich-argparse-plus/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,7 +8,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kiss-headers";
   version = "2.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "kiss-headers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-h0e7kFbn6qxIeSG85qetBg6IeSi/2YAaZLGS0+JH2g8=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

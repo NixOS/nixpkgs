@@ -11,13 +11,13 @@
   zope-testrunner,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zconfig";
   version = "4.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RyIz5RX6Kb5shz54uKK0UMLNJdATPLRZYIN/M/GrT+M=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Structured Configuration Library";
     homepage = "https://github.com/zopefoundation/ZConfig";
-    changelog = "https://github.com/zopefoundation/ZConfig/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/ZConfig/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

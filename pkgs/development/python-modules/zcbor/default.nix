@@ -12,13 +12,13 @@
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zcbor";
   version = "0.9.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wEkYOS4tuxTG8DjXduLqawnDS6ECiwRardfDqVYWvDg=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     description = "Low footprint CBOR library in the C language (C++ compatible), tailored for use in microcontrollers";
     mainProgram = "zcbor";
     homepage = "https://pypi.org/project/zcbor/";
-    changelog = "https://github.com/NordicSemiconductor/zcbor/releases/tag/${version}";
+    changelog = "https://github.com/NordicSemiconductor/zcbor/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
   };
-}
+})

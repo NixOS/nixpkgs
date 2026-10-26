@@ -6,14 +6,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glogg";
   version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "nickbnf";
     repo = "glogg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0hf1c2m8n88frmxmyn0ndr8129p7iky49nq565sw1asaydm5z6pb";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ boost ];
 
-  qmakeFlags = [ "VERSION=${version}" ];
+  qmakeFlags = [ "VERSION=${finalAttrs.version}" ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

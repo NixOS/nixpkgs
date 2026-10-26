@@ -80,7 +80,7 @@ let
   web = if useWebNative then web-native else web-bin;
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -116,8 +116,8 @@ buildPythonPackage rec {
   meta = {
     description = "Clean customizable documentation theme for Sphinx";
     homepage = "https://github.com/pradyunsg/furo";
-    changelog = "https://github.com/pradyunsg/furo/blob/${version}/docs/changelog.md";
+    changelog = "https://github.com/pradyunsg/furo/blob/${finalAttrs.version}/docs/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

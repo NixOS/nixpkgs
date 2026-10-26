@@ -13,13 +13,13 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fbc";
   version = "1.10.1";
 
   src = fetchzip {
     # Bootstrap tarball has sources pretranslated from FreeBASIC to C
-    url = "https://github.com/freebasic/fbc/releases/download/${version}/FreeBASIC-${version}-source-bootstrap.tar.xz";
+    url = "https://github.com/freebasic/fbc/releases/download/${finalAttrs.version}/FreeBASIC-${finalAttrs.version}-source-bootstrap.tar.xz";
     hash = "sha256-LBROv3m1DrEfSStMbNuLC+fldYNfSS+D09bJyNMNPP0=";
   };
 
@@ -141,4 +141,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = with lib.platforms; windows ++ linux;
   };
-}
+})

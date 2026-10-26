@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "boltztrap2";
   version = "25.3.1";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "sousaw";
     repo = "BoltzTraP2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eocstudmgMkuxa94txU8uqIp8HpNEuWQys7WvRRZ4as=";
   };
 
@@ -87,4 +87,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

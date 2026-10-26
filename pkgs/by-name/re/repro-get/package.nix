@@ -9,14 +9,14 @@
   cacert,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "repro-get";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "repro-get";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qLu9SZuHCkKAOhzrBPEEev1iD5mcIBvrbXspHtifsq4=";
   };
 
@@ -33,7 +33,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/reproducible-containers/${pname}/pkg/version.Version=v${version}"
+    "-X github.com/reproducible-containers/${finalAttrs.pname}/pkg/version.Version=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -64,7 +64,7 @@ buildGoModule rec {
     version = testers.testVersion {
       package = repro-get;
       command = "HOME=$(mktemp -d) repro-get -v";
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
@@ -75,4 +75,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "repro-get";
   };
-}
+})

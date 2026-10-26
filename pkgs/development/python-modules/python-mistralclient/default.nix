@@ -25,7 +25,7 @@
   tempest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-mistralclient";
   version = "6.2.0";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-mistralclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FNfee7d8gTcsTdv7lxqDbniUiKQvUXHRSkAlNOCn/k4=";
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     })
   ];
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     openstackdocstheme
@@ -91,4 +91,4 @@ buildPythonPackage rec {
     mainProgram = "mistral";
     teams = [ lib.teams.openstack ];
   };
-}
+})

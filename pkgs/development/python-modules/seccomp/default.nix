@@ -5,13 +5,13 @@
   libseccomp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libseccomp";
   version = libseccomp.version;
   format = "setuptools";
   src = libseccomp.pythonsrc;
 
-  env.VERSION_RELEASE = version; # used by build system
+  env.VERSION_RELEASE = finalAttrs.version; # used by build system
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libseccomp ];
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

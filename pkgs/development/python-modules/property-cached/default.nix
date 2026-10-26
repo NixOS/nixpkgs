@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "property-cached";
   version = "1.6.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "althonos";
     repo = "property-cached";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8kityZ++1TS22Ff7a5x5bQi0QBaHsNaP4E/Man8A28A=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Decorator for caching properties in classes";
     homepage = "https://github.com/althonos/property-cached";
-    changelog = "https://github.com/althonos/property-cached/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/althonos/property-cached/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jherland ];
   };
-}
+})

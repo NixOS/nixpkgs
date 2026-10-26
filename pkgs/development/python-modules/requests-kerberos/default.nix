@@ -10,7 +10,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-kerberos";
   version = "0.15.0";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "requests";
     repo = "requests-kerberos";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-s1Q3zqKPSuTkiFExr+axai9Eta1xjw/cip8xzfDGR88=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/requests/requests-kerberos";
     license = lib.licenses.isc;
   };
-}
+})

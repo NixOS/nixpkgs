@@ -13,13 +13,13 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "doc8";
   version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-EmetMnWJcfvPmRRCQXo5Nce8nlJVDnNiLg5WulXqHUA=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
     description = "Style checker for Sphinx (or other) RST documentation";
     mainProgram = "doc8";
     homepage = "https://github.com/pycqa/doc8";
-    changelog = "https://github.com/PyCQA/doc8/releases/tag/v${version}";
+    changelog = "https://github.com/PyCQA/doc8/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

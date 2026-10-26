@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "polling";
   version = "0.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "justiniso";
     repo = "polling";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Qy2QxCWzAjZMJ6yxZiDT/80I2+rLimoG8/SYxq960Tk=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

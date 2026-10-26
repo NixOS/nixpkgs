@@ -10,14 +10,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-web";
   version = "10.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_web";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-JtNZS74bMFibcpIsNYVbxbdMFR8CJBR6YNGnUjSFkiY=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Web Apps Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-web_${version}/sdk/appservice/azure-mgmt-web/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-web_${finalAttrs.version}/sdk/appservice/azure-mgmt-web/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

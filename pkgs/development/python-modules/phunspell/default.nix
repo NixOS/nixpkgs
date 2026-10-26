@@ -9,7 +9,7 @@
   spylls,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "phunspell";
   version = "0.1.6";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dvwright";
     repo = "phunspell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TlO9Ccr2iRN+s3JV+3P36RF9oFY32fj+24sKslZZCVk=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pure Python spell checker, wrapping spylls a port of Hunspell";
     homepage = "https://github.com/dvwright/phunspell";
-    changelog = "https://github.com/dvwright/phunspell/releases/tag/v${version}";
+    changelog = "https://github.com/dvwright/phunspell/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

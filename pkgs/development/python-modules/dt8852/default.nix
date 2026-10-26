@@ -6,14 +6,14 @@
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dt8852";
   version = "1.1.0";
   pyproject = true;
 
   # Not using Codeberg because there's no tagged release there.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3WiHJQnlP39CGzxu/sZ1jWcP40tyr2G62H4yYuwS0wA=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "dt8852";
   };
-}
+})

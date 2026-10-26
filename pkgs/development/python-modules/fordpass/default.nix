@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fordpass";
   version = "0.0.4";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clarkd";
     repo = "fordpass-python";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Fag+iN7jXKmcZAJyHfLTh66+mgqZtMKqDnsJ1rmmLUQ=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

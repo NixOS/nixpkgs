@@ -5,13 +5,13 @@
   django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymemoize";
   version = "1.0.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "PyMemoize";
     hash = "sha256-B8e49ZKx8Dr3QonvDlVFIAItrjeLo20NvB+AUyEwGXs=";
   };
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

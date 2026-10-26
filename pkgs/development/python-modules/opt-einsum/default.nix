@@ -9,14 +9,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.4.0";
   pname = "opt-einsum";
   pyproject = true;
 
   src = fetchPypi {
     pname = "opt_einsum";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lspy8biG0UgkE0h4NJgZTFd/owqPqsEIWGsU8bpEc6w=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teh ];
   };
-}
+})

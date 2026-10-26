@@ -9,7 +9,7 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-sqlalchemy-lite";
   version = "0.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-sqlalchemy-lite";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KX4kpqgvNlcAe4NSWaSkcgtPQINmeQOx46/4uFM8q8A=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pallets-eco/flask-sqlalchemy-lite/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/pallets-eco/flask-sqlalchemy-lite/blob/${finalAttrs.src.tag}/CHANGES.md";
     description = "Integrate SQLAlchemy with Flask";
     homepage = "https://github.com/pallets-eco/flask-sqlalchemy-lite";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

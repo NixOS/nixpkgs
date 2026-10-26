@@ -6,13 +6,13 @@
   flake8,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "getkey";
   version = "0.6.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aMfHAsOzTerPQn9sDx/WbFwqoS14AaoyRC/BpxyM4Fk=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.symphorien ];
   };
-}
+})

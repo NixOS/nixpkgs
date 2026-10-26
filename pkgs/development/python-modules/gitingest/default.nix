@@ -30,7 +30,7 @@
   python-multipart,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gitingest";
   version = "0.3.1";
   pyproject = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coderamp-labs";
     repo = "gitingest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-drsncGneZyOCC2GJbrDM+bf4QGI2luacxMhrmdk03l4=";
   };
 
@@ -98,11 +98,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/coderamp-labs/gitingest/releases/tag/${src.tag}";
+    changelog = "https://github.com/coderamp-labs/gitingest/releases/tag/${finalAttrs.src.tag}";
     description = "Replace 'hub' with 'ingest' in any github url to get a prompt-friendly extract of a codebase";
     homepage = "https://github.com/coderamp-labs/gitingest";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gitingest";
   };
-}
+})

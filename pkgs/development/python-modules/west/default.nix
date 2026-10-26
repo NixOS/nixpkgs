@@ -9,13 +9,13 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "west";
   version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-cIj+Dpr+Bxnr7pXFHFKRSfe8/JGdg6ggbTX6nGg+0KU=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
       (https://docs.zephyrproject.org/latest/guides/west/repo-tool.html).
     '';
     homepage = "https://github.com/zephyrproject-rtos/west";
-    changelog = "https://github.com/zephyrproject-rtos/west/releases/tag/v${version}";
+    changelog = "https://github.com/zephyrproject-rtos/west/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
-}
+})

@@ -7,7 +7,7 @@
   psutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vprof";
   version = "0.38";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # We use the Pypi source rather than the GitHub ones because the former include the javascript
   # dependency for the UI.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fxAAkS7rekUMfJTTzJZzmvRa0P8B1avMCwmhddQP+ts=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "vprof";
   };
-}
+})

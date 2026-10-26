@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "momonga";
   version = "0.7.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nbtk";
     repo = "momonga";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3Ngm30Bo6hKeLLAOMyYxcgfiwOIessi5S0BB92Ye/rM=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/nbtk/momonga/releases/tag/${src.tag}";
+    changelog = "https://github.com/nbtk/momonga/releases/tag/${finalAttrs.src.tag}";
     description = "Python Route B Library: A Communicator for Low-voltage Smart Electric Energy Meters";
     homepage = "https://github.com/nbtk/momonga";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

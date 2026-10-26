@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.7.0";
   pname = "iptools";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bd808";
     repo = "python-iptools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-340Wc4QGwUqEEANM5EQzFaXxIWVf2fDr4qfCuxNEVBQ=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/bd808/python-iptools";
     license = lib.licenses.bsd0;
   };
-}
+})

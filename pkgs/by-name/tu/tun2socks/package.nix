@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tun2socks";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "xjasonlyu";
     repo = "tun2socks";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eObTZsNy5sBzgM7YNsA6Q4IWazWv3MTywrLtkv7XLOc=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/xjasonlyu/tun2socks/v2/internal/version.Version=v${version}"
-    "-X github.com/xjasonlyu/tun2socks/v2/internal/version.GitCommit=v${version}"
+    "-X github.com/xjasonlyu/tun2socks/v2/internal/version.Version=v${finalAttrs.version}"
+    "-X github.com/xjasonlyu/tun2socks/v2/internal/version.GitCommit=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "tun2socks";
   };
-}
+})

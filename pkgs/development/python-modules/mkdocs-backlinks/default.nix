@@ -7,7 +7,7 @@
   mkdocs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-backlinks";
   version = "0.9.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danodic-dev";
     repo = "mkdocs-backlinks";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-P3CUm7jpmcgipn/SKpZMWhpEqJSpirADMpud10ULXDs=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "galatia-sil";
   version = "2.1";
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/galatia/GalatiaSIL-${version}.zip";
+    url = "https://software.sil.org/downloads/r/galatia/GalatiaSIL-${finalAttrs.version}.zip";
     hash = "sha256-7kXnTC5vpUOjcT40oNW6e32zFGejlWJq1J+p+5DiAos=";
   };
 
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 $downloadedFile *.ttf -t $out/share/fonts/truetype
-    install -Dm644 $downloadedFile OFL.txt OFL-FAQ.txt FONTLOG.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 $downloadedFile OFL.txt OFL-FAQ.txt FONTLOG.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.kmein ];
   };
-}
+})

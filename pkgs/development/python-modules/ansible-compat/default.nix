@@ -21,7 +21,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-compat";
   version = "26.10.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-compat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     postFetch = ''
       # export-subst prevents reproducibility
       rm $out/.git_archival.txt
@@ -88,8 +88,8 @@ buildPythonPackage rec {
   meta = {
     description = "Function collection that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
-    changelog = "https://github.com/ansible/ansible-compat/releases/tag/${src.tag}";
+    changelog = "https://github.com/ansible/ansible-compat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.robsliwi ];
   };
-}
+})

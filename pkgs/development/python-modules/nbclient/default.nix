@@ -17,7 +17,7 @@
 }:
 
 let
-  nbclient = buildPythonPackage rec {
+  nbclient = buildPythonPackage (finalAttrs: {
     pname = "nbclient";
     version = "0.10.4";
     pyproject = true;
@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter";
       repo = "nbclient";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-D7pgrNRrPT0fGOaHrNt3qeDXdbt1wJk5qfkQeLxsc7g=";
     };
 
@@ -68,6 +68,6 @@ let
       license = lib.licenses.bsd3;
       maintainers = [ ];
     };
-  };
+  });
 in
 nbclient

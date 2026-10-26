@@ -10,14 +10,14 @@
   udev,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openambit";
   version = "0.5";
 
   src = fetchFromGitHub {
     owner = "openambitproject";
     repo = "openambit";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1074kvkamwnlkwdajsw1799wddcfkjh2ay6l842r0s4cvrxrai85";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rycee ];
     platforms = lib.platforms.linux;
   };
-}
+})

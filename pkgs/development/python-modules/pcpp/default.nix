@@ -4,7 +4,7 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pcpp";
   version = "1.30";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ned14";
     repo = "pcpp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Fs+CMV4eRKcB+KdV93ncgcqaMnO5etnMY/ivmSJh3Wc=";
     fetchSubmodules = true;
   };
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

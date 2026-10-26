@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-toc";
   version = "0.5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-toc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Rj1lp5Ub+UriOuE896tywN4myovna2RLYO3LRa96FCM=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
       polarmutex
     ];
   };
-}
+})

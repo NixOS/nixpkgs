@@ -9,14 +9,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "debian-inspector";
   version = "31.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "debian_inspector";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-uyFsYrb7D9cM1OQzkIERX0oV711uI/TEKF6t67z8egU=";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
-    changelog = "https://github.com/aboutcode-org/debian-inspector/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aboutcode-org/debian-inspector/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = with lib.licenses; [
       asl20
       bsd3
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitpulsar";
   version = "1.4.0";
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "ilshat-apps";
     repo = "gitpulsar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+b6zpTw9m8VSTLeNIx02VBJVVosgmqAy69rnUaIUATY=";
   };
 
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ rachalaraj ];
     mainProgram = "gitpulsar-gtk";
   };
-}
+})

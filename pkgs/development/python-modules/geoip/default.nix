@@ -6,14 +6,14 @@
   libgeoip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geoip";
   version = "1.3.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "GeoIP";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-qJDaaiFXQFBpIZjxSweqQmigE3Enjfwk9xzZvIfr8OY=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ jluttine ];
     license = lib.licenses.lgpl21Plus;
   };
-}
+})

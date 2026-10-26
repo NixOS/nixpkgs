@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrecswitch";
   version = "1.0.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marcolertora";
     repo = "pyrecswitch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-z9dOJ7WgUR2ntU6boUInRyKxSPBSoNWGtE3pOZcFYA0=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

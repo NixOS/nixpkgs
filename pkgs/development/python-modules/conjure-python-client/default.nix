@@ -8,7 +8,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.3.0";
   pname = "conjure-python-client";
   pyproject = true;
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "conjure-python-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-z6+790fFpI7uYI6O4MXnCOZc/o96r2f8ttj+IsXStYI=";
   };
 
   # https://github.com/palantir/conjure-python-client/blob/3.0.0/setup.py#L57
   postPatch = ''
-    echo '__version__ = "${version}"' > ./conjure_python_client/_version.py
+    echo '__version__ = "${finalAttrs.version}"' > ./conjure_python_client/_version.py
   '';
 
   build-system = [ setuptools ];
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client and JSON encoders for use with generated Conjure clients";
     homepage = "https://github.com/palantir/conjure-python-client";
-    changelog = "https://github.com/palantir/conjure-python-client/releases/tag/${version}";
+    changelog = "https://github.com/palantir/conjure-python-client/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ alkasm ];
   };
-}
+})

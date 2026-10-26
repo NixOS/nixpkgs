@@ -6,7 +6,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-model-utils";
   version = "5.0.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-model-utils";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iRtTYXsgD8NYG3k9ZWAr2Nwazo3HUa6RgdbMeDxc7NI=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/jazzband/django-model-utils";
     description = "Django model mixins and utilities";
-    changelog = "https://github.com/jazzband/django-model-utils/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/jazzband/django-model-utils/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

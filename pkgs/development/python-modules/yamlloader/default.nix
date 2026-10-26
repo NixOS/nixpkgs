@@ -10,7 +10,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yamlloader";
   version = "1.6.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Phynix";
     repo = "yamlloader";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BByyKCCRZZYloxKKZVhSyH82I4hZNxCRqUddinRzYpE=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Case-insensitive list for Python";
     homepage = "https://github.com/Phynix/yamlloader";
-    changelog = "https://github.com/Phynix/yamlloader/releases/tag/${version}";
+    changelog = "https://github.com/Phynix/yamlloader/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

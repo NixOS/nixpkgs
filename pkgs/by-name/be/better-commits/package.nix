@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "better-commits";
   version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "Everduin94";
     repo = "better-commits";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WSsCrjJwWYALJ0Ckldw2vAPzB5ZJ3p7xcOgQGIMHnF8=";
   };
 
@@ -29,4 +29,4 @@ buildNpmPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "better-commits";
   };
-}
+})

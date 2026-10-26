@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "email-validator";
   version = "2.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "email_validator";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-n8BcN/L2z0Of9BT4/EbZF5KZdKgiRMIOsQIxumDFRCY=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
     description = "Email syntax and deliverability validation library";
     mainProgram = "email_validator";
     homepage = "https://github.com/JoshData/python-email-validator";
-    changelog = "https://github.com/JoshData/python-email-validator/releases/tag/v${version}";
+    changelog = "https://github.com/JoshData/python-email-validator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ siddharthist ];
   };
-}
+})

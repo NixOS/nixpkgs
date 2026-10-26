@@ -5,13 +5,13 @@
   buildPythonPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rocket-errbot";
   version = "1.2.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qn2cX8ki1RuklSUd6OuAn+vd85Yq0vVbLz7TLTEPPqA=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     description = "Modern, multi-threaded and extensible web server";
     license = lib.licenses.mit;
   };
-}
+})

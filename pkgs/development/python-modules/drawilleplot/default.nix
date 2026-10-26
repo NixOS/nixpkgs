@@ -6,14 +6,14 @@
   matplotlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drawilleplot";
   version = "0.1.0";
 
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ZEDroo7KkI2VxdESb2QDX+dPY4UahuuK9L0EddrxJjQ=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ nobbz ];
     platforms = lib.platforms.all;
   };
-}
+})

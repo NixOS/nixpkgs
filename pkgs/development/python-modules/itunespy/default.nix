@@ -6,7 +6,7 @@
   pycountry,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "itunespy";
   version = "1.6.1";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sleepyfran";
     repo = "itunespy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QvSKJAZa8v0tGURXwo4Dwo73JqsYs1xsBHW0lcaM7bk=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j0hax ];
   };
-}
+})

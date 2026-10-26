@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mock-open";
   version = "1.4.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nivbend";
     repo = "mock-open";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dfXYykz1oSCCNXXjUnvdWdqaD3Lp+gEerlZ3LJEnn2I=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     description = "Better mock for file I/O";
     license = lib.licenses.mit;
   };
-}
+})

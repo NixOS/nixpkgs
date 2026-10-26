@@ -24,7 +24,7 @@
   jinja2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sanic-ext";
   version = "25.12.0";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-ext";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h1yN5VYFPFUZoeZeJ6+CfGE3m/5zz+/G3BbetDKtZAo=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Common, officially supported extension plugins for the Sanic web server framework";
     homepage = "https://github.com/sanic-org/sanic-ext/";
-    changelog = "https://github.com/sanic-org/sanic-ext/releases/tag/${src.tag}";
+    changelog = "https://github.com/sanic-org/sanic-ext/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ p0lyw0lf ];
   };
-}
+})

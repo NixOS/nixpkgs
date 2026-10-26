@@ -15,7 +15,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mercantile";
   version = "1.2.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "mercantile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DiDXO2XnD3We6NhP81z7aIHzHrHDi/nkqy98OT9986w=";
   };
 
@@ -82,8 +82,8 @@ buildPythonPackage rec {
     description = "Spherical mercator tile and coordinate utilities";
     mainProgram = "mercantile";
     homepage = "https://github.com/mapbox/mercantile";
-    changelog = "https://github.com/mapbox/mercantile/blob/${version}/CHANGES.txt";
+    changelog = "https://github.com/mapbox/mercantile/blob/${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

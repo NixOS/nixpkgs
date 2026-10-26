@@ -13,19 +13,19 @@
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "etebase";
   version = "0.31.8";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etebase-py";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V2mQAYIPyDRQMfT0af2mpKfWXAtnJpRmY5qG1hj2dF4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-e7KNysHeZvHLttHKvG//uP5ebIsUiW0uwXsASVpWh58=";
   };
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

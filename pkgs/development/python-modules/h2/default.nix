@@ -9,7 +9,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "h2";
   version = "4.4.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "h2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ezyvCgsMYfu4s9BH6K60sFflyw29NEN3rSlxAkDOdvs=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/python-hyper/h2/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/python-hyper/h2/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "https://github.com/python-hyper/h2";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

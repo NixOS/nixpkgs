@@ -13,7 +13,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prisma";
   version = "0.15.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RobertCraigie";
     repo = "prisma-client-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F+Up1HHslralt3NvZZ/wT+CKvzKOjhEEuMEeT0L6NZM=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Auto-generated and fully type-safe database client for prisma";
     homepage = "https://github.com/RobertCraigie/prisma-client-py";
-    changelog = "https://github.com/RobertCraigie/prisma-client-py/releases/tag/v${version}";
+    changelog = "https://github.com/RobertCraigie/prisma-client-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

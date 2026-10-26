@@ -34,7 +34,7 @@ let
 
   sphinxSupported = !sphinx.disabled;
 
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "pip";
     version = "26.1.2";
     pyproject = true;
@@ -42,7 +42,7 @@ let
     src = fetchFromGitHub {
       owner = "pypa";
       repo = "pip";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-E53TU7LzGz+gpW1TCQUkSRMUif8mq702EgXdAVxtrGw=";
     };
 
@@ -130,8 +130,10 @@ let
       description = "PyPA recommended tool for installing Python packages";
       license = lib.licenses.mit;
       homepage = "https://pip.pypa.io/";
-      changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
+      changelog = "https://pip.pypa.io/en/stable/news/#v${
+        lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+      }";
     };
-  };
+  });
 in
 self

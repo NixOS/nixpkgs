@@ -20,14 +20,14 @@
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-mailman3";
   version = "1.3.15";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_mailman3";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+ZFrJpy5xdW6Yde/XEvxoAN8+TSQdiI0PfjZ7bHG0Rs=";
   };
 
@@ -91,4 +91,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ qyliss ];
     broken = lib.versionAtLeast django.version "5.3";
   };
-}
+})

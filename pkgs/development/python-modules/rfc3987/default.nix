@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rfc3987";
   version = "1.3.8";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-08TSV6Vg1UTpgms4vIHbZ2iQx5q516ySs5x6JT1cpzM=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     description = "Parsing and validation of URIs (RFC 3986) and IRIs (RFC 3987)";
     maintainers = with lib.maintainers; [ vanschelven ];
   };
-}
+})

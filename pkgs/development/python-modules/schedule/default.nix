@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "schedule";
   version = "1.2.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ff6cdf5f2blifz8ZzA7xQgUI+fmkb0XNB2nvde3l8Lc=";
   };
 
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python job scheduling for humans";
     homepage = "https://github.com/dbader/schedule";
-    changelog = "https://github.com/dbader/schedule/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/dbader/schedule/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

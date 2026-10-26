@@ -7,13 +7,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "outcome";
   version = "1.3.0.post0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nc8C5l8pcbgAR7N3Ro5yomjhXArzzxI45v8U9/kRQ7g=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
       asl20
     ];
   };
-}
+})

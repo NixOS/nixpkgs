@@ -6,14 +6,14 @@
   jre,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "exificient";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "EXIficient";
     repo = "exificient";
-    rev = "exificient-${version}";
+    rev = "exificient-${finalAttrs.version}";
     hash = "sha256-XrlZQf2BamYw8u1S2qQ6jV9mgyCEjBxKqPZCXMJzXmc=";
   };
 
@@ -41,4 +41,4 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ samw ];
     mainProgram = "exificient";
   };
-}
+})

@@ -9,7 +9,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wirerope";
   version = "1.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "youknowone";
     repo = "wirerope";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-oojnv+2+nwL/TJhN+QZ5eiV6WGHC3SCxBQrCri0aHQc=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wrappers for class callables";
     homepage = "https://github.com/youknowone/wirerope";
-    changelog = "https://github.com/youknowone/wirerope/releases/tag/${version}";
+    changelog = "https://github.com/youknowone/wirerope/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2WithViews;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

@@ -6,14 +6,14 @@
   nodejs,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "lineselect";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "chfritz";
     repo = "lineselect";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dCmLD4Wjsdlta2xsFCMj1zWQr4HWCfcWsKVmrTND4Yw=";
   };
 
@@ -36,4 +36,4 @@ buildNpmPackage rec {
     maintainers = [ ];
     mainProgram = "lineselect";
   };
-}
+})

@@ -7,14 +7,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srt-xtransmit";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "maxsharabayko";
     repo = "srt-xtransmit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-v2JMkuSChO6SWh33qG1Js6JSOXAQls0FKFkg314ULUU=";
   };
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "srt-xtransmit";
   };
-}
+})

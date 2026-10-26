@@ -7,14 +7,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sql_exporter";
   version = "0.9";
 
   src = fetchFromGitHub {
     owner = "justwatchcom";
     repo = "sql_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fbPjUMSDNqF8TPnhRaTgIRsuTcHhaRkTND9KdCwaCUI=";
   };
 
@@ -25,8 +25,8 @@ buildGoModule rec {
       t = "github.com/prometheus/common/version";
     in
     [
-      "-X ${t}.Version=${version}"
-      "-X ${t}.Revision=${src.rev}"
+      "-X ${t}.Version=${finalAttrs.version}"
+      "-X ${t}.Revision=${finalAttrs.src.rev}"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
@@ -45,4 +45,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ justinas ];
   };
-}
+})

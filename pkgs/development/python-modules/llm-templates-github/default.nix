@@ -7,7 +7,7 @@
   llm-templates-github,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-templates-github";
   version = "0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-templates-github";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SFXrvpKrvfIP0JmXQt6OZ52kne4AEtiggbshyac9XQc=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Load LLM templates from GitHub repositories";
     homepage = "https://github.com/simonw/llm-templates-github";
-    changelog = "https://github.com/simonw/llm-templates-github/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-templates-github/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

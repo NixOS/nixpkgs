@@ -7,7 +7,7 @@
   black,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paintcompiler";
   version = "0.3.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = "paintcompiler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dmVBQUUyFc71zq8fXBQ4ii/llrGdtUCOponCzSeut6g=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     mainProgram = "paintcompiler";
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
-}
+})

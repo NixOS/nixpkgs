@@ -7,13 +7,13 @@
   cryptography,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slip10";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0kjT3ybxI/CEdDOcRfDyZCVPdK6aVlcjSh1euR8MTVQ=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
       prusnak
     ];
   };
-}
+})

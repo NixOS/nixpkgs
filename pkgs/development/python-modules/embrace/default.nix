@@ -8,7 +8,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "embrace";
   version = "4.2.1";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     vc = "hg";
     owner = "~olly";
     repo = "embrace-sql";
-    rev = "v${version}-release";
+    rev = "v${finalAttrs.version}-release";
     hash = "sha256-B/xW5EfaQWW603fjKYcf+RHQJVZrnFoqVnIl6xSwS0E=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})

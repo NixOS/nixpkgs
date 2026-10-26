@@ -7,7 +7,7 @@
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich-argparse";
   version = "1.8.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hamdanal";
     repo = "rich-argparse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ze9wJn+Cxz/NhbG8xKwHZHaDqMdU142/vJjml3Y9508=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Format argparse help output using rich";
     homepage = "https://github.com/hamdanal/rich-argparse";
-    changelog = "https://github.com/hamdanal/rich-argparse/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/hamdanal/rich-argparse/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ graham33 ];
   };
-}
+})

@@ -7,7 +7,7 @@
   sybil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atpublic";
   version = "5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "warsaw";
     repo = "public";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cqum+4hREu0jO9iFoUUzfzn597BoMAhG+aanwnh8hb8=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "public" ];
 
   meta = {
-    changelog = "https://gitlab.com/warsaw/public/-/blob/${version}/docs/NEWS.rst";
+    changelog = "https://gitlab.com/warsaw/public/-/blob/${finalAttrs.version}/docs/NEWS.rst";
     description = "Python decorator and function which populates a module's __all__ and globals";
     homepage = "https://public.readthedocs.io/";
     longDescription = ''
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eadwu ];
   };
-}
+})

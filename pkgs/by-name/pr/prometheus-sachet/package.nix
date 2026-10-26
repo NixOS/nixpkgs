@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sachet";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "messagebird";
     repo = "sachet";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zcFViE1/B+wrkxZ3YIyfy2IBbxLvXOf8iK/6eqZb1ZQ=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ govanify ];
   };
-}
+})

@@ -15,7 +15,7 @@
   regex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.2.3";
   pname = "beancount";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beancount";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WM8SM2ZHphafzXHyVi4Fo9tgsClAnmLsZKZUsf2Twmg=";
   };
 
@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/beancount/beancount";
-    changelog = "https://github.com/beancount/beancount/releases/tag/${src.tag}";
+    changelog = "https://github.com/beancount/beancount/releases/tag/${finalAttrs.src.tag}";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
       A double-entry bookkeeping computer language that lets you define
@@ -80,4 +80,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ alapshin ];
   };
-}
+})

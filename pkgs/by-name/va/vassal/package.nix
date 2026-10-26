@@ -11,12 +11,12 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "VASSAL";
   version = "3.7.29";
 
   src = fetchzip {
-    url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
+    url = "https://github.com/vassalengine/vassal/releases/download/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}-linux.tar.bz2";
     sha256 = "sha256-czHBCNnm2o4PjZJKU4tht45x/10QhPadBH9Inoh2M9M=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "vassal";
   };
-}
+})

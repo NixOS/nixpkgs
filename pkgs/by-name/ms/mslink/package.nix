@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "mslink";
   version = "1.3";
 
   src = fetchurl {
-    url = "http://www.mamachine.org/mslink/mslink_v${version}.tar.gz";
+    url = "http://www.mamachine.org/mslink/mslink_v${finalAttrs.version}.tar.gz";
     sha256 = "1qiwqa6w2in6gk4sxiy37c2wwpakin6l2ad2cf5s7ij96z2ijgqg";
   };
 
@@ -32,4 +32,4 @@ gccStdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "mslink";
   };
-}
+})

@@ -5,13 +5,13 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oldest-supported-numpy";
   version = "2023.12.21";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-cdicMbtWeBTkfi4mjrLpK2+Z9c529MPbMIM2JOnvKeA=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/scipy/oldest-supported-numpy";
     license = lib.licenses.bsd2;
   };
-}
+})

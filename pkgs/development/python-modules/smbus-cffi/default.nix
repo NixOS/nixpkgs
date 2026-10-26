@@ -9,13 +9,13 @@
   fetchpatch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smbus-cffi";
   version = "0.5.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+0GVqqv8AVhoY/YNMZC1yxv48SYi/Vl+I+SHaNrWveg=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.linux;
   };
-}
+})

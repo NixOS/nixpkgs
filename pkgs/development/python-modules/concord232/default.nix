@@ -10,7 +10,7 @@
   flask,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "concord232";
   version = "0.15";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JasonCarter80";
     repo = "concord232";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qMHFOKuNuk4Z/FDNRqh1nsnA5vCW+9YXGK6d7Td5O5s=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

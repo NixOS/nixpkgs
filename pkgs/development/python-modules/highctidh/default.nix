@@ -6,7 +6,7 @@
   fetchFromCodeberg,
   gitUpdater,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "highctidh";
   version = "1.0.2026101300";
   pyproject = true;
@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "vula";
     repo = "highctidh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NgPVC/Oa0P/ijYHDMuxdsYdj4EGYnD/R/ItvhY4Q+c8=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   build-system = [
     setuptools
@@ -46,4 +46,4 @@ buildPythonPackage rec {
       mightyiam
     ];
   };
-}
+})

@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paginate";
   version = "0.5.7";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = "paginate";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+zX9uGNWcV4BWbD2lcd1u9zZ4m7CnbsYZnc99HNaF8I=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python pagination module";
     homepage = "https://github.com/Pylons/paginate";
-    changelog = "https://github.com/Pylons/paginate/blob/${src.rev}/CHANGELOG.txt";
+    changelog = "https://github.com/Pylons/paginate/blob/${finalAttrs.src.rev}/CHANGELOG.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

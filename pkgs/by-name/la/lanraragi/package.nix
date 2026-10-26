@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "lanraragi";
   version = "0.9.81";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
-    tag = "v.${version}";
+    tag = "v.${finalAttrs.version}";
     hash = "sha256-oXId9VrNNp/S1ZrNFba/9jMqE3/qZWB63dU3DpLiDDo=";
   };
 
@@ -159,7 +159,7 @@ buildNpmPackage rec {
   passthru.tests.module = nixosTests.lanraragi;
 
   meta = {
-    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${finalAttrs.src.tag}";
     description = "Web application for archival and reading of manga/doujinshi";
     homepage = "https://github.com/Difegue/LANraragi";
     license = lib.licenses.mit;
@@ -167,4 +167,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.unix;
   };
-}
+})

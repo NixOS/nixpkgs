@@ -9,7 +9,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "energyid-webhooks";
   version = "0.0.16";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "EnergieID";
     repo = "energyid-webhooks-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5Oh9OLMVgAqVoGKtBYDL9BvKYEzqXySZChIDmllVaqo=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

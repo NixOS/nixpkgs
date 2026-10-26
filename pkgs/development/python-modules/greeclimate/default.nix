@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "greeclimate";
   version = "3.2.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cmroche";
     repo = "greeclimate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lDsMx08BDaUZwmT9afwj9SOMovOftNOlfNV5btSAW8E=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Discover, connect and control Gree based minisplit systems";
     homepage = "https://github.com/cmroche/greeclimate";
-    changelog = "https://github.com/cmroche/greeclimate/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/cmroche/greeclimate/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

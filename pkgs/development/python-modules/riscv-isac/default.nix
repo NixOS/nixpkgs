@@ -13,7 +13,7 @@
   ruamel-yaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "riscv-isac";
   version = "0.18.0";
   format = "setuptools";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "riscv-isac";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7CWUyYwzynFq/Qk5SzQB+ljsVVI98kPPDT63Emhqihw=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
     description = "ISA coverage extraction tool";
     mainProgram = "riscv_isac";
     homepage = "https://github.com/riscv/riscv-isac";
-    changelog = "https://github.com/riscv-software-src/riscv-isac/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/riscv-software-src/riscv-isac/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

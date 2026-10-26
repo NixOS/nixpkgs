@@ -17,7 +17,7 @@
   xdpyinfo,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "i3ipc";
   version = "2.2.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "altdesktop";
     repo = "i3ipc-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JRwipvIF1zL/x2A+xEJKEFV6BlDnv2Xt/eyIzVrSf40=";
   };
 
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   meta = {
     description = "Improved Python library to control i3wm and sway";
     homepage = "https://github.com/altdesktop/i3ipc-python";
-    changelog = "https://github.com/altdesktop/i3ipc-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/altdesktop/i3ipc-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
   };
-}
+})

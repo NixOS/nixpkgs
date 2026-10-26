@@ -5,14 +5,14 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shabnam-fonts";
   version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "shabnam-font";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-H03GTKRVPiwU4edkr4x5upW4JCy6320Lo+cKK9FRMQs=";
   };
 
@@ -27,4 +27,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymiele";
   version = "0.6.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.13";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3GNjfRenX3fNGk1GVv9wMzZr7z+OhEGYmvJebQ0WsJ4=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymiele" ];
 
   meta = {
-    changelog = "https://github.com/astrandb/pymiele/releases/tag/v${version}";
+    changelog = "https://github.com/astrandb/pymiele/releases/tag/v${finalAttrs.version}";
     description = "Lib for Miele integration with Home Assistant";
     homepage = "https://github.com/astrandb/pymiele";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

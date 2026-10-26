@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-parler";
   version = "2.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-parler";
     repo = "django-parler";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tRGifFPCXF3aa3PQWKw3tl1H1TY+lgcChUP1VdwG1cE=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Django model translations without nasty hacks";
     homepage = "https://github.com/django-parler/django-parler";
-    changelog = "https://github.com/django-parler/django-parler/releases/tag/v${version}";
+    changelog = "https://github.com/django-parler/django-parler/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

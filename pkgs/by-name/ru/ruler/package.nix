@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ruler";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "ruler";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cEYpK1LB9b65xr6MCMax1vUtSWefjJdXNs4sPgx65d0=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to abuse Exchange services";
     homepage = "https://github.com/sensepost/ruler";
-    changelog = "https://github.com/sensepost/ruler/releases/tag/${version}";
+    changelog = "https://github.com/sensepost/ruler/releases/tag/${finalAttrs.version}";
     license = lib.licenses.cc-by-nc-40;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ruler";
   };
-}
+})

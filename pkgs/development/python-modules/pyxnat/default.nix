@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyxnat";
   version = "1.6.4";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyxnat";
     repo = "pyxnat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Dhidc5KOzx/S0sr4D7Oc8lvSDT0y8bGDNTAJy/6n8mA=";
   };
 
@@ -75,8 +75,8 @@ buildPythonPackage rec {
     homepage = "https://pyxnat.github.io/pyxnat";
     description = "Python API to XNAT";
     mainProgram = "sessionmirror.py";
-    changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${src.tag}";
+    changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

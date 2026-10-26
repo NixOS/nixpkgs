@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamcontroller-streamdeck";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "streamcontroller_streamdeck";
     hash = "sha256-gY7sXc8cMQOFkuhOmn79tDIrVYC1gsLvbfln9sf7hsk=";
   };
@@ -41,4 +41,4 @@ buildPythonPackage rec {
       sifmelcara
     ];
   };
-}
+})

@@ -4,7 +4,7 @@
   php,
 }:
 
-php.buildComposerProject2 rec {
+php.buildComposerProject2 (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "sculpin";
@@ -13,7 +13,7 @@ php.buildComposerProject2 rec {
   src = fetchFromGitHub {
     owner = "sculpin";
     repo = "sculpin";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WoLqLe6UGzlDTRNpB75O2CT31EZkpHQZ6vPQIK/K/8Q=";
   };
 
@@ -27,4 +27,4 @@ php.buildComposerProject2 rec {
     inherit (php.meta) platforms;
     mainProgram = "sculpin";
   };
-}
+})

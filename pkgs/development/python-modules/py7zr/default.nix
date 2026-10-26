@@ -22,7 +22,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py7zr";
   version = "1.1.3";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miurahr";
     repo = "py7zr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/sorvv5/kwlY/DtxW33ytHhyrR06p6aNgGW9oH+lpUw=";
   };
 
@@ -76,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "7zip in Python 3 with ZStandard, PPMd, LZMA2, LZMA1, Delta, BCJ, BZip2";
     homepage = "https://github.com/miurahr/py7zr";
-    changelog = "https://github.com/miurahr/py7zr/blob/v${version}/docs/Changelog.rst#v${
-      builtins.replaceStrings [ "." ] [ "" ] version
+    changelog = "https://github.com/miurahr/py7zr/blob/v${finalAttrs.version}/docs/Changelog.rst#v${
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
@@ -85,4 +85,4 @@ buildPythonPackage rec {
       PopeRigby
     ];
   };
-}
+})

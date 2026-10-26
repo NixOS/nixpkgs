@@ -4,14 +4,14 @@
   fetchFromSourcehut,
   installShellFiles,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "imapgoose";
   version = "0.5.3";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "ImapGoose";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-koNf75sK3jd/gkUWm+pgbORuZGYBjsNCvQikjLAOvnU=";
   };
 
@@ -44,7 +44,7 @@ buildGoModule rec {
       back-off when network issues occur.
     '';
     homepage = "https://git.sr.ht/~whynothugo/ImapGoose";
-    changelog = "https://git.sr.ht/~whynothugo/ImapGoose/refs/v${version}";
+    changelog = "https://git.sr.ht/~whynothugo/ImapGoose/refs/v${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     mainProgram = "imapgoose";
@@ -53,4 +53,4 @@ buildGoModule rec {
       bobberb
     ];
   };
-}
+})

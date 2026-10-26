@@ -17,7 +17,7 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mandown";
   version = "1.12.2";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kbzh6qbex3PzdE53rx9Sxff1lhh1yYjehdEJ9Srq5gY=";
   };
 
@@ -62,10 +62,10 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/potatoeggy/mandown/releases/tag/v${version}";
+    changelog = "https://github.com/potatoeggy/mandown/releases/tag/v${finalAttrs.version}";
     description = "Comic/manga/webtoon downloader and CBZ/EPUB/MOBI/PDF converter";
     homepage = "https://github.com/potatoeggy/mandown";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
   };
-}
+})

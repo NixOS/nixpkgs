@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "merkletools";
   version = "1.0.3";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tierion";
     repo = "pymerkletools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pd7Wxi7Sk95RcrFOTOtl725nIXidva3ftdKSGxHYPTA=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python tools for creating Merkle trees, generating Merkle proofs, and verification of Merkle proofs";
     homepage = "https://github.com/Tierion/pymerkletools";
-    changelog = "https://github.com/Tierion/pymerkletools/releases/tag/${version}";
+    changelog = "https://github.com/Tierion/pymerkletools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
   };
-}
+})

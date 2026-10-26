@@ -10,7 +10,7 @@
   tomli-w,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dom-toml";
   version = "2.3.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domdfcoding";
     repo = "dom_toml";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ukRnQecbgZBdTHhyEBIoHUwGTwQVJxo+u7Dqg4Kjvsw=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dom's tools for Tom's Obvious, Minimal Language";
     homepage = "https://github.com/domdfcoding/dom_toml";
-    changelog = "https://github.com/domdfcoding/dom_toml/releases/tag/${src.tag}";
+    changelog = "https://github.com/domdfcoding/dom_toml/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };
-}
+})

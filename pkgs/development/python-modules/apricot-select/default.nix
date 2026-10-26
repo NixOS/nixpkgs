@@ -14,7 +14,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apricot-select";
   version = "0.6.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmschrei";
     repo = "apricot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-v9BHFxmlbwXVipPze/nV35YijdFBuka3gAl85AlsffQ=";
   };
 
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for submodular optimization for the purpose of selecting subsets of massive data sets";
     homepage = "https://github.com/jmschrei/apricot";
-    changelog = "https://github.com/jmschrei/apricot/releases/tag/${version}";
+    changelog = "https://github.com/jmschrei/apricot/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

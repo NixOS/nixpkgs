@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "influxdb2-provision";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "influxdb2-provision";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kgpUtXmwy9buupNzQj/6AIeN8XG2x0XjIckK3WIFC+I=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ oddlama ];
     mainProgram = "influxdb2-provision";
   };
-}
+})

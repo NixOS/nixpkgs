@@ -5,14 +5,14 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libretro-core-info";
   version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-m3w7czESeKopQtFTJLgAZJwtcXKJAhFhZtZQqQAQXbM=";
   };
 
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     teams = [ lib.teams.libretro ];
     platforms = lib.platforms.all;
   };
-}
+})

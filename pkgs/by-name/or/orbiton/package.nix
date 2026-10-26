@@ -10,14 +10,14 @@
   vte,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "orbiton";
   version = "2.74.6";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kSysajnrS5XbRE92IeYuhlDlGCfL7UEsY9/907BRmSY=";
   };
 
@@ -59,4 +59,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "o";
   };
-}
+})

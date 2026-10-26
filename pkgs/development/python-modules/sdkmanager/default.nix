@@ -10,7 +10,7 @@
   gnupg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sdkmanager";
   version = "0.7.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "sdkmanager";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UDl+hRNWuv6kmLLtz+FoPcwPOYY23uOnRzLaDwq1abI=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ linsui ];
   };
-}
+})

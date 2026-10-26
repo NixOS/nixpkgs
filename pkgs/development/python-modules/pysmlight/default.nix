@@ -14,7 +14,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmlight";
   version = "0.5.3";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/FL1iRQAOb+4AdrRpRRkt8NsHpQt4fHfg6qO+aUUZeo=";
   };
 
@@ -59,10 +59,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/smlight-tech/pysmlight/releases/tag/${src.tag}";
+    changelog = "https://github.com/smlight-tech/pysmlight/releases/tag/${finalAttrs.src.tag}";
     description = "Library implementing API control of the SMLIGHT SLZB-06 LAN Coordinators";
     homepage = "https://github.com/smlight-tech/pysmlight";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

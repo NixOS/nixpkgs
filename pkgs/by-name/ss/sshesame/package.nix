@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sshesame";
   version = "0.0.39";
 
   src = fetchFromGitHub {
     owner = "jaksi";
     repo = "sshesame";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-h0qvi90gbWm4LCL3FeipW8BKkbuUt0xGMTjaaeYadnE=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "sshesame";
   };
-}
+})

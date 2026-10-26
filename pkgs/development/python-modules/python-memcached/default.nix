@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-memcached";
   version = "1.62";
   pyproject = true;
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "linsomniac";
     repo = "python-memcached";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Qko4Qr9WofeklU0uRRrSPrT8YaBYMCy0GP+TF7YZHLI=";
   };
 
   postPatch = ''
     substituteInPlace memcache.py \
-      --replace-fail '__version__ = "1.60"' '__version__ = "${version}"'
+      --replace-fail '__version__ = "1.60"' '__version__ = "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

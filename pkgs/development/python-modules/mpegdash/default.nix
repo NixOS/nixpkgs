@@ -5,7 +5,7 @@
   pytestCheckHook,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mpegdash";
   version = "0.4.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sangwonl";
     repo = "python-mpegdash";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WrsTxI6zdPCvzU4bW41kuPpR6B1DcDRUFDbAb9JZnK8=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drawbu ];
   };
-}
+})

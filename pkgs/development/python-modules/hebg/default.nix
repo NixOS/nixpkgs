@@ -18,13 +18,13 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hebg";
   version = "0.2.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-11bz+FbnaEVLiXT1eujMw8lvABlzVOeROOsdVgsyfjQ=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Hierarchical Explainable Behaviors using Graphs";
     homepage = "https://github.com/IRLL/HEB_graphs";
-    changelog = "https://github.com/IRLL/HEB_graphs/releases/tag/${version}";
+    changelog = "https://github.com/IRLL/HEB_graphs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ automathis ];
   };
-}
+})

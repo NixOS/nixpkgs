@@ -5,13 +5,13 @@
   glibcLocales,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rpmfluff";
   version = "0.5.7.1";
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
+    url = "https://releases.pagure.org/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-QWtHUpxRKa43BixaDQ0YxoPA+MBg9hgbfAospOqndqc=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     homepage = "https://pagure.io/rpmfluff";
     license = lib.licenses.gpl2;
   };
-}
+})

@@ -18,7 +18,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "attacut";
   version = "1.1.0-dev";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyThaiNLP";
     repo = "attacut";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x3JJC1Xd+tsOAHJEHGzIrhIrNGSvLSanAFc7+uXb2Kk=";
   };
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ vizid ];
     mainProgram = "attacut-cli";
   };
-}
+})

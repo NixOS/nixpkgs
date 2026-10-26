@@ -6,7 +6,7 @@
   defusedxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py3amf";
   version = "0.9.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StdCarrot";
     repo = "Py3AMF";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cRazP6HtE0hjGzdit/XCPuwwLtn7SiKF6pm4lgEkB2I=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Action Message Format (AMF) support for Python 3";
     homepage = "https://github.com/StdCarrot/Py3AMF";
-    changelog = "https://github.com/StdCarrot/Py3AMF/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/StdCarrot/Py3AMF/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
-}
+})

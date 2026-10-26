@@ -8,7 +8,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "furl";
   version = "2.1.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gruns";
     repo = "furl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NRkOJlluZjscM4ZhxHoXIzV2A0+mrkaw7rcxfklGCHs=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "furl" ];
 
   meta = {
-    changelog = "https://github.com/gruns/furl/releases/tag/${src.tag}";
+    changelog = "https://github.com/gruns/furl/releases/tag/${finalAttrs.src.tag}";
     description = "Python library that makes parsing and manipulating URLs easy";
     homepage = "https://github.com/gruns/furl";
     license = lib.licenses.unlicense;
   };
-}
+})

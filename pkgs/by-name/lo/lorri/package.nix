@@ -17,14 +17,14 @@ let
   cargoHash = "sha256-pRtc0cDVIBqbCbC1weFOhZP29rKAE1XdmM6HE5nJKRU=";
 
 in
-(rustPlatform.buildRustPackage rec {
+(rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lorri";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "lorri";
-    rev = version;
+    rev = finalAttrs.version;
     inherit sha256;
   };
 
@@ -38,7 +38,7 @@ in
   doCheck = false;
 
   env = {
-    BUILD_REV_COUNT = src.revCount or 1;
+    BUILD_REV_COUNT = finalAttrs.src.revCount or 1;
     RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
   };
 
@@ -58,8 +58,8 @@ in
   passthru = {
     updater = writers.writeBash "copy-runtime-nix.sh" ''
       set -euo pipefail
-      cp ${src}/nix/runtime.nix ${toString ./runtime.nix}
-      cp ${src}/nix/runtime-closure.nix.template ${toString ./runtime-closure.nix.template}
+      cp ${finalAttrs.src}/nix/runtime.nix ${toString ./runtime.nix}
+      cp ${finalAttrs.src}/nix/runtime-closure.nix.template ${toString ./runtime-closure.nix.template}
     '';
     tests = {
       nixos = nixosTests.lorri;
@@ -76,4 +76,4 @@ in
     ];
     mainProgram = "lorri";
   };
-})
+}))

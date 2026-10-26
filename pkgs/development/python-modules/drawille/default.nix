@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drawille";
   version = "0.2.0";
 
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gVND4RYsWAUtTLZS75cPZ3Ht2QBC1UnsxuRTyXNqoa0=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ nobbz ];
     platforms = lib.platforms.all;
   };
-}
+})

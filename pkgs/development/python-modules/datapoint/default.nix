@@ -11,7 +11,7 @@
   versioningit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datapoint";
   version = "0.13.0";
   pyproject = true;
@@ -19,13 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Perseudonymous";
     repo = "datapoint-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vgwuoG/2Lzo56cAiXEYNPsXQYfx8Cwg0NJgojDBxoug=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to the Met Office's Datapoint API";
     homepage = "https://github.com/Perseudonymous/datapoint-python";
-    changelog = "https://github.com/Perseudonymous/datapoint-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Perseudonymous/datapoint-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

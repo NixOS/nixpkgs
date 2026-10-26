@@ -10,14 +10,14 @@
   couchbase-shell,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "couchbase-shell";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "couchbaselabs";
     repo = "couchbase-shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eJWkqtDwLZsU3PlVud+PuXpg5kxLWe2IpbOXTzT40kA=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cbsh";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "biopandas";
   version = "0.5.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BioPandas";
     repo = "biopandas";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lHzezrx8WmkFdALDDZm7aaY5v8ELoofPrU/SlF7aS+I=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Working with molecular structures in pandas DataFrames";
     homepage = "https://github.com/BioPandas/biopandas";
-    changelog = "https://github.com/BioPandas/biopandas/releases/tag/v${version}";
+    changelog = "https://github.com/BioPandas/biopandas/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

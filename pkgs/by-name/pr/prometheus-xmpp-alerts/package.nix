@@ -7,7 +7,7 @@
   prometheus-xmpp-alerts,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prometheus-xmpp-alerts";
   version = "0.6.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "prometheus-xmpp-alerts";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-kXcadJnPPhMKF/1CHMLdGCqWouAKDBFTdvPpn80yK4A=";
   };
 
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "prometheus_xmpp" ];
 
   passthru.tests = {
-    binaryWorks = runCommand "${pname}-binary-test" { } ''
+    binaryWorks = runCommand "${finalAttrs.pname}-binary-test" { } ''
       # Running with --help to avoid it erroring due to a missing config file
       ${prometheus-xmpp-alerts}/bin/prometheus-xmpp-alerts --help | tee $out
       grep "usage: prometheus-xmpp-alerts" $out
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.asl20;
   };
-}
+})

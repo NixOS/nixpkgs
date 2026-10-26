@@ -5,14 +5,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kristall";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "ikskuh";
     repo = "kristall";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-zTO55xTc7hXlqVUVlx921+LalKj/yQwjEgXW2YUdG70=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     inherit (libsForQt5.qtmultimedia.meta) platforms;
   };
-}
+})

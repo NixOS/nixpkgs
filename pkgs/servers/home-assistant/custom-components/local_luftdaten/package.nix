@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "lichtteil";
   domain = "local_luftdaten";
   version = "2.5.1";
@@ -12,15 +12,15 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "lichtteil";
     repo = "local_luftdaten";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VVMTZjxcfq/nAh4FhlDlkmLV45M9y5fkWa5s68Qd8oI=";
   };
 
   meta = {
-    changelog = "https://github.com/lichtteil/local_luftdaten/releases/tag/${version}";
+    changelog = "https://github.com/lichtteil/local_luftdaten/releases/tag/${finalAttrs.version}";
     description = "Custom component for Home Assistant that integrates your (own) local Luftdaten sensor (air quality/particle sensor) without using the cloud";
     homepage = "https://github.com/lichtteil/local_luftdaten";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

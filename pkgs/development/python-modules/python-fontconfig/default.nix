@@ -20,7 +20,7 @@
 let
   fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-fontconfig";
   version = "0.6.3";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "python-fontconfig";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z7Yj3TmUXBe1rJIuoo6TNB+3IaPfUFlFL+9Vo9fJU4c=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

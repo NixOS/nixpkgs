@@ -4,21 +4,21 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-ci-pipelines-exporter";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
     repo = "gitlab-ci-pipelines-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-r/6tRecbLN9bX2+HYyk4tT0uNiAqtZwMoMMQUJ7niJI=";
   };
 
   subPackages = [ "cmd/gitlab-ci-pipelines-exporter" ];
 
   ldflags = [
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   vendorHash = "sha256-k1yqPVaCRtU9qpCSBR4Mo4n+9cOCT9xyRI1Ian9rNOk=";
@@ -34,4 +34,4 @@ buildGoModule rec {
       mvisonneau
     ];
   };
-}
+})

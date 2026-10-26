@@ -6,14 +6,14 @@
   runtimeShell,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "whitebophir";
   version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "whitebophir";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4T7s9WrpyHVPcw0QY0C0sczDJYKzA4bAAfEv8q2pOy4=";
   };
 
@@ -45,4 +45,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ iblech ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,14 +6,14 @@
   click,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spark-parser";
   version = "1.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "spark_parser";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-3GbUjEJlxBM9tBqcX+nBxQKzsgFn3xWKDyNM0xcSz2Q=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin ];
   };
-}
+})

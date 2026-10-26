@@ -6,13 +6,13 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libmr";
   version = "0.1.9";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-Q8zYZpO3Jfo6vmSMjNzvF7pfpGtVKBaIKeX5uWjf63A=";
   };
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

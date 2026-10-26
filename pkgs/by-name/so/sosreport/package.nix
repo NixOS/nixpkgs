@@ -5,7 +5,7 @@
   gettext,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "sosreport";
   version = "4.11.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-abMH0s+ZfLAURBJrZtTmDczuS5Id3ko0lTKfvp3OJqU=";
   };
 
@@ -50,4 +50,4 @@ python3Packages.buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

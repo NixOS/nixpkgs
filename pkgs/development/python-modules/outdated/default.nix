@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "outdated";
   version = "0.2.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "outdated";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5VpPmgIcVtY97F0Hb0m9MuSW0zjaUJ18ATA4GBRw+jc=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

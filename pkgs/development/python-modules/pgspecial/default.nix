@@ -14,13 +14,13 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgspecial";
   version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2mx/zHvve7ATLcIEb3TsZROx/m8MgOVSjWMNFLfEhJ0=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Meta-commands handler for Postgres Database";
     homepage = "https://github.com/dbcli/pgspecial";
-    changelog = "https://github.com/dbcli/pgspecial/releases/tag/v${version}";
+    changelog = "https://github.com/dbcli/pgspecial/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.SuperSandro2000 ];
   };
-}
+})

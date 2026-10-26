@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vg";
   version = "2.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lace";
     repo = "vg";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZNUAfkhjmsxD8cH0fR8Htjs+/F/3R9xfe1XgRyndids=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Linear algebra for humans: a very good vector-geometry and linear-algebra toolbelt";
     homepage = "https://github.com/lace/vg";
-    changelog = "https://github.com/lace/vg/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/lace/vg/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ clerie ];
   };
-}
+})

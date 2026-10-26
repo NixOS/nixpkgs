@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cv2_enumerate_cameras";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lukehugh";
     repo = "cv2_enumerate_cameras";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-49/Zhfam/wrEwkEJ63PEcjA0eERL5OwsDTVgyvzCx5Q=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     # Needs pyobjc-framework-avfoundation; not currently packaged.
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

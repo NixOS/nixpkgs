@@ -11,7 +11,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mergecal";
   version = "0.5.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mergecal";
     repo = "python-mergecal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Je3gFREu97Ycofszhr6pKOCiK76oBuzb3ji4LAf5aE8=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://mergecal.readthedocs.io/en/latest/";
-    changelog = "https://github.com/mergecal/python-mergecal/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mergecal/python-mergecal/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

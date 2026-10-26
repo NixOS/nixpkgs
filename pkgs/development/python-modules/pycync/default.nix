@@ -10,7 +10,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycync";
   version = "0.5.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kinachi249";
     repo = "pycync";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mYHUkenP0FMnwKOdZe4XjC/VnP3JJGPtuVdYR9UcouM=";
   };
 
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/Kinachi249/pycync/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kinachi249/pycync/releases/tag/${finalAttrs.src.tag}";
     description = "Python API library for Cync smart devices";
     homepage = "https://github.com/Kinachi249/pycync";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

@@ -12,7 +12,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geventhttpclient";
   version = "2.5.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geventhttpclient";
     repo = "geventhttpclient";
-    tag = version;
+    tag = finalAttrs.version;
     # TODO: unvendor llhttp
     fetchSubmodules = true;
     hash = "sha256-qLWvw7C9TNdaUSLIiDEapBFi7MkJGsCrWsjoJZuX8Pk=";
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/geventhttpclient/geventhttpclient";
     description = "High performance, concurrent HTTP client library using gevent";
-    changelog = "https://github.com/geventhttpclient/geventhttpclient/releases/tag/${src.tag}";
+    changelog = "https://github.com/geventhttpclient/geventhttpclient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})

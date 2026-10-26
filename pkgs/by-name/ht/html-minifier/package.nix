@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "html-minifier";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "kangax";
     repo = "html-minifier";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OAykAqBxgr7tbeXXfSH23DALf7Eoh3VjDKNKWGAL3+A=";
   };
 
@@ -32,4 +32,4 @@ buildNpmPackage rec {
     mainProgram = "html-minifier";
     maintainers = with lib.maintainers; [ chris-martin ];
   };
-}
+})

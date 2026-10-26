@@ -12,12 +12,12 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "movit";
   version = "1.7.2";
 
   src = fetchurl {
-    url = "https://movit.sesse.net/movit-${version}.tar.gz";
+    url = "https://movit.sesse.net/movit-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-AKwfjkbC0+OMdcu3oa8KYVdRwVjGEctwBTCUtl7P6NU=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

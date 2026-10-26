@@ -23,13 +23,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "httpbin";
   version = "0.10.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YCOlouj7jpGr3W000fH0VQkvl9VnwlYA4bSO4ReKpzg=";
   };
 
@@ -77,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

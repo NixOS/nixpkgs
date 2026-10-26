@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
   fetchurl,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ziamath";
   version = "0.13";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziamath";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4TSKxCCU4DP+CQKJoi3nBqstHVUb9ycz+JAlYctxGxY=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sfrijters ];
   };
-}
+})

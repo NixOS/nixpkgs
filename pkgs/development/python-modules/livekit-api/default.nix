@@ -11,7 +11,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "livekit-api";
   version = "1.1.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "python-sdks";
-    tag = "api-v${version}";
+    tag = "api-v${finalAttrs.version}";
     hash = "sha256-Z9ZyzESPUR+j9s9LXSTDx3pB+bltbqTeb8WVKaKk80A=";
   };
 
@@ -51,11 +51,11 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/livekit/python-sdks/releases/tag/${src.tag}";
+    changelog = "https://github.com/livekit/python-sdks/releases/tag/${finalAttrs.src.tag}";
     description = "LiveKit real-time and server SDKs for Python";
     homepage = "https://github.com/livekit/python-sdks/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ soyouzpanda ];
     platforms = lib.platforms.all;
   };
-}
+})

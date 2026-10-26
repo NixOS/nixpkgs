@@ -14,13 +14,13 @@
   sudachipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   format = "setuptools";
   pname = "sudachipy";
   inherit (sudachi-rs) src version;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-qWuFY97qPoKVxWp29ywaMEr2fTc0Y4wDR9LK+40r6QI";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/WorksApplications/sudachi.rs/tree/develop/python";
     mainProgram = "sudachipy";
   };
-}
+})

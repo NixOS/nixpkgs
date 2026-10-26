@@ -11,14 +11,14 @@
   nauty,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-gcg";
   version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "gcg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eu7JHtG10/4rzr4xSdoFJjGQ+X5OeWelkEWJOO7QQmE=";
   };
 
@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     maintainers = with lib.maintainers; [ pmeinhold ];
-    changelog = "https://gcg.or.rwth-aachen.de/doc-3.5.0/RN${lib.versions.major version}${lib.versions.minor version}.html";
+    changelog = "https://gcg.or.rwth-aachen.de/doc-3.5.0/RN${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}.html";
     description = "Branch-and-Price & Column Generation for Everyone";
     license = lib.licenses.lgpl3Plus;
     homepage = "https://gcg.or.rwth-aachen.de";
     mainProgram = "gcg";
   };
-}
+})

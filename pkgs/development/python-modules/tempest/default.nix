@@ -31,13 +31,13 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tempest";
   version = "46.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-z/WtY/wqhxaqhudHHy0nA8jbwoSzBJE/5DNxKVp1cRg=";
   };
 
@@ -113,4 +113,4 @@ buildPythonPackage rec {
     mainProgram = "tempest";
     teams = [ lib.teams.openstack ];
   };
-}
+})

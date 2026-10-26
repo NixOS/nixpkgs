@@ -10,7 +10,7 @@
   httpx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "doujinshi-dl-nhentai";
   version = "1.2.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RicterZ";
     repo = "doujinshi-dl-nhentai";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PNUbl7ovl9VLAnasWG1Us6Ur68HOxLRgaWzKRzuyz3k=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

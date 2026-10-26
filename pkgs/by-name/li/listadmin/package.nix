@@ -7,12 +7,12 @@
   installShellFiles,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "listadmin";
   version = "2.73";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/listadmin/${version}/listadmin-${version}.tar.gz";
+    url = "mirror://sourceforge/project/listadmin/${finalAttrs.version}/listadmin-${finalAttrs.version}.tar.gz";
     sha256 = "00333d65ygdbm1hqr4yp2j8vh1cgh3hyfm7iy9y1alf0p0f6aqac";
   };
 
@@ -61,4 +61,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ nomeata ];
     mainProgram = "listadmin";
   };
-}
+})

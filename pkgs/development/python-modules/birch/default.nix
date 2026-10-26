@@ -10,7 +10,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "birch";
   version = "0.0.35";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "shaypal5";
     repo = "birch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KdQZzQJvJ+logpcLQfaqqEEZJ/9VmNTQX/a4v0oBC98=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   postPatch = ''
     # configure correct version, which fails due to missing .git
     substituteInPlace versioneer.py birch/_version.py \
-      --replace-fail '"0+unknown"' '"${version}"'
+      --replace-fail '"0+unknown"' '"${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hubble";
   version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "hubble";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-k6UvjNvWcLz9AaHik+np6b04A2tht4RXpgp6iY0VMYc=";
   };
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     "-w"
     "-X=github.com/cilium/cilium/hubble/pkg.GitBranch=none"
     "-X=github.com/cilium/cilium/hubble/pkg.GitHash=none"
-    "-X=github.com/cilium/cilium/hubble/pkg.Version=${version}"
+    "-X=github.com/cilium/cilium/hubble/pkg.Version=${finalAttrs.version}"
   ];
 
   doCheck = true;
@@ -48,7 +48,7 @@ buildGoModule rec {
   meta = {
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
     homepage = "https://github.com/cilium/hubble/";
-    changelog = "https://github.com/cilium/hubble/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/cilium/hubble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       humancalico
@@ -56,4 +56,4 @@ buildGoModule rec {
     ];
     mainProgram = "hubble";
   };
-}
+})

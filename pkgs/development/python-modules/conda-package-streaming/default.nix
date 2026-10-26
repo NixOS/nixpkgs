@@ -6,7 +6,7 @@
   requests,
   zstandard,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "conda-package-streaming";
   version = "0.12.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "conda";
     repo = "conda-package-streaming";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BfvD+64c9uxBvEJnAuI4MaF0CqS9Gwnqx1Xi+l36Dwo=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];
   };
-}
+})

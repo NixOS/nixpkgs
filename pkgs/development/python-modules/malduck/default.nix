@@ -16,7 +16,7 @@
   yara-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "malduck";
   version = "4.4.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "malduck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Btx0HxiZWrb0TDpBokQGtBE2EDK0htONe/DwqlPgAd4=";
   };
 
@@ -54,9 +54,9 @@ buildPythonPackage rec {
   meta = {
     description = "Helper for malware analysis";
     homepage = "https://github.com/CERT-Polska/malduck";
-    changelog = "https://github.com/CERT-Polska/malduck/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/malduck/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "malduck";
   };
-}
+})

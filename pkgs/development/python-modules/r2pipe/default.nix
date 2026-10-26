@@ -8,7 +8,7 @@
   coreutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "r2pipe";
   version = "1.9.8";
   format = "setuptools";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     '';
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-h6w6ac1kZuMwNku0eZW/ScKoeq2vZJe5zX/dnc8kwd8=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timokau ];
   };
-}
+})

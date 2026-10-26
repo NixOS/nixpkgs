@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gast";
   version = "0.7.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "gast";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-paaXVdhstNlLc/zv/L1tHuv9IZ0Vz/vz2x2y2ePpXRc=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
       cpcloud
     ];
   };
-}
+})

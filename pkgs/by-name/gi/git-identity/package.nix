@@ -6,14 +6,14 @@
   ronn,
   nix-update-script,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "git-identity";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "madx";
     repo = "git-identity";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Wz3+rRi6k7cNXPPBE8L39UOABxaL+E8nNSAeKNMOQMM=";
   };
 
@@ -49,4 +49,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ mynacol ];
     platforms = lib.platforms.all;
   };
-}
+})

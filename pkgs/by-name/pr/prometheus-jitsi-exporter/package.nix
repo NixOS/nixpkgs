@@ -5,13 +5,13 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jitsiexporter";
   version = "0.2.18";
 
   src = fetchgit {
     url = "https://git.xsfx.dev/prometheus/jitsiexporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1cf46wp96d9dwlwlffcgbcr0v3xxxfdv6il0zqkm2i7cfsfw0skf";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

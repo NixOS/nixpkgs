@@ -18,13 +18,13 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vispy";
   version = "0.16.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CUUavoeBM2/WhCIHzZXOXoYJ2Z8TvN6JhBJTgSXDUIg=";
   };
 
@@ -71,8 +71,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interactive scientific visualization in Python";
     homepage = "https://vispy.org/index.html";
-    changelog = "https://github.com/vispy/vispy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/vispy/vispy/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ goertzenator ];
   };
-}
+})

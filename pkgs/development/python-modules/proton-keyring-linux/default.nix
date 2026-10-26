@@ -9,7 +9,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proton-keyring-linux";
   version = "0.2.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-keyring-linux";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Oj0jcoJJGTh/eIE5byS4XohnvfnzlYWkozu9VJJH2vk=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ anthonyroussel ];
     platforms = lib.platforms.linux;
   };
-}
+})

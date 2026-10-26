@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "basemap";
   version = "2.0.0";
   format = "setuptools";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1T1FTcR99KbpqiYzrd2r5h1wTcygBEU7BLZXZ8uMthU=";
   };
 
@@ -71,4 +71,4 @@ buildPythonPackage rec {
       lgpl21
     ];
   };
-}
+})

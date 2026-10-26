@@ -8,7 +8,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docstring-to-markdown";
   version = "0.17";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "docstring-to-markdown";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-conwwToBrlDL487zf2ldCOxFFKxP1a8LnU0KocI8riI=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/python-lsp/docstring-to-markdown";
     description = "On the fly conversion of Python docstrings to markdown";
-    changelog = "https://github.com/python-lsp/docstring-to-markdown/releases/tag/${src.tag}";
+    changelog = "https://github.com/python-lsp/docstring-to-markdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

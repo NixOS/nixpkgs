@@ -8,7 +8,7 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterhub-systemdspawner";
   version = "1.0.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "systemdspawner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-obM8HGCHsisRV1+kHMWdA7d6eb6awwPMBuDUAf3k0uI=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
     description = "JupyterHub Spawner using systemd for resource isolation";
     mainProgram = "check-kernel.bash";
     homepage = "https://github.com/jupyterhub/systemdspawner";
-    changelog = "https://github.com/jupyterhub/systemdspawner/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterhub/systemdspawner/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

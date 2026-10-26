@@ -11,14 +11,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-mysqlflexibleservers";
   version = "1.1.0b3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_mysqlflexibleservers";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-15uNv6MKuHxuXxeQYWbpmWQVhmkmzCYjeGkSIamGWAM=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

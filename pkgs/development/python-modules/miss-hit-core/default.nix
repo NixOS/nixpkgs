@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "miss-hit-core";
   version = "0.9.44";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "florianschanda";
     repo = "miss_hit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dJZIleDWmdarhmxoKvQxWvI/Tmx9pSCNlgFXj5NFIUc=";
   };
 
@@ -54,10 +54,10 @@ buildPythonPackage rec {
   meta = {
     description = "Code formatting and code metrics for programs written in the MATLAB/Simulink and Octave languages";
     homepage = "https://misshit.org/";
-    changelog = "https://github.com/florianschanda/miss_hit/releases/tag/${version}";
+    changelog = "https://github.com/florianschanda/miss_hit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       jacobkoziej
     ];
   };
-}
+})

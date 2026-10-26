@@ -12,7 +12,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aggdraw";
   version = "1.4.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = "aggdraw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rBasRGdlM6/NsUd8+KsgHoZMsWhAhneSWjTeZ/QQZZ8=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "High quality drawing interface for PIL";
     homepage = "https://github.com/pytroll/aggdraw";
-    changelog = "https://github.com/pytroll/aggdraw/blob/${src.tag}CHANGELOG.md";
+    changelog = "https://github.com/pytroll/aggdraw/blob/${finalAttrs.src.tag}CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

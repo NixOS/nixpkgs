@@ -12,14 +12,14 @@
   coremidiSupport ? stdenv.hostPlatform.isDarwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtmidi";
   version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtmidi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QuUeFx8rPpe0+exB3chT6dUceDa/7ygVy+cQYykq7e0=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.unix;
   };
-}
+})

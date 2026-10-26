@@ -6,7 +6,7 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-fulltoc";
   version = "1.3";
   pyproject = true;
@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "fulltoc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rpzKiZgsuAqhLDEYURv77SDJny3eqfj0VtJ1tqT29IQ=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [ pbr ];
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Include a full table of contents in your Sphinx HTML sidebar";
     homepage = "https://sphinxcontrib-fulltoc.readthedocs.org/";
-    changelog = "https://github.com/sphinx-contrib/fulltoc/releases/tag/${src.tag}";
+    changelog = "https://github.com/sphinx-contrib/fulltoc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

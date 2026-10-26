@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-beautysh";
   version = "1.0.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-beautysh";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Wzwy2FSknohmgrZ/ACliBDD2lOaQKKHyacAL57Ci3SU=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Mdformat plugin to beautify Bash scripts";
     homepage = "https://github.com/hukkin/mdformat-beautysh";
-    changelog = "https://github.com/hukkin/mdformat-beautysh/releases/tag/${src.tag}";
+    changelog = "https://github.com/hukkin/mdformat-beautysh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

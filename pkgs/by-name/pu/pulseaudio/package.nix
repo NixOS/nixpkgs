@@ -68,12 +68,12 @@
 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "17.0";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
+    url = "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${finalAttrs.version}.tar.xz";
     hash = "sha256-BTeU1mcaPjl9hJ5HioC4KmPLnYyilr01tzMXu1zrh7U=";
   };
 
@@ -254,7 +254,7 @@ stdenv.mkDerivation rec {
   preFixup =
     lib.optionalString (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
       wrapProgram $out/libexec/pulse/gsettings-helper \
-       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
+       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}" \
        --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
     ''
     # add .so symlinks for modules to be found under macOS
@@ -303,4 +303,4 @@ stdenv.mkDerivation rec {
       one are easily achieved using a sound server.
     '';
   };
-}
+})

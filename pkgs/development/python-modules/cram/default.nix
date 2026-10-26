@@ -7,7 +7,7 @@
   which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.7";
   format = "setuptools";
   pname = "cram";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ which ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fadEWvLOFbkKrV7EeS+FfO9XhtcfFDd+nrmU2Lgzfy8=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     # Tests fail on i686: https://hydra.nixos.org/build/52896671/nixlog/4
     broken = stdenv.hostPlatform.isi686;
   };
-}
+})

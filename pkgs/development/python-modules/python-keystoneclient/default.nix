@@ -14,14 +14,14 @@
   testscenarios,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-keystoneclient";
   version = "6.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_keystoneclient";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-1qw6Ca3yMZqqxXKOO/fL6vlSwpW9eDHx35pXOyX7z4I=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

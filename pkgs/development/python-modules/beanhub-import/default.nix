@@ -13,7 +13,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beanhub-import";
   version = "1.3.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0Or83zod1RIx7Dm+3+EuyV8gP4Ip3ziOuS2if0ThzAQ=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Declarative idempotent rule-based Beancount transaction import engine in Python";
     homepage = "https://github.com/LaunchPlatform/beanhub-import/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${src.tag}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fangpen ];
   };
-}
+})

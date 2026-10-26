@@ -12,7 +12,7 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-modeltranslation";
   version = "0.20.6";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C06j3bzG03ygo76TGWzYraTwD6IgqP95Vl9eWoLlFA4=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Translates Django models using a registration approach";
     homepage = "https://github.com/deschler/django-modeltranslation";
-    changelog = "https://github.com/deschler/django-modeltranslation/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/deschler/django-modeltranslation/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ augustebaum ];
   };
-}
+})

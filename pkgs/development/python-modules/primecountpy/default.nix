@@ -12,13 +12,13 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "primecountpy";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-iIcGq2XMCJ+5g95GOTYN3ccouqTZh3p62LEW9kVlCzk=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     teams = [ lib.teams.sage ];
     license = lib.licenses.gpl3Only;
   };
-}
+})

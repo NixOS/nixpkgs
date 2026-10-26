@@ -7,7 +7,7 @@
   fetchpatch2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhumps";
   version = "3.9.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nficano";
     repo = "humps";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PvfjW56UVCcjd2jJiQW/goVJ1BC8xQ973xuZ6izwclw=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

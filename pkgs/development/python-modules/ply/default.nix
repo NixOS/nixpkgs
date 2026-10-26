@@ -5,13 +5,13 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ply";
   version = "3.11";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AMfBqqiDWLnHZbbTAAxu7AukKrylNRsJUyGu9EYIHaM=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.bsd3;
   };
-}
+})

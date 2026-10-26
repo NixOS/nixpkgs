@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ropper";
   version = "1.13.13";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sashs";
     repo = "Ropper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MOAbACLDdeKCMV4K/n1rAQlxDN0JoDIiUF6Zr3yPw8o=";
   };
 
@@ -39,9 +39,9 @@ buildPythonPackage rec {
   meta = {
     description = "Show information about files in different file formats";
     homepage = "https://scoding.de/ropper/";
-    changelog = "https://github.com/sashs/Ropper/releases/tag/${src.tag}";
+    changelog = "https://github.com/sashs/Ropper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "ropper";
   };
-}
+})

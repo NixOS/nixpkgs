@@ -9,7 +9,7 @@
   thriftpy2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parquet";
   version = "1.3.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcrobak";
     repo = "parquet-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WVDffYKGsyepK4w1d4KUUMmxB6a6ylTbJvG79Bt5G6o=";
   };
 
@@ -55,9 +55,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the parquet columnar file format";
     homepage = "https://github.com/jcrobak/parquet-python";
-    changelog = "https://github.com/jcrobak/parquet-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/jcrobak/parquet-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "parquet";
   };
-}
+})

@@ -7,7 +7,7 @@
   sniffio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asgi-lifespan";
   version = "2.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "florimondmanca";
     repo = "asgi-lifespan";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Jgmd/4c1lxHM/qi3MJNN1aSSUJrI7CRNwwHrFwwcCkc=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Programmatic startup/shutdown of ASGI apps";
     homepage = "https://github.com/florimondmanca/asgi-lifespan";
-    changelog = "https://github.com/florimondmanca/asgi-lifespan/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/florimondmanca/asgi-lifespan/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -50,7 +50,7 @@ let
   '';
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openusd";
   version = "26.05";
   pyproject = false;
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LQ5iopxoDtmScYhmMy+xN/Gb5WVdAYXdQGlGhG3vIiA=";
   };
 
@@ -168,11 +168,11 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
-    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.tost;
     maintainers = with lib.maintainers; [
       shaddydc
       gador
     ];
   };
-}
+})

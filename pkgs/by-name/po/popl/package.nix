@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "popl";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "badaix";
     repo = "popl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AkqFRPK0tVdalL+iyMou0LIUkPkFnYYdSqwEbFbgzqI=";
   };
 
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Header-only C++ program options parser library";
     homepage = "https://github.com/badaix/popl";
-    changelog = "https://github.com/badaix/popl/releases/tag/${src.rev}";
+    changelog = "https://github.com/badaix/popl/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

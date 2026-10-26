@@ -6,9 +6,9 @@
   linuxHeaders,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librseq";
-  version = "0.1.0pre71_${builtins.substring 0 7 src.rev}";
+  version = "0.1.0pre71_${builtins.substring 0 7 finalAttrs.src.rev}";
 
   src = fetchFromGitHub {
     owner = "compudj";
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

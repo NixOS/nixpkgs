@@ -13,14 +13,14 @@ let
   pname = "sphinx-sitemap";
   version = "2.9.0";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdillard";
     repo = "sphinx-sitemap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TiR6F9wMWOGYexSKDzbSPPq0oiIDrZwSiO3a9DajL+0=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/${src.tag}";
+    changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/${finalAttrs.src.tag}";
     description = "Sitemap generator for Sphinx";
     homepage = "https://github.com/jdillard/sphinx-sitemap";
     maintainers = with lib.maintainers; [ alejandrosame ];
     license = lib.licenses.mit;
   };
-}
+})

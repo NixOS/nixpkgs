@@ -7,12 +7,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastnetmon-advanced";
   version = "2.0.384";
 
   src = fetchurl {
-    url = "https://noble.ubuntu.repo.fastnetmon.com/pool/stable/f/fa/fastnetmon_${version}_amd64.deb";
+    url = "https://noble.ubuntu.repo.fastnetmon.com/pool/stable/f/fa/fastnetmon_${finalAttrs.version}_amd64.deb";
     hash = "sha256-UiV1kUuYD2gynYqMQXTYFuY0IILAYl5FA0DNAxMUFbQ=";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
-    changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
+    changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       yureka-wdz
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

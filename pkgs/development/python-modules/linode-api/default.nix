@@ -11,7 +11,7 @@
   httpretty,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linode-api";
   version = "5.46.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d9VgHHbyEcFHy3bM2KpuwUN3Su7ABYqYRWL+nOZ1Xd4=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Linode API v4";
     homepage = "https://github.com/linode/python-linode-api";
-    changelog = "https://github.com/linode/linode_api4-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/linode/linode_api4-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ glenns ];
   };
-}
+})

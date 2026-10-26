@@ -12,7 +12,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vulkan";
   version = "1.3.275.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "realitix";
     repo = "vulkan";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-b1jHNKdHF7pIC6H4O2yxy36Ppb60J0uN2P0WaCw51Gc=";
   };
 
@@ -60,4 +60,4 @@ buildPythonPackage rec {
       getchoo
     ];
   };
-}
+})

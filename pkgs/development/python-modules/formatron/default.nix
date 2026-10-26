@@ -11,7 +11,7 @@
   transformers,
   vllm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "formatron";
   version = "0.5.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Dan-wanna-M";
     repo = "formatron";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LQJza8F5wPcQO1y7Ino4slv7zoJMsZBn4LKLWYO9818=";
     fetchSubmodules = true;
   };
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ BatteredBunny ];
   };
-}
+})

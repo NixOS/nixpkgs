@@ -19,7 +19,7 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bravado-core";
   version = "6.4.1";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "bravado-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P6R1Pmhddyy1iwQuem8YVDFFrQ4qxHzASZQbqpMZXeI=";
   };
 
@@ -64,11 +64,11 @@ buildPythonPackage rec {
   meta = {
     description = "Library for adding Swagger support to clients and servers";
     homepage = "https://github.com/Yelp/bravado-core";
-    changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/Yelp/bravado-core/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       vanschelven
       nickcao
     ];
   };
-}
+})

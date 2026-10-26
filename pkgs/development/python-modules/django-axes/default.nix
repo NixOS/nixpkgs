@@ -10,7 +10,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-axes";
   version = "8.3.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-axes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jH/A3ZuuBI/S9xZ1VmOoB/8NnxSa5NgnSzY9N02GmD0=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sikmir ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -22,13 +22,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbconvert";
   version = "7.17.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-NNDQp+c848urbFquj09Gh5coCwH9i9LKdG2oVp7d19I=";
   };
 
@@ -89,8 +89,8 @@ buildPythonPackage rec {
   meta = {
     description = "Converting Jupyter Notebooks";
     homepage = "https://github.com/jupyter/nbconvert";
-    changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/nbconvert/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

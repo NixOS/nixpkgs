@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-pdf-to-images";
   version = "0.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-pdf-to-images";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UWtCPdKrGE93NNjCroct5fPhq1pWIkngXXtRb+BHm8k=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM fragment plugin to load a PDF as a sequence of images";
     homepage = "https://github.com/simonw/llm-pdf-to-images";
-    changelog = "https://github.com/simonw/llm-pdf-to-images/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-pdf-to-images/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

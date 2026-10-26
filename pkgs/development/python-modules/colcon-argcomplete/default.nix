@@ -8,7 +8,7 @@
   pytestCheckHook,
   pytest-cov-stub,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colcon-argcomplete";
   version = "0.3.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-argcomplete";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A6ia9OVZa+DwChVwCmkjvDtUloiFQyqtmhlaApbD7iI=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

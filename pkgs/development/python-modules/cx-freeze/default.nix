@@ -25,7 +25,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cx-freeze";
   version = "8.5.3";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marcelotduarte";
     repo = "cx_Freeze";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tV2i0o6D/Cz0ePYgJN+c4VgMkhVhO/2xhPX8vsasFPs=";
   };
 
@@ -190,9 +190,9 @@ buildPythonPackage rec {
   meta = {
     description = "Set of scripts and modules for freezing Python scripts into executables";
     homepage = "https://marcelotduarte.github.io/cx_Freeze";
-    changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${src.tag}";
+    changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.psfl;
     maintainers = [ ];
     mainProgram = "cxfreeze";
   };
-}
+})

@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-generate";
   version = "0.0.6";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Freed-Wu";
     repo = "setuptools-generate";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xDjxkWy/n0jStI9eLcM6WduyU9vGjtBOmJ86dpXjceQ=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generate shell completions and man page when building a python package";
     homepage = "https://github.com/Freed-Wu/setuptools-generate";
-    changelog = "https://github.com/Freed-Wu/setuptools-generate/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Freed-Wu/setuptools-generate/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "betamax-matchers";
   version = "0.4.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "betamaxpy";
     repo = "betamax_matchers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BV9DOfZLDAZIr2E75l988QxFWWvazBL9VttxGFIez1M=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Group of experimental matchers for Betamax";
     homepage = "https://github.com/sigmavirus24/betamax_matchers";
-    changelog = "https://github.com/betamaxpy/betamax_matchers/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/betamaxpy/betamax_matchers/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

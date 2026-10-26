@@ -15,7 +15,7 @@ let
     dontDisableStatic = true;
   });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reportlab";
   version = "5.0.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-69ExVL4chRXmZd5wvS0wOundw+9H5Er9URZEHKAoOiY=";
   };
 
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

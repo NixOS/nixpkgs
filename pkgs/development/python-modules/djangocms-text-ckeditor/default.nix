@@ -10,13 +10,13 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djangocms-text-ckeditor";
   version = "5.1.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "djangocms_text_ckeditor";
     hash = "sha256-xyl2TMXzyFaRGyBDku8fu++DE0G72cYv8AstPwcVnIM=";
   };
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Text Plugin for django CMS using CKEditor 4";
     homepage = "https://github.com/django-cms/djangocms-text-ckeditor";
-    changelog = "https://github.com/django-cms/djangocms-text-ckeditor/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/django-cms/djangocms-text-ckeditor/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pandoc-plantuml-filter";
   version = "0.1.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-9qXeIZuCu44m9EoPCPL7MgEboEwN91OylLfbkwhkZYQ=";
   };
 
@@ -31,4 +31,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "pandoc-plantuml";
   };
-}
+})

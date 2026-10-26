@@ -5,14 +5,14 @@
   bash,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "envoluntary";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "dfrankland";
     repo = "envoluntary";
-    tag = "envoluntary-v${version}";
+    tag = "envoluntary-v${finalAttrs.version}";
     hash = "sha256-ccMXrR7PnV3aCehJtsJyXx5ZiCz/KrHkKDLQSV3sMYU=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ blemouzy ];
     mainProgram = "envoluntary";
   };
-}
+})

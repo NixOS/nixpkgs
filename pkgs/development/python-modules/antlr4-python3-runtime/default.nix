@@ -6,13 +6,13 @@
   antlr4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "antlr4-python3-runtime";
   inherit (antlr4.runtime.cpp) version src;
 
   pyproject = true;
 
-  sourceRoot = "${src.name}/runtime/Python3";
+  sourceRoot = "${finalAttrs.src.name}/runtime/Python3";
 
   build-system = [ setuptools ];
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

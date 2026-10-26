@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "btest";
   version = "1.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "btest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hd/o79GFlmSS4u1IeEkK6l+apw8pinINxPkAZUe8U9U=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generic Driver for Powerful System Tests";
     homepage = "https://github.com/zeek/btest";
-    changelog = "https://github.com/zeek/btest/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/zeek/btest/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oscscreen";
   version = "unstable-2023-03-23";
   pyproject = true;
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for developing console applications using Python and curses";
     homepage = "https://github.com/outscale/npyscreen";
-    changelog = "https://github.com/outscale/npyscreen/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/outscale/npyscreen/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nicolas-goudry ];
   };
-}
+})

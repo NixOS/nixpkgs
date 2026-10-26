@@ -11,13 +11,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfume";
   version = "0.3.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UwW5OwFfu01lDKwz72iB2egbOoxb+t8UnEFIUjZmffU=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for fuzzy model estimation";
     homepage = "https://github.com/CaroFuchs/pyFUME";
-    changelog = "https://github.com/CaroFuchs/pyFUME/releases/tag/${version}";
+    changelog = "https://github.com/CaroFuchs/pyFUME/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

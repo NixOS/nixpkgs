@@ -7,7 +7,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diskcache-stubs";
   version = "5.6.3.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "phi-friday";
     repo = "diskcache-stubs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yYds/00K9XyJirreBGG/r30HZTyBQbFa6N4EizsmdKg=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Diskcache stubs";
     homepage = "https://github.com/phi-friday/diskcache-stubs";
-    changelog = "https://github.com/phi-friday/diskcache-stubs/releases/tag/${src.tag}";
+    changelog = "https://github.com/phi-friday/diskcache-stubs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

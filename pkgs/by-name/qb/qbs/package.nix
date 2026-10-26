@@ -6,14 +6,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qbs";
 
   version = "3.3.1";
 
   src = fetchgit {
     url = "https://code.qt.io/qbs/qbs.git";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-1W7+CZt1mtx8RdcZxhEhgi6+4/SPQAjic8yYXckBuJg=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

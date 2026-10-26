@@ -13,7 +13,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "staticvectors";
   version = "0.2.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neuml";
     repo = "staticvectors";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-p3m22qLxQYma0WtkTE/GzHXkxNHjatqLOdeHh4vtyVc=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

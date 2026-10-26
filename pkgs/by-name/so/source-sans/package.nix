@@ -5,7 +5,7 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "source-sans";
   version = "3.052";
 
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   __structuredAttrs = true;
 
   src = fetchzip {
-    url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
+    url = "https://github.com/adobe-fonts/source-sans/archive/${finalAttrs.version}R.zip";
     hash = "sha256-yzbYy/ZS1GGlgJW+ARVWF4tjFqmMq7x+YqSQnojtQBs=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

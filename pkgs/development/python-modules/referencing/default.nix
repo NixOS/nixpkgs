@@ -12,7 +12,7 @@
 }:
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "referencing";
     version = "0.37.0";
     pyproject = true;
@@ -20,7 +20,7 @@ let
     src = fetchFromGitHub {
       owner = "python-jsonschema";
       repo = "referencing";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
       hash = "sha256-4e06rzvIOyWAgkpzAisc4uUK8pWshDZiQ6qpvJCq3GY=";
     };
@@ -51,10 +51,10 @@ let
     meta = {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
-      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${src.tag}";
+      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ fab ];
     };
-  };
+  });
 in
 self

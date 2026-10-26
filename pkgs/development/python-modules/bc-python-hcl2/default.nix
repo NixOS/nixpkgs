@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bc-python-hcl2";
   version = "0.4.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "python-hcl2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Auk5xDLw2UhMzWa7YMKzwUSjhD9s6xHt8RcXMzzL8M0=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "hcl2tojson";
   };
-}
+})

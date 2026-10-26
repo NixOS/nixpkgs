@@ -12,7 +12,7 @@
   django-autoslug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-organizations";
   version = "2.6.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bennylope";
     repo = "django-organizations";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MgXB2gr7tWBXpgVfxLMI0RQWwAbhXlxdzyqk7XdEsWE=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-user accounts for Django projects";
     homepage = "https://github.com/bennylope/django-organizations";
-    changelog = "https://github.com/bennylope/django-organizations/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/bennylope/django-organizations/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ defelo ];
   };
-}
+})

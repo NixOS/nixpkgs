@@ -32,7 +32,7 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generic drag-and-drop ordering for objects in the Django admin interface";
     homepage = "https://github.com/jrief/django-admin-sortable2";
-    changelog = "https://github.com/jrief/django-admin-sortable2/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jrief/django-admin-sortable2/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

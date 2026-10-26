@@ -10,14 +10,14 @@
   argon2-cffi-bindings,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argon2-cffi";
   version = "25.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "argon2_cffi";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-aUrlzIpC9MTivyyg5k5R4joEDGpReoUHRoPTlZ4TRsE=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     homepage = "https://argon2-cffi.readthedocs.io/";
     license = lib.licenses.mit;
   };
-}
+})

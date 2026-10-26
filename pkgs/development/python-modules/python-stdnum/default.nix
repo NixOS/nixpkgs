@@ -8,7 +8,7 @@
   zeep,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-stdnum";
   version = "2.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arthurdejong";
     repo = "python-stdnum";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-X/VmD9bgOfs58m4YtmIdsYI5B4T0a68Wiiq2Ae27A8w=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to handle standardized numbers and codes";
     homepage = "https://arthurdejong.org/python-stdnum/";
-    changelog = "https://github.com/arthurdejong/python-stdnum/blob/${version}/ChangeLog";
+    changelog = "https://github.com/arthurdejong/python-stdnum/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ johbo ];
   };
-}
+})

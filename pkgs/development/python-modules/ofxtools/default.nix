@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ofxtools";
   version = "0.9.5";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "csingley";
     repo = "ofxtools";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     mainProgram = "ofxget";
     license = lib.licenses.mit;
   };
-}
+})

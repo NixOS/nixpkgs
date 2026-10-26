@@ -9,7 +9,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blockbuster";
   version = "1.5.26";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cbornet";
     repo = "blockbuster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2p1xKThna33nhT3rkp1kfZPVkzsJd42OPs3cHenizJs=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

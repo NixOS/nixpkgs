@@ -6,7 +6,7 @@
   pyarrow,
   setuptools-scm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geoarrow-types";
   version = "0.3.0";
   pyproject = true;
@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    tag = "geoarrow-types-${version}";
+    tag = "geoarrow-types-${finalAttrs.version}";
     hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
   };
 
-  sourceRoot = "${src.name}/geoarrow-types";
+  sourceRoot = "${finalAttrs.src.name}/geoarrow-types";
 
   build-system = [ setuptools-scm ];
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
       cpcloud
     ];
   };
-}
+})

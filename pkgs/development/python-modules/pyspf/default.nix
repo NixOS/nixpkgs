@@ -5,7 +5,7 @@
   py3dns,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyspf";
   version = "2.0.14";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdgathman";
     repo = "pyspf";
-    rev = "pyspf-${version}";
+    rev = "pyspf-${finalAttrs.version}";
     hash = "sha256-sXmOe8xudty98k7Oij0vflgwIOPXRMKkpS/hzCutsS4=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.psfl;
   };
-}
+})

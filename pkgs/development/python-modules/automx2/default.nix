@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "automx2";
   version = "2026.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "automx2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7tMcX4BZ6yxlYGy2/3Ffr0X7xtPgcC9YtKcoz1i32sM=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Email client configuration made easy";
     homepage = "https://rseichter.github.io/automx2/";
-    changelog = "https://github.com/rseichter/automx2/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/rseichter/automx2/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ twey ];
   };
-}
+})

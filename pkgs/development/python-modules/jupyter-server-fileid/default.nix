@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-server-fileid";
   version = "0.10.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_server_fileid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Kt8CGO09NKTs7I5QJjzRdjeFJ1OJNwEQH2/2lPLPhUA=";
   };
 
@@ -47,11 +47,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/jupyter-server/jupyter_server_fileid/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter-server/jupyter_server_fileid/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Extension that maintains file IDs for documents in a running Jupyter Server";
     mainProgram = "jupyter-fileid";
     homepage = "https://github.com/jupyter-server/jupyter_server_fileid";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

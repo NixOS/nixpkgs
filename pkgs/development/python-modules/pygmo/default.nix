@@ -15,14 +15,14 @@
 }:
 
 toPythonModule (
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (finalAttrs: {
     pname = "pygmo";
     version = "2.19.7";
 
     src = fetchFromGitHub {
       owner = "esa";
       repo = "pygmo2";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-279KNnP11f5ob2senIVmbnlmhRp2p3RoZLsQRE6yJ5Q=";
     };
 
@@ -52,5 +52,5 @@ toPythonModule (
       license = lib.licenses.mpl20;
       maintainers = [ ];
     };
-  }
+  })
 )

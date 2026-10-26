@@ -51,7 +51,7 @@ let
   withExtraComponents = callPackage ./withExtraComponents.nix { inherit components; };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-cloud-sdk";
   inherit (data) version;
 
@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     # Avoid trying to write logs to homeless-shelter
     export HOME=$(mktemp -d)
-    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+    $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${finalAttrs.version}"
     $out/bin/gcloud storage ls --help > /dev/null
     # Exercises generated clients that use Cloud SDK's vendored protobuf. This
     # catches regressions where external protobuf/upb is selected instead of the
@@ -242,4 +242,4 @@ stdenv.mkDerivation rec {
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";
   };
-}
+})

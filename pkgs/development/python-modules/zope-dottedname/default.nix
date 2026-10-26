@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-dottedname";
   version = "7.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.dottedname";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bWURUr+BCQsMNBYqJD2+YPdfA+FWrJuBGypQ/c8w6kA=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopefoundation/zope.dottedname";
     description = "Resolver for Python dotted names";
-    changelog = "https://github.com/zopefoundation/zope.dottedname/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.dottedname/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

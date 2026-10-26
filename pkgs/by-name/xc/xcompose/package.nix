@@ -6,7 +6,7 @@
   libx11,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xcompose";
   version = "0.5.1";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Udzu";
     repo = "xcompose";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TO7HqGoq9uq6USkvvDubBK3VC0i23yOqSo/t5B1xTiI=";
   };
 
@@ -43,4 +43,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ncfavier ];
     mainProgram = "xcompose";
   };
-}
+})

@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iperf3";
   version = "0.1.11";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thiezn";
     repo = "iperf3-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kcEgG9lkYUqFtTgrGZdEQ0AHsx3yQIMFOG4A7d4mAnE=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

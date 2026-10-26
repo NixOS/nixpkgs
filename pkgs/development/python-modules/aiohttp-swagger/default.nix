@@ -9,7 +9,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp-swagger";
   version = "1.0.15";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cr0hn";
     repo = "aiohttp-swagger";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-M43sNpbXWXFRTd549cZhvhO35nBB6OH+ki36BzSk87Q=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/cr0hn/aiohttp-swagger";
     license = lib.licenses.mit;
   };
-}
+})

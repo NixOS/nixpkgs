@@ -12,7 +12,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "picologging";
   version = "0.9.4";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     # 0.9.4 only release on github
     owner = "microsoft";
     repo = "picologging";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-t75D7aNKAifzeCPwtyKp8LoiXtbbXspRFYnsI0gx+V4=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/microsoft/picologging";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    changelog = "https://github.com/microsoft/picologging/releases/tag/${version}";
+    changelog = "https://github.com/microsoft/picologging/releases/tag/${finalAttrs.version}";
     description = "Optimized logging library for Python";
     license = lib.licenses.mit;
   };
-}
+})

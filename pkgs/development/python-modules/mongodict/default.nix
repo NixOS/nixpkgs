@@ -5,13 +5,13 @@
   pymongo,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mongodict";
   version = "0.3.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nGbWX9HNPh4D/tnVwRxuNgOhCypgydvXA/WMoV1VZVs=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/turicas/mongodict/";
     license = lib.licenses.gpl3;
   };
-}
+})

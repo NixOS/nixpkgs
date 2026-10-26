@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mac-alias";
   version = "2.2.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mac_alias";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-HH+jZ2h9ZpefLOTRqLJxbPHJ+4EXQcqzzzyjVlVcK+s=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
-}
+})

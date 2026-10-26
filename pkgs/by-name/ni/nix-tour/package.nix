@@ -8,7 +8,7 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nix-tour";
   version = "unstable-2022-01-03";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = finalAttrs.pname;
       desktopName = "Tour of Nix";
       genericName = "Tour of Nix";
       comment = "Interactive programming guide dedicated to the nix programming language";
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "nix-tour";
   };
-}
+})

@@ -15,7 +15,7 @@
   fdk-aac-encoder,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "soundconverter";
   version = "4.0.6";
   format = "setuptools";
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kassoulet";
     repo = "soundconverter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qa8VBPpB27hw+mYXGi6I35dxjJAOucH/SevxqKeu6o0=";
   };
 
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
     let
       self = {
         outPath = "$out";
-        name = "${pname}-${version}";
+        name = "${finalAttrs.pname}-${finalAttrs.version}";
       };
       xdgPaths = lib.concatMapStringsSep ":" glib.getSchemaDataDirPath;
     in
@@ -115,4 +115,4 @@ python3Packages.buildPythonApplication rec {
       aleksana
     ];
   };
-}
+})

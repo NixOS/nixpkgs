@@ -20,7 +20,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lastversion";
   version = "3.6.19";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dvershinin";
     repo = "lastversion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yANRwqrD9GVTBvvgj5i9VTmUOubQvMFVHF3s/Oci64A=";
   };
 
@@ -78,9 +78,9 @@ buildPythonPackage rec {
   meta = {
     description = "Find the latest release version of an arbitrary project";
     homepage = "https://github.com/dvershinin/lastversion";
-    changelog = "https://github.com/dvershinin/lastversion/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/dvershinin/lastversion/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "lastversion";
   };
-}
+})

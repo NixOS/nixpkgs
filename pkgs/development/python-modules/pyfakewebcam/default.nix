@@ -6,13 +6,13 @@
   opencv4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfakewebcam";
   version = "0.1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KtjOraZgXYumunbgh+3yC/ziLVRPxBABMGfXzjR9VpQ=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.linux;
   };
-}
+})

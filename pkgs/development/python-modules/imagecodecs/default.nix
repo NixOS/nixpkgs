@@ -31,7 +31,7 @@
 let
   version = "2026.6.26";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imagecodecs";
   inherit version;
   pyproject = true;
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cgohlke";
     repo = "imagecodecs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0o4zSf1iCzxph9tQ+b2nShaRWeCBuszf/r85Zg1BGTY=";
   };
 
@@ -92,8 +92,8 @@ buildPythonPackage rec {
   meta = {
     description = "Image transformation, compression, and decompression codecs";
     homepage = "https://github.com/cgohlke/imagecodecs";
-    changelog = "https://github.com/cgohlke/imagecodecs/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/cgohlke/imagecodecs/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yzx9 ];
   };
-}
+})

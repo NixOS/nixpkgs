@@ -9,14 +9,14 @@
   # For tests
   xrootd, # pkgs.xrootd
 }:
-(buildPythonPackage rec {
+(buildPythonPackage (finalAttrs: {
   pname = "gfal2-util";
   version = "1.9.1";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2-util";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KKtbxr64FsMUIGXPk3yz66dbQVNCWoGbq3/+q47tS6Q=";
   };
 
@@ -39,7 +39,7 @@
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}).overrideAttrs
+})).overrideAttrs
   (
     finalAttrs: previousAttrs:
     lib.recursiveUpdate previousAttrs {

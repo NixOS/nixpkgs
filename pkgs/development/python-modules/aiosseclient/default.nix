@@ -6,7 +6,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosseclient";
   version = "0.1.8";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ebraminio";
     repo = "aiosseclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ynWqRQsCuog8myNleJDdp+omyujmNB1Ys7O6gU2AaUc=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Server Side Events (SSE) client";
     homepage = "https://github.com/ebraminio/aiosseclient";
-    changelog = "https://github.com/ebraminio/aiosseclient/releases/tag/${src.tag}";
+    changelog = "https://github.com/ebraminio/aiosseclient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -17,7 +17,7 @@
   ruff,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optimum-onnx";
   version = "0.1.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum-onnx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Thx3QPLgi8w8znvMGSuCyRu/tUynCkQFywtKKv7UhuA=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Export your model to ONNX and run inference with ONNX Runtime";
     homepage = "https://github.com/huggingface/optimum-onnx";
-    changelog = "https://github.com/huggingface/optimum-onnx/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/optimum-onnx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

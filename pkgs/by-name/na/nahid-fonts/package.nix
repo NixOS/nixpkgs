@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nahid-fonts";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "rastikerdar";
     repo = "nahid-font";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-r8/W0/pJV6OX954spIITvW7M6lIbZRpbsvEHErnXglg=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

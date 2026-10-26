@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anitopy";
   version = "2.1.1";
   format = "setuptools";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "igorcmoura";
     repo = "anitopy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xXEf7AJKg7grDmkKfFuC4Fk6QYFJtezClyfA3vq8TfQ=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ passivelemon ];
   };
-}
+})

@@ -7,14 +7,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moolticute";
   version = "1.03.0";
 
   src = fetchFromGitHub {
     owner = "mooltipass";
     repo = "moolticute";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-S2Pnueo3opP1k6XBBHGAyRJpkNuI1Hotz7ypXa/96eQ=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hughobrien ];
     platforms = lib.platforms.linux;
   };
-}
+})

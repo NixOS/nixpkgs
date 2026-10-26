@@ -5,13 +5,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mailmanclient";
   version = "3.3.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Y1gcYEyn6sAhSJwVqsygaklY63b2ZXTG+rBerGVN2Fc=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ qyliss ];
     platforms = lib.platforms.linux;
   };
-}
+})

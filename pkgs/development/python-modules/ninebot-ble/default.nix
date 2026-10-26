@@ -11,7 +11,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ninebot-ble";
   version = "0.0.6";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ownbee";
     repo = "ninebot-ble";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gA3VTs45vVpO0Iy8MbvvDf9j99vsFzrkADaJEslx6y0=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

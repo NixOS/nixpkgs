@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cogapp";
   version = "3.6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = "cog";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-46ojLTu1elNcjmWSKJuGKDG4XETLLnJDIpL2Al6/aX0=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Code generator for executing Python snippets in source files";
     homepage = "https://nedbatchelder.com/code/cog";
-    changelog = "https://github.com/nedbat/cog/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/nedbat/cog/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

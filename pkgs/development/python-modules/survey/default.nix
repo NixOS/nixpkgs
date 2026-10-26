@@ -6,13 +6,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "survey";
   version = "5.4.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-4vnjtSbw2y/o+fSWDl/CqTEZkl0jULGOLURdZ0BpKvY=";
   };
 
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple library for creating beautiful interactive prompts";
     homepage = "https://github.com/Exahilosys/survey";
-    changelog = "https://github.com/Exahilosys/survey/releases/tag/v${version}";
+    changelog = "https://github.com/Exahilosys/survey/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sfrijters ];
   };
-}
+})

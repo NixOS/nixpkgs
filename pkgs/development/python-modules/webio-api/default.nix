@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webio-api";
   version = "0.1.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "webio_api";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-xS1uf407+ommERkZSYrElD6/tNXyBma3OFs4jUE5+tY=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

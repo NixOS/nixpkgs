@@ -21,7 +21,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "redshift-connector";
   version = "2.1.13";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sjHLw3qpEWaqaGrsaS903NbuAPscnr+GlV4znQD+Hu4=";
   };
 
@@ -78,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Redshift interface library";
     homepage = "https://github.com/aws/amazon-redshift-python-driver";
-    changelog = "https://github.com/aws/amazon-redshift-python-driver/releases/tag/${src.tag}";
+    changelog = "https://github.com/aws/amazon-redshift-python-driver/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mcwitt ];
   };
-}
+})

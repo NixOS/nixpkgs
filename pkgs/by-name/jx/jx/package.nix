@@ -7,14 +7,14 @@
   go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jx";
   version = "3.17.80";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rRaJEqPk07obKfXvRAmluZYh+foj2FYMJxFbQPzOU2w=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X github.com/jenkins-x/jx/pkg/cmd/version.Version=${version}"
-    "-X github.com/jenkins-x/jx/pkg/cmd/version.Revision=${src.rev}"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.Version=${finalAttrs.version}"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.Revision=${finalAttrs.src.rev}"
     "-X github.com/jenkins-x/jx/pkg/cmd/version.GoVersion=${go.version}"
     "-X github.com/jenkins-x/jx/pkg/cmd/version.GitTreeState=clean"
     "-X github.com/jenkins-x/jx/pkg/cmd/version.BuildDate=''"
@@ -44,7 +44,7 @@ buildGoModule rec {
     description = "Command line tool for installing and using Jenkins X";
     mainProgram = "jx";
     homepage = "https://jenkins-x.io";
-    changelog = "https://github.com/jenkins-x/jx/releases/tag/v${version}";
+    changelog = "https://github.com/jenkins-x/jx/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Jenkins X provides automated CI+CD for Kubernetes with Preview
       Environments on Pull Requests using using Cloud Native pipelines
@@ -54,4 +54,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

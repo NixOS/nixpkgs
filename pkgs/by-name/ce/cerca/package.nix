@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cerca";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "cblgh";
     repo = "cerca";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y+TVjtu/5rugY74mIFznHjEUxUmhrmQhdMpSomqLEWw=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dansbandit ];
     mainProgram = "cerca";
   };
-}
+})

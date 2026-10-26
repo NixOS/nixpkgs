@@ -51,14 +51,14 @@ lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}"
   winDecStyles
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     pname = "kde";
     version = "0.2.6";
 
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "kde";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-pfG0L4eSXLYLZM8Mhla4yalpEro74S9kc0sOmQtnG3w=";
     };
 
@@ -94,4 +94,4 @@ lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}"
         gigglesquid
       ];
     };
-  }
+  })

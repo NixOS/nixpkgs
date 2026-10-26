@@ -8,7 +8,7 @@
   pytest-asyncio_0,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyaprilaire";
   version = "0.9.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chamberlain2007";
     repo = "pyaprilaire";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5f/vo8aDQ0HVKXW/yiNYyH3zFnwvP5kv0ZEglvB5quo=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/chamberlain2007/pyaprilaire/releases/tag/${src.tag}";
+    changelog = "https://github.com/chamberlain2007/pyaprilaire/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for interacting with Aprilaire thermostats";
     homepage = "https://github.com/chamberlain2007/pyaprilaire";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

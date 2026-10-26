@@ -11,15 +11,15 @@
   pytest-homeassistant-custom-component,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "AN3Orik";
   domain = "systemair";
   version = "1.0.37";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "systemair";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Evo7H6Np1QVjqQBifav1WhNiFDY/NIdFI/bADNZJo9Q=";
   };
 
@@ -45,10 +45,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/AN3Orik/systemair/releases/tag/v${version}";
+    changelog = "https://github.com/AN3Orik/systemair/releases/tag/v${finalAttrs.version}";
     description = "Home Assistant component for Systemair SAVE ventilation units";
     homepage = "https://github.com/AN3Orik/systemair";
     maintainers = with lib.maintainers; [ uvnikita ];
     license = lib.licenses.mit;
   };
-}
+})

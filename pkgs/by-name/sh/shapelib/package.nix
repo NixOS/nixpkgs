@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shapelib";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/shapelib/shapelib-${version}.tar.gz";
+    url = "https://download.osgeo.org/shapelib/shapelib-${finalAttrs.version}.tar.gz";
     hash = "sha256-P/Xq0Yym0v4knw6As2HhrWeCFlEVJo7UpYx4CmDB4Os=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     changelog = "http://shapelib.maptools.org/release.html";
   };
-}
+})

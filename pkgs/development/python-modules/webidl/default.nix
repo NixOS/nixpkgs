@@ -6,7 +6,7 @@
   ply,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webidl";
   version = "0-unstable-2025-06-15";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # python library is vendored inside another repo
   # and unfortunately not exposed in another repo
   # or Pypi.
-  sourceRoot = "${src.name}/third_party/WebIDL";
+  sourceRoot = "${finalAttrs.src.name}/third_party/WebIDL";
 
   build-system = [ setuptools ];
 
@@ -40,5 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-
-}
+})

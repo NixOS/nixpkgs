@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py4j";
 
   version = "0.10.9.9";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-9pTK0Z76W9He5PPlJw60BmE8l0OUA15b/E7Bq6hwuHk=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.shlevy ];
   };
-}
+})

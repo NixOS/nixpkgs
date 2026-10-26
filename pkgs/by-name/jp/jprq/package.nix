@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jprq";
   version = "2.4";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "azimjohn";
     repo = "jprq";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aOsknEmNXSOKwmCQtm5mibrw9VKpb7uOdOZsivYsz+g=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mmkamron ];
     mainProgram = "jprq";
   };
-}
+})

@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-util";
   version = "3.24";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AbkIVtUbQkkui7H1ZT/xHl1tCfZMvlrbZ2RD3YJAh0E=";
   };
 
@@ -36,9 +36,9 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing various utility functions for the other Dissect modules";
     homepage = "https://github.com/fox-it/dissect.util";
-    changelog = "https://github.com/fox-it/dissect.util/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.util/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dump-nskeyedarchiver";
   };
-}
+})

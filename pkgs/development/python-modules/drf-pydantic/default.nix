@@ -10,7 +10,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-pydantic";
   version = "2.9.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "georgebv";
     repo = "drf-pydantic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e9Zr/8+RO++cvaVWVke03HgWdVTeu7cTcPVNIiXO5AY=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   ++ pydantic.optional-dependencies.email;
 
   meta = {
-    changelog = "https://github.com/georgebv/drf-pydantic/releases/tag/${src.tag}";
+    changelog = "https://github.com/georgebv/drf-pydantic/releases/tag/${finalAttrs.src.tag}";
     description = "Use pydantic with the Django REST framework";
     homepage = "https://github.com/georgebv/drf-pydantic";
     maintainers = [ lib.maintainers.kiara ];
     license = lib.licenses.mit;
   };
-}
+})

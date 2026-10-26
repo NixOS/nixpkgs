@@ -5,7 +5,7 @@
   rpmextract,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "perccli";
 
   # On a new release, update version, URL, hash, and meta.homepage
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ rpmextract ];
 
   unpackPhase = ''
-    rpmextract $src/perccli-00${version}00.0000-1.noarch.rpm
+    rpmextract $src/perccli-00${finalAttrs.version}00.0000-1.noarch.rpm
   '';
 
   dontPatch = true;
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ panicgh ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -7,7 +7,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xs1-api-client";
   version = "3.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "xs1-api-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bAxrqtjoJaPkTzeeOeXSTpJN3rPszi5W4q6Q7ZRo0hc=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

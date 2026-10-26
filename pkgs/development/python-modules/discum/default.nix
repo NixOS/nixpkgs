@@ -15,13 +15,13 @@
   pyqrcode,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "discum";
   version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/8TaAmfSPv/7kuymockSvC2uxXgHfuP+FXN8vuA9WHY=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Discord API Wrapper for Userbots/Selfbots written in Python";
     homepage = "https://pypi.org/project/discum/";
-    changelog = "https://github.com/Merubokkusu/Discord-S.C.U.M/blob/v${version}/changelog.md";
+    changelog = "https://github.com/Merubokkusu/Discord-S.C.U.M/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jokatzke ];
   };
-}
+})

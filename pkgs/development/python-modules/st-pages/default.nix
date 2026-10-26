@@ -6,7 +6,7 @@
   streamlit,
   poetry-core,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "st-pages";
   version = "1.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blackary";
     repo = "st_pages";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sJXgpRiducJVYuyvVvTZthHnIJyIRn+f9Uw/wAMfnm0=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
       keyzox
     ];
   };
-}
+})

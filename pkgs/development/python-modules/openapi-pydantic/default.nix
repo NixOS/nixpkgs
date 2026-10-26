@@ -6,7 +6,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openapi-pydantic";
   version = "0.5.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mike-oakley";
     repo = "openapi-pydantic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SMAjzHGuu+QVWe/y8jQ4UWJI9f+pLR2BxgjvE6vOT0Q=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ taha-yassine ];
   };
-}
+})

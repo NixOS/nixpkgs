@@ -6,14 +6,14 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "celery-types";
   version = "0.26.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "celery_types";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+jGBNv2tg/g/FTHe7Nn+Zktd///ynzwx6RIKRrjjkI8=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

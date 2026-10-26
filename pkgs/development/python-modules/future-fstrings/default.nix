@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "future-fstrings";
   version = "1.2.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "future_fstrings";
     hash = "sha256-bPQcvpfDmKtagRaM4Nu4rZWGLTyvI8IeRDBie5CEQIk=";
   };
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

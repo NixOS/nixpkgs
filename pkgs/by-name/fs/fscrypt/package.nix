@@ -6,14 +6,14 @@
   pam,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fscrypt";
   version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3Xz5ro+V2mfSVqiS7RcB4QH3Whv/XaMLCiUc50bAKf0=";
   };
 
@@ -51,10 +51,10 @@ buildGoModule rec {
       and provides a uniform interface for creating and modifying encrypted
       directories.
     '';
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/google/fscrypt/releases/tag/v${version}";
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/google/fscrypt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

@@ -22,14 +22,14 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "love";
   version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "love2d";
     repo = "love";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.raskin ];
   };
-}
+})

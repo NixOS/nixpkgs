@@ -6,7 +6,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "humblewx";
   version = "0.2.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thetimelineproj";
     repo = "humblewx";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IAgcgzvL1wq4xV43kIpe8XXg+uPLRjIwBgBItih/aDs=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ davidak ];
   };
-}
+})

@@ -6,7 +6,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kotlin-native";
   version = "2.4.21";
 
@@ -17,11 +17,12 @@ stdenv.mkDerivation rec {
           "aarch64-darwin" = "macos-aarch64";
           "x86_64-linux" = "linux-x86_64";
         }
-        .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+        .${stdenv.system}
+          or (throw "${finalAttrs.pname}-${finalAttrs.version}: ${stdenv.system} is unsupported.");
 
       getUrl =
         version: arch:
-        "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-prebuilt-${arch}-${version}.tar.gz";
+        "https://github.com/JetBrains/kotlin/releases/download/v${finalAttrs.version}/kotlin-native-prebuilt-${arch}-${finalAttrs.version}.tar.gz";
 
       getHash =
         arch:
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
         .${arch};
     in
     fetchurl {
-      url = getUrl version getArch;
+      url = getUrl finalAttrs.version getArch;
       sha256 = getHash getArch;
     };
 
@@ -69,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fabianhjr ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
-}
+})

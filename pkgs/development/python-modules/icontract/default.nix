@@ -13,7 +13,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "icontract";
   version = "2.7.3";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Parquery";
     repo = "icontract";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UYBskomnu53A9VCY7y7zAOQm40Y+INOqPK6IqZsk6h0=";
   };
 
@@ -74,11 +74,11 @@ buildPythonPackage rec {
   meta = {
     description = "Provide design-by-contract with informative violation messages";
     homepage = "https://github.com/Parquery/icontract";
-    changelog = "https://github.com/Parquery/icontract/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/Parquery/icontract/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gador
       thiagokokada
     ];
   };
-}
+})

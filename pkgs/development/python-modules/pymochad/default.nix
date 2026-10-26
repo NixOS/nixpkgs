@@ -11,7 +11,7 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymochad";
   version = "0.3.0";
   pyproject = true;
@@ -19,11 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mtreinish";
     repo = "pymochad";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nwh97sbYkt4F/u02zTDemWEztSco27oJCemd6kTnCMk=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

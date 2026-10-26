@@ -4,15 +4,15 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pstree";
   version = "2.39";
 
   src = fetchurl {
     urls = [
-      "https://distfiles.macports.org/${pname}/${pname}-${version}.tar.gz"
-      "https://fossies.org/linux/misc/${pname}-${version}.tar.gz"
-      "ftp://ftp.thp.uni-duisburg.de/pub/source/${pname}-${version}.tar.gz"
+      "https://distfiles.macports.org/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
+      "https://fossies.org/linux/misc/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
+      "ftp://ftp.thp.uni-duisburg.de/pub/source/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
     ];
     sha256 = "17s7v15c4gryjpi11y1xq75022nkg4ggzvjlq2dkmyg67ssc76vw";
   };
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm0555 ${pname} -t $out/bin
-    install -Dm0444 ${pname}.1 -t $out/share/man/man1
+    install -Dm0555 ${finalAttrs.pname} -t $out/bin
+    install -Dm0444 ${finalAttrs.pname}.1 -t $out/share/man/man1
     runHook postInstall
   '';
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     priority = 5; # Lower than psmisc also providing pstree on Linux platforms
     mainProgram = "pstree";
   };
-}
+})

@@ -12,7 +12,7 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asks";
   version = "3.0.0";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "theelous3";
     repo = "asks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ipQ5n2386DqR3kNpmTVhNPG+LC7gfCbvrlZ97+UP55g=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

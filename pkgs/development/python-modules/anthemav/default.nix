@@ -8,7 +8,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anthemav";
   version = "1.4.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nugget";
     repo = "python-anthemav";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZjAt4oODx09Qij0PwBvLCplSjwdBx2fReiwjmKhdPa0=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     description = "Python asyncio module to interface with Anthem AVM and MRX receivers";
     mainProgram = "anthemav_monitor";
     homepage = "https://github.com/nugget/python-anthemav";
-    changelog = "https://github.com/nugget/python-anthemav/releases/tag/v${version}";
+    changelog = "https://github.com/nugget/python-anthemav/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

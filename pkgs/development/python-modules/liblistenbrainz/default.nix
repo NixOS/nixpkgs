@@ -9,7 +9,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "liblistenbrainz";
   version = "0.7.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "liblistenbrainz";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fZgIVGDUJ4Dh/7CIOugvpRP7FoijpsgA3bBKJMmDd7o=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple ListenBrainz client library for Python";
     homepage = "https://github.com/metabrainz/liblistenbrainz";
-    changelog = "https://github.com/metabrainz/liblistenbrainz/releases/tag/${src.tag}";
+    changelog = "https://github.com/metabrainz/liblistenbrainz/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.ngi ];
   };
-}
+})

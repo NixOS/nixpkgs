@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "isal";
   version = "1.8.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-isal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-703uXty3a0N+yXfv/7nVIAnU7PaqMtNO0ScltNLJq3g=";
   };
 
@@ -55,10 +55,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "isal" ];
 
   meta = {
-    changelog = "https://github.com/pycompression/python-isal/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/pycompression/python-isal/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Faster zlib and gzip compatible compression and decompression by providing python bindings for the isa-l library";
     homepage = "https://github.com/pycompression/python-isal";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

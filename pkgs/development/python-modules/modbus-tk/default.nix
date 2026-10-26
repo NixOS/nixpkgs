@@ -6,14 +6,14 @@
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "modbus-tk";
   version = "1.1.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "modbus_tk";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-d6cqOtnV0yodIRC8BCFmgMpX11IpEuDycem/XxtwGzY=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

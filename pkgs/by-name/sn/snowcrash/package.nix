@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "snowcrash";
   version = "0-unstable-2022-08-15";
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    mv $out/bin/SNOWCRASH $out/bin/${pname}
+    mv $out/bin/SNOWCRASH $out/bin/${finalAttrs.pname}
   '';
 
   meta = {
@@ -31,4 +31,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "SNOWCRASH";
   };
-}
+})

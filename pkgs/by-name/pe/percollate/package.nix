@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "percollate";
   version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "danburzo";
     repo = "percollate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nu72jkqGt2ntlCxKptRlfTTd3SAVlv/QPTwkIUpVd2g=";
   };
 
@@ -47,4 +47,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.austinbutler ];
     mainProgram = "percollate";
   };
-}
+})

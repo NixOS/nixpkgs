@@ -89,14 +89,14 @@ let
 
   npmPackages = import ./npm_deps.nix;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "materialize";
   version = "0.87.2";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = "materialize";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EHhN+avUxzwKU48MubiMM40W9J93yZlNqV+xeP44dl0=";
     fetchSubmodules = true;
   };
@@ -181,4 +181,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ petrosagg ];
     mainProgram = "environmentd";
   };
-}
+})

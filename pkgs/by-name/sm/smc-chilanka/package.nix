@@ -7,7 +7,7 @@
   truetype ? false,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "chilanka";
   version = "1.7";
 
@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     group = "smc";
     owner = "fonts";
     repo = "chilanka";
-    rev = "Version${version}";
+    rev = "Version${finalAttrs.version}";
     hash = "sha256-VvotRUQks8vUqJOcYHqy6cuwaAKYg4OqtiAjaBIdBRk=";
   };
 
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
 
     install -Dm444 -t $out/etc/fonts/conf.d *.conf
 
-    install -Dm644 -t $out/share/doc/${pname}-${version} OFL.txt FONTLOG.md
+    install -Dm644 -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} OFL.txt FONTLOG.md
 
     runHook postInstall
   '';
@@ -46,4 +46,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

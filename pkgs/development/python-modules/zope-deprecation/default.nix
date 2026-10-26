@@ -6,7 +6,7 @@
   zope-testrunner,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-deprecation";
   version = "6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.deprecation";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-N/+RtilRY/8NfhUjd/Y4T6dmZHt6PW4ofP1UE8Aj1e8=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopefoundation/zope.deprecation";
     description = "Zope Deprecation Infrastructure";
-    changelog = "https://github.com/zopefoundation/zope.deprecation/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.deprecation/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

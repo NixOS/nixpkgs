@@ -7,7 +7,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reprint";
   version = "0.6.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yinzo";
     repo = "reprint";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-99FC12LcvvRRwNAxDSvWo9vRYmieL0JHSaCJqO/UGEs=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
       jleightcap
     ];
   };
-}
+})

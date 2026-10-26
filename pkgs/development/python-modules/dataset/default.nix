@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dataset";
   version = "2.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "dataset";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A8X1Gv+b+K90LAZ5YDjeUbl3Y1fiaFwGj6urapLN3AQ=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xfnw ];
   };
-}
+})

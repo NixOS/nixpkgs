@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhcl";
   version = "0.4.6";
   pyproject = true;
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "virtuald";
     repo = "pyhcl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-djT0ao1WbM/sLKRycdA5J4IRu8NbmDayVKBdE4s6E2M=";
   };
 
   # https://github.com/virtuald/pyhcl/blob/51a7524b68fe21e175e157b8af931016d7a357ad/setup.py#L64
   configurePhase = ''
-    echo '__version__ = "${version}"' > ./src/hcl/version.py
+    echo '__version__ = "${finalAttrs.version}"' > ./src/hcl/version.py
   '';
 
   build-system = [ setuptools ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };
-}
+})

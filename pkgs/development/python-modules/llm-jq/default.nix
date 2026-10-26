@@ -6,7 +6,7 @@
   llm,
   llm-jq,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-jq";
   version = "0.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-jq";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Mf/tbB9+UdmSRpulqv5Wagr8wjDcRrNs2741DNQZhO4=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Write and execute jq programs with the help of LLM";
     homepage = "https://github.com/simonw/llm-jq";
-    changelog = "https://github.com/simonw/llm-jq/releases/tag/${version}";
+    changelog = "https://github.com/simonw/llm-jq/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       erethon
@@ -37,4 +37,4 @@ buildPythonPackage rec {
       philiptaron
     ];
   };
-}
+})

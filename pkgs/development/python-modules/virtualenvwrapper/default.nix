@@ -13,13 +13,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "virtualenvwrapper";
   version = "6.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ES5+o0qaPOkKrqVBgvDTr+9NGpE+63XpiiY7SXjNc8Y=";
   };
 
@@ -88,4 +88,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-virtualenvwrapper/virtualenvwrapper";
     license = lib.licenses.mit;
   };
-}
+})

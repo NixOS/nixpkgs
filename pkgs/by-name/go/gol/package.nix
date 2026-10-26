@@ -6,14 +6,14 @@
   jre,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "gol";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "clarisma";
     repo = "gol-tool";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AnPm5Mooww9kAMWLnM36z8DVRGfIIEiqUE65tgNuKm8=";
   };
 
@@ -26,7 +26,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/{bin,lib}
-    cp target/gol-tool-${version}-jar-with-dependencies.jar $out/lib/gol-tool.jar
+    cp target/gol-tool-${finalAttrs.version}-jar-with-dependencies.jar $out/lib/gol-tool.jar
 
     makeWrapper ${jre}/bin/java $out/bin/gol \
       --add-flags "-cp $out/lib/gol-tool.jar" \
@@ -47,4 +47,4 @@ maven.buildMavenPackage rec {
     maintainers = [ lib.maintainers.starsep ];
     platforms = lib.platforms.all;
   };
-}
+})

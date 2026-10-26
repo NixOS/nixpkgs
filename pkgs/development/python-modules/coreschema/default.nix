@@ -6,7 +6,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coreschema";
   version = "0.0.4";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "python-coreschema";
     owner = "core-api";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YXGDmWTT3cT3vek40HMbCWelmm6nhx3yWOvNOsph9wg=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

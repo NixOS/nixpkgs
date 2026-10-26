@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "dot-language-server";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "nikeee";
     repo = "dot-language-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NGkobMZrvWlW/jteFowZgGUVQiNm3bS5gv5tN2485VA=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

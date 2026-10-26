@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rfc8785";
   version = "0.1.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "rfc8785.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0Gze3voFXEhf13DuTuBWDbYPmqHXs0FSRn2NprFWoB8=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for RFC8785 (JSON Canonicalization Scheme)";
     homepage = "https://github.com/trailofbits/rfc8785.py";
-    changelog = "https://github.com/trailofbits/rfc8785.py/releases/tag/v${version}";
+    changelog = "https://github.com/trailofbits/rfc8785.py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

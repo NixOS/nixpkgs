@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-hosts";
   version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XiU6aO6EhFVgj1g7TYMdbgg7IvjkU2DFoiwYikrB13A=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
       and remove entries, or import them from a file or URL.
     '';
     homepage = "https://github.com/jonhadfield/python-hosts";
-    changelog = "https://github.com/jonhadfield/python-hosts/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jonhadfield/python-hosts/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

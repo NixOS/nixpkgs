@@ -11,7 +11,7 @@
   pytest8_3CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyspcwebgw";
   version = "0.7.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbrrg";
     repo = "pyspcwebgw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gdIrbr25GXaX26B1f7u0NKbqqnAC2tmMFZspzW6I4HI=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for the SPC Web Gateway REST API";
     homepage = "https://github.com/mbrrg/pyspcwebgw";
-    changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${version}";
+    changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

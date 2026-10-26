@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mpltoolbox";
   version = "26.2.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "mpltoolbox";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vEnuTE+YZ8gK+desT4Bt5kqa2TSD0UkSSHKr7Kt8Xlo=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

@@ -5,7 +5,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "minify-html";
   version = "0.18.1";
 
@@ -13,13 +13,13 @@ buildPythonPackage rec {
 
   # Fetching from Pypi, because there is no Cargo.lock in the GitHub repo.
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "minify_html";
     hash = "sha256-Q5mFMO9TdwHwA6jpCLdW147/MDyGsEGpWFXikFGLp5w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-K0m+rM0dcosAOl5jYdh9CSRrL/Vuk1ATWHPQJbLxvRw=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   meta = {
     description = "Extremely fast and smart HTML + JS + CSS minifier";
     homepage = "https://github.com/wilsonzlin/minify-html/tree/master/minify-html-python";
-    changelog = "https://github.com/wilsonzlin/minify-html/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wilsonzlin/minify-html/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       DutchGerman
       friedow
     ];
   };
-}
+})

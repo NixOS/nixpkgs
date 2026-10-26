@@ -31,7 +31,7 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-brother-mfcl2750dw";
   version = "4.0.0-1";
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf103530/mfcl2750dwpdrv-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf103530/mfcl2750dwpdrv-${finalAttrs.version}.i386.deb";
     hash = "sha256-3uDwzLQTF8r1tsGZ7ChGhk4ryQmVsZYdUaj9eFaC0jc=";
   };
 
@@ -102,4 +102,4 @@ stdenv.mkDerivation rec {
     platforms = map (arch: "${arch}-linux") arches;
     maintainers = [ lib.maintainers.lovesegfault ];
   };
-}
+})

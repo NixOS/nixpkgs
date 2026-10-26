@@ -10,13 +10,13 @@
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpg";
   version = "2.0.0";
   pyproject = true;
 
   src = fetchurl {
-    url = "mirror://gnupg/gpgmepy/gpgmepy-${version}.tar.bz2";
+    url = "mirror://gnupg/gpgmepy/gpgmepy-${finalAttrs.version}.tar.bz2";
     hash = "sha256-B+EmVkj/UdojjJr3oYs/HcewxmtPIacvJ8dLOWzTM20=";
   };
 
@@ -63,10 +63,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://dev.gnupg.org/source/gpgmepy/browse/master/NEWS;gpgmepy-${version}?as=remarkup";
+    changelog = "https://dev.gnupg.org/source/gpgmepy/browse/master/NEWS;gpgmepy-${finalAttrs.version}?as=remarkup";
     description = "Python bindings to the GPGME API of the GnuPG cryptography library";
     homepage = "https://dev.gnupg.org/source/gpgmepy/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

@@ -17,7 +17,7 @@
   pillow,
   llm-perplexity,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-perplexity";
   version = "2026.2.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hex";
     repo = "llm-perplexity";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fZrIKIAGXaMwBq2njtqSUcgRHIbr0ajjx6mECoguFm0=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM access to pplx-api";
     homepage = "https://github.com/hex/llm-perplexity";
-    changelog = "https://github.com/hex/llm-perplexity/releases/tag/${version}";
+    changelog = "https://github.com/hex/llm-perplexity/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jed-richards ];
   };
-}
+})

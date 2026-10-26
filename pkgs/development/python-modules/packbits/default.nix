@@ -4,13 +4,13 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "packbits";
   version = "0.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-vGs3C7NOBKyM+oNeBsBIQ4Cv/G1ZOtuACd1sD3v/8DQ=";
   };
 
@@ -19,4 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/psd-tools/packbits";
     license = lib.licenses.mit;
   };
-}
+})

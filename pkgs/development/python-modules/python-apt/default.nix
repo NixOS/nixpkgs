@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-apt";
   version = "3.1.0";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     domain = "salsa.debian.org";
     owner = "apt-team";
     repo = "python-apt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ISvPBBvo6PGYsGS/tKsBEOAEviuFRj5rgydJ5BQ1f+4=";
   };
 
@@ -26,12 +26,12 @@ buildPythonPackage rec {
 
   # Ensure the version is set properly without trying to invoke
   # dpkg-parsechangelog
-  env.DEBVER = version;
+  env.DEBVER = finalAttrs.version;
 
   pythonImportsCheck = [ "apt_pkg" ];
 
   meta = {
-    changelog = "https://salsa.debian.org/apt-team/python-apt/-/blob/${version}/debian/changelog";
+    changelog = "https://salsa.debian.org/apt-team/python-apt/-/blob/${finalAttrs.version}/debian/changelog";
     description = "Python bindings for APT";
     homepage = "https://launchpad.net/python-apt";
     license = lib.licenses.gpl2;
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

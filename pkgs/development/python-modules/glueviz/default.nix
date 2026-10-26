@@ -23,7 +23,7 @@
   xlrd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glueviz";
   version = "1.27.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "glue";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9uILbcf/Fy0GT4WG+NuGKmbiQIjrAFeOlCCYau1mHqg=";
   };
 
@@ -84,4 +84,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
     maintainers = with lib.maintainers; [ ifurther ];
   };
-}
+})

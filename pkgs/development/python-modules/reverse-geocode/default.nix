@@ -7,14 +7,14 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reverse-geocode";
   version = "1.6.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "reverse_geocode";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-FBZYFYFsxjnddOtmCnTkZK7rzR0IFN50qJfWIHHJnyo=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

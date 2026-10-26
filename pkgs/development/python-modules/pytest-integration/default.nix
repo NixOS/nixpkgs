@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-integration";
   version = "0.2.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jbwdevries";
     repo = "pytest-integration";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ziy+GEfljYDccx3mm63p7rhDUQVDXLbk7DxUW3npjiE=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Organizing test by unit test, quick integration or slow integration";
     homepage = "https://github.com/jbwdevries/pytest-integration";
-    changelog = "https://github.com/jbwdevries/pytest-integration/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jbwdevries/pytest-integration/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

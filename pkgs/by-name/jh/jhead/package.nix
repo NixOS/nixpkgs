@@ -5,14 +5,14 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jhead";
   version = "3.08";
 
   src = fetchFromGitHub {
     owner = "Matthias-Wandel";
     repo = "jhead";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-d1cuy4kkwY/21UcpNN6judrFxGVyEH+b+0TaZw9hP2E=";
   };
 
@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     mkdir -p \
       $out/bin \
       $out/man/man1 \
-      $out/share/doc/${pname}-${version}
+      $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     cp -v jhead $out/bin
     cp -v jhead.1 $out/man/man1
-    cp -v *.txt $out/share/doc/${pname}-${version}
+    cp -v *.txt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
   '';
 
   meta = {
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "jhead";
   };
-}
+})

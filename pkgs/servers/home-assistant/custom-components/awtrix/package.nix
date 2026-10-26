@@ -5,13 +5,13 @@
   requests,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "10der";
   domain = "awtrix";
   version = "0.3.21";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "homeassistant-custom_components-awtrix";
     # https://github.com/10der/homeassistant-custom_components-awtrix/issues/9
     rev = "8180cef7b1837e85115ef7ece553e39b0f94ff4d";
@@ -28,4 +28,4 @@ buildHomeAssistantComponent rec {
     maintainers = with lib.maintainers; [ pinpox ];
     license = lib.licenses.mit;
   };
-}
+})

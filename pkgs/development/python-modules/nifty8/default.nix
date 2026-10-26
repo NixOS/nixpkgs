@@ -26,7 +26,7 @@
   openssh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nifty8";
   version = "8.5.7";
   pyproject = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "ift";
     repo = "nifty";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5KPmM1UaXnS/ZEsnyFyxvDk4Nc4m6AT5FDgmCG6U6YU=";
   };
 
@@ -97,7 +97,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://gitlab.mpcdf.mpg.de/ift/nifty";
-    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/v${version}/ChangeLog.md";
+    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/v${finalAttrs.version}/ChangeLog.md";
     description = "Bayesian Imaging library for high-dimensional posteriors";
     longDescription = ''
       NIFTy, "Numerical Information Field Theory", is a Bayesian imaging library.
@@ -109,4 +109,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ parras ];
   };
-}
+})

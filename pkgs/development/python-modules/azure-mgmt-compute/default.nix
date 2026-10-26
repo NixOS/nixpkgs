@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-compute";
   version = "37.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_compute";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-I0mdTVrSsr9ApMWd8mhMxMnO8PlnKk6EK7mhz2ti9ig=";
   };
 
@@ -37,11 +37,11 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Compute Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/compute/azure-mgmt-compute";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-compute_${version}/sdk/compute/azure-mgmt-compute/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-compute_${finalAttrs.version}/sdk/compute/azure-mgmt-compute/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       olcai
       maxwilson
     ];
   };
-}
+})

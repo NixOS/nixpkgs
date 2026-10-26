@@ -7,14 +7,14 @@
   docbook_xml_dtd_42,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "sqlline";
   version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "julianhyde";
     repo = "sqlline";
-    tag = "sqlline-${version}";
+    tag = "sqlline-${finalAttrs.version}";
     hash = "sha256-rUlGtMgTfhciQVif0KaUcuY28wh+PrHsKen8qODom24=";
   };
 
@@ -39,9 +39,9 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    install -D target/sqlline-${version}-jar-with-dependencies.jar $out/share/java/sqlline-${version}.jar
+    install -D target/sqlline-${finalAttrs.version}-jar-with-dependencies.jar $out/share/java/sqlline-${finalAttrs.version}.jar
     makeWrapper ${jre}/bin/java $out/bin/sqlline \
-      --add-flags "-jar $out/share/java/sqlline-${version}.jar"
+      --add-flags "-jar $out/share/java/sqlline-${finalAttrs.version}.jar"
     runHook postInstall
   '';
 
@@ -52,4 +52,4 @@ maven.buildMavenPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ taranarmo ];
   };
-}
+})

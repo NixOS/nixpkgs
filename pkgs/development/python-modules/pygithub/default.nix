@@ -12,7 +12,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygithub";
   version = "2.8.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-36taxa95WrpQw0UUlmnWX4XFslAAuuoousxNh5O5uDA=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to access the GitHub API v3";
     homepage = "https://github.com/PyGithub/PyGithub";
-    changelog = "https://github.com/PyGithub/PyGithub/raw/${src.tag}/doc/changes.rst";
+    changelog = "https://github.com/PyGithub/PyGithub/raw/${finalAttrs.src.tag}/doc/changes.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

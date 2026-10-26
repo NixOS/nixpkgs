@@ -6,13 +6,13 @@
   netifaces,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onkyo-eiscp";
   version = "1.2.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dhq7FsZUoRNnY7kn0JQXTUHygoCeROoyzUfhmd152ck=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

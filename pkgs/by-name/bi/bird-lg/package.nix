@@ -8,14 +8,14 @@
 let
   generic =
     { modRoot, vendorHash }:
-    buildGoModule rec {
+    buildGoModule (finalAttrs: {
       pname = "bird-lg-${modRoot}";
       version = "1.4.8";
 
       src = fetchFromGitHub {
         owner = "xddxdd";
         repo = "bird-lg-go";
-        rev = "v${version}";
+        rev = "v${finalAttrs.version}";
         hash = "sha256-6nQmle8s5lG67DwnWri1cDZM99vKWHSMgBtOqC0b45U=";
       };
 
@@ -31,14 +31,14 @@ let
       meta = {
         description = "Bird Looking Glass";
         homepage = "https://github.com/xddxdd/bird-lg-go";
-        changelog = "https://github.com/xddxdd/bird-lg-go/releases/tag/v${version}";
+        changelog = "https://github.com/xddxdd/bird-lg-go/releases/tag/v${finalAttrs.version}";
         license = lib.licenses.gpl3Plus;
         maintainers = with lib.maintainers; [
           tchekda
           e1mo
         ];
       };
-    };
+    });
 
   bird-lg-frontend = generic {
     modRoot = "frontend";

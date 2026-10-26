@@ -13,7 +13,7 @@
   s3fs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-universal-directorytree";
   version = "1.7.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "textual-universal-directorytree";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e9i6P+KQnGbFwCsNiu2eLJFg3fpcR2/vl/FVWOBqWUQ=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Textual plugin for a DirectoryTree compatible with remote filesystems";
     homepage = "https://github.com/juftin/textual-universal-directorytree";
-    changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${version}";
+    changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

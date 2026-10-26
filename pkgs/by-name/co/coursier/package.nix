@@ -19,12 +19,12 @@ let
     zlib # libz.so.1
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coursier";
   version = "2.1.26";
 
   src = fetchurl {
-    url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
+    url = "https://github.com/coursier/coursier/releases/download/v${finalAttrs.version}/coursier";
     hash = "sha256-6ww1N5529EQE93erCiM1ylMm9rdyG4zfqHPoe9n0rAw=";
   };
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://get-coursier.io/";
-    changelog = "https://github.com/coursier/coursier/releases/tag/v${version}";
+    changelog = "https://github.com/coursier/coursier/releases/tag/v${finalAttrs.version}";
     description = "Scala library to fetch dependencies from Maven / Ivy repositories";
     mainProgram = "cs";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
@@ -126,4 +126,4 @@ stdenv.mkDerivation rec {
     # a shell script wrapping a java launcher, so it runs wherever the jre does
     platforms = jre.meta.platforms;
   };
-}
+})

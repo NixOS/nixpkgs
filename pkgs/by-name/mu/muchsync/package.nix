@@ -9,14 +9,14 @@
   xapian,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "7";
   pname = "muchsync";
   passthru = {
-    inherit version;
+    inherit (finalAttrs) version;
   };
   src = fetchurl {
-    url = "https://www.muchsync.org/src/${pname}-${version}.tar.gz";
+    url = "https://www.muchsync.org/src/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-+D4vb80O9IE0df3cjTkoVoZlTaX0FWWh6ams14Gjvqw=";
   };
   nativeBuildInputs = [ pkg-config ];
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

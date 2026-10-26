@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "node-pre-gyp";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "node-pre-gyp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9MADe6oY28MBAdQsu/ddVveZYwD4xeVNKUffhcvK+Q0=";
   };
 
@@ -25,11 +25,11 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/mapbox/node-pre-gyp/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mapbox/node-pre-gyp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Node.js tool for easy binary deployment of C++ addons";
     homepage = "https://github.com/mapbox/node-pre-gyp";
     license = lib.licenses.bsd3;
     mainProgram = "node-pre-gyp";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -29,7 +29,7 @@ let
     ln -s "${bluez.test}/test/pbap-client" "$out/bin/pbap-client"
   '';
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-dbusmock";
   version = "0.37.2";
   pyproject = true;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = "python-dbusmock";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Q149NcbpbIgXCd7WujALC9I9vAM/tZh+enTJh0d84Kg=";
   };
 
@@ -69,11 +69,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${src.tag}";
+    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${finalAttrs.src.tag}";
     description = "Mock D-Bus objects for tests";
     homepage = "https://github.com/martinpitt/python-dbusmock";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

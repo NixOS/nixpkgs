@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyaskalono";
   version = "0.2.0";
   pyproject = true;
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kumekay";
     repo = "pyaskalono";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gNQCtubPs8XjE+ZTuTTzZGkxOhK3/Fv3lDLparaUdaQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-rQP6So9tG/9cjB588v+6lp2h+0SjaiWPhKrSXgDYugE=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for askalono";
     homepage = "https://github.com/kumekay/pyaskalono/";
-    changelog = "https://github.com/kumekay/pyaskalono/releases/tag/v${version}";
+    changelog = "https://github.com/kumekay/pyaskalono/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

@@ -8,7 +8,7 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typer-injector";
   version = "0.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BenjyWiener";
     repo = "typer-injector";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rhYeTNQh1DZuQ7/yNleZPMMBiF29OrcT0vr/yb5HJXk=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

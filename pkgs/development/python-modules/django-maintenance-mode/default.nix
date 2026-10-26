@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-maintenance-mode";
   version = "0.22.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "django-maintenance-mode";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gd6Bmir0bHsD7Xaq1N9S8bSMGQWbVCBIA8Cftzu6QB0=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Shows a 503 error page when maintenance-mode is on";
     homepage = "https://github.com/fabiocaccamo/django-maintenance-mode";
-    changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${src.tag}";
+    changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mrmebelman ];
   };
-}
+})

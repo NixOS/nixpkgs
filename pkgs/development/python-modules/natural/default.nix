@@ -6,7 +6,7 @@
   six,
   django,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "natural";
   version = "0.2.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tehmaze";
     repo = "natural";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DERFKDGVUPcjYAxiTYWgWkPp+Myd/9CNytQWgRya570=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
       vinetos
     ];
   };
-}
+})

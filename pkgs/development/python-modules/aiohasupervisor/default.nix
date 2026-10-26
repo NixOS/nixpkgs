@@ -15,7 +15,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohasupervisor";
   version = "0.6.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-supervisor-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OAuLee6hbShgEDN/3oD7O6KzxylnfrJoCgMPjluYcG8=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client for Home Assistant Supervisor";
     homepage = "https://github.com/home-assistant-libs/python-supervisor-client";
-    changelog = "https://github.com/home-assistant-libs/python-supervisor-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-libs/python-supervisor-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

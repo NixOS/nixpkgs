@@ -15,7 +15,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openfga-sdk";
   version = "0.10.5";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "python-sdk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-emWWhdysUGIwEvOzDMGwBWS0ft4+cSfdApMpNboaq8U=";
   };
 
@@ -47,10 +47,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/openfga/python-sdk/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/openfga/python-sdk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Fine-Grained Authorization solution for Python";
     homepage = "https://github.com/openfga/python-sdk";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nicklewis ];
   };
-}
+})

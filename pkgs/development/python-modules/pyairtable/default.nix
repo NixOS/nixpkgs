@@ -17,13 +17,13 @@
   tox,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyairtable";
   version = "3.4.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-apF01DgAlmZgVH4H0Ac2s6D973W1CHt27oug6AnAQu4=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python API Client for Airtable";
     homepage = "https://pyairtable.readthedocs.io/";
-    changelog = "https://pyairtable.readthedocs.io/en/${version}/changelog.html";
+    changelog = "https://pyairtable.readthedocs.io/en/${finalAttrs.version}/changelog.html";
     license = lib.licenses.mit;
     mainProgram = "pyairtable";
     maintainers = with lib.maintainers; [ stupidcomputer ];
   };
-}
+})

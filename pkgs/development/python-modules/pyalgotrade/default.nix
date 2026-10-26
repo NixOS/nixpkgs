@@ -15,14 +15,14 @@
   ws4py,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyalgotrade";
   version = "0.20";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyAlgoTrade";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-eSfIevIChpFVKAqT/27pNLtbRs2x8gtw90BzN/hUHL0=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     homepage = "http://gbeced.github.io/pyalgotrade/";
     license = lib.licenses.asl20;
   };
-}
+})

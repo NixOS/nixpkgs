@@ -9,7 +9,7 @@
   idna,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot-dns-inwx";
   version = "3.0.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oGGy990";
     repo = "certbot-dns-inwx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bI/CSTYy/W1AwbxnBxhMp/yFnp68G25mTkNUbdNsRZ4=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

@@ -8,13 +8,13 @@
   tree-sitter-language-pack,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grep-ast";
   version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "grep_ast";
     hash = "sha256-YgokKkST5nITONHJpsI0rmUfh3T0kkptz5D2hl1LLuM=";
   };
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     description = "Python implementation of the ast-grep tool";
     mainProgram = "grep-ast";
   };
-}
+})

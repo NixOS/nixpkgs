@@ -6,7 +6,7 @@
   setuptools_80,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "command-runner";
   version = "1.7.6";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netinvent";
     repo = "command_runner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/xfpvEU3yWWXz+xsntht9NY3kUenc7S1Sw8hRZbM/fQ=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
       Platform agnostic command execution, timed background jobs with live
       stdout/stderr output capture, and UAC/sudo elevation
     '';
-    changelog = "https://github.com/netinvent/command_runner/releases/tag/${src.tag}";
+    changelog = "https://github.com/netinvent/command_runner/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
   };
-}
+})

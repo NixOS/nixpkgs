@@ -5,13 +5,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "monotonic";
   version = "1.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-OlUge8/tU93VxbrhdFJAYpNe/tF3kuneKtAgXOmtY/c=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/atdt/monotonic";
     license = lib.licenses.asl20;
   };
-}
+})

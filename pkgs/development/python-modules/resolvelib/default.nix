@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "resolvelib";
   version = "1.2.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "resolvelib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AxxW6z51fZGqs5UwY3NEBQL8894uQDuRyVrKzol3ny0=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
-    changelog = "https://github.com/sarugaku/resolvelib/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/sarugaku/resolvelib/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "directv";
   version = "0.4.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-directv";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-s4bE8ACFCfpNq+HGEO8fv3VCGPI4OOdR5A7RjY2bTKY=";
   };
 
@@ -55,10 +55,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "directv" ];
 
   meta = {
-    changelog = "https://github.com/ctalkington/python-directv/releases/tag/${src.tag}";
+    changelog = "https://github.com/ctalkington/python-directv/releases/tag/${finalAttrs.src.tag}";
     description = "Asynchronous Python client for DirecTV (SHEF)";
     homepage = "https://github.com/ctalkington/python-directv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

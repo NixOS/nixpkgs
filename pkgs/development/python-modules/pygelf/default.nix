@@ -7,14 +7,14 @@
   pytestCheckHook,
   requests,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygelf";
   version = "0.4.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pygelf";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-jtlyVjvjyPFoSD8B2/UitrxpeVnJej9IgTJLP3ljiRE=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

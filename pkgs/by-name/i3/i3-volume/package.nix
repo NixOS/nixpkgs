@@ -16,14 +16,14 @@
   libnotify,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i3-volume";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "hastinbe";
     repo = "i3-volume";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IuJK03qW/WIK1K2gWJu3V1mVJM1wJx4IAcNKUBxtXf0=";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

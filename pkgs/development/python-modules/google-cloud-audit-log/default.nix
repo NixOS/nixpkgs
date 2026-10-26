@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-audit-log";
   version = "0.6.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_audit_log";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-SrpytF3BU0TaGy2JgTIAUP45z+gEMvOOcxiqLkd8W/I=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Audit Protos";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-audit-log";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-audit-log-v${version}/packages/google-cloud-audit-log/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-audit-log-v${finalAttrs.version}/packages/google-cloud-audit-log/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -9,14 +9,14 @@
   cppcodec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nitrokey-app";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c6EC5uuMna07xVHDRFq0UDwuSeopZTmZGZ9ZD5zaq8Y=";
   };
 
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
       See https://www.nitrokey.com/ for more information.
     '';
     homepage = "https://github.com/Nitrokey/nitrokey-app";
-    changelog = "https://github.com/Nitrokey/nitrokey-app/releases/tag/v${version}";
+    changelog = "https://github.com/Nitrokey/nitrokey-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       kaiha
       panicgh
     ];
   };
-}
+})

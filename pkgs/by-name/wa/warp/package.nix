@@ -22,7 +22,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "warp";
   version = "1.0.0";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "warp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cFMIMNAVrP3rF7UQeKgSdaRZmJT8XcERR4BSLYqxSoI=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-CFe6Hg1cSz59agZ/eCL7PfnMe/N0vJvAs3gzfjZCwlY=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     mainProgram = "warp";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

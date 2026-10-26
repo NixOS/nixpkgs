@@ -21,7 +21,7 @@
   scipy,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "piqp";
   version = "0.6.2";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PREDICT-EPFL";
     repo = "piqp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W9t7d+wV5WcphL54e6tpnKxiWFay9UrFmIRKsGk2yMM=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Proximal Interior Point Quadratic Programming solver";
     homepage = "https://github.com/PREDICT-EPFL/piqp";
-    changelog = "https://github.com/PREDICT-EPFL/piqp/releases/tag/v${version}";
+    changelog = "https://github.com/PREDICT-EPFL/piqp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ renesat ];
   };
-}
+})

@@ -19,14 +19,14 @@
   sphinxcontrib-programoutput,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-manilaclient";
   version = "6.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_manilaclient";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ktc2Z6GsIKsINYjokStZdpvgcG8g+26YRewG09cnI9Q=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

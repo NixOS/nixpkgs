@@ -5,13 +5,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nskeyedunarchiver";
   version = "1.5.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2aLV1I6p4seNMb+/xKl8AnlBkvO0VINC1yfVS90gvro=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ PapayaJackal ];
   };
-}
+})

@@ -10,7 +10,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pixel-font-knife";
   version = "0.0.25";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pixel-font-knife";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KQN4FQf6PsNi+NQW0BOD4tuK4G5LkUgP6Cr2drUpLO0=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
       h7x4
     ];
   };
-}
+})

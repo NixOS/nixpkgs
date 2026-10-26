@@ -21,14 +21,14 @@ let
     fi
   '';
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linux-firmware";
   version = "20261019";
 
   src = fetchFromGitLab {
     owner = "kernel-firmware";
     repo = "linux-firmware";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0LreLm2Syct6IHCZpE9uJorhl1H3l3fBEMZR/Cy1AVI=";
   };
 
@@ -61,4 +61,4 @@ stdenvNoCC.mkDerivation rec {
     priority = 6; # give precedence to kernel firmware
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
-}
+})

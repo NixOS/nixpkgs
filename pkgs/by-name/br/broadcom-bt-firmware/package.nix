@@ -6,7 +6,7 @@
   bt-fw-converter,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "broadcom-bt-firmware";
   version = "12.0.1.1012";
 
@@ -21,8 +21,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   unpackCmd = ''
-    mkdir -p ${pname}-${version}
-    cabextract $src --directory ${pname}-${version}
+    mkdir -p ${finalAttrs.pname}-${finalAttrs.version}
+    cabextract $src --directory ${finalAttrs.pname}-${finalAttrs.version}
   '';
 
   installPhase = ''
@@ -50,4 +50,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ zraexy ];
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
-}
+})

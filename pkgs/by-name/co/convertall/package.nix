@@ -8,14 +8,14 @@
   _experimental-update-script-combinators,
 }:
 
-flutter341.buildFlutterApplication rec {
+flutter341.buildFlutterApplication (finalAttrs: {
   pname = "convertall";
   version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "doug-101";
     repo = "ConvertAll";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f9HfLfxY2G/3rZoWJ1xLeGmkdFiIyUFkr65Jf8QMqjY=";
   };
 
@@ -25,7 +25,7 @@ flutter341.buildFlutterApplication rec {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -52,4 +52,4 @@ flutter341.buildFlutterApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

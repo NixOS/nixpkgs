@@ -22,12 +22,12 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtranslator";
   version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtranslator/${lib.versions.major version}/gtranslator-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtranslator/${lib.versions.major finalAttrs.version}/gtranslator-${finalAttrs.version}.tar.xz";
     hash = "sha256-hXtRx49U30JBj/b6nmK4VU338CHLEjOMH8DYW5nJGO8=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bobby285271 ];
     platforms = lib.platforms.linux;
   };
-}
+})

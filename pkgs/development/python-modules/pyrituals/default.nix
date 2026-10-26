@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrituals";
   version = "0.0.7";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "milanmeu";
     repo = "pyrituals";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nCyfwOONtpwRLFq3crRacmrWef6J3mOfKz4fvkOcb3g=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the Rituals Perfume Genie API";
     homepage = "https://github.com/milanmeu/pyrituals";
-    changelog = "https://github.com/milanmeu/pyrituals/releases/tag/${src.tag}";
+    changelog = "https://github.com/milanmeu/pyrituals/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

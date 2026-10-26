@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncer";
   version = "0.0.17";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "asyncer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4h6s0jsAzTT6LbsvfQGkc7qNCcPgoyR9Qr/yro1ukbg=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asyncer, async and await, focused on developer experience";
     homepage = "https://github.com/fastapi/asyncer";
-    changelog = "https://github.com/fastapi/asyncer/releases/tag/${version}";
+    changelog = "https://github.com/fastapi/asyncer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
   };
-}
+})

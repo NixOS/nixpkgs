@@ -5,12 +5,12 @@
   six,
   mock,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hiro";
   version = "1.1.1";
   format = "setuptools";
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
 
     hash = "sha256-2jM5rx3JpZTMqdycccclJysuMGYE5F0OBXXNE8X5XWg=";
   };
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyarly ];
   };
-}
+})

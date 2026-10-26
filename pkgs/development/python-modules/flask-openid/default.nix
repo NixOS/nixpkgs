@@ -7,14 +7,14 @@
   python3-openid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-openid";
   version = "1.3.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_openid";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-J2KLwKN+ZTCUiCMZPgaNeQNa2Ulth7dAQEQ+xITHZXo=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

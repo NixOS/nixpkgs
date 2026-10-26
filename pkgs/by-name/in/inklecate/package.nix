@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "inklecate";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "inkle";
     repo = "ink";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IEYn7GHUTLABGVZH2AYUpbGeuZvUPbwHz5GcuMrRem8=";
   };
 
@@ -43,4 +43,4 @@ buildDotnetModule rec {
       robinheghan
     ];
   };
-}
+})

@@ -24,14 +24,14 @@
   vncdotool,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvirtualdisplay";
   version = "3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "PyVirtualDisplay";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-CXVbw86263JfsH7KVCX0PyNY078I4A0qm3kqGu3RYVk=";
   };
 
@@ -67,4 +67,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ layus ];
   };
-}
+})

@@ -7,14 +7,14 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-multiversion";
   version = "0.2.4";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinx-multiversion";
     hash = "sha256-XNHKnste7WPLjWzl6cQ4yhOvT6mOfrbzdr5UHdSZC8s=";
   };
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx extension for building self-hosted versioned docs";
     homepage = "https://sphinx-contrib.github.io/multiversion";
-    changelog = "https://github.com/sphinx-contrib/multiversion/releases/tag/v${version}";
+    changelog = "https://github.com/sphinx-contrib/multiversion/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})

@@ -49,14 +49,14 @@ let
       '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wargus";
   inherit (stratagus) version;
 
   src = fetchFromGitHub {
     owner = "wargus";
     repo = "wargus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-rU2uMhk7Hx9hrLR/iH2tHkJ2z4cVmJB3ISlvY6dfQKU=";
   };
   patches = [
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.astro ];
     platforms = lib.platforms.linux;
   };
-}
+})

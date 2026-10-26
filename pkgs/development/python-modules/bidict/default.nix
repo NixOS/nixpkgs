@@ -10,7 +10,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bidict";
   version = "0.23.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jab";
     repo = "bidict";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WE0YaRT4a/byvU2pzcByuf1DfMlOpYA9i0PPrKXsS+M=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
       jakewaksbaum
     ];
   };
-}
+})

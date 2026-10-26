@@ -6,14 +6,14 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyprind";
   version = "2.11.3";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPrind";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-433KtuGpyOCn8PzmX956eeLe2hx1qgFZEKSeITe1TL8=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

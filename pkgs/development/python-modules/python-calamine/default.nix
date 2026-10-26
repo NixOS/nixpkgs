@@ -11,7 +11,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-calamine";
   version = "0.8.3";
   pyproject = true;
@@ -19,12 +19,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dimastbk";
     repo = "python-calamine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7P75jGsBMfdC6AusyRTdOx0NA3kadReacLUm9tY551g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-ESp1ig2IQqN3TOcAMQ1vHCeeJMuj3cYs0O+8w8NA/2k=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python binding for calamine";
     homepage = "https://github.com/dimastbk/python-calamine";
-    changelog = "https://github.com/dimastbk/python-calamine/releases/tag/v${version}";
+    changelog = "https://github.com/dimastbk/python-calamine/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "python-calamine";
   };
-}
+})

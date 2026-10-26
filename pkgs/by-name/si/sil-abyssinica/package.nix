@@ -4,21 +4,21 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sil-abyssinica";
   version = "2.300";
 
   src = fetchzip {
-    url = "https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL-${version}.zip";
+    url = "https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL-${finalAttrs.version}.zip";
     hash = "sha256-3msQRxoIV1K8mjZr7xXKW54fELjNhteXZ5qg6t5+Vcg=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{fonts/truetype,doc/${pname}-${version}}
+    mkdir -p $out/share/{fonts/truetype,doc/${finalAttrs.pname}-${finalAttrs.version}}
     mv *.ttf $out/share/fonts/truetype/
-    mv *.txt documentation $out/share/doc/${pname}-${version}/
+    mv *.txt documentation $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/
 
     runHook postInstall
   '';
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
   };
-}
+})

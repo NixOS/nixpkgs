@@ -10,7 +10,7 @@
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gputil";
   version = "1.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anderskm";
     repo = "gputil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iOyB653BMmDBtK1fM1ZyddjlnaypsuLMOV0sKaBt+yE=";
   };
 
@@ -32,9 +32,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/anderskm/gputil";
     license = lib.licenses.mit;
     description = "Getting GPU status from NVIDA GPUs using nvidia-smi";
-    changelog = "https://github.com/anderskm/gputil/releases/tag/${src.tag}";
+    changelog = "https://github.com/anderskm/gputil/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [
       doronbehar
     ];
   };
-}
+})

@@ -8,13 +8,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymunk";
   version = "7.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ed50/c5o9HUUwubljvVQKgu2i6HDx35ONZuqRm6dTBY=";
   };
 
@@ -37,9 +37,9 @@ buildPythonPackage rec {
   meta = {
     description = "2d physics library";
     homepage = "https://www.pymunk.org";
-    changelog = "https://github.com/viblo/pymunk/releases/tag/${version}";
+    changelog = "https://github.com/viblo/pymunk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
   };
-}
+})

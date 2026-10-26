@@ -9,14 +9,14 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "matrix-client";
   version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "matrix_client";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-BnivQPLLLwkoqQikEMApdH1Ay5YaxaPxvQWqNVY8MVY=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ olejorgenb ];
   };
-}
+})

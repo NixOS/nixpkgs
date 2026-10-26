@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-maps-routing";
   version = "0.11.2";
   pyproject = true;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-maps-routing-v${version}";
+    tag = "google-maps-routing-v${finalAttrs.version}";
     hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
-  sourceRoot = "${src.name}/packages/google-maps-routing";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-maps-routing";
 
   build-system = [ setuptools ];
 
@@ -53,10 +53,10 @@ buildPythonPackage rec {
   passthru.updateScript = gitUpdater { rev-prefix = "google-maps-routing-v"; };
 
   meta = {
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-maps-routing/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-maps-routing/CHANGELOG.md";
     description = "Google Maps Routing API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-maps-routing";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

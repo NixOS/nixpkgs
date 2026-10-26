@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tree-sitter-markdown";
   version = "0.5.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tree-sitter-grammars";
     repo = "tree-sitter-markdown";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IYqh6JT74deu1UU4Nyls9Eg88BvQeYEta2UXZAbuZek=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   meta = {
     description = "Markdown grammar for tree-sitter";
     homepage = "https://github.com/tree-sitter-grammars/tree-sitter-markdown";
-    changelog = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/releases/tag/${src.tag}";
+    changelog = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
       gepbird
     ];
   };
-}
+})

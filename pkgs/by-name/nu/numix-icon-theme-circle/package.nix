@@ -8,14 +8,14 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "numix-icon-theme-circle";
   version = "26.02.21";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = "numix-icon-theme-circle";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-zkUqbM120mZ4UzBXPEDtSO1cauRNG7wxPM3AmtINWEU=";
   };
 
@@ -56,4 +56,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

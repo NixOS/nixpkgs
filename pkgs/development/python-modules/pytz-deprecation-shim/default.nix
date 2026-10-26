@@ -9,7 +9,7 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytz-deprecation-shim";
   version = "0.1.0.post0";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "pytz_deprecation_shim";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-rwl7rhthbd5cV0REHi3caedN/csMJjEpYQ2FuHRFpZ0=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

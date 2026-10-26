@@ -11,14 +11,14 @@
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-doc-utils";
   version = "0.20.10";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-doc-utils/${lib.versions.majorMinor version}/gnome-doc-utils-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-doc-utils/${lib.versions.majorMinor finalAttrs.version}/gnome-doc-utils-${finalAttrs.version}.tar.xz";
     sha256 = "19n4x25ndzngaciiyd8dd6s2mf9gv6nv3wv27ggns2smm7zkj1nb";
   };
 
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

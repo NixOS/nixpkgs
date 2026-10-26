@@ -5,14 +5,14 @@
   fetchpatch2,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "http-server";
   version = "14.1.1";
 
   src = fetchFromGitHub {
     owner = "http-party";
     repo = "http-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M/YC721QWJfz5sYX6RHm1U9WPHVRBD0ZL2/ceYItnhs=";
   };
 
@@ -36,4 +36,4 @@ buildNpmPackage rec {
     mainProgram = "http-server";
     maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})

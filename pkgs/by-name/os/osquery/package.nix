@@ -36,8 +36,7 @@ let
 
 in
 
-stdenvNoCC.mkDerivation rec {
-
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "osquery";
 
   version = info.osquery.rev;
@@ -71,7 +70,7 @@ stdenvNoCC.mkDerivation rec {
     cmake .. \
       -DCMAKE_INSTALL_PREFIX=$out \
       -DOSQUERY_TOOLCHAIN_SYSROOT=${toolchain} \
-      -DOSQUERY_VERSION=${version} \
+      -DOSQUERY_VERSION=${finalAttrs.version} \
       -DCMAKE_PREFIX_PATH=${toolchain}/usr/lib/cmake \
       -DCMAKE_LIBRARY_PATH=${toolchain}/usr/lib \
       -DOSQUERY_OPENSSL_ARCHIVE_PATH=${opensslSrc} \
@@ -111,4 +110,4 @@ stdenvNoCC.mkDerivation rec {
       lesuisse
     ];
   };
-}
+})

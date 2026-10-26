@@ -6,13 +6,13 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rpmfile";
   version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-j/xE0V+NK2ytHqiFsJ4cpfF0RTLCRxBVTz/khzUG6do=";
   };
 
@@ -29,9 +29,9 @@ buildPythonPackage rec {
   meta = {
     description = "Read rpm archive files";
     homepage = "https://github.com/srossross/rpmfile";
-    changelog = "https://github.com/srossross/rpmfile/releases/tag/v${version}";
+    changelog = "https://github.com/srossross/rpmfile/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "rpmfile";
   };
-}
+})

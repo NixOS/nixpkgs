@@ -7,13 +7,13 @@
   stdenv, # for meta.broken
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmbc";
   version = "1.0.25.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IvFxXfglif2cxCU/6rOQtO8Lq/FPZFE82NB7N4mWMiY=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     # last successful hydra build on darwin was in 2025
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

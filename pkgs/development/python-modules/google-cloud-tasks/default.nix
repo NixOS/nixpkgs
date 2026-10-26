@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-tasks";
   version = "2.26.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_tasks";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-3zO+V0EcV715FGHQu81tBLTg5V+cZbaGgnBsrSR8WwY=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cloud Tasks API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-tasks";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-tasks-v${version}/packages/google-cloud-tasks/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-tasks-v${finalAttrs.version}/packages/google-cloud-tasks/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

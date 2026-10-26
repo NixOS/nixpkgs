@@ -13,14 +13,14 @@
   makeDesktopItem,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "OpenUtau";
   version = "0.1.565";
 
   src = fetchFromGitHub {
     owner = "openutau";
     repo = "OpenUtau";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tjW1xmt409AlEmw/N1RG46oigP4mWAoTecQGV/hwMo4=";
   };
 
@@ -114,4 +114,4 @@ buildDotnetModule rec {
     ];
     mainProgram = "OpenUtau";
   };
-}
+})

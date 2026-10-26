@@ -21,7 +21,7 @@
   withRepl ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "greynoise";
   version = "3.0.3";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GreyNoise-Intelligence";
     repo = "pygreynoise";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ClNKDMfMKcOYOasUqmQoOtKFsAi5wZw/MLTkq5YzpJk=";
   };
 
@@ -72,8 +72,8 @@ buildPythonPackage rec {
     description = "Python3 library and command line for GreyNoise";
     mainProgram = "greynoise";
     homepage = "https://github.com/GreyNoise-Intelligence/pygreynoise";
-    changelog = "https://github.com/GreyNoise-Intelligence/pygreynoise/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/GreyNoise-Intelligence/pygreynoise/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

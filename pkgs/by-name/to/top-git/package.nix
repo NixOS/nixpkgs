@@ -6,14 +6,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "topgit";
   version = "0.19.14";
 
   src = fetchFromGitHub {
     owner = "mackyle";
     repo = "topgit";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     sha256 = "sha256-FMrkoJwgBkFvi3tewtqu+b9sRuNPCNCG6BrcnAbx0sk=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -Dm644 README -t "$out/share/doc/${pname}-${version}/"
+    install -Dm644 README -t "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/"
     install -Dm755 contrib/tg-completion.bash -t "$out/share/bash-completion/completions/"
   '';
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

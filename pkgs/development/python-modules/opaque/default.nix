@@ -8,7 +8,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opaque";
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     src
     ;
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   postPatch =
     let
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       substituteInPlace ./opaque/__init__.py --replace-fail \
         "ctypes.util.find_library('opaque') or ctypes.util.find_library('libopaque')" "'${lib.getLib libopaque}/lib/libopaque${soext}'"
       substituteInPlace ./setup.py --replace-fail \
-        'version="1.0.0",' 'version="${version}",'
+        'version="1.0.0",' 'version="${finalAttrs.version}",'
     '';
 
   build-system = [ setuptools ];
@@ -52,4 +52,4 @@ buildPythonPackage rec {
       teams
       ;
   };
-}
+})

@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inotify-simple";
   version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "inotify_simple";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-8BC7vYKDvXGp9Ost6UdlgE7eJL1HMgsObvQTblQc3Cw=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ erikarvstedt ];
   };
-}
+})

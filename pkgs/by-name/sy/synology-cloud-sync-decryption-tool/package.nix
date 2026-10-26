@@ -7,12 +7,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "synology-cloud-sync-decryption-tool";
   version = "027";
 
   src = fetchurl {
-    url = "https://global.download.synology.com/download/Utility/SynologyCloudSyncDecryptionTool/${version}/Linux/x86_64/SynologyCloudSyncDecryptionTool-${version}_x64.tar.gz";
+    url = "https://global.download.synology.com/download/Utility/SynologyCloudSyncDecryptionTool/${finalAttrs.version}/Linux/x86_64/SynologyCloudSyncDecryptionTool-${finalAttrs.version}_x64.tar.gz";
     sha256 = "sha256-EWxADvkfhnMwHIauJj3pH6SvSkkrc4cwAhsf1pWOOWQ=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "SynologyCloudSyncDecryptionTool";
   };
-}
+})

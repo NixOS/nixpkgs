@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ioctl-opt";
   version = "1.3.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vpelletier";
     repo = "python-ioctl-opt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IdE1HZ0fj1Cv4bJRQOEv23O3bCiPUP4R10oGhSWjEXA=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

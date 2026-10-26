@@ -9,7 +9,7 @@
   reckon,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "reckon";
   version = (import ./gemset.nix).reckon.version;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       env = bundlerEnv {
-        name = "${pname}-${version}-gems";
+        name = "${finalAttrs.pname}-${finalAttrs.version}-gems";
 
         gemdir = ./.;
       };
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests.version = testers.testVersion {
       package = reckon;
-      version = "${version}";
+      version = "${finalAttrs.version}";
     };
     updateScript = bundlerUpdateScript "reckon";
   };
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicknovitski ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/cantino/reckon/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/cantino/reckon/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})

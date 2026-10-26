@@ -6,14 +6,14 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-dmidecode";
   version = "0.1.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "py_dmidecode";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-pS1fRWuWLnXuNEGYXU/j1njC8THWQOHbnVOF9+c13Cw=";
   };
 
@@ -29,9 +29,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library that parses the output of dmidecode";
     homepage = "https://github.com/zaibon/py-dmidecode/";
-    changelog = "https://github.com/zaibon/py-dmidecode/releases/tag/v${version}";
+    changelog = "https://github.com/zaibon/py-dmidecode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

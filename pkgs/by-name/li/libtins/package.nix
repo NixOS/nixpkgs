@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtins";
   version = "4.5";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "libtins";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zL4C2Cgs9Y3NebL8MPQBO5j8Bm6xhl8ZggQBPJLRn0o=";
   };
 
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";
     homepage = "https://libtins.github.io/";
-    changelog = "https://raw.githubusercontent.com/mfontanini/libtins/v${version}/CHANGES.md";
+    changelog = "https://raw.githubusercontent.com/mfontanini/libtins/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fdns ];
     platforms = lib.platforms.unix;
   };
-}
+})

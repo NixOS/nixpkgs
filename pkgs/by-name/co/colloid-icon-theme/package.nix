@@ -42,14 +42,14 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2026-08-10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-JNnTcHIvRf9Ymox2POjatY2gYvkPD6+nd/cN48tC6X4=";
     };
 
@@ -100,4 +100,4 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ romildo ];
     };
-  }
+  })

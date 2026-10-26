@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkl-service";
   version = "2.6.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IntelPython";
     repo = "mkl-service";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qiypoeCWUIghLmEYVOJaT4XUT7TNAJjWxnIq7HOZlkY=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/IntelPython/mkl-service";
     license = lib.licenses.bsd3;
   };
-}
+})

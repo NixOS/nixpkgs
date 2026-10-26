@@ -9,7 +9,7 @@
   recommonmark,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-image-diff";
   version = "0.0.14";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Apkawa";
     repo = "pytest-image-diff";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BQwEbZBgjnx5becu5dcDx0yiw3Y2qptwyqywFq6lqas=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,7 +6,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-nodejs-version";
   version = "0.4.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agoose77";
     repo = "hatch-nodejs-version";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Oe07HFzhhnAGTWM51xSgRmpJgIZg0oMIxkmMxKRPMwI=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

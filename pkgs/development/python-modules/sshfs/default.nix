@@ -14,7 +14,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sshfs";
   version = "2026.8.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "sshfs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gw9fAVAxQxVge7APxrdGXpmhYZlyqmcB2QU9+2ze9dw=";
   };
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = {
     description = "SSH/SFTP implementation for fsspec";
     homepage = "https://github.com/fsspec/sshfs/";
-    changelog = "https://github.com/fsspec/sshfs/releases/tag/${src.tag}";
+    changelog = "https://github.com/fsspec/sshfs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
   };
-}
+})

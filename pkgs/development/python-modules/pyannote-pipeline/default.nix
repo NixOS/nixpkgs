@@ -22,7 +22,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyannote-pipeline";
   version = "4.0.0";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-pipeline";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-H2yIeCKhZFUkZXww+eaRKMzJrbALdARady02fq/pJrU=";
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     substituteInPlace src/pyannote/pipeline/experiment.py \
       --replace-fail \
         'version="Tunable pipelines"' \
-        'version="${version}"'
+        'version="${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -71,4 +71,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "pyannote-pipeline";
   };
-}
+})

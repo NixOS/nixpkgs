@@ -7,14 +7,14 @@
   xcursorgen,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "simp1e-cursors";
   version = "20250223";
 
   src = fetchFromGitLab {
     owner = "cursors";
     repo = "simp1e";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mNuGjpNZCaOlGLkHez4pFMPdCCbSoYQx1HTs7BI0DJA=";
     fetchSubmodules = true;
   };
@@ -42,9 +42,9 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Aesthetic cursor theme for Linux desktops";
     homepage = "https://gitlab.com/cursors/simp1e";
-    changelog = "https://gitlab.com/cursors/simp1e/-/tags/${version}";
+    changelog = "https://gitlab.com/cursors/simp1e/-/tags/${finalAttrs.version}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.natto1784 ];
   };
-}
+})

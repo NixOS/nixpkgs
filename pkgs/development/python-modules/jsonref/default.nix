@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonref";
   version = "1.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gazpachoking";
     repo = "jsonref";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tOhabmqCkktJUZjCrzjOjUGgA/X6EVz0KqehyLtigfc=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of JSON Reference for Python";
     homepage = "https://github.com/gazpachoking/jsonref";
-    changelog = "https://github.com/gazpachoking/jsonref/releases/tag/v${version}";
+    changelog = "https://github.com/gazpachoking/jsonref/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

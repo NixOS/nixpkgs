@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "smokeping_prober";
   version = "0.12.0";
 
   ldflags =
     let
       setVars = rec {
-        Version = version;
+        Version = finalAttrs.version;
         Revision = "722200c4adbd6d1e5d847dfbbd9dec07aa4ca38d";
         Branch = Revision;
         BuildUser = "nix";
@@ -30,7 +30,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "SuperQ";
     repo = "smokeping_prober";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-bFKJkqeuVS4z4jylJ67UgL6OPyi/JbowMKn5/Feu6lM=";
   };
   vendorHash = "sha256-rNk9mCVpc2N+lLAarDenmOLy00swS1rkTNxMy62wR+k=";
@@ -46,4 +46,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lukegb ];
   };
-}
+})

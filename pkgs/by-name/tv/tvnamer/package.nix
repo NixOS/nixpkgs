@@ -31,13 +31,13 @@ let
   pypkgs = python'.pkgs;
 
 in
-pypkgs.buildPythonApplication rec {
+pypkgs.buildPythonApplication (finalAttrs: {
   pname = "tvnamer";
   version = "3.0.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "dc2ea8188df6ac56439343630466b874c57756dd0b2538dd8e7905048f425f04";
   };
 
@@ -57,4 +57,4 @@ pypkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "tvnamer";
   };
-}
+})

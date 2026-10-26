@@ -8,14 +8,14 @@
   go-task,
 }:
 
-buildGo127Module rec {
+buildGo127Module (finalAttrs: {
   pname = "immich-kiosk";
   version = "0.44.2";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E1emLQzXPRdhsQeoOjyVBZODXiSFbxVII2CWsdtrEw0=";
   };
 
@@ -29,8 +29,8 @@ buildGo127Module rec {
   proxyVendor = true;
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    sourceRoot = "${src.name}/frontend";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/frontend";
     hash = "sha256-eKKguY1nlStG86Iap4aSz2hi0LgXkInp8YDGyypYmlI=";
   };
   # Frontend is in a subdirectory
@@ -63,7 +63,7 @@ buildGo127Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Tests require network access to an Immich server
@@ -80,7 +80,7 @@ buildGo127Module rec {
       This is not an official Immich project and is not affiliated with Immich.
     '';
     homepage = "https://github.com/damongolding/immich-kiosk";
-    changelog = "https://github.com/damongolding/immich-kiosk/releases/tag/v${version}";
+    changelog = "https://github.com/damongolding/immich-kiosk/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       tlvince
@@ -88,4 +88,4 @@ buildGo127Module rec {
     ];
     mainProgram = "immich-kiosk";
   };
-}
+})

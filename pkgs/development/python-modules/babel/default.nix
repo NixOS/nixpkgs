@@ -15,13 +15,13 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "babel";
   version = "2.18.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uAuZoUvQhfys+hXJFl9lH7s0BuZsxgOr8RxXUJN8mS0=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of internationalizing tools";
     homepage = "https://babel.pocoo.org/";
-    changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
+    changelog = "https://github.com/python-babel/babel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "pybabel";
   };
-}
+})

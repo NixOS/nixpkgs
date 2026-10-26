@@ -20,13 +20,13 @@
   zstd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libmambapy";
   pyproject = true;
 
   inherit (libmamba) version src;
 
-  sourceRoot = "${src.name}/libmambapy";
+  sourceRoot = "${finalAttrs.src.name}/libmambapy";
 
   build-system = [
     cmake
@@ -58,10 +58,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mamba-org/mamba/blob/${src.tag}/libmambapy/CHANGELOG.md";
+    changelog = "https://github.com/mamba-org/mamba/blob/${finalAttrs.src.tag}/libmambapy/CHANGELOG.md";
     description = "Python library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];
   };
-}
+})

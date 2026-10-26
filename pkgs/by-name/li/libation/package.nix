@@ -15,18 +15,18 @@
   nix-update-script,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "libation";
   version = "14.2.2";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IP3q8n5Bt3fjujkkFfUa3KhM8O5KA5AVAQJkPbwTHvg=";
   };
 
-  sourceRoot = "${src.name}/Source";
+  sourceRoot = "${finalAttrs.src.name}/Source";
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;
 
@@ -79,7 +79,7 @@ buildDotnetModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/rmcrackan/Libation/releases/tag/v${version}";
+    changelog = "https://github.com/rmcrackan/Libation/releases/tag/v${finalAttrs.version}";
     description = "Audible audiobook manager";
     homepage = "https://github.com/rmcrackan/Libation";
     license = lib.licenses.gpl3Plus;
@@ -89,4 +89,4 @@ buildDotnetModule rec {
       tebriel
     ];
   };
-}
+})

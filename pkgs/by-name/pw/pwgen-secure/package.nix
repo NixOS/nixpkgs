@@ -8,7 +8,7 @@ let
   inherit (python3Packages) buildPythonApplication pythonOlder;
 
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "pwgen-secure";
   version = "0.9.1";
   pyproject = true;
@@ -20,12 +20,12 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mjmunger";
     repo = "pwgen_secure";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "15md5606hzy1xfhj2lxmc0nvynyrcs4vxa5jdi34kfm31rdklj28";
   };
 
   postPatch = ''
-    shareDir=$out/share/${pname}
+    shareDir=$out/share/${finalAttrs.pname}
 
     substituteInPlace spwgen.py \
       --replace-fail ' \ ' ' \\ '
@@ -55,4 +55,4 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "spwgen";
   };
-}
+})

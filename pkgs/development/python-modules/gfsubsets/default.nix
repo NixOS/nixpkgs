@@ -9,14 +9,14 @@
   youseedee,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gfsubsets";
   version = "2025.11.04";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nam-files";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mMsmccIuilKeOUjt68etYefibuorjlW32gLcLgV8jxo=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Codepoint definitions for the Google Fonts subsetter";
     homepage = "https://github.com/googlefonts/nam-files";
-    changelog = "https://github.com/googlefonts/nam-files/releases/tag/${src.tag}";
+    changelog = "https://github.com/googlefonts/nam-files/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

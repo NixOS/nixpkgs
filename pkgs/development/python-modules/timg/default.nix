@@ -6,13 +6,13 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timg";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wmfbimnGQZzjAhCAwd1DFQzdCf9V7lTCuMF65eDkd8E=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
       renesat
     ];
   };
-}
+})

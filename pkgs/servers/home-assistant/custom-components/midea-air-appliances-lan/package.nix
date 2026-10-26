@@ -5,15 +5,15 @@
   midea-beautiful-air,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "nbogojevic";
   domain = "midea_dehumidifier_lan";
   version = "0.9.7";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "homeassistant-midea-air-appliances-lan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Rya1mP4KcKA2ZZ16DpxOgXN7NA4Iv0q7PgS+fV5vZq0=";
   };
 
@@ -22,8 +22,8 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Home Assistant custom component adding support for controlling Midea air conditioners and dehumidifiers on local network";
     homepage = "https://github.com/nbogojevic/homeassistant-midea-air-appliances-lan";
-    changelog = "https://github.com/nbogojevic/homeassistant-midea-air-appliances-lan/releases/tag/v${version}";
+    changelog = "https://github.com/nbogojevic/homeassistant-midea-air-appliances-lan/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ k900 ];
     license = lib.licenses.mit;
   };
-}
+})

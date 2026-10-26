@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyexcel-xls";
   version = "0.7.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyexcel";
     repo = "pyexcel-xls";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+iwdMSGUsUbWFO4s4+3Zf+47J9bzFffWthZoeThT8f0=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

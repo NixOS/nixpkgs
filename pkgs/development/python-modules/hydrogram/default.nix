@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hydrogram";
   version = "0.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hydrogram";
     repo = "hydrogram";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QpweUDCypTxOOWL08gCUuMgbuE4130iNyxRpUNuSBac=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Telegram MTProto API framework for fluid user and bot interactions";
     homepage = "https://github.com/hydrogram/hydrogram";
-    changelog = "https://github.com/hydrogram/hydrogram/releases/tag/${src.tag}";
+    changelog = "https://github.com/hydrogram/hydrogram/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tholo ];
   };
-}
+})

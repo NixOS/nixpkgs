@@ -25,14 +25,14 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tint2";
   version = "17.1.3";
 
   src = fetchFromGitLab {
     owner = "nick87720z";
     repo = "tint2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9sEe/Gnj+FWLPbWBtfL1YlNNC12j7/KjQ40xdkaFJVQ=";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-Ddocdir=share/doc/${pname}"
+    "-Ddocdir=share/doc/${finalAttrs.pname}"
   ];
 
   postPatch = ''
@@ -101,4 +101,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

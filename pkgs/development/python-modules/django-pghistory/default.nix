@@ -7,7 +7,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-pghistory";
   version = "3.9.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Opus10";
     repo = "django-pghistory";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YW2zcLSE3AALtyBe9KGMQpkF/HOvF90TW2ffmzj8u9o=";
   };
 
@@ -31,10 +31,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pghistory" ];
 
   meta = {
-    changelog = "https://github.com/Opus10/django-pghistory/releases/tag/${src.tag}";
+    changelog = "https://github.com/Opus10/django-pghistory/releases/tag/${finalAttrs.src.tag}";
     description = "History tracking for Django and Postgres";
     homepage = "https://django-pghistory.readthedocs.io";
     maintainers = with lib.maintainers; [ pyrox0 ];
     license = lib.licenses.bsd3;
   };
-}
+})

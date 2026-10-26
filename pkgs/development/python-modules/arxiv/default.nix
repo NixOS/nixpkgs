@@ -15,7 +15,7 @@
   mock,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arxiv";
   version = "4.0.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukasschwab";
     repo = "arxiv.py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nZhi0dPEiv6VLpacvcGvZhvvDkLalrs4IJvMVzb5MJI=";
   };
 
@@ -67,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the arXiv API";
     homepage = "https://github.com/lukasschwab/arxiv.py";
-    changelog = "https://github.com/lukasschwab/arxiv.py/releases/tag/${src.tag}";
+    changelog = "https://github.com/lukasschwab/arxiv.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.octvs ];
   };
-}
+})

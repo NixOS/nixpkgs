@@ -14,7 +14,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-auditlog";
   version = "3.4.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-auditlog";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/IOzMGRR8EP/AGP7fcqwP4GeSKXPwE6NF6AZmiF1+lA=";
   };
 
@@ -64,11 +64,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "auditlog" ];
 
   meta = {
-    changelog = "https://github.com/jazzband/django-auditlog/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jazzband/django-auditlog/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Django app that keeps a log of changes made to an object";
     homepage = "https://github.com/jazzband/django-auditlog";
     downloadPage = "https://github.com/jazzband/django-auditlog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leona ];
   };
-}
+})

@@ -6,14 +6,14 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "facedetect";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "wavexx";
     repo = "facedetect";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mddh71cjbsngpvjli406ndi2x613y39ydgb8bi4z1jp063865sd";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -v -m644 -D README.rst $out/share/doc/${pname}-${version}/README.rst
+    install -v -m644 -D README.rst $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/README.rst
     install -v -m755 -D facedetect $out/bin/facedetect
     wrapPythonPrograms
   '';
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.rycee ];
     mainProgram = "facedetect";
   };
-}
+})

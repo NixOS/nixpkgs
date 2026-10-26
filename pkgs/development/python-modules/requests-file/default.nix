@@ -8,7 +8,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-file";
   version = "2.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dashea";
     repo = "requests-file";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JtdtE44yiw2mLMZ0bJv0QiGWb7f8ywPLF7+BUufh/g4=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Transport adapter for fetching file:// URLs with the requests python library";
     homepage = "https://github.com/dashea/requests-file";
-    changelog = "https://github.com/dashea/requests-file/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/dashea/requests-file/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

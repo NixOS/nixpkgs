@@ -13,7 +13,7 @@
   buildApplication ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "controku";
   version = "1.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "benthetechguy";
     repo = "controku";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sye2GtL3a77pygllZc6ylaIP7faPb+NFbyKKyqJzIXw=";
   };
 
@@ -46,11 +46,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "controku" ];
 
   meta = {
-    changelog = "https://github.com/benthetechguy/controku/releases/tag/${version}";
+    changelog = "https://github.com/benthetechguy/controku/releases/tag/${finalAttrs.version}";
     description = "Control Roku devices from the comfort of your own desktop";
     mainProgram = "controku";
     homepage = "https://github.com/benthetechguy/controku";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mjm ];
   };
-}
+})

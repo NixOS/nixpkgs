@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "marked-man";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "kapouer";
     repo = "marked-man";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RzPKahYxBdWZi1SwIv7Ju1cAQ4s0ANkCivFJItPYGCY=";
   };
 
@@ -27,10 +27,10 @@ buildNpmPackage rec {
   meta = {
     description = "Markdown to roff wrapper around marked";
     homepage = "https://github.com/kapouer/marked-man";
-    changelog = "https://github.com/kapouer/marked-man/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/kapouer/marked-man/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ atemu ];
     mainProgram = "marked-man";
     platforms = lib.platforms.all;
   };
-}
+})

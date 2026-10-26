@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aspell-python-py3";
   version = "1.15";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aspell-python-py3";
-    inherit version;
+    inherit (finalAttrs) version;
     extension = "tar.bz2";
     hash = "sha256-IEKRDmQY5fOH9bQk0dkUAy7UzpBOoZW4cNtVvLMcs40=";
   };
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

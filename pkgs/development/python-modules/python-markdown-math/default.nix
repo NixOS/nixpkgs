@@ -6,7 +6,7 @@
   markdown,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-markdown-math";
   version = "0.9";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitya57";
     repo = "python-markdown-math";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-m/i43lvOehZSazHXhoAZTRSB5BQgn2VFjXADxSKeXfs=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ klntsky ];
   };
-}
+})

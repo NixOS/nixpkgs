@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvolumio";
   version = "0.1.5";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "PyVolumio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kMhdKZhOiD61bcEBRHWP4Ve3W0yU81RZwJylcRV129s=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

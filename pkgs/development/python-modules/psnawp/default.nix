@@ -9,7 +9,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "psnawp";
   version = "3.0.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "YoshikageKira";
     repo = "psnawp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vAz1HDvPRWgrWMKwWNMA2nhA2wLCN92lDb06ZQiZnO0=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://codeberg.org/YoshikageKira/psnawp/releases/tag/${src.tag}";
+    changelog = "https://codeberg.org/YoshikageKira/psnawp/releases/tag/${finalAttrs.src.tag}";
     description = "Python API Wrapper for PlayStation Network API";
     homepage = "https://codeberg.org/YoshikageKira/psnawp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

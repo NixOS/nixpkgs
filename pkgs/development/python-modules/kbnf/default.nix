@@ -8,7 +8,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kbnf";
   version = "0.4.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Dan-wanna-M";
     repo = "kbnf";
-    rev = "v${version}-python";
+    rev = "v${finalAttrs.version}-python";
     hash = "sha256-reefuqS0eExky9qtxBTqwxnZgK8AWFfkrN+VL/lFLyg=";
   };
 
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ BatteredBunny ];
   };
-}
+})

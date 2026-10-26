@@ -6,14 +6,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "otpauth";
   version = "2.2.2";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1DBnkO8b+zsYIWz/cWAyj4nqJqBPiQedemAhb3gIS8w=";
   };
 
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implements one time password of HOTP/TOTP";
     homepage = "https://otp.authlib.org/";
-    changelog = "https://github.com/authlib/otpauth/releases/tag/v${version}";
+    changelog = "https://github.com/authlib/otpauth/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

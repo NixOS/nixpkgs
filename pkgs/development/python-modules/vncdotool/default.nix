@@ -11,7 +11,7 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vncdotool";
   version = "1.2.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "vncdotool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QrD6z/g85FwaZCJ1PRn8CBKCOQcbVjQ9g0NpPIxguqk=";
   };
 
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   meta = {
     description = "Command line VNC client and Python library";
     homepage = "https://github.com/sibson/vncdotool";
-    changelog = "https://github.com/sibson/vncdotool/releases/tag/v${version}";
+    changelog = "https://github.com/sibson/vncdotool/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "vncdo";
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

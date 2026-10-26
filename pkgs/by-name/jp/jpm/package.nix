@@ -15,14 +15,14 @@ let
   platformFile = platformFiles.${stdenv.hostPlatform.system};
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jpm";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "jpm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3WmIXJhmrZyr7SYFkEcYC3YYBJtq8Uavo6PjLVXA3Bs=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     mainProgram = "jpm";
     platforms = lib.attrNames platformFiles;
   };
-}
+})

@@ -5,12 +5,12 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "overpass";
   version = "3.0.5";
 
   src = fetchzip {
-    url = "https://github.com/RedHatOfficial/Overpass/releases/download/v${version}/overpass-${version}.zip";
+    url = "https://github.com/RedHatOfficial/Overpass/releases/download/v${finalAttrs.version}/overpass-${finalAttrs.version}.zip";
     hash = "sha256-8AWT0/DELfNWXtZOejC90DbUSOtyGt9tSkcSuO7HP2o=";
   };
 
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ installFonts ];
 
   postInstall = ''
-    install -Dm644 *.md  -t $out/share/doc/overpass-${version}
+    install -Dm644 *.md  -t $out/share/doc/overpass-${finalAttrs.version}
   '';
 
   meta = {
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

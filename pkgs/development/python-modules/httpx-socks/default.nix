@@ -19,7 +19,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "httpx-socks";
   version = "0.13.1";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "httpx-socks";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sz7A72nvwy8P0VvVYUT2ZTGXXOe5u1eme7PLC38SIz8=";
   };
 
@@ -69,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
-    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/${src.tag}";
+    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

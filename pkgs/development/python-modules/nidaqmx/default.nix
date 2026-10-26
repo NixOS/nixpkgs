@@ -21,7 +21,7 @@
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nidaqmx";
   version = "1.6.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dxSHaqNTzzMcUk/wtMtxmiHMpoL8f2T3p/h37tw/5AA=";
   };
 
@@ -68,10 +68,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nidaqmx" ];
 
   meta = {
-    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/${finalAttrs.src.tag}";
     description = "API for interacting with the NI-DAQmx driver";
     homepage = "https://github.com/ni/nidaqmx-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fsagbuya ];
   };
-}
+})

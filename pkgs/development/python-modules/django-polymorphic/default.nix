@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-polymorphic";
   version = "4.5.2";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-polymorphic";
     repo = "django-polymorphic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8MZrQErWWd4GiNaIEnGvj4jONGFzsi3bu5NervF4AnE=";
   };
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "polymorphic" ];
 
   meta = {
-    changelog = "https://github.com/jazzband/django-polymorphic/releases/tag/${src.tag}";
+    changelog = "https://github.com/jazzband/django-polymorphic/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

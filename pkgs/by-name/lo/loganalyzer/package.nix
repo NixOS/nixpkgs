@@ -5,14 +5,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "loganalyzer";
   version = "23.5.1";
 
   src = fetchFromGitHub {
     owner = "pbek";
     repo = "loganalyzer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-k9hOGI/TmiftwhSHQEh3ZVV8kkMSs1yKejqHelFSQJ4=";
   };
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   buildPhase = ''
     runHook preBuild
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     description = "Tool that helps you to analyze your log files by reducing the content with patterns you define";
     homepage = "https://github.com/pbek/loganalyzer";
     changelog = "https://github.com/pbek/loganalyzer/blob/develop/CHANGELOG.md";
-    downloadPage = "https://github.com/pbek/loganalyzer/releases/tag/v${version}";
+    downloadPage = "https://github.com/pbek/loganalyzer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pbek ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "prometheus-restic-exporter";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ngosang";
     repo = "restic-exporter";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-b3TbBZqNJEAveNVf+6OGHU2G3UUyuSEjzFMPJVuxlBE=";
   };
 
@@ -41,10 +41,10 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Prometheus exporter for the Restic backup system";
     homepage = "https://github.com/ngosang/restic-exporter";
-    changelog = "https://github.com/ngosang/restic-exporter/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ngosang/restic-exporter/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ minersebas ];
     mainProgram = "restic-exporter.py";
     platforms = lib.platforms.all;
   };
-}
+})

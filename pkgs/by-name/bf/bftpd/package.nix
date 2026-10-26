@@ -5,12 +5,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bftpd";
   version = "6.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bftpd/bftpd/bftpd-${version}/bftpd-${version}.tar.gz";
+    url = "mirror://sourceforge/project/bftpd/bftpd/bftpd-${finalAttrs.version}/bftpd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-f7XZCSrGwmQqyf5C4xtJ46Q4SDHxbr15rDzcAK1PvB4=";
   };
 
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/doc/${pname}
-    mv $out/etc/*.conf $out/share/doc/${pname}
+    mkdir -p $out/share/doc/${finalAttrs.pname}
+    mv $out/etc/*.conf $out/share/doc/${finalAttrs.pname}
     rm -rf $out/{etc,var}
   '';
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.all;
   };
-}
+})

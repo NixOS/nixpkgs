@@ -27,7 +27,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-flex-fields";
   version = "1.0.2";
   pyproject = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rsinger86";
     repo = "drf-flex-fields";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+9ToxCEIDpsA+BK8Uk0VueVjoId41/S93+a716EGvCU=";
   };
 
@@ -58,10 +58,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/rsinger86/drf-flex-fields/releases/tag/${src.tag}";
+    changelog = "https://github.com/rsinger86/drf-flex-fields/releases/tag/${finalAttrs.src.tag}";
     description = "Dynamically set fields and expand nested resources in Django REST Framework serializers";
     homepage = "https://github.com/rsinger86/drf-flex-fields";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

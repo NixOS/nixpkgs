@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "posix-ipc";
   version = "1.3.2";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "osvenskan";
     repo = "posix_ipc";
-    rev = "rel${version}";
+    rev = "rel${finalAttrs.version}";
     hash = "sha256-Ehhk+IM3gTW6t6Cvc9AVAB9bscC0CMc6wQFgrZuCPz0=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

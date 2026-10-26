@@ -21,7 +21,7 @@
   yamlloader,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "junos-eznc";
   version = "2.7.6";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+bheNSRcFnq/07Y6BaTqsUAVxEQcdQwtz39cX1nKOBs=";
   };
 
@@ -77,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Junos 'EZ' automation for non-programmers";
     homepage = "https://github.com/Juniper/py-junos-eznc";
-    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${src.tag}";
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xnaveira ];
   };
-}
+})

@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-cola";
   version = "4.18.2";
   pyproject = true;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oUh9XVj2FGRow3l5wBUGW+BN01ykLvsQH0uC/No22Do=";
   };
 
@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     for i in 16 24 48 64 96 128 256 512; do
       mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-      magick cola/icons/git-cola.svg -background none -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
+      magick cola/icons/git-cola.svg -background none -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/${finalAttrs.pname}.png
     done
   '';
 
@@ -82,9 +82,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Sleek and powerful Git GUI";
     homepage = "https://git-cola.github.io/";
-    changelog = "https://github.com/git-cola/git-cola/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/git-cola/git-cola/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ bobvanderlinden ];
     mainProgram = "git-cola";
   };
-}
+})

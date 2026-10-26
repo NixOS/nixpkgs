@@ -59,13 +59,13 @@
   qt6,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spyder";
   version = "6.1.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eYbtAwq4BHiXS8uBtcjIgvUMpzZsqdVmzgGYZq1rBYM=";
   };
 
@@ -164,9 +164,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
-    changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
+    changelog = "https://github.com/spyder-ide/spyder/blob/v${finalAttrs.version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

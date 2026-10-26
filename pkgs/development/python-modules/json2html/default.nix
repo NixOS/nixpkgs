@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "json2html";
   version = "1.3.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "softvar";
     repo = "json2html";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y+mwJ0p4Q2TKMU8qQvuvo08RiMdsReO7psgXaiW9ntk=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for converting complex JSON to HTML Table representation";
     homepage = "https://github.com/softvar/json2html";
-    changelog = "https://github.com/softvar/json2html/releases/tag/v${version}";
+    changelog = "https://github.com/softvar/json2html/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
   };
-}
+})

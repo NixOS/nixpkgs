@@ -11,7 +11,7 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webtest-aiohttp";
   version = "2.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "webtest-aiohttp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UuAz/k/Tnumupv3ybFR7PkYHwG3kH7M5oobZykEP+ao=";
   };
 
@@ -53,10 +53,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "webtest_aiohttp" ];
 
   meta = {
-    changelog = "https://github.com/sloria/webtest-aiohttp/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/sloria/webtest-aiohttp/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Provides integration of WebTest with aiohttp.web applications";
     homepage = "https://github.com/sloria/webtest-aiohttp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cript0nauta ];
   };
-}
+})

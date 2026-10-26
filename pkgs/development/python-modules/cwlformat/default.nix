@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cwlformat";
   version = "2022.02.18";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rabix";
     repo = "cwl-format";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FI8hUgb/KglTkubZ+StzptoSsYal71ITyyFNg7j48yk=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Code formatter for CWL";
     homepage = "https://github.com/rabix/cwl-format";
-    changelog = "https://github.com/rabix/cwl-format/releases/tag/${version}";
+    changelog = "https://github.com/rabix/cwl-format/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

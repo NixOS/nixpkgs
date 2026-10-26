@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sabnzbd_exporter";
   version = "0.1.80";
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "msroest";
     repo = "sabnzbd_exporter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9oL9Zbzzbr0hZjOdkaH86Tho6gaR+/6uAMreLwYzB8o=";
   };
 
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "sabnzbd_exporter.py";
   };
-}
+})

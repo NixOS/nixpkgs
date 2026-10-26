@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "swagger-codegen3";
   version = "3.0.81";
 
   src = fetchFromGitHub {
     owner = "swagger-api";
     repo = "swagger-codegen";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5p8wVdPRsepwuXgl8weotxXrdGJcbe0Qv1VceCFrNdM=";
   };
 
@@ -47,7 +47,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
     homepage = "https://github.com/swagger-api/swagger-codegen/tree/3.0.0";
-    changelog = "https://github.com/swagger-api/swagger-codegen/releases/tag/v${version}";
+    changelog = "https://github.com/swagger-api/swagger-codegen/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
@@ -60,4 +60,4 @@ maven.buildMavenPackage rec {
     mainProgram = "swagger-codegen3";
     platforms = lib.platforms.all;
   };
-}
+})

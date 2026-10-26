@@ -24,14 +24,14 @@
 let
   inherit (lib) optional;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blitz++";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "blitzpp";
     repo = "blitz";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wZDg+4lCd9iHvxuQQE/qs58NorkxZ0+mf+8PKQ57CDE=";
   };
 
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
       multicomponent or vector fields).
     '';
   };
-}
+})

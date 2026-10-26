@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sectools";
   version = "1.5.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "sectools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iZV7FFfzvirHj4Q2HZQPQTcMIQ7mpc4zQYWAnFwf+q8=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library containing functions to write security tools";
     homepage = "https://github.com/p0dalirius/sectools";
-    changelog = "https://github.com/p0dalirius/sectools/releases/tag/${src.tag}";
+    changelog = "https://github.com/p0dalirius/sectools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

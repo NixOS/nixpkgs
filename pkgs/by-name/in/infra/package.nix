@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "infra";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "infrahq";
     repo = "infra";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-uz4wimhOfeHSL949m+biIhjfDwwEGnTiJWaz/r3Rsko=";
   };
 
@@ -27,8 +27,8 @@ buildGoModule rec {
   meta = {
     description = "Manages access to infrastructure such as Kubernetes";
     homepage = "https://github.com/infrahq/infra";
-    changelog = "https://github.com/infrahq/infra/releases/tag/v${version}";
+    changelog = "https://github.com/infrahq/infra/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.elastic20;
     mainProgram = "infra";
   };
-}
+})

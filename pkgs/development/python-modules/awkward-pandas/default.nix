@@ -12,14 +12,14 @@
   pandas,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awkward-pandas";
   version = "2023.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "awkward_pandas";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Vre3NSQVAkI6ya+0nbDdO7WQWlGlPN/kdunUMWqXX94=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "systemdunitparser";
   version = "0.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sgallagher";
     repo = "systemdunitparser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BlOj1rvRfh0SQ7io2N8MsMvAtWvXk0V6hYzlOSrr7hU=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ malik ];
   };
-}
+})

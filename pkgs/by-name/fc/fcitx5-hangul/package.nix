@@ -11,14 +11,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-hangul";
   version = "5.1.11";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = pname;
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     hash = "sha256-r1B4U51fYlHOgteDQyuYEUfZaEbRbENKmcYY5osj8UY=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ xrelkd ];
     platforms = lib.platforms.linux;
   };
-}
+})

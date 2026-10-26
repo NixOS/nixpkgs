@@ -8,14 +8,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plaster-pastedeploy";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "plaster_pastedeploy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-viYubS5BpyZIddqi/ihQy7BhVyi83JKCj9xyc244FBI=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

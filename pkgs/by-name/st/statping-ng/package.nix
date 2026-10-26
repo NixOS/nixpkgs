@@ -49,7 +49,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "statping-ng";
   inherit version src;
 
@@ -75,7 +75,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.VERSION=${version}"
+    "-X main.VERSION=${finalAttrs.version}"
   ];
 
   tags = [
@@ -87,13 +87,13 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/statping-ng
-    $out/bin/statping-ng version | grep ${version} > /dev/null
+    $out/bin/statping-ng version | grep ${finalAttrs.version} > /dev/null
   '';
 
   meta = {
     description = "Status Page for monitoring your websites and applications with beautiful graphs, analytics, and plugins";
     homepage = "https://github.com/statping-ng/statping-ng";
-    changelog = "https://github.com/statping-ng/statping-ng/releases/tag/${src.tag}";
+    changelog = "https://github.com/statping-ng/statping-ng/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       FKouhai
@@ -101,4 +101,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "statping-ng";
   };
-}
+})

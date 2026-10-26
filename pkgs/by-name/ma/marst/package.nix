@@ -5,12 +5,12 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marst";
   version = "2.8";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-139HA7C0S1C+V5CPnVVu5sO+3ZfWOMQpSdauyE+AcLo=";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -m644 doc/marst.info -Dt $out/share/info/
-    install -m644 doc/marst.pdf -Dt $out/share/doc/${pname}/
+    install -m644 doc/marst.pdf -Dt $out/share/doc/${finalAttrs.pname}/
   '';
 
   meta = {
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

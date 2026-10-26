@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "idasen-ha";
   version = "3.0.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "idasen-ha";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Je7zwPkwAJ1gOWV8wL0utbqC+RkLB10B+IZUFoUFeY4=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/abmantis/idasen-ha/releases/tag/${version}";
+    changelog = "https://github.com/abmantis/idasen-ha/releases/tag/${finalAttrs.version}";
     description = "Home Assistant helper lib for the IKEA Idasen Desk integration";
     homepage = "https://github.com/abmantis/idasen-ha";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

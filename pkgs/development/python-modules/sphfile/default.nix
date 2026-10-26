@@ -5,13 +5,13 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphfile";
   version = "1.0.3";
   format = "setuptools";
 
   src = fetchurl {
-    url = "mirror://pypi/s/sphfile/${pname}-${version}.tar.gz";
+    url = "mirror://pypi/s/sphfile/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-FZbYAfrMKwOkChvGeoOXAfBopBWXBZ/rgvyTeEIMUsA=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

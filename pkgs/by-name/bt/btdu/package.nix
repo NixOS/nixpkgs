@@ -6,14 +6,14 @@
   zlib,
 }:
 
-buildDubPackage rec {
+buildDubPackage (finalAttrs: {
   pname = "btdu";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "CyberShadow";
     repo = "btdu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZZaBaDKfW52w2YWj34gXFruWNBNqjLUFsPCHmrCKT7I=";
   };
 
@@ -35,7 +35,7 @@ buildDubPackage rec {
   meta = {
     description = "Sampling disk usage profiler for btrfs";
     homepage = "https://github.com/CyberShadow/btdu";
-    changelog = "https://github.com/CyberShadow/btdu/releases/tag/${src.rev}";
+    changelog = "https://github.com/CyberShadow/btdu/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -43,4 +43,4 @@ buildDubPackage rec {
     ];
     mainProgram = "btdu";
   };
-}
+})

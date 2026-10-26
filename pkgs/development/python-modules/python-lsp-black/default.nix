@@ -16,7 +16,7 @@
   setuptools_80,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-lsp-black";
   version = "2.0.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-black";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nV6mePSWzfPW2RwXg/mxgzfT9wD95mmTuPnPEro1kEY=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/python-lsp/python-lsp-black";
     description = "Black plugin for the Python LSP Server";
-    changelog = "https://github.com/python-lsp/python-lsp-black/releases/tag/v${version}";
+    changelog = "https://github.com/python-lsp/python-lsp-black/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})
