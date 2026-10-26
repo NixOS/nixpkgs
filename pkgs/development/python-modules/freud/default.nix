@@ -17,7 +17,7 @@
   onetbb,
 
   # dependencies
-  parsnip,
+  parsnip-cif,
   rowan,
   scipy,
 
@@ -69,7 +69,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     numpy
-    parsnip
+    parsnip-cif
     rowan
     scipy
   ];

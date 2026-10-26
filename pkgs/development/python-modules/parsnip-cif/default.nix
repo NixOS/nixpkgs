@@ -22,7 +22,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "parsnip";
+  pname = "parsnip-cif";
   version = "1.0.0";
   pyproject = true;
 
