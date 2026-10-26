@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   swig,
-  lua,
+  lua5_4,
   elastix,
   itk,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     elastix
-    lua
+    lua5_4
     itk
   ];
 
