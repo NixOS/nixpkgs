@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/opencore-amr/fdk-aac/fdk-aac-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-gptrie7zgkCc2mhX/YKvhPq7Y0F7CO3p6npVP4Ect54=";
+    hash = "sha256-gptrie7zgkCc2mhX/YKvhPq7Y0F7CO3p6npVP4Ect54=";
   };
 
   outputs = [
@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   configureFlags = lib.optional exampleSupport "--enable-example";
+
+  __structuredAttrs = true;
 
   meta = {
     description = "High-quality implementation of the AAC codec from Android";
