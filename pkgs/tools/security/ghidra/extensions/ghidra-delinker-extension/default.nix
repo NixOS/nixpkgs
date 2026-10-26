@@ -1,6 +1,7 @@
 {
   callPackage,
   lib,
+  stdenv,
   ghidra,
   gradle,
   fetchFromGitHub,
@@ -36,6 +37,17 @@ ghidra.buildGhidraExtension (finalAttrs: {
   gradleBuildTask = "buildExtension";
 
   __darwinAllowLocalNetworking = true;
+
+  # Work around a Nix darwin sandbox regression: the default profile only
+  # allows outbound connections to `(remote ip "localhost:*")`, which on
+  # some hosts resolves to ::1 only, so connect() to 127.0.0.1 is denied
+  # (and literal IPs like "127.0.0.1:*" are rejected by the sandbox
+  # compiler). The Gradle client needs to connect to its daemon, which
+  # binds to 127.0.0.1. Restore the interface-based loopback allowance
+  # that Nix used before.
+  sandboxProfile = lib.optionalString stdenv.buildPlatform.isDarwin ''
+    (allow network* (local ip))
+  '';
 
   mitmCache = gradle.fetchDeps {
     pkg = finalAttrs.finalPackage;

@@ -6,13 +6,13 @@
   python3,
 }:
 let
-  version = "1.35.0";
+  version = "1.36.3";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-kH6A5tyrUuraJ+Ckn8U0k6UvSSE5kBULMWIPlOwiIs4=";
+    hash = "sha256-lBo+fNusOI0mIBGQmjZ+s2JmEOIIie+khtMGBuoTxPM=";
   };
 
   meta = {
@@ -29,7 +29,12 @@ let
 
   python = python3.override {
     self = python3;
-    packageOverrides = (self: super: { django = super.django_5; });
+    packageOverrides = (
+      self: super: {
+        django = self.django_5;
+        mcp = self.mcp_1;
+      }
+    );
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
@@ -83,6 +88,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       june-analytics-python
       livekit-api
       markdown
+      menshen-client
       mozilla-django-oidc
       nested-multipart-parser
       phonenumbers

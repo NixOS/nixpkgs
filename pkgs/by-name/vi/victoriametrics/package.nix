@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
@@ -24,6 +25,8 @@ buildGo127Module (finalAttrs: {
   };
 
   vendorHash = null;
+  # Match upstream release builds: CGO is enabled on Linux amd64 and arm64.
+  env.CGO_ENABLED = if with stdenv.hostPlatform; isLinux && (isx86_64 || isAarch64) then "1" else "0";
 
   subPackages =
     lib.optionals withServer [

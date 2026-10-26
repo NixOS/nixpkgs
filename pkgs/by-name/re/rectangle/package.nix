@@ -111,7 +111,7 @@ let
       CFBundleIdentifier = "com.knollsoft.Rectangle";
       CFBundleName = "Rectangle";
       CFBundleShortVersionString = version;
-      CFBundleVersion = "100";
+      CFBundleVersion = "110";
       CFBundleURLTypes = [ { CFBundleURLSchemes = [ "rectangle" ]; } ];
       CFBundleIconFile = "AppIcon";
       CFBundleIconName = "AppIcon";
@@ -125,13 +125,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rectangle";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "rxhanson";
     repo = "Rectangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pcDl+GHBgPHysS5q0pQgQbbMOAzsTvA/KJ2N+OlPIoA=";
+    hash = "sha256-je+LQWsbM8PB8iSz8qW/PpY+bO1KEE60JSr+HZxkGlc=";
   };
 
   nativeBuildInputs = [

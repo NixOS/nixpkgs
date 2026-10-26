@@ -807,8 +807,8 @@ stdenv.mkDerivation (finalAttrs: {
       // {
         inherit (nixosTests)
           simple-vm
-          fsck-systemd-stage-1
-          hibernate-systemd-stage-1
+          fsck
+          hibernate
           switchTest
           switchTest-basics
           switchTest-units
@@ -825,16 +825,15 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-initrd-btrfs-raid
           systemd-initrd-luks-fido2
           systemd-initrd-luks-keyfile
-          systemd-initrd-luks-empty-passphrase
+          initrd-luks-empty-passphrase
           systemd-initrd-luks-password
           systemd-initrd-luks-tpm2
           systemd-initrd-modprobe
-          systemd-initrd-shutdown
           systemd-initrd-simple
           systemd-initrd-swraid
           # systemd-initrd-vconsole # broken on master
           systemd-initrd-networkd-ssh
-          systemd-initrd-networkd-openvpn
+          initrd-network-openvpn
           systemd-initrd-vlan
           systemd-journal
           systemd-journal-gateway

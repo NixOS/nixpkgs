@@ -10,6 +10,7 @@
   brotli,
   gitUpdater,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,16 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     nim
     pkg-config
     brotli
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
     openssl
     libssh2
   ];
-
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
 
   buildFlags = [
     "all"

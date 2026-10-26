@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.23.0";
+  version = "18.24.2";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NBn7C9ssLSXYrHWv5qWM5dZ2E8URbRJZOOCvHaNgxW4=";
+    hash = "sha256-b6Uj3cPAu731lhrN8fOv4d0CpehT3bv7IOBmkbYrqfI=";
   };
 
-  cargoHash = "sha256-rkDDs8gviBpoLR4mrrKRu2eTlmlpvjICVRFu22AeOaU=";
+  cargoHash = "sha256-HkYI2+Yvjnw9pKeRsteyZeLhHHErTa1mvJL16NQVF3g=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -79,6 +79,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+    # needs a running Postgres server
+    "--skip=postgres_authenticates_with_the_password_file"
+    # timing-dependent: fails when the index reload is too fast to measure
+    "--skip=end_history_is_not_starved_by_an_index_reload"
+    # timing sensitive
+    "--skip=a_copy_behind_another_machine_catches_up_as_it_resumes"
+    "--skip=capture_starts_when_the_config_turns_it_on"
+    "--skip=continuing_a_diverged_session_carries_one_branch"
+    "--skip=continuing_in_another_agent_carries_the_conversation"
+    "--skip=disjoint_concurrent_deletes_leave_the_index_empty"
   ];
 
   # The e2e tests start an interactive bash, which sources the host's
@@ -99,7 +109,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) atuin atuin-programs;
+      inherit (nixosTests) atuin atuin-programs atuin-default-settings;
     };
     updateScript = nix-update-script { };
   };

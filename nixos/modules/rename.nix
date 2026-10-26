@@ -24,6 +24,10 @@ in
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
       "The raspberryPi boot loader has been removed. See https://github.com/NixOS/nixpkgs/pull/241534 for what to use instead."
     )
+    (mkRemovedOptionModule [
+      "boot"
+      "iscsi-initiator"
+    ] "Support for booting from iSCSI has been removed due to lack of maintenance.")
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "environment" "noXlibs" ] ''
       The environment.noXlibs option was removed, as it often caused surprising breakages for new users.
@@ -100,6 +104,10 @@ in
       "services"
       "podgrab"
     ] "The corresponding package was removed from nixpkgs.") # added 2026-10-02
+    (mkRemovedOptionModule [
+      "programs"
+      "envision"
+    ] "'envision' has been removed from nixpkgs.")
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
@@ -590,6 +598,12 @@ in
       ]
       "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
     )
+    (mkRemovedOptionModule [ "services" "unit" ] ''
+      services.unit has been removed together with pkgs.unit.
+    '')
+    (mkRemovedOptionModule [ "services" "castopod" ] ''
+      services.castopod has been removed together with pkgs.castopod.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }

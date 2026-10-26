@@ -10,13 +10,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-mermaid";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "sphinxcontrib_mermaid";
-    hash = "sha256-E8X5rDlctqv0A+yjTiKNyfs6MMnZYNvz5A6ajO+WlUk=";
+    hash = "sha256-+NfxsvCtabfr3Vy/Uy+07hB4k7U3O8LQ6WNAicCyz+4=";
   };
 
   build-system = [ hatchling ];

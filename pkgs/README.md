@@ -129,7 +129,7 @@ To add a package to Nixpkgs:
    - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix).
      Has an optional dependency on `gspell`, which is only built if `spellCheck` is `true`.
 
-   - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix).
+   - Apache HTTPD: [`pkgs/by-name/ap/apacheHttpd_2_4/package.nix`](./by-name/ap/apacheHttpd_2_4/package.nix).
      A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
    - buildMozillaMach: [`pkgs/build-support/build-mozilla-mach/default.nix`](./build-support/build-mozilla-mach/default.nix).

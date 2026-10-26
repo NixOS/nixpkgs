@@ -290,6 +290,7 @@ mapAliases {
   flufl_i18n = throw "'flufl_i18n' has been renamed to/replaced by 'flufl-i18n'"; # Converted to throw 2025-10-29
   flufl_lock = throw "'flufl_lock' has been renamed to/replaced by 'flufl-lock'"; # Converted to throw 2025-10-29
   FormEncode = throw "'FormEncode' has been renamed to/replaced by 'formencode'"; # Converted to throw 2025-10-29
+  fuse = throw "'fuse-python' was removed, because it is stuck on the old, unmaintained fuse 2.x"; # Added 2026-05-30
   fvs = throw "'fvs' has been removed due to being unused"; # Added 2026-05-23
   garminconnect-ha = throw "'garminconnect-ha' has been renamed to/replaced by 'garminconnect'"; # Converted to throw 2025-10-29
   GeoIP = throw "'GeoIP' has been renamed to/replaced by 'geoip'"; # Converted to throw 2025-10-29
@@ -415,6 +416,7 @@ mapAliases {
   mathlibtools = throw "mathlibtools has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   matlink-gpapi = throw "'matlink-gpapi' has been removed as it was broken and unmaintained"; # Added 2025-11-09
   maubot = throw "'maubot' has been promoted to a top-level attribute: `pkgs.maubot`"; # added 2026-07-12
+  mcp_2 = mcp; # added 2026-10-16
   mdformat-tables = throw "'mdformat-tables' has been archived and replaced by 'mdformat-gfm"; # added 2025-01-25
   MDP = throw "'MDP' has been renamed to/replaced by 'mdp'"; # Converted to throw 2025-10-29
   MechanicalSoup = throw "'MechanicalSoup' has been renamed to/replaced by 'mechanicalsoup'"; # Converted to throw 2025-10-29
@@ -439,6 +441,7 @@ mapAliases {
   mpd2 = warnAlias "'mpd2' has been renamed to 'python-mpd2'" python-mpd2; # Added 2026-06-14
   mpire = throw "'mpire' has been removed because it is unused in Nixpkgs"; # Added 2026-06-22
   msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
+  msrplib = warnAlias "'msrplib' has been renamed to/replaced by 'python3-msrplib'" python3-msrplib; # added 2026-10-21
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
   mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
@@ -629,6 +632,7 @@ mapAliases {
   python-bring-api = throw "python-bring-api was removed because Home Assistant switched to bring-api"; # added 2025-10-03
   python-broadlink = throw "python-broadlink was removed because Home Assistant switched to broadlink-async"; # added 2025-07-03
   python-clementine-remote = throw "'python-clementine-remote' was removed because Home Assistant dropped the integration"; # Added 2026-06-04
+  python-constraint = python-constraint2; # added 2026-10-20
   python-djvulibre = djvulibre-python; # Added 2026-08-07
   python-ethtool = throw "'python-ethtool' has been renamed to/replaced by 'ethtool'"; # Converted to throw 2025-10-29
   python-igraph = throw "'python-igraph' has been renamed to/replaced by 'igraph'"; # Converted to throw 2025-10-29
@@ -833,6 +837,7 @@ mapAliases {
   x11_hash = throw "'x11_hash' has been renamed to/replaced by 'x11-hash'"; # Converted to throw 2025-10-29
   xapp = throw "'xapp' has been renamed to/replaced by 'python-xapp'"; # Converted to throw 2025-10-29
   xbox-webapi = throw "xbox-webapi was removed because Home Assistant switched to python-xbox"; # added 2025-12-03
+  xcaplib = warnAlias "'xcaplib' has been renamed to/replaced by 'python3-xcaplib'" python3-xcaplib; # added 2026-10-21
   xlib = python-xlib; # added 2026-06-21
   XlsxWriter = throw "'XlsxWriter' has been renamed to/replaced by 'xlsxwriter'"; # Converted to throw 2025-10-29
   y-py = throw "'y-py' has been removed as it was archived upstream; consider using 'pycrdt' instead"; # Added 2026-01-21

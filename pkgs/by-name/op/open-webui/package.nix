@@ -239,7 +239,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "open_webui" ];
 
-  makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
+  makeWrapperArgs = [
+    "--set"
+    "FRONTEND_BUILD_DIR"
+    "${frontend}/share/open-webui"
+  ];
 
   passthru = {
     tests = {

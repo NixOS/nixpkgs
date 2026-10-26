@@ -4,6 +4,7 @@
   buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGo127Module (finalAttrs: {
@@ -23,6 +24,8 @@ buildGo127Module (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [
     "-s"
     "-X=github.com/controlplaneio/kubesec/v${lib.versions.major finalAttrs.version}/cmd.version=v${finalAttrs.version}"
@@ -30,6 +33,8 @@ buildGo127Module (finalAttrs: {
 
   # Tests wants to download the kubernetes schema for use with kubeval
   doCheck = false;
+
+  versionCheckProgramArg = [ "version" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubesec \
@@ -39,14 +44,6 @@ buildGo127Module (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/kubesec --help
-    $out/bin/kubesec version | grep "${finalAttrs.version}"
-
-    runHook postInstallCheck
-  '';
 
   meta = {
     description = "Security risk analysis tool for Kubernetes resources";

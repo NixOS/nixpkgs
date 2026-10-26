@@ -47,13 +47,6 @@ in
 
   config = lib.mkIf cfg.enable {
     meta.maintainers = with lib.maintainers; [ hustlerone ];
-    assertions = [
-      {
-        assertion = cfg.enable -> config.boot.initrd.systemd.enable;
-        message = "boot.initrd.unl0kr is only supported with boot.initrd.systemd.";
-      }
-    ];
-
     warnings = lib.mkMerge [
       (lib.mkIf (config.hardware.amdgpu.initrd.enable) [
         "Use early video loading at your risk. It's not guaranteed to work with unl0kr."

@@ -53,8 +53,10 @@
   debug ? false,
   enableXWayland ? true,
   withSystemd ? lib.meta.availableOn gcc16Stdenv.hostPlatform systemdLibs,
+  withUWSM ? withSystemd,
   wrapRuntimeDeps ? true,
 }:
+assert withUWSM -> withSystemd;
 let
   inherit (builtins)
     foldl'
@@ -111,6 +113,8 @@ customStdenv.mkDerivation (finalAttrs: {
       --replace-fail  "@PREFIX@/" ""
     substituteInPlace example/hyprland.desktop.in \
       --replace-fail  "@PREFIX@/" ""
+  ''
+  + lib.optionalString withUWSM ''
     substituteInPlace systemd/hyprland-uwsm.desktop \
       --replace-fail "Exec=uwsm " "Exec=${lib.getExe uwsm} " \
       --replace-fail "TryExec=uwsm" "TryExec=${lib.getExe uwsm}"
@@ -204,7 +208,7 @@ customStdenv.mkDerivation (finalAttrs: {
     "NO_XWAYLAND" = !enableXWayland;
     "NO_SYSTEMD" = !withSystemd;
     "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
-    "NO_UWSM" = !withSystemd;
+    "NO_UWSM" = !withUWSM;
     "TRACY_ENABLE" = false;
   };
 
@@ -223,7 +227,7 @@ customStdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    providedSessions = [ "hyprland" ] ++ optionals withSystemd [ "hyprland-uwsm" ];
+    providedSessions = [ "hyprland" ] ++ optionals withUWSM [ "hyprland-uwsm" ];
     updateScript = ./update.sh;
   };
 

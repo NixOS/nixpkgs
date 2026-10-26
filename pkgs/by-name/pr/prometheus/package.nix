@@ -38,7 +38,7 @@
 }:
 
 let
-  version = "3.15.0";
+  version = "3.15.1";
 
   pname = "prometheus";
 
@@ -46,7 +46,7 @@ let
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${version}";
-    hash = "sha256-H0VkirdEVWoFxg86g8utf6EuCSH3pHD8iuHg6y0xOZE=";
+    hash = "sha256-SVoTlUxUc8d6zjdeZkRN5q4VhoWsFYoUyG6InU2GKJA=";
   };
 
   assets = stdenv.mkDerivation (finalAssetsAttrs: {
@@ -113,7 +113,7 @@ buildGoModule (finalAttrs: {
     src
     ;
 
-  vendorHash = "sha256-ax/uL+fR0dGOiEMQfEzYPh+437i6sUGFmBEBfENbEqI=";
+  vendorHash = "sha256-CUKnKTxXxdSBvE372C3NXMaOkg/A0bgcStOlPMSUc/A=";
 
   proxyVendor = true;
 

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   telegram-desktop,
   withWebkit ? true,
@@ -19,6 +20,10 @@ telegram-desktop.override {
       hash = "sha256-EOXEkXuLJ2p9Y4BBekK7sz5/zkXS570r1npIX6o+o4E=";
       fetchSubmodules = true;
     };
+
+    # Find the Swift SDK overlays needed by the translation provider.
+    # Remove after next release
+    env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L/usr/lib/swift";
 
     meta = {
       description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";

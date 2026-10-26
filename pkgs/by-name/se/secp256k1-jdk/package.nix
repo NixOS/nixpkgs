@@ -22,7 +22,7 @@ maven.buildMavenPackage (finalAttrs: {
   mvnOffline = false; # We need actions not allowed in Maven offline mode, but Nix sandboxing will still be enforced
   # make snapshot builds reproducible, disable Kotlin compiler daemon
   mvnParameters = "-Drevision=${finalAttrs.version} -Dkotlin.compiler.daemon=false";
-  mvnHash = "sha256-a62jDFapnYV/mguZ/5PDzI5Unz7BnuvieLmpsocYMO4=";
+  mvnHash = "sha256-RedwILMEz1UKkzNugcUvlzRojV7Mdx0Wbf58hxxANpA=";
 
   strictDeps = true;
   __structuredAttrs = true;

@@ -56,10 +56,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-icL2WMnoN+UKhm8Z5jS7YbmHIgybszNx9EhvPd4GUTE=",
+                    "hash": "sha256-5QBlmxMu7DKPYPQxADNtjnKTxVFdXKj940Adn/sG+V4=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v42.11.16"
+                    "tag": "v42.11.18"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1437,7 +1437,7 @@
         },
         "modules": "146",
         "node": "24.19.0",
-        "version": "42.11.16"
+        "version": "42.11.18"
     },
     "43": {
         "chrome": "150.0.7871.250",
@@ -1504,10 +1504,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-+DQQS9WzQ6U/4XVslYfaYLP13d/ouHF6pVPLzeKcUfg=",
+                    "hash": "sha256-adUyEUqbjAEfBYxBPaeRPDtoTkwuBGMHIR6YZJ5e6qE=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.8.1"
+                    "tag": "v43.8.3"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2884,7 +2884,7 @@
         },
         "modules": "148",
         "node": "24.22.0",
-        "version": "43.8.1"
+        "version": "43.8.3"
     },
     "44": {
         "chrome": "152.0.7977.167",
@@ -2951,10 +2951,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-fBhtdMzhspUyXDxIU9ylkand7skyqi49DgMSLDnxtG4=",
+                    "hash": "sha256-9FaI//rjfeUeVlcqTITMiHb4Cuk7npzEggrhoJhYTrs=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.9.1"
+                    "tag": "v44.9.3"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4364,6 +4364,6 @@
         },
         "modules": "149",
         "node": "24.22.0",
-        "version": "44.9.1"
+        "version": "44.9.3"
     }
 }

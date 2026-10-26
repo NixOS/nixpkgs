@@ -5,6 +5,7 @@
   stdenv,
   installShellFiles,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -30,9 +31,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME="$TMPDIR"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags =
     let

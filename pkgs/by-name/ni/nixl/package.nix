@@ -20,6 +20,7 @@
   libfabric,
   liburing,
   numactl,
+  rdma-core,
   taskflow,
   tomlplusplus,
   ucx,
@@ -86,6 +87,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     libfabric
     liburing
     numactl
+    rdma-core
     taskflow
     tomlplusplus
     ucx

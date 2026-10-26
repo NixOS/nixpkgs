@@ -6,6 +6,8 @@
   argparse-manpage,
   setuptools,
   packaging,
+  hatchling,
+  hatch-argparse-manpage,
   pyxdg,
 }:
 
@@ -15,12 +17,15 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "show_in_file_manager";
+    inherit version;
     hash = "sha256-VZtZbj5WOADPadc0zSNoJCeanYINHYQWQMXxPgBY+bY=";
   };
 
   nativeBuildInputs = [
     argparse-manpage
+    hatchling
+    hatch-argparse-manpage
     setuptools
   ];
 

@@ -141,7 +141,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     cuda_cudart # cuda.h, cuda_runtime.h, libcudart_static.a
     cuda_cuxxfilt # nv_decode.h
     cuda_nvrtc # nvrtc.h
-    cuda_nvtx # nvToolsExt.h
+    nvtx # nvToolsExt.h
     cuda_profiler_api # cuda_profiler_api.h
     libcublas # cublas_v2.h
     libcufft # cufft.h

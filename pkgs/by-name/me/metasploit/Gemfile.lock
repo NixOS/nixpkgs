@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: c9f124a1cc4f3c4c62c43322733b7ff8736767d1
-  ref: refs/tags/6.5.6
+  revision: 5a727164751eaabedc82d61282df1983e65fefbd
+  ref: refs/tags/6.5.8
   specs:
-    metasploit-framework (6.5.6)
+    metasploit-framework (6.5.8)
       aarch64
       abbrev
       actionpack (~> 8.0.5)
@@ -49,7 +49,7 @@ GIT
       metasploit-concern
       metasploit-credential (>= 6.0.21)
       metasploit-model
-      metasploit-payloads (= 2.0.247)
+      metasploit-payloads (= 2.0.257)
       metasploit_data_models (>= 6.0.15)
       metasploit_payloads-mettle (= 1.0.48)
       mqtt
@@ -169,11 +169,11 @@ GEM
       uri (>= 0.13.1)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    afm (1.0.0)
+    afm (1.0.1)
     arel-helpers (2.17.0)
       activerecord (>= 3.1.0)
-    aws-eventstream (1.4.0)
-    aws-partitions (1.1293.0)
+    aws-eventstream (1.4.1)
+    aws-partitions (1.1298.0)
     aws-sdk-core (3.254.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -217,7 +217,7 @@ GEM
     concurrent-ruby (1.3.8)
     connection_pool (3.0.2)
     cookiejar (0.3.4)
-    crass (1.0.7)
+    crass (1.0.8)
     csv (3.3.6)
     daemons (1.4.1)
     date (3.4.1)
@@ -225,7 +225,7 @@ GEM
       base64 (>= 0.2)
       logger (~> 1.6)
       simpleidn (~> 0.2.1)
-    domain_name (0.6.20260921)
+    domain_name (0.7.20261007)
     drb (2.2.3)
     ed25519 (1.4.0)
     elftools (2.2.0)
@@ -244,11 +244,11 @@ GEM
     eventmachine (1.2.7)
     faker (3.8.0)
       i18n (>= 1.8.11, < 2)
-    faraday (2.14.4)
-      faraday-net_http (>= 2.0, < 3.5)
+    faraday (2.15.0)
+      faraday-net_http (>= 2.0, < 3.6)
       json
       logger
-    faraday-net_http (3.4.4)
+    faraday-net_http (3.5.0)
       net-http (~> 0.5)
     faraday-retry (2.4.0)
       faraday (~> 2.0)
@@ -280,7 +280,7 @@ GEM
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     io-console (0.9.4)
-    ipaddr (1.2.9)
+    ipaddr (1.3.0)
     irb (1.18.0)
       pp (>= 0.6.0)
       prism (>= 1.3.0)
@@ -289,7 +289,7 @@ GEM
     jmespath (1.6.2)
     jsobfu (0.4.2)
       rkelly-remix
-    json (3.0.2)
+    json (3.1.0)
     json_schemer (2.5.0)
       bigdecimal
       hana (~> 1.3)
@@ -300,7 +300,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lru_redux (1.1.0)
-    mcp (1.7.0)
+    mcp (1.8.1)
       json_schemer (>= 2.4)
     metasm (1.0.6)
     metasploit-concern (5.0.7)
@@ -331,7 +331,7 @@ GEM
       drb
       mutex_m
       railties (>= 7.0, < 9.0)
-    metasploit-payloads (2.0.247)
+    metasploit-payloads (2.0.257)
     metasploit_data_models (6.0.19)
       activerecord (>= 7.0, < 9.0)
       activesupport (>= 7.0, < 9.0)
@@ -349,11 +349,9 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.1006)
+    mime-types-data (3.2026.1020)
     mini_portile2 (2.8.9)
-    minitest (6.0.6)
-      drb (~> 2.0)
-      prism (~> 1.5)
+    minitest (5.27.0)
     mqtt (0.7.0)
       logger
     msgpack (1.8.5)
@@ -363,19 +361,21 @@ GEM
     net-http (0.10.0)
       net-protocol (>= 0.3.0)
       uri (>= 0.11.1)
-    net-imap (0.6.7)
+    net-imap (0.6.8)
       date
       net-protocol
-    net-ldap (0.20.0)
+    net-ldap (0.21.0)
       base64
       ostruct
     net-protocol (0.4.0)
       timeout
-    net-sftp (4.0.0)
-      net-ssh (>= 5.0.0, < 8.0.0)
+    net-sftp (4.0.1)
+      net-ssh (>= 5.0.0, < 9.0.0)
     net-smtp (0.5.2)
       net-protocol
-    net-ssh (7.3.6)
+    net-ssh (8.0.2)
+      logger
+      openssl (>= 3.2.0)
     netrc (0.11.0)
     network_interface (0.0.4)
     nexpose (7.3.0)
@@ -410,7 +410,7 @@ GEM
     pp (0.6.4)
       prettyprint
     prettyprint (0.2.1)
-    prism (1.9.0)
+    prism (2.0.0)
     public_suffix (7.0.5)
     puma (8.0.2)
       nio4r (~> 2.0)
@@ -423,7 +423,7 @@ GEM
     rack-session (2.1.2)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
-    rack-test (2.2.0)
+    rack-test (2.3.0)
       rack (>= 1.3)
     rackup (2.3.1)
       rack (>= 3)
@@ -456,7 +456,7 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    recog (3.1.36)
+    recog (3.1.37)
       nokogiri
     redcarpet (3.6.1)
     regexp_parser (2.13.1)
@@ -475,7 +475,7 @@ GEM
       rex-core
       rex-struct2
       rex-text
-    rex-core (0.1.36)
+    rex-core (0.1.37)
     rex-encoder (0.1.10)
       metasm
       rex-arch
@@ -553,7 +553,7 @@ GEM
       rack-protection (= 4.2.1)
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
-    sqlite3 (2.9.6)
+    sqlite3 (2.10.1)
       mini_portile2 (~> 2.8.0)
     sshkey (3.0.0)
     stringio (3.1.1)
@@ -587,14 +587,13 @@ GEM
     websocket-extensions (0.1.5)
     win32api (0.1.0)
     windows_error (0.1.6)
-    winrm (2.4.1)
+    winrm (2.4.2)
       base64 (~> 0.2)
       builder (>= 2.1.2)
-      erubi (~> 1.8)
       gssapi (~> 1.2)
       gyoku (~> 1.0)
       httpclient (~> 2.2, >= 2.2.0.2)
-      logger (~> 1.6)
+      logger (~> 1.5)
       nori (~> 2.0, >= 2.7.1)
       rexml (~> 3.0)
       rubyntlm (~> 0.6.0, >= 0.6.3)

@@ -11,7 +11,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = "memtrace";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dWkTrN8ZgNUz7BW7Aut8mfx8o4n8f6UZaDv/7rbbwNs=";
   };
 

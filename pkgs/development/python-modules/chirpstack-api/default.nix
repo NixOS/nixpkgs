@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chirpstack-api";
-  version = "4.19.2";
+  version = "4.20.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "chirpstack";
     repo = "chirpstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8fRvGxUOZzqK55lvD8mK3GXT+BQrMbLXnrqLiJiX7g0=";
+    hash = "sha256-be2RT+lQvZc0+GbihpLwPgMXb4qOF+xWQ45tuvul0Rg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/api/python/src";

@@ -14,7 +14,7 @@ buildDunePackage {
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-+Dx8BuRlxb8xh41jHskrNcKGV/HgedauLt1vo1tADHw=";
   };
   patches = [

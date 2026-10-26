@@ -13,11 +13,17 @@ let
       version,
       hash ? null,
       phpSrc ? null,
+      knownVulnerabilities ? [ ],
     }:
     let
       base = callPackage ./generic.nix {
         stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-        inherit version hash phpSrc;
+        inherit
+          version
+          hash
+          phpSrc
+          knownVulnerabilities
+          ;
       };
     in
     base.withExtensions (
@@ -70,27 +76,23 @@ let
     );
 in
 {
-  php82 = mkPhp {
-    version = "8.2.34";
-    hash = "sha256-BGfWOoGQFoEdNf0U9zR2SBOrFJdQN5eQY0KUxyPNdWI=";
-  };
   php83 = mkPhp {
-    version = "8.3.35";
-    hash = "sha256-4nnZ7JDZvKuQDRRoFuWxHT6JJLgOK6NsfX2ufXHcvy0=";
+    version = "8.3.36";
+    hash = "sha256-RvS0XjaI7SsYGQFae1MsFbUcwFW907E/0A3f7r7tzV8=";
   };
   php84 = mkPhp {
-    version = "8.4.26";
-    hash = "sha256-QglpTXsPY8RaN3PgfNwrv8cSSSZaXZUbH/U+EUftxco=";
+    version = "8.4.27";
+    hash = "sha256-slMKh3xyL0sIyeF0owywi6wrfhkD7m6eMV8KqfX4LCQ=";
   };
   php85 = mkPhp {
-    version = "8.5.11";
-    hash = "sha256-3JQHFqjHPlMcAHjuy5VdWV0yHsLMnUcUnPAInqbhj2Q=";
+    version = "8.5.12";
+    hash = "sha256-/7YO3EN87WO1E35JhNs3moERxQBJxxFRDYuVgnfvwag=";
   };
   php86 = mkPhp rec {
-    version = "8.6.0RC3";
+    version = "8.6.0RC4";
     phpSrc = fetchurl {
-      url = "https://downloads.php.net/~svpernova09/php-${version}.tar.xz";
-      hash = "sha256-Ex+Hoga92QwXjY5E6AJDrgwzPEzuhTH2PRyqms3YaWo=";
+      url = "https://downloads.php.net/~mbeccati/php-${version}.tar.xz";
+      hash = "sha256-k/II2prgWb9oY7Dh0QHmxkdaew8Ky/bAhJUKtSL1FNg=";
     };
   };
 }

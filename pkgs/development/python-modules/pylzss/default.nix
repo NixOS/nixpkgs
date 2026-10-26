@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pylzss";
-  version = "0.3.8";
+  version = "0.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m1stadev";
     repo = "pylzss";
     tag = "v${version}";
-    hash = "sha256-Y0u9rFJWYWyJUVEgpLtQHsXu0JpTgRKxFJHB+B3EFyU=";
+    hash = "sha256-10AVeYYTYmWjvsUDhnlHAmEsNIHXwyKDQGJmKAyX6cE=";
   };
 
   build-system = [ setuptools ];

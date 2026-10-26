@@ -8,6 +8,7 @@
   nlohmann_json,
   stdenv,
   kdePackages,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -36,11 +37,6 @@ stdenv.mkDerivation {
     cp -r --reflink=auto ${goDeps} src/tailscale/wrapper/vendor
   '';
 
-  # needed for go build to work
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
-
   cmakeFlags = [
     # actually just disables Go vendoring updates
     "-DKTAILCTL_FLATPAK_BUILD=ON"
@@ -52,6 +48,7 @@ stdenv.mkDerivation {
     git
     go_1_27
     wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = with kdePackages; [

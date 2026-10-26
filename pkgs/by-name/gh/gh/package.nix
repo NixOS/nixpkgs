@@ -14,7 +14,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "gh";
-  version = "2.102.1";
+  version = "2.103.2";
 
   __structuredAttrs = true;
   separateDebugInfo = true;
@@ -23,14 +23,14 @@ buildGo127Module (finalAttrs: {
     owner = "cli";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yc63APqTd5a/caRoU1qmNm5zv1eYlJ1QW/s28+OIfPI=";
+    hash = "sha256-g79A0s6PZdALB9aWVZV12Om/2uKVE1Zac2aFkqwa7MQ=";
 
     postCheckout = ''
       git -C "$out" log -1 --pretty=%ct > $out/SOURCE_DATE_EPOCH
     '';
   };
 
-  vendorHash = "sha256-l49T5ZXrXmeFcwT4lWeK4i3/pXv/Y7Btqd1Wwb+lJT8=";
+  vendorHash = "sha256-e9E2iTwF8kYNgW7Vs5upQBD2VT2lJ4dZcUDUk+igq/Y=";
 
   nativeBuildInputs = [
     installShellFiles

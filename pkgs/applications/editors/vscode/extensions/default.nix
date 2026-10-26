@@ -431,8 +431,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.20.0";
-          hash = "sha256-+A1G+3Qe2yzDslgX3ap3N03woHrqAp5Q5uj1nqVGE7k=";
+          version = "1.20.1";
+          hash = "sha256-IH4arT6N9JV93AGhZsnfC65CK4tpDsvaqE2iQr/nGwQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -515,8 +515,8 @@ let
         mktplcRef = {
           publisher = "banacorn";
           name = "agda-mode";
-          version = "0.10.5";
-          hash = "sha256-S4kSXd8kdRZBsXiUQLt8kmPocbwguhLKkdW+qkOfqMI=";
+          version = "0.10.9";
+          hash = "sha256-uSC5egcM2LIxUwkT0Mc3LXin/j3EWaEgSUTgOBWppLE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
@@ -1393,8 +1393,8 @@ let
         mktplcRef = {
           name = "competitive-programming-helper";
           publisher = "DivyanshuAgrawal";
-          version = "2026.9.1789578855";
-          hash = "sha256-9WQ+FvOTMB/jiPbmp9qE2i7yubRS4czskJJIvKvtEyM=";
+          version = "2026.10.1792170155";
+          hash = "sha256-eWy9EgXebVTddpJMsR1xbSsXcdvUdx+GVd1qdTl/PLY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DivyanshuAgrawal.competitive-programming-helper/changelog";
@@ -2049,8 +2049,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "7.2.0";
-          hash = "sha256-kIse70FkeQKYuwZuUSQJUaujQIt/Azynp0kyd3J+4eQ=";
+          version = "7.2.5";
+          hash = "sha256-qcA9he4jxa8fTFJtGSvdIdq2j9G9zI0ps4zAwcH1ju0=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -2916,8 +2916,8 @@ let
         mktplcRef = {
           name = "vscord";
           publisher = "leonardssh";
-          version = "5.3.9";
-          hash = "sha256-DZlIlxFEI4h5304771yZgQt6FiNVCqgzlH2qe1B1Riw=";
+          version = "5.3.10";
+          hash = "sha256-+4/Qdc/CulyuqqvYZgcE8Dw+gZ5snYpEBLZjFx6z3xM=";
         };
         meta = {
           description = "Highly customizable Discord Rich Presence extension for Visual Studio Code";
@@ -3228,8 +3228,8 @@ let
         mktplcRef = {
           name = "vscode-dotnet-runtime";
           publisher = "ms-dotnettools";
-          version = "3.1.0";
-          hash = "sha256-jmdf/l82dEMNY+KNLcBatA82yElOlUnnnTmV1yGxP1o=";
+          version = "3.2.0";
+          hash = "sha256-DvoaWpG8qFNjGl9xVRqBvymucGm9UQ9VOMx+X7EvBUA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.vscode-dotnet-runtime/changelog";
@@ -3885,8 +3885,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "31.12.15";
-          hash = "sha256-YKug6Px1w0upIj9nCvle6efd8+WDrTZeyymiTLHWl1g=";
+          version = "31.13.0";
+          hash = "sha256-arV/kMQCgN91N0D9eOJlXz92f8HdLMW1NqdkxD90Lrk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -3934,6 +3934,23 @@ let
         };
       };
 
+      radicle-ide-plugins-team.radicle = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "radicle-ide-plugins-team";
+          name = "radicle";
+          version = "0.7.1";
+          hash = "sha256-5ik0RYo8IFV//y8UY9MXcjbVCg8jeYRereni07GXVTM=";
+        };
+
+        meta = {
+          description = "Bring support for the Radicle network to your VS code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=radicle-ide-plugins-team.radicle";
+          homepage = "https://github.com/maninak/radicle-vscode-extension";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.liamthexpl0rer ];
+        };
+      };
+
       rangav.vscode-thunder-client = callPackage ./rangav.vscode-thunder-client { };
 
       rebornix.ruby = buildVscodeMarketplaceExtension {
@@ -3967,8 +3984,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.56.0";
-          hash = "sha256-PGqCHXYS64efpAKAtsWFNC7sgtaxs+jc/k0DleBiQ0M=";
+          version = "1.58.0";
+          hash = "sha256-0BGO8WfVmDQ4CLzPPqVOJI0qGrKX3ALgCybn6+ydDMQ=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -3988,8 +4005,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "vscode-yaml";
-          version = "1.24.0";
-          hash = "sha256-Bmh1gxKn+mvtolnKWmhJ2QxdUZ32QV7b4kbBNeBtcWg=";
+          version = "1.25.0";
+          hash = "sha256-KoM0gNl1TYOvtk33WMUHNSAddZtTzbKb57eoEU3KKuQ=";
         };
         meta = {
           description = "YAML Language Support by Red Hat, with built-in Kubernetes syntax support";
@@ -4330,8 +4347,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.10.6";
-          hash = "sha256-5yEfTSgcSv9SQILOu7hyfNcK+m5IBHKpLDjXXwOZb/I=";
+          version = "0.10.8";
+          hash = "sha256-dEfBaXvAxI9JdAMBdZRZ1Fk/QjaSZPTs/okE8FGcQNU=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
@@ -4538,8 +4555,8 @@ let
         mktplcRef = {
           publisher = "streetsidesoftware";
           name = "code-spell-checker";
-          version = "4.9.3";
-          hash = "sha256-8MfXeGFCeKhxa3Z/YISz60N6ZmGHRJde3X/y4I6Totw=";
+          version = "4.10.0";
+          hash = "sha256-C1h6OMTHiIenghWPcnu9rd+rLerjzg2A77q0DVZHVjg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -5058,6 +5075,11 @@ let
         postInstall = ''
           cd "$out/$installPrefix"
           jq '.contributes.configuration.properties."ltex.java.path".default = "${jdk}"' package.json | sponge package.json
+
+          # drop the bundled JDK (unpatched, stale CA keystore); ltex-ls runs on jdk
+          rm -r lib/ltex-ls-*/jdk-*
+          substituteInPlace lib/ltex-ls-*/bin/ltex-ls lib/ltex-ls-*/bin/ltex-cli \
+            --replace-fail '"$BASEDIR"/jdk-11.0.12+7' '${jdk}'
         '';
 
         meta = {
@@ -5180,8 +5202,8 @@ let
         mktplcRef = {
           name = "vscode-gradle";
           publisher = "vscjava";
-          version = "3.18.0";
-          hash = "sha256-ybMejIJER9HHVh1z+tazgvQ0UIa8eKoJBb7JOLU1Kpw=";
+          version = "3.18.1";
+          hash = "sha256-S7uURc3q5atehOi2M6BDgf5olOiG5sAnxToQCb3WtO0=";
         };
 
         meta = {
@@ -5360,8 +5382,8 @@ let
         mktplcRef = {
           name = "gitblame";
           publisher = "waderyan";
-          version = "13.1.0";
-          sha256 = "sha256-32ohvlIV7ogX+hGgcrCyHrv2hKWSpi+YuRMv0SGDYYA=";
+          version = "14.0.0";
+          sha256 = "sha256-FuHczLa459kko2/A+FsPu41GGcK47Y/q8n7epGIdh50=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/waderyan.gitblame/changelog";

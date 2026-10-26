@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nodtool";
-  version = "2.0.0-alpha.9";
+  version = "2.0.0-alpha.12";
 
   src = fetchFromGitHub {
     owner = "encounter";
     repo = "nod";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-beWw+OgF4zCepv/7NQiwXOA8qMwMb8Z3C6icywT+Jr0=";
+    hash = "sha256-15gAlOCYgT7sNKG0FQHh/YnFLi/7YA5wtXGagh/5i/Y=";
   };
 
-  cargoHash = "sha256-+B7mjiCtuxPQ/zSMy8Lw6r5aGB+PVxhRES6zJhD5NAE=";
+  cargoHash = "sha256-AxjCefkC+EQf0WM7bKF7Hn7ToCBTROsowoffxIzLREE=";
 
   nativeBuildInputs = [
     cmake
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     set(CMAKE_INSTALL_LIBDIR lib)
     set(CMAKE_INSTALL_INCLUDEDIR include)
     set(CMAKE_INSTALL_BINDIR bin)
-    configure_package_config_file("''${NOD_SOURCE_DIR}/cmake/nodConfig.cmake.in" "''${CMAKE_INSTALL_PREFIX}/lib/cmake/nod/nodConfig.cmake" INSTALL_DESTINATION lib/cmake/nod)
+    configure_package_config_file("''${NOD_SOURCE_DIR}/cmake/nodConfig.cmake.in" "''${CMAKE_INSTALL_PREFIX}/lib/cmake/nod/nodConfig.cmake" INSTALL_DESTINATION lib/cmake/nod PATH_VARS CMAKE_INSTALL_LIBDIR CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_BINDIR)
     write_basic_package_version_file("''${CMAKE_INSTALL_PREFIX}/lib/cmake/nod/nodConfigVersion.cmake" VERSION "''${NOD_VERSION}" COMPATIBILITY AnyNewerVersion)
     EOF
 
@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
   };
 
   meta = {

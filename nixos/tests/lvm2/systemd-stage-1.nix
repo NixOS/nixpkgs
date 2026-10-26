@@ -95,10 +95,7 @@ in
 
       environment.systemPackages = with pkgs; [ xfsprogs ];
       boot = {
-        initrd.systemd = {
-          enable = true;
-          emergencyAccess = true;
-        };
+        initrd.systemd.emergencyAccess = true;
         initrd.services.lvm.enable = true;
         kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
       };

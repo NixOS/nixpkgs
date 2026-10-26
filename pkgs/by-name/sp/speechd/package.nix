@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     itstool
     texinfo
+    python3Packages.python
     python3Packages.wrapPython
   ];
 
@@ -87,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libao
     libpulseaudio
-    python3Packages.python
   ]
   ++ lib.optionals withSystemd [
     systemdLibs

@@ -81,7 +81,7 @@
       let
         cfg = config.boot.initrd.systemd;
       in
-      lib.mkIf (cfg.enable && cfg.tpm2.enable) {
+      lib.mkIf (config.boot.initrd.enable && cfg.tpm2.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "tpm2.target"
           "systemd-tpm2-setup-early.service"
@@ -107,7 +107,7 @@
       let
         cfg = config.boot.initrd.systemd;
       in
-      lib.mkIf (cfg.enable && cfg.tpm2.enable && cfg.tpm2.pcrphases.enable) {
+      lib.mkIf (config.boot.initrd.enable && cfg.tpm2.enable && cfg.tpm2.pcrphases.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "systemd-pcrphase-initrd.service"
         ];
@@ -119,7 +119,7 @@
       let
         cfg = config.boot.initrd.systemd;
       in
-      lib.mkIf (cfg.enable && cfg.tpm2.enable && cfg.tpm2.pcrosseparator.enable) {
+      lib.mkIf (config.boot.initrd.enable && cfg.tpm2.enable && cfg.tpm2.pcrosseparator.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "systemd-pcrosseparator.service"
         ];

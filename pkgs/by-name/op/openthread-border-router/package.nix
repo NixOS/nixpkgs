@@ -14,29 +14,28 @@
   buildNpmPackage,
   libnftnl,
   libmnl,
+  readline,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "openthread-border-router";
-  version = "2026.09.0";
+  version = "2026.10.0";
 
   src = fetchFromGitHub {
     owner = "openthread";
     repo = "ot-br-posix";
-    tag = "v${version}";
-    hash = "sha256-b/RuAy/A1e5kWJ2x4+/sZ7VDGW1StiXMF/g6kXHSoWQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-saTJ6lt9kNOdyNVvZ1RRg16KsgooSrT5+Y6zrj9Ifb4=";
     fetchSubmodules = true;
   };
 
   frontendModules = buildNpmPackage {
-    pname = "${pname}-frontend";
-    inherit version;
-    src = "${src}/src/web/web-service/frontend";
+    pname = "${finalAttrs.pname}-frontend";
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/src/web/web-service/frontend";
     npmDepsHash = "sha256-8KenFVtfxC0jkfZHHuYeV2Dj2kmzHUQTeACvRtOyZLA=";
     dontNpmBuild = true;
   };
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -49,7 +48,7 @@ stdenv.mkDerivation {
 
   # Adding npmConfigHook and manually passing fetchNpmDeps was resulting in ENOTCACHED errors
   postConfigure = ''
-    ln -sf ${frontendModules}/lib/node_modules/otbr-web/node_modules ./src/web/web-service/frontend/
+    ln -sf ${finalAttrs.frontendModules}/lib/node_modules/otbr-web/node_modules ./src/web/web-service/frontend/
   '';
 
   buildInputs = [
@@ -61,11 +60,8 @@ stdenv.mkDerivation {
     (lib.getBin bashNonInteractive)
     libnftnl
     libmnl
+    readline
   ];
-
-  postInstall = ''
-    install -Dm555 -t $out/bin ../script/otbr-firewall
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" false)
@@ -82,8 +78,9 @@ stdenv.mkDerivation {
     (lib.cmakeBool "OTBR_DBUS" true)
     (lib.cmakeBool "OTBR_TREL" true)
     (lib.cmakeBool "OTBR_NFTABLES" true)
+    (lib.cmakeFeature "OT_READLINE" "readline")
 
-    (lib.cmakeFeature "OTBR_VERSION" version)
+    (lib.cmakeFeature "OTBR_VERSION" finalAttrs.version)
     # otbr-agent aborts on startup with "Vendor name must be set." unless a vendor
     # and product name are baked in at build time.
     (lib.cmakeFeature "OTBR_VENDOR_NAME" "NixOS")
@@ -94,6 +91,11 @@ stdenv.mkDerivation {
 
     (lib.cmakeBool "OT_CHANNEL_MANAGER" true)
     (lib.cmakeBool "OT_CHANNEL_MONITOR" true)
+    # Recover from an RCP failure (e.g. a radio tx timeout) in-process, with a Spinel reset and a
+    # state restore, instead of exiting. OpenThread's default of 0 turns each one into a restart
+    # of otbr-agent. Matches OpenThread's own POSIX build (script/cmake-build) and the Home
+    # Assistant OTBR add-on.
+    (lib.cmakeFeature "OT_RCP_RESTORATION_MAX_COUNT" "2")
 
     # Required by protobuf
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
@@ -111,4 +113,4 @@ stdenv.mkDerivation {
     mainProgram = "ot-ctl";
     platforms = lib.platforms.linux;
   };
-}
+})

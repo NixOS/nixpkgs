@@ -10,17 +10,17 @@
 
 buildGo127Module (finalAttrs: {
   pname = "ghtkn";
-  version = "0.4.1";
+  version = "0.4.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "ghtkn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EtILxa6d6kmsd/6DykGqfokc3rrsXzf7ciettCkgo5E=";
+    hash = "sha256-qRlS/osV2K6p51qj2CCONB5qdy+plMjMBwE7klHiPOE=";
   };
 
-  vendorHash = "sha256-oA9US4CoGZrkhyVCiDooV5PkTV9akDUtcSqguc+4sEk=";
+  vendorHash = "sha256-AGoHsstyvCxe0i2xzwdTLvWGtl2x6z0gn6aQlbA4KBA=";
 
   ldflags = [ "-X=main.version=${finalAttrs.version}" ];
 

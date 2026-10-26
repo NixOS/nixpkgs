@@ -11,7 +11,7 @@
   prometheus-cpp,
   nlohmann_json,
   nix-update-script,
-  cxxStandard ? null,
+  cxxStandard ? "20",
   enableHttp ? false,
   enableGrpc ? false,
   enablePrometheus ? false,
@@ -49,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals (enableGrpc && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ grpc ];
 
   buildInputs = [
     curl
@@ -67,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # TODO remove when https://github.com/NixOS/nixpkgs/pull/573523 is fixed
+  enableParallelChecking = false;
+
   checkInputs = [
     gtest
   ];
@@ -76,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "OTELCPP_WITH_BENCHMARK" false)
+    (lib.cmakeBool "WITH_EXAMPLES" (!enableGrpc))
     (lib.cmakeBool "OTELCPP_WITH_OTLP_HTTP" enableHttp)
     (lib.cmakeBool "OTELCPP_WITH_OTLP_GRPC" enableGrpc)
     (lib.cmakeBool "OTELCPP_WITH_PROMETHEUS" enablePrometheus)
@@ -85,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (cxxStandard != null) [
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-    (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
+    (lib.cmakeFeature "OTELCPP_WITH_STL" "CXX${cxxStandard}")
   ];
 
   outputs = [
@@ -120,6 +127,21 @@ stdenv.mkDerivation (finalAttrs: {
       enableElasticSearch = true;
       enableZipkin = true;
     };
+    http = opentelemetry-cpp.override {
+      enableHttp = true;
+    };
+    grpc = opentelemetry-cpp.override {
+      enableGrpc = true;
+    };
+    prometheus = opentelemetry-cpp.override {
+      enablePrometheus = true;
+    };
+    elasticSearch = opentelemetry-cpp.override {
+      enableElasticSearch = true;
+    };
+    zipkin = opentelemetry-cpp.override {
+      enableZipkin = true;
+    };
   };
 
   meta = {
@@ -131,7 +153,5 @@ stdenv.mkDerivation (finalAttrs: {
       panicgh
     ];
     platforms = lib.platforms.all;
-    # https://github.com/protocolbuffers/protobuf/issues/14492
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 })

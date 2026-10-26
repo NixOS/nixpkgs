@@ -31,13 +31,13 @@
   },
   {
     "pname": "Eto.Forms",
-    "version": "2.8.3",
-    "hash": "sha256-bxWYDbgfhc/tFwUVAt1K9bGiixo8o58plQxRnaJzYgM="
+    "version": "2.11.0",
+    "hash": "sha256-VxNpNQEiO73A6IKvOk5AAr10PXNP7HZiunXGz3ze43A="
   },
   {
     "pname": "Eto.Platform.Gtk",
-    "version": "2.8.3",
-    "hash": "sha256-U78xU1QwGpCEJTmAYZS5AQJU7d2SqISqZcZ10z0UYis="
+    "version": "2.11.0",
+    "hash": "sha256-9ST2LKb2h2mbsszeul1Cwl8H0ijlGQJ+C9OtZ8JwFIM="
   },
   {
     "pname": "GdkSharp",
@@ -195,6 +195,11 @@
     "hash": "sha256-I3iLnGiOuh0/f6Af0kTMmUDT7LX8hutIUXLi31jhCKU="
   },
   {
+    "pname": "NAPS2.Jpeg.Binaries",
+    "version": "1.0.0",
+    "hash": "sha256-HEQJJ01hgzJYUT60oJQK6akQjVIgruUfKJF804HB4VU="
+  },
+  {
     "pname": "NAPS2.Mdns",
     "version": "1.0.1",
     "hash": "sha256-upKFE/ZQeDS94AFbRhKHU7FZJ1TO2aVyRVWye/MyJHY="
@@ -211,8 +216,8 @@
   },
   {
     "pname": "NAPS2.PdfSharp",
-    "version": "1.0.1",
-    "hash": "sha256-HHBDTkCduzPNjwanQBvjjPP/A+kSFh0cyKVhCiXkoXQ="
+    "version": "1.0.2",
+    "hash": "sha256-z998Bf8dNkX6tuIPrajgSRExYEn6WI4cks0OAUdn1PE="
   },
   {
     "pname": "NAPS2.Tesseract.Binaries",

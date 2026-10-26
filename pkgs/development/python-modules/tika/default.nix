@@ -29,9 +29,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Only test that does not require network
   enabledTestPaths = [
-    "tika/tests/test_from_file_service.py::CreateTest::test_remote_endpoint"
+    # Only test that does not require network
+    "tests/test_from_file_service.py::test_remote_endpoint"
   ];
 
   pythonImportsCheck = [ "tika" ];

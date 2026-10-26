@@ -195,7 +195,7 @@ let
         error_log ${cfg.logError};
         daemon off;
 
-        worker_processes ${cfg.workerProcesses};
+        worker_processes ${toString cfg.workerProcesses};
 
         # load_module is a main-context directive that must precede events{}/http{}.
         ${optionalString (

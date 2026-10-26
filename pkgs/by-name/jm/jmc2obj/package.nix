@@ -18,7 +18,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-3+vH1pGJ6I4oobb2vk+J5GrOQrSLNoCuBIC9OsWYCj0=";
   };
 
-  mvnHash = "sha256-y+K6FR0USh4LUyv/w5n3pRVILtMRKg64+3D7yfE1IP8=";
+  mvnHash = "sha256-Bw//GHXmtzrP/tkk9NUijtuLAWeWYKhiVsOoYY9bfYU=";
 
   mvnParameters = "-Dmaven.gitcommitid.skip=true";
 

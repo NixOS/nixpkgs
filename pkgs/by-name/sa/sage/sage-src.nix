@@ -62,6 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/sagemath/sage/pull/42587
     ./patches/link-ntl-directly-for-ntl-cython-extensions.patch
 
+    # OutputBuffer.from_file chmods the bundled rich output example files,
+    # which live in the (possibly read-only mounted) Nix store. Only
+    # PermissionError was tolerated, so builders that mount store paths
+    # read-only fail ~49 doctests with EROFS.
+    # https://github.com/sagemath/sage/pull/43035
+    ./patches/rich-output-read-only-store.patch
+
     # https://github.com/sagemath/sage/pull/41637 causes problems when
     # docbuilding.
     (fetchpatch2 {

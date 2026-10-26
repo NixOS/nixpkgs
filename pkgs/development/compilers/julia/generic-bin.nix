@@ -6,6 +6,7 @@
 
 {
   autoPatchelfHook,
+  cacert,
   fetchurl,
   lib,
   stdenv,
@@ -104,6 +105,8 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     cp -r . $out
+    rm $out/share/julia/cert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/julia/cert.pem
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # "$out/share" is intentionally omitted since it contains

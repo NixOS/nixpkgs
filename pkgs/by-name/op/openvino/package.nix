@@ -40,7 +40,11 @@ let
     ps: with ps; [
       cython
       distutils
-      pybind11
+      # pybind11 3.1.0 runs precall hooks before argument conversion, so OpenVINO's
+      # conditional_keep_alive fires for rejected overloads and breaks the ov.Tensor
+      # bindings. Remove this pin as soon as
+      # https://github.com/pybind/pybind11/pull/6183 is released.
+      pybind11_3_0
       setuptools
       sphinx
       wheel

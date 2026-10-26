@@ -12,16 +12,16 @@ let
     }:
     rustPlatform.buildRustPackage rec {
       pname = name;
-      version = "1.3.0";
+      version = "1.4.0";
 
       src = fetchFromGitHub {
         owner = "n0-computer";
         repo = "iroh";
         rev = "v${version}";
-        hash = "sha256-ugGYRESccGgkI8evd21NE3jzNgULDEHwuf0UWdqKp6A=";
+        hash = "sha256-m2U3jtIsBWV2zp2myudCQ3PN/tDMWTlDfhEeELHRDPc=";
       };
 
-      cargoHash = "sha256-L0OnbXUC8JNW+/Xm0Q/8EjSlGmKYGvQQM+SqrRLb8mQ=";
+      cargoHash = "sha256-hlf/DNoWrxWdPccDpIGP3LY+RphJJXX94EXGhCblRn4=";
 
       buildFeatures = cargoFeatures;
       cargoBuildFlags = [

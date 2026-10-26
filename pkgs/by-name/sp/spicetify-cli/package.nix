@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "spicetify-cli";
-  version = "2.45.3";
+  version = "2.46.1";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+EsZHr9cJDvSlYnwlmLjv0iT6s6gpMCd3+RKl0pUbFM=";
+    hash = "sha256-lf2xGTSbN0A8Xbl3/Ep9l9XEQ4qGzKibzmjPbQ4V5QA=";
   };
 
-  vendorHash = "sha256-1yoFdrSgKB1kWtt7wz/gzNvl+v8v9Z/Ab3Kegb/5Q7M=";
+  vendorHash = "sha256-F16qjdsdHbPMhdeTK1gDboLLwz729PzmNt0D6VsmFfU=";
 
   postPatch = ''
     substituteInPlace src/preprocess/preprocess.go \

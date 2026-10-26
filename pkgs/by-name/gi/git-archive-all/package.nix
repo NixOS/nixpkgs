@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   git,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -37,6 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     git
+    writableTmpDirAsHomeHook
   ];
 
   checkInputs = with python3Packages; [
@@ -46,10 +48,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTests = [ "pycodestyle" ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   meta = {
     description = "Archive a repository with all its submodules";

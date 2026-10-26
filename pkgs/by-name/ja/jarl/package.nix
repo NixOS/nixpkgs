@@ -5,17 +5,19 @@
   fetchFromGitHub,
   git,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jarl";
-  version = "0.6.0-unstable-2026-08-30"; # TODO revert unstable with next version
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "etiennebacher";
     repo = "jarl";
-    rev = "0abcc17f335010419fa9cae463d746ad1343477e";
-    hash = "sha256-zUOCHL/AKDzOmWbnpP6BccEJ+tmtRvI1vQ+T/sCnXvY=";
+    tag = finalAttrs.version;
+    hash = "sha256-BAhfhoDMDgcRa/ylmsyAnJmDBD0CVOkSzkb6mCUDADY=";
   };
 
   postPatch = ''
@@ -25,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                    '(?:/nix)?/(?:build)/(?:nix[\-0-9]+/)?'
   '';
 
-  cargoHash = "sha256-TnpkGOs8/IFJ1trzMijOTmX3BR2P3GsBhyv0GVCwHsc=";
+  cargoHash = "sha256-qhwiwawHaPJCsKMfoJBlKlZ/cunUyymTvFDKwdlv3aM=";
 
   # integrations test require git at build time (jarl >= 0.5.0)
   nativeBuildInputs = [
@@ -43,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # "--test integration_tests"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # TODO: Upstream also provides Elvish and PowerShell completions,
@@ -56,6 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <(COMPLETE=fish $out/bin/jarl) \
       --zsh <(COMPLETE=zsh $out/bin/jarl) \
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Just another R linter";

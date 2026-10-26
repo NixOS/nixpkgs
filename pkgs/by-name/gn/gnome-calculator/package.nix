@@ -25,6 +25,7 @@
   libadwaita,
   gsettings-desktop-schemas,
   libgee,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,10 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  preCheck = ''
-    # Currency conversion test tries to store currency data in $HOME/.cache.
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   passthru = {
     updateScript = gnome.updateScript {

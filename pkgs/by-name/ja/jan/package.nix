@@ -8,16 +8,16 @@
 }:
 
 let
-  version = "0.8.6";
+  version = "0.8.7";
 
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
-    hash = "sha256-jQIY69PT+jMh3bUd2tgscKzvT/TBy8TqF6pFrsl7XAg=";
+    hash = "sha256-PCUfCJ5f6xn8yAMff+8byuxmSsyk2EgjmpPbnFWWkrw=";
   };
 
   linux-src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
-    hash = "sha256-L+cPsIhHOnvbSZ5c4HHVpXPFR1VpFIJduYnsHdEFIGY=";
+    hash = "sha256-SzdQGgHNnS5K6qw7uWNS9vffKapWZqz8Mm478zZm9ho=";
   };
 
   appimageContents = appimageTools.extract {

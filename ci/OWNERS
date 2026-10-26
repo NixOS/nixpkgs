@@ -48,6 +48,10 @@
 /lib/options.nix            @infinisil @roberth @hsjobeki @llakala
 /lib/tests/modules.sh       @infinisil @roberth @hsjobeki
 /lib/tests/modules          @infinisil @roberth @hsjobeki
+## Libraries / Nix-implementation-dependent tests
+/lib/tests/release.nix       @NixOS/lix-maintainers @xokdvium
+/lib/tests/test-with-nix.nix @NixOS/lix-maintainers @xokdvium
+/lib/tests/strings.sh        @NixOS/lix-maintainers @xokdvium
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
@@ -92,6 +96,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 
 # Nixpkgs documentation
 /doc                             @NixOS/documentation-team
+/doc/release-notes
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 
@@ -116,7 +121,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 
 # NixOS Render Docs
 /pkgs/by-name/ni/nixos-render-docs @GetPsyched @hsjobeki
-/doc/redirects.json                @GetPsyched @NixOS/documentation-team
+/doc/redirects.json                @GetPsyched
 /nixos/doc/manual/redirects.json   @GetPsyched
 
 # NixOS QEMU virtualisation
@@ -238,6 +243,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
 /pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
+/pkgs/applications/networking/mailreaders/thunderbird/wrapper.nix @booxter
 /nixos/tests/chromium.nix @emilylange @networkException
 
 # Certificate Authorities

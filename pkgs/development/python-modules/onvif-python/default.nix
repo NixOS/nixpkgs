@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onvif-python";
-  version = "0.4.4";
+  version = "0.4.7";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "nirsimetri";
     repo = "onvif-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aIsne8iHgCCKnPnB0eBOpxddyrtD0EME6GiMREbX0Ho=";
+    hash = "sha256-srLi8RzEqbV2Qre78d2QvGXXaqzuirhBOAT0wJkPzZE=";
   };
 
   postPatch = ''

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -133,11 +134,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     responses
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # No API key available

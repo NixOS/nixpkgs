@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  cacert,
   coreutils,
   lazarus,
   fpc,
@@ -42,13 +43,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
-  version = "1.237.2.0";
+  version = "1.237.3.0";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     tag = finalAttrs.version;
-    hash = "sha256-K2GGfgWyXV92s6TEWP4T2qfWFF4QRXmxaaGUoidP8oE=";
+    hash = "sha256-17cWvMXpJC4fZ4KEBMBF0DzeLczeA8cxeMCnI6MgyN8=";
   };
 
   patches = [
@@ -129,6 +130,11 @@ stdenv.mkDerivation (finalAttrs: {
       exit 1
     fi
   '') additionalLexers;
+
+  postFixup = ''
+    rm $out/share/cudatext/py/sys/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/cudatext/py/sys/certifi/cacert.pem
+  '';
 
   passthru.updateScript = ./update.sh;
 

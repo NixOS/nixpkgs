@@ -10,6 +10,7 @@
   kdePackages,
   libevdev,
   libinput,
+  libnotify,
   nix-update-script,
   pkg-config,
   python3,
@@ -28,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "5.0.4";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E1A9PviA9V4I8f/3iLsiLA1nb4EM+nh+WG8sXwbudCA=";
+    hash = "sha256-zWOnjTaifwhzIk9QLksf/g3EF/SOg1vJmM4IQ5P1+H8=";
   };
 
   passthru = {
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.extra-cmake-modules
     libevdev
     libinput
+    libnotify
     pythonEnv
     qt6.qtbase
     qt6.qtsvg

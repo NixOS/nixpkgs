@@ -3,10 +3,9 @@
   buildPythonPackage,
   chardet,
   fetchPypi,
+  hatchling,
   jinja2,
-  jinja2-pluralize,
   pluggy,
-  poetry-core,
   pycodestyle,
   pyflakes,
   pygments,
@@ -19,25 +18,27 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "10.5.1";
+  version = "10.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-8clBfGIRHkCoHEgsaSxc3RMf+TMXuqmTBEyykZEuu6M=";
+    hash = "sha256-jRGU37U39wSArJfJxF3UByHPTDJsmQP76ZfbZ6TbYZU=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     chardet
     jinja2
-    jinja2-pluralize
     pluggy
     pygments
-    tomli
   ];
+
+  optional-dependencies = {
+    toml = [ tomli ];
+  };
 
   nativeCheckInputs = [
     pycodestyle
@@ -48,16 +49,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # Tests check for flake8
-    "file_does_not_exist"
-    # Comparing console output doesn't work reliable
-    "console"
-    # Assertion failure
-    "test_html_with_external_css"
-    "test_style_defs"
-  ];
-
   pythonImportsCheck = [ "diff_cover" ];
 
   meta = {
@@ -66,5 +57,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dzabraev ];
+    mainProgram = "diff-cover";
   };
 }

@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biblioteca";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "workbenchdev";
     repo = "Biblioteca";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-PRm/4t0f8AExOFXCcV7S+JIKkJgYP1gego2xTUbj7FY=";
+    hash = "sha256-XhmtQyy4OMloeo+LVlNEnXW5KnkLmQq2B6J6W2Mjd1w=";
   };
 
   patches = [

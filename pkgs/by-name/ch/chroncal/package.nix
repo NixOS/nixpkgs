@@ -9,17 +9,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "chroncal";
-  version = "0.13.0";
+  version = "0.15.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DouglasdeMoura";
     repo = "chroncal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QajWO0R6mLJ/3svhc30Gbwr+wlDATExL2Raio+WHZks=";
+    hash = "sha256-n0MMGJ+l3xCECJIxBWmGdrlK/3oCJ7LTcSoCJEGRMXs=";
   };
 
-  vendorHash = "sha256-Ta/HF6EUQRH5I2Ggli2WsBgGm1sil5CImeLuvgmCVbg=";
+  vendorHash = "sha256-7QW8BQ+5Vj6eGECLxbaiZ2CEgHYIbi55g+Rzmf/txcw=";
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook # multiple tests need a writable $HOME for the database

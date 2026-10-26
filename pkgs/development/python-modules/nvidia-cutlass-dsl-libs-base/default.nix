@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "4.8.0";
+  version = "4.8.1";
 
   inherit (stdenv.hostPlatform) system;
 
@@ -38,47 +38,47 @@ let
   hashes = {
     base = {
       x86_64-linux = {
-        cp311 = "sha256-zjrsTDe2iIDoWn8/dj+P5NBQP0lRbMhVyAAS4PrfkuA=";
-        cp312 = "sha256-W9yAmJsPu6w9WJYAV+dOLOhnb6+na4UtlCK5xLm3S90=";
-        cp313 = "sha256-XjZ3N0j1qAYa/pmSZPHD3Mxf8Y7JVIqcdp2OcmMsiwA=";
-        cp314 = "sha256-coq/G8Bl+pUK1PRQaSgwDX4y8xSDErk/g/Py6PdWMpo=";
+        cp311 = "sha256-BPYNSBXUC4WI3BK8WFcpI2GfG5VHk2GV6AY0qUaMD7I=";
+        cp312 = "sha256-rC/Yx/o9be0AkX+ny6hoYGEAXajEcDxqKeA8FQRUOQk=";
+        cp313 = "sha256-M02LIZ/5UER55Q74b62qVpWhHyGoflyHp1NUsNa6EPw=";
+        cp314 = "sha256-FpQaRNTop2M9vmbT5bZO1ME2E0vxT9V9uEy99XCS5ys=";
       };
       aarch64-linux = {
-        cp311 = "sha256-BN4Djgr2WLZEQhxN9MePFhodPCz55bzf9jskxyfc2Vw=";
-        cp312 = "sha256-Ov/K77Wal2/1GV3Sv/TBNZQjPLSUFUC3TjcrY+SX0/I=";
-        cp313 = "sha256-TSbdKEiy+gOVQVHP1tqSt54vQXXYf01mHu3HfDa3oFQ=";
-        cp314 = "sha256-dS8XFdUKSvRwSqLxmZhrmWU7QN+1dN0MaqXPJk3dyAA=";
+        cp311 = "sha256-jVG64HLtg89VmoooM11A60Dx/vXgURxAXZ4dpv0rEyA=";
+        cp312 = "sha256-xjEviy8ardlZoCdtrzxLrMBceDxuoRGYWe1OvTwH47E=";
+        cp313 = "sha256-e8GZoCRBdoSbGpccvDf8QWT3C3Ehp7QmycQr3yQDyxk=";
+        cp314 = "sha256-6EscpqE4pPRitAugVUsBf7ztO26CUzNRLZ4bAdZRj4k=";
       };
     };
     cu12 = {
       x86_64-linux = {
-        cp311 = "sha256-Xax675f8Ud+IK2hiDhxDDntDYtCsoX0iByfadoHwYd8=";
-        cp312 = "sha256-I3TP3/Y1zq9+LFvRe0vrQQgwQgpP1lsSt/JLXVy7nUw=";
-        cp313 = "sha256-oG6mpCySHsZrGQ8UhJ4VKpWkXyiBkhRIi5sKo0Fo2jM=";
-        cp314 = "sha256-iJkYwy/mytBHrnGDQ/7bN0qcQnWQO0qy2PQugRpqDaw=";
+        cp311 = "sha256-36i+ILJXv7UKiEOSgncXa2mljsOg/PItfUgl8sOD7YE=";
+        cp312 = "sha256-RAuIc5Egxl2WxfFbvklqO9fCY5KHTVr2Bh04SX+Exww=";
+        cp313 = "sha256-SdKmQTrvabYGve08S8SBIzVCufk83iQfhpWn6mK08ig=";
+        cp314 = "sha256-4h2V54yA9jyQ6wBIFFiZSQbvD3/R60q1eyNCWzjUx6E=";
       };
       aarch64-linux = {
-        cp311 = "sha256-b4iuUtbirttKNP2jLJdKo1QwZM/u0/p+lhI8MkAv8so=";
-        cp312 = "sha256-MnZoR6vjvvcR62BSq3jA8kwJDt0fgzIvbnRTHTmegRc=";
-        cp313 = "sha256-CK8rifMwgd9ptkvhytEz+fdnJ0szZpiCy+5qX6NcX8w=";
-        cp314 = "sha256-QfnUkIfxggDEUW4Aq63mf1QnlfNjx/GVu1NAS4GoZvg=";
+        cp311 = "sha256-cKwOEJGDh+WxsyuzvAjqVlVsTlAMOJ3GiheMXU6Y898=";
+        cp312 = "sha256-yJ2f+VdOlFYeF74jwMBtZ/we22pLw+sGfzih3B9oK24=";
+        cp313 = "sha256-JJspR/UA0TrsVivVJ8mRNcQ7UgMy2YLwR6hmYefGqSk=";
+        cp314 = "sha256-5NPnwH3+nVf4WmI4U7+PDkU85wYTB5vx6b5o2g7weso=";
       };
     };
     cu13 = {
       x86_64-linux = {
-        cp311 = "sha256-GGZVnI2lw8CBUEeh+0FOF0X0cGmxS6xRaIhXhbhVPcI=";
-        cp312 = "sha256-RjzX8MRS/+7stTChWusbEMu9LI2mxaov7PZfg2JYpzI=";
-        cp313 = "sha256-QTeM+pTvPnQITVFXBk6oB6kglhI9N4aXotWL29WCJAo=";
-        cp314 = "sha256-CdF1JKVfQN9BFhancbdTe+juBWYSaBq8cFQk7rswuo4=";
+        cp311 = "sha256-lpzbjs/oyLUYEAH39IQp991THUPGYJrljr+MkoGFz08=";
+        cp312 = "sha256-UBkaOB2MwTkzc64LyHmwrvqaJWwjwi1PocL+Pf5XvJA=";
+        cp313 = "sha256-4GN/x+wfEZz4j8QtUAfHf3b1J8uCCSDkdmW8GTt4sL4=";
+        cp314 = "sha256-MdfyXJG+4kqXWM1pmmdSafuKWSlTh2ApvujD5Hj3dls=";
       };
       aarch64-linux = {
-        cp311 = "sha256-uh7G1nHwCBUuc5hok1CWdtDgECqyQtUzSRgUzeXI50E=";
-        cp312 = "sha256-1h6+JBbK6KLVN3iJVJ35y1AIrwBqFpLX0AbY90fmLmw=";
-        cp313 = "sha256-V0Gng9wJ4pTa2mhEybjfj/FPzBnbIL5IIFWRGk+5tz8=";
-        cp314 = "sha256-u9srFKdKNdOCowvubxfjH68Kq7bYeQmyuZx9E0psrBA=";
+        cp311 = "sha256-DwqjlOshARNMRKljO+p3ba8xXy/qKrcjzMbJEU+J1+o=";
+        cp312 = "sha256-hiN4wMUaOvLgU7NjZWUBsG+aVPd37uW+jABG14C2aVY=";
+        cp313 = "sha256-19hf9CHYMTSu8FZz6aRolJ/v2KfMr345AR9b/7mNmJA=";
+        cp314 = "sha256-D/KolD4SQ7kzXm0YXOyEHeJzPwwH+FCKVBizv7mEYPk=";
       };
     };
-    core = "sha256-sycW0u0QwYXNu7a1xvyiajETpg5uL+Ti8MsVlmQitiE=";
+    core = "sha256-usxnYOMobbRH1Fcg0yrlisLmzsreEVI0XveEstXkRDE=";
   };
 
   fetchLibsWheel =

@@ -15,7 +15,7 @@ maven.buildMavenPackage (finalAttrs: {
     hash = "sha256-wzOLb+2P9cZh7ka9DZ3BKw5DknPxBRuAVje1Ku4xq4w=";
   };
 
-  mvnHash = "sha256-ILigQLgDTCFij4wZzbYw0fZW3XQJTqyGWs2hofr2kGk=";
+  mvnHash = "sha256-tlnTxEYeIQAtodgsQ9ZgIOtgzys3sVW5h6fi3FkVadY=";
 
   # no .git present, so give buildnumber a fallback and skip the spotless check
   mvnParameters = "-Dmaven.buildNumber.revisionOnScmFailure=v${finalAttrs.version} -DskipTests -Dspotless.check.skip=true";

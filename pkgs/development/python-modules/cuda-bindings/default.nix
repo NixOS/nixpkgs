@@ -7,7 +7,7 @@
   addDriverRunpath,
 
   # build-system
-  cython,
+  cython_3_2,
   setuptools,
   setuptools-scm,
   cuda-pathfinder,
@@ -126,7 +126,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    cython
+    # All versions pin cython<3.3
+    cython_3_2
     setuptools
     setuptools-scm
   ]

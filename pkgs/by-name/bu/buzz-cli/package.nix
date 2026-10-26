@@ -2,34 +2,41 @@
   cacert,
   fetchFromGitHub,
   lib,
+  nix-update-script,
+  runCommand,
   rustPlatform,
   stdenv,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "buzz-cli";
-  version = "0.1.0-unstable-2026-09-02";
+  # The CLI crates have no releases of their own (their crate version stays
+  # 0.1.0 in every release): Buzz releases ship them with the desktop app, so
+  # this follows Buzz Desktop releases (desktop-v* tags).
+  version = "0.5.28";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "buzz";
-    rev = "47d068e2109d077414cbf2f4f1c927f6d051037a";
-    hash = "sha256-sLIyStOy330KzzVF9QnIn27loT5QXCRz0U4NN9bxU40=";
+    tag = "desktop-v${finalAttrs.version}";
+    hash = "sha256-NEsLQwcoQ2zTgznFgGFGNgYPnoclicNVycSEjl7I0Wo=";
   };
 
-  cargoHash = "sha256-q8FUmTHnPfy/Ub+TNs3UK3exOoX1GdZGwHkH5pDteKE=";
+  cargoHash = "sha256-UQ8qNqoeDwkwhmVZebi++gb2GP61dr1Zv2QU9mJ6KJ8=";
   cargoBuildFlags = [ "--package=buzz-cli" ];
   cargoTestFlags = [ "--package=buzz-cli" ];
 
   # reqwest initializes its rustls client in tests and needs a CA bundle.
   nativeCheckInputs = [ cacert ];
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
-    # Avoid nondeterministic LC_UUIDs emitted by ld64 on arm64.
-    RUSTFLAGS = "-C link-arg=-Wl,-no_uuid";
-  };
+  # Make darwin builds reproducible by disabling debug symbols in ring.
+  # See: https://github.com/briansmith/ring/pull/2881
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace "$cargoDepsCopy"/source-registry-*/ring-0.17.14/build.rs \
+      --replace-fail 'c.flag("-gfull")' 'c.flag("-g0")'
+  '';
 
   preBuild = ''
     # Remap transient Nix build paths for reproducible output.
@@ -37,9 +44,50 @@ rustPlatform.buildRustPackage {
     export NIX_CFLAGS_COMPILE="-ffile-prefix-map=$NIX_BUILD_TOP=/build ''${NIX_CFLAGS_COMPILE:-}"
   '';
 
+  # No versionCheckHook: `buzz` has no --version flag.
+
+  passthru = {
+    # Mobile releases tag the same repository far more often, so the release
+    # feed nix-update reads by default rarely shows a desktop release.
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--use-github-releases"
+        "--version-regex"
+        "^desktop-v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+    # `buzz pack` works without a relay: a minimal persona pack validates and
+    # inspects, and one that points at a missing persona file is rejected.
+    tests.persona-pack = runCommand "buzz-cli-persona-pack" { } ''
+      mkdir -p pack/.plugin pack/agents
+      cat > pack/.plugin/plugin.json <<'EOF'
+      {"id": "org.nixos.test", "name": "Test", "version": "1.0.0", "personas": ["agents/tester.persona.md"]}
+      EOF
+      cat > pack/agents/tester.persona.md <<'EOF'
+      ---
+      name: tester
+      display_name: Tester
+      description: Checks the package.
+      ---
+      You test the nixpkgs package.
+      EOF
+      buzz=${lib.getExe finalAttrs.finalPackage}
+      grep -qxF Valid. <<<"$($buzz pack validate pack)"
+      grep -q 'Display: Tester' <<<"$($buzz pack inspect pack)"
+      sed -i s/tester.persona/missing.persona/ pack/.plugin/plugin.json
+      # `! cmd` never fails a script under `set -e`; check the exit status directly.
+      if $buzz pack validate pack; then
+        echo "a pack whose persona file is missing must not validate" >&2
+        exit 1
+      fi
+      touch $out
+    '';
+  };
+
   meta = {
     description = "Agent-first CLI for Buzz relay";
     homepage = "https://github.com/block/buzz";
+    changelog = "https://github.com/block/buzz/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "buzz";
     maintainers = with lib.maintainers; [
@@ -48,4 +96,4 @@ rustPlatform.buildRustPackage {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

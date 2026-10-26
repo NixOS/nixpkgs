@@ -60,7 +60,10 @@ let
       };
       options.source = lib.mkOption {
         type = lib.types.path;
-        description = "The absolute path to the program to be wrapped.";
+        description = ''
+          The absolute path to the program to be wrapped.
+          This must be an ELF executable.
+        '';
       };
       options.program = lib.mkOption {
         type = with lib.types; nullOr str;
@@ -234,7 +237,8 @@ in
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
         modifying it. This works by creating a wrapper program in a directory
-        (not configurable), which is then added to the shell `PATH`.
+        (not configurable), which is then added to the shell `PATH`. Source
+        programs are required to be ELF executables.
       '';
     };
 

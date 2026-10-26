@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lua52Packages,
+  lua55Packages,
   makeWrapper,
 }:
 
@@ -21,13 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ lua52Packages.lua ];
+  buildInputs = [ lua55Packages.lua ];
 
   installPhase = ''
     runHook preInstall
 
     install -Dm755 z.lua $out/bin/z.lua
-    wrapProgram $out/bin/z.lua --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so" --set _ZL_USE_LFS 1;
+    wrapProgram $out/bin/z.lua --set LUA_CPATH "${lua55Packages.getLuaCPath lua55Packages.luafilesystem}" --set _ZL_USE_LFS 1;
     # Create symlink for backwards compatibility. See: https://github.com/NixOS/nixpkgs/pull/96081
     ln -s $out/bin/z.lua $out/bin/z
 

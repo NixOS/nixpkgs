@@ -61,14 +61,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-sYpi7vgeUH2xw2Jq8Rgou8SsS8aq+TWgq29gqv/xNnU=";
   };
 
+  pythonRelaxDeps = [
+    "fastapi"
+    "opentelemetry-instrumentation-fastapi"
+    "websockets"
+  ];
+
   build-system = [
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "fastapi"
-    "opentelemetry-instrumentation-fastapi"
-  ];
   dependencies = [
     docling-core
     docling-jobkit

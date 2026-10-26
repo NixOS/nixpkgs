@@ -32,7 +32,7 @@ maven.buildMavenPackage (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  mvnHash = "sha256-zLXu0VY9F1jtoTZZ0Q/pswNK5nmjN4aCdvSTAoHQg6k=";
+  mvnHash = "sha256-CWG8KO9PxRyyIEpAwhQpCQk5pWa4+OLCzNhOVaGIkSA=";
 
   nativeBuildInputs = [
     makeWrapper

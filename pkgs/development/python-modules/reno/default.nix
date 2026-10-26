@@ -8,7 +8,7 @@
   gnupg,
   pbr,
   pyyaml,
-  setuptools_80,
+  setuptools,
   sphinx,
   stestrCheckHook,
   testtools,
@@ -30,13 +30,15 @@ buildPythonPackage (finalAttrs: {
 
   env.PBR_VERSION = finalAttrs.version;
 
-  build-system = [ setuptools_80 ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     dulwich
     pbr
     pyyaml
-    setuptools_80
+    setuptools
   ];
 
   nativeCheckInputs = [

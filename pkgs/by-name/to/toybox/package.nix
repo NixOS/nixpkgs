@@ -94,7 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://landley.net/toybox/";
     license = lib.licenses.bsd0;
     platforms = with lib.platforms; linux ++ darwin ++ freebsd;
-    maintainers = with lib.maintainers; [ hhm ];
+    maintainers = with lib.maintainers; [
+      hhm
+      coolcuber
+    ];
     priority = 10;
   };
 })

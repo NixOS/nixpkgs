@@ -724,72 +724,8 @@ in
 
       boot.initrd = lib.mkIf inInitrd {
         kernelModules = [ "zfs" ];
-        extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
-          copy_bin_and_libs ${cfgZfs.package}/sbin/mount.zfs
-          copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
-          copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
-          copy_bin_and_libs ${cfgZfs.package}/lib/udev/vdev_id
-          copy_bin_and_libs ${cfgZfs.package}/lib/udev/zvol_id
-        '';
-        extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          $out/bin/zfs --help >/dev/null 2>&1
-          $out/bin/zpool --help >/dev/null 2>&1
-          $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
-        '';
-        postResumeCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
-          lib.concatStringsSep "\n" (
-            [
-              ''
-                ZFS_FORCE="${lib.optionalString cfgZfs.forceImportRoot "-f"}"
-              ''
-            ]
-            ++ [
-              (importLib {
-                # See comments at importLib definition.
-                zpoolCmd = "zpool";
-                awkCmd = "awk";
-                pool = null;
-              })
-            ]
-            ++ (map (pool: ''
-              echo -n "importing root ZFS pool \"${pool}\"..."
-              # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
-              if ! poolImported "${pool}"; then
-                for _ in $(seq 1 60); do
-                  poolReady "${pool}" > /dev/null && msg="$(poolImport "${pool}" 2>&1)" && break
-                  sleep 1
-                  echo -n .
-                done
-                echo
-                if [[ -n "$msg" ]]; then
-                  echo "$msg";
-                fi
-                poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
-              fi
 
-              ${lib.optionalString config.boot.initrd.clevis.enable (
-                lib.concatMapStringsSep "\n" (
-                  elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}"
-                ) (lib.filter (p: (lib.elemAt (lib.splitString "/" p) 0) == pool) clevisDatasets)
-              )}
-
-              ${
-                if lib.isBool cfgZfs.requestEncryptionCredentials then
-                  lib.optionalString cfgZfs.requestEncryptionCredentials ''
-                    zfs load-key -a
-                  ''
-                else
-                  lib.concatMapStrings (fs: ''
-                    zfs load-key -- ${lib.escapeShellArg fs}
-                  '') (lib.filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)
-              }
-            '') rootPools)
-          )
-        );
-
-        # Systemd in stage 1
-        systemd = lib.mkIf config.boot.initrd.systemd.enable {
+        systemd = {
           packages = [ cfgZfs.package ];
           services = lib.listToAttrs (
             map (

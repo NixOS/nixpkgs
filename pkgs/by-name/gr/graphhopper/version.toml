@@ -5,4 +5,4 @@ mapsBundle = "0.0.0-f171bcf55e447bf494348dd274cd377b73c951f6"
 [hash]
 src = "sha256-On4ovNr5MRRafpkhrpcKxRUgs5AwdtD5BD7AmC+iTj0="
 mapsBundle = "sha256-ehwWBIuYBwXu7W7uHYYuGl0lS4s6Tm5c4BfKPkY+w0A="
-mvnDeps = "sha256-Zarz0hFbiQ46cgvXGLt4IJ7YFIZRDXH1irHHOHxFsg4="
+mvnDeps = "sha256-dCqPqB6UTrJQyYJk/NvamD6sGK7sNeJ3FkGWxSKcBAk="

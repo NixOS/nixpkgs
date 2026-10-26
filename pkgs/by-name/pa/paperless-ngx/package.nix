@@ -22,7 +22,7 @@
   extraPythonPackageOverrides ? (_final: _prev: { }),
 }:
 let
-  defaultPythonPackageOverrides = final: prev: {
+  defaultPythonPackageOverrides = _final: prev: {
     django = prev.django_5;
 
     # tesseract5 may be overwritten in the paperless module and we need to propagate that to make the closure reduction effective
@@ -59,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.3.2";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-523WG24e9qhBTdIl327HE/o8e0TwE+HEbHkWPxRZwgI=";
+    hash = "sha256-KUDQ75CJc30Cjyx1UpKKzcN2erYv7gQ/q2H2wI4I6aY=";
   };
 
   postPatch = ''

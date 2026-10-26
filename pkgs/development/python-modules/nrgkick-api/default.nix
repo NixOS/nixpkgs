@@ -12,15 +12,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nrgkick-api";
-  version = "1.7.1";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andijakl";
     repo = "nrgkick-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZOVSQOjFPVnm3xnkhp+KFC9YbASEfzB05VpSzKcXJiU=";
+    hash = "sha256-jwH9C7+eMCUAPTJjgdXUw3icdgzzx4nuD+zDc2MGnBI=";
   };
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ setuptools ];
 

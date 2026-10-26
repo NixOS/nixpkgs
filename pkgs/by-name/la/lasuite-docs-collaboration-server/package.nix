@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   yarnBuildScript = "COLLABORATION_SERVER";
   yarnBuildFlags = "run build";
 
+  preInstall = ''
+    yarn install --force --ignore-scripts --production=true --offline --ignore-engines --frozen-lockfile
+  '';
+
   installPhase = ''
     runHook preInstall
 

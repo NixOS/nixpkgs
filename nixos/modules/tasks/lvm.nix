@@ -43,13 +43,8 @@ in
   };
 
   options.boot.initrd.services.lvm.enable = mkEnableOption "booting from LVM2 in the initrd" // {
-    description = ''
-      *This will only be used when systemd is used in stage 1.*
-
-      Whether to enable booting from LVM2 in the initrd.
-    '';
-    default = config.boot.initrd.systemd.enable && config.services.lvm.enable;
-    defaultText = lib.literalExpression "config.boot.initrd.systemd.enable && config.services.lvm.enable";
+    default = config.services.lvm.enable;
+    defaultText = lib.literalExpression "config.services.lvm.enable";
   };
 
   config = mkMerge [
@@ -90,18 +85,6 @@ in
         systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [
           pkgs.thin-provisioning-tools
         ];
-
-        extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-          for BIN in ${pkgs.thin-provisioning-tools}/bin/*; do
-            copy_bin_and_libs $BIN
-          done
-        '';
-
-        extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
-          ls ${pkgs.thin-provisioning-tools}/bin/ | grep -v pdata_tools | while read BIN; do
-            $out/bin/$(basename $BIN) --help > /dev/null
-          done
-        '';
       };
 
       environment.etc."lvm/lvm.conf".text =
@@ -131,21 +114,6 @@ in
           kernelModules = [ "dm-vdo" ];
 
           systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.vdo ];
-
-          extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-            ls ${pkgs.vdo}/bin/ | while read BIN; do
-              copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
-            done
-            substituteInPlace $out/bin/vdorecover --replace "${pkgs.bash}/bin/bash" "/bin/sh"
-            substituteInPlace $out/bin/adaptlvm --replace "${pkgs.bash}/bin/bash" "/bin/sh"
-          '';
-
-          extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
-            exclude='adaptlvm|vdorecover|vdocalculatesize'
-            ls ${pkgs.vdo}/bin/ | grep -vE "($exclude)" | while read BIN; do
-              $out/bin/$(basename $BIN) --help > /dev/null
-            done
-          '';
         };
       };
 
@@ -170,26 +138,6 @@ in
           dmeventd/executable = /bin/false
           activation/monitoring = 0
         '';
-
-      boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-        mkdir -p /etc/lvm
-        cat << EOF >> /etc/lvm/lvm.conf
-        ${optionalString cfg.boot.thin.enable (
-          concatMapStringsSep "\n" (bin: "global/${bin}_executable = $(command -v ${bin})") [
-            "thin_check"
-            "thin_dump"
-            "thin_repair"
-            "cache_check"
-            "cache_dump"
-            "cache_repair"
-          ]
-        )}
-        ${optionalString cfg.dmeventd.enable ''
-          dmeventd/executable = "$(command -v false)"
-          activation/monitoring = 0
-        ''}
-        EOF
-      '';
     })
   ];
 

@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ua-generator";
-  version = "2.1.6";
+  version = "2.1.7";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "iamdual";
     repo = "ua-generator";
     tag = finalAttrs.version;
-    hash = "sha256-hH+6CIYdt/dI99JgjRPF/jiyFuGwt6F/6gSeD0IXqaU=";
+    hash = "sha256-IOuNskx5R+sQXct04yDFw36DSADHze4sYoBlSIVhU+k=";
   };
 
   build-system = [ setuptools ];

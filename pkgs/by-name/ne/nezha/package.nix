@@ -49,13 +49,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nezha";
-  version = "2.3.18";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tv9JDy6dI23tGZF9hEnA6tbXz0/SQlHUFKpQ6VEhtXk=";
+    hash = "sha256-lgt1FJ4JAOzLju46zisup3fI2V0sSWAK0LtSLyssGtY=";
   };
 
   proxyVendor = true;

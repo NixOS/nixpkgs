@@ -36,23 +36,15 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.fuse
       pkgs.fuse3
     ];
 
-    security.wrappers =
-      let
-        mkSetuidRoot = source: {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          inherit source;
-        };
-      in
-      {
-        fusermount = mkSetuidRoot "${lib.getBin pkgs.fuse}/bin/fusermount";
-        fusermount3 = mkSetuidRoot "${lib.getBin pkgs.fuse3}/bin/fusermount3";
-      };
+    security.wrappers.fusermount3 = {
+      group = "root";
+      owner = "root";
+      setuid = true;
+      source = "${lib.getBin pkgs.fuse3}/bin/fusermount3";
+    };
 
     environment.etc."fuse.conf".text = ''
       ${lib.optionalString (!cfg.userAllowOther) "#"}user_allow_other

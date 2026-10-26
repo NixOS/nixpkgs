@@ -128,8 +128,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "ebdf69a7bdd03d410bfdfc700add08eed0de161d",
-        "resolved-ref": "ebdf69a7bdd03d410bfdfc700add08eed0de161d",
+        "ref": "7c341be73df8a6a5ddccb06124807ac250a32bc1",
+        "resolved-ref": "7c341be73df8a6a5ddccb06124807ac250a32bc1",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
@@ -553,7 +553,7 @@
       "version": "6.0.0"
     },
     "flutter_localizations": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": "flutter",
       "source": "sdk",
       "version": "0.0.0"
@@ -689,6 +689,46 @@
       },
       "source": "hosted",
       "version": "4.1.2"
+    },
+    "in_app_purchase": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase",
+        "sha256": "d8317ec2ed6fe33199957d67ee67e08a4fd4871ef93b91d7611d8ee560892afc",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.3.1"
+    },
+    "in_app_purchase_android": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase_android",
+        "sha256": "eac857f7408769a68194be99ceb233ad4e3599e55ccd6422afaf0c7fd5066738",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.4"
+    },
+    "in_app_purchase_platform_interface": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase_platform_interface",
+        "sha256": "0b0076cac8ce4fa7048f01e76af8b123aeb6a7c4e0dea2a5206d6664454f3e36",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.4.1"
+    },
+    "in_app_purchase_storekit": {
+      "dependency": "direct main",
+      "description": {
+        "name": "in_app_purchase_storekit",
+        "sha256": "21af88fc18865a7ee4c2468b33a726101b6c034cfe79bd1a1e1d1450a6d3a3a9",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.4.13+3"
     },
     "intl": {
       "dependency": "direct main",
@@ -919,6 +959,16 @@
       },
       "source": "hosted",
       "version": "2.1.0"
+    },
+    "openwatchparty": {
+      "dependency": "direct main",
+      "description": {
+        "name": "openwatchparty",
+        "sha256": "e5c19699e6fdf607c5f01c6fa970bedbc824ffcd87a12d29f7c0f522706a29ef",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.0"
     },
     "os_media_controls": {
       "dependency": "direct main",
@@ -1744,7 +1794,7 @@
       "version": "1.1.1"
     },
     "web_socket": {
-      "dependency": "transitive",
+      "dependency": "direct dev",
       "description": {
         "name": "web_socket",
         "sha256": "34d64019aa8e36bf9842ac014bb5d2f5586ca73df5e4d9bf5c936975cae6982c",

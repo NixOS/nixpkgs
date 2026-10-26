@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "4.2.2";
+  version = "4.3.0";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-U6FzNNqYX2wwfS8EdCyT6qvEb0X1YuL4QbyJWupOh4k=";
+    hash = "sha256-Cw0s2XIPHNpUzprX2i1YO1+YlVZeKtnWmjaa/HdibVM=";
   };
 
   postPatch = ''

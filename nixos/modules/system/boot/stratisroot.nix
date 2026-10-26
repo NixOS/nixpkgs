@@ -13,12 +13,6 @@ in
 {
   options = { };
   config = lib.mkIf (requiredStratisFilesystems != { }) {
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "stratis root fs requires systemd stage 1";
-      }
-    ];
     boot.initrd = {
       systemd = {
         storePaths = [

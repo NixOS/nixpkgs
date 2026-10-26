@@ -18,6 +18,7 @@
   stdenv,
   udev,
   wrapGAppsHook4,
+  writableTmpDirAsHomeHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayle";
@@ -62,9 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bin=wayle-settings"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags = [
     # GTK4 failed to initialize (requires GUI?)

@@ -102,6 +102,7 @@ in
     doInstallCheck = false;
     dontBuild = true;
     buildType = "debug";
+    cargoCheckType = "debug";
 
     checkInputs = [
       stdenv.cc.libc.out
@@ -110,11 +111,6 @@ in
 
     nativeCheckInputs = [
       taplo
-    ];
-
-    # https://github.com/davidlattimore/wild/discussions/832#discussioncomment-14482948
-    checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
-      "--skip=integration_test::program_name_71___unresolved_symbols_object_c__"
     ];
 
     # wild's tests compare the outputs of several different linkers. nixpkgs's

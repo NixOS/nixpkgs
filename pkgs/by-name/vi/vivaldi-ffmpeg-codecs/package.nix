@@ -52,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       betaboon
       cawilliamson
-      fptje
       brw
     ];
     platforms = [

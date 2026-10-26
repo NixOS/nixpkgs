@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "obfs4";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -18,11 +18,11 @@ buildGoModule (finalAttrs: {
     # We don't use pname = lyrebird and we use the old obfs4 name as the first
     # will collide with lyrebird Gtk3 program.
     repo = "lyrebird";
-    tag = "lyrebird-${finalAttrs.version}";
-    hash = "sha256-KI9tGQomqSbiW8itxQ72rPwL67LVTmP110FrYVELr5w=";
+    tag = finalAttrs.version;
+    hash = "sha256-6zxGK6ZbYBEtsmlpNvQ9TVpiPPYKYv2hAE8Sq6mc/GM=";
   };
 
-  vendorHash = "sha256-AlLRJieCiCLQPbqT+0J3Zxe73ryNB8MQkAyHsU+wr2A=";
+  vendorHash = "sha256-73ynRbmX3/Czv9juBbNA3/d0kPks222pfCnkVit8MpY=";
 
   ldflags = [
     "-s"
@@ -40,11 +40,12 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^lyrebird-(\\d+\\.\\d+\\.\\d+)$" ];
+    extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
   };
 
   meta = {
@@ -61,7 +62,7 @@ buildGoModule (finalAttrs: {
       multiple pluggable transports.
     '';
     homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird";
-    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/blob/lyrebird-${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/blob/${finalAttrs.version}/ChangeLog";
     license = with lib.licenses; [
       bsd2
       bsd3

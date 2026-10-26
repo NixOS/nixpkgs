@@ -24,8 +24,12 @@
   gettext,
   glew,
   gmp,
+  intel-compute-runtime,
+  intel-graphics-compiler,
+  intel-llvm,
   jackaudioSupport ? false,
   jemalloc,
+  level-zero,
   lib,
   libdecor,
   libepoxy,
@@ -53,8 +57,10 @@
   mesa,
   meshoptimizer,
   nix-update-script,
+  oneapiSupport ? false,
   onetbb,
   openal,
+  opencl-headers,
   opencolorio,
   openexr,
   openimagedenoise,
@@ -86,12 +92,6 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
   zlib,
   zstd,
-  level-zero,
-  intel-compute-runtime,
-  intel-llvm,
-  intel-graphics-compiler,
-  oneapiSupport ? false,
-  opencl-headers,
 }:
 
 let
@@ -165,8 +165,9 @@ stdenv'.mkDerivation (finalAttrs: {
                 '${lib.getLib brotli}/lib/libbrotlidec.dylib'
   '')
   + (lib.optionalString rocmSupport ''
-    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
-    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+    substituteInPlace extern/hipew/src/hipew.c \
+      --replace-fail '"libamdhip64.so"' '"${rocmPackages.clr}/lib/libamdhip64.so"' \
+      --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
   '')
   + (lib.optionalString oneapiSupport ''
     substituteInPlace intern/cycles/kernel/device/oneapi/CMakeLists.txt \
@@ -220,11 +221,11 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
   ++ lib.optionals oneapiSupport [
-    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
+    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
     (lib.cmakeFeature "LEVEL_ZERO_ROOT_DIR" "${level-zero}")
     (lib.cmakeFeature "OCLOC_INSTALL_DIR" "${intel-compute-runtime}")
-    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
     (lib.cmakeFeature "SYCL_CPP_FLAGS" "--verbose")
+    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" false)

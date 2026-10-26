@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dislocker";
-  version = "0.7.3-unstable-2026-08-31";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Aorimn";
     repo = "dislocker";
-    rev = "0706462db88efe8df88150e4c3e4332b808f4581";
-    hash = "sha256-lH2BdMcseZDw5gtzY5V0Gyy4MS0I8Vlyb0uZkkZdcbM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+T+B8pJDvL8sa2zCVl43RMw7M3i2mRD8+vFbEILL0Io=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true; # runs some sanity checks against crypto library bindings
 
-  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Read BitLocker encrypted partitions in Linux";
@@ -51,6 +47,5 @@ stdenv.mkDerivation (finalAttrs: {
       yuannan
     ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

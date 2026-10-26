@@ -87,7 +87,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.4.0";
+  version = "3.4.1";
 
   nativeBuildInputs = [
     makeWrapper
@@ -101,7 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-emGRw6BT8oyxY5Xm4C0us/qGYZWvkwrcQmLI1UxoidU=";
+    hash = "sha256-qPW4xZXNeYY6VxsU4pG0qqYKfpT56b9clVaGaY/X0Rk=";
   };
 
   postPatch = ''
@@ -130,7 +130,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-jzE8C+fssW6PVo/aoJU8ORrgiHpMALqE4WPrm7taIOc=";
+    hash = "sha256-cd0r/fVYdRY1FfsiC0sCMRiEfm6cY8yI+Y9JJ17XmyY=";
   };
 
   env.NODE_ENV = "production";

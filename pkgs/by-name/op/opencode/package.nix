@@ -43,7 +43,7 @@ let
         export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
         bun install \
           --cpu="*" \
-          --filter '!./' \
+          --filter './' \
           --filter './packages/cli' \
           --filter './packages/desktop' \
           --filter './packages/app' \
@@ -77,14 +77,13 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-rkmJPgpMiWErrK5GXdAz5OgD7FfkkH/fEyhn2QiPhdE=";
-      outputHashAlgo = "sha256";
+      outputHash = "sha256-Z+0RJzeJHSfEeDFs0kF8CCr2/Xoi2mWrRH40zgKXLww=";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "2.0.32";
+  version = "2.1.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -93,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KATNzF7z3PoUo30KC13Gm8uC6HA2a9bmJCZRfqY5D44=";
+    hash = "sha256-CoujRYCvqFXDJ6bzMxinT8CSPyKiLSAzCINjVaZBm/Y=";
   };
 
   postPatch =
@@ -165,7 +164,12 @@ stdenv.mkDerivation (finalAttrs: {
       wrapArgs+=(--prefix PATH : ${lib.makeBinPath [ sysctl ]})
     ''}
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ wayland ]})
+      wrapArgs+=(--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          stdenv.cc.cc
+          wayland
+        ]
+      })
     ''}
 
     wrapProgram $out/bin/opencode "''${wrapArgs[@]}"

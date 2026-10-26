@@ -1,28 +1,36 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  cmake,
-  pkg-config,
+  SDL2,
   alsa-lib,
+  cmake,
   ffmpeg,
+  flac,
+  game-music-emu,
+  gtest,
+  icu,
+  jack2,
   kdePackages,
   kdsingleapplication,
-  pipewire,
-  taglib,
-  libebur128,
-  libsndfile,
   libarchive,
-  libopenmpt,
-  soundtouch,
-  soxr,
-  libpulseaudio,
-  libprojectm,
   libcdio,
   libcdio-paranoia,
-  game-music-emu,
-  SDL2,
-  icu,
+  libebur128,
+  libopenmpt,
+  libprojectm,
+  libpulseaudio,
+  libsndfile,
+  libvorbis,
+  mpg123,
+  nix-update-script,
+  opusfile,
+  pipewire,
+  pkg-config,
+  soundtouch,
+  soxr,
+  taglib,
+  versionCheckHook,
   zlib,
   # Select bundled plugins to build. Leave empty for the default set, use none for no plugins, or use a semicolon/comma-separated list of plugin names to include or -name entries to exclude
   pluginSelection ? "",
@@ -30,18 +38,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.13.1";
-
-  __structuredAttrs = true;
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "fooyin";
     repo = "fooyin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HinvM2lB8CQhYNJjXt5ZVR2cw2hfVpKbtKG0BzmirCs=";
+    hash = "sha256-0EtAmgIZNHMvg9sKimAdiG1EnVBN5i4Jj3dIYFvNqKk=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    kdePackages.qttools
+    kdePackages.wrapQtAppsHook
+  ];
+
   buildInputs = [
+    # list from fooyin's BUILD.md
     kdePackages.qcoro
     kdePackages.qtbase
     kdePackages.qtsvg
@@ -51,29 +68,27 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     kdsingleapplication
     zlib
+    libarchive
     # output plugins
     alsa-lib
+    jack2
     pipewire
+    libpulseaudio
     SDL2
     # input plugins
-    libebur128
     libsndfile
-    libarchive
+    flac
+    mpg123
+    opusfile
+    libvorbis
     libopenmpt
     game-music-emu
-    soundtouch
-    soxr
-    libpulseaudio
-    libprojectm
+    libebur128
     libcdio
     libcdio-paranoia
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    kdePackages.qttools
-    kdePackages.wrapQtAppsHook
+    soundtouch
+    soxr
+    libprojectm
   ];
 
   cmakeFlags = [
@@ -86,12 +101,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.LANG = "C.UTF-8";
 
+  doCheck = true;
+  checkInputs = [ gtest ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Customisable music player";
     homepage = "https://www.fooyin.org/";
     changelog = "https://github.com/fooyin/fooyin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    downloadPage = "https://github.com/fooyin/fooyin";
-    mainProgram = "fooyin";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       peterhoeg
@@ -99,5 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       keenanweaver
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "fooyin";
+    downloadPage = "https://github.com/fooyin/fooyin";
   };
 })

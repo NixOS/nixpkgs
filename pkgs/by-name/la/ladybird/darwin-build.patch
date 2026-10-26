@@ -1,19 +1,10 @@
-Link LibGfx's direct CoreText calls explicitly and use Nix dependencies
-instead of searching the host's Homebrew installation.
+Use Nix dependencies instead of searching the host's Homebrew installation.
 
 Defer bundle signing until postFixup, after Nix has finished modifying it.
-Use rcodesign for helper and Cranelift compiler signing during the build.
+Use rcodesign for helper signing during the build.
 Provide a default CA bundle to both curl and the RequestServer sandbox
 when no certificate file was supplied explicitly.
 
---- a/Libraries/LibGfx/CMakeLists.txt
-+++ b/Libraries/LibGfx/CMakeLists.txt
-@@ -105,4 +105,5 @@
-
- if (APPLE)
-+    target_link_libraries(LibGfx PRIVATE "-framework CoreText")
-     target_link_libraries(LibGfx PRIVATE "-framework Metal" "-framework Accelerate")
- endif()
 --- a/Meta/CMake/compile_options.cmake
 +++ b/Meta/CMake/compile_options.cmake
 @@ -210,7 +210,6 @@
@@ -79,14 +70,3 @@ when no certificate file was supplied explicitly.
          VERBATIM
      )
  endfunction()
---- a/Libraries/LibWasm/CMakeLists.txt
-+++ b/Libraries/LibWasm/CMakeLists.txt
-@@ -50,7 +50,7 @@
-         set(cranelift_compiler_signed_stamp "${CMAKE_CURRENT_BINARY_DIR}/cranelift_compiler_signed.stamp")
-         add_custom_command(
-             OUTPUT "${cranelift_compiler_signed_stamp}"
--            COMMAND codesign -s - -f -o runtime "${WASM_CRANELIFT_COMPILER_BINARY}"
-+            COMMAND rcodesign sign --code-signature-flags runtime "${WASM_CRANELIFT_COMPILER_BINARY}"
-             COMMAND "${CMAKE_COMMAND}" -E touch "${cranelift_compiler_signed_stamp}"
-             DEPENDS "${WASM_CRANELIFT_COMPILER_BINARY}"
-             VERBATIM

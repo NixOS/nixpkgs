@@ -20,21 +20,13 @@
       ;
   };
 
-  postPatch =
-    # Remove cuda-pathfinder from build-system requirements
-    ''
-      substituteInPlace pyproject.toml \
-        --replace-fail \
-          '"cuda-pathfinder>=1.5",' \
-          ""
-    ''
-    # Relax cython constraint: https://github.com/NVIDIA/cuda-python/pull/2771
-    + ''
-      substituteInPlace pyproject.toml \
-        --replace-fail \
-          '"cython>=3.2.5,<3.3",' \
-          '"cython>=3.2.5",'
-    '';
+  # Remove cuda-pathfinder from build-system requirements
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"cuda-pathfinder>=1.5",' \
+        ""
+  '';
 
   pythonImportsCheck = [
     "cuda.bindings.cudla"
@@ -43,11 +35,6 @@
   ];
 
   disabledTests = [
-    # Cython 3.3 no longer implicitly converts int to CUarray/cudaArray_t, fixed in the tests by
-    # https://github.com/NVIDIA/cuda-python/pull/2771
-    "test_cudart_eglFrame"
-    "test_eglFrame"
-
     # Requires GPU discovery support not available in the test environment
     "test_discover_gpus"
 

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "trufflehog";
-  version = "3.99.3";
+  version = "3.99.7";
 
   src = fetchFromGitHub {
     owner = "trufflesecurity";
     repo = "trufflehog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iPCdnDHbcU9E+jHhEiab5oEB1QiBV7vnyZPUxuAt4uE=";
+    hash = "sha256-+wmM/aezUN9mNKcozj9svQu0NmRHqFfelezLPVlePoI=";
   };
 
-  vendorHash = "sha256-FofhlVFYy6xqv7cjWGeEGtWeLSe2kHBq4ceBvz6KLMU=";
+  vendorHash = "sha256-e4ySHFFaV823GtGvHCaUtpayRnSMQ7whmnO86h9ra4I=";
 
   nativeBuildInputs = [ makeWrapper ];
 

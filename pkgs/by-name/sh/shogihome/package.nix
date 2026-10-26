@@ -4,7 +4,8 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_42,
+  # Both upstream stable and latest releases often stay on EOL Electron.
+  electron,
   cacert,
   makeDesktopItem,
   copyDesktopItems,
@@ -12,16 +13,11 @@
   nix-update-script,
   _experimental-update-script-combinators,
   writeShellApplication,
-  nix,
   curl,
   common-updater-scripts,
   jq,
-  gnugrep,
 }:
 
-let
-  electron = electron_42;
-in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
   version = "1.29.1";
@@ -154,23 +150,6 @@ buildNpmPackage (finalAttrs: {
           "--version=skip"
         ];
       })
-      (lib.getExe (writeShellApplication {
-        name = "${finalAttrs.pname}-electron-updater";
-        runtimeInputs = [
-          nix
-          jq
-          gnugrep
-        ];
-        runtimeEnv = {
-          PNAME = finalAttrs.pname;
-          PKG_FILE = toString ./package.nix;
-        };
-        text = ''
-          new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-          new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-          sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
-        '';
-      }))
     ];
   };
 

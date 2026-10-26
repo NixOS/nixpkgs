@@ -194,7 +194,7 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchurl { inherit (archive) url sha256; };
+  src = fetchurl { inherit (archive) url hash; };
 
   sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "${darwinApp}.app";
 
@@ -348,7 +348,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       uskudnik
       jefflabonte
-      nasirhm
       buckley310
       rachalaraj
     ];

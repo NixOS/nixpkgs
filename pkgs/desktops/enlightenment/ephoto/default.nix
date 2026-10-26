@@ -9,12 +9,12 @@
   directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ephoto";
   version = "1.6.0";
 
   src = fetchurl {
-    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    url = "https://download.enlightenment.org/rel/apps/ephoto/ephoto-${finalAttrs.version}.tar.xz";
     hash = "sha256-Nrxz884b+cYGYw0AMdFimhFZEeeLeW/R+QMitYhmcNM=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];
   };
-}
+})

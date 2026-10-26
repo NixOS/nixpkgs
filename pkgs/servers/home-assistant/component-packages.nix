@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.10.2";
+  version = "2026.10.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -594,7 +594,8 @@
       ];
     "axle_energy" =
       ps: with ps; [
-      ]; # missing inputs: aioaxlevpp
+        aioaxlevpp
+      ];
     "azure_data_explorer" =
       ps:
       with ps;
@@ -706,7 +707,8 @@
       ];
     "bitvis" =
       ps: with ps; [
-      ]; # missing inputs: bitvis-protobuf
+        bitvis-protobuf
+      ];
     "bizkaibus" =
       ps: with ps; [
         bizkaibus
@@ -3004,7 +3006,8 @@
       ];
     "huisbaasje" =
       ps: with ps; [
-      ]; # missing inputs: energyflip-api-client
+        energyflip-api-client
+      ];
     "humidifier" =
       ps: with ps; [
       ];
@@ -3254,7 +3257,8 @@
       ];
     "indi_allsky" =
       ps: with ps; [
-      ]; # missing inputs: aioindiallsky
+        aioindiallsky
+      ];
     "indianamichiganpower" =
       ps: with ps; [
       ];
@@ -3541,11 +3545,12 @@
       ps:
       with ps;
       [
+        kaco-modbus
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: kaco-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "kaiser_nienhaus" =
       ps: with ps; [
       ];
@@ -4721,7 +4726,8 @@
       ];
     "my_pv" =
       ps: with ps; [
-      ]; # missing inputs: my-pv
+        my-pv
+      ];
     "myneomitis" =
       ps: with ps; [
         pyaxencoapi
@@ -6036,7 +6042,8 @@
       ];
     "rejseplanen" =
       ps: with ps; [
-      ]; # missing inputs: pyrejseplan
+        pyrejseplan
+      ];
     "remember_the_milk" =
       ps: with ps; [
         aiortm
@@ -6754,9 +6761,10 @@
         modbus-connection
         pymodbus
         serialx
+        solaredged
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: solaredged
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "solarlog" =
       ps: with ps; [
         solarlog-cli
@@ -7238,6 +7246,7 @@
       ps: with ps; [
         aioesphomeapi
         aiohasupervisor
+        aiopowerwall
         aioruuvigateway
         aioshelly
         aiousbwatcher
@@ -7264,7 +7273,7 @@
         tesla-fleet-api
         teslemetry-stream
         zeroconf
-      ]; # missing inputs: aiopowerwall
+      ];
     "tessie" =
       ps: with ps; [
         tesla-fleet-api
@@ -7275,7 +7284,8 @@
       ];
     "theben_conexa" =
       ps: with ps; [
-      ]; # missing inputs: theben-conexa-smgw
+        theben-conexa-smgw
+      ];
     "thermador" =
       ps: with ps; [
       ];
@@ -7366,7 +7376,8 @@
       ];
     "threema" =
       ps: with ps; [
-      ]; # missing inputs: aiothreema
+        aiothreema
+      ];
     "threshold" =
       ps: with ps; [
       ];
@@ -7879,7 +7890,8 @@
       ];
     "vitesy" =
       ps: with ps; [
-      ]; # missing inputs: aiovitesy
+        aiovitesy
+      ];
     "vivotek" =
       ps: with ps; [
         libpyvivotek
@@ -8411,7 +8423,8 @@
       ];
     "zonneplan" =
       ps: with ps; [
-      ]; # missing inputs: pyzonneplan
+        pyzonneplan
+      ];
     "zwave_js" =
       ps: with ps; [
         aiohasupervisor
@@ -8512,6 +8525,7 @@
     "aws"
     "aws_s3"
     "axis"
+    "axle_energy"
     "azure_data_explorer"
     "azure_devops"
     "azure_event_hub"
@@ -8525,6 +8539,7 @@
     "bayesian"
     "besen"
     "binary_sensor"
+    "bitvis"
     "blackbird"
     "blebox"
     "blink"
@@ -8856,6 +8871,7 @@
     "huawei_lte"
     "hue"
     "hue_ble"
+    "huisbaasje"
     "humidifier"
     "humidity"
     "hunterdouglas_powerview"
@@ -8887,6 +8903,7 @@
     "improv_ble"
     "incomfort"
     "indevolt"
+    "indi_allsky"
     "inels"
     "influxdb"
     "infrared"
@@ -8929,6 +8946,7 @@
     "juicenet"
     "justnimbus"
     "jvc_projector"
+    "kaco_modbus"
     "kaleidescape"
     "karakeep"
     "keenetic_ndms2"
@@ -9078,6 +9096,7 @@
     "music_assistant"
     "mutesync"
     "my"
+    "my_pv"
     "myneomitis"
     "myq"
     "mysensors"
@@ -9267,6 +9286,7 @@
     "redgtech"
     "refoss"
     "rehlko"
+    "rejseplanen"
     "remember_the_milk"
     "remote"
     "remote_calendar"
@@ -9364,6 +9384,7 @@
     "snooz"
     "sofar"
     "solaredge"
+    "solaredge_modbus"
     "solarlog"
     "solarman"
     "solax"
@@ -9441,12 +9462,15 @@
     "template"
     "tesla_fleet"
     "tesla_wall_connector"
+    "teslemetry"
     "tessie"
     "text"
+    "theben_conexa"
     "thermobeacon"
     "thermopro"
     "thethingsnetwork"
     "thread"
+    "threema"
     "threshold"
     "tibber"
     "tile"
@@ -9531,6 +9555,7 @@
     "victron_remote_monitoring"
     "vilfo"
     "vistapool"
+    "vitesy"
     "vivotek"
     "vizio"
     "vlc_telnet"
@@ -9612,6 +9637,7 @@
     "zodiac"
     "zone"
     "zoneminder"
+    "zonneplan"
     "zwave_js"
     "zwave_me"
   ];

@@ -45,21 +45,21 @@ let
   sources = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-7AlHPjsSvkNTjBn5mSlg16JUnN7NMcjDXGmvd/46pPE=";
+      hash = "sha256-n5y9LbnhlvZW2fTK97+Zr3Vukzb3BBIiCvnzlmm2kiI=";
     };
     aarch64-linux = {
       platform = "linux-arm";
-      hash = "sha256-dG+uECtVK2wBhlFqm9ioRfOXuCsniJ8390jOaYz9CmA=";
+      hash = "sha256-7B7CjowAT3IMWrhznTJJxdA77VRqv+2iwXIUHmW6rfA=";
     };
     aarch64-darwin = {
       platform = "darwin-arm";
-      hash = "sha256-B5ugXrl2jxNGH7OUEdx7brsqwWq8kFggJzOUzob2E0A=";
+      hash = "sha256-tiuU0lMo2ttIgWpgUq2lX3luyLNdVndC+GI85cdSsBo=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "antigravity-hub";
-  version = "2.22.0";
+  version = "2.25.0";
 
   src =
     let
@@ -183,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Download URLs embed a build ID next to the version, e.g. `2.12.2-6298742303883264`.
-    buildId = "5446056071266304";
+    buildId = "6535192714805248";
     updateScript = ./update.sh;
   };
 

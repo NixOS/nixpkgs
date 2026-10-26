@@ -29,9 +29,6 @@
   "InternetSpeedMeter@alshakib.dev" = "internet-speed-meter";
   "speed-meter@mojahid.lunecode.com" = "internet-speed-meter-2";
 
-  "lockkeys@febueldo.test" = "lock-keys";
-  "lockkeys@vaina.lt" = "lock-keys-2";
-
   "memento-mori@paveloom" = "memento-mori";
   "memento-mori@vedeshpadal" = "memento-mori-2";
 
@@ -62,9 +59,7 @@
 
   "system-monitor@gnome-shell-extensions.gcampax.github.com" = "system-monitor";
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
-  "system-monitor@axet.github.com" = "system-monitor-3";
   "sysmonitor@talhasiddique7" = "system-monitor-4";
-  "system-monitor@jtourteau" = "system-monitor-5";
 
   "system-monitor-panel@naimur" = "system-monitor-panel";
   "system-monitor-panel@gnome-shell-extensions" = "system-monitor-panel-2";
@@ -72,8 +67,8 @@
   "system-rpg@conan513" = "systemquest";
   "system-rpg@gnome-rpg.local" = "systemquest-2";
 
-  "tailscale-gnome-qs@tailscale-qs.github.io" = "tailscale-qs";
-  "tailscale@joaophi.github.com" = "tailscale-qs-2";
+  "text-extractor@aditya190803" = "text-extractor";
+  "text-extractor@imshaaz21.github.com" = "ocr-text-extractor";
 
   "workspace-wallpapers@jonathan.aljl.eu" = "workspace-wallpapers";
   "workspace-wallpapers@ero" = "workspace-wallpapers-2";
@@ -87,6 +82,7 @@
   "fullscreen-to-empty-workspace2@corgijan.dev" = "fullscreen-to-empty-workspace-2";
   "power-profile@fthx" = "power-profile-indicator-2";
   "mouse-follows-focus@crisidev.org" = "mouse-follows-focus-2";
+  "lockkeys@vaina.lt" = "lock-keys-2";
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

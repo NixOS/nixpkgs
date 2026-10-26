@@ -10,16 +10,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_polars";
-  inherit (nushell) version src cargoHash;
+  inherit (nushell)
+    version
+    src
+    cargoPatches
+    cargoHash
+    ;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [ openssl ];
 
   buildAndTestSubdir = "crates/nu_plugin_polars";
 
-  checkFlags = [
-    "--skip=dataframe::command::core::to_repr::test::test_examples"
-  ];
+  checkFlags = [ "--skip=dataframe::command::core::to_repr::test::test_examples" ];
 
   patches = [ ../plugin-engine-default-features.patch ];
 

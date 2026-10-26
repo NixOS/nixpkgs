@@ -4,6 +4,7 @@
   aioresponses,
   buildPythonPackage,
   cryptography,
+  click,
   fetchFromGitHub,
   mashumaro,
   orjson,
@@ -31,6 +32,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Dnbz3ssvxX2nR17W0UP2zW6rebbinr5JeI2tfwjl6o4=";
   };
 
+  patches = [
+    ./typer-0-27-2.patch
+  ];
+
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
@@ -38,6 +43,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     cryptography
+    click
     mashumaro
     orjson
     yarl

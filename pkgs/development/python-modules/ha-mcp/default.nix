@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  uv-build,
   cryptography,
   fastmcp,
   httpx,
@@ -19,18 +19,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-mcp";
-  version = "8.6.0";
+  version = "8.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dS3Opv4DNl9a3FSnWk49pe+Ft05l0RoSoet9/gpYIAA=";
+    fetchSubmodules = true;
+    hash = "sha256-UQ6mUpVYWnQCOav8zzjwArmeHfdeh1g5GNFKQHRrO9U=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.12.17,<0.13" "uv_build"
+  '';
+
   build-system = [
-    setuptools
+    uv-build
   ];
 
   pythonRelaxDeps = true;

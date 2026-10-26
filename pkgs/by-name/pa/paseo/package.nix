@@ -14,7 +14,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "paseo";
-  version = "0.12.0";
+  version = "0.13.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,12 +23,12 @@ buildNpmPackage (finalAttrs: {
     owner = "getpaseo";
     repo = "paseo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vi1LplKz2f4bRQgJi5PFwJSih4WEv6Uh0CRfwi1oEuU=";
+    hash = "sha256-q9CTVmmdN53rLXaY+/cKz1IbW1OQA9ok9xan4lBSH1E=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-ObBdUmNSW+vDjzA7EbCDfZrB0nYDmcWmWe+UCoTMh/M=";
+  npmDepsHash = "sha256-eNiKmiZ3XXZMRZRSoGxUbMn2RtY6AX079vUatBYM+qE=";
 
   npmRebuildFlags = [ "--ignore-scripts" ];
 
@@ -49,6 +49,8 @@ buildNpmPackage (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    npm run postinstall
 
     npm_config_build_from_source=true npm_config_nodedir=${finalAttrs.nodejs} \
       npm rebuild node-pty --workspace @getpaseo/server

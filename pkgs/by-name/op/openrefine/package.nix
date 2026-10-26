@@ -55,7 +55,7 @@ maven.buildMavenPackage rec {
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-FvHM9pZ50kMv6RlPvpTWqrNM81WBZxArYDqtjHpFQjg=";
+  mvnHash = "sha256-ub2ETaZ06tflEO1CI1phNydfM9VZrk1iaBB3eqJ62TY=";
   mvnFetchExtraArgs.env = {
     inherit (env) SOURCE_DATE_EPOCH;
   };

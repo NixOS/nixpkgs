@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  click,
   cryptography,
   dnspython,
   fetchFromGitHub,
@@ -54,6 +55,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    click
     hypothesis
     pytest-asyncio
     pytest-cov-stub
@@ -84,7 +86,19 @@ buildPythonPackage (finalAttrs: {
     "test_run_check_sync_dmarc"
     "test_run_check_sync_programmatic_config_no_file"
     "test_run_check_sync_yaml_plus_overlay_merge"
+    # CLI tests
+    "test_caa_overlay_and_generate"
+    "test_dmarc_check_with_overlay_and_generate_subcommand"
+    "test_headers_check_overlay_and_generate_hsts_csp"
+    "test_headers_generate_csp_invalid_json_exits_3"
+    "test_main_writes_cli_index"
+    "test_make_check_typer_dispatches_named_subcommand_before_variadic_domains"
+    "test_mx_generate_invalid_rows_exits_3"
+    "test_mx_overlay_and_generate"
+    "test_spf_overlay_flatten_and_generate"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "SDK and CLI tool for DNS, email and web security hygiene";

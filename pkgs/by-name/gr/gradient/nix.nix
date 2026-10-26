@@ -23,6 +23,7 @@ let
     "0020-perf-libexpr-replay-a-failed-realisation-instead-of-building-it-again.patch"
     "0021-feat-libexpr-let-the-embedder-realise-import-from-derivation.patch"
     "0022-fix-eval-cache-evaluate-a-failed-attribute-again-ins.patch"
+    "0023-libexpr-feat-let-the-embedder-fetch.patch"
   ];
 in
 ((nixVersions.nixComponents_2_35.appendPatches patches).overrideScope (

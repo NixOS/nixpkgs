@@ -7,6 +7,8 @@
   libssh2,
   openssl,
   pkg-config,
+  postgresql_18,
+  postgresqlTestHook,
   rustPlatform,
   sqlite,
   xz,
@@ -15,19 +17,25 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gradient";
-  version = "2.0.0";
+  version = "2.0.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wavelens";
     repo = "gradient";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Irz/EXv7qOqXkvNnaxvninWljRX6nM95YN/x6uIudX8=";
+    hash = "sha256-hgvTiyB9lqI3FNy6x++YbZhKpYFfHVEpHJQHRGlBiOA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  cargoHash = "sha256-new/QW/N6CCRbM48lrpHDNLk8sGjRAKFN6x5AL/3qKY=";
+  cargoHash = "sha256-3ZVd3dvj3mhPpt2/AGRvk9hs8pjgRn0K2v5F6jGKz2g=";
+
+  # https://github.com/wavelens/gradient/pull/865
+  postPatch = ''
+    substituteInPlace gradient-proto/src/lib.rs \
+      --replace-fail "pub mod handler;" $'#![recursion_limit = "256"]\n\npub mod handler;'
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -54,9 +62,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
   checkFeatures = [ "gradient-daemon/mock" ];
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    postgresql_18
+    postgresqlTestHook
+  ];
 
-  # These tests need a store fixture built from hello's `.drv` closure.
+  postgresqlTestUserOptions = "LOGIN CREATEDB";
+  postgresqlExtraSettings = ''
+    fsync = off
+    max_connections = 500
+  '';
+
+  # These tests need additional setup
   cargoTestFlags = [
     "--filterset"
     "not (${

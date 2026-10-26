@@ -10,15 +10,7 @@ let
   # The scripted initrd contains some magic to add the prefix to the
   # paths just in time, so we don't add it here.
   sysrootPrefix =
-    fs:
-    if
-      config.boot.initrd.systemd.enable
-      && fs.overlay.useStage1BaseDirectories
-      && (utils.fsNeededForBoot fs)
-    then
-      "/sysroot"
-    else
-      "";
+    fs: if fs.overlay.useStage1BaseDirectories && (utils.fsNeededForBoot fs) then "/sysroot" else "";
 
   # Returns a service that creates the required directories before the mount is
   # created.
@@ -161,36 +153,20 @@ in
 
       boot.initrd.availableKernelModules = lib.mkIf (initrdFileSystems != { }) [ "overlay" ];
 
-      assertions =
-        lib.concatLists (
-          lib.mapAttrsToList (_name: fs: [
-            {
-              assertion = (fs.overlay.upperdir == null) == (fs.overlay.workdir == null);
-              message = "You cannot define a `lowerdir` without a `workdir` and vice versa for mount point: ${fs.mountPoint}";
-            }
-            {
-              assertion =
-                (fs.overlay.lowerdir != null && fs.overlay.upperdir == null)
-                -> (lib.length fs.overlay.lowerdir) >= 2;
-              message = "A read-only overlay (without an `upperdir`) requires at least 2 `lowerdir`s: ${fs.mountPoint}";
-            }
-            {
-              assertion = !fs.overlay.useStage1BaseDirectories -> config.boot.initrd.systemd.enable;
-              message = ''
-                Stage 1 overlay file system ${fs.mountPoint} has 'useStage1BaseDirectories' set to false,
-                which is not supported with scripted initrd. Please enable 'boot.initrd.systemd.enable'.
-              '';
-            }
-          ]) overlayFileSystems
-        )
-        ++ lib.mapAttrsToList (_: fs: {
-          assertion = fs.overlay.upperdir == null -> config.boot.initrd.systemd.enable;
-          message = ''
-            Stage 1 overlay file system ${fs.mountPoint} has no upperdir,
-            which is not supported with scripted initrd. Please enable
-            'boot.initrd.systemd.enable'.
-          '';
-        }) initrdFileSystems;
+      assertions = lib.concatLists (
+        lib.mapAttrsToList (_name: fs: [
+          {
+            assertion = (fs.overlay.upperdir == null) == (fs.overlay.workdir == null);
+            message = "You cannot define a `lowerdir` without a `workdir` and vice versa for mount point: ${fs.mountPoint}";
+          }
+          {
+            assertion =
+              (fs.overlay.lowerdir != null && fs.overlay.upperdir == null)
+              -> (lib.length fs.overlay.lowerdir) >= 2;
+            message = "A read-only overlay (without an `upperdir`) requires at least 2 `lowerdir`s: ${fs.mountPoint}";
+          }
+        ]) overlayFileSystems
+      );
 
       boot.initrd.systemd.services = lib.mkMerge (lib.mapAttrsToList preMountService initrdFileSystems);
       systemd.services = lib.mkMerge (lib.mapAttrsToList preMountService userspaceFileSystems);

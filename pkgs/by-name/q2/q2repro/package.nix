@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fork of Q2PRO designed to be a drop-in replacement of the Kex Quake II re-release engine";
     homepage = "https://github.com/Paril/q2repro";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
     platforms = lib.platforms.unix;
     mainProgram = "q2repro";
   };

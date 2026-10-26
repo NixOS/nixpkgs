@@ -398,6 +398,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Set number of jobs to use when building.
     ''
       configureFlags+=("--with-jobs=''${NIX_BUILD_CORES}")
+    ''
+    # Build lib/security/cacerts from cacert instead of the bundled CA list.
+    # It goes into the java.base jmod, so jlink images also get it.
+    # Like upstream, write a PKCS12 store without a password: the JDK opens
+    # cacerts without one, and cannot read password-protected certificates.
+    + lib.optionalString atLeast11 ''
+      mkdir "$NIX_BUILD_TOP/cacerts-gen"
+      pushd "$NIX_BUILD_TOP/cacerts-gen"
+      JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+        ${jre-generate-cacerts} ${jdk-bootstrap'.home}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      popd
+      configureFlags+=("--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts")
     '';
 
   env = {

@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-JPmW4OX6iMi0F/SJPmFa8TW9/f29vtfiOfrzaojfcRs=";
+    hash = "sha256-Q+1Gsh0VGqZDxnZUV8cxCCe5OMHPRdUQmgFS3k7wYic=";
   };
 
   pythonRemoveDeps = [
