@@ -12,7 +12,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "jellyfin-web";
-  version = "12.2";
+  version = "12.4";
 
   src =
     # updated together with jellyfin by its update script
@@ -21,7 +21,7 @@ buildNpmPackage (finalAttrs: {
       owner = "jellyfin";
       repo = "jellyfin-web";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-+GcftM0qzUBPvqsyoRZ1E8VVZsWEeMJTVEqDdi6POyg=";
+      hash = "sha256-ctITxOsWIEK7oLWXmhl4zCeG9Zxaqw1SA2C7zJNcyY0=";
     };
 
   nodejs = nodejs_24;
@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}"
   '';
 
-  npmDepsHash = "sha256-kcDBFX4MQxixlIKrOezTkufaOYfkxE7yc/b/HlCim0I=";
+  npmDepsHash = "sha256-OyEdJekxJgH9VBfffmqEFmPPRfGdWpmulV1rjjDk2ks=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
