@@ -134,6 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
                 $out/share/icons/hicolor/"$size"x"$size"/apps/"$name".png
             done
           done
+
+          install -Dm644 ../packaging/linux/net.odamex.Odamex.metainfo.xml -t $out/share/metainfo
+          install -Dm644 ../packaging/linux/net.odamex.Odamex.releases.xml -t $out/share/metainfo/releases
         ''
     }
 
