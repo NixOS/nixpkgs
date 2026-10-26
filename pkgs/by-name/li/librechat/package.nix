@@ -52,7 +52,9 @@ buildNpmPackage (finalAttrs: {
     # Upstream defaults to the immutable package directory.
     # As a functioning default, we set this to the current working directory (through a relative logs path),
     # but make it easy for the module to override.
-    "--set-default LIBRECHAT_LOG_DIR ./logs"
+    "--set-default"
+    "LIBRECHAT_LOG_DIR"
+    "./logs"
   ];
 
   # npmConfigHook only patches the root node_modules
