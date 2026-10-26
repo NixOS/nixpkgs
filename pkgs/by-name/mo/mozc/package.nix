@@ -217,21 +217,9 @@ stdenv.mkDerivation {
     runHook preBuild
   ''
   + lib.optionalString (dictionaries != [ ]) ''
-    # Accept both archive formats while the dictionaries are updated separately.
-    dictionaryInputs=()
-    for dictionary in ${lib.concatMapStringsSep " " (dictionary: "${dictionary}/mozcdic-ut-*.txt*.bz2") dictionaries}; do
-      case "$dictionary" in
-        *.tar.bz2)
-          dictionaryDir=$(mktemp -d)
-          tar -xjf "$dictionary" -C "$dictionaryDir"
-          bzip2 "$dictionaryDir"/*.txt
-          dictionaryInputs+=( "$dictionaryDir"/*.txt.bz2 )
-          ;;
-        *) dictionaryInputs+=( "$dictionary" ) ;;
-      esac
-    done
-
-    bzcat "''${dictionaryInputs[@]}" > mozcdic-ut.txt
+    bzcat ${
+      lib.concatMapStringsSep " " (dictionary: "${dictionary}/mozcdic-ut-*.txt.bz2") dictionaries
+    } > mozcdic-ut.txt
     # Present the title dump in upstream's offset:page_id:title format.
     gzip -dc ${jawiki-all-titles-in-ns0}/jawiki-all-titles-in-ns0.gz \
       | sed '1d; s/_/ /g; s/^/0:0:/' > jawiki-all-titles-in-ns0
