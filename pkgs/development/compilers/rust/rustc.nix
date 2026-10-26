@@ -319,8 +319,18 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -v $doc $man
         ln -s ${rustc.unwrapped}/{bin,libexec} $out
         rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
-        ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
-        ln -s ${rustc.unwrapped}/lib/rustlib/etc $out/lib/rustlib/
+        ln -s ${rustc.unwrapped}/lib/rustlib/manifest-rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
+        # Only the manifest files, not whole dirs: used as stage0, the rustc-dev
+        # crates would clash, and bootstrap can't copy directory symlinks.
+        grep -h '^file:${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/' \
+          ${rustc.unwrapped}/lib/rustlib/manifest-{rustc,rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec}} \
+          | while read -r f; do
+              f=''${f#file:${rustc.unwrapped}/}
+              mkdir -p $out/$(dirname $f)
+              ln -s ${rustc.unwrapped}/$f $out/$f
+            done
+        mkdir -p $out/lib/rustlib/etc
+        lndir ${rustc.unwrapped}/lib/rustlib/etc $out/lib/rustlib/etc
         echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
         lndir ${rustc.doc} $doc
         lndir ${rustc.man} $man
