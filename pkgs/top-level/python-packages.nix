@@ -15835,6 +15835,8 @@ self: super: with self; {
 
   pyosf = callPackage ../development/python-modules/pyosf { };
 
+  pyosmocom = callPackage ../development/python-modules/pyosmocom { };
+
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
 
   pyotb = callPackage ../development/python-modules/pyotb { };
