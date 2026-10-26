@@ -15,9 +15,9 @@
 let
   versionInfoTable = {
     "latest" = {
-      version = "0.3.2";
-      srcHash = "sha256-DUkeOkUf9roZGKqdjoy/DfUL1OrVfSVjMhEvfACLEoo=";
-      cargoHash = "sha256-AiBoM7rywsuokz/fmLmye630N+t1GtwZsxkmtlH5MI8=";
+      version = "0.4.0";
+      srcHash = "sha256-FewXNGhEjqj8mvzaRCqsgejzwnTlCUdRJPuoYg8IuK0=";
+      cargoHash = "sha256-GVXvUsKt314svSeP78+eXt7LoVzI5c/qbvOeQPFHn3o=";
     };
     # version pin that is compatible with heroic
     "heroic" = {
