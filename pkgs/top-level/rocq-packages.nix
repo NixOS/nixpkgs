@@ -284,6 +284,7 @@ let
           };
         })
       );
+      vst-ora = callPackage ../development/rocq-modules/vst-ora { };
       wasmcert = callPackage ../development/rocq-modules/wasmcert { };
       waterproof = callPackage ../development/rocq-modules/waterproof { };
       zorns-lemma = callPackage ../development/rocq-modules/zorns-lemma { };
