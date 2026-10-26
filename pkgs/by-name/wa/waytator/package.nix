@@ -1,25 +1,28 @@
 {
   lib,
-  gtk4,
   stdenv,
+  fetchFromGitHub,
+
   meson,
   ninja,
-  tesseract,
   pkg-config,
-  libadwaita,
   makeWrapper,
-  wl-clipboard,
-  fetchFromGitHub,
-  gtk4-layer-shell,
-  wayland-protocols,
   wayland-scanner,
+
+  gtk4,
+  gtk4-layer-shell,
+  libadwaita,
+  wayland-protocols,
   ffmpeg,
   libdrm,
   pipewire,
   rubberband,
   libgbm,
   libGL,
+
+  wl-clipboard,
   gifski,
+  tesseract,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytator";
