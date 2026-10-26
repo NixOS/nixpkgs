@@ -119,13 +119,13 @@
     "vendorHash": null
   },
   "bpg_proxmox": {
-    "hash": "sha256-OP4nakf1inxZDfMKYFwKMAq1cLfIxr5cJrraW9LuJQw=",
+    "hash": "sha256-DT5mbGoPfTNQs2o+QEJ989mpQ+DfloSUhxA0sFK7G8E=",
     "homepage": "https://registry.terraform.io/providers/bpg/proxmox",
     "owner": "bpg",
     "repo": "terraform-provider-proxmox",
-    "rev": "v0.116.0",
+    "rev": "v0.118.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-xzatI7lBMkGqWobZzhSkVzu/3YvHD0QhB2A3JR7Rplo="
+    "vendorHash": "sha256-9T323h5klswIAUOzpr+Tsd2gWm7kYm/UFUuJImY9HpM="
   },
   "brightbox_brightbox": {
     "hash": "sha256-bvwdtiwzXElhsXLmftXZQ567ExcC0E0L/5OeqIdp1SQ=",
@@ -144,6 +144,15 @@
     "rev": "v1.43.0",
     "spdx": "MIT",
     "vendorHash": "sha256-dEVFIT1iTk/SgQHTT5DA+O/40dIt0bi13EZjxBHr3mY="
+  },
+  "bunnyway_bunnynet": {
+    "hash": "sha256-6furaPvQSWkirDi/DXOkbpdJtvOlPErG2lscgJSDsl4=",
+    "homepage": "https://registry.terraform.io/providers/BunnyWay/bunnynet",
+    "owner": "BunnyWay",
+    "repo": "terraform-provider-bunnynet",
+    "rev": "v0.19.2",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-8hKnunwXJbI2SdwcyqLPWAHIZGu0m7IEKpqBsIiqaJs="
   },
   "camptocamp_pass": {
     "hash": "sha256-GQ2g7VyK+eeBqW3LMR4U0gMYsvQnG3y+KEKKkvnmfsk=",

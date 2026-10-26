@@ -12179,7 +12179,7 @@ self: {
       )
       {
         inherit (pkgs) libxcrypt;
-        inherit (pkgs) pcre;
+        pcre = null;
       };
 
   Etage = callPackage (
@@ -454529,7 +454529,7 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
     }
-  ) { inherit (pkgs) pcre; };
+  ) { pcre = null; };
 
   math-extras = callPackage (
     {
@@ -527572,7 +527572,7 @@ self: {
       description = "Portable regex library for Perl 5 compatible regular expressions";
       license = lib.licenses.bsd3;
     }
-  ) { inherit (pkgs) pcre; };
+  ) { pcre = null; };
 
   pcre-light-extra = callPackage (
     {
@@ -587496,7 +587496,7 @@ self: {
       description = "PCRE Backend for \"Text.Regex\" (regex-base)";
       license = lib.licenses.bsd3;
     }
-  ) { inherit (pkgs) pcre; };
+  ) { pcre = null; };
 
   regex-pcre-builtin = callPackage (
     {
