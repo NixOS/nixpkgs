@@ -46,7 +46,6 @@ let
       version,
       hash,
       patches ? [ ],
-      withDocs ? false,
       extraMeta ? { },
     }:
     stdenv.mkDerivation (finalAttrs: {
@@ -63,18 +62,11 @@ let
       postPatch = ''
         patchShebangs Configure
       ''
-      + lib.optionalString (lib.versionOlder version "1.1.1") ''
-        patchShebangs test/*
-        for a in test/t* ; do
-          substituteInPlace "$a" \
-            --replace /bin/rm rm
-        done
-      ''
       # config is a configure script which is not installed.
-      + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
+      + ''
         substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
       ''
-      + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
+      + lib.optionalString stdenv.hostPlatform.isMusl ''
         substituteInPlace crypto/async/arch/async_posix.h \
           --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                     '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
@@ -109,8 +101,8 @@ let
         "dev"
         "out"
         "man"
+        "doc"
       ]
-      ++ lib.optional withDocs "doc"
       # Separate output for the runtime dependencies of the static build.
       # Specifically, move OPENSSLDIR into this output, as its path will be
       # compiled into 'libcrypto.a'. This makes it a runtime dependency of
@@ -145,9 +137,7 @@ let
           x86_64-solaris = "./Configure solaris64-x86_64-gcc";
           powerpc-linux = "./Configure linux-ppc";
           powerpc64-linux = "./Configure linux-ppc64";
-          riscv32-linux = "./Configure ${
-            if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"
-          }";
+          riscv32-linux = "./Configure linux32-riscv32";
           riscv64-linux = "./Configure linux64-riscv64";
         }
         .${stdenv.hostPlatform.system} or (
@@ -218,13 +208,13 @@ let
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
-      ++ lib.optional (lib.versionAtLeast version "3.0.0" && enableKTLS) "enable-ktls"
-      ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      ++ lib.optional enableKTLS "enable-ktls"
+      ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.1" && static) "no-shared"
-      ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
+      ++ lib.optional static "no-shared"
+      ++ lib.optional static "no-module"
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
@@ -371,7 +361,7 @@ let
             exit 1
           fi
         ''
-        + lib.optionalString (lib.versionAtLeast version "3.3.0") ''
+        + ''
           # cleanup cmake helpers for now (for OpenSSL >= 3.3), only rely on pkg-config.
           # pkg-config gets its paths fixed correctly
           rm -rf $dev/lib/cmake
@@ -432,8 +422,6 @@ in
           ./3.5/use-etc-ssl-certs.patch
       )
     ];
-
-    withDocs = true;
   };
 
   openssl_4_1 = common {
@@ -457,7 +445,5 @@ in
           ./3.5/use-etc-ssl-certs.patch
       )
     ];
-
-    withDocs = true;
   };
 }
