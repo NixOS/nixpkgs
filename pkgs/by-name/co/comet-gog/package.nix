@@ -5,7 +5,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  buildPackages,
+  protobuf,
 
   meson,
   ninja,
@@ -46,8 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
+  # Resolve protoc from PATH
   # TECHNICALLY, we could remove this, but then we'd be using the vendored precompiled protoc binary...
-  env.PROTOC = lib.getExe' buildPackages.protobuf "protoc";
+  env.PROTOC = "protoc";
+
+  nativeBuildInputs = [ protobuf ];
 
   passthru.dummy-service = stdenv.mkDerivation {
     pname = "galaxy-dummy-service";
