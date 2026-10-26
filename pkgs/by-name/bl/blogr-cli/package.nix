@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Write, edit, and publish your blog without ever leaving your terminal";
     homepage = "https://github.com/bahdotsh/blogr";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.fnl ];
     mainProgram = "blogr";
   };
 })

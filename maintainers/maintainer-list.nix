@@ -9828,6 +9828,12 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+  fnl = {
+    email = "nixos@finnloske.de";
+    github = "benular";
+    githubId = 136812920;
+    name = "Finn Loske";
+  };
   fnune = {
     email = "fausto.nunez@mailbox.org";
     github = "fnune";
