@@ -388,6 +388,10 @@ builtins.intersectAttrs super {
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
 
+  # 2026-10-26: `lua` is an alias, which hackage2nix does not see, so
+  # cabal2nix's substitution of lua5_4 for it does not apply.
+  lua = super.lua.override { lua = pkgs.lua5_4; };
+
   # Heist's test suite requires system pandoc
   heist = addTestToolDepend pkgs.pandoc super.heist;
 
