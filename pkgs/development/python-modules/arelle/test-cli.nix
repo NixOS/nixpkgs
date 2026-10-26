@@ -7,6 +7,7 @@
   lib,
   runCommand,
   arelle,
+  python,
 }:
 
 runCommand "arelle-test-cli${lib.optionalString (!arelle.hasGUI) "-headless"}"
@@ -78,7 +79,7 @@ runCommand "arelle-test-cli${lib.optionalString (!arelle.hasGUI) "-headless"}"
 
     # Test with the built-in empty instance from arelle config
     arelleCmdLine \
-      --file "${arelle}/lib/python3.13/site-packages/arelle/config/empty-instance.xml" \
+      --file "${arelle}/${python.sitePackages}/arelle/config/empty-instance.xml" \
       --validate \
       --disablePersistentConfig \
       --internetConnectivity=offline \
