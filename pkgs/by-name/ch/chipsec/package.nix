@@ -76,6 +76,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
+    changelog = "https://github.com/chipsec/chipsec/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [
       johnazoidberg
       erdnaxe
