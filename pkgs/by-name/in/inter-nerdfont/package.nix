@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation {
   buildPhase = ''
     runHook preBuild
     nerd-font-patcher --quiet --complete --careful ${inter}/share/fonts/truetype/Inter.ttc
+    nerd-font-patcher --quiet --complete --careful --variable-width-glyphs ${inter}/share/fonts/truetype/Inter.ttc
     runHook postBuild
   '';
 
