@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bed";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = "bed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NXTQMyCI4PKaQPxZqklH03BEDMUrTCNtFUj2FNwIsNM=";
+    hash = "sha256-8AwMG52PVXeFUkj0I8XGk8t/+trVzcPFRUPr1Lbsh2E=";
   };
   vendorHash = "sha256-tp83T6V4HM7SgpZASMWnIoqgw/s/DhdJMsCu2C6OuTo=";
 
