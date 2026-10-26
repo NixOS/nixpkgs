@@ -52,11 +52,11 @@
           type = "internal";
           element = "discoverable|None detected";
         }
-        # only text we can really look for with VPN is on a button, OCR on CI struggles with it
         {
           name = "vpn";
           type = "internal";
           element = "Add|Manual|Configuration";
+          # only text we can really look for with VPN is on a button, OCR on CI struggles with it
           skipOCR = true;
         }
 
@@ -116,14 +116,16 @@
       ];
     in
     ''
+      import datetime
+
       machine.wait_for_x()
 
       with subtest("lomiri system settings launches"):
           machine.succeed("lomiri-system-settings >&2 &")
           machine.wait_for_console_text("qml: Plugin about does not exist")
-          machine.sleep(10)
+          machine.sleep(datetime.timedelta(seconds=10))
           machine.send_key("alt-f10")
-          machine.sleep(5)
+          machine.sleep(datetime.timedelta(seconds=5))
           machine.wait_for_text("System Settings")
           machine.screenshot("lss_open")
 
@@ -153,9 +155,9 @@
       with subtest("lomiri system settings localisation works"):
           machine.succeed("env LANG=de_DE.UTF-8 lomiri-system-settings >&2 &")
           machine.wait_for_console_text("qml: Plugin about does not exist")
-          machine.sleep(10)
+          machine.sleep(datetime.timedelta(seconds=10))
           machine.send_key("alt-f10")
-          machine.sleep(5)
+          machine.sleep(datetime.timedelta(seconds=5))
           machine.wait_for_text("Systemeinstellungen")
           machine.screenshot("lss_localised_open")
 
