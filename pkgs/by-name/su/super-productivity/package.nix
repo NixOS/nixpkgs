@@ -1,4 +1,5 @@
 {
+  dart-sass,
   buildNpmPackage,
   copyDesktopItems,
   electron_43,
@@ -20,7 +21,7 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
-  version = "19.1.0";
+  version = "19.3.1";
 
   inherit nodejs;
 
@@ -28,7 +29,7 @@ buildNpmPackage (finalAttrs: {
     owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iWiWVUGr3qGcfYqCJg9hkXSTM1eWarYZgWspj3+Bn0Q=";
+    hash = "sha256-RlDpD+dfJiMjXlbVq1hW16eyt+S/IFGiJvoce6ZWAEM=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -74,7 +75,7 @@ buildNpmPackage (finalAttrs: {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-vP3wVozl/7KKnJ4CcOzXsljCdQ3Z83Rm0zYEyg1Ce0c=";
+      hash = "sha256-iTgJhGIbp7PFTiVAn1MQiY5PPNEJ/kcz+dBRUlAoLfw=";
     }
   );
 
@@ -101,6 +102,7 @@ buildNpmPackage (finalAttrs: {
     cargo
     copyDesktopItems
     rustPlatform.cargoSetupHook
+    dart-sass
   ];
 
   postPatch = ''
@@ -112,12 +114,23 @@ buildNpmPackage (finalAttrs: {
     # not our app directory, so it would search the wrong location.
     substituteInPlace electron/idle-time-handler.ts \
       --replace-fail "path.dirname(process.execPath)" "path.dirname(app.getAppPath())"
+
+    # Super Productivity tests internal tools here, which make calls to i. e. git.
+    # We do not use those tools, so we do not need to test them.
+    substituteInPlace package.json \
+      --replace-fail "npm run test:tools" "true"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # build/icon.icns is checked in and already contains all ten macOS icon
     # representations. Avoid regenerating it with sandbox-unavailable iconutil.
     substituteInPlace electron-builder.yaml \
       --replace-fail "beforePack: ./tools/beforePack.js" ""
+  '';
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Use system dart-sass, rather than the packaged one from node_modules, which fails due to dynamic linking
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
   '';
 
   buildPhase = ''
