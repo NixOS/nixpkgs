@@ -133,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit arrow-cpp;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = lib.licenses.asl20;
