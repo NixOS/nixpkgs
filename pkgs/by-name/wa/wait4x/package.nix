@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wait4x";
-  version = "3.7.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "wait4x";
     repo = "wait4x";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-07+6noaevhkr9MqMFquEDpPKcNJSzHMIL2qREwX3tjM=";
+    hash = "sha256-JUg7aIpIa9/b7Fz/cSZs9tZxX/cpCm5xK/HSVq5T7Zk=";
   };
 
-  vendorHash = "sha256-qsVXm0W8R0xjlN4jvE70tmCr8WFScX7zMbtYR0LmJdg=";
+  vendorHash = "sha256-oyEPEaCSr847Eo5KPke3AjbzOwyP4moBbZJVeorw4QQ=";
 
   # Tests make network access
   doCheck = false;
