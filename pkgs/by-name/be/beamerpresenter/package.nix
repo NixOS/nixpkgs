@@ -78,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_VERSION_MAJOR=${lib.versions.major qt6.qtbase.version}"
   ];
 
+  postInstall = ''
+    install -Dm644 ../packaging/io.github.stiglers_eponym.BeamerPresenter.metainfo.xml -t $out/share/metainfo
+  '';
+
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
