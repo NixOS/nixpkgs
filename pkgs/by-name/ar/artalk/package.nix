@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "artalk";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gtWnXRDGFjpw9W1ze6fBn/WXMQStqeyQpQHTr3wu5AU=";
+    hash = "sha256-4usppJGMfKRChSfDcXgouXtHiwaO+xNwyt9aIvpRjN4=";
   };
 
   vendorHash = "sha256-xSIkJKlWGbdBlez7jPaoeHuYbyO+2237sZ/yxjUcHf8=";

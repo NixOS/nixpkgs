@@ -7,7 +7,7 @@
   cmake,
   ninja,
   pathspec,
-  pcre,
+  pcre2,
   scikit-build-core,
   pytestCheckHook,
   pytest-mock,
@@ -17,7 +17,7 @@ let
     name = "hyperscan-static-deps";
     paths = [
       (pkgs.hyperscan.override { withStatic = true; })
-      (pcre.overrideAttrs { dontDisableStatic = 0; }).out
+      pcre2
     ];
   };
 in
@@ -58,6 +58,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
+    broken = true; # doesn't build with pcre2
     description = "CPython extension for the Hyperscan regular expression matching library";
     homepage = "https://github.com/darvid/python-hyperscan";
     changelog = "https://github.com/darvid/python-hyperscan/blob/${finalAttrs.src.tag}/CHANGELOG.md";
