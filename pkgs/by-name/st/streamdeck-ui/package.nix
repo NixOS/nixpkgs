@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "streamdeck-ui";
-  version = "4.1.4";
+  version = "4.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XRtIkDyLick9Pq55Br7lQb6FoygMs4DZEJoAD2/o+pQ=";
+    hash = "sha256-SaK5PNtS0Z5QYPIGLg80nvAQgX5ubULluc4dbCpiMpo=";
   };
 
   pythonRelaxDeps = [
