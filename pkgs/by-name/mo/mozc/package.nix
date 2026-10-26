@@ -11,14 +11,13 @@
   libglvnd,
   stdenv,
   writableTmpDirAsHomeHook,
+  merge-ut-dictionaries,
+  jawiki-all-titles-in-ns0,
 
   dictionaries ? [ ],
-  merge-ut-dictionaries,
 }:
 let
   bazel = bazel_9;
-
-  ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
 
   pname = "mozc-server";
   version = "3.35.6354";
@@ -37,6 +36,7 @@ let
     python3
     qt6.wrapQtAppsHook
     writableTmpDirAsHomeHook
+    merge-ut-dictionaries
   ];
 
   buildInputs = [
@@ -211,14 +211,36 @@ stdenv.mkDerivation {
     substituteInPlace config.bzl \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open" \
       --replace-fail "/usr" "$out"
-  ''
-  + lib.optionalString (dictionaries != [ ]) ''
-    cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
   '';
 
   buildPhase = ''
     runHook preBuild
+  ''
+  + lib.optionalString (dictionaries != [ ]) ''
+    # Accept both archive formats while the dictionaries are updated separately.
+    dictionaryInputs=()
+    for dictionary in ${lib.concatMapStringsSep " " (dictionary: "${dictionary}/mozcdic-ut-*.txt*.bz2") dictionaries}; do
+      case "$dictionary" in
+        *.tar.bz2)
+          dictionaryDir=$(mktemp -d)
+          tar -xjf "$dictionary" -C "$dictionaryDir"
+          bzip2 "$dictionaryDir"/*.txt
+          dictionaryInputs+=( "$dictionaryDir"/*.txt.bz2 )
+          ;;
+        *) dictionaryInputs+=( "$dictionary" ) ;;
+      esac
+    done
 
+    bzcat "''${dictionaryInputs[@]}" > mozcdic-ut.txt
+    # Present the title dump in upstream's offset:page_id:title format.
+    gzip -dc ${jawiki-all-titles-in-ns0}/jawiki-all-titles-in-ns0.gz \
+      | sed '1d; s/_/ /g; s/^/0:0:/' > jawiki-all-titles-in-ns0
+
+    MOZC_SOURCE=${src} JAWIKI_TITLES="$PWD/jawiki-all-titles-in-ns0" \
+      merge-ut-dictionaries mozcdic-ut.txt
+    cat mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
+  ''
+  + ''
     # --action_env=HOME forwards the hook's HOME into Bazel actions with sandbox=false and auto-allocate-uids=true.
     bazel build \
       --action_env=HOME \
