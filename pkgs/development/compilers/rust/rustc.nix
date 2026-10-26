@@ -236,6 +236,11 @@ stdenv.mkDerivation (finalAttrs: {
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
     ]
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      # When cross-compiling the compiler, don't try to
+      # install llvm-tools (and rust-objcopy) into the sysroot.
+      "--set=rust.llvm-tools=false"
+    ]
     ++ optionals (!fastCross && stdenv.targetPlatform.config != "wasm32-unknown-none") [
       # See https://github.com/rust-lang/rust/issues/132802
       "--set=target.wasm32-unknown-unknown.optimized-compiler-builtins=false"
