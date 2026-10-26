@@ -8,6 +8,7 @@
   git,
   level-zero,
   pkg-config,
+  makeWrapper,
   fetchFromGitHub,
 }:
 
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=missing-field-initializers";
@@ -55,8 +57,8 @@ stdenv.mkDerivation rec {
       "include(cmake/FindLevelZero.cmake)"
 
     substituteInPlace third_party/level-zero-npu-extensions/ze_graph_ext.h --replace-fail \
-    "#include \"ze_api.h\"" \
-    "#include <level_zero/ze_api.h>"
+      "#include \"ze_api.h\"" \
+      "#include <level_zero/ze_api.h>"
 
     substituteInPlace validation/{kmd-test,umd-test}/CMakeLists.txt --replace-fail \
       "COMPONENT validation-npu" \
@@ -71,6 +73,12 @@ stdenv.mkDerivation rec {
     cmake --install . --component level-zero-npu
     cmake --install . --component validation-npu
     cmake --install . --component fw-npu
+  '';
+
+  postFixup = ''
+    for binary in "$validation"/bin/*; do
+      wrapProgram "$binary" --prefix LD_LIBRARY_PATH : "$out/lib"
+    done
   '';
 
   meta = {
