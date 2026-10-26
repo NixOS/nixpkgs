@@ -29,7 +29,7 @@ let
       };
 
       postPatch = ''
-        cp ${cacert}/etc/ssl/certs/ca-bundle.crt lib/hex/http/ca-bundle.crt
+        ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt lib/hex/http/ca-bundle.crt
       '';
 
       setupHook = writeText "setupHook.sh" ''

@@ -12,7 +12,7 @@ mixFodDepsPostUnpack() {
     local dep
     for dep in castore certifi; do
       if [ -f "$MIX_DEPS_PATH/$dep/priv/cacerts.pem" ]; then
-        cp @caBundle@ "$MIX_DEPS_PATH/$dep/priv/cacerts.pem"
+        ln -sf @caBundle@ "$MIX_DEPS_PATH/$dep/priv/cacerts.pem"
       fi
     done
   fi

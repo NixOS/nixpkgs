@@ -90,7 +90,7 @@ lib.extendMkDerivation {
     }
     // lib.optionalAttrs (args.name == "certifi") {
       postPatch = (args.postPatch or "") + ''
-        cp ${cacert}/etc/ssl/certs/ca-bundle.crt priv/cacerts.pem
+        ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt priv/cacerts.pem
       '';
     };
 }
