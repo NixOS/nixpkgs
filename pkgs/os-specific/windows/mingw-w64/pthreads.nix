@@ -13,6 +13,10 @@ stdenv.mkDerivation {
 
   configureFlags = [ (lib.enableFeature withStatic "static") ];
 
+  buildInputs = [
+    mingw_w64_headers
+  ];
+
   preConfigure = ''
     cd mingw-w64-libraries/winpthreads
   '';
