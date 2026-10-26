@@ -3,7 +3,9 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
+  openttd,
   installFonts,
+  doCheck ? false,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -20,26 +22,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installFonts
     (python3.withPackages (
-      pp: with pp; [
+      pp:
+      with pp;
+      [
         fontforge
         pillow
         setuptools
       ]
+      ++ lib.optionals (finalAttrs.finalPackage.doCheck) [
+        fonttools
+      ]
     ))
   ];
 
-  postPatch = ''
-    chmod a+x build.sh
-    # Test requires openttd source and an additional python module, doesn't seem worth it
-    substituteInPlace build.sh \
-      --replace-fail "python3 checkOpenTTDStrings.py ../openttd/src/lang" ""
-    patchShebangs --build build.sh
-  '';
-
   buildPhase = ''
     runHook preBuild
-    ./build.sh
+    # The font files already exist, force a rebuild
+    make -B
     runHook postBuild
+  '';
+
+  inherit doCheck;
+  checkPhase = lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+    runHook preCheck
+    python3 checkOpenTTDStrings.py ${openttd.src}/src/lang
+    runHook postCheck
   '';
 
   installPhase = ''
@@ -47,6 +54,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests.withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
 
   meta = {
     homepage = "https://github.com/OpenTTD/OpenTTD-TTF";
