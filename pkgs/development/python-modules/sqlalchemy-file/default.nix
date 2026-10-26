@@ -14,15 +14,19 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-file";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jowilf";
     repo = "sqlalchemy-file";
     rev = version;
-    hash = "sha256-gtW7YA/rQ48tnqPdypMnSqqtwb90nhAkiQNhgEr1M3I=";
+    hash = "sha256-xnd1Y7gyh8Kz9Ns5BQTfWUUnlwC9xWqvGntLFUTdsOs=";
   };
+
+  patches = [
+    ./disable-container-tests.patch
+  ];
 
   build-system = [ hatchling ];
 

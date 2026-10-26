@@ -21029,6 +21029,8 @@ self: super: with self; {
 
   tokentrim = callPackage ../development/python-modules/tokentrim { };
 
+  toktok-rs = callPackage ../development/python-modules/toktok-rs { };
+
   tololib = callPackage ../development/python-modules/tololib { };
 
   toml = callPackage ../development/python-modules/toml { };

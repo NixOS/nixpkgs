@@ -41,13 +41,12 @@ buildNimPackage (finalAttrs: {
     };
   };
 
-  meta =
-
-    finalAttrs.src.meta // {
-      description = "Nim based tiling window manager";
-      platforms = lib.platforms.linux;
-      license = lib.licenses.gpl2;
-      maintainers = [ lib.maintainers.marcusramberg ];
-      mainProgram = "nimdow";
-    };
+  meta = finalAttrs.src.meta // {
+    broken = true; # requires pcre support, but nim only supports pcre v1
+    description = "Nim based tiling window manager";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.marcusramberg ];
+    mainProgram = "nimdow";
+  };
 })
