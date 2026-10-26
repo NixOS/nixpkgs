@@ -158,9 +158,10 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) podman;
       # related modules
       inherit (nixosTests)
+        podman
+        podman-dns
         podman-tls-ghostunnel
         ;
       oci-containers-podman = nixosTests.oci-containers.podman;
