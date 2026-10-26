@@ -27,6 +27,12 @@ stdenv.mkDerivation {
     "DEPMOD=true"
   ];
 
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
+
   installTargets = [ "modules_install" ];
 
   passthru.updateScript = unstableGitUpdater { };
