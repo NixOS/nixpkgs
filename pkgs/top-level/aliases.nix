@@ -1356,6 +1356,7 @@ mapAliases {
   kgx = throw "'kgx' has been renamed to/replaced by 'gnome-console'"; # Converted to throw 2025-10-27
   khd = throw "'khd' has been removed as it has been pulled upstream"; # Added 2025-12-18
   khoj = throw "khoj has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
+  ki = warnAlias "'ki' has been renamed to/replaced by its maintained fork 'ki-ng'" ki-ng; # Added 2026-10-25
   kilocode-cli = warnAlias "'kilocode-cli' has been renamed to/replaced by 'kilo'" kilo; # Added 2026-04-30
   kind2 = throw "'kind2' has been removed since it is no longer maintained upstream. Consider using 'bend' instead"; # Added 2026-10-22
   kio-fuse = throw "'kio-fuse' has been removed, as Plasma 5 has reached end of life. Use 'kdePackages.kio-fuse' for Plasma 6."; # Added 2026-05-01
