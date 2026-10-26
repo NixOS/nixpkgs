@@ -45,6 +45,7 @@
   xz,
   yasm,
   glslang,
+  vulkan-loader,
   wrapGAppsHook3,
   nixosTests,
   # If open-watcom-bin is not passed, VirtualBox will fall back to use
@@ -396,6 +397,12 @@ let
       # so add the library path back to VBoxRT.
       if [ -e "$out/libexec/virtualbox/VBoxVolInfo" ]; then
         patchelf --add-rpath "${lib.makeLibraryPath [ lvm2 ]}" "$out/libexec/virtualbox/VBoxRT.so"
+      fi
+
+      # VBoxDxVk loads Vulkan dynamically; add its path after RPATH shrinking.
+      if [ -e "$out/libexec/virtualbox/VBoxDxVk.so" ]; then
+        patchelf --add-rpath "${lib.makeLibraryPath [ vulkan-loader ]}" \
+          "$out/libexec/virtualbox/VBoxDxVk.so"
       fi
     '';
 
