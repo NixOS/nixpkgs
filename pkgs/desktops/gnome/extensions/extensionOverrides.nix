@@ -30,7 +30,6 @@
   xdg-utils,
   gtk4,
   desktop-file-utils,
-  xdg-user-dirs,
   libglycin,
   libglycin-gtk4,
 }:
