@@ -13558,6 +13558,12 @@
     githubId = 110620;
     name = "Jevin Maltais";
   };
+  jeyemwey = {
+    name = "Jannik Volkland";
+    email = "jannik@outlook.com";
+    github = "jeyemwey";
+    githubId = 2796271;
+  };
   jezcope = {
     email = "j.cope@erambler.co.uk";
     github = "jezcope";
