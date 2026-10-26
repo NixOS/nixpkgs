@@ -28,6 +28,7 @@
   setuptools-rust,
 
   # buildInputs
+  elfutils,
   onednn,
   numactl,
   llvmPackages,
@@ -512,6 +513,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport (
     mergedCudaLibraries
+    ++ [
+      elfutils
+    ]
     ++ (with cudaPackages; [
       nccl
       cudnn
