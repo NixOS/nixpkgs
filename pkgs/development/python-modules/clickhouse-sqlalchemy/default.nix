@@ -7,13 +7,13 @@
   requests,
   asynch,
   clickhouse-driver,
-  nix-update-script,
+  unstableGitUpdater,
   nixosTests,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "clickhouse-sqlalchemy";
-  version = "0.3.2-unstable-2025-11-24";
+  version = "0.3.2-unstable-2025-11-25";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     tests = {
       inherit (nixosTests) clickhouse-sqlalchemy;
     };
-    updateScript = nix-update-script { };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = {
