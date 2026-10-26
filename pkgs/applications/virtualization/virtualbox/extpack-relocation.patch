@@ -1,0 +1,162 @@
+diff --git a/src/VBox/Main/include/ExtPackUtil.h b/src/VBox/Main/include/ExtPackUtil.h
+index f07a311..7b116fa 100644
+--- a/src/VBox/Main/include/ExtPackUtil.h
++++ b/src/VBox/Main/include/ExtPackUtil.h
+@@ -138,6 +138,10 @@ RTCString          *VBoxExtPackLoadDescFromVfsFile(RTVFSFILE hVfsFile, PVBOXEXTP
+ RTCString          *VBoxExtPackExtractNameFromTarballPath(const char *pszTarball);
+ void                VBoxExtPackFreeDesc(PVBOXEXTPACKDESC a_pExtPackDesc);
+ bool                VBoxExtPackIsValidName(const char *pszName);
++
++int                 VBoxExtPackGetInstallDir(char *pszPath, size_t cchPath);
++int                 VBoxExtPackGetCertDir(char *pszPath, size_t cchPath);
++
+ bool                VBoxExtPackIsValidMangledName(const char *pszMangledName, size_t cchMax = RTSTR_MAX);
+ RTCString          *VBoxExtPackMangleName(const char *pszName);
+ RTCString          *VBoxExtPackUnmangleName(const char *pszMangledName, size_t cbMax);
+diff --git a/src/VBox/Main/src-all/ExtPackManagerImpl.cpp b/src/VBox/Main/src-all/ExtPackManagerImpl.cpp
+index 0fcda94..c1e8011 100644
+--- a/src/VBox/Main/src-all/ExtPackManagerImpl.cpp
++++ b/src/VBox/Main/src-all/ExtPackManagerImpl.cpp
+@@ -2384,15 +2384,11 @@ HRESULT ExtPackManager::initExtPackManager(VirtualBox *a_pVirtualBox, VBOXEXTPAC
+      * Figure some stuff out before creating the instance data.
+      */
+     char szBaseDir[RTPATH_MAX];
+-    int vrc = RTPathAppPrivateArchTop(szBaseDir, sizeof(szBaseDir));
+-    AssertLogRelRCReturn(vrc, E_FAIL);
+-    vrc = RTPathAppend(szBaseDir, sizeof(szBaseDir), VBOX_EXTPACK_INSTALL_DIR);
++    int vrc = VBoxExtPackGetInstallDir(szBaseDir, sizeof(szBaseDir));
+     AssertLogRelRCReturn(vrc, E_FAIL);
+ 
+     char szCertificatDir[RTPATH_MAX];
+-    vrc = RTPathAppPrivateNoArch(szCertificatDir, sizeof(szCertificatDir));
+-    AssertLogRelRCReturn(vrc, E_FAIL);
+-    vrc = RTPathAppend(szCertificatDir, sizeof(szCertificatDir), VBOX_EXTPACK_CERT_DIR);
++    vrc = VBoxExtPackGetCertDir(szCertificatDir, sizeof(szCertificatDir));
+     AssertLogRelRCReturn(vrc, E_FAIL);
+ 
+     /*
+diff --git a/src/VBox/Main/src-all/ExtPackUtil.cpp b/src/VBox/Main/src-all/ExtPackUtil.cpp
+index cdde2bb..c0599f2 100644
+--- a/src/VBox/Main/src-all/ExtPackUtil.cpp
++++ b/src/VBox/Main/src-all/ExtPackUtil.cpp
+@@ -33,6 +33,7 @@
+ 
+ #include <iprt/ctype.h>
+ #include <iprt/dir.h>
++#include <iprt/env.h>
+ #include <iprt/err.h>
+ #include <iprt/file.h>
+ #include <iprt/manifest.h>
+@@ -48,6 +49,10 @@
+ 
+ #include "../include/VBoxNls.h"
+ 
++#ifndef RT_OS_WINDOWS
++# include <unistd.h>
++#endif
++
+ 
+ /*********************************************************************************************************************************
+ *   Defined Constants And Macros                                                                                                 *
+@@ -511,6 +516,73 @@ bool VBoxExtPackIsValidName(const char *pszName)
+     return true;
+ }
+ 
++
++/**
++ * Resolves an extension pack directory, allowing a wrapper to relocate it.
++ *
++ * The Nixpkgs build stores the extension pack in a symlink wrapper around the
++ * actual VirtualBox installation.  This lets both VBoxSVC and the helper app
++ * agree on that location instead of using the path compiled into the binaries.
++ * The override is ignored for processes that have switched from their real to
++ * their effective user ID, so a set-user-ID helper app cannot be tricked into
++ * operating outside its installation directory.
++ *
++ * @returns IPRT status code.
++ * @param   fArchTop    Whether to use RTPathAppPrivateArchTop (true) or
++ *                      RTPathAppPrivateNoArch (false) as the default.
++ * @param   pszSubDir   The subdirectory to append.
++ * @param   pszPath     Where to return the path.
++ * @param   cchPath     The size of the buffer.
++ */
++static int vboxExtPackGetDir(bool fArchTop, const char *pszSubDir, char *pszPath, size_t cchPath)
++{
++#ifndef RT_OS_WINDOWS
++    if (geteuid() == getuid())
++#endif
++    {
++        const char *pszShareDir = RTEnvGet("VBOX_NIX_APP_SHARE_DIR");
++        if (pszShareDir && *pszShareDir)
++        {
++            int vrc = RTStrCopy(pszPath, cchPath, pszShareDir);
++            if (RT_SUCCESS(vrc))
++                vrc = RTPathAppend(pszPath, cchPath, pszSubDir);
++            return vrc;
++        }
++    }
++
++    int vrc = fArchTop ? RTPathAppPrivateArchTop(pszPath, cchPath)
++                       : RTPathAppPrivateNoArch(pszPath, cchPath);
++    if (RT_SUCCESS(vrc))
++        vrc = RTPathAppend(pszPath, cchPath, pszSubDir);
++    return vrc;
++}
++
++
++/**
++ * Gets the directory where extension packs are installed.
++ *
++ * @returns IPRT status code.
++ * @param   pszPath     Where to return the path.
++ * @param   cchPath     The size of the buffer.
++ */
++int VBoxExtPackGetInstallDir(char *pszPath, size_t cchPath)
++{
++    return vboxExtPackGetDir(true /*fArchTop*/, VBOX_EXTPACK_INSTALL_DIR, pszPath, cchPath);
++}
++
++
++/**
++ * Gets the directory where extension pack certificates are installed.
++ *
++ * @returns IPRT status code.
++ * @param   pszPath     Where to return the path.
++ * @param   cchPath     The size of the buffer.
++ */
++int VBoxExtPackGetCertDir(char *pszPath, size_t cchPath)
++{
++    return vboxExtPackGetDir(false /*fArchTop*/, VBOX_EXTPACK_CERT_DIR, pszPath, cchPath);
++}
++
+ /**
+  * Checks if an alledged manged extension pack name.
+  *
+diff --git a/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp b/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp
+index 2e1e097..fae18f3 100644
+--- a/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp
++++ b/src/VBox/Main/src-helper-apps/VBoxExtPackHelperApp.cpp
+@@ -172,10 +172,7 @@ static bool IsValidCertificateDir(const char *pszCertDir)
+      * Just be darn strict for now.
+      */
+     char szCorrect[RTPATH_MAX];
+-    int vrc = RTPathAppPrivateNoArch(szCorrect, sizeof(szCorrect));
+-    if (RT_FAILURE(vrc))
+-        return false;
+-    vrc = RTPathAppend(szCorrect, sizeof(szCorrect), VBOX_EXTPACK_CERT_DIR);
++    int vrc = VBoxExtPackGetCertDir(szCorrect, sizeof(szCorrect));
+     if (RT_FAILURE(vrc))
+         return false;
+ 
+@@ -195,10 +192,7 @@ static bool IsValidBaseDir(const char *pszBaseDir)
+      * Just be darn strict for now.
+      */
+     char szCorrect[RTPATH_MAX];
+-    int vrc = RTPathAppPrivateArchTop(szCorrect, sizeof(szCorrect));
+-    if (RT_FAILURE(vrc))
+-        return false;
+-    vrc = RTPathAppend(szCorrect, sizeof(szCorrect), VBOX_EXTPACK_INSTALL_DIR);
++    int vrc = VBoxExtPackGetInstallDir(szCorrect, sizeof(szCorrect));
+     if (RT_FAILURE(vrc))
+         return false;
+ 
