@@ -76,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/oneapi-src/unified-memory-framework/commit/3ab0bc195f72060555f154475ec3abe01d2ba742.patch";
       hash = "sha256-0+dgOFNmGrxXPWxtsc1mvzj0V8+eJhH2HkGooDcNdhs=";
     })
+    # Several file provider tests share a backing file name in the same
+    # working directory and race when ctest runs them in parallel.
+    # https://github.com/oneapi-src/unified-memory-framework/pull/1620
+    (fetchpatch {
+      name = "use-different-temporary-file-names.patch";
+      url = "https://github.com/oneapi-src/unified-memory-framework/commit/afa229239daabfee2722f780f83d933654d5965a.patch";
+      hash = "sha256-mDQCz9sAxFemsGGhY6hwx4vsQgSrchuik/a4+7Gdp9M=";
+    })
   ];
 
   postPatch = ''
