@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
