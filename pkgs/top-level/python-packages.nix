@@ -17151,6 +17151,10 @@ self: super: with self; {
 
   python-libnmap = callPackage ../development/python-modules/python-libnmap { };
 
+  python-libpcap = callPackage ../development/python-modules/python-libpcap {
+    inherit (pkgs) libpcap;
+  };
+
   python-linkplay = callPackage ../development/python-modules/python-linkplay { };
 
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
