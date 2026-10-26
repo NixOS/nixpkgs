@@ -539,6 +539,8 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       rocshmem
       rocm-smi
       hipsparselt
+      # torch's LoadHIP requires hipfile from ROCm 7.14 on
+      hipfile
     ]
   )
   ++ lib.optionals stdenv.cc.isClang [
