@@ -302,6 +302,7 @@ in
   atticd = runTest ./atticd.nix;
   attr = pkgs.callPackage ./attr.nix { };
   atuin = runTest ./atuin.nix;
+  atuin-default-settings = runTest ./atuin-default-settings.nix;
   atuin-programs = runTest ./atuin-programs.nix;
   audiobookshelf = runTest ./audiobookshelf.nix;
   audit = runTest ./audit.nix;
@@ -1857,7 +1858,6 @@ in
   systemd-networkd-vrf = runTest ./systemd-networkd-vrf.nix;
   systemd-no-tainted = runTest ./systemd-no-tainted.nix;
   systemd-nspawn = runTest ./systemd-nspawn.nix;
-  systemd-nspawn-configfile = runTest ./systemd-nspawn-configfile.nix;
   systemd-nsresourced-mountfsd = runTest ./systemd-nsresourced-mountfsd.nix;
   systemd-oomd = runTest ./systemd-oomd.nix;
   systemd-portabled = runTest ./systemd-portabled.nix;

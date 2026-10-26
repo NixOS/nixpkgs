@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
@@ -9,14 +9,14 @@
   git,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "shopware-cli";
-  version = "0.17.0";
+  version = "0.19.5";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "shopware";
     tag = finalAttrs.version;
-    hash = "sha256-VEpQUHEmShrTu+SCZh32X8f2vq7irv+lUOrZ9jZpY8c=";
+    hash = "sha256-fvvGojs+NZdtz56LnIadtvQiUo8meQ72o7jytS/bnJ4=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     dart-sass
   ];
 
-  vendorHash = "sha256-Nsvoqp+Wvf2ZCwb8C+TavpBsVrMTlGwR19fjks0Y2Gs=";
+  vendorHash = "sha256-quTZYiVyFtK0esZ2GryF9XbOXTUJ0xRXUyTM3EtFehw=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd shopware-cli \
@@ -56,6 +56,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/shopware/shopware-cli";
     changelog = "https://github.com/shopware/shopware-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [
+      shyim
+      maltejanz
+    ];
   };
 })

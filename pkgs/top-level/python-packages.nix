@@ -6646,8 +6646,6 @@ self: super: with self; {
 
   furo = callPackage ../development/python-modules/furo { };
 
-  fuse = callPackage ../development/python-modules/fuse-python { inherit (pkgs) fuse; };
-
   fusepy = callPackage ../development/python-modules/fusepy { };
 
   future = callPackage ../development/python-modules/future { };
@@ -10795,6 +10793,8 @@ self: super: with self; {
 
   memray = callPackage ../development/python-modules/memray { };
 
+  menshen-client = callPackage ../development/python-modules/menshen-client { };
+
   meraki = callPackage ../development/python-modules/meraki { };
 
   mercadopago = callPackage ../development/python-modules/mercadopago { };
@@ -12437,6 +12437,12 @@ self: super: with self; {
   nvidia-resiliency-ext = callPackage ../development/python-modules/nvidia-resiliency-ext { };
 
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
+
+  nvtx = callPackage ../development/python-modules/nvtx {
+    # Only for its source and versions. Every CUDA package set from 12.9 on has the same source build, while earlier
+    # ones (possibly the default cudaPackages) use the redistributable.
+    nvtx = pkgs.cudaPackages_13.nvtx;
+  };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
@@ -14662,6 +14668,8 @@ self: super: with self; {
   pybind11-abseil = callPackage ../development/python-modules/pybind11-abseil { };
 
   pybind11-stubgen = callPackage ../development/python-modules/pybind11-stubgen { };
+
+  pybind11_3_0 = callPackage ../development/python-modules/pybind11/3_0.nix { };
 
   pybindgen = callPackage ../development/python-modules/pybindgen { };
 
@@ -20958,7 +20966,10 @@ self: super: with self; {
         tk = if pythonAtLeast "3.14" then pkgs.tk-9_0 else pkgs.tk-8_6;
       };
 
-  tkinter-gl = callPackage ../development/python-modules/tkinter-gl { };
+  tkinter-gl = callPackage ../development/python-modules/tkinter-gl {
+    inherit (pkgs) mesa;
+    inherit (pkgs.tclPackages.override { inherit (tkinter) tcl tk; }) tkgl;
+  };
 
   tld = callPackage ../development/python-modules/tld { };
 
@@ -21013,6 +21024,8 @@ self: super: with self; {
   tokenspeed-triton-bin = callPackage ../development/python-modules/tokenspeed-triton/bin.nix { };
 
   tokentrim = callPackage ../development/python-modules/tokentrim { };
+
+  toktok-rs = callPackage ../development/python-modules/toktok-rs { };
 
   tololib = callPackage ../development/python-modules/tololib { };
 
@@ -21327,6 +21340,8 @@ self: super: with self; {
   triton-bin = callPackage ../development/python-modules/triton/bin.nix { };
 
   triton-cuda = self.triton.override { cudaSupport = true; };
+
+  triton-kernels = callPackage ../development/python-modules/triton-kernels { };
 
   triton-no-cuda = self.triton.override { cudaSupport = false; };
 

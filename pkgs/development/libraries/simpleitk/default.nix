@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simpleitk";
-  version = "2.5.5";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "SimpleITK";
     repo = "SimpleITK";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-biCrtfewxptDGHlN6xGmsv+m4RGgWDIBu7zMfa8XIRg=";
+    hash = "sha256-yqlD1ymxCuGYWP79TidZL5+qLrNZ3ng2b8Cr2l8dV/g=";
   };
 
   nativeBuildInputs = [

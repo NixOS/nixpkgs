@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyisy";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "automicus";
     repo = "PyISY";
     tag = "v${version}";
-    hash = "sha256-4mNG3dcDOuhRXSAN8FiKgxAdf7Yt04L+60luJ3FzKMQ=";
+    hash = "sha256-edrZFJYAbV9ImjWak9Ly+YWTXpQc5uHyOMOXbq9WOvA=";
   };
 
   postPatch = ''

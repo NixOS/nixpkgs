@@ -4,6 +4,7 @@
   fetchurl,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 let
@@ -85,7 +86,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = map (patch: "${rpmFusionPatches}/${patch}") patchset;
 
-  makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/net/wireless"
+    "DEPMOD=true"
+  ];
+
+  # Broadcom's Makefile has no modules_install target, so call kbuild's
+  # directly; it signs the module and writes the wl.ko.cer certificate
+  # aggregateModules expects.
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
+
+  installTargets = [ "modules_install" ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -95,14 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postUnpack
   '';
 
-  installPhase = ''
-    runHook preInstall
-    binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-    docDir="$out/share/doc/broadcom-sta/"
-    mkdir -p "$binDir" "$docDir"
-    cp wl.ko "$binDir"
-    cp lib/LICENSE.txt "$docDir"
-    runHook postInstall
+  postInstall = ''
+    install -Dm644 lib/LICENSE.txt -t "$out/share/doc/broadcom-sta"
   '';
 
   meta = {

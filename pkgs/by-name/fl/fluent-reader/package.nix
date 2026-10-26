@@ -4,28 +4,22 @@
   appimageTools,
 }:
 
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "fluent-reader";
   version = "1.3.0";
-
   src = fetchurl {
-    url = "https://github.com/yang991178/fluent-reader/releases/download/v${version}/Fluent.Reader.${version}.AppImage";
+    url = "https://github.com/yang991178/fluent-reader/releases/download/v${finalAttrs.version}/Fluent.Reader.${finalAttrs.version}.AppImage";
     hash = "sha256-glpe0zEpZ9+tcUSK2BI+AWAwcdt2RNQYnSDbGQV20eQ=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    mkdir -p $out/share/${pname}
-    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
-    install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
-    cp -a ${appimageContents}/usr/share/icons $out/share/
+    mkdir -p $out/share/${finalAttrs.pname}
+    cp -a ${finalAttrs.contents}/{locales,resources} $out/share/${finalAttrs.pname}
+    install -Dm 444 ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications
+    cp -a ${finalAttrs.contents}/usr/share/icons $out/share/
 
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
   '';
 
   meta = {
@@ -36,4 +30,4 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

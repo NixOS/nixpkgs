@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nab";
-  version = "0.0.21";
+  version = "0.0.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "notatallshaw";
     repo = "nab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1oxE/qJ0GAmkYcR1FJ5PXIwik5dpz2b9Q20prIbvwYU=";
+    hash = "sha256-72epflsXDGc+lmnYc+QE0UqCCP/2gsl4BCzdG6ktrs4=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -74,7 +74,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "PubGrub-based dependency resolver for Python packages";
     homepage = "https://github.com/notatallshaw/nab";
-    changelog = "https://github.com/notatallshaw/nab/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/notatallshaw/nab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
     mainProgram = "nab";

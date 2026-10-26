@@ -12,22 +12,25 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lookyloo-models";
-  version = "0.4.7";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "lookyloo-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bFF3AX/WyCceiezIl0YNHaNdtlOKhN7aTbrJO0pCvYs=";
+    hash = "sha256-JQJxGlwBMJpIHRbk5snxY0Y0WkE5suv/p7H7Z0qqK2s=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.12,<0.13" "uv_build"
+      --replace-fail "uv_build>=0.13,<0.14" "uv_build"
   '';
 
-  pythonRelaxDeps = [ "pydantic" ];
+  pythonRelaxDeps = [
+    "orjson"
+    "pydantic"
+  ];
 
   build-system = [ uv-build ];
 

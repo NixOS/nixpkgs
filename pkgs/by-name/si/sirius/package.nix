@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
     cudaPackages.cuda_profiler_api
-    cudaPackages.cuda_nvtx
+    cudaPackages.nvtx
     cudaPackages.libcufft
     cudaPackages.libcusolver
     cudaPackages.libcublas

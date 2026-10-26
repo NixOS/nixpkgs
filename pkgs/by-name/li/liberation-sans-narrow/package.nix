@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fontforge,
-  python3Packages,
   python3,
 }:
 
@@ -20,7 +19,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     fontforge
-    python3Packages.fonttools
     python3
   ];
 

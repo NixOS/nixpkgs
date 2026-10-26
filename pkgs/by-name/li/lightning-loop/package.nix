@@ -1,22 +1,22 @@
 {
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   lib,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "lightning-loop";
-  version = "0.35.0-beta";
+  version = "0.35.2-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "loop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HPYL+89XQ21tWTm8BEKi+6rplQIy2nmBwTOUDZPnuRA=";
+    hash = "sha256-R/h7ppPcwMyk5j2z74tiXVpvxgNKuttWK5D97aViY1U=";
   };
 
-  vendorHash = "sha256-gD1ElkrNND51Twtl30esW6iwtnIoTpq9r6Z2gm1RmA8=";
+  vendorHash = "sha256-LoOSrpkoJpsD9llyM7ItflGJJqMqCHuM09E1nuKvHyw=";
 
   subPackages = [
     "cmd/loop"

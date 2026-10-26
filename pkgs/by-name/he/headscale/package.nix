@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   iana-etc,
@@ -9,15 +9,15 @@
   postgresql,
   stdenv,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "headscale";
-  version = "0.29.5";
+  version = "0.29.6";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uyf4JvZoANwWNqw6JCoRn7Z4ZQxh+hVJVB6SBPkVEv0=";
+    hash = "sha256-KWsoNZTbsv1MqmBKrClmk/QcU8Xll5a+AZvTApipX20=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
       --replace-fail 'Commit:    "unknown"' 'Commit: "${finalAttrs.src.tag}"'
   '';
 
-  vendorHash = "sha256-sdSDAIBaW5c9eTgZfFSrn8LEqHg37Hnr1PszuoXPm6Y=";
+  vendorHash = "sha256-aDP2N3EUPeXZWAvlFHWxsGUZTtVGFtcT+Lul1PnGwT4=";
 
   subPackages = [ "cmd/headscale" ];
 

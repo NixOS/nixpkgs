@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    run_rustc/${outputDir}/prefix/bin/hello_world | grep "hello, world"
+    run_rustc/${outputDir}/prefix/bin/hello_world | grep -F "Hello, world!"
     runHook postCheck
   '';
 

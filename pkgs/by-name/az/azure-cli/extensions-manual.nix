@@ -270,6 +270,7 @@
       pycryptodome
       pyyaml
     ];
+    pythonRelaxDeps = [ "pycryptodome" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
@@ -315,6 +316,7 @@
     propagatedBuildInputs = with python3Packages; [
       websocket-client
     ];
+    pythonRelaxDeps = [ "websocket-client" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 

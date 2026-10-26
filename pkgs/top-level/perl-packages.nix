@@ -15373,6 +15373,11 @@ with self;
       pkgs.goocanvas_2
       Gtk3
     ];
+    nativeCheckInputs = [
+      Gtk3
+    ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Perl binding for GooCanvas2 widget using Glib::Object::Introspection";
       license = with lib.licenses; [
@@ -38353,8 +38358,10 @@ with self;
         })
       ];
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
-    buildInputs = [ pkgs.curl ];
+    nativeBuildInputs = [ pkgs.curl ];
+    strictDeps = true;
     doCheck = false; # performs network access
+    __structuredAttrs = true;
     meta = {
       description = "Perl extension interface for libcurl";
       license = lib.licenses.mit;

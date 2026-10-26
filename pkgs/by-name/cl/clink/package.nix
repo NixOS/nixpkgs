@@ -17,15 +17,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clink";
-  version = "2024.12.07-unstable-2026-09-11";
+  version = "2024.12.07-unstable-2026-10-18";
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Smattr";
     repo = "clink";
-    rev = "ad530fffe3f65df8c464f697d205c9c28d996cae";
-    hash = "sha256-QEVDgByQV26ershttx0gDMqkssKKPLcyI6oRAHGBFQ4=";
+    rev = "97ca7d205e4c470bf6676ac2ab464536ab022fd6";
+    hash = "sha256-OAbCD1g4xbeaf+EOisz+BVp8kwLEiGl/3egeRKtJBNo=";
     fetchSubmodules = true;
   };
 

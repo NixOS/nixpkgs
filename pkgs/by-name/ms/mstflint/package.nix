@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   rdma-core,
   openssl,
   zlib,
@@ -115,6 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  postInstall = lib.optionalString (!onlyFirmwareUpdater) ''
+    rm $out/etc/mstflint/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/mstflint/ca-bundle.crt
+  '';
 
   hardeningDisable = [ "format" ];
 

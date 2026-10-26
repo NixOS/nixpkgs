@@ -46,6 +46,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.darwin;
     mainProgram = "kitty";
     mainDarwinApp = "kitty.app";
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 })
