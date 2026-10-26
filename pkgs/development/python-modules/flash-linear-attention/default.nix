@@ -1,52 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
 
   # build-system
   setuptools,
 
   # dependencies
-  einops,
-  torch,
+  fla-core,
   transformers,
 
   # optional-dependencies
   tilelang,
   causal-conv1d,
   pandas,
-  pytest-xdist,
   matplotlib,
   datasets,
-  pytest,
-  triton,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "flash-linear-attention";
-  version = "0.5.2";
+  inherit (fla-core) version src;
   pyproject = true;
-
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "fla-org";
-    repo = "flash-linear-attention";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Z4TEy8ycUA9NNw/yA4uIJHooqsmXUF2EIG0Lo454NXg=";
-  };
+  # Only ships fla/{layers,models}. The rest of `fla` is provided by fla-core.
+  postPatch = ''
+    python -c "import sys; sys.path.insert(0, 'scripts'); import build_packages; build_packages.build_split_packages('split')"
+    cd split/flash-linear-attention
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    einops
-    torch # Requires torch to function
+    fla-core
     transformers
   ];
 
   optional-dependencies = {
-    cuda = [ triton ];
-    cpu = [ triton ];
     tilelang = [ tilelang ];
     conv1d = [ causal-conv1d ];
     benchmark = [
@@ -54,21 +44,21 @@ buildPythonPackage (finalAttrs: {
       pandas
       datasets
     ];
-    test = [
-      pytest
-      pytest-xdist
-    ];
   };
+
+  pythonImportsCheck = [
+    "fla"
+    "fla.layers"
+    "fla.models"
+  ];
 
   # Tests require a GPU
   doCheck = false;
 
-  pythonImportsCheck = [ "fla" ];
-
   meta = {
     description = "Triton-based implementations of causal linear attention";
     homepage = "https://github.com/fla-org/flash-linear-attention";
-    changelog = "https://github.com/fla-org/flash-linear-attention/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/fla-org/flash-linear-attention/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ BatteredBunny ];
   };
