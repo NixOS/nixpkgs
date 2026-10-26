@@ -239,6 +239,8 @@ in
 
     systemd.packages = [ cfg.package ];
 
+    services.dbus.packages = [ cfg.package ];
+
     programs.feedbackd.enable = true;
 
     # Without this, the stevia OSK does not function when selecting text fields.
