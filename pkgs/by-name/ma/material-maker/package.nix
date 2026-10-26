@@ -90,9 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
   fixupPhase = ''
     runHook preFixup
 
+    # Keep the RPATH update before the interpreter update. Reversing this
+    # order causes the dynamic loader to segfault on the resulting binary.
+    patchelf \
+      --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs} \
+      $out/share/material-maker/material-maker
+
     patchelf \
       --set-interpreter '${stdenv.cc.bintools.dynamicLinker}' \
-      --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs} \
       $out/share/material-maker/material-maker
 
     runHook postFixup
