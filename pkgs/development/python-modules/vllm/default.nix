@@ -28,6 +28,7 @@
   setuptools-rust,
 
   # buildInputs
+  elfutils,
   oniguruma,
   onednn,
   zstd,
@@ -503,6 +504,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport (
     mergedCudaLibraries
+    ++ [
+      elfutils
+    ]
     ++ (with cudaPackages; [
       nccl
       cudnn
