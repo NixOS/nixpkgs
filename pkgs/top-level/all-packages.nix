@@ -5201,8 +5201,6 @@ with pkgs;
     aspell = aspell.override { searchNixProfiles = false; };
   };
 
-  astal = recurseIntoAttrs (lib.makeScope newScope (callPackage ../development/libraries/astal { }));
-
   attr = callPackage ../development/libraries/attr { };
 
   # Not moved to aliases while we decide if we should split the package again.
@@ -6367,8 +6365,6 @@ with pkgs;
     avrlibc = pkgsCross.avr.libc;
   };
 
-  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_4; };
-
   skawarePackages = recurseIntoAttrs (callPackage ../development/skaware-packages { });
 
   inherit (skawarePackages)
@@ -7124,15 +7120,6 @@ with pkgs;
       packages // (lib.optionalAttrs config.allowAliases aliases)
     )
   );
-
-  # We should move to dynamic modules and create a nginxFull package with all modules
-  nginxShibboleth = nginxStable.override {
-    modules = [
-      nginxModules.rtmp
-      nginxModules.moreheaders
-      nginxModules.shibboleth
-    ];
-  };
 
   nsdiff = perlPackages.nsdiff;
 

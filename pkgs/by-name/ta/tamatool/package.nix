@@ -9,7 +9,7 @@
   SDL2_image,
 
   # Optionally bundle a ROM file
-  rom ? null,
+  romFile ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/tamatool
     cp -r res $out/share/tamatool/res
     install -Dm644 linux/tamatool.png $out/share/icons/hicolor/128x126/apps/tamatool.png
-    ${lib.optionalString (rom != null) "install -Dm677 ${rom} $out/share/tamatool/rom.bin"}
+    ${lib.optionalString (romFile != null) "install -Dm677 ${romFile} $out/share/tamatool/rom.bin"}
     runHook postInstall
   '';
 

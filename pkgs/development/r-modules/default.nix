@@ -1763,7 +1763,7 @@ let
     ];
     ravetools = [ pkgs.fftw ];
     rawrr = [ pkgs.mono ];
-    rayrender = [ pkgs.libX11 ];
+    rayrender = [ pkgs.libx11 ];
     rbedrock = [ pkgs.zlib ];
     rcdd = [ pkgs.gmp ];
     redux = [ pkgs.hiredis ];
@@ -3083,10 +3083,6 @@ let
         pkgs.rustPlatform.cargoSetupHook
         pkgs.cargo
       ];
-    });
-
-    trajeR = old.trajeR.overrideAttrs (attrs: {
-      patches = [ ./patches/trajeR.patch ];
     });
 
     trigger = old.trigger.overrideAttrs (attrs: {
