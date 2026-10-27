@@ -733,7 +733,10 @@ in
         "multi-user.target"
       ];
       environment = {
-        CONFIG_FILE = "/run/frigate/frigate.yml";
+        # Frigate keeps some of its persistent runtime state in a file next to the configuration,
+        # so the config must also live in persistent storage (even though we overwrite it on every
+        # startup.)
+        CONFIG_FILE = "/var/lib/frigate/frigate.yml";
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
       }
@@ -762,7 +765,7 @@ in
             ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
-            cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
+            cp --no-preserve=mode ${configFile} "$CONFIG_FILE"
           '')
         ]
         ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
