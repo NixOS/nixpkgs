@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "array-api-compat";
-  version = "1.15";
+  version = "1.16";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "data-apis";
     repo = "array-api-compat";
     tag = finalAttrs.version;
-    hash = "sha256-z6B+lOYciT71Uz3Py9M/8x7R+8IZ46nd8i8AYot5Rlo=";
+    hash = "sha256-NV67lojrDtI0KWGyUCFnH//kEtf7pUMWTxcOT9op8qg=";
   };
 
   build-system = [
