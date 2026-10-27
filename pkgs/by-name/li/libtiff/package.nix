@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-60Lpg5WRfWMzlOoOUA+C6KLlYIZ+3BjXidOVqv4M2GA=";
   };
 
@@ -127,6 +127,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script { };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library and utilities for working with the TIFF image file format";
