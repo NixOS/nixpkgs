@@ -4,8 +4,8 @@
   makeDesktopItem,
   lib,
   libxshmfence,
-  stdenv,
-  runCommand,
+  coreutils,
+  writeText,
   wayland,
   wayland-protocols,
 }:
@@ -20,15 +20,18 @@ let
 
   appimageContents = appimageTools.extract { inherit pname version src; };
 
-  preload =
-    runCommand "lycheeslicer-preload"
-      {
-        nativeBuildInputs = [ stdenv.cc ];
-      }
-      ''
-        mkdir -p $out/lib
-        $CC -shared -fPIC -O2 ${./preload.c} -o $out/lib/liblychee-preload.so -ldl
-      '';
+  # LycheeSlicer 8 regenerates this on every start (for the OAuth login callback),
+  # with Exec= pointing at the unwrapped binary, which can't run outside the FHS env.
+  urlHandler = writeText "lycheeslicer-url-handler.desktop" ''
+    [Desktop Entry]
+    Type=Application
+    Name=LycheeSlicer URL Handler
+    Exec=lycheeslicer %u
+    StartupNotify=false
+    Terminal=false
+    NoDisplay=true
+    MimeType=x-scheme-handler/lycheeslicer;
+  '';
 
   desktopItem = makeDesktopItem {
     name = "lycheeslicer";
@@ -76,12 +79,25 @@ appimageTools.wrapType2 {
     libxshmfence
     wayland
     wayland-protocols
-    preload
   ];
 
-  profile = ''
-    export LD_PRELOAD="/lib/liblychee-preload.so''${LD_PRELOAD:+:$LD_PRELOAD}"
+  extraPreBwrapCmds = ''
+    # Install the URL handler read-only, so the app can't overwrite it with a broken one.
+    handler="$HOME/.local/share/applications/lycheeslicer-url-handler.desktop"
+    ${coreutils}/bin/rm -f "$handler"
+    ${coreutils}/bin/install -Dm444 ${urlHandler} "$handler"
+
+    # The license check reads the machine UUID only from /var/lib/dbus/machine-id,
+    # which NixOS doesn't have. The host /var is bind-mounted, so bwrap can't add it
+    # there: put a tmpfs over /var/lib, rebind the host entries and add machine-id.
+    varlib_mounts=(--tmpfs /var/lib)
+    for d in /var/lib/*; do
+      [[ $d == /var/lib/dbus ]] || varlib_mounts+=(--bind "$d" "$d")
+    done
+    varlib_mounts+=(--ro-bind /etc/machine-id /var/lib/dbus/machine-id)
   '';
+
+  extraBwrapArgs = [ "\"\${varlib_mounts[@]}\"" ];
 
   meta = {
     description = "All-in-one 3D slicer for resin and FDM printers";
