@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ perl ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   doCheck = true;
