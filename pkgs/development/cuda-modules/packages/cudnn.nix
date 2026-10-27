@@ -5,7 +5,7 @@
   lib,
   libcublas,
   cuda_nvrtc,
-  patchelf,
+  buildPackages,
   zlib,
 }:
 buildRedist (
@@ -39,8 +39,8 @@ buildRedist (
     # exist in CuDNN 8.
     # NOTE: Versions from CUDNN releases have four components.
     postFixup = lib.optionalString (cudnnAtLeast "8" && cudnnOlder "9") ''
-      ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
-      ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
+      ${lib.getExe buildPackages.patchelf} ''${!outputLib:?}/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+      ${lib.getExe buildPackages.patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
 
     # From 9.27.0, libcudnn_engines_runtime_compiled links directly against the driver library, which is provided at
