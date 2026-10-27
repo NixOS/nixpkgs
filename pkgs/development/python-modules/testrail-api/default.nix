@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "testrail-api";
-  version = "1.13.6";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";
     tag = version;
-    hash = "sha256-xCarEmJM+liyh8T8qG8sqSLXMnFN49yZapbktIElSF0=";
+    hash = "sha256-quAV496VmkMK3qTMLp5Mx4d81pGbaXIW2RE7tGHtAxA=";
   };
 
   build-system = [
