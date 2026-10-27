@@ -263,9 +263,9 @@ class TerminalLogger(AbstractLogger):
             )
         )
 
-        tic = time.time()
+        tic = time.monotonic()
         yield
-        toc = time.time()
+        toc = time.monotonic()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
     def debug(self, *args, **kwargs) -> None:
@@ -392,11 +392,11 @@ class XMLLogger(AbstractLogger):
         self.xml.characters(message)
         self.xml.endElement("head")
 
-        tic = time.time()
+        tic = time.monotonic()
         self.drain_log_queue()
         yield
         self.drain_log_queue()
-        toc = time.time()
+        toc = time.monotonic()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
         self.xml.endElement("nest")

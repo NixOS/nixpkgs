@@ -190,7 +190,7 @@ def main() -> None:
                 history_filename=history_path,
             )
         else:
-            tic = time.time()
+            tic = time.monotonic()
             driver.run_tests()
-            toc = time.time()
+            toc = time.monotonic()
             logger.info(f"test script finished in {(toc - tic):.2f}s")
