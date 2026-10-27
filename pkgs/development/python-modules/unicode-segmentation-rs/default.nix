@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unicode-segmentation-rs";
-  version = "0.3.3";
+  version = "1.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "WeblateOrg";
     repo = "unicode-segmentation-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GJj6+ppNYjwN9gmFAerr7UTZCAvF31wSr9xnXidEdWs=";
+    hash = "sha256-nXEx6IOcXVS+aoFFxvif0eWKb4phhY4R7FWRenwcNRk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-Uc9AlwOImk8UpwSq1r92APCWsrwJyI8WFUtqpgWkXE4=";
+    hash = "sha256-bkGVijRM7H8HcjwRwpc/czl/yZ+jSY+/izXpzmP9yNI=";
   };
 
   nativeBuildInputs = [
