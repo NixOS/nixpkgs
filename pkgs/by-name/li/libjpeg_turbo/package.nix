@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     openjdk
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_STATIC" enableStatic)
     (lib.cmakeBool "ENABLE_SHARED" enableShared)
