@@ -579,7 +579,7 @@ stdenv.mkDerivation (
       bootPkgs.hscolour
       bootPkgs.ghc-settings-edit
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       autoSignDarwinBinariesHook
     ]
     ++ lib.optionals enableDocs [

@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   configureScript = "../configure";
 
-  doCheck = !(with stdenv.hostPlatform; isDarwin && isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # Note: The test-suite *requires* /dev/pts among the `build-chroot-dirs' of
   # the build daemon when building in a chroot.  See
