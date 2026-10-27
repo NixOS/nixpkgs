@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   texliveInfraOnly,
@@ -199,7 +200,13 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-/CGwhRef6e+BRcodoXd95GwjaPtfC4nM1xvhiz95fNc=";
   };
 
-  patches = [ ./pytest-report-header.patch ];
+  patches = [
+    ./pytest-report-header.patch
+
+    # Parse modified SVGs from memory instead of a fixed temp file next to the source, which races
+    # when tests load the same SVG in parallel
+    ./svg-parse-race.patch
+  ];
 
   postPatch =
     # nixpkgs still ships uv-build < 0.12.1
@@ -284,6 +291,12 @@ buildPythonPackage (finalAttrs: {
 
   # about 45 of ~1050 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
+
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Without system fonts, CoreText falls back to LastResort (which draws a box for every glyph,
+    # whitespace included) and text-related tests fail
+    "/System/Library/Fonts"
+  ];
 
   pythonImportsCheck = [ "manim" ];
 

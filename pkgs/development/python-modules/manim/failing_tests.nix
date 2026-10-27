@@ -81,4 +81,6 @@
   # E         ...Full output truncated (9 lines hidden), use '-vv' to show
   "test_manim_cfg_subcommand"
 
+  # Help text changed with click 8.4: `COMMAND` is now rendered as `[COMMAND]`
+  "test_manim_init_subcommand"
 ]
