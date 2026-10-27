@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd rattler-build \
         --bash <(${emulator} $out/bin/rattler-build completion --shell bash) \
         --fish <(${emulator} $out/bin/rattler-build completion --shell fish) \
+        --nushell <(${emulator} $out/bin/rattler-build completion --shell nushell) \
         --zsh <(${emulator} $out/bin/rattler-build completion --shell zsh)
     ''
   );

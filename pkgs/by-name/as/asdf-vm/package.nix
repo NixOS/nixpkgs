@@ -46,6 +46,7 @@ buildGoModule (finalAttrs: {
     installShellCompletion --cmd asdf \
       --bash <($out/bin/asdf completion bash) \
       --fish <($out/bin/asdf completion fish) \
+      --nushell <($out/bin/asdf completion nushell) \
       --zsh <($out/bin/asdf completion zsh)
   '';
 
