@@ -3,8 +3,9 @@
   callPackage,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -12,30 +13,31 @@
   makeWrapper,
   # Electron updates can break Heroic, so try to use same version as upstream.
   # If the used electron version is higher than upstream's then the node-abi package might need to be updated
-  electron,
+  electron_43,
   vulkan-helper,
   gogdl,
+  legendary-gl,
   nile,
   comet-gog_heroic,
   umu-launcher,
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_12;
+  electron = electron_43;
 
-  legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
   comet-gog = comet-gog_heroic;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.22.0";
+  version = "2.22.4";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RDJDeL5exEzF2BhEWoiXWsTpV5hytrB6RDoXV0mTWTw=";
+    hash = "sha256-3P2u2Pzle3KpYPehfJXGrqg3OAxUrTIlUH3yiWBDPpg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -43,11 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
-      patches
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-lPHL6pA39hvEtq5WkcAXfcY3a0VPseQL/nI+oEjIZeE=";
+    fetcherVersion = 4;
+    hash = "sha256-ffvwX+R4b8VezeJiKR9k3kRhf2tVXTUGUFw606lKL9A=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
+    ./fix-notification-name.patch
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -75,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm --offline electron-builder \
       --dir \
       -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.extraMetadata.desktopName=com.heroicgameslauncher.hgl.desktop
 
     runHook postBuild
   '';
@@ -85,10 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/opt/heroic"
-    cp -r dist/*-unpacked/resources "$out/opt/heroic"
+    mkdir -p "$out/share/heroic"
+    cp -r dist/*-unpacked/resources "$out/share/heroic"
 
-    bin_dir="$out/opt/heroic/resources/app.asar.unpacked/build/bin"
+    bin_dir="$out/share/heroic/resources/app.asar.unpacked/build/bin"
 
     # Clean up prebuilt binaries
     rm -r "$bin_dir"
@@ -96,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary}" \
+      "${lib.getExe legendary-gl}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
@@ -119,19 +122,21 @@ stdenv.mkDerivation (finalAttrs: {
         )
       }" \
       --add-flags --disable-gpu-compositing \
-      --add-flags $out/opt/heroic/resources/app.asar \
+      --add-flags $out/share/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
     install -D "src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
     substituteInPlace "$out/share/applications/com.heroicgameslauncher.hgl.desktop" \
-      --replace-fail "Exec=heroic-run" "Exec=heroic"
+      --replace-fail "Exec=heroic-run" "Exec=heroic" \
+      --replace-fail "StartupWMClass=heroic" "StartupWMClass=com.heroicgameslauncher.hgl"
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit epic-integration legendary;
+    inherit epic-integration;
+    updateScript = nix-update-script { };
   };
 
   meta = {

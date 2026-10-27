@@ -68,7 +68,7 @@
   fontconfig,
   xlsfonts,
   xfontsel,
-  ttf_bitstream_vera,
+  ttf-bitstream-vera,
   freefont_ttf,
   liberation_ttf,
   shell ? "${bashInteractive}/bin/bash",
@@ -132,7 +132,7 @@ let
     sudo launchctl load -w /Library/LaunchDaemons/$daemonName
   '';
   fontDirs = [
-    ttf_bitstream_vera
+    ttf-bitstream-vera
     freefont_ttf
     liberation_ttf
     font-misc-misc

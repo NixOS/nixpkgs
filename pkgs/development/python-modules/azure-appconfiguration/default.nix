@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "azure-appconfiguration";
-  version = "1.8.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_appconfiguration";
     inherit version;
-    hash = "sha256-Fo57AbNQ9dgGotk1qOw2lMWcY5TVocQJ6wX+8LVrGqA=";
+    hash = "sha256-Y+LY4kY8/UBbxaTa2HbAHpv7303D9u6O7HnWZRU4mdE=";
   };
 
   build-system = [ setuptools ];

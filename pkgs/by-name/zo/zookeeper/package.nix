@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   jdk11_headless,
+  jdk17_headless,
   makeWrapper,
   nixosTests,
   bash,
@@ -11,7 +12,9 @@
 let
   # Latest supported LTS JDK for Zookeeper 3.9:
   # https://zookeeper.apache.org/doc/r3.9.5/zookeeperAdmin.html#sc_requiredSoftware
-  jre = jdk11_headless;
+  # JDK 11 has no riscv64 port.
+  jre =
+    if lib.meta.availableOn stdenv.hostPlatform jdk11_headless then jdk11_headless else jdk17_headless;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zookeeper";

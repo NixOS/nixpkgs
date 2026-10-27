@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "yet-another-cloudwatch-exporter";
-  version = "0.67.0";
+  version = "0.68.0";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ buildGoModule (finalAttrs: {
     owner = "prometheus-community";
     repo = "yet-another-cloudwatch-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3VMNLkzzwJX4ZhLihppjyBZDD/W+z5xLsMkZLUYHOF0=";
+    hash = "sha256-IV39nzS1eit6L0GPzK8MtNek28CVEtm9iuDpOPOJRsI=";
   };
 
-  vendorHash = "sha256-0wHvXiYQGYU89SSOEBxiSC0CLGwOfN2Dzn8WeEBLYFk=";
+  vendorHash = "sha256-t7UKznhmbDkO5CNxekitE4HtWEhW3Oe/VK/Tl1wy9fc=";
 
   ldflags = [
     "-s"

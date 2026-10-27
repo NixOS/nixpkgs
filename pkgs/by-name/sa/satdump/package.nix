@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   cmake,
   pkg-config,
@@ -13,12 +12,16 @@
   jemalloc,
   volk,
   nng,
+  sqlite,
   curl,
   # Optional dependencies
   withZIQRecordingCompression ? true,
   zstd,
   withGUI ? true,
+  dbus,
   glfw,
+  libx11,
+  libxrandr,
   zenity,
   withAudio ? true,
   portaudio,
@@ -44,28 +47,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "satdump";
-  version = "1.2.2";
+  version = "2.0.0-unstable-2026-08-17";
 
   src = fetchFromGitHub {
     owner = "SatDump";
     repo = "SatDump";
-    tag = finalAttrs.version;
-    hash = "sha256-+Sne+NMwnIAs3ff64fBHAIE4/iDExIC64sXtO0LJwI0=";
+    rev = "19b73529f16f30776f190cba2abe4ded478f5c8e";
+    hash = "sha256-xfKfxrhTRBFdhirBjGO2CeT1ZmaPRyAGFB7ILu+YZnA=";
   };
-
-  patches = [
-    # fixes build with GCC 15 until newer satdump release is available
-    (fetchpatch {
-      url = "https://github.com/SatDump/SatDump/commit/2b0a874f38d9310e3e4cbc56cfcc69cb0a59e035.patch";
-      name = "fix-build-with-gcc15.patch";
-      hash = "sha256-RYNLax/VA7cT7wP88hG5cb2BDkEMMZu2v2CKo/hqwCE=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace src-core/CMakeLists.txt \
-      --replace-fail '$'{CMAKE_INSTALL_PREFIX}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR}
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -79,11 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
     volk
     nng
+    sqlite
     curl
   ]
   ++ lib.optionals withZIQRecordingCompression [ zstd ]
   ++ lib.optionals withGUI [
+    dbus
     glfw
+    libx11
+    libxrandr
     zenity
   ]
   ++ lib.optionals withAudio [ portaudio ]

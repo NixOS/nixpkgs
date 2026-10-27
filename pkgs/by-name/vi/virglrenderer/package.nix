@@ -94,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Virtual 3D GPU for use inside QEMU virtual machines";
     homepage = "https://docs.mesa3d.org/drivers/virgl";
     license = lib.licenses.mit;
-    maintainers = [ ];
     mainProgram = "virgl_test_server";
     platforms = lib.platforms.unix;
+    teams = [ lib.teams.freedesktop ];
   };
 })

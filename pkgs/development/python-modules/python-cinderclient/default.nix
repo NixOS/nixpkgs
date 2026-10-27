@@ -16,19 +16,19 @@
   setuptools,
   simplejson,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.9.0";
+  version = "9.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_cinderclient";
     inherit version;
-    hash = "sha256-aX5NEsJJ85tB7PT6b8uMOMvy1rLYTW9RXtVnuC3NC9E=";
+    hash = "sha256-+4Vub0OCpMhNgvAEFePGZRS3PhLZRnmTUYK6T4ZRCRY=";
   };
 
   nativeBuildInputs = [
@@ -56,16 +56,8 @@ buildPythonPackage rec {
     ddt
     oslo-serialization
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "cinderclient" ];
 

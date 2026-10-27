@@ -26,7 +26,8 @@
     machine.succeed("atuin --version")
 
     # Check shell integration - verify the init scripts can be sourced without error
-    machine.succeed("bash -c 'eval \"$(atuin init bash)\"'")
+    # bash init only runs in interactive shells; skip bashrc, which already sources it
+    machine.succeed("bash --norc -ic 'eval \"$(atuin init bash)\"'")
     machine.succeed("zsh -c 'eval \"$(atuin init zsh)\"'")
     machine.succeed("fish -c 'atuin init fish | source'")
 
@@ -34,6 +35,8 @@
     machine.succeed("grep -q 'auto_sync = false' /etc/atuin/config.toml")
 
     # Verify daemon socket unit is enabled
-    machine.succeed("systemctl --user --machine=root@ is-enabled atuin-daemon.socket")
+    # needs a running user manager for root
+    machine.succeed("loginctl enable-linger root")
+    machine.wait_until_succeeds("systemctl --user --machine=root@ is-enabled atuin-daemon.socket")
   '';
 }

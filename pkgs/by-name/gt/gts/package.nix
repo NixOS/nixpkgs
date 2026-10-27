@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       3D surfaces meshed with interconnected triangles.
     '';
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

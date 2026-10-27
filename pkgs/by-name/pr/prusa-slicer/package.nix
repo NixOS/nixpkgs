@@ -36,8 +36,8 @@
   catch2_3,
   webkitgtk_4_1,
   ctestCheckHook,
-  withSystemd ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
+  systemdLibs,
   udevCheckHook,
   z3,
   nix-update-script,
@@ -155,7 +155,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   strictDeps = true;

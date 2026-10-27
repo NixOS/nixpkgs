@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   meta = {
     description = "Dead Simple Secret Daemon";

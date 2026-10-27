@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "probatio";
-  version = "0.11.1";
+  version = "0.13.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "frenck";
     repo = "probatio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vYo6q/Rvy31iBC4n+d1mYrhKpBP/03ojthzB1PdvBEs=";
+    hash = "sha256-FgPFlOrLjLNypg+uj7PXrIjQkSeqxWyXhy2EqpBnNOo=";
   };
 
   build-system = [ hatchling ];

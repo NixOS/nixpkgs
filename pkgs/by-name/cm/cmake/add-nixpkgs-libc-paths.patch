@@ -1,8 +1,8 @@
 diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
-index e95da44ea4..bdf4155232 100644
+index 9aa659e4fd..ba9974c316 100644
 --- a/Modules/Platform/UnixPaths.cmake
 +++ b/Modules/Platform/UnixPaths.cmake
-@@ -71,28 +71,38 @@
+@@ -81,28 +81,38 @@ list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
    /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
    )
  

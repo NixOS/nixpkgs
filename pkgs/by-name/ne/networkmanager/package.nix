@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   gitUpdater,
   lib,
   nixosTests,
@@ -36,9 +37,9 @@
   polkit,
   readline,
   slang,
-  systemd,
+  systemdMinimal,
   udev,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
 
   # external deps
   bluez5,
@@ -47,7 +48,6 @@
   ethtool,
   iptables,
   kmod,
-  libgcrypt,
   libndp,
   modemmanager,
   mobile-broadband-provider-info,
@@ -83,11 +83,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.58.0";
+  version = "1.58.1";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DG8nA6LJsBfNaPv+HS6KGl1/8FE3x1HsQhy6NulFRro=";
+    hash = "sha256-Jihkz9GYEj0+Xb6Rk3RBuX7pBZ1tcS4aW/uxxUZo0U0=";
   };
 
   outputs = [
@@ -111,6 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--localstatedir=/var"
     (mesonOption "systemdsystemunitdir" (
       if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"
+    ))
+    (mesonOption "systemdsystemgeneratordir" (
+      if withSystemd then "${placeholder "out"}/lib/systemd/system-generators" else "no"
     ))
     # to enable link-local connections
     (mesonOption "udev_dir" "${placeholder "out"}/lib/udev")
@@ -164,6 +167,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fixes BPF build on powerpc64-linux w/ ELFv1-targeting glibc
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/2529
+    (fetchpatch {
+      name = "0001-networkmanager-bpf-Detect-ELF-ABI-version-on-ppc64.patch";
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/3c28325b9c63386e5313ce006267144e7f63417a.patch";
+      hash = "sha256-SlyeykqL7Y11jEF+5l4aRXY2znHaSBhwV5lcmf88PGc=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -211,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     ppp
     readline
     slang
-    (if withSystemd then systemd else udev)
+    (if withSystemd then systemdMinimal else udev)
   ]
   ++ lib.optionals withNbft [
     libnvme
@@ -219,7 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     gnutls
-    libgcrypt
   ];
 
   nativeInstallCheckInputs = [ udevCheckHook ];
@@ -236,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString withSystemd ''
     substituteInPlace data/NetworkManager.service.in \
-      --replace-fail /usr/bin/busctl ${lib.getExe' systemd "busctl"}
+      --replace-fail /usr/bin/busctl ${lib.getExe' systemdMinimal "busctl"}
   '';
 
   preBuild = ''

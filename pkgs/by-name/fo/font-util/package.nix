@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       # or its an older version that the one on spdx
       unicodeTOU
     ];
-    maintainers = [ ];
     pkgConfigModules = [ "fontutil" ];
     platforms = lib.platforms.unix;
+    teams = [ lib.teams.freedesktop ];
   };
 })

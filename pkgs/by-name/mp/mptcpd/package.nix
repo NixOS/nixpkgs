@@ -11,7 +11,7 @@
   perl,
   pkg-config,
   stdenv,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     ell
-    systemd
+    systemdLibs
   ];
 
   # fix: 'Fontconfig error: No writable cache directories'

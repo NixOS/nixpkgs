@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preCheck = lib.optionalString levelZeroSupport ''
-    export LD_LIBRARY_PATH="${intel-compute-runtime.drivers}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export LD_LIBRARY_PATH="${intel-compute-runtime}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
   '';
 
   cmakeFlags = [

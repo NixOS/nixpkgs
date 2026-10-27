@@ -8,8 +8,8 @@
 }:
 
 buildPythonPackage {
+  pname = "pylibxc";
   inherit (libxc)
-    pname
     version
     src
     patches

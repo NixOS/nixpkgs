@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxls";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "libxls";
     repo = "libxls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KbITHQ9s2RUeo8zR53R9s4WUM6z8zzddz1k47So0Mlw=";
+    hash = "sha256-AOeFeUM57QVpyszC7JS1w8cU2MSzX/omQSeyrVhqD/M=";
   };
 
   # workaround required to build against gettext >= 0.25

@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "rcon-cli";
-  version = "1.7.6";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "itzg";
     repo = "rcon-cli";
     tag = finalAttrs.version;
-    hash = "sha256-HuvRakiOlFeUbS0QVtHimhxCNaj1ppmluJbGcfR4Weg=";
+    hash = "sha256-OuukPDbxkUv8yGFQLBgUQwyiY2o96N1op/eDY1cP4gA=";
   };
 
   vendorHash = "sha256-MxIofF5Jj+w7gxsO+F48ymtgB3bgSutmC5Jh3GcKCnA=";

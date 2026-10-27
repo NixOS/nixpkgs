@@ -10,7 +10,7 @@
   pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
   yarl,
 }:
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     aresponses
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   meta = {

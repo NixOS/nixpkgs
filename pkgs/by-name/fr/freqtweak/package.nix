@@ -6,7 +6,7 @@
   pkg-config,
   fftwFloat,
   libjack2,
-  libsigcxx,
+  libsigcxx_2_0,
   libxml2,
   wxwidgets_3_2,
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildInputs = [
     fftwFloat
     libjack2
-    libsigcxx
+    libsigcxx_2_0
     libxml2
     wxwidgets_3_2
   ];

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btfs";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "btfs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-g8ta5T17iKTpdR0wMQe1LU78LTIxwECmf86o4IlVF00=";
+    sha256 = "sha256-kl58bz+iozviWMmqjUNAcccxKcB3bg6iDAcWNezmN6g=";
   };
 
   nativeBuildInputs = [

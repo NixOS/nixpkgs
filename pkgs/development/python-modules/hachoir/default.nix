@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "hachoir";
-  version = "3.3.0";
+  version = "3.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "vstinner";
     repo = "hachoir";
     tag = version;
-    hash = "sha256-sTUJx8Xyhw4Z6juRtREw/okuVjSTSVWpSLKeZ7T8IR8=";
+    hash = "sha256-K4spxgaGasouOBK5uwcogCFBY7W7a5uR+TkkuH6QISM=";
   };
 
   propagatedBuildInputs = [ urwid ];

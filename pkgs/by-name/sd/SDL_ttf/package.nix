@@ -5,6 +5,7 @@
   freetype,
   stdenv,
   unstableGitUpdater,
+  testers,
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
@@ -37,10 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    tagFormat = "release-2.0.11";
-    tagPrefix = "release-";
-    branch = "SDL-1.2";
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = unstableGitUpdater {
+      tagFormat = "release-2.0.11";
+      tagPrefix = "release-";
+      branch = "SDL-1.2";
+    };
   };
 
   meta = {
@@ -49,9 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
+    pkgConfigModules = [ "SDL_ttf" ];
     knownVulnerabilities = [
       # CVE applies to SDL2 https://github.com/NixOS/nixpkgs/pull/274836#issuecomment-2708627901
       # "CVE-2022-27470"
     ];
+    identifiers.cpeParts =
+      let
+        # version shenanigans to strip -unstable suffix which is not supported by CPE
+        versionString = "${lib.versions.majorMinor finalAttrs.version}.${lib.versions.patch finalAttrs.version}";
+      in
+      lib.meta.cpeFullVersionWithVendor "libsdl" versionString;
   };
 })

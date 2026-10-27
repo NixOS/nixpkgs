@@ -1,37 +1,41 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  aiohttp,
-  pytestCheckHook,
   pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp-basicauth";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "aiohttp-basicauth";
-    tag = "v${version}";
-    hash = "sha256-DjwrMlkVVceA5kDzm0c/on0VMOxyMMA3Hu4Y2Tiu0lI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EnrICetTmQimScjaQ8/jviwwansbZtl35Z5v35rF7kU=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "aiohttp_basicauth" ];
 
   meta = {
-    description = "HTTP basic authentication middleware for aiohttp 3.0";
+    description = "HTTP basic authentication middleware for aiohttp";
     homepage = "https://github.com/romis2012/aiohttp-basicauth";
+    changelog = "https://github.com/romis2012/aiohttp-basicauth/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

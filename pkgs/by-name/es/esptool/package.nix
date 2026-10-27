@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "esptool";
-  version = "5.3.1";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oHQ6rkMnzvjtP/dg+tyc7Dw+D/WuWDqRwqePKBBnjCw=";
+    hash = "sha256-zVK9JoeObfl+Nii4mRC1mZbqDhEvufCFe0mqj24oRd0=";
   };
 
   postPatch = ''
@@ -30,16 +30,22 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
   ];
 
-  dependencies = with python3Packages; [
-    bitstring
-    click
-    cryptography
-    intelhex
-    pyserial
-    pyyaml
-    reedsolo
-    rich-click
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      bitstring
+      click
+      cryptography
+      esp-pylib
+      intelhex
+      pyserial
+      pyyaml
+      reedsolo
+      rich-click
+    ]
+    ++ esp-pylib.optional-dependencies.cli
+    ++ esp-pylib.optional-dependencies.ide
+    ++ esp-pylib.optional-dependencies.serial;
 
   optional-dependencies = with python3Packages; {
     hsm = [ python-pkcs11 ];

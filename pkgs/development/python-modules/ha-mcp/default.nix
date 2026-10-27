@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  uv-build,
   cryptography,
   fastmcp,
   httpx,
+  httpx2,
   packaging,
+  psutil,
   pydantic,
   pydantic-monty,
   python-dotenv,
@@ -17,18 +19,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-mcp";
-  version = "8.3.0";
+  version = "8.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FrVvI3um5/Q83i7A2CS5sIOxGWInTS9KOeKsH7S/nj4=";
+    fetchSubmodules = true;
+    hash = "sha256-UQ6mUpVYWnQCOav8zzjwArmeHfdeh1g5GNFKQHRrO9U=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.12.17,<0.13" "uv_build"
+  '';
+
   build-system = [
-    setuptools
+    uv-build
   ];
 
   pythonRelaxDeps = true;
@@ -37,7 +45,9 @@ buildPythonPackage (finalAttrs: {
     cryptography
     fastmcp
     httpx
+    httpx2
     packaging
+    psutil
     pydantic
     pydantic-monty
     python-dotenv

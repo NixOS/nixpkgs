@@ -121,6 +121,9 @@ let
     gmp = nativePlatforms;
     boehmgc = nativePlatforms;
     hello = nativePlatforms;
+    navidromePlugins =
+      mapAttrs (_: _: nativePlatforms)
+        (pkgsForCross systems.examples.wasi32 (builtins.head supportedSystems)).navidromePlugins;
     tree-sitter.builtGrammars =
       mapAttrs (_: _: nativePlatforms)
         (pkgsForCross systems.examples.wasm32-wasip1 (builtins.head supportedSystems))

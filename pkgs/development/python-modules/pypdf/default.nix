@@ -24,18 +24,18 @@
   pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypdf";
-  version = "6.15.0";
+  version = "6.21.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "pypdf";
-    tag = version;
+    tag = finalAttrs.version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-e39xclCnXlX4oagx4TnFCf99VKdJZeM2Kc3set1KXuo=";
+    hash = "sha256-fbalE7me0sLhwDnl8iM7w/ghVBKuyj8L/fp5TP99w4g=";
   };
 
   outputs = [
@@ -74,18 +74,25 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-timeout
   ]
-  ++ optional-dependencies.full;
+  ++ finalAttrs.passthru.optional-dependencies.full;
 
   disabledTestMarks = [
     # don't access the network
     "enable_socket"
   ];
 
+  disabledTests = [
+    # timing sensitive, these allocate hundreds of megabytes and assert on a
+    # five second pytest-timeout, which slower builders cannot meet
+    "test_dictionary_object__read_from_stream__missing_length__limit"
+    "test_flatedecode__decode_png_prediction__speed"
+  ];
+
   meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
-    changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/pypdf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ javaes ];
   };
-}
+})

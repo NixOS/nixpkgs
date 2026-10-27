@@ -10,7 +10,7 @@
   libpng,
   libtirpc,
   liblxi,
-  libsigcxx,
+  libsigcxx_2_0,
   zlib,
   wrapGAppsHook3,
   makeBinaryWrapper,
@@ -28,7 +28,7 @@
 }:
 
 let
-  version = "0.2.2";
+  version = "0.3";
 in
 stdenv.mkDerivation {
   pname = "scopehal-apps";
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     owner = "ngscopeclient";
     repo = "scopehal-apps";
     tag = "v${version}";
-    hash = "sha256-LhkhSuoj6lHz3zB4U37qDkMxfV1UktIjwJvwbVGKDDM=";
+    hash = "sha256-zA1kRGEMM/71PAH0vfy7OdJHf80eSPXW9T9H8kb30n0=";
     fetchSubmodules = true;
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     hidapi
     liblxi
     libpng
-    libsigcxx
+    libsigcxx_2_0
     vulkan-headers
     vulkan-loader
     yaml-cpp
@@ -112,9 +112,10 @@ stdenv.mkDerivation {
     homepage = "https://www.ngscopeclient.org/";
     license = lib.licenses.bsd3;
     mainProgram = "ngscopeclient";
+    mainDarwinApp = "ngscopeclient.app";
     maintainers = with lib.maintainers; [
       bgamari
-      carlossless
+      karstx
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

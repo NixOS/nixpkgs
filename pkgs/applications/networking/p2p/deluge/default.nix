@@ -30,12 +30,18 @@ let
         hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
+      patches = [
+        # https://github.com/deluge-torrent/deluge/pull/514
+        ./replace-pyopenssl-certificate-generation.patch
+      ];
+
       propagatedBuildInputs =
         with pypkgs;
         [
           twisted
           mako
           chardet
+          cryptography
           pyxdg
           pyopenssl
           service-identity

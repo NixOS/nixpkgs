@@ -17,16 +17,16 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dashy-ui";
-  version = "4.6.0";
+  version = "4.8.3";
   src = fetchFromGitHub {
     owner = "lissy93";
     repo = "dashy";
     tag = finalAttrs.version;
-    hash = "sha256-fU8sbxaHs+j2Z/+xvE6w8qBF2cxKtRx+ARQlpfJ2n5Y=";
+    hash = "sha256-jHO//Ptk2TlaVKSy7D9ibhMpIZHaTcRTGB+aTtH3Pvo=";
   };
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-EBtJW3atTgLeLn+PLxePmrnEG9Xl0R+9LIlTh+Vgw5g=";
+    hash = "sha256-yte5IoUhxNX9AamqS1AKCrSGA3Y3Jy0hqDppsuXHpDA=";
   };
 
   passthru = {

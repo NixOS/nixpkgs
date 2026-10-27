@@ -36,6 +36,7 @@
   toml-f,
   greenx,
   gmp,
+  addDriverRunpath,
   enableElpa ? false,
   elpa,
   cudaPackages,
@@ -152,6 +153,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix pkg-config path generation
     ./pkgconfig.patch
+
+    # SIRIUS 7.12 removed the call_fftw_fin argument from sirius_finalize()
+    ./sirius-7.12-finalize-api.patch
   ];
 
   nativeBuildInputs = [
@@ -165,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_nvcc
+    addDriverRunpath
   ];
 
   buildInputs = [
@@ -263,6 +268,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/cp2k
     cp -r ../data/* $out/share/cp2k
+
+    # Patch RPATH so libcuda.so.1 (NVIDIA driver) is found at runtime.
+    # Must run before wrapProgram, which renames the original ELF binary.
+    ${lib.optionalString (gpuBackend == "cuda") ''
+      for i in $out/bin/* $out/lib/*.so*; do
+        addDriverRunpath "$i" || true
+      done
+    ''}
 
     for i in $out/bin/*; do
       wrapProgram $i \

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitrs";
-  version = "v0.3.6";
+  version = "v0.4.1";
 
   src = fetchFromGitHub {
     owner = "mccurdyc";
     repo = "gitrs";
     rev = finalAttrs.version;
-    hash = "sha256-+43XJroPNWmdUC6FDL84rZWrJm5fzuUXfpDkAMyVQQg=";
+    hash = "sha256-YxojhqcP5Jj+GUhZxwyz1WXpRrTc4mZKxJbJdbnEZ48=";
   };
 
-  cargoHash = "sha256-uDDk1wztXdINPSVF6MvDy+lHIClMLp13HZSTpIgLypM=";
+  cargoHash = "sha256-uxK7HSP7rTPsnSwgj8pJRdXR2N9xqx21TycTRCjdAGo=";
 
   nativeBuildInputs = [
     pkg-config # for openssl

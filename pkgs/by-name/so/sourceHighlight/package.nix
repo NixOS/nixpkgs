@@ -8,7 +8,7 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "source-highlight";
   version = "3.1.9";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/src-highlite/source-highlight-${version}.tar.gz";
+    url = "mirror://gnu/src-highlite/source-highlight-${finalAttrs.version}.tar.gz";
     sha256 = "148w47k3zswbxvhg83z38ifi85f9dqcpg7icvvw1cm6bg21x4zrs";
   };
 
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  # source-highlight uses it's own binary to generate documentation.
+  # source-highlight uses its own binary to generate documentation.
   # During cross-compilation, that binary was built for the target
-  # platform architecture, so it can't run on the build host.
-  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace Makefile.in --replace "src doc tests" "src tests"
+  # platform architecture, so it may not run on the build host.
+  postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace Makefile.in --replace-fail "src doc tests" "src tests"
   '';
 
   strictDeps = true;
@@ -78,12 +78,19 @@ stdenv.mkDerivation rec {
     "--with-bash-completion=${placeholder "out"}/share/bash-completion/completions"
   ];
 
+  env = lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+    # Force linking to "libgcc" so tests pass
+    NIX_CFLAGS_COMPILE = "-lgcc";
+  };
+
   doCheck = true;
 
   enableParallelBuilding = true;
   # Upstream uses the same intermediate files in multiple tests, running
   # them in parallel by make will eventually break one or more tests.
   enableParallelChecking = false;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Source code renderer with syntax highlighting";
@@ -96,8 +103,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
-// lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
-  # Force linking to "libgcc" so tests pass
-  NIX_CFLAGS_COMPILE = "-lgcc";
-}
+})

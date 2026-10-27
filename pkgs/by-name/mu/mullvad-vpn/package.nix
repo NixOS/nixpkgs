@@ -18,7 +18,7 @@ buildNpmPackage (finalAttrs: {
   inherit (mullvad) src version;
 
   nodejs = nodejs_22;
-  npmDepsHash = "sha256-9IfPNfo3MJ7Ipvvlqm76iTh1d1RYFJfVZiKlh5ia8TM=";
+  npmDepsHash = "sha256-CKhPOV0Nd/YoTXqbTQOFrKp3QUacrTJ/B+oEkuFMWsM=";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -127,5 +127,8 @@ buildNpmPackage (finalAttrs: {
       sigmasquadron
     ];
     mainProgram = "mullvad-vpn";
+    # Never built on darwin since first introduction in nixpkgs
+    # The build is currently hardcoded for linux (pack:linux), so adding darwin support will likely require major changes
+    badPlatforms = lib.platforms.darwin;
   };
 })

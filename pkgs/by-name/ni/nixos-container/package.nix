@@ -1,4 +1,5 @@
 {
+  lib,
   replaceVarsWith,
   perl,
   shadow,
@@ -46,5 +47,8 @@ replaceVarsWith {
       --fish ${./nixos-container-completion.fish}
   '';
 
-  meta.mainProgram = "nixos-container";
+  meta = {
+    mainProgram = "nixos-container";
+    license = lib.licenses.mit;
+  };
 }

@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -30,6 +31,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.nixos = nixosTests.selfoss;
 
   meta = {
     description = "Web-based news feed (RSS/Atom) aggregator";

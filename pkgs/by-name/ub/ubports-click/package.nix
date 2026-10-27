@@ -66,8 +66,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       patchShebangs bin/click
     '';
 
-  strictDeps = true;
-
   pkgsBuildBuild = [
     pkg-config
   ];
@@ -142,7 +140,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ''
     # Haven't been able to get them excluded via disabledTest{s,Paths}, just deleting them
     + ''
-      for path in $disabledTestPaths; do
+      for path in ''${disabledTestPaths[@]}; do
         rm -v $path
       done
     '';

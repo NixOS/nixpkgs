@@ -150,13 +150,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.8.1";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-i9Ng9RYqlMGRShu2sDSXCZ6KD7n7A0TKzLdyatXjBmY=";
+    hash = "sha256-/q+w18Akm1VUAI1bM1lHud8QPNkpz2xCUh/7+ot44Gk=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-ikHv1WP38ClHGZy3StiyGS+lDHOjBT8ohJ/HdJwtYgw=";
+    hash = "sha256-vINXoQKol3rY2WDlU01eLzuzxnTx2w3tAfKSg7tRSGI=";
   };
 
   patches = [
@@ -254,14 +254,16 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Trailing space in 'awk ' to avoid matching store paths that coincidentally
+    # contain the string 'awk'. (Yes, this has happened before!)
     for cur in share/functions/*.fish; do
       substituteInPlace "$cur" \
         --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        --replace-quiet 'awk ' '${lib.getExe' gawk "awk"} '
     done
     for cur in share/completions/*.fish; do
       substituteInPlace "$cur" \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        --replace-quiet 'awk ' '${lib.getExe' gawk "awk"} '
     done
   ''
   + ''

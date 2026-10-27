@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picotool";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "picotool";
     tag = finalAttrs.version;
-    hash = "sha256-w9kVCdwevEjc12NNZWztehp6SSgsd9ehSaxqc9sg4O4=";
+    hash = "sha256-D5zsAQlDAv9hVMjAOTzXalwqYKgnBmqL3dkKlyNdizo=";
   };
 
   postPatch = ''

@@ -136,6 +136,38 @@
           };
         };
       };
+
+    yggdrasilCheck = {
+      services = {
+        yggdrasil = {
+          enable = true;
+          settings.MulticastInterfaces = [ ];
+        };
+
+        i2pd = {
+          enable = true;
+          settings = {
+            loglevel = "info";
+            netid = 77;
+            reseed.urls = "";
+            reseed.yggurls = "";
+            httpproxy.enabled = false;
+            socksproxy.enabled = false;
+
+            ipv4 = false;
+            ipv6 = false;
+            ntcp2.enabled = false;
+            ssu2.enabled = false;
+            meshnets.yggdrasil = true;
+
+            shareddest.inbound.length = 0;
+            shareddest.outbound.length = 0;
+            exploratory.inbound.length = 0;
+            exploratory.outbound.length = 0;
+          };
+        };
+      };
+    };
   };
 
   testScript =
@@ -147,9 +179,12 @@
       server.wait_for_unit("i2pd.service")
       client.wait_for_unit("i2pd.service")
       router.wait_for_unit("i2pd.service")
+      yggdrasilCheck.wait_for_unit("yggdrasil.service")
+      yggdrasilCheck.wait_for_unit("i2pd.service")
       server.wait_for_file("/var/lib/i2pd/router.info")
       client.wait_for_file("/var/lib/i2pd/router.info")
       router.wait_for_file("/var/lib/i2pd/router.info")
+      yggdrasilCheck.wait_for_file("/var/lib/i2pd/router.info")
 
       with subtest("Exchange router info"):
           server.wait_until_succeeds(

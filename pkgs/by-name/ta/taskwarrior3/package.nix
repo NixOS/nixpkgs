@@ -130,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       mlaradji
       doronbehar
       Necior
+      me-and
     ];
     mainProgram = "task";
     platforms = lib.platforms.unix;

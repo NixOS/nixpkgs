@@ -19,7 +19,10 @@ stdenv.mkDerivation {
   # Needed to fix `collect2: error: ld returned 1 exit status`
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
-  makeFlags = [ "CC=c++" ];
+  makeFlags = [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "CC=c++"
+  ];
 
   installPhase = ''
     runHook preInstall

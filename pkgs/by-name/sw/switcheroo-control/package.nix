@@ -58,7 +58,9 @@ python3Packages.buildPythonApplication {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "D-Bus service to check the availability of dual-GPU";

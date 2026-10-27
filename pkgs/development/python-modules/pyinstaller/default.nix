@@ -24,12 +24,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyinstaller";
-  version = "6.22.2";
+  version = "6.22.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-ibZaOtB9ndWDIlPje8RfMYctENf51cn9D91giKg4Kd0=";
+    hash = "sha256-BesvVhVQPnKTmnIk1otK/1csawQ47koX0KS0gfOZNi0=";
   };
 
   build-system = [ hatchling ];

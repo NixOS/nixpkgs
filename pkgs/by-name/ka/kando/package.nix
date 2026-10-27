@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   electron,
-  nodejs_22,
+  nodejs,
 
   cmake,
   zip,
@@ -21,25 +21,22 @@
   wayland,
 }:
 
-let
-  nodejs = nodejs_22; # npm v11 included in nodejs_24 doesn't work with the current lockfile
-in
-buildNpmPackage.override { inherit nodejs; } rec {
+buildNpmPackage (finalAttrs: {
   pname = "kando";
-  version = "2.3.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
-    tag = "v${version}";
-    hash = "sha256-vmdDcXpSm2O9MkOGfM3+VUrRSvUot1GB0TkxjNSN4r8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZkhN31zXqrVqHGdYfsJxDgzcmDm7+kpXvsh2oZIgwNw=";
   };
 
   patches = [
     ./add-deep-link-note.patch
   ];
 
-  npmDepsHash = "sha256-2J74igNLl5CwXm9WtHzxqTVt7+S113qcioxJja6uUOE=";
+  npmDepsHash = "sha256-u/1239QXrhiOiDHnox7uW1gzJD1BGPgU7LpU2WeDD4w=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -139,7 +136,7 @@ buildNpmPackage.override { inherit nodejs; } rec {
   ];
 
   meta = {
-    changelog = "https://github.com/kando-menu/kando/releases/tag/v${version}";
+    changelog = "https://github.com/kando-menu/kando/releases/tag/v${finalAttrs.version}";
     description = "Cross-Platform Pie Menu";
     homepage = "https://github.com/kando-menu/kando";
     license = lib.licenses.mit;
@@ -147,4 +144,4 @@ buildNpmPackage.override { inherit nodejs; } rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = electron.meta.platforms;
   };
-}
+})

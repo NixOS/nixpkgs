@@ -9,20 +9,15 @@
 
 buildPythonPackage rec {
   pname = "ourgroceries";
-  version = "1.5.4";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ljmerza";
     repo = "py-our-groceries";
     tag = version;
-    hash = "sha256-tlgctQvbR2YzM6Q1A/P1i40LSt4/2hsetlDeO07RBPE=";
+    hash = "sha256-s6koCh6udktS/NTp67QpyYjzhSYAn874B8FxeBbp2og=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "version='1.5.3'" "version='${version}'"
-  '';
 
   build-system = [ setuptools ];
 

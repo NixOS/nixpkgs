@@ -22,7 +22,6 @@ buildGoModule (finalAttrs: {
   version = "0.1.9";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "foks-proj";

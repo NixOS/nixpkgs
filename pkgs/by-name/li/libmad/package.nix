@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoconf ];
 
+  strictDeps = true;
+
   preConfigure = "autoconf";
 
   passthru.tests = {
@@ -82,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     ocaml-mad = ocamlPackages.mad;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://sourceforge.net/projects/mad/";

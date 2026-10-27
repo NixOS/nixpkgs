@@ -175,7 +175,6 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ dnsmasq ];
       preStart = ''
-        mkdir -m 755 -p ${stateDir}
         touch ${stateDir}/dnsmasq.leases
         chown -R dnsmasq ${stateDir}
         ${lib.optionalString cfg.resolveLocalQueries "touch /etc/dnsmasq-{conf,resolv}.conf"}
@@ -190,6 +189,8 @@ in
         ProtectSystem = true;
         ProtectHome = true;
         Restart = if cfg.alwaysKeepRunning then "always" else "on-failure";
+        StateDirectory = [ (baseNameOf stateDir) ];
+        StateDirectoryMode = "0755";
       };
       restartTriggers = [ config.environment.etc.hosts.source ];
     };

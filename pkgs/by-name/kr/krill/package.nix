@@ -51,10 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/NLnetLabs/krill";
     changelog = "https://github.com/NLnetLabs/krill/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      steamwalker
-      stepbrobd
-    ];
+    maintainers = with lib.maintainers; [ stepbrobd ];
     teams = [ lib.teams.ngi ];
   };
 })

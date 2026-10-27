@@ -14,14 +14,22 @@
 
 clangStdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.12.9";
+  version = "5.12.12";
 
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sope";
     rev = "SOPE-${version}";
-    hash = "sha256-0G28qDXygDe/TJ2znNE+NVQry3bkqUO59jqtJm/t2S4=";
+    hash = "sha256-DnWUss4nWvgNshL0dQcfUvDriJSEhz6GY/l4nu6xgDM=";
   };
+
+  postPatch = ''
+    # Don't record the compile command line in .GCC.command.line sections of
+    # the installed binaries: it embeds the store paths of the whole toolchain
+    # and turns clang, llvm and gcc into runtime dependencies.
+    substituteInPlace general.make \
+      --replace-fail ' $(call cc-option,-frecord-gcc-switches)' ""
+  '';
 
   nativeBuildInputs = lib.optional (libpq != null) libpq.pg_config;
   buildInputs = [

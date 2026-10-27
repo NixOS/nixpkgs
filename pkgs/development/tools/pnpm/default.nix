@@ -23,6 +23,8 @@ let
         "CVE-2026-59194"
         "CVE-2026-59195"
         "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     # 10.34.1 made a breaking change that causes
@@ -38,19 +40,29 @@ let
         "CVE-2026-59194"
         "CVE-2026-59195"
         "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     "10" = {
-      version = "10.34.5";
-      hash = "sha256-zLXEecqxsAYhMlv+fUyaioAx56Ul1ySeJ17L7IGwjbI=";
+      version = "10.34.7";
+      hash = "sha256-xyn2U44AXSNIiZEEZv0cTESv+wso6obZP8+IqhrvppQ=";
     };
     "11" = {
-      version = "11.22.0";
-      hash = "sha256-V6l+byOj+v/AMVOk74x3CgVSYSuGQK6+Ob/dV1TQ69w=";
+      version = "11.27.0";
+      hash = "sha256-QKMlFaJVB/jyJt+74lOA4vBTlEwuzGTAwcuYtBy7ke8=";
+    };
+    "12" = {
+      version = "12.9.0";
+      srcHash = "sha256-lcs9nh9GIKfy5QYabUCj/pIpePAjLeeKBlu4UKm8zgM=";
+      cargoHash = "sha256-Kyow1HuClzc8qBh1GUUaboOB28ut321hUNVSzctyKEE=";
+      # webpki-root-certs 1.0.10 removes emSign ECC Root CA - G3.
+      # rustls-webpki 0.103.16 blocks the revoked eMudhra intermediates.
+      cargoPatches = [ ./12-bump-webpki.patch ];
     };
   };
 
-  callPnpm =
+  callPnpmNode =
     variant:
     callPackage ./generic.nix (
       variant
@@ -59,6 +71,10 @@ let
         nodejs = null; # Passing null to detect out-of-tree overrides
       }
     );
+
+  callPnpmRust = callPackage ./generic-rust.nix;
+
+  callPnpm = variant: if variant ? cargoHash then callPnpmRust variant else callPnpmNode variant;
 
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
 in

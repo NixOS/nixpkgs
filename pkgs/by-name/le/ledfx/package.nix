@@ -6,22 +6,15 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ledfx";
-  version = "2.1.9";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedFx";
     repo = "LedFx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h3bevsvgRILzAnQKSJj8X5AixB8qsyhf2+SkolSEdbk=";
+    hash = "sha256-tLX1WTXshVe24v53EvME1Nw4ob52dNB1olLoeRK7HJs=";
   };
-
-  postPatch = ''
-    substituteInPlace tests/conftest.py \
-      --replace-fail '"uv",' "" \
-      --replace-fail '"run",' "" \
-      --replace-fail '"ledfx",' "\"$out/bin/ledfx\","
-  '';
 
   pythonRelaxDeps = true;
 
@@ -68,13 +61,14 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     uvloop
     stupidartnet
     python-dotenv
-    pyfastnoiselite
+    pyfastnoiselite-ledfx
     netifaces2
     packaging
     samplerate-ledfx
     audio-hotplug
     aiosendspin
     pyflac
+    dbus-fast
   ];
 
   optional-dependencies = {
@@ -101,5 +95,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ledfx";
+    platforms = lib.platforms.linux;
   };
 })

@@ -8,10 +8,7 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "gcc-arm-embedded";
-  version = "14.3.rel1";
-
+let
   platform =
     {
       aarch64-darwin = "darwin-arm64";
@@ -19,9 +16,13 @@ stdenv.mkDerivation rec {
       x86_64-linux = "x86_64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gcc-arm-embedded";
+  version = "14.3.rel1";
 
   src = fetchurl {
-    url = "https://developer.arm.com/-/media/Files/downloads/gnu/${version}/binrel/arm-gnu-toolchain-${version}-${platform}-arm-none-eabi.tar.xz";
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu/${finalAttrs.version}/binrel/arm-gnu-toolchain-${finalAttrs.version}-${platform}-arm-none-eabi.tar.xz";
     # hashes obtained from location ${url}.sha256asc
     sha256 =
       {
@@ -44,10 +45,11 @@ stdenv.mkDerivation rec {
     rm $out/bin/{arm-none-eabi-gdb-py,arm-none-eabi-gdb-add-index-py} || :
   '';
 
+  # Set RPATH before the interpreter to work around a patchelf bug:
+  # https://github.com/NixOS/patchelf/issues/674
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out -type f | while read f; do
       patchelf "$f" > /dev/null 2>&1 || continue
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
       patchelf --set-rpath ${
         lib.makeLibraryPath [
           "$out"
@@ -58,6 +60,7 @@ stdenv.mkDerivation rec {
           zstd
         ]
       } "$f" || true
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
     done
   '';
 
@@ -83,4 +86,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

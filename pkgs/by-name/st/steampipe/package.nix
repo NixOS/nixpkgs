@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "steampipe";
-  version = "2.4.5";
+  version = "2.4.7";
 
   env.CGO_ENABLED = 0;
 
@@ -19,10 +19,10 @@ buildGoModule (finalAttrs: {
     owner = "turbot";
     repo = "steampipe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xlMoDT91IrM1+sqAOqQ/Utzu2T0A7tJObCVzlxM9EsE=";
+    hash = "sha256-+r/RMbFrja0gis2OnmRw7zW3MCUmVnrCyPNgPqcBrJo=";
   };
 
-  vendorHash = "sha256-peqcrkRX6QlXnFl2V+e//ROmpT8HOtRbvzJM9zZUaT8=";
+  vendorHash = "sha256-DZ1lriT05HFet1tSNzJjRzuxM090XRqLCDByUIpnMfg=";
   proxyVendor = true;
 
   postPatch = ''

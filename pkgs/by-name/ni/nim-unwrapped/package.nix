@@ -6,25 +6,22 @@
   fetchurl,
   boehmgc,
   openssl,
-  pcre,
   readline,
   sqlite,
-  darwin,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.10";
+  version = "2.2.12";
   strictDeps = true;
 
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eVe37QBCBrzxC8xPO0dEFTh45i8kMVUqmo6dP0Do1dU=";
+    hash = "sha256-Jjmgal6np/z1ffHn4e9NGyvuWMesm9ANvSqlvqHlpWo=";
   };
 
   buildInputs = [
     boehmgc
     openssl
-    pcre
     readline
     sqlite
   ];
@@ -41,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./openssl.patch
     # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
+
+    ./pcre.patch
+    # pcre v1 is no longer supported by nixos
+
+    ./nimgrep.patch
+    # nimgrep depends on pcre
   ];
 
   configurePhase =

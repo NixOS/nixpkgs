@@ -10,9 +10,8 @@
 
   # dependencies
   anyio,
-  distro,
   docstring-parser,
-  httpx,
+  httpx2,
   jiter,
   pydantic,
   sniffio,
@@ -25,7 +24,7 @@
   aiohttp,
   httpx-aiohttp,
 
-  # test
+  # tests
   dirty-equals,
   http-snapshot,
   inline-snapshot,
@@ -34,11 +33,12 @@
   pytest-xdist,
   pytestCheckHook,
   respx,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "0.109.1";
+  version = "1.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H+blENPgkKhoGPJmAtdszFsJDkAzgprlDso0o2fhwz8=";
+    hash = "sha256-SWZ00mY28wgL4lgtfDVMmhZct5f8rbfU2NXepwwEadY=";
   };
 
   postPatch = ''
@@ -61,9 +61,8 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     anyio
-    distro
     docstring-parser
-    httpx
+    httpx2
     jiter
     pydantic
     sniffio
@@ -92,7 +91,10 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     respx
   ]
-  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "anthropic" ];
 
@@ -111,6 +113,13 @@ buildPythonPackage (finalAttrs: {
     # Hangs
     # https://github.com/anthropics/anthropic-sdk-python/issues/1008
     "test_get_platform"
+
+    # Fail in the sandbox:
+    #   AssertionError: Regex pattern did not match.
+    #     Expected regex: "outside the session's working directory and its other permitted directories"
+    #     Actual message: "path '/nix/var/nix/builds/nix-53257-3010075771/pytest-of-_nixbld1/pytest-0/popen-gw2/test_resolve_path_symlink_out_0/mount/leak': permission denied"
+    "test_resolve_path_absolute_inside_workdir"
+    "test_resolve_path_symlink_out_of_allowed_root_is_rejected"
   ];
 
   disabledTestPaths = [

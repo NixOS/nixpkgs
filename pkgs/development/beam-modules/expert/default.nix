@@ -4,25 +4,24 @@
   fetchMixDeps,
   lib,
   mixRelease,
-  nix-update,
-  writeShellApplication,
+  nix-update-script,
 }:
 
 mixRelease (finalAttrs: {
   pname = "expert";
-  version = "0.1.9";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "expert-lsp";
     repo = "expert";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TcYSO+CY4ZC4uC6k5OhKFKwv70preoILHAan3KZlUqQ=";
+    hash = "sha256-tXTETzlUCz17YqOrfOD5veQwftj4zKZ7bjFpGnKdORU=";
   };
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${finalAttrs.pname}";
     inherit (finalAttrs) src version;
-    hash = "sha256-N2krs4NNWytrN3K8lR5IGGroXVNuBzjks6IoD9D1rPM=";
+    hash = "sha256-0XyfrMK4tucWgHDQySECtDw+wcW/EkTRCOht1nTTpJA=";
 
     preConfigure = ''
       cd apps/expert
@@ -35,7 +34,7 @@ mixRelease (finalAttrs: {
     pname = "mix-deps-expert-engine";
 
     inherit (finalAttrs) src version;
-    hash = "sha256-evYg/yRk6ymV75kuWpY0pFODWWopozjnFHUa9MOFN/A=";
+    hash = "sha256-ELLpCr47FGjs3K0nu5RWGgoEdWbDtm6Fx8jutg9Enmo=";
 
     preConfigure = ''
       cd apps/engine
@@ -57,14 +56,9 @@ mixRelease (finalAttrs: {
   removeCookie = false;
 
   passthru = {
-    updateScript = lib.getExe (writeShellApplication {
-      name = "expert-update-script";
-      runtimeInputs = [ nix-update ];
-      text = ''
-        nix-update beamPackages.expert
-        nix-update beamPackages.expert.engineDeps
-      '';
-    });
+    updateScript = nix-update-script {
+      extraArgs = [ "--subpackage=engineDeps" ];
+    };
   };
 
   meta = {

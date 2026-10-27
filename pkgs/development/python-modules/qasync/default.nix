@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-eQJ1Yszl95IycggSyWcD3opAO1rfBdNp14y8eHDMJY4=";
   };
 
+  patches = [
+    # See https://github.com/CabbageDevelopment/qasync/issues/176
+    ./fix-python314-loop-incompatibility.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.8.3,<0.9.0" uv_build
@@ -44,6 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation of the PEP 3156 event-loop";
     homepage = "https://github.com/CabbageDevelopment/qasync";
+    changelog = "https://github.com/CabbageDevelopment/qasync/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

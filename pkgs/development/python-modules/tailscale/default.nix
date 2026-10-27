@@ -11,21 +11,21 @@
   pytest-cov-stub,
   pytestCheckHook,
   rich,
-  syrupy,
+  syrupy_5,
   typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.8.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-tailscale";
     tag = "v${version}";
-    hash = "sha256-Lvtx3/tYJO8qCQhVjJTV0qu064duH7MI+A+a+pdeoHI=";
+    hash = "sha256-vGvbAzwB2QepU2RIrNvJxMGvScCQrFe1dyzFmI3/7Tk=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ]
   ++ lib.concatAttrValues optional-dependencies;
 

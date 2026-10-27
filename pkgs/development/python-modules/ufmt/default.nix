@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Safe, atomic formatting with black and usort";
     homepage = "https://github.com/omnilib/ufmt";
-    changelog = "https://github.com/omnilib/ufmt/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/omnilib/ufmt/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ufmt";

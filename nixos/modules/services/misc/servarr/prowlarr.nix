@@ -45,9 +45,12 @@ in
         description = "Prowlarr";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        environment = servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings // {
-          HOME = "/var/empty";
-        };
+        environment =
+          servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings
+          // servarr.commonDotnetEnvVars
+          // {
+            HOME = "/var/empty";
+          };
 
         serviceConfig = {
           Type = "simple";

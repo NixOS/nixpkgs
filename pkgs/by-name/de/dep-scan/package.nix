@@ -63,11 +63,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # INFO [2025-07-28 20:17:35,654] Generating Software Bill-of-Materials for container image shiftleft/scan-slim. This might take a few mins ...
   # WARNING [2025-07-28 20:17:35,654] Unable to locate cdxgen command.
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        cdxgen
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      cdxgen
+    ])
   ];
 
   passthru.tests = { inherit (nixosTests) dep-scan; };

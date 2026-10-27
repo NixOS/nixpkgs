@@ -11,13 +11,13 @@
   directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terminology";
   version = "1.14.0";
 
   src = fetchurl {
-    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "81QFcFGwXP+2meM4NqETXbHU7Yv5VPm1fcDpO8MHUU0=";
+    url = "https://download.enlightenment.org/rel/apps/terminology/terminology-${finalAttrs.version}.tar.xz";
+    hash = "sha256-81QFcFGwXP+2meM4NqETXbHU7Yv5VPm1fcDpO8MHUU0=";
   };
 
   nativeBuildInputs = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.enlightenment ];
   };
-}
+})

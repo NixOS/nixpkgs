@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPackages,
+  callPackage,
 
   bashInteractive,
   makeSetupHook,
@@ -32,5 +33,9 @@ makeSetupHook {
     # Can be overridden to zsh or fish, etc.
     # This shell is also used to load the env variables before the $debugShell is started.
     bashInteractive = lib.getExe bashInteractive;
+  };
+  passthru.tests = {
+    can-attach-valid-id = callPackage ./test-can-attach-valid-id.nix { inherit attach; };
+    cannot-attach-invalid-id = callPackage ./test-cannot-attach-invalid-id.nix { inherit attach; };
   };
 } ./breakpoint-hook.sh

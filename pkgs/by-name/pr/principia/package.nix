@@ -4,11 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapGAppsHook3,
 
   curl,
   freetype,
-  gtk3,
   libGL,
   libjpeg,
   libpng,
@@ -17,25 +15,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "principia";
-  version = "2026.07.15";
+  version = "2026.10.22";
 
   src = fetchFromGitHub {
     owner = "Bithack";
     repo = "principia";
     tag = finalAttrs.version;
-    hash = "sha256-kIUi5vXXI3R2P4ZsbfLdfmRexfpk0zWZAMhUjreZPuA=";
+    hash = "sha256-ccx8jyHoxOa7GZQHsmV3JfazHsRpCcbz/vU9S4RHn3A=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook3
   ];
 
   buildInputs = [
     curl
     freetype
-    gtk3
     libGL
     libjpeg
     libpng

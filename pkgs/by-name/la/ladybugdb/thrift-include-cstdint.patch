@@ -1,0 +1,13 @@
+Thrift uses fixed-width integer types without including their defining header.
+Include <cstdint> explicitly for compatibility with newer GCC versions.
+
+--- a/third_party/thrift/Thrift.h
++++ b/third_party/thrift/Thrift.h
+@@ -42,6 +42,7 @@
+ #include <exception>
+ #include <typeinfo>
+ #include <cstddef>
++#include <cstdint>
+ 
+ #include "TLogging.h"
+ //#include <thrift/TOutput.h>

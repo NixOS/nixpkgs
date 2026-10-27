@@ -4,9 +4,11 @@
   python3Packages,
   fetchFromGitHub,
   gitMinimal,
+  coreutils,
   versionCheckHook,
   esptool,
   esphome,
+  nixosTests,
 }:
 
 let
@@ -32,14 +34,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "esphome-device-builder";
-  version = "1.6.1";
+  version = "1.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "device-builder";
     tag = finalAttrs.version;
-    hash = "sha256-vzHG5nsECN3qAwpDGcELf9adgGiebr99pcdDqet79s4=";
+    hash = "sha256-cXnEx3HNvTEsSz2Gz/W5gswmvQ3bxHMPGq0Y4MwIHjM=";
   };
 
   __structuredAttrs = true;
@@ -79,10 +81,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pytest-timeout
     pytest-xdist
     blockbuster
+    jsonschema
   ];
 
   postPatch = ''
-    substituteInPlace esphome_device_builder/controllers/firmware/helpers.py \
+    substituteInPlace esphome_device_builder/helpers/sibling_cli.py \
       --replace-fail 'list(_find_sibling_cli("esphome"))' '["${lib.getExe pythonPackages.esphome}"]' \
       --replace-fail 'list(_find_sibling_cli("esptool"))' '["${lib.getExe esptool}"]'
 
@@ -93,6 +96,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       --replace-fail 'shutil.which("git")' '"${lib.getExe gitMinimal}"'
     substituteInPlace tests/test_editor_controller.py \
       --replace-fail 'controller._esphome_cmd = ["esphome"]' 'controller._esphome_cmd = ["${lib.getExe pythonPackages.esphome}"]'
+
+    substituteInPlace tests/helpers/test_orphan_reaper.py \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
   # Needed for tests
@@ -131,9 +137,16 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
     # TOOD: requires patching the device state monitor
     "test_start_logs_ping_count_at_debug"
+
+    # broken test: AssertionError: compile failed: Failed config
+    "test_native_arduino_compile_download_round_trip"
   ];
 
   passthru = {
+    tests = {
+      inherit (nixosTests) esphome;
+    };
+
     frontend = pythonPackages.esphome-device-builder-frontend;
     updateScript = callPackage ./update.nix { };
   };

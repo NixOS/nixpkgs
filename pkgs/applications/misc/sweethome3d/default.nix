@@ -33,6 +33,8 @@ let
       "aarch64-darwin"
     ];
     mainProgram = "sweethome3d";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 in
 {

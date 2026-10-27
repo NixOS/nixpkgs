@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.7.10";
+  version = "3.7.11";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    hash = "sha256-l3cKsR8HSdtFGw1S12xueQOu/U9ABlOxQQtbHBj2izs=";
+    hash = "sha256-mpPmrmzCNHccBcPCZtrYYURTIBLC9ppGp4pMc1RFrWo=";
   };
 
   buildInputs = [
@@ -60,8 +60,13 @@ stdenv.mkDerivation rec {
       "LANGUAGES=cpp"
       "CONFIGS=${if cpp11 then "cpp11-shared" else "shared"}"
       "SKIP=slice2py" # provided by a separate package
+      # Ice links the Slice compilers fully statically by default. This requires static glibc; link them dynamically like every other binary.
+      "fully_static_ldflags="
     )
   '';
+
+  # Ice 3.7 predates C++20. GCC 16 defaults to -std=gnu++20
+  env.NIX_CFLAGS_COMPILE = "-std=gnu++17";
 
   enableParallelBuilding = true;
 

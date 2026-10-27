@@ -1,5 +1,6 @@
 {
   lib,
+  angle,
   buildPythonPackage,
   fetchFromGitHub,
   libGL,
@@ -20,10 +21,15 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-FnS2aQmPb5a3dO9m5McpO5Kfyy1aOaboc+oAtYqauQo=";
   };
 
-  postPatch = ''
-    mkdir -p comfy_angle/libs
-    ln -s ${lib.getLib libGL}/lib/{libEGL,libGLESv2}${stdenv.hostPlatform.extensions.sharedLibrary} comfy_angle/libs/
-  '';
+  # Upstream wheels bundle ANGLE on macOS; on Linux the system libGL provides EGL
+  postPatch =
+    let
+      egl = if stdenv.hostPlatform.isDarwin then angle else lib.getLib libGL;
+    in
+    ''
+      mkdir -p comfy_angle/libs
+      ln -s ${egl}/lib/{libEGL,libGLESv2}${stdenv.hostPlatform.extensions.sharedLibrary} comfy_angle/libs/
+    '';
 
   build-system = [
     setuptools
@@ -38,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     description = "Redistributable ANGLE libraries";
     homepage = "https://github.com/Comfy-Org/comfy-angle";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     inherit (comfyui.meta) maintainers;
   };
 })

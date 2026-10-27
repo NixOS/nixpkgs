@@ -21,25 +21,25 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.61.0";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-uXkAD4+B8ghUbti1ts1RO+Jc0wQlpovl6+JzZA1JaRk=";
+    hash = "sha256-BqBI+xOFDcsw4muiyh6TypA8msJfwTsQ/nC4B6AtiLE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-eZAJdMDC09nE9n2Arh72ZZUQjmMFdA68rPCmH2tSx2w=";
+    hash = "sha256-1raDjWN2IvtschMmLgs9Twlxc4+XVIEZ+7pqkVUDOR8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-WZ4eYwQNeDF55ax3mW5swKafCDeYG5rWPPzJk5f+H1k=";
+    hash = "sha256-A4HpPjyL5UTMlpQ7hT/f2zbbW3GOKBFXWpZNdPRM6/s=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,22 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   env.OXC_VERSION = finalAttrs.version;
+
+  # @napi-rs/cli >= 3.8 reads the process start time and machine identity via
+  # host binaries while acquiring its filesystem reconciliation lock. The
+  # Darwin build sandbox denies those execs; Node raises them as synchronous
+  # `spawn EPERM` from execFile, which escapes napi's callback-based error
+  # handling. Point the lookups at a store no-op so the sandbox allows them.
+  # Empty output is treated as unverifiable identity and only disables stale
+  # lock detection.
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for cli in node_modules/.pnpm/@napi-rs+cli@*/node_modules/@napi-rs/cli/dist/cli.js; do
+      substituteInPlace "$cli" \
+        --replace-fail '"/bin/ps"' '":"' \
+        --replace-fail '"/usr/sbin/ioreg"' '":"' \
+        --replace-fail '"/usr/sbin/sysctl"' '":"'
+    done
+  '';
 
   buildPhase = ''
     runHook preBuild

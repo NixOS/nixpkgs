@@ -8,6 +8,7 @@
       environment.systemPackages = [
         pkgs.hello
       ];
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
   testScript =
     let

@@ -34,8 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk4-layer-shell
   ];
 
-  strictDeps = true;
-
   postInstall = ''
     $out/bin/hyprland-preview-share-picker schema > schema.json
     install -Dm0644 schema.json -t $out/share/hyprland-preview-share-picker

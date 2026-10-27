@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage {
-  pname = "scspell";
+  pname = "scspell3k";
   version = "2.3.0-unstable-2025-04-06";
   pyproject = true;
 

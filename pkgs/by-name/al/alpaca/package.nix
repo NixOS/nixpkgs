@@ -89,6 +89,10 @@ pythonPackages.buildPythonApplication rec {
       zstandard
       pythonPackages.ollama
     ]
+    ++ markitdown.optional-dependencies.pptx
+    ++ markitdown.optional-dependencies.docx
+    ++ markitdown.optional-dependencies.pdf
+    ++ markitdown.optional-dependencies.youtube-transcription
     ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = with pythonPackages; {
@@ -107,14 +111,18 @@ pythonPackages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        xdg-utils
-        ollama
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      xdg-utils
+      ollama
+    ]}"
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = nix-update-script { };
 

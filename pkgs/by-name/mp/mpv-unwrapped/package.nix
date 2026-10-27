@@ -5,7 +5,6 @@
   alsa-lib,
   bash,
   buildPackages,
-  config,
   docutils,
   fetchFromGitHub,
   ffmpeg,
@@ -36,7 +35,7 @@
   libva,
   libvdpau,
   libxkbcommon,
-  lua,
+  lua5_2_compat,
   makeBinaryWrapper,
   libgbm,
   meson,
@@ -75,7 +74,7 @@
   javascriptSupport ? true,
   openalSupport ? true,
   pipewireSupport ? !stdenv.hostPlatform.isDarwin,
-  pulseSupport ? config.pulseaudio or (!stdenv.hostPlatform.isDarwin),
+  pulseSupport ? !stdenv.hostPlatform.isDarwin,
   rubberbandSupport ? true,
   sdl2Support ? false,
   sixelSupport ? false,
@@ -90,6 +89,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -127,12 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     ''
   ];
-
-  # Ensure we reference 'lib' (not 'out') of Swift.
-  # TODO: Remove this once the Swift wrapper doesn’t include these.
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
-  '';
 
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
@@ -224,13 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals zimgSupport [ zimg ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
-
-  # https://github.com/mpv-player/mpv/issues/15591#issuecomment-2764797522
-  # In file included from ../player/clipboard/clipboard-mac.m:19:
-  # ./osdep/mac/swift.h:270:9: fatal error: '.../app_bridge_objc-1.pch' file not found
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
-    NIX_SWIFTFLAGS_COMPILE = "-disable-bridging-pch";
-  };
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths

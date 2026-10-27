@@ -7,20 +7,20 @@
 
 buildNpmPackage rec {
   pname = "inshellisense";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "inshellisense";
     tag = version;
-    hash = "sha256-Zo9ogCmkTwRqkvL1R/BnOGDZR1Hzmgegf19N2ZmVmkM=";
+    hash = "sha256-5gVFP1AFFP4o9MNUqkRtgrTkKuMb37CU/c8TcrwZkRY=";
   };
 
   # Building against nodejs-24 is not yet supported by upstream.
   # https://github.com/microsoft/inshellisense/issues/369
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-d88ybpAwDkhxKyq9dgOMeoUbY7WVtqJUkk6mNp9Rsuk=";
+  npmDepsHash = "sha256-JP9m624XxR6M18+jSWEh/E8WxIUjHnPN1eKW4iqUmSc=";
 
   meta = {
     description = "IDE style command line auto complete";

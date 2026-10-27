@@ -44,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ library based on Qt that eases the creation of OpenGL 3D viewers";
     homepage = "https://github.com/GillesDebunne/libQGLViewer";
-    license = lib.licenses.gpl2;
+    license =
+      with lib.licenses;
+      OR [
+        gpl2Only
+        gpl3Only
+      ];
     platforms = lib.platforms.all;
   };
 })

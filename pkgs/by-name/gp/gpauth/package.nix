@@ -2,11 +2,14 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
+  glib-networking,
   openssl,
   pkg-config,
   perl,
   webkitgtk_4_1,
+  wrapGAppsHook3,
   stdenv,
+  nixosTests,
   nix-update-script,
 }:
 
@@ -29,11 +32,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
   ];
   buildInputs = [
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
     webkitgtk_4_1
   ];
 
@@ -43,7 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cli::tests::client_version_arg_sets_profile_client_version"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.runtime-tls = nixosTests.gpauth-tls;
+  };
 
   meta = {
     changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/changelog.md";

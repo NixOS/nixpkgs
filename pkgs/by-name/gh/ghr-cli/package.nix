@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghr-cli";
-  version = "0.9.0";
+  version = "0.9.1";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "chenyukang";
     repo = "ghr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LmQaBPPX+VRWFHDMvzyhtWcoiEZJocNeyu6EKBX4IjI=";
+    hash = "sha256-JxGJ0nOR/66Reg/1dd3jy7O4H/mK7CdoiFtR4+3Tjss=";
   };
 
-  cargoHash = "sha256-UCu/z6TzNYV0scWnl5XnN+nj9V9cg9hpUNqFZXlMXaM=";
+  cargoHash = "sha256-si8sQXC/F6PYYgGh7PT3jxKmLBzmp3QzlH1szYerA4k=";
 
   passthru.updateScript = nix-update-script { };
 

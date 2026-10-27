@@ -11,6 +11,7 @@
   freebsd-lib,
   expat,
   zlib,
+  apple-sdk,
   extraSrc ? [ ],
 }:
 
@@ -29,9 +30,9 @@ mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "lib/libc/string" # strlcpy
-    "lib/libutil"
   ]
   ++ [
+    "lib/libutil"
     "contrib/libc-pwcache"
     "contrib/libc-vis"
     "sys/libkern"
@@ -177,6 +178,9 @@ mkDerivation {
   ''
   + lib.optionalString stdenv.hostPlatform.isx86 ''
     cp ../../sys/x86/include/elf.h ../../sys/x86
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    NIX_CFLAGS_COMPILE+=" -I$PWD"
   '';
 
   setupHooks = [
@@ -205,7 +209,9 @@ mkDerivation {
   makeFlags = [
     "STRIP=-s" # flag to install, not command
     "MK_WERROR=no"
-    "HOST_INCLUDE_ROOT=${lib.getDev stdenv.cc.libc}/include"
+    "HOST_INCLUDE_ROOT=${
+      if stdenv.hostPlatform.isDarwin then "${apple-sdk.sdkroot}/usr" else lib.getDev stdenv.cc.libc
+    }/include"
     "INSTALL=boot-install"
   ];
 
@@ -217,13 +223,17 @@ mkDerivation {
     cp --no-preserve=mode -r cross-build/include/linux/* $out/1-include
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp --no-preserve=mode -r cross-build/include/darwin/* $out/1-include
+    cp --no-preserve=mode -r cross-build/include/mac/* $out/1-include
+    substituteInPlace $out/1-include/libutil.h \
+      --replace-fail '#include_next <util.h>' '#include "${apple-sdk.sdkroot}/usr/include/util.h"'
   '';
 
   # Compat is for making other platforms look like FreeBSD (e.g. to
-  # build build-time dependencies for building FreeBSD packages). It is
-  # not needed when building for FreeBSD.
-  meta.platforms = lib.platforms.linux;
+  # build build-time dependencies for building FreeBSD packages). On FreeBSD
+  # it doesn't make sense, and isn't needed either: see `compatIsNeeded`.
+  # Upstream's `tools/build/cross-build` supports Linux and macOS hosts, which
+  # the include shims above cover.
+  meta.platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
   alwaysKeepStatic = true;
 }

@@ -11,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.12.8";
+  version = "0.12.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
     tag = "v${version}";
-    hash = "sha256-UKvag65KP58/4lZzbwR1sM90z8TOw/0BY3NTLZ4LKxM=";
+    hash = "sha256-m4rep06gefuyTu41wT7OYALC3+ddjaXmK4i03iAxtxo=";
   };
 
   buildAndTestSubdir = "mitmproxy-rs";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-P6tVyv38hgf5mdUHdHwGwgrM1/7qf15YnhulBqsN5eg=";
+    hash = "sha256-k8yF1MlzxqbXrnYNuSAzW1q4UcN/S/hOmvKjkfzpqFg=";
   };
 
   nativeBuildInputs = [

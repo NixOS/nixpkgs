@@ -13,16 +13,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "cbconvert";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gen2brain";
     repo = "cbconvert";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C2Eox6fpKS0fPB7KFgBn62HKbWYacSVMJK0CkT6+FBU=";
+    hash = "sha256-fLAVX3AlHUp2jmb8AiFeqB4IhVcWxYk0tkjvwWiKwPc=";
   };
 
-  vendorHash = "sha256-uV8aIUKy9HQdZvR3k8CTTrHsh9TyBw21gFTdjR1XJlg=";
+  env.GOWORK = "off";
+
+  vendorHash = "sha256-lR1ZbEDNjJ9+bl8ijdI5/ifC5uIB1rdbnXQh5D2T7NM=";
   modRoot = "cmd/cbconvert";
 
   # The extlib tag forces the github.com/gen2brain/go-unarr module to use external libraries instead of bundled ones.

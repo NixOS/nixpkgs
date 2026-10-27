@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-mqtt";
-  version = "1.10.0"; # nixpkgs-update: no auto update
+  version = "1.10.1"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-mqtt";
     tag = finalAttrs.version;
-    hash = "sha256-GLSRs3qV8AwaSPPqAKt/PchIQnlDr0IeqbJkCqkDBY8=";
+    hash = "sha256-615EoZlzt49pqD7OifUT0Qs4AifZVpFxwXutvuQvVz8=";
   };
 
-  cargoHash = "sha256-XteKnrfKrOGbjCz7njaDlxSPOZ73UWt91dg8R2hB3PM=";
+  cargoHash = "sha256-ESSkk6+OOXd3P2xyJzjbV6sAIrBrlitqKjvPavQr6E0=";
 
   # Some test time out
   doCheck = false;

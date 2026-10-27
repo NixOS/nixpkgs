@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   fetchPnpmDeps,
   git,
@@ -13,17 +13,17 @@
 }:
 let
   pname = "headplane";
-  version = "0.7.0";
-  goVendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
-  pnpmDepsHash = "sha256-OBerkCnB/QL5HGYp2kehzFYEIKSuqpBt0dTFHIypc00=";
+  version = "0.8.1";
+  goVendorHash = "sha256-Unjq1QCckuY+xO4HLaNfMJbsjSSv9WYAYeb5OqOR/P0=";
+  pnpmDepsHash = "sha256-dVhVzjhNdMmI0myNmZzjxexgvQftSyezOozps1s5c98=";
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
     tag = "v${version}";
-    hash = "sha256-UMAGsrG2xfpgWlsDhf4aWJKoOrUbruucDNOhCJcYmQQ=";
+    hash = "sha256-xs1oFlrDTSCjhEHYj3XfSNg+3qQEtDCaR526tesOtk4=";
   };
 
-  headplaneSshWasm = buildGoModule {
+  headplaneSshWasm = buildGo127Module {
     pname = "headplane-ssh-wasm";
     inherit version src;
     subPackages = [ "cmd/hp_ssh" ];
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Feature-complete Web UI for Headscale";
     homepage = "https://github.com/tale/headplane";
-    changelog = "https://github.com/tale/headplane/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/tale/headplane/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       igor-ramazanov

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/scikit-hep/mplhep_data";
     license = with lib.licenses; [
       mit
-      gfl
+      lppl13c
       ofl
     ];
     maintainers = with lib.maintainers; [ veprbl ];

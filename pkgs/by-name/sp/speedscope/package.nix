@@ -46,7 +46,7 @@ buildNpmPackage (finalAttrs: {
     description = "Fast and interactive web-based viewer for performance profiles";
     homepage = "https://github.com/jlfwong/speedscope";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "speedscope";
     maintainers = with lib.maintainers; [ thomasjm ];
   };

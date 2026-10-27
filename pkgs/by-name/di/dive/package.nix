@@ -3,11 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  pkg-config,
   installShellFiles,
-  btrfs-progs,
-  gpgme,
-  lvm2,
 }:
 buildGoModule (finalAttrs: {
   pname = "dive";
@@ -22,16 +18,7 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-egsFnnHZMPRTJeFw6uByE9OJH06zqKRTvQi9XhegbDI=";
 
-  nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    btrfs-progs
-    gpgme
-    lvm2
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"

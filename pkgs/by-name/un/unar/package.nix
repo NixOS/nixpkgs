@@ -101,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = "https://theunarchiver.com";
     description = "Archive unpacker program";

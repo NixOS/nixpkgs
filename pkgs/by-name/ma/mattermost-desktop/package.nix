@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   electron_43,
+  autoPatchelfHook,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -16,20 +17,30 @@ in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "6.3.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-aDYmnFb0CJDF/M1ca/6YkKTBcTC56+zpe9iqtRR0cpU=";
+    hash = "sha256-CkSV0zKWz60qGrYpdhzyBU5CqjrvQba1B9vQZtyuEAw=";
   };
 
-  npmDepsHash = "sha256-nNKfzPKA0kjki169u/qe5r6rrVbVi3+0nkVj6niS+/c=";
+  npmDepsHash = "sha256-wZTKNb2nIRlMDkIt4lQHCf98lk7MhblKSA0gNjvJDO8=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    # The package uses a pre-built binary Node.js module.
+    autoPatchelfHook
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
+
+  buildInputs = [
+    stdenv.cc.cc
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -103,6 +114,10 @@ buildNpmPackage rec {
     platforms = electron.meta.platforms;
     # https://github.com/NixOS/nixpkgs/issues/430763
     broken = stdenv.hostPlatform.isDarwin;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     maintainers = with lib.maintainers; [
       joko
       liff

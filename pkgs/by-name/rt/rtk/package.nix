@@ -6,6 +6,9 @@
   pkg-config,
   sqlite,
   gitMinimal,
+  curl,
+  jq,
+  coreutils,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -13,17 +16,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtk";
-  version = "0.45.0";
+  version = "1.0.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rtk-ai";
     repo = "rtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-weAyHM0nWLrM8JRbbXIfjUsHtAep3DOFyTO+M3BZ/iU=";
+    hash = "sha256-8nf2q6SGupoOqaf97TdD37lSCj7cMNfYGwX+42mWz1k=";
   };
 
-  cargoHash = "sha256-tgW6il/xLxt/xwhUBJ4MNVnk0JSZ7iFjJaEobj5+H4o=";
+  cargoHash = "sha256-WoBuQ+Meml4wXSp8bQTckjvjriKsSOs0vSijWo0frq8=";
+
+  postPatch = ''
+    substituteInPlace tests/run_shell_test.rs \
+      --replace-fail /usr/bin/printf ${lib.getExe' coreutils "printf"} \
+      --replace-fail /bin/echo ${lib.getExe' coreutils "echo"} \
+      --replace-fail /bin/true ${lib.getExe' coreutils "true"} \
+      --replace-fail /bin/false ${lib.getExe' coreutils "false"}
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -45,9 +56,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
+    curl
     gitMinimal
+    jq
     writableTmpDirAsHomeHook
   ];
+
+  checkFlags = [
+    # Waits on a shim subprocess that never gets scheduled inside the build sandbox, so it only ever
+    # fails on its own 60s timeout.
+    "--skip=signalled_run_still_prints_captured_output"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -66,7 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "CLI proxy that reduces LLM token consumption by 60-90% on common dev commands";
     homepage = "https://github.com/rtk-ai/rtk";
     changelog = "https://github.com/rtk-ai/rtk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+      bsl11
+    ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rtk";
   };

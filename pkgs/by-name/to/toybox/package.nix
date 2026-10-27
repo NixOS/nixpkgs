@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "toybox";
-  version = "0.8.14";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = "toybox";
     tag = finalAttrs.version;
-    hash = "sha256-46iKwUSIQ4M9ZL86e4rY4hGcz8y06HZMC0mvNp3jR1s=";
+    hash = "sha256-eZz8s0+jUMGZ3QJ4vX3nXGl+JFJhqfvxDaNJQ8RTHLk=";
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -94,7 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://landley.net/toybox/";
     license = lib.licenses.bsd0;
     platforms = with lib.platforms; linux ++ darwin ++ freebsd;
-    maintainers = with lib.maintainers; [ hhm ];
+    maintainers = with lib.maintainers; [
+      hhm
+      coolcuber
+    ];
     priority = 10;
   };
 })

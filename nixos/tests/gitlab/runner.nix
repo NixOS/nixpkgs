@@ -31,21 +31,6 @@ let
       path = ./runner/shell-runner.nix;
       tokenFile = "${runnerTokenDir}/token-shell.env";
     };
-
-    # The Gitlab runner which uses the Docker runner (we use podman).
-    # Features:
-    #  - Daemonizes the Nix store into a container.
-    #  - All jobs run in an unprivileged container, e.g. with image
-    #    (`local/nix`, `local/alpine`, `local/ubuntu`)
-    podman = {
-      # Only enabled on x86_64-linux: due to container images.
-      # TODO: See https://github.com/NixOS/nixpkgs/issues/474409
-      enabled = pkgs.stdenv.buildPlatform.isx86_64;
-      desc = "Podman runner (containers, shared containerized Nix store)";
-      name = "podman";
-      path = ./runner/podman-runner;
-      tokenFile = "${runnerTokenDir}/token-podman.env";
-    };
   };
 in
 {
@@ -166,8 +151,8 @@ in
 
       # Register all runners which are enabled.
       for name, tokenFile, enabled in [
-          ("shell", "${runnerConfigs.shell.tokenFile}", "${lib.boolToString runnerConfigs.shell.enabled}"),
-          ("podman", "${runnerConfigs.podman.tokenFile}", "${lib.boolToString runnerConfigs.podman.enabled}")]:
+          ("shell", "${runnerConfigs.shell.tokenFile}", "${lib.boolToString runnerConfigs.shell.enabled}")
+      ]:
         if enabled == "true":
           test_register_runner(name=name, tokenFile=tokenFile)
 

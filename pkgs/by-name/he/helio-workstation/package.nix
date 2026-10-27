@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "helio-workstation";
-  version = "3.17";
+  version = "3.18";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = "helio-sequencer";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-uEo4dxwc1HksYGU5ssYp3rLugszSir2kKo4XxgqvSno=";
+    hash = "sha256-pdKBN51c6e3rNRu4pZiw8F6+l86ARsDl0dWBv1VHXxs=";
   };
 
   buildInputs = [

@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation rec {
     repo = "comixcursors";
     # https://gitlab.com/limitland/comixcursors/-/issues/3
     rev = "8c327c8514ab3a352583605c1ddcb7eb3d1d302b";
-    sha256 = "0bpxqw4izj7m0zb9lnxnmsjicfw60ppkdyv5nwrrz4x865wb296a";
+    hash = "sha256-yiSxeDGok58zt2X7Nu8FhjsWpa62W5rWB/XIHwnH/S4=";
   };
 
   nativeBuildInputs = [

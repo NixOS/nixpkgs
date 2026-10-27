@@ -22,6 +22,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  pythonRelaxDeps = [ "libtmux" ];
+
   dependencies = with python3Packages; [
     colorama
     libtmux

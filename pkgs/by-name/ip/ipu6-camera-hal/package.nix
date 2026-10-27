@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "${ipuVersion}-camera-hal";
-  version = "unstable-2025-06-27";
+  version = "0-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "intel";
@@ -46,7 +46,6 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"

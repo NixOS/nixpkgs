@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build dependencies
-  poetry-core,
+  hatchling,
 
   # dependencies
   babelfish,
@@ -18,17 +18,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trakit";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "trakit";
     tag = finalAttrs.version;
-    hash = "sha256-uKLuXkvyZWjCMx5MHlsTKvTJwHYYV+wnRyE+D8BtCC0=";
+    hash = "sha256-71Y9VLMgIhonJtX4vtj6eXj+2HW0J6fWCAcJZK75GQs=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     babelfish

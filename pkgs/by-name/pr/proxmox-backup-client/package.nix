@@ -142,8 +142,6 @@ rustPlatform.buildRustPackage {
     acl
   ];
 
-  strictDeps = true;
-
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";

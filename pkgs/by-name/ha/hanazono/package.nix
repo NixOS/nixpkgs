@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,10 +15,11 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-qd0q4wQnHBGLT7C+UQIiOHnxCnRCscMZcj3P5RRxD1U=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
     install -Dm644 *.txt -t $out/share/doc/hanazono
 
     runHook postInstall
@@ -25,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Japanese Mincho-typeface TrueType font";
-    homepage = "https://fonts.jp/hanazono/";
+    homepage = "https://glyphwiki.org/hanazono/";
     longDescription = ''
       Hanazono Mincho typeface is a Japanese TrueType font that developed with a
       support of Grant-in-Aid for Publication of Scientific Research Results

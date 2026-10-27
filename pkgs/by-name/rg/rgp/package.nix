@@ -3,6 +3,7 @@
   stdenv,
   makeWrapper,
   fetchurl,
+  patchelf,
   autoPatchelfHook,
   dbus,
   directx-shader-compiler,
@@ -41,6 +42,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
+    #FIXME: avoid pulling explicit patchelf after resolving https://github.com/NixOS/patchelf/pull/672
+    (patchelf.overrideAttrs (
+      finalAttrs: previousAttrs: {
+        version = "0.15.2";
+        src = fetchurl {
+          url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+          hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+        };
+      }
+    ))
     autoPatchelfHook
   ];
 

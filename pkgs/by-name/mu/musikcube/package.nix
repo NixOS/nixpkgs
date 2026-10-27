@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Terminal-based music player, library, and streaming audio server";
-    homepage = "https://musikcube.com/";
+    homepage = "https://github.com/clangen/musikcube";
     maintainers = with lib.maintainers; [
       aanderse
       afh

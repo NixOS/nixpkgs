@@ -16,7 +16,7 @@
 }:
 
 let
-  useCrossStdenv = crossSystem != localSystem || crossOverlays != [ ];
+  useCrossStdenv = !(lib.systems.equals crossSystem localSystem) || crossOverlays != [ ];
   useCustomStdenv = !useCrossStdenv && (config.replaceStdenv or null) != null;
 
   # Cross and custom stdenvs extend the local bootstrap stages. Keep

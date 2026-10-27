@@ -2,12 +2,8 @@
   lib,
   fetchFromGitHub,
   nodejs,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  stdenv,
-  buildGoModule,
+  buildNpmPackage,
+  buildGo127Module,
   makeWrapper,
   bash,
   versionCheckHook,
@@ -15,38 +11,30 @@
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
 
   pname = "gocron";
-  version = "0.9.14";
+  version = "0.13.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flohoss";
     repo = "gocron";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LKjK5V+WrzTJlWPytafy8Ypva41RW4/12aSGaJj572I=";
+    hash = "sha256-cePoirTNTb+tXJE57et9lkV4aNAvzp4w8hGWX+RdZ+c=";
   };
 
-  gocron-web = stdenv.mkDerivation (finalAttrsWebassets: {
+  gocron-web = buildNpmPackage (finalAttrsWebassets: {
     pname = "${finalAttrs.pname}-web";
     src = "${finalAttrs.src}/web";
     inherit (finalAttrs) version;
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = finalAttrsWebassets.src + "/yarn.lock";
-      hash = "sha256-f0xnF9gd3c0KPrORPVkApyWPy+DazyzHeQu32wWybiw=";
-    };
+    npmDepsHash = "sha256-pDw7wtMU7DMpfpCK9wt7wVbH8s0t2U1r3gRmSj0kBLY=";
 
-    nativeBuildInputs = [
-      yarnConfigHook
-      yarnBuildHook
-      yarnInstallHook
-      nodejs
-    ];
+    dontNpmInstall = true;
 
     preBuild = ''
-      yarn types
+      npm run types
     '';
 
     postBuild = ''
@@ -55,7 +43,7 @@ buildGoModule (finalAttrs: {
 
   });
 
-  vendorHash = "sha256-VbmS9Fh0pr/dUB+pZBqKbi4bu6Do/3TRr9uI3TmGsOM=";
+  vendorHash = "sha256-ML0bZX1pyqM73ttDUNeE0bcP+qcgVJW3rkGOc+4y+T4=";
 
   postPatch = ''
     substituteInPlace handlers/web.go \

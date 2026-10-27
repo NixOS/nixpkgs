@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  strictDeps = true;
+
   installPhase = ''
     mkdir -p $out/include/
     cp -rv lib/* "$out/include/"
@@ -32,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit bluez; # inherits bluez-headers.src
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://bluez.github.io/";

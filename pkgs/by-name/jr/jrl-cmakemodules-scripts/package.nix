@@ -1,5 +1,6 @@
 {
   jrl-cmakemodules,
+  gitMinimal,
   python3Packages,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -21,12 +22,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    gitMinimal
     python3Packages.pytest-mock
     python3Packages.pytestCheckHook
   ];
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   meta = jrl-cmakemodules.meta // {
     description = "Release scripting tools for JRL CMake modules";

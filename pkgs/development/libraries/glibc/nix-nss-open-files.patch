@@ -12,7 +12,7 @@ index 1db9e46127..3a567e0224 100644
 +
 +      #ifdef NIX_DATAFILE
 +      // use the Nix environment variable such as `NIX_ETC_PROTOCOLS`
-+      char *path = secure_getenv (NIX_DATAFILE);
++      char *path = __libc_secure_getenv (NIX_DATAFILE);
 +
 +      // if the environment variable is set, then read from the /nix/store entry instead
 +      if (path && path[0]) {

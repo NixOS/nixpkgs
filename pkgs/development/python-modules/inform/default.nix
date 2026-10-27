@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://inform.readthedocs.io";
     changelog = "https://github.com/KenKundert/inform/blob/${finalAttrs.src.tag}/doc/releases.rst";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jeremyschlatter ];
   };
 })

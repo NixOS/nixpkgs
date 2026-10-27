@@ -39,7 +39,7 @@ in
     in
     {
       environment.systemPackages = [
-        (agdaPackages.agda.withPackages {
+        (agdaPackages.withPackages {
           pkgs = p: [ p.standard-library ];
         })
       ];

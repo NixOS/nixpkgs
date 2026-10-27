@@ -209,7 +209,7 @@ in
     };
 
     services.dbus.packages = mkIf (lib.elem "gnome3" (cfg.agent.pinentryPackage.flavors or [ ])) [
-      pkgs.gcr
+      pkgs.gcr_3
     ];
 
     environment.systemPackages = [ cfg.package ];

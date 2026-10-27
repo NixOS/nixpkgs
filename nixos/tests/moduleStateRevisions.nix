@@ -15,7 +15,7 @@ let
   testModule =
     path:
     evalModuleStateRevisions (lib.setAttrByPath path { enable = true; })
-    ? "${builtins.concatStringsSep "." path}.stateRevision";
+      ? "${builtins.concatStringsSep "." path}.stateRevision";
 in
 assert evalModuleStateRevisions { } == { };
 assert testModule [

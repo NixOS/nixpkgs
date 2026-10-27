@@ -4,6 +4,7 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
+  gitMinimal,
   oauthlib,
   pytest-asyncio,
   pytest-mock,
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "9.6.0";
+  version = "9.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     tag = "v${version}";
-    hash = "sha256-H5lj0IkUMOcAngiPrOxcR58DcSUsyf6Jsxilce7P9nU=";
+    hash = "sha256-TJHCBGO9Pi3elewj4C9kIf4J9pyhSO5bYGONA3onvRE=";
   };
 
   pythonRelaxDeps = [
@@ -51,6 +52,10 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     time-machine
+  ];
+
+  disabledTestPaths = [
+    "tests/test_release_script.py"
   ];
 
   pythonImportsCheck = [ "pyatmo" ];

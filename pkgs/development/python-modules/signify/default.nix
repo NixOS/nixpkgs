@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "signify";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ralphje";
     repo = "signify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ICmBzIbkynxRNojNQrQZoydMyFd6j3F1BLWN8VeB5dE=";
+    hash = "sha256-gE0j0P4BXVwntfvn7G3rHB0pnO/0RWkUDp+XWfRixLY=";
   };
 
   build-system = [ setuptools ];

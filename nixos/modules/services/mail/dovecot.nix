@@ -90,8 +90,6 @@ let
     }) cfg.sieve.pipeBins
   );
 
-  yesOrNo = v: if v then "yes" else "no";
-
   toOption =
     i: n: v:
     "${i}${toString n} = ${v}";
@@ -103,7 +101,7 @@ let
     if isInt v then
       toString v
     else if isBool v then
-      yesOrNo v
+      lib.boolToYesNo v
     else if isString v then
       v
     else if isPath v || isDerivation v then
@@ -1061,7 +1059,7 @@ in
           "CAP_SYS_RESOURCE"
         ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         NoNewPrivileges = false; # e.g for sendmail
         OOMPolicy = "continue";
         PrivateTmp = true;

@@ -252,6 +252,16 @@ in
               '';
             };
 
+            experimental-features = mkOption {
+              type = with types; listOf str;
+              default = [ ];
+              example = [ "ca-derivations" ];
+              description = ''
+                List of experimental features to enable in Nix.
+                See <https://nixos.org/manual/nix/stable/development/experimental-features> for available features.
+              '';
+            };
+
             sandbox = mkOption {
               type = types.either types.bool (types.enum [ "relaxed" ]);
               default = true;
@@ -337,7 +347,6 @@ in
             trusted-users = mkOption {
               type = types.listOf types.str;
               example = [
-                "root"
                 "alice"
                 "@wheel"
               ];
@@ -347,8 +356,9 @@ in
                 additional binary caches, or to import unsigned NARs. You
                 can also specify groups by prefixing them with
                 `@`; for instance,
-                `@wheel` means all users in the wheel
-                group.
+                `@wheel` means all users in the wheel group.
+                `root` is included as a regular definition, so you do not have to repeat it.
+                Furthermore, `root` normally bypasses the daemon.
               '';
             };
 

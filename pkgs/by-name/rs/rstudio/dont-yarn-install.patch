@@ -1,8 +1,8 @@
 diff --git a/src/gwt/build.xml b/src/gwt/build.xml
-index abf850ee3d..3e3d5fea57 100644
+index 71c1a56edf..244f1aec9b 100644
 --- a/src/gwt/build.xml
 +++ b/src/gwt/build.xml
-@@ -267,13 +267,6 @@
+@@ -306,13 +306,6 @@
        <echo message="panmirror minify: ${panmirror.minify}"/>
  
        <mkdir dir="${panmirror.build.dir}"/>
@@ -13,6 +13,6 @@ index abf850ee3d..3e3d5fea57 100644
 -            <arg value="240000"/>
 -         </exec>
 -      </retry>
-       <exec executable="${yarn.bin}" dir="${panmirror.dir}" resolveexecutable="true" failonerror="true">
-          <arg value="build"/>
-          <arg value="--minify"/>
+       <!-- vite needs more than node's default heap (~2GB on CI runners) to
+            render the panmirror bundle + sourcemap since pinyin 4.x added
+            several MB of dictionary data (quarto-dev/quarto#1057). preserve

@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "simplisafe-python";
-  version = "2026.06.0";
+  version = "2026.09.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "simplisafe-python";
     tag = finalAttrs.version;
-    hash = "sha256-e59h4zX0AuzNlR1sovw4QJ6zXxksElY5emEM9eTfjwI=";
+    hash = "sha256-0jvReE6eugcXubOMclIO+X86waCQweyEQ8rTObQhV8Q=";
   };
 
   build-system = [ poetry-core ];

@@ -111,6 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=strict-prototypes"
       "-Wno-error=deprecated-declarations"
     ]
+    ++ [
+      "-Wno-error=discarded-qualifiers"
+    ]
   );
 
   enableParallelBuilding = true;

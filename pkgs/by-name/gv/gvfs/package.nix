@@ -12,7 +12,6 @@
   udevSupport ? stdenv.hostPlatform.isLinux,
   libgudev,
   udisks,
-  libgcrypt,
   libcap,
   polkit,
   libgphoto2,
@@ -46,11 +45,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.60.2";
+  version = "1.60.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qNd0RhWkiKVZMC/gzI9BjVtEq6PCuiFj5anm9gfBvpo=";
+    hash = "sha256-TLIdURwuKVEamfOhk96qkUqLt9njciKGc8awha/2P0s=";
   };
 
   patches = [
@@ -77,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    libgcrypt
     dbus
     libgphoto2
     avahi
@@ -111,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
+    "-Dgcrypt=false"
   ]
   ++ lib.optionals (!udevSupport) [
     "-Dgudev=false"
@@ -153,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     description =
       "Virtual Filesystem support library" + lib.optionalString gnomeSupport " (full GNOME support)";
     license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
   };
 })

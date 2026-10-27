@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch2,
   apple-sdk,
-  lua,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -27,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.10.1";
+  version = "8.10.2";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-fGLuOuiM3VHj70qlSpb2s25RYD8gFARrqwAhW6CIHXE=";
+    hash = "sha256-lje8tQPxIgOt8xOlSySmD2ZNcLOvIGIQMbdmQiFrj1k=";
   };
 
   patches = [
@@ -62,12 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   # More cross-compiling fixes.
   makeFlags = [

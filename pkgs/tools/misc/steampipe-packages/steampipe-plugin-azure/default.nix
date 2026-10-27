@@ -43,7 +43,7 @@ buildGoModule rec {
     changelog = "https://github.com/turbot/steampipe-plugin-azure/blob/v${version}/CHANGELOG.md";
     description = "Azure Plugin for Steampipe";
     homepage = "https://github.com/turbot/steampipe-plugin-azure";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     longDescription = "Use SQL to instantly query Azure resources across regions and subscriptions.";
     maintainers = [ ];
     platforms = steampipe.meta.platforms;

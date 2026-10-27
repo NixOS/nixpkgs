@@ -1,7 +1,8 @@
 {
   lib,
   buildNpmPackage,
-  typescript,
+  yq-go,
+  typescript_7,
   fetchFromGitHub,
 }:
 
@@ -16,11 +17,18 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-tRx/ZCyHnDP3BmK/xOgVKtjlKCyKUfIll8y1sSDgzV8=";
   };
 
+  postPatch = ''
+        yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+    # Remove this since it fails during `npmInstallHook` otherwise
+        substituteInPlace src/memory/package.json \
+          --replace-fail "prepare" "dont-prepare"
+  '';
+
   nativeBuildInputs = [
-    typescript
+    yq-go
+    typescript_7
   ];
 
-  dontNpmPrune = true;
   npmWorkspace = "src/memory";
   npmDepsHash = "sha256-psy1XH4DuZu2+tkHpe/bQw3R7uNr8nF5u/AFKoxJeTg=";
 

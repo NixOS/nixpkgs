@@ -6,10 +6,13 @@
   ragel,
   pkg-config,
   wrapGAppsHook3,
-  lua,
+  lua5_2_compat,
   fetchpatch,
   lib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpick";

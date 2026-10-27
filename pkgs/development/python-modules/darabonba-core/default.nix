@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "darabonba-core";
-  version = "1.0.8";
+  version = "1.0.9";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "darabonba_core";
     inherit (finalAttrs) version;
-    hash = "sha256-8WYZYLNo40LT02Q0voLSZLcKAcSehDkh2KTazSFzdq4=";
+    hash = "sha256-ECbJZbTCtI+JmV6trXq3gKA5WYEsj43kZw60TEjlsXk=";
   };
 
   build-system = [ setuptools ];

@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trafilatura";
-  version = "2.2.0";
+  version = "2.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,11 +31,16 @@ buildPythonPackage (finalAttrs: {
     owner = "adbar";
     repo = "trafilatura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U6sqUuPQZiv7VMCJ5lLJ3qqdEBq60J82nHHlGdCOyX4=";
+    hash = "sha256-VcS0x7lU7bHIyJJm+tQVa8Eypyu5cvXjZ+i3tG/N7z0=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "charset_normalizer"
+    "lxml"
+    "urllib3"
+  ];
   dependencies = [
     certifi
     charset-normalizer
@@ -69,6 +74,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "trafilatura" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python package and command-line tool designed to gather text on the Web";

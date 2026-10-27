@@ -29,15 +29,16 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cronet-go";
   # NOTE: https://github.com/SagerNet/sing-box/blob/stable/.github/CRONET_GO_VERSION
-  version = "150.0.7871.63-1";
+  version = "150.0.7871.63-3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "cronet-go";
-    rev = "7e27f60f7f04a1c762b6bb69b4a44d7b24cd7a5d";
+    # NOTE: keep rev for easier overriding
+    rev = "049f2909701ca088c9569f6b303bba5376a2b2ff";
     fetchSubmodules = true;
-    hash = "sha256-dTKKl32saIIVt8ue105Xw643TBNEf09H38GbSdEcmKQ=";
+    hash = "sha256-705cctVHseRSJuEPFxlTRJJUWsNgZ4y5ZQ9nwhyTqFY=";
   };
 
   patches = [
@@ -51,6 +52,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build naiveproxy/src/build/toolchain/apple/linker_driver.py
+
+    sslDir="naiveproxy/src/net/data/ssl/chrome_root_store"
+    # Check existence
+    grep -Fq '# CN=emSign ECC Root CA - G3,' "$sslDir/root_store.textproto"
+    grep -Fxq '# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b' "$sslDir/root_store.certs"
+    # Remove emSign ECC Root CA - G3 from root store, which is compromised.
+    sed -i '/^# CN=emSign ECC Root CA - G3,/,/^}/d' "$sslDir/root_store.textproto"
+    sed -i \
+      '/^# 86a1ecba089c4a8d3bbe2734c612ba341d813e043cf9e8a862cd5c57a36bbe6b$/,/^-----END CERTIFICATE-----$/d' \
+      "$sslDir/root_store.certs"
   '';
 
   nativeBuildInputs = [

@@ -26,7 +26,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon" + lib.optionalString embedSamurai "-embedded-samurai";
-  version = "0.5.0";
+  version = "0.7.0";
 
   srcs = builtins.attrValues (lib.filterAttrs (_: v: v.use or true) finalAttrs.passthru.srcsAttrs);
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  patches = [ ./darwin-clang.patch ];
+  patches = [ ./restrict-ar-solaris-to-sunos-systems.patch ];
 
   postPatch = ''
     find subprojects -name "*.py" -exec chmod +x {} \;
@@ -80,9 +80,20 @@ stdenv.mkDerivation (finalAttrs: {
       "subprojects/meson-tests/native/8 external program shebang parsing/script.int.in" \
         --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
 
+    # don't run test depending on git
     substituteInPlace \
       "subprojects/meson-tests/meson.build" \
         --replace-fail "['common/66 vcstag', {'python': true}]," ""
+
+    # don't attempt to run setuid/setgid
+    substituteInPlace \
+      "subprojects/meson-tests/common/12 data/meson.build" \
+      "subprojects/meson-tests/common/190 install_mode/meson.build" \
+        --replace-fail "'rwxr-sr-x'" "'rwxr--r-x'"
+    substituteInPlace \
+      "subprojects/meson-tests/common/190 install_mode/meson.build" \
+        --replace-fail "'rw-rwSr--'" "'rw-rw-r--'" \
+        --replace-fail "'rw---Sr--'" "'rw----r--'"
   '';
 
   enableParallelBuilding = true;
@@ -110,6 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
         (muonEnable "samurai" embedSamurai)
         (muonEnable "tracy" false)
         (muonEnable "website" false)
+        # native_backtrace requires _GNU_SOURCE
+        (muonEnable "native_backtrace" stdenv.targetPlatform.isGnu)
+        (muonOption "c_args" (lib.optionalString stdenv.targetPlatform.isGnu "-D_GNU_SOURCE"))
       ];
       cmdlineForSamu = "-j$NIX_BUILD_CORES";
     in
@@ -123,8 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postBuild
     '';
 
-  # tests only pass when samurai is embedded
-  doCheck = embedSamurai && runTests;
+  # tests only pass when samurai is embedded, and rely on mixed dynamic/static builds
+  doCheck = embedSamurai && !stdenv.hostPlatform.isStatic && runTests;
 
   nativeCheckInputs = [
     # "common/220 fs module"
@@ -161,22 +175,22 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "~lattis";
       repo = "muon";
       tag = finalAttrs.version;
-      hash = "sha256-bWEYWUD+GK8R3yVnDTnzFWmm4KAuVPI+1yMfCXWcG/A=";
+      hash = "sha256-OJvduSTJSSVWMynDP2DnMMqEirQjsvTIGXNYatGHdd4=";
     };
     meson-docs = fetchFromGitHub {
       name = "meson-docs";
       repo = "meson-docs";
       owner = "muon-build";
-      rev = "1017b3413601044fb41ad04977445e68a80e8181";
-      hash = "sha256-aFpyJFIqybLNKhm/kyfCjYylj7DE6muI1+OUh4Cq4WY=";
+      rev = "589bc119dfc06bb678fb1688488e508ec51a87b8";
+      hash = "sha256-5Pq5KB+aLL3IUrhBX/LZl5lT8ghyk1MTxRlq8OlKSBw=";
       passthru.use = buildDocs;
     };
     meson-tests = fetchFromGitHub {
       name = "meson-tests";
       repo = "meson-tests";
       owner = "muon-build";
-      rev = "db92588773a24f67cda2f331b945825ca3a63fa7";
-      hash = "sha256-z4Fc1lr/m2MwIwhXJwoFWpzeNg+udzMxuw5Q/zVvpSM=";
+      rev = "38483b8cf5eb4f6e9df7a78d786ec111e0d6eb5d";
+      hash = "sha256-zBr1tytfLVi4VKEtNJZ46+zDPviQOwLAaI8SPHIyb0A=";
       passthru.use = finalAttrs.finalPackage.doCheck;
     };
   };

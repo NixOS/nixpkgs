@@ -1,5 +1,6 @@
 {
   lib,
+  arrow,
   buildPythonPackage,
   cryptography,
   defusedxml,
@@ -9,6 +10,7 @@
   marshmallow,
   pydantic-extra-types,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
@@ -27,25 +29,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "26.6.1";
+  version = "26.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    tag = finalAttrs.version;
-    hash = "sha256-KRZbrJgIxdNAnlmP7Ww/JasoDJqJZkBkd0qXm9gfXp4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tomPmKljJiZ1Zop4HOXS1zCYBApGlNI6U4rdk6L/Plg=";
   };
-
-  postPatch = ''
-    # pytest 9 rejects marks on fixtures, where they never had any effect
-    substituteInPlace tests/sc/conftest.py \
-      --replace-fail "@pytest.mark.filterwarnings('ignore::DeprecationWarning')" ""
-  '';
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
   dependencies = [
+    arrow
     cryptography
     defusedxml
     gql

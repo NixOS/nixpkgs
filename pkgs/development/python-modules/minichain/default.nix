@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Tiny library for coding with large language models";
-    homepage = "https://srush-minichain.hf.space";
+    homepage = "https://github.com/srush/MiniChain";
     changelog = "https://github.com/srush/MiniChain/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];

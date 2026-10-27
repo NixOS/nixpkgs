@@ -123,9 +123,7 @@ buildNpmPackage (finalAttrs: {
       ];
     };
     maintainers = with lib.maintainers; [
-      brantes
       xiaoxiangmoe
-      _4evy
       caverav
     ];
     platforms = lib.platforms.all;

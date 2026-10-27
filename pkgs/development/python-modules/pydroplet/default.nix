@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pydroplet";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Hydrific";
     repo = "pydroplet";
     tag = "v${version}";
-    hash = "sha256-XLosly9Zyvp3Mfvj0mPORYJBNBkt8JPjlHuvHinZ39w=";
+    hash = "sha256-4DZN4uFKmYpE2A+Hmy7mkJjhqNGRrZO6JJ5P+vnagHY=";
   };
 
   build-system = [ setuptools ];

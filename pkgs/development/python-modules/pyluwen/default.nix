@@ -9,7 +9,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "pyluwen";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,12 +17,12 @@ buildPythonPackage (finalAttrs: {
     owner = "tenstorrent";
     repo = "luwen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pc/7G9YxBTg2uYn47ONxI7zsfdK3Ex4zndLASRtDQyk=";
+    hash = "sha256-J0SvCBsDi3GMvnwqgqGMUDvrSO+baznDhsfuvF44Ens=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-2ibAZnfv++eyCB57F0uD7XFJ3MP9SnAApOn6uelo3Po=";
+    hash = "sha256-vEuVxBGIJAyc8POy3EPTzTK5g5SE3QDZcnTnAb3b5k0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bind/pyluwen";
@@ -38,6 +38,15 @@ buildPythonPackage (finalAttrs: {
     sed -i '0,/version = /{s/version = "*.*.*"/version = "${finalAttrs.version}"/g}' Cargo.toml
   '';
 
+  # pyo3 0.19.2 predates CPython 3.13 the stable ABI avoids a segfault
+  # https://github.com/tenstorrent/luwen/blob/v0.10.0/bind/pyluwen/Cargo.toml#L27
+  maturinBuildFlags = [
+    "--features"
+    "abi3-py311"
+  ];
+
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = "1";
+
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
@@ -45,6 +54,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   build-system = [ maturin ];
+
+  pythonImportsCheck = [ "pyluwen" ];
 
   meta = {
     description = "Tenstorrent system interface library";

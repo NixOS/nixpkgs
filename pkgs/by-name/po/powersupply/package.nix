@@ -50,8 +50,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pygobject3
   ];
 
-  strictDeps = true;
-
   meta = {
     description = "Graphical app to display power status of mobile Linux platforms";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/powersupply";

@@ -14,9 +14,10 @@ logger = logging.getLogger(__name__)
 class QMPAPIError(RuntimeError):
     def __init__(self, message: dict[str, Any]):
         assert "error" in message, "Not an error message!"
+        error = message["error"]
         try:
-            self.class_name = message["class"]
-            self.description = message["desc"]
+            self.class_name = error["class"]
+            self.description = error["desc"]
             # NOTE: Some errors can occur before the Server is able to read the
             # id member; in these cases the id member will not be part of the
             # error response, even if provided by the client.

@@ -375,12 +375,18 @@ let
         };
 
         fprintAuth = lib.mkOption {
-          default = config.services.fprintd.enable;
-          defaultText = lib.literalExpression "config.services.fprintd.enable";
+          default = config.services.fprintd.enablePam;
+          defaultText = lib.literalExpression "config.services.fprintd.enablePam";
           type = lib.types.bool;
           description = ''
             If set, fingerprint reader will be used (if exists and
             your fingerprints are enrolled).
+
+            ::: {.note}
+            This setting should only be enabled for clients that can ensure
+            user attention, such as lockscreens.
+            See https://github.com/NixOS/nixpkgs/issues/442117
+            :::
           '';
         };
 
@@ -1252,7 +1258,7 @@ let
                       name = "fscrypt";
                       enable = config.security.pam.enableFscrypt;
                       control = "optional";
-                      modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                      modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
                     }
                     {
                       name = "zfs_key";
@@ -1449,7 +1455,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key";
@@ -1610,7 +1616,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key-skip-systemd";
@@ -2663,7 +2669,7 @@ in
       ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     security.wrappers = {

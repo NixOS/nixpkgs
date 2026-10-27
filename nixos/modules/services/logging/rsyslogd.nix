@@ -84,6 +84,8 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    services.journald.settings.Journal.ForwardToSyslog = lib.mkOptionDefault true;
+
     environment.systemPackages = [ pkgs.rsyslog ];
 
     systemd.services.syslog = {

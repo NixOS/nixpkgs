@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     with python3.pkgs;
     [
       arrow
-      chardet
+      chardet_5
       cryptography
       filelock
       google-api-python-client
@@ -53,12 +53,19 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # evaluated on run and not during build time.
   # Detailed on this page: https://github.com/GAM-team/GAM/wiki/gam.cfg
   makeWrapperArgs = [
-    ''--set-default GAM_CA_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"''
-    ''--run 'export GAMCFGDIR="''${XDG_CONFIG_HOME:-$HOME/.config}/gam"' ''
-    ''--run 'export GAMUSERCONFIGDIR="''${XDG_CONFIG_HOME:-$HOME/.config}/gam"' ''
-    ''--run 'export GAMSITECONFIGDIR="''${XDG_CONFIG_HOME:-$HOME/.config}/gam"' ''
-    ''--run 'export GAMCACHEDIR="''${XDG_CACHE_HOME:-$HOME/.cache}/gam"' ''
-    ''--run 'export GAMDRIVEDIR="$PWD"' ''
+    "--set-default"
+    "GAM_CA_FILE"
+    "${cacert}/etc/ssl/certs/ca-bundle.crt"
+    "--run"
+    "'export GAMCFGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\"'"
+    "--run"
+    "'export GAMUSERCONFIGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\"'"
+    "--run"
+    "'export GAMSITECONFIGDIR=\"\${XDG_CONFIG_HOME:-$HOME/.config}/gam\"'"
+    "--run"
+    "'export GAMCACHEDIR=\"\${XDG_CACHE_HOME:-$HOME/.cache}/gam\"'"
+    "--run"
+    "'export GAMDRIVEDIR=\"$PWD\"'"
   ];
 
   pythonImportsCheck = [ "gam" ];

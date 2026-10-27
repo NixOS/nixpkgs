@@ -16,30 +16,39 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-leCvbWteOp7z7ORwtljA+KslHUptY2vdupZTmAjsArg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-leCvbWteOp7z7ORwtljA+KslHUptY2vdupZTmAjsArg=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     gfortran
-  ];
-  buildInputs = [
     mpi
-    blas
     openssh
   ];
 
+  buildInputs = [
+    mpi
+    blas
+  ];
+
+  passthru = { inherit (blas) isILP64; };
+
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
-  preConfigure = ''
-    configureFlagsArray+=( "--enable-i8" \
-                           "--with-mpi" \
-                           "--with-mpi3" \
-                           "--enable-eispack" \
-                           "--enable-underscoring" \
-                           "--with-blas8=${blas}/lib -lblas" )
-  '';
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  configureFlags = [
+    "--with-mpi"
+    "--with-mpi3"
+    "--enable-eispack"
+    "--enable-underscoring"
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "--enable-i8"
+    "--with-blas8=-lblas"
+  ];
 
   enableParallelBuilding = true;
 

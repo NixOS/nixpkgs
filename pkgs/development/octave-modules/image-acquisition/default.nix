@@ -15,7 +15,7 @@ buildOctavePackage rec {
     owner = "Andy1978";
     repo = "octave-image-acquisition";
     tag = "image-acquisition-${version}";
-    sha256 = "sha256-vS1i0PNAyfkxuMSfm+OGvFXkpbD4H6VJrs4eb+LxYBA=";
+    hash = "sha256-vS1i0PNAyfkxuMSfm+OGvFXkpbD4H6VJrs4eb+LxYBA=";
   };
 
   buildInputs = [

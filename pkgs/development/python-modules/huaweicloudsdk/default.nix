@@ -11,14 +11,14 @@ let
     serviceName:
     buildPythonPackage (finalAttrs: {
       pname = "huaweicloudsdk${serviceName}";
-      version = "3.1.211";
+      version = "3.1.213";
       pyproject = true;
 
       src = fetchFromGitHub {
         owner = "huaweicloud";
         repo = "huaweicloud-sdk-python-v3";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-UcuWHYMnsgxMbB/RcBZkZYbRzZYEPP8Q8Ccur7iWrZk=";
+        hash = "sha256-Bir0DWGN0xpfUfC9KMwu/kfzM8jWaqC7S6BUat49zEY=";
       };
 
       sourceRoot = "${finalAttrs.src.name}/huaweicloud-sdk-${serviceName}";
@@ -46,7 +46,7 @@ in
   huaweicloudsdkaad = buildHuaweiCloudSdkPackage "aad";
   huaweicloudsdkagentarts = buildHuaweiCloudSdkPackage "agentarts";
   huaweicloudsdkagentidentity = buildHuaweiCloudSdkPackage "agentidentity";
-  huaweicloudsdkaidatalakejobserver = buildHuaweiCloudSdkPackage "aidatalakejobserver";
+  huaweicloudsdkaidatalake = buildHuaweiCloudSdkPackage "aidatalake";
   huaweicloudsdkantiddos = buildHuaweiCloudSdkPackage "antiddos";
   huaweicloudsdkaom = buildHuaweiCloudSdkPackage "aom";
   huaweicloudsdkaos = buildHuaweiCloudSdkPackage "aos";
@@ -91,7 +91,6 @@ in
   huaweicloudsdkcodeartsrepo = buildHuaweiCloudSdkPackage "codeartsrepo";
   huaweicloudsdkcodecraft = buildHuaweiCloudSdkPackage "codecraft";
   huaweicloudsdkconfig = buildHuaweiCloudSdkPackage "config";
-  huaweicloudsdkcore = buildHuaweiCloudSdkPackage "core";
   huaweicloudsdkcpcs = buildHuaweiCloudSdkPackage "cpcs";
   huaweicloudsdkcph = buildHuaweiCloudSdkPackage "cph";
   huaweicloudsdkcpts = buildHuaweiCloudSdkPackage "cpts";

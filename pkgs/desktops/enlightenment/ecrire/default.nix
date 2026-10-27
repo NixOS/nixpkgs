@@ -9,13 +9,13 @@
   directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ecrire";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1pszk583rzclfqy3dyjh1m9pz1hnr84vqz8vw9kngcnmj23mjr6r";
+    url = "https://download.enlightenment.org/rel/apps/ecrire/ecrire-${finalAttrs.version}.tar.xz";
+    hash = "sha256-2WRZh5DVsmdn4ht9vAnKFoZ/Uw1Q+jY8dpT9PFCZX98=";
   };
 
   nativeBuildInputs = [
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];
   };
-}
+})

@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blackjax";
-  version = "1.6.2";
+  version = "1.7.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = finalAttrs.version;
-    hash = "sha256-NO/CvYtxfAid3ETpj5DcNQPdARP2cwqy9p0kHOybvNg=";
+    hash = "sha256-IyWZbmYIPqvvex1gHkYsFb4gtNLCERXv+UkbvKfGwec=";
   };
 
   build-system = [

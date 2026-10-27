@@ -59,5 +59,7 @@ buildPythonPackage rec {
       binaryBytecode
       binaryNativeCode
     ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

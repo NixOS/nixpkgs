@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "corrode-scanner";
-  version = "0.5.1";
+  version = "0.5.3";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ul0gic";
     repo = "corrode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cxmX0UOEI78P9K4glTh7B2b+/Uc5pHY961RamarvZm0=";
+    hash = "sha256-ucMNdl4TIl4TnGrkQXxO9ZNkYXrDD5Kto8NbWeT3IKI=";
   };
 
-  cargoHash = "sha256-f+gwucHpQu5IJqll/DmGYkNwu/5a2esl9URpwj7c3Pc=";
+  cargoHash = "sha256-0iKzigRLfnepGs2DMnYEWA4FwfRUegu+i64EbE881Qs=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

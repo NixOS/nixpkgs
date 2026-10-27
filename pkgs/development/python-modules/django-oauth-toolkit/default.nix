@@ -15,7 +15,7 @@
   django-ninja,
   djangorestframework,
   pytest-cov-stub,
-  pytest-django,
+  pytest-django_4_12,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
@@ -45,13 +45,19 @@ buildPythonPackage (finalAttrs: {
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.settings
+    # See below about xdist
+    substituteInPlace pyproject.toml \
+      --replace-fail '    "-n", "auto",' "" \
+      --replace-fail '    "--dist", "loadfile",' ""
   '';
 
   nativeCheckInputs = [
     django-ninja
     djangorestframework
     pytest-cov-stub
-    pytest-django
+    pytest-django_4_12
+    django-ninja
+    # pytest-xdist
     pytest-mock
     pytest-xdist
     pytestCheckHook

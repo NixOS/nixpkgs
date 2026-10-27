@@ -15,13 +15,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kraft";
-  version = "0.12.15";
+  version = "0.12.16";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UpCAvGKhWBE4SR8dQpl0FexhID2k15Xu4KROCfPPPXw=";
+    hash = "sha256-rk6FXPEtBkVzGDbjaiASg8FNYgJBXqYDiZ/TcBSgUok=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
     yajl
   ];
 
-  vendorHash = "sha256-TM9wzh4F+7EJhwNUEKBJv9MbPfYPvT3BYJ69UJJ9ieE=";
+  vendorHash = "sha256-CNyBwJJIg0C1QE//BH+XaGHjSKCnslvi2Zu8JgqBEls=";
 
   ldflags = [
     "-s"

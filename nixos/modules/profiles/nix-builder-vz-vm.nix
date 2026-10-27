@@ -8,8 +8,6 @@
 
   Main differences:
 
-  - `networking.nameservers = [ "8.8.8.8" ]` is not needed.
-    vz uses the host's NAT, which provides working DNS.
   - `virtualisation.graphics = false`: no display support in vz
   - `virtualisation.useNixStoreImage`: vz only supports nix store image
 */

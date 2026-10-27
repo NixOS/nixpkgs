@@ -34,7 +34,7 @@ lib.makeExtensible (
       cairoSupport = stdenv.hostPlatform.isLinux;
       cursesSupport = true;
       saneSupport = stdenv.hostPlatform.isLinux;
-      pulseaudioSupport = config.pulseaudio or stdenv.hostPlatform.isLinux;
+      pulseaudioSupport = stdenv.hostPlatform.isLinux;
       udevSupport = stdenv.hostPlatform.isLinux;
       xineramaSupport = stdenv.hostPlatform.isLinux;
       sdlSupport = true;

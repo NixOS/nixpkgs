@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "print-color";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xy3";
     repo = "print-color";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bVmJiRFYThAwNz25DKvBl1k1mdqwQ5FB2vuaYvuf4kg=";
+    hash = "sha256-WzWButpFc+YHQNjd7+t5MHgAa8W9nSyWfTCd9zmnD6s=";
   };
 
   build-system = [ setuptools ];

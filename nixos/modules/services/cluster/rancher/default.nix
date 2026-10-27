@@ -62,17 +62,6 @@ let
         builtins.attrNames cfg.charts
       );
 
-      # Converts YAML -> JSON -> Nix
-      fromYaml =
-        path:
-        builtins.fromJSON (
-          builtins.readFile (
-            pkgs.runCommand "${path}-converted.json" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
-              yq --no-colors --output-format json ${path} > $out
-            ''
-          )
-        );
-
       # Replace prefixes and characters that are problematic in file names
       cleanHelmChartName =
         name:
@@ -136,9 +125,12 @@ let
       mkHelmChartCR =
         name: value:
         let
-          chartValues = if (lib.isPath value.values) then fromYaml value.values else value.values;
-          # use JSON for values as it's a subset of YAML and understood by the rancher Helm controller
-          valuesContent = builtins.toJSON chartValues;
+          # file values are inlined as YAML; attrs are converted to JSON (a YAML subset)
+          valuesContent =
+            if builtins.isAttrs value.values then
+              builtins.toJSON value.values
+            else
+              builtins.readFile (toString value.values);
         in
         # merge with extraFieldDefinitions to allow setting advanced values and overwrite generated
         # values
@@ -162,15 +154,24 @@ let
         } value.extraFieldDefinitions;
 
       # Generate a HelmChart custom resource together with extraDeploy manifests.
+      # Assembled at build time to avoid IFD.
       mkAutoDeployChartManifest = name: value: {
         # target is the final name of the link created for the manifest file
         target = mkManifestTarget name;
         inherit (value) enable package;
         # source is a store path containing the complete manifest file
-        source = mkManifestSource "auto-deploy-chart-${name}" (
-          lib.singleton (mkHelmChartCR name value)
-          ++ map (x: fromYaml (mkExtraDeployManifest x)) value.extraDeploy
-        );
+        source =
+          let
+            crFile = pkgs.writers.writeJSON "auto-deploy-chart-${name}-cr" (mkHelmChartCR name value);
+            allFiles = [ crFile ] ++ map mkExtraDeployManifest value.extraDeploy;
+            docs = lib.concatStringsSep "\necho ---\n" (map (f: "yq -o json '.' ${f}") allFiles);
+          in
+          pkgs.runCommand "auto-deploy-chart-${name}" { nativeBuildInputs = [ pkgs.yq-go ]; } ''
+            {
+              ${docs}
+            } | yq eval-all -o json '[.] | {"apiVersion": "v1", "kind": "List", "items": .}' - \
+              ${lib.optionalString (!jsonManifests) "| yq -o yaml -P '.'"} > $out
+          '';
       };
 
       autoDeployChartsModule = lib.types.submodule (
@@ -849,13 +850,22 @@ let
                 "L+".argument = "${manifest.source}";
               };
             };
-            # Make a systemd-tmpfiles rule for a container image
-            mkImageRule = image: {
-              name = "${imageDir}/${image.name}";
-              value = {
-                "L+".argument = "${image}";
-              };
-            };
+            # Build a single store directory containing symlinks to all
+            # container images declared in the NixOS configuration. The
+            # directory's store path changes whenever any image changes, so
+            # k3s/rke2 re-imports images on every generation switch. It is
+            # exposed under ${imageDir}/nixos so that ${imageDir} itself
+            # remains a normal directory that users can still populate manually.
+            agentImagesDir = pkgs.linkFarm "${name}-agent-images" (
+              map (image: {
+                # The store-path hash is included in the link name so that two
+                # different images with the same tarball base name do not
+                # collide. The context is discarded because tmpfiles link names
+                # must not carry store-path references.
+                name = builtins.unsafeDiscardStringContext (builtins.baseNameOf image);
+                path = image;
+              }) cfg.images
+            );
             # Merge charts with charts contained in enabled auto deploying charts
             helmCharts =
               (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
@@ -873,7 +883,11 @@ let
             };
           in
           (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests)
-          // (builtins.listToAttrs (map mkImageRule cfg.images))
+          // (lib.optionalAttrs (cfg.images != [ ]) {
+            "${imageDir}/nixos" = {
+              "L+".argument = "${agentImagesDir}";
+            };
+          })
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
               "L+".argument = "${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate}";

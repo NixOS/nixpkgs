@@ -16,18 +16,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kPGbEi0KCq/BsEq2RkFb5zfARncMIvXHniOUglNYk1s=";
+    hash = "sha256-1/3guOvzhE98dYaQ+X1vyRkTMyetbdhALKHgVSpbiFs=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-WrH56oWTTDG1P/OHC5WjLCkZM3j6HEirAvhF+6Xd76I=";
+    hash = "sha256-79uKP1wGIAFuCHFtm04XkJTaZxc/WaKFRiTflsPoF0M=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       installShellCompletion --cmd fish-lsp \
         --fish <($out/bin/fish-lsp complete --fish)
     ''}
+
+    installManPage man/fish-lsp.1
 
     runHook postInstall
   '';

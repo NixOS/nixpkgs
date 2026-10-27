@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.29.1";
+  version = "1.30.2";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-sB0ssvH7MFNFDiXF5lPxcFMAwItdTJEEmAnB7kwhu30=";
+    hash = "sha256-kaRRLiV5QJ7LeC/LVfrVbgqPpuzj5MeHo0GChVIqE20=";
   };
 
   postPatch = ''

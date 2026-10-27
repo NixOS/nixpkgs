@@ -83,7 +83,7 @@ in
       extraArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = [ "--db /path/to/silverbullet.db" ];
+        example = [ "--single" ];
         description = "Extra arguments passed to silverbullet.";
       };
     };

@@ -15,7 +15,6 @@
   dconf,
   gtk3,
   mate-desktop,
-  pulseaudioSupport ? stdenv.config.pulseaudio or true,
   libpulseaudio,
   wrapGAppsHook3,
   gitUpdater,
@@ -53,10 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     dconf
     mate-desktop
-  ]
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+    libpulseaudio
+  ];
 
-  configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
+  configureFlags = [ "--enable-pulse" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 

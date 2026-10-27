@@ -9,22 +9,17 @@
 
 stdenv.mkDerivation rec {
   pname = "liquid-dsp";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "jgaeddert";
     repo = "liquid-dsp";
     rev = "v${version}";
-    sha256 = "sha256-WI0GLU/m3PVm1VjOTyPuKcopauiqdSullDyux9WUyKc=";
+    sha256 = "sha256-QRCPdngQCpC+o8fCLVoixPsZ25yI1ZEo8ePreC2S0Yk=";
   };
 
   patches = [
-    # Fix CMake absolute include/lib paths issue, see also
-    # - https://github.com/NixOS/nixpkgs/issues/144170
-    # - https://github.com/jgaeddert/liquid-dsp/pull/450
     ./fix-cmake-pc-paths.patch
-    # liquid.h uses va_list; needs stdarg.h
-    ./include-stdarg.patch
   ];
 
   nativeBuildInputs = [

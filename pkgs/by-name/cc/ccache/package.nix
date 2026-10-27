@@ -12,17 +12,19 @@
   xxhash,
   zstd,
   bashInteractive,
-  doctest,
-  xcodebuild,
-  makeWrapper,
   ctestCheckHook,
+  elfutils,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
+  xcodebuild,
+  doctest,
+  makeWrapper,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.13.6";
+  version = "4.14.2";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,11 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-A0n+DO6IznETsAFUNIpBkQI6A3UilgEUbuyP3sqKDTk=";
+    hash = "sha256-DGanom9sfn/UoBJAlvyViusZyc+7c9v0UKwIr8IvYrk=";
   };
 
   outputs = [
     "out"
+    "doc"
     "man"
   ];
 
@@ -90,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     # bashInteractive, but not bash.
     bashInteractive
     ctestCheckHook
+    elfutils # eu-elfcmp
+    versionCheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
@@ -97,6 +102,13 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     doctest
   ];
+
+  # Some tests require running $CC -march=native
+  # Test artifacts aren't installed to $out, so this shouldn't affect
+  # reproducibility
+  preCheck = ''
+    export NIX_ENFORCE_NO_NATIVE=0
+  '';
 
   disabledTests = [
     "test.fileclone" # flaky on hydra, also seems to fail on zfs

@@ -6,13 +6,12 @@
   mock,
   pbr,
   pyyaml,
-  setuptools,
   six,
   multi-key-dict,
   testscenarios,
   requests,
   requests-mock,
-  stestr,
+  stestrCheckHook,
   multiprocess,
 }:
 
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pbr
     pyyaml
-    setuptools
     six
     multi-key-dict
     requests
@@ -49,14 +47,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     testscenarios
     requests-mock
     multiprocess
   ];
-  checkPhase = ''
-    stestr run
-  '';
 
   meta = {
     description = "Python bindings for the remote Jenkins API";

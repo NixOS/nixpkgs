@@ -38,7 +38,6 @@ let
     "coc-spell-checker"
     "coc-sqlfluff"
     "coc-stylelint"
-    "coc-tabnine"
     "coc-texlab"
     "coc-toml"
     "coc-vimlsp"

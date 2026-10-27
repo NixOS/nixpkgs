@@ -25,19 +25,19 @@
   zlib,
   # plugins
   withLua ? true,
-  lua5_3,
+  lua5_5,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xournalpp";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CvuHgZ824jLF/L0/PAnbT4RXFLV+Uh2RJ30DA4PEEbE=";
+    hash = "sha256-IQxWLKxcJOncDSzei18+CzE8RJ4b6bcUBS5iXmE4sQw=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optional withLua lua5_3;
+  ++ lib.optional withLua lua5_5;
 
   buildFlags = [ "translations" ];
 

@@ -1,13 +1,15 @@
 {
   lib,
   buildPythonPackage,
+  calendaring-config,
   dnspython,
   fetchFromGitHub,
+  httpx,
   icalendar,
   icalendar-searcher,
   lxml,
   manuel,
-  pytest9_0CheckHook,
+  pytestCheckHook,
   python,
   radicale,
   recurring-ical-events,
@@ -26,16 +28,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "caldav";
-  version = "3.2.1";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
-    tag = "v${version}";
-    hash = "sha256-SCqc0MVxKaHpES+NkDcaItHlkk0kCFj6kFqH8k08vdA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mRaWWR1/YkJ5+eRc/ylT/ntYzBJVpCyuBVHGzAYOB+I=";
   };
 
   build-system = [
@@ -44,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    calendaring-config
     dnspython
     lxml
     niquests
@@ -55,11 +58,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    httpx
     manuel
     proxy-py
     pyfakefs
     pytest-asyncio
-    pytest9_0CheckHook
+    pytestCheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
     vobject
@@ -71,14 +75,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "caldav" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-caldav/caldav/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       marenz
       dotlambda
     ];
   };
-}
+})

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snort";
-  version = "3.10.0.0";
+  version = "3.12.2.0";
 
   src = fetchFromGitHub {
     owner = "snort3";
     repo = "snort3";
     tag = finalAttrs.version;
-    hash = "sha256-vxiZeJByZGS7rXtvPMgNjb94E/oju+mmEuzJ7tA+hE4=";
+    hash = "sha256-YxWIWR8E1bf8+xRFFasZqe284ecd0R922OXDJ2IclDA=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     xz
   ];
-
-  # Patch that is tracking upstream PR https://github.com/snort3/snort3/pull/399
-  patches = [ ./0001-cmake-fix-pkg-config-path-for-libdir.patch ];
 
   enableParallelBuilding = true;
 

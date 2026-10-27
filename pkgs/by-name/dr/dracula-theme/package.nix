@@ -10,7 +10,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
-  version = "4.0.0-unstable-2026-05-21";
+  version = "4.0.0-unstable-2026-08-24";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -18,8 +18,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "dracula";
     repo = "gtk";
-    rev = "81d0287950e8093dd8f8c753347763bce8588465";
-    hash = "sha256-gbotOIGG55oqQZZNDkc9s5fPXvJQr+YHqxt5ZWS5bF8=";
+    rev = "71640b9456110f3bac2130d0b387a3154a9fb4d2";
+    hash = "sha256-95Lfr4yiu7Yyff/pVgLCyKRX/btjdTASIqJ785XePG0=";
   };
 
   installPhase = ''

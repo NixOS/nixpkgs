@@ -21,8 +21,8 @@ in
   pname = "devin-desktop";
 
   executableName = "devin-desktop";
-  longName = "devin-desktop";
-  shortName = "devin-desktop";
+  longName = "Devin Desktop";
+  shortName = "Devin Desktop";
   libraryName = "devin-desktop";
   iconName = "devin-desktop";
 

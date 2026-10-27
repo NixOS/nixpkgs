@@ -8,12 +8,12 @@
 
 let
   gemName = "github-linguist";
-  version = "9.5.0";
+  version = "9.7.0";
   src = fetchFromGitHub {
     owner = "github-linguist";
     repo = "linguist";
     tag = "v${version}";
-    hash = "sha256-kxPiHsWrd+iwvasXfHiwZYAJFMmzZGOsZtsor5Jf1fg=";
+    hash = "sha256-dRpZBATBpLBVjwiTiWuCnd0WGMwQqaHT/XUl1mS3LD8=";
   };
 
   deps = bundlerEnv {
@@ -42,7 +42,7 @@ buildRubyGem rec {
   postInstall = ''
     export GEM_PATH="${deps}/lib/ruby/gems/${ruby.version.libDir}"
     bundle exec rake samples
-    install --mode=0644 -Dm 0755 lib/linguist/samples.json $out/lib/ruby/gems/${ruby.version.libDir}/gems/${name}/lib/linguist
+    install --mode=0644 -Dm 0755 lib/linguist/samples_data.rb $out/lib/ruby/gems/${ruby.version.libDir}/gems/${name}/lib/linguist
 
     wrapProgram "$out/bin/github-linguist" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}"

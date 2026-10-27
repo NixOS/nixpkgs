@@ -76,8 +76,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   doCheck = false;
 
-  strictDeps = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

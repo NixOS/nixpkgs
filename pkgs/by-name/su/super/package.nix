@@ -39,7 +39,8 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/brimdata/super/releases/tag/v${finalAttrs.version}";
     description = "Analytics database that puts JSON and relational tables on equal footing";
     homepage = "https://superdb.org";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "superDB10";
       free = false;
       fullName = "SuperDB Source Available License version 1.0";
       redistributable = true;

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "danhper";
     repo = "python-i18n";
     rev = "v${version}";
-    sha256 = "6FahoHZqaOWYGaT9RqLARCm2kLfUIlYuauB6+0eX7jA=";
+    hash = "sha256-6FahoHZqaOWYGaT9RqLARCm2kLfUIlYuauB6+0eX7jA=";
   };
 
   # Replace use of deprecated assertRaisesRegexp

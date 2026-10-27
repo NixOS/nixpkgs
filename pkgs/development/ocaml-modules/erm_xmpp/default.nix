@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner = "hannesm";
     repo = "xmpp";
     rev = "54418f77abf47b175e9c1b68a4f745a12b640d6a";
-    sha256 = "sha256-AbzZjNkW1VH/FOnzNruvelZeo3IYg/Usr3enQEknTQs=";
+    hash = "sha256-AbzZjNkW1VH/FOnzNruvelZeo3IYg/Usr3enQEknTQs=";
   };
 
   nativeBuildInputs = [

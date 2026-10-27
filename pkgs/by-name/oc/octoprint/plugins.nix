@@ -55,7 +55,7 @@ in
       owner = "razer";
       repo = "Octoprint_ABL_Expert";
       rev = version;
-      sha256 = "0ij3rvdwya1sbymwm5swlh2j4jagb6fal945g88zrzh5xf26hzjh";
+      hash = "sha256-UH5ohOsF/vwReoUkqpxZT0kiBaRcl8qrXzooz9vOQ0Y=";
     };
 
     meta = {
@@ -500,7 +500,7 @@ in
     meta = {
       description = "Simple plugin that add an emergency stop button on NavBar of OctoPrint";
       homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
-      license = lib.licenses.agpl3Only;
+      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ WhittlesJr ];
     };
   };

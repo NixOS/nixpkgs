@@ -1,5 +1,5 @@
-{ libsForQt5, qt6Packages }:
+{ callPackage }:
 {
-  new-engine = qt6Packages.callPackage ./new-engine.nix { };
-  old-engine = libsForQt5.callPackage ./old-engine.nix { };
+  new-engine = callPackage ./new-engine.nix { };
+  old-engine = callPackage ./old-engine.nix { };
 }

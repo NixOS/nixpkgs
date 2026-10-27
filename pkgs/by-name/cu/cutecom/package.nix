@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cutecom";
     repo = "cutecom";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Co0bUW7klSPf1VfBt7oT2DlQmf6CLELS0oapIyjpx8w=";
+    hash = "sha256-Co0bUW7klSPf1VfBt7oT2DlQmf6CLELS0oapIyjpx8w=";
   };
 
   postPatch = ''

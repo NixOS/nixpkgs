@@ -65,50 +65,44 @@ in
     # Mullvad prefers systemd-resolved for setting up their DNS servers.
     services.resolved.enable = lib.mkDefault true;
 
-    # See https://github.com/mullvad/mullvadvpn-app/blob/2025.14/dist-assets/linux/mullvad-early-boot-blocking.service.
+    # See https://github.com/mullvad/mullvadvpn-app/blob/2026.05/dist-assets/linux/
     systemd.services = {
       mullvad-early-boot-blocking = mkIf cfg.enableEarlyBootBlocking {
         description = "Mullvad early boot network blocker";
         wantedBy = [ "mullvad-daemon.service" ];
         before = [
-          "basic.target"
+          "network-pre.target"
           "mullvad-daemon.service"
         ];
-        unitConfig = {
-          DefaultDependencies = "no";
-        };
+        after = [ "local-fs.target" ];
+        unitConfig.DefaultDependencies = "no";
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${getExe' cfg.package "mullvad-daemon"} --initialize-early-boot-firewall";
+          ExecStart = "${getExe' cfg.package "mullvad-daemon"} -v --initialize-early-boot-firewall";
         };
       };
 
       mullvad-daemon = {
         description = "Mullvad VPN daemon";
         wantedBy = [ "multi-user.target" ];
-        wants = [
-          "network.target"
-          "network-online.target"
-        ];
+        before = [ "network-online.target" ];
         after = [
-          "network-online.target"
-          "NetworkManager.service"
-          "systemd-resolved.service"
+          "network.target"
         ]
         ++ optional cfg.enableEarlyBootBlocking "mullvad-early-boot-blocking.service";
-
+        startLimitBurst = 5;
+        startLimitIntervalSec = 20;
         path =
           # Necessary for certain obfuscation types (pre-v2026.4) and DAITA.
-          # TODO: Drop iproute2 once the dependency on the `ip` command is dropped upstream.
+          # TODO: Drop iproute2 once we update to 2026.06. (https://github.com/mullvad/mullvadvpn-app/pull/10794)
           singleton pkgs.iproute2
           # See https://github.com/NixOS/nixpkgs/issues/262681
           ++ optional config.networking.resolvconf.enable config.networking.resolvconf.package;
-        startLimitBurst = 5;
-        startLimitIntervalSec = 20;
         serviceConfig = {
-          ExecStart = "${getExe' cfg.package "mullvad-daemon"} -v --disable-stdout-timestamps";
+          ExecStart = "${getExe' cfg.package "mullvad-daemon"} -vv --disable-stdout-timestamps";
           Restart = "always";
           RestartSec = 1;
+          RestartKillSignal = "SIGUSR1";
         };
       };
     };

@@ -16,7 +16,6 @@ let
     mapAttrsToList
     getBin
     concatStringsSep
-    mkEnableOption
     mkOption
     types
     literalExpression
@@ -177,32 +176,64 @@ let
 
 in
 {
-  imports = [
-    (lib.mkRemovedOptionModule [ "boot" "initrd" "systemd" "strip" ] ''
-      The option to strip ELF files in initrd has been removed.
-      It only saved ~1MiB of initramfs size, but caused a few issues
-      like unloadable kernel modules.
-    '')
-    (lib.mkRemovedOptionModule [
-      "boot"
-      "initrd"
-      "systemd"
-      "extraConfig"
-    ] "Use boot.initrd.systemd.settings.Manager instead.")
-  ];
+  imports =
+    let
+      obsoleteOpt =
+        opts: msgFn:
+        lib.flip map opts (
+          opt:
+          lib.mkRemovedOptionModule (
+            [
+              "boot"
+              "initrd"
+            ]
+            ++ opt
+          ) (msgFn (lib.concatStringsSep "." opt))
+        );
+    in
+    [
+      (lib.mkRemovedOptionModule [ "boot" "initrd" "systemd" "enable" ] ''
+        Scripted initrd has been removed.
+      '')
+      (lib.mkRemovedOptionModule [ "boot" "initrd" "systemd" "strip" ] ''
+        The option to strip ELF files in initrd has been removed.
+        It only saved ~1MiB of initramfs size, but caused a few issues
+        like unloadable kernel modules.
+      '')
+      (lib.mkRemovedOptionModule [
+        "boot"
+        "initrd"
+        "systemd"
+        "extraConfig"
+      ] "Use boot.initrd.systemd.settings.Manager instead.")
+    ]
+    ++
+      obsoleteOpt
+        [
+          [ "preFailCommands" ]
+          [ "preDeviceCommands" ]
+          [ "preLVMCommands" ]
+          [ "postDeviceCommands" ]
+          [ "postResumeCommands" ]
+          [ "postMountCommands" ]
+        ]
+        (name: ''
+          systemd stage 1 does not support `boot.initrd.${name}`. Instead, create systemd services using the `boot.initrd.systemd.services` options, which has an API matching the stage 2 `systemd.services` options. Refer to `bootup(7)`, specifically the sections on "Bootup in the Initrd" and "System Manager Bootup", for information about when various units happen, and order services accordingly.
+        '')
+    ++
+      obsoleteOpt
+        [
+          [ "extraUtilsCommands" ]
+          [ "extraUtilsCommandsTest" ]
+        ]
+        (name: ''
+          systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.systemd.initrdBin`, `boot.initrd.systemd.extraBin`, `boot.initrd.systemd.contents`, or `boot.initrd.systemd.storePaths` to add files to the initrd.
+        '')
+    ++ obsoleteOpt [ [ "extraUdevRulesCommands" ] ] (name: ''
+      systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.services.udev` to configure udev.
+    '');
 
   options.boot.initrd.systemd = {
-    enable = mkEnableOption "systemd in initrd" // {
-      default = true;
-      description = ''
-        Whether to enable systemd in initrd. The unit options such as
-        {option}`boot.initrd.systemd.services` are the same as their
-        stage 2 counterparts such as {option}`systemd.services`,
-        except that `restartTriggers` and `reloadTriggers` are not
-        supported.
-      '';
-    };
-
     package = lib.mkOption {
       type = lib.types.package;
       default = config.systemd.package;
@@ -475,58 +506,14 @@ in
     };
   };
 
-  config = mkIf (config.boot.initrd.enable && cfg.enable) {
-    assertions =
-      let
-        obsoleteOpt =
-          opts: msgFn:
-          lib.flip map opts (opt: {
-            assertion = lib.attrByPath opt (throw "impossible") config.boot.initrd == "";
-            message = ''
-              ${msgFn (lib.concatStringsSep "." opt)}
-                  Definitions:
-              ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
-                (lib.attrByPath opt (throw "impossible") options.boot.initrd).definitionsWithLocations
-              }
-            '';
-          });
-      in
-      [
-        {
-          assertion =
-            cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
-          message = "The ‘fileSystems’ option does not specify your root file system.";
-        }
-      ]
-      ++
-        obsoleteOpt
-          [
-            [ "preFailCommands" ]
-            [ "preDeviceCommands" ]
-            [ "preLVMCommands" ]
-            [ "postDeviceCommands" ]
-            [ "postResumeCommands" ]
-            [ "postMountCommands" ]
-            [
-              "network"
-              "postCommands"
-            ]
-          ]
-          (name: ''
-            systemd stage 1 does not support `boot.initrd.${name}`. Instead, create systemd services using the `boot.initrd.systemd.services` options, which has an API matching the stage 2 `systemd.services` options. Refer to `bootup(7)`, specifically the sections on "Bootup in the Initrd" and "System Manager Bootup", for information about when various units happen, and order services accordingly.
-          '')
-      ++
-        obsoleteOpt
-          [
-            [ "extraUtilsCommands" ]
-            [ "extraUtilsCommandsTest" ]
-          ]
-          (name: ''
-            systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.systemd.initrdBin`, `boot.initrd.systemd.extraBin`, `boot.initrd.systemd.contents`, or `boot.initrd.systemd.storePaths` to add files to the initrd.
-          '')
-      ++ obsoleteOpt [ [ "extraUdevRulesCommands" ] ] (name: ''
-        systemd stage 1 does not support `boot.initrd.${name}`. Instead, use `boot.initrd.services.udev` to configure udev.
-      '');
+  config = mkIf config.boot.initrd.enable {
+    assertions = [
+      {
+        assertion =
+          cfg.root == "fstab" -> any (fs: fs.mountPoint == "/") (builtins.attrValues config.fileSystems);
+        message = "The ‘fileSystems’ option does not specify your root file system.";
+      }
+    ];
 
     system.build = { inherit initialRamdisk; };
 

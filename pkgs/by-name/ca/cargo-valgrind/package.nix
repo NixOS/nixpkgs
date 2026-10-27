@@ -25,6 +25,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+  ];
+
+  nativeCheckInputs = [
     valgrind # for tests where the executable is not wrapped yet
   ];
 
@@ -37,6 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=default_cargo_project_reports_no_violations"
     "--skip=empty_tests_not_leak_in_release_mode"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';

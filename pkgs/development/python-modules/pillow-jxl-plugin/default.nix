@@ -9,6 +9,8 @@
   packaging,
   pillow,
   numpy,
+  openexr,
+  pyexiv2,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -44,12 +46,17 @@ buildPythonPackage (finalAttrs: {
     pillow
   ];
 
-  doCheck = false;
-
   nativeCheckInputs = [
     pytestCheckHook
     numpy
+    openexr
+    pyexiv2
   ];
+
+  # Remove source so tests don't try to import from it
+  preCheck = ''
+    rm -r pillow_jxl
+  '';
 
   pythonImportsCheck = [
     "pillow_jxl"

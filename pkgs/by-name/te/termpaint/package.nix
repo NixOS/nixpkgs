@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   python3,
+  fetchpatch,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "termpaint";
@@ -18,7 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7mfGTC5vJ4806bDbrPMSVthtW05a+M3vgUlHGbtaI4Q=";
   };
 
-  patches = [ ./0001-meson.build-use-prefix.patch ];
+  patches = [
+    ./0001-meson.build-use-prefix.patch
+
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/termpaint/termpaint/commit/6164fb5ff17fd3d05bf44e942539082aa71a2ff3.patch";
+      hash = "sha256-rTI0ZdJ6Q/a7M73igihd+4EZT9l6l+7oHGUnKmB5n0o=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

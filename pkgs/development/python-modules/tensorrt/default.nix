@@ -24,8 +24,8 @@ buildPythonPackage {
 
   inherit version;
 
-  # cudaPackages.tensorrt.src does not contain the wheel for python>=3.14.
-  disabled = pythonAtLeast "3.14";
+  # cudaPackages.tensorrt.src contains wheels for python 3.14 from TensorRT 11.1.
+  disabled = pythonAtLeast (if lib.versionOlder version "11.1" then "3.14" else "3.15");
 
   src =
     let

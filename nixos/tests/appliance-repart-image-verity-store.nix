@@ -27,6 +27,8 @@
       };
 
       image.repart = {
+        enable = true;
+
         verityStore = {
           enable = true;
           # by default the module works with systemd-boot, for simplicity this test directly boots the UKI
@@ -53,10 +55,7 @@
         useEFIBoot = true;
       };
 
-      boot = {
-        loader.grub.enable = false;
-        initrd.systemd.enable = true;
-      };
+      boot.loader.grub.enable = false;
 
       system.image.id = "nixos-appliance";
 

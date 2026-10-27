@@ -12,21 +12,21 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typer-config";
-  version = "1.4.3";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxb2";
     repo = "typer-config";
-    tag = version;
-    hash = "sha256-pR32E6zdlfNpzIS4u/WOCxuqrnjDWZYiroUu92RBHVM=";
+    tag = finalAttrs.version;
+    hash = "sha256-gWe4Eo4WyjpQ3ZHzp1sIIo0L/EfnZMwR6EKfPtYSKuY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.7.19,<0.8.0" "uv_build"
+      --replace-fail "uv_build>=0.7.19,<0.11.0" "uv_build"
   '';
 
   build-system = [ uv-build ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     schema
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "typer_config" ];
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utilities for working with configuration files in typer CLIs";
     homepage = "https://github.com/maxb2/typer-config";
-    changelog = "https://github.com/maxb2/typer-config/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/maxb2/typer-config/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

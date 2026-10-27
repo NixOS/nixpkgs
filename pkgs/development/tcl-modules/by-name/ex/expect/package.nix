@@ -6,6 +6,7 @@
   tcl,
   makeWrapper,
   autoreconfHook,
+  bashNonInteractive,
   replaceVars,
   dejagnu,
 }:
@@ -38,9 +39,9 @@ tcl.mkTclDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  __structuredAttrs = true;
-
-  strictDeps = true;
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   postInstall = ''
     tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})

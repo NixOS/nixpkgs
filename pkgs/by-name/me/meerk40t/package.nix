@@ -5,6 +5,7 @@
   python3Packages,
   gtk3,
   wrapGAppsHook3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -69,11 +70,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     unittestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   meta = {
     changelog = "https://github.com/meerk40t/meerk40t/releases/tag/${src.tag}";

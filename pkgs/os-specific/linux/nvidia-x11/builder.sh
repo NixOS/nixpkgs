@@ -200,8 +200,10 @@ installPhase() {
                 install -Dm755 $i $bin/bin/$i
                 # unmodified binary backup for mounting in containers
                 install -Dm755 $i $bin/origBin/$i
-                patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                    --set-rpath $out/lib:$libPath $bin/bin/$i
+                # Two separate patchelf invocations to workaround
+                # https://github.com/NixOS/nixpkgs/issues/576412
+                patchelf --set-rpath "$out/lib:$libPath" "$bin/bin/$i"
+                patchelf --interpreter "$(cat "$NIX_CC/nix-support/dynamic-linker")" "$bin/bin/$i"
             fi
         done
         substituteInPlace nvidia-bug-report.sh \

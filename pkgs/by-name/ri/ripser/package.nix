@@ -55,7 +55,17 @@ stdenv.mkDerivation {
     description = "Lean C++ code for the computation of Vietoris–Rips persistence barcodes";
     mainProgram = "ripser";
     homepage = "https://github.com/Ripser/ripser";
-    license = lib.licenses.lgpl3;
+    license =
+      with lib.licenses;
+      AND [
+        mit
+        {
+          fullName = "Ripser extra clause";
+          url = "https://github.com/Ripser/ripser/blob/v${version}/CONTRIBUTING.txt";
+          licenseType = "simple";
+          free = true;
+        }
+      ];
     maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;
   };

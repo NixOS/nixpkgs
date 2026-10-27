@@ -21,7 +21,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnp-ocaml";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-G4B1llsHnGcuGIarDB248QMaRBvS47IEQB5B93wY7nA=";
   };
 

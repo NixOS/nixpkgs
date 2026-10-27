@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "hockeypuck";
-  version = "2.3.3";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "hockeypuck";
     repo = "hockeypuck";
     rev = finalAttrs.version;
-    sha256 = "sha256-1AOvtAvx2OFxjJE5YhZwqdm9G8mWgS0hKPdTctU2MV4=";
+    sha256 = "sha256-y1SoAgehsMdhb0dnLtTsZnzTbqE1L1v26Nzh0GLJyKI=";
   };
 
   modRoot = "src/hockeypuck/";

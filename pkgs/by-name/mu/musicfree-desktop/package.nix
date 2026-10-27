@@ -7,7 +7,7 @@
   copyDesktopItems,
   makeWrapper,
   nix-update-script,
-  electron_41,
+  electron,
   python3,
   nodejs,
   vips,
@@ -16,9 +16,7 @@
   xcodebuild,
   zip,
 }:
-let
-  electron = electron_41;
-in
+
 buildNpmPackage (finalAttrs: {
   pname = "musicfree-desktop";
   version = "0.0.8";
@@ -60,7 +58,7 @@ buildNpmPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ]; # Used by better-sqlite3
 
-  npmDepsHash = "sha256-pEpU3JuxeMl0Oo/ZnmzH9/WdJ/3O2RUGofm7KXrKcAo=";
+  npmDepsHash = "sha256-8NI4aFL8D3SO71DnknjbkBqSEgNIhHrMSgFWn8Jesfs=";
 
   postConfigure = ''
     # use Electron's headers to make node-gyp compile against the Electron ABI

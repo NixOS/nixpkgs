@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tgpt";
-  version = "2.13.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-70BbII+cK9s+5yIFmpUV3pNqiTPSWfwLbrwNvvjkXrA=";
+    hash = "sha256-i0zQEBXAMgF3AnahJhwVZHqTqHgTtuy4kxdYxBDcER0=";
   };
 
   vendorHash = "sha256-oh1qKEmWoWK9fXgSfbHFgM8TWD14xNNRFw+YgqnXt00=";

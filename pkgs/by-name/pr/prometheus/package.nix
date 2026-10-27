@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  nix-update-script,
   go,
   buildGoModule,
   nodejs,
@@ -37,9 +38,7 @@
 }:
 
 let
-  source = import ./source.nix;
-
-  inherit (source) version vendorHash;
+  version = "3.15.1";
 
   pname = "prometheus";
 
@@ -47,7 +46,7 @@ let
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${version}";
-    hash = source.hash;
+    hash = "sha256-SVoTlUxUc8d6zjdeZkRN5q4VhoWsFYoUyG6InU2GKJA=";
   };
 
   assets = stdenv.mkDerivation (finalAssetsAttrs: {
@@ -66,7 +65,7 @@ let
       inherit (finalAssetsAttrs) pname version src;
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = source.pnpmDepsHash;
+      hash = "sha256-iSnP2zImIBklU/Ejq2NiuAYAo0SCuWtYbsAyTFHuD7Q=";
     };
 
     nativeBuildInputs = [
@@ -111,9 +110,10 @@ buildGoModule (finalAttrs: {
   inherit
     pname
     version
-    vendorHash
     src
     ;
+
+  vendorHash = "sha256-CUKnKTxXxdSBvE372C3NXMaOkg/A0bgcStOlPMSUc/A=";
 
   proxyVendor = true;
 
@@ -126,6 +126,7 @@ buildGoModule (finalAttrs: {
   excludedPackages = [
     "documentation/prometheus-mixin"
     "internal/tools"
+    "promql/promqltest/cmd/migrate"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 
@@ -234,7 +235,12 @@ buildGoModule (finalAttrs: {
   passthru = {
     inherit assets;
     tests = { inherit (nixosTests) prometheus; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "assets"
+      ];
+    };
   };
 
   meta = {

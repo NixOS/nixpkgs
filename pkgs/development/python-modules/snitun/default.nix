@@ -9,23 +9,24 @@
   pytest-codspeed,
   pytestCheckHook,
   setuptools,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "snitun";
-  version = "0.45.1";
+  version = "0.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "snitun";
     tag = version;
-    hash = "sha256-luXv5J0PUvW+AGTecwkEq+qkG1N5Ja5NbBKJ3M6HC0I=";
+    hash = "sha256-l7iXTXY6Dq1LV4ju6/WlipTSeybne33tiFYiwgy+DuM=";
   };
 
   patches = [
-    # https://github.com/NabuCasa/snitun/pull/459
-    ./fix-python-3.14-compatibility.diff
+    # required server_hostname for client connections
+    ./python-3.14.8-compat.patch
   ];
 
   postPatch = ''
@@ -38,12 +39,14 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     cryptography
+    trustme
   ];
 
   nativeCheckInputs = [
     pytest-aiohttp
     pytest-codspeed
     pytestCheckHook
+    trustme
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

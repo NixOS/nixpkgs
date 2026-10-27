@@ -6,13 +6,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.JsonPatch",
-    "version": "10.0.10",
-    "hash": "sha256-NIFI6z2X1blS3ab3G/CgY42WuJULni5wTa4X8AMx1c0="
+    "version": "10.0.11",
+    "hash": "sha256-/5hoxKRU7e60Zeu6MzAjRk9VChL7I6CzFDz9I9aHGM0="
   },
   {
     "pname": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
-    "version": "10.0.10",
-    "hash": "sha256-QlXe8Il3kcDQZTSZg3tCvW7c8ERix7lIWvYGSrrleNE="
+    "version": "10.0.11",
+    "hash": "sha256-xaVQXc2DlrhHoachCyxz9e1JoHYV2gkoV/jwHLQLPgg="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
@@ -21,13 +21,13 @@
   },
   {
     "pname": "NBitcoin",
-    "version": "10.0.8",
-    "hash": "sha256-SnJ60lhDv94oD0370ZyrvFG2LDJ0wkixNP1pIvcq8AA="
+    "version": "10.0.12",
+    "hash": "sha256-kxDd2BE1a6YI+I51JPFmBuIjkAHYl0mzGDpsHAKpDdg="
   },
   {
     "pname": "NBitcoin.Altcoins",
-    "version": "6.0.4",
-    "hash": "sha256-BpXLxjmFf1JUud0Mwz/Zph0jPVqrEfa6KiMMnsOeIU8="
+    "version": "6.0.8",
+    "hash": "sha256-5rjdpwZ0m3RbxuABfCtEKh3LUy8eQvkUHKVThojj9Zw="
   },
   {
     "pname": "NETStandard.Library.Ref",
@@ -41,13 +41,13 @@
   },
   {
     "pname": "Newtonsoft.Json",
-    "version": "13.0.1",
-    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
   },
   {
     "pname": "Newtonsoft.Json",
-    "version": "13.0.3",
-    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+    "version": "13.0.4",
+    "hash": "sha256-8JCB1FdAW681qXP6DFDWvycu1oPyVoxaYgpJ2pUvZSk="
   },
   {
     "pname": "Newtonsoft.Json.Bson",

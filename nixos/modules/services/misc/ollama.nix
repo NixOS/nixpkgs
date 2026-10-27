@@ -353,8 +353,8 @@ in
                 ''
             }
             if [ -n "$undeclared" ]; then
-              echo removing: $undeclared
-              '${ollama}' rm $undeclared
+              echo "removing: $undeclared"
+              echo "$undeclared" | '${xargs}' -r '${ollama}' rm
             fi
           ''}
 

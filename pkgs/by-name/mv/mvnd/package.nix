@@ -31,7 +31,7 @@ maven.buildMavenPackage (finalAttrs: {
 
   # need graalvm at build-time for the `native-image` tool
   mvnJdk = graalvmPackages.graalvm-ce;
-  mvnHash = "sha256-dgKQj6xa10MkFmxUckwW5FqKS3Tf95aP/RmKXSRqtCg=";
+  mvnHash = "sha256-HjpNumhGLz83YIzpjkodgtj74FkqLSEPZJ/4qCaMkgw=";
 
   nativeBuildInputs = [
     graalvmPackages.graalvm-ce

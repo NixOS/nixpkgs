@@ -1,22 +1,19 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-
-  # dependencies
   base58,
   beautifulsoup4,
   bech32,
   brotli,
+  buildPythonPackage,
   colorama,
   cryptography,
+  deepdiff,
+  fetchFromGitHub,
   gitpython,
+  hatchling,
   humanfriendly,
+  hypothesis,
   lxml,
   numpy,
   odfpy,
@@ -24,41 +21,39 @@
   openpyxl,
   pandas,
   pdfminer-six,
+  psutil,
   pybase62,
+  pygments,
   pyjks,
   pysquashfsimage,
+  pytestCheckHook,
   python-dateutil,
   python-docx,
   python-pptx,
+  pythonOlder,
   pyxlsb,
   pyyaml,
   rpmfile,
   striprtf,
+  tabulate,
+  tqdm,
+  versionCheckHook,
   whatthepatch,
   xlrd,
-  # < python 3.14 only:
   zstandard,
-
-  # tests
-  deepdiff,
-  hypothesis,
-  psutil,
-  pytestCheckHook,
-  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.17.4";
+  version = "1.19.4";
   pyproject = true;
-
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JsKwmzC9kMF3dkYVFrLDxYsxOc5X13pFN9aealZEgqY=";
+    hash = "sha256-MQB0auf5G48tSkxAWHE4o6ldlN9u78/Y5TENtMgqXeE=";
   };
 
   build-system = [ hatchling ];
@@ -80,6 +75,7 @@ buildPythonPackage (finalAttrs: {
     pandas
     pdfminer-six
     pybase62
+    pygments
     pyjks
     pysquashfsimage
     python-dateutil
@@ -89,6 +85,7 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     rpmfile
     striprtf
+    tqdm
     whatthepatch
     xlrd
   ]
@@ -101,6 +98,7 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     psutil
     pytestCheckHook
+    tabulate
     versionCheckHook
   ];
 
@@ -109,11 +107,18 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Probability tests
     "test_data_p"
+    "test_data_scan_depth_3_pedantic_p"
+    "test_data_scan_doc_p"
+    "test_data_scan_no_filters_p"
+    "test_data_scan_output_p"
     "test_depth_n"
     "test_depth_p"
     "test_match_n"
     "test_multi_jobs_p"
     "test_rules_ml_p"
+
+    # Hang indefinitely on some CPUs
+    "TestInt"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
@@ -125,6 +130,7 @@ buildPythonPackage (finalAttrs: {
     "test_it_works_n"
     "test_log_n"
     "test_log_p"
+    "test_sqlite_injection_n"
   ];
 
   meta = {

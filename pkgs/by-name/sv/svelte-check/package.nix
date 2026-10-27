@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   pnpm_10,
   nodejs,
   makeBinaryWrapper,
@@ -14,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-check";
-  version = "4.7.6";
+  version = "4.7.7";
 
   src = fetchFromGitHub {
     owner = "sveltejs";
     repo = "language-tools";
     tag = "svelte-check@${finalAttrs.version}";
-    hash = "sha256-FYM4pceGgYLDWhdoTCk2dLkcxhamkxBd2nBEtReEGAo=";
+    hash = "sha256-AJZj3dDvDG2PvT8YFRS0lEbnXckdZ1XX22j1phSc2Ig=";
   };
 
   pnpmWorkspaces = [ "svelte-check..." ];
@@ -34,38 +35,35 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-lzphyVC1fpT5EFIuVz7ZMAiSLeyXhjSuOpAqSklh6QU=";
+    hash = "sha256-OdPwM+IL2h90BIJdyBzpXx+Z9NT+zKfZoFYOrTsiaP0=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     makeBinaryWrapper
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm run --filter=svelte-check... build
-
-    runHook postBuild
-  '';
-
   installPhase = ''
-    runHook preInstall
+        runHook preInstall
 
-    pnpm install --filter=svelte-check... --frozen-lockfile --offline --force --ignore-scripts
-    mkdir -p $out/lib/node_modules/svelte-check/
-    mkdir -p $out/bin
+    cp -rL packages/svelte-check/node_modules/svelte "$TMPDIR/svelte"
+        rm -rf node_modules packages/*/node_modules
+        pnpm install --filter=svelte-check... --prod --frozen-lockfile --offline --force --ignore-scripts
+        cp -r "$TMPDIR/svelte" packages/svelte-check/node_modules/svelte
 
-    mv {packages,node_modules} $out/lib/node_modules/svelte-check/
+        mkdir -p $out/lib/node_modules/svelte-check/
+        mkdir -p $out/bin
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/svelte-check \
-      --add-flags "$out/lib/node_modules/svelte-check/packages/svelte-check/bin/svelte-check" \
-      --set NODE_PATH "$out/lib/node_modules/svelte-check/packages/svelte-check/node_modules/"
+        mv {packages,node_modules} $out/lib/node_modules/svelte-check/
 
-    runHook postInstall
+        makeWrapper ${lib.getExe nodejs} $out/bin/svelte-check \
+          --add-flags "$out/lib/node_modules/svelte-check/packages/svelte-check/bin/svelte-check" \
+          --set NODE_PATH "$out/lib/node_modules/svelte-check/packages/svelte-check/node_modules/"
+
+        runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script {
@@ -82,6 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sveltejs/language-tools";
     license = lib.licenses.mit;
     mainProgram = "svelte-check";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dfjay ];
   };
 })

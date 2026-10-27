@@ -11,19 +11,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rfc3161-client";
-  version = "1.0.8";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "rfc3161-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ztszylefOKYqmvJsevM1T18C4oLC6AXRbbUT8DXTjEI=";
+    hash = "sha256-M3O2cOBT7ObhCxAyNyOktLF/ZQvrGkyfk2nmlric4oo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname;
-    hash = "sha256-ntqiITOKBIGpvuYj1fUrIsP+AGPlHtOXt0IApwLYNWY=";
+    hash = "sha256-YCn/MDSDgrntbFZBJ9eQ5KM74fx7+r0aMdW3jOGJ5+w=";
   };
 
   pythonRelaxDeps = [

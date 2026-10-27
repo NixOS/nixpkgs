@@ -13,12 +13,20 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nbytes";
   version = "0.1.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "nbytes";
     tag = "v${finalAttrs.version}";
     hash = "sha256-etCRWjak7tKL6dKlQR7SD6HXx/mn/8gnR4l+CAjoQgA=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

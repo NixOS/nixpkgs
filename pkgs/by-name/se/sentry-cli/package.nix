@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
   dontUseSwiftpmBuild = true;
   dontUseSwiftpmCheck = true;
+  dontUseSwiftpmInstall = true;
 
   __darwinAllowLocalNetworking = true;
 
@@ -56,6 +57,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=integration::send_metric::command_send_metric"
     "--skip=integration::update::command_update"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Asset catalog parsing is disabled on macOS 27, but these tests require it.
+    # Upstream declined to fix this because this CLI is being deprecated:
+    # https://github.com/getsentry/sentry-cli/issues/3422
+    "--skip=commands::build::upload::tests::test_xcarchive_upload_includes_parsed_assets"
+    "--skip=commands::build::upload::tests::test_ipa_upload_includes_parsed_assets"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

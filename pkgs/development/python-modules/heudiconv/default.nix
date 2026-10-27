@@ -7,24 +7,25 @@
   etelemetry,
   fetchPypi,
   filelock,
-  git,
   git-annex,
+  git,
   nibabel,
   nipype,
   pydicom,
   pytestCheckHook,
   setuptools,
   versioningit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "heudiconv";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N3W6lkUwb7ejZwyIrvvZBBOuuypchIaEYx6XQhmvSwc=";
+    hash = "sha256-EO3iKhFs7U/ekueeUK8PRif6NFcV6xoDIMC+9js0Q8o=";
   };
 
   postPatch = ''
@@ -52,11 +53,8 @@ buildPythonPackage rec {
     pytestCheckHook
     git
     git-annex
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "heudiconv" ];
 

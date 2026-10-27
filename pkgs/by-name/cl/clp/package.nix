@@ -9,13 +9,13 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.17.10";
+  version = "1.17.11";
   pname = "clp";
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Clp";
     rev = "releases/${finalAttrs.version}";
-    hash = "sha256-9IlBT6o1aHAaYw2/39XrUis72P9fesmG3B6i/e+v3mM=";
+    hash = "sha256-Gt42F6xc1XgcB6VvtaSAam8/QLJjPRHNKkx3sBFwcFg=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -4,6 +4,7 @@
   fetchurl,
   bun,
   makeWrapper,
+  installAgentSkills,
   nix-update-script,
 }:
 
@@ -23,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    installAgentSkills
   ];
 
   dontBuild = true;

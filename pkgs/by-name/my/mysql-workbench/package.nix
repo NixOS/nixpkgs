@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.pld-linux.org/?p=packages/mysql-workbench.git;a=blob_plain;f=python-3.13.patch;h=d1425a93c41fb421603cda6edbb0514389cdc6a8;hb=bb09cb858f3b9c28df699d3b98530a6c590b5b7a";
       hash = "sha256-hLfPqZSNf3ls2WThF1SBRjV33zTUymfgDmdZVpgO22Q=";
     })
+    ./fix-missing-static-assert-include.patch
   ];
 
   postPatch = ''
@@ -94,6 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f build/CMakeCache.txt
 
     patchShebangs tools/get_wb_version.sh
+
+    # Fix error: array subscript 1 is outside array bounds of 'bec::NodeId [1]' [-Werror=array-bounds=]
+    # At /frontend/linux/workbench/overview_panel.cpp:1318:35
+    substituteInPlace frontend/linux/workbench/overview_panel.cpp \
+      --replace-fail 'std::vector<bec::NodeId> nodes(1);' 'std::vector<bec::NodeId> nodes;'
   '';
 
   strictDeps = true;
@@ -137,6 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
       "-Wno-error=deprecated-declarations"
+      # library/forms/home_screen_connections.cpp:1353:7: error: variable 'row' set but not used
+      "-Wno-error=unused-but-set-variable="
+      # frontend/linux/linux_utilities/listmodel_wrapper.h:251:7: error: defining 'ListModelWrapper', which previously failed to be complete in a SFINAE context
+      "-Wno-error=sfinae-incomplete"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # error: narrowing conversion of '-1' from 'int' to 'char'

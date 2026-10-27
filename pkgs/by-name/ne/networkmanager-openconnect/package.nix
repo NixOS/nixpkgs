@@ -9,7 +9,7 @@
   intltool,
   pkg-config,
   networkmanager,
-  gcr,
+  gcr_3,
   libsecret,
   file,
   gtk3,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libnma
     libnma-gtk4
     gtk4
-    gcr
+    gcr_3
     libsecret
   ];
 

@@ -22,7 +22,7 @@ build-idris-package {
     owner = "benclifford";
     repo = "idris-config";
     rev = "92f98652f5cb06a76c47809f16c661ec6cf11048";
-    sha256 = "1w2w2l4drvkf8mdzh3lwn6l5lnkbxlx9p22s7spw82n5s4wib6c9";
+    hash = "sha256-iZkVOdHFCsSvPlqImzrta1paqLGcDvhbRW7u3AgVXPA=";
   };
 
   meta = {

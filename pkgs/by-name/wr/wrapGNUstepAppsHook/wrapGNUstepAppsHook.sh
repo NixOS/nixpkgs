@@ -4,6 +4,10 @@ if [[ -z "${__nix_wrapGNUstepAppsHook-}" ]]; then
     # Inherit arguments given in mkDerivation
     gnustepWrapperArgs=(${gnustepWrapperArgs-})
 
+    # NIX_GNUSTEP_SYSTEM_HEADERS is deliberately missing here: it only matters
+    # while compiling and gnustep-base ignores it at run time, so writing it
+    # into the installed config file would only pull the -dev outputs of every
+    # build input into the runtime closure.
     gnustepConfigVars+=(
         GNUSTEP_MAKEFILES
         NIX_GNUSTEP_SYSTEM_APPS
@@ -12,7 +16,6 @@ if [[ -z "${__nix_wrapGNUstepAppsHook-}" ]]; then
         NIX_GNUSTEP_SYSTEM_TOOLS
         NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS
         NIX_GNUSTEP_SYSTEM_LIBRARY
-        NIX_GNUSTEP_SYSTEM_HEADERS
         NIX_GNUSTEP_SYSTEM_LIBRARIES
         NIX_GNUSTEP_SYSTEM_DOC
         NIX_GNUSTEP_SYSTEM_DOC_MAN
@@ -38,17 +41,40 @@ if [[ -z "${__nix_wrapGNUstepAppsHook-}" ]]; then
             fi
         }
 
-        gsAddToIncludeSearchPath() {
-            local -n ref="$1"
+        # Without strictDeps, gnustep-make's environment hook also picks up
+        # native build inputs, so the NIX_GNUSTEP_* paths include the compiler
+        # wrapper and friends. Keeping those in the installed config file would
+        # make the whole toolchain a runtime dependency (~1.6 GB).
+        gsDropBuildOnlyPaths() {
+            local -n pathsRef="$1"
+            local -a kept=()
+            local entry prefix
+            local IFS=:
 
-            if [[ -d "$2" && "${ref-}" != *"$2"* ]]; then
-                if [[ "${ref-}" != "" ]]; then
-                    ref+=" "
-                fi
+            for entry in ${pathsRef-}; do
+                for prefix in "${gnustepRuntimePrefixes[@]}"; do
+                    if [[ "$entry" =~ ^"$prefix"(/|$) ]]; then
+                        kept+=("$entry")
+                        break
+                    fi
+                done
+            done
 
-                ref+="$2"
-            fi
+            pathsRef="${kept[*]}"
         }
+
+        gnustepRuntimePrefixes=()
+
+        for output in ${outputs:-out}; do
+            gnustepRuntimePrefixes+=("${!output}")
+        done
+
+        for pkg in \
+            ${pkgsHostHost+"${pkgsHostHost[@]}"} \
+            ${pkgsHostTarget+"${pkgsHostTarget[@]}"}
+        do
+            gnustepRuntimePrefixes+=("$pkg")
+        done
 
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$out/lib/GNUstep/Applications"
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$out/lib/GNUstep/Applications"
@@ -56,11 +82,17 @@ if [[ -z "${__nix_wrapGNUstepAppsHook-}" ]]; then
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$out/bin"
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$out/sbin"
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$out/lib/GNUstep"
-        gsAddToIncludeSearchPath NIX_GNUSTEP_SYSTEM_HEADERS "$out/include"
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$out/lib"
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$out/share/GNUstep/Documentation"
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$out/share/man"
         gsAddToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$out/share/info"
+
+        for var in "${gnustepConfigVars[@]}"; do
+            # GNUSTEP_MAKEFILES is a single path pointing at gnustep-make
+            # rather than a search path assembled from the build environment.
+            [[ "$var" == NIX_GNUSTEP_* ]] || continue
+            gsDropBuildOnlyPaths "$var"
+        done
 
         for var in "${gnustepConfigVars[@]}"; do
             if [[ -n "${!var-}" ]]; then

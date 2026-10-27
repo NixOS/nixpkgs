@@ -64,7 +64,7 @@ buildGoModule (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    make COMMIT=${finalAttrs.src.rev}
+    make COMMIT=${finalAttrs.src.tag}
 
     runHook postBuild
   '';
@@ -118,6 +118,7 @@ buildGoModule (finalAttrs: {
       vdemeester
       atkinschang
       Chili-Man
+      bddvlpr
     ];
   };
 })

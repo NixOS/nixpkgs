@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 
 {
   name = "romm";
@@ -26,6 +26,8 @@
   };
 
   testScript = ''
+    import json
+
     machine.start()
 
     with subtest("services come up"):
@@ -39,7 +41,8 @@
         machine.wait_for_unit("nginx.service")
 
     with subtest("backend API answers"):
-        machine.succeed("curl -sf http://127.0.0.1:8080/api/heartbeat")
+        heartbeat = json.loads(machine.succeed("curl -sf http://127.0.0.1:8080/api/heartbeat"))
+        assert heartbeat["SYSTEM"]["VERSION"] == ${builtins.toJSON config.nodes.machine.services.romm.package.version}
 
     with subtest("nginx serves the frontend and proxies the API"):
         machine.succeed("curl -sf http://localhost/ | grep -iq romm")

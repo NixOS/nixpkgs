@@ -40,7 +40,21 @@ in
   options.services.grav = {
     enable = mkEnableOption "grav";
 
-    package = mkPackageOption pkgs "grav" { };
+    package =
+      let
+        stateVersionAtLeast = lib.versionAtLeast config.system.stateVersion;
+      in
+      mkPackageOption pkgs "grav" {
+        default = if stateVersionAtLeast "26.11" then "grav_2" else "grav";
+      }
+      // {
+        defaultText = lib.literalExpression ''
+          if versionAtLeast config.system.stateVersion "26.11" then
+            pkgs.grav_2
+          else
+            pkgs.grav
+        '';
+      };
 
     root = mkOption {
       type = types.path;

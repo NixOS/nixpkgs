@@ -97,7 +97,6 @@ buildGoModule (finalAttrs: {
     ;
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   patches = [
     # https://github.com/garethgeorge/backrest/pull/1293

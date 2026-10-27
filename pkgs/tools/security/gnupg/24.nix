@@ -6,6 +6,7 @@
   buildPackages,
   pkg-config,
   texinfo,
+  bashNonInteractive,
   gettext,
   libassuan,
   libgcrypt,
@@ -34,12 +35,12 @@
 
 assert guiSupport -> !enableMinimal;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnupg";
   version = "2.4.9";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    url = "mirror://gnupg/gnupg/gnupg-${finalAttrs.version}.tar.bz2";
     hash = "sha256-3RerLpoE/XnTnYU/WZy8hSBi3bmrUqTd60F2/YswKWQ=";
   };
 
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     libgpg-error
   ];
   buildInputs = [
+    bashNonInteractive
     gettext
     libassuan
     libgcrypt
@@ -76,6 +78,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
+  strictDeps = true;
+
   # FreePG (https://freepg.org) is a set of commonly-used patches for GnuPG that
   # have not been merged upstream. It is used by Arch Linux, Debian, Fedora and
   # NixOS, and is maintained by Andrew Gallagher.
@@ -86,8 +90,8 @@ stdenv.mkDerivation rec {
   freepgPatches = fetchFromGitLab {
     owner = "freepg";
     repo = "gnupg";
-    tag = "source-2.4.9-freepg";
-    hash = "sha256-wF+iR0OgnU8VI90NlFOXtN5aCRC0YY/X7sPiDXjJm5M=";
+    tag = "source-2.4.9-freepg-1";
+    hash = "sha256-hoSuIrq7Epco1LLlc77tGr/YZdp2w04Eq0rGbBCurWU=";
   };
 
   patches = [
@@ -103,7 +107,7 @@ stdenv.mkDerivation rec {
     # in the patch file.
     ./static.patch
   ]
-  ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
+  ++ lib.map (v: "${finalAttrs.freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
     "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"
     "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
     "0004-tests-add-test-cases-for-import-without-uid.patch"
@@ -128,6 +132,15 @@ stdenv.mkDerivation rec {
     "0033-Support-large-RSA-keygen-in-non-batch-mode.patch"
     "0034-gpg-Verify-Text-mode-Signatures-over-binary-Literal-.patch"
     "0039-gpg-Do-not-use-a-default-when-asking-for-another-out.patch"
+    "0040-Add-missing-test-files-to-EXTRA_DIST.patch"
+    "0045-gpg-Fix-edge-case-in-refresh-keys.patch"
+    "0046-gpgsm-Require-a-minimum-tag-length-for-GCM-decryptio.patch"
+    "0047-gpg-Fix-handling-with-no-CRC-armor.patch"
+    "0048-gpg-Fix-armored-input-parsing.patch"
+    "0049-gpg-Fix-armor-parsing-when-no-CRC-is-found.patch"
+    "0050-tpm-Fix-possible-buffer-overflow-in-PKDECRYPT.patch"
+    "0051-agent-Fix-the-regression-in-pkdecrypt-with-TPM-RSA.patch"
+    "0052-dirmngr-Fix-a-call-of-calloc.patch"
   ];
 
   postPatch =
@@ -204,9 +217,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.gnupg;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://gnupg.org";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=NEWS;hb=refs/tags/gnupg-${finalAttrs.version}";
     description = "Modern release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = lib.licenses.gpl3Plus;
     longDescription = ''
@@ -227,6 +242,6 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "gpg";
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" finalAttrs.version;
   };
-}
+})

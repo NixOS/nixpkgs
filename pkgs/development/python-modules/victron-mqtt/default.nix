@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -13,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "victron-mqtt";
-  version = "2026.8.0";
+  version = "2026.9.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomer-w";
     repo = "victron_mqtt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5bY5IG+WgCwgAv4i/RidiRmEzO0iuhTBKRl63nMdnAo=";
+    hash = "sha256-6pXfKH8tUZgKweSAREzdyzNTCGaEngHiOrZ/N8lxfKk=";
   };
 
   build-system = [
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiohttp
     paho-mqtt
   ];
 

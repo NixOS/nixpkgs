@@ -25,5 +25,6 @@ ioquake3.overrideAttrs (old: {
     homepage = "https://github.com/lschulz/ioq3-scion";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 })

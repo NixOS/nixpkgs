@@ -34,8 +34,6 @@ let
       libiconv
     ];
 
-    strictDeps = true;
-
     passthru = {
       tests = {
         version = testers.testVersion {

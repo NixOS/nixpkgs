@@ -85,6 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ${wrap "evcxr"}
       ${wrap "evcxr_jupyter"}
       rm $out/bin/testing_runtime
+      rm $out/bin/print_performance_info
     '';
 
   passthru.updateScript = nix-update-script { };

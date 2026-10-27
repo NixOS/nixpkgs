@@ -6,6 +6,7 @@
   cmake,
   pandoc,
   pkg-config,
+  libgit2,
   zlib,
   installShellFiles,
   versionCheckHook,
@@ -29,13 +30,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-IRG+mVgU8ZZ8PsxZWqmf3ZjW8fGL0RD0CwIrjsL366I=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [
     cmake
     pkg-config
     installShellFiles
     pandoc
   ];
-  buildInputs = [ zlib ];
+  buildInputs = [
+    libgit2
+    zlib
+  ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional gitSupport "git";

@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "hplt-project";
     repo = "sacremoses";
     tag = finalAttrs.version;
-    sha256 = "sha256-ked6/8oaGJwVW1jvpjrWtJYfr0GKUHdJyaEuzid/S3M=";
+    hash = "sha256-ked6/8oaGJwVW1jvpjrWtJYfr0GKUHdJyaEuzid/S3M=";
   };
 
   build-system = [ setuptools ];
@@ -41,10 +41,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/alvations/sacremoses";
+    homepage = "https://github.com/hplt-project/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
     mainProgram = "sacremoses";
-    license = lib.licenses.lgpl21Plus;
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pashashocky ];
   };

@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-    configureFlagsArray+=(
+    configureFlags+=(
       "--libdir=$out/lib"
       "--includedir=$dev/include"
       "--bindir=$dev/bin"
@@ -258,6 +258,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.binlore.out = binlore.synthesize ncurses ''
     execer cannot bin/{reset,tput,tset}
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/ncurses/";

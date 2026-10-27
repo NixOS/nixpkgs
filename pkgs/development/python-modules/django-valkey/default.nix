@@ -17,7 +17,7 @@
 
   # testing
   anyio,
-  pytest-django,
+  pytest-django_4_12,
   pytest-mock,
   pytestCheckHook,
   redisTestHook,
@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     anyio
-    pytest-django
+    pytest-django_4_12
     pytest-mock
     pytestCheckHook
     redisTestHook # contains valkey

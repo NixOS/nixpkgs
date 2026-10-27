@@ -2,8 +2,8 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  coreutils,
   fetchFromGitHub,
+  freezegun,
   google-auth,
   google-auth-oauthlib,
   google-cloud-pubsub,
@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-nest-sdm";
-  version = "9.1.2";
+  version = "9.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     tag = finalAttrs.version;
-    hash = "sha256-yElmh+ajNVbjhsnNsUtQ3mJw9fvJtXqgS58iow+Nwi8=";
+    hash = "sha256-cFTcLWHHSJOEvpx9YwKZ1FW87P4VvvNTO3j3b0F5y1M=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    coreutils
+    freezegun
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook

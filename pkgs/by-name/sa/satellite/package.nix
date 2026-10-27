@@ -40,8 +40,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pynmea2
   ];
 
-  strictDeps = true;
-
   passthru = {
     updateScript = nix-update-script { };
   };

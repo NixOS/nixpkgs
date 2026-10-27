@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch = ''
+  postPatch =
     # Upstream's way of generating their schema doesn't work for us, don't quite understand why.
     # (gdb) bt
     # #0  QSQLiteResult::prepare (this=0x4a4650, query=...) at qsql_sqlite.cpp:406
@@ -65,27 +65,39 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # This makes the tests stall indefinitely and breaks history-service usage.
     # This replacement script should hopefully achieve the same / a similar-enough result with just sqlite
-    cp ${./update_schema.sh.in} plugins/sqlite/schema/update_schema.sh.in
+    ''
+      cp ${./update_schema.sh.in} plugins/sqlite/schema/update_schema.sh.in
+    ''
 
     # Uses pkg_get_variable, cannot substitute prefix with that
-    substituteInPlace daemon/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
+    + ''
+      substituteInPlace daemon/CMakeLists.txt \
+        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
+    ''
 
     # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
-  ''
-  + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    # Tests launch these DBus services, fix paths related to them
-    substituteInPlace tests/common/dbus-services/CMakeLists.txt \
-      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
-      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
-      ${replaceDbusService dconf "ca.desrt.dconf.service"}
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}"
+    ''
 
-    substituteInPlace cmake/modules/GenerateTest.cmake \
-      --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
-      --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
-  '';
+    # protobuf -> abseil-cpp needs >= C++20
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
+    ''
+
+    # Tests launch these DBus services, fix paths related to them
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      substituteInPlace tests/common/dbus-services/CMakeLists.txt \
+        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
+        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
+        ${replaceDbusService dconf "ca.desrt.dconf.service"}
+
+      substituteInPlace cmake/modules/GenerateTest.cmake \
+        --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
+        --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
+    '';
 
   strictDeps = true;
 

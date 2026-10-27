@@ -31,15 +31,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postPatch = ''
-    # Remove when https://github.com/isso-comments/isso/pull/973 is available.
-    substituteInPlace isso/tests/test_comments.py \
-      --replace "self.client.delete_cookie('localhost.local', '1')" "self.client.delete_cookie(key='1', domain='localhost')"
+    # Remove test for (misaka) outdated alternative to mistune
+    # so we can drop misaka from nixpkgs.
+    rm isso/tests/test_html_misaka.py
   '';
 
   propagatedBuildInputs = with python3Packages; [
     itsdangerous
     jinja2
-    misaka
     mistune
     html5lib
     werkzeug
@@ -74,7 +73,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Commenting server similar to Disqus";
     mainProgram = "isso";
-    homepage = "https://posativ.org/isso/";
+    homepage = "https://isso-comments.de";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
   };

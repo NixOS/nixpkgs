@@ -10,15 +10,15 @@
   tk,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tclreadline";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclreadline";
-    tag = "v${version}";
-    hash = "sha256-6FIQJsAm28jPIfNG+7xsMlCJSLw9JStOVzDemw2P+EI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7b+d1fBENfTCdyeHSGAnPPAKf2DMiQbxDLXDvhGYQm4=";
   };
 
   nativeBuildInputs = [
@@ -67,4 +67,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

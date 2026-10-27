@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hatch-gettext";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "damonlynch";
     repo = "hatch-gettext";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hdYwDKRzv3iRoKUtPssOL2t4iPPsK+wlSydbMOeFyUs=";
+    hash = "sha256-EPyG9RYVdxEvgfHLb18zNCe5Wk6he+QAzxVCsNWu56k=";
   };
 
   build-system = [

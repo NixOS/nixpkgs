@@ -15,7 +15,7 @@ mkDerivation rec {
     owner = "lumina-desktop";
     repo = "lumina-calculator";
     rev = "v${version}";
-    sha256 = "1238d1m0mjkwkdpgq165a4ql9aql0aji5f41rzdzny6m7ws9nm2y";
+    hash = "sha256-XlSbND/VePvbz4G4EqUCFKtEMVHFBPxum3zKCmpoaIg=";
   };
 
   sourceRoot = "${src.name}/src-qt5";

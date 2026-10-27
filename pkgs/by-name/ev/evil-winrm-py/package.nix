@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "evil-winrm-py";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adityatelange";
     repo = "evil-winrm-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-arfH7z7QGZPenyHLAubuG1VOJArUxI4wlQgV+iU7CvU=";
+    hash = "sha256-xB+JLeh5MUWHd9wWLEVFLkN4QxyRaaa1p6442hsshXc=";
   };
 
   pythonRelaxDeps = true;

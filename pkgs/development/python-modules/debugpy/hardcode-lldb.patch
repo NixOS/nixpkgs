@@ -11,3 +11,16 @@ index ba7221fe..24efc1ed 100644
          "--no-lldbinit",  # Do not automatically parse any '.lldbinit' files.
          # '--attach-pid',
          # str(pid),
+diff --git a/tests/debugpy/server/test_add_code_to_python_process.py b/tests/debugpy/server/test_add_code_to_python_process.py
+--- a/tests/debugpy/server/test_add_code_to_python_process.py
++++ b/tests/debugpy/server/test_add_code_to_python_process.py
+@@ -117,8 +117,8 @@ def test_lldb_command(acpp):
+     (cmd,), kwargs = check_call.call_args
+     assert kwargs["shell"]
+ 
+-    assert cmd.startswith("lldb --no-lldbinit --script-language Python ")
++    assert cmd.startswith("@lldb@/bin/lldb --no-lldbinit --script-language Python ")
+     assert "-o 'process attach --pid 4242'" in cmd
+     assert "-o 'command script import \"%s\"'" % (lldb_prepare,) in cmd
+     assert '-o \'load_lib_and_attach "%s" 0 "print(1)" 7\'' % (target_dll,) in cmd
+     assert "-o 'process detach'" in cmd

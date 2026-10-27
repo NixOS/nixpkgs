@@ -1,4 +1,4 @@
-# Netbird {#module-services-netbird}
+# Netbird Client {#module-services-netbird}
 
 ## Quickstart {#module-services-netbird-quickstart}
 

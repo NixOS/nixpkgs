@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/freeswitch/spandsp/pull/111
     ./Fix-tests-pcap_parse-build-on-musl.patch
+
+    # https://github.com/freeswitch/spandsp/pull/116
+    ./fix-bit-operations-ub.patch
   ]
   ++ patches;
 
@@ -173,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Seemingly runs forever, with tons of output
     "v22bis_tests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isPower64 [
+    # Output differs from x86-generated reference due to float precision
+    "lpc10_tests"
   ];
 
   checkPhase = ''
@@ -220,6 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ misuzu ];
     teams = [ lib.teams.ngi ];
     license = lib.licenses.gpl2;
-    downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
+    downloadPage = "https://github.com/freeswitch/spandsp";
   };
 })

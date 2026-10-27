@@ -9,17 +9,17 @@
   undmg,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "2.0.5.0";
+  version = "2.7.3.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     name = "Raycast.dmg";
-    url = "https://x-r2.raycast-releases.com/Raycast_2.0.5.0_7ecbc62a97_arm64.dmg";
-    hash = "sha256-8/EJVGTfTVqN+4U9vT84TLpo137RWnD2YtFTtYK7tH0=";
+    url = "https://x-r2.raycast-releases.com/Raycast_2.7.3.0_758e1a8dbb_arm64.dmg";
+    hash = "sha256-7b20Mc93W48NTOm/68d+YwXQLTPFJfBdEfrKFztihuw=";
   };
 
   dontPatch = true;
@@ -67,18 +67,21 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Control your tools with a few keystrokes";
-    homepage = "https://raycast.app/";
+    homepage = "https://www.raycast.com";
+    changelog = "https://www.raycast.com/changelog/macos/${
+      lib.replaceString "." "-" (lib.versions.majorMinor finalAttrs.version)
+    }";
     license = lib.licenses.unfree;
     mainProgram = "raycast";
     maintainers = with lib.maintainers; [
       lovesegfault
+      nyakase
       stepbrobd
       _4evy
-      jakecleary
     ];
     platforms = [
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

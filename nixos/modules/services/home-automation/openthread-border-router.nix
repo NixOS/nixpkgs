@@ -19,12 +19,6 @@ let
     "debug" = 7;
   };
   logLevel = lib.getAttr cfg.logLevel logLevelMappings;
-  # Use correct iptables for otbr-firewall (legacy vs nf-compat)
-  iptables =
-    let
-      inherit (config.networking) firewall;
-    in
-    if firewall.backend == "iptables" then firewall.package else pkgs.iptables;
 in
 {
   meta.maintainers = with lib.maintainers; [
@@ -214,14 +208,20 @@ in
       otbr-agent = {
         description = "OpenThread Border Router Agent";
         wantedBy = [ "multi-user.target" ];
-        requires = [ "network-online.target" ];
-        after = [ "network-online.target" ];
+        requires = [
+          "network-online.target"
+          "dbus.socket"
+        ];
+        after = [
+          "network-online.target"
+          "dbus.socket"
+        ];
         environment = {
           THREAD_IF = cfg.interfaceName;
         };
         serviceConfig = {
+          Type = "notify";
           Group = "otbr";
-          ExecStartPre = "${utils.escapeSystemdExecArg (lib.getExe' cfg.package "otbr-firewall")} start";
           ExecStart = lib.concatStringsSep " " (
             lib.concatLists [
               [
@@ -242,7 +242,6 @@ in
               (map utils.escapeSystemdExecArg cfg.extraArgs)
             ]
           );
-          ExecStopPost = "${utils.escapeSystemdExecArg (lib.getExe' cfg.package "otbr-firewall")} stop";
           KillMode = "mixed";
           Restart = "on-failure";
           RestartSec = 5;
@@ -280,10 +279,6 @@ in
             "CAP_NET_RAW"
           ];
         };
-        path = [
-          pkgs.ipset
-          iptables
-        ];
       };
 
       # Sync with: src/web/otbr-web.service.in

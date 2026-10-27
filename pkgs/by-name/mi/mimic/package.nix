@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   autoreconfHook,
@@ -12,8 +11,6 @@
   libtool,
   icu,
   pcre2,
-  pulseaudioSupport ? config.pulseaudio or false,
-  libpulseaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,12 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     icu
     pcre2
-  ]
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=free-nonheap-object"
+    # Fix build w/ glibc-2.44
+    "-Wno-error=discarded-qualifiers"
+    # Needed with GCC 16
+    "-Wno-error=unused-but-set-variable"
   ];
 
   postInstall = ''

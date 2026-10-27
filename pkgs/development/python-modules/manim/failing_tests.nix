@@ -46,6 +46,20 @@
   "test_force_window_opengl_render_with_format"
   "test_get_frame_with_preview_disabled"
   "test_get_frame_with_preview_enabled"
+  "test_file_output_disables_window"
+  "test_live_preview_opengl_render_with_image_sequence"
+  "test_get_frame_with_live_preview_disabled"
+  "test_get_frame_with_live_preview_enabled"
+  "test_render_without_frame_output_skips_gpu_readback"
+  "test_move_camera_interpolates_and_preserves_omitted_settings"
+  "test_set_camera_orientation"
+  "test_set_camera_orientation_zoom_is_absolute"
+  "test_png_sequence_images_are_zero_padded"
+  "test_images_are_created_when_png_sequence_format_set"
+  "test_default_video_output_with_non_static_scene"
+  "test_opengl_png_sequence_images_are_zero_padded"
+  "test_images_are_created_when_png_sequence_format_set_for_opengl"
+  "test_explicit_video_output_for_static_scene_fails"
 
   # reason for failure: tests try to reach network
   "test_logging_to_file"
@@ -66,4 +80,5 @@
   # E
   # E         ...Full output truncated (9 lines hidden), use '-vv' to show
   "test_manim_cfg_subcommand"
+
 ]

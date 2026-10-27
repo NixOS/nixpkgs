@@ -10,7 +10,6 @@
   libarchive,
   libpcap,
   libslirp,
-  pipewire,
   pkg-config,
   qt6,
   stdenv,
@@ -29,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonds";
-  version = "1.1-unstable-2026-07-31";
+  version = "1.1-unstable-2026-08-24";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "d3cd6164deb1f217d4b262d18af3ef9b97e536c8";
-    hash = "sha256-3epbcg/0Oq3Hndg/5VYKepPruUMHxEkL6LwIcdGm24g=";
+    rev = "906e9ebb27da8c6a715cd7abab4abfe8a8d29427";
+    hash = "sha256-hJFzH7qPk2NIXl9OQQyqSId6uofJ//FoslmbyX5ZjUk=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libpcap
-          pipewire
           wayland
         ]
       }"

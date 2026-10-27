@@ -5,7 +5,6 @@
   libiconv,
   libiconvReal,
   updateAutotoolsGnuConfigScriptsHook,
-  darwin,
 }@args:
 
 let

@@ -44,12 +44,12 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.8.2";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jn3KzCHVOQVYG1QyitJwWVT3LymX+Z/DMsHejaU6o8w=";
+    hash = "sha256-c/CwwG15JcorbVKy3FHCUzoR9mfMaUTx8GwDnMxXxc4=";
   };
 
   patches = [

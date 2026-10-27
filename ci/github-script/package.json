@@ -1,5 +1,11 @@
 {
   "private": true,
+  "scripts": {
+    "typecheck": "tsc --build",
+    "testsuite": "node --test",
+    "test": "npm run typecheck && npm run testsuite"
+  },
+  "type": "module",
   "//": [
     "Keep `@actions/core` and `@actions/github` in sync with",
     "https://github.com/actions/github-script/blob/main/package.json."
@@ -12,7 +18,6 @@
     "commander": "14.0.3"
   },
   "devDependencies": {
-    "@tsconfig/node24": "24.0.4",
     "@types/node": "24.13.3",
     "typescript": "7.0.2"
   }

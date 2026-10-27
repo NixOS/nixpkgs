@@ -87,7 +87,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [ ansible ]}"
+  ];
 
   meta = {
     description = "Best practices checker for Ansible";

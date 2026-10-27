@@ -8,59 +8,81 @@
 let
   inherit (lib)
     literalExpression
-    mkDefault
     mkEnableOption
     mkPackageOption
     mkOption
+    mkChangedOptionModule
     maintainers
+    optionalString
+    findFirst
+    attrValues
     ;
   inherit (lib.types)
-    addCheck
     bool
     listOf
     package
     port
     str
     submodule
+    functionTo
     ;
+  inherit (pkgs)
+    writeShellScriptBin
+    ;
+
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
 in
 {
+  imports = [
+    (mkChangedOptionModule [ "services" "navidrome" "plugins" ] [ "services" "navidrome" "withPlugins" ]
+      (
+        config:
+        (
+          p:
+          (map (
+            old_plugin:
+            (findFirst (
+              new_plugin: new_plugin.name or "not-pkg" == old_plugin.name
+            ) (throw "plugin ${old_plugin} does not exist in navidromePlugins") (attrValues p))
+          ))
+            config.services.navidrome.plugins
+        )
+      )
+    )
+  ];
+
   options = {
+
     services.navidrome = {
 
       enable = mkEnableOption "Navidrome music server";
 
       package = mkPackageOption pkgs "navidrome" { };
 
-      plugins = mkOption {
-        type = listOf (
-          addCheck package (p: p.isNavidromePlugin or false)
-          // {
-            name = "navidrome plugin";
-            description = "package that is a navidrome plugin";
-          }
+      withPlugins = mkOption {
+        type = functionTo (
+          listOf (
+            package
+            // {
+              name = "navidrome plugin";
+              description = "wasm plugins loaded by Navidrome";
+            }
+          )
         );
-        default = [ ];
-        description = "List of Navidrome plugins";
+        default = _: [ ];
+        description = "Plugins to bundle with Navidrome";
         example = literalExpression ''
-          with pkgs.navidromePlugins; [
-            listenbrainz-daily-playlist
-          ];
+          p: [ p.listenbrainz-daily-playlist ];
         '';
       };
 
       finalPackage = mkOption {
         type = package;
         readOnly = true;
-        default = cfg.package.override {
-          inherit (cfg) plugins;
-        };
+        default = cfg.package.withPlugins cfg.withPlugins;
         defaultText = literalExpression ''
-          config.services.navidrome.package.override {
-            inherit (config.services.navidrome) plugins;
-          }
+          cfg.package.withPlugins cfg.withPlugins;
         '';
         description = "The final navidrome package including all selected plugins.";
       };
@@ -146,6 +168,29 @@ in
     let
       inherit (lib) mkIf optional getExe;
       WorkingDirectory = "/var/lib/navidrome";
+
+      settingsFile = settingsFormat.generate "navidrome.json" cfg.settings;
+
+      # Wrapper so that users can do admin tasks with the configured navidrome
+      #
+      # Since it is common that the user may be running this from their home directory,
+      # or possible something else, we should not inherit the CWD or else it may error
+      # trying to chdir to it since this runs as the navidrome user.
+      wrappedNavi = writeShellScriptBin "navidrome-cli" ''
+        exec systemd-run \
+          --quiet \
+          --pty \
+          --wait \
+          --service-type=exec \
+          --collect \
+          --working-directory=${WorkingDirectory} \
+          ${optionalString (cfg.environmentFile != null) "-p EnvironmentFile=${cfg.environmentFile}"} \
+          -p Group=${cfg.user} \
+          -p User=${cfg.group} \
+          -u navidrome-admin.service \
+          -- \
+          ${lib.getExe cfg.package} --configfile ${settingsFile} "$@"
+      '';
     in
     mkIf cfg.enable {
       systemd = {
@@ -169,9 +214,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = ''
-              ${getExe cfg.finalPackage} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
-            '';
+            ExecStart = "${lib.getExe cfg.finalPackage} --configfile ${settingsFile}";
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;
             Group = cfg.group;
@@ -235,7 +278,13 @@ in
       users.groups = mkIf (cfg.group == "navidrome") { navidrome = { }; };
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
+
+      environment.systemPackages = [
+        wrappedNavi
+      ];
     };
+
+  meta.doc = ./navidrome.md;
   meta.maintainers = with maintainers; [
     fsnkty
     tebriel

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   flac,
   lib,
+  libmpg123,
   libogg,
   libvorbis,
   pkg-config,
@@ -12,7 +13,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-librespot";
-  version = "0.7.4";
+  version = "0.10.5";
 
   __structuredAttrs = true;
 
@@ -20,10 +21,10 @@ buildGoModule (finalAttrs: {
     owner = "devgianlu";
     repo = "go-librespot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TJQMfZRuWDu83QZeCU+EQ90WX6gT5+nXbYRIqfvXRp8=";
+    hash = "sha256-lSObYalZqAYfik59L5PrH4CGcZilA7Tpzx4tVmTdsks=";
   };
 
-  vendorHash = "sha256-kCzzybOEP4Tp7OGFZBjIP1FgcQ9u+lgO3931gbaG9hA=";
+  vendorHash = "sha256-fxB99qZE+U355iKJHIl7LgxqHmYgCiU1FpbyObTXVcQ=";
 
   subPackages = [ "cmd/daemon" ];
 
@@ -31,6 +32,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     flac
+    libmpg123
     libogg
     libvorbis
   ]
@@ -54,7 +56,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       sweenu
-      emilylange
     ];
   };
 })

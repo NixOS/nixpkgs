@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   hatchling,
@@ -33,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optiland";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -41,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     owner = "HarrisonKramer";
     repo = "optiland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4A58AdEDVvHtG3ZS67Ycpd+kRKt69BLEtPMaIGR1dvI=";
+    hash = "sha256-iyTvY+aqczzNCa13i/PnEiVAxXlqw9TWviqBANBV/sw=";
   };
 
   postPatch = ''
@@ -95,13 +96,14 @@ buildPythonPackage (finalAttrs: {
     # From some reason, importing pyside6 during tests causes a core dump of the
     # python interpreter, so we disable all GUI tests.
     "tests/gui/"
-    # All of these 5 fail similarly, see:
-    # https://github.com/optiland/optiland/issues/746
-    "tests/test_ray_aiming.py::test_epd_invariant_under_translation[backend=numpy-25.0-issue613"
-    "tests/test_ray_aiming.py::test_epd_invariant_under_translation[backend=numpy--15.0-issue613"
-    "tests/test_ray_aiming.py::test_float_by_stop_epd_invariant_under_translation[backend=numpy-30.0"
-    "tests/test_ray_aiming.py::test_float_by_stop_epd_invariant_under_translation[backend=numpy--10.0"
-    "tests/test_ray_aiming.py::test_float_by_stop_epd_invariant_under_translation[backend=numpy-1000.0"
+    # Flaky test according to the experience in:
+    # https://github.com/NixOS/nixpkgs/pull/572833#issuecomment-6135335498
+    "tests/test_materials.py::TestBaseMaterial::test_large_array_cache_key_avoids_python_scalar_overhead"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/optiland/optiland/issues/927
+    "tests/regression/test_golden_snapshots.py::test_golden_snapshot[backend=numpy-wide_fov]"
+    "tests/regression/test_golden_snapshots.py::test_golden_snapshot[backend=torch-wide_fov]"
   ];
 
   pythonImportsCheck = [

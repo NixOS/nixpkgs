@@ -91,6 +91,7 @@ luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,,,arobyn flosse
 luaffi,,,https://luarocks.org/dev,,,
+luaffi-tkl,,,,,,
 luafilesystem,,,,,,flosse alerque
 lualdap,,,,,,aanderse
 lualine.nvim,,,https://luarocks.org/dev,,,
@@ -119,7 +120,7 @@ lusc_luv,,,,,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 luuid,,,,20120509-2,,
 lyaml,,,,,,lblasc
-lz.n,,,,,,mrcjkb
+lz.n,,,,,5.1,mrcjkb
 lze,,,,,,birdee
 lzextras,,,,,,birdee
 lzn-auto-require,,,,,,mrcjkb
@@ -185,4 +186,5 @@ utf8,,,,,,
 vicious,,,,,,
 vstruct,,,,,,
 vusted,,,,,,
+warna,,,,,,Freed-Wu
 xml2lua,,,,,,teto

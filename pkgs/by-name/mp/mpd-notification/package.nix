@@ -9,7 +9,7 @@
   libnotify,
   libmpdclient,
   discount,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     libmpdclient
     discount
-    systemd
+    systemdLibs
   ];
 
   installPhase = ''

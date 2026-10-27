@@ -2,12 +2,12 @@
   lib,
   fetchFromGitHub,
   darwin,
+  stdenv,
   swift,
-  swiftPackages,
   nix-update-script,
 }:
 
-swiftPackages.stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vzvm";
   version = "1.0.0";
 

@@ -77,15 +77,20 @@ A link or a list of links to the location of Changelog for a package. A link may
 
 ### `license` {#var-meta-license}
 
-The license, or licenses, for the package. One from the attribute set defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix). At this moment using both a list of licenses and a single license is valid. If the license field is in the form of a list representation, then it means that parts of the package are licensed differently. Each license should preferably be referenced by their attribute. The non-list attribute value can also be a space delimited string representation of the contained attribute `shortNames` or `spdxIds`. The following are all valid examples:
+The license, or licenses, for the package.
+The following are all valid examples:
 
-- Single license referenced by attribute (preferred) `lib.licenses.gpl3Only`.
-- Single license referenced by its attribute shortName (frowned upon) `"gpl3Only"`.
-- Single license referenced by its attribute spdxId (frowned upon) `"GPL-3.0-only"`.
-- Multiple licenses referenced by attribute (preferred) `with lib.licenses; [ asl20 free ofl ]`.
-- Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon) `"asl20 free ofl"`.
+- Single license covering the entire package: `lib.licenses.gpl3Only`.
+- Multiple licenses covering the same part of a package, where users can select which to use: `with lib.licenses; OR [ mit asl20 ]`.
+- Multiple licenses covering a package, where users are bound by the obligations of all: `with lib.licenses; AND [ bsd3 cc0 ]`.
+  - This applies when the package directly incorporates code under another license.
 
-For details, see [Licenses](#sec-meta-license).
+These compound licenses may also be combined within each other: `with lib.licenses; AND [ (OR [ mit asl20 ]) gpl3Plus ]`.
+
+The list of valid licenses is defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix).
+See [Licenses](#sec-meta-license) for additional generic values.
+Custom licenses may be specified directly in the `license` field, using the `lib.licenses.mkLicense` function.
+This should only be done when the license doesn't have an SPDX identifier and is unlikely to be useful for other packages.
 
 ### `sourceProvenance` {#var-meta-sourceProvenance}
 
@@ -104,6 +109,10 @@ A list of the teams of this Nix expression. Teams are defined in [`nixpkgs/maint
 ### `mainProgram` {#var-meta-mainProgram}
 
 The name of the main binary for the package. This affects the binary `nix run` executes. Example: `"rg"`
+
+### `mainDarwinApp` {#var-meta-mainDarwinApp}
+
+The name of the main Darwin/macOS Application for the package. It must end in `.app`. Example: `"VSCodium.app"`
 
 ### `priority` {#var-meta-priority}
 
@@ -216,9 +225,9 @@ If this list is not empty, the package is marked as "insecure", meaning that it 
 
 ## Licenses {#sec-meta-license}
 
-The `meta.license` attribute should preferably contain a value from `lib.licenses` defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix), or in-place license description of the same format if the license is unlikely to be useful in another expression.
-
-Although it’s typically better to indicate the specific license, a few generic options are available:
+When available, use a value from `lib.licenses` defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix).
+Otherwise, a custom license can be defined using `lib.licenses.mkLicense`.
+These generic options are also available:
 
 ### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
 

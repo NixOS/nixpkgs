@@ -66,7 +66,7 @@ let
       in
       bus_type.name == "PCI"
       && devices
-      ? "${vendorHex}:${deviceHex}:${subVendorHex}:${subDeviceHex}/${baseClassHex}-${subClassHex}-${revisionHex}"
+        ? "${vendorHex}:${deviceHex}:${subVendorHex}:${subDeviceHex}/${baseClassHex}-${subClassHex}-${revisionHex}"
     );
 in
 {

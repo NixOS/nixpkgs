@@ -5,26 +5,30 @@
   pkg-config,
   openssl,
   dbus,
+  libgit2,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "pesde";
-  version = "0.7.3";
+  version = "0.7.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pesde-pkg";
     repo = "pesde";
-    rev = "e57b4c2db9eaf295c8af998212f427ea039ed46e";
-    hash = "sha256-+8SneWw3UQwXg1IV1zn0OM1ySAJpcvMqyoQd7eYAarE=";
+    rev = "611c484ed26aa6a7151d5f2c85e5048012eefdac";
+    hash = "sha256-4SF+k14QQGrkrJ0qYGY1khjQmm9gA6aLQjv5bAIe9gY=";
   };
 
-  cargoHash = "sha256-1k7bmH4ocF9JK15C7YonCmwDKVh639Nropuzm62roDA=";
+  cargoHash = "sha256-/jQmlkgWY6tqenwi/ceavGkz8BPwvx+DCzBjKA0w5ZU=";
+
+  env.LIBGIT2_NO_VENDOR = 1;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
     dbus
+    libgit2
   ];
   buildFeatures = [ "bin" ];
 
@@ -32,7 +36,10 @@ rustPlatform.buildRustPackage {
     description = "Package manager for the Luau programming language, supporting multiple runtimes including Roblox and Lune.";
     homepage = "https://github.com/pesde-pkg/pesde";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vokinn ];
+    maintainers = with lib.maintainers; [
+      daimond113
+      vokinn
+    ];
     mainProgram = "pesde";
   };
 }

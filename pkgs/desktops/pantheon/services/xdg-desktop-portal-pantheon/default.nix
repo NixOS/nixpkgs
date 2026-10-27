@@ -14,7 +14,7 @@
   gsettings-desktop-schemas,
   gtk4,
   pantheon-wayland,
-  systemd,
+  systemdLibs,
   libadwaita,
   libx11,
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     gsettings-desktop-schemas
     gtk4
     pantheon-wayland
-    systemd
+    systemdLibs
     libadwaita
     libx11
   ];

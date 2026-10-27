@@ -130,6 +130,7 @@ stdenv.mkDerivation {
     "--enable-256-color"
     (lib.enableFeature perlSupport "perl")
     (lib.enableFeature unicode3Support "unicode3")
+    "CXXFLAGS=-std=c++17"
   ]
   ++ lib.optional emojiSupport "--enable-wide-glyphs";
 

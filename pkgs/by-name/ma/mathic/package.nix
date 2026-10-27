@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mathic";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "Macaulay2";
     repo = "mathic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0/ws95MTrNXt6BhqyWjsOGyXvh2tTd48/pT6kWwQPd4=";
+    hash = "sha256-O/5fNnKiHTX/VV7ztFofRlRQZuoTmag3BNok7qFyffQ=";
   };
 
   buildInputs = [

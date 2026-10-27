@@ -6,13 +6,13 @@
 
 mkNginxPlugin (finalAttrs: {
   pname = "cache-purge";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "nginx-modules";
     repo = "ngx_cache_purge";
     tag = finalAttrs.version;
-    hash = "sha256-kjZbHXaDCh4EHK59XuIISZ0xcgd2c+plwrXvqB+2S1E=";
+    hash = "sha256-i7TJGC4E6AX3+BYCK/NfYEx976h7Txu03+QgbOUWNKk=";
   };
 
   meta = {

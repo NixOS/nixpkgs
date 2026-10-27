@@ -90,6 +90,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "plover" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "OpenSteno Plover stenography software";
     homepage = "https://www.openstenoproject.org/plover/";

@@ -10,13 +10,16 @@
   libao,
   libpulseaudio,
   libzip,
-  lua,
+  lua5_2_compat,
   miniupnpc,
   SDL2,
   systemdLibs,
   vulkan-loader,
   moltenvk,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flycast";
@@ -55,7 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ moltenvk ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    substituteInPlace core/version.h.in --replace-fail \
+      '@GIT_VERSION@' \
+      '${finalAttrs.version}'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace-fail \
         '"$ENV{VULKAN_SDK}/lib/libMoltenVK.dylib"' \

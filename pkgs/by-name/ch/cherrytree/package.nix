@@ -8,7 +8,6 @@
   wrapGAppsHook3,
   gtkmm3,
   gtksourceview4,
-  gtksourceviewmm,
   gspell,
   libxmlxx,
   sqlite,
@@ -40,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtkmm3
     gtksourceview4
-    gtksourceviewmm
     gspell
     libxmlxx
     sqlite

@@ -18,7 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-kX/DCXO/qwm1iF44gG7aBSUpG4Vf2Aer0zwrtq4YNHo=";
   };
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ graphviz ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ graphviz ])
+  ];
 
   # Needed so dot is on path of the test script
   nativeCheckInputs = [ graphviz ];

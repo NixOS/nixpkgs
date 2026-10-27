@@ -21,8 +21,8 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.qyliss ];
   };
 
-  description = "Service manager for s6-based systems";
-  platforms = lib.platforms.unix;
+  meta.description = "Service manager for s6-based systems";
+  meta.platforms = lib.platforms.unix;
 
   outputs = [
     # "bin" "lib"
@@ -30,23 +30,20 @@ skawarePackages.buildPackage {
     "dev"
     "doc"
   ];
+  buildInputs = [
+    skalibs
+    execline
+    s6
+  ];
 
   configureFlags = [
-    "--libdir=\${out}/lib"
-    "--libexecdir=\${out}/libexec"
-    "--dynlibdir=\${out}/lib"
-    "--bindir=\${out}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "out"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-include=${s6.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-lib=${s6.out}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
-    "--with-dynlib=${s6.out}/lib"
   ];
 
   # s6-rc-compile generates built-in service definitions containing

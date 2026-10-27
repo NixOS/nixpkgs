@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alavrik";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-6Luq49sbo+AqLSq57mc6fLhrRx0K6G5LCUIzkGPfqYo=";
+    tag = "v${version}";
+    hash = "sha256-6Luq49sbo+AqLSq57mc6fLhrRx0K6G5LCUIzkGPfqYo=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
-    homepage = "https://piqi.org";
+    homepage = "https://github.com/alavrik/piqi";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.maurer ];
     mainProgram = "piqic-ocaml";

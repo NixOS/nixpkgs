@@ -6,6 +6,12 @@ Package JavaScript applications with the tools below.
 
 ## Tools overview {#javascript-tools-overview}
 
+- **npm**: [`buildNpmPackage`](#javascript-buildNpmPackage), [`prefetch-npm-deps` (CLI)](#javascript-buildNpmPackage-prefetch-npm-deps), [`fetchNpmDeps`](#javascript-buildNpmPackage-fetchNpmDeps), [`importNpmLock`](#javascript-buildNpmPackage-importNpmLock)
+- [**corepack**](#javascript-corepack)
+- **pnpm**: [`fetchPnpmDeps`](#javascript-pnpm), [`pnpmConfigHook`](#javascript-pnpm-pnpmConfigHook), [`pnpmBuildHook`](#javascript-pnpm-pnpmBuildHook)
+- [**Yarn v1**](#javascript-yarn-v1): [`fetchYarnDeps`](#javascript-fetchyarndeps), [`yarnConfigHook`](#javascript-yarnconfighook), [`yarnBuildHook`](#javascript-yarnbuildhook), [`yarnInstallHook`](#javascript-yarninstallhook)
+- [**Yarn Berry (v3/v4)**](#javascript-yarn-v3-v4): [`fetchYarnBerryDeps`](#javascript-fetchYarnBerryDeps), [`yarnBerryConfigHook`](#javascript-yarnBerryConfigHook)
+
 ## General principles {#javascript-general-principles}
 
 The principles below are ordered by importance.
@@ -56,7 +62,7 @@ Exceptions to this rule are:
   ```nix
   {
     patchedPackageJSON = final.runCommand "package.json" { } ''
-      ${jq}/bin/jq '.version = "0.4.0" |
+      ${lib.getExe jq} '.version = "0.4.0" |
         .devDependencies."@jsdoc/cli" = "^0.2.5"
         ${sonar-src}/package.json > $out
     '';
@@ -288,9 +294,7 @@ This package puts the corepack wrappers for pnpm and yarn in your PATH, and they
 
 pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
 
-When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` prepares the build environment to install the pre-fetched dependencies store. The example below uses the fetcher and setup hook for a package that has `package.json` and `pnpm-lock.yaml`:
-
-There is also the [`pnpmBuildHook`](#pnpm-build-hook) for building packages with `pnpm`, as seen in [](#ex-pnpm-build-hook).
+When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook [`pnpmConfigHook`](#javascript-pnpm-pnpmConfigHook) prepares the build environment to install the pre-fetched dependencies store. The example below uses the fetcher and setup hook for a package that has `package.json` and `pnpm-lock.yaml`:
 
 ```nix
 {
@@ -298,6 +302,7 @@ There is also the [`pnpmBuildHook`](#pnpm-build-hook) for building packages with
   nodejs,
   pnpm_11,
   pnpmConfigHook,
+  pnpmBuildHook,
   stdenv,
 }:
 let
@@ -319,61 +324,24 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs # in case scripts are run outside of a pnpm call
     pnpmConfigHook
-    pnpm # At least required by pnpmConfigHook, if not other (custom) phases
+    pnpmBuildHook
+    pnpm # At least required by pnpmConfigHook and pnpmBuildHook, if not other (custom) phases
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "...";
   };
 })
 ```
 
-Use a pinned version of pnpm (for example `pnpm_9` or `pnpm_10`) to increase reproducibility. An older version may be required if the package needs a certain lock file version. To do so, pass the `pnpm` argument to `fetchPnpmDeps`. Then override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
+The example also uses [`pnpmBuildHook`](#javascript-pnpm-pnpmBuildHook), which runs `pnpm run build` in the build phase.
 
-<!-- TODO: Does splicing still work when overriding in nativeBuildInputs here? -->
+In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the `fetchPnpmDeps` function as well (i.e., `inherit (finalAttrs) patches`).
 
-```diff
- {
-   fetchPnpmDeps,
-   nodejs,
--  pnpm,
-+  pnpm_10,
-   pnpmConfigHook,
-   stdenv,
- }:
-+let
-+  # Optionally override pnpm to use a custom nodejs version
-+  # Make sure that the same nodejs version is referenced in nativeBuildInputs
-+  # pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
-+in
- stdenv.mkDerivation (finalAttrs: {
-   pname = "foo";
-   version = "0-unstable-1980-01-01";
-
-   src = {
-     #...
-   };
-
-   nativeBuildInputs = [
-     nodejs # in case scripts are run outside of a pnpm call
-     pnpmConfigHook
--    pnpm # At least required by pnpmConfigHook, if not other (custom) phases
-+    pnpm_10 # At least required by pnpmConfigHook, if not other (custom) phases
-   ];
-
-   pnpmDeps = fetchPnpmDeps {
-     inherit (finalAttrs) pname version src;
-+    pnpm = pnpm_10;
-     fetcherVersion = 4;
-     hash = "...";
-   };
- })
-```
-
-In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e., `inherit (finalAttrs) patches`).
+#### pnpmConfigHook {#javascript-pnpm-pnpmConfigHook}
 
 `pnpmConfigHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
 
@@ -390,6 +358,33 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 ```
 
 If needed, set `dontPnpmConfigure = true;` to fully disable `pnpmConfigHook` without removing it from inputs manually.
+
+#### pnpmBuildHook {#javascript-pnpm-pnpmBuildHook}
+
+The `pnpmBuildHook` in overrides the default build phase with `pnpm run <build-script>`.
+
+```nix
+{
+  nativeBuildInputs = [
+    pnpmBuildHook
+  ];
+
+  pnpmBuildScript = "build-ui";
+  pnpmBuildFlags = [
+    "--mode"
+    "production"
+  ];
+}
+```
+
+Available options:
+
+- `pnpmBuildScript`: select which script from `package.json` to run. Defaults to `build`.
+- `pnpmBuildFlags`: array of flags to pass to the build script.
+- `pnpmFlags`: array of flags passed to all invocations of pnpm itself.
+- `dontPnpmBuild`: disable this hook from running automatically. The hook can still be invoked manually.
+
+Both [`pnpmRoot`](#javascript-pnpm-sourceRoot) and [`pnpmWorkspaces`](#javascript-pnpm-workspaces) are honored by this hook.
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
@@ -475,14 +470,14 @@ In this example, `prePnpmInstall` runs in both `pnpmConfigHook` and the `fetchPn
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
-This is the version of the output of `fetchPnpmDeps`. Use `4` for new packages:
+This is the version of the output of `fetchPnpmDeps`. Use `5` for new packages:
 
 ```nix
 {
   # ...
   pnpmDeps = fetchPnpmDeps {
     # ...
-    fetcherVersion = 4;
+    fetcherVersion = 5;
     hash = "..."; # clear this hash and generate a new one
   };
 }
@@ -501,6 +496,7 @@ Version 3 is the minimum supported value. Versions 1 and 2 were removed in the 2
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975) (removed in 26.11)
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 - 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
+- 5: [Keep virtual store materializations out of the archived store](https://github.com/NixOS/nixpkgs/pull/565315)
 
 ### Yarn {#javascript-yarn}
 
@@ -562,6 +558,29 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+##### `fetchYarnDeps` arguments {#javascript-fetchyarndeps}
+
+`fetchYarnDeps` accepts the following arguments:
+
+- `yarnLock`: Path to the `yarn.lock` file to fetch dependencies for.
+- `hash` (or `sha256`): The output hash of the offline cache.
+- `mirrorUrl`: Optional registry mirror URL used in place of the default yarn
+  registry (`https://registry.yarnpkg.com/`). When set, any resolved URL
+  pointing at the default registry is rewritten to use this mirror before
+  downloading. This is useful for pointing at a local or internal registry
+  mirror. Note that changing the mirror does not change the output hash, since
+  the downloaded contents are identical.
+
+```nix
+{
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    mirrorUrl = "https://registry.npmmirror.com/";
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
+}
+```
+
 ##### `yarnConfigHook` arguments {#javascript-yarnconfighook}
 
 By default, `yarnConfigHook` relies upon the attribute `${yarnOfflineCache}` (or `${offlineCache}` if the former is not set) to find the location of the offline cache produced by `fetchYarnDeps`. To disable this phase, you can set `dontYarnInstallDeps = true` or override the `configurePhase`.
@@ -580,13 +599,8 @@ To install the package, `yarnInstallHook` uses both `npm` and `yarn` to clean up
 - `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
 
 #### Yarn Berry v3/v4 {#javascript-yarn-v3-v4}
-Yarn Berry (v3 / v4) versions have similar formats. They start with blocks like these:
 
-```yaml
-__metadata:
-  version: 6
-  cacheKey: 8[cX]
-```
+Yarn Berry (v3 / v4) versions have similar formats. The `yarn.lock` file starts with blocks like these:
 
 ```yaml
 __metadata:
@@ -611,7 +625,6 @@ Explicitly pin the major version. For example, capture the `yarn-berry_Xn` argum
 
 let
   yarn-berry = yarn-berry_4;
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
@@ -634,6 +647,7 @@ stdenv.mkDerivation (finalAttrs: {
 ```
 
 ##### `yarn-berry_X.fetchYarnBerryDeps` {#javascript-fetchYarnBerryDeps}
+
 `fetchYarnBerryDeps` runs `yarn-berry-fetcher fetch` in a fixed-output-derivation. It is a custom fetcher designed to reproducibly download all files in the `yarn.lock` file, validating their hashes in the process. For git dependencies, it creates a checkout at `${offlineCache}/checkouts/<40-character-commit-hash>` (relying on the git commit hash to describe the contents of the checkout).
 
 To produce the `hash` argument for the `fetchYarnBerryDeps` call, run `yarn-berry-fetcher prefetch`:
@@ -645,14 +659,17 @@ $ yarn-berry-fetcher prefetch </path/to/yarn.lock> [/path/to/missing-hashes.json
 This prints the hash to stdout. Use it in update scripts to recalculate the hash for a new `yarn.lock`.
 
 ##### `yarn-berry_X.yarnBerryConfigHook` {#javascript-yarnBerryConfigHook}
+
 `yarnBerryConfigHook` uses the store path `offlineCache` points to, to run a `yarn install` during the build, producing a usable `node_modules` directory from the downloaded dependencies.
 
 Internally, this uses a patched version of Yarn to ensure git dependencies are re-packed and any attempted downloads fail immediately.
 
 ##### Patching the project's `package.json` or `yarn.lock` files {#javascript-yarnBerry-patching}
+
 In case patching the project's `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e., `inherit (finalAttrs) patches`).
 
 ##### Missing hashes in the `yarn.lock` file {#javascript-yarnBerry-missing-hashes}
+
 Unfortunately, `yarn.lock` files do not include hashes for optional/platform-specific dependencies. This is [by design](https://github.com/yarnpkg/berry/issues/6759).
 
 To compensate for this, run the `yarn-berry-fetcher missing-hashes` subcommand to produce all missing hashes. These are stored in a `missing-hashes.json` file, which needs to be passed to both the build itself, as well as the `fetchYarnBerryDeps` helper:
@@ -666,7 +683,6 @@ To compensate for this, run the `yarn-berry-fetcher missing-hashes` subcommand t
 
 let
   yarn-berry = yarn-berry_4;
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";

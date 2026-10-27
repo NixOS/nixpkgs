@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ng0ihfagh9g8hral0bq5nhjlp3csqghyv3z8b7ylkdkqc1cgiv8";
+    hash = "sha256-aMfHAsOzTerPQn9sDx/WbFwqoS14AaoyRC/BpxyM4Fk=";
   };
 
   # disable coverage, because we don't care and python-coveralls is not in nixpkgs

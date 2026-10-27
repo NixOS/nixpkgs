@@ -96,7 +96,7 @@ in
       startAt = "*:0/5";
       path = [
         pkgs.gnused
-        pkgs.systemd
+        config.systemd.package
         pkgs.curl
         pkgs.gawk
         duckdns

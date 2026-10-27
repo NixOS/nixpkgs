@@ -48,13 +48,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
   ];
 
   meta = {
     description = "Yet another simple static gallery generator";
     mainProgram = "sigal";
-    homepage = "http://sigal.saimon.org/";
+    homepage = "https://sigal.readthedocs.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer

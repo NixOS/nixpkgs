@@ -4,12 +4,14 @@
   fetchFromGitHub,
   glibcLocales,
   meson,
+  cmake,
   ninja,
   pkg-config,
   python3,
   cld2,
   cli11,
   fmt_11,
+  tl-expected,
   emacs,
   glib,
   gmime3,
@@ -19,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mu";
-  version = "1.14.3";
+  version = "1.14.4";
 
   outputs = [
     "out"
@@ -30,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "djcb";
     repo = "mu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nDAtegMqKsUiKLQuTY7clFh2oBeW0OrG7LY1yeIW+R4=";
+    hash = "sha256-BZfc5NRh/Z/M85OlSWTOeg0p9zBOIg25/PArgXIGTpQ=";
   };
 
   postPatch = ''
@@ -64,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gmime3
     texinfo
+    tl-expected
     xapian
   ];
 
@@ -78,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     meson
+    # tl-expected is only findable through cmake :(
+    cmake
     ninja
     python3
     glibcLocales

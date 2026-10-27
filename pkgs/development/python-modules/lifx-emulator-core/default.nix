@@ -8,18 +8,19 @@
   pytestCheckHook,
   pyyaml,
   writableTmpDirAsHomeHook,
+  zeroconf,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lifx-emulator-core";
-  version = "3.8.0";
+  version = "3.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Djelibeybi";
     repo = "lifx-emulator";
     tag = "core-v${finalAttrs.version}";
-    hash = "sha256-hAgneMgcq7PgOTkjsLeceqoL74FvyCPwJ57n0gZnt3g=";
+    hash = "sha256-ppknjmEEhDgtRNv/BXOGqGYafE9BqdGzd6Esq3QRGM8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/lifx-emulator-core";
@@ -29,6 +30,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     pydantic
     pyyaml
+    zeroconf
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -11,6 +11,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "enroot";
   version = "4.2.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "enroot";
@@ -21,7 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail 'git submodule update' 'echo git submodule update'
+      --replace-fail \
+        'git submodule update' \
+        'echo git submodule update'
+  ''
+  # GCC >= 16 implicitly links `-latomic_asneeded`, which does not exist in the musl sysroot
+  + lib.optionalString (stdenv.cc.isGNU && (lib.versionAtLeast stdenv.cc.version "16")) ''
+    substituteInPlace Makefile \
+      --replace-fail \
+        '$(UTILS): LDFLAGS     += -pie -static-pie' \
+        '$(UTILS): LDFLAGS     += -pie -static-pie -fno-link-libatomic'
   '';
 
   makeTarget = "install";

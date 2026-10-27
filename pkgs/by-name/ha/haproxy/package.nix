@@ -5,6 +5,7 @@
   sslLibrary ? "openssl",
   stdenv,
   lib,
+  fetchpatch2,
   fetchurl,
   nixosTests,
   zlib,
@@ -12,7 +13,7 @@
   aws-lc,
   libressl,
   openssl,
-  lua5_4,
+  lua5_5,
   pcre2,
 }:
 
@@ -33,11 +34,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.4.3";
+  version = "3.4.7";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-f6Zm020ZgnWZnipo3aRNPTeWDy967TpZX7gR9P0FFbU=";
+    hash = "sha256-zP00Lzckws1llXQETXiPROILISRnxr1e27/FF6J3Xco=";
   };
 
   buildInputs = [
@@ -45,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libxcrypt
   ]
-  ++ lib.optional useLua lua5_4
+  ++ lib.optional useLua lua5_5
   ++ lib.optional usePcre pcre2;
 
   # TODO: make it work on bsd as well
@@ -86,8 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals useLua [
     "USE_LUA=yes"
     "LUA_LIB_NAME=lua"
-    "LUA_LIB=${lua5_4}/lib"
-    "LUA_INC=${lua5_4}/include"
+    "LUA_LIB=${lua5_5}/lib"
+    "LUA_INC=${lua5_5}/include"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "USE_GETADDRINFO=1"

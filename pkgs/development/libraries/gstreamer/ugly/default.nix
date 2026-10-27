@@ -17,6 +17,8 @@
   libintl,
   lib,
   enableGplPlugins ? true,
+  # only for passthru.gstreamerCpeParts
+  gstreamer,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -27,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-ugly";
-  version = "1.28.5";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -36,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DvTPnDyaXndqbKjRkKMYYzkbaBmAJSFDuCKymqgx4SA=";
+    hash = "sha256-K2gRcN3CK2soPK/u1I9CfDChcFaXSmqe0TfDVOD3cww=";
   };
 
   separateDebugInfo = true;
@@ -122,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
       like. The code might be widely known to present patent problems.
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };

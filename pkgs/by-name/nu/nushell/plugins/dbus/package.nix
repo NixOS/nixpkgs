@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ aftix ];
     platforms = lib.platforms.linux;
     # "Plugin `dbus` is compiled for nushell version 0.101.0, which is not
-    # compatible with version 0.105.1"
+    # compatible with version 0.115.1"
     broken = true;
   };
 })

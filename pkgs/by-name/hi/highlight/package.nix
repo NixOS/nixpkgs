@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   getopt,
-  lua,
+  lua5_2_compat,
   boost,
   libxcrypt,
   pkg-config,
@@ -13,6 +13,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   self = stdenv.mkDerivation (finalAttrs: {
     pname = "highlight";
     version = "4.21";
@@ -81,6 +82,7 @@ let
       changelog = "https://gitlab.com/saalen/highlight/-/blob/${finalAttrs.src.tag}/ChangeLog.adoc?ref_type=tags#user-content-highlight-${lib.versions.major finalAttrs.version}-${lib.versions.minor finalAttrs.version}";
       platforms = lib.platforms.unix;
       maintainers = [ ];
+      license = lib.licenses.gpl3Plus;
     };
   });
 

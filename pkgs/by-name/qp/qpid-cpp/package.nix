@@ -53,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString (
     [
       "-Wno-error=maybe-uninitialized"
+      "-Wno-template-body"
+      "-Wno-mismatched-new-delete"
+      "-Wno-unused-but-set-variable"
+      "-Wno-free-nonheap-object"
+      "-Wno-uninitialized"
+      "-std=gnu++17"
     ]
     ++ lib.optionals stdenv.cc.isGNU [
       "-Wno-error=deprecated-copy"

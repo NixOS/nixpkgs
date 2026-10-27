@@ -20,11 +20,12 @@ let
             yq
             check-jsonschema
           ];
+          strictDeps = true;
           value = builtins.toJSON value;
-          passAsFile = [ "value" ];
+          __structuredAttrs = true;
         }
         ''
-          yq --yaml-output . $valuePath > $out
+          printf "%s" "$value" | yq --yaml-output . > $out
           check-jsonschema --schemafile "${cfg.package.passthru.jsonschema}" "$out"
           sed -i $'s|\'!include |!include \'|' $out
         '';
@@ -209,10 +210,6 @@ in
           assertion = cfg.enable;
           message = "If IfState is used in initrd, it should also be used for the stage 2 system (networking.ifstate), as initrd IfState does not clean up the network stack like it was before after execution.";
         }
-        {
-          assertion = config.boot.initrd.systemd.enable;
-          message = "IfState only supports systemd stage one. See `boot.initrd.systemd.enable` option.";
-        }
       ];
 
       environment.etc = {
@@ -225,8 +222,6 @@ in
       };
 
       boot.initrd = {
-        network.udhcpc.enable = lib.mkDefault false;
-
         # automatic configuration of kernel modules of virtual interface types
         availableKernelModules =
           let

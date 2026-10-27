@@ -23,8 +23,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  unpackCmd = "7zz x -snld -xr'!*:com.apple.*' $curSrc";
-
   installPhase = ''
     runHook preInstall
 

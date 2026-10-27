@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   glib,
   expat,
@@ -22,6 +21,7 @@
   docbook_xml_dtd_412,
   gtk-doc,
   coreutils,
+  useConsoleKit ? false,
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
   elogind,
@@ -40,9 +40,11 @@ let
   system = "/run/current-system/sw";
   setuid = "/run/wrappers/bin";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polkit";
   version = "127";
+
+  disallowedReferences = lib.optional useConsoleKit systemdLibs;
 
   outputs = [
     "bin"
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "polkit-org";
     repo = "polkit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YTugETy0rqu/bv53jV1UeGqSK79bRXR52EJNcTblvzo=";
   };
 
@@ -95,7 +97,7 @@ stdenv.mkDerivation rec {
     dbus
     duktape
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !useConsoleKit) [
     # On Linux, fall back to elogind when systemd support is off.
     (if useSystemd then systemdLibs else elogind)
   ];
@@ -146,7 +148,14 @@ stdenv.mkDerivation rec {
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-Dsession_tracking=${if useSystemd then "logind" else "elogind"}"
+    "-Dsession_tracking=${
+      if useSystemd then
+        "logind"
+      else if useConsoleKit then
+        "ConsoleKit"
+      else
+        "elogind"
+    }"
   ];
 
   inherit doCheck;
@@ -193,4 +202,4 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.freedesktop ];
   };
-}
+})

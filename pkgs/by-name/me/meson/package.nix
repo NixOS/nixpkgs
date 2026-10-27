@@ -10,20 +10,22 @@
   pkg-config,
   python3,
   replaceVars,
+  writableTmpDirAsHomeHook,
   writeShellScriptBin,
   zlib,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meson";
-  version = "1.10.2";
-  format = "setuptools";
+  version = "1.12.1";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
-    tag = version;
-    hash = "sha256-3Zeavn6aW6920gM7yE73Ms1RPCP2GjX9IUL9YGmISfY=";
+    tag = finalAttrs.version;
+    hash = "sha256-cQphgkEWNpjjs7DuV5+6KGDhsmQ4x09cH+FU0lfoB0Y=";
   };
 
   patches = [
@@ -85,11 +87,20 @@ python3.pkgs.buildPythonApplication rec {
     else
       null;
 
+  build-system = [ python3.pkgs.setuptools ];
+
   nativeBuildInputs = [ installShellFiles ];
+
+  optional-dependencies = {
+    ninja = [ python3.pkgs.ninja ];
+    progress = [ python3.pkgs.tqdm ];
+    typing = [ python3.pkgs.mypy ];
+  };
 
   nativeCheckInputs = [
     ninja
     pkg-config
+    writableTmpDirAsHomeHook
   ]
   ++ lib.optionals python3.isPyPy [
     # Several tests hardcode python3.
@@ -114,7 +125,9 @@ python3.pkgs.buildPythonApplication rec {
         substituteInPlace \
           'test cases/native/8 external program shebang parsing/script.int.in' \
           'test cases/common/274 customtarget exe for test/generate.py' \
-            --replace /usr/bin/env ${coreutils}/bin/env
+            --replace-fail /usr/bin/env ${lib.getExe' coreutils "env"}
+        substituteInPlace run_project_tests.py \
+          --replace-fail "multiprocessing.cpu_count()" "int(os.environ['NIX_BUILD_CORES'])"
       ''
     ]
     # Remove problematic tests
@@ -129,6 +142,11 @@ python3.pkgs.buildPythonApplication rec {
         "test cases/linuxlike/14 static dynamic linkage"
         # Nixpkgs cctools does not have bitcode support.
         "test cases/osx/7 bitcode"
+        # This test tries to compile with flags `-D_FORTIFY_SOURCE=2 -U_FORTIFY_SOURCE -O0`.
+        # It fails because cc-wrapper adds `-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3`
+        # after the provided args (to ensure that fortify cannot be disabled without
+        # being allowed by the package definition)
+        "test cases/common/282 -D_FORTIFY_SOURCE=2 and -O0"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # requires llvmPackages.openmp, creating cyclic dependency
@@ -146,16 +164,15 @@ python3.pkgs.buildPythonApplication rec {
       ]
     ))
     ++ [
-      ''HOME="$TMPDIR" ${
-        if python3.isPyPy then python3.interpreter else "python"
-      } ./run_project_tests.py''
+      "${if python3.isPyPy then python3.interpreter else "python"} ./run_project_tests.py"
       "runHook postCheck"
     ]
   );
 
   postInstall = ''
-    installShellCompletion --zsh data/shell-completions/zsh/_meson
-    installShellCompletion --bash data/shell-completions/bash/meson
+    installShellCompletion \
+      --bash data/shell-completions/bash/meson \
+      --zsh data/shell-completions/zsh/_meson
   '';
 
   postFixup = ''
@@ -170,7 +187,7 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
 
     substituteInPlace "$out/share/bash-completion/completions/meson" \
-      --replace "python3 -c " "${python3.interpreter} -c "
+      --replace-fail "python3 -c " "${python3.interpreter} -c "
   '';
 
   setupHook = ./setup-hook.sh;
@@ -193,5 +210,5 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ qyliss ];
     inherit (python3.meta) platforms;
   };
-}
+})
 # TODO: a more Nixpkgs-tailoired test suite

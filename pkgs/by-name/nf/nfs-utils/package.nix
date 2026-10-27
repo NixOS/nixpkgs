@@ -15,7 +15,7 @@
   libuuid,
   keyutils,
   lvm2,
-  systemd,
+  systemdMinimal,
   coreutils,
   python3,
   buildPackages,
@@ -28,23 +28,28 @@
   udevCheckHook,
   enablePython ? true,
   enableLdap ? true,
+  enableSystemd ? true,
 }:
 
 let
-  statdPath = lib.makeBinPath [
-    systemd
-    util-linux
-    coreutils
-  ];
+  statdPath = lib.makeBinPath (
+    [
+      util-linux
+      coreutils
+    ]
+    ++ lib.optionals enableSystemd [
+      systemdMinimal
+    ]
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-utils";
-  version = "2.9.2";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/nfs-utils/${finalAttrs.version}/nfs-utils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4d2KnJWvFUkgZZQsw7UrEzn/1Ya6oigO2GydPcQJfow=";
+    hash = "sha256-fbwF64sygosyKHK3WaYss5ectBGPNE3YYWgT0TkOhOA=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -96,11 +101,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-svcgss"
     "--with-statedir=/var/lib/nfs"
     "--with-krb5=${lib.getLib libkrb5}"
-    "--with-systemd=${placeholder "out"}/etc/systemd/system"
     "--enable-libmount-mount"
     "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
     "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
     "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
+    (
+      if enableSystemd then
+        "--with-systemd=${placeholder "out"}/etc/systemd/system"
+      else
+        "--without-systemd"
+    )
   ]
   ++ lib.optional enableLdap "--enable-ldap";
 
@@ -139,6 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "sbindir=$(out)/bin"
+  ]
+  ++ lib.optionals enableSystemd [
     "generator_dir=$(out)/etc/systemd/system-generators"
   ];
 
@@ -153,20 +165,23 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "libexec"
     "bin"
+  ]
+  ++ lib.optionals enableSystemd [
     "etc/systemd/system-generators"
   ];
 
-  postInstall = ''
-    # Not used on NixOS
-    sed -i \
-      -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
-      -e "s,/usr/sbin,$out/bin,g" \
-      $out/etc/systemd/system/*
-  ''
-  + lib.optionalString (!enablePython) ''
-    # Remove all scripts that require python (currently mountstats and nfsiostat)
-    grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
-  '';
+  postInstall =
+    lib.optionalString enableSystemd ''
+      # Not used on NixOS
+      sed -i \
+        -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
+        -e "s,/usr/sbin,$out/bin,g" \
+        $out/etc/systemd/system/*
+    ''
+    + lib.optionalString (!enablePython) ''
+      # Remove all scripts that require python (currently mountstats and nfsiostat)
+      grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
+    '';
 
   # One test fails on mips.
   # doCheck = !stdenv.hostPlatform.isMips;

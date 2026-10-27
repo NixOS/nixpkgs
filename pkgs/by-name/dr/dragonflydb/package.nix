@@ -28,7 +28,7 @@
   # Build tools
   autoconf,
   autoconf-archive,
-  automake116x,
+  automake,
   bison,
   cmake,
   gcc-unwrapped,
@@ -223,7 +223,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoconf
     autoconf-archive
-    automake116x
+    automake
     bison
     cmake
     ninja

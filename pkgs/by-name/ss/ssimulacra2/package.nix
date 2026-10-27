@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
         rev = version;
         hash = "sha256-v2HyyHtBydr7QiI83DW1yRv2kWjUOGxFT6mmdrN9XPo=";
       };
+      outputs = [ "out" ];
       patches = [ ];
       postPatch = ''
         substituteInPlace CMakeLists.txt --replace-fail "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"

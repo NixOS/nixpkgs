@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyscan";
-  version = "0.1.4";
+  version = "2.1.3";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,12 +22,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "ohaswin";
     repo = "pyscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n1mwOYntWyW7lPKPLgG7PteTRh3mly5vqbKy2R/9xnw=";
+    hash = "sha256-I5Chs9N/ZH7NM1CsaIKjO0eS68/t+wZaHGEO59Ur/+8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-QzFUoHfvjd6ZMkKIsGXIVyks2LxdJblIiQccsOoYcJs=";
+    hash = "sha256-Y3fxKYpGJCX4VECe0mmP2lDZc4efd9tNXY8YLeQXXRk=";
   };
 
   build-system = [

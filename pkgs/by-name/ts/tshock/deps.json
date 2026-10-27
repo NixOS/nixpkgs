@@ -196,8 +196,8 @@
   },
   {
     "pname": "OTAPI.Upcoming",
-    "version": "3.3.11",
-    "hash": "sha256-2v5hl1UUSUmGWnZXWKx2Y3ZmLUwbI0PlEb6mlb9qO0U="
+    "version": "3.3.14",
+    "hash": "sha256-bU3m2QQBjY5DO887cpWNCT0Z8xTFavRbW24Am5zcJv8="
   },
   {
     "pname": "runtime.any.System.Collections",

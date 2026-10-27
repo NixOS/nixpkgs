@@ -683,13 +683,6 @@ in
         message = "Xen only supports booting on systemd-boot, Lanzaboote or Limine.";
       }
       {
-        assertion = config.boot.initrd.systemd.enable;
-        message = ''
-          Xen does not support the legacy script-based stage 1 initial ramdisk.
-          Please set 'boot.initrd.systemd.enable' to 'true'.
-        '';
-      }
-      {
         assertion = cfg.dom0Resources.maxMemory >= cfg.dom0Resources.memory;
         message = ''
           You have allocated more memory to dom0 than 'virtualisation.xen.dom0Resources.maxMemory'

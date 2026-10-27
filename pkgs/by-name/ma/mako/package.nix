@@ -7,16 +7,27 @@
   pkg-config,
   scdoc,
   systemdMinimal,
+  basu,
+  elogind,
   pango,
   cairo,
   gdk-pixbuf,
-  jq,
-  bash,
   wayland,
   wayland-scanner,
   wayland-protocols,
-  wrapGAppsHook3,
+
+  busProvider ? "libsystemd",
+  withManPages ? true,
+  withBashCompletions ? true,
+  withFishCompletions ? true,
+  withZshCompletions ? true,
 }:
+
+assert lib.assertOneOf "busProvider" busProvider [
+  "libsystemd"
+  "libelogind"
+  "basu"
+];
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mako";
@@ -35,37 +46,29 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    scdoc
     wayland-protocols
-    wrapGAppsHook3
     wayland-scanner
-  ];
+  ]
+  ++ lib.optional withManPages scdoc;
   buildInputs = [
-    systemdMinimal
     pango
     cairo
     gdk-pixbuf
     wayland
-  ];
+  ]
+  ++ lib.optional (busProvider == "libsystemd") systemdMinimal
+  ++ lib.optional (busProvider == "libelogind") elogind
+  ++ lib.optional (busProvider == "basu") basu;
 
   mesonFlags = [
-    "-Dzsh-completions=true"
-    "-Dsd-bus-provider=libsystemd"
+    (lib.mesonBool "bash-completions" withBashCompletions)
+    (lib.mesonBool "fish-completions" withFishCompletions)
+    (lib.mesonBool "zsh-completions" withZshCompletions)
+    (lib.mesonEnable "man-pages" withManPages)
+    (lib.mesonOption "sd-bus-provider" busProvider)
   ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${
-        lib.makeBinPath [
-          systemdMinimal # for busctl
-          jq
-          bash
-        ]
-      }"
-    )
-  '';
-
-  postInstall = ''
+  postInstall = lib.optionalString (busProvider == "libsystemd") ''
     mkdir -p $out/lib/systemd/user
     substitute $src/contrib/systemd/mako.service $out/lib/systemd/user/mako.service \
       --replace-fail '/usr/bin' "$out/bin"

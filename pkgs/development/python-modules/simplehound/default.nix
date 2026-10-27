@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "robmarkcole";
     repo = "simplehound";
     rev = "v${version}";
-    sha256 = "1b5m3xjmk0l6ynf0yvarplsfsslgklalfcib7sikxg3v5hiv9qwh";
+    hash = "sha256-kOO0Iyx7vD6jPisyRxWdj2rtNL1ZbQ+c9YaCWWUftaw=";
   };
 
   propagatedBuildInputs = [ requests ];

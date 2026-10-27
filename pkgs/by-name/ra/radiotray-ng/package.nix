@@ -12,7 +12,7 @@
   libbsd,
   # GUI/Desktop
   dbus,
-  glibmm,
+  glibmm_2_4,
   gsettings-desktop-schemas,
   hicolor-icon-theme,
   libappindicator,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     jsoncpp
     libbsd
-    glibmm
+    glibmm_2_4
     hicolor-icon-theme
     gsettings-desktop-schemas
     libappindicator

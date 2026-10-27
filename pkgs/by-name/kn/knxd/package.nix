@@ -10,8 +10,8 @@
   argp-standalone,
   fmt,
   libev,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   withUsb ? stdenv.hostPlatform.isLinux,
   libusb1,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     libev
   ]
-  ++ lib.optional withSystemd systemd
+  ++ lib.optional withSystemd systemdLibs
   ++ lib.optional withUsb libusb1
   ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
 

@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
 
   updateAutotoolsGnuConfigScriptsHook,
+  bashNonInteractive,
   perl,
   python3,
   libiconv,
@@ -29,27 +29,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsync";
-  version = "3.4.4";
+  version = "3.5.0";
 
   src = fetchurl {
     # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vYjPgvplPaMjFPsikTZAfFyQ+A0XWNj0sJF2eHfY+pY=";
+    hash = "sha256-x//R72U+mVQPZh5HywC3+crR7muXI5mxb5PWcmVuDTM=";
   };
 
-  patches = [
-    # Fixes test failure on darwin
-    (fetchpatch {
-      url = "https://github.com/RsyncProject/rsync/commit/e1c5f0e93a75dd45f32f3b92ba221ef158ac2e5f.patch";
-      hash = "sha256-pg65K9BCTq/WvS5icK6KT28ARccFKedp2445wLYdRsE=";
-      excludes = [
-        ".github/workflows/cygwin-build.yml"
-      ];
-    })
-  ];
+  patches = [ ];
+
+  # Remove with the first upstream release that links t_acl against the snprintf fallback.
+  postPatch = ''
+    substituteInPlace Makefile.in \
+      --replace-fail 'T_ACL_OBJ = t_acl.o lib/acl.o' 'T_ACL_OBJ = t_acl.o lib/acl.o lib/snprintf.o'
+  '';
 
   preBuild = ''
-    patchShebangs ./runtests.py
+    patchShebangs ./runtests.py ./support/rrsync
+
+    # patchShebangs ignores non-executable test sources and embedded shebangs.
+    substituteInPlace \
+      testsuite/{daemon-namecvt-{empty-response,newline-token},rrsync-{sender-parent-pin,symlink}}_test.py \
+      --replace-fail '#!/usr/bin/env python3' '#!${python3}/bin/python3'
+
+    substituteInPlace \
+      testsuite/rsync-ssl-stunnel-{ca-required,hostname-check}_test.py \
+      --replace-fail '#!/usr/bin/env bash' '#!${stdenv.shell}'
   '';
 
   nativeBuildInputs = [
@@ -58,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     libiconv
     zlib
     popt
@@ -103,12 +110,41 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  # Test fails when built in a chroot store
+  # These require set-id, chown, xattrs, or unrestricted /proc/self/fd,
+  # which the Linux Nix build sandbox does not provide.
   preCheck = ''
-    rm testsuite/chgrp.test
+    export RSYNC_EXCLUDE=${
+      lib.concatStringsSep "," (
+        lib.optionals stdenv.hostPlatform.isLinux [
+          "chmod-option"
+          "chmod-setid"
+          "chown-fake"
+          "fake-super-backup-fifo-regression"
+          "protected-regular"
+          "rrsync-backup-dir-inband-pivot"
+          "rrsync-pull-delivers-content"
+          "variety-symlink-traversal"
+          "variety"
+        ]
+        # The Darwin sandbox drops set-id bits, and Python's os.getgroups()
+        # reports account groups that may not be usable by this process.
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "chmod-setid"
+          "daemon-groupmap-wild"
+        ]
+        # This test assumes that every Linux libc provides glibc malloc stats.
+        ++ lib.optional stdenv.hostPlatform.isMusl "misc-coverage"
+        # These require a native compiler and dynamic interposition.
+        ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+          "link-dest-symlink-enotsup"
+          "partial-protected-regular-retry-linux"
+        ]
+      )
+    }
   '';
 
   doCheck = true;
+  strictDeps = true;
 
   __darwinAllowLocalNetworking = true;
 

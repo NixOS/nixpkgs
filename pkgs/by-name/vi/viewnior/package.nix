@@ -20,6 +20,9 @@
   webp-pixbuf-loader,
   gnome,
   librsvg,
+  libavif,
+  libheif,
+  libjxl,
 }:
 
 stdenv.mkDerivation {
@@ -63,6 +66,9 @@ stdenv.mkDerivation {
         extraLoaders = [
           webp-pixbuf-loader
           librsvg
+          libavif
+          libheif.lib
+          libjxl
         ];
       }
     }"

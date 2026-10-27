@@ -30,7 +30,7 @@ index 608aebd1af..7f60917f71 100644
          # Load function
          {{if 'nvrtcGetErrorString' in found_functions}}
 diff --git a/cuda_bindings/cuda/bindings/_internal/_nvml_linux.pyx b/cuda_bindings/cuda/bindings/_internal/_nvml_linux.pyx
-index 1622cc82aa..ddff5dad75 100644
+index 1622cc82aa..36eba31d32 100644
 --- a/cuda_bindings/cuda/bindings/_internal/_nvml_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/_nvml_linux.pyx
 @@ -10,7 +10,7 @@ import threading
@@ -42,12 +42,17 @@ index 1622cc82aa..ddff5dad75 100644
  
  
  ###############################################################################
-@@ -410,7 +410,7 @@ cdef void* __nvmlDeviceGetSramUniqueUncorrectedEccErrorCounts = NULL
+@@ -410,7 +410,12 @@ cdef void* __nvmlDeviceGetSramUniqueUncorrectedEccErrorCounts = NULL
  
  
  cdef void* load_library() except* with gil:
 -    return dlopen("libnvidia-ml.so.1", RTLD_NOW | RTLD_GLOBAL)
-+    return dlopen("@libnvml@/lib/libnvidia-ml.so.1", RTLD_NOW | RTLD_GLOBAL)
++    # Search like the dynamic linker would for a library with the driver link in its RUNPATH: LD_LIBRARY_PATH
++    # first (e.g. a host driver exposed by nixglhost or a container runtime), then the configured path.
++    cdef void* handle = dlopen("libnvidia-ml.so.1", RTLD_NOW | RTLD_GLOBAL)
++    if handle == NULL:
++        handle = dlopen("@libnvml@/lib/libnvidia-ml.so.1", RTLD_NOW | RTLD_GLOBAL)
++    return handle
  
  
  cdef int _init_nvml() except -1 nogil:

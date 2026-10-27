@@ -94,6 +94,7 @@
   pytest-factoryboy,
   pytest-flask,
   mock,
+  py7zr,
   rarfile,
   responses,
   requests-mock,
@@ -114,12 +115,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.13.1";
+  version = "2.14.1";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f25Uv7PRKBFUWah6pvEwwTFjxXKQfmAP2fyTNFJyWB0=";
+    hash = "sha256-elKifMiy0uYPkoIVedqpL7QSjLBKIHz5CIEylVmsTxk=";
   };
   pyproject = true;
 
@@ -173,9 +174,18 @@ buildPythonPackage (finalAttrs: {
   '';
 
   makeWrapperArgs = [
-    "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
-    "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
-    "--prefix PATH : ${lib.makeBinPath finalAttrs.finalPackage.passthru.plugins.wrapperBins}"
+    "--set"
+    "GI_TYPELIB_PATH"
+    "$GI_TYPELIB_PATH"
+
+    "--set"
+    "GST_PLUGIN_SYSTEM_PATH_1_0"
+    "$GST_PLUGIN_SYSTEM_PATH_1_0"
+
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath finalAttrs.finalPackage.passthru.plugins.wrapperBins)
   ];
 
   nativeCheckInputs = [
@@ -185,6 +195,7 @@ buildPythonPackage (finalAttrs: {
     pytest-factoryboy
     pytest-flask
     mock
+    py7zr
     rarfile
     responses
     requests-mock
@@ -569,7 +580,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://beets.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      astratagem
+      montchr
       doronbehar
       lovesegfault
       pjones

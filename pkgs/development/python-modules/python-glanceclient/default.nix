@@ -14,23 +14,14 @@
   oslo-utils,
   wrapt,
   pyopenssl,
-  stestr,
+  stestrCheckHook,
   testscenarios,
   ddt,
   requests-mock,
-  writeText,
 }:
 let
   pname = "python-glanceclient";
-  version = "4.11.0";
-
-  disabledTests = [
-    # Skip tests which require networking.
-    "glanceclient.tests.unit.test_http.TestClient.test_http_chunked_response"
-    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
-    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
-    ''glanceclient\.tests\.unit\.test_ssl\.TestHTTPSVerifyCert\..*''
-  ];
+  version = "4.13.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -39,7 +30,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "python_glanceclient";
     inherit version;
-    hash = "sha256-XOIRi/50YpNIBZFmF+U3vFsA/UyrP7e7iKT5JTlwVi0=";
+    hash = "sha256-+jNZvIvZPnrryjctr+yOGQA7TB9kSZ4uuCsncdqPpBw=";
   };
 
   postPatch = ''
@@ -65,15 +56,19 @@ buildPythonPackage {
     ddt
     openstacksdk
     requests-mock
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e ${writeText "disabled-tests" (lib.concatStringsSep "\n" disabledTests)}
-    runHook postCheck
-  '';
+  # Skip tests which require networking.
+  disabledTests = [
+    "glanceclient.tests.unit.test_http.TestClient.test_http_chunked_response"
+    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
+  ];
+
+  disabledTestsRegex = [
+    ''glanceclient\.tests\.unit\.test_ssl\.TestHTTPSVerifyCert\..*''
+  ];
 
   pythonImportsCheck = [ "glanceclient" ];
 

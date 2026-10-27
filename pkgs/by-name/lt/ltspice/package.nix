@@ -11,10 +11,10 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ltspice";
-  version = "26.0.2";
+  version = "26.1.1";
   src = fetchurl {
     url = "https://ltspice.analog.com/download/${finalAttrs.version}/LTspice64.msi";
-    hash = "sha256-SF2r0tfYKT3nM6OZcZ9lOO/aSlS0ixgaFOBycRhphNM=";
+    hash = "sha256-8iFj8VQg5DotXGZEDgOO8DGp8BmhgfOWuV7c717rw1c=";
   };
   dontUnpack = true;
   dontConfigure = true;

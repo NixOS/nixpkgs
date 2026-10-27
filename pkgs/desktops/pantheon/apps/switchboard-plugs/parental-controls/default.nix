@@ -20,7 +20,7 @@
   malcontent,
   polkit,
   switchboard,
-  systemd,
+  systemdLibs,
   iptables,
   nix-update-script,
 }:
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     malcontent
     polkit
     switchboard
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [

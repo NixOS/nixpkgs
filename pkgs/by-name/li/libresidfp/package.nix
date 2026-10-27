@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libresidfp";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libresidfp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0XxQtXRHHEW7DNPKFu345ffiwo949uIDeL2oj2f8+jY=";
+    hash = "sha256-F3EjOqEcv1JfoEPyA72NRK4FoAbb5Zbhg2FVZ3VRbkM=";
   };
 
   strictDeps = true;

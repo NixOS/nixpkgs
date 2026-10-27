@@ -3,6 +3,9 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  copyDesktopItems,
+  makeDesktopItem,
+  nix-update-script,
   gtk3,
   zlib,
   alsa-lib,
@@ -19,19 +22,24 @@
   udev,
   vulkan-loader, # (not used by default, enable in settings menu)
   wayland, # (not used by default, enable with SDL_VIDEODRIVER=wayland - doesn't support HiDPI)
-  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clonehero";
-  version = "1.1.0.6085";
+  version = "1.1.0.6142";
 
   src = fetchurl {
     url = "https://github.com/clonehero-game/releases/releases/download/v${finalAttrs.version}-final/Linux.x86_64-Standalone.tar";
-    hash = "sha256-xy7/3SDNgKw67ikA7CtRVK2gNrfjqx4cTDeRUkkSBKo=";
+    hash = "sha256-Vylx2TCSKDxdDVIAaia1Krjo+xKNz7QqNJbeJsiqIx0=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
 
   buildInputs = [
     # Load-time libraries (loaded from DT_NEEDED section in ELF binary)
@@ -56,14 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "clonehero";
-    desktopName = "Clone Hero";
-    comment = finalAttrs.meta.description;
-    icon = "clonehero";
-    exec = "clonehero";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "clonehero";
+      desktopName = "Clone Hero";
+      comment = finalAttrs.meta.description;
+      icon = "clonehero";
+      exec = "clonehero";
+      categories = [ "Game" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -74,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p "$out/share"
     cp -r clonehero_Data "$out/share/clonehero"
-    install -Dm644 "$desktopItem/share/applications/clonehero.desktop" "$out/share/applications/clonehero.desktop"
 
     mkdir -p "$out/bin" "$out/share/icons/hicolor/128x128/apps"
     ln -s "$out/libexec/clonehero/clonehero" "$out/bin/clonehero"
@@ -115,10 +124,18 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/clonehero/UnityPlayer.so"
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)-final$"
+    ];
+  };
+
   meta = {
     description = "Clone of Guitar Hero and Rockband-style games";
     homepage = "https://clonehero.net";
     license = lib.licenses.unfree;
+    mainProgram = "clonehero";
     maintainers = with lib.maintainers; [
       kira-bruneau
       syboxez

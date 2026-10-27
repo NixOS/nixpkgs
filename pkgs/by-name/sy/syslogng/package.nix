@@ -14,7 +14,7 @@
   pkg-config,
   glib,
   hiredis,
-  systemd,
+  systemdLibs,
   perl,
   python3,
   riemann_c_client,
@@ -36,6 +36,7 @@
   withGrpc ? true,
   grpc,
   protobuf,
+  nixosTests,
 }:
 let
   python-deps =
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     eventlog
     glib
     py
-    systemd
+    systemdLibs
     riemann_c_client
     protobufc
     libnet
@@ -138,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.nixos = nixosTests.syslog-ng;
 
   meta = {
     homepage = "https://www.syslog-ng.com";

@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
       Simple, fast web crawler designed for easy, quick discovery of endpoints
       and assets within a web application.
     '';
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

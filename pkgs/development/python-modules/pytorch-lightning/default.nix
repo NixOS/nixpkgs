@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-lightning";
-  version = "2.6.5";
+  version = "2.6.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     tag = finalAttrs.version;
-    hash = "sha256-j29UvQbm+R/uDqwj3kZrXw5YSbUPlJWZUT8RUPc4QyY=";
+    hash = "sha256-VKEd9Psj4DdOSdIXqwbmLl23FJWrQJEr9b34+t//c9w=";
   };
 
   env.PACKAGE_NAME = "pytorch";

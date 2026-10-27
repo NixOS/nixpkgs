@@ -48,7 +48,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Terminal netease cloud music client written in Go";
     homepage = "https://github.com/anhoder/go-musicfox";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "musicfox";
     maintainers = with lib.maintainers; [
       zendo

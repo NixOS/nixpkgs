@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: kinnrai <me@kinnrai.com>
+Date: Tue, 13 Oct 2026 06:55:27 -0400
+Subject: [PATCH 12/12] Build and install the Darwin testing helper for the
+ CMake-based package.
+
+Upstream supports CMake builds on macOS only for bootstrapping. Nixpkgs
+distributes the CMake-built tools, so include the helper required to run
+Swift Testing tests.
+
+https://github.com/swiftlang/swift-package-manager/issues/10600
+---
+ Sources/CMakeLists.txt                        | 4 ++++
+ Sources/swiftpm-testing-helper/CMakeLists.txt | 8 ++++++++
+ 2 files changed, 12 insertions(+)
+ create mode 100644 Sources/swiftpm-testing-helper/CMakeLists.txt
+
+diff --git a/Sources/CMakeLists.txt b/Sources/CMakeLists.txt
+index bac60ca63..416d3a6d4 100644
+--- a/Sources/CMakeLists.txt
++++ b/Sources/CMakeLists.txt
+@@ -47,6 +47,10 @@ add_subdirectory(XCBuildSupport)
+ add_subdirectory(SwiftBuildSupport)
+ add_subdirectory(tsan_utils)
+ 
++if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
++  add_subdirectory(swiftpm-testing-helper)
++endif()
++
+ if(SwiftPM_ENABLE_RUNTIME)
+   add_subdirectory(Runtimes)
+   # NOTE: maintain the custom output directory for the ManifestAPI modules to
+diff --git a/Sources/swiftpm-testing-helper/CMakeLists.txt b/Sources/swiftpm-testing-helper/CMakeLists.txt
+new file mode 100644
+index 000000000..542dde91d
+--- /dev/null
++++ b/Sources/swiftpm-testing-helper/CMakeLists.txt
+@@ -0,0 +1,8 @@
++add_executable(swiftpm-testing-helper
++  Entrypoint.swift)
++
++target_compile_options(swiftpm-testing-helper PRIVATE
++  -parse-as-library)
++
++install(TARGETS swiftpm-testing-helper
++  RUNTIME DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/swift/pm")
+-- 
+2.54.0
+

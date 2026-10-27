@@ -62,7 +62,7 @@
   libvorbis,
   libxml2,
   live555,
-  lua5,
+  lua5_2_compat,
   ncurses,
   nix-update-script,
   perl,
@@ -101,14 +101,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.23-2";
+  version = "3.0.24";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "vlc";
     rev = finalAttrs.version;
-    hash = "sha256-vg/kKNrIpGF7Olz8EiA1ZsW5SB4iHlvFbREDp4JokB0=";
+    hash = "sha256-WzgWspA1Jpc6FZ3kaEsxNEOI3Xj37Zp43NNbn6LamXg=";
   };
 
   depsBuildBuild = optionals waylandSupport [ pkg-config ];
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     bison
     flex
-    lua5
+    lua5_2_compat
     perl
     pkg-config
     removeReferencesTo
@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     libva
     libvorbis
     libxml2
-    lua5
+    lua5_2_compat
     ncurses
     samba
     schroedinger

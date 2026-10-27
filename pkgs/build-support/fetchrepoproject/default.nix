@@ -30,23 +30,22 @@ lib.fetchers.withNormalizedHash { } (
       concatMapStringsSep
       concatStringsSep
       fetchers
-      optionalString
+      optional
       ;
 
-    extraRepoInitFlags = [
-      (optionalString (repoRepoURL != "") "--repo-url=${repoRepoURL}")
-      (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")
-      (optionalString (referenceDir != "") "--reference=${referenceDir}")
-      (optionalString (manifestName != "") "--manifest-name=${manifestName}")
-    ];
+    extraRepoInitFlags =
+      optional (repoRepoURL != "") "--repo-url=${repoRepoURL}"
+      ++ optional (repoRepoRev != "") "--repo-branch=${repoRepoRev}"
+      ++ optional (referenceDir != "") "--reference=${referenceDir}"
+      ++ optional (manifestName != "") "--manifest-name=${manifestName}";
 
     repoInitFlags = [
       "--manifest-url=${manifest}"
       "--manifest-branch=${rev}"
       "--depth=1"
-      (optionalString createMirror "--mirror")
-      (optionalString useArchive "--archive")
     ]
+    ++ optional createMirror "--mirror"
+    ++ optional useArchive "--archive"
     ++ extraRepoInitFlags;
 
     local_manifests = copyPathsToStore localManifests;
@@ -80,7 +79,12 @@ lib.fetchers.withNormalizedHash { } (
       cacert
     ];
 
-    GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    env.GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+    inherit repoInitFlags createMirror local_manifests;
 
     buildCommand = ''
       # Path must be absolute (e.g. for GnuPG: ~/.repoconfig/gnupg/pubring.kbx)
@@ -90,23 +94,23 @@ lib.fetchers.withNormalizedHash { } (
       cd $out
 
       mkdir .repo
-      ${optionalString (local_manifests != [ ]) ''
+      if [ "''${#local_manifests[@]}" -gt 0 ]; then
         mkdir .repo/local_manifests
-        for local_manifest in ${concatMapStringsSep " " toString local_manifests}; do
+        for local_manifest in "''${local_manifests[@]}"; do
           cp $local_manifest .repo/local_manifests/$(stripHash $local_manifest)
         done
-      ''}
+      fi
 
-      repo init ${concatStringsSep " " repoInitFlags}
+      repo init "''${repoInitFlags[@]}"
       repo sync --jobs=$NIX_BUILD_CORES --current-branch
 
       # TODO: The git-index files (and probably the files in .repo as well) have
       # different contents each time and will therefore change the final hash
       # (i.e. creating a mirror probably won't work).
-      ${optionalString (!createMirror) ''
+      if [ -z "$createMirror" ]; then
         rm -rf .repo
         find -type d -name '.git' -prune -exec rm -rf {} +
-      ''}
+      fi
     '';
   }
 )

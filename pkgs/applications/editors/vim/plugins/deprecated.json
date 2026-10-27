@@ -143,10 +143,6 @@
         "date": "2024-11-19",
         "new": "cmp-latex-symbols"
     },
-    "compe-tabnine": {
-        "date": "2024-11-19",
-        "new": "cmp-tabnine"
-    },
     "compe-zsh": {
         "date": "2024-11-19",
         "new": "cmp-zsh"
@@ -259,6 +255,10 @@
         "date": "2026-02-04",
         "new": "vim-hier"
     },
+    "himalaya-vim": {
+        "date": "2026-10-01",
+        "new": "himalaya-vim9"
+    },
     "hlint-refactor": {
         "date": "2026-02-04",
         "new": "hlint-refactor-vim"
@@ -274,6 +274,10 @@
     "ipython": {
         "date": "2026-02-04",
         "new": "vim-ipython"
+    },
+    "kanagawa-paper-nvim": {
+        "date": "2026-10-22",
+        "new": "kanagawa-paper"
     },
     "latex-live-preview": {
         "date": "2026-02-04",

@@ -158,9 +158,13 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/robbert-vdh/nih-plug/blob/${src.rev}/CHANGELOG.md";
     # The framework crates are ISC. Every plugin in `plugins/` declares
     # `GPL-3.0-or-later` in its `Cargo.toml`, and the produced bundles link
-    # `vst3-sys` which is also GPLv3+. The binaries shipped by this
-    # derivation are therefore GPLv3+.
-    license = lib.licenses.gpl3Plus;
+    # `vst3-sys` which is also GPLv3+.
+    license =
+      with lib.licenses;
+      AND [
+        isc
+        gpl3Plus
+      ];
     maintainers = with lib.maintainers; [ magnetophon ];
     # CI also targets macOS and Windows, but the bundle install layout and
     # required system frameworks differ on Darwin (`CoreFoundation`, `AppKit`,

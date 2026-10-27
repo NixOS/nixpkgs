@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "thunderbird-mcp";
-  version = "0.7.4";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "TKasperczyk";
     repo = "thunderbird-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jrmHqToe+lJTpoG1QYaYHVk84PaO5zKAXLwr3Opl0A4=";
+    hash = "sha256-OH8uAy9ka2ao/7UF2Bi4dfhOa0IZz+z2Bm6MpfBF1Gk=";
   };
 
   postPatch = ''
@@ -23,16 +23,27 @@ buildNpmPackage (finalAttrs: {
   forceEmptyCache = true;
   dontNpmBuild = true;
 
-  npmDepsHash = "sha256-D0DAjK/u59rOKNf5kCu/OYkch+4lZYgdHkuib0sqtIw=";
+  npmDepsHash = "sha256-cngbvIIP7lgwuXhIM6CA7oNlg9ctj9I2AA3SMKxk54g=";
 
   doCheck = true;
 
   # Tests use local mock servers.
   __darwinAllowLocalNetworking = true;
 
-  checkPhase = "npm test";
+  checkPhase = ''
+    runHook preCheck
+    npm test
+    runHook postCheck
+  '';
 
-  passthru.updateScript = nix-update-script { };
+  preCheck = ''
+    # This is a test for the project's CI
+    rm test/release-workflow.test.cjs
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
 
   meta = {
     description = "MCP server for Thunderbird - enables AI assistants to access email, contacts, and calendars";

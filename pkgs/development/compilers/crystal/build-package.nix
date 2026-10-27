@@ -115,6 +115,11 @@ stdenv.mkDerivation (
     }
     // (args.env or { });
 
+    preConfigure = ''
+      export CRYSTAL_WORKERS="''${CRYSTAL_WORKERS:-$NIX_BUILD_CORES}"
+    ''
+    + (args.preConfigure or "");
+
     inherit enableParallelBuilding;
     strictDeps = true;
     buildInputs =

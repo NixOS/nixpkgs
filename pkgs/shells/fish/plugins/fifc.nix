@@ -3,14 +3,14 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "fifc";
   version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "gazorby";
     repo = "fifc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-huBcOdjiRztGyqcMX4vnrr8lLjtWBcCYvBLXr1JNNQs=";
   };
 
@@ -20,4 +20,4 @@ buildFishPlugin rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hmajid2301 ];
   };
-}
+})

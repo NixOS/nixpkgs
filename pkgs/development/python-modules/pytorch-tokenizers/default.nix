@@ -30,7 +30,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pytorch-tokenizers";
-  version = "1.4.1";
+  version = "1.5.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     repo = "tokenizers";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-r/o8+hyFoL01zuymgYED17yQHWwYgSxN2+Q8hnWeDYo=";
+    hash = "sha256-cEt+1n4ORgixipx14vCuFBYDSeaDF0UupITlihLxsew=";
   };
 
   patches = [

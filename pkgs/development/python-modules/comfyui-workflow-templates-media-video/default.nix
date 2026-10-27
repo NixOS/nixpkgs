@@ -11,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.101";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
+  # updated via comfyui
   src = fetchPypi {
     pname = "comfyui_workflow_templates_media_video";
     inherit (finalAttrs) version;

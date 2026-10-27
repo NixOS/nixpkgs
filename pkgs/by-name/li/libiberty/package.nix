@@ -28,11 +28,15 @@ stdenv.mkDerivation {
     substituteInPlace ../config.guess --replace-fail /usr/bin/uname uname
   '';
 
+  strictDeps = true;
+
   configureFlags = [ "--enable-install-libiberty" ] ++ lib.optional (!staticBuild) "--enable-shared";
 
   postInstall = lib.optionalString (!staticBuild) ''
     cp pic/libiberty.a $out/lib*/libiberty.a
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gcc.gnu.org/";

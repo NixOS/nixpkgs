@@ -10,7 +10,7 @@
   pbr,
   python-glanceclient,
   setuptools,
-  stestr,
+  stestrCheckHook,
   python-subunit,
   testscenarios,
   testtools,
@@ -51,18 +51,10 @@ buildPythonPackage rec {
     jsonschema
     python-subunit
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
     testtools
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "os_client_config" ];
 

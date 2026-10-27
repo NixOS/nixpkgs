@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Only
       gpl3Only
     ];
-    platforms = lib.intersectLists lib.platforms.unix lib.platforms.x86_64;
+    platforms = lib.platforms.unix;
   };
 })

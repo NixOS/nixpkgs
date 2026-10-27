@@ -45,6 +45,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [
+    # Ignore octoDNS deprecation warnings
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "octodns_ovh" ];
 
   meta = {

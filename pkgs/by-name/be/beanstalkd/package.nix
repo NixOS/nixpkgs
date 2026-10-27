@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "fortify" ];
 
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   nativeBuildInputs = [ installShellFiles ];

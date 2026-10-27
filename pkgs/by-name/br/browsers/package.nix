@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "browsers";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "Browsers-software";
     repo = "browsers";
     tag = finalAttrs.version;
-    hash = "sha256-0ITNw0xWG0BWQRRYKCRwiYhFUw6QkYukCCybt7Mdq7A=";
+    hash = "sha256-mbYtoWfnDgE7UkXh9KpAtFx6YvNryMv11ntkrXclHaA=";
   };
 
-  cargoHash = "sha256-OQbfGOd3lOd8/VxhdvkYMezNx/PO65PzRKcWlI7n/JU=";
+  cargoHash = "sha256-g21oIo5qozXK3XvHV/1bM6vFE0DLIMykY0m0WLk16t4=";
 
   nativeBuildInputs = [
     pkg-config

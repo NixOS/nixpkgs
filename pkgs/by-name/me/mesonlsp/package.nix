@@ -1,11 +1,9 @@
 {
   lib,
   stdenv,
-  llvmPackages_19,
   fetchFromGitHub,
 
   gtest,
-  makeWrapper,
   meson,
   ninja,
   pkg-config,
@@ -15,45 +13,91 @@
   libarchive,
   libossp_uuid,
   libpkgconf,
+  tomlplusplus,
   libuuid,
   nlohmann_json,
+  tree-sitter,
   pkgsStatic,
 
-  mesonlsp,
+  versionCheckHook,
   nix-update-script,
-  testers,
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mesonlsp";
-  version = "4.3.7";
+  version = "5.0.4";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "JCWasmx86";
     repo = "mesonlsp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-QhZv4PTcf1jzSOcp1+bPZWf5COugCIMq1zkhc0PJjUQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j8J/IREXYwH6KP9KlUTAfLpNN3n7yJSxoh8fqcvQ2P8=";
   };
 
-  patches = [ ./disable-tests-that-require-network-access.patch ];
+  mesonSubprojects = {
+    ada = fetchFromGitHub {
+      owner = "ada-url";
+      repo = "ada";
+      rev = "v2.7.4";
+      hash = "sha256-V5LwL03x7/a9Lvg1gPvgGipo7IICU7xyO2D3GqP6Lbw=";
+    };
+
+    muon = fetchFromGitHub {
+      owner = "JCWasmx86";
+      repo = "muon";
+      rev = "cea0b8e6c2874d1f2ce4057a17bd37090f619b6b";
+      hash = "sha256-MM47mdMKpQBykWeL1aSufH/BYfy+uAWVJLWWMhXolsE=";
+    };
+
+    sha256 = fetchFromGitHub {
+      owner = "amosnier";
+      repo = "sha-2";
+      rev = "49265c656f9b370da660531db8cc6bf0a2e110a6";
+      hash = "sha256-X9M/ZATYXUiE4oGorPBnsdaKnKaObarnMRh6QEfkBls=";
+    };
+
+    tree-sitter-ini = fetchFromGitHub {
+      owner = "JCWasmx86";
+      repo = "tree-sitter-ini";
+      rev = "848b6269f7039739aebd169fbd3d5e6e34bef661";
+      hash = "sha256-Lmlp20gxwfkWMbk81pBwfS7nc3ZBcMfjPzFB2ozhhLk=";
+    };
+
+    tree-sitter-meson = fetchFromGitHub {
+      owner = "JCWasmx86";
+      repo = "tree-sitter-meson";
+      rev = "09665faff74548820c10d77dd8738cd76d488572";
+      hash = "sha256-ice2NdK1/U3NylIQDnNCN41rK/G6uqFOX+OeNf3zm18=";
+    };
+  };
+
+  patches = [
+    # TODO: use mesonCheckFlag once nixpkgs updates to meson 1.12.0
+    ./disable-tests-that-require-network-access.patch
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    gtest
-    makeWrapper
     meson
     ninja
     pkg-config
     python3
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   buildInputs = [
     curl
+    gtest
     libarchive
     libpkgconf
     nlohmann_json
+    tomlplusplus
+    tree-sitter
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libossp_uuid
@@ -61,101 +105,46 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
 
-  mesonFlags = [ "-Dbenchmarks=false" ];
-
-  mesonCheckFlags = [ "--print-errorlogs" ];
+  mesonFlags = with lib.strings; [
+    (mesonBool "use_own_tree_sitter" false) # one less vendored dependency
+    (mesonBool "benchmarks" false)
+    # meson flags from $src/mesonlsp.spec
+    # couldn't get it to find tracy anyway
+    (mesonEnable "muon:tracy" false)
+    (mesonEnable "muon:meson-docs" false)
+    (mesonEnable "muon:meson-tests" false)
+    (mesonEnable "muon:man-pages" false)
+    (mesonEnable "muon:website" false)
+    (mesonEnable "muon:native_backtrace" false)
+  ];
 
   doCheck = true;
+  doInstallCheck = true;
 
-  postUnpack =
-    let
-      ada = fetchFromGitHub {
-        owner = "ada-url";
-        repo = "ada";
-        rev = "v2.7.4";
-        hash = "sha256-V5LwL03x7/a9Lvg1gPvgGipo7IICU7xyO2D3GqP6Lbw=";
-      };
+  postUnpack = ''
+    (
+      cd "$sourceRoot"
 
-      muon = fetchFromGitHub {
-        owner = "JCWasmx86";
-        repo = "muon";
-        rev = "62af239567ec3b086bae7f02d4aed3a545949155";
-        hash = "sha256-k883mKwuP35f0WtwX8ybl9uYbvA3y6Vxtv2EJMpZDEs=";
-      };
+      ${lib.concatMapAttrsStringSep "\n" (name: value: ''
+        cp -R --no-preserve=mode,ownership ${value} subprojects/${name}
+      '') finalAttrs.mesonSubprojects}
 
-      sha256 = fetchFromGitHub {
-        owner = "amosnier";
-        repo = "sha-2";
-        rev = "49265c656f9b370da660531db8cc6bf0a2e110a6";
-        hash = "sha256-X9M/ZATYXUiE4oGorPBnsdaKnKaObarnMRh6QEfkBls=";
-      };
-
-      tomlplusplus = fetchFromGitHub {
-        owner = "marzer";
-        repo = "tomlplusplus";
-        rev = "v3.4.0";
-        hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
-      };
-
-      tree-sitter = fetchFromGitHub {
-        owner = "tree-sitter";
-        repo = "tree-sitter";
-        rev = "v0.20.8";
-        hash = "sha256-278zU5CLNOwphGBUa4cGwjBqRJ87dhHMzFirZB09gYM=";
-      };
-
-      tree-sitter-ini = fetchFromGitHub {
-        owner = "JCWasmx86";
-        repo = "tree-sitter-ini";
-        rev = "20aa563306e9406ac55babb4474521060df90a30";
-        hash = "sha256-1hHjtghBIf7lOPpupT1pUCZQCnzUi4Qt/yHSCdjMhCU=";
-      };
-
-      tree-sitter-meson = fetchFromGitHub {
-        owner = "JCWasmx86";
-        repo = "tree-sitter-meson";
-        rev = "09665faff74548820c10d77dd8738cd76d488572";
-        hash = "sha256-ice2NdK1/U3NylIQDnNCN41rK/G6uqFOX+OeNf3zm18=";
-      };
-    in
-    ''
-      (
-        cd "$sourceRoot/subprojects"
-
-        cp -R --no-preserve=mode,ownership ${ada} ada
-        cp "packagefiles/ada/meson.build" ada
-
-        cp -R --no-preserve=mode,ownership ${muon} muon
-
-        cp -R --no-preserve=mode,ownership ${sha256} sha256
-        cp "packagefiles/sha256/meson.build" sha256
-
-        cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus-3.4.0
-
-        cp -R --no-preserve=mode,ownership ${tree-sitter} tree-sitter-0.20.8
-        cp "packagefiles/tree-sitter-0.20.8/meson.build" tree-sitter-0.20.8
-
-        cp -R --no-preserve=mode,ownership ${tree-sitter-ini} tree-sitter-ini
-        cp "packagefiles/tree-sitter-ini/meson.build" tree-sitter-ini
-
-        cp -R --no-preserve=mode,ownership ${tree-sitter-meson} tree-sitter-meson
-        cp "packagefiles/tree-sitter-meson/meson.build" tree-sitter-meson
-      )
-    '';
+      meson subprojects packagefiles --apply
+    )
+  '';
 
   postPatch = ''
-    substituteInPlace subprojects/muon/include/compilers.h \
-      --replace-fail 'compiler_language new' 'compiler_language new_'
-
     patchShebangs src/libtypenamespace
   '';
 
+  mesonCheckFlags = [
+    "--print-errorlogs"
+    # requires internet
+    # "--exclude=utilstest" (meson 1.12.0)
+  ];
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = mesonlsp;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = {
@@ -164,9 +153,7 @@ stdenv'.mkDerivation (finalAttrs: {
     changelog = "https://github.com/JCWasmx86/mesonlsp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "mesonlsp";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.quantenzitrone ];
     platforms = lib.platforms.unix;
-    # ../src/liblog/log.cpp:41:7: error: call to 'format' is ambiguous
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

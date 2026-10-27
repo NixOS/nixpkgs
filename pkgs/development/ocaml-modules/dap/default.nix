@@ -18,7 +18,7 @@ buildDunePackage (finalAttrs: {
   duneVersion = "3";
   src = fetchurl {
     url = "https://github.com/hackwaly/ocaml-dap/releases/download/${finalAttrs.version}/dap-${finalAttrs.version}.tbz";
-    sha256 = "1zq0f8429m38a4x3h9n3rv7n1vsfjbs72pfi5902a89qwyilkcp0";
+    hash = "sha256-4LJJo+c4ISVAKtFdcfSSTu9gz87DJjg6UWjUJAhyAP8=";
   };
 
   minimalOCamlVersion = "4.08";

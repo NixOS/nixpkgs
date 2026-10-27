@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'package-recipe)
 (require 'package-build)
 

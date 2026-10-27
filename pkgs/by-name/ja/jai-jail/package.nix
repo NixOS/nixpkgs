@@ -5,7 +5,7 @@
   autoreconfHook,
   pkg-config,
   pandoc,
-  systemd,
+  systemdLibs,
   util-linux,
   acl,
 }:
@@ -25,7 +25,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     pandoc
-    systemd
+    systemdLibs
   ];
 
   strictDeps = true;

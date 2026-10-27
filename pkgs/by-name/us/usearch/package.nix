@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "usearch";
-  version = "2.25.3";
+  version = "2.26.0";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # we need to use the pinned stringzilla because the now removed (or partially by levenshtein replaced) hamming_distance is being used.
     fetchSubmodules = true;
-    hash = "sha256-lk6cBUwu3+ud/43HSmDWVP2RhXtH8+KmWSuREPoKQ4s=";
+    hash = "sha256-FsU/e8Aq+ARWV94c8MNJPL/edkde1Lj0cA3dOVrrm/0=";
   };
 
   postPatch = ''

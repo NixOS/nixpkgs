@@ -2,6 +2,7 @@
   lib,
   python314,
   fetchFromGitLab,
+  fetchpatch,
   callPackage,
   stdenv,
   makeWrapper,
@@ -87,6 +88,18 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-RGYD6HAFZZTSNJWd8n7/gMy9FkjZno9LO1jGxav5d9M=";
   };
+
+  patches = [
+    # support django-async-backend>=6.1
+    (fetchpatch {
+      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/commit/4cf8c9d1518f5835b71c0692a72b63d8a62bea4a.patch";
+      includes = [
+        "glitchtip/ingest_asgi.py"
+        "glitchtip/settings.py"
+      ];
+      hash = "sha256-FwOJYSsJcJoqUwuHwHPWkzQqVB81Chex4RFTIhl82XM=";
+    })
+  ];
 
   postPatch = ''
     echo 'import os

@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "7.1.5";
+  version = "7.1.6";
   pname = "multitail";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "multitail";
     rev = finalAttrs.version;
-    hash = "sha256-c9NlQLgHngNBbADZ6/legWFaKHJAQR/LZIfh8bJoc4Y=";
+    hash = "sha256-L8rpuiZrwWkAHIntTwqepVBYTcMuV494lFoS5YvJq8g=";
   };
 
   nativeBuildInputs = [

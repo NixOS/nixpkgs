@@ -5,18 +5,20 @@
   versionCheckHook,
   _experimental-update-script-combinators,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 let
   stubsSrc = fetchFromGitHub {
     owner = "JetBrains";
     repo = "phpstorm-stubs";
-    rev = "f6dd2dd35d99fb774251a83555fe07bf2109d57e";
-    hash = "sha256-H9Td/yi9Um0Z9ifxZdh74bvGCMVSC+MA1OHrtbGD8vE=";
+    rev = "5f68c1021badebe34119fb8fa10ba7cc25de6c0c";
+    hash = "sha256-GQW+N5FrWKf6PpLyhJ6Gywbe1lESwW/rxiv2ESNdH1s=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phpantom-lsp";
-  version = "0.9.0";
+  version = "0.11.1";
 
   __structuredAttrs = true;
 
@@ -24,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "PHPantom-dev";
     repo = "phpantom_lsp";
     tag = finalAttrs.version;
-    hash = "sha256-euWaFH40VHefZewUcKvsLwwHZP+GwfTN8kfuAkaABB8=";
+    hash = "sha256-OTMe7T/TK9lpQGXPQA8VIfZ+SA6/7T/2WBdwym3A+0E=";
   };
 
   postPatch = ''
@@ -36,7 +38,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       > stubs/jetbrains/phpstorm-stubs/.commit
   '';
 
-  cargoHash = "sha256-2MIJxVRqyCv5HzCwY1s+rCp1A4vFRsyAEEuyIEegZMA=";
+  cargoHash = "sha256-PH2Q38v2eX51jwHjGEObbaiJKZdv4qf/8eup0d97Iis=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  env.ZSTD_SYS_USE_PKG_CONFIG = "1";
+  buildInputs = [ zstd ];
 
   checkFlags = [
     "--test"

@@ -11,7 +11,7 @@
   check,
   libserialport,
   doxygen,
-  glibmm,
+  glibmm_2_4,
   python3,
   hidapi,
   libieee1284,
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     libftdi1
     check
     libserialport
-    glibmm
+    glibmm_2_4
     hidapi
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

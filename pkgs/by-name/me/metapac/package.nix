@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "metapac";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "ripytide";
     repo = "metapac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Nw4CUTx0/KcHHguRrUH6Sa+DZhPJqdsTEeVBb0eEqw=";
+    hash = "sha256-VVDN+s6UNoLM5QywHGcSMVcgFFgnuJcCcCNm/KJ9wqQ=";
   };
 
-  cargoHash = "sha256-hUd9qWXXErOyJV0mjmkMUb8KPuUhp1XI3GNYwpt1Xow=";
+  cargoHash = "sha256-ze1oOYD8gUS4mlW/+VFfyzdo7rd10uKFmt3JhUsA32o=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

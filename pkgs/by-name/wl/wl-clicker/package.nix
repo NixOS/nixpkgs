@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wl-clicker";
-  version = "0.4";
+  version = "0.5.2";
 
   nativeBuildInputs = [ wayland-scanner ];
   buildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "phoneticalb";
     repo = "wl-clicker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+k3iZOv12WbqpeYbYjIXBIB4mO2DrY1pl+MJn2B+cZA=";
+    hash = "sha256-Hiy85WSOWo1WviMeAt2UcYdwReI8Gio3hYY5qxt+720=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

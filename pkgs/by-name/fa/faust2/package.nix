@@ -16,7 +16,6 @@
   libtool,
   libxml2,
   p11-kit,
-  vim,
   which,
   ncurses,
   fetchpatch,
@@ -61,7 +60,6 @@ let
         pkg-config
         cmake
         libtool
-        vim
         which
       ];
       buildInputs = [

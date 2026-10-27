@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "faiss";
-  version = "1.15.0";
+  version = "1.15.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cP13HRNa17KL5ZE6if8QmoyKQBLf8ckAa0bOaioEOgE=";
+    hash = "sha256-uqP/dygyFGUEXCIYpvUGWC35kPyn7ZsDkNTPU5hwxSk=";
   };
 
   nativeBuildInputs = [

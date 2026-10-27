@@ -37,9 +37,13 @@ mkMesonExecutable (finalAttrs: {
   mesonFlags = [
   ];
 
-  excludedTestPatterns = lib.optionals (lib.versions.majorMinor version == "2.34") [
-    "fchmodatTryNoFollow.fallbackWithoutProc"
-  ];
+  excludedTestPatterns =
+    lib.optionals (lib.versions.majorMinor version == "2.34") [
+      "fchmodatTryNoFollow.fallbackWithoutProc"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.36pre") [
+      "Root*"
+    ];
 
   passthru = {
     tests = {

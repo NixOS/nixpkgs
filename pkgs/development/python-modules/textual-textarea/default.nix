@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textual-textarea";
-  version = "0.18.1";
+  version = "0.18.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tconbeer";
     repo = "textual-textarea";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ixSzT6Mxh7n7pLlXnb9y2XJoSUwcETpJ9qylON0NxIo=";
+    hash = "sha256-Te4CJHRavdaQuSPhmR2KhuLJL1dASC30b2r0MiiCy0g=";
   };
 
   build-system = [ hatchling ];

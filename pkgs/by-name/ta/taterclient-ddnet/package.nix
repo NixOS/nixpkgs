@@ -33,18 +33,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.8.7";
+  version = "10.9.0";
 
   src = fetchFromGitHub {
     owner = "TaterClient";
     repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-jGi0eRKeYVGWes4AAzasKjdSqoYrEalxVHR/dYEzSXo=";
+    hash = "sha256-QlLxY1k9S9mvRJ0LL7/jpBfIn638eEEnQQ6tKvT/MJY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
+    hash = "sha256-n+1SlgmjSe0ul/iuK3kjTGSvyYwdxwcRrCAnZyavZA8=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     # git rev-parse --short=32 HEAD
     #
     # In accordance with this script https://github.com/TaterClient/TClient/blob/master/scripts/git_revision.py
-    DDNET_GIT_SHORTREV_HASH = "4e4269396b97d06879c11ae3b9696c3d";
+    DDNET_GIT_SHORTREV_HASH = "6b4118bf0ec86822dea43cc3e97b0645";
   };
 
   # Since we are not building the server executable, the `run_tests` Makefile target

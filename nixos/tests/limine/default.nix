@@ -1,6 +1,5 @@
 {
   runTest,
-  ...
 }:
 {
   additionalFiles = runTest ./additional-files.nix;

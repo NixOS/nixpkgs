@@ -28,10 +28,10 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.29.1";
+  version = "1.29.3";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script { })
+    (nix-update-script { extraArgs = [ "--use-github-releases" ]; })
     (lib.getExe (writeShellApplication {
       name = "podman-desktop-dependencies-updater";
       runtimeInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "podman-desktop";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yAGwXY1MxjIS4ChK/YUHSjysFFKlsPmdxysTW7y7DlA=";
+    hash = "sha256-7fyRrO4qd4sxsVtVuACZUgOzDVC5vGYQi39a+gTCPsM=";
   };
 
   pnpmDeps = fetchPnpmDeps {

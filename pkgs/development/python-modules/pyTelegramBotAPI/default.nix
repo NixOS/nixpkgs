@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  aioredis,
   buildPythonPackage,
   coloredlogs,
   fastapi,
@@ -19,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytelegrambotapi";
-  version = "4.36.1";
+  version = "4.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     tag = finalAttrs.version;
-    hash = "sha256-KPsfKTG7MjBhM5nYlhfVF7wvjZP9KQRVmCjlGcL/OT4=";
+    hash = "sha256-RVrCL/fwPiKUylMxush5TkRk2qb7mMPmKCrLq1z7nJg=";
   };
 
   build-system = [ hatchling ];
@@ -35,7 +34,6 @@ buildPythonPackage (finalAttrs: {
     json = [ ujson ];
     PIL = [ pillow ];
     redis = [ redis ];
-    aioredis = [ aioredis ];
     aiohttp = [ aiohttp ];
     fastapi = [ fastapi ];
     uvicorn = [ uvicorn ];

@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZXw7KEvf1sUHWIM5R4Th2SmekTX6rGXznAq3mtcf3Zo=";
 
-  strictDeps = true;
-
   # use the non-vendored openssl
   env.OPENSSL_NO_VENDOR = 1;
 

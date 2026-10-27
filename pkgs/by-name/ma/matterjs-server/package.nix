@@ -36,6 +36,13 @@ buildNpmPackage (finalAttrs: {
 
   preBuild = "npm run version -- --apply";
 
+  # remove temporary build files
+  postBuild = ''
+    shopt -s globstar
+    rm node_modules/**/build/{config.gypi,Makefile,*.target.mk}
+    shopt -u globstar
+  '';
+
   dontNpmInstall = true;
 
   makeWrapperArgs = [

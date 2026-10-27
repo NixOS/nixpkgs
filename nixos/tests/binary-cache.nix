@@ -7,6 +7,9 @@
     { pkgs, ... }:
     {
       imports = [ ../modules/installer/cd-dvd/channel.nix ];
+
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
       environment.systemPackages = with pkgs; [
         openssl
         python3

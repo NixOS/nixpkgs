@@ -7,7 +7,7 @@
   fetchFromGitHub,
   nix,
   nix-update,
-  nanobind,
+  nanobind_3,
   perl,
   writeShellApplication,
 
@@ -20,16 +20,14 @@
   fmt,
   nlohmann_json,
   # linux-only
-  openblas,
+  openblasCompat,
 
   # tests
+  callPackage,
   numpy,
   pytestCheckHook,
   python,
-  runCommand,
-
-  # passthru
-  mlx,
+  sysctl,
 }:
 
 let
@@ -44,7 +42,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.32.0";
+  version = "0.32.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -52,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yHpTyRf9FOPbdyDWSM7b6VC72STnUpgCMLbDxLbdaqs=";
+    hash = "sha256-Bs8c1+GvJuUsrB/KrW6Sjfe8noS8P+M7dwBQY0XJtaU=";
   };
 
   patches = [
@@ -84,7 +82,7 @@ buildPythonPackage (finalAttrs: {
       (lib.cmakeBool "MLX_BUILD_METAL" false)
       (lib.cmakeBool "USE_SYSTEM_FMT" true)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind_3.src}")
       (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
     ];
   };
@@ -100,7 +98,8 @@ buildPythonPackage (finalAttrs: {
     nlohmann_json
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    openblas
+    # MLX passes 32-bit integers to LAPACK.
+    openblasCompat
   ];
 
   pythonImportsCheck = [ "mlx" ];
@@ -109,6 +108,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     numpy
     pytestCheckHook
+    sysctl
   ];
 
   enabledTestPaths = [
@@ -116,25 +116,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      # Segmentation fault
-      "test_lapack"
-      "test_multivariate_normal"
-      "test_orthogonal"
-      "test_vmap_inverse"
-      "test_vmap_svd"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # M1 Accelerate bug, to be fixed in macOS:
       # https://github.com/ml-explore/mlx/issues/3200
       # https://github.com/ml-explore/mlx/pull/3563#issuecomment-4784288696
       "test_gather_qmm_sorted"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      # AssertionError: 1.049041748046875e-05 not less than 1e-05
+      "test_1bit_quantize_dequantize"
     ];
-
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    # Segmentation fault
-    "python/tests/test_linalg.py"
-  ];
 
   # patchelf is only available on Linux and no patching is needed on darwin.
   # Otherwise mlx/core.cpython-313-x86_64-linux-gnu.so contains a reference to
@@ -151,25 +142,11 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     inherit gguf-tools;
 
-    tests = {
-      mlxTest =
-        runCommand "run-mlx-examples"
-          {
-            buildInputs = [ mlx ];
-            nativeBuildInputs = [ python ];
-          }
-          ''
-            cp ${finalAttrs.src}/examples/python/logistic_regression.py .
-            ${python.interpreter} logistic_regression.py
-            rm logistic_regression.py
-
-            cp ${finalAttrs.src}/examples/python/linear_regression.py .
-            ${python.interpreter} linear_regression.py
-            rm linear_regression.py
-
-            touch $out
-          '';
-    };
+    tests.mlxTest =
+      (callPackage ./tests.nix {
+        mlx = finalAttrs.finalPackage;
+        inherit (finalAttrs) src;
+      }).mlxTest;
 
     updateScript = lib.getExe (writeShellApplication {
       name = "mlx-update";

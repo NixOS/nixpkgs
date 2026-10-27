@@ -3,29 +3,21 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  jq,
 }:
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.39.26";
+  version = "0.47.16";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-CfoC9/Qe2OdPNnAa7e0BFgbPEbVrDfl9u3hM6y8msGQ=";
+    hash = "sha256-V8YpTc7GqP42a+Z/cKW/R4WrwbCyPY0+kYuotA4ec4E=";
   };
-
-  patches = [
-    ./0001-Pin-Grpc.Tools-To-2.68.1.patch
-  ];
 
   postPatch = ''
     substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
-    # Upstream uses rollForward = disable, which pins to an *exact* .NET SDK version.
-    jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
-    mv global.json.tmp global.json
   '';
 
   projectFile = [
@@ -35,11 +27,12 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0_4xx-bin;
 
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  nativeBuildInputs = [ jq ];
+  # Compression in single-file bundles requires self-contained builds.
+  dotnetInstallFlags = [ "-p:EnableCompressionInSingleFile=false" ];
 
   doCheck = true;
 

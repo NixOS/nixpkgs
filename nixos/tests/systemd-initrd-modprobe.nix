@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ ... }:
 {
   name = "systemd-initrd-modprobe";
 
@@ -6,7 +6,6 @@
     { pkgs, ... }:
     {
       testing.initrdBackdoor = true;
-      boot.initrd.systemd.enable = true;
       boot.initrd.kernelModules = [ "tcp_hybla" ]; # Load module in initrd.
       boot.extraModprobeConfig = ''
         options tcp_hybla rtt0=42

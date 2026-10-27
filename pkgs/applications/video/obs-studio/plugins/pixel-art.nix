@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "dspstanky";
     repo = "pixel-art";
     rev = version;
-    sha256 = "sha256-7o63e7nK/JsK2SQg0AzUYcc4ZsPx0lt8gtAQm8Zy+9w=";
+    hash = "sha256-7o63e7nK/JsK2SQg0AzUYcc4ZsPx0lt8gtAQm8Zy+9w=";
   };
 
   nativeBuildInputs = [ cmake ];

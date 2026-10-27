@@ -30,10 +30,12 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Cowsay reborn, written in Go";
     homepage = "https://github.com/Code-Hex/Neo-cowsay";
-    license = with lib.licenses; [
-      artistic1 # or
-      gpl3
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        artistic2
+        gpl3Only
+      ];
     mainProgram = "cowsay";
   };
 })

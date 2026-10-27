@@ -10,20 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.9.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6w4Pso7I0ojbsbACEZrYuJsW9J2W38jY9uiErMQNeXE=";
+    hash = "sha256-CMjgYl1RL9N1P/xCM0/yVAU280pOF2S+4b+xfv4/2WU=";
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/outline/outline/blob/main/package.json#L398
-    ./yarn-4.14-support.patch
-  ];
 
   missingHashes = ./missing-hashes.json;
 
@@ -34,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-7nREE+sGd6ZUGfZ+YSIIGUaysMSEdap189koFQcV+hs=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-d36+pdV/hq4YVWCNXWqWaoltQnTQm4NfrJIjtYTill4=";
   };
 
   buildPhase = ''
@@ -49,8 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    yarn workspaces focus --production
+
     mkdir -p $out/bin $out/share/outline
     mv build server public node_modules $out/share/outline/
+    find $out/share/outline/node_modules -name "*.map" -delete
+    find $out/share/outline/node_modules -name "*.d.ts" -delete
 
     node_modules=$out/share/outline/node_modules
     build=$out/share/outline/build

@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
     tag = version;
-    hash = "sha256-Jg9GNw93uA+Lg7/kiQb+tfXXuoggQI0Nkz7cwRqq8FQ=";
+    hash = "sha256-sg7c18+Gd6KObPQS7h9Jwj5iXUx5Cz1lcKSRERDMdL0=";
   };
 
   postPatch = ''

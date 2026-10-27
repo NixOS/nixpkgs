@@ -33,16 +33,16 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "psst";
-  version = "0-unstable-2025-11-16";
+  version = "0-unstable-2026-08-18";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = "psst";
-    rev = "cae05c43f4aee2c5936375225c4586ea35594835";
-    hash = "sha256-iCm5lvZq64Dmbe/stkZO0XvX0mWfmzFgl3MeCTI6/hM=";
+    rev = "3c3621aa79f820c737dd899e7e359b1359292466";
+    hash = "sha256-+Wh4dhlfF/hQhDoe/ixoYvA2yVlgUygEgMbeUgWVAG4=";
   };
 
-  cargoHash = "sha256-Q4xMsX6lJK3Or+oKuPOTCec2pe+oBWC33peCE1x7QRg=";
+  cargoHash = "sha256-sJX5iMPXsKE9UmD+WOAYqWTTouSzmiDbZppPtMoGue8=";
 
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
@@ -76,7 +76,12 @@ rustPlatform.buildRustPackage {
     install -Dm644 ${desktopItem}/share/applications/* -t $out/share/applications
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=(0-unstable-.*)"
+    ];
+  };
 
   meta = {
     description = "Spotify client with native GUI written in Rust, without Electron";

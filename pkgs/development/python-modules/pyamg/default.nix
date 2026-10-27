@@ -60,6 +60,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stephen-huan ];
-    broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast python.version "3.14";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

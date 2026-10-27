@@ -110,7 +110,6 @@ in
   allowGoReference = true;
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   passthru = {
     inherit

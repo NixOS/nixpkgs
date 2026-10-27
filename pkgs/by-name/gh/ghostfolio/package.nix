@@ -12,13 +12,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "ghostfolio";
-  version = "3.59.1";
+  version = "3.86.0";
 
   src = fetchFromGitHub {
     owner = "ghostfolio";
     repo = "ghostfolio";
     tag = finalAttrs.version;
-    hash = "sha256-Wf5uxU4lLB/Xw8SoZKFyyZulmpQCKKIIonDmyUlDyHs=";
+    hash = "sha256-HZ5nGH4iOPZWqGmOqioEaV4hcd+K4Aexc4IWoIr1IDs=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
     '';
   };
 
-  npmDepsHash = "sha256-pUE/zXM+q9RcV9pEMBMAhGUMB6Exn3ZWCbvFggzz0N8=";
+  npmDepsHash = "sha256-ohpGshxAfAFcDCV8mCrvFOwwY5ozSjf0u/Lab0BQ6rU=";
 
   postPatch = ''
     substituteInPlace replace.build.mjs \

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-enum";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "abice";
     repo = "go-enum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fFMTnbQ6RUGxvANHveB1YrXlppgUVTJIRB4v1sV3GH8=";
+    hash = "sha256-pEBx5292R8X06TLpv8kboNafiEfq9NWXvUoVVVQ0DVg=";
   };
 
-  vendorHash = "sha256-hGfwb0GZCxc3EQWvxs7/fNVEVGGQE2I0B+MMaH7ecPM=";
+  vendorHash = "sha256-NK4IeOmpzioo7c9PrncgwhCsIyt31sMnkv7qjuJbREo=";
 
   __structuredAttrs = true;
 

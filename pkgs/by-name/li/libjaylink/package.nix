@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjaylink";
-  version = "0.4.0";
+  version = "0.5.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libjaylink";
     repo = "libjaylink";
     tag = finalAttrs.version;
-    hash = "sha256-PghPVgovNo/HhNg7c6EGXrqi6jMrb8p/uLqGDIZ7t+s=";
+    hash = "sha256-bwFmJuezMURM7JEInG/q5TP7g+QloyQ4V1rsUZVcmvE=";
   };
 
   nativeBuildInputs = [

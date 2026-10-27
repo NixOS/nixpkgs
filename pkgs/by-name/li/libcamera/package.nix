@@ -1,6 +1,8 @@
 {
   stdenv,
-  fetchgit,
+  fetchFromGitLab,
+  testers,
+  nix-update-script,
   lib,
   meson,
   ninja,
@@ -10,29 +12,38 @@
   libdrm,
   libevent,
   libyaml,
+  libyuv,
   gst_all_1,
   gtest,
-  graphviz,
-  doxygen,
   python3,
   python3Packages,
   udev,
   libpisp,
+  libglvnd,
+  enableDocumentation ? false,
+  graphviz,
+  doxygen,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
-  withQcam ? false,
-  qt6, # withQcam
-  libtiff, # withQcam
+  withSoftispGPU ? true, # software ISP GPU acceleration
+  withQcam ? false, # cannot be enabled per default as it causes infinite recursion
+  # withQcam
+  qt6,
+  libjpeg,
+  libtiff,
+  SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
-  version = "0.7.0";
+  version = "0.7.2";
 
-  src = fetchgit {
-    url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "v${version}";
-    hash = "sha256-W9pRE8/0Cf2EEP5bbvy4FsDSeKKSklfJb6T48ZN4dzE=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "camera";
+    repo = "libcamera";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vhFkeT1j2KKm+CVvGrtH5BEYJSEdaX7N7DRdA0a9EWk=";
   };
 
   outputs = [
@@ -80,6 +91,8 @@ stdenv.mkDerivation rec {
     # pycamera
     python3Packages.pybind11
 
+    libyuv
+
     # yamlparser
     libyaml
 
@@ -87,10 +100,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
   ++ lib.optionals withTracing [ lttng-ust ]
+  ++ lib.optionals withSoftispGPU [ libglvnd ]
   ++ lib.optionals withQcam [
+    libjpeg
     libtiff
     qt6.qtbase
     qt6.qttools
+    SDL2
   ];
 
   nativeBuildInputs = [
@@ -101,31 +117,43 @@ stdenv.mkDerivation rec {
     python3Packages.jinja2
     python3Packages.pyyaml
     python3Packages.ply
+    openssl
+  ]
+  ++ lib.optionals enableDocumentation [
     python3Packages.sphinx
     graphviz
     doxygen
-    openssl
   ]
   ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
-  mesonFlags = [
-    "-Dv4l2=true"
-    (lib.mesonEnable "tracing" withTracing)
-    (lib.mesonEnable "qcam" withQcam)
-    "-Dlibunwind=disabled"
-    "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
-    # Avoid blanket -Werror to evade build failures on less
-    # tested compilers.
-    "-Dwerror=false"
-    # Documentation breaks binary compatibility.
-    # Given that upstream also provides public documentation,
-    # we can disable it here.
-    "-Ddocumentation=disabled"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch [
-    # we don't have tensorflow-lite to build this
-    "-Drpi-awb-nn=disabled"
-  ];
+  mesonFlags =
+    lib.mapAttrsToList lib.mesonEnable {
+      v4l2 = true;
+      tracing = true;
+      pycamera = true;
+      qcam = withQcam;
+      apps-output-dng = withQcam;
+      cam-output-sdl2 = withQcam;
+      cam-jpeg = withQcam;
+      softisp-gpu = withSoftispGPU;
+      libunwind = false;
+      libdw = false;
+      lc-compliance = true;
+
+      # Documentation breaks binary compatibility.
+      # Given that upstream also provides public documentation,
+      # we can disable it here.
+      documentation = enableDocumentation;
+
+      rpi-awb-nn = false;
+    }
+    ++ [
+      (lib.mesonBool "test" finalAttrs.finalPackage.doCheck)
+
+      # Avoid blanket -Werror to evade build failures on less
+      # tested compilers.
+      (lib.mesonBool "werror" false)
+    ];
 
   env = {
     # Fixes error on a deprecated declaration
@@ -135,16 +163,30 @@ stdenv.mkDerivation rec {
     FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
   };
 
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
-    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
+    downloadPage = "https://gitlab.freedesktop.org/camera/libcamera";
+    changelog = "https://gitlab.freedesktop.org/camera/libcamera/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ citadelcore ];
+    pkgConfigModules = [
+      "libcamera"
+      "libcamera-base"
+    ];
+    maintainers = with lib.maintainers; [
+      citadelcore
+      tmarkus
+    ];
     platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-}
+})

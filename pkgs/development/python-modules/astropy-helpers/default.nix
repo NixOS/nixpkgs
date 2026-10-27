@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pkg-resources-backport,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,10 @@ buildPythonPackage rec {
     ./python-imp.patch
   ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    pkg-resources-backport
+  ];
 
   pythonImportsCheck = [ "astropy_helpers" ];
 

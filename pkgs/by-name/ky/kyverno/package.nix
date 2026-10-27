@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kyverno";
-  version = "1.19.0";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7uzpUyrqe+nvPp5qI0k7+6uFStr+oJNgEJXsuv+nPLs=";
+    hash = "sha256-Q94qvOTrGl/82cooREqFAw+G7lY/tnpmaOb1JA2ZYOQ=";
   };
 
   ldflags = [
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/kyverno/kyverno/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
-  vendorHash = "sha256-oAZG0UThURyQgENhpSX/jxaA36/iRPkbYCGYilhIQpc=";
+  vendorHash = "sha256-boLJoLF6eNYy1anNiQ+aGy5/hY23t4WULdEjFLTUrCk=";
 
   subPackages = [ "cmd/cli/kubectl-kyverno" ];
 
@@ -60,5 +60,6 @@ buildGoModule (finalAttrs: {
       LorenzBischof
       Scrumplex
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kyverno" finalAttrs.version;
   };
 })

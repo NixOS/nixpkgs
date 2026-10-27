@@ -17,26 +17,26 @@
   webkitgtk_4_1,
   atk,
   libsoup_3,
-  openssl_3,
+  openssl_3_5,
   libayatana-appindicator,
 }:
 
 let
   pname = "github-copilot-app";
-  version = "1.1.12";
+  version = "1.1.29";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-x64.deb";
-      hash = "sha256-gT8CzKaoyNhykDtNGXQDqYc0yBRvNotjwETxI9VnPoA=";
+      hash = "sha256-IqvaFeGY2BDPGlgvQYTbQ2INxFqTczV01PAvAI3To3A=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-arm64.deb";
-      hash = "sha256-bC5Z3ZAhF/YqWWj+YHEYQBki8eOUv35rXH7C+DnGSlg=";
+      hash = "sha256-URF7lOXieOYJ2fVohXyG17RcvJjY0JsgSXE0N3wzNRs=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-darwin-arm64.dmg";
-      hash = "sha256-8cNMYDqgOyMIyMqtZvKOzxWYHQ6+tKmxlaim1Zqn33c=";
+      hash = "sha256-G31b92lBX91CtTn+KBlg3/DQi1U4/kQNIJ07VSUyiLg=";
     };
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     webkitgtk_4_1
     atk
     libsoup_3
-    openssl_3
+    openssl_3_5
     libayatana-appindicator
     stdenv.cc.cc.lib
   ];
@@ -95,7 +95,8 @@ stdenv.mkDerivation {
         cp -r *.app $out/Applications/
 
         mkdir -p $out/bin
-        ln -s "$out/Applications/"*.app/Contents/MacOS/* $out/bin/github-copilot-app
+        ln -s "$out/Applications/"*.app/Contents/MacOS/git-credential-copilot "$out"/bin/git-credential-copilot
+        ln -s "$out/Applications/"*.app/Contents/MacOS/github "$out"/bin/github-copilot-app
       ''
     else
       ''
@@ -110,7 +111,8 @@ stdenv.mkDerivation {
 
         # Update desktop file to use the new executable name
         substituteInPlace $out/share/applications/*.desktop \
-          --replace-fail "Exec=github" "Exec=github-copilot-app"
+          --replace-fail "Exec=github" "Exec=github-copilot-app" \
+          --replace-fail "StartupWMClass=github" "StartupWMClass=github-copilot-app"
       ''
   )
   + ''

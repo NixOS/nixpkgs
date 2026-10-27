@@ -23,7 +23,7 @@ let
   ];
 in
 
-mkCoqDerivation {
+(mkCoqDerivation {
   pname = "coq${coq.coq-version}-VST";
   namePrefix = [ ];
   displayVersion = {
@@ -38,6 +38,7 @@ mkCoqDerivation {
     in
     with lib.versions;
     lib.switch coq.coq-version [
+      (case (range "9.1" "9.2") "2.17")
       (case (range "9.0" "9.1") "2.16")
       (case (range "8.19" "8.20") "2.15")
       (case (range "8.15" "8.19") "2.14")
@@ -46,6 +47,7 @@ mkCoqDerivation {
       (case (range "8.13" "8.15") "2.9")
       (case (range "8.12" "8.13") "2.8")
     ] null;
+  release."2.17".hash = "sha256-iDrX3uA6yOilwtg/9hIVx7e9U18pA2h5TXBh0bvBQkY=";
   release."2.16".hash = "sha256-/IlFLiojtuENHE9d+j55Z2rYw5HUkltwVim75w/UFVE=";
   release."2.15".hash = "sha256-51k2W4efMaEO4nZ0rdkRT9rA8ZJLpot1YpFmd6RIAXw=";
   release."2.14".hash = "sha256-NHc1ZQ2VmXZy4lK2+mtyeNz1Qr9Nhj2QLxkPhhQB7Iw=";
@@ -79,6 +81,15 @@ mkCoqDerivation {
     "IGNORECOMPCERTVERSION=true"
   ];
 
+  # The default target is `vst progs64`, where progs64 is the test suite;
+  # `vst` alone is the library, as built by the opam package.
+  buildFlags = [ "vst" ];
+
+  # `make test` is `make vst progs64`, so this only builds the test suite.
+  # It runs before the install phase, which installs progs64 as well.
+  doCheck = true;
+  checkTarget = "test";
+
   postInstall = ''
     for d in msl veric floyd sepcomp progs64
     do
@@ -91,4 +102,12 @@ mkCoqDerivation {
     homepage = "https://vst.cs.princeton.edu/";
     inherit (compcert.meta) platforms;
   };
-}
+}).overrideAttrs
+  (
+    o:
+    # The `vst` and `test` targets appeared in VST 2.10.
+    lib.optionalAttrs (o.version != "dev" && lib.versionOlder o.version "2.10") {
+      buildFlags = [ ];
+      doCheck = false;
+    }
+  )

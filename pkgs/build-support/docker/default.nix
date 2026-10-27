@@ -71,9 +71,7 @@ let
       # A user is required by nix
       # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
       export USER=nobody
-      ${lib.getExe' buildPackages.nix "nix-store"} --load-db < ${
-        closureInfo { rootPaths = contentsList; }
-      }/registration
+      nix-store --load-db < ${closureInfo { rootPaths = contentsList; }}/registration
       # Reset registration times to make the image reproducible
       ${lib.getExe buildPackages.sqlite} nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
@@ -430,6 +428,7 @@ rec {
       keepContentsDirlinks ? false,
       # Additional commands to run on the layer before it is tar'd up.
       extraCommands ? "",
+      nativeBuildInputs ? [ ],
       uid ? 0,
       gid ? 0,
     }:
@@ -441,7 +440,8 @@ rec {
           jshon
           rsync
           tarsum
-        ];
+        ]
+        ++ nativeBuildInputs;
       }
       ''
         mkdir layer
@@ -705,6 +705,7 @@ rec {
               uid
               gid
               ;
+            nativeBuildInputs = optionals includeNixDB [ nix ];
             extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
           }
@@ -1082,6 +1083,9 @@ rec {
         ]
         ++ optionals enableFakechroot [
           proot
+        ]
+        ++ optionals includeNixDB [
+          nix
         ];
         postBuild = ''
           mv $out old_out

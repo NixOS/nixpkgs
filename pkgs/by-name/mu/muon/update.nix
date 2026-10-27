@@ -24,12 +24,12 @@ lib.getExe (writeShellApplication {
       --version-key=version \
       --source-key=srcsAttrs.muon-src
     update-source-version "muon" \
-      "$(curl -s "$REPO/blob/$MUON_VERSION/subprojects/meson-docs.wrap" | grep -oP "revision = \K.+$")" \
-      --version-key=srcsAttrs.meson-docs.rev \
+      --ignore-same-version \
+      --rev="$(curl -s "$REPO/blob/$MUON_VERSION/subprojects/meson-docs.wrap" | grep -oP "revision = \K.+$")" \
       --source-key=srcsAttrs.meson-docs
     update-source-version "muon" \
-      "$(curl -s "$REPO/blob/$MUON_VERSION/subprojects/meson-tests.wrap" | grep -oP "revision = \K.+$")" \
-      --version-key=srcsAttrs.meson-tests.rev \
+      --ignore-same-version \
+      --rev="$(curl -s "$REPO/blob/$MUON_VERSION/subprojects/meson-tests.wrap" | grep -oP "revision = \K.+$")" \
       --source-key=srcsAttrs.meson-tests
   '';
 })

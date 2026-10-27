@@ -2,16 +2,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   nodejs,
-  fetchNpmDeps,
-  npmHooks,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_11,
   pyprojectVersionPatchHook,
   setuptools,
   meta,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 buildPythonPackage (finalAttrs: {
   pname = "esphome-device-builder-frontend";
-  version = "0.1.251";
+  version = "0.1.371";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,18 +23,21 @@ buildPythonPackage (finalAttrs: {
     owner = "esphome";
     repo = "device-builder-frontend";
     tag = finalAttrs.version;
-    hash = "sha256-lt7uDtoKcymm5wWygS44ff6TmSs1lPM1WdbygsEHcUc=";
+    hash = "sha256-0aZzvlkv8x+MBMJsvJ2uztFJSaq29qgE16d0M3s7igU=";
   };
 
-  npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-JDpUk/aEgPpx8X2AuPlm7rCpvfOX0vfLHpSDlBRN/5o=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-YuPZWBtDBoJ/Ha/A70zXsJoXUXh+IxIxMo6w1DT5fwQ=";
   };
 
   nativeBuildInputs = [
     nodejs
-    npmHooks.npmConfigHook
+    pnpmConfigHook
     pyprojectVersionPatchHook
+    pnpm
   ];
 
   build-system = [
@@ -39,7 +45,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preBuild = ''
-    npm run build
+    pnpm run build
   '';
 
   pythonImportsCheck = [

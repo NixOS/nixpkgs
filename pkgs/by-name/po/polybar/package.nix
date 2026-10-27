@@ -1,5 +1,4 @@
 {
-  config,
   cairo,
   cmake,
   fetchFromGitHub,
@@ -35,7 +34,7 @@
   alsaSupport ? true,
   githubSupport ? false,
   mpdSupport ? false,
-  pulseSupport ? config.pulseaudio or false,
+  pulseSupport ? false,
   iwSupport ? false,
   nlSupport ? true,
   i3Support ? false,

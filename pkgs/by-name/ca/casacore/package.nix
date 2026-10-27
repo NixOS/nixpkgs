@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   gfortran,
   flex,
@@ -87,6 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     # leaving it empty, and remove hardcoded absolute cmake build paths from
     # Cflags (which would embed /nix/store paths from the build environment).
     ./casacore-pkgconfig.patch
+
+    # Fix undefined Dysco encoder template symbols with GCC 16
+    (fetchpatch {
+      url = "https://github.com/casacore/casacore/commit/60923a924d6380de04ee32042290c7e7426e3509.patch";
+      includes = [ "tables/Dysco/*" ];
+      hash = "sha256-j/Ukc6hvfGpWTlw3YZDjgu/UihFxfOoHMatpPP9KcO8=";
+    })
   ];
 
   enableParallelBuilding = true;

@@ -31,7 +31,7 @@
   libxkbcommon,
   libxshmfence,
   pango,
-  systemd,
+  systemdLibs,
   icu,
   openssl,
   zlib,
@@ -112,7 +112,7 @@ let
             libxkbfile
             pango
             (lib.getLib stdenv.cc.cc)
-            systemd
+            systemdLibs
           ]
         }:$out/libexec/sidequest" \
         --add-needed libGL.so.1 \
@@ -150,6 +150,9 @@ buildFHSEnv {
       rvolosatovs
     ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "SideQuest";
+    mainProgram = "sidequest";
+    knownVulnerabilities = [
+      "Uses EOL Electron 29, many known CVEs."
+    ];
   };
 }

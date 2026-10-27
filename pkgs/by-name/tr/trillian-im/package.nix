@@ -6,12 +6,12 @@
   dpkg,
   atkmm,
   cairo,
-  cairomm,
+  cairomm_1_0,
   gtk3,
   gtkmm3,
   libnotify,
   libsecret,
-  pangomm,
+  pangomm_1_4,
   libxscrnsaver,
   libpulseaudio,
   librsvg,
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     atkmm
     cairo
-    cairomm
+    cairomm_1_0
     gtk3
     gtkmm3
     libnotify
     libsecret
-    pangomm
+    pangomm_1_4
     libxscrnsaver
     libpulseaudio
     librsvg

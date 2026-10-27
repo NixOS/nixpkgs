@@ -48,7 +48,8 @@
   withJax ? true,
   withNvshmem ? false,
   withCusolvermp ? false,
-  withNcclEp ? true,
+  # NCCL EP requires Hopper (9.0) or newer.
+  withNcclEp ? lib.any (lib.flip lib.versionAtLeast "9.0") cudaCapabilities,
 }:
 
 let
@@ -62,7 +63,7 @@ let
     optionalString
     optionals
     strings
-    subtractLists
+    unique
     ;
   inherit (cudaPackages) backendStdenv flags;
 
@@ -72,21 +73,28 @@ let
     else
       "none";
 
-  cudaCapabilities' = subtractLists [
-    # Compilation will fail when providing those architectures:
-    #   error: static assertion failed with "Compiled for the generic architecture, while utilizing
-    #   family-specific features.
-    #   Please compile for smXXXf architecture instead of smXXX architecture."
-    # Providing 10.0 and 12.0 respectively is enough as the CMake file will automatically add the
-    # correct compilation flags for supporting those architectures.
-    "10.3"
-    "12.1"
-  ] cudaCapabilities;
+  # Compilation will fail when providing architectures which are members of a family other than its head:
+  #   error: static assertion failed with "Compiled for the generic architecture, while utilizing
+  #   family-specific features.
+  #   Please compile for smXXXf architecture instead of smXXX architecture."
+  # Providing the head of the family (10.0 or 12.0) is enough, as the CMake file automatically adds the family- and
+  # architecture-specific targets (100a, 103a, 107a, and 120f) which support them.
+  cudaCapabilities' = unique (
+    map (
+      cudaCapability:
+      {
+        "10.3" = "10.0";
+        "10.7" = "10.0";
+        "12.1" = "12.0";
+      }
+      .${cudaCapability} or cudaCapability
+    ) cudaCapabilities
+  );
 
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.18";
+  version = "2.20.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -96,7 +104,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-NKky2b5grlfVdWsPf6HO4QZAvVuibCKvmfU0DxUIfvs=";
+    hash = "sha256-YXo0LIq13HNVrYa19npDoLRrB2NY4IjZb3E+asblBnQ=";
   };
 
   patches = optionals cudaSupport [
@@ -131,16 +139,13 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
           'te_path = Path(importlib.util.find_spec("transformer_engine").origin).parent.parent' \
           'te_path = Path("${placeholder "out"}/${python.sitePackages}")'
     ''
-    # nccl-ep is built from the vendored `3rdparty/nccl` submodule (see the NCCL_EP_* CMake
-    # variables in `transformer_engine/common/CMakeLists.txt`), which pins a newer NCCL than
-    # `cudaPackages.nccl-ep` provides.
-    # Only `libnccl_ep.a` is consumed (whole-archive), so skip the shared library, which would
-    # otherwise need `-lnccl -lcuda` on the link line.
-    + optionalString withNcclEp ''
-      substituteInPlace 3rdparty/nccl/contrib/nccl_ep/Makefile \
+    # The vendored NCCL probes for `nvcc` with `which`, which is not available in the sandbox, so
+    # the CUDA version it derives (passed as `-DCUDA_MAJOR`/`-DCUDA_MINOR`) comes out empty.
+    + ''
+      substituteInPlace 3rdparty/nccl-extensions/third_party/nccl/makefiles/common.mk \
         --replace-fail \
-          'lib: $(LIBTARGET) $(SOLIBTARGET) $(SOLIBLINKS) $(HEADER_TARGETS)' \
-          'lib: $(LIBTARGET) $(HEADER_TARGETS)'
+          'which $(NVCC) >/dev/null' \
+          'command -v $(NVCC) >/dev/null'
     '';
 
   # https://github.com/NVIDIA/TransformerEngine/blob/main/docs/envvars.rst
@@ -169,6 +174,9 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     CUDA_HOME = optionalString withNcclEp (getBin cudaPackages.cuda_nvcc).outPath;
     CUDA_INC = optionalString withNcclEp "${getInclude cudaPackages.cuda_cudart}/include";
     CUDA_LIB = optionalString withNcclEp "${getLib cudaPackages.cuda_cudart}/lib";
+    # `libnccl_ep.so` is linked with `-lcuda`, which is only provided by the GPU driver at run
+    # time. Link against the cudart stub instead.
+    LDFLAGS = optionalString withNcclEp "-L${getLib cudaPackages.cuda_cudart}/lib/stubs";
 
     NVTE_UB_WITH_MPI = if withMpi then 1 else 0;
     # NOTE: Make sure to use mpi from buildPackages to match the spliced version created through nativeBuildInputs.
@@ -214,7 +222,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     cudaPackages.cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
     cudaPackages.cuda_nvml_dev # nvml.h
     cudaPackages.cuda_nvrtc # nvrtc.h
-    cudaPackages.cuda_nvtx # nvToolsExt.h
+    cudaPackages.nvtx # nvToolsExt.h
     cudaPackages.cuda_profiler_api # cuda_profiler_api.h
     cudaPackages.cudnn # cudnn.h
     cudaPackages.libcublas
@@ -274,7 +282,12 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     # libtransformer_engine.so gets a `DT_NEEDED` on libcuda.so.1, provided by the GPU driver at
     # run time:
     # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
-    || withNcclEp;
+    || withNcclEp
+
+    # libtransformer_engine.so links against libcudnn_engines_runtime_compiled.so, which has a `DT_NEEDED` on
+    # libcuda.so.1 since cuDNN 9.27:
+    # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
+    || lib.versionAtLeast cudaPackages.cudnn.version "9.27";
 
   pythonImportsCheck = [
     "transformer_engine"

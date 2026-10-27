@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "3.2.3";
+  version = "3.2.9";
 
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     tag = "v${version}";
-    hash = "sha256-sbyiY5zZuVyul98y5xwfxp7kIzeojdJWxDf6zjWnLrI=";
+    hash = "sha256-A2SwpVoRXAJdLzB/1oCSSPySsGnFzHOIaPseq3QAGek=";
     fetchSubmodules = true;
   };
 

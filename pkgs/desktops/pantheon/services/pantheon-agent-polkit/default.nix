@@ -14,7 +14,7 @@
   granite7,
   pantheon-wayland,
   polkit,
-  systemd,
+  systemdLibs,
   wrapGAppsHook4,
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libgee
     pantheon-wayland
     polkit
-    systemd
+    systemdLibs
   ];
 
   passthru = {

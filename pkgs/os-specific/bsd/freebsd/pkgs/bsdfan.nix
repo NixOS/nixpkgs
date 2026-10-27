@@ -33,7 +33,6 @@ mkDerivation {
 
   meta = {
     description = "A simple FreeBSD fan control utility for thinkpads";
-    platforms = lib.platforms.freebsd;
     mainProgram = "bsdfan";
   };
 }

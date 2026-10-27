@@ -2,7 +2,7 @@
   buildPythonPackage,
   cliff,
   sphinx,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage {
@@ -22,10 +22,6 @@ buildPythonPackage {
   nativeCheckInputs = [
     cliff
     sphinx
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

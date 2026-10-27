@@ -29,8 +29,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-CBDRoUD4kvbqkyUzxmPEcbW4UJLycRAYC4s40fZ0xYY=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     appstream
     blueprint-compiler
@@ -55,10 +53,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath [ ffmpeg-headless ]}"
+    )
+  '';
 
   # NOTE: `postCheck` is intentionally not used here, as the entire checkPhase
   # is skipped by `buildPythonApplication`

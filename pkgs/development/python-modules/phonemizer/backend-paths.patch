@@ -1,18 +1,25 @@
 diff --git a/phonemizer/backend/espeak/wrapper.py b/phonemizer/backend/espeak/wrapper.py
-index 84a79f5..8abcae1 100644
+index 8679043a7d..3a511baae9 100644
 --- a/phonemizer/backend/espeak/wrapper.py
 +++ b/phonemizer/backend/espeak/wrapper.py
-@@ -143,12 +143,7 @@ class EspeakWrapper:
-                     f'is not a readable file')
+@@ -190,19 +190,7 @@ def library(cls):
+                 )
              return library.resolve()
  
 -        library = (
--                ctypes.util.find_library('espeak-ng') or
--                ctypes.util.find_library('espeak'))
+-            _find_library("espeak-ng")
+-            or _find_library("espeak")
+-            # The official espeak-ng Windows installer ships the DLL as
+-            # "libespeak-ng.dll". ctypes.util.find_library does not add a
+-            # "lib" prefix on Windows (unlike Linux, where it resolves
+-            # "espeak-ng" to "libespeak-ng.so"), so the two names above miss
+-            # a perfectly normal installation that is already on PATH.
+-            or _find_library("libespeak-ng")
+-            or _find_library("libespeak")
+-        )
 -        if not library:  # pragma: nocover
--            raise RuntimeError(
--                'failed to find espeak library')
-+        library = '@libespeak@'
+-            raise RuntimeError("failed to find espeak library")
++        library = "@libespeak@"
          return library
  
      def _fetch_version_and_path(self):

@@ -7,6 +7,7 @@
 
   # nativeBuildInputs
   cmake,
+  darwin,
   openssl,
   perl,
   pkg-config,
@@ -26,16 +27,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.7.3";
+  version = "1.7.12";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b3IjQDTl8ci5gimlGLkynNbihIbOzh58GqYPFqJGJF0=";
+    hash = "sha256-UL6FVyydzqNAsHorqQXbcXRZCZcQ0DCZho1x23YM9+o=";
   };
 
-  cargoHash = "sha256-ElTTl2erDT3+b21lKfkPRyFrn3cvL0+VziEMLELwNaU=";
+  cargoHash = "sha256-bKGJZ5gmp+sG3BuMoT0i62fDJFC1mNu9iOEQFEf7rRA=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -78,9 +79,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Have to be set to dynamically link librdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
 
-    # krb5-src contains K&R-style C code incompatible with GCC 14's default C23 standard;
-    # tikv-jemalloc-sys has a strerror_r return type mismatch (-Wint-conversion)
-    NIX_CFLAGS_COMPILE = "-std=gnu17 -Wno-error=int-conversion";
+    NIX_CFLAGS_COMPILE = toString (
+      # tikv-jemalloc-sys has a strerror_r return type mismatch (-Wint-conversion)
+      [ "-Wno-error=int-conversion" ]
+      # krb5-src contains K&R-style C code incompatible with GCC's default C23 standard,
+      # and glibc's const-preserving strchr trips its -Werror=discarded-qualifiers.
+      # Clang already defaults to gnu17 and rejects -std=gnu17 for C++ sources.
+      ++ lib.optionals stdenv.cc.isGNU [
+        "-std=gnu17"
+        "-Wno-error=discarded-qualifiers"
+      ]
+    );
   };
 
   nativeBuildInputs = [
@@ -89,6 +98,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
     pkg-config
     rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # krb5-src needs mig to generate its KCM RPC stubs
+    darwin.bootstrap_cmds
   ];
 
   buildInputs = [

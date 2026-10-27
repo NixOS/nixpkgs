@@ -26,8 +26,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "aug26a";
-  version = "20260801_a";
+  srcVersion = "oct26a";
+  version = "20261001_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
     ];
-    hash = "sha256-NqIgUyjzYoq2fsalaPEHCyxE4cbwXj+azmVxEBOPi6s=";
+    hash = "sha256-5z7UFWxM4rFqhXiw/NwEpblPZT0dd8H8PB1MIaUqoqw=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  userExec = "astro class greg mapping sic";
+  userExec = "astro class cube greg mapping sic";
 
   postInstall = ''
     mkdir -p $out/bin

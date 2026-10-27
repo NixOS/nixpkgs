@@ -11,7 +11,7 @@
   coreutils,
   cairo,
   dbus,
-  systemd,
+  systemdLibs,
   gdk-pixbuf,
   glib,
   libx11,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
     which
-    systemd
+    systemdLibs
     makeWrapper
   ];
 

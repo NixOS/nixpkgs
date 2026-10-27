@@ -8,7 +8,7 @@
 {
   lib,
   stdenv,
-  llvmPackages_21,
+  llvmPackages_22,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -31,7 +31,7 @@
   versionCheckHook,
 }:
 let
-  llvmPackages = llvmPackages_21;
+  llvmPackages = llvmPackages_22;
   llvmStdenv = llvmPackages.stdenv;
 in
 llvmStdenv.mkDerivation (finalAttrs: {
@@ -130,6 +130,9 @@ llvmStdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/ utils/
+
+    substituteInPlace contrib/liburing-cmake/CMakeLists.txt \
+      --replace-fail "set (LIBURING_CONFIG_HAS_OPEN_HOW        FALSE)" "set (LIBURING_CONFIG_HAS_OPEN_HOW        TRUE)"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/tools.cmake \
@@ -191,6 +194,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     "-DENABLE_DELTA_KERNEL_RS=0"
     "-DENABLE_XRAY=OFF"
     "-DCOMPILER_CACHE=disabled"
+    "-DDISABLE_HERMETIC_BUILD=ON"
   ]
   ++ lib.optional (
     stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64

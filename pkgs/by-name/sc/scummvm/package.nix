@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nasm,
+  pkg-config,
   alsa-lib,
   curl,
   flac,
@@ -20,21 +21,28 @@
   SDL2,
   zlib,
   cctools,
+  fetchpatch,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scummvm";
-  version = "2026.1.0";
+  version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-wgMOhQ6yHk4dG94J4EdHTxsaCqapyFhJU1GjRuQY8TY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wFEYg3hRVNVlxpw3xP8O8s4ILKy487k5hyWENaLiOlw=";
   };
 
-  nativeBuildInputs = [ nasm ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    nasm
+    pkg-config
+  ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -67,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-release"
   ];
 
+  preConfigure = ''
+    PATH="${lib.getDev SDL2}/bin:$PATH"
+  '';
+
   # They use 'install -s', that calls the native strip instead of the cross
   postConfigure = ''
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
@@ -76,6 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
   '';
 
+  patches = [
+    # Nancy Drew build error. Remove after next release.
+    (fetchpatch {
+      url = "https://github.com/scummvm/scummvm/commit/e2ef63e84123c199ab55de445e406aa626147e10.patch";
+      hash = "sha256-sdabI0W6Apav/pgGBxY+usHUakxECZtYu2tdyi8gojk=";
+    })
+  ];
+
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   passthru = {
@@ -84,10 +104,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
-    mainProgram = "scummvm";
+    longDescription = ''
+      ScummVM is a program which allows you to run a variety of classic
+      graphical point-and-click adventure games and role-playing games,
+      provided you already have their data files. It reimplements the original
+      engines (SCUMM, SCI, AGS, and many more) so those games can be played
+      on systems and hardware they were never designed for.
+    '';
     homepage = "https://www.scummvm.org/";
+    changelog = "https://github.com/scummvm/scummvm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
+    mainProgram = "scummvm";
     platforms = lib.platforms.unix;
   };
 })

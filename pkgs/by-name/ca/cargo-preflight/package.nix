@@ -4,12 +4,16 @@
   rustPlatform,
   nix-update-script,
   pkg-config,
+  libgit2,
+  libz,
   openssl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-preflight";
   version = "0.5.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "supinie";
@@ -20,9 +24,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-q/JbaFr1ISe0OiKeGBQQlZ2TaMTJkLABilibcp98svM=";
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+    LIBZ_SYS_STATIC = 0;
+  };
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    libz
+    openssl
+  ];
 
   passthru.updateScript = nix-update-script { };
 

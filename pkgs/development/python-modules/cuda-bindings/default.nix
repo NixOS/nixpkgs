@@ -7,11 +7,11 @@
   addDriverRunpath,
 
   # build-system
-  cython,
-  pyclibrary,
+  cython_3_2,
   setuptools,
   setuptools-scm,
   cuda-pathfinder,
+  pyclibrary,
 
   # env
   symlinkJoin,
@@ -23,28 +23,41 @@
   pytest-benchmark,
   pytestCheckHook,
   util-linux,
-
-  # passthru
-  cuda-bindings,
+  pyglet,
 }:
 
 let
   cudaVersion = cudaPackages.cudaMajorMinorVersion;
 
+  cudaLibPaths = {
+    libcuda =
+      # Use cuda_compat to provide libcuda.so from its `compat` directory
+      if (cudaPackages.cuda_compat.meta.available or false) then
+        "${cudaPackages.cuda_compat}/compat"
+
+      # Else, use the host CUDA driver library
+      else
+        "${addDriverRunpath.driverLink}/lib";
+    libcudart = lib.getLib cudaPackages.cuda_cudart;
+    # libcudla is only available on Xavier and Orin Jetson devices
+    libcudla =
+      if (cudaPackages.libcudla.meta.available or false) then
+        "${lib.getLib cudaPackages.libcudla}/lib/libcudla.so"
+      else
+        "libcudla.so";
+    libcufile = lib.getLib cudaPackages.libcufile;
+    libnvfatbin = lib.getLib cudaPackages.libnvfatbin;
+    libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
+    libnvml = addDriverRunpath.driverLink;
+    libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
+    libnvvm =
+      if cudaOlder "13.0" then "${cudaPackages.cuda_nvcc}/nvvm" else lib.getLib cudaPackages.libnvvm;
+  };
+
   versionSpecificAttrs =
     let
       args = {
-        inherit replaceVars;
-        cudaLibPaths = {
-          libcudart = lib.getLib cudaPackages.cuda_cudart;
-          libcufile = lib.getLib cudaPackages.libcufile;
-          libnvfatbin = lib.getLib cudaPackages.libnvfatbin;
-          libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
-          libnvml = addDriverRunpath.driverLink;
-          libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
-          libnvvm =
-            if cudaOlder "13.0" then "${cudaPackages.cuda_nvcc}/nvvm" else lib.getLib cudaPackages.libnvvm;
-        };
+        inherit replaceVars cudaLibPaths;
       };
     in
     {
@@ -55,6 +68,7 @@ let
       "13.1" = import ./13_1.nix args;
       "13.2" = import ./13_2.nix args;
       "13.3" = import ./13_3.nix args;
+      "13.4" = import ./13_4.nix args;
     }
     .${cudaVersion} or (throw "Unsupported cuda-bindings version: ${cudaVersion}");
 
@@ -70,6 +84,16 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "v${finalAttrs.version}";
+    # GitHub expands the export-subst'd .git_archival.txt when generating the tarball. Its ref-names line lists every
+    # branch pointing at the tagged commit, so the hash changes when e.g. a release branch moves on, even though the tag
+    # did not. Keep only the tag, which setuptools-scm still resolves to the right version. 13.0 and 13.1 ship no
+    # .git_archival.txt.
+    postFetch = ''
+      if [[ -f "$out/.git_archival.txt" ]]; then
+        sed -i 's/^ref-names: .*$/ref-names: tag: v${finalAttrs.version}/' "$out/.git_archival.txt"
+        grep -qx 'ref-names: tag: v${finalAttrs.version}' "$out/.git_archival.txt"
+      fi
+    '';
     hash = versionSpecificAttrs.sourceHash;
   };
 
@@ -83,26 +107,17 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/cuda_bindings";
 
   postPatch =
-    let
-      libCudaPath =
-        # Use cuda_compat to provide libcuda.so on pre-Thor Jetsons
-        if (cudaPackages.cuda_compat.meta.available or false) then
-          cudaPackages.cuda_compat
-
-        # Else, use the host CUDA driver library
-        else
-          addDriverRunpath.driverLink;
-    in
-    ''
+    # Since 13.4, libcuda is loaded from driver_linux.pyx, handled by nvidiaLibsPatch
+    lib.optionalString (cudaOlder "13.4") ''
       substituteInPlace cuda/bindings/_internal/nvjitlink_linux.pyx \
         --replace-fail \
           "handle = dlopen('libcuda.so.1'" \
-          "handle = dlopen('${libCudaPath}/lib/libcuda.so.1'"
+          "handle = dlopen('${cudaLibPaths.libcuda}/libcuda.so.1'"
 
       substituteInPlace cuda/bindings/_bindings/cydriver.pyx.in \
         --replace-fail \
           "path = 'libcuda.so.1'" \
-          "path = '${libCudaPath}/lib/libcuda.so.1'"
+          "path = '${cudaLibPaths.libcuda}/libcuda.so.1'"
     ''
     + (versionSpecificAttrs.postPatch or "");
 
@@ -111,23 +126,37 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    cython
-    pyclibrary
+    # All versions pin cython<3.3
+    cython_3_2
     setuptools
     setuptools-scm
   ]
   ++ lib.optionals (cudaAtLeast "13.3") [
     cuda-pathfinder
+  ]
+  # Since 13.4, bindings are pre-generated and headers are no longer parsed at build time
+  ++ lib.optionals (cudaOlder "13.4") [
+    pyclibrary
   ];
 
   env = {
+    # Cython compresses string constants by default, hiding the hardcoded library store paths from
+    # nix's reference scanner (they would be missing from the runtime closure)
+    NIX_CFLAGS_COMPILE = "-DCYTHON_COMPRESS_STRINGS=0";
+
     CUDA_HOME = symlinkJoin {
       name = "cuda-redist";
-      paths = with cudaPackages; [
-        (lib.getInclude cuda_cudart) # cuda_runtime.h
-        (lib.getInclude cuda_nvrtc) # nvrtc.h
-        (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
-      ];
+      paths =
+        with cudaPackages;
+        [
+          (lib.getInclude cuda_cudart) # cuda_runtime.h
+          (lib.getInclude cuda_nvrtc) # nvrtc.h
+          (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
+        ]
+        ++ lib.optionals finalAttrs.doInstallCheck [
+          # Examples (run by tests/test_examples.py) locate <cuda/std/version> via cuda.pathfinder
+          (lib.getInclude cccl)
+        ];
     };
   };
 
@@ -174,6 +203,7 @@ buildPythonPackage (finalAttrs: {
     # some tests
     cuda-pathfinder
 
+    pyglet
     pytest-benchmark
     util-linux # findmnt
   ];
@@ -193,16 +223,22 @@ buildPythonPackage (finalAttrs: {
 
   # Tests need access to a GPU
   doCheck = false;
-  passthru.gpuCheck = cuda-bindings.overridePythonAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doCheck = true;
+  passthru = {
+    gpuCheck = finalAttrs.finalPackage.overrideAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doInstallCheck = true;
+    };
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
   };
 
   meta = {
     description = "Standard set of low-level interfaces, providing access to the CUDA host APIs from Python";
     homepage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_bindings";
     changelog = "https://nvidia.github.io/cuda-python/cuda-bindings/latest/release/${finalAttrs.version}-notes.html";
-    license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary Software
+    license =
+      # Relicensed from the NVIDIA Software License to Apache-2.0 in 13.4
+      if cudaAtLeast "13.4" then lib.licenses.asl20 else lib.licenses.nvidiaCudaPython;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

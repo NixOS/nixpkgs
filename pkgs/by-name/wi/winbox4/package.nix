@@ -5,7 +5,7 @@
 }:
 let
   pname = "winbox";
-  version = "4.3";
+  version = "4.4";
 
   metaCommon = {
     description = "Graphical configuration utility for RouterOS-based devices";
@@ -23,13 +23,13 @@ let
   x86_64-zip = callPackage ./build-from-zip.nix {
     inherit pname version metaCommon;
 
-    hash = "sha256-VzYArCTfOKegbqQxixJ1QkfuxLVMbJCwpXEA1nZ4ekw=";
+    hash = "sha256-SbH6q6tVgExJGqKUfvut6WeBXVPfdpjMeHagwdY2zcE=";
   };
 
   x86_64-dmg = callPackage ./build-from-dmg.nix {
     inherit pname version metaCommon;
 
-    hash = "sha256-VoHQPjITOFiz3FQceMG644yzNVtf2YMmrHJeC9i6tXA=";
+    hash = "sha256-v/Bw+0EBkdVRyZiNR3lv99JF0napgbFKkMpvhpi+Shg=";
   };
 in
 (if stdenvNoCC.hostPlatform.isDarwin then x86_64-dmg else x86_64-zip).overrideAttrs (oldAttrs: {

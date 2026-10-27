@@ -1,0 +1,73 @@
+{
+  lib,
+  fetchzip,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  setuptools,
+}:
+let
+  src = fetchFromGitHub {
+    owner = "philippj";
+    repo = "SteamworksPy";
+    rev = "c021d1c186084d22a21817fc4fe5fad1e1c20a7e";
+    hash = "sha256-pAl/utInHYZsqCjvVHTeQU4jOX/Vim9EEO6jIFhwz9w=";
+  };
+  steamworksSrc = fetchzip {
+    url = "https://web.archive.org/web/20250527013243/https://partner.steamgames.com/downloads/steamworks_sdk_162.zip";
+    hash = "sha256-yDA92nGj3AKTNI4vnoLaa+7mDqupQv0E4YKRRUWqyZw=";
+  };
+
+  library = stdenv.mkDerivation {
+    pname = "steamworks-c";
+    version = "1.6.5-unstable-2026-06-18";
+
+    unpackPhase = ''
+      runHook preUnpack
+
+      cp -r ${src} source
+      chmod -R 755 source
+      cp -r ${steamworksSrc}/public/steam source/library/sdk/
+      cp ${steamworksSrc}/redistributable_bin/linux64/libsteam_api.so source/library/
+
+      runHook postUnpack
+    '';
+
+    sourceRoot = "source/library";
+
+    installPhase = ''
+      mkdir -p $out
+      cp SteamworksPy.so $out/
+    '';
+  };
+in
+
+buildPythonPackage {
+  pname = "steamworks";
+  version = "1.6.5-unstable-2026-06-18";
+  pyproject = true;
+
+  inherit src;
+
+  build-system = [ setuptools ];
+
+  postInstall = ''
+    cp ${library}/SteamworksPy.so $out/lib
+  '';
+
+  meta = {
+    description = "Python API system for Valve's Steamworks";
+    homepage = "https://github.com/philippj/SteamworksPy";
+    license = with lib.licenses; [
+      mit
+      # For steamworks headers and libsteamapi.so
+      valveSDK
+    ];
+    # steamworksSrc is x86_64-linux only
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
+  };
+}

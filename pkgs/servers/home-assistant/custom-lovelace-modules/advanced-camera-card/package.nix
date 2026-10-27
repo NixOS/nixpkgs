@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   gitMinimal,
   yarn-berry_4,
   nodejs,
@@ -16,14 +17,26 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dermotduffy";
     repo = "advanced-camera-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NdWP2nYzDEzmO4DpwVUpn3/KsungKNOzOQf8FxZ4fGw=";
+    hash = "sha256-I1dm7TZMK/eRF2Uld3e+r4PQBaL9oJc+NI+/5cxaGUs=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/dermotduffy/advanced-camera-card/blob/main/package.json#L201
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/dermotduffy/advanced-camera-card/blob/main/package.json#L201
-    ./yarn-4.14-support.patch
-
     # Drop hard dependency on .git repo during build
     ./gitinfo.patch
   ];
@@ -37,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     name = "${finalAttrs.pname}-yarn-deps";
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-4fdSeSxSjd8EjPmu7U3ftxB+OJJc2uuvM3Umr5iY/a8=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-vbDX5TkUrNqqWLq465mLyGkQ4L8QWJtKv5aCR98P/SI=";
   };
 
   nativeBuildInputs = [

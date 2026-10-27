@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  python-dateutil,
   pytestCheckHook,
+  python-dateutil,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-crontab";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,8 +18,13 @@ buildPythonPackage (finalAttrs: {
     owner = "doctormo";
     repo = "python-crontab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eJXtvTRwokbewWrTArHJ2FXGDLvlkGA/5ZZR01koMW8=";
+    hash = "sha256-MVQNZDCEsX8cjDQQviTfwOarul8+CkdCvWfJMc5Sbq0=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "= '3.3.0'," "= '${finalAttrs.version}',"
+  '';
 
   build-system = [ setuptools ];
 

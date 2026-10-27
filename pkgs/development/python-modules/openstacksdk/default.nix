@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openstacksdk";
-  version = "4.13.0";
+  version = "4.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "openstacksdk";
     tag = finalAttrs.version;
-    hash = "sha256-nMpUNLz7OosoGd5rozWcOcOEf3jdEHo5dhxmOv0xONw=";
+    hash = "sha256-xpA7+KzFxKop2a+L/UTqqAXXcQ7ejsXq94yePWjIIls=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "SDK for building applications to work with OpenStack clouds.";
+    description = "SDK for building applications to work with OpenStack clouds";
     mainProgram = "openstack";
     homepage = "https://docs.openstack.org/openstacksdk/latest/";
     downloadPage = "https://github.com/openstack/openstacksdk/releases/tag/${finalAttrs.src.tag}";

@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-iotawattpy";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "iotawattpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yPWQisSBeAGx5bTCXq6HeJmH06Frk7zlP+9kpoOHTOo=";
+    hash = "sha256-7fXnl1ao/UANhV0P2iz8BE9qK7OUXBsdotnlxSNr/7I=";
   };
 
   build-system = [ hatchling ];

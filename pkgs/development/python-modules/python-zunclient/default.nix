@@ -13,7 +13,7 @@
   prettytable,
   setuptools,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   websocket-client,
 }:
 
@@ -58,24 +58,20 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  nativeCheckInputs = [ stestr ];
+  nativeCheckInputs = [ stestrCheckHook ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "
-      zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_internal
-      zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_public
-      zunclient.tests.unit.test_shell.ShellTest.test_main_env_region
-      zunclient.tests.unit.test_shell.ShellTest.test_main_no_region
-      zunclient.tests.unit.test_shell.ShellTest.test_main_option_region
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_internal
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_public
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_env_region
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_no_region
-      zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_option_region
-    ")
-    runHook postCheck
-  '';
+  disabledTests = [
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_internal"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_endpoint_public"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_env_region"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_no_region"
+    "zunclient.tests.unit.test_shell.ShellTest.test_main_option_region"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_internal"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_endpoint_public"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_env_region"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_no_region"
+    "zunclient.tests.unit.test_shell.ShellTestKeystoneV3.test_main_option_region"
+  ];
 
   pythonImportsCheck = [ "zunclient" ];
 

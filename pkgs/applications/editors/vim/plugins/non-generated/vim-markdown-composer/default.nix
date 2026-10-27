@@ -1,24 +1,24 @@
 {
+  lib,
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
   vimUtils,
 }:
 let
-  version = "0-unstable-2022-06-14";
+  version = "0-unstable-2025-10-23";
   src = fetchFromGitHub {
     owner = "euclio";
     repo = "vim-markdown-composer";
-    rev = "e6f99bc20cfcb277c63041b1f766e6d5940bcc76";
-    sha256 = "0ljv8cvca8nk91g67mnzip81say04b1wbj9bzcgzy8m6qkz1r2h3";
-    fetchSubmodules = true;
+    rev = "4f53f1c6e41c8fb916c50b50e18284d923f0f3cd";
+    sha256 = "sha256-QODj8J2d2Qo8/B0rv5HthSidZcBgY11oNKwT8jCO6kI=";
   };
 
   vim-markdown-composer-bin = rustPlatform.buildRustPackage {
     pname = "vim-markdown-composer-bin";
     inherit src version;
 
-    cargoHash = "sha256-xzlEIaDEYDbxJ6YqzF+lSHcB9O+brClw026YI1YeNUc=";
+    cargoHash = "sha256-/wkXbd4cEOEVhWW5KzMavay7a4XI1deonjn0QCP6z7I=";
     # tests require network access
     doCheck = false;
   };
@@ -45,8 +45,9 @@ vimUtils.buildVimPlugin {
   };
 
   meta = {
+    description = "(Neo)vim plugin for asynchronous Markdown previews";
     homepage = "https://github.com/euclio/vim-markdown-composer/";
-    # rust build error
-    broken = true;
+    # https://github.com/euclio/vim-markdown-composer/blob/4f53f1c6e41c8fb916c50b50e18284d923f0f3cd/doc/markdown-composer.txt#L4
+    license = lib.licenses.mit;
   };
 }

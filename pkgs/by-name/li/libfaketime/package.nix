@@ -36,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./nix-store-date.patch
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # Fixes build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/wolfcw/libfaketime/commit/dbe865dfdba0145d993d70b7fd4ec88b2f47554b.patch";
+      hash = "sha256-pn9MInefa4ZKuOorGEpi/sDQOQamCakjdYOkFSNA2VQ=";
+    })
     # GCC 16's unused variable analysis is more advanced than previous
     # versions, and detects that these variables are unused.
     # https://github.com/wolfcw/libfaketime/pull/528

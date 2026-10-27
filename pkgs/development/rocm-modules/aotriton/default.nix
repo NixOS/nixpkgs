@@ -34,27 +34,40 @@ let
   # Pick a single arbitrary target to speed up shim build when we can't support our target
   supportedTargets' =
     if anySupportedTargets then lib.concatStringsSep ";" supportedTargets else "gfx1200";
+  sourceRoot = "aotriton";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aotriton${lib.optionalString (!anySupportedTargets) "-shim"}";
-  version = "0.11.1b";
+  version = "0.12b";
+  inherit sourceRoot;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "aotriton";
-    tag = finalAttrs.version;
-    hash = "sha256-F7JjyS+6gMdCpOFLldTsNJdVzzVwd6lwW7+V8ZOZfig=";
-    leaveDotGit = true;
-    # fetch all submodules except unused triton submodule that is ~500MB
-    postFetch = ''
-      cd $out
-      git reset --hard HEAD
-      for submodule in $(git config --file .gitmodules --get-regexp path | awk '{print $2}' | grep '^third_party/' | grep -v '^third_party/triton$'); do
-        git submodule update --init --recursive "$submodule"
-      done
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner = "ROCm";
+      repo = "aotriton";
+      tag = finalAttrs.version;
+      hash = "sha256-KOc+xAoWABjokIEq5n9olpln3JUqVFYGADLwqV/H2Zc=";
+      # for reference false is the default, setting it here to document upstream has an unused triton submodule that is ~500MB we don't want to download.
+      fetchSubmodules = false;
+      name = sourceRoot;
+    })
+    (fetchFromGitHub {
+      owner = "ROCm";
+      repo = "aiter";
+      tag = "v0.1.11";
+      hash = "sha256-e1C/baFYkm1/iuLUCcCLyiHfivRgBb96lnVGH9mOmM0=";
+      name = "aiter";
+    })
+  ];
+
+  # link aiter source where build would normally put it via git checkout
+  postUnpack = ''
+    ln -s aiter ${sourceRoot}/third_party/aiter
+  '';
+
+  patches = [
+    ./aiter-no-git-checkout.patch
+  ];
 
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;
@@ -69,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     CFLAGS = "-w -g1 -gz -Wno-c++11-narrowing";
     CXXFLAGS = finalAttrs.env.CFLAGS;
     TRITON_STORE_BINARY_ONLY = 1; # reduce triton disk space usage
+    AOTRITON_GIT_TREESHA1 = "35bfbd0ebe2fd774e97cdc12421592c23f59abfe"; # git rev-parse 'HEAD^{tree}'
   };
 
   nativeBuildInputs = [

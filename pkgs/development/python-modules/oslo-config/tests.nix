@@ -6,7 +6,7 @@
   oslotest,
   requests-mock,
   sphinx,
-  stestr,
+  stestrCheckHook,
   testscenarios,
 }:
 
@@ -31,11 +31,7 @@ buildPythonPackage {
     oslotest
     requests-mock
     sphinx
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    stestr run
-  '';
 }

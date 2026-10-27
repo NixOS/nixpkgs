@@ -33,11 +33,15 @@ buildPythonPackage (finalAttrs: {
     protobuf
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "googleapis-common-protos-v([0-9.]+)"
-    ];
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "googleapis-common-protos-v([0-9.]+)"
+      ];
+    };
   };
 
   # does not contain tests

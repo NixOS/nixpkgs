@@ -14,12 +14,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "packaging";
-  version = "26.2";
+  version = "26.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-/0Uv9aPoKM4RAZD+/xF4ux8uoigfogdarbmHwvsiFmE=";
+    hash = "sha256-lO3CVkJK84di6zEwbu0ovrnw78UKiDdJLJ1v1gBK7Xk=";
   };
 
   nativeBuildInputs = [ flit-core ];

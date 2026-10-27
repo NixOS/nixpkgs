@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -31,6 +30,7 @@
   freetype,
   libxft,
   libxext,
+  libxi,
   libx11,
   libsm,
   libice,
@@ -56,7 +56,7 @@
   wirelesstools ? null,
   nvidiaSupport ? false,
   libXNVCtrl ? null,
-  pulseSupport ? config.pulseaudio or false,
+  pulseSupport ? false,
   libpulseaudio ? null,
 
   curlSupport ? true,
@@ -81,7 +81,6 @@ assert imlib2Support -> x11Support && imlib2 != null;
 assert luaSupport -> lua != null;
 assert luaImlib2Support -> luaSupport && imlib2Support && toluapp != null;
 assert luaCairoSupport -> luaSupport && toluapp != null && cairo != null;
-assert luaCairoSupport || luaImlib2Support -> lua.luaversion == "5.4";
 
 assert wirelessSupport -> wirelesstools != null;
 assert nvidiaSupport -> libXNVCtrl != null;
@@ -95,13 +94,13 @@ assert extrasSupport -> python3 != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conky";
-  version = "1.22.3";
+  version = "1.25.3";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WZjYs68/u7XUUriLPW3VMJIFP/HsnraHT6w84usQMYM=";
+    hash = "sha256-/8//pgnn1IKlyc6UXVZPXeA5THZu4oo9ktIGpvt+hUY=";
   };
 
   # pkg-config doesn't detect wayland-scanner in cross-compilation for some reason
@@ -139,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libx11
     libxext
+    libxi
     libxft
     libxfixes
     libsm

@@ -60,7 +60,6 @@ symlinkJoin {
 
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      bergey
       minijackson
     ];
   };

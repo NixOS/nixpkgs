@@ -28,12 +28,13 @@
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 
+  # passthru
   nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.3.0";
+  version = "3.3.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,15 +45,8 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-Kq/kLjdDS/NHveeFmoy0PiHLLXviPpU2zf3lcXhx7Sk=";
+    hash = "sha256-b2CYHqjWtbugKotEfSjnU21m+P8RhoH+nelbc0whfqI=";
   };
-
-  # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of
-  # SciPy 1.18.0 and will be removed in SciPy 1.20.0
-  postPatch = ''
-    substituteInPlace pytensor/link/numba/dispatch/linalg/decomposition/qr.py \
-      --replace-fail "lwork=lwork," ""
-  '';
 
   build-system = [
     setuptools
@@ -60,9 +54,6 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
-  pythonRelaxDeps = [
-    "numba"
-  ];
   dependencies = [
     cons
     etuples
@@ -125,6 +116,10 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: equal_computations failed
     "test_infer_shape_db_handles_xtensor_lowering"
+
+    # With fastmath=False, the LLVM IR still contains a `fcmp reassoc` instruction
+    # AssertionError: assert True == False
+    "test_config_options_fastmath_vectorized"
 
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"

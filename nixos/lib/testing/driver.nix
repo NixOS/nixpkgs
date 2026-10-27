@@ -14,7 +14,7 @@ let
 
   inherit (config) sshBackdoor;
 
-  inherit (hostPkgs.stdenv.hostPlatform) isLinux isAarch64;
+  inherit (hostPkgs.stdenv.hostPlatform) isLinux;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
@@ -249,7 +249,7 @@ in
     passthru.driver = config.driver;
 
     nodeDefaults =
-      { config, ... }:
+      { config, pkgs, ... }:
       {
         # This is needed for the SSH backdoor to function.
         # Set this to `true` by default to not change essential QEMU flags
@@ -258,7 +258,7 @@ in
         # If needed, this can still be turned off.
         virtualisation.qemu.enableSharedMemory = lib.mkDefault isLinux;
         # Needed for screenshots to work (in e.g `nixosTests.login`)
-        virtualisation.qemu.options = lib.optionals (isLinux && isAarch64) [
+        virtualisation.qemu.options = lib.optionals pkgs.stdenv.hostPlatform.isAarch64 [
           "-device virtio-gpu-pci"
         ];
 

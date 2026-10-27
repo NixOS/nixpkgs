@@ -16,8 +16,8 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "convos-chat";
     repo = "convos";
-    rev = "v${version}";
-    sha256 = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
+    tag = "v${version}";
+    hash = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,7 +50,9 @@ perlPackages.buildPerlPackage rec {
 
   propagatedBuildInputs = [ openssl ];
 
-  nativeCheckInputs = with perlPackages; [ TestDeep ];
+  nativeCheckInputs = [ openssl ] ++ (with perlPackages; [ TestDeep ]);
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs script/convos
@@ -69,7 +71,7 @@ perlPackages.buildPerlPackage rec {
     # the sandbox, we replace the this out from a substitution expression
     #
     substituteInPlace t/web-register-open-to-public.t \
-      --replace '!127.0.0.1!' '!localhost!'
+      --replace-fail '!127.0.0.1!' '!localhost!'
 
     # Another online test fails, so remove this.
     rm t/irc-reconnect.t
@@ -85,6 +87,10 @@ perlPackages.buildPerlPackage rec {
 
     # Another web test fails, so we also remove this.
     rm t/web-login.t
+
+    # Remove tests failing due to Mojolicious CSRF behavior updates in 9.48
+    #
+    rm t/web-recover-password.t t/web-register-invite-only.t t/web-users.t
 
     # Module::Install is a runtime dependency not covered by the tests, so we add
     # a test for it.
@@ -109,6 +115,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   passthru.tests = nixosTests.convos;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://convos.chat";

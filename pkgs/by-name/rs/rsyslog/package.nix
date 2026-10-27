@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   autoreconfHook,
   autoconf-archive,
@@ -15,8 +14,8 @@
   libyaml,
   withKrb5 ? true,
   libkrb5,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   withJemalloc ? true,
   jemalloc,
   withMysql ? true,
@@ -66,31 +65,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
-  version = "8.2606.0";
+  version = "8.2610.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/rsyslog-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JXSz8waOaVXrlO9WQ+K2pbhYXMjqp3IJ/1y8Hi5fceU=";
+    hash = "sha256-e9+V6B6mwO5dWGNC1X0qbjlbCJ+zxnMYoNxVWBbeQEs=";
   };
-
-  patches = [
-    # Remove with rsyslog 8.2608.0 or newer.
-    (fetchpatch {
-      name = "CVE-2026-19654.patch";
-      url = "https://github.com/rsyslog/rsyslog/commit/f7f774228273730ba1075f4cd457ae78303a8f08.patch";
-      hash = "sha256-ww8Ade2eKrQygJduLMPFjxd/fmBnpQ4ePLEzHffPy90=";
-    })
-
-    # Fix imjournal invalidation reopen busy-loop.
-    # Remove with rsyslog 8.2608.0 or newer.
-    # https://github.com/rsyslog/rsyslog/pull/7384
-    (fetchpatch {
-      name = "imjournal-invalidation-reopen-busy-loop.patch";
-      url = "https://github.com/rsyslog/rsyslog/commit/383f80f21f16c3c94e7d7a57b0a5af12cdac9d75.patch";
-      excludes = [ "ChangeLog" ];
-      hash = "sha256-RlhXoK+dAPBN2wu4V7GoFw/d+uWQzO7+nUkW5+z7QJY=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -129,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withHiredis hiredis
   ++ lib.optional withMaxminddb libmaxminddb
   ++ lib.optional withMysql libmysqlclient
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -214,10 +194,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
-    mainProgram = "rsyslogd";
     changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    mainProgram = "rsyslogd";
   };
 })

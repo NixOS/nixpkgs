@@ -2,13 +2,11 @@
   apple-sdk_14,
   cargo-tauri,
   darwin,
-  deltachat-desktop,
   fetchFromGitHub,
   fetchPnpmDeps,
   gst_all_1,
   lib,
   libayatana-appindicator,
-  makeWrapper,
   nodejs,
   openssl,
   perl,
@@ -18,7 +16,6 @@
   python3,
   rustPlatform,
   stdenv,
-  versionCheckHook,
   webkitgtk_4_1,
   wrapGAppsHook4,
 }:
@@ -28,14 +25,25 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deltachat-tauri";
-  inherit (deltachat-desktop)
-    version
-    src
-    pnpmDeps
-    ;
+  version = "2.59.0-unstable-2026-08-15";
   __structuredAttrs = true;
 
+  src = fetchFromGitHub {
+    owner = "deltachat";
+    repo = "deltachat-tauri";
+    rev = "ea854b4799578d7291e4dc9d6b76ddb5a001d2f0";
+    fetchSubmodules = true;
+    hash = "sha256-EdtSrr/5QKzBFhocCdFyAUFYHhuQUEUzMyw/fjgsIIg=";
+  };
+
   cargoHash = "sha256-Z3uZ+IARmCZbJiIotYjdQRzYZFplRwE3xO0Yb0tLbcE=";
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-IzMl6dZ8r8CH0eELOzHuFYVuzhQTdSS4NvYFOp7jHIs=";
+  };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
@@ -73,24 +81,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       apple-sdk_14
     ];
 
-  buildAndTestSubdir = "packages/target-tauri";
-
   env = {
-    VERSION_INFO_GIT_REF = finalAttrs.src.tag;
+    VERSION_INFO_GIT_REF = finalAttrs.src.rev;
   };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm 444 images/tray/deltachat.svg "$out/share/icons/hicolor/scalable/apps/deltachat-tauri.svg"
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-
   meta = {
-    changelog = "https://github.com/deltachat/deltachat-desktop/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    broken = true; # Error Found version mismatched Tauri packages.
     description = "Email-based instant messaging for Desktop";
-    homepage = "https://github.com/deltachat/deltachat-desktop";
+    homepage = "https://github.com/deltachat/deltachat-tauri";
     license = lib.licenses.gpl3Plus;
     mainProgram = "deltachat-tauri";
     maintainers = [ lib.maintainers.dotlambda ];

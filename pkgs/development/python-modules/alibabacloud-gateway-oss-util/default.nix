@@ -7,7 +7,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-gateway-oss-util";
-  version = "0.0.13";
+  version = "0.0.14";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "alibabacloud_gateway_oss_util";
     inherit (finalAttrs) version;
-    hash = "sha256-RlWx2oGOieifxcs0UHhapFVZT5XYJAR3EXPJuJXtMDc=";
+    hash = "sha256-OHOjPeo3RKaFvnctxK00XmlGZSMVU5kozIY3S3vfy50=";
   };
 
   build-system = [ setuptools ];

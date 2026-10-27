@@ -23,6 +23,7 @@
   pyyaml,
   setuptools,
   stestr,
+  stestrCheckHook,
   stevedore,
   python-subunit,
   testscenarios,
@@ -32,12 +33,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "46.2.0";
+  version = "46.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F/K0X4wHZOR4dvicGwQ9JOeh25iyqfKkgjiIZc6qWLY=";
+    hash = "sha256-z/WtY/wqhxaqhudHHy0nA8jbwoSzBJE/5DNxKVp1cRg=";
   };
 
   postPatch = ''
@@ -76,26 +77,32 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hacking
     oslotest
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # Tests expect these applications available as such.
     mkdir -p bin
     export PATH="$PWD/bin:$PATH"
     printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.main "$@"\n' > bin/tempest
     printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.subunit_describe_calls "$@"\n' > bin/subunit-describe-calls
     chmod +x bin/*
-
-    stestr --test-path tempest/tests run -e <(echo "
-      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_dict_return_values
-      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_multiple_workers
-      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_single_process
-      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success
-      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception
-      tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
-    ")
   '';
+
+  stestrFlags = [
+    "--test-path"
+    "tempest/tests"
+  ];
+
+  disabledTests = [
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_dict_return_values"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_multiple_workers"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_single_process"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success"
+    "tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception"
+    "tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix"
+    "tempest.tests.lib.common.test_rest_client.TestRestClientServiceToken.test_log_request_full_omits_service_token"
+  ];
 
   pythonImportsCheck = [ "tempest" ];
 

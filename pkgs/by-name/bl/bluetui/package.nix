@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bluetui";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "pythops";
     repo = "bluetui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-K+QAU9/XdGZonsKjBXbPbpJhWIHyaqxP6eb670n81LU=";
+    hash = "sha256-gOmPWkn5RznvmxPsAJUFXYNTBoZV/v42S3w1bpZeWt0=";
   };
 
-  cargoHash = "sha256-i77j7hKtVxDDiHEBz5E7iwGXWYg0f/NfwFnN71QfgPU=";
+  cargoHash = "sha256-dWDkbje4JtGnRWsnmiLZ4GI3ZfL9cImp+9Pb+nzSyLA=";
 
   nativeBuildInputs = [
     pkg-config

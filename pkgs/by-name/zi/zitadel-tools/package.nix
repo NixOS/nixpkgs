@@ -8,18 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "zitadel-tools";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wtCBRsP0b7qPOQfYgvmgDT0t2zZHocokO5J8yLZcsgQ=";
+    hash = "sha256-0Wr+2zWcFDBsQgNRgbCHKyaLdWlldPNkXKo++yoy0KE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-ql5Qw5Va/wLBKsb9bCmPciuVrgORU8nndRkhjoJBIgs=";
+  vendorHash = "sha256-oqw0Cj+EdYGjNdg8ZazudU8iQXd5oSVrQ34ae1r7Kl4=";
 
   ldflags = [
     "-s"

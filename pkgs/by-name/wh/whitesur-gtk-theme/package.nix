@@ -1,11 +1,10 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   dialog,
   glib,
-  gnome-themes-extra,
   jdupes,
   libxml2,
   sassc,
@@ -91,17 +90,20 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
   [ "default" "smaller" "bigger" ]
   (single panelSize)
 
-  stdenv.mkDerivation
-  rec {
-    pname = "whitesur-gtk-theme";
+  stdenvNoCC.mkDerivation
+  (finalAttrs: {
+    inherit pname;
     version = "2026-08-08";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "whitesur-gtk-theme";
-      rev = version;
+      tag = finalAttrs.version;
       hash = "sha256-L8hDF1P+4q7RqohIzYyAw3c6iQvecfQm6ga+IKG0IZ8=";
     };
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     nativeBuildInputs = [
       dialog
@@ -112,9 +114,10 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
       util-linux
     ];
 
-    buildInputs = [
-      gnome-themes-extra # adwaita engine for Gtk2
-    ];
+    # The GTK2 themes need an engine that is no longer packaged.
+    # Replace with --no-gtk2 once merged:
+    # https://github.com/vinceliuice/WhiteSur-gtk-theme/pull/1437
+    patches = [ ./remove-gtk2.patch ];
 
     postPatch = ''
       find -name "*.sh" -print0 | while IFS= read -r -d ''' file; do
@@ -128,6 +131,7 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
       substituteInPlace libs/lib-core.sh --replace-fail 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
     '';
 
+    dontConfigure = true;
     dontBuild = true;
 
     installPhase = ''
@@ -154,13 +158,13 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = {
       description = "MacOS BigSur like Gtk+ theme based on Elegant Design";
       homepage = "https://github.com/vinceliuice/WhiteSur-gtk-theme";
       license = lib.licenses.mit;
-      platforms = lib.platforms.unix;
+      platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ romildo ];
     };
-  }
+  })

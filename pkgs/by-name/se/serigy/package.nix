@@ -37,15 +37,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [ pygobject3 ];
 
-  strictDeps = true;
-
   postInstallCheck = ''
     mesonCheckPhase
   '';
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = nix-update-script { };
 

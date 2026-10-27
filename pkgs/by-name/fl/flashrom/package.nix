@@ -14,26 +14,32 @@
   pkg-config,
   sphinx,
   jlinkSupport ? false,
-  git,
+  gitMinimal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashrom";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://download.flashrom.org/releases/flashrom-v${finalAttrs.version}.tar.xz";
-    hash = "sha256-Qyis6YM/fv58M0vdc0gs3oKGgZgmzAAUnoP7qWvzq08=";
+    hash = "sha256-ZUycYXRcJQzTtczQ5W/EPudpgPkqXgeEIEIGOdZpdaI=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   nativeBuildInputs = [
-    git
+    gitMinimal
     meson
     ninja
     pkg-config
     sphinx
     bash-completion
   ];
+
   buildInputs = [
     openssl
     cmocka
@@ -41,11 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pciutils ]
-  ++ lib.optional jlinkSupport libjaylink;
+  ++ lib.optionals jlinkSupport [ libjaylink ];
+
+  strictDeps = true;
 
   postPatch = ''
     substituteInPlace util/flashrom_udev.rules \
-      --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
+      --replace-fail 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
   '';
 
   mesonFlags = [
@@ -66,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   env = lib.optionalAttrs (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) {
     NIX_CFLAGS_COMPILE = "-Wno-gnu-folding-constant";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.flashrom.org";

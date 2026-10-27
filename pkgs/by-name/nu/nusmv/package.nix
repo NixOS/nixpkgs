@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ mgttlinger ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
   };
 })

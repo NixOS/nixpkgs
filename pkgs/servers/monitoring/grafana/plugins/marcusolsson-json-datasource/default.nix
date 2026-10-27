@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "marcusolsson-json-datasource";
-  version = "1.4.1";
-  zipHash = "sha256-tLjb3ZTK26Cb3CQ1qSRTtmbdzYD4S+vzI2OopogsY0M=";
+  version = "1.4.3";
+  zipHash = "sha256-zBDgv3oQg66yMBOgibUIBxwSaIyiqH1K4uBO4fPyAaw=";
   meta = {
     description = "Grafana JSON Datasource plugin empowers you to seamlessly integrate JSON data into Grafana";
     license = lib.licenses.asl20;

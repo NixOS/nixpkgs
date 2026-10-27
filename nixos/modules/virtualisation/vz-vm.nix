@@ -13,7 +13,14 @@ let
 
   hostPkgs = cfg.host.pkgs;
 
-  regInfo = hostPkgs.closureInfo { rootPaths = cfg.additionalPaths; };
+  inherit
+    (import ../../lib/store-registration-info.nix {
+      inherit hostPkgs;
+      rootPaths = cfg.additionalPaths;
+    })
+    regInfo
+    regInfoPath
+    ;
 
   # Host-built erofs store image, named by closure hash so only a changed guest rebuilds it.
   # A derivation is not an option: it would need the Linux builder this VM provides.
@@ -31,7 +38,7 @@ let
     # Virtualization.framework offers a virtio console
     "console=hvc0"
     "init=${toplevel}/init"
-    "regInfo=${regInfo}/registration"
+    "regInfo=${regInfoPath}"
   ]
   ++ config.boot.kernelParams;
 
@@ -229,8 +236,6 @@ in
       # Inbound connections go via vsock; loaded in the initrd so `systemd-ssh-generator` finds `/dev/vsock`.
       boot.initrd.kernelModules = [ "vmw_vsock_virtio_transport" ];
 
-      boot.initrd.systemd.enable = lib.mkDefault true;
-
       system.requiredKernelConfig = with config.lib.kernelConfig; [
         (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")
@@ -246,32 +251,11 @@ in
       ];
 
       # Override per entry and not as a whole: see note in vm-base.nix.
-      fileSystems = {
-        "/" = lib.mkVMOverride {
-          device = "tmpfs";
-          fsType = "tmpfs";
-          neededForBoot = true;
-          options = [ "mode=0755" ];
-        };
-      }
-      // lib.optionalAttrs (!cfg.writableStoreUseTmpfs && vzCfg.diskImage != null) {
-        # Second disk, hence /dev/vdb: store image is always first.
-        "/nix/.rw-store" = lib.mkVMOverride {
-          device = "/dev/vdb";
-          fsType = "ext4";
-          autoFormat = true;
-          neededForBoot = true;
-        };
-      }
-      // lib.mapAttrs' (
-        _: share:
-        lib.nameValuePair share.target (
-          lib.mkVMOverride {
-            device = share.tag;
-            fsType = "virtiofs";
-          }
-        )
-      ) cfg.sharedDirectories;
+      fileSystems = import ./vz-vm-file-systems.nix {
+        inherit lib;
+        inherit (cfg) sharedDirectories writableStoreUseTmpfs;
+        diskImage = vzCfg.diskImage;
+      };
 
       # DHCP and DNS come from host NAT
       networking.useDHCP = lib.mkDefault true;

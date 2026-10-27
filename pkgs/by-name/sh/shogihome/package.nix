@@ -4,7 +4,8 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_42,
+  # Both upstream stable and latest releases often stay on EOL Electron.
+  electron,
   cacert,
   makeDesktopItem,
   copyDesktopItems,
@@ -12,28 +13,23 @@
   nix-update-script,
   _experimental-update-script-combinators,
   writeShellApplication,
-  nix,
   curl,
   common-updater-scripts,
   jq,
-  gnugrep,
 }:
 
-let
-  electron = electron_42;
-in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.29.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vo9ZxiTJNPBVOlylmXbBzVzXCEr++JZRgHyJ0JYYstY=";
+    hash = "sha256-F13rgUdquKJHz41Gz2ou8cAk3FmZF/FjA19DKtkJr2E=";
   };
 
-  npmDepsHash = "sha256-1LQIhHCTx8ZY2r/kwkd+qPM1FNo4dxx2jDDTtBscemY=";
+  npmDepsHash = "sha256-9pitop6ZGw4JlN/iUfQ7xqY7jN5PyffTSH2Tc/coi+c=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -154,23 +150,6 @@ buildNpmPackage (finalAttrs: {
           "--version=skip"
         ];
       })
-      (lib.getExe (writeShellApplication {
-        name = "${finalAttrs.pname}-electron-updater";
-        runtimeInputs = [
-          nix
-          jq
-          gnugrep
-        ];
-        runtimeEnv = {
-          PNAME = finalAttrs.pname;
-          PKG_FILE = toString ./package.nix;
-        };
-        text = ''
-          new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-          new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-          sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
-        '';
-      }))
     ];
   };
 

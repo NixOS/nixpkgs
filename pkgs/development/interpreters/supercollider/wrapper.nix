@@ -1,4 +1,5 @@
 {
+  lib,
   symlinkJoin,
   makeWrapper,
   supercollider,
@@ -12,10 +13,19 @@ symlinkJoin {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
+    # --include-path adds to the paths from the user's language configuration,
+    # including an explicit -l configuration (as used by tidal-cycles-full).
+    if [ -d "$out/share/SuperCollider/Extensions" ]; then
+      wrapProgram "$out/bin/sclang" \
+        --add-flags "--include-path $out/share/SuperCollider/Extensions"
+    fi
+
     for exe in $out/bin/*; do
-      wrapProgram $exe \
-        --set SC_PLUGIN_DIR "$out/lib/SuperCollider/plugins" \
-        --set SC_DATA_DIR   "$out/share/SuperCollider"
+      # scide launches sclang, and sclang launches scsynth, through PATH.
+      # The server already loads its core UGens from its compiled-in path.
+      wrapProgram "$exe" \
+        --prefix PATH : "$out/bin" \
+        --prefix SC_PLUGIN_PATH : "${lib.makeSearchPath "lib/SuperCollider/plugins" plugins}"
     done
   '';
 

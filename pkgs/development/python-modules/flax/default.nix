@@ -36,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.9";
+  version = "0.12.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zh5PE9pq+loJCIW5EPvtWTco/ouIK3TzJ0o3Ydthz00=";
+    hash = "sha256-cgtRncxqT6ZKBUR3NpN08+c7zddxU3EoeIF5Xt9omc0=";
   };
 
   build-system = [
@@ -70,13 +70,15 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cloudpickle
-    keras
     einops
     pytestCheckHook
     pytest-xdist
     sphinx
-    tensorflow
     torch
+  ]
+  ++ lib.optionals tensorflow.meta.available [
+    keras
+    tensorflow
   ];
 
   disabledTestPaths = [
@@ -90,6 +92,10 @@ buildPythonPackage (finalAttrs: {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+  ]
+  ++ lib.optionals (!tensorflow.meta.available) [
+    "tests/io_test.py"
+    "tests/tensorboard_test.py"
   ];
 
   disabledTests = [

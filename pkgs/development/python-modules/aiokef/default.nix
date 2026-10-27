@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "basnijholt";
     repo = "aiokef";
     tag = "v${finalAttrs.version}";
-    sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
+    hash = "sha256-afZbMIH3HlamGYSF66S9sVC/z7XrXrZ1KRwgeTNvQFc=";
   };
 
   build-system = [ setuptools ];
@@ -26,6 +26,10 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace tox.ini \
       --replace "--mypy" ""
+    # For python3.14 compatability
+    substituteInPlace aiokef/aiokef.py \
+      --replace-fail  'self._loop = loop or asyncio.get_event_loop()' \
+                      'self._loop = loop if loop is not None else asyncio.new_event_loop()'
   '';
 
   dependencies = [

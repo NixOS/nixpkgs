@@ -6,6 +6,7 @@
   autoAddDriverRunpath,
   autoPatchelfHook,
   backendStdenv,
+  cudaMajorMinorPatchVersion,
   cudaMajorMinorVersion,
   cudaMajorVersion,
   cudaNamePrefix,
@@ -13,6 +14,7 @@
   lib,
   manifests,
   markForCudatoolkitRootHook,
+  patchelf,
   removeStubsFromRunpathHook,
   srcOnly,
   stdenv,
@@ -21,7 +23,7 @@
 }:
 let
   inherit (backendStdenv) hostRedistSystem;
-  inherit (_cuda.lib) getNixSystems _mkCudaVariant mkRedistUrl;
+  inherit (_cuda.lib) getNixSystems _mkCudaVariants mkRedistUrl;
   inherit (lib.attrsets)
     foldlAttrs
     getDev
@@ -70,7 +72,7 @@ let
 
   getSupportedReleases =
     let
-      desiredCudaVariant = _mkCudaVariant cudaMajorVersion;
+      desiredCudaVariants = _mkCudaVariants cudaMajorMinorPatchVersion;
     in
     release:
     # Always show preference to the "source", then "linux-all" redistSystem if they are available, as they are
@@ -92,9 +94,16 @@ let
         acc
         # If the value is an attribute, and when hasCudaVariants is true it has the relevant CUDA variant,
         # then add it to the set.
-        // optionalAttrs (isAttrs value && (hasCudaVariants -> hasAttr desiredCudaVariant value)) {
-          ${name} = value.${desiredCudaVariant} or value;
-        }
+        // (
+          let
+            desiredCudaVariant = findFirst (
+              variant: isAttrs value && hasAttr variant value
+            ) null desiredCudaVariants;
+          in
+          optionalAttrs (isAttrs value && (hasCudaVariants -> desiredCudaVariant != null)) {
+            ${name} = if desiredCudaVariant == null then value else value.${desiredCudaVariant};
+          }
+        )
       ) { } release;
 
   getPreferredRelease =
@@ -269,6 +278,17 @@ extendMkDerivation {
 
       nativeBuildInputs = [
         ./buildRedistHook.bash
+        # patchelf 0.19.2 aborts in shiftFile when addDriverRunpath re-patches binaries (e.g. libcufile, cuda_nvcc).
+        # FIXME: drop once https://github.com/NixOS/patchelf/pull/672 is in the default patchelf
+        (patchelf.overrideAttrs (
+          finalAttrs: _: {
+            version = "0.15.2";
+            src = fetchurl {
+              url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+              hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+            };
+          }
+        ))
         autoPatchelfHook
         # This hook will make sure libcuda can be found
         # in typically /lib/opengl-driver by adding that

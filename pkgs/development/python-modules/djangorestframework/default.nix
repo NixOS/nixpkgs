@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -20,6 +19,7 @@
   pyyaml,
 
   # tests
+  dj-database-url,
   pytestCheckHook,
   pytest-django,
   pytz,
@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "djangorestframework";
-  version = "3.17.1";
+  version = "3.18.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     tag = finalAttrs.version;
-    hash = "sha256-hDAtICtVFeEXRgR5Shb0IdVlLkpf/TBDWw+2cOLJTfw=";
+    hash = "sha256-D3A9fUBc8QhkAA8GyECifQh/VJa1Jxwx3W0usA3RoD4=";
   };
 
   build-system = [ setuptools ];
@@ -56,15 +56,16 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    dj-database-url
     pytest-django
     pytestCheckHook
     pytz
   ]
   ++ finalAttrs.passthru.optional-dependencies.complete;
 
-  disabledTests = [
-    # https://github.com/encode/django-rest-framework/issues/9422
-    "test_urlpatterns"
+  disabledTestPaths = lib.optionals (lib.versionAtLeast django.version "5") [
+    # AssertionError: assert '�\\u0125\\u01a6.txt' == 'ÀĥƦ.txt'"
+    "tests/test_parsers.py::TestFileUploadParser::test_get_encoded_filename"
   ];
 
   pythonImportsCheck = [ "rest_framework" ];

@@ -12,7 +12,7 @@
   withRustAnalyzer ? true,
   rust-analyzer,
   withTypescript ? true,
-  typescript,
+  typescript_5,
   abseil-cpp,
   boost,
   llvmPackages,
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
-    ln -sf ${typescript} $TARGET
+    ln -sf ${typescript_5} $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so

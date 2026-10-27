@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hittekaart";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromCodeberg {
     owner = "dunj3";
     repo = "hittekaart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pp4biN20NWrTB11Bi14INl9g5VPPP79j9tbgXUe40qQ=";
+    hash = "sha256-MMHtcO55d0IRwJ1VcHj1WVPDT8N+gTrdq05hVmHUIIw=";
   };
 
-  cargoHash = "sha256-bo8PnAShrQJ9qPYk/yEhD8E0DZH2uJ427w0Wr34Xz/U=";
+  cargoHash = "sha256-Dz5EY0EW7WUpB7gsGWRHyXjDLHIdLbqHBBwemKGOWF0=";
 
   nativeBuildInputs = [ python3 ];
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://telepathy.freedesktop.org/releases/telepathy-qt/telepathy-qt-${version}.tar.gz";
-    sha256 = "bf8e2a09060addb80475a4938105b9b41d9e6837999b7a00e5351783857e18ad";
+    hash = "sha256-v44qCQYK3bgEdaSTgQW5tB2eaDeZm3oA5TUXg4V+GK0=";
   };
 
   nativeBuildInputs = [

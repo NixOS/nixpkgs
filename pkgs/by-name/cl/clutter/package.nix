@@ -109,7 +109,7 @@ stdenv.mkDerivation {
     '';
 
     license = lib.licenses.lgpl2Plus;
-    homepage = "http://www.clutter-project.org/";
+    homepage = "https://gitlab.gnome.org/Archive/clutter";
 
     maintainers = [ ];
     platforms = lib.platforms.unix;

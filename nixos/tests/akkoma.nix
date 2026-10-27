@@ -129,7 +129,7 @@ let
     };
 in
 {
-  name = "akkoma";
+  name = "akkoma-${if confined then "confined" else "nonconfined"}";
   nodes = {
     client-a =
       { ... }:

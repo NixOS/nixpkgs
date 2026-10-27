@@ -58,6 +58,7 @@ let
       nix-store
       nix-store-c
       nix-fetchers
+      nix-fetchers-c
       nix-expr
       nix-expr-c
       nix-flake
@@ -65,11 +66,6 @@ let
       nix-main
       nix-main-c
       nix-cmd
-      ;
-  }
-  // lib.optionalAttrs (lib.versionAtLeast version "2.29pre") {
-    inherit
-      nix-fetchers-c
       ;
   }
   //
@@ -189,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
       ln -sT ${nix-manual} $doc
       ln -sT ${nix-manual.man} $man
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && lib.versionAtLeast version "2.34pre") ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       lndir ${nix-nswrapper} $out
     '';
 
@@ -258,11 +254,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-expr"
       "nix-expr-c"
       "nix-fetchers"
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
       "nix-fetchers-c"
-    ]
-    ++ [
       "nix-flake"
       "nix-flake-c"
       "nix-main"

@@ -21,7 +21,7 @@
   glib,
   glib-networking,
   json-glib,
-  gcr,
+  gcr_3,
   libgee,
   gexiv2_0_16,
   gettext,
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gdk-pixbuf
     librsvg
-    gcr
+    gcr_3
     adwaita-icon-theme
     libsecret
     libportal-gtk3

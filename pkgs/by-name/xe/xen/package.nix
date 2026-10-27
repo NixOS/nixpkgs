@@ -201,6 +201,69 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-makefile-efi-output-directory.patch
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa509.patch";
+      hash = "sha256-Ive95ewRsPe/Oq2NpqkcgXwKAi8pKJAF4eGQ9IkgM9A=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa510.patch";
+      hash = "sha256-RxCN2TMqeXVjHZhqxLvhWE40vUkD52RDYNyd9+6K9mA=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa511.patch";
+      hash = "sha256-y7TVcoXpeJoXnMOk1ESWyW53JbBTf8urrNYpwtmft/A=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa512-1.patch";
+      hash = "sha256-Xky7ddRSd1d+Y/voEmsyiyMsU7NX/WM2/yOviaLv5gU=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa512-2.patch";
+      hash = "sha256-4LgqC1F22kFjiVWgiSb1hZazbBF2Fziiif0Scv+ynho=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa514.patch";
+      hash = "sha256-Ez4IaQbsb27nmyfbrdUeuqaCLJY5YfkYS2Mh+Crlf2Q=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa515.patch";
+      hash = "sha256-p4/eNfnR/KL1QZ+6Ml4eWyMibXr1DEcBzhQ6XrKVVhM=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa516.patch";
+      hash = "sha256-k+3i0akBvIDz6EnEaas+tzzVFAD9/SAOpjBFA6WnDcA=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa517.patch";
+      hash = "sha256-3IyzQwK3+rM0BulhaAUBQCceLp/AuiXZSKMHaCkeMy8=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa518.patch";
+      hash = "sha256-/JGtNoreyCo7SNDVxCB9RuvpZLbWzJj8djcKp2jsEqE=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa519-1.patch";
+      hash = "sha256-vQAUDNcfSm4fKqdNGnfJzURSEji33lWAFXmZ4Q8ByMc=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa519-2.patch";
+      hash = "sha256-dycKGN8YptATwc2bF/q+GOx3pGm/GXIv5On0BJnUgDc=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa520.patch";
+      hash = "sha256-E2m+OOm7slNFV8t6Yhvbfn7FtBRE63GkCXMImQkDpnc=";
+    })
   ]
   ++ optionals (versionOlder finalAttrs.version "4.21") [
     # Patch `libxl` to search for `qemu-system-i386` properly.

@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "netutils";
-  version = "1.18.0";
+  version = "1.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1pfuuvJ3ze2MYW9IX3oCDZ/VRvuytdl3ZnMQOTjOEOs=";
+    hash = "sha256-9M2lG5/U/6gTec0zXDP1UVeVmS/dBmCz007W1jeGwrU=";
   };
 
   build-system = [ poetry-core ];

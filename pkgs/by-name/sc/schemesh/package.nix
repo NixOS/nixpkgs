@@ -11,19 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schemesh";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "cosmos72";
     repo = "schemesh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sk2AZXd5kBR3Er8GeVm+10BaLwFL9k0v5Uk5CmuWv6o=";
+    hash = "sha256-EeFj2//vqYFwiFxK1NSoK1t49i0i7W3MMWLr2Dk5oSk=";
   };
-
-  postPatch = ''
-    # https://github.com/cosmos72/schemesh/commit/696ba7c24737cd436bb4d8bfa9ec1ea517681403
-    substituteInPlace c/dir.c --replace-fail PATH_MAX 1024
-  '';
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # error initializing POSIX subsystem: dup2(0, tty_fd) failed with error Bad file descriptor

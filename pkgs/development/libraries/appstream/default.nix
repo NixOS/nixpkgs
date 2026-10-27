@@ -32,13 +32,13 @@
   pango,
   librsvg,
   bash-completion,
-  systemd,
+  systemdLibs,
   nixosTests,
   testers,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     bash-completion
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [
