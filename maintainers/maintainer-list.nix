@@ -10410,6 +10410,12 @@
     githubId = 1176131;
     name = "George Whewell";
   };
+  georgkrause = {
+    email = "mail@georg-krause.net";
+    github = "georgkrause";
+    githubId = 939889;
+    name = "Georg Krause";
+  };
   georgyo = {
     email = "george@shamm.as";
     github = "georgyo";
