@@ -1,12 +1,13 @@
 {
   aiohttp,
-  aresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
   lib,
   poetry-core,
   pyprojectVersionPatchHook,
+  pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
@@ -14,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pysmhi";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gjohansson-ST";
     repo = "pysmhi";
-    tag = "v${version}";
-    hash = "sha256-9t/mhmQfNwuX2QVS1OOeKZOARXK9otjGtwJEfVeizPU=";
+    tag = version;
+    hash = "sha256-QGpheSXmYWLgrIYg98qBgR2R6pFCH1eB0HQPK1T3/qo=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +38,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pysmhi" ];
 
   nativeCheckInputs = [
-    aresponses
+    aiointercept
     freezegun
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
     syrupy
