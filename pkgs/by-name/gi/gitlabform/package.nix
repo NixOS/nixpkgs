@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitlabform";
-  version = "6.2.4";
+  version = "6.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "gitlabform";
     repo = "gitlabform";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dld97rLe5ADkYAuAIGFsDs12ffs+bxj23EZkgnW3TzM=";
+    hash = "sha256-ctVtCcoNLTqw0GIl+mA7ER2H6lhWb9cXWPcFyonYKbs=";
   };
 
   postPatch = ''
