@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     libyuv
   ];
 
+  strictDeps = true;
+
   env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = gdkPixbufModuleDir;
 
   doCheck = true;
