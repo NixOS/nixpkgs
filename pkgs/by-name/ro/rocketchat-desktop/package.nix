@@ -7,7 +7,7 @@
   pkg-config,
   node-gyp,
   python3Packages,
-  electron_42,
+  electron_43,
   vips,
   xvfb-run,
   copyDesktopItems,
@@ -17,17 +17,17 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  electron = electron_42;
+  electron = electron_43;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocketchat-desktop";
-  version = "4.18.2";
+  version = "4.19.0";
 
   src = fetchFromGitHub {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-x8B806RziRk3/PGdy081teX+0fKTlKXwsYQkFtUV9mM=";
+    hash = "sha256-VbOmB+O7HjccdSup90DGirsVh4X4hjp2kgiI9uAv99w=";
   };
 
   patches = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-WPOGfFgUDFcer/7MSxTC8E+yFJJ/P0NdwekISFX1t9I=";
+    hash = "sha256-L4IX/Kjm+a0vl6aj8L+a/xdzo+MfqfS6LnBr/S3Jtl8=";
   };
 
   nativeBuildInputs = [
