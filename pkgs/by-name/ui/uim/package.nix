@@ -20,6 +20,8 @@
   withGtk ? true,
   withGtk3 ? withGtk,
   gtk3,
+  withGtk4 ? withGtk,
+  gtk4,
   # Was never enabled in the history of this package and is not needed by any
   # dependent package, hence disabled to save up closure size.
   withQt ? false,
@@ -75,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withAnthy anthy
   ++ lib.optional withGtk3 gtk3
+  ++ lib.optional withGtk4 gtk4
   ++ lib.optionals withQt5 [
     qt5.qtbase
     qt5.qtx11extras
@@ -110,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withAnthy "--with-anthy-utf8"
   ++ lib.optional withGtk3 "--with-gtk3"
+  ++ lib.optional withGtk4 "--with-gtk4"
   ++ lib.optionals withQt5 [
     "--with-qt5"
     "--with-qt5-immodule"
