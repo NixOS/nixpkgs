@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-Ogq8aTOZvZTfceJuQ1vSjl5Lm5Ww/8jTUZwcXkDDaxI=";
   };
 
+  patches = [ ./darwin-dont-vendor-dependencies.patch ];
+
   nativeBuildInputs = [
     cmake
     readline
