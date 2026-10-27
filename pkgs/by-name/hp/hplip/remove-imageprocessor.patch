@@ -1,0 +1,43 @@
+diff --git a/Makefile.am b/Makefile.am
+index ccd4eff..4bdf027 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -179,7 +179,7 @@ if !HPLIP_CLASS_DRIVER
+ dist_hplip_SCRIPTS = hpssd.py __init__.py hpdio.py
+ endif #HPLIP_CLASS_DRIVER
+ 
+-dist_noinst_DATA += prnt/drv/hpijs.drv.in.template prnt/drv/hpcups.drv.in.template prnt/hpcups/libImageProcessor-x86_64.so prnt/hpcups/libImageProcessor-x86_32.so
++dist_noinst_DATA += prnt/drv/hpijs.drv.in.template prnt/drv/hpcups.drv.in.template
+ 
+ dist_noinst_DATA += prnt/ipp-usb/HPLIP.conf
+ dist_noinst_SCRIPTS += dat2drv.py install.py  hplip-install init-suse-firewall init-iptables-firewall class_rpm_build.sh hplipclassdriver.spec createPPD.sh Makefile_dat2drv hpijs-drv
+@@ -605,7 +605,7 @@ hpcups_SOURCES = prnt/hpcups/HPCupsFilter.cpp prnt/hpcups/HPCupsFilter.h prnt/hp
+ hpcups_CPPFLAGS = -I$(srcdir)/prnt/hpcups -I$(srcdir)/prnt -I$(srcdir)/common -D_GNU_SOURCE
+ hpcups_CXXFLAGS = $(APDK_ENDIAN_FLAG) $(DBUS_CFLAGS) $(AM_CXXFLAGS)
+ hpcups_LDFLAGS = $(AM_LDFLAGS)
+-hpcups_LDADD = -L./prnt/hpcups/ -ljpeg -ldl -lImageProcessor -lcups -lcupsimage -lz $(DBUS_LIBS)
++hpcups_LDADD = -L./prnt/hpcups/ -ljpeg -ldl -lcups -lcupsimage -lz $(DBUS_LIBS)
+ #else
+ #hpcupsdir = $(cupsfilterdir)
+ #hpcups_PROGRAMS = hpcups
+@@ -707,20 +707,6 @@ endif #HPLIP_CLASS_DRIVER
+ 
+ install-data-hook:
+ if HPLIP_BUILD
+-	if [ \( "$(UNAME)" = "x86_64" -a  -d "$(libdir)/" \) ]; then \
+-		cp prnt/hpcups/libImageProcessor-x86_64.so $(libdir)/ ; \
+-		chmod 775 $(libdir)/libImageProcessor-x86_64.so ; \
+-		ln -sf $(libdir)/libImageProcessor-x86_64.so $(libdir)/libImageProcessor.so ; \
+-	fi; \
+-	if [ \( \( "$(UNAME)" = "i686" -o "$(UNAME)" = "i386" \) -a -d "$(libdir)/" \) ]; then \
+-		cp prnt/hpcups/libImageProcessor-x86_32.so $(libdir)/ ; \
+-		chmod 775 $(libdir)/libImageProcessor-x86_32.so ; \
+-		ln -sf $(libdir)/libImageProcessor-x86_32.so $(libdir)/libImageProcessor.so ; \
+-	fi
+-	if [ -d "/usr/share/ipp-usb/quirks/" ]; then \
+-		echo "ipp-usb directory exists"; \
+-		cp prnt/ipp-usb/HPLIP.conf /usr/share/ipp-usb/quirks/ ; \
+-	fi
+ if !HPLIP_CLASS_DRIVER
+ #	   If scanner build, add hpaio entry to sane dll.conf.
+ 	if [ "$(scan_build)" = "yes" ]; then \

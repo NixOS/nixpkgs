@@ -1,0 +1,28 @@
+From ee192f35d29ecae64dc00b4736e1870274b58cc8 Mon Sep 17 00:00:00 2001
+From: azban <me@azban.net>
+Date: Sat, 21 Mar 2026 18:41:34 -0600
+Subject: [PATCH] handle result from DcoKeyConfig_ParseFromString
+
+This previously failed with error unused-result. This checks the result and throws an exception if the parsing fails.
+---
+ src/netcfg/netcfg-dco.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/netcfg/netcfg-dco.cpp b/src/netcfg/netcfg-dco.cpp
+index 290c12a8..f41836bf 100644
+--- a/src/netcfg/netcfg-dco.cpp
++++ b/src/netcfg/netcfg-dco.cpp
+@@ -265,7 +265,9 @@ void NetCfgDCO::method_new_key(GVariant *params)
+     std::string key_config = glib2::Value::Extract<std::string>(params, 1);
+ 
+     DcoKeyConfig dco_kc;
+-    dco_kc.ParseFromString(base64->decode(key_config));
++    if (!dco_kc.ParseFromString(base64->decode(key_config))) {
++        throw NetCfgException("Failed to parse DCO key config");
++    }
+ 
+     auto copyKeyDirection = [](const DcoKeyConfig_KeyDirection &src, KoRekey::KeyDirection &dst)
+     {
+-- 
+2.51.2
+

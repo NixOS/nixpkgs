@@ -1,0 +1,28 @@
+Link `Boost::url` against the `index` library
+
+`DeltaTriples.cpp` in the `index` library ends up using `boost::urls`
+(via `util/http/UrlParser.h`), so consumers of `index` such as
+`RdfParserTest` fail to link with
+
+  undefined reference to
+  'boost::urls::detail::throw_length_error(boost::source_location const&)'
+
+Only `sparqlExpressions` linked against `Boost::url`, and that happens too
+late to satisfy `index`. Link it against `index` as well.
+
+This matches what upstream does on `master`:
+https://github.com/ad-freiburg/qlever/commit/5e050486be4300b2c96a2b9d939be01f3deeb0e3#diff-cc990ff9f129e764c0cb155599a666cfbf183675cbc19661bad62baaa7bdfd9bR32-R34
+---
+ src/index/CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/index/CMakeLists.txt b/src/index/CMakeLists.txt
+--- a/src/index/CMakeLists.txt
++++ b/src/index/CMakeLists.txt
+@@ -29,3 +29,6 @@ add_library(index
+         InputFileSpecification.cpp
+         TripleComponentConversions.cpp)
+ qlever_target_link_libraries(index qlever_util basicParser rdfParser vocabulary localVocab global)
++if (NOT REDUCED_FEATURE_SET_FOR_CPP17)
++    target_link_libraries(index PUBLIC Boost::url)
++endif()

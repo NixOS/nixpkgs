@@ -1,0 +1,17 @@
+name: Reviewed
+
+on:
+  pull_request_review:
+    types: [submitted, dismissed]
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  trigger:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo This is a no-op only used as a trigger for workflow_run.

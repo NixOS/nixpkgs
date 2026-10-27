@@ -1,0 +1,10 @@
+The "haha" string is too likely to appear e.g. in /nix/store hashes.
+--- a/tests/view_tests/tests/test_debug.py
++++ b/tests/view_tests/tests/test_debug.py
+@@ -92 +92 @@
+-            "file_data.txt": SimpleUploadedFile("file_data.txt", b"haha"),
++            "file_data.txt": SimpleUploadedFile("file_data.txt", b"hahaXGEENJAHSM"),
+@@ -97 +97 @@
+-        self.assertNotContains(response, "haha", status_code=500)
++        self.assertNotContains(response, "hahaXGEENJAHSM", status_code=500)
+

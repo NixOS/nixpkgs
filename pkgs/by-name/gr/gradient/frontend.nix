@@ -1,0 +1,72 @@
+{
+  dart-sass,
+  fetchPnpmDeps,
+  gradient,
+  lib,
+  nodejs,
+  pnpm,
+  pnpmConfigHook,
+  stdenv,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gradient-frontend";
+  inherit (gradient) version src;
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  sourceRoot = "${finalAttrs.src.name}/frontend";
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit pnpm;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      ;
+
+    fetcherVersion = 4;
+    hash = "sha256-DGMN9LXsEmPoZzw5PsIG+YTkDzlHu76f4bfm4SGeTAw=";
+  };
+
+  nativeBuildInputs = [
+    dart-sass
+    nodejs
+    pnpm
+    pnpmConfigHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    echo "exports.compilerCommand = ['dart-sass'];" > \
+      node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js
+
+    pnpm run build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/gradient-frontend
+    cp -rL dist/gradient-frontend/browser/* $out/share/gradient-frontend/
+    install -Dm444 dist/gradient-frontend/3rdpartylicenses.txt \
+      $out/share/doc/gradient-frontend/3rdpartylicenses.txt
+
+    runHook postInstall
+  '';
+
+  meta = {
+    description = "Nix-CI for Teams (web frontend)";
+    inherit (gradient.meta)
+      homepage
+      changelog
+      license
+      maintainers
+      ;
+
+    platforms = lib.platforms.unix;
+  };
+})

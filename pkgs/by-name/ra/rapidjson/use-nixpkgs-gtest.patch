@@ -1,0 +1,43 @@
+From b9206d360c19412d185263795d67c884feab281a Mon Sep 17 00:00:00 2001
+From: Tobias Mayer <tobim@fastmail.fm>
+Date: Mon, 29 Jul 2024 07:26:50 +0200
+Subject: [PATCH] Use nixpkgs gtest
+
+---
+ test/CMakeLists.txt | 24 ++++++------------------
+ 1 file changed, 6 insertions(+), 18 deletions(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 11c1b04c..3d02d475 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1,20 +1,8 @@
+-find_package(GTestSrc)
++find_package(GTest REQUIRED)
++enable_testing()
+ 
+-IF(GTESTSRC_FOUND)
+-    enable_testing()
++set(TEST_LIBRARIES GTest::gtest GTest::gtest_main)
+ 
+-    if (WIN32 AND (NOT CYGWIN) AND (NOT MINGW))
+-        set(gtest_disable_pthreads ON)
+-        set(gtest_force_shared_crt ON)
+-    endif()
+-
+-    add_subdirectory(${GTEST_SOURCE_DIR} ${CMAKE_BINARY_DIR}/googletest)
+-    include_directories(SYSTEM ${GTEST_INCLUDE_DIR})
+-
+-    set(TEST_LIBRARIES gtest gtest_main)
+-
+-    add_custom_target(tests ALL)
+-    add_subdirectory(perftest)
+-    add_subdirectory(unittest)
+-
+-ENDIF(GTESTSRC_FOUND)
++add_custom_target(tests ALL)
++add_subdirectory(perftest)
++add_subdirectory(unittest)
+-- 
+2.45.2
+

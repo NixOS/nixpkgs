@@ -1,0 +1,15 @@
+---
+ gnulib-tests/test-c32ispunct.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/gnulib-tests/test-c32ispunct.c
++++ b/gnulib-tests/test-c32ispunct.c
+@@ -255,7 +255,7 @@ main (int argc, char *argv[])
+           is = for_character ("\360\235\204\200", 4);
+           ASSERT (is != 0);
+         #endif
+-        #if !(defined __GLIBC__ || (defined __APPLE__ && defined __MACH__) || defined __FreeBSD__ || defined __NetBSD__ || defined __OpenBSD__ || defined _AIX || defined __sun || defined __CYGWIN__ || (defined _WIN32 && !defined __CYGWIN__) || defined __ANDROID__)
++        #if !(defined __GLIBC__ || defined MUSL_LIBC || (defined __APPLE__ && defined __MACH__) || defined __FreeBSD__ || defined __NetBSD__ || defined __OpenBSD__ || defined _AIX || defined __sun || defined __CYGWIN__ || (defined _WIN32 && !defined __CYGWIN__) || defined __ANDROID__)
+           /* U+E003A TAG COLON */
+           is = for_character ("\363\240\200\272", 4);
+           ASSERT (is == 0);

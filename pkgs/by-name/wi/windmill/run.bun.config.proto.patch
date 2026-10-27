@@ -1,0 +1,37 @@
+diff --git a/windmill-worker/nsjail/run.bun.config.proto b/windmill-worker/nsjail/run.bun.config.proto
+index cd1510a..d834d62 100644
+--- a/windmill-worker/nsjail/run.bun.config.proto
++++ b/windmill-worker/nsjail/run.bun.config.proto
+@@ -24,16 +24,24 @@ keep_env: true
+ # execs nsjail: the loader honours `LD_PRELOAD` before the jail exists.
+ {ENVARS}
+
++mount {
++    src: "/nix/store"
++    dst: "/nix/store"
++	is_bind: true
++}
++
+ mount {
+     src: "/bin"
+     dst: "/bin"
+ 	is_bind: true
++    mandatory: false
+ }
+
+ mount {
+     src: "/lib"
+     dst: "/lib"
+ 	is_bind: true
++    mandatory: false
+ }
+
+ mount {
+@@ -54,6 +62,7 @@ mount {
+     src: "/usr"
+     dst: "/usr"
+ 	is_bind: true
++    mandatory: false
+ }
+
+ mount {

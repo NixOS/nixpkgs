@@ -1,0 +1,62 @@
+diff --git a/dataclasses_json/api.py b/dataclasses_json/api.py
+index 3481e93..a19eb0a 100644
+--- a/dataclasses_json/api.py
++++ b/dataclasses_json/api.py
+@@ -79,7 +79,6 @@ class DataClassJsonMixin(abc.ABC):
+                only=None,
+                exclude=(),
+                many: bool = False,
+-               context=None,
+                load_only=(),
+                dump_only=(),
+                partial: bool = False,
+@@ -95,7 +94,6 @@ class DataClassJsonMixin(abc.ABC):
+         return Schema(only=only,
+                       exclude=exclude,
+                       many=many,
+-                      context=context,
+                       load_only=load_only,
+                       dump_only=dump_only,
+                       partial=partial,
+
+diff --git a/dataclasses_json/mm.py b/dataclasses_json/mm.py
+index 9cfacf1..cecd3b0 100644
+--- a/dataclasses_json/mm.py
++++ b/dataclasses_json/mm.py
+@@ -248,7 +248,7 @@ def build_type(type_, options, mixin, field, cls):
+                 options['field_many'] = bool(
+                     _is_supported_generic(field.type) and _is_collection(
+                         field.type))
+-                return fields.Nested(type_.schema(), **options)
++                return fields.Nested(type_.schema(), metadata=options)
+             else:
+                 warnings.warn(f"Nested dataclass field {field.name} of type "
+                               f"{field.type} detected in "
+
+From b5ea169f19cea0e346ba152c75ab49802f307e5e Mon Sep 17 00:00:00 2001
+From: Steven Packard <spackard1@bloomberg.net>
+Date: Sat, 9 Apr 2022 03:37:52 -0400
+Subject: [PATCH] fix(mm): Replace deprecated Marshmallow Field parameters
+
+In Marshmallow 3.13.0, the `default` and `missing` parameters of the
+`Field` object were deprecated and replaced with `dump_default` and
+`load_default` respectively.
+
+fixes: #328
+---
+ dataclasses_json/mm.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dataclasses_json/mm.py b/dataclasses_json/mm.py
+index 9cfacf1d..b9e54d8e 100644
+--- a/dataclasses_json/mm.py
++++ b/dataclasses_json/mm.py
+@@ -305,7 +305,7 @@ def schema(cls, mixin, infer_missing):
+         else:
+             type_ = field.type
+             options: typing.Dict[str, typing.Any] = {}
+-            missing_key = 'missing' if infer_missing else 'default'
++            missing_key = 'load_default' if infer_missing else 'dump_default'
+             if field.default is not MISSING:
+                 options[missing_key] = field.default
+             elif field.default_factory is not MISSING:

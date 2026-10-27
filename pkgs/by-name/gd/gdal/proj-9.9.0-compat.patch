@@ -1,0 +1,29 @@
+diff --git a/autotest/utilities/test_gdalalg_mdim_info.py b/autotest/utilities/test_gdalalg_mdim_info.py
+index 33b87f60fc..63c283b350 100755
+--- a/autotest/utilities/test_gdalalg_mdim_info.py
++++ b/autotest/utilities/test_gdalalg_mdim_info.py
+@@ -180,7 +180,14 @@ def test_gdalalg_mdim_info_all_options():
+ def test_gdalalg_mdim_info_binary(gdal_path):
+ 
+     out = gdaltest.runexternal(f"{gdal_path} mdim info ../gdrivers/data/netcdf/byte.nc")
+-    assert json.loads(out) == {
++
++    info = json.loads(out)
++
++    # make PROJ 9.9.0 output equivalent to previous versions (#15250)
++    srs = info["arrays"]["Band1"]["srs"]
++    srs["wkt"] = srs["wkt"].replace("(E)", "easting").replace("(N)", "northing")
++
++    expected = {
+         "arrays": {
+             "Band1": {
+                 "attributes": {
+@@ -313,6 +320,8 @@ def test_gdalalg_mdim_info_binary(gdal_path):
+         "type": "group",
+     }
+ 
++    assert info == expected
++
+ 
+ def test_gdalalg_mdim_info_completion_array_invalid_ds(gdal_path):
+ 

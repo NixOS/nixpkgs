@@ -1,0 +1,75 @@
+From 7ef5ed98cc6666f64db2f155ded2077ce038e1e4 Mon Sep 17 00:00:00 2001
+From: Reno Dakota <paparodeo@proton.me>
+Date: Sat, 16 Nov 2024 05:57:40 +0000
+Subject: [PATCH] [Clang][Driver] report unsupported option error regardless of
+ argument order
+
+This change updates clang to report unsupported option errors regardless
+of the command line argument order.
+
+When clang with a source file and without `-c` it will both compile and
+link. When an unsupported option is also part of the command line clang
+should generated an error. However, if the source file name comes before
+an object file, eg: `-lc`, the error is ignored.
+
+```
+$ clang --target=x86_64 -lc hello.c -mhtm
+clang: error: unsupported option '-mhtm' for target 'x86_64'
+$ echo $?
+1
+```
+
+but if `-lc` comes after `hello.c` the error is dropped
+
+```
+$ clang --target=x86_64 hello.c -mhtm -lc
+$ echo $?
+0
+```
+
+after this change clang will report the error regardless of the command
+line argument order.
+---
+ clang/lib/Driver/Driver.cpp            | 13 ++++++-------
+ clang/test/Driver/unsupported-option.c | 10 ++++++++++
+ 2 files changed, 16 insertions(+), 7 deletions(-)
+
+diff --git a/lib/Driver/Driver.cpp b/clang/lib/Driver/Driver.cpp
+index 93e85f7dffe35a..8e784a7b130ac3 100644
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -4064,17 +4064,18 @@ void Driver::handleArguments(Compilation &C, DerivedArgList &Args,
+     YcArg = YuArg = nullptr;
+   }
+ 
+-  unsigned LastPLSize = 0;
++  bool LinkOnly = phases::Link == FinalPhase && Inputs.size() > 0;
+   for (auto &I : Inputs) {
+     types::ID InputType = I.first;
+     const Arg *InputArg = I.second;
+ 
+     auto PL = types::getCompilationPhases(InputType);
+-    LastPLSize = PL.size();
++
++    phases::ID InitialPhase = PL[0];
++    LinkOnly = LinkOnly && phases::Link == InitialPhase && PL.size() == 1;
+ 
+     // If the first step comes after the final phase we are doing as part of
+     // this compilation, warn the user about it.
+-    phases::ID InitialPhase = PL[0];
+     if (InitialPhase > FinalPhase) {
+       if (InputArg->isClaimed())
+         continue;
+@@ -4129,10 +4130,8 @@ void Driver::handleArguments(Compilation &C, DerivedArgList &Args,
+     }
+   }
+ 
+-  // If we are linking, claim any options which are obviously only used for
+-  // compilation.
+-  // FIXME: Understand why the last Phase List length is used here.
+-  if (FinalPhase == phases::Link && LastPLSize == 1) {
++  // claim any options which are obviously only used for compilation.
++  if (LinkOnly) {
+     Args.ClaimAllArgs(options::OPT_CompileOnly_Group);
+     Args.ClaimAllArgs(options::OPT_cl_compile_Group);
+   }

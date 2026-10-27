@@ -1,0 +1,6 @@
+# Nixpkgs Manual {#nixpkgs-manual}
+## Version @MANUAL_VERSION@
+
+```{=include=} appendix html:into-file=//release-notes.html
+release-notes/release-notes.md
+```

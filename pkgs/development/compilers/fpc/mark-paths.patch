@@ -1,0 +1,109 @@
+diff --git a/fpcsrc/compiler/systems/t_linux.pas b/fpcsrc/compiler/systems/t_linux.pas
+index a7398fb9..8e46fec0 100644
+--- a/fpcsrc/compiler/systems/t_linux.pas
++++ b/fpcsrc/compiler/systems/t_linux.pas
+@@ -135,13 +135,13 @@ begin
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib64',true);
+       { /lib64 should be the really first, so add it before everything else }
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib',true);
+-      LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64',true);
++      LibrarySearchPath.AddLibraryPath(sysrootpath,'=@syslibpath@',true);
+ {$else}
+ {$ifdef powerpc64}
+       if target_info.abi<>abi_powerpc_elfv2 then
+-        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64;=/usr/lib64;=/usr/X11R6/lib64',true)
++        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/@syslibpath@;=/usr/lib64;=/usr/X11R6/lib64',true)
+       else
+-        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64;=/usr/lib/powerpc64le-linux-gnu;=/usr/X11R6/powerpc64le-linux-gnu',true);
++        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/@syslibpath@;=/usr/lib/powerpc64le-linux-gnu;=/usr/X11R6/powerpc64le-linux-gnu',true);
+ {$else powerpc64}
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib;=/usr/lib;=/usr/X11R6/lib',true);
+ {$endif powerpc64}
+@@ -165,7 +165,7 @@ begin
+ {$endif i386}
+ {$ifdef aarch64}
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib64',true);
+-      LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/aarch64-linux-gnu',true);
++      LibrarySearchPath.AddLibraryPath(sysrootpath,'=@syslibpath@',true);
+ {$endif aarch64}
+ {$ifdef powerpc}
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/powerpc-linux-gnu',true);
+@@ -186,53 +186,53 @@ begin
+ end;
+ 
+ {$ifdef m68k}
+-  const defdynlinker='/lib/ld.so.1';
++  const defdynlinker='@dynlinker-prefix@/lib/ld.so.1';
+ {$endif m68k}
+ 
+ {$ifdef i386}
+-  const defdynlinker='/lib/ld-linux.so.2';
++  const defdynlinker='@dynlinker-prefix@/lib/ld-linux.so.2';
+ {$endif}
+ 
+ {$ifdef x86_64}
+-  const defdynlinker='/lib64/ld-linux-x86-64.so.2';
++  const defdynlinker='@dynlinker-prefix@/lib64/ld-linux-x86-64.so.2';
+ {$endif x86_64}
+ 
+ {$ifdef sparc}
+-  const defdynlinker='/lib/ld-linux.so.2';
++  const defdynlinker='@dynlinker-prefix@/lib/ld-linux.so.2';
+ {$endif sparc}
+ 
+ {$ifdef powerpc}
+-  const defdynlinker='/lib/ld.so.1';
++  const defdynlinker='@dynlinker-prefix@/lib/ld.so.1';
+ {$endif powerpc}
+ 
+ {$ifdef powerpc64}
+-  const defdynlinkerv1='/lib64/ld64.so.1';
+-  const defdynlinkerv2='/lib64/ld64.so.2';
++  const defdynlinkerv1='@dynlinker-prefix@/lib64/ld64.so.1';
++  const defdynlinkerv2='@dynlinker-prefix@/lib64/ld64.so.2';
+   var defdynlinker: string;
+ {$endif powerpc64}
+ 
+ {$ifdef arm}
+ {$ifdef FPC_ARMHF}
+-  const defdynlinker='/lib/ld-linux-armhf.so.3';
++  const defdynlinker='@dynlinker-prefix@/lib/ld-linux-armhf.so.3';
+ {$else FPC_ARMHF}
+ {$ifdef FPC_ARMEL}
+-  const defdynlinker='/lib/ld-linux.so.3';
++  const defdynlinker='@dynlinker-prefix@/lib/ld-linux.so.3';
+ {$else FPC_ARMEL}
+-  const defdynlinker='/lib/ld-linux.so.2';
++  const defdynlinker='@dynlinker-prefix@/lib/ld-linux.so.2';
+ {$endif FPC_ARMEL}
+ {$endif FPC_ARMHF}
+ {$endif arm}
+ 
+ {$ifdef aarch64}
+-const defdynlinker='/lib/ld-linux-aarch64.so.1';
++const defdynlinker='@dynlinker-prefix@/lib/ld-linux-aarch64.so.1';
+ {$endif aarch64}
+ 
+ {$ifdef mips}
+-  const defdynlinker='/lib/ld.so.1';
++  const defdynlinker='@dynlinker-prefix@/lib/ld.so.1';
+ {$endif mips}
+ 
+ {$ifdef sparc64}
+-  const defdynlinker='/lib64/ld-linux.so.2';
++  const defdynlinker='@dynlinker-prefix@/lib64/ld-linux.so.2';
+ {$endif sparc64}
+ 
+ 
+@@ -267,9 +267,9 @@ begin
+       libctype:=uclibc;
+     end
+ {$ifdef i386}
+-  else if FileExists(sysrootpath+'/lib/ld-linux.so.1',false) then
++  else if FileExists(sysrootpath+'@dynlinker-prefix@/lib/ld-linux.so.1',false) then
+     begin
+-      DynamicLinker:='/lib/ld-linux.so.1';
++      DynamicLinker:='@dynlinker-prefix@/lib/ld-linux.so.1';
+       libctype:=glibc2;
+     end
+ {$endif i386}

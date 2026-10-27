@@ -1,0 +1,75 @@
+{
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  lib,
+  lz4,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  backports-zstd,
+  cramjam,
+  setuptools,
+  zlib-ng,
+}:
+
+buildPythonPackage rec {
+  pname = "fastavro";
+  version = "1.12.2";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "fastavro";
+    repo = "fastavro";
+    tag = version;
+    hash = "sha256-UeOfYM03Htqrh+lpBKWiAPgZTv63jpO/FZZRMSgW5Ug=";
+  };
+
+  preBuild = ''
+    export FASTAVRO_USE_CYTHON=1
+  '';
+
+  build-system = [
+    cython
+    setuptools
+  ];
+
+  optional-dependencies = {
+    codecs = [
+      cramjam
+      lz4
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      backports-zstd
+    ];
+    snappy = [ cramjam ];
+    zstandard = lib.optionals (pythonOlder "3.,14") [ backports-zstd ];
+    lz4 = [ lz4 ];
+  };
+
+  nativeCheckInputs = [
+    numpy
+    pandas
+    pytestCheckHook
+    python-dateutil
+    zlib-ng
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
+  # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
+  disabledTests = [ "test_cython_python" ];
+
+  pythonImportsCheck = [ "fastavro" ];
+
+  meta = {
+    description = "Fast read/write of AVRO files";
+    mainProgram = "fastavro";
+    homepage = "https://github.com/fastavro/fastavro";
+    changelog = "https://github.com/fastavro/fastavro/blob/${src.tag}/ChangeLog";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
+  };
+}

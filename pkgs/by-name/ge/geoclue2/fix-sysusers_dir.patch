@@ -1,0 +1,13 @@
+diff --git a/data/meson.build b/data/meson.build
+index 2591e6a..dc1bd8d 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -69,7 +69,7 @@ if get_option('enable-backend')
+         if systemd.found()
+             sysusers_dir = systemd.get_variable(pkgconfig: 'sysusersdir')
+         else
+-            sysusers_dir = '/usr/lib/sysusers.d'
++            sysusers_dir = join_paths(get_option('prefix'), 'usr/lib/sysusers.d')
+         endif
+         configure_file(output: 'geoclue-sysusers.conf',
+                        input: 'geoclue-sysusers.conf.in',

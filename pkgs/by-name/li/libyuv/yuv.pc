@@ -1,0 +1,13 @@
+prefix=@PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: yuv
+Description: WebM Project Yuv codec implementation
+Version: @VERSION@
+Requires:
+Conflicts:
+Libs: -L${libdir} -lyuv -lm
+Libs.private: -lm -lpthread
+Cflags: -I${includedir}
