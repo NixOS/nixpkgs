@@ -149,6 +149,9 @@ buildGoModule rec {
         "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
         "TestURLAllowedSSH/Pushmirror_URL" # requires network git.gay (DNS)
         "TestBleveDeleteIssue" # Known Flake-y https://github.com/NixOS/nixpkgs/issues/509878
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "17") [
+        "TestActivityPubMatchesList" # requires local network, which is not available in sandbox
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

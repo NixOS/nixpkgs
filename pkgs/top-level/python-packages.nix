@@ -2193,6 +2193,8 @@ self: super: with self; {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  bacpypes3 = callPackage ../development/python-modules/bacpypes3 { };
+
   badauth = callPackage ../development/python-modules/badauth { };
 
   badges = callPackage ../development/python-modules/badges { };
@@ -17158,6 +17160,10 @@ self: super: with self; {
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
   python-libnmap = callPackage ../development/python-modules/python-libnmap { };
+
+  python-libpcap = callPackage ../development/python-modules/python-libpcap {
+    inherit (pkgs) libpcap;
+  };
 
   python-linkplay = callPackage ../development/python-modules/python-linkplay { };
 
