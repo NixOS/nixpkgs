@@ -274,6 +274,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # flaky test:
     #   ValueError: Failed to open file for read: 'FileDoesNotExist("meta.json")'
     "src/documents/tests/test_permission_filtering_security.py::TestTrashRestorePermissionBoundary::test_restore_allows_document_with_explicit_delete_permission"
+    # OSError: [Errno 95] Operation not supported
+    "src/documents/tests/test_management_exporter.py::TestExportDerivedFileNameCollisions::test_long_titles_export_within_file_name_limit"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
