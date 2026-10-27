@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  asciidoc-full,
+  asciidoc,
   jansson,
   jose,
   http-parser,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    asciidoc-full
+    asciidoc
     meson
     ninja
     pkg-config
