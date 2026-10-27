@@ -142,6 +142,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
