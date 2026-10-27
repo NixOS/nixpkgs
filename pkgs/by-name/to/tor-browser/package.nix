@@ -239,9 +239,6 @@ stdenv.mkDerivation rec {
     // Reset pref that captures store paths.
     clearPref("extensions.xpiState");
 
-    // Stop obnoxious first-run redirection.
-    lockPref("noscript.firstRunRedirection", false);
-
     // User should never change these.  Locking prevents these
     // values from being written to prefs.js, avoiding Store
     // path capture.
