@@ -2,33 +2,23 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   zlib,
   bzip2,
   xz,
   curl,
   libdeflate,
   perl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "htslib";
-  version = "1.22";
+  version = "1.24";
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${finalAttrs.version}/htslib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-YlDB3yl9tHdRbmCsjfRe11plLR8lsPN/EvWxcmnq/ek=";
+    hash = "sha256-KKjeGROBx6l6NWdc6sdvoeqV57Z41qLp1gCnh05Ad94=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/samtools/htslib/commit/31006e1c8edd02eb6321ed9be76b84fca5d20cb6.patch";
-      hash = "sha256-sbnkVmXIbs/Cn/msUUrJpJZCI2DHX5kpGSka2cccZIQ=";
-    })
-  ];
-
-  # perl is only used during the check phase.
-  nativeBuildInputs = [ perl ];
 
   buildInputs = [
     zlib
@@ -37,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libdeflate
   ];
+
+  nativeCheckInputs = [ perl ];
 
   configureFlags =
     if !stdenv.hostPlatform.isStatic then
@@ -58,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -d $out/lib
     install -d $out/include/htslib
     install -D libhts.a $out/lib
-    install  -m644 htslib/*h $out/include/htslib
+    install -m644 htslib/*h $out/include/htslib
     install -D bgzip htsfile tabix $out/bin
   '';
 
@@ -68,12 +60,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # The ref-cache test starts loopback HTTP servers, which fail in the Darwin
+  # sandbox. Skip only that test.
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "REF_CACHE_TEST_OPTS="
+  ];
+
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "C library for reading/writing high-throughput sequencing data";
     license = lib.licenses.mit;
-    homepage = "http://www.htslib.org/";
+    homepage = "https://www.htslib.org/";
+    changelog = "https://github.com/samtools/htslib/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mimame ];
   };
