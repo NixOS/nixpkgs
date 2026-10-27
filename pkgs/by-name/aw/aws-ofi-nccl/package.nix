@@ -63,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/aws/aws-ofi-nccl";
     changelog = "https://github.com/aws/aws-ofi-nccl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [
+      _81reap
+      jlesquembre
+    ];
     platforms = lib.platforms.linux;
   };
 })
