@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./fix-includes.patch ];
 
+  strictDeps = true;
+
   configureFlags = [
     "--disable-lynx"
   ]
