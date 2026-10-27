@@ -13,7 +13,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysmhi";
   version = "2.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gjohansson-ST";
     repo = "pysmhi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QGpheSXmYWLgrIYg98qBgR2R6pFCH1eB0HQPK1T3/qo=";
   };
 
@@ -49,10 +49,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/gjohansson-ST/pysmhi/releases/tag/${src.tag}";
+    changelog = "https://github.com/gjohansson-ST/pysmhi/releases/tag/${finalAttrs.src.tag}";
     description = "Retrieve open data from SMHI api";
     homepage = "https://github.com/gjohansson-ST/pysmhi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
