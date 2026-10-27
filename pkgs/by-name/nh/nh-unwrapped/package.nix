@@ -6,6 +6,7 @@
   pkg-config,
   aws-lc,
   sqlite,
+  zstd,
   fetchFromGitHub,
   nix-update-script,
   buildPackages,
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     aws-lc
     sqlite
+    zstd
   ];
 
   # pkgs.sudo is not available on the Darwin platform, and thus breaks build
