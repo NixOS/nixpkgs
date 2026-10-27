@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DgRPC_ZLIB_PROVIDER=package"
     "-DgRPC_CARES_PROVIDER=package"
@@ -136,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
     inherit arrow-cpp;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
