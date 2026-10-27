@@ -6,6 +6,7 @@
   pkg-config,
   withNativeTls ? true,
   stdenv,
+  oniguruma,
   openssl,
   versionCheckHook,
   nix-update-script,
@@ -31,7 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals (withNativeTls && !stdenv.hostPlatform.isDarwin) [ openssl ];
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals (withNativeTls && !stdenv.hostPlatform.isDarwin) [ openssl ];
 
   env = {
     # Get openssl-sys to use pkg-config
