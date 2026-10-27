@@ -56,10 +56,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-P/zoInRtKQXlzPkyu+f4LW5rgIp/5VTY7yaQB5Jo8Ag=",
+                    "hash": "sha256-5QBlmxMu7DKPYPQxADNtjnKTxVFdXKj940Adn/sG+V4=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v42.11.14"
+                    "tag": "v42.11.18"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1367,7 +1367,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-EIdGb0MAZeYelJujwLvjFIRjvuayq5qBu8eAfCQSG0Q=",
+            "hash": "sha256-i4bos0RAZ67kAnmqBahpZX9FmLADVnuz3p/+EFo2CVk=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -1437,7 +1437,7 @@
         },
         "modules": "146",
         "node": "24.19.0",
-        "version": "42.11.14"
+        "version": "42.11.18"
     },
     "43": {
         "chrome": "150.0.7871.250",
@@ -1504,10 +1504,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-tB4xqttVDCRSxP1jnAXCWKWtVSrVXc+ml2FvzdJns0o=",
+                    "hash": "sha256-adUyEUqbjAEfBYxBPaeRPDtoTkwuBGMHIR6YZJ5e6qE=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.7.11"
+                    "tag": "v43.8.3"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1849,10 +1849,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-D0Emw+F+8fz41onhxfiCQuxEQx+4jjsT7Ym2mqrKkRI=",
+                    "hash": "sha256-055FP6A2CjODxhrh2R4csRsiTNOIsxnuC9zWjTP9U34=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.21.0"
+                    "tag": "v24.22.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1863,15 +1863,6 @@
                     "url": "https://chromium.googlesource.com/external/github.com/google/emoji-segmenter.git"
                 },
                 "fetcher": "fetchFromGitiles"
-            },
-            "src/third_party/engflow-reclient-configs": {
-                "args": {
-                    "hash": "sha256-aZXYPj9KYBiZnljqOLlWJWS396Fg3EhjiQLZmkwCBsY=",
-                    "owner": "EngFlow",
-                    "repo": "reclient-configs",
-                    "rev": "955335c30a752e9ef7bff375baab5e0819b6c00d"
-                },
-                "fetcher": "fetchFromGitHub"
             },
             "src/third_party/expat/src": {
                 "args": {
@@ -2823,7 +2814,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-8r0r7WXrM4HlS2qKMHbyxS+4zet646JKjTEtSyCTqqs=",
+            "hash": "sha256-s6iBBgvQvvPN97/pSoHrZZcAyE4dWOmYtAT5Z5cQ9d8=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -2892,11 +2883,11 @@
             }
         },
         "modules": "148",
-        "node": "24.21.0",
-        "version": "43.7.11"
+        "node": "24.22.0",
+        "version": "43.8.3"
     },
     "44": {
-        "chrome": "152.0.7977.149",
+        "chrome": "152.0.7977.167",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2905,15 +2896,15 @@
                     "version": "0-unstable-2026-07-23"
                 }
             },
-            "version": "152.0.7977.149"
+            "version": "152.0.7977.167"
         },
         "chromium_npm_hash": "sha256-pF0JtwFpPC4/fodbhSJnQKkczA9WlDg4VqEAy9aDVLg=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-hGjd8i2ESBREWG5lekdtEK5CVFjxT3Po7NRG1PvD3xM=",
+                    "hash": "sha256-DzIhUc7a9USmm8MCUgkDcLtb5GRs7eKzT4FlsZADmJU=",
                     "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "tag": "152.0.7977.149",
+                    "tag": "152.0.7977.167",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2960,10 +2951,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-HkV7zfjl6BbMVowgNBtHl8DZVVSgSMjQFOn37qPxA60=",
+                    "hash": "sha256-9FaI//rjfeUeVlcqTITMiHb4Cuk7npzEggrhoJhYTrs=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.7.2"
+                    "tag": "v44.9.3"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2993,8 +2984,8 @@
             },
             "src/third_party/angle": {
                 "args": {
-                    "hash": "sha256-YRPVefAR1xcqWJApIYb9ynGfwTtoRhhj6a6GpSIVykM=",
-                    "rev": "6c47c4b6dae794245a23a16b3826efc09ebdefd0",
+                    "hash": "sha256-RGAZFJh5IM1NYRqOPAvEX9MnA9lTTXS2ZEDPcvc7DNw=",
+                    "rev": "4f2e7d39252ed0e8387ebee1b222d4715f2dea7d",
                     "url": "https://chromium.googlesource.com/angle/angle.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3137,8 +3128,8 @@
             },
             "src/third_party/crabbyavif/src": {
                 "args": {
-                    "hash": "sha256-N9YwO68d3CXPje43fWs9CoO5Sc3wIULta7n8cp+2Efs=",
-                    "rev": "61f5abadda7b179f90e557fed6ae7a3d78bd8231",
+                    "hash": "sha256-D5cYECQYGfDn4ubl9yhpK3XGq1vjzOZI5tOV8s67SuQ=",
+                    "rev": "05103ee49f6dc58dfbbaf24286dcedacffb26d6d",
                     "url": "https://chromium.googlesource.com/external/github.com/webmproject/CrabbyAvif.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3313,10 +3304,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-D0Emw+F+8fz41onhxfiCQuxEQx+4jjsT7Ym2mqrKkRI=",
+                    "hash": "sha256-055FP6A2CjODxhrh2R4csRsiTNOIsxnuC9zWjTP9U34=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.21.0"
+                    "tag": "v24.22.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -3327,15 +3318,6 @@
                     "url": "https://chromium.googlesource.com/external/github.com/google/emoji-segmenter.git"
                 },
                 "fetcher": "fetchFromGitiles"
-            },
-            "src/third_party/engflow-reclient-configs": {
-                "args": {
-                    "hash": "sha256-aZXYPj9KYBiZnljqOLlWJWS396Fg3EhjiQLZmkwCBsY=",
-                    "owner": "EngFlow",
-                    "repo": "reclient-configs",
-                    "rev": "955335c30a752e9ef7bff375baab5e0819b6c00d"
-                },
-                "fetcher": "fetchFromGitHub"
             },
             "src/third_party/expat/src": {
                 "args": {
@@ -3860,8 +3842,8 @@
             },
             "src/third_party/pdfium": {
                 "args": {
-                    "hash": "sha256-4OhJcWZJ3UC/Mf4DJNzLLYQtrw0y0suO/wy0d1GYP4w=",
-                    "rev": "8f3e90282ef137adf7d380079c3178b24407104a",
+                    "hash": "sha256-X30F4eqkkY5mttzA0yKwMX/rpbrFiZDc5iigg82PrTM=",
+                    "rev": "23f70fdae651eff9740ef8c0eb31158029314f84",
                     "url": "https://pdfium.googlesource.com/pdfium.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -3972,8 +3954,8 @@
             },
             "src/third_party/skia": {
                 "args": {
-                    "hash": "sha256-eXQ9FXOKVzVpXjDUFdkO4e3YRcgSHDszbM2nsZDHTXw=",
-                    "rev": "f593e0fb883333745ab2c8568c1449a60904b244",
+                    "hash": "sha256-GH1yObHvyEH2rgVMRJKEG00NON1WLX8dW2w5TPf05M4=",
+                    "rev": "747cf654ed6f864f4402e7d6eb54a6ede60141e5",
                     "url": "https://skia.googlesource.com/skia.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4264,8 +4246,8 @@
             },
             "src/third_party/webrtc": {
                 "args": {
-                    "hash": "sha256-c0h6bD8zNZbacnOgRei+yVB+5+AvfglW+eQDNZU945M=",
-                    "rev": "6f37672d358475cd17544121a12494da454d85fb",
+                    "hash": "sha256-SNuTzeMeu5hF6SQWDI4Y9tgbDifiPpcAlmycLko3P00=",
+                    "rev": "e1991d7f7bd00eaa701dcdd8d6786b746c623c30",
                     "url": "https://webrtc.googlesource.com/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4304,15 +4286,15 @@
             },
             "src/v8": {
                 "args": {
-                    "hash": "sha256-Oohc8euPVyridd0SMjRd8vdsIJgrzfSYfN9LM/dtT3Y=",
-                    "rev": "55f2189ccf587e664e289e900d8ed99dfff2acfa",
+                    "hash": "sha256-cv8pAZxlSuLLCQEfVc7+/mkco8PZQqS/smSpa8VAsMo=",
+                    "rev": "a11d960c1c22c067ff898ceb4a8e4e0687014d41",
                     "url": "https://chromium.googlesource.com/v8/v8.git"
                 },
                 "fetcher": "fetchFromGitiles"
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-o40KUJ1YYQ9ImompIMsovGQT3kuXDKJyfZHW/k7+8mE=",
+            "hash": "sha256-uPMmYNUPFw7LC/MUr6duZYjVgcaJ2Q5DN6qO+iCqXao=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -4381,7 +4363,7 @@
             }
         },
         "modules": "149",
-        "node": "24.21.0",
-        "version": "44.7.2"
+        "node": "24.22.0",
+        "version": "44.9.3"
     }
 }
