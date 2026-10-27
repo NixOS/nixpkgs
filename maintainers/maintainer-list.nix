@@ -27208,6 +27208,12 @@
     github = "shortcord";
     githubId = 3823744;
   };
+  shortwavesurfer2009 = {
+    name = "Shortwavesurfer2009";
+    email = "nixpkgs@feder8.me";
+    github = "shortwavesurfer2009";
+    githubId = 116814522;
+  };
   shou = {
     email = "x+g@shou.io";
     github = "Shou";
