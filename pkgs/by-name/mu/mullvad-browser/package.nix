@@ -220,9 +220,6 @@ stdenv.mkDerivation rec {
     // Reset pref that captures store paths.
     clearPref("extensions.xpiState");
 
-    // Stop obnoxious first-run redirection.
-    lockPref("noscript.firstRunRedirection", false);
-
     // Allow sandbox access to sound devices if using ALSA directly
     ${
       if (audioSupport && !pulseaudioSupport) then
