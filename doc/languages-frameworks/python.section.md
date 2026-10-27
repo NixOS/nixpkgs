@@ -1672,6 +1672,19 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
   The default value `null` opts out from the white-listing.
 
+  The matching is case-sensitive.
+  A pattern without `*` matches as a sub-string of the fully qualified test method name, such as `test_foo` or `FooTests.test_foo` matching `tests.test_module.FooTests.test_foo`.
+  A pattern with `*` is a glob that has to match the whole fully qualified test method name, such as `*.FooTests.test_*`.
+
+`disabledTests` (list of strings, default to `[ ]`)
+
+: Black-listed patterns (sub-strings or globs) to deselect the tests.
+  The patterns follow the same rules as `enabledTests`.
+
+  As `python3 -m unittest -k` provides no negation,
+  `unittestCheckHook` runs the tests through a wrapper of `python3 -m unittest` with a custom test loader when `disabledTests` is non-empty.
+  Each deselected test is reported in the build log.
+
 `unittestFlags` (list, default to `[ ]`)
 
 : Additional flags to append to the `python3 -m unittest` command.

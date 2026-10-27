@@ -74,7 +74,18 @@ EOF
   concatTo flagsArray unittestFlags
 
   echoCmd 'unittest flags' "${flagsArray[@]}"
-  @pythonCheckInterpreter@ -m unittest "${flagsArray[@]}"
+
+  local -a _disabledTests=()
+  concatTo _disabledTests disabledTests
+  if ((${#_disabledTests[@]})); then
+    # `python -m unittest -k` provides no negation.
+    # Deselect the disabled tests with a custom test loader instead.
+    echoCmd 'unittest disabled tests' "${_disabledTests[@]}"
+    @pythonCheckInterpreter@ @unittestCheckHookRunner@ "${_disabledTests[@]}" -- "${flagsArray[@]}"
+  else
+    @pythonCheckInterpreter@ -m unittest "${flagsArray[@]}"
+  fi
+  unset _disabledTests
 
   runHook postCheck
   echo "Finished executing unittestCheckPhase"

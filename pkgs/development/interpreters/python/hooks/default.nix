@@ -486,14 +486,17 @@ in
 
   unittestCheckHook = callPackage (
     {
+      stdenvNoCC,
       testers,
       makePythonHook,
       khanaa,
+      unittestCheckHook,
     }:
     makePythonHook {
       name = "unittest-check-hook";
       substitutions = {
         inherit pythonCheckInterpreter;
+        unittestCheckHookRunner = ./unittest-check-hook-runner.py;
       };
       passthru = {
         tests =
@@ -505,6 +508,21 @@ in
                 dontCheckPythonMetadata = true;
               }
             );
+            # test_selection.TestSelection.test_bad and test_2_bad always fail,
+            # so a build succeeds only when the test selection excludes them.
+            test-sample = stdenvNoCC.mkDerivation {
+              name = "test-unittestCheckHook-sample";
+              src = ./unittest-check-hook-test/sample;
+              nativeBuildInputs = [ unittestCheckHook ];
+              unittestStartDir = "test";
+              dontConfigure = true;
+              dontBuild = true;
+              installPhase = ''
+                runHook preInstall
+                touch "$out"
+                runHook postInstall
+              '';
+            };
           in
           rec {
             inherit test-khanaa;
@@ -552,6 +570,59 @@ in
                 "test_general"
                 "test_setting_form"
               ];
+            };
+            test-sample-unselected = testers.testBuildFailure' {
+              drv = test-sample;
+              expectedBuilderLogEntries = [
+                "FAILED (failures=2)"
+              ];
+            };
+            test-sample-enabledTests = test-sample.overrideAttrs {
+              name = "test-unittestCheckHook-sample-enabledTests";
+              enabledTests = [ "good" ];
+            };
+            test-sample-disabledTests = test-sample.overrideAttrs {
+              name = "test-unittestCheckHook-sample-disabledTests";
+              disabledTests = [
+                # Sub-string of the test method name
+                "test_bad"
+                # Glob, which has to match the full name
+                "*.TestSelection.test_*_bad"
+              ];
+            };
+            # disabledTests deselects among the tests selected by enabledTests.
+            test-sample-enabledTests-disabledTests = test-sample.overrideAttrs {
+              name = "test-unittestCheckHook-sample-enabledTests-disabledTests";
+              enabledTests = [
+                "good"
+                "test_bad"
+              ];
+              disabledTests = [ "test_bad" ];
+            };
+            test-sample-enabledTests-disabledTests-remaining = testers.testBuildFailure' {
+              drv = test-sample.overrideAttrs {
+                name = "test-unittestCheckHook-sample-enabledTests-disabledTests-remaining";
+                enabledTests = [ "bad" ];
+                disabledTests = [ "test_2_bad" ];
+              };
+              expectedBuilderLogEntries = [
+                "unittestCheckHook: deselected test_selection.TestSelection.test_2_bad"
+                "Ran 1 test"
+                "FAILED (failures=1)"
+              ];
+            };
+            test-sample-disabledTests-structuredAttrs = test-sample-disabledTests.overrideAttrs {
+              name = "test-unittestCheckHook-sample-disabledTests-structuredAttrs";
+              __structuredAttrs = true;
+            };
+            test-sample-dontUseUnittestDiscover-disabledTests = test-sample-disabledTests.overrideAttrs {
+              name = "test-unittestCheckHook-sample-dontUseUnittestDiscover-disabledTests";
+              dontUseUnittestDiscover = true;
+              # The runner should import from the current directory as `python -m unittest` does.
+              preCheck = ''
+                cd test
+              '';
+              enabledTestPaths = [ "test_selection.py" ];
             };
           };
       };
