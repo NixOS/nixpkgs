@@ -9,7 +9,7 @@
   podofo,
   libjpeg,
   djvulibre,
-  libxmlxx3,
+  libxmlxx5,
   libzip,
   tesseract,
   intltool,
@@ -19,6 +19,7 @@
   python3,
   doxygen,
   enchant,
+  writableTmpDirAsHomeHook,
 
   # Gtk deps
   # upstream gImagereader supports Qt too
@@ -58,11 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     enchant
     gobject-introspection
     wrapGAppsHook3
+    writableTmpDirAsHomeHook
   ]
   ++ lib.optionals withQt6 [ qt6Packages.wrapQtAppsHook ];
 
   buildInputs = [
-    libxmlxx3
+    libxmlxx5
     libzip
     libuuid
     sane-backends
