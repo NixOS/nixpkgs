@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "liger-kernel";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linkedin";
     repo = "liger-kernel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1D9+CXPT2ZASfKVSHPO/zbZcvW1Zrv0wHaLW+N5L+48=";
+    hash = "sha256-Gsdp+3+r7Vlx+bJurjKZSM5ZK7ucsR2TNWvcMImg7uw=";
   };
 
   build-system = [

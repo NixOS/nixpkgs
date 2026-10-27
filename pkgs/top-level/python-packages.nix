@@ -6217,6 +6217,8 @@ self: super: with self; {
 
   fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
 
+  fla-core = callPackage ../development/python-modules/fla-core { };
+
   flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
@@ -17767,6 +17769,20 @@ self: super: with self; {
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
+
+  pyzfs_2_3 = toPythonModule (
+    pkgs.zfs_2_3.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
+
+  pyzfs_2_4 = toPythonModule (
+    pkgs.zfs_2_4.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
 
   pyzhuyin = callPackage ../development/python-modules/pyzhuyin { };
 
