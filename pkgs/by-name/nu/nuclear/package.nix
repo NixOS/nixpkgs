@@ -21,74 +21,83 @@
   # Darwin Dependents
   darwin,
 }:
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "nuclear";
-  version = "1.37.3";
+rustPlatform.buildRustPackage (
+  finalAttrs:
+  let
+    version = "1.39.1";
+  in
+  {
+    pname = "nuclear";
+    inherit version;
 
-  src = fetchFromGitHub {
-    owner = "nukeop";
-    repo = "nuclear";
-    tag = "player@1.37.3";
-    hash = "sha256-Ada86CXCrkIaEUKsCrBeji8Su5Bbl1a/ENghO5OJPZc=";
-  };
+    __structuredAttrs = true;
 
-  pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      patches
-      ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-TeoNYkP6rUfqxtnklcl8wLODesbv1kasKviTspVKKWU=";
-  };
+    src = fetchFromGitHub {
+      owner = "nukeop";
+      repo = "nuclear";
+      tag = "player@${version}";
+      hash = "sha256-s1D394YRB3sl4q9mqm4gOn4KlPUcQcbNd/XQAvI/xV4=";
+    };
 
-  cargoRoot = "packages/player/src-tauri";
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        patches
+        ;
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-nwqUTgcLxEq01Q2vEJNFxBTPH/vi3u+LKADrqE+9cXg=";
+    };
 
-  postPatch =
-    let
-      tauriConfJson = "${finalAttrs.cargoRoot}/tauri.conf.json";
-    in
-    ''
-      jq '.bundle.createUpdaterArtifacts = false' ${tauriConfJson} | sponge ${tauriConfJson}
-    ''
-    # Disable Tauri's built-in codesigning
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      jq '.bundle.macOS.signingIdentity = null' ${tauriConfJson} | sponge ${tauriConfJson}
-    '';
+    cargoRoot = "packages/player/src-tauri";
 
-  buildAndTestSubdir = finalAttrs.cargoRoot;
+    postPatch =
+      let
+        tauriConfJson = "${finalAttrs.cargoRoot}/tauri.conf.json";
+      in
+      ''
+        jq '.bundle.createUpdaterArtifacts = false' ${tauriConfJson} | sponge ${tauriConfJson}
+      ''
+      # Disable Tauri's built-in codesigning
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        jq '.bundle.macOS.signingIdentity = null' ${tauriConfJson} | sponge ${tauriConfJson}
+      '';
 
-  cargoHash = "sha256-bVioujpKUo3q3pNqFwgPRP+kFRZsNXxALDxXbpV0CjY=";
+    buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  tauriBuildFlags = [ "--verbose" ];
+    cargoHash = "sha256-GyuVVSBoANqJa+03IY3eOQYv0MiuyMeCXQ2f29lk/kk=";
 
-  nativeBuildInputs = [
-    cargo-tauri.hook
-    jq
-    moreutils
-    nodejs_22
-    pkg-config
-    pnpmConfigHook
-    pnpm_10
-    wrapGAppsHook4
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+    tauriBuildFlags = [ "--verbose" ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    glib-networking
-    openssl
-    webkitgtk_4_1
-  ];
+    nativeBuildInputs = [
+      cargo-tauri.hook
+      jq
+      moreutils
+      nodejs_22
+      pkg-config
+      pnpmConfigHook
+      pnpm_10
+      wrapGAppsHook4
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
-  passthru.updateScript = nix-update-script { };
-  meta = {
-    description = "Streaming music player that finds free music for you";
-    homepage = "https://nuclear.js.org/";
-    license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    mainProgram = "nuclear-music-player";
-  };
-})
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      glib-networking
+      openssl
+      webkitgtk_4_1
+    ];
+
+    passthru.updateScript = nix-update-script { };
+
+    meta = {
+      description = "Streaming music player that finds free music for you";
+      homepage = "https://nuclear.js.org/";
+      license = lib.licenses.agpl3Plus;
+      maintainers = [ ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      mainProgram = "nuclear-music-player";
+    };
+  }
+)

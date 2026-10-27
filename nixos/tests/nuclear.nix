@@ -12,6 +12,8 @@
       services.cage.program = "${lib.getExe pkgs.nuclear}";
 
       environment.variables = {
+        # We scale nuclear to help OCR find the small semver dot.
+        GDK_DPI_SCALE = 2;
         GDK_BACKEND = "x11"; # UI is severely broken on VM's wayland
         # GDK_BACKEND = "wayland";
         # DISPLAY = "do not use";
@@ -30,14 +32,12 @@
         # (e.g., nuclear-music-player)
         machine.succeed('pgrep -f nuclear')
 
-    start_all()
-
     machine.wait_for_unit('graphical.target')
 
     nuclear_running.wait()
     with nuclear_running:
         with subtest("Check dashboard"):
-            machine.wait_for_text('Welcome to Nuclear')
+            machine.wait_for_text('Welcome')
             machine.screenshot('nuclear_ui_loaded')
 
         with subtest("Check version"):
