@@ -175,8 +175,11 @@ in
 
       virtualisation.containers = {
         containersConf.settings = {
-          engine = lib.mkIf cfg.ociSeccompBpfHook.enable {
-            hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
+          engine = {
+            init_path = lib.mkDefault "/run/current-system/sw/libexec/podman/catatonit";
+            hooks_dir = lib.optionalAttrs cfg.ociSeccompBpfHook.enable [
+              config.boot.kernelPackages.oci-seccomp-bpf-hook
+            ];
           };
           containers = {
             default_sysctls = lib.mkDefault [ "net.ipv4.ping_group_range=0 0" ];
