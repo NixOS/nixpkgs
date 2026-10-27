@@ -106,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
