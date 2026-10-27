@@ -15,14 +15,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qcsuper";
-  version = "2.1.3";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "P1sec";
     repo = "QCSuper";
     tag = finalAttrs.version;
-    hash = "sha256-fsIbtfbFRrUomgUWeFIZnMIJ7XTAa3JLvyuZabfEtb4=";
+    hash = "sha256-e2Mb3hGTIl8TYPBEB0qlrb0Q9LA21hlIpgMIzfHuzvI=";
   };
 
   build-system = [ poetry-core ];
