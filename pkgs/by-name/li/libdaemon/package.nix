@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Lightweight C library that eases the writing of UNIX daemons";
     homepage = "http://0pointer.de/lennart/projects/libdaemon/";
