@@ -219,6 +219,7 @@ in
         It overrides values in the `[General]` section of the theme's config.
 
         New themes can be packaged with `pkgs.buildSddmThemePackage`.
+        See https://nixos.org/manual/nixpkgs/unstable/#sec-sddm-buildSddmThemePackage
       ''
     )
     (mkRenamedOptionModule
