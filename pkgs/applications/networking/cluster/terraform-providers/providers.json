@@ -1,10 +1,10 @@
 {
   "1password_onepassword": {
-    "hash": "sha256-BK6rKoEva8ChSARBXZNUAAphjG+Y+eeje8Gdi4DAJoc=",
+    "hash": "sha256-QPzIa/Q7s4YMGjCGwQy2viPeLc/tmt9GWUmS5KmHbWM=",
     "homepage": "https://registry.terraform.io/providers/1Password/onepassword",
     "owner": "1Password",
     "repo": "terraform-provider-onepassword",
-    "rev": "v3.3.1",
+    "rev": "v3.4.1",
     "spdx": "MIT",
     "vendorHash": "sha256-RTfj2Omiqe92Ad0swEY/aGIMvcXb39bdQoObYKiekiw="
   },
