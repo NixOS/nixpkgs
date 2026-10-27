@@ -7,7 +7,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhomee";
   version = "1.4.7";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Taraman17";
     repo = "pyHomee";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/qLs/ZmGc0N3Fs78Jbd0SbeMMf/gzMrXmrbeBFc7O6k=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/Taraman17/pyHomee/releases/tag/${src.tag}";
+    changelog = "https://github.com/Taraman17/pyHomee/releases/tag/${finalAttrs.src.tag}";
     description = "Python library to interact with homee";
     homepage = "https://github.com/Taraman17/pyHomee";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
