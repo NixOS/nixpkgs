@@ -88,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "General-purpose cryptographic library maintained by the AWS Cryptography team for AWS and their customers";
     homepage = "https://github.com/aws/aws-lc";
     changelog = "https://github.com/aws/aws-lc/releases/tag/v${finalAttrs.version}";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "amazon" finalAttrs.version // {
+      product = "aws_libcrypto";
+    };
     license =
       with lib.licenses;
       OR [
