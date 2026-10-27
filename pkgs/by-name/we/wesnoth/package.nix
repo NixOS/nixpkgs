@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  python3,
   SDL2,
   SDL2_image,
   SDL2_mixer,
@@ -75,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    # translations are only built when both are found
+    gettext
+    python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
