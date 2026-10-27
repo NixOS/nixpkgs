@@ -96,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     lerc
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
   ];
