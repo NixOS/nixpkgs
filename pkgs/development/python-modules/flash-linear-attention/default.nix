@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   inherit (fla-core) version src;
   pyproject = true;
 
-
   # Only ships fla/{layers,models}. The rest of `fla` is provided by fla-core.
   postPatch = ''
     python -c "import sys; sys.path.insert(0, 'scripts'); import build_packages; build_packages.build_split_packages('split')"
