@@ -21,7 +21,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "doclang";
-  version = "0.7.3";
+  version = "0.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "doclang-project";
     repo = "doclang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U5QuYCTB2OTugfmvskMnoA71u1DUEVMZTi9H7C7PYEY=";
+    hash = "sha256-H9NijNMcd1FRh6w2pIVnIyY8uRHwXZG5x11ysjXIOwY=";
   };
 
   build-system = [
