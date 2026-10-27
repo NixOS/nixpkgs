@@ -124,6 +124,20 @@ stdenv.mkDerivation (finalAttrs: {
     fontDirectories = [ ];
   };
 
+  # FIXME: Ghostty currently unconditionally builds libghostty-vt,
+  # even though that should really be built as its own package.
+  # Having the libghostty-vt binaries around also bloats our runtime
+  # closure immensely (from ~1 GiB to ~1.8 GiB) since the static library
+  # references glibc.dev, the Zig compiler and the dependency cache.
+  #
+  # The GUI app doesn't need any of this so we just nuke all -vt related
+  # output files for now.
+  postInstall = ''
+    rm -r $out/include/ghostty/{vt.h,vt}
+    rm $out/lib/libghostty-vt.*
+    rm $out/share/pkgconfig/libghostty-vt*.pc
+  '';
+
   /**
     Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them
 
