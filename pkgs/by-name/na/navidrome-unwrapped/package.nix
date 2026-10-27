@@ -120,6 +120,5 @@ buildGo127Module (finalAttrs: {
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "navidrome" finalAttrs.version;
   };
 })

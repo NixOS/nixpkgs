@@ -42,9 +42,6 @@ buildGoModule (finalAttrs: {
     "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
   ];
 
-  # no tests are actually run
-  doCheck = false;
-
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash
     installShellCompletion vault.bash

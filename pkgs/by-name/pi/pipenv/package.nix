@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  cacert,
   python3,
   fetchFromGitHub,
   installShellFiles,
@@ -100,12 +99,7 @@ buildPythonApplication rec {
     '';
   };
 
-  postInstall = ''
-    rm $out/${python3.sitePackages}/pipenv/patched/pip/_vendor/certifi/cacert.pem
-    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
-      $out/${python3.sitePackages}/pipenv/patched/pip/_vendor/certifi/cacert.pem
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pipenv \
       --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
       --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \

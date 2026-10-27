@@ -21,7 +21,6 @@
   unixodbc,
   libmysqlclient,
   libsForQt5,
-  libva,
   libxv,
   libxtst,
   libxdamage,
@@ -134,8 +133,6 @@ else
 
     nativeBuildInputs = [ autoPatchelfHook ];
 
-    autoPatchelfIgnoreMissingDeps = [ "libksailite.so" ];
-
     buildInputs = [
       alsa-lib
       libjpeg
@@ -148,7 +145,6 @@ else
       libusb1
       unixodbc
       libsForQt5.qtbase
-      libva
       libxdamage
       libxtst
       libxv

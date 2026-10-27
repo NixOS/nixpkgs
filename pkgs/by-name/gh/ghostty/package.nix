@@ -6,7 +6,6 @@
   callPackage,
   fetchFromGitHub,
   fontconfig,
-  makeFontsConf,
   freetype,
   glib,
   glslang,
@@ -25,8 +24,7 @@
   removeReferencesTo,
   versionCheckHook,
   wrapGAppsHook4,
-  writableTmpDirAsHomeHook,
-  zig_0_17,
+  zig_0_15,
 
   # Upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
@@ -34,7 +32,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.4.0";
+  version = "1.3.1";
 
   outputs = [
     "out"
@@ -48,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ywmIjwix0P5TC8kD/zTmt82CNrLXMFETaWZj0NirpoM=";
+    hash = "sha256-+ddMmUe9Jjkun4qqW8XFXVgwVZdVHsGWcQzndgIlBjQ=";
   };
 
   deps = callPackage ./deps.nix {
@@ -62,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     pkg-config
     removeReferencesTo
-    zig_0_17
+    zig_0_15
 
     # GTK frontend
     glib # Required for `glib-compile-schemas`
@@ -100,8 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
     "-Dcpu=baseline"
-    # Required for systemd units and D-Bus files to resolve to the executable path
-    "-Dinstalled-exe-path=${placeholder "out"}/bin/ghostty"
   ]
   ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
     inherit glslang;
@@ -115,28 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-
-  # Required for Fontconfig tests
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-  ];
-  env.FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ ];
-  };
-
-  # FIXME: Ghostty currently unconditionally builds libghostty-vt,
-  # even though that should really be built as its own package.
-  # Having the libghostty-vt binaries around also bloats our runtime
-  # closure immensely (from ~1 GiB to ~1.8 GiB) since the static library
-  # references glibc.dev, the Zig compiler and the dependency cache.
-  #
-  # The GUI app doesn't need any of this so we just nuke all -vt related
-  # output files for now.
-  postInstall = ''
-    rm -r $out/include/ghostty/{vt.h,vt}
-    rm $out/lib/libghostty-vt.*
-    rm $out/share/pkgconfig/libghostty-vt*.pc
-  '';
 
   /**
     Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them

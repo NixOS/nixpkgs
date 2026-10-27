@@ -15,6 +15,7 @@ description: {
     johanot
     krav
     nh2
+    benaryorg
   ];
   platforms = [
     "x86_64-linux"

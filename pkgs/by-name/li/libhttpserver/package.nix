@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhttpserver";
-  version = "2.0.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "etr";
     repo = "libhttpserver";
     rev = finalAttrs.version;
-    hash = "sha256-OhFDG4Ppu1J3YPfyW9/3pfI0K31h49pTRHooJaZFkNo=";
+    hash = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
   };
 
   nativeBuildInputs = [

@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gophertube";
-  version = "2.8.2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "KrishnaSSH";
     repo = "GopherTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K3wVPhqMMPNsIgFYeY+syeWzpNuzOoQKP394zhYfS2w=";
+    hash = "sha256-0TStXYghfRR11ETJcK2lnkBtS2IUy/YgeFFn0wXpeOU=";
   };
 
-  vendorHash = "sha256-905OkZNMoGbRHNYV4Fg4E7PyK/E+gzCDyzCLccGsEsc=";
+  vendorHash = "sha256-WfVoCxzMk+h4AP1zgTNRXTpj8Ltu71YrsQ7OoU3Y4tg=";
 
   ldflags = [
     "-X gophertube/internal/app.version=${finalAttrs.version}"

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  cacert,
   unzip,
   writeText,
   dos2unix,
@@ -60,9 +59,6 @@ let
       installPhase = ''
         mkdir $out
         cp -r rainloop/* $out
-        rm $out/rainloop/v/${version}/app/libraries/tmhOAuth/cacert.pem
-        ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
-          $out/rainloop/v/${version}/app/libraries/tmhOAuth/cacert.pem
         rm -rf $out/data
         cp ${includeScript} $out/include.php
         mkdir $out/data

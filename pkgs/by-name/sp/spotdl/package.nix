@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spotdl";
-  version = "4.6.0";
+  version = "4.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6qFLvwnvOUaT7NE+lkiat39yjVLySr5hDiFgSWKLXho=";
+    hash = "sha256-qztG9q7hwajyCTVg0iTrPrvL2UYrzAPw7Z+CFOTSi/U=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -52,9 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pyfakefs
-    pytest-asyncio
     pytest-mock
-    pytest-recording
     pytest-subprocess
     pytestCheckHook
     vcrpy

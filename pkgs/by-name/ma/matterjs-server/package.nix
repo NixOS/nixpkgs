@@ -12,7 +12,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "matterjs-server";
-  version = "1.5.5";
+  version = "1.4.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -20,10 +20,10 @@ buildNpmPackage (finalAttrs: {
     owner = "matter-js";
     repo = "matterjs-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A5TjsRVtIXzaFOYzy1kR0Rbdh41HqXmayM17Dg1c8eA=";
+    hash = "sha256-eJSDTg00H/G2pPdVC23HiLLjPA8n1vCpqpAZgtUXl78=";
   };
 
-  npmDepsHash = "sha256-zlVdqIiz0uo+n0iIBsH82nrRmH9nd51fwwUp5vn9bDA=";
+  npmDepsHash = "sha256-haKiheg/+f1rgC/narKRTk3nWZgl0GMlSOz0QqzVbUo=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -32,10 +32,7 @@ buildNpmPackage (finalAttrs: {
 
   buildInputs = [ udev ];
 
-  env = {
-    CXXFLAGS = "-std=c++20";
-    PUPPETEER_SKIP_DOWNLOAD = "1";
-  };
+  env.CXXFLAGS = "-std=c++20";
 
   preBuild = "npm run version -- --apply";
 

@@ -29,7 +29,7 @@ in
       example = lib.literalExpression ''
         {
           cache-dir = "/var/cache/upki";
-          revocation.fetch-url = "https://upki.rustls.dev/revocation/";
+          revocation.fetch-url = "https://upki.rustls.dev/";
         }
       '';
     };
@@ -42,7 +42,7 @@ in
 
     services.upki.settings = {
       cache-dir = lib.mkDefault "/var/cache/upki";
-      revocation.fetch-url = lib.mkDefault "https://upki.rustls.dev/revocation/";
+      revocation.fetch-url = lib.mkDefault "https://upki.rustls.dev/";
     };
 
     users.users.upki = {
@@ -64,7 +64,7 @@ in
         User = "upki";
         Group = "upki";
         ConfigurationDirectory = "upki";
-        CacheDirectory = "upki/revocation";
+        CacheDirectory = "upki";
         CacheDirectoryMode = "0755";
         UMask = "0022";
 
@@ -77,24 +77,16 @@ in
         ProtectHome = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectKernelLogs = true;
         ProtectSystem = "strict";
         RestrictAddressFamilies = [
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
         ];
         RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        RemoveIPC = true;
-        ProcSubset = "pid";
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged @resources"
-        ];
-        CapabilityBoundingSet = [ "" ];
-        AmbientCapabilities = [ "" ];
+        SystemCallFilter = "@system-service";
       };
     };
 
@@ -102,7 +94,7 @@ in
       description = "Update the upki cache every ${cfg.interval}";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnBootSec = "10min";
+        OnActiveSec = "0";
         OnUnitActiveSec = cfg.interval;
       };
     };

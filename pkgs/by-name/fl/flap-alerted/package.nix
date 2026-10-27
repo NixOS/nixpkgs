@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo127Module,
+  buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
@@ -16,16 +16,16 @@
   withRoaFilter ? false,
 }:
 
-buildGo127Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "flap-alerted";
-  version = "4.6.0";
+  version = "4.5.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kioubit";
     repo = "FlapAlerted";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7uK8d0XLSYRWHmw7wMxJsNpefdJTdzWWc5/lavz1vjM=";
+    hash = "sha256-D4+FLAMt/cHXCks4GQI33ymbZIHzBajpvKU6QQntofk=";
   };
 
   vendorHash = null;

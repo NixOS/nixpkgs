@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -18,9 +19,6 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-zOWX0AiLAs1FtOn+VtRexfn6oOmJT1PoTPHkcpwvxRY=";
 
   subPackages = [ "." ];
-
-  # Tests exist under pkg, but not in the selected subPackages
-  doCheck = false;
 
   meta = {
     description = "Friends don't let friends leak secrets on their terminal window";

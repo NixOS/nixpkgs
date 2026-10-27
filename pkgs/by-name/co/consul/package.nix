@@ -4,12 +4,11 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
-  versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoModule rec {
   pname = "consul";
-  version = "2.1.0";
+  version = "2.0.4";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -22,8 +21,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-fXkp9/EyZ/SqyUnxXZw/zwf9MO0dmO0Mpbmrygnw3oQ=";
+    tag = "v${version}";
+    hash = "sha256-vjGlxmruHuIfBjmw/KHOm6xoKMAsZ+fVpfx+93nFJc8=";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
@@ -33,12 +32,15 @@ buildGoModule (finalAttrs: {
     "connect/certgen"
   ];
 
-  vendorHash = "sha256-KPZzFrI9mhe152et9/VGamUCNMbpVlNF2c5VaPQWwz4=";
+  vendorHash = "sha256-rUYjQqEoZ4RzhJIGYot7LXbwLFmfWEie8F7F6Oczh4Q=";
 
   doCheck = false;
 
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  ldflags = [
+    "-X github.com/hashicorp/consul/version.GitDescribe=v${version}"
+    "-X github.com/hashicorp/consul/version.Version=${version}"
+    "-X github.com/hashicorp/consul/version.VersionPrerelease="
+  ];
 
   passthru = {
     tests = {
@@ -50,7 +52,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool for service discovery, monitoring and configuration";
-    changelog = "https://github.com/hashicorp/consul/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/hashicorp/consul/releases/tag/v${version}";
     homepage = "https://www.consul.io/";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.bsl11;
@@ -61,4 +63,4 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "consul";
   };
-})
+}
