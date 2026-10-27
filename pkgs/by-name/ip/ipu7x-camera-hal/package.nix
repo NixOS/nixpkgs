@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${ipuVersion}-camera-hal";
-  version = "20260629_1";
+  version = "20260926_1900_40";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu7-camera-hal";
     rev = finalAttrs.version;
-    hash = "sha256-uiVPQBMHUBP9ZFzX0QMimIpgbmvm7JLTkD588V07iGw=";
+    hash = "sha256-jRddiZoymphPc249SMnUYm+GZeakbklpkFLxGog04fg=";
   };
 
   __structuredAttrs = true;
@@ -74,9 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Keep optional sensor images under the install prefix, not /boot.
     substituteInPlace CMakeLists.txt \
       --replace-fail 'set (CMAKE_CXX_STANDARD 11)' \
-                     'set (CMAKE_CXX_STANDARD 17)'
+                     'set (CMAKE_CXX_STANDARD 17)' \
+      --replace-fail 'DESTINATION /boot' \
+                     'DESTINATION share/ipu7/boot'
     substituteInPlace src/platformdata/JsonParserBase.h \
       --replace-fail '<jsoncpp/json/json.h>' '<json/json.h>'
   '';
