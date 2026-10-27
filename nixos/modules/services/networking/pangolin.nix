@@ -268,11 +268,6 @@ in
           requires = [ "network.target" ];
           after = [ "network.target" ];
 
-          preStart = ''
-            mkdir -p ${cfg.dataDir}/config
-            cp -f ${cfgFile} ${cfg.dataDir}/config/config.yml
-          '';
-
           serviceConfig = {
             User = "pangolin";
             Group = "fossorial";
@@ -343,6 +338,11 @@ in
               "~@setuid:EPERM"
               "~@swap:EPERM"
               "~@timer:EPERM"
+            ];
+
+            ExecStartPre = [
+              "${lib.getExe' pkgs.coreutils "mkdir"} -p ${cfg.dataDir}/config"
+              "${lib.getExe' pkgs.coreutils "cp"} -f ${cfgFile} ${cfg.dataDir}/config/config.yml"
             ];
             ExecStart = lib.getExe cfg.package;
           };
