@@ -90,8 +90,15 @@ buildFHSEnv {
     polkit_gnome
   ];
 
+  # The URL handler is launched from the browser, outside the FHS env, so it
+  # must go through the wrapper or byndid fails to start (stub-ld).
   extraInstallCommands = ''
-    ln -s ${beyond-identity}/share $out
+    mkdir -p $out/share
+    cp -r ${beyond-identity}/share/. $out/share
+    chmod -R u+w $out/share
+    substituteInPlace \
+      $out/share/applications/com.beyondidentity.endpoint.BeyondIdentity.desktop \
+      --replace-fail ${beyond-identity}/bin/beyond-identity $out/bin/beyond-identity
   '';
 
   runScript = "beyond-identity";
