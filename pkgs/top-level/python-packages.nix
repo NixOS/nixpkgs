@@ -14887,7 +14887,9 @@ self: super: with self; {
 
   pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
 
-  pydantic-monty = callPackage ../development/python-modules/pydantic-monty { };
+  pydantic-monty = callPackage ../development/python-modules/pydantic-monty {
+    inherit (pkgs) zstd;
+  };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
