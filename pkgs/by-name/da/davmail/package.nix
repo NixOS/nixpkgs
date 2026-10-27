@@ -81,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
-      doronbehar
       shymega
     ];
     platforms = lib.platforms.all;
