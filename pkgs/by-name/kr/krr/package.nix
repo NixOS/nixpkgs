@@ -80,6 +80,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with pythonPackages; [
+    click
     pytest-asyncio
     pytestCheckHook
   ];
