@@ -35,6 +35,7 @@ in
         mv gcc/build/genchecksum gcc/build/.genchecksum-wrapped
         cat > gcc/build/genchecksum <<\EOF
         #!${runtimeShell}
+        set -e
         ${nukeReferences}/bin/nuke-refs $@
         for INPUT in "$@"; do install -Dt "$checksum/inputs/" "$INPUT"; done
         exec build/.genchecksum-wrapped $@
