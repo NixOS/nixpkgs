@@ -1876,6 +1876,7 @@ in
   teleport = handleTest ./teleport.nix { };
   teleports = runTest ./teleports.nix;
   temporal = runTest ./temporal.nix;
+  tenstorrent = runTest ./tenstorrent.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
   test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
   thanos = runTest ./thanos.nix;
