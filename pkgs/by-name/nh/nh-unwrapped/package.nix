@@ -3,6 +3,8 @@
   lib,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  aws-lc,
   sqlite,
   fetchFromGitHub,
   nix-update-script,
@@ -31,10 +33,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    pkg-config
     installShellFiles
   ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    aws-lc
+    sqlite
+  ];
 
   # pkgs.sudo is not available on the Darwin platform, and thus breaks build
   # if added to nativeCheckInputs. We must manually disable the tests that
