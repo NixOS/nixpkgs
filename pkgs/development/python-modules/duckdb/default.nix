@@ -154,6 +154,7 @@ buildPythonPackage rec {
     homepage = "https://duckdb.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      _81reap
       cameronraysmith
       cpcloud
     ];
