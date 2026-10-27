@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "keba-kecontact";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dannerph";
     repo = "keba-kecontact";
     tag = version;
-    hash = "sha256-gIqHo+J/I4vqJCs/r3ZHo3kChefTRqpVmdw3r3y3Hzk=";
+    hash = "sha256-Ir/7lP8TDyOTwIMXKv2d9HYuT9onxrQskdkNhQYaOvU=";
   };
 
   build-system = [ hatchling ];
