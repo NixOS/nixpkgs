@@ -38,6 +38,15 @@ buildPythonPackage (finalAttrs: {
     sed -i '0,/version = /{s/version = "*.*.*"/version = "${finalAttrs.version}"/g}' Cargo.toml
   '';
 
+  # pyo3 0.19.2 predates CPython 3.13 the stable ABI avoids a segfault
+  # https://github.com/tenstorrent/luwen/blob/v0.10.0/bind/pyluwen/Cargo.toml#L27
+  maturinBuildFlags = [
+    "--features"
+    "abi3-py311"
+  ];
+
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = "1";
+
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
@@ -45,6 +54,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   build-system = [ maturin ];
+
+  pythonImportsCheck = [ "pyluwen" ];
 
   meta = {
     description = "Tenstorrent system interface library";

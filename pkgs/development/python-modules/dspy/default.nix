@@ -113,6 +113,14 @@ buildPythonPackage (finalAttrs: {
     "test_streamify_yields_expected_response_chunks"
     "test_streaming_response_yields_expected_response_chunks"
     "test_text_lms_can_be_queried"
+
+    # mocked response has no content
+    "test_retry_made_on_system_errors"
+    "test_exponential_backoff_retry"
+
+    # claude-3-7-sonnet missing from litellm's model map
+    "test_chat_adapter_native_reasoning"
+    "test_json_adapter_native_reasoning"
   ];
 
   meta = {

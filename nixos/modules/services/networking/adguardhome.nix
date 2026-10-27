@@ -1,12 +1,17 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
 }:
 let
   cfg = config.services.adguardhome;
+  opt = options.services.adguardhome;
   settingsFormat = pkgs.formats.yaml { };
+
+  defaultHost = "0.0.0.0";
+  defaultPort = 3000;
 
   args = lib.concatStringsSep " " (
     [
@@ -18,25 +23,15 @@ let
     ++ cfg.extraArgs
   );
 
-  settings =
-    if (cfg.settings != null) then
-      lib.recursiveUpdate cfg.settings (
-        if cfg.settings.schema_version < 23 then
-          {
-            bind_host = cfg.host;
-            bind_port = cfg.port;
-          }
-        else
-          {
-            http = (cfg.settings.http or { }) // {
-              address = "${cfg.host}:${toString cfg.port}";
-            };
-          }
-      )
-    else
-      null;
+  minimumSchemaVersion = 23;
 
-  configFile = (settingsFormat.generate "AdGuardHome.yaml" settings).overrideAttrs (_: {
+  webPort =
+    if cfg.settings != null then
+      lib.toInt (lib.last (lib.splitString ":" cfg.settings.http.address))
+    else
+      defaultPort;
+
+  configFile = (settingsFormat.generate "AdGuardHome.yaml" cfg.settings).overrideAttrs (_: {
     checkPhase = "${cfg.package}/bin/AdGuardHome -c $out --check-config";
   });
 in
@@ -63,7 +58,7 @@ in
     };
 
     allowDHCP = lib.mkOption {
-      default = settings.dhcp.enabled or false;
+      default = cfg.settings.dhcp.enabled or false;
       defaultText = lib.literalExpression "config.services.adguardhome.settings.dhcp.enabled or false";
       type = bool;
       description = ''
@@ -85,20 +80,16 @@ in
       '';
     };
 
+    # deprecated in favor of `settings.http.address`
     host = lib.mkOption {
-      default = "0.0.0.0";
-      type = str;
-      description = ''
-        Host address to bind HTTP server to.
-      '';
+      type = nullOr str;
+      default = null;
+      visible = false;
     };
-
     port = lib.mkOption {
-      default = 3000;
-      type = port;
-      description = ''
-        Port to serve HTTP pages on.
-      '';
+      type = nullOr port;
+      default = null;
+      visible = false;
     };
 
     settings = lib.mkOption {
@@ -113,6 +104,14 @@ in
             description = ''
               Schema version for the configuration.
               Defaults to the `schema_version` supplied by `cfg.package`.
+            '';
+          };
+
+          http.address = lib.mkOption {
+            default = "${defaultHost}:${toString defaultPort}";
+            type = str;
+            description = ''
+              Address to serve the web interface on, in the `host:port` format.
             '';
           };
         };
@@ -144,26 +143,44 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings =
+      lib.concatMap
+        (
+          name:
+          lib.optional (cfg.${name} != null) ''
+            The option `services.adguardhome.${name}' defined in ${
+              lib.showFiles opt.${name}.files
+            } is deprecated, set `services.adguardhome.settings.http.address' instead.
+          ''
+        )
+        [
+          "host"
+          "port"
+        ];
+
+    services.adguardhome.settings = lib.mkIf (cfg.host != null || cfg.port != null) {
+      http.address = "${lib.defaultTo defaultHost cfg.host}:${toString (lib.defaultTo defaultPort cfg.port)}";
+    };
+
     assertions = [
       {
-        assertion = cfg.settings != null -> !(lib.hasAttrByPath [ "bind_host" ] cfg.settings);
-        message = "AdGuard option `settings.bind_host' has been superseded by `services.adguardhome.host'";
-      }
-      {
-        assertion = cfg.settings != null -> !(lib.hasAttrByPath [ "bind_port" ] cfg.settings);
-        message = "AdGuard option `settings.bind_port' has been superseded by `services.adguardhome.port'";
+        assertion = cfg.settings != null -> cfg.settings.schema_version >= minimumSchemaVersion;
+        message = "AdGuard option `settings.schema_version' must be at least ${toString minimumSchemaVersion}";
       }
       {
         assertion =
-          settings != null -> cfg.mutableSettings || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings;
+          cfg.settings != null
+          -> cfg.mutableSettings || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings;
         message = "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
       }
       {
         assertion =
-          settings != null
+          cfg.settings != null
           ->
             cfg.mutableSettings
-            || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings && lib.isList settings.dns.bootstrap_dns;
+            ||
+              lib.hasAttrByPath [ "dns" "bootstrap_dns" ] cfg.settings
+              && lib.isList cfg.settings.dns.bootstrap_dns;
         message = "AdGuard setting dns.bootstrap_dns needs to be a list";
       }
     ];
@@ -184,7 +201,7 @@ in
             chmod 600 "$STATE_DIRECTORY/AdGuardHome.yaml"
           '';
         in
-        lib.optionalString (settings != null) (
+        lib.optionalString (cfg.settings != null) (
           if cfg.mutableSettings then
             ''
               if [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ]; then
@@ -249,6 +266,6 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ webPort ];
   };
 }

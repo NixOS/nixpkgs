@@ -88,8 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = gitUpdater { };
-
   meta = {
     homepage = "https://github.com/swiftlang/swift-tools-support-core";
     description = "Common infrastructure code used by SwiftPM and llbuild";

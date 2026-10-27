@@ -23,34 +23,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     tag = version;
-    hash = "sha256-sp31o62rwWONd7ajo8prvkEVbU3lPPLFkXsxAT9oRzY=";
+    hash = "sha256-PI5yKVFGm4kdefLXltEq/WupJ5HKe3tqSm0O0DJOa/Q=";
   };
 
   patches = [
     # needed to not attempt codesigning on darwin
     ./remove-signing-identity.patch
-
-    # Make npm ci pass by adding missing packages to package-lock.json
-    # Upstream PR: https://github.com/tranxuanthang/lrcget/pull/408
-    ./sync-package-lock.patch
-  ];
-
-  cargoPatches = [
-    # Update charabia crate to v0.10.0 to allow caching of Lindera dictionaries
-    # Upstream PR: https://github.com/tranxuanthang/lrcget/pull/407
-    ./update-to-charabia-0.10.0.patch
   ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";
 
-  cargoHash = "sha256-qyIvUbEBImJfVaxILtLN88KREgUk45zRdxbdZ1A6vc0=";
+  cargoHash = "sha256-qrJnEqmqCC6iDMbDY3W8/E5+J3qjLdLRLza3lgi954w=";
 
   # FIXME: This is a workaround, because we have a git dependency node_modules/lrc-kit contains install scripts
   # but has no lockfile, which is something that will probably break.
@@ -59,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   npmDeps = fetchNpmDeps {
     name = "lrcget-${version}-npm-deps";
     inherit src forceGitDeps patches;
-    hash = "sha256-PyKnh2AjdhWurTQmoCuOnLDdDIcZT51xwpPImkc3nBc=";
+    hash = "sha256-vC0pyORU85fT/AqtUSWZ521OE4w8ams790Hv7HYYCTw=";
   };
 
   preConfigure =
@@ -153,14 +143,32 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   # make the binary also runnable from the shell
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeWrapper "$out/Applications/LRCGET.app/Contents/MacOS/LRCGET" "$out/bin/LRCGET"
-  '';
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      install -Dm644 packaging/linux/lrcget.desktop \
+        $out/share/applications/lrcget.desktop
+
+      install -Dm644 src-tauri/icons/icon.png \
+        $out/share/pixmaps/lrcget.png
+
+      install -Dm644 packaging/linux/lrcget.metainfo.xml \
+        $out/share/metainfo/lrcget.metainfo.xml
+    ''
+    # make the binary also runnable from the shell
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      makeWrapper "$out/Applications/lrcget.app/Contents/MacOS/lrcget" "$out/bin/lrcget"
+    '';
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     gappsWrapperArgs+=(
-      # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
-      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      # WEBKIT_DISABLE_COMPOSITING_MODE=1 is commonly exported session-wide on
+      # NVIDIA (see NixOS/nixpkgs#212064). Inherited into WebKit's UI process it
+      # makes AcceleratedBackingStore::create() return null, yet the web process
+      # still enters accelerated compositing mode, so the UI process segfaults
+      # in AcceleratedBackingStore::update(). Force compositing back on and use
+      # the shared-memory transport so no GBM buffers are allocated either.
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 0
+      --set WEBKIT_DMABUF_RENDERER_FORCE_SHM 1
     )
   '';
 
@@ -175,7 +183,7 @@ rustPlatform.buildRustPackage rec {
       anas
       Scrumplex
     ];
-    mainProgram = "LRCGET";
+    mainProgram = "lrcget";
     platforms = with lib.platforms; unix ++ windows;
   };
 }

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "favirecon";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "favirecon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LgwwkHKKsGMOTi6VX/Fc4+vAYUc044i1CrxQO3Ci7nQ=";
+    hash = "sha256-/CnhvcFNLNj8dFqypgXmOkteKepNmIH1icOXnldA/T8=";
   };
 
-  vendorHash = "sha256-KRNzKPYCcOOvi7kP6fRMh7LBkMwSssmvUoRlH+jZPu8=";
+  vendorHash = "sha256-v/SBkfyO+NI+LXBK2OOTchmydIw69ycNF6amPOVt4rA=";
 
   ldflags = [ "-s" ];
 

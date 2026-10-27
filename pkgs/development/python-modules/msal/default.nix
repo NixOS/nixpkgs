@@ -10,12 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "msal";
-  version = "1.37.0";
+  version = "1.38.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-GxZyoz7kZ8HXCzQbsWyv1RuzyBcUepW5MmN5SwOXG+w=";
+    hash = "sha256-TxD/Ele6z9F4HyLoW9K41DrRtJDztqr9eQZnHK3t1GQ=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +38,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/AzureAD/microsoft-authentication-library-for-python";
     changelog = "https://github.com/AzureAD/microsoft-authentication-library-for-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

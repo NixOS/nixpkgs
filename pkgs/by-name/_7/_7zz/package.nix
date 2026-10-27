@@ -22,6 +22,7 @@
 
   # For tests
   testers,
+  fetchurl,
 }:
 
 let
@@ -45,7 +46,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "26.02";
+  version = "26.04";
 
   src = fetchFromGitHub {
     owner = "ip7z";
@@ -53,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableUnfree then
-        "sha256-MmnsCM4guQ5DuWDE5MslI8QIIbkUtZnddVPgAuCRWQU="
+        "sha256-JLLbkrptKzC4UuEaA0X9rXBFPH5v4n6a2jSF2E3yEv8="
       else
-        "sha256-prKxsT7y7iHbzduM+xqz1yQMEbJ8IjnsmafzC2mOwr4=";
+        "sha256-DDe8nMgzzciZ+SroHYqaEtOXg/MoT3RYnXvN1YC1Znc=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
@@ -165,15 +166,90 @@ stdenv.mkDerivation (finalAttrs: {
         extraArgs = [ "--version=skip" ];
       })
     ];
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "7zz --help";
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "7zz --help";
+      };
+      # So dmg can be tested on Linux without
+      # macos toolchains
+      undmg = stdenv.mkDerivation {
+        pname = "test-undmg";
+        version = "none";
+
+        src = fetchurl {
+          url = "https://caido.download/releases/v0.57.0/caido-desktop-v0.57.0-mac-aarch64.dmg";
+          hash = "sha256-GmpMnaGR7gYz1RvSO5xj9AA3xU1mn2IBInakmVkuG7A=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e Contents ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
+
+      unzip = stdenv.mkDerivation {
+        pname = "test-unzip";
+        version = "none";
+
+        src = fetchurl {
+          url = "mirror://sourceforge/libjson/libjson_7.6.1.zip";
+          hash = "sha256-ByZ6OVEDjuLgLSbMQb+OJ1Zow491EkDT543JeRguc3Y=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e libjson.h ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
+
+      # We do not want to decompress tarballs since
+      # it will just leave an uncompressed tarball in the source dir.
+      tarballs = stdenv.mkDerivation {
+        pname = "test-tarball";
+        version = "none";
+
+        src = fetchurl {
+          url = "https://github.com/ip7z/7zip/archive/refs/tags/26.04.tar.gz";
+          hash = "sha256-SP3G3+h57i24Z7sH8ZxKlAa/6gHVH0h4W2x6E3iB4lw=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e README.md ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
     };
   };
 
   meta = {
     description = "Command line version of the 7-Zip archiver utility";
     homepage = "https://7-zip.org";
+    changelog = "https://7-zip.org/history.txt";
     license =
       with lib.licenses;
       # 7zip code is largely lgpl2Plus
@@ -193,5 +269,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
+    identifiers.cpeParts = {
+      vendor = "7-zip";
+      product = "7-zip";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
 })

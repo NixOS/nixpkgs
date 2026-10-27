@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchurl,
@@ -11,7 +10,7 @@
   portaudio,
   libsndfile,
   flac,
-  usePulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  usePulseAudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
 }:
 

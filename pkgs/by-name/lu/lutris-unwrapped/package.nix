@@ -127,11 +127,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # avoid double wrapping
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath requiredTools}"
-    "--prefix APPIMAGE_EXTRACT_AND_RUN : 1"
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--prefix" "PATH" ":" "${lib.makeBinPath requiredTools}"
+      "--prefix" "APPIMAGE_EXTRACT_AND_RUN" ":" "1"
+      "''${gappsWrapperArgs[@]}"
+    )
+  '';
 
   meta = {
     homepage = "https://lutris.net";

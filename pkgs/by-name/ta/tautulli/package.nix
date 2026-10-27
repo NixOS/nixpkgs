@@ -1,5 +1,6 @@
 {
   lib,
+  cacert,
   fetchFromGitHub,
   python3Packages,
   makeWrapper,
@@ -46,6 +47,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ln -s $out/bin/tautulli $out/bin/plexpy
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    rm $out/libexec/tautulli/lib/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/libexec/tautulli/lib/certifi/cacert.pem
   '';
 
   checkPhase = ''

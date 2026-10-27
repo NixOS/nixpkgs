@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylogout";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "loserMcloser";
     repo = "waylogout";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dsuuTjmZm3IpqXU68LsAz86HNbMFvKhWPYOMG/5Z4jE=";
+    hash = "sha256-h8Ip0Lxe2IGvuye2EvVyBH0hVoaOYlfDEv5ruSTq2h0=";
   };
 
   nativeBuildInputs = [

@@ -180,6 +180,7 @@ buildRustPackage {
     maintainers = with lib.maintainers; [
       domenkozar
       sandydoo
+      anish
     ];
   };
 }

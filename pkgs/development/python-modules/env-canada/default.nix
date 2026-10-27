@@ -14,7 +14,7 @@
   pytestCheckHook,
   python-dateutil,
   setuptools,
-  syrupy_6,
+  syrupy,
   voluptuous,
 }:
 
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     freezegun
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   disabledTests = [

@@ -52,6 +52,7 @@ stdenv.mkDerivation {
     homepage = "https://www.ioncube.com";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree;
+    broken = lib.versionAtLeast php.version "8.6";
     maintainers = with lib.maintainers; [ neverbehave ];
     platforms = [
       "x86_64-linux"

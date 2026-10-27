@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "2026.5";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mullvad";

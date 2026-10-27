@@ -8,11 +8,15 @@
   pkg-config,
   libadwaita,
   makeWrapper,
+  wl-clipboard,
   fetchFromGitHub,
+  gtk4-layer-shell,
+  wayland-protocols,
+  wayland-scanner,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytator";
-  version = "1.2.4";
+  version = "1.4.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -21,24 +25,34 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "faetalize";
     repo = "waytator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/Tq4fVrgss/v/+ugAueWCx1mbQlsyQ0LE4jRtIhT4qU=";
+    hash = "sha256-OnEUDSxKJCZsN0v2BV/QQ8ceI4BSaY9LH+QucziY1EA=";
   };
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     makeWrapper
+    wayland-scanner
   ];
 
   buildInputs = [
     gtk4
     libadwaita
+    gtk4-layer-shell
+    wayland-protocols
   ];
 
   postFixup = ''
     wrapProgram $out/bin/waytator \
-      --prefix PATH : ${lib.makeBinPath [ tesseract ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          tesseract
+          wl-clipboard
+        ]
+      }
   '';
 
   mesonBuildType = "release";

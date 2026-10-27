@@ -133,7 +133,12 @@ buildPythonPackage rec {
     description = "Python library to interface with the Telegram Bot API";
     homepage = "https://python-telegram-bot.org";
     changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/${src.tag}/CHANGES.rst";
-    license = lib.licenses.lgpl3Only;
+    license =
+      with lib.licenses;
+      OR [
+        lgpl3Plus
+        gpl3Only
+      ];
     maintainers = with lib.maintainers; [
       veprbl
       pingiun

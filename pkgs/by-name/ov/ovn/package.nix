@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -47,6 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
     "dev"
     "tools"
+  ];
+
+  patches = [
+    # tests: Make localnet loopback IGMP report scapy 2.8 safe.
+    # TODO: remove on next update
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/fb3dbe3d9fb0c4e46874480b6ad30b4014b24b03.patch";
+      hash = "sha256-C3nucwyyouMY+CcfZQJrwIlpqq9Oh6vwuxKDKHnsQBA=";
+    })
   ];
 
   nativeBuildInputs = [

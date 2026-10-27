@@ -178,12 +178,24 @@ lib.makeExtensible (
   {
     inherit makeLixScope;
 
+    lix_2_96 = self.makeLixScope {
+      attrName = "lix_2_96";
+
+      lix-args = (import ./2.96.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
+        patches = [
+          ./lix-rs-tests-whole-archive.patch
+          ./darwin-libcxx-nodiscard.patch
+        ];
+      };
+    };
+
     lix_2_95 = self.makeLixScope {
       attrName = "lix_2_95";
 
       lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
         patches = [
           lixFunctional2TimeoutPatch
+          ./darwin-libcxx-nodiscard.patch
         ];
       };
     };
@@ -191,7 +203,12 @@ lib.makeExtensible (
     git = self.makeLixScope {
       attrName = "git";
 
-      lix-args = import ./git.nix { inherit fetchFromGitea rustPlatform; };
+      lix-args = (import ./git.nix { inherit fetchFromGitea rustPlatform; }) // {
+        patches = [
+          ./lix-rs-tests-whole-archive.patch
+          ./darwin-libcxx-nodiscard.patch
+        ];
+      };
     };
 
     latest = self.lix_2_95;

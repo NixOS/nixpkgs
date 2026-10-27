@@ -87,7 +87,7 @@ buildFHSEnv {
       libnghttp2
 
       # Desmume
-      lua
+      lua5_2_compat
       agg
       soundtouch
       openal
@@ -110,7 +110,7 @@ buildFHSEnv {
       orc
       nettle
       gmp
-      pcre
+      pcre2 # TODO: pcre2 is incorrect. This is supposed to be pcre1, but it has been dropped
       vulkan-loader
       zstd
 

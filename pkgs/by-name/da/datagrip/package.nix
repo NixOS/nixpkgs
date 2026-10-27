@@ -9,38 +9,19 @@
   # keep-sorted end
 }:
 let
-  system = stdenv.hostPlatform.system;
-  # update-script-start: urls
-  urls = {
-    x86_64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.2.tar.gz";
-      hash = "sha256-RyzXihbj7vmROdfByTmwkljqSHxdFcd+aa2GAA+Rrjs=";
-    };
-    aarch64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.2-aarch64.tar.gz";
-      hash = "sha256-wVkVg0SeB0cf5ad2mt5nsPPg98tbMbCXQPEoFWQdK6U=";
-    };
-    aarch64-darwin = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.2-aarch64.dmg";
-      hash = "sha256-EdZcvRD7rU7hfR4tYZrmUCC/tLfdC1eX+UZ/5wFwqqE=";
-    };
-  };
-  # update-script-end: urls
+  inherit (stdenv.hostPlatform) system;
+  versionInfo = lib.importJSON ./version.json;
 in
 jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
+  inherit (versionInfo) version buildNumber;
 
   pname = "datagrip";
 
   wmClass = "jetbrains-datagrip";
   product = "DataGrip";
 
-  # update-script-start: version
-  version = "2026.2.2";
-  buildNumber = "262.9437.70";
-  # update-script-end: version
-
-  src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchurl (versionInfo.urls.${system} or (throw "Unsupported system: ${system}"));
 
   # the jdk is bundled on Darwin.
   jdk =

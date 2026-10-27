@@ -246,6 +246,13 @@ stdenv.mkDerivation (finalAttrs: {
     # set install path of freedesktop files
     substituteInPlace src/node/desktop/CMakeLists.txt \
       --replace-fail "/usr/share" "$out/share"
+
+    # Prevent Boost.URL linker error
+    substituteInPlace src/cpp/CMakeLists.txt \
+      --replace-fail 'C++17' 'C++20' \
+      --replace-fail 'c++17' 'c++20'
+    substituteInPlace cmake/compiler.cmake \
+      --replace-fail 'CMAKE_CXX_STANDARD 17' 'CMAKE_CXX_STANDARD 20'
   '';
 
   yarnOfflineCache = fetchYarnDeps {

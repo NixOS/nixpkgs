@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
           "arm" = "arm";
           "aarch64" = "arm64";
           "loongarch64" = "loong64";
+          "riscv64" = "riscv64";
         }
         .${stdenv.hostPlatform.parsed.cpu.name};
     in
@@ -181,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://skia.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64 ++ loongarch64;
+    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64 ++ loongarch64 ++ riscv64;
     pkgConfigModules = [ "skia" ];
   };
 })

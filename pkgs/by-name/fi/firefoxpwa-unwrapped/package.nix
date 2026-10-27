@@ -8,6 +8,7 @@
   rustPlatform,
 
   firefox-unwrapped,
+  nix-update-script,
   nixosTests,
   openssl,
   pkg-config,
@@ -16,13 +17,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firefoxpwa-unwrapped";
-  version = "2.20.0";
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4Gbwfx/Gv21dvCEeS6HE1zHflD7xABRX3rAJdHWIsHU=";
+    hash = "sha256-kOtdGRW2DN0qQLrtvbsywBdGlM/1cboQGu2NM7cO8E8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/native";
@@ -91,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests.firefoxpwa = nixosTests.firefoxpwa;
     binaryName = "firefoxpwa";
     applicationName = "firefoxpwa";

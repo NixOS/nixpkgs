@@ -4,47 +4,43 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  testers,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanobench";
-  version = "4.3.11";
+  version = "4.6.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "martinus";
     repo = "nanobench";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6OoVU31cNY0pIYpK/PdB9Qej+9IJo7+fHFQCTymBVrk=";
+    hash = "sha256-FN/w20icNirj3ah0l7FNvG8ooZcAaZCKVtag9Rv7nn8=";
   };
-
-  patches = [
-    # Missing header from a test file. Required for compiling as of gcc13. Patched in commit from master branch.
-    # Remove on next release.
-    (fetchpatch {
-      url = "https://github.com/martinus/nanobench/commit/e4327893194f06928012eb81cabc606c4e4791ac.patch";
-      hash = "sha256-vmpohg9TbIxT+p4JerWh/QBcZ3/+1gPSNf15sqW6leM=";
-    })
-
-    # Change cmake install directories to conventional locations. Patches from unmerged pull request.
-    # Remove when merged upstream.
-    (fetchpatch {
-      url = "https://github.com/martinus/nanobench/pull/98/commits/92c6995ccaebbda87fed13de8eaf3d135d1af0c0.patch";
-      hash = "sha256-JwCpwSRzV1qnwwcJIGEJWxthT4Vj12TXhAGG0bc8KGM=";
-    })
-    (fetchpatch {
-      url = "https://github.com/martinus/nanobench/pull/98/commits/17a1f0b598a09d399dd492c72bca5b48ad76c794.patch";
-      hash = "sha256-2lOD63qN7gywUQxrdSRVyddpzcQjjeWOrA3hqu7x+CY=";
-    })
-
-    # Drop when https://github.com/martinus/nanobench/pull/134 is merged
-    # This is a slice of what that PR provides, it makes it possible for packages to do "find_package"
-    ./fix-cmake-find_package.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = nix-update-script { };
+  doCheck = true;
+
+  cmakeFlags = [ (lib.cmakeBool "NANOBENCH_BUILD_TEST" finalAttrs.finalPackage.doCheck) ];
+
+  checkPhase = ''
+    runHook preCheck
+    ./nb
+    runHook postCheck
+  '';
+
+  passthru = {
+    tests.cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "nanobench" ];
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Simple, fast, accurate single-header microbenchmarking functionality for C++11/14/17/20";

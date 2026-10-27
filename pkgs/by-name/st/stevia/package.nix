@@ -20,7 +20,7 @@
   json-glib,
   libhandy,
   libxkbcommon,
-  systemd,
+  systemdLibs,
   nix-update-script,
   dconf,
 }:
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libhandy
     libxkbcommon
-    systemd
+    systemdLibs
     dconf
   ];
 

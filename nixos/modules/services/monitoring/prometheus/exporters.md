@@ -137,7 +137,7 @@ example:
         serviceConfig = {
           DynamicUser = false;
           ExecStart = ''
-            ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
+            ${lib.getExe pkgs.prometheus-postfix-exporter} \
               --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
               --web.telemetry-path ${cfg.telemetryPath} \
               ${lib.concatStringsSep " \\\n  " cfg.extraFlags}

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onvif-zeep-async";
-  version = "4.2.1";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvideolibs";
     repo = "python-onvif-zeep-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7o9rzpXLNX5Ibaj74bNbFZ6v55SMDyzYjutvimOxbYk=";
+    hash = "sha256-2/lkBwXFKmSGrETNqJqN6PBqtJxdFBivqbee3h9BwTM=";
   };
 
   postPatch = ''

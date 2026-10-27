@@ -108,6 +108,18 @@ buildNpmPackage {
       --replace-fail '["Assets.car", "icon.icns"]' '["icon.icns"]'
   '';
 
+  npmRebuildFlags = [ "--ignore-scripts" ];
+
+  # canvas 3.1.0 omits `#include <cstdint>`, which GCC 15+ requires
+  # This can be removed when filen updates it's deep dendence on canvas >= 3.2.1
+  preBuild = ''
+    substituteInPlace node_modules/canvas/src/CharData.h \
+      --replace-fail '#pragma once' '#pragma once
+    #include <cstdint>'
+
+    npm rebuild
+  '';
+
   buildPhase = ''
     runHook preBuild
 

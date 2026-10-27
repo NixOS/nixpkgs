@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "validate-pyproject-schema-store";
-  version = "2026.10.06";
+  version = "2026.10.23";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "henryiii";
     repo = "validate-pyproject-schema-store";
     tag = finalAttrs.version;
-    hash = "sha256-7TvNldvCFHSz7GRh/j43Wl6WuGFi7ckouQH0wIJY32Q=";
+    hash = "sha256-Yz1pAKMHv2HTUbii3Fm+Yr8pE5YzMoZmFLP139lp6as=";
   };
 
   build-system = [ hatchling ];

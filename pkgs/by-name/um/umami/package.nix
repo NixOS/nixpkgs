@@ -87,7 +87,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "3.4.0";
+  version = "3.4.1";
 
   nativeBuildInputs = [
     makeWrapper
@@ -101,7 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-emGRw6BT8oyxY5Xm4C0us/qGYZWvkwrcQmLI1UxoidU=";
+    hash = "sha256-qPW4xZXNeYY6VxsU4pG0qqYKfpT56b9clVaGaY/X0Rk=";
   };
 
   postPatch = ''
@@ -114,8 +114,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
 
     # Biome executable needs to be patched to run, but we don't need to format code anyway, so just skip it.
+    # Also, increase test timeout as some tests may take longer on resource-constrained machines.
     substituteInPlace ./package.json \
-      --replace-fail ' && biome format --write src/tracker/index.d.ts' '''
+      --replace-fail ' && biome format --write src/tracker/index.d.ts' ''' \
+      --replace-fail '"vitest run"' '"vitest run --test-timeout=10000"'
     substituteInPlace ./scripts/generate-api-client.ts \
       --replace-fail 'await format(written);' ""
   '';
@@ -128,7 +130,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-jzE8C+fssW6PVo/aoJU8ORrgiHpMALqE4WPrm7taIOc=";
+    hash = "sha256-cd0r/fVYdRY1FfsiC0sCMRiEfm6cY8yI+Y9JJ17XmyY=";
   };
 
   env.NODE_ENV = "production";
@@ -155,7 +157,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preCheck
 
     # Tests fail if NODE_ENV=production
-    NODE_ENV=development pnpm test
+    # Logging is much more readable when CI=1
+    NODE_ENV=development CI=1 pnpm test
 
     runHook postCheck
   '';

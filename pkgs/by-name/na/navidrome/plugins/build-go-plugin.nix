@@ -21,6 +21,7 @@ lib.extendMkDerivation {
       version,
       src,
       vendorHash,
+      bundleName ? finalAttrs.pname,
       meta,
       passthru ? { },
       ...
@@ -47,6 +48,8 @@ lib.extendMkDerivation {
       preInstall = ''
         find "$GOPATH"/bin/ -type f -exec cp {} "./plugin.wasm" \;
       '';
+
+      inherit bundleName;
 
       passthru = {
         isNavidromePlugin = true;

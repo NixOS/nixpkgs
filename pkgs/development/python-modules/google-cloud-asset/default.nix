@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-asset-v${finalAttrs.version}";
-    sha256 = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
+    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-asset";

@@ -26,20 +26,10 @@
   zstandard,
 
   # optional-dependencies
-  hypothesis,
-  liblzfse,
-  nodeenv,
-  opencv-python,
-  playwright,
-  pre-commit,
-  psutil,
-  pyright,
-  pytest,
-  pytest-playwright,
-  pytest-xdist,
-  ruff,
   gdown,
+  liblzfse,
   matplotlib,
+  opencv-python,
   pandas,
   plotly,
   plyfile,
@@ -47,9 +37,9 @@
   torch,
   tyro,
 
-  # nativeCheckInputs
+  # tests
+  hypothesis,
   pytestCheckHook,
-  playwright-driver,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -64,36 +54,34 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-jf1/BJpkHxt5teR0ay1YKvCdsC6QFApFPuQswPjPW4g=";
   };
 
-  postPatch = ''
-    # prepare npm offline cache
-    mkdir -p node_modules
-    cd src/viser/client
-    cp package.json package-lock.json ../../..
-    ln -s ../../../node_modules
-    cd ../../..
-  '';
-
-  nativeBuildInputs = [
-    npmHooks.npmConfigHook
-    nodejs
-  ];
-
+  npmRoot = "src/viser/client";
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    src = finalAttrs.src + "/src/viser/client/";
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
     hash = "sha256-ebEJ4lm45L6+Dw1jh0BjciUEQWpFNGqfVMT6loIgZsk=";
   };
 
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
   preBuild = ''
-    cd src/viser/client
+    pushd ${finalAttrs.npmRoot}
     npm --offline run build
-    cd ../../..
+    popd
   '';
 
   build-system = [
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    # rich<15.0.0,>=13.3.3 not satisfied by version 15.0.0
+    "rich"
+    # websockets<17.0.0,>=13.1 not satisfied by version 17.0.1
+    "websockets"
+  ];
   dependencies = [
     imageio
     msgspec
@@ -109,19 +97,6 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     urdf = [ yourdfpy ];
-    dev = [
-      hypothesis
-      nodeenv
-      playwright
-      pre-commit
-      psutil
-      pyright
-      pytest
-      pytest-playwright
-      pytest-xdist
-      ruff
-    ]
-    ++ finalAttrs.passthru.optional-dependencies.examples;
     examples = [
       gdown
       liblzfse
@@ -137,46 +112,18 @@ buildPythonPackage (finalAttrs: {
     ++ finalAttrs.passthru.optional-dependencies.urdf;
   };
 
+  pythonImportsCheck = [ "viser" ];
+
   nativeCheckInputs = [
     hypothesis
-    playwright-driver
+    opencv-python
     pytestCheckHook
   ];
 
-  # adding pre-commit here break PYTHONPATH in 3.14
-  checkInputs = lib.filter (p: p.pname != "pre-commit") finalAttrs.passthru.optional-dependencies.dev;
-
-  env = {
-    PLAYWRIGHT_BROWSERS_PATH = playwright-driver.browsers;
-    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = true;
-    PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = true;
-  };
-
   disabledTestPaths = [
-    # too many flaky tests
+    # Require a browser (playwright)
     "tests/e2e"
   ];
-  disabledTests = [
-    # assert 0 != 0
-    # (only when xdist)
-    "test_server_port_is_freed"
-
-    # counts ffmpeg pids, can be confused when
-    # building multiple times this package in parallel
-    "test_process_termination"
-  ];
-
-  pythonImportsCheck = [
-    "viser"
-  ];
-
-  pythonRelaxDeps = [
-    # rich<15.0.0,>=13.3.3 not satisfied by version 15.0.0
-    "rich"
-    # trimesh<5.0.0,>=3.21.7 not satisfied by version 5.0.0
-    "trimesh"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   meta = {

@@ -105,6 +105,11 @@
     "hash": "sha256-FhXf9ggWmWzGp6vz6vJP+ly4SOeyluP6Ic3MfCz1uUA="
   },
   {
+    "pname": "ExCSS",
+    "version": "4.3.1",
+    "hash": "sha256-nNn5+YEaqKSULhtDsImNEyndU/MHna7VpZNUExmo80o="
+  },
+  {
     "pname": "HarfBuzzSharp",
     "version": "8.3.1.3",
     "hash": "sha256-/+ZEhjpOs8B4tMPw3vDyuQqGGZHJEWvy3WaKMaDwmrU="
@@ -143,6 +148,11 @@
     "pname": "Microsoft.CodeAnalysis.Analyzers",
     "version": "3.11.0",
     "hash": "sha256-hQ2l6E6PO4m7i+ZsfFlEx+93UsLPo4IY3wDkNG11/Sw="
+  },
+  {
+    "pname": "Microsoft.DotNet.PlatformAbstractions",
+    "version": "3.1.6",
+    "hash": "sha256-RfM2qXiqdiamPkXr4IDkNc0IZSF9iTZv4uou/E7zNS0="
   },
   {
     "pname": "Microsoft.Extensions.AmbientMetadata.Application",
@@ -203,6 +213,11 @@
     "pname": "Microsoft.Extensions.DependencyInjection.AutoActivation",
     "version": "10.0.0",
     "hash": "sha256-cVRZwchZofxVsHEH4VIssGFGJ6pPjzmjW2afbNtr9/Q="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyModel",
+    "version": "8.0.0",
+    "hash": "sha256-qkCdwemqdZY/yIW5Xmh7Exv74XuE39T8aHGHCofoVgo="
   },
   {
     "pname": "Microsoft.Extensions.Diagnostics",
@@ -395,6 +410,31 @@
     "hash": "sha256-Y1lH1TrxBua3Ux6trRUQGeSfYjE3qld6TQDz/ABy6Ws="
   },
   {
+    "pname": "ShimSkiaSharp",
+    "version": "5.1.1",
+    "hash": "sha256-dusvqnuofmzxcALMFAAsJK2a08H4WNjwXwWk368xau0="
+  },
+  {
+    "pname": "Silk.NET.Core",
+    "version": "2.22.0",
+    "hash": "sha256-1aBiBwifLel9aaGI97gxbvID/XKbFm1dpVv2zm0NSEc="
+  },
+  {
+    "pname": "Silk.NET.Maths",
+    "version": "2.22.0",
+    "hash": "sha256-wBydHf4R69A3dm8SnD82zjBd5QgwXbmipRqXtk+AjpE="
+  },
+  {
+    "pname": "Silk.NET.OpenGL",
+    "version": "2.22.0",
+    "hash": "sha256-1XWABfBzsSg1nJzbDJ/FH140WLzjpuNTxDHNZfV85xo="
+  },
+  {
+    "pname": "SkiaSharp",
+    "version": "3.119.2",
+    "hash": "sha256-A9F397K5FfLeOsNZacKmUh4IU/WMK60B4Z6TEtS/oqo="
+  },
+  {
     "pname": "SkiaSharp",
     "version": "3.119.4",
     "hash": "sha256-4ypEnTGUXAudFp61vGduHj9YmqtpiI5J1wP9wcOEwXY="
@@ -403,6 +443,11 @@
     "pname": "SkiaSharp.NativeAssets.Linux",
     "version": "3.119.4",
     "hash": "sha256-+uBVQFmxEH73iI5GwgvftUhAHvenpvc5GtT63HQy1Qo="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.macOS",
+    "version": "3.119.2",
+    "hash": "sha256-KEeGqSiyAiMbzLgH/0JkwUz/pWcL49gYB1T1YLkMPaI="
   },
   {
     "pname": "SkiaSharp.NativeAssets.macOS",
@@ -416,8 +461,43 @@
   },
   {
     "pname": "SkiaSharp.NativeAssets.Win32",
+    "version": "3.119.2",
+    "hash": "sha256-CI6dg+MlxX8t+vbnkxtd5QE3xalMKkA8LUSudxg7TNU="
+  },
+  {
+    "pname": "SkiaSharp.NativeAssets.Win32",
     "version": "3.119.4",
     "hash": "sha256-WlaYsbTh/cn/6YaN9odNtfpp8hpN52unGgGlQum0M5E="
+  },
+  {
+    "pname": "Svg.Animation",
+    "version": "5.1.1",
+    "hash": "sha256-mXcfShsZh2D9r79feD8Btv2y7kBDjsqca+0sB0/bToc="
+  },
+  {
+    "pname": "Svg.Custom",
+    "version": "5.1.1",
+    "hash": "sha256-0wxNoAJHEXM7aH3N6hqxlIiG2sGuMKiLWuSyE80zBgY="
+  },
+  {
+    "pname": "Svg.Model",
+    "version": "5.1.1",
+    "hash": "sha256-JnOJYoRZxnRKRdgiUbfwvz4PHDat2TyngCM7O/jN2YY="
+  },
+  {
+    "pname": "Svg.SceneGraph",
+    "version": "5.1.1",
+    "hash": "sha256-Uag4IC+BwBgw5Dawozpl4/km9cwuL8vLDTsVJtw9098="
+  },
+  {
+    "pname": "Svg.Skia",
+    "version": "5.1.1",
+    "hash": "sha256-P8TI6uzXppCtCBj0ctD9/T0AvDBj7O1NTXc2KGWNewk="
+  },
+  {
+    "pname": "System.IO.Hashing",
+    "version": "10.0.0",
+    "hash": "sha256-zq3baIIsQ1kaY4CVl0vpkDcZb2ZNwT7wC0wDqzEN5oI="
   },
   {
     "pname": "System.Threading.RateLimiting",

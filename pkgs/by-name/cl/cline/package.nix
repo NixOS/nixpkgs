@@ -70,7 +70,7 @@ let
       # paths from the source it was built from.
       dontFixup = true;
 
-      outputHash = "sha256-vHd1Uh5JUa+LgPyToRfWkpfgz+Y3JFWNvlHYEEQF2Dc=";
+      outputHash = "sha256-dVbQIed8hYhOl+/BTlEZtS+VyfhH3qBsrZgcisWlm0k=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
@@ -83,7 +83,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cline";
-  version = "3.0.68";
+  version = "3.0.74";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "cline";
     repo = "cline";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-Codwrt9ByARSal/A7UrtUG0edyHl9ePDzVYMALyf+1s=";
+    hash = "sha256-9NuMX5Bt6kRe2UWISbiOKzlOI8Z6aN2sphMdQk1JFGA=";
   };
 
   node_modules = nodeModules finalAttrs;

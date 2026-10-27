@@ -90,20 +90,35 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-JJnIF/2SmGgPzQe7E4DmC61komZpbmjnIemggpBPLdM=";
     })
 
-    # --with-tcl and --with-tclsh were tangled together in bad ways. I
-    # (@Ericson2314) wrote this patch to untangle and submit upstream. It
-    # unbreaks our cross builds.
+    # --with-tcl and --with-tclsh were tangled together in bad ways. These
+    # two commits untangle them, which unbreaks our cross builds. They were
+    # merged to trunk in 8364e34cbd9e.
     #
-    # https://sqlite.org/forum/forumpost?udc=1&name=fe9e99eb27c8c2ba
+    # https://sqlite.org/forum/forumpost/fe9e99eb27c8c2ba
     #
-    # The intent is to submit it there once I have enough forum privileges
-    # to do so. The Nixpkgs copy will remain the sole copy in the meantime.
-    #
-    # TODO make it unconditional next mass rebuild. If version of this is
-    # upstreamed, also replace this with a fetchpatch of the final landed
-    # change for older versions.
-    ./separate-build-and-host-tcl.patch
+    # TODO make it unconditional next mass rebuild, and drop it entirely
+    # once a release contains it.
+    (fetchpatch {
+      url = "https://github.com/sqlite/sqlite/commit/d501b949a39d276494c8e36cdc2b94bfe28e671c.patch";
+      includes = [ "autosetup/sqlite-config.tcl" ];
+      hash = "sha256-eTeb1o1aCjXG5jv3jK6KtSA7Lcr7lrUY+sI0iq/U8zU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/sqlite/sqlite/commit/e4e1b4a464e632fb06870114081d06ce7c53a1de.patch";
+      includes = [ "autosetup/sqlite-config.tcl" ];
+      hash = "sha256-uMhQDSP1jTj/Mz/24oOi84tE4bAINmplDoKJGxUGD1A=";
+    })
   ];
+
+  # capi3c.test is a copy of capi3.test, but upstream only disabled the
+  # intentional use-after-free cases in the original. They segfault with
+  # allocators that return freed memory to the OS eagerly, such as musl's.
+  postPatch = ''
+    substituteInPlace test/capi3c.test \
+      --replace-fail \
+        'if {[clang_sanitize_address]==0} {' \
+        'if {0 && [clang_sanitize_address]==0} {'
+  '';
 
   buildInputs = [
     zlib
@@ -194,6 +209,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
   # When tcl is not available, only run test targets that don't need it.
   checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
+  # Neither GCC's libsanitizer nor compiler-rt's sanitizers are built for
+  # musl, so the fuzzcheck-asan and fuzzcheck-ubsan programs cannot be linked.
+  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [ "TSTRNNR_OPTS=~fuzzcheck-%san" ];
 
   passthru = {
     tests = {

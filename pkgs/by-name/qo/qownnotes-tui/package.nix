@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-NJIyuBq+PCH7qbQedYB9J+80vw5UEcAh8zQJbtycrH0=";
 
-  strictDeps = true;
-
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

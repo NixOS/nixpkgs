@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Session manager designed for audio applications";
     maintainers = [ lib.maintainers._6AA4FD ];
     license = lib.licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

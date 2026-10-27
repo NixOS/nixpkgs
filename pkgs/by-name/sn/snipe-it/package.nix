@@ -12,20 +12,16 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "snipe-it";
-  version = "8.7.2";
-
-  patches = [
-    ./0001-Fix-backup-restoration-when-using-a-unix-socket.patch
-  ];
+  version = "8.8.1";
 
   src = fetchFromGitHub {
     owner = "grokability";
     repo = "snipe-it";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ND/Et3zRhD4axNNfaq4MW4sLj3634VhnDdAtZUxnEJU=";
+    hash = "sha256-+MSyC6zCHaewI8rxCEIe4wqYcyIgrPTuLCFCot9Gi1M=";
   };
 
-  vendorHash = "sha256-9mihxUDylADJCbLSxVj+qHfT8BW6rO2qjRzhGQJT0jM=";
+  vendorHash = "sha256-i+cvAMsMptwZU2qDw4Qq+2KXWJIAVUAH1njVn2debdw=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"

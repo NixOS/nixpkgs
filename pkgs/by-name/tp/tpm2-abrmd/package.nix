@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-abrmd";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-abrmd";
     rev = finalAttrs.version;
-    sha256 = "sha256-l0ncCMsStaeFACRU3Bt6F1zyiOTGY6wOHewA4AD58Ww=";
+    sha256 = "sha256-o58emkp6jiOLZSqtz+C2l7F+EaZ3sa2/i8aDzBAxxiI=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "TPM2 resource manager, accessible via D-Bus";
     mainProgram = "tpm2-abrmd";
-    homepage = "https://github.com/tpm2-software/tpm2-tools";
+    homepage = "https://github.com/tpm2-software/tpm2-abrmd";
+    changelog = "https://github.com/tpm2-software/tpm2-abrmd/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

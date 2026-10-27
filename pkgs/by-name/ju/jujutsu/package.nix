@@ -10,24 +10,40 @@
   buildPackages,
   nix-update-script,
   versionCheckHook,
+  mkdocs,
+  python3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  version = "0.45.1";
+  version = "0.46.0";
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nqMd9kj6TH/6kTZ8a9XDPBESwCIOMa7c/0TgbEXoo3o=";
+    hash = "sha256-5A443Cjlbu3+46F1Ynfu8FSOOy1yjZSgFnCbg6dMzzk=";
   };
 
-  cargoHash = "sha256-rt3mq7+Z+7Z1Y+XUWva+UsrDcVeZs6VjXnhAL0iyP20=";
+  cargoHash = "sha256-ugqvdijwIUrvq0gEQSzAxqSnF6Ui3qBmMvk1L2TXWEE=";
 
   nativeBuildInputs = [
     installShellFiles
-  ];
+    mkdocs
+  ]
+  ++ (with python3.pkgs; [
+    mdx-breakless-lists
+    mdx-truly-sane-lists
+    mike
+    mkdocs-include-markdown-plugin
+    mkdocs-material
+    mkdocs-redirects
+    mkdocs-table-reader-plugin
+  ]);
 
   nativeCheckInputs = [
     gitMinimal
@@ -61,6 +77,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBSSH2_SYS_USE_PKG_CONFIG = "1";
   };
 
+  preBuild = ''
+    mkdocs build -d $name
+  '';
+
   postInstall =
     let
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
@@ -74,6 +94,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --fish <(COMPLETE=fish ${jj}) \
         --nushell <(${jj} util completion nushell) \
         --zsh <(COMPLETE=zsh ${jj})
+    ''
+    + ''
+      mkdir -p $doc/share/doc
+      mv $name $doc/share/doc
     '';
 
   doInstallCheck = true;

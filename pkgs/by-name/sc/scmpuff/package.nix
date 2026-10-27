@@ -43,8 +43,6 @@ buildGoModule (finalAttrs: {
     which
   ];
 
-  strictDeps = true;
-
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 

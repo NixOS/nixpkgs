@@ -13,14 +13,14 @@
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonpickle";
-  version = "4.1.1";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+G4Y8T4rlsHB7t4Le5AJW7th2Z/twUgTxE3C82HbuuE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-iv7RiqGJ/YHi6DO0JrtK9IVZSSHwsdNsIAH8Vjei8hA=";
   };
 
   build-system = [
@@ -37,15 +37,19 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # imports distutils
-    "test_thing_with_submodule"
+  disabledTests = [
+    # AsserationError
+    "test_warnings"
   ];
+
+  pythonImportsCheck = [ "jsonpickle" ];
 
   meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";
     downloadPage = "https://github.com/jsonpickle/jsonpickle";
     homepage = "http://jsonpickle.github.io/";
+    changelog = "https://github.com/jsonpickle/jsonpickle/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-}
+})

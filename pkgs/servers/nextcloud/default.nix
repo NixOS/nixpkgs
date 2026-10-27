@@ -57,20 +57,20 @@ let
 in
 {
   nextcloud33 = generic {
-    version = "33.0.9";
-    hash = "sha256-8zHBBB0CfmWIUm0qAM5CvHCpYi6rWHHAvpF3JSz3dCM=";
+    version = "33.0.10";
+    hash = "sha256-QnEQuW/YWA2P6yOkCkHQBlfpdflF4ISEhaaibXd9fK4=";
     packages = nextcloud33Packages;
   };
 
   nextcloud34 = generic {
-    version = "34.0.4";
-    hash = "sha256-APIm5jZPluCRirBhVxWPZmAbjO3CWvd39e5aMFb0K4M=";
+    version = "34.0.5";
+    hash = "sha256-BOw93fRlyfLCqebuXzm4GDmdTz1YFVb0HQhyvutZsKk=";
     packages = nextcloud34Packages;
   };
 
   nextcloud35 = generic {
-    version = "35.0.1";
-    hash = "sha256-ftMF6IAZLYBLqDF5oZ3SIldnlgjWMWGmEc4/ipGNKqY=";
+    version = "35.0.2";
+    hash = "sha256-38eVXq7FYh3pDgMdEPdgBhc7Pz4x1dbhdIIdHaFPFi0=";
     packages = nextcloud35Packages;
   };
 

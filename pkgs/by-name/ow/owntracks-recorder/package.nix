@@ -7,13 +7,16 @@
   curl,
   openssl,
   lmdb,
-  lua,
+  lua5_2_compat,
   libsodium,
   libuuid,
   libconfig,
   testers,
   owntracks-recorder,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "owntracks-recorder";

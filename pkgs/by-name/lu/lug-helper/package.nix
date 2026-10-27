@@ -16,12 +16,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lug-helper";
-  version = "4.14";
+  version = "4.17";
   src = fetchFromGitHub {
     owner = "starcitizen-lug";
     repo = "lug-helper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xS+k8UYwpGtsvjusmrNjn7yOcqSVEFhedPD5nXchD/4=";
+    hash = "sha256-v/w3bnih3zh5LcKNUCLKDlPKc18qgY2JvEhMYeDupD8=";
   };
 
   buildInputs = [

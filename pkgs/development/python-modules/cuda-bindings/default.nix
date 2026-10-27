@@ -7,7 +7,7 @@
   addDriverRunpath,
 
   # build-system
-  cython,
+  cython_3_2,
   setuptools,
   setuptools-scm,
   cuda-pathfinder,
@@ -24,9 +24,6 @@
   pytestCheckHook,
   util-linux,
   pyglet,
-
-  # passthru
-  cuda-bindings,
 }:
 
 let
@@ -34,13 +31,13 @@ let
 
   cudaLibPaths = {
     libcuda =
-      # Use cuda_compat to provide libcuda.so on pre-Thor Jetsons
+      # Use cuda_compat to provide libcuda.so from its `compat` directory
       if (cudaPackages.cuda_compat.meta.available or false) then
-        cudaPackages.cuda_compat
+        "${cudaPackages.cuda_compat}/compat"
 
       # Else, use the host CUDA driver library
       else
-        addDriverRunpath.driverLink;
+        "${addDriverRunpath.driverLink}/lib";
     libcudart = lib.getLib cudaPackages.cuda_cudart;
     # libcudla is only available on Xavier and Orin Jetson devices
     libcudla =
@@ -87,6 +84,16 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "v${finalAttrs.version}";
+    # GitHub expands the export-subst'd .git_archival.txt when generating the tarball. Its ref-names line lists every
+    # branch pointing at the tagged commit, so the hash changes when e.g. a release branch moves on, even though the tag
+    # did not. Keep only the tag, which setuptools-scm still resolves to the right version. 13.0 and 13.1 ship no
+    # .git_archival.txt.
+    postFetch = ''
+      if [[ -f "$out/.git_archival.txt" ]]; then
+        sed -i 's/^ref-names: .*$/ref-names: tag: v${finalAttrs.version}/' "$out/.git_archival.txt"
+        grep -qx 'ref-names: tag: v${finalAttrs.version}' "$out/.git_archival.txt"
+      fi
+    '';
     hash = versionSpecificAttrs.sourceHash;
   };
 
@@ -105,12 +112,12 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace cuda/bindings/_internal/nvjitlink_linux.pyx \
         --replace-fail \
           "handle = dlopen('libcuda.so.1'" \
-          "handle = dlopen('${cudaLibPaths.libcuda}/lib/libcuda.so.1'"
+          "handle = dlopen('${cudaLibPaths.libcuda}/libcuda.so.1'"
 
       substituteInPlace cuda/bindings/_bindings/cydriver.pyx.in \
         --replace-fail \
           "path = 'libcuda.so.1'" \
-          "path = '${cudaLibPaths.libcuda}/lib/libcuda.so.1'"
+          "path = '${cudaLibPaths.libcuda}/libcuda.so.1'"
     ''
     + (versionSpecificAttrs.postPatch or "");
 
@@ -119,7 +126,8 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    cython
+    # All versions pin cython<3.3
+    cython_3_2
     setuptools
     setuptools-scm
   ]
@@ -138,11 +146,17 @@ buildPythonPackage (finalAttrs: {
 
     CUDA_HOME = symlinkJoin {
       name = "cuda-redist";
-      paths = with cudaPackages; [
-        (lib.getInclude cuda_cudart) # cuda_runtime.h
-        (lib.getInclude cuda_nvrtc) # nvrtc.h
-        (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
-      ];
+      paths =
+        with cudaPackages;
+        [
+          (lib.getInclude cuda_cudart) # cuda_runtime.h
+          (lib.getInclude cuda_nvrtc) # nvrtc.h
+          (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
+        ]
+        ++ lib.optionals finalAttrs.doInstallCheck [
+          # Examples (run by tests/test_examples.py) locate <cuda/std/version> via cuda.pathfinder
+          (lib.getInclude cccl)
+        ];
     };
   };
 
@@ -209,9 +223,13 @@ buildPythonPackage (finalAttrs: {
 
   # Tests need access to a GPU
   doCheck = false;
-  passthru.gpuCheck = cuda-bindings.overridePythonAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doCheck = true;
+  passthru = {
+    gpuCheck = finalAttrs.finalPackage.overrideAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doInstallCheck = true;
+    };
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
   };
 
   meta = {
@@ -220,11 +238,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://nvidia.github.io/cuda-python/cuda-bindings/latest/release/${finalAttrs.version}-notes.html";
     license =
       # Relicensed from the NVIDIA Software License to Apache-2.0 in 13.4
-      if cudaAtLeast "13.4" then
-        lib.licenses.asl20
-      # NVIDIA Proprietary Software
-      else
-        lib.licenses.unfreeRedistributable;
+      if cudaAtLeast "13.4" then lib.licenses.asl20 else lib.licenses.nvidiaCudaPython;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

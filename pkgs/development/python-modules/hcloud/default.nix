@@ -10,12 +10,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hcloud";
-  version = "2.26.0";
+  version = "2.27.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-xGMsB4nbWzrz38kniJ5Za2kHeUAmqhOibEboFY+vvtk=";
+    hash = "sha256-djbRJDHu0V3lH/rDe8PucNNqfhuStnHOOEvhCKcPZp8=";
   };
 
   build-system = [ setuptools ];

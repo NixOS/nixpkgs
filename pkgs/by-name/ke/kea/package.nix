@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kea";
-  version = "3.2.0"; # only even minor versions are stable
+  version = "3.2.1"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/kea/${finalAttrs.version}/kea-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FL9pXTe2W5sb9VD+pdCtr5gGxQ5UGe8qF2pLjpqt498=";
+    hash = "sha256-NHgiC+YrOqNhosf5fV0pibk094ZOgtS9FwVuHiCLlzU=";
   };
 
   patches = [

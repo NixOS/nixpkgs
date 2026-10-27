@@ -88,6 +88,12 @@ buildNpmPackage {
     rm -rf node_modules/{@tabler,pdfjs-dist,*redux*,prettier,@types*,*react*,*graphiql*,@swagger-api}
     rm -r node_modules/.bin
 
+    # canvas buildtime dependencies: https://github.com/NixOS/nixpkgs/issues/514862
+    rm -f node_modules/canvas/build/Makefile
+    rm -f node_modules/canvas/build/canvas.target.mk
+    rm -f node_modules/canvas/build/config.gypi
+    rm -R -f node_modules/canvas/build/Release/.deps/
+
     # unused file types
     for pattern in '*.map' '*.map.js' '*.ts'; do
       find . -type f -name "$pattern" -exec rm {} +

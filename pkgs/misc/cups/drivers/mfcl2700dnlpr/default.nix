@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf102085/${pname}-${version}.i386.deb";
-    sha256 = "170qdzxlqikzvv2wphvfb37m19mn13az4aj88md87ka3rl5knk4m";
+    hash = "sha256-lUw7C81DzYNaRUgq8tUItqZQz1huw8vF3n9GTPtvGJw=";
   };
 
   nativeBuildInputs = [

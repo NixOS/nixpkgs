@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
     rev = "v${version}";
-    hash = "sha256-wYDSx2WngWS4Ucj82hLO0G46tiXhqskhMjmv7NuUVfw=";
+    hash = "sha256-3Sp/rDPEHmew3PI1AdK+8guDyuBlh2bxumOGsV7CR+A=";
   };
 
   buildInputs = with llvmPackages; [

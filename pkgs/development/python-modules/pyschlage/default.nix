@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pycognito,
   pytestCheckHook,
+  pytest-timeout,
   requests,
   setuptools,
   setuptools-scm,
@@ -11,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2026.7.0";
+  version = "2026.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pyschlage";
     tag = version;
-    hash = "sha256-I16P37eGjMJ1qYVDu9+mrqOPGiFklNJmhqSLaJTXyoA=";
+    hash = "sha256-P5YH3v03vWHRkVeOkrfMU/Xy5hPG2sk116/fVZVmsqU=";
   };
 
   build-system = [
@@ -31,7 +32,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+  ];
 
   pythonImportsCheck = [ "pyschlage" ];
 

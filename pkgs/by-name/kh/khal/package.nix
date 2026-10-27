@@ -63,9 +63,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "doc"
     "man"
   ];
+
+  # TODO: revert to [ "html" "man" ] once #573479 is on unstable
   sphinxBuilders = [
-    "html"
-    "man"
+    "html man"
   ];
 
   postInstall = ''

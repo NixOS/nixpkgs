@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "sjohannes";
     repo = "gdmap";
     tag = "v1.4.0";
-    sha256 = "sha256-yqrlxmMxtcJqUe9xgs01d1AAc2gkPBPsQbzQfffZET0=";
+    hash = "sha256-yqrlxmMxtcJqUe9xgs01d1AAc2gkPBPsQbzQfffZET0=";
   };
 
   nativeBuildInputs = [

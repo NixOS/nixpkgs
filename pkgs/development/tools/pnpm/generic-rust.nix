@@ -13,6 +13,7 @@
   version,
   srcHash,
   cargoHash,
+  cargoPatches ? [ ],
   knownVulnerabilities ? [ ],
 }:
 let
@@ -20,7 +21,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pnpm";
-  inherit version cargoHash;
+  inherit version cargoHash cargoPatches;
 
   src = fetchFromGitHub {
     owner = "pnpm";
@@ -93,7 +94,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   # Tests take way too long to run

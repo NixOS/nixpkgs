@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spec-kit";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "spec-kit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e9/2lc80SLHVLpA1Hs7NceEflNjWACsHIamtuYTYNMQ=";
+    hash = "sha256-NbHdMup6YmVI/rfnTo7AJeoXN9TTnrQrS8L8U1Hw5uM=";
   };
 
   pyproject = true;
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.luochen1990
-      lib.maintainers."3mp3ri0r"
+      lib.maintainers._3mp3ri0r
     ];
     mainProgram = "specify";
   };

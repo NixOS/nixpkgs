@@ -128,8 +128,8 @@ rec {
 
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
-    version = "5.4.7";
-    hash = "sha256-n79eKO+GxphY9tPTTszDLpEcGii0Eg/z6EqqcM+/HjA=";
+    version = "5.4.9";
+    hash = "sha256-IzW2xYKlJlT5RhK/ENL0ZygF0FMpqmVosdjNnlxvuOY=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 

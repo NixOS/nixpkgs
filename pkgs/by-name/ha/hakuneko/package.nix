@@ -11,7 +11,7 @@
   alsa-lib,
   nss,
   nspr,
-  systemd,
+  systemdLibs,
   libxtst,
   libxscrnsaver,
 }:
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
     libxscrnsaver
     libxtst
-    systemd
+    systemdLibs
   ];
 
   unpackPhase = ''

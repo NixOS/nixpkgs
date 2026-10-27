@@ -7,6 +7,7 @@
   liblxqt,
   libqtxdg,
   lxqt-build-tools,
+  lxqt-themes,
   qtsvg,
   qttools,
   qtwayland,
@@ -39,6 +40,13 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
   ];
+
+  # The logo is supplied by lxqt-themes
+  postPatch = ''
+    substituteInPlace aboutdialog/lxqtaboutdialog.cpp \
+      --replace-fail 'QStringLiteral(LXQT_SHARE_DIR) + QStringLiteral("/graphics/lxqt_logo.png")' \
+                     'QStringLiteral("${lxqt-themes}/share/lxqt/graphics/lxqt_logo.png")'
+  '';
 
   passthru.updateScript = gitUpdater { };
 

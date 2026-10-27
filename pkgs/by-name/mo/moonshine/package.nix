@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   cargoHash = "sha256-g9X9tiO+mUW4eTYi16nvesHIvWsQgAft7ZLEK1/CQHg=";
 

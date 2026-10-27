@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-lsp";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_lsp";
     inherit version;
-    hash = "sha256-RYqlkzncho+3hNczZPF9vOiDbpBs11/UcaMly6AuAkU=";
+    hash = "sha256-/fikqn2FgTl21uKeleaiyPdScB+SbycVMFJJo4KYBaY=";
   };
 
   nativeBuildInputs = [ setuptools ];

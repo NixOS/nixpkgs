@@ -30,6 +30,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tqdm
   ];
 
+  pythonRelaxDeps = [ "av" ];
+
   nativeCheckInputs = with python3Packages; [
     nose2
   ];

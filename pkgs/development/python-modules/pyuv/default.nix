@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "saghul";
     repo = "pyuv";
     rev = "pyuv-${version}";
-    sha256 = "1wiwwdylz66lfsjh6p4iv7pfhzvnhwjk332625njizfhz3gq9fwr";
+    hash = "sha256-mbuE3/jQ/ShtEUaMMSWHdn/o7tmRXAOldtSYT33jPPI=";
   };
 
   patches = [

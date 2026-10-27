@@ -85,6 +85,8 @@ stdenv'.mkDerivation (finalAttrs: {
     ./patches/fix-interactive-apps.patch
     # Fallback to $HOME and correctly handle missing home directories
     ./patches/fix-no-home-directory-crash.patch
+    # Add missing header required to build with GCC on Linux
+    ./patches/add-missing-cstdint.patch
   ];
 
   prePatch = ''

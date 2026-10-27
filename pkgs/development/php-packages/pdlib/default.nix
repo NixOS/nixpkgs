@@ -2,6 +2,7 @@
   buildPecl,
   fetchFromGitHub,
   lib,
+  php,
   pkg-config,
   dlib,
 }:
@@ -15,14 +16,15 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "goodspb";
     repo = "pdlib";
-    rev = "v${version}";
-    sha256 = "sha256-AKZ3F2XzEQCeZkacSXBinxeGQrHBmqjP7mDGQ3RBAiE=";
+    tag = "v${version}";
+    hash = "sha256-AKZ3F2XzEQCeZkacSXBinxeGQrHBmqjP7mDGQ3RBAiE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ (dlib.override { guiSupport = true; }) ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP extension for Dlib";
     license = lib.licenses.mit;
     homepage = "https://github.com/goodspb/pdlib";

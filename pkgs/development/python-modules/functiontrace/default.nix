@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "functiontrace";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yRzcg8BDuwF74J2EYa/3GMkTaRGsx0WyDIQEWHwj12M=";
+    hash = "sha256-dVJQ28Z+fohSQOk0rXCCKrhYmBL7QB/CGO/9pBhabFE=";
   };
 
   nativeBuildInputs = [

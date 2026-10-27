@@ -4,7 +4,7 @@
   cacert,
   jq,
   nix,
-  nix-prefetch-git,
+  prefetch-swiftpm-deps,
   runCommand,
   stdenvNoCC,
 }:
@@ -36,49 +36,15 @@ let
       nativeBuildInputs = [
         cacert
         jq
-        nix-prefetch-git
+        prefetch-swiftpm-deps
       ]
       ++ nativeBuildInputs;
 
       buildPhase = ''
         runHook preBuild
 
-        resolved=$PWD/Package.resolved
-        stagingResolved=$out/Package.resolved
-
         mkdir -p "$out"
-
-        # Convert version 1 to version 2 because its pins `schema` differs.
-        # Version 3 has the same pins schema, so it is already compatible.
-        if [ "$(jq --raw-output '.version' < "$resolved")" = "1" ]; then
-          jq '
-             {
-                 pins: [
-                     .object.pins[] | {
-                         identity: .package,
-                         kind: "remoteSourceControl",
-                         location: .repositoryURL,
-                         state: .state
-                     }
-                 ],
-                 version: 2
-             }
-          ' < "$resolved" > "$stagingResolved"
-        else
-          cp "$resolved" "$stagingResolved"
-        fi
-
-        if [ -n "$(jq --raw-output '.pins[] | select(.kind != "remoteSourceControl")' < "$stagingResolved")" ]; then
-          echo "Only Git-based dependencies are supported by fetchSwiftPMDeps"
-          exit 1
-        fi
-
-        jq --raw-output0 '.pins[] | select(.kind == "remoteSourceControl")' < "$stagingResolved" | while IFS= read -d "" pin; do
-          url=$(jq --raw-output '.location' <<< "$pin")
-          name=$(basename "$url" .git)
-          rev=$(jq --raw-output '.state.revision' <<< "$pin")
-          nix-prefetch-git --builder --quiet --fetch-submodules --url "$url" --rev "$rev" --out "$out/Packages/$name"
-        done
+        prefetch-swiftpm-deps Package.resolved "$out"
 
         runHook postBuild
       '';

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  rocmUpdateScript,
   rocmPackages,
   cmake,
 }:
@@ -30,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "ROCT_INC_DIR" "${rocmPackages.rocm-runtime}/include/libhsakmt")
   ];
-
-  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Bandwidth test for AMD GPUs supported by ROCm";

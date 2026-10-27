@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "silverbullet";
-  version = "2.11.1";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "silverbulletmd";
     repo = "silverbullet";
     rev = finalAttrs.version;
-    hash = "sha256-+8q0gQ4pRdGHPE7woH/+cteLoUQ5qhEIGI+AhwkXN5E=";
+    hash = "sha256-tXzfqelNwlG3iVIkhVDmXjDR6iKaUbVH5NQicDyHsDQ=";
   };
 
-  cargoHash = "sha256-t2RDrdZsCMReDGUUu3r59OAosZNY3TMlvjo/uM2xL8g=";
+  cargoHash = "sha256-v0CJqq3Rz2dMyl8mA1hj1brnvbRc8rVo8UhOIQnNWFo=";
 
   cargoBuildFlags = [
     "-p"
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pname = "silverbullet-frontend";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-IALStufO5TwhQbkIgSqwTYcQAL7Q+vmLDjlVYzMTyCA=";
+    npmDepsHash = "sha256-1bzN7tsERaRUc9J3Yr23mj6kP/eZ9pW771ODUEW75lo=";
 
     patches = [
       (replaceVars ./override-version.patch { inherit (finalAttrs) version; })

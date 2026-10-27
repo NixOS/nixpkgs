@@ -34,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tiv";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ magnetophon ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

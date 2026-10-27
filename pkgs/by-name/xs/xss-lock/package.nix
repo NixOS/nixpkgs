@@ -17,11 +17,14 @@ stdenv.mkDerivation {
   pname = "xss-lock";
   version = "0.3.0-unstable-2018-05-31";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "xdbob";
     repo = "xss-lock";
     rev = "cd0b89df9bac1880ea6ea830251c6b4492d505a5";
-    sha256 = "040nqgfh564frvqkrkmak3x3h0yadz6kzk81jkfvd9vd20a9drh7";
+    hash = "sha256-B+aWFBBtp7bdlAHNP81vygM4+piqzjzxzo6YAt3DFhA=";
   };
 
   patches = [
@@ -52,6 +55,7 @@ stdenv.mkDerivation {
     mainProgram = "xss-lock";
     maintainers = with lib.maintainers; [
       malyn
+      coolcuber
     ];
     platforms = lib.platforms.linux;
   };

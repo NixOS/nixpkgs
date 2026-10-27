@@ -60,22 +60,6 @@ let
             ];
             services.openssh.enable = true;
 
-            specialisation.gitea-actions-runner = {
-              inheritParentConfig = true;
-              configuration.services.gitea-actions-runner = {
-                package = pkgs.forgejo-runner;
-                instances."test" = {
-                  enable = true;
-                  name = "ci";
-                  url = "http://localhost:3000";
-                  labels = [
-                    # type ":host" does not depend on docker/podman/lxc
-                    "native:host"
-                  ];
-                  tokenFile = "/var/lib/forgejo/runner_token";
-                };
-              };
-            };
             specialisation.forgejo-runner = {
               inheritParentConfig = true;
               configuration = (
@@ -256,10 +240,10 @@ let
               server.fail("curl --fail http://localhost:3000/metrics")
               server.succeed('curl --fail http://localhost:3000/metrics -H "Authorization: Bearer ${metricSecret}"')
 
-          def poll_workflow_action_status(id: int) -> bool:
+          def poll_workflow_action_status(_) -> bool:
               try:
                   response = server.succeed("curl --fail http://localhost:3000/api/v1/repos/test/repo/actions/tasks")
-                  status = json.loads(response).get("workflow_runs")[id].get("status")
+                  status = json.loads(response).get("workflow_runs")[0].get("status")
 
               except IndexError:
                   status = "???"
@@ -271,7 +255,7 @@ let
 
               return status == "success"
 
-          with subtest("Testing deprecated gitea-actions-runner registration and action workflow"):
+          with subtest("Testing forgejo-runner registration and action workflow"):
               # mirror "actions/checkout" action
               client.succeed("cp -R ${checkoutActionSource}/ /tmp/checkout")
               client.succeed("git -C /tmp/checkout init")
@@ -287,24 +271,6 @@ let
               client.succeed("git -C /tmp/repo commit -m 'Add dummy workflow'")
               client.succeed("git -C /tmp/repo push origin main")
 
-              # enable actions feature for this repository, defaults to disabled
-              server.succeed(
-                  "curl --fail -X PATCH http://localhost:3000/api/v1/repos/test/repo "
-                  + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
-                  + f"-H 'Authorization: token {api_token}'"
-                  + ' -d \'{"has_actions":true}\'''
-              )
-              server.succeed(
-                  "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
-              )
-              server.succeed("${serverSystem}/specialisation/gitea-actions-runner/bin/switch-to-configuration test")
-              server.wait_for_unit("gitea-runner-test.service")
-              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
-
-              with server.nested("Waiting for the workflow run to be successful"):
-                  retry(lambda _: poll_workflow_action_status(0), 180)
-
-          with subtest("Testing forgejo-runner registration and action workflow"):
               runner_registration_response = server.succeed(
                   "curl --fail http://localhost:3000/api/v1/admin/actions/runners "
                   + f"-H 'Authorization: token {api_token}' "
@@ -319,11 +285,8 @@ let
               server.wait_for_unit("forgejo-runner-test.service")
               server.succeed("journalctl -o cat -u forgejo-runner-test.service | grep -q 'declared successfully'")
 
-              client.succeed("git -C /tmp/repo commit --allow-empty -m 'Retrigger dummy workflow'")
-              client.succeed("git -C /tmp/repo push origin main")
-
               with server.nested("Waiting for the workflow run to be successful"):
-                  retry(lambda _: poll_workflow_action_status(1), 180)
+                  retry(poll_workflow_action_status, 180)
 
           with subtest("Testing backup service"):
               server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")

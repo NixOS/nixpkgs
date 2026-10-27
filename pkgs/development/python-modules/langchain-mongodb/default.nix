@@ -36,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-mongodb";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langchain-mongodb/v${finalAttrs.version}";
-    hash = "sha256-cNrVB2YKS6vP6O+gA47G3cAlxEiOrI8soL44G/BQYMM=";
+    hash = "sha256-cRp8wMKKmN9ONn5qJLYd3J+zEShubF49kADBxQCDu3g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langchain-mongodb";

@@ -60,6 +60,49 @@ function isIgnoredBranchError(error: unknown) {
   )
 }
 
+export function cherryPickedFromSha(message: string): string | undefined {
+  // Using the last line with "cherry" + hash, because a chained backport
+  // can result in multiple of those lines. Only the last one counts.
+  return Array.from(message.matchAll(/cherry.*([0-9a-f]{40})/g))
+    .at(-1)
+    ?.at(1)
+}
+
+interface ShaIsInDevelopmentBranchProps {
+  github: InstanceType<typeof GitHub>
+  context: typeof actionsContext
+  sha: string
+}
+export async function shaIsInDevelopmentBranch({
+  github,
+  context,
+  sha,
+}: ShaIsInDevelopmentBranchProps): Promise<boolean> {
+  let branches: string[] | undefined
+  try {
+    branches = (
+      await github.request<CommitBranches>({
+        // This is an undocumented endpoint to fetch the branches a commit is part of.
+        // There is no equivalent in neither the REST nor the GraphQL API.
+        // The endpoint itself is unlikely to go away, because GitHub uses it to display
+        // the list of branches on the detail page of a commit.
+        url: `https://github.com/${context.repo.owner}/${context.repo.repo}/branch_commits/${sha}`,
+        headers: {
+          accept: 'application/json',
+        },
+      })
+    ).data.branches
+      .map(({ branch }) => branch)
+      .filter((branch) => classify(branch).type.includes('development'))
+  } catch (e) {
+    // For some unknown reason a 404 error comes back as 500 without any more details in a GitHub Actions runner.
+    // Ignore these to return a regular error message below.
+    if (!isIgnoredBranchError(e)) throw e
+  }
+
+  return branches !== undefined && branches.length > 0
+}
+
 export default async ({
   github,
   context,
@@ -103,13 +146,9 @@ export default async ({
           type: 'no-cherry-pick',
         }
 
-      // Using the last line with "cherry" + hash, because a chained backport
-      // can result in multiple of those lines. Only the last one counts.
-      const cherry = Array.from(
-        commit.message.matchAll(/cherry.*([0-9a-f]{40})/g),
-      ).at(-1)
+      const original_sha = cherryPickedFromSha(commit.message)
 
-      if (!cherry)
+      if (!original_sha)
         return {
           sha,
           commit,
@@ -118,30 +157,13 @@ export default async ({
           type: 'no-commit-hash',
         }
 
-      const original_sha = cherry[1]
-
-      let branches: string[] | undefined
-      try {
-        branches = (
-          await github.request<CommitBranches>({
-            // This is an undocumented endpoint to fetch the branches a commit is part of.
-            // There is no equivalent in neither the REST nor the GraphQL API.
-            // The endpoint itself is unlikely to go away, because GitHub uses it to display
-            // the list of branches on the detail page of a commit.
-            url: `https://github.com/${context.repo.owner}/${context.repo.repo}/branch_commits/${original_sha}`,
-            headers: {
-              accept: 'application/json',
-            },
-          })
-        ).data.branches
-          .map(({ branch }) => branch)
-          .filter((branch) => classify(branch).type.includes('development'))
-      } catch (e) {
-        // For some unknown reason a 404 error comes back as 500 without any more details in a GitHub Actions runner.
-        // Ignore these to return a regular error message below.
-        if (!isIgnoredBranchError(e)) throw e
-      }
-      if (!branches?.length)
+      if (
+        !(await shaIsInDevelopmentBranch({
+          github,
+          context,
+          sha: original_sha,
+        }))
+      )
         return {
           sha,
           commit,

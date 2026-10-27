@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Ultra low latency kernel bypass TCP and UDP implementation for AMD Solarflare network adapters";
-    homepage = "https://www.openonload.org";
+    homepage = "https://github.com/Xilinx-CNS/tcpdirect";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ YorikSar ];
     # ARM64 build fails, see https://github.com/Xilinx-CNS/onload/issues/253

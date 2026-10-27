@@ -17,20 +17,20 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "atomgit-cli";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchgit {
     url = "https://atomgit.com/hust-open-atom-club/atomgit-cli.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Yvv65+tNO9JJ4aW0KGDbjYzXAEWp9QFzCrrYMwdSl8M=";
+    hash = "sha256-8Q/LvACc3qsPwhCCYrq0LU+ji39KhjZ90qkhGM/v6AQ=";
   };
 
-  vendorHash = "sha256-YuAY+CBO+YAMEfrJuUJ/EMnmR9pfRkL+qMhOr1LPKck=";
+  vendorHash = "sha256-2YBsLa+pX6+ZAf+kLh2I0FJdbggdC8TBUAOOcoJuhaQ=";
 
-  subPackages = [ "cmd/ag" ];
+  subPackages = [ "cmd/ag-cli" ];
 
   preCheck = ''
-    # Test all packages, not only cmd/ag.
+    # Test all packages, not only cmd/ag-cli.
     unset subPackages
   '';
 
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/ag \
+    wrapProgram $out/bin/ag-cli \
       --prefix PATH : ${
         lib.makeBinPath ([ gitMinimal ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xdg-utils ])
       }
@@ -70,7 +70,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://atomgit.com/hust-open-atom-club/atomgit-cli";
     changelog = "https://atomgit.com/hust-open-atom-club/atomgit-cli/tags/v${finalAttrs.version}";
     license = lib.licenses.mulan-psl2;
-    mainProgram = "ag";
+    mainProgram = "ag-cli";
     maintainers = [ lib.maintainers.silicalet ];
   };
 })

@@ -31,7 +31,7 @@
   libxkbcommon,
   libxshmfence,
   pango,
-  systemd,
+  systemdLibs,
   icu,
   openssl,
   zlib,
@@ -112,7 +112,7 @@ let
             libxkbfile
             pango
             (lib.getLib stdenv.cc.cc)
-            systemd
+            systemdLibs
           ]
         }:$out/libexec/sidequest" \
         --add-needed libGL.so.1 \

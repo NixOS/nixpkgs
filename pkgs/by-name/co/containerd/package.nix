@@ -43,8 +43,6 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     util-linux
   ]

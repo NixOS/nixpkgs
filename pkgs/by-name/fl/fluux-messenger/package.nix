@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
   version = "0.17.4";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     name = "${finalAttrs.pname}-${finalAttrs.version}-source";

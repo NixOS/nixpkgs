@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    # Remove development dependencies to shrink closure size
+    CI=true pnpm prune --prod --ignore-scripts
     mkdir -p $out/bin $out/lib
     cp -r * $out/lib
 

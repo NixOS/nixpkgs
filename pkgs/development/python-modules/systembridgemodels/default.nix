@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   disabledTests = [

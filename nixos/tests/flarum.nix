@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ lib, package, ... }:
 {
-  name = "flarum";
+  name = "flarum-${package.version}";
 
   meta = {
     maintainers = with lib.maintainers; [
@@ -18,6 +18,7 @@
 
       services.flarum = {
         enable = true;
+        inherit package;
         forumTitle = "NixOS Flarum Test Forum";
         domain = "localhost";
         baseUrl = "http://localhost";

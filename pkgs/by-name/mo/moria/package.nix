@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moria";
-  version = "0.2.1";
+  version = "0.3.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nmatt0";
     repo = "moria";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-okeAzE2qUO6i1a4kyp+IjsH7OOyBCAMQv+dzgBR73o8=";
+    hash = "sha256-l06Xrm/osiUxkCcgSjhGp3LIW/5nLDka5S/QLzlEZ/0=";
   };
 
   nativeBuildInputs = [ cmake ];

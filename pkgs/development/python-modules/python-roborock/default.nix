@@ -21,20 +21,21 @@
   pyyaml,
   vacuum-map-parser-roborock,
   click-shell,
-  syrupy,
+  syrupy_5,
   writableTmpDirAsHomeHook,
+  zmqtt,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "7.12.0";
+  version = "7.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-svgKXclEGIUZT61fnk0u/dV6mSJkMNuC8aXJNH+6D+k=";
+    hash = "sha256-S1rVkm0UPesQ0+s28uVD2ztjnaly0G2aUKHcCXBOroI=";
   };
 
   pythonRelaxDeps = [
@@ -68,8 +69,9 @@ buildPythonPackage (finalAttrs: {
     freezegun
     pytest-asyncio
     pytestCheckHook
-    syrupy
+    syrupy_5
     writableTmpDirAsHomeHook
+    zmqtt
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 

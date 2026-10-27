@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "besen";
-  version = "0.3.4";
+  version = "0.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moryoav";
     repo = "besen";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-abWF9v1snIscua2PzesuxYS4IYKYrq8dSfjbnzT4P/A=";
+    tag = "library-v${finalAttrs.version}";
+    hash = "sha256-qXvp0tP+KoSdm+Hbq+TAFodvEJK8M0x1YrZiMYv5CPY=";
   };
 
   build-system = [ setuptools ];
@@ -29,12 +29,12 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  # The other tests are for the bundled Home Assistant integration
-  pytestFlags = [
-    "tests/test_client.py"
-    "tests/test_models.py"
-    "tests/test_protocol.py"
-  ];
+  preCheck = ''
+    # specific to the custom component tests
+    rm tests/conftest.py
+  '';
+
+  enabledTestPaths = [ "tests/library" ];
 
   pythonImportsCheck = [ "besen" ];
 

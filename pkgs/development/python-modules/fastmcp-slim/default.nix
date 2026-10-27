@@ -172,6 +172,7 @@ buildPythonPackage (finalAttrs: {
   doCheck = pythonAtLeast "3.14";
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2";
     description = "Dependency-slim FastMCP package";
     changelog = "https://github.com/jlowin/fastmcp/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/PrefectHQ/fastmcp/tree/main/fastmcp_slim";

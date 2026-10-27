@@ -9,10 +9,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cpm-cmake";
   version = "0.43.2";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cpm-cmake";
     repo = "cpm.cmake";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZmGM2UziK3zB4uszfJYhYvJGSDD7aF+F32yi+1ETebU=";
   };
 
@@ -29,6 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/{,doc/}cpm
     install -Dm644 cmake/CPM.cmake $out/share/cpm/CPM.cmake
+    ln -s CPM.cmake $out/share/cpm/CPM_${finalAttrs.version}.cmake
     install -Dm644 README.md CONTRIBUTING.md $out/share/doc/cpm/
 
     runHook postInstall

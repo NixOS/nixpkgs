@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "132";
+  version = "133";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-di/M4QidDwa1doomy79yfN7chCng9VcDB2KgmaEunDc=";
+    hash = "sha256-ip10rXDnBfgSLrc4q8TXGckGnyq4SSoXQKoCU/KQIE8=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   ];
   checkInputs = [ gtest ];
   checkPhase = ''
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py --binaryen-bin=$PWD/bin $tests
   '';
 
   # bin/binaryen-unittests is absent on cross builds which don't have doCheck,

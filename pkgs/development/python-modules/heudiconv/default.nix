@@ -7,14 +7,15 @@
   etelemetry,
   fetchPypi,
   filelock,
-  git,
   git-annex,
+  git,
   nibabel,
   nipype,
   pydicom,
   pytestCheckHook,
   setuptools,
   versioningit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -52,11 +53,8 @@ buildPythonPackage rec {
     pytestCheckHook
     git
     git-annex
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "heudiconv" ];
 

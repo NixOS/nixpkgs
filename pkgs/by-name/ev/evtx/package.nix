@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "evtx";
-  version = "0.12.3";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "omerbenamram";
     repo = "evtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mqwMLUlDl6t3VNix+RNYngl28HwyrMhAnCbilYS2KwU=";
+    hash = "sha256-sTTQb7Xa88gAFflPA0gD73CsaQne0gj0WwvRYwaYjjc=";
   };
 
-  cargoHash = "sha256-OcqhpNFYkAMfIjBHDOa5YMpY6K8JLZB4E0Wh1VxdvwA=";
+  cargoHash = "sha256-iELRXFvN/EkzoHGq6F/n85CVLD0vnZ0ideSyc572Y4U=";
 
   postPatch = ''
     # CLI tests will fail in the sandbox

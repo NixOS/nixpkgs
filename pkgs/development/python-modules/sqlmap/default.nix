@@ -9,12 +9,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sqlmap";
-  version = "1.10.9";
+  version = "1.10.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-YiColRzO57wX5CRkB/++LJSGiagxkvIZTDVInHolUHY=";
+    hash = "sha256-nezo6xXkEO4QEU2I0gD1Sjg/VJtWXAFHtkcIGrgF45k=";
   };
 
   postPatch = ''

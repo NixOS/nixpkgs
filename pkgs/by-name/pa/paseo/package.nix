@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   buildNpmPackage,
+  callPackage,
   fetchFromGitHub,
   lib,
   libuv,
@@ -13,7 +14,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "paseo";
-  version = "0.11.1";
+  version = "0.13.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,12 +23,12 @@ buildNpmPackage (finalAttrs: {
     owner = "getpaseo";
     repo = "paseo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sJlNsgzaTERDtnl77nmhoqc5WTyQIDvHIvc+Rsmjaz4=";
+    hash = "sha256-q9CTVmmdN53rLXaY+/cKz1IbW1OQA9ok9xan4lBSH1E=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-aoYgGgEkqeeZJR7OOcSHuZEhBELkpyOGqHo4oEx7W88=";
+  npmDepsHash = "sha256-eNiKmiZ3XXZMRZRSoGxUbMn2RtY6AX079vUatBYM+qE=";
 
   npmRebuildFlags = [ "--ignore-scripts" ];
 
@@ -48,6 +49,8 @@ buildNpmPackage (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    npm run postinstall
 
     npm_config_build_from_source=true npm_config_nodedir=${finalAttrs.nodejs} \
       npm rebuild node-pty --workspace @getpaseo/server
@@ -98,7 +101,18 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    desktop = callPackage ./desktop.nix {
+      inherit (finalAttrs)
+        meta
+        nodejs
+        npmDeps
+        src
+        version
+        ;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Orchestrate multiple coding agents from desktop and mobile";

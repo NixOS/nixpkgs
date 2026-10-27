@@ -24,7 +24,7 @@
   gtk3,
   libGL,
   libglvnd,
-  systemd,
+  systemdLibs,
   patchelf,
   undmg,
   makeWrapper,
@@ -33,11 +33,11 @@
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.3.2"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.3.3"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-F1PIsiMd+Ve9SX31PRB9D+cbsPZzJof6Yvq70CeqCm4=";
-    darwin = "sha256-0/Q6ybJFMxIguwppAwXVylyevdRqcK1xrI/dpwrFhmA=";
+    linux = "sha256-grBgBV1kcovdEKzNOOMlqC9DKmxXDI1HiZiBwJLdTe0=";
+    darwin = "sha256-IPN8LBmfeY4SlXodYc8YzNEM9x3DXlnGhTlV2iNEdtQ=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
@@ -110,7 +110,7 @@ let
     runtimeDependencies = [
       # Required to launch the application and proceed past the zygote_linux fork() process
       # Fixes `Zygote could not fork`
-      systemd
+      systemdLibs
 
       # Fixes input/output audio device selection
       libpulseaudio

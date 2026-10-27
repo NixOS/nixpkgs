@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s2n-tls";
-  version = "1.7.8";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ib0f8dQiajTghfmPmeQe2Mkymc+AMDcZBWLgxgxnxv4=";
+    hash = "sha256-OGEqKjhl+gf8dq9ddIir+P4fUO+c9FGo/IsqDCCltqQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit nix;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C99 implementation of the TLS/SSL protocols";

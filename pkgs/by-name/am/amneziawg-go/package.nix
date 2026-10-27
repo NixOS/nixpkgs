@@ -30,8 +30,6 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  strictDeps = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

@@ -101,6 +101,9 @@ in
   };
 
   meta = {
-    maintainers = [ lib.maintainers.skyesoss ];
+    maintainers = [
+      lib.maintainers.skyesoss
+      lib.maintainers.cpu
+    ];
   };
 }

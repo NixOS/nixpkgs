@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Implementation of the JPEG XR image codec standard";
-    homepage = "https://jxrlib.codeplex.com";
+    homepage = "https://salsa.debian.org/debian-phototools-team/jxrlib";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];

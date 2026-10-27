@@ -10,38 +10,19 @@
   # keep-sorted end
 }:
 let
-  system = stdenv.hostPlatform.system;
-  # update-script-start: urls
-  urls = {
-    x86_64-linux = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2026.2.tar.gz";
-      hash = "sha256-k+T5QDCIcuqHWrjhoCGcym/Q9v4YBviacg9rnNFBIRM=";
-    };
-    aarch64-linux = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2026.2-aarch64.tar.gz";
-      hash = "sha256-2T6thTMYAlfb6yJKbpuIyVtj7Af/P3AjQAVl16H35nM=";
-    };
-    aarch64-darwin = {
-      url = "https://download.jetbrains.com/ruby/RubyMine-2026.2-aarch64.dmg";
-      hash = "sha256-rgskPMKLtgPpdSbbENJcE4g75VzqeWPLzxoXqzln67k=";
-    };
-  };
-  # update-script-end: urls
+  inherit (stdenv.hostPlatform) system;
+  versionInfo = lib.importJSON ./version.json;
 in
 jetbrains.mkJetBrainsProduct {
   inherit jetbrains-libdbm fsnotifier;
+  inherit (versionInfo) version buildNumber;
 
   pname = "ruby-mine";
 
   wmClass = "jetbrains-rubymine";
   product = "RubyMine";
 
-  # update-script-start: version
-  version = "2026.2";
-  buildNumber = "262.8665.308";
-  # update-script-end: version
-
-  src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+  src = fetchurl (versionInfo.urls.${system} or (throw "Unsupported system: ${system}"));
 
   # the jdk is bundled on Darwin.
   jdk =

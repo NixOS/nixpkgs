@@ -9,7 +9,6 @@ buildGoModule {
   pname = "molly-brown";
   version = "0-unstable-2023-02-10";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchgit {

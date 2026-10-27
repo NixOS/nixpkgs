@@ -12,13 +12,13 @@ in
 renode.overrideAttrs (
   finalAttrs: old: {
     pname = "renode-unstable";
-    version = "1.17.0-unstable-2026-10-02";
+    version = "1.17.0-unstable-2026-10-12";
 
     src = fetchFromGitHub {
       owner = "renode";
       repo = "renode";
-      rev = "b039ed10ea66198afd6f68f2ec5a041e76e5e1dc";
-      hash = "sha256-ico2g1YOPfM0wdKosUf1ul+u8JBA+N8qFHij57cmS34=";
+      rev = "59f8f5d0b1efdbacf1800dbef55fc1959c9a4cc8";
+      hash = "sha256-XllgBdr2Aqq+SU5mYf6LhELNpHVM1JrkeWL6kQy0x0g=";
       fetchSubmodules = true;
     };
 

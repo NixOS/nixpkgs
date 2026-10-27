@@ -21,7 +21,7 @@
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "7.2.3";
+  version = "7.2.4";
 
   outputs = [
     "out"

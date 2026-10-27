@@ -49,5 +49,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/py-stockfish/stockfish/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamerrq ];
+
+    # Upstream restricts supported engine versions and asserts them in tests.
+    # Support lags behind the latest engine release.
+    broken = lib.versionAtLeast stockfish.version "19";
   };
 })

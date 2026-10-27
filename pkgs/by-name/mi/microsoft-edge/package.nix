@@ -56,7 +56,7 @@
   commandLineArgs ? "",
 
   # Will crash without.
-  systemd,
+  systemdLibs,
 
   # Loaded at runtime.
   libexif,
@@ -169,7 +169,7 @@ let
     pipewire
     snappy
     speechd-minimal
-    systemd
+    systemdLibs
     util-linux
     vulkan-loader
     wayland
@@ -186,11 +186,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta;
-    version = "154.0.4258.62";
+    version = "156.0.4314.42";
 
     src = fetchurl {
       url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-9CXepZ8Ki6wAIBaFoHDpR1Q8V9E1wTC6c+CGPPLFBrE=";
+      hash = "sha256-qGQvgp4QX+ekrEQFSOb6frcmtJ//j/xqJ/PQ+yWltAU=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -296,12 +296,12 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta;
-    version = "154.0.4258.62";
-    uuid = "0f45f474-1930-45f2-aec6-2c58136eb0fd";
+    version = "156.0.4314.42";
+    uuid = "f082dcef-be0f-4c7c-83a8-ff101a911cf2";
 
     src = fetchurl {
       url = "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/${finalAttrs.uuid}/MicrosoftEdge-${finalAttrs.version}.dmg";
-      hash = "sha256-kPWWjoDJIU7+2i+lZlebfhurZj/hGtCXlktWWM5ApMA=";
+      hash = "sha256-eMIfTwvMp+kUgF3ms+k4vURkz47X0DkiVsDMr8W5bdo=";
     };
 
     dontPatch = true;

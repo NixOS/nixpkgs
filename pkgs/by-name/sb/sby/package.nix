@@ -20,7 +20,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.69";
+  version = "0.70";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      carlossless
+      karstx
     ];
     mainProgram = "sby";
     platforms = lib.platforms.all;

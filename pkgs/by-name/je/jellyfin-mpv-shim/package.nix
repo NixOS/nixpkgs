@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   # contains shaderpacks
   src = fetchPypi {
     pname = "jellyfin_mpv_shim";
     inherit version;
-    hash = "sha256-K4dmJ7/aNsxEWKLXY8RNvszmA8FstzD/Kh7M0wkU/Rs=";
+    hash = "sha256-ad6ZokTy8vxAVrgopK+DK9WQqOlEKssigA++68vuid4=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace jellyfin_mpv_shim/conf.py \
       --replace-fail "check_updates: bool = True" "check_updates: bool = False" \
-      --replace-fail "notify_updates: bool = True" "notify_updates: bool = False"
+      --replace-fail 'notify_updates: str = "default"' 'notify_updates: str = "disabled"'
     # python-mpv renamed to mpv with 1.0.4
     substituteInPlace pyproject.toml \
       --replace-fail "python-mpv" "mpv" \

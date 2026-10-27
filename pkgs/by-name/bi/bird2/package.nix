@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bird";
-  version = "2.19.3";
+  version = "2.20.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.nic.cz";
     owner = "labs";
     repo = "bird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rqkpYLt0PgC2BcQd6F/6N93kIdkxjP1cnhmmUzy6rnA=";
+    hash = "sha256-8bezmLbiX0PFk2UEWe1vyovXjBGH26gqbTZJDQqCsFU=";
   };
 
   nativeBuildInputs = [

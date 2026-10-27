@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   pname = "jaxopt";
   version = "0.8.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
@@ -87,6 +88,9 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
     # https://github.com/google/jaxopt/issues/618
     "test_binary_logit_log_likelihood"
+
+    # AssertionError: Array(False, dtype=bool) is not true (since jax 0.12.0)
+    "test_hager_zhang_linesearch_non_finite1"
 
     # AssertionError (flaky numerical tests)
     "test_Rosenbrock2"

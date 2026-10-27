@@ -4,21 +4,25 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "puremagic";
-  version = "1.30";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "puremagic";
-    tag = version;
-    hash = "sha256-k2xrcML8XxI9cMTQTv0pDLkOrmEr5mbDnVsyWuD1rEc=";
+    tag = finalAttrs.version;
+    hash = "sha256-Mvhn/1xcgYgVkWok2qZXAe40pocfu6nJo5xuPruw2dc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of magic file detection";
     homepage = "https://github.com/cdgriffith/puremagic";
-    changelog = "https://github.com/cdgriffith/puremagic/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/cdgriffith/puremagic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

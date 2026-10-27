@@ -36,11 +36,11 @@ let
   # TODO: we could cut the `let` short here, but it would de-indent everything.
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_6";
-    version = "6.5.0";
+    version = "6.5.1";
 
     src = fetchurl {
       url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
-      hash = "sha256-hFmbv4iezHiSrqvAiHUzVdYzJjVOWZK1Ol7IIwYiTuY=";
+      hash = "sha256-OyoEYmwd+bQkIJYAJbyU4od3dE0xxWetuVgMNxiarpc=";
     };
 
     outputs = [
@@ -52,17 +52,6 @@ let
     patches = [
       # Install-time paths sometimes differ from run-time paths in nixpkgs.
       ./paths.patch
-      # Temporary patches that will be included in further upstream releases.
-      (fetchpatch {
-        name = "logging-level-regression.patch";
-        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/ec5b6d9f1a0defa5f817bf2d1c53a5df2f2a5e99.diff";
-        hash = "sha256-Bde8mIFUjf8aVBFh2TeWZMiw94VGMXkfd1+SvhzhvLo=";
-      })
-      (fetchpatch {
-        name = "musl-build-regression.patch";
-        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/8c4bd515a0c0da5fbff85038322a2b9f2d077dfd.diff";
-        hash = "sha256-+fHQ2pmUGTLiCP+OKb5PobFfQ2nwdEGm+IXbSpK35Ik=";
-      })
     ];
 
     # systemd Exec* options are difficult to override in NixOS *if present*, so we drop them.

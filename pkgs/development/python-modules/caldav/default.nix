@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  calendaring-config,
   dnspython,
   fetchFromGitHub,
   httpx,
@@ -8,7 +9,7 @@
   icalendar-searcher,
   lxml,
   manuel,
-  pytest9_0CheckHook,
+  pytestCheckHook,
   python,
   radicale,
   recurring-ical-events,
@@ -29,14 +30,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caldav";
-  version = "3.3.1";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G1iZ2a81DTURIODWTXji7AU6ywPDg4XqGNoQFhPIMO4=";
+    hash = "sha256-mRaWWR1/YkJ5+eRc/ylT/ntYzBJVpCyuBVHGzAYOB+I=";
   };
 
   build-system = [
@@ -45,6 +46,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    calendaring-config
     dnspython
     lxml
     niquests
@@ -61,7 +63,7 @@ buildPythonPackage (finalAttrs: {
     proxy-py
     pyfakefs
     pytest-asyncio
-    pytest9_0CheckHook
+    pytestCheckHook
     (toPythonModule (radicale.override { python3 = python; }))
     tzlocal
     vobject
@@ -72,6 +74,11 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "caldav" ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     description = "CalDAV (RFC4791) client library";

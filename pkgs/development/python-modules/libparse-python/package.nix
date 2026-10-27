@@ -39,6 +39,9 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "libparse" ];
 
+  # Upstream ships this as "lln_libparse", not "libparse-python".
+  dontCheckPythonMetadata = true;
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {

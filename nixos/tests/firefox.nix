@@ -11,12 +11,11 @@
     maintainers = [ shlevy ];
   };
 
-  nodes.machine =
-    { pkgs, ... }:
+  containers.machine =
+    { ... }:
 
     {
       imports = [ ./common/x11.nix ];
-      environment.systemPackages = [ pkgs.xdotool ];
 
       programs.firefox = {
         enable = true;
@@ -24,15 +23,35 @@
         package = firefoxPackage;
       };
 
-      hardware.alsa = {
-        enable = true;
-        enableRecorder = true;
-        defaultDevice.playback = "pcm.recorder";
+      services.pipewire = {
+        enable = false;
+        alsa.enable = false;
+        pulse.enable = false;
       };
+
+      services.pulseaudio = {
+        enable = true;
+        systemWide = true;
+        extraConfig = ''
+          load-module module-null-sink sink_name=recorder
+          set-default-sink recorder
+        '';
+      };
+
+      users.users.root.extraGroups = [ "pulse-access" ];
+
+      systemd.services.pulseaudio.wantedBy = [ "multi-user.target" ];
 
       systemd.services.audio-recorder = {
         description = "Record NixOS test audio to /tmp/record.wav";
-        script = "${pkgs.alsa-utils}/bin/arecord -Drecorder -fS16_LE -r48000 -c2 /tmp/record.wav";
+        after = [ "pulseaudio.service" ];
+        requires = [ "pulseaudio.service" ];
+        script = ''
+          ${pkgs.pulseaudio}/bin/parec \
+            --device=recorder.monitor \
+            --file-format=wav \
+            /tmp/record.wav
+        '';
       };
 
     };
@@ -94,10 +113,10 @@
           machine.copy_from_machine("/tmp/record.wav")
 
       with subtest("Close sound test tab"):
-          machine.execute("xdotool key ctrl+w")
+          machine.send_key("ctrl-w")
 
       with subtest("Close default browser prompt"):
-          machine.execute("xdotool key space")
+          machine.send_key("spc")
 
       with subtest("Wait until Firefox draws the developer tool panel"):
           machine.sleep(10)

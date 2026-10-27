@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   perl,
   pkg-config,
@@ -10,22 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multimarkdown";
-  version = "6.7.0";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "fletcher";
     repo = "MultiMarkdown-6";
     tag = finalAttrs.version;
-    hash = "sha256-b6yCn0NFpONI7WwfjDOc0d2nCKMIiUXi+rsnytiNc0Q=";
+    hash = "sha256-kZM3OuGCJaBoUYvACAaKqQgMVHWWcVmQhWczWZvkIJ8=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "multimarkdown-fix-cmake-4.patch";
-      url = "https://github.com/fletcher/MultiMarkdown-6/commit/655c0908155758e7c94858af2fb99dc992709075.patch";
-      hash = "sha256-d1b5NcBQDVnbmTvVnPyiTS8aSx/VGgRLHD0nSs+JksI=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs tools/enumsToPerl.pl

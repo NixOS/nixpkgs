@@ -184,7 +184,7 @@ let
       owner = "opencv";
       repo = "opencv_3rdparty";
       rev = "34e4206aef44d50e6bbcd0ab06354b52e7466d26";
-      sha256 = "13yig1xhvgghvxspxmdidss5lqiikpjr0ddm83jsi0k85j92sn62";
+      hash = "sha256-wlgtkixogqjlQLU1kOWdMWJatG6x1X513/C9DXt40Y8=";
     };
     files = {
       "boostdesc_bgm.i" = "0ea90e7a8f3f7876d450e4149c97c74f";

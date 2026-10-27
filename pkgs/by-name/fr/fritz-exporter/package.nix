@@ -1,19 +1,19 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fritz-exporter";
-  version = "2.6.2";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
     tag = "fritzexporter-v${finalAttrs.version}";
-    hash = "sha256-qHx96TluE3RdkIfMcsnMt+LcHoqS2l5sD0+94yizbp8=";
+    hash = "sha256-Nrj9DoqqhVvaualvy0+YjMPKDVrP/6GvIvVtLfjluEc=";
   };
 
   postPatch = ''
@@ -21,27 +21,20 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  pythonRelaxDeps = [
-    "defusedxml"
-    "attrs"
-  ];
+  pythonRelaxDeps = [ "defusedxml" ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3Packages; [ hatchling ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    attrs
-    defusedxml
-    fritzconnection
+  dependencies = with python3Packages; [
     prometheus-client
+    fritzconnection
     pyyaml
     requests
+    attrs
+    defusedxml
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   # Required for tests
   __darwinAllowLocalNetworking = true;

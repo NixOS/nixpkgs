@@ -16,16 +16,17 @@
   paramiko,
   pytestCheckHook,
   rich,
-  rustPlatform,
   rustc,
-  setuptools,
+  rustPlatform,
   setuptools-rust,
+  setuptools,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "1.2.15";
+  version = "1.2.17";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,12 +34,12 @@ buildPythonPackage (finalAttrs: {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${finalAttrs.version}";
-    hash = "sha256-ZLTgVeY9seeElnRc0G7M+0bFx8b/9i5dMj4/61A/maY=";
+    hash = "sha256-C7OXh5ahZUm59yBy82YIViHe57NRpdwqxSItvKiT63Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-X8sKVLTPQVjAcW+h1X/AsHW7UgwSOUbAa4VRZfhepM0=";
+    hash = "sha256-1Vnx7mMuZ36zkrevltIKINued9IKJGJq3nbtYqhfkE4=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +76,7 @@ buildPythonPackage (finalAttrs: {
     glibcLocales
     openssh # for ssh-keygen
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
@@ -84,10 +86,6 @@ buildPythonPackage (finalAttrs: {
     # Depends on setuid which is not available in sandboxed environments
     "SharedRepositoryTests"
   ];
-
-  preCheck = ''
-    export TMPDIR=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # AssertionError: GPGMEError not raised

@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ida-hcli";
-  version = "0.18.5";
+  version = "0.21.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "HexRaysSA";
     repo = "ida-hcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n8hLgVgxqaU7Au6HVgOEUKOm1LV3Wx/v42gi2gOD3Jk=";
+    hash = "sha256-GCR+DcZ3RZevfS2OO44LpkiQ7Fk1WtZpivLh2VONbHg=";
   };
 
   build-system = [ setuptools ];
@@ -73,7 +73,6 @@ buildPythonPackage (finalAttrs: {
     "tests/integration/"
     "tests/lib/test_ida_python.py"
     "tests/lib/test_ida.py"
-    "tests/lib/test_plugin_bundle_install.py"
     "tests/lib/test_plugin_collisions.py"
     "tests/lib/test_plugin_install.py"
     "tests/lib/test_plugin_records.py"

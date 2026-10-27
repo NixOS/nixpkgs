@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asyncua";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZbLY6Qu8EikD70ZHLeLz9NMhVGBu65o0CICafuTLOuM=";
+    hash = "sha256-8IyTMKk+cPZZI0m/PW5CvxMSgngmMeQkznT7IlN6Qxs=";
     fetchSubmodules = true;
   };
 

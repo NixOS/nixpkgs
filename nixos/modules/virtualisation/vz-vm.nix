@@ -236,8 +236,6 @@ in
       # Inbound connections go via vsock; loaded in the initrd so `systemd-ssh-generator` finds `/dev/vsock`.
       boot.initrd.kernelModules = [ "vmw_vsock_virtio_transport" ];
 
-      boot.initrd.systemd.enable = lib.mkDefault true;
-
       system.requiredKernelConfig = with config.lib.kernelConfig; [
         (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")

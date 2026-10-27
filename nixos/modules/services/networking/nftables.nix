@@ -312,7 +312,7 @@ in
             }
             ${cfg.extraDeletions}
           '';
-          deletionsScriptVar = "/var/lib/nftables/deletions.nft";
+          deletionsScriptVar = "/run/nftables/deletions.nft";
           makeDeletions = "${pkgs.nftables}/bin/nft -f ${deletionsScriptVar}";
           ensureDeletions = pkgs.writeShellScript "nftables-ensure-deletions" ''
             touch ${deletionsScriptVar}
@@ -383,7 +383,8 @@ in
             makeDeletions
             cleanupDeletionsScript
           ];
-          StateDirectory = "nftables";
+          RuntimeDirectory = "nftables";
+          RuntimeDirectoryPreserve = true;
         };
       unitConfig.DefaultDependencies = false;
     };

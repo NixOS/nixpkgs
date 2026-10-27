@@ -5,8 +5,8 @@
   oslotest,
   pbr,
   setuptools,
+  stestrCheckHook,
   testscenarios,
-  stestr,
 }:
 
 buildPythonPackage rec {
@@ -33,17 +33,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
     testscenarios
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "oslo_i18n" ];
 

@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ (lib.mesonBool "enable_pfsfuse" true) ];
 
   meta = {
+    broken = true; # stuck on fuse2
     inherit (finalAttrs.src.meta) homepage;
     description = "PFS (PlayStation File System) shell for POSIX-based systems";
     platforms = lib.platforms.unix;

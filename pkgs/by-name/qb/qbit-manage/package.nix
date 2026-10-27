@@ -8,13 +8,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qbit-manage";
-  version = "4.13.0";
+  version = "4.14.0";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Btj6Lavz5vcCURDKy7OTdEonTD5jwBbAwSMzK06lK3o=";
+    hash = "sha256-1wiNvmGtt1tP+x5blzsPabAlLOOImy+HIsRGmUq0QoM=";
   };
 
   pyproject = true;
@@ -38,11 +38,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ruamel-yaml
     slowapi
     uvicorn
-  ];
-
-  pythonRelaxDeps = [
-    "bencode.py"
-    "humanize"
   ];
 
   passthru = {

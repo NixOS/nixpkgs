@@ -1,22 +1,22 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "spiffe-helper";
-  version = "0.11.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "spiffe";
     repo = "spiffe-helper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-akuq5qqL+B4kyZ7EuBYOPYQ15/hUsUPTmewgQWYTXos=";
+    hash = "sha256-MT4VSB9EO8asWvakhGJT5TBQUyn/otVZDQygjFU1bkA=";
   };
 
-  vendorHash = "sha256-32ArgWgQFHPyA/wqbcuIZ77HCCsh+V3QFw/8YrPJZww=";
+  vendorHash = "sha256-qmr/Xm720pUiFsNW8AbYOCeaawR+Ghlyhr1isD2lyGg=";
 
   ldflags = [
     "-s"

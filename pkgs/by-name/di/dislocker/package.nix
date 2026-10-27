@@ -5,18 +5,19 @@
   cmake,
   pkg-config,
   fuse3,
-  mbedtls,
+  openssl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dislocker";
-  version = "0.7.3-unstable-2025-09-07";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Aorimn";
     repo = "dislocker";
-    rev = "4ff070f0ea9e56948ab316fb76b91f54dd6727aa";
-    hash = "sha256-hrIt5D9YjBWs0Q9chWGQM2bo1SZ7qLCd898zFHWWcqA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+T+B8pJDvL8sa2zCVl43RMw7M3i2mRD8+vFbEILL0Io=";
   };
 
   nativeBuildInputs = [
@@ -26,10 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fuse3
-    mbedtls
+    openssl
   ];
 
-  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
+  cmakeFlags = [
+    (lib.cmakeFeature "CRYPTO_BACKEND" "openssl")
+  ];
+
+  doCheck = true; # runs some sanity checks against crypto library bindings
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Read BitLocker encrypted partitions in Linux";

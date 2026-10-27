@@ -7,7 +7,7 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "5.4.0";
+  version = "6.0.1";
 
   common = {
     inherit version;
@@ -16,7 +16,7 @@ let
       owner = "NordSecurity";
       repo = "nordvpn-linux";
       tag = version;
-      hash = "sha256-m3evkWYrXtgXJu7dt1mFKPVkcnrn5g3udZWafb4lFcM=";
+      hash = "sha256-FI65+ZrsTYAXYoK5HYFWjyGXZZaajC+HCtROtZno5CM=";
     };
 
     # rec so that changelog can reference homepage
@@ -25,6 +25,7 @@ let
       changelog = "${homepage}/releases/tag/${version}";
       license = lib.licenses.gpl3Only;
       maintainers = with lib.maintainers; [
+        different-error
         novalkun
       ];
       platforms = lib.platforms.linux;

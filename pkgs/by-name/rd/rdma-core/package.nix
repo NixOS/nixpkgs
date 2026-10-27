@@ -31,26 +31,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "dev"
+    "scripts"
   ]
   ++ lib.optionals withManPages [
     "man"
-  ]
-  ++ [
-    "dev"
-    "scripts"
   ];
 
   nativeBuildInputs = [
     cmake
+    pkg-config
+    python3
+    udevCheckHook
   ]
   ++ lib.optionals withManPages [
     docutils
     pandoc
-  ]
-  ++ [
-    pkg-config
-    python3
-    udevCheckHook
   ];
 
   buildInputs = [

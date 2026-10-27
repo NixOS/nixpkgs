@@ -3,7 +3,6 @@
   fetchFromGitHub,
   jinja2,
   lib,
-  nix-update-script,
   pytest-cov-stub,
   pytestCheckHook,
   rich,
@@ -12,18 +11,20 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "j2lint";
   version = "1.3.0";
   pyproject = true;
+
   src = fetchFromGitHub {
     owner = "aristanetworks";
     repo = "j2lint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-aT25Yq5GkQpZBgVNjYdV/afyqFanJkmqkDGMz2Yf+Ps=";
   };
 
   build-system = [ setuptools ];
+
   dependencies = [
     jinja2
     rich
@@ -34,14 +35,17 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     versionCheckHook
+    typing-extensions
   ];
 
-  passthru.updateScript = nix-update-script { };
+  pythonImportsCheck = [ "j2lint" ];
 
   meta = {
-    homepage = "https://github.com/aristanetworks/j2lint";
     description = "Jinja2 Linter CLI";
+    homepage = "https://github.com/aristanetworks/j2lint";
+    changelog = "https://github.com/aristanetworks/j2lint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ polyfloyd ];
+    mainProgram = "j2lint";
   };
-}
+})

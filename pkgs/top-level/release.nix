@@ -44,10 +44,6 @@
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_8-1.8.6"
-        "kanidmWithSecretProvisioning_1_8-1.8.6"
-        "kanidm_1_9-1.9.4"
-        "kanidmWithSecretProvisioning_1_9-1.9.4"
         "kanidm_1_10-1.10.5"
         "kanidmWithSecretProvisioning_1_10-1.10.5"
       ];
@@ -148,7 +144,6 @@ let
             # jobs.firefox-unwrapped.aarch64-darwin
             jobs.qt5.qtmultimedia.aarch64-darwin
             jobs.inkscape.aarch64-darwin
-            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resolved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
 

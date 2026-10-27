@@ -709,7 +709,7 @@ let
           mozc = super.mozc.overrideAttrs (attrs: {
             postPatch = attrs.postPatch or "" + ''
               substituteInPlace src/unix/emacs/mozc.el \
-                --replace '"mozc_emacs_helper"' '"${pkgs.mozc}/bin/mozc_emacs_helper"'
+                --replace-fail '"mozc_emacs_helper"' '"${pkgs.emacs-mozc}/bin/mozc_emacs_helper"'
             '';
           });
 
@@ -775,6 +775,8 @@ let
 
           # https://github.com/gergelypolonkai/alert-termux/issues/2
           alert-termux = addPackageRequires super.alert-termux [ self.alert ];
+
+          all-the-icons = addPackageRequires super.all-the-icons [ pkgs.emacs-all-the-icons-fonts ];
 
           # https://github.com/magnars/angular-snippets.el/issues/7
           angular-snippets = addPackageRequires super.angular-snippets [ self.yasnippet ];
@@ -1462,6 +1464,8 @@ let
 
           # empty tools/ncl-mode-keywords.el causing native-compiler-error-empty-byte
           ncl-mode = ignoreCompilationError super.ncl-mode;
+
+          nerd-icons = addPackageRequires super.nerd-icons [ pkgs.nerd-fonts.symbols-only ];
 
           # missing optional dependencies
           netease-cloud-music = addPackageRequires super.netease-cloud-music [ self.async ];

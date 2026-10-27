@@ -74,6 +74,17 @@ let
     lua
     isLuaJIT
     ;
+
+  # Only for modules tested on 5.5; drop once LuaRocks has a rockspec allowing it.
+  allowLua55 = old: {
+    meta = (old.meta or { }) // {
+      broken = false;
+    };
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail 'lua >= 5.1, < 5.5' 'lua >= 5.1, <= 5.5'
+    '';
+  };
 in
 {
   # keep-sorted start block=yes case=no newline_separated=yes
@@ -105,6 +116,9 @@ in
   });
 
   cqueues = prev.cqueues.overrideAttrs (old: {
+    # The rockspec below is rewritten to build for every supported Lua version.
+    disabled = luaOlder "5.1" || luaAtLeast "5.6";
+
     # Parse out a version number without the Lua version inserted
     version =
       let
@@ -151,6 +165,8 @@ in
         sed -Ei ''${rockspecFilename} \
           -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.5|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
+          -e 's|install_target = "[^"]+"|install_target = "install${lua.luaversion}"|' \
+          -e 's|lua5[0-9](c?path)|lua${lib.replaceStrings [ "." ] [ "" ] lua.luaversion}\1|g' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
         cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
@@ -526,15 +542,12 @@ in
     '';
   };
 
-  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs {
-    src = fetchFromGitHub {
-      owner = "cdbattags";
-      repo = "lua-resty-jwt";
-      rev = "v0.3.2";
-      hash = "sha256-VCi5ge2jAldJQgecFeMZJkq5PqRQdUs+K8NsXWmK7IQ=";
+  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs (old: {
+    src = old.src.override {
       fetchSubmodules = true;
+      hash = "sha256-71Y88ZvmvysgTmY19eogLO1xNaY0WMjhZ//r18dFPdw=";
     };
-  };
+  });
 
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
     strictDeps = false;
@@ -613,7 +626,9 @@ in
     '';
   });
 
-  luadbi-mysql = prev.luadbi-mysql.overrideAttrs (old: {
+  luadbi = prev.luadbi.overrideAttrs allowLua55;
+
+  luadbi-mysql = (prev.luadbi-mysql.overrideAttrs allowLua55).overrideAttrs (old: {
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
@@ -627,13 +642,13 @@ in
     ];
   });
 
-  luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (old: {
+  luadbi-postgresql = (prev.luadbi-postgresql.overrideAttrs allowLua55).overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
       (lib.getDev libpq)
     ];
   });
 
-  luadbi-sqlite3 = prev.luadbi-sqlite3.overrideAttrs {
+  luadbi-sqlite3 = (prev.luadbi-sqlite3.overrideAttrs allowLua55).overrideAttrs {
     externalDeps = [
       {
         name = "SQLITE";
@@ -681,6 +696,16 @@ in
     meta = (old.meta or { }) // {
       broken = luaOlder "5.5" || isLuaJIT;
       badPlatforms = lib.platforms.aarch64;
+    };
+  });
+
+  luaffi-tkl = prev.luaffi-tkl.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = isLuaJIT;
+      license = lib.licenses.AND [
+        lib.licenses.bsd3
+        lib.licenses.mit
+      ];
     };
   });
 
@@ -741,9 +766,8 @@ in
         dep = libxcrypt;
       }
     ];
-    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
-      final.bit32
-    ];
+    propagatedBuildInputs =
+      (old.propagatedBuildInputs or [ ]) ++ lib.optionals (luaOlder "5.2") [ final.bit32 ];
   });
 
   luaprompt = prev.luaprompt.overrideAttrs (old: {
@@ -1116,6 +1140,11 @@ in
   };
 
   rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+    # Inserting keys during pairs() traversal can omit the WARN log level.
+    postPatch = (oa.postPatch or "") + ''
+      substituteInPlace lua/rocks/log.lua \
+        --replace-fail 'pairs(log_levels)' 'pairs(vim.log.levels)'
+    '';
 
     nativeCheckInputs = [
       final.nlua
@@ -1183,20 +1212,6 @@ in
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
         -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
       runHook postCheck
-    '';
-  };
-
-  std-_debug = prev.std-_debug.overrideAttrs {
-    # run make to generate lib/std/_debug/version.lua
-    preConfigure = ''
-      make all
-    '';
-  };
-
-  std-normalize = prev.std-normalize.overrideAttrs {
-    # run make to generate lib/std/_debug/version.lua
-    preConfigure = ''
-      make all
     '';
   };
 

@@ -10,7 +10,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    sha256 = "1wdrdg2j16pmqhk0ify20s5pngijh7zc6hyxhh8w8v5k8v3pz5vk";
+    hash = "sha256-c5d/x0azbMQRhN1Dw/6BMj57iwbCuwgmxPWaIMVrufE=";
     inherit pname version;
   };
 

@@ -1,6 +1,7 @@
 {
   # Package metadata
   pname ? "discord",
+  source ? (callPackage ./metadata.nix { }).${pname}.source,
   # Feature flags (cross-platform)
   withOpenASAR ? false,
   withVencord ? false,
@@ -42,7 +43,6 @@ let
 
   metadata = (callPackage ./metadata.nix { }).${pname};
   inherit (metadata)
-    source
     meta
     binaryName
     desktopName
@@ -50,7 +50,7 @@ let
     branch
     ;
 
-  pkgArgs = removeAttrs (args // metadata) [
+  pkgArgs = removeAttrs (args // metadata // { inherit source; }) [
     "branch"
     "self"
     "unwrappedDiscord"

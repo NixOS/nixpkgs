@@ -102,10 +102,6 @@
               "file": "languages-frameworks/android.section.md"
             },
             {
-              "id": "astal",
-              "file": "languages-frameworks/astal.section.md"
-            },
-            {
               "id": "beam",
               "file": "languages-frameworks/beam.section.md"
             },
@@ -468,6 +464,10 @@
                 {
                   "id": "gnome",
                   "file": "hooks/gnome.section.md"
+                },
+                {
+                  "id": "guileimportscheckhook",
+                  "file": "hooks/guileImportsCheckHook.section.md"
                 },
                 {
                   "id": "haredo",

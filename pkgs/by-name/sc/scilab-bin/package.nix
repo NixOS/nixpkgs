@@ -5,31 +5,58 @@
   makeWrapper,
   undmg,
   autoPatchelfHook,
+  wrapGAppsHook3,
+  versionCheckHook,
   alsa-lib,
-  ncurses5,
-  libxxf86vm,
-  libxtst,
-  libxrender,
-  libxrandr,
-  libxi,
-  libxft,
-  libxext,
-  libxcursor,
+  libgbm,
+  zlib,
+  glib,
+  nss,
+  nspr,
+  dbus,
+  at-spi2-core,
+  cups,
+  expat,
+  pango,
+  cairo,
+  udev,
+  gdk-pixbuf,
+  fontconfig,
+  freetype,
+  libGL,
+  gtk3,
+
+  libxkbcommon,
+  libxfixes,
+  libxcb,
   libx11,
+  libxext,
+  libxi,
+  libxrender,
+  libxtst,
+  libxxf86vm,
+  libxrandr,
+  libxcursor,
+  libxcomposite,
+  libxdamage,
+
+  coreutils,
+  gnugrep,
+  gnused,
 }:
 
 let
   pname = "scilab-bin";
-  version = "6.1.1";
+  version = "2027.0.0";
 
   srcs = {
     aarch64-darwin = fetchurl {
-      url = "https://www.utc.fr/~mottelet/scilab/download/${version}/scilab-${version}-accelerate-arm64.dmg";
-      sha256 = "sha256-L4dxD8R8bY5nd+4oDs5Yk0LlNsFykLnAM+oN/O87SRI=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}-arm64.dmg";
+      hash = "sha256-82+5EBZEl5rUI+VpSPdd2T4hWiydENJgh/G6Mi4t05E=";
     };
     x86_64-linux = fetchurl {
-      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.linux-x86_64.tar.gz";
-      sha256 = "sha256-PuGnz2YdAhriavwnuf5Qyy0cnCeRHlWC6dQzfr7bLHk=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.x86_64-linux-gnu.tar.xz";
+      hash = "sha256-AP3DBo/r7p//419UYLSWFd1RH8epANOrfmWr+AIn1YY=";
     };
   };
   src =
@@ -45,15 +72,19 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;
     mainProgram = "scilab";
+    changelog = "https://help.scilab.org/docs/${version}/en_US/CHANGES.html";
   };
 
-  darwin = stdenv.mkDerivation {
+  darwin = stdenv.mkDerivation (finalAttrs: {
     inherit
       pname
       version
       src
       meta
       ;
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     nativeBuildInputs = [
       makeWrapper
@@ -71,11 +102,9 @@ let
 
       runHook postInstall
     '';
+  });
 
-    dontCheckForBrokenSymlinks = true;
-  };
-
-  linux = stdenv.mkDerivation {
+  linux = stdenv.mkDerivation (finalAttrs: {
     inherit
       pname
       version
@@ -83,23 +112,60 @@ let
       meta
       ;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+    # bin/ also contains the real ELF binaries (scilab-bin, scilab-cli-bin, ...),
+    # so only the launcher scripts are wrapped, manually in postFixup
+    dontWrapGApps = true;
+
     nativeBuildInputs = [
       autoPatchelfHook
+      makeWrapper
+      wrapGAppsHook3
     ];
 
     buildInputs = [
       alsa-lib
-      ncurses5
       stdenv.cc.cc
+      libgbm
+      zlib
+      glib
+      nss
+      nspr
+      dbus
+      at-spi2-core
+      cups
+      expat
+      pango
+      cairo
+      udev
+      gtk3
+      gdk-pixbuf
+      libGL
+      fontconfig
+      freetype
+
+      libxkbcommon
+      libxfixes
+      libxcb
       libx11
-      libxcursor
       libxext
-      libxft
       libxi
-      libxrandr
       libxrender
       libxtst
       libxxf86vm
+      libxrandr
+      libxcursor
+      libxcomposite
+      libxdamage
+    ];
+
+    # Tools the launcher scripts call; needed on PATH at runtime and by
+    # versionCheckHook, which runs the script in the build sandbox
+    runtimeDeps = [
+      coreutils
+      gnugrep
+      gnused
     ];
 
     installPhase = ''
@@ -107,19 +173,36 @@ let
 
       mkdir -p $out
       mv -t $out bin include lib share thirdparty
-      sed -i \
-        -e 's|\$(/bin/|$(|g' \
-        -e 's|/usr/bin/||g' \
-        $out/bin/{scilab,xcos}
-      sed -i \
-        -e "s|Exec=|Exec=$out/bin/|g" \
-        -e "s|Terminal=.*$|Terminal=true|g" \
-        $out/share/applications/*.desktop
+
+      # The launcher scripts hardcode /bin/ in their command substitutions
+      substituteInPlace \
+        $out/bin/{scilab,scilab-cli,scilab-adv-cli,scinotes,xcos} \
+        --replace-fail '$(/bin/' '$('
+
+      substituteInPlace $out/share/applications/*.desktop \
+        --replace-fail 'Exec=' "Exec=$out/bin/"
 
       runHook postInstall
     '';
 
-    dontCheckForBrokenSymlinks = true;
-  };
+    # libGL, fontconfig, freetype and gtk3 are loaded at runtime by the bundled
+    # JVM/JCEF, so they must be in RUNPATH even though autoPatchelfHook is
+    # already satisfied
+    appendRunpaths = [
+      (lib.makeLibraryPath finalAttrs.buildInputs)
+    ];
+
+    postFixup = ''
+      for f in scilab scilab-cli scilab-adv-cli scinotes xcos; do
+        wrapProgram $out/bin/$f \
+          "''${gappsWrapperArgs[@]}" \
+          --suffix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
+      done
+    '';
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgramArg = "-version";
+    doInstallCheck = true;
+  });
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux

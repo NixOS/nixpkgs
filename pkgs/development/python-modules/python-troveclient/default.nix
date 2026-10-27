@@ -18,7 +18,7 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
@@ -65,17 +65,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httplib2
     requests-mock
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "
-    troveclient.tests.test_shell.ShellTest.test_help
-    troveclient.tests.test_shell.ShellTestKeystoneV3.test_help
-    ")
-    runHook postCheck
-  '';
+  disabledTests = [
+    "troveclient.tests.test_shell.ShellTest.test_help"
+    "troveclient.tests.test_shell.ShellTestKeystoneV3.test_help"
+  ];
 
   pythonImportsCheck = [ "troveclient" ];
 

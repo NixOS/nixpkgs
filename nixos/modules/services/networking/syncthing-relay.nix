@@ -32,6 +32,22 @@ in
   options.services.syncthing.relay = {
     enable = mkEnableOption "Syncthing relay service";
 
+    cert = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to the `cert.pem` file, which will be copied into `dataDirectory`.
+      '';
+    };
+
+    key = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Path to the `key.pem` file, which will be copied into `dataDirectory`.
+      '';
+    };
+
     token = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -142,14 +158,27 @@ in
         DynamicUser = true;
         StateDirectory = baseNameOf dataDirectory;
 
-        LoadCredential = optional (cfg.token != null) "token:${cfg.token}";
+        LoadCredential =
+          optional (cfg.token != null) "token:${cfg.token}"
+          ++ optional (cfg.key != null) "key:${cfg.key}"
+          ++ optional (cfg.cert != null) "cert:${cfg.cert}";
 
         Restart = "on-failure";
       };
 
+      preStart = lib.mkIf (cfg.cert != null || cfg.key != null) ''
+        install -dm700 ${dataDirectory}
+        ${optionalString (cfg.cert != null) ''
+          install -Dm644 "$CREDENTIALS_DIRECTORY/cert" ${dataDirectory}/cert.pem
+        ''}
+        ${optionalString (cfg.key != null) ''
+          install -Dm600 "$CREDENTIALS_DIRECTORY/key" ${dataDirectory}/key.pem
+        ''}
+      '';
+
       script = ''
         ${pkgs.syncthing-relay}/bin/strelaysrv \
-          ${optionalString (cfg.token != null) ''-token="$(cat $CREDENTIALS_DIRECTORY/token)"''} \
+          ${optionalString (cfg.token != null) ''-token="$(cat "$CREDENTIALS_DIRECTORY/token")"''} \
           ${concatStringsSep " " relayOptions}
       '';
     };

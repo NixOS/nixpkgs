@@ -61,16 +61,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        winetricks
-        yad
-      ]
-    }"
-    # Steam Runtime does not work outside of steam-run, so don't use it
-    "--set STEAM_RUNTIME 0"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      winetricks
+      yad
+    ]) # Steam Runtime does not work outside of steam-run, so don't use it
+
+    "--set"
+    "STEAM_RUNTIME"
+    "0"
   ]
-  ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
+  ++ lib.optionals (extraCompatPaths != "") [
+    "--set"
+    "STEAM_EXTRA_COMPAT_TOOLS_PATHS"
+    extraCompatPaths
+  ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
@@ -79,6 +86,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstall = ''
     rm "$out/bin/protontricks-desktop-install"
   '';
+
+  disabledTests = [
+    # Executes ldconfig via steam-run, which relies on bubblewrap.
+    # bubblewrap requires unprivileged user namespaces, which means this fails in some environments
+    # with hardened kernels or restrictive distros, such as GitHub Actions (Ubuntu 24.04).
+    "test_get_runtime_library_paths"
+  ];
 
   pythonImportsCheck = [ "protontricks" ];
 

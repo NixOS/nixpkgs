@@ -8,6 +8,7 @@
 
   dbus,
 
+  installShellFiles,
   writableTmpDirAsHomeHook,
   gitMinimal,
   nix-update-script,
@@ -15,7 +16,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.79.0";
+  version = "0.80.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -23,12 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YDl52T2xY0XbBO5YdNa5uGvvvk7mqr1JtAQOLTXspFw=";
+    hash = "sha256-VaHeLMUZOxPjIeBSf37vWfm9fChskJYJgD4I9pKbgyo=";
   };
-  cargoHash = "sha256-ffwJDKFoDMfZYYNWO4SWezdbD5Y8SR7S+a+qSQEgG9w=";
+  cargoHash = "sha256-c8PL9lA0Jocse+rir5kTt5I6yGq5z7XN0pcWPrk2DGE=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -226,6 +228,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "tool_sandbox::dynamic_providers::tests::git_read_main_worktree_returns_main_repo_root_in_linked_worktree"
     ]
   );
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd nono \
+      --bash <($out/bin/nono completion bash) \
+      --zsh <($out/bin/nono completion zsh) \
+      --fish <($out/bin/nono completion fish)
+  '';
 
   passthru.updateScript = nix-update-script { };
   meta = {

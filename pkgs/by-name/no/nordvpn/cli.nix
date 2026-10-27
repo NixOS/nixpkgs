@@ -7,7 +7,6 @@
   buildGoModule,
   copyDesktopItems,
   e2fsprogs,
-  fetchFromGitHub,
   iproute2,
   lib,
   libxslt,
@@ -19,33 +18,6 @@
   systemdMinimal,
   wireguard-tools,
 }:
-let
-  patchedOpenvpn = openvpn.overrideAttrs (old: {
-    # Apply XOR obfuscation patches to disguise OpenVPN traffic,
-    # enabling connectivity on networks that block VPN protocols via DPI.
-    patches =
-      let
-        tunnelblickSrc = fetchFromGitHub {
-          owner = "Tunnelblick";
-          repo = "Tunnelblick";
-          # https://github.com/NordSecurity/nordvpn-linux/blob/4.6.0/ci/openvpn/env.sh#L11
-          tag = "v6.0beta09";
-          hash = "sha256-uLYrBgwX3HkEV06snlIYLsgfhD5lNDVR21D56ygoStY=";
-        };
-
-        pathDir = "third_party/sources/openvpn/openvpn-2.6.12/patches";
-      in
-      (old.patches or [ ])
-      ++ (map (fname: "${tunnelblickSrc}/${pathDir}/${fname}") [
-        "02-tunnelblick-openvpn_xorpatch-a.diff"
-        "03-tunnelblick-openvpn_xorpatch-b.diff"
-        "04-tunnelblick-openvpn_xorpatch-c.diff"
-        "05-tunnelblick-openvpn_xorpatch-d.diff"
-        "06-tunnelblick-openvpn_xorpatch-e.diff"
-      ]);
-  });
-
-in
 buildGoModule (finalAttrs: {
   inherit src version;
 
@@ -56,7 +28,7 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  vendorHash = "sha256-vqNxPGcxGiEtBOGr+ZJHJNts/N4RMQzAL9DOjk13v/w=";
+  vendorHash = "sha256-dqKpsik9/wlWiJLJaB5bo6cBhkJFT1n6KDfsHq4YGx0=";
 
   preBuild = ''
     # redirect AppDataPathStatic (/usr/lib/nordvpn) to $out/bin so that
@@ -64,9 +36,9 @@ buildGoModule (finalAttrs: {
     substituteInPlace internal/constants.go \
         --replace-fail "/usr/lib/nordvpn" "$out/bin"
 
-    # hardcode the openvpn path to the patched one
+    # hardcode the openvpn path
     old_ovpn_path='filepath.Join(internal.AppDataPathStatic, "openvpn")'
-    new_ovpn_path='"${patchedOpenvpn}/bin/openvpn"'
+    new_ovpn_path='"${openvpn}/bin/openvpn"'
     substituteInPlace daemon/vpn/openvpn/config.go \
         --replace-fail "$old_ovpn_path" "$new_ovpn_path"
   '';
@@ -85,11 +57,31 @@ buildGoModule (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    go test ./cli
-    # skip tests that require network access
-    go test ./daemon -skip \
-        'TestTransports|TestH1Transport_RoundTrip|Test.*FileList_RealURL'
-    go test ./norduser
+    go test ./cli/...
+    go test ./fileshare/...
+    go test ./norduser/...
+
+    # skip tests requiring network access, root/CAP_NET_ADMIN,
+    # or network state the sandbox doesn't provide
+    # skip libtelio tests as the package lacks meshnet support
+    go test $(go list ./daemon/... | grep -v /daemon/vpn/nordlynx/libtelio) -skip \
+      'Test.*FileList_RealURL|'\
+      'TestAddAllowlistRules|'\
+      'TestAddDevice|'\
+      'TestConnectionInfo_TransferRatesShallBeProvidedOnlyForConnectedState|'\
+      'TestCustomTable|'\
+      'TestDiscoverNameserverIp|'\
+      'TestFwmarkRule|'\
+      'TestH1Transport_RoundTrip|'\
+      'TestMeshnetRuleset|'\
+      'TestMultiFwmarkRule|'\
+      'TestNetlinkManager_SetUnset|'\
+      'TestRouter_Add|'\
+      'TestSetMTU|'\
+      'TestSuppressRule|'\
+      'TestTransports|'\
+      'TestUpWGInterface|'\
+      'TestVPNRuleset'
 
     runHook postCheck
   '';
@@ -117,7 +109,7 @@ buildGoModule (finalAttrs: {
         iproute2
         libxslt # xsltproc: used to populate OpenVPN configuration files from templates
         nftables
-        patchedOpenvpn
+        openvpn
         procps
         systemdMinimal
         wireguard-tools

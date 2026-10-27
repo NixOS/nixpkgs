@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rahasher";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "LeXofLeviafan";
     repo = "RAHasher";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-PitP2MUNwkcCwNJTet3D+A4/RTWp7Xl5Fpc63o5KRFc=";
+    hash = "sha256-3nFp9z55juPOteZ2wtb4+Ut/mCm93c/2G3Bgf6f3h8U=";
   };
 
   # The upstream Makefile derives src/RA_BuildVer.h from `.git/HEAD` by

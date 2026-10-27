@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensile";
-  version = "7.2.3";
+  version = "7.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {

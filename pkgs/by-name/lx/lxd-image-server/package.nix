@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Avature";
     repo = "lxd-image-server";
-    rev = finalAttrs.version;
-    sha256 = "yx8aUmMfSzyWaM6M7+WcL6ouuWwOpqLzODWSdNgwCwo=";
+    tag = finalAttrs.version;
+    hash = "sha256-yx8aUmMfSzyWaM6M7+WcL6ouuWwOpqLzODWSdNgwCwo=";
   };
 
   patches = [
@@ -39,12 +39,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    ''--prefix PATH ':' "${
-      lib.makeBinPath [
-        openssl
-        rsync
-      ]
-    }"''
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      openssl
+      rsync
+    ]}"
   ];
 
   doCheck = false;
@@ -56,6 +57,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Creates and manages a simplestreams lxd image server on top of nginx";
     homepage = "https://github.com/Avature/lxd-image-server";
+    changelog = "https://github.com/Avature/lxd-image-server/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mkg20001 ];

@@ -33,7 +33,6 @@
     {
       # Node that will use initrd networking.
       server = network "1" // {
-        boot.initrd.systemd.enable = true;
         boot.initrd.network.enable = true;
         boot.initrd.systemd.services.boot-blocker = {
           before = [ "initrd.target" ];

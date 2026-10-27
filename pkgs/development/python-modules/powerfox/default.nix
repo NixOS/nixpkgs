@@ -11,7 +11,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy_6,
+  syrupy,
   yarl,
 }:
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   pythonImportsCheck = [ "powerfox" ];

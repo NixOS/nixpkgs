@@ -20,7 +20,7 @@ build-idris-package {
     owner = "jheiling";
     repo = "idris-electron";
     rev = "f0e86f52b8e5a546a2bf714709b659c1c0b04395";
-    sha256 = "1rpa7yjvfpzl06h0qbk54jd2n52nmgpf7nq5aamcinqh7h5gbiwn";
+    hash = "sha256-lsf1CjwQ28iqUgXb4+6rVhQrmiRlLgygAfRft6U/6uY=";
   };
 
   meta = {

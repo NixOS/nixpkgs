@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vermouth";
-  version = "2.4.0";
+  version = "2.6.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dekomote";
     repo = "vermouth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fSk3nSpE6Bh/Uvx+tFZX8wX0IbQICy7KvblNYLpmbE4=";
+    hash = "sha256-jQvt4IMpqyM/fxjFT/pm5skgSuHhBShOWTgTXcGC6cs=";
   };
 
   nativeBuildInputs = [

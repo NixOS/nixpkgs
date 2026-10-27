@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  autoreconfHook,
   bison,
   flex,
   readline,
@@ -11,25 +10,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdecl";
-  version = "18.5";
+  version = "18.7.2";
 
   src = fetchFromGitHub {
     owner = "paul-j-lucas";
     repo = "cdecl";
     tag = "cdecl-${finalAttrs.version}";
-    hash = "sha256-cC098+W8cbcumBv+3ZFwGYXmens4u0aQSx5Lvw6maYM=";
+    hash = "sha256-j6NEKnc/2j4Btlo1fzTWoO0DdqRNV9iksRQCADaW3w8=";
   };
 
   strictDeps = true;
-  preConfigure = "./bootstrap";
+
+  # Manually generate lexer.c to avoid triggering the broken ylwrap logic
+  preBuild = ''
+    flex -o src/lexer.c src/lexer.l
+  '';
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     bison
     flex
   ];
   buildInputs = [ readline ];
+
+  enableParallelBuilding = true;
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
@@ -70,9 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/paul-j-lucas/cdecl";
     changelog = "https://github.com/paul-j-lucas/cdecl/blob/cdecl-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      zirancumin
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "cdecl";
-    broken = true;
   };
 })

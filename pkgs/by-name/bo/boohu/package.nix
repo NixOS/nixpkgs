@@ -1,16 +1,18 @@
 {
   lib,
-  fetchurl,
+  fetchFromCodeberg,
   buildGoModule,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "boohu";
-  version = "0.14.0";
+  version = "0.14.1";
 
-  src = fetchurl {
-    url = "https://download.tuxfamily.org/boohu/downloads/boohu-${finalAttrs.version}.tar.gz";
-    hash = "sha256-IB59C5/uuHP6LtKLypjpgHOo0MR9bFdCbudaRa+h7lI=";
+  src = fetchFromCodeberg {
+    owner = "anaseto";
+    repo = "boohu";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Yt5B5VjZJO64pmuYR8jSIMdCMK01gwNhFKltIR1ZCHY=";
   };
 
   vendorHash = "sha256-AVK4zE/Hs9SN8Qj2WYj/am2B0R74QKYoMNf3sRRjnU4=";
@@ -29,7 +31,7 @@ buildGoModule (finalAttrs: {
       aiming for very short games, almost no character building, and a
       simplified inventory.
     '';
-    homepage = "https://download.tuxfamily.org/boohu/index.html";
+    homepage = "https://codeberg.org/anaseto/boohu";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = [ ];

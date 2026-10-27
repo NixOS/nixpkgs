@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "moq";
-  version = "0.7.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "matryer";
     repo = "moq";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IJnP8aF0UJTEDlayZtxe0Qqs3RFTKT7O5ZiGtaULCMM=";
+    sha256 = "sha256-eVUqGAbNfLyL6ZKtVTwBJNeQ/SasgKZi/S0nGEqYBO4=";
   };
 
-  vendorHash = "sha256-Mwx2Z2oVFepNr911zERuoM79NlpXu13pVpXPJox86BA=";
+  vendorHash = "sha256-6mDFR6QZomBhlBOKmqTFlv5LlbE2upj99HMP0O5SzIk=";
 
   subPackages = [ "." ];
 

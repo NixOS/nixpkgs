@@ -9,11 +9,11 @@
   writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
+  withOdbcAdapter ? true,
 }:
-
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.16.1";
+  version = "2.17.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0ZVqA7A8JWpUSx4uABWgaKtNlINwzY4Gld1z2cypJKc=";
+    hash = "sha256-NfjYY+wdFuPjq9I9c6735ENRWPqRSa+UtAKMvfr0OYk=";
   };
 
   postPatch =
@@ -61,7 +61,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       wcwidth
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
-    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
+    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ]
+    ++ lib.optionals withOdbcAdapter [ harlequin-odbc ];
 
   pythonImportsCheck = [
     "harlequin"
@@ -85,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
     # Compare the source checkout with the installed package
@@ -112,6 +114,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64
     "test_load_extension"
+  ]
+  ++ lib.optionals withOdbcAdapter [
+    # harlequin-odbc declares no adapter options (its connection string is a
+    # positional argument), and this test requires every installed adapter to
+    # declare at least one.
+    "test_spec_covers_every_installed_adapter"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test seems to be failing because of concurrency issues
+    "test_a_second_client_waits_its_turn"
   ];
 
   disabledTestPaths = [

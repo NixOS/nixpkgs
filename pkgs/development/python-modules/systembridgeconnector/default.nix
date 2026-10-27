@@ -10,7 +10,7 @@
   pytest-aiohttp,
   pytest-socket,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage rec {
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-socket
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   __darwinAllowLocalNetworking = true;

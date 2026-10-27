@@ -45,7 +45,9 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   env = {
     pnpmDeps = fetchPnpmDeps {

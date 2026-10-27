@@ -20,7 +20,7 @@ mkDerivation {
     owner = "qt";
     repo = "qtfeedback";
     rev = "a14bd0bb1373cde86e09e3619fb9dc70f34c71f2";
-    sha256 = "0kiiffvriagql1cark6g1qxy7l9c3q3s13cx3s2plbz19nlnikj7";
+    hash = "sha256-R85oqU3hL3qFHp2NoAceLNHjOw7PzKxYoPipmLdzMU4=";
   };
 
   nativeBuildInputs = [

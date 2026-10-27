@@ -21,9 +21,9 @@ maven.buildMavenPackage (finalAttrs: {
   mvnHash =
     let
       mvnHashes = {
-        "aarch64-darwin" = "sha256-D7inbJCs8r2RWY4TJMmxpiDPxy+o3xvdklzWNd5uZXk=";
-        "aarch64-linux" = "sha256-DS8LfIneN05OG201CK2bIUSV0fSUdku78Vt3FIZFmwQ=";
-        "x86_64-linux" = "sha256-k60cKLwN/VyWrErjIpgOvC+uYNbF2hkmCwO8MFVxvrI=";
+        "aarch64-darwin" = "sha256-wBflqfJlTZkSdLnM6BLh6y05maVRAAyXXwrHDarYYN0=";
+        "aarch64-linux" = "sha256-WOct8X9N9ToH0pQ7Ql/85pLVHNns1e5Jo+Oi0K3UKKs=";
+        "x86_64-linux" = "sha256-CTbdSww95kCUgrHmB5fQpR0pp+hvlM66/alm6VjiD1k=";
       };
     in
     mvnHashes.${stdenv.hostPlatform.system}

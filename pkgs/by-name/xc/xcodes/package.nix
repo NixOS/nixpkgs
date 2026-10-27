@@ -4,22 +4,19 @@
   stdenv,
   swift,
   swiftpm,
-  swiftpm2nix,
+  fetchSwiftPMDeps,
   makeWrapper,
   aria2,
 }:
-let
-  generated = swiftpm2nix.helpers ./generated;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcodes";
-  version = "1.6.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "XcodesOrg";
     repo = "xcodes";
     rev = finalAttrs.version;
-    hash = "sha256-eH6AdboJsGQ0iWoRllOMzhjM/1t43DB1U0bOu6J/uo4=";
+    hash = "sha256-BUFcK+r7fDN7KC9PBikRGl355VouZ85ngcmVh7gj6tE=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  configurePhase = generated.configure;
+  swiftpmDeps = fetchSwiftPMDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-jMJcW8vINSjfe7F3O7xaznZli2Vsi5QloXcI9itLUGQ=";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       _0x120581f
       emilytrau
+      matteopacini
     ];
     platforms = lib.platforms.darwin;
   };

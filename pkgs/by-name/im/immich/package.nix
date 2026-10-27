@@ -9,6 +9,7 @@
   nodejs,
   node-gyp,
   runCommand,
+  nix-update-script,
   nixosTests,
   immich-machine-learning,
   # build-time deps
@@ -85,7 +86,7 @@ let
     in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-zxMbIEFF5MA2qkAbXs4sD4EQFWfCYt8t3AaC0m0LtEY=";
+        outputHash = "sha256-otk0VysLd9qG24JLar4r0CohqJG5ESUkBb3FCvWBUg0=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -101,6 +102,7 @@ let
         curl -Lo ./cities500.zip "$url/cities500.zip"
         curl -Lo $out/admin1CodesASCII.txt "$url/admin1CodesASCII.txt"
         curl -Lo $out/admin2Codes.txt "$url/admin2Codes.txt"
+        curl -Lo $out/countryInfo.txt "$url/countryInfo.txt"
         curl -Lo $out/ne_10m_admin_0_countries.geojson \
           https://github.com/nvkelso/natural-earth-vector/raw/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
 
@@ -110,7 +112,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "3.2.4";
+  version = "3.3.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -119,14 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/wWep6A/ryocuGMOElcD1lOEwT6tJDdwa5HAcCZUXSs=";
+    hash = "sha256-QIp6i+6Hz4ZfXkbdBzK63cNp2OkkOdeWDwkrSiVHUcc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-N6eaRcJxik1wzGE1H/LnKR1JUcSc8iswPFkIGymOKVA=";
+    hash = "sha256-7xUH5b64QfrgWBe32WSFXXNTbjXx6Po6D6L5hbHTHE0=";
   };
 
   postPatch = ''
@@ -232,6 +234,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
+
     tests = {
       inherit (nixosTests) immich immich-vectorchord-reindex;
     };

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "portwave";
-  version = "0.19.3";
+  version = "0.19.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "assassin-marcos";
     repo = "portwave";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N1/ryYMwlkwPfOZexZVFiR2Wr8w8zq6l9gKK4PLPJqU=";
+    hash = "sha256-0AAVAMqBtvuN2ElBbEVaJaIL5nfVXEcJOPnmJM9JJFk=";
   };
 
-  cargoHash = "sha256-5UOsPswU+nyH5x3JDcyPgUbhIPxRzWzWyekwZboKdlE=";
+  cargoHash = "sha256-QPaL5ifmxwpUuHgEYowrdguGtK56UYW0K0bbIf3POEY=";
 
   nativeBuildInputs = [ pkg-config ];
 

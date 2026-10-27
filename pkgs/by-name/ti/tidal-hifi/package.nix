@@ -35,7 +35,7 @@
   libxrandr,
   libxkbfile,
   pango,
-  systemd,
+  systemdLibs,
   pciutils,
   libnotify,
   pipewire,
@@ -76,7 +76,7 @@ let
     pango
     pciutils
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libnotify
     pipewire
     libsecret

@@ -11,15 +11,16 @@
   yarnBuildHook,
   yarnConfigHook,
   yarnInstallHook,
+  nixosTests,
 }:
 let
 
-  version = "1.5.5";
+  version = "1.5.6";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
     tag = "${version}";
-    hash = "sha256-6O2zVTj9soB/Y2xYTYX6fbc2pFsgHL+BHMtB2U1P6HE=";
+    hash = "sha256-BF7vOp8Rxke+OlvzlVSQSrdsFc/87Ur9MWTKyVeU9FE=";
     postCheckout = ''
       git -C $out rev-parse HEAD > $out/commit_hash.txt
       git -C $out show -s --format=%cd --date=short HEAD > $out/commit_date.txt
@@ -318,6 +319,7 @@ python3Packages.buildPythonApplication rec {
     in
     {
       inherit frontend pythonPath;
+      tests.nixos = nixosTests.inventree;
     };
 
   meta = {

@@ -10,7 +10,7 @@
   lib,
 }:
 let
-  version = "3.0.5";
+  version = "3.0.6";
 in
 buildDotnetModule {
   pname = "sockseek";
@@ -20,7 +20,7 @@ buildDotnetModule {
     owner = "fiso64";
     repo = "sockseek";
     rev = "v${version}";
-    hash = "sha256-ao+N9HASVDTk5fh5ikTABQdNYi6czyyKW3jeyJdw+bY=";
+    hash = "sha256-9qdMJawjc9BmLaMFCctP9Pj/Cjpk/NbICMRttmmO21I=";
   };
 
   strictDeps = true;
@@ -40,6 +40,7 @@ buildDotnetModule {
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
   dotnetBuildFlags = [
     "--property:OpenApiGenerateDocuments=false"
   ];
@@ -51,5 +52,6 @@ buildDotnetModule {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.kfears ];
+    mainProgram = "sockseek";
   };
 }

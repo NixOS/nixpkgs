@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-gnutls";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/guile-gnutls-${finalAttrs.version}.tar.gz";
-    hash = "sha256-droqD0ft3n/S9YP8EWLtHOgzm9r36dnMOTh/zJX7k1s=";
+    hash = "sha256-Iwrk+J3/rG1X//YYQQYRgg4VUJB67vYGWxIf5kEKe2s=";
   };
 
   strictDeps = true;
@@ -44,8 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-guile-extension-dir=${placeholder "out"}/lib/guile/${guile.effectiveVersion}/extensions"
   ];
 
+  guileImportsCheck = [ "gnutls" ];
+
   meta = {
-    homepage = "https://gitlab.com/gnutls/guile/";
+    homepage = "https://codeberg.org/guile-gnutls/guile-gnutls";
     description = "Guile bindings for GnuTLS library";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];

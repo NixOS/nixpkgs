@@ -61,6 +61,7 @@
   stdenv,
   postgresql,
   nix-update-script,
+  nukeReferences,
 }:
 
 lib.extendMkDerivation {
@@ -91,7 +92,11 @@ lib.extendMkDerivation {
       strictDeps = true;
       __structuredAttrs = true;
       buildInputs = [ postgresql ] ++ prevAttrs.buildInputs or [ ];
-      nativeBuildInputs = [ postgresql.pg_config ] ++ prevAttrs.nativeBuildInputs or [ ];
+      nativeBuildInputs = [
+        nukeReferences
+        postgresql.pg_config
+      ]
+      ++ prevAttrs.nativeBuildInputs or [ ];
 
       installFlags = [
         "DESTDIR=${placeholder "out"}"
@@ -146,6 +151,10 @@ lib.extendMkDerivation {
               nixErrorLog 'Found left-overs in $out/nix/store, make sure to move them into $out properly.'
               exit 1
             fi
+        fi
+
+        if [[ -d "$out/lib" ]]; then
+            find "$out/lib" -iname '*.bc' -type f -exec nuke-refs '{}' +
         fi
       ''
       + prevAttrs.postInstall or "";

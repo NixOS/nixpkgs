@@ -91,6 +91,11 @@ buildPythonPackage (finalAttrs: {
     # onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented: [ONNXRuntimeError] : 9 :
     # NOT_IMPLEMENTED : Could not find an implementation for SplitToSequence(11) node with name '_inlfunc_aten_split_with_sizes_n0'
     "test_output_match_opinfo__split_with_sizes_cpu_bool"
+
+    # AssertionError: Not equal to tolerance rtol=1e-05, atol=0
+    # The SpaceToDepth test function only implements the DCR mode, but is checked against every SpaceToDepth test case
+    # shipped by onnx, which include test_spacetodepth_crd_mode_example since onnx 1.23.
+    "test_onnxfns_space_to_depth"
   ];
 
   disabledTestPaths = [

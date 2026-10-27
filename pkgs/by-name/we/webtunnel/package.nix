@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "webtunnel";
-  version = "0.0.5";
+  version = "0.0.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -14,10 +14,10 @@ buildGoModule (finalAttrs: {
     owner = "anti-censorship/pluggable-transports";
     repo = "webtunnel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9dXlkIkCERy/eFsVrAfBkbjU6aEeJLGmlLjLuXTwAs8=";
+    hash = "sha256-m++vVtUGwkprCMwEeRgHSww4rXGfozv62x9uZQ9pDWo=";
   };
 
-  vendorHash = "sha256-3AAPySLAoMimXUOiy8Ctl+ghG5q+3dWRNGXHpl9nfG0=";
+  vendorHash = "sha256-mVvs1p63tQG7+s/5Hg4tcpCmNo/B8U5ArKqeuec5Mc4=";
 
   meta = {
     description = "Pluggable Transport based on HTTP Upgrade(HTTPT)";

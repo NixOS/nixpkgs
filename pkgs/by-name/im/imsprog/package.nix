@@ -74,11 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/bigbigmdm/IMSProg/releases/tag/v${finalAttrs.version}";
     description = "Free I2C, MicroWire and SPI EEPROM/Flash chip programmer tool for CH341A device";
     homepage = "https://github.com/bigbigmdm/IMSProg";
-    license = with lib.licenses; [
-      gpl3Plus
-      gpl2Plus
-      lgpl21Only
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Plus
+        gpl2Plus
+        lgpl21Only
+        bsd1
+      ];
     mainProgram = "IMSProg";
     maintainers = with lib.maintainers; [ wucke13 ];
     platforms = lib.platforms.unix;

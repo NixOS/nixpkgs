@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  guileImportsCheck = [ "semver" ];
+
   meta = {
     description = "GNU Guile library implementing Semantic Versioning 2.0.0";
     homepage = "https://ngyro.com/software/guile-semver.html";

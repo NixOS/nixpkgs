@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    rm -rf node_modules
     pnpm install --offline --frozen-lockfile --ignore-scripts --prod
     mkdir -p $out/lib/node_modules/textlint-rule-preset-ai-words-ja
     cp -r lib node_modules package.json $out/lib/node_modules/textlint-rule-preset-ai-words-ja

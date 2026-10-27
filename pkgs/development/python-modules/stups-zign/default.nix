@@ -20,14 +20,14 @@ buildPythonPackage rec {
     owner = "zalando-stups";
     repo = "zign";
     rev = version;
-    sha256 = "1vk6pnprnd5lfx96hc2c1n7kwh99f260r730x4y2h7lamlv82fh4";
+    hash = "sha256-BDqBNq2KHig86WCcDIxwKUE+jw1MMGhSd7Q0m6+9Zu4=";
   };
 
   patches = [
     # pytest 5 is currently unsupported. Fetch and apply a pr that resolves this.
     (fetchpatch {
       url = "https://github.com/zalando-stups/zign/commit/50140720211e547b0e59f7ddb39a732f0cc73ad7.patch";
-      sha256 = "1zmyvg1z1asaqqsmxvsx0srvxd6gkgavppvg3dblxwhkml01awqk";
+      hash = "sha256-E3MVAK0T8k5XG2/fu9Wbz7S+swZd7141xkqr8MPbvv4=";
     })
   ];
 

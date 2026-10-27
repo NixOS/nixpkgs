@@ -14,7 +14,7 @@ build-idris-package {
     owner = "lambda-11235";
     repo = "FarRP";
     rev = "d592957232968743f8862e49d5a8d52e13340444";
-    sha256 = "1zrf750d7x1cz7kkgcx4ipa87hkg10adwii4qqvz9vpjap7vh7h0";
+    hash = "sha256-AB64z1Xy7vQ3xiRG3hQIb8KD1I2kszfn+Sz000A5Lv8=";
   };
 
   meta = {

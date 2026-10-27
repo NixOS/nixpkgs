@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "chakki-works";
     repo = "seqeval";
     rev = "v${version}";
-    sha256 = "0qv05gn54kc4wpmwnflmfqw4gwwb8lxqhkiihl0pvl7s2i7qzx2j";
+    hash = "sha256-UvSPTxT60H0BhTFOiDtFi/NHOHaVOsvr5YRNUuwrYGM=";
   };
 
   postPatch = ''

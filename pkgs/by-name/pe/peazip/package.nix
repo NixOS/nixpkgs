@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
-  version = "11.3.0";
+  version = "11.4.0";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
     rev = finalAttrs.version;
-    hash = "sha256-NeFfXFsDYpRHPrIZGkJMvplYxsTw+QzQ33TJzgyDZ+c=";
+    hash = "sha256-PC5dD+/f598911FgxlftXH7FLpYaI0sjuQYpIyneYHs=";
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       Supports 7Z, 7-Zip sfx, ACE, ARJ, Brotli, BZ2, CAB, CHM, CPIO, DEB, GZ, ISO, JAR, LHA/LZH, NSIS, OOo, PEA, RAR, RPM, split, TAR, Z, ZIP, ZIPX, Zstandard.
     '';
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     homepage = "https://peazip.github.io";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

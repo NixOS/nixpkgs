@@ -8,7 +8,7 @@
   version = "0.0.6";
   src = fetchurl {
     url = "https://src.fedoraproject.org/lookaside/pkgs/spandsp/spandsp-${version}.tar.gz/897d839516a6d4edb20397d4757a7ca3/spandsp-${version}.tar.gz";
-    sha256 = "0rclrkyspzk575v8fslzjpgp4y2s4x7xk3r55ycvpi4agv33l1fc";
+    hash = "sha256-zAU6xn6KxLuZLyWP2U8nWnhy35Wfaod2OWX+q/3MlGU=";
   };
   patches = [
     (fetchpatch {

@@ -23,7 +23,7 @@
   libsigrok,
   libvirt,
   libxml2,
-  lua,
+  lua5_2_compat,
   lvm2,
   lm_sensors,
   mongoc,
@@ -39,7 +39,6 @@
   riemann_c_client,
   rrdtool,
   udev,
-  varnish,
   xen,
   yajl,
   # Defaults to `null` for all supported plugins (except xen, which is marked as
@@ -48,6 +47,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   # Plugins that have dependencies.
   # Please help to extend these!
   plugins = {
@@ -144,10 +144,6 @@ let
     ];
     snmp.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ net-snmp ];
     snmp_agent.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ net-snmp ];
-    varnish.buildInputs = [
-      curl
-      varnish
-    ];
     virt.buildInputs = [
       libvirt
       libxml2

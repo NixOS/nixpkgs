@@ -24,10 +24,6 @@
   '';
 
   patches = [
-    # Fix this error when building bootia32.efi and bootx64.efi:
-    # error: PHDR segment not covered by LOAD segment
-    ./no-dynamic-linker.patch
-
     # multiple header dirs, see above
     ./sys-headers-incsdir.patch
   ];

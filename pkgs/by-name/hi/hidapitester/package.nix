@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hidapitester";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "todbot";
     repo = "hidapitester";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WqyAaoiiuHbLAgfGpl4M3AHyWFl8KPGA/OaO2E/uix0=";
+    hash = "sha256-tnPKCSDhoCFUUHAWQrm7lytsMEnKmTkPaaKXJoEVuts=";
   };
 
   postUnpack = ''

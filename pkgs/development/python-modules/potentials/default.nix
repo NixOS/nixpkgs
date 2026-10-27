@@ -32,6 +32,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-GGEpxp0ww8Ridiol5xqAYA6zXUFnOGiMvka49nlJHEU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.26,<0.12" "uv_build"
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [

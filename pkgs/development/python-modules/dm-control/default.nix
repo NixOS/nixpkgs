@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dm-control";
-  version = "1.0.48";
+  version = "1.0.50";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google-deepmind";
     repo = "dm_control";
     tag = finalAttrs.version;
-    hash = "sha256-YziB2VmUe/Isq/r1pLJcmXHIQVby3lFgr94cFpY+Zzo=";
+    hash = "sha256-4aOcOipIyh5f7atJr5t6n/51DbMW6I+xehfVuvNBxIk=";
   };
 
   build-system = [

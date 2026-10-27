@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyupgrade";
-  version = "3.21.2";
+  version = "3.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "pyupgrade";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u4iudzPhVuAOS9cL3z6FCVpWKJZHg7UGpe9aHnN7Byc=";
+    hash = "sha256-B3x1ykS+8gzaDIYb1f6locaHw/wBMdGfniEbthDdrL4=";
   };
 
   build-system = [ setuptools ];

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.3.10";
+  version = "1.3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Swamp-Ig";
     repo = "pizone";
     tag = "v${version}";
-    hash = "sha256-X5yH3mzevCq4hO1IikfcvXmk9rTfL3jiMaf7mACZ+k0=";
+    hash = "sha256-I6lenTAcGWwE6CJ7vCfEL5VdIa1VMwIYOSoe5K9vtAg=";
   };
 
   build-system = [

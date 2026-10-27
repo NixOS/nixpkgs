@@ -86,8 +86,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "157.0.1";
-    sha512 = "12c6151150cadce68b113720788ff6d4cdcd39ae57131152f92a272a76c2590fd929edd45faed4e81e1f32eb58d0b22ca003a37294b9daf6648d39194f09fd95";
+    version = "158.0";
+    sha512 = "fe19e0e7540ef27af0bdb730963a9b4ad91472a9ab8b0c5eddd291c2d234ab7ac68ddf71c8595090b87cfd0deeaebc66dbce15c65c90fd09183b05db4bdce263";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -100,8 +100,8 @@ rec {
   thunderbird-153 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "153.4.0esr";
-    sha512 = "93c43a75010b2edd36c58d054cd2e15a879b9e62e21f419bd8c7f97b8f7f6f29e8aed9d445ab9ccebdc1825dbf0f5e82e6e316c5f817f877d64266a2f2dbf9ec";
+    version = "153.5.1esr";
+    sha512 = "e2f84cbef7454d908438c79d7073297d7cb5aacdbe65f9d2680d2a80be46b800fc6a7cce50037e8646ed1e9846ef54383f72695a69dddc43f1d972a76ba369a3";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-153";
@@ -109,24 +109,10 @@ rec {
       versionSuffix = "esr";
     };
   };
-
-  thunderbird-140 = common {
-    applicationName = "Thunderbird ESR";
-
-    version = "140.16.0esr";
-    sha512 = "9844641f9c8b4e7c96445d6d6fc554fc80afd8652899de3458d183f9381a18f08233e5d2e2beedd6adf2a0a6e1331e7abb55e698765b27110ca2dafdf12ecbb7";
-
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbirdPackages.thunderbird-140";
-      versionPrefix = "140";
-      versionSuffix = "esr";
-    };
-
-    broken = true;
-  };
 }
 // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
   thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
   thunderbird-128 = throw "Thunderbird 128 support ended in August 2025";
+  thunderbird-140 = throw "Thunderbird 140 has been removed. Use thunderbird-esr instead.";
 }

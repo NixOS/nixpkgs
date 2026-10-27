@@ -15,17 +15,18 @@
   nixosTests,
   librsvg,
   nix-update-script,
+  fetchurl,
 }:
 
 let
-  version = "260728-bbde8f452";
+  version = "261007-65faaae5d";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
-    rev = version;
-    hash = "sha256-NRVaTrYrYpOdeNLM+GY6Ae7jXR3uNpAVjhLWWoHCdyc=";
+    tag = version;
+    hash = "sha256-cn+Xs4MYpvlOkrrSbYSoHuBgCfmdBDvKyRX1ovj4ppk=";
   };
 
   backend = callPackage ./backend.nix { inherit src version; };
@@ -38,6 +39,16 @@ let
       extension = "zip";
       url = "https://dl.photoprism.app/tensorflow/${name}.zip?${version}";
       stripRoot = false;
+    };
+
+  fetchOnnxModel =
+    { name, hash }:
+    {
+      inherit name;
+      file = fetchurl {
+        inherit hash;
+        url = "https://dl.photoprism.app/onnx/models/${name}?${version}";
+      };
     };
 
   # NB: needs to be a derivation with a src attribute so the update script
@@ -57,19 +68,29 @@ let
       passthru.updateScript = nix-update-script { };
     };
 
+  efficientformerv2_s2 = fetchOnnxModel {
+    name = "efficientformerv2_s2.onnx";
+    hash = "sha256-fWKIrYlHPCuhGXTJwkqW4HxOPuSMUxCB8QimOA3I0Ks=";
+  };
+
   facenet = fetchModel {
     name = "facenet";
     hash = "sha256-aS5kkNhxOLSLTH/ipxg7NAa1w9X8iiG78jmloR1hpRo=";
   };
 
-  nasnet = fetchModel {
-    name = "nasnet";
-    hash = "sha256-bF25jPmZLyeSWy/CGXZE/VE2UupEG2q9Jmr0+1rUYWE=";
+  sface = fetchOnnxModel {
+    name = "face_recognition_sface_2021dec.onnx";
+    hash = "sha256-C6n7+gG1JwyWYnxO94TahZkx4C8EQZyCnoNIQIfDTnk=";
   };
 
-  nsfw = fetchModel {
-    name = "nsfw";
-    hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
+  yahoo_open_nsfw = fetchOnnxModel {
+    name = "yahoo_open_nsfw.onnx";
+    hash = "sha256-dD3ewLjWpu6RL1K0c32B9NHlHlytAfI4T2ffCk04S5c=";
+  };
+
+  yunet = fetchOnnxModel {
+    name = "face_detection_yunet_2026may.onnx";
+    hash = "sha256-66/OTjwRjWVUY0vlwnqzM7TAR6mow/rx18+TEBwi8PA=";
   };
 
   assets_path = "$out/share/photoprism";
@@ -104,13 +125,17 @@ stdenv.mkDerivation (finalAttrs: {
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
     rm ${assets_path}/models
-    mkdir -p ${assets_path}/models
+    mkdir -p ${assets_path}/models/{efficientformerv2_s2,sface,yahoo_open_nsfw,yunet}
     ln -s ${frontend}/assets/models/* ${assets_path}/models/
 
     # install tensorflow models
-    ln -s ${nasnet}/nasnet ${assets_path}/models/
-    ln -s ${nsfw}/nsfw ${assets_path}/models/
     ln -s ${facenet}/facenet ${assets_path}/models/
+
+    # install onnx models
+    ln -s ${efficientformerv2_s2.file} ${assets_path}/models/efficientformerv2_s2/${efficientformerv2_s2.name}
+    ln -s ${sface.file} ${assets_path}/models/sface/${sface.name}
+    ln -s ${yahoo_open_nsfw.file} ${assets_path}/models/yahoo_open_nsfw/${yahoo_open_nsfw.name}
+    ln -s ${yunet.file} ${assets_path}/models/yunet/${yunet.name}
 
     runHook postInstall
   '';
@@ -119,8 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit backend frontend;
 
     facenet = wrapModelForUpdate facenet;
-    nasnet = wrapModelForUpdate nasnet;
-    nsfw = wrapModelForUpdate nsfw;
+    efficientformerv2_s2 = wrapModelForUpdate efficientformerv2_s2;
+    yahoo_open_nsfw = wrapModelForUpdate yahoo_open_nsfw;
+    sface = wrapModelForUpdate sface.file;
+    yunet = wrapModelForUpdate yunet.file;
 
     tests = {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
@@ -134,11 +161,15 @@ stdenv.mkDerivation (finalAttrs: {
         "--subpackage"
         "frontend"
         "--subpackage"
+        "efficientformerv2_s2"
+        "--subpackage"
         "facenet"
         "--subpackage"
-        "nasnet"
+        "sface"
         "--subpackage"
-        "nsfw"
+        "yahoo_open_nsfw"
+        "--subpackage"
+        "yunet"
       ];
     };
   };

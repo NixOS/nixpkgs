@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "minimax-mcp";
-  version = "0-unstable-2026-03-19";
+  version = "0-unstable-2026-08-20";
 
   src = fetchFromGitHub {
     owner = "MiniMax-AI";
     repo = "MiniMax-MCP";
-    rev = "1a53cf1";
-    hash = "sha256-pi9QMEdgJ5HYn7MNulsQ3kn93OtBGad8Ehojc8apAEs=";
+    rev = "0856b9aef8a9d676bb63bdd6b6426d7b640a3b7a";
+    hash = "sha256-5s6pax4dJLec2NlQ4Q/aS4+auScdioFbwxstXtOHXUc=";
   };
 
   pyproject = true;

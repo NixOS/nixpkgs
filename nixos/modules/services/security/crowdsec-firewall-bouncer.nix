@@ -7,6 +7,8 @@
 let
   cfg = config.services.crowdsec-firewall-bouncer;
   format = pkgs.formats.yaml { };
+
+  cfg-crowdsec = config.services.crowdsec;
 in
 {
   options.services.crowdsec-firewall-bouncer =
@@ -90,8 +92,8 @@ in
               type = types.str;
               description = "URL of the local API.";
               example = "http://127.0.0.1:8080";
-              default = "http://${config.services.crowdsec.settings.general.api.server.listen_uri}";
-              defaultText = lib.literalExpression ''http://$\{config.services.crowdsec.settings.general.api.server.listen_uri}'';
+              default = "http://${config.services.crowdsec.settings.config.api.server.listen_uri}";
+              defaultText = lib.literalExpression ''http://$\{config.services.crowdsec.settings.config.api.server.listen_uri}'';
             };
             api_key = mkOption {
               type = types.nullOr types.str;
@@ -155,6 +157,7 @@ in
       update_frequency = lib.mkDefault "10s";
       log_mode = lib.mkDefault "stdout";
       log_level = lib.mkDefault "info";
+      log_dir = lib.mkDefault "/var/log/crowdsec-firewall-bouncer";
 
       # iptables-specific config
       blacklists_ipv4 = lib.mkDefault "crowdsec-blacklists";
@@ -220,135 +223,70 @@ in
           };
     };
 
-    systemd.services =
-      let
-        apiKeyFile = "/var/lib/crowdsec-firewall-bouncer-register/api-key.cred";
-      in
-      {
-        crowdsec-firewall-bouncer-register = lib.mkIf cfg.registerBouncer.enable rec {
-          description = "Register the CrowdSec Firewall Bouncer to the local CrowdSec service";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "crowdsec.service" ];
-          wants = after;
-          script = ''
-            cscli=${lib.getExe' config.services.crowdsec.package "cscli"}
-            if $cscli bouncers list --output json | ${lib.getExe pkgs.jq} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
-              # Bouncer already registered. Verify the API key is still present
-              if [ ! -f ${apiKeyFile} ]; then
-                echo "Bouncer registered but API key is not present"
-                exit 1
-              fi
-            else
-              # Bouncer not registered
-              # Remove any previously saved API key
-              rm -f '${apiKeyFile}'
-              # Register the bouncer and save the new API key
-              if ! $cscli bouncers add --output raw -- ${lib.escapeShellArg cfg.registerBouncer.bouncerName} >${apiKeyFile}; then
-                # Failed to register the bouncer
-                rm ${apiKeyFile}
-                exit 1
-              fi
-            fi
-          '';
-          serviceConfig = {
-            Type = "oneshot";
+    systemd = {
 
-            # Run as crowdsec user to be able to use cscli
-            User = config.services.crowdsec.user;
-            Group = config.services.crowdsec.group;
-
-            StateDirectory = "crowdsec-firewall-bouncer-register crowdsec";
-
-            DynamicUser = true;
-            LockPersonality = true;
-            PrivateDevices = true;
-            ProcSubset = "pid";
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectHome = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            SystemCallArchitectures = "native";
-
-            RestrictAddressFamilies = "none";
-            CapabilityBoundingSet = [ "" ];
-            SystemCallFilter = [
-              "@system-service"
-              "~@privileged"
-              "~@resources"
-            ];
-            UMask = "0077";
-          };
+      tmpfiles.settings."10-crowdsec-firewall-bouncer" = {
+        "/var/lib/crowdsec-firewall-bouncer-register".d = {
+          user = cfg-crowdsec.user;
+          group = cfg-crowdsec.user;
         };
+      };
 
-        crowdsec-firewall-bouncer =
-          let
-            runtime-dir-name = "crowdsec-firewall-bouncer";
-            final-config-file = "/run/${runtime-dir-name}/config.yaml";
-            generateConfig = pkgs.writeShellScript "crowdsec-firewall-bouncer-config" ''
-              set -euo pipefail
-              umask 077
-
-              # Copy the template to the final location
-              cp ${format.generate "crowdsec-firewall-bouncer-config-template.yml" cfg.settings} ${final-config-file}
-              chmod 0600 ${final-config-file}
-
-              # Replace the api_key placeholder with the secret
-              ${lib.getExe pkgs.replace-secret} '@API_KEY_FILE@' "$CREDENTIALS_DIRECTORY/API_KEY_FILE" ${final-config-file}
-            '';
-
-            isIptables = (cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset");
-            isNftables = cfg.settings.mode == "nftables";
-          in
-          rec {
-            description = "CrowdSec Firewall Bouncer";
+      services =
+        let
+          apiKeyFile = "/var/lib/crowdsec-firewall-bouncer-register/api-key.cred";
+        in
+        {
+          crowdsec-firewall-bouncer-register = lib.mkIf cfg.registerBouncer.enable rec {
+            description = "Register the CrowdSec Firewall Bouncer to the local CrowdSec service";
             wantedBy = [ "multi-user.target" ];
-            partOf = lib.optional isNftables "nftables.service" ++ lib.optional isIptables "firewall.service";
-            after =
-              lib.optional isNftables "nftables.service"
-              ++ lib.optional isIptables "firewall.service"
-              ++ lib.optional config.services.crowdsec.enable "crowdsec.service";
+            after = [ "crowdsec.service" ];
             wants = after;
-            requires = lib.optional cfg.registerBouncer.enable "crowdsec-firewall-bouncer-register.service";
-
-            # When using iptables/ipset modes, the bouncer calls external binaries so they must be added to the path.
-            # For nftables mode, it does not depend on external binaries.
-            path = lib.optionals isIptables [
-              pkgs.iptables
-              pkgs.ipset
-            ];
-
-            serviceConfig = rec {
-              Type = "notify";
-              ExecStartPre = [
-                generateConfig
-                "${lib.getExe cfg.package} -c ${final-config-file} -t"
-              ];
-              ExecStart = [
-                "${lib.getExe cfg.package} -c ${final-config-file}"
-              ];
-
-              # Same as upstream
-              LimitNOFILE = 65536;
-              KillMode = "mixed";
-
-              # Load the api_key secret to be able to use it when generating the final config
-              LoadCredential =
-                if (cfg.registerBouncer.enable) then
-                  "API_KEY_FILE:${apiKeyFile}"
-                else if (cfg.secrets.apiKeyPath != null) then
-                  "API_KEY_FILE:${cfg.secrets.apiKeyPath}"
+            path = [ config.services.crowdsec.package ];
+            script = ''
+              echo "Checking bouncer registration..."
+              if cscli bouncers list --output json | ${lib.getExe pkgs.jq} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
+                echo "Bouncer already registered. Verify the API key is still present"
+                if [ ! -f ${apiKeyFile} ]; then
+                  echo "Bouncer registered but API key is not present"
+                  echo "Unregistering bouncer..."
+                  cscli bouncers delete ${cfg.registerBouncer.bouncerName} || true
                 else
-                  null;
+                  echo "API key file exists, nothing to do"
+                  exit 0
+                fi
+              else
+                echo "Bouncer not registered"
+                echo "Remove any previously saved API key"
+                rm -f '${apiKeyFile}'
+              fi
+
+              echo "Register the bouncer and save the new API key"
+              if ! cscli bouncers add --output raw -- ${lib.escapeShellArg cfg.registerBouncer.bouncerName} > ${apiKeyFile} 2>&1; then
+                echo "Failed to register the bouncer"
+                cat ${apiKeyFile} || true  # Show error message
+                rm -f ${apiKeyFile}
+                exit 1
+              fi
+
+              chmod 0440 ${apiKeyFile} || true
+              echo "Successfully registered bouncer and saved API key"
+
+              cscli bouncers list
+            '';
+            serviceConfig = {
+              Type = "oneshot";
+
+              # Run as crowdsec user to be able to use cscli
+              User = config.services.crowdsec.user;
+              Group = config.services.crowdsec.group;
+
+              ReadWritePaths = [
+                "/var/lib/crowdsec"
+                "/var/lib/crowdsec-firewall-bouncer-register"
+              ];
 
               DynamicUser = true;
-              RuntimeDirectory = runtime-dir-name;
-
               LockPersonality = true;
               PrivateDevices = true;
               ProcSubset = "pid";
@@ -364,18 +302,8 @@ in
               RestrictRealtime = true;
               SystemCallArchitectures = "native";
 
-              RestrictAddressFamilies = [
-                "AF_NETLINK"
-                "AF_UNIX"
-                "AF_INET"
-                "AF_INET6"
-              ];
-              AmbientCapabilities = [
-                # Needed to be able to manipulate the rulesets
-                "CAP_NET_ADMIN"
-              ]
-              ++ lib.optional ((cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset")) "CAP_NET_RAW";
-              CapabilityBoundingSet = AmbientCapabilities;
+              RestrictAddressFamilies = "none";
+              CapabilityBoundingSet = [ "" ];
               SystemCallFilter = [
                 "@system-service"
                 "~@privileged"
@@ -384,7 +312,108 @@ in
               UMask = "0077";
             };
           };
-      };
+
+          crowdsec-firewall-bouncer =
+            let
+              runtime-dir-name = "crowdsec-firewall-bouncer";
+              final-config-file = "/run/${runtime-dir-name}/config.yaml";
+              generateConfig = pkgs.writeShellScript "crowdsec-firewall-bouncer-config" ''
+                set -euo pipefail
+                umask 077
+
+                # Copy the template to the final location
+                cp ${format.generate "crowdsec-firewall-bouncer-config-template.yml" cfg.settings} ${final-config-file}
+                chmod 0600 ${final-config-file}
+
+                # Replace the api_key placeholder with the secret
+                ${lib.getExe pkgs.replace-secret} '@API_KEY_FILE@' "$CREDENTIALS_DIRECTORY/API_KEY_FILE" ${final-config-file}
+              '';
+
+              isIptables = (cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset");
+              isNftables = cfg.settings.mode == "nftables";
+            in
+            rec {
+              description = "CrowdSec Firewall Bouncer";
+              wantedBy = [ "multi-user.target" ];
+              partOf = lib.optional isNftables "nftables.service" ++ lib.optional isIptables "firewall.service";
+              after =
+                lib.optional isNftables "nftables.service"
+                ++ lib.optional isIptables "firewall.service"
+                ++ lib.optional config.services.crowdsec.enable "crowdsec.service"
+                ++ lib.optional cfg.registerBouncer.enable "crowdsec-firewall-bouncer-register.service";
+              wants = after;
+              requires = lib.optional cfg.registerBouncer.enable "crowdsec-firewall-bouncer-register.service";
+
+              # When using iptables/ipset modes, the bouncer calls external binaries so they must be added to the path.
+              # For nftables mode, it does not depend on external binaries.
+              path = lib.optionals isIptables [
+                pkgs.iptables
+                pkgs.ipset
+              ];
+
+              serviceConfig = rec {
+                Type = "notify";
+                ExecStartPre = [
+                  generateConfig
+                  "${lib.getExe cfg.package} -c ${final-config-file} -t"
+                ];
+                ExecStart = [
+                  "${lib.getExe cfg.package} -c ${final-config-file}"
+                ];
+
+                # Same as upstream
+                LimitNOFILE = 65536;
+                KillMode = "mixed";
+
+                # Load the api_key secret to be able to use it when generating the final config
+                LoadCredential =
+                  if (cfg.registerBouncer.enable) then
+                    "API_KEY_FILE:${apiKeyFile}"
+                  else if (cfg.secrets.apiKeyPath != null) then
+                    "API_KEY_FILE:${cfg.secrets.apiKeyPath}"
+                  else
+                    null;
+
+                DynamicUser = true;
+                RuntimeDirectory = runtime-dir-name;
+
+                LockPersonality = true;
+                PrivateDevices = true;
+                ProcSubset = "pid";
+                ProtectClock = true;
+                ProtectControlGroups = true;
+                ProtectHome = true;
+                ProtectHostname = true;
+                ProtectKernelLogs = true;
+                ProtectKernelModules = true;
+                ProtectKernelTunables = true;
+                ProtectProc = "invisible";
+                RestrictNamespaces = true;
+                RestrictRealtime = true;
+                SystemCallArchitectures = "native";
+
+                RestrictAddressFamilies = [
+                  "AF_NETLINK"
+                  "AF_UNIX"
+                  "AF_INET"
+                  "AF_INET6"
+                ];
+                AmbientCapabilities = [
+                  # Needed to be able to manipulate the rulesets
+                  "CAP_NET_ADMIN"
+                ]
+                ++ lib.optional ((cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset")) "CAP_NET_RAW";
+                CapabilityBoundingSet = AmbientCapabilities;
+                SystemCallFilter = [
+                  "@system-service"
+                  "~@privileged"
+                  "~@resources"
+                ];
+                UMask = "0077";
+              };
+            };
+        };
+    };
   };
 
   meta = {

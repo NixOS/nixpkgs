@@ -5,6 +5,7 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
+  fetchpatch,
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -150,62 +151,58 @@ let
       test = "shebang.sh";
     }
   ];
+
+  # `libutil` calls `NtCreateFile` and `RtlNtStatusToDosError` without linking
+  # `ntdll`, so it only links with a toolchain that adds `-lntdll` implicitly.
+  # Windows only, so that `nix` is not rebuilt for every other platform.
+  #
+  # Temporary: fixed in https://github.com/NixOS/nix/pull/16306 and backported,
+  # but not yet released. Drop this from each version once its next release,
+  # which will include the backport, is packaged:
+  #
+  # - 2.34: https://github.com/NixOS/nix/pull/16607
+  # - 2.35: https://github.com/NixOS/nix/pull/16608
+  windowsPatches = lib.optionals stdenv.hostPlatform.isWindows [
+    (fetchpatch {
+      name = "libutil-link-ntdll-on-windows.patch";
+      url = "https://github.com/NixOS/nix/commit/4b247ec7f961686e60da6f012e4e128e30e8c82f.patch";
+      hash = "sha256-WDx0xknyin7ayQUIA5Zafk2tEySVIVqUZ0RdsQKAN8Q=";
+    })
+  ];
 in
 lib.makeExtensible (
   self:
   (
     {
-      nixComponents_2_31 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.31.5";
-          inherit teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
-          };
-        }).appendPatches
-          (
-            lib.optionals stdenv.hostPlatform.isDarwin [
-              # Avoid recursive arch probes when libnixstore is preloaded by Cachix.
-              # https://github.com/NixOS/nixpkgs/issues/562481
-              ./detect-rosetta-via-runtime-file.patch
-            ]
-          );
-
-      nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
-
       nixComponents_2_34 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.34.8";
+          version = "2.34.9";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_34";
           src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-Rvy1PmIUMGI0IS/kwDwmf/VrorU8v1iZYejssSVu1rY=";
+            hash = "sha256-ZJwg/qG4M1Impy774HKMZ3Hsq7vlBJy7sXl1fI9QDXI=";
           });
         }).appendPatches
-          [ ];
+          windowsPatches;
 
       nix_2_34 = addTests "nix_2_34" self.nixComponents_2_34.nix-everything;
 
       nixComponents_2_35 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.35.2";
+          version = "2.35.3";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_35";
           src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-C/YEm/5IPiAMxQH5aHlkwgQMkLqK7NVsudEWdlzBZAA=";
+            hash = "sha256-qtlx8ywd1qj2ToZTNBunXE7JUajLtw44ja3r7+d47D4=";
           });
         }).appendPatches
-          [ ];
+          windowsPatches;
 
       nix_2_35 = addTests "nix_2_35" self.nixComponents_2_35.nix-everything;
 
@@ -214,12 +211,12 @@ lib.makeExtensible (
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "203f85b2e851fc52e253e8e33eff5fb92936736a";
-            hash = "sha256-ahm58Y+ASv19VGVzC2IwNsQpkVR8rgEwwHDYwnMadkI=";
+            rev = "f3f184834895f45030d69f20a311b2eac99ebf1d";
+            hash = "sha256-TyuLrhxjzHjIYWtpBgSHi8wdKw7ciLiyfrdfJe33uEc=";
           };
         in
         (nixDependencies.callPackage ./modular/packages.nix {
-          version = "2.36pre20260912_${lib.substring 0 8 src.rev}";
+          version = "2.36pre20261020_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = removeFunctionalTests commonDisabledTests src;
@@ -244,18 +241,20 @@ lib.makeExtensible (
         ) (lib.range 4 23)
       )
       // {
-        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
-        nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
-        nixComponents_2_30 = throw "nixComponents_2_30 has been removed. use nixComponents_2_31.";
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_34.";
+        nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_34.";
+        nixComponents_2_30 = throw "nixComponents_2_30 has been removed. use nixComponents_2_34.";
+        nixComponents_2_31 = throw "nixComponents_2_31 has been removed. use nixComponents_2_34.";
         nixComponents_2_32 = throw "nixComponents_2_32 has been removed. use nixComponents_2_34.";
         nixComponents_2_33 = throw "nixComponents_2_33 has been removed. use nixComponents_2_34.";
-        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
-        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_31.";
-        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_31.";
-        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
-        nix_2_28 = throw "nix_2_28 has been removed. use nix_2_31.";
-        nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
-        nix_2_30 = throw "nix_2_30 has been removed. use nix_2_31.";
+        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_34.";
+        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_34.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_34.";
+        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_34.";
+        nix_2_28 = throw "nix_2_28 has been removed. use nix_2_34.";
+        nix_2_29 = throw "nix_2_29 has been removed. use nix_2_34.";
+        nix_2_30 = throw "nix_2_30 has been removed. use nix_2_34.";
+        nix_2_31 = throw "nix_2_31 has been removed. use nix_2_34.";
         nix_2_32 = throw "nix_2_32 has been removed. use nix_2_34.";
         nix_2_33 = throw "nix_2_33 has been removed. use nix_2_34.";
 

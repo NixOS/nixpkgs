@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pkg-config,
   dbus,
   lndir,
@@ -41,6 +42,10 @@ buildPythonPackage (finalAttrs: {
     ./pyqt6-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/pyqt6/-/raw/29d72ada23513ab0ece1b9980059c39f677e5d32/qt-6.12.patch";
+      hash = "sha256-ZOFmSeS1bDUZjsqo3ENPXRvvt/6aI+ePSiZoqh9vnTk=";
+    })
   ];
 
   build-system = [

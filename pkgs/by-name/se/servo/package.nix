@@ -69,13 +69,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-inhpSzLQExTD5VT7hCzoycYMa2U4oZv8fz7NhZAlP2I=";
+    hash = "sha256-blDr9zZHHAGqK8Eoh0ixazeUDZKr2T1El7Y5k2axXcc=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-hjea0ze+GO3i+x1HZxSpWfXc57kvVVjmTWl2ytQYxco=";
+  cargoHash = "sha256-3jUZNiESi9zYFQAbf1dYmHVgHNzmD2aY2CuS8K7SxEY=";
 
   postPatch = ''
     # The mozjs crates all use cbindgen with `cargo metadata` invocations,

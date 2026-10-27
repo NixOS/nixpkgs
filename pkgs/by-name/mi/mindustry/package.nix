@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "160.6";
+  version = "160.7";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,7 +48,7 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-B3pZQiaDJ4GSTsFCeCu/ENYfIxSWyyR+J/UHuKItXYI=";
+    hash = "sha256-b6zbdd8/MD5WzGTQ2LPMnZ09H/cVAsxksKwjTuPm8NE=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";

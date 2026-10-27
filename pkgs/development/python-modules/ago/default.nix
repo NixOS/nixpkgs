@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ago";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FWBBWXEcR+CPISUfKL+0ODlCCHU1Zg2+ZAsvYZP5K+Q=";
+    hash = "sha256-ewnXDTtpi9fdbtlSWDQwlDuRVpBo3rKhgEgOQRvJDEc=";
   };
 
   build-system = [ setuptools ];

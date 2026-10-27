@@ -37,7 +37,7 @@ index bea271fce..79312f1ae 100644
          # Assume to be *nix like
          dlloader = ctypes.CDLL
 -        dldir = ['/usr/lib', '/usr/lib64']
-+        dldir = ['@libcuda@/lib']
++        dldir = ['@libcuda@']
          dlnames = ['libcuda.so', 'libcuda.so.1']
  
      if envpath:

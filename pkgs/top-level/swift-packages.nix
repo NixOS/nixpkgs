@@ -1,9 +1,20 @@
 let
   autoCalledPackages = import ./by-name-overlay.nix ../development/compilers/swift/by-name;
 
+  swift_release =
+    let
+      raw_release = builtins.readFile ../development/compilers/swift/swift-version;
+      len = builtins.stringLength raw_release;
+    in
+    builtins.substring 0 (len - 1) raw_release; # Drop the trailing newline.
+
   swift_sources_6_2 = builtins.fromJSON (
+    # Contains only the hashes for the packages used to build the bootstrap compiler.
+    # Hashes for other packages (like SwiftPM) are omitted.
     builtins.readFile ../development/compilers/swift/sources-6.2.json
   );
+
+  swift_sources = builtins.fromJSON (builtins.readFile ../development/compilers/swift/sources.json);
 
   mkBootstrapSwiftPackages =
     {
@@ -60,16 +71,34 @@ let
   # - Stage 0 builds a minimal Swift compiler using only C++.
   # - Stage 1 builds a Swift compiler using the stage 0 Swift compiler. Features needed to build macros are enabled.
   # - Stage 2 builds a full Swift compiler and stdlib using the stage 1 compiler.
-  bootstrapStage0SwiftPackages = mkBootstrapSwiftPackages {
+  bootstrapStage0SwiftPackages62 = mkBootstrapSwiftPackages {
     inherit lib swiftPackages;
     bootstrapStage = 0;
     buildSwiftPackages = swiftPackages.overrideScope (_: _: { swift = null; });
+    swift_sources = swift_sources_6_2;
+    swift_release = "6.2.4";
+  };
+
+  bootstrapStage1SwiftPackages62 = mkBootstrapSwiftPackages {
+    inherit lib swiftPackages;
+    bootstrapStage = 1;
+    buildSwiftPackages = bootstrapStage0SwiftPackages62;
+    swift_sources = swift_sources_6_2;
+    swift_release = "6.2.4";
+  };
+
+  bootstrapStage2SwiftPackages62 = mkBootstrapSwiftPackages {
+    inherit lib swiftPackages;
+    bootstrapStage = 2;
+    buildSwiftPackages = bootstrapStage1SwiftPackages62;
+    swift_sources = swift_sources_6_2;
+    swift_release = "6.2.4";
   };
 
   bootstrapStage1SwiftPackages = mkBootstrapSwiftPackages {
     inherit lib swiftPackages;
     bootstrapStage = 1;
-    buildSwiftPackages = bootstrapStage0SwiftPackages;
+    buildSwiftPackages = bootstrapStage2SwiftPackages62;
   };
 in
 
@@ -87,13 +116,65 @@ makeScopeWithSplicing' {
           ln -s ${lib.getExe' llvmPackages.llvm "llvm-libtool-darwin"} "$out/bin/libtool"
         '';
       };
+
+      /**
+        Provides a list of patches for the specified major.minor version.
+
+        # Inputs
+        `path`
+        : The path where to get patches (excluding version-based path components).
+          The function at `<path>/<version.major>.<version.minor>/default.nix` is called with `callPackage`.
+
+        `version`
+        : The package’s version for which to get patches (typically `finalAttrs.version`)
+
+        `...`
+        : Additional arguments passed to `callPackage`.
+
+        # Type
+        ```
+        patchesForVersion :: { path :: Path, version :: String, ... } -> [Derivation | Path]
+
+        # Examples
+        :::{.example}
+        ## `patchesForVersion` usage example
+
+        ```nix
+        patches = patchesForVersion {
+          version = "6.2.4";
+          path = ./patches;
+        }
+        => [
+        [
+          <path>/patches/6.2/0001-Read-C-and-C-stdlib-flags-from-the-wrapped-compiler.patch
+          <path>/patches/6.2/0002-Use-Nixpkgs-C-and-C-stdlib-paths-in-ClangImporter.patch
+          <path>/patches/6.2/0003-cmark-build-revamp.patch
+          <path>/patches/6.2/0004-sil-missing-headers.patch
+          «derivation /nix/store/nwpjbbdszqzk0idizcm5rza1w4iql0m1-0005-specify-liblto-path.patch.drv»
+          <path>/patches/6.2/0006-use-nixpkgs-libdispatch.patch
+          «derivation /nix/store/bxj26lblfhjz77aliyjgz6alpcxazs2l-0007-Help-Swift-JIT-find-the-separate-stdlib-and-framewor.patch.drv»
+          «derivation /nix/store/x3nk6n2ar2j31xb40cijg7dalwrcm2sn-cfbe70db5d1e65bed2388f97ee52f65719c812b3.patch?full_index=1.drv»
+        ]
+        ```
+
+        :::
+      */
+      patchesForVersion =
+        { path, version, ... }@args:
+        let
+          args' = lib.removeAttrs args [
+            "path"
+            "version"
+          ];
+        in
+        self.callPackage (lib.path.append path (lib.versions.majorMinor version)) args';
     in
     {
       bootstrapStage = 2;
 
       buildSwiftPackages = bootstrapStage1SwiftPackages;
 
-      inherit llvm_libtool;
+      inherit llvm_libtool patchesForVersion swift_sources;
 
       llvmPackages_upstream = llvmPackages;
 
@@ -104,14 +185,12 @@ makeScopeWithSplicing' {
         swift-testing = null;
         enableRepl = false;
       };
-
-      swift_sources = swift_sources_6_2;
     };
   f = lib.extends autoCalledPackages (
     self:
     {
       stdenv = clangStdenv;
-      swift_release = "6.2.4";
+      inherit swift_release;
     }
     // lib.optionalAttrs config.allowAliases {
       # Compatibility aliases for the old Swift packaging.

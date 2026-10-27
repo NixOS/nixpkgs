@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "skops";
-  version = "0.14";
+  version = "0.15";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "skops-dev";
     repo = "skops";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AyrsXomc3vpfdqsBL51UmGXsjPsAJ+dx3uf3T8nPk/Y=";
+    hash = "sha256-+X5llGP41V+q1BAGEA6Snlt8M9dOS0Bog5XqMeVK0Xs=";
   };
 
   build-system = [ hatchling ];

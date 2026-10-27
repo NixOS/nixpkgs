@@ -17,7 +17,7 @@
   libbpf,
   ncurses,
   libmysqlclient,
-  lua,
+  lua5_2_compat,
   hwloc,
   numactl,
   readline,
@@ -39,10 +39,13 @@
   symlinkJoin,
   s2n-tls,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
-  version = "26-05-4-1";
+  version = "26-05-5-1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -51,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "slurm";
     # The release tags use - instead of .
     tag = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-R3kHM9CohiJljffYKEe4CdNltKNQkcRuPFqOT0y+3n0=";
+    hash = "sha256-CI5xO7BYu2m+bFuveskvu+h1BL+LoP+pgSG3slRy1h0=";
   };
 
   outputs = [

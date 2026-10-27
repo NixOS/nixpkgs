@@ -102,7 +102,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.spease ];
     # 64-bit only
-    platforms = lib.platforms.aarch64 ++ lib.platforms.x86_64;
+    platforms = [ lib.systems.inspect.patterns.is64bit ];
     mainProgram = "zfp";
   };
 })

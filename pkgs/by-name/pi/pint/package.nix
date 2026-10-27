@@ -17,7 +17,6 @@ buildGoModule (finalAttrs: {
   version = "0.87.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
   # required for tests
   __darwinAllowLocalNetworking = true;
 

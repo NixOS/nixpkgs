@@ -3,7 +3,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchurl,
-  gcc,
   icu,
   nix-update-script,
   nixosTests,
@@ -13,6 +12,7 @@
   stdenv,
   uwsgi,
 }:
+
 let
   version = "1.47.0";
 
@@ -28,6 +28,8 @@ let
     python3 = python;
   };
 
+  icuExtensionSuffix = stdenv.hostPlatform.extensions.sharedLibrary;
+
   # Compile the SQLite ICU extension for case-insensitive search and ordering.
   # This mirrors the compile-icu stage in the upstream Dockerfile.
   icuExtension = stdenv.mkDerivation {
@@ -40,10 +42,7 @@ let
       hash = "sha256-DkELE5p82yZVz0GVFdWWAEU8eo10ob0fqx66Q7rxv+U=";
     };
 
-    nativeBuildInputs = [
-      gcc
-      pkg-config
-    ];
+    nativeBuildInputs = [ pkg-config ];
 
     buildInputs = [
       icu.dev
@@ -54,16 +53,24 @@ let
 
     buildPhase = ''
       runHook preBuild
-      gcc -fPIC -shared $src \
+
+      $CC -fPIC -shared \
         -I${sqlite.dev}/include \
-        $(pkg-config --libs --cflags icu-uc icu-io) \
-        -o libicu.so
+        $(pkg-config --cflags icu-uc icu-io icu-i18n) \
+        $src \
+        $(pkg-config --libs icu-uc icu-io icu-i18n) \
+        -o libicu${icuExtensionSuffix}
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
-      install -Dm755 libicu.so $out/lib/libicu.so
+
+      install -Dm755 \
+        libicu${icuExtensionSuffix} \
+        $out/lib/libicu${icuExtensionSuffix}
+
       runHook postInstall
     '';
   };
@@ -104,6 +111,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   dontCheckRuntimeDeps = true;
+
   # Django's runserver re-executes sys.argv[0] via the Python interpreter,
   # so manage.py must remain a valid Python script and cannot be wrapped in bash.
   dontWrapPythonPrograms = true;
@@ -125,8 +133,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/bookmarks
       mv bookmarks/static $out/bookmarks
+
       runHook postInstall
     '';
   };
@@ -139,7 +149,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     substituteInPlace bookmarks/settings/base.py \
       --replace-fail \
         'SQLITE_ICU_EXTENSION_PATH = "./libicu.so"' \
-        'SQLITE_ICU_EXTENSION_PATH = "${icuExtension}/lib/libicu.so"'
+        'SQLITE_ICU_EXTENSION_PATH = "${icuExtension}/lib/libicu${icuExtensionSuffix}"'
 
     # Allow overriding the data directory via an internal environment variable
     # so that the NixOS module can point it at the mutable state directory
@@ -148,7 +158,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     substituteInPlace bookmarks/settings/base.py \
       --replace-fail \
         'BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))' \
-            'BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))''\nDATA_DIR = os.getenv("_NIXOS_LINKDING_DATA_DIR", os.path.join(os.getcwd(), "data"))'
+        'BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))''\nDATA_DIR = os.getenv("_NIXOS_LINKDING_DATA_DIR", os.path.join(os.getcwd(), "data"))'
 
     substituteInPlace bookmarks/settings/base.py \
       --replace-fail \
@@ -207,14 +217,17 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail \
         'from django.core.management.utils import get_random_secret_key' \
         'from django.conf import settings''\nfrom django.core.management.utils import get_random_secret_key'
+
     substituteInPlace bookmarks/management/commands/generate_secret_key.py \
       --replace-fail \
         'secret_key_file = os.path.join("data", "secretkey.txt")' \
         'secret_key_file = os.path.join(settings.DATA_DIR, "secretkey.txt")'
+
     substituteInPlace bookmarks/management/commands/migrate_tasks.py \
       --replace-fail \
         'import sqlite3' \
         'import sqlite3''\nfrom django.conf import settings'
+
     substituteInPlace bookmarks/management/commands/migrate_tasks.py \
       --replace-fail \
         'db = sqlite3.connect(os.path.join("data", "db.sqlite3"))' \
@@ -224,6 +237,13 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # so that it can be installed by setuptools alongside the package
     # in the Nix store.
     mv version.txt bookmarks/version.txt
+
+    # sqlite3.Connection.load_extension() expects the complete library path.
+    # Do not strip the extension suffix: Linux uses .so while Darwin uses .dylib.
+    substituteInPlace bookmarks/signals.py \
+      --replace-fail \
+        'settings.SQLITE_ICU_EXTENSION_PATH.rstrip(".so")' \
+        'settings.SQLITE_ICU_EXTENSION_PATH'
   '';
 
   preBuild = ''
@@ -277,9 +297,11 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       icuExtension
       uwsgiWithPython
       ;
+
     tests = {
       inherit (nixosTests) linkding linkding-postgres;
     };
+
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -297,6 +319,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       iedame
       squat
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

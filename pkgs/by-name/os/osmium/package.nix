@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   makeDesktopItem,
+  copyDesktopItems,
   makeShellWrapper,
   autoPatchelfHook,
   libgcc,
@@ -29,18 +30,19 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmium";
-  version = "0.0.42-alpha";
+  version = "0.1.2";
 
   src = fetchurl {
-    url = "https://updater.osmium.chat/Osmium-${version}-x64.tar.gz";
-    hash = "sha256-AI9hrCHa0gfI/m7zGUzAagyypgfKSgm2cVnn9LH1I0g=";
+    url = "https://updater.osmium.chat/Osmium-${finalAttrs.version}-x64.tar.gz";
+    hash = "sha256-SKuC7pCK2g400h++22upl+Z1Ux4qVEoPk5XxcSmuDoA=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeShellWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -96,24 +98,24 @@ stdenv.mkDerivation rec {
 
     ln -s $out/opt/resources/assets/icons/1024x1024.png $out/share/icons/osmium.png
 
-    ln -s "$desktopItem/share/applications" $out/share
-
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "osmium";
-    exec = "osmium";
-    icon = "osmium";
-    desktopName = "Osmium";
-    genericName = "A globally distributed community messaging and voice/video platform.";
-    categories = [
-      "Network"
-      "InstantMessaging"
-    ];
-    mimeTypes = [ "x-scheme-handler/osmium" ];
-    startupWMClass = "Osmium";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "osmium";
+      exec = "osmium";
+      icon = "osmium";
+      desktopName = "Osmium";
+      genericName = "A globally distributed community messaging and voice/video platform.";
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
+      mimeTypes = [ "x-scheme-handler/osmium" ];
+      startupWMClass = "Osmium";
+    })
+  ];
 
   passthru = {
     updateScript = ./update.sh;
@@ -132,4 +134,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

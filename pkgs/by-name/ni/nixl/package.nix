@@ -20,6 +20,7 @@
   libfabric,
   liburing,
   numactl,
+  rdma-core,
   taskflow,
   tomlplusplus,
   ucx,
@@ -36,7 +37,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "nixl";
-  version = "1.5.0";
+  version = "1.5.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,7 +46,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ai-dynamo";
     repo = "nixl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZsYchzywmsxcZGv44v0tk3d5JJjYrpkYzL59D5jMME0=";
+    hash = "sha256-tk8OpbBac8UCZZV8dRNClXNOvemjtE3MuBwwZlo7Xek=";
   };
 
   postPatch =
@@ -57,6 +58,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         --replace-fail 'm.Unlock()' 'm.unlock()' \
         --replace-fail 'm.ReaderLock()' 'm.lock_shared()' \
         --replace-fail 'm.ReaderUnlock()' 'm.unlock_shared()'
+    ''
+    # asio 1.38 removed the deprecated io_context::post() member function
+    + ''
+      substituteInPlace src/plugins/ucx/ucx_backend.cpp \
+        --replace-fail \
+          'io_->post(' \
+          'asio::post(*io_, '
     ''
     # Fix GDS plugin: Nix uses lib/ not lib64/
     + ''
@@ -86,6 +94,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     libfabric
     liburing
     numactl
+    rdma-core
     taskflow
     tomlplusplus
     ucx

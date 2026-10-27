@@ -31,6 +31,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit macosVariant srcs;
+    # The bot requires a Linux build, but these wheels only support Darwin.
+    # nixpkgs-update: no auto update
     updateScript = callPackage ./update-wheels.nix { };
   };
 

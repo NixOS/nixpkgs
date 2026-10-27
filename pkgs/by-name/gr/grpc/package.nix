@@ -25,7 +25,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation (finalAttrs: {
   pname = "grpc";
-  version = "1.83.1"; # N.B: if you change this, please update:
+  version = "1.84.0"; # N.B: if you change this, please update:
   # pythonPackages.grpcio
   # pythonPackages.grpcio-channelz
   # pythonPackages.grpcio-health-checking
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "grpc";
     repo = "grpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h2F+lKF9GH5CGjzS5326ovLUHbYwsPjoqmb8Ljgj2ao=";
+    hash = "sha256-cuNa/Juh8/whghdtbSaEDMqGRASt6vbzeEtHp34STrc=";
     fetchSubmodules = true;
   };
 
@@ -101,6 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
   # basel BUILD file on case-insensitive filesystems.
   preConfigure = ''
     rm -vf BUILD
+  ''
+  # grpc forces -msse2 on 32-bit x86, which changes the abseil swiss-table
+  # ABI and no longer matches our abseil-cpp/protobuf builds.
+  + lib.optionalString stdenv.hostPlatform.isi686 ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '-msse2' ""
   '';
 
   # When natively compiling, grpc_cpp_plugin is executed from the build directory,

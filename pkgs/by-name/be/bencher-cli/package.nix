@@ -11,7 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bencher-cli";
   version = "0.6.13";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "bencherdev";

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snobol4";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchurl {
     urls = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       # fallback for when the current version is moved to the old folder
       "https://ftp.regressive.org/snobol4/old/snobol4-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-cC9ztBB0OL0lHrwlPTNZlPN7tAN5JCNg2Hbi3m3AP3g=";
+    hash = "sha256-BxVDFNRYvgCTax3YWSoyviXVuPwn5r8bc62pBIhuhuI=";
   };
 
   outputs = [

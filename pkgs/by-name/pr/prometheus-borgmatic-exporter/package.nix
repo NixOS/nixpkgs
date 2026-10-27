@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finallAttrs: {
   pname = "prometheus-borgmatic-exporter";
-  version = "0.5.0";
+  version = "0.6.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finallAttrs: {
     owner = "maxim-mityutko";
     repo = "borgmatic-exporter";
     tag = "v${finallAttrs.version}";
-    hash = "sha256-pa1f31jrfDzUB3+xexJUwG0byiFszj/zEt+dIwlEv0o=";
+    hash = "sha256-yeP/E3u0LUrqI5DmXbsai/kcrH6DS5A92J4tPNlvtUA=";
   };
 
   pythonRelaxDeps = [ "prometheus-client" ];

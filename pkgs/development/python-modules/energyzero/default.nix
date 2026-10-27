@@ -4,35 +4,40 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
   syrupy,
+  uv-build,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "energyzero";
-  version = "5.0.2";
+  version = "5.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-energyzero";
     tag = "v${version}";
-    hash = "sha256-Vkx+Exvq3gafnz/aY3Tw462rJHanPlOPh7S6oXVi07I=";
+    hash = "sha256-UNY2JZd9ck7SfdGudW7Ujg0MjO/l9OgohzH2yfOeIW8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"'
+      --replace-fail 'uv_build>=0.13,<0.14' uv_build
   '';
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ uv-build ];
+
+  dependencies = [
     aiohttp
     yarl
   ];

@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsrpc";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "rsRPC";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L07x93mgTbo+v0Wg91XjCNbRYAltHns8WyrsIrr7pZE=";
+    hash = "sha256-7zS833bmy6JUjk4PqCENz6ikoTOtelcymXMi2pxD3V0=";
   };
 
-  cargoHash = "sha256-YTkOneMUTVLv3SWgeRdYpxGB9PIr+C9NHR1SCHOvDUY=";
+  cargoHash = "sha256-yXAds/rTqPUWR+9o3VAOPv0yw5we2QZuUwqG2KS7onY=";
 
   nativeBuildInputs = [
     pkg-config

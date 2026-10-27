@@ -15,7 +15,7 @@
   setuptools,
   sqlalchemy,
   stevedore,
-  stestr,
+  stestrCheckHook,
   testresources,
   testscenarios,
 }:
@@ -51,17 +51,11 @@ buildPythonPackage rec {
     aiosqlite
     oslo-context
     oslotest
-    stestr
+    stestrCheckHook
     psycopg2
     testresources
     testscenarios
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "oslo_db" ];
 

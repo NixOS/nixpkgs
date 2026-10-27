@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ascii-magic";
-  version = "2.7.4";
+  version = "2.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LeandroBarone";
     repo = "python-ascii_magic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-werCg7LW7MKMoYp/QxZU74MSc6WmscwWfvGRG4Dn60c=";
+    hash = "sha256-7Ek0+Gzpl49zdBX0hjW5bweIBDgzsyYu8/zuE08Egno=";
   };
 
   build-system = [ setuptools ];

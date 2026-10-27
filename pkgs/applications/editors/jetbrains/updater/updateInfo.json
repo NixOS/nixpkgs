@@ -39,7 +39,7 @@
       "aarch64-darwin": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg"
     }
   },
-  "intellij-dea-oss": {
+  "intellij-idea-oss": {
     "channel": "IU-RELEASE-licensing-RELEASE",
     "urls": {}
   },

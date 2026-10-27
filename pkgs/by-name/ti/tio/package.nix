@@ -7,9 +7,12 @@
   pkg-config,
   glib,
   inih,
-  lua,
+  lua5_5,
   bash-completion,
 }:
+let
+  lua = lua5_5;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tio";

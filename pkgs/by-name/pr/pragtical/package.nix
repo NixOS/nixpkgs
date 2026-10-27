@@ -12,7 +12,7 @@
   libkqueue,
   libuchardet,
   libzip,
-  lua5_4,
+  lua5_5,
   luajit,
   mbedtls_4,
   pcre2,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    lua5_4 # needed for built-time lua bytecode generation
+    lua5_5 # embeds ppm.lua into the ppm binary as a C string at build time
     meson
     ninja
     pkg-config
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libkqueue # optional
     libuchardet
     libzip
-    lua5_4
+    lua5_5
     luajit
     mbedtls_4
     pcre2

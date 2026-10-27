@@ -12,8 +12,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ufo5260987423";
     name = "magic-scheme";
-    version = "0.0.16";
-    hash = "sha256-ru7/AkbJi7Ogt/VZ6n2nDesvctv0UcyliEUKVWLp1/Q=";
+    version = "0.0.17";
+    hash = "sha256-pG1TfSXdpGXrS3SG28k/p3p2/kkUezhzAqRePp6k4wA=";
   };
 
   postInstall = ''

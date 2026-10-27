@@ -4,10 +4,9 @@
   runCommand,
   fetchurl,
   fetchFromGitHub,
-  gradle_8, # incompatible with gradle 9+
+  gradle,
   installShellFiles,
   makeBinaryWrapper,
-  opentxl,
   jre_headless,
 }:
 let
@@ -28,18 +27,16 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umple";
-  version = "1.37.1";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "umple";
     repo = "umple";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xrq3Qmoq0tWR+9vrp292H3WpcWCYjYeIu1LJPBLvhD4=";
+    hash = "sha256-MLxshoyzXYgbBIoeGiaJE2RVjRR9cvfSWV4ZKSij7kg=";
   };
 
   patches = [
-    # The upstream project uses some deprecated Gradle 7 features and old dependencies
-    ./gradle-8-compat.patch
     # Replaces the logic to determine the current version (requires Git at runtime)
     ./replace-version.patch
     # Fixes broken working directory + updates Jar paths for manpage generation task
@@ -50,11 +47,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   nativeBuildInputs = [
-    gradle_8
-    gradle_8.jdk
+    gradle
+    gradle.jdk
     installShellFiles
     makeBinaryWrapper
-    opentxl
   ];
 
   postPatch = ''
@@ -75,7 +71,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     find . -type f \( -name '*.java' -o -name '*.ump' \) -exec sed -i "s/@UMPLE_VERSION@/${longVersion}/g" {} +
   '';
 
-  mitmCache = gradle_8.fetchDeps {
+  mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
@@ -130,7 +126,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
-            gradle_8.jdk
+            gradle.jdk
           ];
           src = ./2DShapes.ump;
         }

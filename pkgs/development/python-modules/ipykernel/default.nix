@@ -36,9 +36,9 @@ buildPythonPackage (finalAttrs: {
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
   pythonRemoveDeps = [ "debugpy" ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     comm
     ipython
     jupyter-client

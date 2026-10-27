@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
     mainProgram = "arduino-language-server";
     homepage = "https://github.com/arduino/arduino-language-server";
     changelog = "https://github.com/arduino/arduino-language-server/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ BattleCh1cken ];
   };
 })

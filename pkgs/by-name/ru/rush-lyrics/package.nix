@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "rush-lyrics";
-  version = "7.1.0";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "shub39";
     repo = "Rush";
     tag = finalAttrs.version;
-    hash = "sha256-SHeg8ZHV+xhB5AUPRaGy0288SKFeL7eJCmOvU8EBVZQ=";
+    hash = "sha256-5QEZEizpBtv0QkK6lRShfmQLESofgMy8UEWXWj14Yjw=";
   };
 
   patches = [

@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "neopool-modbus";
-  version = "4.9.0";
+  version = "4.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "svasek";
     repo = "python-neopool-modbus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ns7ZyoX+YqssfQ8FFX0j8WTjjXi1EDDK9EVJGxW3LEM=";
+    hash = "sha256-du/ivakWHOQTmxIVqVWeBKTurC6oevuiM97En7BAQGc=";
   };
 
   build-system = [ hatchling ];

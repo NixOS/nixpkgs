@@ -16,6 +16,7 @@ buildNimPackage (finalAttrs: {
   lockFile = ./lock.json;
 
   meta = {
+    broken = true; # requires pcre support, but nim only supports pcre v1
     description = "Simple tool to explore prometheus exporter metrics";
     homepage = "https://github.com/marcusramberg/promexplorer";
     license = lib.licenses.mit;

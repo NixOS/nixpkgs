@@ -9,34 +9,12 @@
   # keep-sorted end
 }:
 let
-  src = jetbrains.mkJetBrainsSource {
-    # update-script-start: source-args
-    version = "2025.3.4";
-    buildNumber = "253.32098.37";
-    buildType = "idea";
-    ideaHash = "sha256-5rPaXIGOeWY9tcHRs5p376kgo4EbUtEltwcmNpPSsM8=";
-    androidHash = "sha256-uvoDTv/7RlyxRp1d9v2tN9IJkv9d1QEkZpp23hae84k=";
-    jpsHash = "sha256-iHpt926BDLNUwHRXvkqVgwlWiLo1qSZEaGeJcS0Fjmk=";
-    restarterHash = "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=";
-    mvnDeps = ./maven_artefacts.json;
-    repositories = [
-      "repo1.maven.org/maven2"
-      "packages.jetbrains.team/maven/p/ij/intellij-dependencies"
-      "dl.google.com/dl/android/maven2"
-      "download.jetbrains.com/teamcity-repository"
-      "packages.jetbrains.team/maven/p/grazi/grazie-platform-public"
-      "packages.jetbrains.team/maven/p/kpm/public"
-      "packages.jetbrains.team/maven/p/ki/maven"
-      "maven.pkg.jetbrains.space/public/p/compose/dev"
-      "packages.jetbrains.team/maven/p/amper/amper"
-      "packages.jetbrains.team/maven/p/kt/bootstrap"
-    ];
-    kotlin-jps-plugin = {
-      version = "2.2.20";
-      hash = "sha256-+jGghK2+yq+YFm5zT7ob+WTgTiJnHXAjDtlZjOzSISQ=";
-    };
-    # update-script-end: source-args
-  };
+  src = jetbrains.mkJetBrainsSource (
+    lib.importJSON ./source_args.json
+    // {
+      mvnDeps = ./maven_artefacts.json;
+    }
+  );
 in
 jetbrains.mkJetBrainsProduct {
   inherit src fsnotifier;

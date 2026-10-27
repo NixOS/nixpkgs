@@ -38,7 +38,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.13.0";
+  version = "2.14.1";
   cuda-bindings' = cuda-bindings.override { inherit cudaPackages; };
 in
 buildPythonPackage {
@@ -74,7 +74,7 @@ buildPythonPackage {
     [
       # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
       # libnvToolsExt-$hash.so.1
-      cuda_nvtx
+      nvtx
 
       cuda_cudart
       cuda_cupti

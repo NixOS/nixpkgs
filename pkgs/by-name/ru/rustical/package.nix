@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustical";
-  version = "0.16.5";
+  version = "0.16.7";
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "lennart-k";
     repo = "rustical";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sQhZoS/Mv3nqf8rZpmbrqUknDf2PqpZhcxuo3CCcEnY=";
+    hash = "sha256-v9HbrZIqDiWzIoEyXWSJvKEsneRHgb9FGjyjm5JHbf8=";
   };
 
-  cargoHash = "sha256-1DEbF7zum1XbyZJSWCBT9/yc0QoaliWjOhO8rCCxqDM=";
+  cargoHash = "sha256-pXUOmBDwKofd5YDep8KAKzBSwuqMB4q/WzwR5kn9Z6c=";
 
   nativeBuildInputs = [ pkg-config ];
 

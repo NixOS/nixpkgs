@@ -27,7 +27,7 @@ self: super: {
       owner = "FlyingWombat";
       repo = "case.kak";
       rev = "6f1511820aa3abfa118e0f856118adc8113e2185";
-      sha256 = "002njrlwgakqgp74wivbppr9qyn57dn4n5bxkr6k6nglk9qndwdp";
+      hash = "sha256-t/FmcZr0WTNNnn0VS2w7xXqc8r1rR07OfXiqx2mWVgA=";
     };
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
@@ -131,7 +131,7 @@ self: super: {
       owner = "Screwtapello";
       repo = "kakoune-state-save";
       rev = "ab7c0c765326a4a80af78857469ee8c80814c52a";
-      sha256 = "AAOCG0TY3G188NnkkwMCSbkkNe487F4gwiFWwG9Yo+A=";
+      hash = "sha256-AAOCG0TY3G188NnkkwMCSbkkNe487F4gwiFWwG9Yo+A=";
     };
 
     meta = {

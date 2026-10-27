@@ -3,6 +3,7 @@
   fetchNpmDeps,
   lib,
   stdenv,
+  nix-update-script,
   nodejs_24,
   npmHooks,
   postgresql,
@@ -11,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fittrackee";
-  version = "1.3.5";
+  version = "1.3.6";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "FitTrackee";
     repo = "FitTrackee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IJ/Y1y94esoJtGNJBUbwQo5H0s6hGcUDCIfI1RUht1c=";
+    hash = "sha256-bDhjz95gEyfTYxT6XOAvF3I0xqgKCojIz16SXLSGBbo=";
   };
 
   makeCacheWritable = true;
@@ -26,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zIqkJdXeQjvXW9TSKZ2Qs9YwiSdRb7HNhZB9Roauu9Y=";
+    hash = "sha256-hbiNdpQz7OJ7zz0uRr+q/5t969zBB8GLfBktY+9ownw=";
     sourceRoot = "${finalAttrs.src.name}/fittrackee_client";
   };
 
@@ -61,6 +62,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       flask-babel
       flask-bcrypt
       flask-dramatiq
+      flask-jwt-extended
       flask-limiter
       flask-migrate
       flask-sqlalchemy
@@ -106,11 +108,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "fittrackee"
   ];
 
-  disabledTests = [
-    # Raises the error but it's not captured by the test
-    "test_it_raises_error_when_token_body_is_invalid"
-  ];
-
   postgresqlTestSetupPost = ''
     echo "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" | PGUSER=postgres psql test_db
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
@@ -122,6 +119,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export TMP=$TMPDIR
     export UI_URL=http://0.0.0.0:5000
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "Self-hosted outdoor activity tracker";

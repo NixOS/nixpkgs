@@ -48,7 +48,7 @@ let
     if lib.isList value then lib.imap0 (i: f "${id}.${toString i}") value else f id value;
 
   secretFiles = lib.flip lib.pipe [
-    (mapSecret (id: _: "--rawfile ${id} $CREDENTIALS_DIRECTORY/${id}"))
+    (mapSecret (id: _: ''--rawfile ${id} "$CREDENTIALS_DIRECTORY"/${id}''))
     toString
   ];
   secretTemplate = lib.flip lib.pipe [
@@ -193,6 +193,41 @@ in
         KillSignal = "SIGINT";
         SuccessExitStatus = "0 156";
         LoadCredential = credentials;
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateTmp = "disconnected";
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
       };
       unitConfig.RequiresMountsFor = [ cfg.dataDir ];
     };

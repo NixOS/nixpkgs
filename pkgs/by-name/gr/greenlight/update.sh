@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bundix ruby_3_3 nixfmt
+#!nix-shell -i bash -p bundix ruby_3_4 nixfmt
 set -eu -o pipefail
 set -x
 dir="$(dirname "$(readlink -f "$0")")"

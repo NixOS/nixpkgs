@@ -118,6 +118,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "tic80";
-    maintainers = with lib.maintainers; [ blinry ];
+    maintainers = [ ];
   };
 }

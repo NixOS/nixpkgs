@@ -5,9 +5,9 @@
   cryptography,
   defusedxml,
   fetchFromGitHub,
+  gitMinimal,
   hatchling,
   lib,
-  nix-update-script,
   pydantic,
   pytestCheckHook,
   pytest-cov-stub,
@@ -17,21 +17,21 @@
   requests,
 }:
 let
-  version = "3.14.0-beta.21";
+  version = "3.14.1";
   src = fetchFromGitHub {
     owner = "solentlabs";
     repo = "cable_modem_monitor";
     tag = "v${version}";
-    hash = "sha256-WipB5MUUr49325cxQqe0WW+gk8gVnb+fTgG7JnbwClk=";
+    hash = "sha256-ihMFTOsYAUyYusvHFo7SjLEXdOQHK1yVN08doUov3f4=";
     fetchLFS = true;
   };
 
-  core = buildPythonPackage (finalAttrs: {
+  core = buildPythonPackage {
     inherit src version;
     pname = "solentlabs-cable-modem-monitor-core";
     pyproject = true;
 
-    sourceRoot = "${finalAttrs.src.name}/packages/cable_modem_monitor_core";
+    sourceRoot = "${src.name}/packages/cable_modem_monitor_core";
 
     build-system = [ hatchling ];
 
@@ -49,14 +49,14 @@ let
       pytest-cov-stub
       pytest-socket
     ];
-  });
+  };
 
-  catalog = buildPythonPackage (finalAttrs: {
+  catalog = buildPythonPackage {
     inherit src version;
     pname = "solentlabs-cable-modem-monitor-catalog";
     pyproject = true;
 
-    sourceRoot = "${finalAttrs.src.name}/packages/cable_modem_monitor_catalog";
+    sourceRoot = "${src.name}/packages/cable_modem_monitor_catalog";
 
     build-system = [ hatchling ];
 
@@ -69,9 +69,14 @@ let
       pytestCheckHook
       pytest-socket
     ];
-  });
+
+    disabledTestPaths = [
+      # test requires `har_capture`
+      "tests/test_check_fixture_pii_urls.py"
+    ];
+  };
 in
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent {
   inherit src version;
   owner = "solentlabs";
   domain = "cable_modem_monitor";
@@ -82,11 +87,15 @@ buildHomeAssistantComponent rec {
   ];
 
   nativeCheckInputs = [
+    gitMinimal
     pytestCheckHook
     pytest-homeassistant-custom-component
   ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+  disabledTestPaths = [
+    # test using `git rev-parse` requires .git
+    "tests/lib/test_check_markdown_links.py::test_repo_markdown_links_all_resolve"
+  ];
 
   meta = {
     description = "Home Assistant integration for monitoring cable modem signal quality";

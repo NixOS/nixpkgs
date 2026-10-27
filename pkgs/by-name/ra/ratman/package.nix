@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Modular decentralised peer-to-peer packet router and associated tools";
-    homepage = "https://git.irde.st/we/irdest";
+    homepage = "https://codeberg.org/irdest/irdest";
     platforms = lib.platforms.unix;
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ spacekookie ];

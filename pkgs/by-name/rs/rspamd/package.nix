@@ -18,7 +18,7 @@
   lapack,
   libarchive,
   libsodium,
-  lua,
+  lua5_2_compat,
   luajit,
   openssl,
   pcre2,
@@ -36,6 +36,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   inherit (lib)
     cmakeFeature
     ;
@@ -46,13 +47,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
-  version = "4.2.1";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     tag = finalAttrs.version;
-    hash = "sha256-ggPK7F2nnWignJvyTMaFVppUbrVVrKorux0yQAD4usQ=";
+    hash = "sha256-/fS50gS2l2fFU5Uxi6aC+im8Jw2hTU8/lUaDMVAv0O4=";
   };
 
   nativeBuildInputs = [

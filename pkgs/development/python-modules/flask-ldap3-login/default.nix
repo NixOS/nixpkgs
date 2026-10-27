@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "flask-ldap3-login";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "nickw444";
     repo = "flask-ldap3-login";
     tag = version;
-    hash = "sha256-bWu+hCVnNRSWvXgB2pAcCdhXJQEg3mZeAfZgxUqVOkY=";
+    hash = "sha256-NqMZC9JAUH6uheLEkcH+ZX3IV6gUEygrUdTIFVy+JUE=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];

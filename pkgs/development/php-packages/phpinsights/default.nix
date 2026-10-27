@@ -27,7 +27,7 @@ php.buildComposerProject2 (finalAttrs: {
   meta = {
     changelog = "https://github.com/nunomaduro/phpinsights/releases/tag/v${finalAttrs.version}";
     description = "Instant PHP quality checks from your console";
-    homepage = "https://phpinsights.com/";
+    homepage = "https://github.com/nunomaduro/phpinsights";
     license = lib.licenses.mit;
     mainProgram = "phpinsights";
     teams = [ lib.teams.php ];

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a8e942b0788b16ded253039008b34d2b46199283461b294f0f41a579c70fda7";
+    hash = "sha256-Ko6UKweIsW3tJTA5AIs00rRhmSg0YbKU8PQaV5xw/ac=";
   };
 
   # Neither the PyPI tarball nor the repository has tests

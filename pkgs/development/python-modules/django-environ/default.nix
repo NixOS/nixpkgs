@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "django-environ";
-  version = "0.12.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_environ";
     inherit version;
-    hash = "sha256-In3IkUU91b3nacNEnPSnS28u6PerI2HJOgcGj0F5BBo=";
+    hash = "sha256-tsSNk7nS/4o+oUCZ6Qw1qk8QHBtNXyYt/uDSewZ0Ltc=";
   };
 
   build-system = [ setuptools ];

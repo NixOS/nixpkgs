@@ -18,7 +18,6 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-qIfca8ebt6+i27X2Gt0m39cmddA5ucbxQmQUyQoItd0=";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   meta = {
     description = "Set of rewrite proxies and gateways for UnifiedPush";

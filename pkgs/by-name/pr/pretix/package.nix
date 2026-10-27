@@ -20,21 +20,7 @@ let
       chardet = super.chardet_5;
       django = super.django_5;
       djangorestframework = super.djangorestframework_3_17;
-
-      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
-        };
-        disabledTests = [
-          # error message mismatch
-          "test_validation_failed_message"
-          # fails dns resolution
-          "test_response_when_auth_server_response_return_404"
-        ];
-      });
+      django-oauth-toolkit = super.django-oauth-toolkit_2;
 
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";

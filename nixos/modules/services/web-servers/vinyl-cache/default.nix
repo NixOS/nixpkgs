@@ -215,10 +215,6 @@ in
         ]) cfg.listen
         ++ [
           {
-            assertion = cfg.package.pname == "vinyl-cache";
-            message = "services.vinyl-cache only supports Vinyl Cache. Please use services.varnish.";
-          }
-          {
             assertion = lib.strings.hasPrefix "/run/" stateDir;
             message = "The vinyl-cache NixOS mosule only supports statedirs in /run/, but vinyl-cache package was compiled with ${stateDir}.";
           }

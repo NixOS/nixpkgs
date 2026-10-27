@@ -11,13 +11,13 @@
   directoryListingUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rage";
   version = "0.4.0";
 
   src = fetchurl {
-    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "03yal7ajh57x2jhmygc6msf3gzvqkpmzkqzj6dnam5sim8cq9rbw";
+    url = "https://download.enlightenment.org/rel/apps/rage/rage-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fOWEGapRl6psM/Lj+eudeP83nK6GPV+hFP0UKNWhyg8=";
   };
 
   nativeBuildInputs = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.enlightenment ];
   };
-}
+})

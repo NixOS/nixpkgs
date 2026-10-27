@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependenceis = [
+  dependencies = [
     typing-extensions
     uri-template
   ];

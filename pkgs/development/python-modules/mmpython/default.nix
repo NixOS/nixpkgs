@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/mmpython/files/latest/download";
-    sha256 = "1b7qfad3shgakj37gcj1b9h78j1hxlz6wp9k7h76pb4sq4bfyihy";
+    hash = "sha256-HkbvFsGarGsOPDNdbj7tMEh0YFpBsneGnOpBPZpy+Kw=";
     name = "${pname}-${version}.tar.gz";
   };
 

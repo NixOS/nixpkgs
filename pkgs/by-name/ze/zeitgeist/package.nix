@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zeitgeist";
     repo = "zeitgeist";
     rev = "v${finalAttrs.version}";
-    sha256 = "kG1N8DXgjYAJ8fbrGHsp7eTqB20H5smzRnW0PSRUYR0=";
+    hash = "sha256-kG1N8DXgjYAJ8fbrGHsp7eTqB20H5smzRnW0PSRUYR0=";
   };
 
   nativeBuildInputs = [

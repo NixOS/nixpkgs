@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-09";
+  version = "dev-2026-10";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-wJm7J1DU9XxUGrh4AKqHtDJEzxSSVKqOVKWEhckl94Q=";
+    hash = "sha256-Y8Em52W3ntWXgnRiRAyhWv5Y6+3b/4bj2+TTIvtniYU=";
   };
 
   patches = [

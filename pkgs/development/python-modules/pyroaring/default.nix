@@ -6,18 +6,19 @@
   setuptools,
   hypothesis,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pyroaring";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ezibenroc";
     repo = "PyRoaringBitMap";
     tag = version;
-    hash = "sha256-hCllqGcyPRVC7Bh4gvXv0NYRCD7Hqh0OMB6Ab3miA6o=";
+    hash = "sha256-+nYeI791dQeHjalXv6cPyBZsAN4YJpaNbzcoh4fTVF4=";
   };
 
   build-system = [
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pyroaring" ];
+
+  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs = [
     hypothesis

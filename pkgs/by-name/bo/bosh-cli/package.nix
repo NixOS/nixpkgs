@@ -39,7 +39,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://bosh.io";
     changelog = "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      ris
+      a-hassanin
+    ];
     mainProgram = "bosh";
   };
 })

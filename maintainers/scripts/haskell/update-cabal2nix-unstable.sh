@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils curl jq gnused haskellPackages.cabal2nix-unstable.bin nix-prefetch-scripts -I nixpkgs=.
+#! nix-shell -i bash -E 'with import ../../.. {}; mkShell { packages = [ bash coreutils curl jq gnused haskellPackages.cabal2nix-unstable.bin nix-prefetch-scripts (import ../../../ci {}).fmt.pkg ]; }'
 
 # Updates cabal2nix-unstable to the latest master of the nixos/cabal2nix repository.
 # See regenerate-hackage-packages.sh for details on the purpose of this script.
@@ -18,7 +18,7 @@ function mkPackage() {
   output=pkgs/development/haskell-modules/cabal2nix-unstable/$1.nix
   echo "# This file defines $1-unstable, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh." > "$output"
   cabal2nix --subpath "$1" "https://github.com/NixOS/cabal2nix/archive/$commit.tar.gz" | sed -Ee 's/version = "(.*)"/version = "\1-unstable-'"$date"'"/' >> "$output"
-  nixfmt "$output"
+  treefmt --no-cache "$output"
 }
 
 mkPackage "cabal2nix"

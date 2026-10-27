@@ -12,12 +12,12 @@
 }:
 
 let
-  version = "1.17.1";
+  version = "1.17.2";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
     tag = "v${version}";
-    hash = "sha256-oWU3E1WM/gzOcW4c0pdXbEhiHIivItZx0FiZ/LZZQu8=";
+    hash = "sha256-UA3XDAo1kiKnCvB2en4y+L5tgtD18+DsmTnaL8OY5+c=";
   };
 in
 flutter344.buildFlutterApplication {

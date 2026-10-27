@@ -55,6 +55,9 @@ buildPythonPackage (finalAttrs: {
 
     # fails due to change in file (libmagic) 5.45
     "test_media_image_img"
+    # fails due to change in file (libmagic) 5.48
+    "test_archive_squashfs_lzo"
+    "test_archive_squashfs_xz"
   ];
 
   pythonImportsCheck = [ "typecode" ];

@@ -83,6 +83,11 @@ buildPythonPackage (finalAttrs: {
     xmltodict
   ];
 
+  disabledTests = [
+    # snapshot formatting changed
+    "test_subscribe_and_publish"
+  ];
+
   pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = {

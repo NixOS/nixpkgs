@@ -8,6 +8,8 @@
   postgresqlTestExtension,
   rustc,
   stdenv,
+  pkg-config,
+  sqlite,
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
@@ -24,6 +26,14 @@ buildPgrxExtension (finalAttrs: {
   };
 
   cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    sqlite
+  ];
 
   patches =
     lib.optionals (lib.versionOlder rustc.llvm.version "22.0.0" && stdenv.hostPlatform.isx86_64)

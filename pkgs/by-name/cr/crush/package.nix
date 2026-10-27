@@ -3,6 +3,7 @@
   stdenv,
   buildGo127Module,
   fetchFromGitHub,
+  git,
   installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
@@ -11,16 +12,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "crush";
-  version = "0.96.1";
+  version = "0.98.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iaZ0rw9585iLVj+HSWCiQnaj2XZ+eYr6zprpUs/47z0=";
+    hash = "sha256-sz/jlpWH43pgUqKDzaRVKJPK2u7smJLoL2eNrGkXtOY=";
   };
 
-  vendorHash = "sha256-ADDHgngAChNch8Sp6Zltw52eSlk7swEQG+R4fCxDbY8=";
+  vendorHash = "sha256-yEV/cBQ2XsmbsYrSWiyEj/dznzSVrpY9QHXMpuw2lpc=";
 
   ldflags = [
     "-s"
@@ -46,7 +47,10 @@ buildGo127Module (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

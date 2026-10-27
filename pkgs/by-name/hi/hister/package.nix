@@ -24,7 +24,6 @@ buildGoModule (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   vendorHash = "sha256-piPns+kq6ZCM4Bpe7nzdjHjkZKe1VV6UY9IIMshNGpo=";
   proxyVendor = true;

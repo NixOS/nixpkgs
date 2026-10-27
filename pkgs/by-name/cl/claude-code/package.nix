@@ -35,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
   dontBuild = true;
-  __noChroot = stdenv.hostPlatform.isDarwin;
   # otherwise the bun runtime is executed instead of the binary
   dontStrip = true;
 
@@ -59,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
       --set DISABLE_INSTALLATION_CHECKS 1 \
       --set USE_BUILTIN_RIPGREP 0 \
+      --set-default CLAUDE_CODE_CERT_STORE system \
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
       ''}--prefix PATH : ${

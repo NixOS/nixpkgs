@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "aenum";
-  version = "3.1.16";
+  version = "3.1.17";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v6+Vib20GO46mG2FdQxzGNnSg5wbGh1v6PxT7CAc8UA=";
+    hash = "sha256-qWmkUWsZSJXecsh17ONV8XwNJyFG9/2jRu90+Tz01bo=";
   };
 
   nativeBuildInputs = [ setuptools ];

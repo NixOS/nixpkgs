@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./export-variable.patch
     # https://github.com/madler/zlib/pull/1296
     ./mingw-shared.patch
+    # CVE-2026-85091: buffer overflow in non-blocking gzwrite
+    ./cve-2026-85091.patch
   ];
 
   postPatch = ''
@@ -112,7 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
       );
     }
     //
-      lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      lib.optionalAttrs
+        (
+          stdenv.cc.bintools.isLLVM
+          && lib.versionAtLeast stdenv.cc.bintools.version "17"
+          && !stdenv.hostPlatform.isMinGW
+        )
         {
           # https://reviews.llvm.org/D135402
           # Without this flag configure decides that it cannot build shared libraries and does not make a libz.so

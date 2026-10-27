@@ -54,7 +54,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapGAppsHook = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "Graphical librespeed client written using GTK4 + libadwaita";

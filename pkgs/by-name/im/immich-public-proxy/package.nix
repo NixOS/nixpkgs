@@ -2,34 +2,48 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  makeWrapper,
   nix-update-script,
   nixosTests,
   nodejs,
 }:
 buildNpmPackage rec {
   pname = "immich-public-proxy";
-  version = "3.4.0";
+  version = "4.1.2";
   src = fetchFromGitHub {
     owner = "alangrainger";
     repo = "immich-public-proxy";
     tag = "v${version}";
-    hash = "sha256-8L0HXz0W9vRNOb2HyOupEqBs6pjICFU5KfP4zUh1KdA=";
+    hash = "sha256-MJ5VoBHXM5Mxch4nVaFk0B8/SNjkXf8oXQgnRwscc4E=";
   };
 
-  sourceRoot = "${src.name}/app";
+  npmDepsHash = "sha256-oKS034t7X0kJhVSRSUNyJRo3NDjjqP/LUm7rHl+6oSo=";
 
-  npmDepsHash = "sha256-ca6TSION7l++NWbUheXQM/5kgVU3xA/gu4ZmXZCW8WA=";
+  nativeBuildInputs = [ makeWrapper ];
 
-  # patch in absolute nix store paths so the process doesn't need to cwd in $out
-  postPatch = ''
-    substituteInPlace src/index.ts --replace-fail \
-      "const app = express()" \
-      "const app = express()
-    // Set the views path to the nix output
-    app.set('views', '$out/lib/node_modules/immich-public-proxy/views')" \
-    --replace-fail \
-      "static('public'" \
-      "static('$out/lib/node_modules/immich-public-proxy/public'"
+  # The repo is an npm workspace (shared/, app/, upload-app/). The default install
+  # phase packs a single package, but both programs need the whole workspace.
+  dontNpmInstall = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    npm prune --omit=dev --no-audit --no-fund
+
+    mkdir -p $out/lib/ipp
+    cp -r package.json node_modules shared app upload-app $out/lib/ipp/
+
+    # Both programs serve ./public relative to the working directory
+    makeWrapper ${lib.getExe nodejs} $out/bin/immich-public-proxy \
+      --chdir $out/lib/ipp/app \
+      --add-flags $out/lib/ipp/app/dist/index.js \
+      --set NODE_ENV production
+    makeWrapper ${lib.getExe nodejs} $out/bin/immich-public-proxy-upload \
+      --chdir $out/lib/ipp/upload-app \
+      --add-flags $out/lib/ipp/upload-app/dist/index.js \
+      --set NODE_ENV production
+
+    runHook postInstall
   '';
 
   passthru = {
@@ -44,7 +58,10 @@ buildNpmPackage rec {
     description = "Share your Immich photos and albums in a safe way without exposing your Immich instance to the public";
     homepage = "https://github.com/alangrainger/immich-public-proxy";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jaculabilis ];
+    maintainers = with lib.maintainers; [
+      jaculabilis
+      parkuman
+    ];
     inherit (nodejs.meta) platforms;
     mainProgram = "immich-public-proxy";
   };

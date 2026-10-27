@@ -144,7 +144,7 @@ def main() -> None:
     if "--keep-vm-state" in sys.argv:
         warnings.warn(
             "The flag '--keep-vm-state' is deprecated. Use '--keep-machine-state' instead.",
-            DeprecationWarning,
+            FutureWarning,
         )
 
     output_directory = args.output_directory.resolve()
@@ -178,6 +178,7 @@ def main() -> None:
         logger=logger,
         keep_machine_state=args.keep_machine_state,
         debug=debugger,
+        interactive=bool(args.interactive),
     ) as driver:
         if driver.config.enable_ssh_backdoor:
             driver.dump_machine_ssh()

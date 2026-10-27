@@ -5,6 +5,7 @@
   setuptools,
   aiofiles,
   aiohttp,
+  anyio,
   colorlog,
   defusedxml,
   ifaddr,
@@ -17,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "midea-local";
-  version = "11.0.1";
+  version = "12.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
     repo = "midea-local";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9Yx3i/zZvVqZrlsbLxkWWFAITFnwOAaaiBoFfjaYbKw=";
+    hash = "sha256-zaEVje2/whWj8PtKNO1WnpKkTdfwG+wor2raNrlAc4w=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiofiles
     aiohttp
+    anyio
     colorlog
     defusedxml
     ifaddr

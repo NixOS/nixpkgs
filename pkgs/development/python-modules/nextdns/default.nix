@@ -16,21 +16,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nextdns";
-  version = "5.0.1";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
     tag = finalAttrs.version;
-    hash = "sha256-QCiosQHxuwDxztXMEkEosob8M2NMtnlGI33m5oAkaBw=";
+    hash = "sha256-+ih7QHmtQmWsi6HZZ3xepYBDYlCOyMKo0pQtr6oXpFs=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
-
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -44,6 +42,11 @@ buildPythonPackage (finalAttrs: {
     pytest-error-for-skips
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = [
+    # Test is outdated
+    "test_valid_data"
   ];
 
   pythonImportsCheck = [ "nextdns" ];

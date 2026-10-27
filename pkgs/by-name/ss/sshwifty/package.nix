@@ -13,13 +13,13 @@
 # so let's build using the latest Go available in nixpkgs.
 buildGoLatestModule (finalAttrs: {
   pname = "sshwifty";
-  version = "0.4.11-beta-release";
+  version = "0.4.12-beta-release";
 
   src = fetchFromGitHub {
     owner = "nirui";
     repo = "sshwifty";
     tag = finalAttrs.version;
-    hash = "sha256-Vb2G7zV6RrAgwpxpnbEVwo1TRatlilHgH1g19uVwAKs=";
+    hash = "sha256-zp/TqvjAb+yDOVkFXjXML/TxomIyPEG8fLq6BeDnSxU=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +34,10 @@ buildGoLatestModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-NnRQStZooSS87GyeRc7gls/9EMPdndr/OkHFFHt46HQ=";
+    hash = "sha256-t6g83QNq5hCNXPx5dcYYCaBJbjyXAao33qvdbZFCxvo=";
   };
 
-  vendorHash = "sha256-C60bf9QjY/37zSjSfwhBgtN2lqd4d8TBJqZYtBOCHug=";
+  vendorHash = "sha256-fXQW97/ztjerM62rw1k1ZKD2LSBV2iKLZkk1hJ7HhXE=";
 
   preBuild = ''
     # Generate static pages

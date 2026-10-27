@@ -8,6 +8,7 @@
   runCommand,
   cmake,
   ninja,
+  bashNonInteractive,
   libxml2,
   libllvm,
   version,
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     libllvm
     libxml2
   ];

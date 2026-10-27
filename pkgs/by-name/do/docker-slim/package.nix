@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   makeBinaryWrapper,
@@ -22,6 +23,9 @@ buildGoModule (finalAttrs: {
 
   subPackages = [
     "cmd/slim"
+  ]
+  # The sensor runs in Linux containers.
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "cmd/slim-sensor"
   ];
 

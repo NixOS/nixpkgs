@@ -15,7 +15,7 @@ Typically both the *attributes* and *script* arguments support this, simultaneou
 # Using `finalAttrs` in a build helper
 
 ```nix
-runCommand "hi" (finalAttrs: { passthru.exe = "${finalAttrs.finalPackage}/bin/hi"; }) ''
+runCommand "hi" (finalAttrs: { passthru.exe = lib.getExe' finalAttrs.finalPackage "hi"; }) ''
   mkdir -p $out/bin
   substitute ${./hi.foo} $out/bin/hi --replace-fail "@foo@" ${lib.getExe foo}
 ''
@@ -225,15 +225,13 @@ writeShellScript "evaluate-my-file.sh" ''
 
 ### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
 
-Write an [XDG desktop file](https://specifications.freedesktop.org/desktop-entry-spec/1.4/) to the Nix store.
+Write an [XDG desktop file](https://specifications.freedesktop.org/desktop-entry-spec/latest) to the Nix store.
 
 This function is usually used to add desktop items to a package through the `copyDesktopItems` hook.
 
-`makeDesktopItem` adheres to version 1.4 of the specification.
-
 #### Inputs {#trivial-builder-makeDesktopItem-inputs}
 
-`makeDesktopItem` takes an attribute set that accepts most values from the [XDG specification](https://specifications.freedesktop.org/desktop-entry-spec/1.4/ar01s06.html).
+`makeDesktopItem` takes an attribute set that accepts most values from the [XDG specification](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html).
 
 All recognised keys from the specification are supported with the exception of the "Hidden" field. The keys are converted into camelCase format, but correspond 1:1 to their equivalent in the specification: `genericName`, `noDisplay`, `comment`, `icon`, `onlyShowIn`, `notShowIn`, `dbusActivatable`, `tryExec`, `exec`, `path`, `terminal`, `mimeTypes`, `categories`, `implements`, `keywords`, `startupNotify`, `startupWMClass`, `url`, `prefersNonDefaultGPU`.
 
@@ -416,7 +414,7 @@ writeTextFile {
   executable = true;
   destination = "/some/subpath/my-cool-script";
   checkPhase = ''
-    ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
+    ${lib.getExe pkgs.shellcheck} $out/some/subpath/my-cool-script
   '';
   meta = {
     license = pkgs.lib.licenses.cc0;
@@ -838,7 +836,7 @@ Runtime environment variables can be set with the `runtimeEnv` argument.
 ::: {.example #ex-writeShellApplication}
 # Usage of `writeShellApplication`
 
-The following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`
+The following shell application can refer to `curl` directly, rather than needing to write `${lib.getExe curl}`
 
 ```nix
 writeShellApplication {
@@ -896,7 +894,7 @@ The result is equivalent to the output of `nix-store -q --requisites`.
 For example,
 
 ```nix
-writeClosure [ (writeScriptBin "hi" "${hello}/bin/hello") ]
+writeClosure [ (writeScriptBin "hi" (lib.getExe hello)) ]
 ```
 
 produces an output path `/nix/store/<hash>-runtime-deps` containing
@@ -922,7 +920,7 @@ This produces the equivalent of `nix-store -q --references`.
 For example,
 
 ```nix
-writeDirectReferencesToFile (writeScriptBin "hi" "${hello}/bin/hello")
+writeDirectReferencesToFile (writeScriptBin "hi" (lib.getExe hello))
 ```
 
 produces an output path `/nix/store/<hash>-runtime-references` containing

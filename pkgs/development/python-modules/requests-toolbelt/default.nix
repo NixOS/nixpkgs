@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Toolbelt of useful classes and functions to be used with requests";
-    homepage = "http://toolbelt.rtfd.org";
+    homepage = "https://toolbelt.readthedocs.io";
     changelog = "https://github.com/requests/toolbelt/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];

@@ -25,14 +25,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "51.0.0";
+  version = "51.1.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5YEvYdkktoIEWoyTLop4tNVxG69/qPneOO0i0nW/Tfg=";
+    hash = "sha256-I5qu1P6X4A8w3EfdlTPlSqvon+uqNfUx4KICWXoMaQk=";
   };
 
   nativeBuildInputs = [
@@ -99,7 +99,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

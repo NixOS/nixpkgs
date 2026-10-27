@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/weechat/scripts/10671d785ea3f9619d0afd0d7a1158bfa4ee3938/python/url_hint.py";
-    sha256 = "0aw59kq74yqh0qbdkldfl6l83d0bz833232xr2w4741szck43kss";
+    hash = "sha256-Ws9BJvs6kEO4yF0MMQb6C7SBqKGu0dkWBhB7cvBMhSs=";
   };
 
   dontUnpack = true;

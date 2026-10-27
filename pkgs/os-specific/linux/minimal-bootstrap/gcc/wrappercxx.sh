@@ -36,6 +36,12 @@ for param in "$@"; do
   prev="$param"
 done
 
+# Don't keep build compiler by unnecessary RPATH for static-only case.
+libstdcxxRpath=""
+if [ -e @libstdcxx@/libstdc++.so ]; then
+  libstdcxxRpath="-Wl,-rpath,@libstdcxx@"
+fi
+
 # Order of -B is very particular. musl detection in gnulib requires that
 # libc/.. comes before libgcc, otherwise libc is assumed to be glibc.
 # Also, libstdcxxinc uses #include_next directives that depend on
@@ -43,7 +49,8 @@ done
 exec -a "@origname@" @gcc@ -Wl,-dynamic-linker=@dynlinker@ \
   @extraflags@ \
   $extraRpath \
-  -Wl,-rpath,@libc@,-rpath,@libstdcxx@ \
+  -Wl,-rpath,@libc@ \
+  $libstdcxxRpath \
   -I @libstdcxxarchinc@ \
   -I @libstdcxxinc@ \
   -B@libc@/.. \

@@ -103,8 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv $out/bin $out/Applications
-    rm -fr $out/share
+    mkdir -p $out/Applications
+    mv $out/NotepadNext.app $out/Applications/
+    rm -rf $out/share
     mkdir -p $out/bin
     ln -s $out/Applications/NotepadNext.app/Contents/MacOS/NotepadNext $out/bin/NotepadNext
   '';

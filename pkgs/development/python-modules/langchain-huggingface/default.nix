@@ -33,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-huggingface";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-huggingface==${finalAttrs.version}";
-    hash = "sha256-jMbFqui0XoKZ15B+5kJAamW5Dasv/JCIZS2KtteRBXg=";
+    hash = "sha256-muibdSyBybUR1YTVsWr00mg0uSgUm2zwKRM3KU9Ju38=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/huggingface";

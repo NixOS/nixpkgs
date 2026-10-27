@@ -5,8 +5,14 @@
   lib,
   helix,
   helix-unwrapped,
-  grammarsOverlay ? (
-    final: prev: {
+  grammarsOverlay ? [
+    (
+      final: prev:
+      lib.attrsets.filterAttrs (k: _: k == "tree-sitter-haskell" || k == "tree-sitter-perl") (
+        helix.defaultGrammarsOverlay final prev
+      )
+    )
+    (final: prev: {
       tree-sitter-beancount = prev.tree-sitter-beancount.override {
         excludeBrokenTreeSitterJson = false;
       };
@@ -28,20 +34,20 @@
       tree-sitter-wit = prev.tree-sitter-wit.override {
         excludeBrokenTreeSitterJson = false;
       };
-    }
-  ),
+    })
+  ],
 }:
 let
   steelix-unwrapped = helix-unwrapped.overrideAttrs (
     finalAttrs: _: {
       pname = "steelix-unwrapped";
-      version = "0-unstable-2026-09-26";
+      version = "0-unstable-2026-10-18";
 
       src = fetchFromGitHub {
         owner = "mattwparas";
         repo = "helix";
-        rev = "df595c7dc5729e2712c79dd2e35977e3474b3ec6";
-        hash = "sha256-zWOzgArhg4PCgi8AMKLtcttBtchlQJay6atEpobCASk=";
+        rev = "16a26934f39152b5cd81bf2f6944e18e680314d0";
+        hash = "sha256-FU4WIMHhIyvEMxHeN8+Qgb3VHsU6DP74ylsyZACLzM8=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {

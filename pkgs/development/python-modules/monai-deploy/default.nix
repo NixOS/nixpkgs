@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Framework and tools to design, develop and verify AI applications in healthcare imaging";
     mainProgram = "monai-deploy";
-    homepage = "https://monai.io/deploy.html";
+    homepage = "https://github.com/Project-MONAI/monai-deploy-app-sdk";
     changelog = "https://github.com/Project-MONAI/monai-deploy-app-sdk/blob/main/docs/source/release_notes/${src.tag}.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];

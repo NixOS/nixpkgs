@@ -20,7 +20,7 @@
   libxkbcommon,
   libgbm,
   openssl,
-  systemd,
+  systemdLibs,
   libxcb-cursor,
   libxcb-wm,
   libxcb-render-util,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     openssl
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libxcb-cursor
     libx11
     libxcb-wm

@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (getVersionFile "lld/gnu-install-dirs.patch")
   ]
+  # https://github.com/llvm/llvm-project/pull/198129, which is fixed in 22.1.8
+  ++ lib.optional (lib.versionOlder release_version "22") (
+    getVersionFile "lld/initialize-symbol-fields.patch"
+  )
   ++ lib.optional (lib.versions.major release_version == "18") (
     # https://github.com/llvm/llvm-project/pull/97122
     fetchpatch {

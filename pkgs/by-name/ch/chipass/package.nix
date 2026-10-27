@@ -55,6 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+  # Fixes removal of 'QTEST_DISABLE_KEYPAD_NAVIGATION' in Qt 6.12.
+  # Fixed upstream in https://codeberg.org/ChiPass/ChiPass/pulls/247
+  # Remove on next version bump.
+  patches = [
+    ./0001-fix_qt6_keypad_removal.patch
+  ];
+
   # Upstream develops against a build of PCSC from Xcode.
   # The types are incompatible with nixpkgs pcsclite.
   # https://github.com/NixOS/nixpkgs/issues/520227

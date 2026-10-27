@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "dimtpap";
     repo = "obs-pipewire-audio-capture";
     rev = version;
-    sha256 = "sha256-GrfogPsqpQ976Gcc4JVdslAAWTj49PdspwVp/JXYXSQ=";
+    hash = "sha256-GrfogPsqpQ976Gcc4JVdslAAWTj49PdspwVp/JXYXSQ=";
   };
 
   nativeBuildInputs = [

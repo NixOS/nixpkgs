@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "${ipuVersion}-camera-hal";
-  version = "unstable-2025-06-27";
+  version = "0-unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "intel";

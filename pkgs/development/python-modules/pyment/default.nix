@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Pyment";
     inherit version;
-    sha256 = "951a4c52d6791ccec55bc739811169eed69917d3874f5fe722866623a697f39d";
+    hash = "sha256-lRpMUtZ5HM7FW8c5gRFp7taZF9OHT1/nIoZmI6aX850=";
   };
 
   # Tests are not included in PyPI tarball

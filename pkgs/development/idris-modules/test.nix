@@ -14,7 +14,7 @@ build-idris-package {
     owner = "jfdm";
     repo = "idris-testing";
     rev = "604d56f77054931b21975198be669e22427b1f52";
-    sha256 = "1pmyhs3jx6wd0pzjd3igfxb9zjs8pqmk4ah352bxjrqdnhqwrl51";
+    hash = "sha256-odDMMbQNZ9mXKAMqMiu+SMufVncvjib/BY2bLoeGvt4=";
   };
 
   doCheck = false;

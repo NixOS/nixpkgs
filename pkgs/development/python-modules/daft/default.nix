@@ -78,7 +78,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "daft";
-  version = "0.7.25";
+  version = "0.7.26";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Eventual-Inc";
     repo = "Daft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XVtMB+fZ1zbFoStwlZmmam3/t8eD7vRop+7YlNhuLhs=";
+    hash = "sha256-lIlKJPDW2r0BzvXfMCYH9+ZjgPjS33Lx1fRQrcbSbOo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -113,6 +113,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail \
         'chunks.into_remainder()' \
         'Some(chunks.into_remainder())'
+  ''
+  # PyAV in 19.0 removed the metadata_encoding argument and now always encodes as UTF8 with surrogateescape
+  + ''
+    substituteInPlace daft/file/video.py \
+      --replace-fail ', metadata_encoding="utf-8"' ""
   '';
 
   nativeBuildInputs = [
@@ -351,9 +356,16 @@ buildPythonPackage (finalAttrs: {
     #   AssertionError: assert result is None
     "test_type_promotion_float_to_double"
     "test_type_promotion_int_to_long"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ray.exceptions.RpcError: Timed out while waiting for GCS to become available.
+    "test_extension_ray_runner"
+    "test_extension_ray_runner_aggregate"
   ];
 
   pythonImportsCheck = [ "daft" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Distributed dataframes for multimodal data";

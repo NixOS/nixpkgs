@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/tinyxml/tinyxml/${version}/tinyxml_2_6_2.zip";
-    sha256 = "04nmw6im2d1xp12yir8va93xns5iz816pwi25n9cql3g3i8bjsxc";
+    hash = "sha256-rGu5UBxvUMySLSLyawL6sWjbR1Ib5ehFuD00UaPh1RI=";
   };
 
   patches = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
-    homepage = "http://www.grinninglizard.com/tinyxml/index.html";
+    homepage = "https://sourceforge.net/projects/tinyxml/";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
   };

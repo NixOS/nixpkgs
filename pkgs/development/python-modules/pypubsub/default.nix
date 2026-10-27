@@ -14,7 +14,7 @@ buildPythonPackage {
     owner = "schollii";
     repo = "pypubsub";
     rev = "v4.0.3";
-    sha256 = "02j74w28wzmdvxkk8i561ywjgizjifq3hgcl080yj0rvkd3wivlb";
+    hash = "sha256-i+7IR5s7A+kBApQ9OLCL8scnuQ+mRDRn361+jgQnRwo=";
   };
 
   nativeCheckInputs = [ pytest ];

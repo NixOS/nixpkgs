@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   meson,
   sassc,
@@ -9,20 +9,23 @@
   ninja,
   python3,
   gtk3,
+  nix-update-script,
   gnome,
-  gnome-themes-extra,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yaru-remix";
   version = "40";
 
   src = fetchFromGitHub {
     owner = "Muqtxdir";
     repo = "yaru-remix";
-    rev = "v${version}";
-    sha256 = "0xilhw5gbxsyy80ixxgj0nw6w782lz9dsinhi24026li1xny804c";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jADkbQ+RGgGIiNBG3dKnAh1uuAXy9R4B8l739QqHNHY=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -31,15 +34,18 @@ stdenv.mkDerivation rec {
     glib
     ninja
     python3
-  ];
-  buildInputs = [
-    gtk3
-    gnome-themes-extra
+    gtk3 # for gtk-update-icon-cache
   ];
 
   dontDropIconThemeCache = true;
 
   postPatch = "patchShebangs .";
+
+  # The GTK2 themes need an engine that is no longer packaged.
+  # Remove once this tracks a yaru revision that dropped GTK2.
+  patches = [ ./remove-gtk2.patch ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fork of the Yaru GTK theme";
@@ -50,7 +56,7 @@ stdenv.mkDerivation rec {
       lgpl21Only
       lgpl3Only
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ hoppla20 ];
   };
-}
+})

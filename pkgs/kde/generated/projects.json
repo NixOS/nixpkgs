@@ -4376,8 +4376,8 @@
   "kup": {
     "description": "Backup scheduler for the Plasma desktop",
     "name": "kup",
-    "project_path": "system/kup",
-    "repo_path": "system/kup"
+    "project_path": "workspace/kup",
+    "repo_path": "plasma/kup"
   },
   "kuser": {
     "description": "KDE User Manager",
@@ -4570,6 +4570,12 @@
     "name": "l10n-templates",
     "project_path": "localization/l10n-templates",
     "repo_path": "localization/l10n-templates"
+  },
+  "l10n-umbrella": {
+    "description": "Umbrella repository to allow checking out the most current version of all languages",
+    "name": "l10n-umbrella",
+    "project_path": "localization/l10n-umbrella",
+    "repo_path": "localization/l10n-umbrella"
   },
   "labplot": {
     "description": "LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.",
@@ -7980,7 +7986,7 @@
     "repo_path": "websites/l10n-kde-org"
   },
   "websites-labplot-org": {
-    "description": "Website for Labplot - labplot.org",
+    "description": "Website for LabPlot - labplot.org",
     "name": "websites-labplot-org",
     "project_path": "websites/labplot-org",
     "repo_path": "websites/labplot-org"
@@ -8104,6 +8110,12 @@
     "name": "websites-libregraphicsmeeting-org-2026",
     "project_path": "websites/libregraphicsmeeting-org-2026",
     "repo_path": "websites/libregraphicsmeeting-org-2026"
+  },
+  "websites-libregraphicsmeeting-org-2027": {
+    "description": "Website for Libre Graphics Meeting 2027",
+    "name": "websites-libregraphicsmeeting-org-2027",
+    "project_path": "websites/libregraphicsmeeting-org-2027",
+    "repo_path": "websites/libregraphicsmeeting-org-2027"
   },
   "websites-linux-kde-org": {
     "description": "Website for KDE Linux - linux.kde.org",

@@ -11,7 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "2.0.2";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jackTabsCode";

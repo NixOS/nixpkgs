@@ -1,4 +1,4 @@
-From e4bba6f9c03af6fe20c8bd090bb1bc94cbd9ef1f Mon Sep 17 00:00:00 2001
+From 5a7ee128bdf4af1a6db04f37db50a5061abe724e Mon Sep 17 00:00:00 2001
 From: Martin Weinelt <hexa@darmstadt.ccc.de>
 Date: Mon, 6 Jul 2026 13:14:54 +0200
 Subject: [PATCH 1/5] Migrate to fastapi lifespan for startup events
@@ -11,7 +11,7 @@ https://fastapi.tiangolo.com/advanced/events/
  1 file changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/frigate/api/fastapi_app.py b/frigate/api/fastapi_app.py
-index 387f0473fc..86058bfdaa 100644
+index 387f0473f..86058bfda 100644
 --- a/frigate/api/fastapi_app.py
 +++ b/frigate/api/fastapi_app.py
 @@ -1,6 +1,7 @@
@@ -43,7 +43,7 @@ index 387f0473fc..86058bfdaa 100644
          swagger_ui_parameters={"apisSorter": "alpha", "operationsSorter": "alpha"},
          dependencies=[Depends(require_admin_by_default())]
          if enforce_default_admin
-@@ -115,15 +127,6 @@ async def frigate_middleware(request: Request, call_next):
+@@ -115,15 +127,6 @@ def create_fastapi_app(
              database.close()
          return response
  
@@ -59,8 +59,10 @@ index 387f0473fc..86058bfdaa 100644
      # Rate limiter (used for login endpoint)
      if frigate_config.auth.failed_login_rate_limit is None:
          limiter.enabled = False
+-- 
+2.55.0
 
-From ef8fcf2328bd59b6d30c7ca523e39909a8b8c01e Mon Sep 17 00:00:00 2001
+From 46cdd45c957d5d5c5a864d99ecb4e52586218f85 Mon Sep 17 00:00:00 2001
 From: Martin Weinelt <hexa@darmstadt.ccc.de>
 Date: Mon, 6 Jul 2026 13:16:58 +0200
 Subject: [PATCH 2/5] Migrate to pydantic TypeAdapter
@@ -71,10 +73,10 @@ https://pydantic.dev/docs/validation/2.12/get-started/migration/#introduction-of
  1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/frigate/test/test_object_detector.py b/frigate/test/test_object_detector.py
-index dc15b23516..33748c2807 100644
+index dc15b2351..33748c280 100644
 --- a/frigate/test/test_object_detector.py
 +++ b/frigate/test/test_object_detector.py
-@@ -2,7 +2,7 @@
+@@ -2,7 +2,7 @@ import unittest
  from unittest.mock import Mock, patch
  
  import numpy as np
@@ -83,7 +85,7 @@ index dc15b23516..33748c2807 100644
  
  import frigate.detectors as detectors
  import frigate.object_detection.base
-@@ -19,8 +19,8 @@ def test_localdetectorprocess_should_only_create_specified_detector_type(self):
+@@ -19,8 +19,8 @@ class TestLocalObjectDetector(unittest.TestCase):
                      "frigate.detectors.api_types",
                      {det_type: Mock() for det_type in DetectorTypeEnum},
                  ):
@@ -94,7 +96,7 @@ index dc15b23516..33748c2807 100644
                      )
                      test_cfg.model.path = "/test/modelpath"
                      test_obj = frigate.object_detection.base.LocalObjectDetector(
-@@ -44,7 +44,9 @@ def test_detect_raw_given_tensor_input_should_return_api_detect_raw_result(self)
+@@ -44,7 +44,9 @@ class TestLocalObjectDetector(unittest.TestCase):
          TEST_DATA = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
          TEST_DETECT_RESULT = np.ndarray([1, 2, 4, 8, 16, 32])
          test_obj_detect = frigate.object_detection.base.LocalObjectDetector(
@@ -105,7 +107,7 @@ index dc15b23516..33748c2807 100644
          )
  
          mock_det_api = mock_cputfl.return_value
-@@ -67,7 +69,9 @@ def test_detect_raw_given_tensor_input_should_call_api_detect_raw_with_transpose
+@@ -67,7 +69,9 @@ class TestLocalObjectDetector(unittest.TestCase):
          TEST_DATA = np.zeros((1, 32, 32, 3), np.uint8)
          TEST_DETECT_RESULT = np.ndarray([1, 2, 4, 8, 16, 32])
  
@@ -116,7 +118,7 @@ index dc15b23516..33748c2807 100644
          test_cfg.model.input_tensor = InputTensorEnum.nchw
  
          test_obj_detect = frigate.object_detection.base.LocalObjectDetector(
-@@ -116,7 +120,9 @@ def test_detect_given_tensor_input_should_return_lfiltered_detections(
+@@ -116,7 +120,9 @@ class TestLocalObjectDetector(unittest.TestCase):
              "label-5",
          ]
  
@@ -127,8 +129,10 @@ index dc15b23516..33748c2807 100644
          test_cfg.model = ModelConfig()
          test_obj_detect = frigate.object_detection.base.LocalObjectDetector(
              detector_config=test_cfg,
+-- 
+2.55.0
 
-From e9f1435eeb337bf7e269af1b09a0b1b87de719d5 Mon Sep 17 00:00:00 2001
+From 2e774cd1c3cadc10c10eaa5cfebd2f17b8abb6b1 Mon Sep 17 00:00:00 2001
 From: Martin Weinelt <hexa@darmstadt.ccc.de>
 Date: Mon, 6 Jul 2026 13:17:16 +0200
 Subject: [PATCH 3/5] Replace pytz with native tz-aware objects and zoneinfo
@@ -153,7 +157,7 @@ https://blog.ganssle.io/articles/2019/11/utcnow.html.
  13 files changed, 50 insertions(+), 55 deletions(-)
 
 diff --git a/docker/main/requirements-wheels.txt b/docker/main/requirements-wheels.txt
-index 5ed9664fc2..164ab3b853 100644
+index 5ed9664fc..164ab3b85 100644
 --- a/docker/main/requirements-wheels.txt
 +++ b/docker/main/requirements-wheels.txt
 @@ -25,7 +25,6 @@ peewee_migrate == 1.14.*
@@ -165,7 +169,7 @@ index 5ed9664fc2..164ab3b853 100644
  ruamel.yaml == 0.18.*
  tzlocal == 5.2
 diff --git a/docs/static/frigate-api.yaml b/docs/static/frigate-api.yaml
-index fe467e0c62..3ce79e4ae6 100644
+index 7753ed7af..0c331c9e2 100644
 --- a/docs/static/frigate-api.yaml
 +++ b/docs/static/frigate-api.yaml
 @@ -2087,7 +2087,7 @@ paths:
@@ -186,7 +190,7 @@ index fe467e0c62..3ce79e4ae6 100644
              title: Timezone
        responses:
          '200':
-@@ -4227,7 +4227,7 @@ paths:
+@@ -4237,7 +4237,7 @@ paths:
              anyOf:
                - type: string
                - type: 'null'
@@ -195,7 +199,7 @@ index fe467e0c62..3ce79e4ae6 100644
              title: Timezone
        responses:
          '200':
-@@ -4479,7 +4479,7 @@ paths:
+@@ -4499,7 +4499,7 @@ paths:
              anyOf:
                - type: string
                - type: 'null'
@@ -204,7 +208,7 @@ index fe467e0c62..3ce79e4ae6 100644
              title: Timezone
          - name: min_score
            in: query
-@@ -4559,7 +4559,7 @@ paths:
+@@ -4579,7 +4579,7 @@ paths:
              anyOf:
                - type: string
                - type: 'null'
@@ -213,7 +217,7 @@ index fe467e0c62..3ce79e4ae6 100644
              title: Timezone
          - name: has_clip
            in: query
-@@ -6854,7 +6854,7 @@ paths:
+@@ -6875,7 +6875,7 @@ paths:
            required: false
            schema:
              type: string
@@ -222,7 +226,7 @@ index fe467e0c62..3ce79e4ae6 100644
              title: Timezone
          - name: cameras
            in: query
-@@ -6904,7 +6904,7 @@ paths:
+@@ -6925,7 +6925,7 @@ paths:
            required: false
            schema:
              type: string
@@ -232,7 +236,7 @@ index fe467e0c62..3ce79e4ae6 100644
        responses:
          '200':
 diff --git a/frigate/api/defs/query/app_query_parameters.py b/frigate/api/defs/query/app_query_parameters.py
-index 626d39679b..26974d59b9 100644
+index 626d39679..26974d59b 100644
 --- a/frigate/api/defs/query/app_query_parameters.py
 +++ b/frigate/api/defs/query/app_query_parameters.py
 @@ -7,4 +7,4 @@ class AppTimelineHourlyQueryParameters(BaseModel):
@@ -242,10 +246,10 @@ index 626d39679b..26974d59b9 100644
 -    timezone: str | None = "utc"
 +    timezone: str | None = "UTC"
 diff --git a/frigate/api/defs/query/events_query_parameters.py b/frigate/api/defs/query/events_query_parameters.py
-index 06d0dfc3af..30d0fcac50 100644
+index 80cc77c72..1cbc2d80a 100644
 --- a/frigate/api/defs/query/events_query_parameters.py
 +++ b/frigate/api/defs/query/events_query_parameters.py
-@@ -39,7 +39,7 @@ class EventsQueryParams(BaseModel):
+@@ -40,7 +40,7 @@ class EventsQueryParams(BaseModel):
      max_length: float | None = None
      event_id: str | None = None
      sort: str | None = None
@@ -254,7 +258,7 @@ index 06d0dfc3af..30d0fcac50 100644
  
  
  class EventsSearchQueryParams(BaseModel):
-@@ -66,7 +66,7 @@ class EventsSearchQueryParams(BaseModel):
+@@ -68,7 +68,7 @@ class EventsSearchQueryParams(BaseModel):
      has_clip: bool | None = None
      has_snapshot: bool | None = None
      is_submitted: bool | None = None
@@ -263,7 +267,7 @@ index 06d0dfc3af..30d0fcac50 100644
      min_score: float | None = None
      max_score: float | None = None
      min_speed: float | None = None
-@@ -76,6 +76,6 @@ class EventsSearchQueryParams(BaseModel):
+@@ -78,6 +78,6 @@ class EventsSearchQueryParams(BaseModel):
  
  
  class EventsSummaryQueryParams(BaseModel):
@@ -272,10 +276,10 @@ index 06d0dfc3af..30d0fcac50 100644
      has_clip: int | None = None
      has_snapshot: int | None = None
 diff --git a/frigate/api/defs/query/recordings_query_parameters.py b/frigate/api/defs/query/recordings_query_parameters.py
-index 770da96bb8..cd7b4221c2 100644
+index 770da96bb..cd7b4221c 100644
 --- a/frigate/api/defs/query/recordings_query_parameters.py
 +++ b/frigate/api/defs/query/recordings_query_parameters.py
-@@ -3,7 +3,7 @@
+@@ -3,7 +3,7 @@ from pydantic.json_schema import SkipJsonSchema
  
  
  class MediaRecordingsSummaryQueryParams(BaseModel):
@@ -285,7 +289,7 @@ index 770da96bb8..cd7b4221c2 100644
  
  
 diff --git a/frigate/api/defs/query/review_query_parameters.py b/frigate/api/defs/query/review_query_parameters.py
-index b16146a9bc..16f759f42a 100644
+index b16146a9b..16f759f42 100644
 --- a/frigate/api/defs/query/review_query_parameters.py
 +++ b/frigate/api/defs/query/review_query_parameters.py
 @@ -19,7 +19,7 @@ class ReviewSummaryQueryParams(BaseModel):
@@ -298,10 +302,10 @@ index b16146a9bc..16f759f42a 100644
  
  class ReviewActivityMotionQueryParams(BaseModel):
 diff --git a/frigate/api/media.py b/frigate/api/media.py
-index c6fa90c068..a5f5e1bab8 100644
+index d6e2a7f83..632d81554 100644
 --- a/frigate/api/media.py
 +++ b/frigate/api/media.py
-@@ -11,10 +11,10 @@
+@@ -11,10 +11,10 @@ from datetime import UTC, datetime, timedelta
  from pathlib import Path as FilePath
  from typing import Any
  from urllib.parse import unquote
@@ -313,7 +317,7 @@ index c6fa90c068..a5f5e1bab8 100644
  from fastapi import APIRouter, Depends, Path, Query, Request, Response
  from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
  from pathvalidate import sanitize_filename
-@@ -714,7 +714,7 @@ async def vod_hour(
+@@ -723,7 +723,7 @@ async def vod_hour(
      parts = year_month.split("-")
      start_date = (
          datetime(int(parts[0]), int(parts[1]), day, hour, tzinfo=UTC)
@@ -323,10 +327,10 @@ index c6fa90c068..a5f5e1bab8 100644
      end_date = start_date + timedelta(hours=1) - timedelta(milliseconds=1)
      start_ts = start_date.timestamp()
 diff --git a/frigate/api/preview.py b/frigate/api/preview.py
-index 1047591434..af84117fd6 100644
+index 104759143..af84117fd 100644
 --- a/frigate/api/preview.py
 +++ b/frigate/api/preview.py
-@@ -5,8 +5,8 @@
+@@ -5,8 +5,8 @@ import logging
  import os
  import threading
  from datetime import UTC, datetime, timedelta
@@ -346,7 +350,7 @@ index 1047591434..af84117fd6 100644
      end_date = start_date + timedelta(hours=1) - timedelta(milliseconds=1)
      start_ts = start_date.timestamp()
 diff --git a/frigate/api/record.py b/frigate/api/record.py
-index 5db257f482..3352ec039b 100644
+index 5db257f48..3352ec039 100644
 --- a/frigate/api/record.py
 +++ b/frigate/api/record.py
 @@ -120,7 +120,7 @@ def all_recordings_summary(
@@ -359,10 +363,10 @@ index 5db257f482..3352ec039b 100644
  
      time_range_query = (
 diff --git a/frigate/record/export.py b/frigate/record/export.py
-index 5d307077c9..0564dee04b 100644
+index 00addda12..79f2fb9a6 100644
 --- a/frigate/record/export.py
 +++ b/frigate/record/export.py
-@@ -12,8 +12,8 @@
+@@ -12,8 +12,8 @@ import threading
  from collections.abc import Callable
  from enum import Enum
  from pathlib import Path
@@ -372,7 +376,7 @@ index 5d307077c9..0564dee04b 100644
  from peewee import DoesNotExist
  
  from frigate.config import FfmpegConfig, FrigateConfig
-@@ -371,8 +371,8 @@ def get_datetime_from_timestamp(self, timestamp: int) -> str:
+@@ -372,8 +372,8 @@ class RecordingExporter(threading.Thread):
          tz_name = self.config.ui.timezone
          if tz_name:
              try:
@@ -383,7 +387,7 @@ index 5d307077c9..0564dee04b 100644
                  tz = None
              if tz is not None:
                  return datetime.datetime.fromtimestamp(timestamp, tz=tz).strftime(
-@@ -533,8 +533,8 @@ def _build_recording_segment_chapter_metadata_file(
+@@ -534,8 +534,8 @@ class RecordingExporter(threading.Thread):
          tz: datetime.tzinfo | None = None
          if tz_name:
              try:
@@ -395,20 +399,20 @@ index 5d307077c9..0564dee04b 100644
          if tz is None:
              tz = datetime.UTC
 diff --git a/frigate/test/http_api/test_http_media.py b/frigate/test/http_api/test_http_media.py
-index b2d83cbc8a..8a3835c324 100644
+index 252d8a0af..a693d9f67 100644
 --- a/frigate/test/http_api/test_http_media.py
 +++ b/frigate/test/http_api/test_http_media.py
-@@ -1,8 +1,8 @@
- """Unit tests for recordings/media API endpoints."""
- 
+@@ -4,8 +4,8 @@ import threading
+ from concurrent.futures import ThreadPoolExecutor
  from datetime import UTC, datetime
+ from unittest.mock import patch
 +from zoneinfo import ZoneInfo
  
 -import pytz
  from fastapi import Request
  
  from frigate.api.auth import get_allowed_cameras_for_filter, get_current_user
-@@ -51,16 +51,16 @@ def test_recordings_summary_across_dst_spring_forward(self):
+@@ -54,16 +54,16 @@ class TestHttpMedia(BaseTestHttp):
          In 2024, DST in America/New_York transitions on March 10, 2024 at 2:00 AM
          Clocks spring forward from 2:00 AM to 3:00 AM (EST to EDT)
          """
@@ -429,7 +433,7 @@ index b2d83cbc8a..8a3835c324 100644
  
          with AuthTestClient(self.app) as client:
              # Insert recordings for each day
-@@ -124,19 +124,16 @@ def test_recordings_summary_across_dst_fall_back(self):
+@@ -127,19 +127,16 @@ class TestHttpMedia(BaseTestHttp):
          In 2024, DST in America/New_York transitions on November 3, 2024 at 2:00 AM
          Clocks fall back from 2:00 AM to 1:00 AM (EDT to EST)
          """
@@ -453,7 +457,7 @@ index b2d83cbc8a..8a3835c324 100644
  
          with AuthTestClient(self.app) as client:
              # Insert recordings for each day
-@@ -197,13 +194,13 @@ def test_recordings_summary_multiple_cameras_across_dst(self):
+@@ -200,13 +197,13 @@ class TestHttpMedia(BaseTestHttp):
          """
          Test recordings summary with multiple cameras across DST boundary.
          """
@@ -470,7 +474,7 @@ index b2d83cbc8a..8a3835c324 100644
  
          with AuthTestClient(self.app) as client:
              # Override allowed cameras for this test to include both
-@@ -266,15 +263,15 @@ def test_recordings_summary_at_dst_transition_time(self):
+@@ -269,15 +266,15 @@ class TestHttpMedia(BaseTestHttp):
          """
          Test recordings that span the exact DST transition time.
          """
@@ -489,7 +493,7 @@ index b2d83cbc8a..8a3835c324 100644
  
          with AuthTestClient(self.app) as client:
              Recordings.insert(
-@@ -334,7 +331,7 @@ def test_recordings_summary_utc_timezone(self):
+@@ -337,7 +334,7 @@ class TestHttpMedia(BaseTestHttp):
  
              # Test with UTC timezone
              response = client.get(
@@ -498,7 +502,7 @@ index b2d83cbc8a..8a3835c324 100644
              )
  
              assert response.status_code == 200
-@@ -365,8 +362,8 @@ def test_recordings_summary_single_camera_filter(self):
+@@ -368,8 +365,8 @@ class TestHttpMedia(BaseTestHttp):
          """
          Test recordings summary filtered to a single camera.
          """
@@ -510,10 +514,10 @@ index b2d83cbc8a..8a3835c324 100644
          with AuthTestClient(self.app) as client:
              # Insert recordings for both cameras
 diff --git a/frigate/test/http_api/test_http_review.py b/frigate/test/http_api/test_http_review.py
-index d13a7bd273..62d4f1608d 100644
+index e2312e771..3dd319b6c 100644
 --- a/frigate/test/http_api/test_http_review.py
 +++ b/frigate/test/http_api/test_http_review.py
-@@ -250,7 +250,7 @@ def test_get_review_summary_all_filters(self):
+@@ -342,7 +342,7 @@ class TestHttpReview(BaseTestHttp):
                  "cameras": "front_door",
                  "labels": "all",
                  "zones": "all",
@@ -523,7 +527,7 @@ index d13a7bd273..62d4f1608d 100644
              response = client.get("/review/summary", params=params)
              assert response.status_code == 200
 diff --git a/frigate/util/time.py b/frigate/util/time.py
-index 861bec17f6..777ae9cc11 100644
+index 861bec17f..777ae9cc1 100644
 --- a/frigate/util/time.py
 +++ b/frigate/util/time.py
 @@ -2,9 +2,8 @@
@@ -537,7 +541,7 @@ index 861bec17f6..777ae9cc11 100644
  from tzlocal import get_localzone
  
  logger = logging.getLogger(__name__)
-@@ -12,7 +11,7 @@
+@@ -12,7 +11,7 @@ logger = logging.getLogger(__name__)
  
  def get_tz_modifiers(tz_name: str) -> tuple[str, str, float]:
      seconds_offset = (
@@ -592,8 +596,10 @@ index 861bec17f6..777ae9cc11 100644
          local_dt = dt.astimezone(tz)
          current_offset = local_dt.utcoffset().total_seconds()
  
+-- 
+2.55.0
 
-From af86312f3dd57c068c3f6b3ae68d8fa6f77c6e30 Mon Sep 17 00:00:00 2001
+From b62ef0459bbe096631da95a4e6d94cf8177eef01 Mon Sep 17 00:00:00 2001
 From: Martin Weinelt <hexa@darmstadt.ccc.de>
 Date: Mon, 6 Jul 2026 16:21:01 +0200
 Subject: [PATCH 4/5] Provide lookup for normalized timezone names
@@ -608,10 +614,10 @@ of the casing of the given timezone name.
  4 files changed, 30 insertions(+), 8 deletions(-)
 
 diff --git a/frigate/api/media.py b/frigate/api/media.py
-index a5f5e1bab8..14ae263053 100644
+index 632d81554..af8998b8c 100644
 --- a/frigate/api/media.py
 +++ b/frigate/api/media.py
-@@ -54,6 +54,7 @@
+@@ -54,6 +54,7 @@ from frigate.util.file import (
  from frigate.util.image import get_image_from_recording, get_image_quality_params
  from frigate.util.media import get_keyframe_before
  from frigate.util.object import create_empty_regions_grid
@@ -619,7 +625,7 @@ index a5f5e1bab8..14ae263053 100644
  
  logger = logging.getLogger(__name__)
  
-@@ -714,7 +715,9 @@ async def vod_hour(
+@@ -723,7 +724,9 @@ async def vod_hour(
      parts = year_month.split("-")
      start_date = (
          datetime(int(parts[0]), int(parts[1]), day, hour, tzinfo=UTC)
@@ -631,10 +637,10 @@ index a5f5e1bab8..14ae263053 100644
      end_date = start_date + timedelta(hours=1) - timedelta(milliseconds=1)
      start_ts = start_date.timestamp()
 diff --git a/frigate/api/preview.py b/frigate/api/preview.py
-index af84117fd6..81de23d003 100644
+index af84117fd..81de23d00 100644
 --- a/frigate/api/preview.py
 +++ b/frigate/api/preview.py
-@@ -22,6 +22,7 @@
+@@ -22,6 +22,7 @@ from frigate.api.defs.response.preview_response import (
  from frigate.api.defs.tags import Tags
  from frigate.const import BASE_DIR, CACHE_DIR, PREVIEW_FRAME_TYPE
  from frigate.models import Previews
@@ -654,10 +660,10 @@ index af84117fd6..81de23d003 100644
      end_date = start_date + timedelta(hours=1) - timedelta(milliseconds=1)
      start_ts = start_date.timestamp()
 diff --git a/frigate/record/export.py b/frigate/record/export.py
-index 0564dee04b..ff33063bc3 100644
+index 79f2fb9a6..f5bd1cd31 100644
 --- a/frigate/record/export.py
 +++ b/frigate/record/export.py
-@@ -31,7 +31,7 @@
+@@ -31,7 +31,7 @@ from frigate.ffmpeg_presets import (
  )
  from frigate.models import Export, Previews, Recordings, ReviewSegment
  from frigate.util.ffmpeg import run_ffmpeg_with_progress
@@ -666,7 +672,7 @@ index 0564dee04b..ff33063bc3 100644
  
  logger = logging.getLogger(__name__)
  
-@@ -371,7 +371,7 @@ def get_datetime_from_timestamp(self, timestamp: int) -> str:
+@@ -372,7 +372,7 @@ class RecordingExporter(threading.Thread):
          tz_name = self.config.ui.timezone
          if tz_name:
              try:
@@ -675,7 +681,7 @@ index 0564dee04b..ff33063bc3 100644
              except (ValueError, ZoneInfoNotFoundError):
                  tz = None
              if tz is not None:
-@@ -533,7 +533,7 @@ def _build_recording_segment_chapter_metadata_file(
+@@ -534,7 +534,7 @@ class RecordingExporter(threading.Thread):
          tz: datetime.tzinfo | None = None
          if tz_name:
              try:
@@ -685,7 +691,7 @@ index 0564dee04b..ff33063bc3 100644
                  tz = None
          if tz is None:
 diff --git a/frigate/util/time.py b/frigate/util/time.py
-index 777ae9cc11..a4395c5d5d 100644
+index 777ae9cc1..a4395c5d5 100644
 --- a/frigate/util/time.py
 +++ b/frigate/util/time.py
 @@ -2,16 +2,32 @@
@@ -732,8 +738,10 @@ index 777ae9cc11..a4395c5d5d 100644
      except (ValueError, ZoneInfoNotFoundError):
          # If timezone is invalid, return single period with no offset
          return [(start_time, end_time, 0)]
+-- 
+2.55.0
 
-From 490f1b93f8cc2aa450e74e882aa31516d6c1078c Mon Sep 17 00:00:00 2001
+From f5609f623c12cce7bc7e19bf6f2e276c436772d6 Mon Sep 17 00:00:00 2001
 From: Martin Weinelt <hexa@darmstadt.ccc.de>
 Date: Mon, 6 Jul 2026 18:12:37 +0200
 Subject: [PATCH 5/5] Test timezone naming normalization and error handling
@@ -745,7 +753,7 @@ Subject: [PATCH 5/5] Test timezone naming normalization and error handling
 
 diff --git a/frigate/test/test_tz.py b/frigate/test/test_tz.py
 new file mode 100644
-index 0000000000..5be8010dda
+index 000000000..5be8010dd
 --- /dev/null
 +++ b/frigate/test/test_tz.py
 @@ -0,0 +1,19 @@
@@ -768,3 +776,6 @@ index 0000000000..5be8010dda
 +    def test_invalid(self):
 +        with self.assertRaisesRegex(ValueError, r"Unknown timezone: foo/bar"):
 +            get_normalized_tz_name("foo/bar")
+-- 
+2.55.0
+

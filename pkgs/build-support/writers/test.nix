@@ -6,6 +6,7 @@
   katex,
   perlPackages,
   python3Packages,
+  rPackages,
   runCommand,
   testers,
   writers,
@@ -44,6 +45,8 @@ let
     writePyPy3
     writePython3
     writePython3Bin
+    writeRscript
+    writeRscriptBin
     writeRuby
     writeRust
     writeRustBin
@@ -175,6 +178,12 @@ recurseIntoAttrs {
           - test: success
         """)
         print(y[0]['test'])
+      ''
+    );
+
+    rscript = expectSuccessBin (
+      writeRscriptBin "test-writers-rscript-bin" { } /* R */ ''
+        cat("success")
       ''
     );
 
@@ -365,6 +374,17 @@ recurseIntoAttrs {
         """)
         print(y[0]['test'])
       ''
+    );
+
+    rscript = expectSuccess (
+      writeRscript "test-writers-rscript"
+        {
+          libraries = [ rPackages.jsonlite ];
+        }
+        /* R */ ''
+          result <- jsonlite::fromJSON('{"message":"success"}')
+          cat(result$message)
+        ''
     );
 
     # Commented out because of this issue: https://github.com/NixOS/nixpkgs/issues/39356

@@ -35,7 +35,6 @@
   libxtst,
   wayland,
   wayland-protocols,
-  xkeyboard_config,
 
   # Update script for `passthru`.
   nix-update-script,
@@ -43,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.26.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XcSG47Ysjn+wrJH5DC/XXGXcneXcW7xIhAn6sguuv+s=";
+    hash = "sha256-CgmK/2MbxUJD16q/WdJHz4ppWsMvxIxuwZ8nIgWoH/4=";
   };
 
   nativeBuildInputs = [
@@ -95,8 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
-        --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
       substituteInPlace deploy/linux/deploy.cmake \
         --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
     ''}
@@ -125,13 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_QPA_PLATFORM=offscreen
     ctest --test-dir  "src/unittests" --output-on-failure \
       --exclude-regex "OSX(KeyState|Clipboard)Tests"
-    ./bin/legacytests
 
     runHook postCheck
-  '';
-
-  postInstall = ''
-    install -Dm644 ../README.md ../doc/user/configuration.md -t $out/share/doc/deskflow
   '';
 
   passthru.updateScript = nix-update-script {

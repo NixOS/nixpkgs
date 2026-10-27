@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "katana";
-  version = "1.7.0";
+  version = "1.8.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "projectdiscovery";
     repo = "katana";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LJufz8KXFKai9Ntdc7/zpblS8xQTzbiEWruFVCu59m4=";
+    hash = "sha256-XpFE4g5TuO7KqDwKjj8J7h/Nkngh1BGN1bwK8e/1RU0=";
   };
 
-  vendorHash = "sha256-1QfmMsgbsrUwRd7ZAgvhwsRCuae3Pc5MYb+p59AsRU4=";
+  vendorHash = "sha256-+fq0QAu61U5plFL7I/qTD0NYGeOnK4WfLnpkY9MvNtE=";
 
   subPackages = [ "cmd/katana" ];
 

@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "3.3.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";

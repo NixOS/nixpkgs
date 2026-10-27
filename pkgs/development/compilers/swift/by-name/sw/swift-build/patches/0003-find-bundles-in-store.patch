@@ -1,14 +1,14 @@
-From a60ea4fbf21654eac779eece5c6d304e0f7b64c8 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
 Date: Sat, 13 Dec 2025 09:40:18 -0500
-Subject: [PATCH] find-bundles-in-store
+Subject: [PATCH 3/3] find-bundles-in-store
 
 ---
  Sources/CMakeLists.txt | 11 +++++------
  1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/Sources/CMakeLists.txt b/Sources/CMakeLists.txt
-index c0d0304..9df123e 100644
+index 7be9a7c4..ad641c54 100644
 --- a/Sources/CMakeLists.txt
 +++ b/Sources/CMakeLists.txt
 @@ -24,18 +24,17 @@ function(SwiftBuild_Bundle)
@@ -22,7 +22,7 @@ index c0d0304..9df123e 100644
      CONTENT [[
      import Foundation
      extension Foundation.Bundle {
-       static let module: Bundle = {
+       static nonisolated let module: Bundle = {
 -        let mainPath = Bundle.main.bundleURL.appendingPathComponent("SwiftBuild_@BundleXCSpecs_MODULE@.resources").path
 -        let buildPath = #"@_SWIFT_BUILD_RESOURCE_BUNDLE_BUILD_PATH@"#
 +        let mainPath = #"@_SWIFT_BUILD_RESOURCE_BUNDLE_BUILD_PATH@"#
@@ -44,5 +44,5 @@ index c0d0304..9df123e 100644
  
  add_subdirectory(SWBCSupport)
 -- 
-2.51.2
+2.54.0
 

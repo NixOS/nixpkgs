@@ -69,13 +69,13 @@ assert libraqmSupport -> freetypeSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.2-31";
+  version = "7.1.2-34";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
-    hash = "sha256-RQpvpWSEMIIGIDLk5X9BwsWgD0AKPBgJ2m9dSipq8Lc=";
+    hash = "sha256-H2tXlEsW2JbvJJpUxEkwbV3zRXjwtPBxpbvs2xdKNZY=";
   };
 
   outputs = [

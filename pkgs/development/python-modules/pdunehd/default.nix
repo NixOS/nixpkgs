@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "valentinalexeev";
     repo = "pdunehd";
     tag = version;
-    sha256 = "sha256-8CL7ZQ+tV0CKdqWWiPDbo6Q5d1iIj/vNbYshdjUpYSw=";
+    hash = "sha256-8CL7ZQ+tV0CKdqWWiPDbo6Q5d1iIj/vNbYshdjUpYSw=";
   };
 
   propagatedBuildInputs = [ requests ];

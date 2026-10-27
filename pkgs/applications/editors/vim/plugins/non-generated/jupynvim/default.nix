@@ -6,12 +6,12 @@
   vimUtils,
 }:
 let
-  version = "0.4.5";
+  version = "0.4.6";
   src = fetchFromGitHub {
     owner = "sheng-tse";
     repo = "jupynvim";
     tag = "v${version}";
-    hash = "sha256-G8vyhsTfHtbE7foqj1HNJNMg3TYeO/Nd4ofRS+SVPUo=";
+    hash = "sha256-EQMjMlYd6x6E59JQ1EUFSXK5CYv8I87TqMWsNKanE/c=";
   };
   jupynvim-core = rustPlatform.buildRustPackage {
     pname = "jupynvim-core";
@@ -19,7 +19,7 @@ let
 
     sourceRoot = "${src.name}/core";
 
-    cargoHash = "sha256-7zMuo7evZrer8CXAwbrZtLv/LdOuoZK95sMgyqs5P0I=";
+    cargoHash = "sha256-oYUd62xmJ/MwRwGpfRmsnRgW6ggllOHzoczeVXV5hNE=";
 
     meta.mainProgram = "jupynvim-core";
   };
@@ -33,7 +33,7 @@ vimUtils.buildVimPlugin {
   postInstall = ''
     rm -rf $out/core
     substituteInPlace $out/lua/jupynvim/backend/connect.lua \
-      --replace-fail 'M._plugin_root() .. "/core/target/release/jupynvim-core"' \
+      --replace-fail 'root .. "/core/target/release/jupynvim-core"' \
                      '"${lib.getExe jupynvim-core}"'
   '';
 

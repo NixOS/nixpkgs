@@ -16,7 +16,7 @@ buildOctavePackage rec {
     owner = "pr0m1th3as";
     repo = "datatypes";
     tag = "release-${version}";
-    sha256 = "sha256-pjGJkcZg3m3UzoAexw4yw7ztZR/shT/W2Q1zfj+le0E=";
+    hash = "sha256-pjGJkcZg3m3UzoAexw4yw7ztZR/shT/W2Q1zfj+le0E=";
   };
 
   nativeOctavePkgTestInputs = [

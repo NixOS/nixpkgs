@@ -1,26 +1,35 @@
-{ ... }:
 {
   name = "navidrome";
 
-  nodes.machine =
-    { pkgs, ... }:
-    {
+  nodes = {
+    machine = { pkgs, ... }: {
       services.navidrome = {
         enable = true;
-        plugins = with pkgs.pkgsCross.wasi32.navidromePlugins; [
-          # basic go plugin
-          listenbrainz-daily-playlist
+        withPlugins = p: [
           # uses bundleName instead of pname
-          apple-music
+          p.apple-music
           # rust plugin
-          lyrics-plugin
+          p.lyrics-plugin
         ];
+
+        # Also makes sure that the migration works.
+        plugins = [
+          # basic go plugin
+          pkgs.pkgsCross.wasi32.navidromePlugins.listenbrainz-daily-playlist
+        ];
+
         settings = {
           # Disables all external network connections
           EnableExternalServices = "false";
         };
       };
     };
+
+    no_plugins.services.navidrome = {
+      enable = true;
+      settings.EnableExternalServices = "false";
+    };
+  };
 
   testScript = ''
     machine.wait_for_unit("navidrome")
@@ -31,5 +40,13 @@
     # Make sure the admin wrapper is working
     machine.succeed("cd ~")
     assert "--version" in machine.succeed("navidrome-cli --help")
+
+    # Make sure that the rust plugin loads
+    assert "nd-lyrics" in machine.succeed("navidrome-cli plugin list")
+
+    # Make sure it works without any plugins
+    no_plugins.wait_for_unit("navidrome")
+    no_plugins.wait_for_open_port(4533)
+    no_plugins.wait_for_console_text("Navidrome server is ready!")
   '';
 }

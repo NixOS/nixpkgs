@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "beets-alternatives";
-  version = "0.14.4";
+  version = "0.14.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
     tag = "v${version}";
-    hash = "sha256-jRVzKqvGvAKn3D3s1KEqF7uh9S28Yw4TarMRVRBB6ug=";
+    hash = "sha256-PcaEvQRZoJ+iKlnCGoxz2ikJ2QAJKFDVKF29GSgDp/U=";
   };
 
   build-system = [

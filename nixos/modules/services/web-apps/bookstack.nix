@@ -372,11 +372,11 @@ in
     services.phpfpm.pools.bookstack = {
       inherit user group;
       phpPackage = cfg.package.phpPackage;
-      phpOptions = ''
-        log_errors = on
-        post_max_size = ${cfg.maxUploadSize}
-        upload_max_filesize = ${cfg.maxUploadSize}
-      '';
+      phpOptions = {
+        log_errors = "on";
+        post_max_size = cfg.maxUploadSize;
+        upload_max_filesize = cfg.maxUploadSize;
+      };
       settings = {
         "listen.mode" = lib.mkDefault "0660";
         "listen.owner" = lib.mkDefault user;

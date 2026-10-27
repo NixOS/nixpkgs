@@ -60,7 +60,7 @@ let
 
     meta = {
       description = "Fake file system that mocks the Python file system modules";
-      homepage = "https://pyfakefs.org/";
+      homepage = "https://pytest-pyfakefs.readthedocs.io";
       changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${finalAttrs.version}/CHANGES.md";
       license = lib.licenses.asl20;
       maintainers = [ ];

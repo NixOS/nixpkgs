@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
-  version = "0.3.8";
+  version = "0.3.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "universal_pathlib";
     inherit version;
-    hash = "sha256-6tK2W8o99uEcO3yzb8mEY0C8PC2071cTFVAmBCKwo+g=";
+    hash = "sha256-RIfLyQcwpIz7ZPgR2Z4UtvrtbXOEIM1fk/WfSOaTC/s=";
   };
 
   build-system = [

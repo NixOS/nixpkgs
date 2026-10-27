@@ -1,10 +1,9 @@
 {
   fetchFromGitHub,
+  fontconfig,
   installShellFiles,
   lib,
-  libGL,
   libxkbcommon,
-  makeBinaryWrapper,
   pkg-config,
   rustPlatform,
   versionCheckHook,
@@ -14,42 +13,46 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vellum";
-  version = "0.6.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "greyxp1";
     repo = "vellum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uWGaCeENwaqg2+wbtfgpDAjxIsJbgUcMnvSPauwjcBI=";
+    hash = "sha256-S+0z8epsGS9nFVH3vzoZ50fjdnxo4Mb2zgBJ6ryNgdU=";
   };
 
-  cargoHash = "sha256-quZW6jkGzvRHNgkJQS4entJyXeYftBOV89hKaFfQCDw=";
+  cargoHash = "sha256-7v4bFe4Kuxph1BxG7tZxps/K6QzreZRLmwWATtgUmx0=";
 
   __structuredAttrs = true;
 
   nativeBuildInputs = [
     installShellFiles
-    makeBinaryWrapper
     pkg-config
   ];
 
   buildInputs = [
+    fontconfig
     libxkbcommon
     wayland
   ];
 
   postInstall = ''
-    manDir=$(find target -type d -path '*/build/vellum-*/out/man' -print -quit)
-    installManPage "$manDir"/*.1
+    outputDir=$(find target -type d -path '*/build/vellum-*/out' -print -quit | head -n 1)
 
-    wrapProgram $out/bin/vellum \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libGL
-          vulkan-loader
-          wayland
-        ]
-      }
+    installManPage "$outputDir"/man/*.1
+    installShellCompletion "$outputDir"/completions/vellum.{bash,fish,nu} \
+      --zsh "$outputDir"/completions/_vellum
+
+    install -Dm644 "$outputDir"/completions/vellum.elv \
+      $out/share/elvish/lib/vellum.elv
+    install -Dm644 "$outputDir"/completions/_vellum.ps1 \
+      $out/share/powershell/vellum.Completion.ps1
+  '';
+
+  postFixup = ''
+    # wgpu loads Vulkan dynamically, so its path must be added after RPATH shrinking.
+    patchelf --add-rpath "${lib.makeLibraryPath [ vulkan-loader ]}" "$out/bin/vellum"
   '';
 
   doInstallCheck = true;
@@ -66,7 +69,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         isc
         mit
       ];
-    maintainers = with lib.maintainers; [ poz ];
+    maintainers = with lib.maintainers; [
+      greyxp1
+      poz
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "vellum";
   };

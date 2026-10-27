@@ -38,6 +38,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/kurtbrose/pyjks/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/kurtbrose/pyjks";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

@@ -374,7 +374,7 @@ in
         startLimitIntervalSec = 60;
         serviceConfig = commonServiceConfig // {
           Type = "exec";
-          ExecStart = "${lib.getExe pkgs.uwsgi} --ini ${uwsgiIni}";
+          ExecStart = "${lib.getExe pkg.passthru.uwsgiWithPython} --ini ${uwsgiIni}";
           Restart = "on-failure";
         };
       };

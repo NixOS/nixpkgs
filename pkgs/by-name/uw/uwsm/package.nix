@@ -14,7 +14,7 @@
   libnotify,
   newt,
   python3Packages,
-  systemd,
+  systemdLibs,
   util-linux,
   fumonSupport ? true,
   uuctlSupport ? true,
@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.27.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-al+SPMaYn9qpc7zTASKjrP/WJL2UEzgvGkMTAnLx99o=";
+    hash = "sha256-4LY4gBZ6qXGY4xLoL6Bp2TiPp2Suy/8Xs1m0aRtzjrg=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     newt # whiptail
     libnotify # notify-send
     bash # sh
-    systemd
+    systemdLibs
     python
   ]
   ++ lib.optionals uuctlSupport [ dmenu ];

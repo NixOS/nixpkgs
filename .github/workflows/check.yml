@@ -58,7 +58,7 @@ jobs:
         run: npm ci --package-lock-only=false --no-audit bottleneck
         working-directory: trusted/ci/github-script
 
-      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_COMMIT_CHECK_CLIENT_ID
         id: app-token
         with:
@@ -108,7 +108,7 @@ jobs:
           sparse-checkout: |
             ci/github-script
 
-      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_MANUAL_EDIT_CHECK_CLIENT_ID
         id: app-token
         with:
@@ -154,7 +154,11 @@ jobs:
           sparse-checkout: |
             ci/github-script
 
-      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      - name: Install dependencies
+        run: npm ci --package-lock-only=false --no-audit bottleneck
+        working-directory: trusted/ci/github-script
+
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_CLIENT_ID
         id: app-token
         with:
@@ -220,7 +224,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+      - uses: cachix/install-nix-action@448cde739abec1eaf0646249e3d25bb8d9bc7702 # v31.11.2
 
       - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
         continue-on-error: true

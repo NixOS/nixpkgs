@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsimplecal";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "dmedvinsky";
     repo = "gsimplecal";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ev7cSs1DUmJ2RKMokMP87YDqrqtWhmq0zIpLerSCI+0=";
+    sha256 = "sha256-am3QF6tLq9yBpN4Ia826SRaWaKCkHJgqOOO/+/9WjfA=";
   };
 
   postPatch = ''

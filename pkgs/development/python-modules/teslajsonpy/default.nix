@@ -15,16 +15,16 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "teslajsonpy";
-  version = "3.13.2";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = "teslajsonpy";
-    tag = "v${version}";
-    hash = "sha256-tlw5m8RsBGwVx3h+JlY9rwINMDR6csAt2XefK6AaQWE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EyyDyRoenKY1ZaPGyQz9WwRYWKRbthrNCdq+ms9LNNU=";
   };
 
   build-system = [ poetry-core ];
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to work with Tesla API";
     homepage = "https://github.com/zabuldon/teslajsonpy";
-    changelog = "https://github.com/zabuldon/teslajsonpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/zabuldon/teslajsonpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

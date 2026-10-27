@@ -327,24 +327,6 @@ buildStdenv.mkDerivation {
     lib.optionals (lib.versionAtLeast version "136") [ ./136-no-buildconfig.patch ]
     # Add MOZ_SYSTEM_DIR env var for native messaging host support
     ++ lib.optionals (lib.versionAtLeast version "133") [ ./133-env-var-for-system-dir.patch ]
-    ++ lib.optionals (lib.versionAtLeast version "139" && lib.versionOlder version "141") [
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1955112
-      # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
-      ./139-wayland-drag-animation.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "144") [
-      # Versions before 144 vendor bindgen 0.69. On Darwin, libc++ 21 changed
-      # basic_string::__self_view from a typedef to an attributed using alias;
-      # bindgen then emits it without its template parameter, producing invalid
-      # Rust. Vendored bindgen was updated in:
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
-      ./140-bindgen-string-view.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "140.13") [
-      # https://github.com/mozilla/cbindgen/issues/1165
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=2046162
-      ./153-cbindgen-0.29.4-compat.patch
-    ]
     ++ extraPatches;
 
   postPatch = ''

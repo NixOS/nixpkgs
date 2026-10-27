@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tmuxp";
-  version = "1.74.0";
+  version = "1.76.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-ngSA6gEpmWAmNYh+BGHTlcLYqm42qFtabR1l3NbHgJw=";
+    hash = "sha256-rtrTKcWTTpOA7s9D5Kk3L0+HyrZAyWlRBeHpHJ2uyW8=";
   };
 
   build-system = with python3Packages; [
@@ -21,6 +21,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  pythonRelaxDeps = [ "libtmux" ];
 
   dependencies = with python3Packages; [
     colorama

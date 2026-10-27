@@ -1,6 +1,8 @@
 {
   lib,
   immich,
+  ocl-icd,
+  openvino,
   python3,
   nixosTests,
   stdenv,
@@ -10,13 +12,19 @@ let
     self = python;
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "immich-machine-learning";
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
   __structuredAttrs = true;
+
+  postPatch = ''
+    substituteInPlace immich_ml/sessions/ort.py \
+      --replace-fail 'Path(ort.__file__).parent / "capi" / "libopenvino_c.so"' '"${lib.getLib openvino}/lib/libopenvino_c.so"' \
+      --replace-fail '"libOpenCL.so.1"' '"${lib.getLib ocl-icd}/lib/libOpenCL.so.1"'
+  '';
 
   pythonRelaxDeps = [
     "onnx"
@@ -45,6 +53,8 @@ python.pkgs.buildPythonApplication rec {
       tokenizers
       uvicorn
       rapidocr
+
+      finalAttrs.passthru.immich-model
     ]
     ++ uvicorn.optional-dependencies.standard;
 
@@ -66,7 +76,7 @@ python.pkgs.buildPythonApplication rec {
     cp -r ann $out/${python.sitePackages}/
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} "''${!outputBin}"/bin/machine-learning \
-      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}" \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}" \
       --set-default MACHINE_LEARNING_WORKERS 1 \
       --set-default MACHINE_LEARNING_WORKER_TIMEOUT 120 \
       --set-default MACHINE_LEARNING_CACHE_FOLDER /var/cache/immich \
@@ -79,8 +89,11 @@ python.pkgs.buildPythonApplication rec {
         --log-config-json $out/share/immich/log_conf.json"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) immich;
+  passthru = {
+    tests = {
+      inherit (nixosTests) immich;
+    };
+    immich-model = python.pkgs.callPackage ./immich-model.nix { };
   };
 
   meta = {
@@ -89,4 +102,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "machine-learning";
     inherit (immich.meta) license maintainers platforms;
   };
-}
+})

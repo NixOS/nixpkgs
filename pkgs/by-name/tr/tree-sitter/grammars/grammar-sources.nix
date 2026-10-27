@@ -469,9 +469,9 @@
   };
 
   dbml = {
-    version = "0.1.0";
+    version = "1.0.0";
     url = "github:dynamotn/tree-sitter-dbml";
-    hash = "sha256-IxxUW6YYxP1hkwA9NEojEEE3c8pwvAI6juX8aF7NfMw=";
+    hash = "sha256-18pAc8tOdUDBvZiFwikwrG0mMXnHCludZM56IJXZTDw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -720,9 +720,9 @@
   };
 
   erlang = rec {
-    version = "0.1.0";
+    version = "0.21.0";
     url = "github:WhatsApp/tree-sitter-erlang?ref=${version}";
-    hash = "sha256-FH8DNE03k95ZsRwaiXHkaU9/cdWrWALCEdChN5ZPdog=";
+    hash = "sha256-K4ytlHKE5YW8gu1YvXVv9bKrpU6o0I7NNP0kXcV4mSk=";
     meta = {
       license = lib.licenses.asl20;
     };
@@ -1422,9 +1422,9 @@
   };
 
   inko = {
-    version = "0.5.1";
+    version = "0.9.0";
     url = "github:inko-lang/tree-sitter-inko";
-    hash = "sha256-bt/T6O/7of8r9DrA6DU8pM4vWlBCgWWzw89GZbDyJnw=";
+    hash = "sha256-thSOSJLxRztyp3krxS2yGUTCof42JotCcFmK08/Lb4M=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
@@ -2089,6 +2089,19 @@
     };
   };
 
+  odoc = rec {
+    version = "0.2.0";
+    url = "github:tmcgilchrist/tree-sitter-odoc?ref=${version}";
+    hash = "sha256-hLx5spgka2fW7L2yjdDvNxRcEwcZsGGQ9Xd5bFITg8A=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        leungbk
+      ];
+    };
+    excludeBrokenTreeSitterJson = true;
+  };
+
   ohm = {
     version = "0-unstable-2025-12-12";
     url = "github:novusnota/tree-sitter-ohm";
@@ -2260,10 +2273,10 @@
   };
 
   php-only = {
-    version = "0.25.0-unstable-2026-09-24";
+    version = "0.25.1-unstable-2026-10-06";
     url = "github:tree-sitter/tree-sitter-php";
-    rev = "92b5271b60bec77fb65b5e5bc41561e8dac81299";
-    hash = "sha256-EkKYb9jatSl0/o+7tO2O3vx44ufDmZ4YJ/6t4il/Yk0=";
+    rev = "58d5643086ae60e93a3746cca648363ee97c8761";
+    hash = "sha256-L8c2OkkwryR5wpqYS++Zn8ZJ85wr//dvH2oe1PJcE8o=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2290,10 +2303,10 @@
   };
 
   pkl = {
-    version = "0.21.0-unstable-2026-09-25";
+    version = "0.21.0-unstable-2026-10-01";
     url = "github:apple/tree-sitter-pkl";
-    rev = "c95d8284940f5e1da2cd0d8f1ee45d7ef9ef75d1";
-    hash = "sha256-dnGqTZ7Kga1sIJkzRSbqkhvIrPJMxOEhHnDKJuLyudM=";
+    rev = "c837eff683d62f3cb5e6309b44c257640f202d4b";
+    hash = "sha256-wV0UzT1GB/sWlDTGK7Sij/eIBYIu4vM7O5zKf/Qde8g=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
@@ -2725,9 +2738,9 @@
   };
 
   scala = {
-    version = "0.26.2";
+    version = "0.26.3";
     url = "github:tree-sitter/tree-sitter-scala";
-    hash = "sha256-PRyNcsiGeGfKtHvbLaGtiog/P8QEs117rqoBZZOXbeE=";
+    hash = "sha256-hTcG41bQqTSSsqtvtXW6wJIEFZJE49HYmYNJJw1wrho=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2910,9 +2923,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.9.24";
+    version = "2026.10.15";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-M5PwCbNxs8Ow5YZl178PLJy3Lq9vxm9PEDvsR5UVJHE=";
+    hash = "sha256-UZL/JxyxCLCez8A5PPcbA0wNzRENMR4sB1HIxDeO0FY=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
@@ -3006,9 +3019,9 @@
   };
 
   swift = rec {
-    version = "0.7.3";
+    version = "0.7.4";
     url = "github:alex-pinkus/tree-sitter-swift/${version}-with-generated-files";
-    hash = "sha256-SnWwqk6IRpaNldsraSKwHGtS64LiCndxDksrvLMs1P8=";
+    hash = "sha256-cnC1qVvtkgHSsYsMi9sbH8VGwGckRMTZpMQsdisU3AI=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -3025,9 +3038,9 @@
   };
 
   t32 = {
-    version = "9.0.2";
+    version = "9.0.3";
     url = "github:xasc/tree-sitter-t32";
-    hash = "sha256-hs0JHC4SOC4LvBQTMv/kKDQnW590p6waPHuO58CUaUw=";
+    hash = "sha256-tM0xN+boHCJzK16jRZKQYk/KkwEBut7KGZxj8KDHMMg=";
     meta = {
       maintainers = with lib.maintainers; [
         aciceri
@@ -3495,10 +3508,10 @@
   };
 
   wesl = {
-    version = "0-unstable-2025-09-26";
+    version = "0.1.0-unstable-2026-10-02";
     url = "github:wgsl-tooling-wg/tree-sitter-wesl";
-    rev = "3fa2b96bf5c217dae9bf663e2051fcdad0762c19";
-    hash = "sha256-O3n65StgGhxfdwYF/QPBTdkXEGjY2ajHeLpF5JWuTc8=";
+    rev = "b600a65818e4dd7f4d32407d1427643c27f3c389";
+    hash = "sha256-hf/dSdWkvmEICrHRNq6HNz2RqOWt5bMEhd+1RUOs/W4=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

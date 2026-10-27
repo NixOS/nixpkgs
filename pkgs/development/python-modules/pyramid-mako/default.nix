@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0066c863441f1c3ddea60cee1ccc50d00a91a317a8052ca44131da1a12a840e2";
+    hash = "sha256-AGbIY0QfHD3epgzuHMxQ0AqRoxeoBSykQTHaGhKoQOI=";
   };
 
   patches = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     # https://github.com/Pylons/pyramid_mako/pull/54
     (fetchpatch {
       url = "https://github.com/Pylons/pyramid_mako/commit/c0f9e7e0146a7f94e35a9401b1519ac8b7765f5b.patch";
-      sha256 = "15swfm0a07bdl32s85426rmjh72jwfasjcrl849ppg035z75q9fx";
+      hash = "sha256-3SVczi8DvHsTQTQzqZXjUhwoazaCFKTFoG0doEB1XJc=";
     })
   ];
 

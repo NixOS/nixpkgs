@@ -21,7 +21,7 @@ makeScopeWithSplicing' {
       directory = ./pkgs;
     }
     // {
-      version = "9.2";
+      version = "11.0";
 
       defaultMakeFlags = [
         "MKSOFTFLOAT=${

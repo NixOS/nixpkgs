@@ -27,7 +27,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flash-attn";
-  version = "2.8.3.post1";
+  version = "2.8.3.post2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "flash-attention";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-IgK517JorAf9ERcimusF20HgnuETBNKgnGaOxWBuV/M=";
+    hash = "sha256-bMFvcVpOMSM0YrU7pmtwNWDubhdbWVqiu9DsPF3J1Hg=";
   };
 
   # Avoid that MAX_JOBS could be ignored with future updates
@@ -135,9 +135,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   # Tests require access to a physical GPU
   doCheck = false;
 
-  passthru.gpuCheck = finalAttrs.finalPackage.overrideAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doInstallCheck = true;
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    gpuCheck = finalAttrs.finalPackage.overrideAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doInstallCheck = true;
+    };
   };
 
   meta = {

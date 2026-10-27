@@ -8,37 +8,37 @@
 
   # tests
   aioresponses,
+  gitMinimal,
   gitpython,
-  home-assistant,
   jsonschema,
   pytest-freezegun,
   pytest-homeassistant-custom-component,
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "bramstroker";
   domain = "powercalc";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
-    inherit owner;
+    owner = "bramstroker";
     repo = "homeassistant-powercalc";
-    tag = "v${version}";
-    hash = "sha256-XUHQYHZ4PMkxobENb3xo2W7MGju/vN+iJfI6NVaP+RM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oeOQ4h+sCSqHn+li9R5q26LGE+FOFzoD4iKQ+ZGIKjw=";
   };
 
   dependencies = [ numpy ];
 
   nativeCheckInputs = [
     aioresponses
+    gitMinimal
     gitpython
     jsonschema
     pytest-freezegun
     pytest-homeassistant-custom-component
     pytestCheckHook
-  ]
-  ++ home-assistant.getPackages "camera" home-assistant.python3Packages;
+  ];
 
   preCheck = ''
     patchShebangs --build tests/setup.sh
@@ -46,10 +46,10 @@ buildHomeAssistantComponent rec {
   '';
 
   meta = {
-    changelog = "https://github.com/bramstroker/homeassistant-powercalc/releases/tag/${src.tag}";
+    changelog = "https://github.com/bramstroker/homeassistant-powercalc/releases/tag/${finalAttrs.src.tag}";
     description = "Custom Home Assistant component for virtual power sensors";
     homepage = "https://github.com/bramstroker/homeassistant-powercalc";
     maintainers = with lib.maintainers; [ CodedNil ];
     license = lib.licenses.mit;
   };
-}
+})

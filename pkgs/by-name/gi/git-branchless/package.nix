@@ -6,6 +6,8 @@
   openssl,
   pkg-config,
   rustPlatform,
+  libgit2,
+  libz,
   sqlite,
   stdenv,
   versionCheckHook,
@@ -14,6 +16,8 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-branchless";
   version = "0.11.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arxanas";
@@ -24,10 +28,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5uygCOzPNqHjKJfq2LFTfaRT/N++/AY/PwlBJ8j8QwM=";
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+    LIBZ_SYS_STATIC = 0;
+  };
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     ncurses
+    libgit2
+    libz
     openssl
     sqlite
   ];

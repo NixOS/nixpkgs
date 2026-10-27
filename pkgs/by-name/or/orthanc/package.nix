@@ -14,7 +14,7 @@
   libpng,
   libuuid,
   log4cplus,
-  lua,
+  lua5_2_compat,
   openssl,
   protobuf,
   pugixml,
@@ -25,6 +25,9 @@
   nixosTests,
   orthanc-framework,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc";

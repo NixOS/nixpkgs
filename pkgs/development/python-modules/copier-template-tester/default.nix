@@ -4,24 +4,22 @@
   corallium,
   fetchFromGitHub,
   lib,
-  poetry-core,
-  poetry-dynamic-versioning,
+  uv-build,
 }:
 buildPythonPackage rec {
   pname = "copier-template-tester";
-  version = "2.2.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "copier-template-tester";
     tag = version;
-    hash = "sha256-n/39Gl4q24QKfVFaeeqqu0AQt2jRSRrcnEOFRHQ+SQE=";
+    hash = "sha256-eWTrrvZGucHYJVZfhCZSJJQGSqhXLSf8Rp4ZPsGxsIw=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    uv-build
   ];
 
   dependencies = [

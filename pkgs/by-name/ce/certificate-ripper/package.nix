@@ -24,7 +24,7 @@ buildGraalvmNativeImage (finalAttrs: {
       ./pin-default-maven-plguin-versions.patch
     ];
 
-    mvnHash = "sha256-ZuqPzFL7CJ/H6SBcQMwTMqBsKtlxv9oiQXXfFgMdQpE=";
+    mvnHash = "sha256-wgJpmOVheuU1ZEIq9lbX5KGJt5SKjjrXXISe7y/Wq8k=";
 
     mvnParameters = lib.escapeShellArgs [
       # generate a singular .jar file

@@ -19,6 +19,9 @@ let
   }
   // lib.optionalAttrs (cfg.extensions != [ ]) {
     THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss";
+  }
+  // lib.optionalAttrs (cfg.internalHostAllowlist != [ ]) {
+    INTERNAL_HOST_ALLOWLIST = concatStringsSep " " cfg.internalHostAllowlist;
   };
 in
 {
@@ -55,6 +58,25 @@ in
         ]
       '';
       description = "Additional extensions to be used.";
+    };
+
+    internalHostAllowlist = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [
+        "rss-bridge.lan:80"
+        "192.168.1.0/24"
+        "127.0.0.1:8080"
+      ];
+      description = ''
+        Hosts on local and private networks that FreshRSS fetches feeds from.
+
+        FreshRSS blocks requests to local and private networks, such as `127.0.0.1`, by default.
+        Each entry is a `host:port` pair, a network in CIDR notation
+        (`0.0.0.0/0` for any IPv4, `::/0` for any IPv6 address) or `*` for all hosts (unsafe).
+
+        This list overrides the allowlist set in the web UI.
+      '';
     };
 
     defaultUser = mkOption {

@@ -4,17 +4,18 @@
   buildDotnetModule,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
   lib,
 }:
 buildDotnetModule rec {
   pname = "melonloader-installer";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "LavaGang";
     repo = "MelonLoader.Installer";
     tag = version;
-    hash = "sha256-6tSbLgr44xBoJsNOGUq62KBirIU6sNCy24fwKROZRPE=";
+    hash = "sha256-6nyrHSD3x5Oh50ckDkWq6Fr3x4BFHsT4mn+N5QGJud4=";
   };
 
   patches = [
@@ -50,7 +51,7 @@ buildDotnetModule rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://melonwiki.xyz";

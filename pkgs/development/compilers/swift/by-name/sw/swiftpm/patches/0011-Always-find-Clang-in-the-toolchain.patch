@@ -15,10 +15,10 @@ probably not a good idea usually.
  1 file changed, 10 deletions(-)
 
 diff --git a/Sources/PackageModel/UserToolchain.swift b/Sources/PackageModel/UserToolchain.swift
-index b63997bad..903bdeba3 100644
+index a40c5eae6..db3526a0e 100644
 --- a/Sources/PackageModel/UserToolchain.swift
 +++ b/Sources/PackageModel/UserToolchain.swift
-@@ -377,16 +377,6 @@ public final class UserToolchain: Toolchain {
+@@ -437,16 +437,6 @@ public final class UserToolchain: Toolchain {
              return clang
          }
  

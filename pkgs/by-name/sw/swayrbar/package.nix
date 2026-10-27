@@ -5,6 +5,7 @@
   makeWrapper,
   withPulseaudio ? false,
   pulseaudio,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,9 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = lib.optionalString withPulseaudio ''
     wrapProgram "$out/bin/swayrbar" \

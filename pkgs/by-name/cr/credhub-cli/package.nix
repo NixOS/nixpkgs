@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -34,9 +35,7 @@ buildGoModule (finalAttrs: {
     ln -s $out/bin/credhub-cli $out/bin/credhub
   '';
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "Provides a command line interface to interact with CredHub servers";
