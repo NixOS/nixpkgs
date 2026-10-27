@@ -5,7 +5,7 @@
   setuptools,
   colorama,
   pytestCheckHook,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "migen" ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python toolbox for building complex digital hardware";
