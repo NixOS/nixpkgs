@@ -12,6 +12,7 @@
   gnome-keyring,
   polkit,
   polkit_gnome,
+  zenity,
 }:
 
 let
@@ -88,6 +89,8 @@ buildFHSEnv {
     gnome-keyring
     polkit
     polkit_gnome
+    # byndid asks for login approval via zenity, else a [y/n] on stdin
+    zenity
   ];
 
   # The URL handler is launched from the browser, outside the FHS env, so it
