@@ -1170,8 +1170,8 @@ in
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.113"
-      "sha256-KthKB55bTOVoYlpK8VJfIy3P7ZItPiH5cNW+aQX3AB4=";
+    buildMypyBoto3Package "sagemaker" "1.43.119"
+      "sha256-kEZkbts+L2XepTNlJZ//sE+bIkBoXcbbcnaQLPPR5J8=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"
