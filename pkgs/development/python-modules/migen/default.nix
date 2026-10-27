@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python toolbox for building complex digital hardware";
-    homepage = "https://m-labs.hk/migen";
+    homepage = "https://m-labs.hk/misc/migen";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ evanwporter ];
   };
