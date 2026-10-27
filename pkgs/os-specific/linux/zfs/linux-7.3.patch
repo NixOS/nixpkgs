@@ -1,0 +1,84 @@
+Backport Linux 7.3 API changes to the 2.4.4 source layout.
+The remaining compatibility changes are fetched from upstream in the recipes.
+
+https://github.com/openzfs/zfs/commit/6e2fa4bc87c35086ce36a4022cfa2b4212518eab
+https://github.com/openzfs/zfs/commit/cd3699d308e1b37dcdd0d5a9a8c3624deb5fc3e9
+
+https://github.com/openzfs/zfs/commit/315bc75afc18f548df3b738b69bfaad7cff094ad
+
+diff --git a/config/kernel-inode-create.m4 b/config/kernel-inode-create.m4
+--- a/config/kernel-inode-create.m4
++++ b/config/kernel-inode-create.m4
+@@ -2,0 +3,13 @@
++	ZFS_LINUX_TEST_SRC([create_no_flag], [
++		#include <linux/fs.h>
++
++		static int inode_create(struct mnt_idmap *idmap,
++		    struct inode *inode, struct dentry *dentry,
++		    umode_t mode) { return 0; }
++
++		static const struct inode_operations
++		    iops __attribute__((unused)) = {
++			.create = inode_create,
++		};
++	],[])
++
+@@ -77 +90,10 @@
+-				ZFS_LINUX_TEST_ERROR([iops->create()])
++				AC_MSG_CHECKING([whether iops->create() omits flags])
++				ZFS_LINUX_TEST_RESULT([create_no_flag], [
++					AC_MSG_RESULT(yes)
++					AC_DEFINE(HAVE_IOPS_CREATE_IDMAP, 1,
++					    [iops->create() takes struct mnt_idmap*])
++					AC_DEFINE(HAVE_IOPS_CREATE_NO_FLAG_ARG, 1,
++					    [iops->create() omits flags])
++				],[
++					ZFS_LINUX_TEST_ERROR([iops->create()])
++				])
+diff --git a/include/os/linux/Makefile.am b/include/os/linux/Makefile.am
+--- a/include/os/linux/Makefile.am
++++ b/include/os/linux/Makefile.am
+@@ -8,0 +9 @@
++	%D%/kernel/linux/kthread_compat.h \
+diff --git a/module/os/linux/spl/spl-taskq.c b/module/os/linux/spl/spl-taskq.c
+--- a/module/os/linux/spl/spl-taskq.c
++++ b/module/os/linux/spl/spl-taskq.c
+@@ -40,0 +41 @@
++#include <linux/kthread_compat.h>
+@@ -1110 +1111,2 @@
+-			t->tqent_func(t->tqent_arg);
++			scoped_with_init_fs()
++			    t->tqent_func(t->tqent_arg);
+diff --git a/module/os/linux/zfs/zpl_inode.c b/module/os/linux/zfs/zpl_inode.c
+--- a/module/os/linux/zfs/zpl_inode.c
++++ b/module/os/linux/zfs/zpl_inode.c
+@@ -168 +168,4 @@
+-#ifdef HAVE_IOPS_CREATE_USERNS
++#ifdef HAVE_IOPS_CREATE_NO_FLAG_ARG
++zpl_create(struct mnt_idmap *user_ns, struct inode *dir,
++    struct dentry *dentry, umode_t mode)
++#elif defined(HAVE_IOPS_CREATE_USERNS)
+diff --git a/include/os/linux/kernel/linux/simd_x86.h b/include/os/linux/kernel/linux/simd_x86.h
+--- a/include/os/linux/kernel/linux/simd_x86.h
++++ b/include/os/linux/kernel/linux/simd_x86.h
+@@ -318 +318 @@
+-	if (static_cpu_has(X86_FEATURE_XSAVES)) {
++	if (cpu_feature_enabled(X86_FEATURE_XSAVES)) {
+@@ -324 +324 @@
+-	if (static_cpu_has(X86_FEATURE_XSAVEOPT)) {
++	if (cpu_feature_enabled(X86_FEATURE_XSAVEOPT)) {
+@@ -330 +330 @@
+-	if (static_cpu_has(X86_FEATURE_XSAVE)) {
++	if (cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+@@ -335 +335 @@
+-	if (static_cpu_has(X86_FEATURE_FXSR)) {
++	if (cpu_feature_enabled(X86_FEATURE_FXSR)) {
+@@ -383 +383 @@
+-	if (static_cpu_has(X86_FEATURE_XSAVES)) {
++	if (cpu_feature_enabled(X86_FEATURE_XSAVES)) {
+@@ -389 +389 @@
+-	if (static_cpu_has(X86_FEATURE_XSAVE)) {
++	if (cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+@@ -394 +394 @@
+-	if (static_cpu_has(X86_FEATURE_FXSR)) {
++	if (cpu_feature_enabled(X86_FEATURE_FXSR)) {
