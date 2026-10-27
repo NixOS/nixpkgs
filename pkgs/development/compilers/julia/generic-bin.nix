@@ -2,6 +2,7 @@
   version,
   sha256,
   patches ? [ ],
+  knownVulnerabilities ? [ ],
 }:
 
 {
@@ -143,6 +144,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    inherit knownVulnerabilities;
     description = "High-level, high-performance, dynamic language for technical computing";
     homepage = "https://julialang.org";
     # Bundled and linked with various GPL code, although Julia itself is MIT.
