@@ -16,6 +16,7 @@
   libbfd,
   libpfm,
   libxml2,
+  libedit,
   ncurses,
   version,
   release_version,
@@ -33,6 +34,8 @@
     && !stdenv.hostPlatform.isAarch,
   enablePolly ? true,
   enableTerminfo ? true,
+  # Line editing for interactive tools like clang-query
+  enableLibedit ? lib.meta.availableOn stdenv.hostPlatform libedit,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
   fetchpatch,
@@ -316,6 +319,7 @@ stdenv.mkDerivation (
       libffi
       python3 # for opt-viewer scripts
     ]
+    ++ optional enableLibedit libedit
     ++ optional enablePFM libpfm; # exegesis
 
     propagatedBuildInputs = [
@@ -537,6 +541,7 @@ stdenv.mkDerivation (
         (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
         (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
         (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
+        (lib.cmakeFeature "LLVM_ENABLE_LIBEDIT" (if enableLibedit then "FORCE_ON" else "OFF"))
         (lib.cmakeBool "LLVM_INCLUDE_TESTS" finalAttrs.finalPackage.doCheck)
       ]
       ++ optionals stdenv.hostPlatform.isStatic [
