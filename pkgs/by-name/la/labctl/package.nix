@@ -40,5 +40,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "labctl";
+    # `github.com/containernetworking/plugins/pkg/ns` has no Go files for Darwin.
+    platforms = lib.platforms.linux;
   };
 })

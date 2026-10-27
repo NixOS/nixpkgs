@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustormy";
-  version = "0.5.2";
+  version = "0.5.3";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tairesh";
     repo = "rustormy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LC6hHxCG9TnXcRIxg2jAt6+r8Rm6Iu/TiX/neW5d4fk=";
+    hash = "sha256-03xvbtwZ3KqK36+N71wGTEsZl3Yyfl/JnLMCuBDu53w=";
   };
 
-  cargoHash = "sha256-cvL+OAiGidQEltM/cgjzjeEFbM7IZvhIG5Q3Nxybb1w=";
+  cargoHash = "sha256-wKv198Clvhk8BbnbfPoP/v5YOb4zAMtMNK/pFq1BelA=";
 
   checkFlags = [
     "--skip=tests::test_different_units"
