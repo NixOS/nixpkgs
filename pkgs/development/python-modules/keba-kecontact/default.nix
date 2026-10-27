@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keba-kecontact";
   version = "4.3.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dannerph";
     repo = "keba-kecontact";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ir/7lP8TDyOTwIMXKv2d9HYuT9onxrQskdkNhQYaOvU=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for controlling KEBA charging stations";
     homepage = "https://github.com/dannerph/keba-kecontact";
-    changelog = "https://github.com/dannerph/keba-kecontact/releases/tag/${version}";
+    changelog = "https://github.com/dannerph/keba-kecontact/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
