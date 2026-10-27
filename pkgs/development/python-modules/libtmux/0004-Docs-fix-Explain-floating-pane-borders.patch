@@ -1,0 +1,108 @@
+From d0c70364993b9f25d35707cd43b78b64294a7293 Mon Sep 17 00:00:00 2001
+From: Tony Narlock <tony@git-pull.com>
+Date: Sun, 13 Sep 2026 09:10:45 -0500
+Subject: [PATCH] Docs(fix): Explain floating pane borders
+
+why: tmux 3.8 measures floating geometry including borders, while pane
+formats report the content area.
+
+what:
+- Describe size and position semantics in both creation methods
+- Show exact content placement with borders disabled
+- Verify default-border size and coordinates across tmux versions
+
+Upstream: https://github.com/tmux-python/libtmux/pull/758/commits/d0c70364993b9f25d35707cd43b78b64294a7293
+---
+ docs/topics/floating_panes.md | 10 ++++++++--
+ src/libtmux/pane.py           |  4 ++++
+ src/libtmux/window.py         |  4 ++++
+ tests/test_pane.py            |  7 +++++--
+ 4 files changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/docs/topics/floating_panes.md b/docs/topics/floating_panes.md
+index 7aa96a6..8a5c312 100644
+--- a/docs/topics/floating_panes.md
++++ b/docs/topics/floating_panes.md
+@@ -47,14 +47,20 @@ which is `"1"` when it floats:
+ 
+ You set the pane's **size** with `width` and `height` (tmux's `-x` / `-y`), and
+ its **position** with `x` and `y` — cells measured from the top-left of the
+-window (tmux's `-X` / `-Y`). tmux reports the placement back through the
++window (tmux's `-X` / `-Y`). On tmux 3.8+, these values include the border:
++an 80-by-15 pane with a border has 78-by-13 content cells. tmux 3.7 uses
++content dimensions directly. tmux reports the content position through the
+ {attr}`pane_x <libtmux.Pane.pane_x>` /
+-{attr}`pane_y <libtmux.Pane.pane_y>` fields:
++{attr}`pane_y <libtmux.Pane.pane_y>` fields, one cell inside a border on
++tmux 3.8+. Disable borders when the requested position should match those
++fields exactly:
+ 
+ ```python
+ >>> from libtmux.common import has_gte_version
+ 
+ >>> if has_gte_version("3.7"):
++...     if has_gte_version("3.8"):
++...         _ = window.set_option("pane-border-lines", "none")
+ ...     placed = window.new_pane(width=20, height=5, x=2, y=1, shell="sleep 30")
+ ...     position = (placed.pane_x, placed.pane_y)
+ ... else:
+diff --git a/src/libtmux/pane.py b/src/libtmux/pane.py
+index 5641d0d..3dae5c6 100644
+--- a/src/libtmux/pane.py
++++ b/src/libtmux/pane.py
+@@ -1452,12 +1452,16 @@ class Pane(
+             Environment variables for the new pane (``-e`` flag).
+         width : int, optional
+             Width of the floating pane in cells (``-x`` flag).
++            Includes the border on tmux 3.8+; ``pane_width`` reports content cells.
+         height : int, optional
+             Height of the floating pane in cells (``-y`` flag).
++            Includes the border on tmux 3.8+; ``pane_height`` reports content cells.
+         x : int, optional
+             X position of the floating pane in cells (``-X`` flag).
++            Places the outer border on tmux 3.8+; ``pane_x`` reports content position.
+         y : int, optional
+             Y position of the floating pane in cells (``-Y`` flag).
++            Places the outer border on tmux 3.8+; ``pane_y`` reports content position.
+         zoom : bool, optional
+             Zoom the pane (``-Z`` flag).
+         empty : bool, optional
+diff --git a/src/libtmux/window.py b/src/libtmux/window.py
+index 8a7980d..cae37e7 100644
+--- a/src/libtmux/window.py
++++ b/src/libtmux/window.py
+@@ -636,12 +636,16 @@ class Window(
+             Environment variables for the new pane (``-e``).
+         width : int, optional
+             Width in cells (``-x``).
++            Includes borders on tmux 3.8+.
+         height : int, optional
+             Height in cells (``-y``).
++            Includes borders on tmux 3.8+.
+         x : int, optional
+             X position in cells (``-X``).
++            Places the outer border on tmux 3.8+.
+         y : int, optional
+             Y position in cells (``-Y``).
++            Places the outer border on tmux 3.8+.
+         zoom : bool, optional
+             Zoom the pane (``-Z``).
+         empty : bool, optional
+diff --git a/tests/test_pane.py b/tests/test_pane.py
+index 4865203..3ccf901 100644
+--- a/tests/test_pane.py
++++ b/tests/test_pane.py
+@@ -1871,8 +1871,11 @@ def test_new_pane_floating(session: Session) -> None:
+     if has_gte_version("3.7"):
+         floating = pane.new_pane(width=80, height=15, x=5, y=3, shell="sleep 30")
+         assert floating.pane_floating_flag == "1"
+-        assert floating.pane_width == "80"
+-        assert floating.pane_height == "15"
++        border = 1 if has_gte_version("3.8") else 0
++        assert floating.pane_width == str(80 - 2 * border)
++        assert floating.pane_height == str(15 - 2 * border)
++        assert floating.pane_x == str(5 + border)
++        assert floating.pane_y == str(3 + border)
+     else:
+         with pytest.raises(exc.LibTmuxException, match=r"new_pane .*requires tmux 3.7"):
+             pane.new_pane(width=40, height=10)

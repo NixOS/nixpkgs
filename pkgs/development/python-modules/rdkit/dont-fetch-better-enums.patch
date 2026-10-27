@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 77939f452..9cace7fe1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -184,8 +184,7 @@ Include(FetchContent)
+ 
+ FetchContent_Declare(
+   better_enums
+-  GIT_REPOSITORY https://github.com/aantron/better-enums.git
+-  GIT_TAG        c35576bed0295689540b39873126129adfa0b4c8 # 0.11.3
++  URL @better_enums@
+ )
+ 
+ if(RDK_INSTALL_INTREE)

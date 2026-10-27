@@ -1,0 +1,65 @@
+--- xpilot-1.4.6fxi/src/common/net.c	2016-02-09 00:20:43.531714342 +0000
++++ xpilot-1.4.6fxi/src/common/net.c	2016-02-09 00:21:15.301331053 +0000
+@@ -608,9 +608,9 @@
+ }
+ 
+ #if STDVA
+-inline int32_t Packet_scanf(sockbuf_t *sbuf, const char *fmt, ...)
++extern int32_t Packet_scanf(sockbuf_t *sbuf, const char *fmt, ...)
+ #else
+-inline int32_t Packet_scanf(va_alist)
++extern int32_t Packet_scanf(va_alist)
+ va_dcl
+ #endif
+ {
+--- xpilot-1.4.6fxi/src/server/collision.c	2016-02-09 00:22:29.581784405 +0000
++++ xpilot-1.4.6fxi/src/server/collision.c	2016-02-09 00:22:38.152952500 +0000
+@@ -71,7 +71,7 @@
+  * p: first object, q: second object
+  */
+ 
+-inline int32_t Collision_occured(int32_t p1x, int32_t p1y, int32_t p2x, int32_t p2y,
++extern int32_t Collision_occured(int32_t p1x, int32_t p1y, int32_t p2x, int32_t p2y,
+ 		int32_t q1x, int32_t q1y, int32_t q2x, int32_t q2y, int32_t r)
+ {
+ 	int32_t fac1, fac2;	/* contraction between the distance between the x and y coordinates of objects */
+--- xpilot-1.4.6fxi/src/server/player.c	2016-02-09 00:25:29.546313808 +0000
++++ xpilot-1.4.6fxi/src/server/player.c	2016-02-09 00:25:40.464527932 +0000
+@@ -1411,12 +1411,12 @@
+ 	return NULL;
+ }
+ 
+-inline bool Player_idle_timed_out(player_t *pl)
++extern bool Player_idle_timed_out(player_t *pl)
+ {
+ 	return (frame_loops - pl->frame_last_busy > MAX_PLAYER_IDLE_TICKS && (NumPlayers > 1)) ? true : false;
+ }
+ 
+-inline bool Player_is_recovered(player_t *pl)
++extern bool Player_is_recovered(player_t *pl)
+ {
+ 	return (pl->recovery_count <= 0.0) ? true : false;
+ }
+--- xpilot-1.4.6fxi/src/server/score.c	2016-02-09 00:21:45.659923025 +0000
++++ xpilot-1.4.6fxi/src/server/score.c	2016-02-09 00:22:07.224345939 +0000
+@@ -24,17 +24,17 @@
+ char msg[MSG_LEN];
+ 
+ 
+-inline double Get_Score(player_t *pl)
++extern double Get_Score(player_t *pl)
+ {
+     return pl->score;
+ }
+ 
+-inline void Score_set(player_t * pl, double score)
++extern void Score_set(player_t * pl, double score)
+ {
+     pl->score = score;
+ }
+ 
+-inline void Score_add(player_t * pl, double score)
++extern void Score_add(player_t * pl, double score)
+ {
+     pl->score += score;
+ }

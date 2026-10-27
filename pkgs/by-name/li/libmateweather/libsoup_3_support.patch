@@ -1,0 +1,575 @@
+diff --git a/configure.ac b/configure.ac
+index 133108e..d9fcf9c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -8,6 +8,7 @@ AC_CONFIG_AUX_DIR([build-aux])
+ AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar check-news])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+ 
++AC_USE_SYSTEM_EXTENSIONS
+ # Before making a release, the LT_VERSION string should be modified.
+ # The string is of the form C:R:A.
+ # - If interfaces have been changed or added, but binary compatibility has
+@@ -23,7 +24,7 @@ AC_CANONICAL_HOST
+ 
+ GLIB_REQUIRED=2.56.0
+ GTK_REQUIRED=3.22.0
+-LIBSOUP_REQUIRED=2.34.0
++LIBSOUP_REQUIRED=3.0.0
+ GIO_REQUIRED=2.25.0
+ LIBXML_REQUIRED=2.6.0
+ 
+@@ -65,7 +66,7 @@ dnl -- Check for libxml (required) ------------------------------------------
+ PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= $LIBXML_REQUIRED)
+ 
+ dnl -- check for libsoup (required) -----------------------------------------
+-PKG_CHECK_MODULES(LIBSOUP, [libsoup-2.4 >= $LIBSOUP_REQUIRED])
++PKG_CHECK_MODULES(LIBSOUP, [libsoup-3.0 >= $LIBSOUP_REQUIRED])
+ 
+ dnl -- check for gio (required) -----------------------------------------
+ PKG_CHECK_MODULES(GIO,
+@@ -100,6 +101,7 @@ AC_CHECK_FUNCS(regexec,,[AC_CHECK_LIB(regex,regexec,
+                [AC_MSG_ERROR([No regex library found])])])
+ AC_SUBST(REGEX_LIBS)
+ 
++AC_CHECK_FUNC(memmem,[],[AC_MSG_ERROR([memmem is required])])
+ 
+ dnl ***************************************************************************
+ dnl *** Check for presence of tm.tm_gmtoff on the system                    ***
+diff --git a/libmateweather/mateweather-uninstalled.pc.in b/libmateweather/mateweather-uninstalled.pc.in
+index 03e7461..c692842 100644
+--- a/libmateweather/mateweather-uninstalled.pc.in
++++ b/libmateweather/mateweather-uninstalled.pc.in
+@@ -8,6 +8,6 @@ Name: MateWeather
+ Description: MateWeather shared library
+ Version: @VERSION@
+ Requires: glib-2.0 gobject-2.0 gdk-pixbuf-2.0 gtk+-3.0 gio-2.0
+-Requires.private: libxml-2.0 libsoup-2.4
++Requires.private: libxml-2.0 libsoup-3.0
+ Libs: ${pc_top_builddir}/${pcfiledir}/libmateweather.la
+ Cflags: -I${pc_top_builddir}/${pcfiledir}/..
+diff --git a/libmateweather/mateweather.pc.in b/libmateweather/mateweather.pc.in
+index a617c33..bea024d 100644
+--- a/libmateweather/mateweather.pc.in
++++ b/libmateweather/mateweather.pc.in
+@@ -8,7 +8,7 @@ Name: MateWeather
+ Description: MateWeather shared library
+ Version: @VERSION@
+ Requires: glib-2.0 gobject-2.0 gdk-pixbuf-2.0 gtk+-3.0 gio-2.0
+-Requires.private: libxml-2.0 libsoup-2.4
++Requires.private: libxml-2.0 libsoup-3.0
+ Libs: -L${libdir} -lmateweather
+ Libs.private: -lm
+ Cflags: -I${includedir}
+diff --git a/libmateweather/weather-bom.c b/libmateweather/weather-bom.c
+index 47b2d0b..f5c7a87 100644
+--- a/libmateweather/weather-bom.c
++++ b/libmateweather/weather-bom.c
+@@ -27,34 +27,45 @@
+ #include "weather-priv.h"
+ 
+ static void
+-bom_finish (SoupSession *session, SoupMessage *msg, gpointer data)
++bom_finish (GObject *source, GAsyncResult *result, gpointer data)
+ {
+     char *p, *rp;
+     WeatherInfo *info = (WeatherInfo *)data;
++    GError *error = NULL;
++    GBytes *bytes;
++    const char *response_body = NULL;
++    gsize len = 0;
+ 
+     g_return_if_fail (info != NULL);
+ 
+-    if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+-        g_warning ("Failed to get BOM forecast data: %d %s.\n",
+-		   msg->status_code, msg->reason_phrase);
+-        request_done (info, FALSE);
+-	return;
++    bytes = soup_session_send_and_read_finish (SOUP_SESSION(source),
++                                               result, &error);
++
++    if (error != NULL) {
++        g_warning ("Failed to get BOM forecast data: %s.\n", error->message);
++        request_done (info, error);
++        g_error_free (error);
++        return;
+     }
+ 
+-    p = strstr (msg->response_body->data, "Forecast for the rest");
++    response_body = g_bytes_get_data (bytes, &len);
++
++    p = xstrnstr (response_body, len, "Forecast for the rest");
+     if (p != NULL) {
+-        rp = strstr (p, "The next routine forecast will be issued");
++        rp = xstrnstr (p, len - (p - response_body),
++                     "The next routine forecast will be issued");
+         if (rp == NULL)
+-            info->forecast = g_strdup (p);
++            info->forecast = g_strndup (p, len - (p - response_body));
+         else
+             info->forecast = g_strndup (p, rp - p);
+     }
+ 
+     if (info->forecast == NULL)
+-        info->forecast = g_strdup (msg->response_body->data);
++        info->forecast = g_strndup (response_body, len);
+ 
++    g_bytes_unref (bytes);
+     g_print ("%s\n",  info->forecast);
+-    request_done (info, TRUE);
++    request_done (info, NULL);
+ }
+ 
+ void
+@@ -70,7 +81,8 @@ bom_start_open (WeatherInfo *info)
+ 			   loc->zone + 1);
+ 
+     msg = soup_message_new ("GET", url);
+-    soup_session_queue_message (info->session, msg, bom_finish, info);
++    soup_session_send_and_read_async (info->session, msg, G_PRIORITY_DEFAULT,
++                                      NULL, bom_finish, info);
+     g_free (url);
+ 
+     info->requests_pending++;
+diff --git a/libmateweather/weather-iwin.c b/libmateweather/weather-iwin.c
+index 9f7ff38..b1dc1ff 100644
+--- a/libmateweather/weather-iwin.c
++++ b/libmateweather/weather-iwin.c
+@@ -93,7 +93,7 @@ hasAttr (xmlNode *node, const char *attr_name, const char *attr_value)
+ }
+ 
+ static GSList *
+-parseForecastXml (const char *buff, WeatherInfo *master_info)
++parseForecastXml (const char *buff, gsize len, WeatherInfo *master_info)
+ {
+     GSList *res = NULL;
+     xmlDocPtr doc;
+@@ -107,7 +107,7 @@ parseForecastXml (const char *buff, WeatherInfo *master_info)
+     #define XC (const xmlChar *)
+     #define isElem(_node,_name) g_str_equal ((const char *)_node->name, _name)
+ 
+-    doc = xmlParseMemory (buff, strlen (buff));
++    doc = xmlParseMemory (buff, len);
+     if (!doc)
+         return NULL;
+ 
+@@ -380,26 +380,36 @@ parseForecastXml (const char *buff, WeatherInfo *master_info)
+ }
+ 
+ static void
+-iwin_finish (SoupSession *session, SoupMessage *msg, gpointer data)
++iwin_finish (GObject *source, GAsyncResult *result, gpointer data)
+ {
+     WeatherInfo *info = (WeatherInfo *)data;
++    GError *error = NULL;
++    GBytes *bytes;
++    const char *response_body = NULL;
++    gsize len = 0;
+ 
+     g_return_if_fail (info != NULL);
+ 
+-    if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
++    bytes = soup_session_send_and_read_finish (SOUP_SESSION(source),
++                                               result, &error);
++
++    if (error != NULL) {
+         /* forecast data is not really interesting anyway ;) */
+-        g_warning ("Failed to get IWIN forecast data: %d %s\n",
+-                   msg->status_code, msg->reason_phrase);
+-        request_done (info, FALSE);
++        g_warning ("Failed to get IWIN forecast data: %s\n",
++                   error->message);
++        request_done (info, error);
++        g_error_free (error);
+         return;
+     }
+ 
++    response_body = g_bytes_get_data (bytes, &len);
+     if (info->forecast_type == FORECAST_LIST)
+-        info->forecast_list = parseForecastXml (msg->response_body->data, info);
++        info->forecast_list = parseForecastXml (response_body, len, info);
+     else
+-        info->forecast = formatWeatherMsg (g_strdup (msg->response_body->data));
++        info->forecast = formatWeatherMsg (g_strndup (response_body, len));
+ 
+-    request_done (info, TRUE);
++    g_bytes_unref (bytes);
++    request_done (info, NULL);
+ }
+ 
+ /* Get forecast into newly alloc'ed string */
+@@ -439,7 +449,9 @@ iwin_start_open (WeatherInfo *info)
+ 
+             msg = soup_message_new ("GET", url);
+             g_free (url);
+-            soup_session_queue_message (info->session, msg, iwin_finish, info);
++            soup_session_send_and_read_async (info->session, msg,
++                                              G_PRIORITY_DEFAULT,
++                                              NULL, iwin_finish, info);
+ 
+             info->requests_pending++;
+         }
+@@ -470,7 +482,8 @@ iwin_start_open (WeatherInfo *info)
+ 
+     msg = soup_message_new ("GET", url);
+     g_free (url);
+-    soup_session_queue_message (info->session, msg, iwin_finish, info);
++    soup_session_send_and_read_async (info->session, msg, G_PRIORITY_DEFAULT,
++                                      NULL, iwin_finish, info);
+ 
+     info->requests_pending++;
+ }
+diff --git a/libmateweather/weather-met.c b/libmateweather/weather-met.c
+index 164e9f2..7022abb 100644
+--- a/libmateweather/weather-met.c
++++ b/libmateweather/weather-met.c
+@@ -119,19 +119,20 @@ met_reprocess (char *x, int len)
+  */
+ 
+ static gchar *
+-met_parse (const gchar *meto)
++met_parse (const gchar *meto, gsize len)
+ {
+     gchar *p;
+     gchar *rp;
+     gchar *r = g_strdup ("Met Office Forecast\n");
+     gchar *t;
++    const gchar *end = meto + len;
+ 
+     g_return_val_if_fail (meto != NULL, r);
+ 
+-    p = strstr (meto, "Summary: </b>");
++    p = xstrnstr (meto, len, "Summary: </b>");
+     g_return_val_if_fail (p != NULL, r);
+ 
+-    rp = strstr (p, "Text issued at:");
++    rp = xstrnstr (p, end - p, "Text issued at:");
+     g_return_val_if_fail (rp != NULL, r);
+ 
+     p += 13;
+@@ -143,21 +144,31 @@ met_parse (const gchar *meto)
+ }
+ 
+ static void
+-met_finish (SoupSession *session, SoupMessage *msg, gpointer data)
++met_finish (GObject *source, GAsyncResult *result, gpointer data)
+ {
+     WeatherInfo *info = (WeatherInfo *)data;
++    GError *error = NULL;
++    GBytes *bytes;
++    const char *response_body = NULL;
++    gsize len = 0;
+ 
+     g_return_if_fail (info != NULL);
+ 
+-    if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+-	g_warning ("Failed to get Met Office forecast data: %d %s.\n",
+-		   msg->status_code, msg->reason_phrase);
+-        request_done (info, FALSE);
++    bytes = soup_session_send_and_read_finish (SOUP_SESSION(source),
++                                               result, &error);
++
++    if (error != NULL) {
++        g_warning ("Failed to get Met Office forecast data: %s.\n",
++                   error->message);
++        request_done (info, error);
++        g_error_free (error);
+         return;
+     }
+ 
+-    info->forecast = met_parse (msg->response_body->data);
+-    request_done (info, TRUE);
++    response_body = g_bytes_get_data (bytes, &len);
++    info->forecast = met_parse (response_body, len);
++    g_bytes_unref (bytes);
++    request_done (info, NULL);
+ }
+ 
+ void
+@@ -171,7 +182,8 @@ metoffice_start_open (WeatherInfo *info)
+     url = g_strdup_printf ("http://www.metoffice.gov.uk/weather/europe/uk/%s.html", loc->zone + 1);
+ 
+     msg = soup_message_new ("GET", url);
+-    soup_session_queue_message (info->session, msg, met_finish, info);
++    soup_session_send_and_read_async (info->session, msg, G_PRIORITY_DEFAULT,
++                                      NULL, met_finish, info);
+     g_free (url);
+ 
+     info->requests_pending++;
+diff --git a/libmateweather/weather-metar.c b/libmateweather/weather-metar.c
+index 7bc24fc..d470822 100644
+--- a/libmateweather/weather-metar.c
++++ b/libmateweather/weather-metar.c
+@@ -486,43 +486,60 @@ metar_parse (gchar *metar, WeatherInfo *info)
+ }
+ 
+ static void
+-metar_finish (SoupSession *session, SoupMessage *msg, gpointer data)
++metar_finish (GObject *source, GAsyncResult *result, gpointer data)
+ {
+     WeatherInfo *info = (WeatherInfo *)data;
+     WeatherLocation *loc;
+-    const gchar *p, *endtag;
++    const gchar *p, *end, *endtag;
+     gchar *searchkey, *metar;
+     gboolean success = FALSE;
++    GError *error = NULL;
++    GBytes *bytes;
++    const char *response_body = NULL;
++    gsize len = 0;
+ 
+     g_return_if_fail (info != NULL);
+ 
+-    if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+-        if (SOUP_STATUS_IS_TRANSPORT_ERROR (msg->status_code))
++    bytes = soup_session_send_and_read_finish (SOUP_SESSION(source),
++                                               result, &error);
++
++    if (error != NULL) {
++        /* https://libsoup.org/libsoup-3.0/migrating-from-libsoup-2.html#status-codes-no-longer-used-for-internal-errors */
++        switch (error->code) {
++        case SOUP_SESSION_ERROR_PARSING:
++        case SOUP_SESSION_ERROR_ENCODING:
++        case SOUP_SESSION_ERROR_TOO_MANY_REDIRECTS:
+             info->network_error = TRUE;
+-        else {
+-            /* Translators: %d is an error code, and %s the error string */
+-            g_warning (_("Failed to get METAR data: %d %s.\n"),
+-                       msg->status_code, msg->reason_phrase);
++            break;
++        default:
++            break;
+         }
+-        request_done (info, FALSE);
++        g_warning (_("Failed to get METAR data: %s.\n"),
++                   error->message);
++        request_done (info, error);
++        g_error_free (error);
+         return;
+     }
+ 
+     loc = info->location;
+ 
+     searchkey = g_strdup_printf ("<raw_text>METAR %s", loc->code);
+-    p = strstr (msg->response_body->data, searchkey);
+-    g_free (searchkey);
++
++    response_body = g_bytes_get_data (bytes, &len);
++    end = response_body + len;
++
++    p = xstrnstr (response_body, len, searchkey);
+     if (p) {
+         p += WEATHER_LOCATION_CODE_LEN + 11;
+         endtag = strstr (p, "</raw_text>");
++        endtag = xstrnstr (p, end - p, "</raw_text>");
+         if (endtag)
+             metar = g_strndup (p, endtag - p);
+         else
+-            metar = g_strdup (p);
++            metar = g_strndup (p, end - p);
+         success = metar_parse (metar, info);
+         g_free (metar);
+-    } else if (!strstr (msg->response_body->data, "aviationweather.gov")) {
++    } else if (!xstrnstr (response_body, len, "aviationweather.gov")) {
+         /* The response doesn't even seem to have come from NOAA...
+          * most likely it is a wifi hotspot login page. Call that a
+          * network error.
+@@ -531,7 +548,8 @@ metar_finish (SoupSession *session, SoupMessage *msg, gpointer data)
+     }
+ 
+     info->valid = success;
+-    request_done (info, TRUE);
++    request_done (info, NULL);
++    g_bytes_unref(bytes);
+ }
+ 
+ /* Read current conditions and fill in info structure */
+@@ -540,6 +558,7 @@ metar_start_open (WeatherInfo *info)
+ {
+     WeatherLocation *loc;
+     SoupMessage *msg;
++    char *query;
+ 
+     g_return_if_fail (info != NULL);
+     info->valid = info->network_error = FALSE;
+@@ -549,8 +568,7 @@ metar_start_open (WeatherInfo *info)
+         return;
+     }
+ 
+-    msg = soup_form_request_new (
+-        "GET", "https://aviationweather.gov/api/data/dataserver",
++    query = soup_form_encode (
+         "dataSource", "metars",
+         "requestType", "retrieve",
+         "format", "xml",
+@@ -559,7 +577,11 @@ metar_start_open (WeatherInfo *info)
+         "fields", "raw_text",
+         "stationString", loc->code,
+         NULL);
+-    soup_session_queue_message (info->session, msg, metar_finish, info);
++    msg = soup_message_new_from_encoded_form (
++        "GET", "https://aviationweather.gov/api/data/dataserver",
++        query);
++    soup_session_send_and_read_async (info->session, msg, G_PRIORITY_DEFAULT,
++                                      NULL, metar_finish, info);
+ 
+     info->requests_pending++;
+ }
+diff --git a/libmateweather/weather-priv.h b/libmateweather/weather-priv.h
+index 817f13c..03cdcbd 100644
+--- a/libmateweather/weather-priv.h
++++ b/libmateweather/weather-priv.h
+@@ -21,6 +21,7 @@
+ 
+ #include "config.h"
+ 
++#include <string.h>
+ #include <time.h>
+ #include <libintl.h>
+ #include <math.h>
+@@ -34,6 +35,8 @@ const char *mateweather_dpgettext (const char *context, const char *str) G_GNUC_
+ #define _(str) (mateweather_gettext (str))
+ #define C_(context, str) (mateweather_dpgettext (context, str))
+ #define N_(str) (str)
++#define xstrnstr(haystack, hlen, needle) \
++	memmem(haystack, hlen, needle, strlen(needle))
+ 
+ #define WEATHER_LOCATION_CODE_LEN 4
+ 
+@@ -95,7 +98,6 @@ struct _WeatherInfo {
+     GSList *forecast_list; /* list of WeatherInfo* for the forecast, NULL if not available */
+     gchar *radar_buffer;
+     gchar *radar_url;
+-    GdkPixbufLoader *radar_loader;
+     GdkPixbufAnimation *radar;
+     SoupSession *session;
+     gint requests_pending;
+@@ -167,7 +169,7 @@ gboolean	metar_parse		(gchar *metar,
+ 
+ gboolean	requests_init		(WeatherInfo *info);
+ void		request_done		(WeatherInfo *info,
+-					 gboolean     ok);
++					 GError      *error);
+ 
+ void		ecl2equ			(gdouble t,
+ 					 gdouble eclipLon,
+diff --git a/libmateweather/weather-wx.c b/libmateweather/weather-wx.c
+index e29cecc..11f7336 100644
+--- a/libmateweather/weather-wx.c
++++ b/libmateweather/weather-wx.c
+@@ -25,48 +25,51 @@
+ #include "weather-priv.h"
+ 
+ static void
+-wx_finish (SoupSession *session, SoupMessage *msg, gpointer data)
++wx_finish (GObject *source, GAsyncResult *result, gpointer data)
+ {
+     WeatherInfo *info = (WeatherInfo *)data;
+     GdkPixbufAnimation *animation;
++    GError *error = NULL;
+ 
+     g_return_if_fail (info != NULL);
+ 
+-    if (!SOUP_STATUS_IS_SUCCESSFUL (msg->status_code)) {
+-	g_warning ("Failed to get radar map image: %d %s.\n",
+-		   msg->status_code, msg->reason_phrase);
+-	g_object_unref (info->radar_loader);
+-	request_done (info, FALSE);
+-	return;
+-    }
++    animation = gdk_pixbuf_animation_new_from_stream_finish (result, &error);
+ 
+-    gdk_pixbuf_loader_close (info->radar_loader, NULL);
+-    animation = gdk_pixbuf_loader_get_animation (info->radar_loader);
++    if (error != NULL) {
++        g_warning ("Failed to get radar map image: %s.\n", error->message);
++        request_done (info, error);
++        g_error_free (error);
++        return;
++    }
+     if (animation != NULL) {
+-	if (info->radar)
+-	    g_object_unref (info->radar);
+-	info->radar = animation;
+-	g_object_ref (info->radar);
++        if (info->radar)
++            g_object_unref (info->radar);
++        info->radar = animation;
++        g_object_ref (info->radar);
+     }
+-    g_object_unref (info->radar_loader);
+ 
+-    request_done (info, TRUE);
++    request_done (info, NULL);
+ }
+ 
+ static void
+-wx_got_chunk (SoupMessage *msg, SoupBuffer *chunk, gpointer data)
++wx_got_chunk (GObject *source, GAsyncResult *result, gpointer data)
+ {
+     WeatherInfo *info = (WeatherInfo *)data;
+     GError *error = NULL;
++    GInputStream *istream;
+ 
+     g_return_if_fail (info != NULL);
+ 
+-    gdk_pixbuf_loader_write (info->radar_loader, (guchar *)chunk->data,
+-			     chunk->length, &error);
+-    if (error) {
+-	g_print ("%s \n", error->message);
+-	g_error_free (error);
++    istream = soup_session_send_finish (SOUP_SESSION (source), result, &error);
++
++    if (error != NULL) {
++        g_warning ("Failed to get radar map image: %s.\n", error->message);
++        g_error_free (error);
++        request_done (info, error);
++        return;
+     }
++
++    gdk_pixbuf_animation_new_from_stream_async (istream, NULL, wx_finish, data);
+ }
+ 
+ /* Get radar map and into newly allocated pixmap */
+@@ -79,7 +82,6 @@ wx_start_open (WeatherInfo *info)
+ 
+     g_return_if_fail (info != NULL);
+     info->radar = NULL;
+-    info->radar_loader = gdk_pixbuf_loader_new ();
+     loc = info->location;
+     g_return_if_fail (loc != NULL);
+ 
+@@ -98,9 +100,8 @@ wx_start_open (WeatherInfo *info)
+ 	return;
+     }
+ 
+-    g_signal_connect (msg, "got-chunk", G_CALLBACK (wx_got_chunk), info);
+-    soup_message_body_set_accumulate (msg->response_body, FALSE);
+-    soup_session_queue_message (info->session, msg, wx_finish, info);
++    soup_session_send_async (info->session, msg, G_PRIORITY_DEFAULT, NULL,
++                             wx_got_chunk, info);
+     g_free (url);
+ 
+     info->requests_pending++;
+diff --git a/libmateweather/weather.c b/libmateweather/weather.c
+index 86453fc..1d7533a 100644
+--- a/libmateweather/weather.c
++++ b/libmateweather/weather.c
+@@ -348,12 +348,13 @@ requests_init (WeatherInfo *info)
+     return TRUE;
+ }
+ 
+-void request_done (WeatherInfo *info, gboolean ok)
++void request_done (WeatherInfo *info, GError *error)
+ {
+-    if (ok) {
++    if (error == NULL) {
+ 	(void) calc_sun (info);
+ 	info->moonValid = info->valid && calc_moon (info);
+-    }
++    } else if (error->code == G_IO_ERROR_CANCELLED)
++        return; /* Caused by soup_session_abort */
+     if (!--info->requests_pending)
+         info->finish_cb (info, info->cb_data);
+ }

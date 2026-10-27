@@ -1,0 +1,57 @@
+From 7fa7b7bedd46a6e346d2bf1504388e7dd00138ed Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sun, 25 Oct 2026 18:12:47 -0700
+Subject: [PATCH] fix: link cuSOLVER and cuBLAS only when FindHomography is
+ built
+
+cvcuda_priv links CUDA::cusolver_static, CUDA::cublas_static and
+CUDA::cublasLt_static unconditionally, but only OpFindHomography.cu
+uses them. A build that selects a subset of the operators with
+CV_CUDA_SRC_PATERN, as DALI does, still needs the static cuSOLVER and
+cuBLAS libraries, and fails to configure where they aren't installed:
+
+  CMake Error at src/cvcuda/priv/CMakeLists.txt (target_link_libraries):
+    Target "cvcuda_priv" links to:
+
+      CUDA::cusolver_static
+
+    but the target was not found.
+
+Link them only when OpFindHomography.cu is part of the build. A full
+build links the same libraries in the same order as before.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ src/cvcuda/priv/CMakeLists.txt | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/third_party/cvcuda/src/cvcuda/priv/CMakeLists.txt b/third_party/cvcuda/src/cvcuda/priv/CMakeLists.txt
+index deac31c..7645497 100644
+--- a/third_party/cvcuda/src/cvcuda/priv/CMakeLists.txt
++++ b/third_party/cvcuda/src/cvcuda/priv/CMakeLists.txt
+@@ -95,6 +95,12 @@ add_library(cvcuda_priv STATIC
+     ${CV_CUDA_PRIV_FILES}
+ )
+ 
++# Only FindHomography uses cuSOLVER and cuBLAS, and CV_CUDA_SRC_PATERN can leave it out
++set(CV_CUDA_PRIV_SOLVER_LIBS)
++if ("OpFindHomography.cu" IN_LIST CV_CUDA_PRIV_FILES)
++    set(CV_CUDA_PRIV_SOLVER_LIBS CUDA::cusolver_static CUDA::cublas_static CUDA::cublasLt_static)
++endif()
++
+ target_link_libraries(cvcuda_priv
+     PUBLIC
+         nvcv_types
+@@ -103,8 +109,6 @@ target_link_libraries(cvcuda_priv
+         nvcv_util_sanitizer
+         cvcuda_legacy
+         CUDA::cudart_static
+-	    CUDA::cusolver_static
+-        CUDA::cublas_static
+-        CUDA::cublasLt_static
++        ${CV_CUDA_PRIV_SOLVER_LIBS}
+         -lrt
+ )
+-- 
+2.43.0
+

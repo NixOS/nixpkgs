@@ -1,0 +1,21 @@
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -41,14 +41,14 @@
+ 	${INSTALL} -d ${DESTDIR}${bindir}
+ 	${INSTALL} -d ${DESTDIR}${mandir}/man8
+ 	${INSTALL} -d ${DESTDIR}${CONFDIR}
+-	${INSTALL} -o 0 -g 0 scponly ${DESTDIR}${bindir}/scponly
+-	${INSTALL} -o 0 -g 0 -m 0644 scponly.8 ${DESTDIR}${mandir}/man8/scponly.8
+-	${INSTALL} -o 0 -g 0 -m 0644 debuglevel ${DESTDIR}${DEBUGFILE}
++	${INSTALL} scponly ${DESTDIR}${bindir}/scponly
++	${INSTALL} -m 0644 scponly.8 ${DESTDIR}${mandir}/man8/scponly.8
++	${INSTALL} -m 0644 debuglevel ${DESTDIR}${DEBUGFILE}
+ 	if test "x${CHROOTED_NAME}" != "x"; then			\
+ 		${INSTALL} -d ${DESTDIR}${sbindir};				\
+ 		rm -f ${DESTDIR}${sbindir}/${CHROOTED_NAME};			\
+ 		cp scponly ${CHROOTED_NAME};				\
+-		${INSTALL} -o 0 -g 0 -m 4755 ${CHROOTED_NAME} ${DESTDIR}${sbindir}/${CHROOTED_NAME};	\
++		${INSTALL} ${CHROOTED_NAME} ${DESTDIR}${sbindir}/${CHROOTED_NAME};	\
+ 	fi
+ 
+ debuglevel:

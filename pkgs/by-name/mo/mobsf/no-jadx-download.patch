@@ -1,0 +1,33 @@
+diff --git a/mobsf/MobSF/init.py b/mobsf/MobSF/init.py
+index 6ed1897..988a778 100644
+--- a/mobsf/MobSF/init.py
++++ b/mobsf/MobSF/init.py
+@@ -5,7 +5,6 @@ import random
+ import subprocess
+ import sys
+ import shutil
+-import threading
+ from hashlib import sha256
+ from pathlib import Path
+ from importlib import (
+@@ -13,7 +12,6 @@ from importlib import (
+     util,
+ )
+ 
+-from mobsf.MobSF.tools_download import install_jadx
+ from mobsf.install.windows.setup import windows_config_local
+ 
+ logger = logging.getLogger(__name__)
+@@ -47,12 +45,6 @@ def first_run(secret_file, base_dir, mobsf_home):
+         # Run Once
+         make_migrations(base_dir)
+         migrate(base_dir)
+-        # Install JADX
+-        thread = threading.Thread(
+-            target=install_jadx,
+-            name='install_jadx',
+-            args=(mobsf_home.as_posix(),))
+-        thread.start()
+         # Windows Setup
+         windows_config_local(mobsf_home.as_posix())
+     return secret_key

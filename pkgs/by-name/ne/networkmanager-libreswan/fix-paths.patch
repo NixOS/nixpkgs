@@ -1,0 +1,48 @@
+diff --git a/properties/nm-libreswan-editor-plugin.c b/properties/nm-libreswan-editor-plugin.c
+index 6a178af..787e183 100644
+--- a/properties/nm-libreswan-editor-plugin.c
++++ b/properties/nm-libreswan-editor-plugin.c
+@@ -96,7 +96,7 @@ export_to_file(NMVpnEditorPlugin *self, const char *path, NMConnection *connecti
+ 
+ 	openswan = nm_streq(nm_setting_vpn_get_service_type(s_vpn), NM_VPN_SERVICE_TYPE_OPENSWAN);
+ 
+-	nm_libreswan_detect_version(nm_libreswan_find_helper_bin("ipsec", NULL),
++	nm_libreswan_detect_version("@ipsec@",
+ 	                            &is_openswan,
+ 	                            &version,
+ 	                            NULL);
+diff --git a/src/nm-libreswan-service.c b/src/nm-libreswan-service.c
+index 0458d4e..e0add02 100644
+--- a/src/nm-libreswan-service.c
++++ b/src/nm-libreswan-service.c
+@@ -1820,7 +1820,7 @@ connect_step(NMLibreswanPlugin *self, GError **error)
+ 		if (!priv->openswan) {
+ 			const char *stackman_path;
+ 
+-			stackman_path = nm_libreswan_find_helper_libexec("_stackmanager", error);
++			stackman_path = "@libreswan@/libexec/_stackmanager";
+ 			if (!stackman_path)
+ 				return FALSE;
+ 
+@@ -1977,7 +1977,7 @@ _connect_common(NMVpnServicePlugin *plugin,
+ 		return FALSE;
+ 	}
+ 
+-	priv->ipsec_path = nm_libreswan_find_helper_bin("ipsec", error);
++	priv->ipsec_path = "@ipsec@";
+ 	if (!priv->ipsec_path)
+ 		return FALSE;
+ 
+@@ -1988,10 +1988,10 @@ _connect_common(NMVpnServicePlugin *plugin,
+ 	      priv->openswan ? "Openswan" : "Libreswan");
+ 
+ 	if (!priv->openswan) {
+-		priv->pluto_path = nm_libreswan_find_helper_libexec("pluto", error);
++		priv->pluto_path = "@libreswan@/libexec/pluto";
+ 		if (!priv->pluto_path)
+ 			return FALSE;
+-		priv->whack_path = nm_libreswan_find_helper_libexec("whack", error);
++		priv->whack_path = "@libreswan@/libexec/whack";
+ 		if (!priv->whack_path)
+ 			return FALSE;
+ 	}

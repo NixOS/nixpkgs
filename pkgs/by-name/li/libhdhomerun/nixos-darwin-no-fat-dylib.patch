@@ -1,0 +1,52 @@
+From 6b9ed19d7874b88b7db5b740dac3dcd7dcda6c8c Mon Sep 17 00:00:00 2001
+From: Nicholas Sielicki <git@opensource.nslick.com>
+Date: Sat, 25 Nov 2023 13:54:39 -0600
+Subject: [PATCH] nixos-darwin-no-fat-dylib
+
+Signed-off-by: Nicholas Sielicki <git@opensource.nslick.com>
+---
+ Makefile | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 1d8fb9f..35c7d15 100644
+--- a/Makefile
++++ b/Makefile
+@@ -42,30 +42,14 @@ LIBSRCS += hdhomerun_video.c
+ 
+ ifeq ($(OS),Darwin)
+ 
+-TARGET_X64 := -target x86_64-apple-macos10.11
+-TARGET_ARM64 := -target arm64-apple-macos11
+-
+ all : hdhomerun_config libhdhomerun.dylib
+ 
+-hdhomerun_config_x64 : hdhomerun_config.c $(LIBSRCS)
+-	$(CC) $(TARGET_X64) $(CFLAGS) $+ $(LDFLAGS) -o $@
+-	$(STRIP) $@
+-
+-hdhomerun_config_arm64 : hdhomerun_config.c $(LIBSRCS)
+-	$(CC) $(TARGET_ARM64) $(CFLAGS) $+ $(LDFLAGS) -o $@
++hdhomerun_config: hdhomerun_config.c $(LIBSRCS)
++	$(CC) $(CFLAGS) $+ $(LDFLAGS) -o $@
+ 	$(STRIP) $@
+ 
+-hdhomerun_config : hdhomerun_config_x64 hdhomerun_config_arm64
+-	lipo -create -output hdhomerun_config hdhomerun_config_x64 hdhomerun_config_arm64
+-
+-libhdhomerun_x64.dylib : $(LIBSRCS)
+-	$(CC) $(TARGET_X64) $(CFLAGS) -DDLL_EXPORT -fPIC -dynamiclib $+ $(LDFLAGS) -o $@
+-
+-libhdhomerun_arm64.dylib : $(LIBSRCS)
+-	$(CC) $(TARGET_ARM64) $(CFLAGS) -DDLL_EXPORT -fPIC -dynamiclib $+ $(LDFLAGS) -o $@
+-
+-libhdhomerun.dylib : libhdhomerun_x64.dylib libhdhomerun_arm64.dylib
+-	lipo -create -output libhdhomerun.dylib libhdhomerun_x64.dylib libhdhomerun_arm64.dylib
++libhdhomerun.dylib : $(LIBSRCS)
++	$(CC) $(CFLAGS) -DDLL_EXPORT -fPIC -dynamiclib $+ $(LDFLAGS) -o $@
+ 
+ else
+ 
+-- 
+2.42.0
+

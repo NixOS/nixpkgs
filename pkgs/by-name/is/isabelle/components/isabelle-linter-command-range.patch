@@ -1,0 +1,11 @@
+--- a/linter_base/src/token_markup.scala
++++ b/linter_base/src/token_markup.scala
+@@ -114,6 +114,8 @@
+               val span = Command_Span.Span(Command_Span.Ignored_Span, trees.flatMap(map_tokens))
+               reduce(
+                 start + XML.text_length(trees), body1.drop(trees.length - 1), res :+ (span, start))
++            case XML.Elem(Markup(Markup.COMMAND_RANGE, _), trees) =>
++              reduce(start, trees ::: body1, res)
+             case t =>
+               find_span(t) match {
+               case Some(arg) if XML.content(t) == arg.name =>

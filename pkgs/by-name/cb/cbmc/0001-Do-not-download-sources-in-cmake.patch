@@ -1,0 +1,26 @@
+From 7b49a436bd5cc903b86b01f1a0f046ab8ec99fdb Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Mon, 11 Nov 2024 11:07:37 +0800
+Subject: [PATCH] Do not download sources in cmake
+
+---
+ CMakeLists.txt | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2c1289a..8128362 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -116,8 +116,7 @@ if(DEFINED CMAKE_USE_CUDD)
+     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/DownloadProject.cmake")
+     message(STATUS "Downloading Cudd-3.0.0")
+     download_project(PROJ cudd
+-            URL https://sourceforge.net/projects/cudd-mirror/files/cudd-3.0.0.tar.gz/download
+-            URL_MD5 4fdafe4924b81648b908881c81fe6c30
++            SOURCE_DIR @cudd@
+             )
+ 
+     if(NOT EXISTS ${cudd_SOURCE_DIR}/Makefile)
+-- 
+2.47.0
+

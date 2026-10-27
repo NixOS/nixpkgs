@@ -1,0 +1,49 @@
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  cacert,
+}:
+
+python3.pkgs.buildPythonApplication (finalAttrs: {
+  pname = "pur";
+  version = "7.4.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "alanhamlett";
+    repo = "pip-update-requirements";
+    tag = finalAttrs.version;
+    hash = "sha256-BxUR4yyT6ipvBozWgat709rNPHELE/PNPVJ4LtfOdfQ=";
+  };
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [ click ];
+
+  postInstall = ''
+    rm $out/${python3.sitePackages}/pur/packages/pip/_vendor/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
+      $out/${python3.sitePackages}/pur/packages/pip/_vendor/certifi/cacert.pem
+  '';
+
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pur" ];
+
+  disabledTests = [
+    # Tests are failing after the last mass update
+    "test_missing_requirements_file"
+    "test_no_arguments_and_no_requirements_file"
+    "test_interactive_choice_default"
+  ];
+
+  meta = {
+    description = "Python library for update and track the requirements";
+    homepage = "https://github.com/alanhamlett/pip-update-requirements";
+    changelog = "https://github.com/alanhamlett/pip-update-requirements/blob/${finalAttrs.src.tag}/HISTORY.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pur";
+  };
+})

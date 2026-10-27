@@ -1,0 +1,13 @@
+diff --git a/product.json b/product.json
+index 74b7299ee93..a80fe7373bc 100644
+--- a/product.json
++++ b/product.json
+@@ -8,7 +8,7 @@
+     "managed": {
+       "macOS": "/Library/Application Support/io.podman_desktop.PodmanDesktop",
+       "windows": "%PROGRAMDATA%\\Podman Desktop",
+-      "linux": "/usr/share/podman-desktop",
++      "linux": "/etc/podman-desktop",
+       "flatpak": "/run/host/usr/share/podman-desktop"
+     }
+   },

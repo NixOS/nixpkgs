@@ -1,0 +1,13 @@
+diff --git a/src/config.hpp b/src/config.hpp
+index 6e7439b..ae01462 100644
+--- a/src/config.hpp
++++ b/src/config.hpp
+@@ -4,8 +4,6 @@
+ 	Runtime configuration can be disabled by deleting #define RUNTIME_CONFIG
+ */
+ 
+-#define RUNTIME_CONFIG
+-
+ // Current								Default
+ inline bool starthidden = false;		// false
+ inline bool searchbar = true;			// true

@@ -1,0 +1,34 @@
+diff --git a/setup.py b/setup.py
+index 3b86748..543f5b8 100644
+--- a/setup.py
++++ b/setup.py
+@@ -7,7 +7,7 @@ from setuptools import setup, Extension
+ 
+ MARISA_ROOT_DIR = Path("marisa-trie")
+ MARISA_SOURCE_DIR = MARISA_ROOT_DIR / "lib"
+-MARISA_INCLUDE_DIR = MARISA_ROOT_DIR / "include"
++MARISA_INCLUDE_DIR = Path("@marisa@") / "include"
+ MARISA_FILES = [
+     "marisa/*.cc",
+     "marisa/grimoire.cc",
+@@ -27,19 +27,11 @@ extensions = [
+         sources=["src/*.pyx"],
+         language="c++",
+         include_dirs=[str(MARISA_INCLUDE_DIR)],
++        libraries=["marisa"],
+     ),
+ ]
+ 
+ setup(
+-    libraries=[
+-        (
+-            "libmarisa-trie",
+-            {
+-                "sources": MARISA_FILES,
+-                "include_dirs": [str(MARISA_SOURCE_DIR), str(MARISA_INCLUDE_DIR)],
+-            },
+-        )
+-    ],
+     ext_modules=cythonize(
+         extensions,
+         language_level="3",

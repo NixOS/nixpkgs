@@ -1,0 +1,357 @@
+From d4bb6e040ad7b6e6a6cf68ffced3b895c2753a18 Mon Sep 17 00:00:00 2001
+From: Zewei Yang <yangzewei@loongson.cn>
+Date: Thu, 19 Mar 2026 09:40:43 +0800
+Subject: [PATCH] vmm: fix riscv64 non-TEE memory region setup
+
+In non-x86 builds that don't use TEE features, vstate.rs used cfg!() to
+distinguish between TEE and non-TEE memory setup paths.
+
+cfg!() only evaluates to a compile-time constant; code in both branches
+still participates in compilation and type checking. As a result, normal
+riscv64 builds still type-check guest_memfd and memory attribute code,
+which leads to build failures.
+
+Refactor the memory-region setup into cfg-gated helpers so non-TEE builds
+do not compile TEE-only memory setup code, and reject unsupported
+TEE+architecture combinations during VM setup instead of during memory
+initialization.
+
+Upstream: https://github.com/libkrun/libkrun/commit/d4bb6e040ad7b6e6a6cf68ffced3b895c2753a18
+Backported to v1.19.0: the upstream diff does not apply as-is because of
+the intervening Rust 2024 edition migration / cargo fmt reordering of the
+`use kvm_bindings::{...}` blocks. Only those import hunks were adjusted;
+no functional change.
+
+Signed-off-by: Zewei Yang <yangzewei@loongson.cn>
+---
+diff --git a/src/vmm/src/builder.rs b/src/vmm/src/builder.rs
+index 6d50e7f..c0521b1 100644
+--- a/src/vmm/src/builder.rs
++++ b/src/vmm/src/builder.rs
+@@ -1562,6 +1562,23 @@ pub(crate) fn setup_vm(
+         .map_err(StartMicrovmError::Internal)?;
+     Ok(vm)
+ }
++
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
++fn validate_tee_config(tee: Tee) -> std::result::Result<(), StartMicrovmError> {
++    match tee {
++        #[cfg(feature = "amd-sev")]
++        Tee::Snp => Ok(()),
++        #[cfg(feature = "tdx")]
++        Tee::Tdx => Ok(()),
++        _ => Err(StartMicrovmError::InvalidTee),
++    }
++}
++
++#[cfg(all(feature = "tee", not(target_arch = "x86_64")))]
++fn validate_tee_config(_tee: Tee) -> std::result::Result<(), StartMicrovmError> {
++    Err(StartMicrovmError::InvalidTee)
++}
++
+ #[cfg(all(target_os = "linux", feature = "tee"))]
+ pub(crate) fn setup_vm(
+     kvm: &KvmContext,
+@@ -1569,6 +1586,8 @@ pub(crate) fn setup_vm(
+     resources: &super::resources::VmResources,
+     #[cfg(feature = "tdx")] _sender: Sender<WorkerMessage>,
+ ) -> std::result::Result<Vm, StartMicrovmError> {
++    validate_tee_config(resources.tee_config().tee)?;
++
+     let mut vm = Vm::new(
+         kvm.fd(),
+         resources.tee_config(),
+diff --git a/src/vmm/src/linux/vstate.rs b/src/vmm/src/linux/vstate.rs
+index 05e58fb..d87b743 100644
+--- a/src/vmm/src/linux/vstate.rs
++++ b/src/vmm/src/linux/vstate.rs
+@@ -41,7 +41,9 @@ use kbs_types::Tee;
+ use crate::resources::TeeConfig;
+ use crate::vmm_config::machine_config::CpuFeaturesTemplate;
+ #[cfg(target_arch = "x86_64")]
+-use cpuid::{c3, filter_cpuid, t2, VmSpec};
++use cpuid::{VmSpec, c3, filter_cpuid, t2};
++#[cfg(not(feature = "tee"))]
++use kvm_bindings::kvm_userspace_memory_region;
+ #[cfg(target_arch = "x86_64")]
+ use kvm_bindings::{
+     kvm_clock_data, kvm_debugregs, kvm_irqchip, kvm_lapic_state, kvm_mp_state, kvm_pit_state2,
+@@ -49,14 +51,14 @@ use kvm_bindings::{
+     KVM_CLOCK_TSC_STABLE, KVM_IRQCHIP_IOAPIC, KVM_IRQCHIP_PIC_MASTER, KVM_IRQCHIP_PIC_SLAVE,
+     KVM_MAX_CPUID_ENTRIES,
+ };
++use kvm_bindings::{KVM_API_VERSION, KVM_SYSTEM_EVENT_RESET, KVM_SYSTEM_EVENT_SHUTDOWN};
++#[cfg(feature = "tee")]
++use kvm_bindings::{KVM_CAP_EXIT_HYPERCALL, KVM_MEMORY_EXIT_FLAG_PRIVATE, kvm_enable_cap};
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
+ use kvm_bindings::{
+-    kvm_create_guest_memfd, kvm_userspace_memory_region, kvm_userspace_memory_region2,
+-    KVM_API_VERSION, KVM_MEM_GUEST_MEMFD, KVM_SYSTEM_EVENT_RESET, KVM_SYSTEM_EVENT_SHUTDOWN,
++    KVM_MEM_GUEST_MEMFD, KVM_MEMORY_ATTRIBUTE_PRIVATE, kvm_create_guest_memfd,
++    kvm_memory_attributes, kvm_userspace_memory_region2,
+ };
+-#[cfg(feature = "tee")]
+-use kvm_bindings::{kvm_enable_cap, KVM_CAP_EXIT_HYPERCALL, KVM_MEMORY_EXIT_FLAG_PRIVATE};
+-#[cfg(not(target_arch = "riscv64"))]
+-use kvm_bindings::{kvm_memory_attributes, KVM_MEMORY_ATTRIBUTE_PRIVATE};
+ use kvm_ioctls::{Cap::*, *};
+ use utils::eventfd::EventFd;
+ use utils::signal::{register_signal_handler, sigrtmin, Killable};
+@@ -661,90 +663,121 @@ impl Vm {
+         None
+     }
+ 
+-    #[allow(unused_mut)]
+-    fn memory_region_set(
++    // GuestMemfd is generally intended for either of two purposes:
++    // * sharing the memory with out-of-process components, and conversely,
++    // * hiding the memory completely from the VMM process (Confidential Computing).
++    //
++    // We only use it for the second use case currently, so don't even try to use it
++    // outside of TEE builds. Software-protected VMs are only available on x86_64 and
++    // are marked with strongly-worded warnings about them being for development only,
++    // as of late 2025. Also, on other architectures like aarch64, guest_memfd in
++    // general is unstable for now, so don't try to use it without a reason.
++
++    #[cfg(not(feature = "tee"))]
++    fn create_guest_physical_memory_slot(
+         &mut self,
+-        guest_mem: &GuestMemoryMmap,
++        host_addr: u64,
++        start: u64,
+         region: &GuestRegionMmap,
+     ) -> Result<()> {
+-        let host_addr = guest_mem.get_host_address(region.start_addr()).unwrap();
+-        let start = region.start_addr().raw_value();
+-        let end = start + region.len();
++        let memory_region = kvm_userspace_memory_region {
++            slot: self.next_mem_slot,
++            guest_phys_addr: start,
++            memory_size: region.len(),
++            userspace_addr: host_addr,
++            flags: 0,
++        };
+ 
+-        // GuestMemfd is generally intended for either of two purposes:
+-        // * sharing the memory with out-of-process components, and conversely,
+-        // * hiding the memory completely from the VMM process (Confidential Computing).
+-        //
+-        // We only use it for the second use case currently, so don't even try to use it
+-        // outside of TEE builds. Software-protected VMs are only available on x86_64 and
+-        // are marked with strongly-worded warnings about them being for development only,
+-        // as of late 2025. Also, on other architectures like aarch64, guest_memfd in
+-        // general is unstable for now, so don't try to use it without a reason.
+-
+-        if cfg!(not(feature = "tee")) {
+-            let memory_region = kvm_userspace_memory_region {
+-                slot: self.next_mem_slot,
+-                guest_phys_addr: start,
+-                memory_size: region.len(),
+-                userspace_addr: host_addr as u64,
+-                flags: 0,
+-            };
++        // Safe because we mapped the memory region and ensured regions do not overlap.
++        unsafe {
++            self.fd
++                .set_user_memory_region(memory_region)
++                .map_err(Error::SetUserMemoryRegion)?;
++        };
+ 
+-            // Safe because we mapped the memory region, we made sure that the regions
+-            // are not overlapping.
+-            unsafe {
+-                self.fd
+-                    .set_user_memory_region(memory_region)
+-                    .map_err(Error::SetUserMemoryRegion)?;
+-            };
+-        } else {
+-            if !self.fd.check_extension(GuestMemfd) {
+-                return Err(Error::KvmCap(GuestMemfd));
+-            }
++        Ok(())
++    }
+ 
+-            // Create a guest_memfd and set the region.
+-            let guest_memfd = self
+-                .fd
+-                .create_guest_memfd(kvm_create_guest_memfd {
+-                    size: region.size() as u64,
+-                    flags: 0,
+-                    reserved: [0; 6],
+-                })
+-                .map_err(Error::CreateGuestMemfd)?;
+-
+-            let memory_region = kvm_userspace_memory_region2 {
+-                slot: self.next_mem_slot,
+-                flags: KVM_MEM_GUEST_MEMFD,
+-                guest_phys_addr: start,
+-                memory_size: region.len(),
+-                userspace_addr: host_addr as u64,
+-                guest_memfd_offset: 0,
+-                guest_memfd: guest_memfd as u32,
+-                pad1: 0,
+-                pad2: [0; 14],
+-            };
+-
+-            // Safe because we mapped the memory region, we made sure that the regions
+-            // are not overlapping.
+-            unsafe {
+-                self.fd
+-                    .set_user_memory_region2(memory_region)
+-                    .map_err(Error::SetUserMemoryRegion)?;
+-            };
+-
+-            let attr = kvm_memory_attributes {
+-                address: start,
+-                size: region.len(),
+-                attributes: KVM_MEMORY_ATTRIBUTE_PRIVATE as u64,
++    #[cfg(all(feature = "tee", target_arch = "x86_64"))]
++    fn create_guest_physical_memory_slot(
++        &mut self,
++        host_addr: u64,
++        start: u64,
++        region: &GuestRegionMmap,
++    ) -> Result<()> {
++        let end = start + region.len();
++
++        if !self.fd.check_extension(GuestMemfd) {
++            return Err(Error::KvmCap(GuestMemfd));
++        }
++
++        // GuestMemfd is only used for confidential-memory setups in TEE builds.
++        let guest_memfd = self
++            .fd
++            .create_guest_memfd(kvm_create_guest_memfd {
++                size: region.size() as u64,
+                 flags: 0,
+-            };
++                reserved: [0; 6],
++            })
++            .map_err(Error::CreateGuestMemfd)?;
++
++        let memory_region = kvm_userspace_memory_region2 {
++            slot: self.next_mem_slot,
++            flags: KVM_MEM_GUEST_MEMFD,
++            guest_phys_addr: start,
++            memory_size: region.len(),
++            userspace_addr: host_addr,
++            guest_memfd_offset: 0,
++            guest_memfd: guest_memfd as u32,
++            pad1: 0,
++            pad2: [0; 14],
++        };
+ 
++        // Safe because we mapped the memory region and ensured regions do not overlap.
++        unsafe {
+             self.fd
+-                .set_memory_attributes(attr)
+-                .map_err(Error::SetMemoryAttributes)?;
++                .set_user_memory_region2(memory_region)
++                .map_err(Error::SetUserMemoryRegion)?;
++        };
+ 
+-            self.guest_memfds.push((Range { start, end }, guest_memfd));
+-        }
++        let attr = kvm_memory_attributes {
++            address: start,
++            size: region.len(),
++            attributes: KVM_MEMORY_ATTRIBUTE_PRIVATE as u64,
++            flags: 0,
++        };
++
++        self.fd
++            .set_memory_attributes(attr)
++            .map_err(Error::SetMemoryAttributes)?;
++
++        self.guest_memfds.push((Range { start, end }, guest_memfd));
++
++        Ok(())
++    }
++
++    #[cfg(all(feature = "tee", not(target_arch = "x86_64")))]
++    fn create_guest_physical_memory_slot(
++        &mut self,
++        _host_addr: u64,
++        _start: u64,
++        _region: &GuestRegionMmap,
++    ) -> Result<()> {
++        // TEE support should be rejected during VM setup on non-x86_64 targets.
++        // Do not silently fall back to the non-TEE path here, because that would
++        // ignore an invalid TEE configuration and create a normal VM instead.
++        Err(Error::InvalidTee)
++    }
++
++    fn memory_region_set(
++        &mut self,
++        guest_mem: &GuestMemoryMmap,
++        region: &GuestRegionMmap,
++    ) -> Result<()> {
++        let host_addr = guest_mem.get_host_address(region.start_addr()).unwrap() as u64;
++        let start = region.start_addr().raw_value();
++
++        self.create_guest_physical_memory_slot(host_addr, start, region)?;
+ 
+         self.next_mem_slot += 1;
+ 
+diff --git a/src/vmm/src/worker.rs b/src/vmm/src/worker.rs
+index d0131b9..a28ed55 100644
+--- a/src/vmm/src/worker.rs
++++ b/src/vmm/src/worker.rs
+@@ -1,20 +1,20 @@
+ use std::io;
+ use std::sync::{Arc, Mutex};
+ 
+-#[cfg(feature = "tee")]
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
+ use utils::worker_message::MemoryProperties;
+ use utils::worker_message::WorkerMessage;
+ 
+ use crossbeam_channel::Receiver;
+-#[cfg(feature = "tee")]
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
+ use crossbeam_channel::Sender;
+-#[cfg(feature = "tee")]
+-use kvm_bindings::{kvm_memory_attributes, KVM_MEMORY_ATTRIBUTE_PRIVATE};
+-#[cfg(feature = "tee")]
+-use libc::{fallocate, madvise, FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE, MADV_DONTNEED};
+-#[cfg(feature = "tee")]
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
++use kvm_bindings::{KVM_MEMORY_ATTRIBUTE_PRIVATE, kvm_memory_attributes};
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
++use libc::{FALLOC_FL_KEEP_SIZE, FALLOC_FL_PUNCH_HOLE, MADV_DONTNEED, fallocate, madvise};
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
+ use std::ffi::c_void;
+-#[cfg(feature = "tee")]
++#[cfg(all(feature = "tee", target_arch = "x86_64"))]
+ use vm_memory::{
+     guest_memory::GuestMemory, Address, GuestAddress, GuestMemoryRegion, MemoryRegionAddress,
+ };
+@@ -59,15 +59,21 @@ impl super::Vmm {
+                     .send(self.vm.fd().set_irq_line(irq, active).is_ok())
+                     .unwrap();
+             }
+-            WorkerMessage::ConvertMemory(_sender, _properties) =>
+-            {
+-                #[cfg(feature = "tee")]
+-                self.convert_memory(_sender, _properties)
++            WorkerMessage::ConvertMemory(_sender, _properties) => {
++                #[cfg(all(feature = "tee", target_arch = "x86_64"))]
++                {
++                    self.convert_memory(_sender, _properties);
++                }
++
++                #[cfg(not(all(feature = "tee", target_arch = "x86_64")))]
++                {
++                    let _ = _sender.send(false);
++                }
+             }
+         }
+     }
+ 
+-    #[cfg(feature = "tee")]
++    #[cfg(all(feature = "tee", target_arch = "x86_64"))]
+     fn convert_memory(&self, sender: Sender<bool>, properties: MemoryProperties) {
+         let Some((guest_memfd, region_start)) = self.kvm_vm().guest_memfd_get(properties.gpa)
+         else {
+-- 
+2.51.0

@@ -1,0 +1,27 @@
+--- source/CMakeLists.txt
++++ source/CMakeLists.txt
+@@ -56,11 +56,6 @@ target_include_directories(${IPFS_API_LIBNAME}
+ )
+ 
+ # Fetch "JSON for Modern C++"
+-include(FetchContent)
+-message(STATUS "Fetching nlohmann/JSON")
+-# Retrieve Nlohmann JSON
+-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.10.5/json.tar.xz)
+-FetchContent_MakeAvailable(json)
+ 
+ # libcurl requires additional libs only for static Windows builds
+ if(WIN32)
+@@ -71,12 +66,11 @@ set_target_properties(${IPFS_API_LIBNAME} PROPERTIES
+   SOVERSION ${PROJECT_VERSION_MAJOR}
+   VERSION ${PROJECT_VERSION}
+ )
+-target_link_libraries(${IPFS_API_LIBNAME} ${CURL_LIBRARIES} ${WINDOWS_CURL_LIBS} nlohmann_json::nlohmann_json)
++target_link_libraries(${IPFS_API_LIBNAME} ${CURL_LIBRARIES} ${WINDOWS_CURL_LIBS})
+ if(NOT DISABLE_INSTALL)
+   install(TARGETS ${IPFS_API_LIBNAME} DESTINATION lib)
+   install(FILES include/ipfs/client.h DESTINATION include/ipfs)
+   install(FILES include/ipfs/http/transport.h DESTINATION include/ipfs/http)
+-  install(FILES ${json_SOURCE_DIR}/include/nlohmann/json.hpp DESTINATION include/nlohmann)
+ endif()
+ # Tests, use "CTEST_OUTPUT_ON_FAILURE=1 make test" to see output from failed tests

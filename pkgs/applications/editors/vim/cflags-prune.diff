@@ -1,0 +1,15 @@
+diff --git a/src/Makefile b/src/Makefile
+index 864f54b..fd85f76 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -2806,8 +2806,8 @@ auto/pathdef.c: Makefile auto/config.mk
+ 	-@echo '#include "vim.h"' >> $@
+ 	-@echo 'char_u *default_vim_dir = (char_u *)"$(VIMRCLOC)";' | $(QUOTESED) >> $@
+ 	-@echo 'char_u *default_vimruntime_dir = (char_u *)"$(VIMRUNTIMEDIR)";' | $(QUOTESED) >> $@
+-	-@echo 'char_u *all_cflags = (char_u *)"$(CC) -c -I$(srcdir) $(ALL_CFLAGS)";' | $(QUOTESED) >>  $@
+-	-@echo 'char_u *all_lflags = (char_u *)"$(CC) $(ALL_LIB_DIRS) $(LDFLAGS) -o $(VIMTARGET) $(ALL_LIBS) ";' | $(QUOTESED) >>  $@
++	-@echo 'char_u *all_cflags = (char_u *)"see nix-store --read-log $(out)";' | $(QUOTESED) >>  $@
++	-@echo 'char_u *all_lflags = (char_u *)"see nix-store --read-log $(out)";' | $(QUOTESED) >>  $@
+ 	-@echo 'char_u *compiled_user = (char_u *)"' | tr -d $(NL) >> $@
+ 	-@if test -n "$(COMPILEDBY)"; then \
+ 		echo "$(COMPILEDBY)" | tr -d $(NL) >> $@; \

@@ -1,0 +1,15 @@
+diff --git a/picocom.c b/picocom.c
+index ba2f9bd666..d4df60f2d3 100644
+--- a/picocom.c
++++ b/picocom.c
+@@ -243,8 +243,8 @@
+     .send_cmd = "",
+     .receive_cmd = "",
+ #else
+-    .send_cmd = "sz -vv",
+-    .receive_cmd = "rz -vv -E",
++    .send_cmd = "@lrzsz@/bin/sz -vv",
++    .receive_cmd = "@lrzsz@/bin/rz -vv -E",
+ #endif
+     .imap = M_I_DFL,
+     .omap = M_O_DFL,

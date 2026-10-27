@@ -1,0 +1,115 @@
+{
+  "version": "13.1.0",
+  "cp310-cp310-x86_64-darwin": {
+    "platform": "macosx_10_11_x86_64",
+    "hash": "sha256-h/RF6T+M2Klz2lLl6qdF+jZWCNIG5iwvE4kTsSm9B2g="
+  },
+  "cp310-cp310-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-ClYmdpJGWrxyA4+P6x+zSxhJcPQSxaXM/w/SiXWWUnI="
+  },
+  "cp310-cp310-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-dRt3a2rC52h2F4rsrk23Dx+wIdCKqDh+C3pl6GbQBks="
+  },
+  "cp310-cp310-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-oznf9R9fBzMgfQumdoqcOQuST/BcWmLicM53jfqfk7g="
+  },
+  "cp311-cp311-x86_64-darwin": {
+    "platform": "macosx_10_11_x86_64",
+    "hash": "sha256-CC/Cbb9SlKZg1BSW+D2+Lmuu84ROJ7xwiHb2UOVLHu0="
+  },
+  "cp311-cp311-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-DemCcncctdJEGSYt2AaiyM5/8bAVENKfubjePHsS8v0="
+  },
+  "cp311-cp311-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-4Kc8QCzR+peri6rhiyvtHwOKFHR5rJD7UohbG2GuBGU="
+  },
+  "cp311-cp311-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-Ig4I9SpZwMMRWFJ8/AWwt1IiIY1SqdB0PkywcldPSik="
+  },
+  "cp312-cp312-x86_64-darwin": {
+    "platform": "macosx_10_11_x86_64",
+    "hash": "sha256-T+iK42v0khed2Ewm2ymfGbBpf5Y6FlHS5MsbrUDgx4o="
+  },
+  "cp312-cp312-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-xE2cQVxEuLP1hLb8+VktX+Mc/DCvhCNuXdEsSdoI82E="
+  },
+  "cp312-cp312-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-ojh+FCyhemK8kn30p6B4H++pJ/DoXxnhrUoTy2kfWlA="
+  },
+  "cp312-cp312-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-7fb/PDiDNDr9TpBxSwL8GeVWzFJ+qNj1KKOB1duZQIw="
+  },
+  "cp313-cp313-x86_64-darwin": {
+    "platform": "macosx_10_11_x86_64",
+    "hash": "sha256-hA0XoC0L94FApS1u7Qco7bo39E/+YSiXo9uqCULU3Rg="
+  },
+  "cp313-cp313-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-nHX/3GFDxHOPxdJPalroPv1VVUQ6W1NEHZs3fHBP+3I="
+  },
+  "cp313-cp313-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-dom3cvxiuNs327usHIQjPVAltA0Cvx4udk9v9TknU54="
+  },
+  "cp313-cp313-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-ehhYoLMXYPIuFi8Sks9KduXmD5hSxNE/6r9Pkand7uM="
+  },
+  "cp314-cp314-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-xxfLddJCD7efhYnn5+9qdOI4y3X0J0K4jSsAfQUA6fY="
+  },
+  "cp314-cp314-x86_64-darwin": {
+    "platform": "macosx_11_0_x86_64",
+    "hash": "sha256-TPr+pSyGjWH/L0bjm1Di4XGV4zwHUA/AETb7kBSDTIE="
+  },
+  "cp314-cp314-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-pQ2diOmDJbj83eT5H2ASieWfzmOrs6+qzIaxkMizilg="
+  },
+  "cp314-cp314-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-+IAn8tSzFdFrgiDjIWPUkw9xA+bQa9pz+Rhkq408JEE="
+  },
+  "cp314-cp314t-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-XjHsn1QC8yRn8V+GYef/EEZlHkkbT0YX0DH5sKwXBFc="
+  },
+  "cp314-cp314t-x86_64-darwin": {
+    "platform": "macosx_11_0_x86_64",
+    "hash": "sha256-cN/XcKJDyJ4KcmvmSSBTSwsw9DPXZV/AusOs1OXyU/w="
+  },
+  "cp314-cp314t-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-cBUZ0EVocAFZkvmDYcXCIYE3i40yXoLsB96ZC6UALhA="
+  },
+  "cp314-cp314t-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-0Y0ypp8FZ1CfCfl5BjtpmBm6yyY5/IqWGV5kfm2Uzow="
+  },
+  "cp39-cp39-x86_64-darwin": {
+    "platform": "macosx_10_11_x86_64",
+    "hash": "sha256-IPTKv5az2k9bqnIr3pjCMYugNcY4Ew7Fho/uotheu5o="
+  },
+  "cp39-cp39-aarch64-darwin": {
+    "platform": "macosx_11_0_arm64",
+    "hash": "sha256-4pigAM0Bk92x1sZekCWkX5fFwDqkE9Dt5u/gjhsjz/o="
+  },
+  "cp39-cp39-aarch64-linux": {
+    "platform": "manylinux_2_24_aarch64",
+    "hash": "sha256-FrUVsrlIrWDT+mq6TvLnCEfVI6MsVOqStAEHuBGUgvo="
+  },
+  "cp39-cp39-x86_64-linux": {
+    "platform": "manylinux_2_24_x86_64",
+    "hash": "sha256-PfqnFJD2LOnTl0KjLg/JI6YhrZyU4g1hDRAGuC9ES2c="
+  }
+}

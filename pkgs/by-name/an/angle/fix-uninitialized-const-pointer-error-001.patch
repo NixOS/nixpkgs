@@ -1,0 +1,16 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 0c04c9036..1f32ec562 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -1992,6 +1992,11 @@ config("tot_warnings") {
+       "-Wno-character-conversion",
+     ]
+   }
++
++  cflags += [
++    # TODO(crbug.com/432275627): Fix and re-enable.
++    "-Wno-uninitialized-const-pointer"
++  ]
+ }
+ 
+ # default_warnings ------------------------------------------------------------

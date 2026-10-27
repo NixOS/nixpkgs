@@ -1,0 +1,19 @@
+diff --git a/db/fixtures/990_settings.rb b/db/fixtures/990_settings.rb
+index c64d9fbc205..d8cf8d88010 100644
+--- a/db/fixtures/990_settings.rb
++++ b/db/fixtures/990_settings.rb
+@@ -1,14 +1,3 @@
+ # frozen_string_literal: true
+ 
+-if SiteSetting.notification_email == SiteSetting.defaults[:notification_email]
+-  # don't crash for invalid hostname, which is possible in dev
+-  begin
+-    SiteSetting.notification_email = "noreply@#{Discourse.current_hostname}"
+-  rescue Discourse::InvalidParameters
+-    if Rails.env.production?
+-      STDERR.puts "WARNING: Discourse hostname: #{Discourse.current_hostname} is not a valid domain for emails!"
+-    end
+-  end
+-end
+-
+ SiteSetting.api_key_last_used_epoch = Time.now if SiteSetting.api_key_last_used_epoch.blank?

@@ -1,0 +1,13 @@
+diff --git a/Tests/t_cext.py b/Tests/t_cext.py
+index bc095fa..504dc74 100644
+--- a/Tests/t_cext.py
++++ b/Tests/t_cext.py
+@@ -247,7 +247,7 @@ class TestLdapCExtension(SlapdTestCase):
+ 
+     @requires_init_fd()
+     def test_simple_bind_fileno_invalid(self):
+-        fd = os.open(os.devnull, os.O_RDWR)
++        fd = os.open(os.devnull, os.O_RDONLY)
+         l = _ldap.initialize_fd(fd, self.server.ldap_uri)
+         with self.assertRaises(_ldap.SERVER_DOWN):
+             self._bind_conn(l)

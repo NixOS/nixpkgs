@@ -1,0 +1,146 @@
+At time of writing this is equivalent to https://github.com/lgi-devs/lgi/pull/361.patch?full_index=1
+The only difference is that this diff does not include the *tests/progress.lua* changes since that file does not exist in the source used by *nixpkgs*.
+
+--- a/lgi/ffi.lua
++++ b/lgi/ffi.lua
+@@ -74,19 +74,39 @@
+ end
+ 
+ -- Creates new enum/flags table with all values from specified gtype.
++--
++-- Fixes https://github.com/lgi-devs/lgi/issues/358
++--
++-- Implementation for the fix was mirrored from the LGI fork:
++--   https://github.com/vtrlx/LuaGObject/blob/0.10.5/LuaGObject/ffi.lua#L74-L104
+ function ffi.load_enum(gtype, name)
+-   local GObject = core.repo.GObject
++   local GLib, GObject = core.repo.GLib, core.repo.GObject
+    local is_flags = GObject.Type.is_a(gtype, GObject.Type.FLAGS)
+    local enum_component = component.create(
+       gtype, is_flags and enum.bitflags_mt or enum.enum_mt, name)
+-   local type_class = GObject.TypeClass.ref(gtype)
++   local type_class
++   -- GLib >= 2.86 deprecates GObject.TypeClass.ref() in favour of .get()
++   if GLib.check_version(2, 86, 0) then
++      type_class = GObject.TypeClass.ref(gtype)
++   else
++      type_class = GObject.TypeClass.get(gtype)
++   end
+    local enum_class = core.record.cast(
+       type_class, is_flags and GObject.FlagsClass or GObject.EnumClass)
+-   for i = 0, enum_class.n_values - 1 do
+-      local val = core.record.fromarray(enum_class.values, i)
+-      enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
++   if GLib.check_version(2, 87, 0) then
++      for i = 0, enum_class.n_values - 1 do
++         local val = core.record.fromarray(enum_class.values, i)
++         enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
++      end
++   else
++      for _, val in ipairs(enum_class.values) do
++         enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
++      end
++   end
++   -- For GLib versions below 2.86, type_class was ref'd and needs to be unref'd
++   if GLib.check_version(2, 86, 0) then
++      type_class:unref()
+    end
+-   type_class:unref()
+    return enum_component
+ end
+ 
+--- a/lgi/ffi.lua
++++ b/lgi/ffi.lua
+@@ -74,18 +74,12 @@
+ end
+ 
+ -- Creates new enum/flags table with all values from specified gtype.
+---
+--- Fixes https://github.com/lgi-devs/lgi/issues/358
+---
+--- Implementation for the fix was mirrored from the LGI fork:
+---   https://github.com/vtrlx/LuaGObject/blob/0.10.5/LuaGObject/ffi.lua#L74-L104
+ function ffi.load_enum(gtype, name)
+    local GLib, GObject = core.repo.GLib, core.repo.GObject
+    local is_flags = GObject.Type.is_a(gtype, GObject.Type.FLAGS)
+    local enum_component = component.create(
+       gtype, is_flags and enum.bitflags_mt or enum.enum_mt, name)
+    local type_class
+-   -- GLib >= 2.86 deprecates GObject.TypeClass.ref() in favour of .get()
+    if GLib.check_version(2, 86, 0) then
+       type_class = GObject.TypeClass.ref(gtype)
+    else
+@@ -103,7 +97,6 @@
+          enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
+       end
+    end
+-   -- For GLib versions below 2.86, type_class was ref'd and needs to be unref'd
+    if GLib.check_version(2, 86, 0) then
+       type_class:unref()
+    end
+--- a/lgi/ffi.lua
++++ b/lgi/ffi.lua
+@@ -80,6 +80,7 @@
+    local enum_component = component.create(
+       gtype, is_flags and enum.bitflags_mt or enum.enum_mt, name)
+    local type_class
++   -- GLib >= 2.86 deprecates GObject.TypeClass.ref() in favour of .get()
+    if GLib.check_version(2, 86, 0) then
+       type_class = GObject.TypeClass.ref(gtype)
+    else
+@@ -97,6 +98,7 @@
+          enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
+       end
+    end
++   -- For GLib versions below 2.86, type_class was ref'd and needs to be unref'd
+    if GLib.check_version(2, 86, 0) then
+       type_class:unref()
+    end
+--- a/tests/pango.lua
++++ b/tests/pango.lua
+@@ -35,8 +35,24 @@
+       local offset = items[i].offset
+       local length = items[i].length
+       local analysis = items[i].analysis
+-      local pgs = Pango.GlyphString()
+-      Pango.shape(string.sub(s,1+offset), length, analysis, pgs)
++      --
++      -- Fixes https://github.com/lgi-devs/lgi/issues/336
++      --
++      -- Implementation for the fix was a combination
++      -- of ideas from:
++      --
++      -- 1) my own investigation plus trial-error
++      -- 2) the comment: https://github.com/lgi-devs/lgi/issues/336#issuecomment-2888361271
++      -- 3) the LGI fork: https://github.com/vtrlx/LuaGObject/blob/0.10.5/tests/pango.lua#L38-L39
++      --
++      local pgs
++      if Pango.version_check(1, 56, 2) then
++         pgs = Pango.GlyphString()
++         Pango.shape(string.sub(s,1+offset), length, analysis, pgs)
++      else
++         pgs = Pango.shape(string.sub(s,1+offset), length, analysis)
++      end
++
+       -- Pull out individual glyphs with pgs.glyphs
+       local glyphs = pgs.glyphs
+       check(type(glyphs) == 'table')
+--- a/tests/pango.lua
++++ b/tests/pango.lua
+@@ -35,16 +35,6 @@
+       local offset = items[i].offset
+       local length = items[i].length
+       local analysis = items[i].analysis
+-      --
+-      -- Fixes https://github.com/lgi-devs/lgi/issues/336
+-      --
+-      -- Implementation for the fix was a combination
+-      -- of ideas from:
+-      --
+-      -- 1) my own investigation plus trial-error
+-      -- 2) the comment: https://github.com/lgi-devs/lgi/issues/336#issuecomment-2888361271
+-      -- 3) the LGI fork: https://github.com/vtrlx/LuaGObject/blob/0.10.5/tests/pango.lua#L38-L39
+-      --
+       local pgs
+       if Pango.version_check(1, 56, 2) then
+          pgs = Pango.GlyphString()

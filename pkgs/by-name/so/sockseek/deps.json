@@ -1,0 +1,192 @@
+[
+  {
+    "pname": "AngleSharp",
+    "version": "1.8.5",
+    "hash": "sha256-9SZVPXmaiFwuA5ln/NWF2OcxhubhYZMbJfRO+x9u2vs="
+  },
+  {
+    "pname": "EmbedIO",
+    "version": "3.5.2",
+    "hash": "sha256-e6GfVHXxYeUw3ntCrHokNoAS6mXArO7+vdMeUFnsSo8="
+  },
+  {
+    "pname": "Google.Apis",
+    "version": "1.77.0",
+    "hash": "sha256-M14OLFc8sOaTBKyb04uhduqpDg+W7hfYlj+fpME0xos="
+  },
+  {
+    "pname": "Google.Apis.Auth",
+    "version": "1.77.0",
+    "hash": "sha256-kcGYc4Heb+jZm28MUmc92lKuPTjaZx3F8rUz4mV0sEU="
+  },
+  {
+    "pname": "Google.Apis.Core",
+    "version": "1.77.0",
+    "hash": "sha256-9WDQf7jTbO0rDYx3P/rvhi4FxN7z7LbxnjNd3QYgfik="
+  },
+  {
+    "pname": "Google.Apis.YouTube.v3",
+    "version": "1.77.0.4302",
+    "hash": "sha256-HVwatSNd9v/5GOa98P1y6gWR7lHRFAr9r3v/x/LJeIg="
+  },
+  {
+    "pname": "HtmlAgilityPack",
+    "version": "1.13.1",
+    "hash": "sha256-/D9UnhyG7/HubnrYcqfA9awhzuCT0PYG+CcLPpN6/M4="
+  },
+  {
+    "pname": "Markdig",
+    "version": "1.4.0",
+    "hash": "sha256-vdhDU6P0mfmJ8xEbM6zuvZQ0+KBpyos9oqBl8iMOe68="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Connections.Abstractions",
+    "version": "10.0.13",
+    "hash": "sha256-vKTgFWsav/5jScnDTB+J8YCYQXECA1pFoYvPaeP5NGI="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Http.Connections.Client",
+    "version": "10.0.13",
+    "hash": "sha256-Qcp0r0rqHlxeUDc8Weafyr8LJNG5i6RI4ShaTJIrxqY="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Http.Connections.Common",
+    "version": "10.0.13",
+    "hash": "sha256-qaVCnuSzm+1mQvkcQfchKkC4SQuZBcxMMmBaU9Zx518="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.OpenApi",
+    "version": "10.0.13",
+    "hash": "sha256-NV0Sl/TvAg8WqRpEgiEw0PsU1znOU6vUToH5h49Dj9M="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.SignalR.Client",
+    "version": "10.0.13",
+    "hash": "sha256-z6cvyvDfYCne4/LHadurxIpU8DNsg7blsTHOudFfaf8="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.SignalR.Client.Core",
+    "version": "10.0.13",
+    "hash": "sha256-pMRFe+sH5P6Y7TR23OzPgD/Dmk4vXh2oJ99r+7M8AM4="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.SignalR.Common",
+    "version": "10.0.13",
+    "hash": "sha256-X2Fh6+C3cdxMdw4f8G1LzBNSpFRbwGHg2wJIjIbwP+g="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.SignalR.Protocols.Json",
+    "version": "10.0.13",
+    "hash": "sha256-I6n1/s/xmiKzBDwgwA1j81z9/UJnsWKkCV84lZ/avlg="
+  },
+  {
+    "pname": "Microsoft.Extensions.ApiDescription.Server",
+    "version": "10.0.13",
+    "hash": "sha256-j99VW8Kv9WDBTaXsfpoL5n6yRJuKZiiQ7IqSAKJVJjY="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection",
+    "version": "10.0.13",
+    "hash": "sha256-iQsWb83BNHtt652J0ljhJvn4X0/QV9A4zzYf9gSmwzg="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "10.0.13",
+    "hash": "sha256-Z2+btHojrzSfhbb0X3HXpjTbYKcbXJ83DQNyFajzrIw="
+  },
+  {
+    "pname": "Microsoft.Extensions.Features",
+    "version": "10.0.13",
+    "hash": "sha256-k2N24isy6Ypoqa4TZXfM0r+8TzcsCQvZN7pyfv+cl84="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging",
+    "version": "10.0.13",
+    "hash": "sha256-q8IVivjMCdtveXC/p+NIoAHLIGktkH2sYtcseF0rz10="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "10.0.13",
+    "hash": "sha256-jAn0MoqAFxa4mXcH+1ZwE9sZOTW0755piXyD3JxWyLE="
+  },
+  {
+    "pname": "Microsoft.Extensions.Options",
+    "version": "10.0.13",
+    "hash": "sha256-2IXVR6Nzd0E94EBm+/mE3kA1m4dwGPJMOukMCyLgPs4="
+  },
+  {
+    "pname": "Microsoft.Extensions.Primitives",
+    "version": "10.0.13",
+    "hash": "sha256-el8dy8xue5TLPnwY0irO9YI5Sf6UtAdq0g/wVzIsbm8="
+  },
+  {
+    "pname": "Microsoft.OpenApi",
+    "version": "2.12.2",
+    "hash": "sha256-OjW4VjHhx7h3thJEypPgQvaiScouBV/Vw9krVPGyR6k="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.4",
+    "hash": "sha256-8JCB1FdAW681qXP6DFDWvycu1oPyVoxaYgpJ2pUvZSk="
+  },
+  {
+    "pname": "SmallestCSVParser",
+    "version": "1.2.0",
+    "hash": "sha256-LP6KPKruAKNW022CsMp0yFPmqo8QYzFu6BLWNoV5EdA="
+  },
+  {
+    "pname": "Soulseek",
+    "version": "10.0.2",
+    "hash": "sha256-JXH6b3zM1pZ47t2WE964d+BtHkHrOWHEZ+qfSdly1Mk="
+  },
+  {
+    "pname": "Spectre.Console",
+    "version": "0.57.2",
+    "hash": "sha256-ORLa6NVkaski0XYP4Mg+BtxO7kuIZNOOGFG1uJHrwww="
+  },
+  {
+    "pname": "Spectre.Console.Ansi",
+    "version": "0.57.2",
+    "hash": "sha256-pL8hSDbW0Cy9jpr9HKsfUPzY1WvWP7l0VndwpxHWjCw="
+  },
+  {
+    "pname": "SpotifyAPI.Web",
+    "version": "7.4.2",
+    "hash": "sha256-bONT7va0tDCVwB1rSeZTIwTvyINkaMMViGstVjPxDpA="
+  },
+  {
+    "pname": "SpotifyAPI.Web.Auth",
+    "version": "7.4.2",
+    "hash": "sha256-u6mZOplpNpSKRjlHD00+dAupwjwXef9NQcSTp+fkrlQ="
+  },
+  {
+    "pname": "System.CodeDom",
+    "version": "7.0.0",
+    "hash": "sha256-7IPt39cY+0j0ZcRr/J45xPtEjnSXdUJ/5ai3ebaYQiE="
+  },
+  {
+    "pname": "System.Management",
+    "version": "7.0.2",
+    "hash": "sha256-bJ21ILQfbHb8mX2wnVh7WP/Ip7gdVPIw+BamQuifTVY="
+  },
+  {
+    "pname": "TagLibSharp",
+    "version": "2.3.0",
+    "hash": "sha256-PD9bVZiPaeC8hNx2D+uDUf701cCaMi2IRi5oPTNN+/w="
+  },
+  {
+    "pname": "Unosquare.Swan.Lite",
+    "version": "3.1.0",
+    "hash": "sha256-PL8N3CqIz/wku8/mkRMC3X868Byv47C20/rBLBhkS3o="
+  },
+  {
+    "pname": "YoutubeExplode",
+    "version": "6.6.2",
+    "hash": "sha256-NlFkK9hOuq6okF8kVTywXw9jW4emLXbi+T9u42vKQ/c="
+  }
+]

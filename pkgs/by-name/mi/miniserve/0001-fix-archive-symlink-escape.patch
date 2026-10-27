@@ -1,0 +1,678 @@
+From e8c4af5ace1fd9f02c6ccfc21c4c0030d6d175b3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Memduh=20=C3=87elik?= <memduhcelik33@gmail.com>
+Date: Sat, 4 Jul 2026 12:41:46 +0300
+Subject: [PATCH] fix: prevent archive downloads from following escape symlinks
+
+ZIP generation used std::fs::metadata(), which follows symlinks, so the
+subsequent is_symlink() check never fired and --no-symlinks was a no-op
+for ZIP archives. A symlink inside the served tree that pointed outside
+could therefore have its target contents packaged into the download.
+
+Detect symlinks via DirEntry::file_type() (which does not follow), skip
+them when --no-symlinks is set, and never include targets that resolve
+outside the directory being archived for ZIP, TAR, and TAR.GZ.
+
+Walk TAR trees ourselves (with follow_symlinks disabled on the builder)
+so the same containment rules apply. Broken/unresolvable links are
+omitted instead of aborting the whole archive stream.
+
+Adds regression tests for the #1568 escape-symlink cases, including
+with and without --no-symlinks, and keeps following in-root symlinks
+when allowed.
+
+Fixes #1568
+---
+ Cargo.toml       |   3 +
+ src/archive.rs   | 281 ++++++++++++++++++++++++++++++++++++++++++-----
+ tests/archive.rs | 236 +++++++++++++++++++++++++++++++++++----
+ 3 files changed, 472 insertions(+), 48 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 5f7d62c6a..8dc4adcd3 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -73,6 +73,7 @@ tls = ["rustls", "rustls-pemfile", "actix-web/rustls-0_23"]
+ [dev-dependencies]
+ assert_cmd = "2"
+ assert_fs = "1"
++libflate = "2"
+ predicates = "3"
+ pretty_assertions = "1.2"
+ regex = "1"
+@@ -80,7 +81,9 @@ reqwest = { version = "0.13", features = ["blocking", "multipart", "json", "rust
+ reqwest_dav = { version = "0.3", default-features = false }
+ rstest = "0.26"
+ select = "0.6"
++tar = "0.4"
+ url = "2"
++zip = { version = "8", default-features = false }
+ 
+ [target.'cfg(not(windows))'.dev-dependencies]
+ # fake_tty does not support Windows for now
+diff --git a/src/archive.rs b/src/archive.rs
+index 136a4d7f5..944134c2c 100644
+--- a/src/archive.rs
++++ b/src/archive.rs
+@@ -1,3 +1,4 @@
++use std::collections::HashSet;
+ use std::fs::File;
+ use std::io::{Cursor, Read, Write};
+ use std::path::{Path, PathBuf};
+@@ -10,6 +11,43 @@ use zip::{ZipWriter, write};
+ 
+ use crate::errors::RuntimeError;
+ 
++/// Whether `path` is equal to or nested under `root`.
++///
++/// Both paths are expected to already be canonicalized so that symlink
++/// components and `..` segments cannot fool a prefix check.
++fn is_within_root(path: &Path, root: &Path) -> bool {
++    path.starts_with(root)
++}
++
++/// Decide what to do with a symlink encountered while building an archive.
++///
++/// - When `skip_symlinks` is true, the entry is ignored entirely.
++/// - When following is allowed, only targets that resolve **inside**
++///   `canonical_root` are included. Targets that escape the archive root, and
++///   broken links that cannot be resolved, are omitted so a single bad entry
++///   cannot abort (or poison) the whole archive download.
++enum SymlinkAction {
++    /// Omit the entry from the archive.
++    Skip,
++    /// Follow the symlink; `resolved` is the canonical target path.
++    Follow { resolved: PathBuf },
++}
++
++fn symlink_action(entry_path: &Path, canonical_root: &Path, skip_symlinks: bool) -> SymlinkAction {
++    if skip_symlinks {
++        return SymlinkAction::Skip;
++    }
++
++    match entry_path.canonicalize() {
++        Ok(resolved) if is_within_root(&resolved, canonical_root) => {
++            SymlinkAction::Follow { resolved }
++        }
++        // Outside the archive root, or unresolvable (broken link / permissions):
++        // never package the target contents.
++        _ => SymlinkAction::Skip,
++    }
++}
++
+ /// Available archive methods
+ #[derive(Deserialize, Clone, Copy, EnumIter, EnumString, Display)]
+ #[serde(rename_all = "snake_case")]
+@@ -56,7 +94,12 @@ impl ArchiveMethod {
+     ///
+     /// Recursively includes all files and subdirectories.
+     ///
+-    /// If `skip_symlinks` is `true`, symlinks fill not be followed and will just be ignored.
++    /// If `skip_symlinks` is `true`, symlinks will not be followed and will just be ignored.
++    ///
++    /// Regardless of `skip_symlinks`, symlink targets that resolve outside the
++    /// directory being archived are never included as regular file content. This
++    /// prevents archive downloads from exfiltrating files outside the served root
++    /// via a symlink planted inside it.
+     pub fn create_archive<T, W>(
+         self,
+         dir: T,
+@@ -147,26 +190,176 @@ where
+ {
+     let mut tar_builder = Builder::new(out);
+ 
+-    tar_builder.follow_symlinks(!skip_symlinks);
++    // We walk the tree ourselves so we can refuse symlink targets that escape
++    // the archive root. Disable the builder's own following accordingly.
++    tar_builder.follow_symlinks(false);
++
++    let canonical_root = src_dir.canonicalize().map_err(|e| {
++        RuntimeError::IoError(
++            format!(
++                "Could not resolve archive root '{}'",
++                src_dir.to_string_lossy()
++            ),
++            e,
++        )
++    })?;
++
++    let mut visited = HashSet::new();
++    visited.insert(canonical_root.clone());
++
++    append_path_to_tar(
++        &mut tar_builder,
++        src_dir,
++        Path::new(&inner_folder),
++        &canonical_root,
++        skip_symlinks,
++        &mut visited,
++    )?;
++
++    // Finish the archive
++    tar_builder.into_inner().map_err(|e| {
++        RuntimeError::IoError("Failed to finish writing the TAR archive".to_string(), e)
++    })?;
+ 
+-    // Recursively adds the content of src_dir into the archive stream
++    Ok(())
++}
++
++/// Recursively append `abs_path` into the tar archive under `archive_path`.
++fn append_path_to_tar<W>(
++    tar_builder: &mut Builder<W>,
++    abs_path: &Path,
++    archive_path: &Path,
++    canonical_root: &Path,
++    skip_symlinks: bool,
++    visited: &mut HashSet<PathBuf>,
++) -> Result<(), RuntimeError>
++where
++    W: std::io::Write,
++{
++    let entries = std::fs::read_dir(abs_path).map_err(|e| {
++        RuntimeError::IoError(
++            format!("Could not read directory '{}'", abs_path.to_string_lossy()),
++            e,
++        )
++    })?;
++
++    // Ensure the directory itself exists in the archive (empty dirs, path prefix).
+     tar_builder
+-        .append_dir_all(inner_folder, src_dir)
++        .append_dir(archive_path, abs_path)
+         .map_err(|e| {
+             RuntimeError::IoError(
+                 format!(
+-                    "Failed to append the content of '{}' to the TAR archive",
+-                    src_dir.to_str().unwrap_or("file")
++                    "Failed to append directory '{}' to the TAR archive",
++                    abs_path.to_string_lossy()
+                 ),
+                 e,
+             )
+         })?;
+ 
+-    // Finish the archive
+-    tar_builder.into_inner().map_err(|e| {
+-        RuntimeError::IoError("Failed to finish writing the TAR archive".to_string(), e)
+-    })?;
++    for entry in entries {
++        let entry = entry
++            .map_err(|e| RuntimeError::IoError("Could not read directory entry".to_string(), e))?;
++        let entry_path = entry.path();
++        let file_name = entry.file_name();
++        let entry_archive_path = archive_path.join(&file_name);
+ 
++        // `DirEntry::file_type` does not follow symlinks.
++        let file_type = entry.file_type().map_err(|e| {
++            RuntimeError::IoError(
++                format!(
++                    "Could not get file type of '{}'",
++                    entry_path.to_string_lossy()
++                ),
++                e,
++            )
++        })?;
++
++        if file_type.is_symlink() {
++            match symlink_action(&entry_path, canonical_root, skip_symlinks) {
++                SymlinkAction::Skip => continue,
++                SymlinkAction::Follow { resolved } => {
++                    if !visited.insert(resolved) {
++                        // Circular symlink within the root — skip to avoid loops.
++                        continue;
++                    }
++                    let meta = std::fs::metadata(&entry_path).map_err(|e| {
++                        RuntimeError::IoError(
++                            format!(
++                                "Could not get file metadata of '{}'",
++                                entry_path.to_string_lossy()
++                            ),
++                            e,
++                        )
++                    })?;
++                    if meta.is_file() {
++                        append_file_to_tar(tar_builder, &entry_path, &entry_archive_path)?;
++                    } else if meta.is_dir() {
++                        append_path_to_tar(
++                            tar_builder,
++                            &entry_path,
++                            &entry_archive_path,
++                            canonical_root,
++                            skip_symlinks,
++                            visited,
++                        )?;
++                    }
++                }
++            }
++        } else if file_type.is_dir() {
++            let canonical_dir = entry_path.canonicalize().map_err(|e| {
++                RuntimeError::IoError(
++                    format!(
++                        "Could not resolve directory '{}'",
++                        entry_path.to_string_lossy()
++                    ),
++                    e,
++                )
++            })?;
++            if !visited.insert(canonical_dir) {
++                continue;
++            }
++            append_path_to_tar(
++                tar_builder,
++                &entry_path,
++                &entry_archive_path,
++                canonical_root,
++                skip_symlinks,
++                visited,
++            )?;
++        } else if file_type.is_file() {
++            append_file_to_tar(tar_builder, &entry_path, &entry_archive_path)?;
++        }
++        // Other special files (fifo, socket, device) are intentionally omitted.
++    }
++
++    Ok(())
++}
++
++fn append_file_to_tar<W>(
++    tar_builder: &mut Builder<W>,
++    abs_path: &Path,
++    archive_path: &Path,
++) -> Result<(), RuntimeError>
++where
++    W: std::io::Write,
++{
++    let mut file = File::open(abs_path).map_err(|e| {
++        RuntimeError::IoError(
++            format!("Could not open file '{}'", abs_path.to_string_lossy()),
++            e,
++        )
++    })?;
++    tar_builder
++        .append_file(archive_path, &mut file)
++        .map_err(|e| {
++            RuntimeError::IoError(
++                format!(
++                    "Failed to append file '{}' to the TAR archive",
++                    abs_path.to_string_lossy()
++                ),
++                e,
++            )
++        })?;
+     Ok(())
+ }
+ 
+@@ -208,6 +401,18 @@ where
+         RuntimeError::InvalidPathError("Directory name terminates in \"..\"".to_string())
+     })?;
+ 
++    let canonical_root = directory.canonicalize().map_err(|e| {
++        RuntimeError::IoError(
++            format!(
++                "Could not resolve archive root '{}'",
++                directory.to_string_lossy()
++            ),
++            e,
++        )
++    })?;
++    let mut visited = HashSet::new();
++    visited.insert(canonical_root.clone());
++
+     let mut zip_writer = ZipWriter::new(out);
+     let mut buffer = Vec::new();
+     while !paths_queue.is_empty() {
+@@ -226,28 +431,46 @@ where
+         );
+ 
+         for entry in directory_entry_iterator {
+-            let entry_path = entry
+-                .ok()
+-                .ok_or_else(|| {
+-                    RuntimeError::InvalidPathError(
+-                        "Directory name terminates in \"..\"".to_string(),
+-                    )
+-                })?
+-                .path();
+-            let entry_metadata = std::fs::metadata(entry_path.clone()).map_err(|e| {
++            let dir_entry = entry.map_err(|e| {
++                RuntimeError::IoError("Could not read directory entry".to_string(), e)
++            })?;
++            let entry_path = dir_entry.path();
++
++            // `DirEntry::file_type` does not follow symlinks — unlike
++            // `std::fs::metadata`, which always does. The previous check used
++            // followed metadata, so `is_symlink()` was always false and
++            // `--no-symlinks` was a no-op for ZIP generation (see #1568).
++            let file_type = dir_entry.file_type().map_err(|e| {
+                 RuntimeError::IoError(
+                     format!(
+-                        "Could not get file metadata of '{}'",
++                        "Could not get file type of '{}'",
+                         entry_path.to_string_lossy()
+-                    )
+-                    .to_string(),
++                    ),
+                     e,
+                 )
+             })?;
+ 
+-            if entry_metadata.file_type().is_symlink() && skip_symlinks {
+-                continue;
++            if file_type.is_symlink() {
++                match symlink_action(&entry_path, &canonical_root, skip_symlinks) {
++                    SymlinkAction::Skip => continue,
++                    SymlinkAction::Follow { resolved } => {
++                        if !visited.insert(resolved) {
++                            continue;
++                        }
++                    }
++                }
+             }
++
++            let entry_metadata = std::fs::metadata(&entry_path).map_err(|e| {
++                RuntimeError::IoError(
++                    format!(
++                        "Could not get file metadata of '{}'",
++                        entry_path.to_string_lossy()
++                    ),
++                    e,
++                )
++            })?;
++
+             let current_entry_name = entry_path.file_name().ok_or_else(|| {
+                 RuntimeError::InvalidPathError("Invalid file or directory name".to_string())
+             })?;
+@@ -259,8 +482,8 @@ where
+                 let branch = zip_directory
+                     .as_os_str()
+                     .to_string_lossy()
+-                    .trim_end_matches(r"\") // every branch ends with two backslashes "\\".
+-                    .replace(r"\", "/"); // every branch uses backslash "\" as path separators.
++                    .trim_end_matches('\\') // every branch ends with two backslashes "\\".
++                    .replace('\\', "/"); // every branch uses backslash "\" as path separators.
+                 let leaf = current_entry_name.to_string_lossy();
+                 format!("{branch}/{leaf}") // construct a Unix-style path in the simplest way.
+             } else {
+@@ -289,6 +512,12 @@ where
+                 })?;
+                 buffer.clear();
+             } else if entry_metadata.is_dir() {
++                if !file_type.is_symlink() {
++                    // Track non-symlink dirs too so a later symlink can't re-enter them.
++                    if let Ok(canonical_dir) = entry_path.canonicalize() {
++                        visited.insert(canonical_dir);
++                    }
++                }
+                 zip_writer
+                     .add_directory(relative_path, options)
+                     .map_err(|_| {
+diff --git a/tests/archive.rs b/tests/archive.rs
+index 02f7b447c..4180b21af 100644
+--- a/tests/archive.rs
++++ b/tests/archive.rs
+@@ -1,4 +1,5 @@
+-use std::io::Cursor;
++use std::io::{Cursor, Read};
++use std::path::Path;
+ 
+ use reqwest::{StatusCode, blocking::Client};
+ use rstest::rstest;
+@@ -9,6 +10,7 @@ mod fixtures;
+ 
+ use crate::fixtures::{Error, TestServer, reqwest_client, server};
+ 
++#[derive(Clone, Copy)]
+ enum ArchiveKind {
+     TarGz,
+     Tar,
+@@ -204,35 +206,28 @@ fn archives_links_and_downloads(
+     Ok(())
+ }
+ 
+-enum ExpectedLen {
+-    /// Exact byte length expected.
+-    Exact(usize),
+-    /// Minimum byte length expected.
+-    Min(usize),
+-}
+-
+-/// Broken symlinks (from [`fixtures::BROKEN_SYMLINK`]) yield different archive behaviors:
+-/// - tar_gz: a file with only partial header fields. See "rfc1952 § 2.3.1. Member header and trailer".
+-/// - tar: a tarball containing a subset of files.
+-/// - zip: an empty file.
++/// Broken symlinks (from [`fixtures::BROKEN_SYMLINK`]) are omitted from the
++/// archive rather than aborting the whole download. The remaining regular
++/// files must still produce a non-trivial payload for every archive format.
+ #[rstest]
+-#[case::tar_gz(ArchiveKind::TarGz, ExpectedLen::Exact(10))]
+-#[case::tar(ArchiveKind::Tar, ExpectedLen::Min(512 + 512 + 2 * 512))]
+-#[case::zip(ArchiveKind::Zip, ExpectedLen::Exact(0))]
+-fn archive_behave_differently_with_broken_symlinks(
++#[case::tar_gz(ArchiveKind::TarGz)]
++#[case::tar(ArchiveKind::Tar)]
++#[case::zip(ArchiveKind::Zip)]
++fn archive_skips_broken_symlinks_and_still_succeeds(
+     #[case] kind: ArchiveKind,
+-    #[case] expected: ExpectedLen,
+     #[with(&[ArchiveKind::TarGz.server_option(), ArchiveKind::Tar.server_option(), ArchiveKind::Zip.server_option()])]
+     server: TestServer,
+     reqwest_client: Client,
+ ) -> Result<(), Error> {
+     let (status_code, byte_len) = download_archive_bytes(&reqwest_client, &server, kind)?;
+     assert_eq!(status_code, StatusCode::OK);
+-
+-    match expected {
+-        ExpectedLen::Exact(len) => assert_eq!(byte_len, len),
+-        ExpectedLen::Min(len) => assert!(byte_len >= len),
+-    }
++    // Each format must produce a real archive with the fixture files, not an
++    // empty/truncated stream from an error mid-walk.
++    assert!(
++        byte_len > 64,
++        "expected a non-trivial {} archive, got {byte_len} bytes",
++        kind.link_text()
++    );
+ 
+     Ok(())
+ }
+@@ -265,3 +260,200 @@ fn zip_archives_store_entry_name_in_unix_style(
+ 
+     Ok(())
+ }
++
++const OUTSIDE_SECRET: &str = "MINISERVE-OUTSIDE-SECRET\n";
++const ESCAPE_LINK_NAME: &str = "link_to_outside";
++
++/// Plant a symlink inside the served tree that points at a file *outside* it.
++fn plant_escape_symlink(server: &TestServer) -> Result<(), Error> {
++    #[cfg(unix)]
++    use std::os::unix::fs::symlink;
++    #[cfg(windows)]
++    use std::os::windows::fs::symlink_file as symlink;
++
++    // Sibling of the served root so a relative `../…` target resolves outside
++    // the archive root. Unique name avoids clobbering parallel tests.
++    let served = server.path();
++    let durable_outside = served.parent().unwrap().join(format!(
++        "outside-secret-{}.txt",
++        served.file_name().unwrap().to_string_lossy()
++    ));
++    std::fs::write(&durable_outside, OUTSIDE_SECRET)?;
++
++    let link_path = served.join(ESCAPE_LINK_NAME);
++    let relative_target = Path::new("..").join(durable_outside.file_name().unwrap());
++    symlink(&relative_target, &link_path)?;
++
++    Ok(())
++}
++
++/// Regression for #1568: ZIP generation used followed `metadata()`, so
++/// `is_symlink()` never fired and `--no-symlinks` failed to stop packaging
++/// the target of an escape symlink.
++#[rstest]
++#[case::zip_no_symlinks(
++    ArchiveKind::Zip,
++    &["--enable-zip", "--no-symlinks"]
++)]
++#[case::tar_no_symlinks(
++    ArchiveKind::Tar,
++    &["--enable-tar", "--no-symlinks"]
++)]
++#[case::tar_gz_no_symlinks(
++    ArchiveKind::TarGz,
++    &["--enable-tar-gz", "--no-symlinks"]
++)]
++fn archive_with_no_symlinks_omits_escape_symlink(
++    #[case] kind: ArchiveKind,
++    #[case] _args: &[&str],
++    #[with(_args)] server: TestServer,
++    reqwest_client: Client,
++) -> Result<(), Error> {
++    plant_escape_symlink(&server)?;
++
++    let resp = reqwest_client
++        .get(server.url().join(kind.download_param())?)
++        .send()?
++        .error_for_status()?;
++    assert_eq!(resp.status(), StatusCode::OK);
++    let bytes = resp.bytes()?;
++
++    match kind {
++        ArchiveKind::Zip => {
++            let mut archive = ZipArchive::new(Cursor::new(bytes.as_ref()))?;
++            for i in 0..archive.len() {
++                let mut entry = archive.by_index(i)?;
++                let name = entry.name().to_string();
++                assert!(
++                    !name.contains(ESCAPE_LINK_NAME),
++                    "ZIP must not contain escape symlink entry '{name}' with --no-symlinks"
++                );
++                let mut contents = String::new();
++                // Only try to read regular file entries.
++                if entry.is_file() {
++                    entry.read_to_string(&mut contents)?;
++                    assert!(
++                        !contents.contains("MINISERVE-OUTSIDE-SECRET"),
++                        "ZIP must not contain outside-root secret contents"
++                    );
++                }
++            }
++        }
++        ArchiveKind::Tar | ArchiveKind::TarGz => {
++            assert_tar_has_no_escape_secret(&bytes, matches!(kind, ArchiveKind::TarGz))?;
++        }
++    }
++
++    Ok(())
++}
++
++/// Even when symlinks are allowed, archive generation must not package the
++/// *contents* of a target that resolves outside the served root.
++#[rstest]
++#[case::zip(ArchiveKind::Zip, &["--enable-zip"])]
++#[case::tar(ArchiveKind::Tar, &["--enable-tar"])]
++#[case::tar_gz(ArchiveKind::TarGz, &["--enable-tar-gz"])]
++fn archive_never_packages_outside_root_symlink_target(
++    #[case] kind: ArchiveKind,
++    #[case] _args: &[&str],
++    #[with(_args)] server: TestServer,
++    reqwest_client: Client,
++) -> Result<(), Error> {
++    plant_escape_symlink(&server)?;
++
++    let resp = reqwest_client
++        .get(server.url().join(kind.download_param())?)
++        .send()?
++        .error_for_status()?;
++    assert_eq!(resp.status(), StatusCode::OK);
++    let bytes = resp.bytes()?;
++
++    match kind {
++        ArchiveKind::Zip => {
++            let mut archive = ZipArchive::new(Cursor::new(bytes.as_ref()))?;
++            for i in 0..archive.len() {
++                let mut entry = archive.by_index(i)?;
++                if entry.is_file() {
++                    let mut contents = String::new();
++                    entry.read_to_string(&mut contents)?;
++                    assert!(
++                        !contents.contains("MINISERVE-OUTSIDE-SECRET"),
++                        "ZIP entry '{}' leaked outside-root secret",
++                        entry.name()
++                    );
++                }
++            }
++        }
++        ArchiveKind::Tar | ArchiveKind::TarGz => {
++            assert_tar_has_no_escape_secret(&bytes, matches!(kind, ArchiveKind::TarGz))?;
++        }
++    }
++
++    Ok(())
++}
++
++/// In-root symlinks may still be followed when `--no-symlinks` is off, so the
++/// pointed-to file contents appear under the symlink's name.
++#[rstest]
++fn zip_follows_in_root_symlink_when_symlinks_allowed(
++    #[with(&["--enable-zip"])] server: TestServer,
++    reqwest_client: Client,
++) -> Result<(), Error> {
++    let resp = reqwest_client
++        .get(server.url().join(ArchiveKind::Zip.download_param())?)
++        .send()?
++        .error_for_status()?;
++    let mut archive = ZipArchive::new(Cursor::new(resp.bytes()?))?;
++
++    // fixtures create `file_symlink` -> `test.txt` with content "Test Hello Yes"
++    let mut found_followed = false;
++    for i in 0..archive.len() {
++        let mut entry = archive.by_index(i)?;
++        if entry.name().ends_with("file_symlink") && entry.is_file() {
++            let mut contents = String::new();
++            entry.read_to_string(&mut contents)?;
++            assert_eq!(contents, "Test Hello Yes");
++            found_followed = true;
++        }
++    }
++    assert!(
++        found_followed,
++        "expected in-root file_symlink to be followed into the ZIP"
++    );
++
++    Ok(())
++}
++
++fn assert_tar_has_no_escape_secret(bytes: &[u8], gzipped: bool) -> Result<(), Error> {
++    use std::io::Cursor;
++
++    let plain: Vec<u8> = if gzipped {
++        let mut decoder = libflate::gzip::Decoder::new(Cursor::new(bytes))?;
++        let mut buf = Vec::new();
++        decoder.read_to_end(&mut buf)?;
++        buf
++    } else {
++        bytes.to_vec()
++    };
++
++    let mut archive = tar::Archive::new(Cursor::new(plain));
++    for entry in archive.entries()? {
++        let mut entry = entry?;
++        let path = entry.path()?.into_owned();
++        assert!(
++            !path.to_string_lossy().contains(ESCAPE_LINK_NAME),
++            "TAR must not contain escape symlink path '{}'",
++            path.display()
++        );
++        if entry.header().entry_type().is_file() {
++            let mut contents = String::new();
++            entry.read_to_string(&mut contents)?;
++            assert!(
++                !contents.contains("MINISERVE-OUTSIDE-SECRET"),
++                "TAR entry '{}' leaked outside-root secret",
++                path.display()
++            );
++        }
++    }
++    Ok(())
++}

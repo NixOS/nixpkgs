@@ -1,0 +1,16 @@
+diff --git a/Tools/CMake/Programs.cmake b/Tools/CMake/Programs.cmake
+index 4e7c052..abb5b48 100644
+--- a/Tools/CMake/Programs.cmake
++++ b/Tools/CMake/Programs.cmake
+@@ -38,8 +38,9 @@ if(NOT WIN32)
+ endif()
+ 
+ # ------ Linux Tools/Programs
+-
+-if(LINUX)
++# We don't need to check for any dependencies that are used to build R packages
++# since we build them separately
++if(false)
+ 
+   message(CHECK_START "Looking for 'gfortran'")
+   find_program(
