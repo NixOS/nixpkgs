@@ -2,7 +2,6 @@
   backendStdenv,
   buildRedist,
   cuda_nvrtc,
-  cudaMajorMinorVersion,
   lib,
   manifests,
 }:
@@ -22,6 +21,11 @@ let
         )
         "libcublas: standalone cuBLAS ${standaloneVersion} is not a newer patch release of CUDA's cuBLAS ${cudaCublasVersion}; drop or update the cublas pin"
     && manifests.cublas.libcublas ? ${backendStdenv.hostRedistSystem};
+
+  cudaRelease = buildRedist {
+    redistName = "cuda";
+    pname = "libcublas";
+  };
 in
 buildRedist (finalAttrs: {
   redistName = if isStandalone then "cublas" else "cuda";
@@ -41,40 +45,12 @@ buildRedist (finalAttrs: {
     "stubs"
   ];
 
-  # Standalone archives lack the stubs and pkg-config file shipped with CUDA's cuBLAS, so generate them. Like NVIDIA's,
-  # the stubs define the libraries' versioned functions, each of which prints a warning.
+  # Standalone cuBLAS releases lack the stubs and pkg-config file of the CUDA release they patch. Those still apply:
+  # the stubs have the same sonames and exports, and the pkg-config file is versioned by CUDA release.
   ${if isStandalone then "postUnpack" else null} = ''
-    mkdir "$sourceRoot/lib/stubs"
-    for base in cublas cublasLt; do
-      real="$sourceRoot/lib/lib$base.so"
-      stub="$sourceRoot/lib/stubs/lib$base.so"
-      nixLog "generating $stub"
-      $NM --dynamic --defined-only --format=posix "$real" | awk -v base="$base" '
-        BEGIN { print "#include <stdio.h>" > base ".c" }
-        $2 == "T" {
-          split($1, sym, "@@")
-          print "int " sym[1] "(void) { return puts(\"You are running using the stub version of " base "\"); }" > base ".c"
-          syms[sym[2]] = syms[sym[2]] " " sym[1] ";"
-        }
-        END { for (ver in syms) print ver " { global:" syms[ver] " local: *; };" > base ".map" }
-      '
-      $CC -shared -fPIC -o "$stub" "$base.c" -Wl,--version-script="$base.map" \
-        -Wl,-soname,"$($READELF --dynamic "$real" | sed -n 's/.*(SONAME).*\[\(.*\)\]$/\1/p')"
-      diff <($NM --dynamic --defined-only "$real" | cut -d' ' -f2-) <($NM --dynamic --defined-only "$stub" | cut -d' ' -f2-)
-    done
-
-    mkdir "$sourceRoot/pkg-config"
-    cat >"$sourceRoot/pkg-config/cublas-${cudaMajorMinorVersion}.pc" <<'EOF'
-    cudaroot=/usr/local/cuda-${cudaMajorMinorVersion}
-    libdir=''${cudaroot}/lib
-    includedir=''${cudaroot}/include
-
-    Name: cublas
-    Description: CUDA Basic Linear Algebra Subprograms
-    Version: ${cudaMajorMinorVersion}
-    Libs: -L''${libdir} -lcublas
-    Cflags: -I''${includedir}
-    EOF
+    cp --recursive ${cudaRelease.src}/lib/stubs "$sourceRoot/lib/"
+    cp --recursive ${cudaRelease.src}/pkg-config "$sourceRoot/"
+    chmod --recursive u+w "$sourceRoot/lib/stubs" "$sourceRoot/pkg-config"
   '';
 
   meta = {
