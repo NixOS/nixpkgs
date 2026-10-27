@@ -1,13 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
+  pythonOlder,
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
   python,
   cocotb-bus,
   find-libpython,
+  exceptiongroup,
+  pexpect,
+  pytest,
   pytestCheckHook,
   swig,
   iverilog,
@@ -17,26 +20,25 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "setuptools";
-
-  # RuntimeError: cocotb 2.0.1 only supports a maximum Python version of 3.13.
-  # You can suppress this error by defining the environment variable COCOTB_IGNORE_PYTHON_REQUIRES
-  # There is no guarantee this will work and no support will be provided.
-  disabled = pythonAtLeast "3.14";
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {
     owner = "cocotb";
     repo = "cocotb";
     tag = "v${version}";
-    hash = "sha256-LXQNqFlvP+WBaDGWPs5+BXBtW2dhDu+v+7lR/AMG21M=";
+    hash = "sha256-MND6d+5ymlGT597kt6rWN9ylmoGvexIylzsgjY0NRe8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ find-libpython ];
+  propagatedBuildInputs = [
+    find-libpython
+    pytest
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -65,10 +67,13 @@ buildPythonPackage rec {
     # https://github.com/cocotb/cocotb/commit/425e1edb8e7133f4a891f2f87552aa2748cd8d2c#diff-4df986cbc2b1a3f22172caea94f959d8fcb4a128105979e6e99c68139469960cL33
     "test_cocotb"
     "test_cocotb_parallel"
+    # needs a real interactive IPython session/pty, doesn't work in the build sandbox
+    "test_ipython_support_interactive"
   ];
 
   nativeCheckInputs = [
     cocotb-bus
+    pexpect
     pytestCheckHook
     swig
     iverilog
