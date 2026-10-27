@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libfabric=${libfabric}"
   ];
 
+  doCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
