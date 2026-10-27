@@ -76,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       -rpath $out/lib \
       -libpng \
       -libcurl \
-      -libexpat
+      -libexpat \
+      -without-qtbinding # avoids https://github.com/KLayout/klayout/issues/2515 (Qt 6.12)
 
     runHook postBuild
   '';
