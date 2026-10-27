@@ -905,11 +905,6 @@
     "hash": "sha256-1cxHWcvHRD7orQ3EEEPPxVGEkTpxom1/zoICC9SInJs="
   },
   {
-    "pname": "Microsoft.Toolkit.Uwp.Notifications",
-    "version": "7.1.3",
-    "hash": "sha256-sygTmtEBzLgQ6dh0Hpq/Cz9x+dcDl73+9maOvZvNbF4="
-  },
-  {
     "pname": "Microsoft.VisualStudio.Threading",
     "version": "16.3.52",
     "hash": "sha256-FqNJQb3Wb9J80Im7PrySPSv6zBnD/SVV5hbFpSBiE5E="
@@ -943,16 +938,6 @@
     "pname": "Microsoft.Win32.SystemEvents",
     "version": "10.0.0",
     "hash": "sha256-p0rfcBwM6pkVY+G49ujVcHwwFgrEq46FGPpGFOg0H5w="
-  },
-  {
-    "pname": "Microsoft.Windows.SDK.NET.Ref",
-    "version": "10.0.17763.57",
-    "hash": "sha256-zlqlDMcjBqA8pXPhh5vuYBwc5u4622orITqeECn1xps="
-  },
-  {
-    "pname": "Microsoft.WindowsDesktop.App.Ref",
-    "version": "10.0.12",
-    "hash": "sha256-omruH9MPqONFT43CGi3/ZDuw8UkqIp0kZhTfq/CMr4k="
   },
   {
     "pname": "MimeKit",
@@ -1245,19 +1230,9 @@
     "hash": "sha256-pN3tld926Fp0n5ZNjjzIJviUQrynlOAB0vhc1aoso6E="
   },
   {
-    "pname": "System.DirectoryServices",
-    "version": "9.0.7",
-    "hash": "sha256-xp5ldf1KFEytrvlGKbk3Oe39I1y/nJJdF0dv9tj/iKU="
-  },
-  {
     "pname": "System.Drawing.Common",
     "version": "10.0.0",
     "hash": "sha256-ZFneSifHbDj3O+IbwHSSs5YpDEunTeu9Hnz9APZKOA8="
-  },
-  {
-    "pname": "System.Drawing.Common",
-    "version": "4.7.0",
-    "hash": "sha256-D3qG+xAe78lZHvlco9gHK2TEAM370k09c6+SQi873Hk="
   },
   {
     "pname": "System.Drawing.Common",
@@ -1386,23 +1361,8 @@
   },
   {
     "pname": "Vanara.Core",
-    "version": "4.1.2",
-    "hash": "sha256-nZQ2GV1Uv1hpmjj5MBOhz0A+RULCHyns1xiXaMy2UsY="
-  },
-  {
-    "pname": "Vanara.Core",
     "version": "5.0.0",
     "hash": "sha256-jv9TBQ8KkkrLWPC2F6XwBdrLj5bN1rovLFoIORFAUew="
-  },
-  {
-    "pname": "Vanara.PInvoke.Cryptography",
-    "version": "5.0.0",
-    "hash": "sha256-lwRGaswib9H6sw6vmF0GEaDl3KqrcikVisjzYvNwbuU="
-  },
-  {
-    "pname": "Vanara.PInvoke.Gdi32",
-    "version": "5.0.0",
-    "hash": "sha256-iewIEufCyCBKWx4Lpj2m7HwQgOYwP2ZEdt/wtRw4KBM="
   },
   {
     "pname": "Vanara.PInvoke.Kernel32",
@@ -1410,39 +1370,9 @@
     "hash": "sha256-sF4VLD+XvzIpjP5S1GG92SQRzfH20Lum2ljmqQkZWQ4="
   },
   {
-    "pname": "Vanara.PInvoke.NTDSApi",
-    "version": "5.0.0",
-    "hash": "sha256-wB73Dt7fQ1z89jLZ93PP6khwWQYSlPKRN2G8DIQO+sc="
-  },
-  {
-    "pname": "Vanara.PInvoke.Security",
-    "version": "5.0.0",
-    "hash": "sha256-tkQy3OZ+IW8Qoq1aLbTWFjTts6ZV0sjngtnbBR/6jz0="
-  },
-  {
-    "pname": "Vanara.PInvoke.Shared",
-    "version": "4.1.2",
-    "hash": "sha256-kmcBNcn98sfWtmLrFcuxiyxa6BJLacl5uNHaRBGmc8k="
-  },
-  {
     "pname": "Vanara.PInvoke.Shared",
     "version": "5.0.0",
     "hash": "sha256-GmYvYTQspfDPtJOG8d4M6Hy2vHtCc10pVXraSsmy26s="
-  },
-  {
-    "pname": "Vanara.PInvoke.User32",
-    "version": "5.0.0",
-    "hash": "sha256-HTj/KpzsppERmSewriiSmGPnZXdpOIAcYC6buPTLyyo="
-  },
-  {
-    "pname": "Vanara.PInvoke.VssApi",
-    "version": "5.0.0",
-    "hash": "sha256-L4xkuHHKP8FPkLs+F00via2mBYHGcqzNG9rpS0VDsk0="
-  },
-  {
-    "pname": "Vanara.Security",
-    "version": "5.0.0",
-    "hash": "sha256-Zd3s9PVMFOo3QKBWiS1RbrcaNNJEY23wBIndYbXTTyQ="
   },
   {
     "pname": "VaultSharp",
