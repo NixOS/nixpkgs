@@ -2972,6 +2972,7 @@ mapAliases {
   xflux = throw "'xflux' has been removed as it was unmaintained"; # Added 2025-08-22
   xflux-gui = throw "'xflux-gui' has been removed as it was unmaintained"; # Added 2025-08-22
   xhtml1 = throw "'xhtml1' has been removed because it was superseded in 2018"; # Added 2026-07-24
+  xhyve = throw "'xhyve' has been removed because x86_64-darwin is no longer supported"; # Added 2026-10-26
   xinput_calibrator = xinput-calibrator; # Added 2025-08-28
   xjump = throw "'xjump' has been removed as it is unmaintained"; # Added 2025-08-22
   xkeyboardconfig = xkeyboard-config; # Added 2026-02-04
