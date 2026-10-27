@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   autoreconfHook,
   pkg-config,
@@ -74,6 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-shared"
   ]
   ++ lib.optional (!nftablesCompat) "--disable-nftables";
+
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/db99cd88ef44613c1ded52a284df3304e1de9d6e/packages/network/iptables/patches/0001-include-linux-types.h-add-__s128-and-__u128.patch";
+      hash = "sha256-COdSExbxcEsoqLXl51iBoVnlHmvqablWFCbLH6QMe5I=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
