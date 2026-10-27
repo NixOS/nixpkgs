@@ -24,6 +24,9 @@ in
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
       version = "1.10.12";
+      knownVulnerabilities = [
+        "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0). See https://julialang.org/downloads/."
+      ];
       sha256 = {
         x86_64-linux = "03dw4zykf09wnzc7mm8yv6k8hfb2pv0f090db34gyxlx6kz0vidh";
         aarch64-linux = "18p5h0h00320rfc3yhjgp9z4f5xfgpzimphpzqmn8jbhjqhpn9fc";
@@ -72,6 +75,9 @@ in
       (import ./generic.nix {
         version = "1.10.12";
         hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
+        knownVulnerabilities = [
+          "Julia 1.10 vendors outdated security dependencies (MbedTLS 2.28.10, curl 8.4.0). See https://julialang.org/downloads/."
+        ];
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
           # [build] Some improvements to the LLVM build system
