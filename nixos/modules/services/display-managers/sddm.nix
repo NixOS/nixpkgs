@@ -88,11 +88,7 @@ let
           Current = ".";
           ThemeDir = cfg.themePackage.sddmThemeDir;
         }
-    )
-    // optionalAttrs (cfg.theme == "breeze") {
-      CursorTheme = "breeze_cursors";
-      CursorSize = 24;
-    };
+    );
 
     Users = {
       MaximumUid = config.ids.uids.nixbld;

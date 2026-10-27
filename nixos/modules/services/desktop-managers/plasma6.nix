@@ -311,19 +311,18 @@ in
     };
     services.displayManager.sddm = {
       package = kdePackages.sddm;
-      theme = mkDefault "breeze";
+      themePackage = mkDefault kdePackages.sddm-theme-breeze;
       wayland = mkDefault {
         enable = true;
         compositor = "kwin";
       };
       extraPackages = with kdePackages; [
-        breeze-icons
-        kirigami
-        libplasma
-        plasma5support
-        qtsvg
         qtvirtualkeyboard
       ];
+      settings.Theme = {
+        CursorTheme = mkDefault "breeze_cursors";
+        CursorSize = mkDefault 24;
+      };
     };
 
     security.pam.services = {
