@@ -4,6 +4,7 @@
 
   buildNpmPackage,
   fetchFromGitHub,
+  runCommand,
   pkg-config,
   electron,
   chromium,
@@ -21,15 +22,49 @@
 
   nixosTests,
 }:
+let
+  jediSrc = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "jedi";
+    rev = "v0.19.2"; # updateScript
+    hash = "sha256-2nDQJS6LIaq91PG3Av85OMFfs1ZwId00K/kvog3PGXE=";
+    fetchSubmodules = true;
+  };
+
+  parsoSrc = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "parso";
+    rev = "v0.8.6"; # updateScript
+    hash = "sha256-SKXVU19zCYpPik8QF/r2J9V4+ygGiDPEc9Xv6qRb4dM=";
+  };
+
+  pyodideWheels =
+    runCommand "pyodide-wheels"
+      {
+        nativeBuildInputs = with python3.pkgs; [
+          build
+          flit-core
+          setuptools
+          wheel
+        ];
+      }
+      ''
+        mkdir -p $out
+        cp -r ${jediSrc} jedi && chmod -R u+w jedi
+        python -m build --wheel --no-isolation jedi --outdir $out
+        cp -r ${parsoSrc} parso && chmod -R u+w parso
+        python -m build --wheel --no-isolation parso --outdir $out
+      '';
+in
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.18";
+  version = "0.4.26";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uHGF/SEbKZF6Ax1yrXYoAjXH5k6PzKF4aB85TXGJvk4=";
+    hash = "sha256-aLHQhhIF/GQYVO5p0Wlr8VGt71NOohRnu78tJhGvyp8=";
   };
 
   patches = [
@@ -39,11 +74,13 @@ buildNpmPackage (finalAttrs: {
     # checks have become flaky in nix build sandbox, increase timeout and disable dev/shm for chrome
     ./fix-karma-sandbox.patch
     ./0001-disable-auto-update-check.patch
+    # pyodide wheels are built locally from source
+    ./use-local-pyodide-wheels.patch
   ];
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-LBzauu5lpyfwOpnncsjPP4NpnoKqqcvX+HbK0YWNerA=";
+  npmDepsHash = "sha256-8fZjwwZuuiXYTq9NUkvcVaj+mewGfK2vaiq6z7rHoTo=";
 
   nativeBuildInputs = [
     finalAttrs.passthru.clojureWithHome
@@ -71,9 +108,9 @@ buildNpmPackage (finalAttrs: {
     substituteInPlace shadow-cljs.edn \
       --replace-fail ":shadow-git-inject/version" '"v${finalAttrs.version}"'
 
-    substituteInPlace src/renderer/shell/impl/python.cljs \
-      --replace-fail '"/pyodide/pyodide.js"' '"pyodide/pyodide.js"' \
-      --replace-fail '(js/loadPyodide)' '(js/loadPyodide #js {:indexURL "pyodide/"})'
+    mkdir -p resources/public/pyodide src/generated
+    cp ${pyodideWheels}/*.whl resources/public/pyodide/
+    chmod -R u+w resources/public/pyodide
   '';
 
   buildPhase = ''
@@ -175,7 +212,8 @@ buildNpmPackage (finalAttrs: {
 
         # -P       -> resolve all normal deps
         # -M:alias -> resolve extra-deps of the listed aliases
-        clojure -P -M:dev:cljs
+        clojure -P
+        clojure -M:dev
 
         runHook postBuild
       '';
@@ -213,7 +251,7 @@ buildNpmPackage (finalAttrs: {
 
       dontFixup = true;
 
-      outputHash = "sha256-0+7pPY/f7Cn+wgGZyM5gKS7g3dsL4j57oQE4GWdCpu0=";
+      outputHash = "sha256-7J1sK7fg/gBLln4KTt9q65Vt0FjCjR81vGRwhwSdw4o=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };
@@ -225,6 +263,7 @@ buildNpmPackage (finalAttrs: {
     '';
 
     updateScript = ./update.sh;
+    inherit jediSrc parsoSrc;
     tests = { inherit (nixosTests) repath-studio; };
   };
 
