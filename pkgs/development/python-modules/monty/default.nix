@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "monty";
-  version = "2026.7.16";
+  version = "2026.10.21";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "materialyzeai";
     repo = "monty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x5FNw7E3rtrgCWVhMsBpnO+uwu+mB3ELNFdd33+uFds=";
+    hash = "sha256-m8jBiNaD0rn+W0wLmIZ4o79vDwe7vUDxsEMer5PVFWY=";
   };
 
   build-system = [

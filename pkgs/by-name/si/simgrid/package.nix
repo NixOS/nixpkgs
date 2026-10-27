@@ -128,8 +128,8 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString buildPythonBindings ''
       # manually install the python binding if requested.
-      mkdir -p $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
-      cp ./lib/simgrid.cpython*.so $python/lib/python${lib.versions.majorMinor python3.version}/site-packages/
+      mkdir -p $python/${python3.sitePackages}/
+      cp ./lib/simgrid.cpython*.so $python/${python3.sitePackages}/
     '';
 
   # improve debuggability if requested

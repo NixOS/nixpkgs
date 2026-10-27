@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "exercism";
-  version = "3.5.8";
+  version = "3.5.9";
 
   src = fetchFromGitHub {
     owner = "exercism";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vYbOagP3RwqD2+x0Mvve66Xm88jeRVzHU7nsN432j6k=";
+    hash = "sha256-sXKE9FpiziRz1O5mMGhdXwqUxKwo082C7PImSorDNjA=";
   };
 
-  vendorHash = "sha256-xY3C3emqtPIKyxIN9aEkrLXhTxWNmo0EJXNZVtbtIvs=";
+  vendorHash = "sha256-XkntjTcfESKB8La/GuWRUZoB9FIcawqrVxSZQ8SYbKA=";
 
   doCheck = false;
 

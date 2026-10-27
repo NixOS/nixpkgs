@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "textual-image";
-  version = "0.14.1";
+  version = "0.14.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lnqs";
     repo = "textual-image";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iGjpEUkr8r74Bb7F5Zmx72hvHLshO8q+2SSRfHlvWiE=";
+    hash = "sha256-X9J4RNh1FJRGavCUJQLe+s/CACKg1Qg69BlittNXWFg=";
   };
 
   build-system = [ uv-build ];
