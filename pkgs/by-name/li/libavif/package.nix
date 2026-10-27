@@ -112,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C implementation of the AV1 Image File Format";
     longDescription = ''
