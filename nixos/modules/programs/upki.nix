@@ -29,7 +29,7 @@ in
       example = lib.literalExpression ''
         {
           cache-dir = "/var/cache/upki";
-          revocation.fetch-url = "https://upki.rustls.dev/";
+          revocation.fetch-url = "https://upki.rustls.dev/revocation/";
         }
       '';
     };
@@ -42,7 +42,7 @@ in
 
     services.upki.settings = {
       cache-dir = lib.mkDefault "/var/cache/upki";
-      revocation.fetch-url = lib.mkDefault "https://upki.rustls.dev/";
+      revocation.fetch-url = lib.mkDefault "https://upki.rustls.dev/revocation/";
     };
 
     users.users.upki = {
