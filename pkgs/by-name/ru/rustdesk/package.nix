@@ -80,6 +80,7 @@ flutter329.buildFlutterApplication rec {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
   env.VCPKG_ROOT = "/homeless-shelter"; # idk man, makes the build go since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
   env.OPENSSL_NO_VENDOR = true;
 
@@ -89,6 +90,11 @@ flutter329.buildFlutterApplication rec {
   # Then add flutter_test, fake_async, leak_tracker*, vm_service SDK deps manually
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
+  # passAsFile is ignored under __structuredAttrs and leaves pubspecLockFilePath empty, so link a writable copy
+  pubspecLockFilePath = "pubspec.lock.nix";
+  preConfigure = ''
+    install -m644 ${./pubspec.lock.json} "$pubspecLockFilePath"
+  '';
 
   # Configure the Rust build
   cargoRoot = "..";
@@ -103,7 +109,7 @@ flutter329.buildFlutterApplication rec {
   };
 
   dontCargoBuild = true;
-  cargoBuildFlags = "--lib";
+  cargoBuildFlags = [ "--lib" ];
   cargoBuildType = "release";
   cargoBuildFeatures = [
     "flutter"
