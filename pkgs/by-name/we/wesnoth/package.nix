@@ -7,30 +7,26 @@
   SDL2,
   SDL2_image,
   SDL2_mixer,
-  SDL2_net,
   makeBinaryWrapper,
-  SDL2_ttf,
   sdl3,
   sdl3-image,
   sdl3-mixer,
   pango,
   gettext,
-  boost186,
+  boost,
   libvorbis,
-  fribidi,
   dbus,
-  libpng,
   openssl,
   icu,
   lua5_4,
   curl,
+  readline,
   nix-update-script,
   versionCheckHook,
   enableDevel ? false,
 }:
 
 let
-  boost = boost186;
   suffix = lib.optionalString enableDevel "-devel";
 
   sdl =
@@ -45,8 +41,6 @@ let
         SDL2
         SDL2_image
         SDL2_mixer
-        SDL2_net
-        SDL2_ttf
       ];
 
   # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
@@ -89,13 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     boost
     libvorbis
-    fribidi
     dbus
-    libpng
     openssl
     icu
     lua
     curl
+    readline
   ]
   ++ sdl;
 
