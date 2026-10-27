@@ -5,9 +5,6 @@
   nix-update-script,
   autoAddDriverRunpath,
   autoreconfHook,
-  numactl,
-  libuuid,
-  rdma-core,
   libfabric,
   hwloc,
   cudaPackages,
@@ -32,16 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    numactl
-    libuuid
-    rdma-core
     libfabric
     hwloc
-  ]
-  ++ (with cudaPackages; [
-    cuda_cudart
-    nccl
-  ]);
+    cudaPackages.cuda_cudart
+  ];
 
   postPatch = ''
     patchShebangs m4
