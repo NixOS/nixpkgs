@@ -171,7 +171,24 @@ in
         ++ lib.optional (lib.hasAttrByPath [ "storage" "runroot" ] cfg.storage.settings) ''
           virtualisation.containers.storage.settings.storage.runroot now applies to both rootful and rootless podman and will likely not work as intended.
           Use virtualisation.containers.storage.{rootful,rootless}.settings.storage.runroot instead.
-        '';
+        ''
+        ++
+          lib.optional
+            (
+              lib.hasAttrByPath [
+                "engine"
+                "init_path"
+              ] cfg.containersConf.settings
+              && lib.hasAttrByPath [
+                "containers"
+                "init_path"
+              ] cfg.containersConf.settings
+            )
+            ''
+              Both `engine.init_path` and `containers.init_path` are set in virtualisation.containers.containersConf.settings.
+              `engine.init_path` is undocumented and has a lower priority than `containers.init_path`.
+              Please use `containers.init_path` instead.
+            '';
 
       virtualisation.containers = {
         containersConf.settings = {
