@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
   ];
+
   buildInputs = [
     fuse3
     qt6.qtbase
@@ -41,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Reliable MTP client with minimalistic UI";
     homepage = "https://whoozle.github.io/android-file-transfer-linux/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ lib.maintainers.xaverdh ];
+    maintainers = with lib.maintainers; [
+      azuwis
+      xaverdh
+    ];
     platforms = lib.platforms.unix;
   };
 })
