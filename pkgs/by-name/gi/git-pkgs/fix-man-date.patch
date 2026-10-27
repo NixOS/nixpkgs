@@ -1,0 +1,27 @@
+--- a/scripts/generate-man/main.go
++++ b/scripts/generate-man/main.go
+@@ -3,6 +3,7 @@
+ import (
+ 	"log"
+ 	"os"
++	"strconv"
+ 	"time"
+ 
+ 	"github.com/git-pkgs/git-pkgs/cmd"
+@@ -17,7 +18,14 @@ func main() {
+ 		log.Fatal(err)
+ 	}
+ 
+-	now := time.Now()
++	now := time.Now().UTC()
++	if epoch := os.Getenv("SOURCE_DATE_EPOCH"); epoch != "" {
++		seconds, err := strconv.ParseInt(epoch, 10, 64)
++		if err != nil {
++			log.Fatalf("invalid SOURCE_DATE_EPOCH: %v", err)
++		}
++		now = time.Unix(seconds, 0).UTC()
++	}
+ 	header := &doc.GenManHeader{
+ 		Title:   "GIT-PKGS",
+ 		Section: "1",
+
