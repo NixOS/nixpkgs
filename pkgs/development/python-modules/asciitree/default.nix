@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "asciitree";
-  version = "0.3.3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mbr";
     repo = "asciitree";
     rev = version;
-    hash = "sha256-AaLDO27W6fGHGU11rRpBf5gg1we+9SS1MEJdFP2lPBw=";
+    hash = "sha256-67GWk6K2AyEyt5lzL0LMRnY+Uxtsig6ld2rNTvZe5ro=";
   };
 
   build-system = [ setuptools ];
