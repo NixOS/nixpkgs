@@ -10,6 +10,7 @@ unittestCheckPhase() {
   local -a flagsArray=()
 
   if [[ -z "${dontUseUnittestDiscover-}" ]]; then
+    # The `discover` sub-command must precede any other command-line argument.
     flagsArray+=("discover")
   fi
 
