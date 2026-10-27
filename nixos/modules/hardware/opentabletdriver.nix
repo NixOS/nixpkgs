@@ -75,7 +75,7 @@ in
         # https://github.com/OpenTabletDriver/OpenTabletDriver/issues/4885
         ExecStartPre = pkgs.writeShellScript "poll-for-non-gdm-greeter-display" ''
           if [[ "$USER" = "gdm-greeter"* \
-              || ( "$${XDG_SESSION_TYPE}" = wayland && -z "$${WAYLAND_DISPLAY}" ) ]]; then
+              || ( "''${XDG_SESSION_TYPE}" = wayland && -z "''${WAYLAND_DISPLAY}" ) ]]; then
             exit 1
           fi
         '';
