@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipu7-camera-bins";
-  version = "20260629_1";
+  version = "20260926_1900_40";
 
   src = fetchFromGitHub {
     repo = "ipu7-camera-bins";
     owner = "intel";
     rev = finalAttrs.version;
-    hash = "sha256-LjiqxlQKDLArgK2puxlyTpLPtL6QN6P/xWO2asPTLig=";
+    hash = "sha256-P6VwFVHUIRq5jLG/RvxxJ1GT+HX4CkA6WCIR3bTeHkQ=";
   };
 
   __structuredAttrs = true;
