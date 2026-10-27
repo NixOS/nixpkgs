@@ -1227,6 +1227,7 @@ mapAliases {
   hiddify-app = throw "hiddify-app has been removed, since it is unmaintained"; # Added 2025-08-20
   hifiscan = throw "'hifiscan' has been removed due to being archived upstream."; # Added 2026-08-22
   highlight-assertions = throw "'highlight-assertions' has been removed due to lack of upstream maintenance."; # Added 2026-10-15
+  hime = throw "hime has been removed because no active release after November 2020, please use `fcitx5` instead."; # Added 2026-10-28
   himitsu-firefox = throw "himitsu-firefox has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   hiPrio = warnAlias "'hiPrio' has been removed from pkgs, use `lib.hiPrio` instead" lib.hiPrio; # Added 2025-10-30
   hiraeth = throw "hiraeth has been removed due to being unmaintained upstream";
