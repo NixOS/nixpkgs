@@ -6,6 +6,7 @@
   pkg-config,
   withNativeTls ? true,
   stdenv,
+  aws-lc,
   oniguruma,
   openssl,
   versionCheckHook,
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     oniguruma
   ]
   ++ lib.optionals (withNativeTls && !stdenv.hostPlatform.isDarwin) [ openssl ];
