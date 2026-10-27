@@ -200,8 +200,14 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
     # so, add the directory to the rpath.
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
-    declare -A rpaths
+    declare -A rpaths seenLibDirs
     for dir in ${libDirs+"${libDirs[@]}"}; do
+        # The same directory is often passed many times, such as from
+        # NIX_LDFLAGS; it would give the same result each time.
+        if [ -n "${seenLibDirs[$dir]:-}" ]; then
+            continue
+        fi
+        seenLibDirs["$dir"]=1
         # Find where the directory is, following symlinks outside the store,
         # and in it only where needed; see resolveLibDir.  Skip directories
         # that do not exist, in which the linker cannot find libraries either.
