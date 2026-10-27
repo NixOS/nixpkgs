@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "async-lru";
     tag = "v${version}";
-    hash = "sha256-ytmh6tY6AS2VHajCnnRBSi0i57DUu+ikpbil/RwFyYA=";
+    hash = "sha256-QhzAHU9y1Wdckd6ZrdVvSU0BcO3TaTr6X5QrPNQ/pvM=";
   };
 
   build-system = [ setuptools ];
