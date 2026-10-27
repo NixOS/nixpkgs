@@ -20,7 +20,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "python-sat";
-  version = "1.9.dev15";
+  version = "1.9.dev17";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "python_sat";
-    hash = "sha256-WipYAiJIziz5OVtWBoUYXkdzxFKinrCuhmLWdhEzbNM=";
+    hash = "sha256-gm6e+KgIb1E5wF64mqoF6/py+KYizXvkKdEKKxy7GVU=";
   };
 
   # The kissat source archive is not included in the repo and pysat attempts to
