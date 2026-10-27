@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xh";
-  version = "0.26.2";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EiwK5/+mAQc8P120E6gQa/6h5t4tijy7PcdF3RYQ10U=";
+    hash = "sha256-dLQEz4Uy/7+wGGqjh0hFAVj1MK+2z6m+k+ZFwqUAbxE=";
   };
 
-  cargoHash = "sha256-fdqHUblEL9YFiYdWkonOWCdYCS9pZ+9uoiBoyK2qWB4=";
+  cargoHash = "sha256-Kavr19KpZSIL6LU9U3Vd+1MY/8rnlglZQp6Rfsu0kR4=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
