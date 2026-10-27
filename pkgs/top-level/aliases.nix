@@ -2416,6 +2416,7 @@ mapAliases {
   rust-paddle-ocr = throw "'rust-paddle-ocr' has been renamed to/replaced by 'newbee-ocr'"; # Added 2026-10-19
   rust-synapse-state-compress = throw "'rust-synapse-state-compress' has been renamed to/replaced by 'rust-synapse-compress-state'"; # Converted to throw 2025-10-27
   rustc-wasm32 = throw "'rustc-wasm32' has been renamed to/replaced by 'rustc'"; # Converted to throw 2025-10-27
+  rustdesk-flutter = warnAlias "'rustdesk-flutter' has been renamed to 'rustdesk'" rustdesk; # Added 2026-10-27
   rustic-rs = throw "'rustic-rs' has been renamed to/replaced by 'rustic'"; # Converted to throw 2025-10-27
   rx = throw "'rx' has been dropped due to being broken since September 2025, with no complaints by any users of the package."; # Added 2026-04-05
   rye = throw "'rye' has been removed as it is archived upstream; use 'uv' instead"; # Added 2026-10-19
