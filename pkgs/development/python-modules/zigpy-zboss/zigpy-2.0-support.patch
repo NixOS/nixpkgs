@@ -1,0 +1,77 @@
+From 32887a76bc5d9111615fb46fdda7a7cde1e7efab Mon Sep 17 00:00:00 2001
+From: Dirk Tostmann <tostmann@gmail.com>
+Date: Fri, 28 Aug 2026 12:43:24 +0200
+Subject: [PATCH] fix: widen zigpy requirement to <3 to support zigpy 2.x
+
+zigpy-zboss pins zigpy>=0.92.0,<2, so installing it into an environment
+that ships zigpy 2.x (Home Assistant 2026.7 and newer) downgrades zigpy
+in place and breaks ZHA with:
+
+  TypeError: ControllerApplication.new() got an unexpected keyword
+  argument 'device_resolver'
+
+The library itself uses no API removed in zigpy 2.0.0 (the only breaking
+change there was moving the quirks API out of zigpy). The test suite
+passes on zigpy 1.6.0, 2.0.0, 2.0.1 and 2.1.0, with one test-only fix:
+tests/application/test_quirked_zdo.py constructed its quirked device via
+zigpy.quirks.CustomDevice, which on zigpy 2.x is a deprecation shim
+delegating to the external zhaquirks package. The test only needs a
+device that is not a ZbossDevice, so construct a plain
+zigpy.device.Device directly; this works on both zigpy major versions
+without adding a test dependency.
+
+Fixes #94
+---
+ pyproject.toml                        |  2 +-
+ tests/application/test_quirked_zdo.py | 15 ++++++---------
+ 2 files changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 6dd8dd7..54ba2a4 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,7 +13,7 @@ authors = [
+ requires-python = ">=3.12"
+ dynamic = ["version"]
+ dependencies = [
+-    "zigpy>=0.92.0,<2",
++    "zigpy>=0.92.0,<3",
+     "serialx",
+     "voluptuous",
+     "coloredlogs",
+diff --git a/tests/application/test_quirked_zdo.py b/tests/application/test_quirked_zdo.py
+index c31a670..4444c61 100644
+--- a/tests/application/test_quirked_zdo.py
++++ b/tests/application/test_quirked_zdo.py
+@@ -1,15 +1,14 @@
+ """Test that ZDO requests behave the same with and without a quirk.
+ 
+-`zigpy.quirks.get_device()` returns a plain `zigpy.device.Device` subclass,
+-so a quirked device cannot carry any `ZbossZDO` method overrides. Every ZDO
+-request is therefore translated on the outgoing packet instead, and both
+-kinds of device must end up sending the same NCP command and returning the
+-same value.
++A quirked device is a plain `zigpy.device.Device` subclass, so it cannot
++carry any `ZbossZDO` method overrides. Every ZDO request is therefore
++translated on the outgoing packet instead, and both kinds of device must
++end up sending the same NCP command and returning the same value.
+ """
+ import pytest
++import zigpy.device
+ import zigpy.endpoint
+ import zigpy.exceptions
+-import zigpy.quirks
+ import zigpy.types as zigpy_t
+ import zigpy.zdo
+ import zigpy.zdo.types as zdo_t
+@@ -46,9 +45,7 @@ async def _start(make_application, quirked):
+     device = app.add_initialized_device(ieee=DEVICE_IEEE, nwk=DEVICE_NWK)
+ 
+     if quirked:
+-        device = zigpy.quirks.CustomDevice(
+-            app, device.ieee, device.nwk, device
+-        )
++        device = zigpy.device.Device(app, device.ieee, device.nwk)
+         app.devices[device.ieee] = device
+         device.add_endpoint(1).status = zigpy.endpoint.Status.ZDO_INIT
+ 

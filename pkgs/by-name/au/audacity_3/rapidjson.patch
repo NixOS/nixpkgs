@@ -1,0 +1,18 @@
+diff --git a/cmake-proxies/cmake-modules/dependencies/rapidjson.cmake b/cmake-proxies/cmake-modules/dependencies/rapidjson.cmake
+index ba95962..66a96a8 100644
+--- a/cmake-proxies/cmake-modules/dependencies/rapidjson.cmake
++++ b/cmake-proxies/cmake-modules/dependencies/rapidjson.cmake
+@@ -2,8 +2,11 @@
+ 
+ if(NOT ${_OPT}use_rapidjson STREQUAL "off")
+    if(NOT TARGET rapidjson::rapidjson)
+-      if(TARGET rapidjson)
+-         add_library( rapidjson::rapidjson ALIAS rapidjson )
++      if(TARGET RapidJSON)
++         if(NOT TARGET rapidjson)
++            add_library(rapidjson ALIAS RapidJSON)
++         endif()
++         add_library( rapidjson::rapidjson ALIAS RapidJSON )
+       else()
+          # At least on Arch RapidJSONConfig.cmake does not define a target at all
+          # so we have to do it ourselves

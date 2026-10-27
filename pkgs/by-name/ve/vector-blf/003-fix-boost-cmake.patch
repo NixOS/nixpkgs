@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 82da81b..750d075 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -45,7 +45,7 @@ if(OPTION_RUN_CPPCHECK)
+ endif()
+ if(OPTION_BUILD_TESTS)
+     enable_testing()
+-    find_package(Boost 1.55 COMPONENTS system filesystem unit_test_framework REQUIRED)
++    find_package(Boost 1.55 CONFIG REQUIRED COMPONENTS filesystem unit_test_framework)
+ endif()
+ if(OPTION_ADD_LCOV)
+     find_package(LCOV REQUIRED)

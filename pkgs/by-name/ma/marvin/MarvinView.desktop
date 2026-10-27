@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=MarvinView
+Exec=@out@/bin/mview %f
+Icon=MarvinView
+Comment=Molecule viewing program
+MimeType=text/xml;text/plain;chemical/x-cml;chemical/x-mdl-molfile;chemical/x-mdl-sdfile;chemical/x-mol2;chemical/x-pdb;chemical/x-xyz;chemical/x-mdl-rdfile;chemical/x-mdl-rxnfile;chemical/x-inchi;
+Categories=Education;Science;Chemistry;
+StartupWMClass=com-install4j-runtime-launcher-UnixLauncher

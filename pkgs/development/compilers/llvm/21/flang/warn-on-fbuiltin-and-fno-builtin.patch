@@ -1,0 +1,74 @@
+From 263377a175709c2d11f3ff63c2d2d2843afb91ea Mon Sep 17 00:00:00 2001
+From: Tarun Prabhu <tarun@lanl.gov>
+Date: Thu, 23 Oct 2025 13:24:20 -0600
+Subject: [PATCH] [flang][Driver] Warn on -fbuiltin and -fno-builtin
+
+The options -fbuiltin and -fno-builtin are not valid for Fortran. However,
+they are accepted by gfortran which emits a warning message but continues to
+compile the code. Both -fbuiltin and -fno-builtin have been enabled for flang.
+Specifying either will result in a warning message being shown but no other
+effects. Compilation will proceed normally after these warnings are shown. This
+brings flang's behavior in line with gfortran for these options.
+
+Fixes #164766
+---
+ clang/include/clang/Basic/DiagnosticDriverKinds.td |  3 +++
+ clang/include/clang/Driver/Options.td              |  4 ++--
+ clang/lib/Driver/ToolChains/Flang.cpp              |  7 +++++++
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/include/clang/Basic/DiagnosticDriverKinds.td b/include/clang/Basic/DiagnosticDriverKinds.td
+index 0581bf353d936..83980e3ac35b7 100644
+--- a/include/clang/Basic/DiagnosticDriverKinds.td
++++ b/include/clang/Basic/DiagnosticDriverKinds.td
+@@ -131,6 +131,9 @@ def warn_drv_unsupported_option_for_offload_arch_req_feature : Warning<
+ def warn_drv_unsupported_option_for_target : Warning<
+   "ignoring '%0' option as it is not currently supported for target '%1'">,
+   InGroup<OptionIgnored>;
++def warn_drv_invalid_argument_for_flang : Warning<
++  "'%0' is not valid for Fortran">,
++  InGroup<OptionIgnored>;
+ def warn_drv_unsupported_option_for_flang : Warning<
+   "the argument '%0' is not supported for option '%1'. Mapping to '%1%2'">,
+   InGroup<OptionIgnored>;
+diff --git a/include/clang/Driver/Options.td b/include/clang/Driver/Options.td
+index ef1c8758705f4..bca8b26bc3d30 100644
+--- a/include/clang/Driver/Options.td
++++ b/include/clang/Driver/Options.td
+@@ -1940,7 +1940,7 @@ defm borland_extensions : BoolFOption<"borland-extensions",
+           "Accept non-standard constructs supported by the Borland compiler">,
+   NegFlag<SetFalse>>;
+ def fbuiltin : Flag<["-"], "fbuiltin">, Group<f_Group>,
+-  Visibility<[ClangOption, CLOption, DXCOption]>;
++  Visibility<[ClangOption, CLOption, DXCOption, FlangOption, FC1Option]>;
+ def fbuiltin_module_map : Flag <["-"], "fbuiltin-module-map">, Group<f_Group>,
+   Flags<[]>, HelpText<"Load the clang builtins module map file.">;
+ defm caret_diagnostics : BoolFOption<"caret-diagnostics",
+@@ -3493,7 +3493,7 @@ def fno_assume_sane_operator_new : Flag<["-"], "fno-assume-sane-operator-new">,
+   HelpText<"Don't assume that C++'s global operator new can't alias any pointer">,
+   Visibility<[ClangOption, CC1Option]>,
+   MarshallingInfoNegativeFlag<CodeGenOpts<"AssumeSaneOperatorNew">>;
+ def fno_builtin : Flag<["-"], "fno-builtin">, Group<f_Group>,
+-  Visibility<[ClangOption, CC1Option, CLOption, DXCOption]>,
++  Visibility<[ClangOption, CC1Option, CLOption, DXCOption, FlangOption, FC1Option]>,
+   HelpText<"Disable implicit builtin knowledge of functions">;
+ def fno_builtin_ : Joined<["-"], "fno-builtin-">, Group<f_Group>,
+   Visibility<[ClangOption, CC1Option, CLOption, DXCOption]>,
+diff --git a/lib/Driver/ToolChains/Flang.cpp b/lib/Driver/ToolChains/Flang.cpp
+index a56fa41c49d34..88bce181d40d2 100644
+--- a/lib/Driver/ToolChains/Flang.cpp
++++ b/lib/Driver/ToolChains/Flang.cpp
+@@ -851,6 +851,13 @@ void Flang::ConstructJob(Compilation &C, const JobAction &JA,
+     assert(false && "Unexpected action class for Flang tool.");
+   }
+ 
++  // We support some options that are invalid for Fortran and have no effect.
++  // These are solely for compatibility with other compilers. Emit a warning if
++  // any such options are provided, then proceed normally.
++  for (options::ID Opt : {options::OPT_fbuiltin, options::OPT_fno_builtin})
++    if (const Arg *A = Args.getLastArg(Opt))
++      D.Diag(diag::warn_drv_invalid_argument_for_flang) << A->getSpelling();
++
+   const InputInfo &Input = Inputs[0];
+   types::ID InputType = Input.getType();
+ 

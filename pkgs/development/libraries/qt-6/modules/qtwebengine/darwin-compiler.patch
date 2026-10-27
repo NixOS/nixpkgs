@@ -1,0 +1,31 @@
+--- a/configure.cmake
++++ b/configure.cmake
+@@ -434,7 +434,7 @@ qt_webengine_configure_check("compiler"
+     CONDITION MSVC OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+-        (MACOS AND CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
++        MACOS
+     MESSAGE
+         "${CMAKE_CXX_COMPILER_ID} compiler is not supported."
+ )
+@@ -443,7 +443,7 @@ qt_webengine_configure_check("compiler"
+     CONDITION MSVC OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
+         (LINUX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+-        (APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang") OR
++        APPLE OR
+         (ANDROID AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+         (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR
+         (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang") OR
+--- a/src/gn/CMakeLists.txt
++++ b/src/gn/CMakeLists.txt
+@@ -49,7 +49,7 @@ elseif(MSVC)
+     set(platform msvc)
+ elseif(MINGW)
+     set(platform mingw)
+-elseif(APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL AppleClang)
++elseif(APPLE)
+     set(platform darwin)
+ else()
+     message(FATAL_ERROR "Unsupported gn platform !")

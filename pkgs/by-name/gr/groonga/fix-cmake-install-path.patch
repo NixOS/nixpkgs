@@ -1,0 +1,50 @@
+Fix CMake install path
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -212,12 +212,12 @@
+     CACHE STRING "wait time in nanosecond to acquire a lock.")
+ set(GRN_RELATIVE_PLUGINS_DIR
+     "${CMAKE_INSTALL_LIBDIR}/${GRN_PROJECT_NAME}/plugins")
+-set(GRN_PLUGINS_DIR "${CMAKE_INSTALL_PREFIX}/${GRN_RELATIVE_PLUGINS_DIR}")
++set(GRN_PLUGINS_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/${GRN_PROJECT_NAME}/plugins")
+ set(GRN_PLUGIN_SUFFIX "${CMAKE_SHARED_MODULE_SUFFIX}")
+ set(GRN_RELATIVE_GGML_BACKENDS_DIR
+     "${CMAKE_INSTALL_LIBDIR}/${GRN_PROJECT_NAME}/ggml")
+ set(GRN_GGML_BACKENDS_DIR
+-    "${CMAKE_INSTALL_PREFIX}/${GRN_RELATIVE_GGML_BACKENDS_DIR}")
++    "${CMAKE_INSTALL_FULL_LIBDIR}/${GRN_PROJECT_NAME}/ggml")
+ set(GRN_DLL_FILENAME "libgroonga${CMAKE_SHARED_LIBRARY_SUFFIX}")
+ set(GRN_QUERY_EXPANDER_TSV_RELATIVE_SYNONYMS_FILE
+     "${GRN_CONFIG_DIR}/synonyms.tsv")
+@@ -225,11 +225,11 @@
+ set(GRN_RELATIVE_RUBY_SCRIPTS_DIR
+     "${CMAKE_INSTALL_LIBDIR}/${GRN_PROJECT_NAME}/scripts/ruby")
+ set(GRN_RUBY_SCRIPTS_DIR
+-    "${CMAKE_INSTALL_PREFIX}/${GRN_RELATIVE_RUBY_SCRIPTS_DIR}")
++    "${CMAKE_INSTALL_FULL_LIBDIR}/${GRN_PROJECT_NAME}/scripts/ruby")
+ set(GRN_RELATIVE_LANGUAGE_MODELS_DIR
+     "${CMAKE_INSTALL_DATADIR}/${GRN_PROJECT_NAME}/language_models")
+ set(GRN_LANGUAGE_MODELS_DIR
+-    "${CMAKE_INSTALL_PREFIX}/${GRN_RELATIVE_LANGUAGE_MODELS_DIR}")
++    "${CMAKE_INSTALL_FULL_DATADIR}/${GRN_PROJECT_NAME}/language_models")
+ 
+ if(GRN_C_COMPILER_GNU_LIKE)
+   set(GRN_C_COMPILE_FLAGS "${GRN_C_COMPILE_FLAGS} $<$<CONFIG:Debug>:-g3 -O0>")
+@@ -2407,11 +2407,11 @@
+ 
+ set(prefix "${CMAKE_INSTALL_PREFIX}")
+ set(exec_prefix "\${prefix}")
+-set(bindir "\${exec_prefix}/${CMAKE_INSTALL_BINDIR}")
+-set(sbindir "\${exec_prefix}/${CMAKE_INSTALL_SBINDIR}")
+-set(libdir "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
+-set(includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+-set(datarootdir "\${prefix}/${CMAKE_INSTALL_DATAROOTDIR}")
++set(bindir "${CMAKE_INSTALL_FULL_BINDIR}")
++set(sbindir "${CMAKE_INSTALL_FULL_SBINDIR}")
++set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
++set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
++set(datarootdir "${CMAKE_INSTALL_FULL_DATAROOTDIR}")
+ set(datadir "\${datarootdir}")
+ set(expanded_pluginsdir "${GRN_PLUGINS_DIR}")
+ set(GRN_EXPANDED_DEFAULT_DOCUMENT_ROOT "${GRN_DEFAULT_DOCUMENT_ROOT}")

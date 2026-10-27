@@ -1,0 +1,43 @@
+From ac51f09a9e1a1307ebaf38ffab66eb729cf1b0a5 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Tue, 2 Jun 2026 20:17:25 +0200
+Subject: [PATCH] mount.go: try fusermount3 suid wrapper and fallback to
+ fusermount from $PATH
+
+On NixOS, we want to use the fusermount3 suid wrapper to allow mounting
+as non-root user.
+
+We still want to try fusermount from `$PATH` to work on non-NixOS, and
+keep the /bin/fusermount fallback as a last resort.
+---
+ mount.go | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/mount.go b/mount.go
+index 2508409..defc967 100644
+--- a/mount.go
++++ b/mount.go
+@@ -526,14 +526,16 @@ func initGoFuse(rootNode fs.InodeEmbedder, args *argContainer) *fuse.Server {
+ 
+ // haveFusermount2 finds out if the "fusermount" binary is from libfuse 2.x.
+ func haveFusermount2() bool {
+-	path, err := exec.LookPath("fusermount")
+-	if err != nil {
+-		path = "/bin/fusermount"
++	path := "/bin/fusermount"
++	if _, err := os.Stat("/run/wrappers/bin/fusermount3"); err == nil {
++		path = "/run/wrappers/bin/fusermount3"
++	} else if newPath, err := exec.LookPath("fusermount"); err == nil {
++		path = newPath
+ 	}
+ 	cmd := exec.Command(path, "-V")
+ 	var out bytes.Buffer
+ 	cmd.Stdout = &out
+-	err = cmd.Run()
++	err := cmd.Run()
+ 	if err != nil {
+ 		tlog.Warn.Printf("warning: haveFusermount2: %v", err)
+ 		return false
+-- 
+2.53.0
+

@@ -1,0 +1,13 @@
+diff --git a/esphome/platformio/toolchain.py b/esphome/platformio/toolchain.py
+index 073e134ac4..2dfa523ddc 100644
+--- a/esphome/platformio/toolchain.py
++++ b/esphome/platformio/toolchain.py
+@@ -64,7 +64,7 @@ def run_platformio_cli(*args, **kwargs) -> str | int:
+         # a user-provided value (or the unmodified path on platforms that
+         # don't need the strip).
+         os.environ["PYTHONEXEPATH"] = python_exe
+-    cmd = [python_exe, "-m", "esphome.platformio.runner"] + list(args)
++    cmd = ["platformio"] + list(args)
+ 
+     return run_external_process(*cmd, **kwargs)
+ 

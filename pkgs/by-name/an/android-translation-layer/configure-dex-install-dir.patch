@@ -1,0 +1,12 @@
+diff --git a/src/main-executable/main.c b/src/main-executable/main.c
+index 558bd994..2d341b4b 100644
+--- a/src/main-executable/main.c
++++ b/src/main-executable/main.c
+@@ -351,6 +351,7 @@ static void open(GtkApplication *app, GFile **files, gint nfiles, const gchar *h
+ 		fprintf(stderr, "error: couldn't find art install path\n");
+ 		exit(1);
+ 	}
++	dex_install_dir = "@out@/lib/java/dex";
+ 
+ 	char *app_data_dir_base = getenv("ANDROID_APP_DATA_DIR");
+ 	if (!app_data_dir_base) {

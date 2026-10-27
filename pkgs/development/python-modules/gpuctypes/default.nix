@@ -1,0 +1,131 @@
+{
+  lib,
+  config,
+  buildPythonPackage,
+  fetchFromGitHub,
+  replaceVars,
+  addDriverRunpath,
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
+  cudaPackages,
+  setuptools,
+  ocl-icd,
+  rocmPackages,
+  pytestCheckHook,
+  gpuctypes,
+  testCudaRuntime ? false,
+  testOpenclRuntime ? false,
+  testRocmRuntime ? false,
+}:
+assert testCudaRuntime -> cudaSupport;
+assert testRocmRuntime -> rocmSupport;
+
+buildPythonPackage (finalAttrs: {
+  pname = "gpuctypes";
+  version = "0.3.0";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    repo = "gpuctypes";
+    owner = "tinygrad";
+    tag = finalAttrs.version;
+    hash = "sha256-xUMvMBK1UhZaMZfik0Ia6+siyZGpCkBV+LTnQvzt/rw=";
+  };
+
+  patches = [
+    (replaceVars ./0001-fix-dlopen-cuda.patch {
+      inherit (addDriverRunpath) driverLink;
+      libnvrtc =
+        if cudaSupport then
+          "${lib.getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so"
+        else
+          "Please import nixpkgs with `config.cudaSupport = true`";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  postPatch = ''
+    substituteInPlace gpuctypes/opencl.py \
+      --replace-fail \
+        "ctypes.util.find_library('OpenCL')" \
+        "'${lib.getLib ocl-icd}/lib/libOpenCL.so'"
+  ''
+  # hipGetDevicePropertiesR0600 is a symbol from rocm-6. We are currently at rocm-5.
+  # We are not sure that this works. Remove when rocm gets updated to version 6.
+  + lib.optionalString rocmSupport ''
+    substituteInPlace gpuctypes/hip.py \
+      --replace-fail \
+        "/opt/rocm/lib/libamdhip64.so" \
+        "${lib.getLib rocmPackages.clr}/lib/libamdhip64.so" \
+      --replace-fail \
+        "hipGetDevicePropertiesR0600" \
+        "hipGetDeviceProperties"
+
+    substituteInPlace gpuctypes/comgr.py \
+      --replace-fail \
+        "/opt/rocm/lib/libamd_comgr.so" \
+        "${lib.getLib rocmPackages.rocm-comgr}/lib/libamd_comgr.so"
+  '';
+
+  pythonImportsCheck = [ "gpuctypes" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths =
+    lib.optionals (!testOpenclRuntime) [ "test/test_opencl.py" ]
+    ++ lib.optionals (!rocmSupport) [ "test/test_hip.py" ]
+    ++ lib.optionals (!cudaSupport) [ "test/test_cuda.py" ];
+
+  # Require GPU access to run (not available in the sandbox)
+  disabledTests =
+    lib.optionals (!testCudaRuntime) [
+      "TestCUDADevice"
+    ]
+    ++ lib.optionals (!testRocmRuntime) [
+      "TestHIPDevice"
+    ];
+
+  pytestFlags = lib.optionals (testCudaRuntime || testOpenclRuntime || testRocmRuntime) [ "-v" ];
+
+  # Running these tests requires special configuration on the builder.
+  # e.g. https://github.com/NixOS/nixpkgs/pull/256230 implements a nix
+  # pre-build hook which exposes the devices and the drivers in the sandbox
+  # based on requiredSystemFeatures:
+  requiredSystemFeatures =
+    lib.optionals testCudaRuntime [ "cuda" ]
+    ++ lib.optionals testOpenclRuntime [ "opencl" ]
+    ++ lib.optionals testRocmRuntime [ "rocm" ];
+
+  passthru.gpuChecks = {
+    cuda = gpuctypes.override {
+      cudaSupport = true;
+      testCudaRuntime = true;
+    };
+    opencl = gpuctypes.override { testOpenclRuntime = true; };
+    rocm = gpuctypes.override {
+      rocmSupport = true;
+      testRocmRuntime = true;
+    };
+  };
+
+  preCheck = lib.optionalString (cudaSupport && !testCudaRuntime) ''
+    addToSearchPath LD_LIBRARY_PATH ${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs
+  '';
+
+  # If neither rocmSupport or cudaSupport is enabled, no tests are selected
+  dontUsePytestCheck = !(rocmSupport || cudaSupport) && (!testOpenclRuntime);
+
+  meta = {
+    description = "Ctypes wrappers for HIP, CUDA, and OpenCL";
+    homepage = "https://github.com/tinygrad/gpuctypes";
+    changelog = "https://github.com/tinygrad/gpuctypes/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      matthewcroughan
+      wozeparrot
+    ];
+  };
+})

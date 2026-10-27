@@ -1,0 +1,129 @@
+{
+  lib,
+  bashInteractive,
+  fetchFromGitHub,
+  gitMinimal,
+  installShellFiles,
+  ncurses,
+  nix-update-script,
+  nixosTests,
+  openssl,
+  zstd,
+  sqlite,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  writableTmpDirAsHomeHook,
+  writeShellScriptBin,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "atuin";
+  version = "18.24.2";
+
+  src = fetchFromGitHub {
+    owner = "atuinsh";
+    repo = "atuin";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b6Uj3cPAu731lhrN8fOv4d0CpehT3bv7IOBmkbYrqfI=";
+  };
+
+  cargoHash = "sha256-HkYI2+Yvjnw9pKeRsteyZeLhHHErTa1mvJL16NQVF3g=";
+
+  # atuin's default features include 'check-updates', which do not make sense
+  # for distribution builds. List all other default features.
+  # see https://github.com/atuinsh/atuin/blob/main/crates/atuin/Cargo.toml#L42
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "ai"
+    "client"
+    "clipboard"
+    "daemon"
+    "pty-proxy"
+    "sync"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+    zstd
+    sqlite
+  ];
+
+  # e2e_pty tests drive an interactive bash (needs readline), run `clear`,
+  # and create git repositories for workspace filtering
+  nativeCheckInputs = [
+    bashInteractive
+    gitMinimal
+    ncurses
+    writableTmpDirAsHomeHook
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd atuin \
+      --bash <($out/bin/atuin gen-completions -s bash) \
+      --fish <($out/bin/atuin gen-completions -s fish) \
+      --zsh <($out/bin/atuin gen-completions -s zsh)
+  '';
+
+  checkFlags = [
+    # tries to make a network access
+    "--skip=registration"
+    "--skip=api_client"
+    # No such file or directory (os error 2)
+    "--skip=sync"
+    # PermissionDenied (Operation not permitted)
+    "--skip=change_password"
+    "--skip=multi_user_test"
+    # needs a running Postgres server
+    "--skip=postgres_authenticates_with_the_password_file"
+    # timing-dependent: fails when the index reload is too fast to measure
+    "--skip=end_history_is_not_starved_by_an_index_reload"
+    # timing sensitive
+    "--skip=a_copy_behind_another_machine_catches_up_as_it_resumes"
+    "--skip=capture_starts_when_the_config_turns_it_on"
+    "--skip=continuing_a_diverged_session_carries_one_branch"
+    "--skip=continuing_in_another_agent_carries_the_conversation"
+    "--skip=disjoint_concurrent_deletes_leave_the_index_empty"
+  ];
+
+  # The e2e tests start an interactive bash, which sources the host's
+  # /etc/bashrc when the build is not sandboxed (the darwin default).
+  # The nix-darwin config resets PATH, so if the user has atuin installed,
+  # the shell integration runs the system atuin instead of the one currently building
+  # and no output is captured.
+  # The test harness clears the environment before it starts the shell, so
+  # NOSYSBASHRC has to be set by the shell it is given. It must be named bash:
+  # the pty proxy picks the shell integration from the file name.
+  env.ATUIN_E2E_BASH = lib.getExe (
+    writeShellScriptBin "bash" ''
+      NOSYSBASHRC=1 exec ${lib.getExe bashInteractive} "$@"
+    ''
+  );
+
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) atuin atuin-programs atuin-default-settings;
+    };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
+    homepage = "https://github.com/atuinsh/atuin";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      sciencentistguy
+      _0x4A6F
+      rvdp
+    ];
+    mainProgram = "atuin";
+  };
+})

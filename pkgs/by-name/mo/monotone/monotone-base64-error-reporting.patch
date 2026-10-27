@@ -1,0 +1,13 @@
+Error reporting of broken Base64 has changed
+
+--- mtn-src/test/func/schema_migration_error_recovery/__driver__.lua	2026-08-05 21:39:46.432609427 +0200
++++ mtn-src/test/func/schema_migration_error_recovery/__driver__.lua	2026-08-05 21:40:07.650450675 +0200
+@@ -15,7 +15,7 @@
+ 
+ -- migrate_files_BLOB
+ test_one("bad_base64", "1db80c7cee8fa966913db1a463ed50bf1b0e5b0e", 
+-	 "invalid base64 character")
++	 "base64 decode: invalid character")
+ test_one("tmp_in_the_way", "1db80c7cee8fa966913db1a463ed50bf1b0e5b0e",
+ 	 "already another table")
+ test_one("column_missing", "1db80c7cee8fa966913db1a463ed50bf1b0e5b0e",

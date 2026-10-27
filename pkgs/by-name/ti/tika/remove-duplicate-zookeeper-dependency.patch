@@ -1,0 +1,23 @@
+Remove the first of two identical zookeeper dependencyManagement entries.
+
+The tika-parent pom declares org.apache.zookeeper:zookeeper twice in
+dependencyManagement (once in the general section, once for the Solr 8
+emitter), both resolving to ${zookeeper.version}. Maven >= 3.10 rejects
+duplicate dependencies as a model validation error. Removing the first
+declaration keeps the commented one and does not change resolution, as
+both pick the same version.
+---
+--- a/tika-parent/pom.xml
++++ b/tika-parent/pom.xml
+@@ -496,11 +496,6 @@
+         <version>6.4.1</version>
+       </dependency>
+       <dependency>
+-        <groupId>org.apache.zookeeper</groupId>
+-        <artifactId>zookeeper</artifactId>
+-        <version>${zookeeper.version}</version>
+-      </dependency>
+-      <dependency>
+         <groupId>com.amazonaws</groupId>
+         <artifactId>aws-java-sdk-s3</artifactId>
+         <version>${aws.version}</version>

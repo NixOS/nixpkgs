@@ -1,0 +1,120 @@
+From ef6039563489695e2593f0c156d13b01491d2644 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 11/18] Modify vendored libtapi to build with upstream LLVM
+
+---
+ subprojects/libtapi/LinkerInterfaceFile.cpp | 47 +++++++++------------
+ 1 file changed, 21 insertions(+), 26 deletions(-)
+
+diff --git a/subprojects/libtapi/LinkerInterfaceFile.cpp b/subprojects/libtapi/LinkerInterfaceFile.cpp
+index 76797e3..632eac8 100644
+--- a/subprojects/libtapi/LinkerInterfaceFile.cpp
++++ b/subprojects/libtapi/LinkerInterfaceFile.cpp
+@@ -10,12 +10,12 @@
+ /// \brief Implements the C++ linker interface file API.
+ ///
+ //===----------------------------------------------------------------------===//
+-#include "tapi/Core/LLVM.h"
+-#include "tapi/Core/Registry.h"
+-#include "tapi/Core/Utils.h"
+-#include "llvm/ADT/StringExtras.h"
+-#include "llvm/Object/MachO.h"
+-#include "llvm/TextAPI/InterfaceFile.h"
++#include <llvm/ADT/StringExtras.h>
++#include <llvm/Object/MachO.h>
++#include <llvm/Support/Process.h>
++#include <llvm/TextAPI/InterfaceFile.h>
++#include <llvm/TextAPI/TextAPIReader.h>
++#include <llvm/TextAPI/Utils.h>
+ #include <string>
+ #include <tapi/LinkerInterfaceFile.h>
+ #include <tapi/PackedVersion32.h>
+@@ -27,10 +27,17 @@ using namespace llvm::MachO;
+ 
+ TAPI_NAMESPACE_V1_BEGIN
+ 
+-using namespace tapi::internal;
+ using InterfaceFile = llvm::MachO::InterfaceFile;
+ using PackedVersion = llvm::MachO::PackedVersion;
+ 
++/// Determine if tapi is running in a B&I context.
++static inline bool inBnIEnvironment() {
++  if (auto isBnI = llvm::sys::Process::GetEnv("RC_XBS"))
++    return (isBnI.value() == "YES") &&
++           (!llvm::sys::Process::GetEnv("RC_BUILDIT"));
++  return false;
++}
++
+ static PackedVersion parseVersion32(StringRef str) {
+   uint32_t version = 0;
+   if (str.empty())
+@@ -118,7 +125,7 @@ public:
+   void processSymbol(StringRef name, PackedVersion minOSVersion,
+                      bool disallowWeakImports) {
+     // $ld$ <action> $ <condition> $ <symbol-name>
+-    if (!name.startswith("$ld$"))
++    if (!name.starts_with("$ld$"))
+       return;
+ 
+     StringRef action, condition, symbolName;
+@@ -127,7 +134,7 @@ public:
+     if (action.empty() || condition.empty() || symbolName.empty())
+       return;
+ 
+-    if (!condition.startswith("os"))
++    if (!condition.starts_with("os"))
+       return;
+ 
+     auto version = parseVersion32(condition.drop_front(2));
+@@ -198,33 +205,21 @@ LinkerInterfaceFile::getSupportedFileExtensions() noexcept {
+ /// \brief Load and parse the provided TBD file in the buffer and return on
+ ///        success the interface file.
+ static Expected<std::unique_ptr<const InterfaceFile>>
+-loadFile(std::unique_ptr<MemoryBuffer> buffer,
+-         ReadFlags readFlags = ReadFlags::Symbols) {
+-  Registry registry;
+-  registry.addYAMLReaders();
+-  registry.addJSONReaders();
+-  registry.addDiagnosticReader();
+-
+-  auto textFile = registry.readTextFile(std::move(buffer), readFlags);
++loadFile(std::unique_ptr<MemoryBuffer> buffer) {
++  auto textFile = llvm::MachO::TextAPIReader::get(buffer->getMemBufferRef());
+   if (!textFile)
+     return textFile.takeError();
+ 
+   return std::unique_ptr<const InterfaceFile>(
+       cast<const InterfaceFile>(textFile.get().release()));
+-
+-  return std::make_unique<const InterfaceFile>(InterfaceFile());
+ }
+ 
+ bool LinkerInterfaceFile::isSupported(const std::string &path,
+                                       const uint8_t *data,
+                                       size_t size) noexcept {
+-  Registry registry;
+-  registry.addYAMLReaders();
+-  registry.addJSONReaders();
+-  registry.addDiagnosticReader();
+   auto memBuffer = MemoryBufferRef(
+       StringRef(reinterpret_cast<const char *>(data), size), path);
+-  return registry.canRead(memBuffer);
++  return !!llvm::MachO::TextAPIReader::canRead(memBuffer);
+ }
+ 
+ bool LinkerInterfaceFile::shouldPreferTextBasedStubFile(
+@@ -316,8 +311,8 @@ bool LinkerInterfaceFile::Impl::init(
+ 
+     switch (symbol->getKind()) {
+     case EncodeKind::GlobalSymbol:
+-      if (symbol->getName().startswith("$ld$") &&
+-          !symbol->getName().startswith("$ld$previous"))
++      if (symbol->getName().starts_with("$ld$") &&
++          !symbol->getName().starts_with("$ld$previous"))
+         continue;
+       addSymbol(symbol->getName(), symbol->getFlags());
+       break;
+-- 
+2.47.2
+

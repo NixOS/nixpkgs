@@ -1,0 +1,14 @@
+diff --git a/node/build_node_bridge.py b/node/build_node_bridge.py
+index 82f96eef..95261d53 100755
+--- a/node/build_node_bridge.py
++++ b/node/build_node_bridge.py
+@@ -156,9 +156,6 @@ def main(args: Optional[List[str]] = None) -> int:
+     # Work around CMake bug introduced in cmake-rs v1.49.0
+     # https://github.com/rust-lang/cmake-rs/pull/158#issuecomment-1544782070
+     cargo_env['CMAKE_ARGS'] = '-DCMAKE_SYSTEM_NAME='
+-    # Strip absolute paths
+-    for path in build_helpers.rust_paths_to_remap():
+-        cargo_env['RUSTFLAGS'] += f' --remap-path-prefix {path}='
+ 
+     # If set (below), will post-process the build library using this instead of just `cp`-ing it.
+     objcopy = None
