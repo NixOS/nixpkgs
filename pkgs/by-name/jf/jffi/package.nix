@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jffi";
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "jnr";
     repo = "jffi";
     rev = "jffi-${finalAttrs.version}";
-    hash = "sha256-KprkeSMHW/g5IoRnkNaSpBi5sPiBcRcyct+Z0zPWVGU=";
+    hash = "sha256-x8g9o2OHZCIWxsCE7jdF5JRdkpaGh3kBRscxGYGoyYA=";
   };
 
   nativeBuildInputs = [
