@@ -50,7 +50,7 @@
         patch = "16";
         suffix = "";
       };
-      hash = "sha256-wsQyGWH6sPuZnWbgzs9SHCqzmUx5koc0qZ4wbBCU/Vo=";
+      hash = "sha256-tXlpFdxF/3Rc+06ZCn58k9b1RjKKECzjFEjWnrw3V1w=";
       inherit passthruFun;
     };
 
@@ -59,10 +59,10 @@
       sourceVersion = {
         major = "3";
         minor = "13";
-        patch = "16";
+        patch = "18";
         suffix = "";
       };
-      hash = "sha256-9LG/s8ebW7EbjSKKElBBY7TA2rTWeYKNj18mtstqs10==";
+      hash = "sha256-q7AQLm1K4CdQm8uCMn2d2FUVtEo7qK1TjPxemEcCn2g=";
       inherit passthruFun;
     };
 
