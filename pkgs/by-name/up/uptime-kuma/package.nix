@@ -5,6 +5,7 @@
   buildNpmPackage,
   nodejs,
   nixosTests,
+  srcOnly,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -34,6 +35,11 @@ buildNpmPackage (finalAttrs: {
 
     # remove references to nodejs source
     rm -r $out/lib/node_modules/uptime-kuma/node_modules/@louislam/sqlite3/build-tmp-napi-v*
+    shopt -s globstar
+    rm -r $out/lib/node_modules/uptime-kuma/node_modules/**/{*.target.mk,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
+    # remove references to python
+    rm -r $out/lib/node_modules/uptime-kuma/node_modules/{node-gyp,.bin/node-gyp}
   '';
 
   postFixup = ''
@@ -41,6 +47,11 @@ buildNpmPackage (finalAttrs: {
       --add-flags $out/lib/node_modules/uptime-kuma/server/server.js \
       --chdir $out/lib/node_modules/uptime-kuma
   '';
+
+  disallowedReferences = [
+    (srcOnly nodejs)
+    nodejs.python
+  ];
 
   passthru.tests.uptime-kuma = nixosTests.uptime-kuma;
 
