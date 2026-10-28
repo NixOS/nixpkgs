@@ -14,8 +14,8 @@
   glslang,
   hyprcursor,
   hyprgraphics,
+  hyprland-guiutils,
   hyprland-protocols,
-  hyprland-qtutils,
   hyprlang,
   hyprutils,
   hyprwire,
@@ -226,7 +226,7 @@ customStdenv.mkDerivation (finalAttrs: {
         --suffix PATH : ${
           makeBinPath [
             binutils
-            hyprland-qtutils
+            hyprland-guiutils
             pciutils
             pkgconf
           ]
