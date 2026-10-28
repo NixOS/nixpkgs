@@ -189,7 +189,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "manim";
-  version = "0.22.0";
+  version = "0.22.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -197,7 +197,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/CGwhRef6e+BRcodoXd95GwjaPtfC4nM1xvhiz95fNc=";
+    hash = "sha256-qeI2lUsRQ8Fzfa1q4qAfOynUC5vPMcr0U9txJicqsnY=";
   };
 
   patches = [

@@ -60,6 +60,8 @@
   "test_opengl_png_sequence_images_are_zero_padded"
   "test_images_are_created_when_png_sequence_format_set_for_opengl"
   "test_explicit_video_output_for_static_scene_fails"
+  "test_opengl_image_mobject_from_file"
+  "test_opengl_image_mobject_from_array"
 
   # reason for failure: tests try to reach network
   "test_logging_to_file"
