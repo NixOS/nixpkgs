@@ -17,6 +17,11 @@ let
     gpu-screen-recorder-notification = notifPackage;
     inherit (config.security) wrapperDir;
   };
+
+  gtkPackage = cfg.gtk.package.override {
+    gpu-screen-recorder = package;
+    inherit (config.security) wrapperDir;
+  };
 in
 {
   options = {
@@ -30,10 +35,20 @@ in
         package = lib.mkPackageOption pkgs "gpu-screen-recorder-ui" { };
         notifPackage = lib.mkPackageOption pkgs "gpu-screen-recorder-notification" { };
       };
+
+      gtk = {
+        enable = lib.mkEnableOption "the GPU Screen Recorder GTK frontend";
+        package = lib.mkPackageOption pkgs "gpu-screen-recorder-gtk" { };
+      };
     };
   };
 
   config = lib.mkMerge [
+    (lib.mkIf cfg.gtk.enable {
+      programs.gpu-screen-recorder.enable = true;
+      environment.systemPackages = [ gtkPackage ];
+    })
+
     (lib.mkIf cfg.ui.enable {
       programs.gpu-screen-recorder.enable = true;
 
