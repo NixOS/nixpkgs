@@ -2,11 +2,11 @@
   "depends": [
     {
       "method": "fetchzip",
-      "path": "/nix/store/3z38cvxik3b4cs8cga0az50srzgaq5bp-source",
-      "rev": "c6311c69ded3fa2971ff8129a512bd04ce7b21d7",
-      "sha256": "192q4jzcy73vwprrmqc3405g65d6zfwaysc2653mk6a88x3n021n",
-      "url": "https://github.com/capocasa/streamhttp/archive/c6311c69ded3fa2971ff8129a512bd04ce7b21d7.tar.gz",
-      "ref": "0.4.3",
+      "path": "/nix/store/wipl0xfnpsp2nywq9wgfh1avglnhdf6c-source",
+      "rev": "95126b6d3444275a7dac6a515a335c39decf1d2a",
+      "sha256": "0ndrds3q2slk5s2b65isw9if5yrdiq3m2jpjpwx1h37zw8g9n4r1",
+      "url": "https://github.com/capocasa/streamhttp/archive/95126b6d3444275a7dac6a515a335c39decf1d2a.tar.gz",
+      "ref": "0.4.5",
       "packages": [
         "streamhttp"
       ],
@@ -26,11 +26,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/1mcck56sr1h1sf8gv87m761x6f3d1k0l-source",
-      "rev": "7c6ee4bfc184d7121896a098d68b639a96df7af1",
-      "sha256": "06j8d0bjbpv1iibqlmrac4qb61ggv17hvh6nv4pbccqk1rlpxhsq",
-      "url": "https://github.com/nitely/nim-unicodedb/archive/7c6ee4bfc184d7121896a098d68b639a96df7af1.tar.gz",
-      "ref": "v0.9.0",
+      "path": "/nix/store/wb2x78l0bcjax6mzh6kc0ir7081hwsqp-source",
+      "rev": "15c5e25e2a49a924bc97647481ff50125bba2c76",
+      "sha256": "13s6mmsy5ah4sjpcl53x0qd8szc040s4nd47kszqyj1qxy340j6j",
+      "url": "https://github.com/nitely/nim-unicodedb/archive/15c5e25e2a49a924bc97647481ff50125bba2c76.tar.gz",
+      "ref": "v0.13.0",
       "packages": [
         "unicodedb"
       ],
@@ -50,11 +50,11 @@
     },
     {
       "method": "fetchzip",
-      "path": "/nix/store/2flkknk5gxaryxvb0hz0qlm36l4sjg7f-source",
-      "rev": "779fedd272e41bd4495af17387c7471eb9f02eff",
-      "sha256": "0jshqrspi6sy093z0wnyv0p6579f7z985vpfh1416jzr37rngfwa",
-      "url": "https://github.com/capocasa/sandwall/archive/779fedd272e41bd4495af17387c7471eb9f02eff.tar.gz",
-      "ref": "0.5.4",
+      "path": "/nix/store/7w06yc1v0sc17ji10akyrxbin0p24sqm-source",
+      "rev": "dd978ee9cfa4c8abbb3b84ae34c5e70d3244a636",
+      "sha256": "1czf3har3c759hhpihcfki36q5m1ixzf72zf0jgf2mn2kyrq20ml",
+      "url": "https://github.com/capocasa/sandwall/archive/dd978ee9cfa4c8abbb3b84ae34c5e70d3244a636.tar.gz",
+      "ref": "0.5.6",
       "packages": [
         "sandwall"
       ],
