@@ -221,7 +221,9 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
         if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "${NIX_STORE:-}"/* ]]; then
             continue
         fi
-        for path in "$dir"/*; do
+        # Every name in libs is that of a shared library, ending in .so or
+        # containing .so., so the rest of the directory can be skipped.
+        for path in "$dir"/*.so*; do
             file="${path##*/}"
             if [ "${libs[$file]:-}" ]; then
                 # This library may have been provided by a previous directory,
