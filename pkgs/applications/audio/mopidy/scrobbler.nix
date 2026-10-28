@@ -7,13 +7,13 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-scrobbler";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "mopidy_scrobbler";
-    hash = "sha256-kYBah5eUZGwFTPlyN+ILjKcZVpW4e1+VFSu2OSlN9Sw=";
+    hash = "sha256-A69tIDeEYn6FztOtBnDkX/CksHorpR2guNEFwbhFt48=";
   };
 
   build-system = [
@@ -23,11 +23,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   dependencies = [
     mopidy
+    pythonPackages.pykka
     pythonPackages.pylast
   ];
 
-  # no tests implemented
-  doCheck = false;
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "mopidy_scrobbler" ];
 
   meta = {

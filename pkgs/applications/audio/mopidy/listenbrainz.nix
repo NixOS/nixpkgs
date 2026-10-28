@@ -7,14 +7,14 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-listenbrainz";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suaviloquence";
     repo = "mopidy-listenbrainz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e3VrOILOqBvX3j8jEsseFY6ihZiXIm0ela66VRwvlgg=";
+    hash = "sha256-H9pvnvbECFoGTJ5Uy40mrdTqCaCknvT5JKM09u6FWVQ=";
   };
 
   build-system = [
