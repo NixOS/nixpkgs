@@ -19537,6 +19537,12 @@
     githubId = 20436235;
     name = "Billy Zaelani Malik";
   };
+  minosimo = {
+    email = "github@oddlypresent.com";
+    github = "minosimo";
+    githubId = 19229302;
+    name = "Simon";
+  };
   mio = {
     name = "Mio";
     email = "mio@mio19.uk";
