@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   unzip,
   tcl,
   zlib,
@@ -66,6 +67,16 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://src.fedoraproject.org/rpms/sqlite/raw/faea37529752d0134154f3678443e2822a105834/f/sqlite-3.53.3-fix-fts3corrupt4-test.patch";
       hash = "sha256-cfwBOomIjm8szInOqKZfg2lmRM9K663ujKR3wVmAtrE=";
+    })
+    # Fix concurrency-related hang in notify2.test
+    (fetchpatch {
+      name = "sqlite-test1-hash-mutex.patch";
+      url = "https://github.com/sqlite/sqlite/commit/c3e073420ff9e35ea80c783e3664e32449b5b703.patch";
+      includes = [
+        "src/test1.c"
+        "test/notify2.test"
+      ];
+      hash = "sha256-oHXttbYDq510kaYZEvoxG2zdBRN0lxeO0RvyYwwfhcE=";
     })
   ];
 
