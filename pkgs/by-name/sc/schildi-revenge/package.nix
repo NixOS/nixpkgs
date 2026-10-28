@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.10.10";
+  version = "26.10.26";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2JgS5iLAUSXBnal3HoGzuydSlCFkgNg0f1RnctiDALU=";
+    hash = "sha256-fpfLgmLXmM7SGSp6qZtEQc3WK+fd8++Toi0Jad37ZYE=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-6v5VqUwiIfkGhByoZN9hVm4zANAgTWHpPBdVHGFmGNc=";
+    hash = "sha256-OhASitog//ojP4zy/u05x9nN4+KhQKgYDEjItCgAwJo=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    patchelf $out/lib/app/libskiko-linux-x64.so \
+    patchelf $out/lib/app/libskiko-linux-*.so \
     --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 

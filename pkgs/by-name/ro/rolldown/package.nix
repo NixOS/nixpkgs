@@ -11,7 +11,7 @@
   rustc,
   cmake,
   nix-update-script,
-  version ? "1.2.9",
+  version ? "1.2.15",
 }:
 let
   pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_24; };
@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rolldown";
     repo = "rolldown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r6O+W5oduMkLNYWc+3dHOJRM0NvPuuMvE2ddJZXOeM8=";
+    hash = "sha256-fGPH+Fxumvw2H45VCum/tbEVf8n3bqWlxn7Iob21C3g=";
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "rolldown";
     version = finalAttrs.version;
     src = finalAttrs.src;
-    hash = "sha256-79cKISF/hp8ouUKap39yqhnr+tLg8QtRt0PF39zjAfs=";
+    hash = "sha256-PrMdwMyxly/O5PQGDlP8/albwEKuaylp+UHFrSC9jpc=";
   };
   pnpmDeps = fetchPnpmDeps {
     pname = "rolldown";
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     src = finalAttrs.src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-sMMdFPLkHNNEKO1S9DoyHdpYO33XxElPBGMXXW74m2c=";
+    hash = "sha256-2zeCf7ALI0+lDCoiOmkXVTtGjx0soMv0xb5QNOj6x4o=";
   };
 
   # cmake is only needed for Rust build (mimalloc-sys), not for a top-level configure
