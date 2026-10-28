@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     description = "Static checker for GitHub Actions workflow files";
     changelog = "https://github.com/kjanat/actionlint/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ lafrenierejm ];
     mainProgram = "actionlint";
   };
 })
