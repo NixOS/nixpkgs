@@ -6,11 +6,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "jet-pilot";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "https://github.com/unxsist/jet-pilot/releases/download/v${version}/JET.Pilot_${version}_amd64.AppImage";
-    hash = "sha256-GhXG9DtYW0qW3F2kRETTHTwha9vfFvODamMkGRhwx+4=";
+    hash = "sha256-80R/i7DNpzWGwNSHKPUUxnTGhaodHoCDoy4WN+VJOQ4=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
