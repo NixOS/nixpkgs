@@ -1,0 +1,11 @@
+--- src/ftop.c.orig	2010-06-15 21:42:15.000000000 +0200
++++ src/ftop.c	2010-06-15 21:45:38.000000000 +0200
+@@ -935,7 +935,7 @@
+     {
+         if (bar_used > 0)
+         {
+-            snprintf(rate_buf, bar_used + 1, "%s", tmp_buf);
++            snprintf(rate_buf, bar_used >= sizeof(rate_buf) ? sizeof(rate_buf) : bar_used + 1, "%s", tmp_buf);
+             p_attron(p, A_REVERSE);
+             p_printf(p, "%s", rate_buf);
+             if (bar_used > bytes)

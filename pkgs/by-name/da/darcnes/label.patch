@@ -1,0 +1,13 @@
+http://gentoo-overlays.zugaina.org/funtoo/portage/games-emulation/darcnes/files/darcnes-0401-exec-stack.patch
+
+diff -Naur old/video_x.c new/video_x.c
+--- old/video_x.c	2004-09-04 01:26:41.102187277 +0200
++++ new/video_x.c	2004-09-04 01:27:51.586427427 +0200
+@@ -366,6 +366,7 @@
+ 	}
+ 	
+     default:
++    	break;
+     }
+ }
+ 

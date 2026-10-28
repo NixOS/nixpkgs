@@ -1,0 +1,13 @@
+diff --git a/test/test.hs b/test/test.hs
+index 0251552..dc799a7 100644
+--- a/test/test.hs
++++ b/test/test.hs
+@@ -214,7 +214,7 @@ wrap :: (ThreadGroup -> Fork a) -> (Fork a -> IO b) -> IO b
+ wrap doFork test = ThreadGroup.new >>= test . doFork
+ 
+ test_group_single_wait :: (ThreadGroup -> Fork ()) -> Assertion
+-test_group_single_wait doFork = assert $ fmap isJustTrue $ timeout (10 * a_moment) $ do
++test_group_single_wait doFork = assert $ fmap isJustTrue $ timeout (100 * a_moment) $ do
+   tg <- ThreadGroup.new
+   r <- newIORef False
+   _ <- doFork tg $ do

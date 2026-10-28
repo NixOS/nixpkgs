@@ -1,0 +1,26 @@
+diff --git a/src/rewriter.c b/src/rewriter.c
+index f8c72bf..9c95e7e 100644
+--- a/src/rewriter.c
++++ b/src/rewriter.c
+@@ -64,7 +64,7 @@ int rewriter_get(char *word)
+     	
+ 	if (word == '\0') {
+ 		*original_word = '\0';
+-		rewriter_reset(rule_set);
++		rewriter_reset();
+ 		return 0;
+ 	}
+ 	
+diff --git a/src/utils.h b/src/utils.h
+index c20ac5c..b8fe00a 100644
+--- a/src/utils.h
++++ b/src/utils.h
+@@ -33,7 +33,7 @@
+ 
+ void	prepare_tty();
+ void	reset_tty();
+-void	handle_user_input();
++void	handle_user_input(int worker_num);
+ void	set_verbose();
+ 
+ void	verbose_printf(const char *fmt, ...);

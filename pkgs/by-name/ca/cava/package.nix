@@ -1,0 +1,80 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  alsa-lib,
+  darwinMinVersionHook,
+  fftw,
+  iniparser,
+  libGL,
+  libpulseaudio,
+  libtool,
+  ncurses,
+  pipewire,
+  pkgconf,
+  portaudio,
+  SDL2,
+  versionCheckHook,
+  withSDL2 ? false,
+  withPipewire ? stdenv.hostPlatform.isLinux,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "cava";
+  version = "1.0.0";
+
+  src = fetchFromGitHub {
+    owner = "karlstav";
+    repo = "cava";
+    tag = finalAttrs.version;
+    hash = "sha256-0vQWobnt9pAZTJc45Lgcfad72BE8DUPGQ5/YwMSmU98=";
+  };
+
+  buildInputs = [
+    fftw
+    iniparser
+    libpulseaudio
+    libtool
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "14.2")
+    portaudio
+  ]
+  ++ lib.optionals withSDL2 [
+    libGL
+    SDL2
+  ]
+  ++ lib.optionals withPipewire [
+    pipewire
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkgconf
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-v";
+
+  preAutoreconf = ''
+    echo ${finalAttrs.version} > version
+  '';
+
+  meta = {
+    description = "Console-based Audio Visualizer for Alsa";
+    homepage = "https://github.com/karlstav/cava";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mirrexagon
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "cava";
+  };
+})

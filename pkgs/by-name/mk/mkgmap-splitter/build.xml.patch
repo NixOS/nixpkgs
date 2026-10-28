@@ -1,0 +1,38 @@
+--- a/build.xml	2026-02-10 03:53:33.129313250 +0200
++++ b/build.xml	2026-02-10 03:53:36.908100965 +0200
+@@ -212,7 +212,7 @@
+ 		</propertyfile>
+ 	</target>
+ 
+-  <target name="compile" depends="prepare, resolve-compile" description="main compilation">
++  <target name="compile" depends="prepare" description="main compilation">
+     <javac srcdir="${src}" destdir="${build.classes}" debug="yes" includeantruntime="false">
+       <include name="**/*.java"/>
+       <classpath refid="classpath"/>
+@@ -222,7 +222,7 @@
+     </javac>
+   </target>
+ 
+-  <target name="compile.tests" depends="prepare, resolve-test" description="test compilation">
++  <target name="compile.tests" depends="prepare" description="test compilation">
+     <javac srcdir="${test}" destdir="${build.test-classes}" debug="yes" includeantruntime="false">
+       <include name="**/*.java"/>
+       <classpath refid="test.classpath"/>
+@@ -330,7 +330,7 @@
+ 	</target>
+ 
+ 	<!-- Main -->
+-  <target name="build" depends="compile,compile.tests,run.tests">
++  <target name="build" depends="compile">
+     <copy todir="${build.classes}">
+       <fileset dir="${resources}">
+         <include name="*.properties"/>
+@@ -355,7 +355,7 @@
+ 			ignoreerrors="true"/>
+ 	</target>
+  
+-	<target name="run.func-tests" depends="compile,compile.tests,obtain-test-input-files" description="Run the functional tests">
++	<target name="run.func-tests" depends="compile,compile.tests" description="Run the functional tests">
+ 		<mkdir dir="tmp/report"/>
+ 		<junit printsummary="yes" failureproperty="junit.failure" forkmode="once">
+ 	

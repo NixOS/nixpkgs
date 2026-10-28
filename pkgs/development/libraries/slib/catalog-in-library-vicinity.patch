@@ -1,0 +1,29 @@
+Write the catalog in under `(library-vicinity)', which is a subdir of $out,
+rather than under `(implementation-vicinity)', which is a subdir of ${scheme}.
+
+The downside is that we can't build an SLIB for several Schemes at the
+same time.
+
+--- slib/mklibcat.scm	2007-12-24 05:47:34.000000000 +0100
++++ slib/mklibcat.scm	2009-09-29 14:08:28.000000000 +0200
+@@ -17,7 +17,7 @@
+ ;promotional, or sales literature without prior written consent in
+ ;each case.
+ 
+-(let ((catpath (in-vicinity (implementation-vicinity) "slibcat")))
++(let ((catpath (in-vicinity (library-vicinity) "slibcat")))
+   (and (file-exists? catpath) (delete-file catpath))
+   (call-with-output-file catpath
+     (lambda (op)
+
+--- slib/require.scm	2009-08-03 04:09:47.000000000 +0200
++++ slib/require.scm	2009-09-29 14:13:56.000000000 +0200
+@@ -74,7 +74,7 @@
+ 
+ (define (catalog:get feature)
+   (if (not *catalog*)
+-      (let ((slibcat (catalog:try-read (implementation-vicinity) "slibcat")))
++      (let ((slibcat (catalog:try-read (library-vicinity) "slibcat")))
+ 	(cond ((not (catalog/require-version-match? slibcat))
+ 	       (slib:load-source (in-vicinity (library-vicinity) "mklibcat"))
+ 	       (set! slibcat

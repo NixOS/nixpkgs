@@ -1,0 +1,45 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "steamodd";
+  version = "5.0";
+
+  pyproject = true;
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "Lagg";
+    repo = "steamodd";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ySAyCOI1ISuBQ/5+UHSQVji76ZDRGjdVwlBAY9tnSmE=";
+  };
+
+  build-system = [ setuptools ];
+
+  # tests require API key
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "steam.api"
+    "steam.apps"
+    "steam.items"
+    "steam.loc"
+    "steam.remote_storage"
+    "steam.sim"
+    "steam.user"
+    "steam.vdf"
+  ];
+
+  meta = {
+    description = "High level Steam API implementation with low level reusable core";
+    homepage = "https://github.com/Lagg/steamodd";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ dotlambda ];
+  };
+})

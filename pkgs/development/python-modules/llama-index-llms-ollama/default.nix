@@ -1,0 +1,39 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  llama-index-core,
+  ollama,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "llama-index-llms-ollama";
+  version = "0.11.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "llama_index_llms_ollama";
+    inherit (finalAttrs) version;
+    hash = "sha256-5rjKwgCp/2fK6lMf7OCmJyqJ41BrK5ZI7HCaz/5KeYA=";
+  };
+
+  build-system = [ hatchling ];
+
+  dependencies = [
+    llama-index-core
+    ollama
+  ];
+
+  # Tests are only available in the mono repo
+  doCheck = false;
+
+  pythonImportsCheck = [ "llama_index.llms.ollama" ];
+
+  meta = {
+    description = "LlamaIndex LLMS Integration for ollama";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/llms/llama-index-llms-ollama";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

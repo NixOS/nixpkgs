@@ -1,0 +1,52 @@
+From 0b587a5f6df1cbab0ff145b96672a95faed301d1 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 14 Apr 2026 21:35:22 -0400
+Subject: [PATCH] Remove private analytics APIs
+
+---
+ src/ld/Options.cpp | 2 --
+ src/ld/Options.h   | 3 ---
+ 2 files changed, 5 deletions(-)
+
+diff --git a/src/ld/Options.cpp b/src/ld/Options.cpp
+index 9841689..00adba2 100644
+--- a/src/ld/Options.cpp
++++ b/src/ld/Options.cpp
+@@ -35,13 +35,11 @@
+ #include <spawn.h>
+ #include <Availability.h>
+ #include <tapi/tapi.h>
+-#include <CoreAnalytics/CoreAnalytics.h>
+ 
+ #include <algorithm>
+ #include <vector>
+ #include <map>
+ #include <sstream>
+-#include <xpc/xpc.h>
+ 
+ #include "ld.hpp"
+ #include "Options.h"
+diff --git a/src/ld/Options.h b/src/ld/Options.h
+index e1cd720..20ba2ab 100644
+--- a/src/ld/Options.h
++++ b/src/ld/Options.h
+@@ -33,7 +33,6 @@
+ #include <vector>
+ #include <unordered_set>
+ #include <unordered_map>
+-#include <xpc/xpc.h>
+ 
+ #include "ld.hpp"
+ #include "Snapshot.h"
+@@ -664,8 +663,6 @@ private:
+ 	void						cannotBeUsedWithBitcode(const char* arg);
+ 	void						loadImplictZipperFile(const char *path,std::vector<const char*>& paths);
+ 	void 						inferArchAndPlatform();
+-	xpc_object_t 		makeAnalyticsObject() const;
+-	void						sendAnalytics() const;
+ 
+ 
+ //	ObjectFile::ReaderOptions			fReaderOptions;
+-- 
+2.51.2
+

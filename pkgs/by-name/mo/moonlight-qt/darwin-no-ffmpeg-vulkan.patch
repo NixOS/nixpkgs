@@ -1,0 +1,29 @@
+--- a/app/streaming/video/ffmpeg-renderers/plvk.cpp
++++ b/app/streaming/video/ffmpeg-renderers/plvk.cpp
+@@ -55,7 +55,7 @@
+     DrmMasterLocker& operator=(DrmMasterLocker&&) noexcept = delete;
+ };
+ 
+-#if LIBAVUTIL_VERSION_INT < AV_VERSION_INT(60, 26, 100)
++#if LIBAVUTIL_VERSION_INT < AV_VERSION_INT(60, 26, 100) || defined(Q_OS_DARWIN)
+ static const char *k_OptionalDeviceExtensions[] = {
+     /* Misc or required by other extensions */
+     //VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME,
+@@ -366,7 +366,7 @@
+     vkParams.device = device;
+ 
+     if (m_HwDeviceType == AV_HWDEVICE_TYPE_VULKAN) {
+-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(60, 26, 100)
++#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(60, 26, 100) && !defined(Q_OS_DARWIN)
+         vkParams.opt_extensions = av_vk_get_optional_device_extensions(&vkParams.num_opt_extensions);
+ #else
+         vkParams.opt_extensions = k_OptionalDeviceExtensions;
+@@ -382,7 +382,7 @@
+         m_Vulkan = pl_vulkan_create(m_Log, &vkParams);
+     }
+ 
+-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(60, 26, 100)
++#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(60, 26, 100) && !defined(Q_OS_DARWIN)
+     av_free((void*)vkParams.opt_extensions);
+ #endif
+ 

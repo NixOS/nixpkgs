@@ -1,0 +1,54 @@
+diff --git a/setup.py b/setup.py
+index 38e891c..e846847 100644
+--- a/setup.py
++++ b/setup.py
+@@ -14,7 +14,7 @@ from setuptools import find_packages
+ from setuptools.command.build_py import build_py
+ from packaging.version import parse
+ from pathlib import Path
+-from torch.utils.cpp_extension import CUDAExtension, CUDA_HOME
++from torch.utils.cpp_extension import CUDAExtension
+ from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
+ 
+ 
+@@ -33,20 +33,10 @@ if DG_JIT_USE_RUNTIME_API:
+ current_dir = os.path.dirname(os.path.realpath(__file__))
+ sources = ['csrc/python_api.cpp']
+ build_include_dirs = [
+-    f'{CUDA_HOME}/include',
+-    f'{CUDA_HOME}/include/cccl',
+     'deep_gemm/include',
+-    'third-party/cutlass/include',
+-    'third-party/fmt/include',
+ ]
+ build_libraries = ['cuda', 'cudart', 'nvrtc']
+ build_library_dirs = [
+-    f'{CUDA_HOME}/lib64',
+-    f'{CUDA_HOME}/lib64/stubs'
+-]
+-third_party_include_dirs = [
+-    'third-party/cutlass/include/cute',
+-    'third-party/cutlass/include/cutlass',
+ ]
+ 
+ # Release
+@@ -142,19 +132,6 @@ class CustomBuildPy(build_py):
+         build_include_dir = os.path.join(self.build_lib, 'deep_gemm/include')
+         os.makedirs(build_include_dir, exist_ok=True)
+ 
+-        # Copy third-party includes to the build directory
+-        for d in third_party_include_dirs:
+-            dirname = d.split('/')[-1]
+-            src_dir = os.path.join(current_dir, d)
+-            dst_dir = os.path.join(build_include_dir, dirname)
+-
+-            # Remove existing directory if it exists
+-            if os.path.exists(dst_dir):
+-                shutil.rmtree(dst_dir)
+-
+-            # Copy the directory
+-            shutil.copytree(src_dir, dst_dir)
+-
+ 
+ class CachedWheelsCommand(_bdist_wheel):
+     def run(self):

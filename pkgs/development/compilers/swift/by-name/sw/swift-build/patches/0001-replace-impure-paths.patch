@@ -1,0 +1,489 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 9 Dec 2025 20:57:45 -0500
+Subject: [PATCH 1/3] replace-impure-paths
+
+---
+ Plugins/run-xcodebuild/run-xcodebuild.swift          |  2 +-
+ Sources/SWBBuildService/Messages.swift               |  2 +-
+ Sources/SWBCore/BuildRuleSet.swift                   |  2 +-
+ Sources/SWBCore/SDKRegistry.swift                    |  2 +-
+ .../SpecImplementations/CommandLineToolSpec.swift    |  2 +-
+ .../SWBCore/SpecImplementations/Tools/CodeSign.swift |  2 +-
+ .../SpecImplementations/Tools/MkdirTool.swift        |  2 +-
+ .../SpecImplementations/Tools/SymlinkTool.swift      |  2 +-
+ .../SpecImplementations/Tools/TouchTool.swift        |  2 +-
+ Sources/SWBCore/Specs/CoreBuildSystem.xcspec         |  2 +-
+ Sources/SWBCore/Specs/NativeBuildSystem.xcspec       | 12 ++++++------
+ Sources/SWBGenericUnixPlatform/Plugin.swift          |  2 +-
+ Sources/SWBProjectModel/PIFGenerationModel.swift     |  4 ++--
+ .../ShellScriptTaskProducer.swift                    |  2 +-
+ Sources/SWBTaskExecution/BuildDescription.swift      |  4 ++--
+ .../TaskActions/CopyTiffTaskAction.swift             |  2 +-
+ .../TaskActions/EmbedSwiftStdLibTaskAction.swift     |  2 +-
+ Sources/SWBTestSupport/CoreBasedTests.swift          |  6 +++---
+ Sources/SWBTestSupport/FSUtilities.swift             |  4 ++--
+ Sources/SWBTestSupport/LibraryGeneration.swift       |  8 ++++----
+ Sources/SWBTestSupport/TestWorkspaces.swift          |  4 ++--
+ Sources/SWBTestSupport/Xcode.swift                   |  2 +-
+ Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec   |  2 +-
+ Sources/SWBUtil/PbxCp.swift                          | 12 ++++++------
+ Sources/SWBUtil/Signatures.swift                     |  2 +-
+ .../CoreQualificationTester.swift                    |  2 +-
+ 26 files changed, 45 insertions(+), 45 deletions(-)
+
+diff --git a/Plugins/run-xcodebuild/run-xcodebuild.swift b/Plugins/run-xcodebuild/run-xcodebuild.swift
+index 710a84a2..c83982de 100644
+--- a/Plugins/run-xcodebuild/run-xcodebuild.swift
++++ b/Plugins/run-xcodebuild/run-xcodebuild.swift
+@@ -39,7 +39,7 @@ struct RunXcodebuild: CommandPlugin {
+         }
+ 
+         let process = Process()
+-        process.executableURL = URL(fileURLWithPath: "/usr/bin/xcrun")
++        process.executableURL = URL(fileURLWithPath: "@xcrun@/bin/xcrun")
+         process.arguments = ["xcodebuild"] + args.remainingArguments
+         process.environment = ProcessInfo.processInfo.environment.merging(["XCBBUILDSERVICE_PATH": buildServiceURL.path()]) { _, new in new }
+         try await process.run()
+diff --git a/Sources/SWBBuildService/Messages.swift b/Sources/SWBBuildService/Messages.swift
+index 4f2e6ad2..4861cd88 100644
+--- a/Sources/SWBBuildService/Messages.swift
++++ b/Sources/SWBBuildService/Messages.swift
+@@ -190,7 +190,7 @@ extension SetSessionWorkspaceContainerPathRequest: PIFProvidingRequest {
+             try fs.createDirectory(dir, recursive: true)
+             let pifPath = dir.join(Foundation.UUID().description + ".json")
+             let argument = isProject ? "-project" : "-workspace"
+-            let result = try await Process.getOutput(url: URL(fileURLWithPath: "/usr/bin/xcrun"), arguments: ["xcodebuild", "-dumpPIF", pifPath.str, argument, path.str], currentDirectoryURL: URL(fileURLWithPath: containerPath.dirname.str, isDirectory: true), environment: Environment.current.addingContents(of: [.developerDir: session.core.developerPath.path.str]))
++            let result = try await Process.getOutput(url: URL(fileURLWithPath: "@xcrun@/bin/xcrun"), arguments: ["xcodebuild", "-dumpPIF", pifPath.str, argument, path.str], currentDirectoryURL: URL(fileURLWithPath: containerPath.dirname.str, isDirectory: true), environment: Environment.current.addingContents(of: [.developerDir: session.core.developerPath.path.str]))
+             if !result.exitStatus.isSuccess {
+                 throw StubError.error("Could not dump PIF for '\(path.str)': \(String(decoding: result.stderr, as: UTF8.self))")
+             }
+diff --git a/Sources/SWBCore/BuildRuleSet.swift b/Sources/SWBCore/BuildRuleSet.swift
+index a9aef7c2..329f5c5f 100644
+--- a/Sources/SWBCore/BuildRuleSet.swift
++++ b/Sources/SWBCore/BuildRuleSet.swift
+@@ -160,7 +160,7 @@ extension Core {
+         let shouldRunDuringInstallAPI = scope.evaluate(BuiltinMacros.APPLY_RULES_IN_INSTALLAPI)
+ 
+         // FIXME: There needs to be a way to specify the interpreter
+-        let action = BuildRuleScriptAction(guid: guid, name: name, interpreterPath: "/bin/sh", scriptSource: scriptContents, inputFiles: inputFiles, inputFileLists: inputFileLists, outputFiles: outputFiles, outputFileLists: outputFileLists, dependencyInfo: dependencyInfo, runOncePerArchitecture: runOncePerArchitecture, runDuringInstallAPI: shouldRunDuringInstallAPI, runDuringInstallHeaders: false)
++        let action = BuildRuleScriptAction(guid: guid, name: name, interpreterPath: "@bashNonInteractive@/bin/sh", scriptSource: scriptContents, inputFiles: inputFiles, inputFileLists: inputFileLists, outputFiles: outputFiles, outputFileLists: outputFileLists, dependencyInfo: dependencyInfo, runOncePerArchitecture: runOncePerArchitecture, runDuringInstallAPI: shouldRunDuringInstallAPI, runDuringInstallHeaders: false)
+ 
+         let condition: any BuildRuleCondition
+         switch inputSpecifier {
+diff --git a/Sources/SWBCore/SDKRegistry.swift b/Sources/SWBCore/SDKRegistry.swift
+index 5fb5a318..2abebfbe 100644
+--- a/Sources/SWBCore/SDKRegistry.swift
++++ b/Sources/SWBCore/SDKRegistry.swift
+@@ -1099,7 +1099,7 @@ public final class SDKRegistry: SDKRegistryLookup, CustomStringConvertible, Send
+                 "GENERATE_TEXT_BASED_STUBS": "NO",
+                 "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
+ 
+-                "CHOWN": "/usr/bin/chown",
++                "CHOWN": "@coreutils@/bin/chown",
+ 
+                 // TODO are these going to be appropriate for all kinds of SDK's?
+                 // SwiftSDK _could_ have tool entries for these, so use them if they are available
+diff --git a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
+index cee454e4..23050d4e 100644
+--- a/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
++++ b/Sources/SWBCore/SpecImplementations/CommandLineToolSpec.swift
+@@ -246,7 +246,7 @@ extension DiscoveredCommandLineToolSpecInfo {
+         if !toolPath.isAbsolute {
+             throw StubError.error("\(toolPath.str) is not absolute")
+         }
+-        return try await producer.discoveredCommandLineToolSpecInfo(delegate, toolPath.basename, ["/usr/bin/what", "-q", toolPath.str]) { executionResult in
++        return try await producer.discoveredCommandLineToolSpecInfo(delegate, toolPath.basename, ["@what@/bin/what", "-q", toolPath.str]) { executionResult in
+             let outputString = String(decoding: executionResult.stdout, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+             let lines = Set(outputString.split(separator: "\n").map(String.init)) // version info is printed once per architecture slice, but we never expect them to differ
+             return try construct(AppleGenericVersionInfo(string: lines.only ?? outputString))
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift b/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
+index 8f0dd409..c80d1899 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/CodeSign.swift
+@@ -20,7 +20,7 @@ public final class CodesignToolSpec : CommandLineToolSpec, SpecIdentifierType, @
+     public override func computeExecutablePath(_ cbc: CommandBuildContext) -> String {
+         var codesign = Path(cbc.scope.evaluate(BuiltinMacros.CODESIGN))
+         if codesign.isEmpty {
+-            codesign = Path("/usr/bin/codesign")
++            codesign = Path("@sigtool@/bin/codesign")
+         }
+         if !codesign.isAbsolute {
+             codesign = resolveExecutablePath(cbc.producer, codesign)
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift b/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift
+index 78feb6d3..8f4a1914 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/MkdirTool.swift
+@@ -21,7 +21,7 @@ public final class MkdirToolSpec : CommandLineToolSpec, SpecIdentifierType, @unc
+         let outputs: [any PlannedNode] = [delegate.createNode(output), delegate.createVirtualNode("MkDir \(output.str)")]
+         delegate.createTask(
+             type: self, ruleInfo: ["MkDir", output.str],
+-            commandLine: ["/bin/mkdir", "-p", output.str],
++            commandLine: ["@coreutils@/bin/mkdir", "-p", output.str],
+             environment: EnvironmentBindings(),
+             workingDirectory: cbc.producer.defaultWorkingDirectory,
+             inputs: [], outputs: outputs, action: nil,
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift b/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
+index 0d889a54..47c0e4cb 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/SymlinkTool.swift
+@@ -40,7 +40,7 @@ public final class SymlinkToolSpec : CommandLineToolSpec, SpecIdentifierType, @u
+             toPath = destination.normalize().str
+         }
+ 
+-        let commandLine = ["/bin/ln", "-sfh", toPath, outputPath.str]
++        let commandLine = ["@coreutils@/bin/ln", "-sfn", toPath, outputPath.str]
+         delegate.createTask(
+             type: self, ruleInfo: ["SymLink", outputPath.str, toPath],
+             commandLine: commandLine, environment: environmentFromSpec(cbc, delegate),
+diff --git a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift b/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
+index 57ab5f1a..892cb46c 100644
+--- a/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
++++ b/Sources/SWBCore/SpecImplementations/Tools/TouchTool.swift
+@@ -44,7 +44,7 @@ final class TouchToolSpec : CommandLineToolSpec, SpecIdentifierType, @unchecked
+             }
+             commandLine = [commandShellPath, "/c", "copy", "/b", input.absolutePath.str, "+,,"]
+         } else {
+-            commandLine = ["/usr/bin/touch", "-c", input.absolutePath.str]
++            commandLine = ["@coreutils@/bin/touch", "-c", input.absolutePath.str]
+         }
+ 
+         delegate.createTask(type: self, ruleInfo: ["Touch", input.absolutePath.str], commandLine: commandLine, environment: EnvironmentBindings(), workingDirectory: cbc.producer.defaultWorkingDirectory, inputs: [delegate.createNode(input.absolutePath)], outputs: outputs, mustPrecede: [], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: cbc.producer.userPreferences), execDescription: resolveExecutionDescription(cbc, delegate, lookup: outputFileOverride), enableSandboxing: enableSandboxing)
+diff --git a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
+index 7593180b..4fe24daf 100644
+--- a/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
++++ b/Sources/SWBCore/Specs/CoreBuildSystem.xcspec
+@@ -3215,7 +3215,7 @@ For more information on mergeable libraries, see [Configuring your project to us
+             {
+                 Name = "JAVA_COMPILER";
+                 Type = Path;
+-                DefaultValue = "/usr/bin/javac";
++                DefaultValue = "javac";
+             },
+             {
+                 Name = "JAVA_ARCHIVE_CLASSES";
+diff --git a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
+index 65e3918c..e0bda4ba 100644
+--- a/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
++++ b/Sources/SWBCore/Specs/NativeBuildSystem.xcspec
+@@ -819,27 +819,27 @@ When `GENERATE_INFOPLIST_FILE` is enabled, sets the value of the [CFBundleExecut
+             // Other tool settings
+             {   Name = CP;
+                 Type = Path;
+-                DefaultValue = "/bin/cp";
++                DefaultValue = "@coreutils@/bin/cp";
+             },
+             {   Name = ICONV;
+                 Type = Path;
+-                DefaultValue = "/usr/bin/iconv";
++                DefaultValue = "@iconv@/bin/iconv";
+             },
+             {   Name = SED;
+                 Type = Path;
+-                DefaultValue = "/usr/bin/sed";
++                DefaultValue = "@gnused@/bin/sed";
+             },
+             {   Name = CHOWN;
+                 Type = Path;
+-                DefaultValue = "chown";
++                DefaultValue = "@coreutils@/bin/chown";
+             },
+             {   Name = CHMOD;
+                 Type = Path;
+-                DefaultValue = "/bin/chmod";
++                DefaultValue = "@coreutils@/bin/chmod";
+             },
+             {   Name = DIFF;
+                 Type = Path;
+-                DefaultValue = "/usr/bin/diff";
++                DefaultValue = "@diffutils@/bin/diff";
+             },
+ 
+             // Utility settings
+diff --git a/Sources/SWBGenericUnixPlatform/Plugin.swift b/Sources/SWBGenericUnixPlatform/Plugin.swift
+index 971b24d1..9c3b1a4d 100644
+--- a/Sources/SWBGenericUnixPlatform/Plugin.swift
++++ b/Sources/SWBGenericUnixPlatform/Plugin.swift
+@@ -130,7 +130,7 @@ struct GenericUnixSDKRegistryExtension: SDKRegistryExtension {
+                     "GENERATE_TEXT_BASED_STUBS": "NO",
+                     "GENERATE_INTERMEDIATE_TEXT_BASED_STUBS": "NO",
+ 
+-                    "AR": "llvm-ar",
++                    "AR": "@llvm@/bin/llvm-ar",
+                 ]
+             default:
+                 defaultProperties = [:]
+diff --git a/Sources/SWBProjectModel/PIFGenerationModel.swift b/Sources/SWBProjectModel/PIFGenerationModel.swift
+index 00e96dc0..426cc089 100644
+--- a/Sources/SWBProjectModel/PIFGenerationModel.swift
++++ b/Sources/SWBProjectModel/PIFGenerationModel.swift
+@@ -356,7 +356,7 @@ public enum PIF {
+         /// Adds a "shell script" build phase, i.e. one that runs a custom shell script as part of the build.
+         @discardableResult public func addShellScriptBuildPhase(
+             name: String,
+-            shellPath: String = "/bin/sh",
++            shellPath: String = "@bashNonInteractive@/bin/sh",
+             scriptContents: String,
+             inputPaths: [String],
+             outputPaths: [String],
+@@ -382,7 +382,7 @@ public enum PIF {
+         /// Adds a "shell script" build phase, i.e. one that runs a custom shell script as part of the build.
+         @discardableResult public func addShellScriptBuildPhaseWithConfigurableSandboxing(
+             name: String,
+-            shellPath: String = "/bin/sh",
++            shellPath: String = "@bashNonInteractive@/bin/sh",
+             scriptContents: String,
+             inputPaths: [String],
+             outputPaths: [String],
+diff --git a/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift b/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
+index fedc42f6..df7a9f72 100644
+--- a/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
++++ b/Sources/SWBTaskConstruction/TaskProducers/BuildPhaseTaskProducers/ShellScriptTaskProducer.swift
+@@ -201,7 +201,7 @@ final class ShellScriptTaskProducer: PhasedTaskProducer, TaskProducer, ShellBase
+         let ruleInfo = ["PhaseScriptExecution", shellScriptBuildPhase.name, scriptFilePath.str]
+         // NOTE: We must escape the script path, as `/bin/sh -c` will reevaluate.
+         let execDescription = "Run custom shell script '\(shellScriptBuildPhase.name)'"
+-        let commandLine = ["/bin/sh", "-c", scriptFilePath.str.escaped]
++        let commandLine = ["@bashNonInteractive@/bin/sh", "-c", scriptFilePath.str.escaped]
+ 
+         let isSandboxingEnabled: Bool
+ 
+diff --git a/Sources/SWBTaskExecution/BuildDescription.swift b/Sources/SWBTaskExecution/BuildDescription.swift
+index f2279da3..ed26f903 100644
+--- a/Sources/SWBTaskExecution/BuildDescription.swift
++++ b/Sources/SWBTaskExecution/BuildDescription.swift
+@@ -893,7 +893,7 @@ package final class BuildDescriptionBuilder {
+ 
+         var commandLine = commandLine
+         if bypassActualTasks {
+-            commandLine = [ByteString(encodingAsUTF8: "/usr/bin/true")] + commandLine
++            commandLine = [ByteString(encodingAsUTF8: "@coreutils@/bin/true")] + commandLine
+         }
+ 
+         // Add the command definition.
+@@ -973,7 +973,7 @@ package final class BuildDescriptionBuilder {
+     func addCustomCommand(_ task: any PlannedTask, tool: String, inputs: [any PlannedNode], outputs: [any PlannedNode], deps: DependencyDataStyle? = nil, allowMissingInputs: Bool, alwaysOutOfDate: Bool, description: [String]) throws {
+         // Honor `bypassActualTasks`.
+         if bypassActualTasks {
+-            try addSubprocessCommand(task, inputs: inputs, outputs: outputs, description: description, commandLine: ["/usr/bin/true"], allowMissingInputs: allowMissingInputs, alwaysOutOfDate: alwaysOutOfDate, isUnsafeToInterrupt: false)
++            try addSubprocessCommand(task, inputs: inputs, outputs: outputs, description: description, commandLine: ["@coreutils@/bin/true"], allowMissingInputs: allowMissingInputs, alwaysOutOfDate: alwaysOutOfDate, isUnsafeToInterrupt: false)
+             return
+         }
+ 
+diff --git a/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift b/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
+index df1675af..9e4b37c2 100644
+--- a/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
++++ b/Sources/SWBTaskExecution/TaskActions/CopyTiffTaskAction.swift
+@@ -141,7 +141,7 @@ public final class CopyTiffTaskAction: TaskAction {
+ 
+             // If we have a compression argument, pass through tiffutil.
+             if let compression = options.compression {
+-                let tiffutilCommand = ["/usr/bin/tiffutil", "-\(compression)", input.str, "-out", output.str]
++                let tiffutilCommand = ["@graphics_cmds@/bin/tiffutil", "-\(compression)", input.str, "-out", output.str]
+ 
+                 let processDelegate = TaskProcessDelegate(outputDelegate: outputDelegate)
+                 do {
+diff --git a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
+index 38501d22..01b80870 100644
+--- a/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
++++ b/Sources/SWBTaskExecution/TaskActions/EmbedSwiftStdLibTaskAction.swift
+@@ -839,7 +839,7 @@ public final class EmbedSwiftStdLibTaskAction: TaskAction {
+             // Codesign the Swift libraries in $build_dir/$frameworks
+             // but not the libraries in $build_dir/$unsigned_frameworks.
+             if codeSignIdentity != nil && !swiftLibs.isEmpty {
+-                let codesign = Path(self.effectiveEnvironment["CODESIGN"] ?? "/usr/bin/codesign")
++                let codesign = Path(self.effectiveEnvironment["CODESIGN"] ?? "@sigtool@/bin/codesign")
+ 
+                 // Swift libraries that are up-to-date get codesigned anyway
+                 // (in case options changed or a previous build was incomplete).
+diff --git a/Sources/SWBTestSupport/CoreBasedTests.swift b/Sources/SWBTestSupport/CoreBasedTests.swift
+index 6beda66f..58a3ec8e 100644
+--- a/Sources/SWBTestSupport/CoreBasedTests.swift
++++ b/Sources/SWBTestSupport/CoreBasedTests.swift
+@@ -241,8 +241,8 @@ extension CoreBasedTests {
+     package var libtoolPath: Path {
+         get async throws {
+             let (core, defaultToolchain) = try await coreAndToolchain()
+-            let fallbacklibtool = Path("/usr/bin/libtool")
+-            return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "libtool")
++            let fallbacklibtool = Path("@llvm@/bin/llvm-libtool-darwin")
++            return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-libtool-darwin")
+                                 ?? defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-ar")
+                                 ?? (localFS.exists(fallbacklibtool) ? fallbacklibtool : nil), "couldn't find libtool in default toolchain")
+         }
+@@ -252,7 +252,7 @@ extension CoreBasedTests {
+     package var llvmlibPath: Path {
+         get async throws {
+             let (core, defaultToolchain) = try await coreAndToolchain()
+-            let fallbacklibtool = Path("/usr/bin/llvm-lib")
++            let fallbacklibtool = Path("@llvm@/bin/llvm-lib")
+             return try #require(defaultToolchain.executableSearchPaths.findExecutable(operatingSystem: core.hostOperatingSystem, basename: "llvm-lib") ?? (localFS.exists(fallbacklibtool) ? fallbacklibtool : nil), "couldn't find llvm-lib in default toolchain")
+         }
+     }
+diff --git a/Sources/SWBTestSupport/FSUtilities.swift b/Sources/SWBTestSupport/FSUtilities.swift
+index 75c193c9..b1a3dc42 100644
+--- a/Sources/SWBTestSupport/FSUtilities.swift
++++ b/Sources/SWBTestSupport/FSUtilities.swift
+@@ -325,9 +325,9 @@ package extension FSProxy {
+ 
+         if self === localFS {
+             if !shallow {
+-                _ = try await runProcess(["/usr/bin/codesign", "-s", "-", binary.join(path.basenameWithoutSuffix).str])
++                _ = try await runProcess(["@sigtool@/bin/codesign", "-s", "-", binary.join(path.basenameWithoutSuffix).str])
+             }
+-            _ = try await runProcess(["/usr/bin/codesign", "-s", "-", (shallow ? path : contents).str])
++            _ = try await runProcess(["@sigtool@/bin/codesign", "-s", "-", (shallow ? path : contents).str])
+         } else {
+             try await writeFileContents(contents.join("_CodeSignature/CodeSignature")) { $0 <<< "signature" }
+         }
+diff --git a/Sources/SWBTestSupport/LibraryGeneration.swift b/Sources/SWBTestSupport/LibraryGeneration.swift
+index 1a238077..13bf27ad 100644
+--- a/Sources/SWBTestSupport/LibraryGeneration.swift
++++ b/Sources/SWBTestSupport/LibraryGeneration.swift
+@@ -87,7 +87,7 @@ extension InstalledXcode {
+             let linkArgs = [["-sdk", platform.sdkName, "clang", "-dynamiclib", "-target", target], targetVariantArgs, linkerArgs, ["-L" + swiftRuntimeLibraryDirectoryPath(name: platform.sdkName), "-L/usr/lib/swift", "-o", machoPath.str, objectPath.str]].reduce([], +)
+             _ = try await xcrun(linkArgs, workingDirectory: workingDirectory)
+             if needSigned {
+-                _ = try await runProcessWithDeveloperDirectory(["/usr/bin/codesign", "-s", "-", machoPath.str])
++                _ = try await runProcessWithDeveloperDirectory(["@sigtool@/bin/codesign", "-s", "-", machoPath.str])
+             }
+             return machoPath
+         }
+@@ -178,7 +178,7 @@ extension InstalledXcode {
+                 } else {
+                     _ = try await xcrun(["-sdk", platform.sdkName, "clang", "-dynamiclib", "-target", target] + targetVariantArgs + linkerArgs + ["-o", machoPath.str, objectPath.str])
+                     if needSigned {
+-                        _ = try await runProcessWithDeveloperDirectory(["/usr/bin/codesign", "-s", "-", machoPath.str])
++                        _ = try await runProcessWithDeveloperDirectory(["@sigtool@/bin/codesign", "-s", "-", machoPath.str])
+                     }
+                     machos.append(machoPath)
+                 }
+@@ -355,14 +355,14 @@ extension InstalledXcode {
+             return only
+         }
+ 
+-        _ = try await xcrun(["-sdk", platform.sdkName, "libtool", "-static", "-o", archivePath.str] + machos.map { $0.str })
++        _ = try await xcrun(["-sdk", platform.sdkName, "llvm-libtool-darwin", "-static", "-o", archivePath.str] + machos.map { $0.str })
+ 
+         return archivePath
+     }
+ 
+     package func libtool(_ inputs: [Path], into outputPath: Path, usingSDK sdk: String? = nil) async throws -> Path {
+         let sdkArgs = sdk.map { ["-sdk", $0] } ?? []
+-        _ = try await xcrun(sdkArgs + ["libtool", "-static", "-o", outputPath.str] + inputs.map { $0.str })
++        _ = try await xcrun(sdkArgs + ["llvm-libtool-darwin", "-static", "-o", outputPath.str] + inputs.map { $0.str })
+         return outputPath
+     }
+ 
+diff --git a/Sources/SWBTestSupport/TestWorkspaces.swift b/Sources/SWBTestSupport/TestWorkspaces.swift
+index 9d550ea4..1ecc026e 100644
+--- a/Sources/SWBTestSupport/TestWorkspaces.swift
++++ b/Sources/SWBTestSupport/TestWorkspaces.swift
+@@ -690,7 +690,7 @@ package final class TestShellScriptBuildPhase: TestInternalBuildPhase {
+         return overriddenGuid ?? "\(Self.guidCode)\(guidIdentifier)"
+     }
+ 
+-    package init(name: String, guid: String? = nil, shellPath: String = "/bin/sh", originalObjectID: String, contents: String = "", inputs: [String] = [], inputFileLists: [String] = [], outputs: [String] = [], outputFileLists: [String] = [], onlyForDeployment: Bool = false, emitEnvironment: Bool = false, dependencyInfo: SWBProtocol.DependencyInfo? = nil, alwaysOutOfDate: Bool = false, sandboxingOverride: SWBProtocol.SandboxingOverride = .basedOnBuildSetting, alwaysRunForInstallHdrs: Bool = false) {
++    package init(name: String, guid: String? = nil, shellPath: String = "@bashNonInteractive@/bin/sh", originalObjectID: String, contents: String = "", inputs: [String] = [], inputFileLists: [String] = [], outputs: [String] = [], outputFileLists: [String] = [], onlyForDeployment: Bool = false, emitEnvironment: Bool = false, dependencyInfo: SWBProtocol.DependencyInfo? = nil, alwaysOutOfDate: Bool = false, sandboxingOverride: SWBProtocol.SandboxingOverride = .basedOnBuildSetting, alwaysRunForInstallHdrs: Bool = false) {
+         self.name = name
+         self.overriddenGuid = guid
+         self.shellPath = shellPath
+@@ -1194,7 +1194,7 @@ package final class TestExternalTarget: TestInternalTarget {
+     private let dependencies: [String]
+     private let passBuildSettingsInEnvironment: Bool?
+ 
+-    package init(_ name: String, toolPath: String = "/usr/bin/make", arguments: String = "$(ACTION)", workingDirectory: String = "$(PROJECT_DIR)", buildConfigurations: [TestBuildConfiguration]? = nil, customTasks: [TestCustomTask] = [], dependencies: [String] = [], passBuildSettingsInEnvironment: Bool? = nil) {
++    package init(_ name: String, toolPath: String = "@gnumake@/bin/make", arguments: String = "$(ACTION)", workingDirectory: String = "$(PROJECT_DIR)", buildConfigurations: [TestBuildConfiguration]? = nil, customTasks: [TestCustomTask] = [], dependencies: [String] = [], passBuildSettingsInEnvironment: Bool? = nil) {
+         self.name = name
+         self.toolPath = toolPath
+         self.arguments = arguments
+diff --git a/Sources/SWBTestSupport/Xcode.swift b/Sources/SWBTestSupport/Xcode.swift
+index 969fc923..087816c7 100644
+--- a/Sources/SWBTestSupport/Xcode.swift
++++ b/Sources/SWBTestSupport/Xcode.swift
+@@ -32,7 +32,7 @@ package struct InstalledXcode: Sendable {
+     }
+ 
+     package func xcrun(_ args: [String], workingDirectory: Path? = nil, redirectStderr: Bool = true) async throws -> String {
+-        return try await runProcessWithDeveloperDirectory(["/usr/bin/xcrun"] + args, workingDirectory: workingDirectory, overrideDeveloperDirectory: self.developerDirPath.str, redirectStderr: redirectStderr)
++        return try await runProcessWithDeveloperDirectory(["@xcrun@/bin/xcrun"] + args, workingDirectory: workingDirectory, overrideDeveloperDirectory: self.developerDirPath.str, redirectStderr: redirectStderr)
+     }
+ 
+     package func productBuildVersion() throws -> ProductBuildVersion {
+diff --git a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec b/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
+index 02ec3dd5..51629c96 100644
+--- a/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
++++ b/Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec
+@@ -17,7 +17,7 @@
+         Description = "Code-sign a framework, application, or other built target.";
+         ExecDescription = "Sign $(InputFileName)";
+         ProgressDescription = "Signing product";
+-        ExecPath = "/usr/bin/codesign";
++        ExecPath = "@sigtool@/bin/codesign";
+         // codesign is currently not safe to interrupt, tracked by 20712615.
+         IsUnsafeToInterrupt = YES;
+         CommandOutputParser = (
+diff --git a/Sources/SWBUtil/PbxCp.swift b/Sources/SWBUtil/PbxCp.swift
+index 2d3bedd0..4d37790a 100644
+--- a/Sources/SWBUtil/PbxCp.swift
++++ b/Sources/SWBUtil/PbxCp.swift
+@@ -106,12 +106,12 @@ fileprivate func stripFile(_ srcPath: Path, _ dstPath: Path, _ strip_tool_path:
+     args.append(srcPath.str)
+     args.append("-o")
+     args.append(dstPath.str)
+-    let toolPath = strip_tool_path ?? Path("/usr/bin/strip")
++    let toolPath = strip_tool_path ?? Path("@llvm@/bin/llvm-strip")
+     try await spawnTaskAndWait(toolPath, args, nil, nil, dryRun, stream)
+ }
+ 
+ fileprivate func stripBitcodeFile(_ srcPath: Path, _ dstPath: Path, _ bitcode_strip_tool_path: Path?, _ bitcode_strip_flag: String, _ dryRun: Bool, _ stream: OutputByteStream) async throws {
+-    let toolPath = bitcode_strip_tool_path ?? Path("/usr/bin/bitcode_strip")
++    let toolPath = bitcode_strip_tool_path ?? Path("@llvm@/bin/llvm-bitcode-strip")
+     // Note that srcPath and dstPath could be the same, in which case the file gets stripped in-place.
+     let args = [srcPath.str, bitcode_strip_flag, "-o", dstPath.str]
+     try await spawnTaskAndWait(toolPath, args, nil, nil, dryRun, stream)
+@@ -511,11 +511,11 @@ struct CopyOptions: AsyncParsableCommand {
+     @Flag(name: .customLong("strip-unsigned-binaries", withSingleDash: true), help: "strips debug symbols from any executables")
+     var stripUnsignedBinaries: Bool = false
+ 
+-    @Option(name: .customLong("strip-tool", withSingleDash: true), help: "path to strip tool; defaults to /usr/bin/strip")
+-    var stripTool = Path("/usr/bin/strip")
++    @Option(name: .customLong("strip-tool", withSingleDash: true), help: "path to strip tool; defaults to llvm-strip")
++    var stripTool = Path("@llvm@/bin/llvm-strip")
+ 
+-    @Option(name: .customLong("strip-flags", withSingleDash: true), help: "flags to pass to strip tool; defaults to -S -no_atom_info")
+-    var stripFlags: String = "-S -no_atom_info"
++    @Option(name: .customLong("strip-flags", withSingleDash: true), help: "flags to pass to strip tool; defaults to -S")
++    var stripFlags: String = "-S"
+ 
+     @Flag(name: .customLong("strip-deterministic", withSingleDash: true), help: "runs the strip tool in deterministic (-D) mode")
+     var stripDeterministic: Bool = false
+diff --git a/Sources/SWBUtil/Signatures.swift b/Sources/SWBUtil/Signatures.swift
+index eb3c1e27..180dcc62 100644
+--- a/Sources/SWBUtil/Signatures.swift
++++ b/Sources/SWBUtil/Signatures.swift
+@@ -140,7 +140,7 @@ public struct CodeSignatureInfo: Codable, Sendable {
+ 
+     static public func invokeCodesignVerification(for path: String, treatUnsignedAsError: Bool) async throws {
+         #if os(macOS)
+-        let executionResult = try await Process.getOutput(url: URL(filePath: "/usr/bin/codesign"), arguments: ["-vvvv", path])
++        let executionResult = try await Process.getOutput(url: URL(filePath: "@sigtool@/bin/codesign"), arguments: ["-vvvv", path])
+         let stdoutContent = String(data: executionResult.stdout, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+         let stderrContent = String(data: executionResult.stderr, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+ 
+diff --git a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
+index 8495d9ff..1e4dd60e 100644
+--- a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
++++ b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
+@@ -326,7 +326,7 @@ extension FileContentsCheckingResult {
+             let plist: PropertyListItem?
+             switch destination {
+             case .signed:
+-                let bytes = try await Array(xcode.xcrun(["/usr/bin/codesign", "-a", slice.arch, "-d", "--entitlements", ":-", binaryPath.str], redirectStderr: false).utf8)
++                let bytes = try await Array(xcode.xcrun(["@sigtool@/bin/codesign", "-a", slice.arch, "-d", "--entitlements", ":-", binaryPath.str], redirectStderr: false).utf8)
+                 plist = try !bytes.isEmpty ? PropertyList.fromBytes(bytes) : nil
+             case .simulated:
+                 // xcrun otool-classic [-arch arch] -X -s __TEXT __entitlements <path>
+-- 
+2.54.0
+

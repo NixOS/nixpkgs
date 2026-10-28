@@ -1,0 +1,31 @@
+Description: Fix build with gcc-5
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=778003
+Author: Jaromír Mikeš <mira.mikes@seznam.cz>
+Forwarded: No
+
+Index: meterbridge/src/linedraw.h
+===================================================================
+--- meterbridge.orig/src/linedraw.h
++++ meterbridge/src/linedraw.h
+@@ -1,7 +1,7 @@
+ #ifndef LINEDRAW_H
+ #define LINEDRAW_H
+ 
+-inline void set_rgba(SDL_Surface *surface, Uint32 x, Uint32 y, Uint32 col);
++void set_rgba(SDL_Surface *surface, Uint32 x, Uint32 y, Uint32 col);
+ 
+ void draw_ptr(SDL_Surface *surface, int x1, int y1, int x2, int y2, Uint32 nedle_col, Uint32 aa_col);
+ 
+Index: meterbridge/src/linedraw.c
+===================================================================
+--- meterbridge.orig/src/linedraw.c
++++ meterbridge/src/linedraw.c
+@@ -4,7 +4,7 @@
+ /* set a pixel on an SDL_Surface, assumes that the surface is 32bit RGBA,
+  * ordered ABGR (I think), probably wont work on bigendian systems */
+ 
+-inline void set_rgba(SDL_Surface *surface, Uint32 x, Uint32 y, Uint32 col)
++void set_rgba(SDL_Surface *surface, Uint32 x, Uint32 y, Uint32 col)
+ {
+ 	Uint32 *bufp = (Uint32 *)surface->pixels + y*surface->pitch/4 + x;
+ 	*bufp = col;

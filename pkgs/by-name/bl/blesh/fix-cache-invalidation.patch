@@ -1,0 +1,11 @@
+--- a/ble.pp
++++ b/ble.pp
+@@ -2063,7 +2063,7 @@
+     return 1
+   fi
+ 
+-  local ver=${BLE_VERSINFO[0]}.${BLE_VERSINFO[1]}
++  local ver=$BLE_VERSION
+   ble/base/.create-user-directory _ble_base_cache "$cache_dir/blesh/$ver"
+ }
+ function ble/base/initialize-cache-directory {
