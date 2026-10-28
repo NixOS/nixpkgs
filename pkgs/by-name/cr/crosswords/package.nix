@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crosswords";
-  version = "0.3.18.1";
+  version = "0.3.19.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jrb";
     repo = "crosswords";
     rev = finalAttrs.version;
-    hash = "sha256-d8KwZ06WubqIRq5aPm+W/MfLgNcLP+233gur5pLF/PY=";
+    hash = "sha256-bncC3QXseYMkw3SH+PAqUpXiL0qZy4JASbhFoVvabqA=";
   };
 
   nativeBuildInputs = [
