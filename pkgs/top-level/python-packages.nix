@@ -12595,6 +12595,8 @@ self: super: with self; {
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
+  omsdk = callPackage ../development/python-modules/omsdk { };
+
   oncalendar = callPackage ../development/python-modules/oncalendar { };
 
   ondilo = callPackage ../development/python-modules/ondilo { };
