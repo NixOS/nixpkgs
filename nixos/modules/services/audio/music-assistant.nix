@@ -12,6 +12,7 @@ let
     mkEnableOption
     mkOption
     mkPackageOption
+    mkDefault
     types
     ;
 
@@ -153,9 +154,10 @@ in
       avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
         enable = true;
         openFirewall = lib.mkIf cfg.openFirewall true;
-        publish = {
-          enable = true;
-          userServices = true;
+        settings.publish = {
+          disable-publishing = mkDefault false;
+          disable-user-service-publishing = mkDefault false;
+          publish-addresses = mkDefault true;
         };
       };
 
