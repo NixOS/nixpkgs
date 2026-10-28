@@ -786,6 +786,7 @@ in
   gotosocial = runTest ./web-apps/gotosocial.nix;
   goupile = runTest ./web-apps/goupile;
   gpauth-tls = runTest ./gpauth-tls.nix;
+  gpu-screen-recorder = runTest ./gpu-screen-recorder.nix;
   grafana = import ./grafana {
     inherit runTest;
   };

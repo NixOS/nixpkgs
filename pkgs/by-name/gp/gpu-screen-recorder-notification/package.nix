@@ -13,6 +13,7 @@
   makeWrapper,
   meson,
   ninja,
+  nixosTests,
   pango,
   pkg-config,
   wayland,
@@ -63,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --add-rpath ${lib.makeLibraryPath [ libglvnd ]} $out/bin/.gsr-notify-wrapped
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    tests.nixos = nixosTests.gpu-screen-recorder;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Notification in the style of ShadowPlay";

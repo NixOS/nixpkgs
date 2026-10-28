@@ -19,6 +19,7 @@
   makeWrapper,
   meson,
   ninja,
+  nixosTests,
   pipewire,
   pkg-config,
   versionCheckHook,
@@ -104,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/bin/.wrapped/gpu-screen-recorder
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    tests.nixos = nixosTests.gpu-screen-recorder;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";

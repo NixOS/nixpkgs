@@ -16,6 +16,7 @@
   makeWrapper,
   meson,
   ninja,
+  nixosTests,
   pkg-config,
   wayland,
   wrapGAppsHook3,
@@ -72,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/bin/.gpu-screen-recorder-gtk-wrapped
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    tests.nixos = nixosTests.gpu-screen-recorder;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "GTK frontend for gpu-screen-recorder";
