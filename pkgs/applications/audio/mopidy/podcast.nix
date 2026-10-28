@@ -36,8 +36,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/tkem/mopidy-podcast";
     description = "Mopidy extension for browsing and playing podcasts";
     license = lib.licenses.asl20;
-    maintainers = [
-      lib.maintainers.daneads
-    ];
+    maintainers = [ ];
   };
 })
