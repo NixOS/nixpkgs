@@ -2,6 +2,8 @@
   fetchFromGitHub,
   lib,
   stdenv,
+  udevCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -14,6 +16,9 @@ stdenv.mkDerivation {
     rev = "153b46312ef4cd2775d7e0c8b3e256f2c0398265";
     hash = "sha256-oDufIqFVW2rRRB8oWc36BZMYkeZvW5phJsbL9Ai7JaU=";
   };
+
+  nativeBuildInputs = [ udevCheckHook ];
+  doInstallCheck = true;
 
   dontUnpack = true;
 
