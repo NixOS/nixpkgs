@@ -29,18 +29,14 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "5.1.0";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-F46bADHVe6ssQrj6oXPSi3KRGBaX//pXO3+4bMFi8Ag=";
+    hash = "sha256-vKNrsm09LGu8pgkX5Yv0XlY3u/MAawoma3BIeavS8So=";
   };
-
-  patches = lib.optionals useCmakeBuild [
-    ./fix-pkg-config-paths.patch
-  ];
 
   strictDeps = true;
 
@@ -62,10 +58,16 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = lib.optionals ocamlBindings [ zarith ];
   enableParallelBuilding = true;
 
-  postPatch = lib.optionalString ocamlBindings ''
-    export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
-    mkdir -p $OCAMLFIND_DESTDIR/stublibs
-  '';
+  postPatch =
+    lib.optionalString useCmakeBuild ''
+      substituteInPlace z3.pc.cmake.in \
+        --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@" \
+        --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "@CMAKE_INSTALL_FULL_INCLUDEDIR@"
+    ''
+    + lib.optionalString ocamlBindings ''
+      export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
+      mkdir -p $OCAMLFIND_DESTDIR/stublibs
+    '';
 
   configurePhase = lib.optionalString (!useCmakeBuild) ''
     runHook preConfigure
