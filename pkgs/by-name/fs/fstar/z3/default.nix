@@ -49,6 +49,8 @@ let
   solvers = {
     z3_4_8_5 = withLegacyFixes (mkZ3 "4.8.5" "sha256-ytG5O9HczbIVJAiIGZfUXC/MuYH7d7yLApaeTRlKXoc=");
     z3_4_13_3 = mkZ3 "4.13.3" "sha256-odwalnF00SI+sJGHdIIv4KapFcfVVKiQ22HFhXYtSvA=";
+    z3_4_15_3 = mkZ3 "4.15.3" "sha256-Lw037Z0t0ySxkgMXkbjNW5CB4QQLRrrSEBsLJqiomZ4=";
+    z3_5_3_0 = mkZ3 "5.3.0" "sha256-K0KTI8ZpvvYCF9ITxVTbdtqlalFFjtYcyog/Sy1kRV8=";
   };
 in
 stdenvNoCC.mkDerivation {
