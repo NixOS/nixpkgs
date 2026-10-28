@@ -34,20 +34,7 @@ in
           };
       };
 
-    portalPackage =
-      lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" {
-        extraDescription = ''
-          If the package is not overridable with `hyprland`, then the Hyprland package
-          used by the portal may differ from the one set in the module option {option}`package`.
-        '';
-      }
-      // {
-        apply =
-          p:
-          wayland-lib.genFinalPackage p {
-            hyprland = cfg.package;
-          };
-      };
+    portalPackage = lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
     xwayland.enable = lib.mkEnableOption "XWayland" // {
       default = true;
