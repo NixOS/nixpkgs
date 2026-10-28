@@ -156,6 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
+      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libavformat.so" \
+      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libavcodec.so" \
+      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libavutil.so" \
+      --prefix LD_PRELOAD : "${ffmpeg-headless.lib}/lib/libswresample.so" \
       --inherit-argv0
 
     runHook postInstall
