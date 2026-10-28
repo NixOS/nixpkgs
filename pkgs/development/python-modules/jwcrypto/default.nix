@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Implementation of JOSE Web standards";
     homepage = "https://github.com/latchset/jwcrypto";
-    changelog = "https://github.com/latchset/jwcrypto/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/latchset/jwcrypto/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
