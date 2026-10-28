@@ -443,17 +443,25 @@ make_path("$bootPath/kernels", { mode => 0755 }) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
+    my $sourceSize = -s $path;
+    defined $sourceSize or die "cannot stat boot image $path: $!\n";
+    $sourceSize > 0 or die "cannot install empty boot image $path\n";
     return $grubStore->path . substr($path, length("/nix/store")) unless $copyKernels;
     $path =~ /\/nix\/store\/(.*)/ or die;
     my $name = $1; $name =~ s/\//-/g;
     my $dst = "$bootPath/kernels/$name";
-    # Don't copy the file if $dst already exists.  This means that we
-    # have to create $dst atomically to prevent partially copied
-    # kernels or initrd if this script is ever interrupted.
-    if (! -e $dst) {
-        my $tmp = "$dst.tmp";
-        copy $path, $tmp or die "cannot copy $path to $tmp: $!\n";
-        rename $tmp, $dst or die "cannot rename $tmp to $dst: $!\n";
+    # Existing copies are reused, so publish new copies atomically to avoid
+    # reusing partially copied kernels or initrds after an interruption.
+    my $exists = -e $dst;
+    my $image = $exists ? $dst : "$dst.tmp";
+    if (!$exists) {
+        copy $path, $image or die "cannot copy $path to $image: $!\n";
+    }
+    my $size = -s $image;
+    defined $size or die "cannot stat boot image $image: $!\n";
+    $size == $sourceSize or die "boot image $image has size $size, expected $sourceSize bytes from $path\n";
+    if (!$exists) {
+        rename $image, $dst or die "cannot rename $image to $dst: $!\n";
     }
     $copied{$dst} = 1;
     return ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$name";
