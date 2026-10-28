@@ -70,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.pseudocc
     ];
     platforms = [ "x86_64-linux" ];
+    broken = lib.versionOlder stdenv.cc.libc.version "2.43";
   };
 })
