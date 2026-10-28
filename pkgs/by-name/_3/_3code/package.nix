@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   openssl,
+  testers,
   versionCheckHook,
 }:
 
@@ -30,6 +31,11 @@ buildNimPackage (finalAttrs: {
     # buildNimPackage only reads `bin`; upstream uses `namedBin` to install `3code`.
     substituteInPlace threecode.nimble \
       --replace-fail 'namedBin["threecode"] = "3code"' 'bin = @["threecode"]'
+
+    # Sandboxed commands need read/execute access to Nix-store binaries and libraries.
+    substituteInPlace src/threecode/box.nim \
+      --replace-fail 'var readonly = a.readOnly' \
+        'var readonly = a.readOnly & @["${builtins.storeDir}"]'
   '';
 
   nimFlags = [
@@ -47,6 +53,10 @@ buildNimPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+
+  passthru.tests.sandbox = testers.runNixOSTest (
+    import ./sandbox-test.nix { package = finalAttrs.finalPackage; }
+  );
 
   meta = {
     description = "Economical coding agent for OpenAI-compatible endpoints";
