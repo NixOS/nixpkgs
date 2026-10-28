@@ -6,17 +6,18 @@
   nodejs,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "pairdrop";
   version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "schlagmichdoch";
     repo = "PairDrop";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LvrBIdBjb4M2LidEJVCdK2uYydsJY+Cr5eXdfbS46dk=";
   };
 
+  inherit nodejs;
   npmDepsHash = "sha256-Ovi5RzWPCVk6LkZ33Anb8abkyu+IrEaCXE/etBgsHYU=";
 
   dontNpmBuild = true;
@@ -44,6 +45,7 @@ buildNpmPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/schlagmichdoch/PairDrop/releases/tag/${finalAttrs.src.tag}";
     description = "Local file sharing in your browser";
     mainProgram = "pairdrop";
     longDescription = ''
@@ -56,4 +58,4 @@ buildNpmPackage rec {
       diogotcorreia
     ];
   };
-}
+})
