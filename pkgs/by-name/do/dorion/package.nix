@@ -8,68 +8,67 @@
   makeBinaryWrapper,
   wrapGAppsHook4,
   glib-networking,
-  gst_all_1,
-  libsysprof-capture,
   libayatana-appindicator,
   nodejs,
   openssl,
   pkg-config,
   yq-go,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   webkitgtk_4_1,
   cargo-tauri,
   desktop-file-utils,
-  pipewire,
   apple-sdk_15,
   darwin,
   shelter,
+  cef-binary,
+  lld,
+  gtk3,
+  libsoup_3,
+  zstd,
   nix-update-script,
 }:
 
 let
-  webkitgtk_4_1' = webkitgtk_4_1.override {
-    enableExperimental = true;
-  };
+  cefPath = cef-binary.overrideAttrs (finalAttrs: {
+    pname = "cef-path";
+    postInstall = ''
+      find "$out" -mindepth 1 -delete
+      strip ./Release/*.so*
+      mv ./Release/* "$out"/
+      find "./Resources/locales" -maxdepth 1 -type f ! -name 'en-US.pak' -delete
+      mv ./Resources/* "$out"/
+      mv ./include "$out"/
+    '';
+  });
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.13.2";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+NG2uOGoJ4oAcsyI7F0gmhXEjuw+QJOskAANk0ynx0c=";
+    hash = "sha256-3GcStFkCS9BwtKzLKFqNS+qJRtGw6wfAPeoXh71zj0I=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-V8FHnZLz4K9sShqJbYgiFwXYmTawosKulUGgTvu7Gqo=";
+  cargoHash = "sha256-/iXqviXBFN272xdnFAHV3MH4U5M2Z+k3rZozyWKvRUk=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-i20NSlWot8DmjSpdIGd2ne/82HyPB1cdxkBSxbOLA/8=";
+    pnpm = pnpm_12;
+    fetcherVersion = 5;
+    hash = "sha256-3rYcKwItDgZqly2wo16/UbOtLrN23z0RN2F8tRm70yo=";
   };
-
-  # CMake (webkit extension, Linux only)
-  cmakeDir = ".";
-  cmakeBuildDir = "src-tauri/extension_webkit";
-  dontUseCmakeConfigure = true;
-  dontUseNinjaBuild = true;
-  dontUseNinjaCheck = true;
-  dontUseNinjaInstall = true;
-  cmakeFlags = [
-    "-GNinja"
-  ];
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
     cargo-tauri.hook
     nodejs
     pkg-config
@@ -80,6 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     desktop-file-utils
     cmake
     ninja
+    lld
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
@@ -90,19 +90,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    webkitgtk_4_1'
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-rs
+    cefPath
+    gtk3
+    libsoup_3
+    webkitgtk_4_1
     glib-networking
-    libsysprof-capture
     libayatana-appindicator
-    pipewire
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
+    zstd.dev
   ];
 
   postPatch = ''
@@ -129,27 +126,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+    # Upstream's beforeBundleCommand expects the CEF auto-downloader output; we provide CEF ourselves, so disable it.
+    yq -iPo=json '
+      .build.beforeBundleCommand = "" | .bundle.linux.deb.files = {} | .bundle.linux.rpm.files = {}
+    ' src-tauri/tauri.linux.conf.json
+
+    # A small /dev/shm makes CEF renderer time out and the UI fail to load; fall back to /tmp.
+    substituteInPlace src-tauri/src/main.rs \
+      --replace-fail '("--no-sandbox".into(), None),' \
+        '("--no-sandbox".into(), None),
+      ("--disable-dev-shm-usage".into(), None),'
+
+    # cef-dll-sys refuses a CEF_PATH that is not an official download dir, so skip its archive check.
+    substituteInPlace "$cargoDepsCopy"/*/cef-dll-sys-*/build.rs \
+      --replace-fail 'download_cef::check_archive_json(&package_version, &path.to_string_lossy())?;' ""
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    cmakeConfigurePhase
-  ''
-  + ''
-    pnpmConfigHook
-    runHook postConfigure
-  '';
-
-  buildPhase =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      ninjaBuildPhase
-      cd ../..
-    ''
-    + ''
-      tauriBuildHook
-    '';
+  # error: failed to run custom build command for `Dorion v6.5.3 (/build/source/src-tauri)`
+  # Permission denied (os error 13)
+  doCheck = false;
 
   postInstall = ''
     mkdir -p "$out/lib/Dorion"
@@ -175,14 +171,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper "$out/Applications/Dorion.app/Contents/MacOS/Dorion" "$out/bin/Dorion"
   '';
 
-  # error: failed to run custom build command for `Dorion v6.5.3 (/build/source/src-tauri)`
-  # Permission denied (os error 13)
-  doCheck = false;
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath "${cefPath}:$out/bin" "$out/bin/.Dorion-wrapped"
+  '';
 
   env = {
     # pnpm 10 prompts before purging node_modules in non-interactive builds.
     CI = "true";
     TAURI_RESOURCE_DIR = "${placeholder "out"}/lib";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # Consumed by cef-dll-sys at build time.
+    CEF_PATH = cefPath;
   };
 
   passthru.updateScript = nix-update-script { };
