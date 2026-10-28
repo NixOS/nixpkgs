@@ -71,6 +71,9 @@ let
       # Remove unused plugins. This is based on missing libraries from the upstream package.
       rm -rf usr/lib/insync/PySide2/Qt/qml/
 
+      # auto-patchelf crashes on *.debug objects
+      find usr -name '*.debug' -type f -delete
+
       mkdir -p $out
       cp -R usr/* $out/
 
@@ -80,7 +83,6 @@ let
     # NB! This did the trick, otherwise it segfaults! However I don't understand why!
     dontStrip = true;
   };
-
 in
 buildFHSEnv {
   inherit pname version;
