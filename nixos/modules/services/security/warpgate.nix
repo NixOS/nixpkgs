@@ -184,7 +184,7 @@ in
               keys = mkOption {
                 description = "Path to store SSH host & client keys.";
                 default = "/var/lib/warpgate/ssh-keys";
-                type = str;
+                type = nullOr str;
               };
               host_key_verification = mkOption {
                 description = "Specify host key verification action when connecting to a SSH target with unknown/differing host key.";
@@ -602,6 +602,12 @@ in
           message = "`services.warpgate.settings.recordings` has been deprecated by S3 recording storage support in 0.27.0. Please remove this section from your config and set it from admin UI.";
         }
       ];
+
+      warnings =
+        optional (cfg.settings.ssh.keys != null) ''
+          Warpgate's SSH keys has been deprecated in favor of being stored in database in 0.29.0.
+          Please remove `services.warpgate.ssh.keys` after upgrading and first start of service so that it migrates existing keys into database.
+        '';
 
       environment.systemPackages = [ cfg.package ];
 
