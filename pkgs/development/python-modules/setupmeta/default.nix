@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "setupmeta";
-  version = "3.9.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codrsquad";
     repo = "setupmeta";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ONl+hFvMkUmPbzbeduCrqidGrKZvbWE0wTvaZMhs64w=";
+    hash = "sha256-aTSb6wy272Rt3axxG/4gidY515G6g4sQWzBZ31qH9jA=";
   };
 
   postPatch = ''
