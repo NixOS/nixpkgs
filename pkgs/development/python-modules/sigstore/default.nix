@@ -4,25 +4,19 @@
   fetchFromGitHub,
 
   # build-system
-  flit-core,
+  uv-build,
 
   # dependencies
-  appdirs,
   cryptography,
   id,
-  importlib-resources,
   platformdirs,
-  pyasn1,
   pydantic,
   pyjwt,
-  pyopenssl,
   requests,
   rfc3161-client,
   rfc8785,
   rich,
-  securesystemslib,
   sigstore-models,
-  sigstore-protobuf-specs,
   sigstore-rekor-types,
   tuf,
 
@@ -37,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sigstore";
-  version = "4.2.0";
+  version = "4.5.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,35 +39,27 @@ buildPythonPackage (finalAttrs: {
     owner = "sigstore";
     repo = "sigstore-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-33JjQdYH/FptFUo0CecWItm9qH1wGQPHdk/JSdX8QfQ=";
+    hash = "sha256-YpqkKyhgr8cZ3NxVGVmTkv1Wz+lqkBikHY4N2LVK/UI=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ uv-build ];
 
   pythonRelaxDeps = [
-    "cryptography"
     "rich"
-    "sigstore-models"
     "tuf"
   ];
 
   dependencies = [
-    appdirs
     cryptography
     id
-    importlib-resources
     platformdirs
-    pyasn1
     pydantic
     pyjwt
-    pyopenssl
     requests
     rfc3161-client
     rfc8785
     rich
-    securesystemslib
     sigstore-models
-    sigstore-protobuf-specs
     sigstore-rekor-types
     tuf
   ];
@@ -85,15 +71,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "sigstore" ];
-
-  disabledTestPaths = [
-    # AttributeError: module 'cryptography.hazmat.primitives.asymmetric.ec' has no attribute 'SECT163K1'
-    #
-    # Uses ec.SECT163K1 which cryptography 48 removed entirely.
-    # Upstream considers this over-testing (sigstore itself never uses this curve at runtime):
-    # https://github.com/sigstore/sigstore-python/issues/1603
-    "test/unit/internal/test_key_details.py"
-  ];
 
   disabledTests = [
     # Tests require network access
