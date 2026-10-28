@@ -3,9 +3,9 @@
   fetchYarnDeps,
   lib,
   nodejs,
-  pnpm_9,
-  rubyPackages_4_0,
-  ruby_4_0,
+  pnpm,
+  rubyPackages,
+  ruby,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
@@ -30,7 +30,7 @@
       fetchFromGitHub
       nodejs
       stdenv
-      pnpm_9
+      pnpm
       ;
   };
 
@@ -41,12 +41,12 @@
       fetchYarnDeps
       lib
       nodejs
-      rubyPackages_4_0
-      ruby_4_0
       stdenv
       yarnBuildHook
       yarnConfigHook
       yarnInstallHook
+      rubyPackages
+      ruby
       ;
   };
 

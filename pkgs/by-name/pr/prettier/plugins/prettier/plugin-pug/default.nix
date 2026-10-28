@@ -7,7 +7,7 @@
 {
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm,
   stdenv,
   ...
 }:
@@ -26,17 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
-    pnpm_9
+    pnpm.configHook
+    pnpm
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
+      pnpm
       ;
-    pnpm = pnpm_9;
     fetcherVersion = 2;
     hash = "sha256-4IS2dvcODzeakx8ezIQkoz6PLEP8Sm4OFz0EWQ0jXoA=";
   };

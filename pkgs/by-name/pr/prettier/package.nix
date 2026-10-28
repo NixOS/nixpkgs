@@ -193,13 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
         ;
       inherit (pkgs)
         fetchYarnDeps
-        pnpm_9
-        rubyPackages_4_0
-        ruby_4_0
         yarnBuildHook
         yarnConfigHook
         yarnInstallHook
         ;
+      pnpm = pkgs.pnpm_9;
+      rubyPackages = pkgs.rubyPackages_4_0;
+      ruby = pkgs.ruby_4_0;
     };
   };
 

@@ -9,8 +9,8 @@
   fetchYarnDeps,
   lib,
   nodejs,
-  rubyPackages_4_0,
-  ruby_4_0,
+  rubyPackages,
+  ruby,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
@@ -38,19 +38,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase =
     let
-      rubyDeps = with rubyPackages_4_0; [
+      rubyDeps = with rubyPackages; [
         prettier_print
         syntax_tree
         syntax_tree-haml
         syntax_tree-rbs
       ];
 
-      rubyEnv = ruby_4_0.withPackages (ps: rubyDeps);
+      rubyEnv = ruby.withPackages (ps: rubyDeps);
     in
     ''
-      sed -i '/default: "ruby"/ {
-        s|ruby|${lib.getExe rubyEnv}|;
-      }' ./src/plugin.js
+      substituteInPlace \
+        ./src/plugin.js \
+        --replace-fail \
+        'default: "ruby"' \
+        'default: "${lib.getExe rubyEnv}"';
     '';
 
   buildPhase = ''
