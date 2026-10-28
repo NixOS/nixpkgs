@@ -5,7 +5,7 @@
   setuptools,
   matplotlib,
   numpy,
-  opencv-python,
+  opencv-python-headless,
   pillow,
   scikit-learn,
   torch,
@@ -20,7 +20,8 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "grad_cam";
+    inherit version;
     hash = "sha256-9r4G+CZnei6SLDh535vjlEsUppZD2A577Jrfsm9rXkI=";
   };
 
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   dependencies = [
     matplotlib
     numpy
-    opencv-python
+    opencv-python-headless
     pillow
     scikit-learn
     torchvision
