@@ -711,7 +711,7 @@ in
       // commonServiceConfig;
     };
 
-    systemd.services.lasuite-docs-collaboration-server = {
+    systemd.services.lasuite-docs-collaboration-server = lib.mkIf cfg.collaborationServer.enable {
       description = "Docs Collaboration Server from SuiteNumérique";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
