@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   removeReferencesTo,
   zlib,
@@ -17,6 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-qGNWFFUUjv2R5e/nQrriAyDJCARISqNB8e5/1zEJ3fk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-111152.patch";
+      url = "https://github.com/libgme/game-music-emu/commit/ae10a8f05479e3c8f80429e7a59759fed06f8c13.patch";
+      hash = "sha256-/cOKzqhUrKMXcwxRKwdUf7wthrfYkiHy/IQGy9lK0ZM=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     removeReferencesTo

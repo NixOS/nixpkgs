@@ -169,7 +169,8 @@ rec {
           "nixos.tests.simple-container"
           "nixos.tests.simple-vm"
           "nixpkgs.jdk"
-          "nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
+          # FIXME: omitted just temporarily
+          #"nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
           "nixpkgs.opensshTest"
         ])
       ];

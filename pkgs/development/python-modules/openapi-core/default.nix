@@ -81,6 +81,12 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
+  pytestFlags = [
+    # starlette <1.7.0 uses `anyio.abc.BlockingPortal`, which is a deprecated
+    # alias since anyio 4.15.0.
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # Requires secrets and additional configuration
     "tests/integration/contrib/django/"
