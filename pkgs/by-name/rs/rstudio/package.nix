@@ -17,7 +17,7 @@
   git,
   jdk,
   makeWrapper,
-  nodejs,
+  nodejs_22,
   npmHooks,
   python3,
   xcbuild,
@@ -25,8 +25,9 @@
   yarnConfigHook,
   zip,
 
+  acl,
   boost191,
-  electron_42,
+  electron_43,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -45,7 +46,8 @@
 }:
 
 let
-  electron = electron_42;
+  nodejs = nodejs_22; # the lockfile doesn't work with nodejs_24 for some reason
+  electron = electron_43;
   boost = boost191;
 
   mathJax27Src = fetchzip {
@@ -69,9 +71,9 @@ let
     owner = "quarto-dev";
     repo = "quarto";
     # Note: rev should ideally be the last commit of the release/rstudio-[codename] branch
-    # Last updated: 2026-09-11 to release/rstudio-autumn-hawkbit branch
-    rev = "828ae28e53b796fb95a33bd7f3c7c109e0709649";
-    hash = "sha256-xkNCbGrMUSkPBSkMqjOz2jljw71TyPThUfd79XYM+WE=";
+    # Last updated: 2026-10-28 to release/rstudio-blue-mistflower branch
+    rev = "2d5a23d918079ce38f584a31b4639aa769379d64";
+    hash = "sha256-lN1QzCSM/KNBUIK4wJpOXJzpoUVJo1hVQMA4UUacPRY=";
   };
 
   hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -99,13 +101,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rstudio";
-  version = "2026.09.0+174";
+  version = "2026.10.1+239";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-67HT2JT0kPXqzCfcgtfRZZ/zM35ZWULb0ooCjagzr3w=";
+    hash = "sha256-uUqDvlBid7zbcXeNMHk9ARWJM3u3qbrXhwci/Z5e280=";
   };
 
   # sources fetched into _deps via cmake's FetchContent
@@ -170,6 +172,9 @@ stdenv.mkDerivation (finalAttrs: {
     R
     soci
     sqlite.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
   ]
   ++ lib.optionals (!server) [
     fontconfig
@@ -250,14 +255,15 @@ stdenv.mkDerivation (finalAttrs: {
     # Prevent Boost.URL linker error
     substituteInPlace src/cpp/CMakeLists.txt \
       --replace-fail 'C++17' 'C++20' \
-      --replace-fail 'c++17' 'c++20'
+      --replace-fail 'c++17' 'c++20' \
+      --replace-fail 'gnu++17' 'gnu++20'
     substituteInPlace cmake/compiler.cmake \
       --replace-fail 'CMAKE_CXX_STANDARD 17' 'CMAKE_CXX_STANDARD 20'
   '';
 
   yarnOfflineCache = fetchYarnDeps {
     src = quartoSrc;
-    hash = "sha256-4mPc2gNlXTvAWLdWViceTPk5lizKST7iBMZ42ZcrEZA=";
+    hash = "sha256-aBo6kh/+pzkKeg147ZsGC7BR9UQP36UwGPHS9LGW/wg=";
   };
 
   dontYarnInstallDeps = true; # will call manually in preConfigure
@@ -273,7 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "rstudio-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-8tPmNqcte0Pxhxp/PSx6vaZihXMZvPHRBX4428H3N/Q=";
+    hash = "sha256-nH7hPnVePybM8kG0SJKfwHVZcMEM8CWf3dX+xlgz3b8=";
   };
 
   preConfigure = ''
@@ -311,7 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
     # node used by cmake and node used for distribution
     # version in cmake/globals.cmake
     RSTUDIO_NODE_VERSION="22.22.2"
-    RSTUDIO_INSTALLED_NODE_VERSION="22.23.2"
+    RSTUDIO_INSTALLED_NODE_VERSION="24.21.0"
 
     mkdir -p dependencies/common/node
     ln -s ${nodejs} dependencies/common/node/$RSTUDIO_NODE_VERSION
