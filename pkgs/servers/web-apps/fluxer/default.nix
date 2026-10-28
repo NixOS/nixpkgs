@@ -177,6 +177,8 @@ rustPlatform.buildRustPackage (
       pname = "fluxer-gateway";
       inherit (finalAttrs) src version;
 
+      __structuredAttrs = true;
+
       releaseType = "release";
       profile = "prod";
 
@@ -266,6 +268,8 @@ rustPlatform.buildRustPackage (
   {
     pname = "fluxer-server";
     inherit (fluxerHashes) version;
+
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "fluxerapp";
