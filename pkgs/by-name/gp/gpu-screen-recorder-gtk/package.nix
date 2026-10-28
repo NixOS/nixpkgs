@@ -1,30 +1,33 @@
 {
-  stdenv,
   lib,
-  fetchgit,
-  pkg-config,
+  stdenv,
   addDriverRunpath,
   desktop-file-utils,
+  fetchgit,
+  gitUpdater,
+  gpu-screen-recorder,
+  gtk3,
+  libayatana-appindicator,
+  libdrm,
+  libglvnd,
+  libpulseaudio,
+  libx11,
+  libxrandr,
   makeWrapper,
   meson,
   ninja,
-  gtk3,
-  libayatana-appindicator,
-  libpulseaudio,
-  libdrm,
-  gpu-screen-recorder,
-  libglvnd,
-  libx11,
-  libxrandr,
+  pkg-config,
   wayland,
   wrapGAppsHook3,
   wrapperDir ? "/run/wrappers/bin",
-  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-gtk";
   version = "5.8.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk";
@@ -33,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    addDriverRunpath
     desktop-file-utils
     pkg-config
     makeWrapper
@@ -40,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     wrapGAppsHook3
   ];
-
   buildInputs = [
     gtk3
     libayatana-appindicator
@@ -51,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
-  __structuredAttrs = true;
-  strictDeps = true;
+  mesonBuildType = "release";
 
   preFixup =
     let
@@ -63,27 +65,25 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       gappsWrapperArgs+=(--prefix PATH : ${wrapperDir})
       gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gpu-screen-recorder-wrapped ]})
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libglvnd
-          addDriverRunpath.driverLink
-        ]
-      })
     '';
+
+  postFixup = ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ libglvnd ]} $out/bin/.gpu-screen-recorder-gtk-wrapped
+    addDriverRunpath $out/bin/.gpu-screen-recorder-gtk-wrapped
+  '';
 
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    changelog = "https://git.dec05eba.com/gpu-screen-recorder-gtk/tree/com.dec05eba.gpu_screen_recorder.appdata.xml#n82";
     description = "GTK frontend for gpu-screen-recorder";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-gtk/about/";
     license = lib.licenses.gpl3Only;
-    mainProgram = "gpu-screen-recorder-gtk";
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
       keenanweaver
     ];
     platforms = lib.platforms.linux;
+    mainProgram = "gpu-screen-recorder-gtk";
   };
 })

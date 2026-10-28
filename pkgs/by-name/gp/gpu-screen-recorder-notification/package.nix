@@ -1,8 +1,9 @@
 {
+  lib,
+  stdenv,
   fetchgit,
   gitUpdater,
   gsettings-desktop-schemas,
-  lib,
   libglvnd,
   libx11,
   libxext,
@@ -14,14 +15,16 @@
   ninja,
   pango,
   pkg-config,
-  stdenv,
-  wayland-scanner,
   wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-notification";
   version = "1.3.8";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-notification";
@@ -29,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-nojlYxNqoB9x8LBNYKERzQzp+l+cALkKYV+ORMZjBlo=";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     meson
     ninja
@@ -36,9 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     wayland-scanner
   ];
-
-  depsBuildBuild = [ pkg-config ];
-
   buildInputs = [
     libglvnd
     pango
@@ -51,15 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   mesonBuildType = "release";
 
   postInstall = ''
     wrapProgram "$out/bin/gsr-notify" \
-      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}"
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+  '';
+
+  postFixup = ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ libglvnd ]} $out/bin/.gsr-notify-wrapped
   '';
 
   passthru.updateScript = gitUpdater { };
@@ -68,12 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Notification in the style of ShadowPlay";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-notification/about";
     license = lib.licenses.gpl3Only;
-    mainProgram = "gsr-notify";
     maintainers = with lib.maintainers; [
       AhmedAmr
       keenanweaver
     ];
     platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    mainProgram = "gsr-notify";
   };
 })

@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   dbus,
   desktop-file-utils,
   fetchgit,
@@ -6,7 +8,6 @@
   gpu-screen-recorder,
   gpu-screen-recorder-notification,
   gsettings-desktop-schemas,
-  lib,
   libcap,
   libdrm,
   libglvnd,
@@ -26,9 +27,8 @@
   ninja,
   pango,
   pkg-config,
-  stdenv,
-  wayland-scanner,
   wayland,
+  wayland-scanner,
   wrapperDir ? "/run/wrappers/bin",
 }:
 
@@ -36,12 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-ui";
   version = "1.15.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder-ui";
     tag = finalAttrs.version;
     hash = "sha256-tFP2KsZJxmcyfFt8EKM7Rusl0uNvTGY9EIkklFJfUvA=";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     meson
     ninja
@@ -50,9 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     wayland-scanner
   ];
-
-  depsBuildBuild = [ pkg-config ];
-
   buildInputs = [
     libx11
     libxrandr
@@ -74,11 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
-  __structuredAttrs = true;
-  strictDeps = true;
-
   mesonBuildType = "release";
-
   mesonFlags = [
     # must be handled in the nixos module as extra file permissions are stripped in the nix store
     (lib.mesonBool "capabilities" false)
@@ -92,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapProgram "$out/bin/gsr-ui" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}" \
         --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
         --prefix PATH : "${wrapperDir}" \
         --suffix PATH : "${
@@ -103,18 +99,21 @@ stdenv.mkDerivation (finalAttrs: {
         }"
     '';
 
+  postFixup = ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ libglvnd ]} $out/bin/.gsr-ui-wrapped
+  '';
+
   passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Fullscreen overlay UI for GPU Screen Recorder in the style of ShadowPlay";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-ui/about";
     license = lib.licenses.gpl3Only;
-    mainProgram = "gsr-ui";
     maintainers = with lib.maintainers; [
       AhmedAmr
       keenanweaver
     ];
     platforms = lib.platforms.linux;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    mainProgram = "gsr-ui";
   };
 })
