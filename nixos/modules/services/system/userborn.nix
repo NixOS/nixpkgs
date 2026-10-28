@@ -69,6 +69,12 @@ let
     "subuid"
     "subgid"
   ];
+  # Make the source files writable, userborn bind-mounts them read-only.
+  unmountPasswordFiles = lib.mkIf (!userCfg.mutableUsers) (
+    lib.map (file: "-${pkgs.util-linux}/bin/umount ${cfg.passwordFilesLocation}/${file}") (
+      passwordFiles ++ subIdFiles
+    )
+  );
 
 in
 {
@@ -197,6 +203,7 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
+          ExecStartPre = unmountPasswordFiles;
           ExecStart = "${lib.getExe pkgs.userborn-import-legacy} --nogroup-gid ${toString config.ids.gids.nogroup} ${cfg.passwordFilesLocation}";
         };
       };
@@ -244,12 +251,7 @@ in
               "${pkgs.coreutils}/bin/mkdir -p ${cfg.passwordFilesLocation}"
             ])
 
-            # Make the source files writable before executing userborn.
-            (lib.mkIf (!userCfg.mutableUsers) (
-              lib.map (file: "-${pkgs.util-linux}/bin/umount ${cfg.passwordFilesLocation}/${file}") (
-                passwordFiles ++ subIdFiles
-              )
-            ))
+            unmountPasswordFiles
           ];
 
           ExecStartPost =

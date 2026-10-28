@@ -55,6 +55,14 @@
         services.userborn.importLegacyState = false;
         users.users.intruder.enable = true;
       };
+
+      # userborn bind-mounts the password files read-only.
+      userborn-immutable.configuration = {
+        services.userborn.enable = lib.mkForce true;
+        users.mutableUsers = lib.mkForce false;
+        users.allowNoPasswordLogin = true;
+        users.users.intruder.enable = true;
+      };
     };
   };
 
@@ -158,5 +166,17 @@
       with subtest("legacy import service can be excluded"):
           switch("userborn-without-import")
           machine.fail("systemctl cat userborn-import-legacy.service")
+
+      with subtest("legacy import reruns over read-only password files"):
+          switch("userborn-immutable")
+          machine.succeed("findmnt --noheadings --options ro /etc/group")
+          machine.succeed(
+              "sed -i 's/^{/{\"phantom\":4242,/' /var/lib/nixos/gid-map",
+              "rm /etc/previous-userborn.json",
+          )
+          machine.succeed("systemctl restart userborn-import-legacy.service")
+          machine.wait_for_unit("userborn.service")
+          t.assertEqual(machine.succeed("getent group phantom").strip(), "phantom:x:4242:")
+          machine.succeed("findmnt --noheadings --options ro /etc/group")
     '';
 }
