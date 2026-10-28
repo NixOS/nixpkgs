@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchgit,
   fetchHex,
+  cacert,
   erlang,
   makeWrapper,
   writeScript,
@@ -19,7 +20,7 @@ let
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
-    version = "3.27.3";
+    version = "3.28.0";
 
     # How to obtain `sha256`:
     # nix-prefetch-url --unpack https://github.com/erlang/rebar3/archive/${version}.tar.gz
@@ -27,7 +28,7 @@ let
       owner = "erlang";
       repo = "rebar3";
       tag = version;
-      sha256 = "Om6c2cpeFCdPAemeA965YxKXhasHbx3gHVgSh+jO2TI=";
+      sha256 = "bhNpZNBYVnM/81EERADvzUGkN9jIR7wPv/kXCC5tWO8=";
     };
 
     buildInputs = [ erlang ];
@@ -60,7 +61,8 @@ let
     '';
 
     checkPhase = ''
-      HOME=. escript ./rebar3 ct
+      HOME=. ERL_FLAGS="-public_key cacerts_path '\"${cacert}/etc/ssl/certs/ca-bundle.crt\"'" \
+        escript ./rebar3 ct
     '';
 
     doCheck = true;
