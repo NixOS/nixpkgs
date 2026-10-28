@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   unzip,
   tcl,
   zlib,
@@ -88,6 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://build.opensuse.org/public/source/openSUSE:Factory/sqlite3/sqlite-3.54.1-CVE-2026-119586-dump-recover-hardening.patch?rev=180";
       hash = "sha256-mzTIhEfZY0U1UPcw+1We4mfxBhwOUoMEd33tr9Q5ZLE=";
+    })
+    # Fix concurrency-related hang in notify2.test
+    (fetchpatch {
+      name = "sqlite-test1-hash-mutex.patch";
+      url = "https://github.com/sqlite/sqlite/commit/c3e073420ff9e35ea80c783e3664e32449b5b703.patch";
+      includes = [
+        "src/test1.c"
+        "test/notify2.test"
+      ];
+      hash = "sha256-oHXttbYDq510kaYZEvoxG2zdBRN0lxeO0RvyYwwfhcE=";
     })
   ];
 
