@@ -59,7 +59,7 @@ buildNimPackage (finalAttrs: {
   );
 
   meta = {
-    description = "Economical coding agent for OpenAI-compatible endpoints";
+    description = "Terminal coding agent focused on token efficiency";
     homepage = "https://3code.capocasa.dev";
     changelog = "https://github.com/capocasa/3code/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
