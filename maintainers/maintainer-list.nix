@@ -31348,12 +31348,6 @@
     githubId = 3413119;
     name = "Vonfry";
   };
-  vonixxx = {
-    email = "vonixxx@tuta.io";
-    github = "vonixxx";
-    githubId = 144771550;
-    name = "Luca Uricariu";
-  };
   voronind = {
     email = "hi@voronind.com";
     name = "Dmitry Voronin";
