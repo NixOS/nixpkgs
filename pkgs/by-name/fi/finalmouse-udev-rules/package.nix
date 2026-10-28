@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     homepage = "https://github.com/teamfinalmouse/xpanel-linux-permissions";
     description = "udev rules that give NixOS permission to communicate with Finalmouse devices";
