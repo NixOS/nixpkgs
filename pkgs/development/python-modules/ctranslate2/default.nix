@@ -71,6 +71,7 @@ buildPythonPackage rec {
     lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       # RuntimeError: Failed to initialize cpuinfo!"
       "test_torch_variables"
+      "test_float32_float16_and_independent_chunks"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Fatal Python error: Aborted
