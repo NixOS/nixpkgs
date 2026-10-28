@@ -395,9 +395,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals (pythonAtLeast "3.13") [
     ./3.13/virtualenv-permissions.patch
   ]
-  ++ optionals mimetypesSupport [
+  ++ optionals (mimetypesSupport && (pythonOlder "3.14" || pythonAtLeast "3.15")) [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
+  ]
+  ++ optionals (mimetypesSupport && pythonAtLeast "3.14" && pythonOlder "3.15") [
+    ./3.14/mimetypes.patch
   ]
   ++ optionals (hasDistutilsCxxPatch && pythonOlder "3.12") [
     # Fix for http://bugs.python.org/issue1222585
