@@ -122,7 +122,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://multiviewer.app";
     downloadPage = "https://multiviewer.app/download";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ babeuh ];
+    maintainers = with lib.maintainers; [
+      babeuh
+      eprovst
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "multiviewer";
   };
