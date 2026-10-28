@@ -81,7 +81,7 @@ symlinkJoin {
   postBuild = ''
     makeWrapper ${lib.getExe electron} "$out/bin/t3code-desktop" \
       --add-flags "$out/libexec/t3code/apps/desktop" \
-      --set T3CODE_SERVER_ROOT "${configuredCli.unwrapped}/libexec/t3code" \
+      --set T3CODE_SERVER_ROOT "$out/libexec/t3code" \
       --inherit-argv0 ${lib.escapeShellArgs configuredCli.wrapperArgs}
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
