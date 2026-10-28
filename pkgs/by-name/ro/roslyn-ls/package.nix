@@ -33,7 +33,14 @@ let
 
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
 
-  project = "Microsoft.CodeAnalysis.LanguageServer";
+  microsoftCodeAnalysisLanguageServer = "Microsoft.CodeAnalysis.LanguageServer";
+
+  roslynLanguageServer = "roslyn-language-server";
+
+  projects = [
+    microsoftCodeAnalysisLanguageServer
+    roslynLanguageServer
+  ];
 in
 buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk dotnet-runtime;
@@ -50,7 +57,7 @@ buildDotnetModule (finalAttrs: {
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
   version = "5.13.0-1.26513.11";
-  projectFile = "src/LanguageServer/${project}/${project}.csproj";
+  projectFile = map (project: "src/LanguageServer/${project}/${project}.csproj") projects;
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
 
@@ -84,12 +91,14 @@ buildDotnetModule (finalAttrs: {
     "-p:EnableRuntimePackDownload=false"
   ];
 
-  executables = [ project ];
+  executables = projects;
 
   postInstall = ''
-    # fake executable that we substitute in postFixup
-    touch $out/lib/$pname/${project}
-    chmod +x $out/lib/$pname/${project}
+    # fake executables that we substitute in postFixup
+    for project in ${toString projects}; do
+      touch $out/lib/$pname/$project
+      chmod +x $out/lib/$pname/$project
+    done
   '';
 
   # problem and solution:
@@ -97,29 +106,37 @@ buildDotnetModule (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    env dotnet publish $dotnetProjectFiles \
-        -p:ContinuousIntegrationBuild=true \
-        -p:Deterministic=true \
-        -p:InformationalVersion=$version \
-        -p:PublishTrimmed=false \
-        -p:OverwriteReadOnlyFiles=true \
-        --configuration Release \
-        --no-self-contained \
-        --output "$out/lib/$pname" \
-        --no-restore \
-        --runtime ${rid} \
-        ''${dotnetInstallFlags[@]}  \
-        ''${dotnetFlags[@]}
+    for project in $dotnetProjectFiles; do
+      env dotnet publish $project \
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
+          -p:InformationalVersion=$version \
+          -p:PublishTrimmed=false \
+          -p:OverwriteReadOnlyFiles=true \
+          --configuration Release \
+          --no-self-contained \
+          --output "$out/lib/$pname" \
+          --no-restore \
+          --runtime ${rid} \
+          ''${dotnetInstallFlags[@]}  \
+          ''${dotnetFlags[@]}
+    done
 
     runHook postInstall
   '';
 
-  # force dotnet-runtime to run the dll
-  # but keep the wrapper created with useDotnetFromEnv to allow LS to work properly on codebases
   postFixup = ''
-    rm -f $out/lib/$pname/${project}
-    substituteInPlace $out/bin/${project} \
-      --replace-fail "$out/lib/$pname/${project}" "${lib.getExe dotnet-runtime}\" \"$out/lib/$pname/${project}.dll"
+    # force dotnet-runtime to run the dll
+    # but keep the wrapper created with useDotnetFromEnv to allow LS to work properly on codebases
+    for project in ${toString projects}; do
+      rm -f $out/lib/$pname/$project
+      substituteInPlace $out/bin/$project \
+        --replace-fail "$out/lib/$pname/$project" "${lib.getExe dotnet-runtime}\" \"$out/lib/$pname/$project.dll"
+    done
+
+    # roslyn-language-server requires Microsoft.CodeAnalysis.LanguageServer
+    # to be available in AppContext.BaseDirectory, which is $out/lib/$pname
+    ln -s $out/bin/${microsoftCodeAnalysisLanguageServer} $out/lib/$pname/${microsoftCodeAnalysisLanguageServer}
   '';
 
   passthru = {
@@ -144,16 +161,20 @@ buildDotnetModule (finalAttrs: {
                 set timeout 60
                 set req "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"processId\":null,\"rootUri\":null,\"capabilities\":{}}}"
 
-                set chan [open "|${finalAttrs.meta.mainProgram} --stdio --extensionLogDirectory log 2>@stderr" r+]
-                fconfigure $chan -translation binary -buffering none
-                spawn -open $chan
-                match_max 100000
+                set programs { "${lib.join "\" \"" projects}" }
 
-                send -- "Content-Length: [string length $req]\r\n\r\n$req"
-                expect {
-                  -ex {"id":1,"result"} { }
-                  timeout { send_error "\ntimeout!\n"; exit 1 }
-                  eof { send_error "\nserver exited!\n"; exit 1 }
+                foreach program $programs {
+                  set chan [open "|$program --stdio --extensionLogDirectory log 2>@stderr" r+]
+                  fconfigure $chan -translation binary -buffering none
+                  spawn -open $chan
+                  match_max 100000
+
+                  send -- "Content-Length: [string length $req]\r\n\r\n$req"
+                  expect {
+                    -ex {"id":1,"result"} { }
+                    timeout { send_error "\ntimeout!\n"; exit 1 }
+                    eof { send_error "\nserver exited!\n"; exit 1 }
+                  }
                 }
               EOF
               touch $out
@@ -166,7 +187,14 @@ buildDotnetModule (finalAttrs: {
         with-net10-sdk = with-sdk dotnetCorePackages.sdk_10_0;
         with-net11-sdk = with-sdk dotnetCorePackages.sdk_11_0;
         no-sdk = with-sdk null;
-        version = testers.testVersion { package = finalAttrs.finalPackage; };
+        version-microsoft-codeanalysis-languageserver = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "${microsoftCodeAnalysisLanguageServer} --version";
+        };
+        version-roslyn-language-server = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "${roslynLanguageServer} --stdio --version";
+        };
       };
     updateScript = ./update.sh;
   };
@@ -177,6 +205,6 @@ buildDotnetModule (finalAttrs: {
     changelog = "https://github.com/dotnet/vscode-csharp/releases/tag/v${finalAttrs.vsVersion}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
-    mainProgram = "Microsoft.CodeAnalysis.LanguageServer";
+    mainProgram = microsoftCodeAnalysisLanguageServer;
   };
 })
