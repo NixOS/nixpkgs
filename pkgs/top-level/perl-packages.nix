@@ -22451,7 +22451,7 @@ with self;
       ParseRecDescent
       PodStrip
     ];
-    buildInputs = [
+    checkInputs = [
       TestDeep
       TestNoWarnings
     ];
