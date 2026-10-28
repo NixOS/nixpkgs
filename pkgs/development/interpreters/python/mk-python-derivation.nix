@@ -270,7 +270,7 @@ lib.extendMkDerivation {
                 * If ${theirName} provides executables that are called at run time, pass its
                   bin path to makeWrapperArgs:
 
-                      makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${getName drv} ] }" ];
+                      makeWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ ${getName drv} ]) ];
 
               ${optionalLocation}
             '';

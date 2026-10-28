@@ -12434,6 +12434,8 @@ self: super: with self; {
 
   nvidia-cutlass-operators = callPackage ../development/python-modules/nvidia-cutlass-operators { };
 
+  nvidia-dali = callPackage ../development/python-modules/nvidia-dali { };
+
   nvidia-dlprof-pytorch-nvtx =
     callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
       { };

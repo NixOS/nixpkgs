@@ -27,7 +27,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "tailscale";
-  version = "1.104.2";
+  version = "1.104.4";
 
   outputs = [
     "out"
@@ -38,10 +38,10 @@ buildGo127Module (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vMkNFJSwf/UPCUnMZiFd+cfOspdvHMU4GPs/LAqxib0=";
+    hash = "sha256-sJh3oXFarS1s+flMfm4ZAE+0ZSwp8F3Rib76+qBFVIw=";
   };
 
-  vendorHash = "sha256-VxuDS8QKZ82W/MOlfng0+ZCPSPl5KnK3FYW1puDiNe4=";
+  vendorHash = "sha256-RvaouD88naVNOPJBVcqMaAn+ovjXI4g83ShCdRiR5/Q=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -113,6 +113,25 @@ buildGo127Module (finalAttrs: {
 
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
+
+        # Run children with an environment that lacks PATH, so the commands
+        # they spawn (`cat`, `printenv`, `nohup`) are not found in the sandbox.
+        "TestMonitorExecEnvFD" # ssh/tailssh
+        "TestSpawnRPCChildEnvIsExplicit" # ssh/tailssh
+        "TestSessionMonitorTeardownKillsSamePgidStraggler" # ssh/tailssh
+
+        # Agent forwarding dirs are only removed from a root-owned /tmp.
+        "TestAgentForwardDirCleanup" # ssh/tailssh
+
+        # The incubator needs the session user's supplementary groups, but the
+        # build user has none: an empty --groups= does not parse, and as
+        # non-root setgroups(2) with any other list fails with EPERM.
+        "TestFwdChildHoldsOnlyDeclaredFds" # ssh/tailssh
+        "TestSessionChildDeclaredFdsIncludeOnlyEnvFD" # ssh/tailssh
+        "TestSessionMonitorExitStatusOrder" # ssh/tailssh
+        "TestSessionMonitorPTY" # ssh/tailssh
+        "TestSessionPTYMasterNotInheritedByLaterSessions" # ssh/tailssh
+        "TestSessionPtyTermWiring" # ssh/tailssh
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -216,6 +235,12 @@ buildGo127Module (finalAttrs: {
           # nothing in the sandbox.
           preCheck = ''
             export TAILSCALE_SSH_DEFAULT_PATH="$PATH"
+
+            # The session monitor tests run children by absolute FHS paths.
+            substituteInPlace ssh/tailssh/monitor_test.go ssh/tailssh/monitor_lifecycle_test.go \
+              --replace-fail '"/bin/sleep"' "\"$(type -P sleep)\""
+            substituteInPlace ssh/tailssh/monitor_test.go \
+              --replace-fail '"/usr/bin/id"' "\"$(type -P id)\""
           '';
         };
         tsnet = { };

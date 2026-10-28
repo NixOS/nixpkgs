@@ -35,7 +35,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   # Native onnxruntime lib used by Python module onnxruntime can't find its other libs without this
   makeWrapperArgs = [
-    ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.onnxruntime ]}"''
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ pkgs.onnxruntime ])
   ];
 
   pythonImportsCheck = [
