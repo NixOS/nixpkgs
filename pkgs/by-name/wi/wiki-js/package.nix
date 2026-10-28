@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://js.wiki/";
     description = "Modern and powerful wiki app built on Node.js";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ minosimo ];
   };
 })
