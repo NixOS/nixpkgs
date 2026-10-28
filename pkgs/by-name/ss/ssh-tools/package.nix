@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ssh-tools";
-  version = "1.9";
+  version = "1.10";
 
   src = fetchFromCodeberg {
     owner = "vaporup";
     repo = "ssh-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZMjpc2zjvuLJES5ixEHvo7oAx1JGzy60LzN09Ykn/54=";
+    hash = "sha256-eOwBvw4jtJnmm0eXIenntYpZzo+HsZHVOwoL5u3+/Cg=";
   };
 
   vendorHash = "sha256-GSFhz3cIRl4XUA18HUeUkrw+AJyOkU3ZrZKYTGsWbug=";
