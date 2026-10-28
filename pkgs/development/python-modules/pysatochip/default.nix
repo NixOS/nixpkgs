@@ -2,33 +2,68 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cbor2,
   certifi,
+  click,
   cryptography,
+  mnemonic,
   pyaes,
+  pycryptodomex,
   pyopenssl,
   pyscard,
+  pytestCheckHook,
+  setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pysatochip";
-  version = "0.18.0";
-  format = "setuptools";
+  version = "0.18.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "toporin";
+    owner = "Toporin";
     repo = "pysatochip";
     tag = "v${version}";
-    hash = "sha256-Axtxd/Jmdqo6JayCbDNk5wOToXT7/GlEKxWMC12mXyc=";
+    hash = "sha256-J4VGdeC+IowqWnCP8JFWGU8yPEaYCzfVn6F025/mwKY=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-    pyaes
-    pyopenssl
-    pyscard
+  postPatch = ''
+        # Make the optional 'nostr' dependency lazy in the CLI module.
+        # We do not package 'nostr' (python-nostr) because it is unmaintained upstream,
+        # relies on outdated 'secp256k1' bindings incompatible with modern libsecp256k1,
+        # and is only needed for the single 'nostr_publish_message' command.
+        substituteInPlace satochip_cli.py \
+          --replace-fail "from nostr.event import Event, EventKind" "try:
+        from nostr.event import Event, EventKind
+    except ImportError:
+        Event = EventKind = None"
+  '';
+
+  build-system = [
+    setuptools
   ];
 
-  nativeCheckInputs = [ certifi ];
+  dependencies = [
+    cbor2
+    certifi
+    click
+    cryptography
+    mnemonic
+    pyaes
+    pycryptodomex
+    pyopenssl
+    pyscard
+    websockets
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [
+    "tests"
+  ];
 
   pythonImportsCheck = [ "pysatochip" ];
 
