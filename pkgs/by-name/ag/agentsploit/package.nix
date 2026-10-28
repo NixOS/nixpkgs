@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "agentsploit";
-  version = "1.6.3";
+  version = "1.7.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "agentsploit";
     repo = "agentsploit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g9h+hM6ujm0uvkWZMoOkZ/wUGA77Yu6lEn1ZNHh6aTg=";
+    hash = "sha256-xcAf5mJW5a+z5W5LGDKnUzb22YS0WEasX+y3CT65jZw=";
   };
 
   build-system = with python3Packages; [ hatchling ];
