@@ -89,7 +89,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/rtk-ai/rtk/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
-      bsl11
     ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rtk";

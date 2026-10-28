@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ciel";
-  version = "3.0.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fossi-foundation";
     repo = "ciel";
     tag = finalAttrs.version;
-    hash = "sha256-bARqe8Mu15bIlb0I+UK5feefN1qXRngBB2r3kgwxI7w=";
+    hash = "sha256-IEeNYjmA7geiHCVzjadDzy77STbbWmie47HF63bqMqk=";
   };
 
   build-system = [ python3Packages.poetry-core ];
