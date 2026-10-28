@@ -14,21 +14,19 @@
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "2.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iroco-co";
     repo = "aioimaplib";
     tag = version;
-    hash = "sha256-njzSpKPis033eLoRKXL538ljyMOB43chslio1wodrKU=";
+    hash = "sha256-amEY44mW5EFDMTwfC7+ut28CeWTdEEMzZ/aX3k+IF7g=";
   };
 
   patches = [
     # https://github.com/iroco-co/aioimaplib/issues/125
     ./event-loop.patch
-    # https://github.com/iroco-co/aioimaplib/pull/138
-    ./python3.14.7-compat.patch
   ];
 
   postPatch = ''
