@@ -83,7 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Gnome CD/DVD Burner";
     homepage = "https://gitlab.gnome.org/GNOME/brasero";
-    maintainers = [ lib.maintainers.bdimcheff ];
+    maintainers = [
+      lib.maintainers.bdimcheff
+      lib.maintainers.juliusfreudenberger
+    ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     mainProgram = "brasero";
