@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "2.6";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = "html-sanitizer";
     tag = version;
-    hash = "sha256-egBGhv7vudH32jwh9rAXuXfMzPDxJ60S5WKbc4kzCTU=";
+    hash = "sha256-F+af1cyHAKc7FhTBHxc+LHhE46rE0rm23ONIqFIZolo=";
   };
 
   build-system = [ hatchling ];
