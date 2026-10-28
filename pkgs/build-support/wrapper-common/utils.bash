@@ -162,6 +162,12 @@ expandResponseParams() {
 # Fails if there are too many symlinks.
 resolveLibDir() {
     local rest="$1/" component link target links=0
+    # The common case: a path in the store with no `.`, `..` or empty
+    # components is already resolved, since it has no symlink to follow.
+    if [[ "$1" == "${NIX_STORE:-}"/* && "$1/" != */./* && "$1/" != */../* && "$1/" != *//* ]]; then
+        resolvedPath="$1"
+        return
+    fi
     if [[ "$rest" != /* ]]; then
         rest="$PWD/$rest"
     fi
