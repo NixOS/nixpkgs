@@ -1,0 +1,14 @@
+diff --git a/scan/sane/ledmi.h b/scan/sane/ledmi.h
+index a987c5d..f72847b 100644
+--- a/scan/sane/ledmi.h
++++ b/scan/sane/ledmi.h
+@@ -162,7 +162,7 @@ struct ledm_session
+ int bb_open(struct ledm_session*);
+ int bb_close(struct ledm_session*);
+ int bb_get_parameters(struct ledm_session*, SANE_Parameters*, int);
+-int bb_is_paper_in_adf();         /* 0 = no paper in adf, 1 = paper in adf, -1 = error */
++int bb_is_paper_in_adf(struct ledm_session*);         /* 0 = no paper in adf, 1 = paper in adf, -1 = error */
+ SANE_Status bb_start_scan(struct ledm_session*);
+ int bb_get_image_data(struct ledm_session*, int); 
+ int bb_end_page(struct ledm_session*, int);
+

@@ -1,0 +1,26 @@
+From 2d84683ee874d9f7ca506c61f810aaf4bdc06e63 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 12 Jul 2026 15:12:39 +0530
+Subject: [PATCH 2/3] fix: exit after printing version
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ cmd/backrest/backrest.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmd/backrest/backrest.go b/cmd/backrest/backrest.go
+index dd59512..9c0ca7e 100644
+--- a/cmd/backrest/backrest.go
++++ b/cmd/backrest/backrest.go
+@@ -58,7 +58,7 @@ func runApp() {
+ 	flag.Parse()
+ 	if *printVersion {
+ 		fmt.Printf("backrest version: %s, commit: %s\n", version, commit)
+-		return
++		os.Exit(0)
+ 	}
+ 	installLoggers(version, commit)
+ 
+-- 
+2.54.0
+

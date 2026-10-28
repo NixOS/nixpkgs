@@ -1,0 +1,12 @@
+diff --git a/third_party/kiwi/kiwi.h b/third_party/kiwi/kiwi.h
+index d3bf4113..a8a2ad6e 100644
+--- a/third_party/kiwi/kiwi.h
++++ b/third_party/kiwi/kiwi.h
+@@ -15,6 +15,7 @@
+ #include <string.h>
+ #include <pthread.h>
+ #include <assert.h>
++#include <ctype.h>
+ #include <machinarium.h>
+ 
+ #include "kiwi/macro.h"

@@ -1,0 +1,37 @@
+--- a/lib/prelude.nix
++++ b/lib/prelude.nix
+@@ -108,9 +108,24 @@
+ 
+   primitiveFetchers = listFetchers builtinsOverlay true ++ [ "fetchurlBoot" ];
+ 
++  # Helper to merge args, handling both attrsets and functions (for extendMkDerivation)
++  mergeArgsWithRequired = requiredArgs: args:
++    if isFunction args
++    then final: requiredArgs // args final
++    else requiredArgs // args;
++
++  # Helper to safely intersect args with oldArgs, handling function args
++  safeIntersectArgs = args: oldArgs:
++    if isFunction args
++    then {}  # When args is a function, we can't know the keys at evaluation time
++    else builtins.intersectAttrs args oldArgs;
++
+   markFetcher = { type, name, fetcher }:
+     let
+-      customFetcher = args: markFetcherDrv { inherit type name fetcher args; drv = fetcher (requiredFetcherArgs // args); };
++      customFetcher = args: markFetcherDrv {
++        inherit type name fetcher args;
++        drv = fetcher (mergeArgsWithRequired requiredFetcherArgs args);
++      };
+ 
+       # The required fetcher arguments are assumed to be of type string,
+       # because requiring a complex value, e.g. a derivation attrset, is very unlikely,
+@@ -132,7 +147,7 @@
+               if !(elem origPassthru.__fetcher.name primitiveFetchers) then functionArgs origPassthru.__fetcher
+               else throw "Fetcher ${name} is build on top of the primitive fetcher ${origPassthru.__fetcher.name}, which is not supported."
+             else {};
+-          newArgs = oldArgs // functionArgs fetcher // mapAttrs (_: _: true) (builtins.intersectAttrs args oldArgs);
++          newArgs = oldArgs // functionArgs fetcher // mapAttrs (_: _: true) (safeIntersectArgs args oldArgs);
+         in {
+           passthru = origPassthru // {
+             __fetcher = setFunctionArgs fetcher newArgs // { inherit type name args; drv = drvOverriden; };

@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1234567..abcdefg 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -151,14 +151,4 @@ include_directories(${ZLIB_INCLUDE_DIRS})
+ 
+ # libArchive
+-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+-    # Homebrew ships libarchive keg only, include dirs have to be set manually
+-    execute_process(
+-        COMMAND brew --prefix libarchive
+-        OUTPUT_VARIABLE LIBARCHIVE_PREFIX
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
+-        COMMAND_ERROR_IS_FATAL ANY
+-    )
+-    set(LibArchive_INCLUDE_DIR "${LIBARCHIVE_PREFIX}/include")
+-endif()
+ find_package(LibArchive REQUIRED)
+ include_directories(${LibArchive_INCLUDE_DIR})

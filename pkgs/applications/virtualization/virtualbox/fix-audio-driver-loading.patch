@@ -1,0 +1,26 @@
+diff --git a/src/VBox/Devices/Audio/DrvHostAudioAlsaStubs.cpp b/src/VBox/Devices/Audio/DrvHostAudioAlsaStubs.cpp
+index cfcb0abbf..2ce564f6f 100644
+--- a/src/VBox/Devices/Audio/DrvHostAudioAlsaStubs.cpp
++++ b/src/VBox/Devices/Audio/DrvHostAudioAlsaStubs.cpp
+@@ -258,7 +258,7 @@ static DECLCALLBACK(int32_t) drvHostAudioAlsaLibInitOnce(void *pvUser)
+     LogFlowFunc(("\n"));
+ 
+     RTLDRMOD hMod = NIL_RTLDRMOD;
+-    int rc = RTLdrLoadSystemEx(VBOX_ALSA_LIB, RTLDRLOAD_FLAGS_NO_UNLOAD, &hMod);
++    int rc = RTLdrLoadEx(VBOX_ALSA_LIB, &hMod, RTLDRLOAD_FLAGS_NO_UNLOAD, nullptr);
+     if (RT_SUCCESS(rc))
+     {
+         for (uintptr_t i = 0; i < RT_ELEMENTS(SharedFuncs); i++)
+diff --git a/src/VBox/Devices/Audio/DrvHostAudioPulseAudioStubs.cpp b/src/VBox/Devices/Audio/DrvHostAudioPulseAudioStubs.cpp
+index a17fc93f9..148f5c39a 100644
+--- a/src/VBox/Devices/Audio/DrvHostAudioPulseAudioStubs.cpp
++++ b/src/VBox/Devices/Audio/DrvHostAudioPulseAudioStubs.cpp
+@@ -332,7 +332,7 @@ static DECLCALLBACK(int32_t) drvHostAudioPulseLibInitOnce(void *pvUser)
+     LogFlowFunc(("\n"));
+ 
+     RTLDRMOD hMod = NIL_RTLDRMOD;
+-    int rc = RTLdrLoadSystemEx(VBOX_PULSE_LIB, RTLDRLOAD_FLAGS_NO_UNLOAD, &hMod);
++    int rc = RTLdrLoadEx(VBOX_PULSE_LIB, &hMod, RTLDRLOAD_FLAGS_NO_UNLOAD, nullptr);
+     if (RT_SUCCESS(rc))
+     {
+         for (unsigned i = 0; i < RT_ELEMENTS(g_aImportedFunctions); i++)

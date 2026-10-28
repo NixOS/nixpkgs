@@ -1,0 +1,25 @@
+diff --git a/src/common/gnomesettings.cpp b/src/common/gnomesettings.cpp
+index 717cc9b..ee255ea 100644
+--- a/src/common/gnomesettings.cpp
++++ b/src/common/gnomesettings.cpp
+@@ -150,10 +150,18 @@ GnomeSettingsPrivate::GnomeSettingsPrivate(QObject *parent)
+     : GnomeSettings(parent)
+     , m_usePortal(checkUsePortalSupport())
+     , m_canUseFileChooserPortal(!m_usePortal)
+-    , m_gnomeDesktopSettings(g_settings_new("org.gnome.desktop.wm.preferences"))
+-    , m_settings(g_settings_new("org.gnome.desktop.interface"))
+     , m_fallbackFont(new QFont(QLatin1String("Sans"), 10))
+ {
++    g_autoptr(GSettingsSchemaSource) schemaSource = nullptr;
++    g_autoptr(GSettingsSchema) gnomeDesktopSchema = nullptr;
++    g_autoptr(GSettingsSchema) settingsSchema = nullptr;
++
++    schemaSource = g_settings_schema_source_new_from_directory("@gds_gsettings_path@", g_settings_schema_source_get_default(), true, nullptr);
++    gnomeDesktopSchema = g_settings_schema_source_lookup(schemaSource, "org.gnome.desktop.wm.preferences", false);
++    m_gnomeDesktopSettings = g_settings_new_full(gnomeDesktopSchema, nullptr, nullptr);
++    settingsSchema = g_settings_schema_source_lookup(schemaSource, "org.gnome.desktop.interface", false);
++    m_settings = g_settings_new_full(settingsSchema, nullptr, nullptr);
++
+     gtk_init(nullptr, nullptr);
+ 
+     // Set log handler to suppress false GtkDialog warnings

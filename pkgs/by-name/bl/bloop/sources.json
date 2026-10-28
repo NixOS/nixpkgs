@@ -1,0 +1,28 @@
+{
+  "repo": "scalacenter/bloop",
+  "version": "2.1.2",
+  "completions": {
+    "bash": {
+      "asset": "bash-completions",
+      "hash": "sha256-2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE="
+    },
+    "fish": {
+      "asset": "fish-completions",
+      "hash": "sha256-RF6nZxbw4sLwCP4irKJLYCZnlkaRdEkmpYkOHBoSF/8="
+    },
+    "zsh": {
+      "asset": "zsh-completions",
+      "hash": "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c="
+    }
+  },
+  "assets": {
+    "aarch64-darwin": {
+      "asset": "bloop-aarch64-apple-darwin",
+      "hash": "sha256-Y3jY50vaJufHNUm4msSbJRrtLT2eB9fSlrwfm8qjem0="
+    },
+    "x86_64-linux": {
+      "asset": "bloop-x86_64-pc-linux",
+      "hash": "sha256-p9bUqeCMxH1A9JAyObTgPagcJAE4HMDhZFtQQLEjWXE="
+    }
+  }
+}

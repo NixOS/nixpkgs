@@ -1,0 +1,37 @@
+diff --git a/src/pyshark/capture/capture.py b/src/pyshark/capture/capture.py
+index b7aef6e..8967398 100644
+--- a/src/pyshark/capture/capture.py
++++ b/src/pyshark/capture/capture.py
+@@ -182,25 +182,16 @@ class Capture:
+                 asyncio.set_event_loop(self.eventloop)
+         else:
+             try:
+-                self.eventloop = asyncio.get_event_loop_policy().get_event_loop()
++                self.eventloop = asyncio.get_running_loop()
+             except RuntimeError:
+-                if threading.current_thread() != threading.main_thread():
+-                    # Ran not in main thread, make a new eventloop
++                try:
++                    # Python <3.14: may return an existing non-running loop.
++                    self.eventloop = asyncio.get_event_loop()
++                except RuntimeError:
++                    # Python 3.14+: no loop exists for this thread.
+                     self.eventloop = asyncio.new_event_loop()
+                     asyncio.set_event_loop(self.eventloop)
+-                else:
+-                    raise
+-            if os.name == "posix" and isinstance(threading.current_thread(), threading._MainThread):
+-                # The default child watchers (ThreadedChildWatcher) attach_loop method is empty!
+-                # While using pyshark with ThreadedChildWatcher, asyncio could raise a ChildProcessError
+-                # "Unknown child process pid %d, will report returncode 255"
+-                # This led to a TSharkCrashException in _cleanup_subprocess.
+-                # Using the SafeChildWatcher fixes this issue, but it is slower.
+-                # SafeChildWatcher O(n) -> large numbers of processes are slow
+-                # ThreadedChildWatcher O(1) -> independent of process number
+-                # asyncio.get_child_watcher().attach_loop(self.eventloop)
+-                asyncio.set_child_watcher(asyncio.SafeChildWatcher())
+-                asyncio.get_child_watcher().attach_loop(self.eventloop)
++
+ 
+     def _packets_from_tshark_sync(self, packet_count=None, existing_process=None):
+         """Returns a generator of packets.

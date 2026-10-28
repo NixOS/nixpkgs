@@ -1,0 +1,57 @@
+From 86b5ad551ef0ffc7ca4da24b7619937bec738522 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 15 Apr 2024 20:47:59 -0400
+Subject: [PATCH 4/6] Use nixpkgs clang with the assembler driver
+
+---
+ as/driver.c | 20 +++-----------------
+ 1 file changed, 3 insertions(+), 17 deletions(-)
+
+diff --git a/as/driver.c b/as/driver.c
+index a0d49ad..c15dcbf 100644
+--- a/as/driver.c
++++ b/as/driver.c
+@@ -36,7 +36,7 @@ char **envp)
+     char *p, c, *arch_name, *as, *as_local;
+     char **new_argv;
+     const char *CLANG = "clang";
+-    char *prefix, buf[MAXPATHLEN], resolved_name[PATH_MAX];
++    char *prefix = "@clang-unwrapped@/bin/";
+     uint32_t bufsize;
+     struct arch_flag arch_flag;
+     const struct arch_flag *arch_flags, *family_arch_flag;
+@@ -50,22 +50,6 @@ char **envp)
+ 	qflag = FALSE;
+ 	Qflag = FALSE;
+ 	some_input_files = FALSE;
+-	/*
+-	 * Construct the prefix to the assembler driver.
+-	 */
+-	bufsize = MAXPATHLEN;
+-	p = buf;
+-	i = _NSGetExecutablePath(p, &bufsize);
+-	if(i == -1){
+-	    p = allocate(bufsize);
+-	    _NSGetExecutablePath(p, &bufsize);
+-	}
+-	prefix = realpath(p, resolved_name);
+-	if(prefix == NULL)
+-	    system_fatal("realpath(3) for %s failed", p);
+-	p = rindex(prefix, '/');
+-	if(p != NULL)
+-	    p[1] = '\0';
+ 	/*
+ 	 * Process the assembler flags exactly like the assembler would (except
+ 	 * let the assembler complain about multiple flags, bad combinations of
+@@ -362,6 +346,8 @@ char **envp)
+ 		exit(1);
+ 	}
+ 
++	prefix = "@gas@/bin/"; /* `libexec` is found relative to the assembler driver’s path. */
++
+ 	/*
+ 	 * If this assembler exist try to run it else print an error message.
+ 	 */
+-- 
+2.45.2
+

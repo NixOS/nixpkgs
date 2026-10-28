@@ -1,0 +1,13 @@
+diff --git a/src/streamlink/stream/ffmpegmux.py b/src/streamlink/stream/ffmpegmux.py
+index 136c0b81..2dd00a20 100644
+--- a/src/streamlink/stream/ffmpegmux.py
++++ b/src/streamlink/stream/ffmpegmux.py
+@@ -83,7 +83,7 @@ class MuxedStream(Stream, Generic[TSubstreams]):
+ 
+ 
+ class FFMPEGMuxer(StreamIO):
+-    __commands__: ClassVar[list[str]] = ["ffmpeg"]
++    __commands__: ClassVar[list[str]] = ["@ffmpeg@"]
+ 
+     DEFAULT_LOGLEVEL = "info"
+     DEFAULT_OUTPUT_FORMAT = "matroska"

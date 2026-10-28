@@ -1,0 +1,25 @@
+Disable openpty() and forkpty() prototypes when needed.
+--- a/yasr/yasr.h
++++ b/yasr/yasr.h
+@@ -308,8 +308,10 @@ extern void opt_set(int num, void *val);
+ extern void opt_queue_empty(int ll);
+ extern void opt_write(FILE * fp);
+ 
++#ifndef HAVE_OPENPTY
+ /* openpty.c prototypes */
+ extern int openpty(int *, int *, char *, struct termios *, struct winsize *);
++#endif
+ 
+ /* cfmakeraw.c prototypes */
+ extern void cfmakeraw(struct termios *);
+@@ -317,8 +319,10 @@ extern void cfmakeraw(struct termios *);
+ /* login_tty.c prototypes */
+ extern int login_tty(int);
+ 
++#ifndef HAVE_FORKPTY
+ /* forkpty.c prototypes */
+ extern int forkpty(int *, char *, struct termios *, struct winsize *);
++#endif
+ 
+ /* tbc - Would it be more efficient to ensure that "blank" grids always held
+    ascii 0x20 rather than ascii 0x00? */

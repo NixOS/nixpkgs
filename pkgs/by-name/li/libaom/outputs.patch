@@ -1,0 +1,70 @@
+diff --git a/cmake/aom_install.cmake b/cmake/aom_install.cmake
+index a8f6d64361..c5223462ed 100644
+--- a/cmake/aom_install.cmake
++++ b/cmake/aom_install.cmake
+@@ -45,8 +45,8 @@ macro(setup_aom_install_targets)
+               -DAOM_ROOT=${AOM_ROOT}
+               -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+               -DCMAKE_INSTALL_BINDIR=${CMAKE_INSTALL_BINDIR}
+-              -DCMAKE_INSTALL_INCLUDEDIR=${CMAKE_INSTALL_INCLUDEDIR}
+-              -DCMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}
++              -DCMAKE_INSTALL_FULL_INCLUDEDIR=${CMAKE_INSTALL_FULL_INCLUDEDIR}
++              -DCMAKE_INSTALL_FULL_LIBDIR=${CMAKE_INSTALL_FULL_LIBDIR}
+               -DCMAKE_PROJECT_NAME=${CMAKE_PROJECT_NAME}
+               -DCMAKE_THREAD_LIBS_INIT=${CMAKE_THREAD_LIBS_INIT}
+               -DCONFIG_MULTITHREAD=${CONFIG_MULTITHREAD}
+@@ -115,13 +115,13 @@ macro(setup_aom_install_targets)
+     # Setup the install rules. install() will automatically prepend
+     # CMAKE_INSTALL_PREFIX to relative paths
+     install(FILES ${AOM_INSTALL_INCS}
+-            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/aom")
++            DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/aom")
+     install(FILES "${AOM_PKG_CONFIG_FILE}"
+-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
++            DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+     install(TARGETS ${AOM_INSTALL_LIBS};${AOM_INSTALL_BINS}
+             EXPORT "${AOM_TARGETS_EXPORT_NAME}"
+-            RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+-            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+-            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++            RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}"
++            LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
++            ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}")
+   endif()
+ endmacro()
+diff --git a/cmake/pkg_config.cmake b/cmake/pkg_config.cmake
+index ad3cf77009..1b46040cd1 100644
+--- a/cmake/pkg_config.cmake
++++ b/cmake/pkg_config.cmake
+@@ -11,8 +11,8 @@
+ cmake_minimum_required(VERSION 3.16)
+ 
+ set(REQUIRED_ARGS "AOM_ROOT" "AOM_CONFIG_DIR" "CMAKE_INSTALL_PREFIX"
+-                  "CMAKE_INSTALL_BINDIR" "CMAKE_INSTALL_INCLUDEDIR"
+-                  "CMAKE_INSTALL_LIBDIR" "CMAKE_PROJECT_NAME"
++                  "CMAKE_INSTALL_BINDIR" "CMAKE_INSTALL_FULL_INCLUDEDIR"
++                  "CMAKE_INSTALL_FULL_LIBDIR" "CMAKE_PROJECT_NAME"
+                   "CONFIG_MULTITHREAD")
+ 
+ foreach(arg ${REQUIRED_ARGS})
+@@ -35,15 +35,15 @@ else()
+ endif()
+ 
+ # Write pkg-config info.
+-set(prefix "${CMAKE_INSTALL_PREFIX}")
+-set(bindir "${CMAKE_INSTALL_BINDIR}")
+-set(includedir "${CMAKE_INSTALL_INCLUDEDIR}")
+-set(libdir "${CMAKE_INSTALL_LIBDIR}")
++get_filename_component(prefix "${CMAKE_INSTALL_FULL_INCLUDEDIR}" DIRECTORY)
++get_filename_component(exec_prefix "${CMAKE_INSTALL_FULL_LIBDIR}" DIRECTORY)
++get_filename_component(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}" NAME)
++get_filename_component(libdir "${CMAKE_INSTALL_FULL_LIBDIR}" NAME)
+ set(pkgconfig_file "${AOM_CONFIG_DIR}/aom.pc")
+ string(TOLOWER ${CMAKE_PROJECT_NAME} pkg_name)
+ file(WRITE "${pkgconfig_file}" "# libaom pkg-config.\n")
+ file(APPEND "${pkgconfig_file}" "prefix=${prefix}\n")
+-file(APPEND "${pkgconfig_file}" "exec_prefix=\${prefix}\n")
++file(APPEND "${pkgconfig_file}" "exec_prefix=${exec_prefix}\n")
+ file(APPEND "${pkgconfig_file}" "includedir=\${prefix}/${includedir}\n")
+ file(APPEND "${pkgconfig_file}" "libdir=\${exec_prefix}/${libdir}\n\n")
+ file(APPEND "${pkgconfig_file}" "Name: ${pkg_name}\n")

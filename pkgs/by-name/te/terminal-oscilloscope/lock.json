@@ -1,0 +1,14 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": ["illwill"],
+      "path": "",
+      "rev": "v0.4.1",
+      "sha256": "0hiic5yjsaw6sgl1jzmfpm5g6a5ckzmd29c3pzg30glchn2g94sk",
+      "srcDir": "",
+      "subDir": "",
+      "url": "https://github.com/johnnovak/illwill/archive/v0.4.1.tar.gz"
+    }
+  ]
+}
