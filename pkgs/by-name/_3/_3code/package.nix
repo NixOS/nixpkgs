@@ -26,7 +26,7 @@ buildNimPackage (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    # buildNimPackage discovers only the standard `bin` field.
+    # buildNimPackage only reads `bin`; upstream uses `namedBin` to install `3code`.
     substituteInPlace threecode.nimble \
       --replace-fail 'namedBin["threecode"] = "3code"' 'bin = @["threecode"]'
   '';
@@ -53,7 +53,7 @@ buildNimPackage (finalAttrs: {
     changelog = "https://github.com/capocasa/3code/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "3code";
-    maintainers = with lib.maintainers; [ rvveber ];
+    maintainers = [ lib.maintainers.rvveber ];
     platforms = lib.platforms.linux;
   };
 })
