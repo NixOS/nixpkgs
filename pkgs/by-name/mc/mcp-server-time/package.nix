@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-time";
-  version = "2026.8.31";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
-    tag = finalAttrs.version;
-    hash = "sha256-6woyDFfHbv8oZDN7lXrNnjZM8viYsBfMe/NtcHdDZcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gzT45m4S/S7sighNwYw4I01jiLsUrGh+9H9p0neaQDE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/time/";
@@ -32,6 +32,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3Packages; [
     freezegun
     pytestCheckHook
+    pytest-asyncio
+  ];
+
+  disabledTests = [
+    # AssertionError: the console script is not installed in this venv
+    "test_console_script_boots_over_stdio"
+    "test_console_script_rejects_an_invalid_local_timezone"
   ];
 
   pythonImportsCheck = [ "mcp_server_time" ];
