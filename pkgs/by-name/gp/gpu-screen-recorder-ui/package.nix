@@ -25,6 +25,7 @@
   makeWrapper,
   meson,
   ninja,
+  nixosTests,
   pango,
   pkg-config,
   wayland,
@@ -103,7 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --add-rpath ${lib.makeLibraryPath [ libglvnd ]} $out/bin/.gsr-ui-wrapped
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    tests.nixos = nixosTests.gpu-screen-recorder;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Fullscreen overlay UI for GPU Screen Recorder in the style of ShadowPlay";
