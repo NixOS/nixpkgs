@@ -113,6 +113,25 @@ buildGo127Module (finalAttrs: {
 
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
+
+        # Run children with an environment that lacks PATH, so the commands
+        # they spawn (`cat`, `printenv`, `nohup`) are not found in the sandbox.
+        "TestMonitorExecEnvFD" # ssh/tailssh
+        "TestSpawnRPCChildEnvIsExplicit" # ssh/tailssh
+        "TestSessionMonitorTeardownKillsSamePgidStraggler" # ssh/tailssh
+
+        # Agent forwarding dirs are only removed from a root-owned /tmp.
+        "TestAgentForwardDirCleanup" # ssh/tailssh
+
+        # The incubator needs the session user's supplementary groups, but the
+        # build user has none: an empty --groups= does not parse, and as
+        # non-root setgroups(2) with any other list fails with EPERM.
+        "TestFwdChildHoldsOnlyDeclaredFds" # ssh/tailssh
+        "TestSessionChildDeclaredFdsIncludeOnlyEnvFD" # ssh/tailssh
+        "TestSessionMonitorExitStatusOrder" # ssh/tailssh
+        "TestSessionMonitorPTY" # ssh/tailssh
+        "TestSessionPTYMasterNotInheritedByLaterSessions" # ssh/tailssh
+        "TestSessionPtyTermWiring" # ssh/tailssh
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -216,6 +235,12 @@ buildGo127Module (finalAttrs: {
           # nothing in the sandbox.
           preCheck = ''
             export TAILSCALE_SSH_DEFAULT_PATH="$PATH"
+
+            # The session monitor tests run children by absolute FHS paths.
+            substituteInPlace ssh/tailssh/monitor_test.go ssh/tailssh/monitor_lifecycle_test.go \
+              --replace-fail '"/bin/sleep"' "\"$(type -P sleep)\""
+            substituteInPlace ssh/tailssh/monitor_test.go \
+              --replace-fail '"/usr/bin/id"' "\"$(type -P id)\""
           '';
         };
         tsnet = { };
