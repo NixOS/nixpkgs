@@ -138,6 +138,28 @@ in
                 ]
               '';
             };
+            recordings = mkOption {
+              description = ''
+                Settings for session recordings.
+                Deprecated in settings file, moved to in-app settings.
+              '';
+              default = null;
+              type = nullOr (submodule {
+                freeformType = yaml.type;
+                options = {
+                  enable = mkOption {
+                    description = "Whether to enable session recording.";
+                    default = true;
+                    type = bool;
+                  };
+                  path = mkOption {
+                    description = "Path to store session recordings.";
+                    default = "/var/lib/warpgate/recordings";
+                    type = str;
+                  };
+                };
+              });
+            };
             external_host = mkOption {
               description = ''
                 Configure the domain name of this Warpgate instance.
@@ -597,16 +619,16 @@ in
           assertion = !(lib.hasAttr "config_provider" cfg.settings);
           message = "`services.warpgate.settings.config_provider` is a legacy option that has been removed since 0.14.0. Please do not set this option.";
         }
-        {
-          assertion = !(lib.hasAttr "recordings" cfg.settings);
-          message = "`services.warpgate.settings.recordings` has been deprecated by S3 recording storage support in 0.27.0. Please remove this section from your config and set it from admin UI.";
-        }
       ];
 
       warnings =
         optional (cfg.settings.ssh.keys != null) ''
           Warpgate's SSH keys has been deprecated in favor of being stored in database in 0.29.0.
           Please remove `services.warpgate.ssh.keys` after upgrading and first start of service so that it migrates existing keys into database.
+        ''
+        ++ optional (cfg.settings.recordings != null) ''
+          `services.warpgate.settings.recordings` has been deprecated by S3 recording storage support in 0.27.0.
+          Please remove this section from your config and set it from admin UI.
         '';
 
       environment.systemPackages = [ cfg.package ];
