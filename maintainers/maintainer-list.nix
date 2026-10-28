@@ -5178,6 +5178,12 @@
     githubId = 1689801;
     name = "Mikhail Chekan";
   };
+  Chemaclass = {
+    github = "Chemaclass";
+    githubId = 5256287;
+    name = "Jose M. Valera Reales";
+    keys = [ { fingerprint = "56D5 D60B 0934 0999 199C  3750 E51B 5BF4 5F85 D160"; } ];
+  };
   chemonke = {
     email = "nixpkgs@chemonke.ch";
     github = "chemonke";
