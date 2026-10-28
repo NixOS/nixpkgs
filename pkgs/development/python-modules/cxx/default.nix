@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pycxx";
+  pname = "cxx";
   version = "7.1.8";
   pyproject = true;
 
