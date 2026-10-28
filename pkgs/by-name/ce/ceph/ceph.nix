@@ -27,6 +27,7 @@
   babeltrace,
   ceph-boost,
   bzip2,
+  catch2_3,
   cryptsetup,
   cunit,
   e2fsprogs,
@@ -35,6 +36,7 @@
   gperf,
   graphviz,
   gnugrep,
+  grpc,
   gtest,
   icu,
   kmod,
@@ -52,6 +54,7 @@
   oath-toolkit,
   openldap,
   parted,
+  protobuf,
   ceph-python-env,
   rdkafka,
   ceph-rocksdb,
@@ -163,6 +166,7 @@ stdenv.mkDerivation {
     ceph-python-env
     ceph-python-env.pkgs.python # for the toPythonPath function
     ceph-python-env.pkgs.wrapPython
+    ceph-python-env.pkgs.pip # for rados cython?
     which
     (ensureNewerSourcesHook { year = "1980"; })
     # for building docs/man-pages presumably
@@ -177,6 +181,7 @@ stdenv.mkDerivation {
       babeltrace
       ceph-boost
       bzip2
+      catch2_3
       # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
       # This is important, otherwise the build system may not find the Python deps and then
       # silently skip installing ceph-volume and other Ceph python tools.
@@ -185,6 +190,7 @@ stdenv.mkDerivation {
       cunit
       e2fsprogs # according to `debian/control` file, `ceph-volume` is supposed to use it
       gperf
+      grpc
       gtest
       icu
       libcap
@@ -203,6 +209,7 @@ stdenv.mkDerivation {
       optLibs3
       optYasm
       parted # according to `debian/control` file, used by `src/ceph-volume/ceph_volume/util/disk.py`
+      protobuf
       rdkafka
       ceph-rocksdb
       snappy
@@ -240,6 +247,11 @@ stdenv.mkDerivation {
     ceph-python-env
     "${placeholder "out"}/${ceph-python-env.sitePackages}"
   ];
+
+  postPatch = ''
+    # apparently the fix for the messed up shebang was not backported to the then-unreleased 21.2.0
+    sed -i -E '/^#([^!]|$)/d' src/qatlib/autogen.sh src/qatzip/autogen.sh
+  '';
 
   # * `unset AS` because otherwise the Ceph CMake build errors with
   #       configure: error: No modern nasm or yasm found as required. Nasm should be v2.11.01 or later (v2.13 for AVX512) and yasm should be 1.2.0 or later.
@@ -280,6 +292,9 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeOptionType "path" "CMAKE_INSTALL_DATADIR" "${placeholder "lib"}/lib")
+    # avoid grpc conflicts, see https://github.com/protocolbuffers/protobuf/issues/18307#issuecomment-2813940391
+    (lib.cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true) # remove
 
     (lib.cmakeBool "WITH_CEPHFS_SHELL" true)
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
@@ -311,6 +326,7 @@ stdenv.mkDerivation {
     # Use our own libraries, where possible
     (lib.cmakeBool "WITH_SYSTEM_ARROW" true) # Only used if other options enable Arrow support.
     (lib.cmakeBool "WITH_SYSTEM_BOOST" true)
+    (lib.cmakeBool "WITH_SYSTEM_CATCH2" true)
     (lib.cmakeBool "WITH_SYSTEM_GTEST" true)
     (lib.cmakeBool "WITH_SYSTEM_ROCKSDB" true)
     (lib.cmakeBool "WITH_SYSTEM_UTF8PROC" true)

@@ -6,11 +6,11 @@
 
 applyPatches (final: {
   pname = "ceph-src";
-  version = "20.2.4";
+  version = "21.2.0";
 
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${final.version}.tar.gz";
-    hash = "sha256-XzRWkkGiiQRGuTHwbNhE+TvKZl90CiBjFCnS1Vsemzc=";
+    hash = "sha256-gtPAJgkWG94TDHxBwzxfiztZGFzep355KbveLLxm44U=";
   };
 
   patches = [
@@ -23,6 +23,16 @@ applyPatches (final: {
       stripLen = 1;
       hash = "sha256-0jn5X4jIdluCufFXWHeO6skMz6XQpliHkC1tPLK6dbk=";
     })
+    # revert the upstream change to the way the directory for systemd units is located
+    # The new way seemingly cannot be overridden, and resolves to the location that *systemd* places its units.
+    # With Nix guarding the access to /nix/store, this fails.
+    # See: https://github.com/ceph/ceph/pull/43993
+    (fetchpatch2 {
+      name = "ceph-systemd-unit-dir.patch";
+      url = "https://github.com/ceph/ceph/pull/43993.diff?full_index=1";
+      hash = "sha256-00jW3Mp9q/Z1/83Dpu2Q7HJqeDQZPZCV8AsNznhUigw=";
+      revert = true;
+    })
     # arrow-cpp 24 dropped the `arrow/util/span.h` header and switched its
     # parquet encryption API from `arrow::util::span` to `std::span`.
     # Must be applied on top of the s3select patch above, which introduces the
@@ -31,24 +41,7 @@ applyPatches (final: {
     # fixes issues when python3 is not on the PATH
     # See: https://github.com/ceph/ceph/pull/67904
     ./patches/0001-mgr-python-interpreter.patch
-    # fixes compilation on the gcc version present in nixos-unstable
-    # See: https://github.com/ceph/ceph/pull/67081
-    (fetchpatch2 {
-      name = "ceph-20.2.1-backport-gcc16-fixes.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/ceph-20.2.1-backport-gcc16-fixes.patch?h=ceph&id=b158fda8a3e3834a7aa362954dc17077dc46f609";
-      hash = "sha256-uLl20Sdd+JJFWqbMHIZRt53OpGRXlTaceajgpzYCaTM=";
-      excludes = [
-        # these cause CMake dependency cycles
-        "src/test/CMakeLists.txt"
-        "src/rgw/CMakeLists.txt"
-      ];
-    })
-    # fixes compilation on the gcc version present in nixos-unstable
-    # See: https://github.com/ceph/ceph/pull/69166
-    (fetchpatch2 {
-      name = "ceph-20.2.4-radosgw-gcc16-fixes.patch";
-      url = "https://github.com/ceph/ceph/pull/69166.patch?full_index=1";
-      hash = "sha256-yaqOrmw0ZItT2efzNfpDqjTRsva8VN0R+TLqbTX0snc=";
-    })
+    # allows bin/dbstore-bin to compile without linker errors due to missing expat
+    ./patches/0003-dbstore-expat.patch
   ];
 })
