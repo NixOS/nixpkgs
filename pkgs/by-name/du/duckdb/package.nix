@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   ninja,
   openssl,
@@ -46,6 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "duckdb";
     tag = "v${finalAttrs.version}";
   };
+
+  patches = [
+    # Fix uninitialized terminal width in the unittest progress reporter.
+    # It padded every progress line to a garbage width when stdin is not a TTY and
+    # blew up the build log past Hydra's limit.
+    # Patch is merged upstream and should be in DuckDB >=2.0.1
+    # https://github.com/NixOS/nixpkgs/issues/570642
+    # https://github.com/duckdb/duckdb/pull/27894
+    (fetchpatch2 {
+      url = "https://github.com/duckdb/duckdb/commit/95e44bf80b7306eac421a16b87507bdec5aa3321.patch?full_index=1";
+      hash = "sha256-aDGSpXsvOTz8ywsboSeeDDeKtEUOlt+CPsiJq6jrY70=";
+    })
+  ];
 
   outputs = [
     "out"
