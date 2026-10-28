@@ -7,7 +7,7 @@
 }:
 
 let
-  withLibfdt = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64;
+  withLibfdt = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV;
 in
 
 stdenv.mkDerivation {
@@ -58,6 +58,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "riscv32-linux"
       "riscv64-linux"
     ];
     mainProgram = "lkvm";
