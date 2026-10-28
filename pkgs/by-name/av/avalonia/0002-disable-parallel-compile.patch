@@ -1,0 +1,38 @@
+From c26ab243c8ab9383d05e1be974090d462b12d3cb Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 11 Aug 2024 00:03:36 -0300
+Subject: [PATCH 2/2] disable parallel compile
+
+---
+ nukebuild/Build.cs | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/nukebuild/Build.cs b/nukebuild/Build.cs
+index c6942e430..137f0710d 100644
+--- a/nukebuild/Build.cs
++++ b/nukebuild/Build.cs
+@@ -145,12 +145,20 @@ DotNetTestSettings ApplySetting(DotNetTestSettings c, Configure<DotNetTestSettin
+             ProcessTasks.StartProcess("xcodebuild", args).AssertZeroExitCode();
+         });
+ 
++    [Serializable]
++    public class SerialBuildSettings : DotNetBuildSettings
++    {
++        protected override Arguments ConfigureProcessArguments(Arguments arguments) =>
++            base.ConfigureProcessArguments(arguments)
++                .Add("-m:1");
++    }
++
+     Target Compile => _ => _
+         .DependsOn(Clean, CompileNative)
+         .DependsOn(CompileHtmlPreviewer)
+         .Executes(() =>
+         {
+-            DotNetBuild(c => ApplySetting(c)
++            DotNetBuild(ApplySetting(new SerialBuildSettings())
+                 .SetProjectFile(Parameters.MSBuildSolution)
+             );
+         });
+-- 
+2.49.0
+

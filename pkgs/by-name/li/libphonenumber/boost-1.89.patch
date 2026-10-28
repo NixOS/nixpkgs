@@ -1,0 +1,22 @@
+From 72c1023fbf00fc48866acab05f6ccebcae7f3213 Mon Sep 17 00:00:00 2001
+From: Michael Cho <michael@michaelcho.dev>
+Date: Mon, 11 Aug 2025 17:08:15 -0400
+Subject: [PATCH] Fix build with Boost 1.89.0
+
+---
+ cpp/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cpp/CMakeLists.txt b/cpp/CMakeLists.txt
+index 27e4680ccc..39f05d2c9a 100644
+--- a/cpp/CMakeLists.txt
++++ b/cpp/CMakeLists.txt
+@@ -145,7 +145,7 @@ if (USE_BOOST)
+   if (WIN32)
+     set (Boost_USE_STATIC_LIBS ON)
+   endif ()
+-  find_package (Boost 1.40.0 COMPONENTS date_time system thread)
++  find_package (Boost 1.40.0 COMPONENTS date_time thread OPTIONAL_COMPONENTS system)
+   if (NOT Boost_FOUND)
+     print_error ("Boost Date_Time/System/Thread" "Boost")
+   endif ()

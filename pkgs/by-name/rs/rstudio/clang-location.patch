@@ -1,0 +1,41 @@
+diff --git a/src/cpp/core/libclang/LibClang.cpp b/src/cpp/core/libclang/LibClang.cpp
+index f166a43b37..d8024b2ce7 100644
+--- a/src/cpp/core/libclang/LibClang.cpp
++++ b/src/cpp/core/libclang/LibClang.cpp
+@@ -84,34 +84,13 @@ std::vector<std::string> systemClangVersions()
+    // line tools since we request their installation in other
+    // contexts as well)
+    clangVersions = {
+-      "/Library/Developer/CommandLineTools/usr/lib/libclang.dylib"
++      "@libclang@/lib/libclang.dylib"
+    };
+ #elif defined(__unix__)
+    // default set of versions
+    clangVersions = {
+-      "/usr/lib/libclang.so",
+-      "/usr/lib/llvm/libclang.so",
+-      "/usr/lib64/libclang.so",
+-      "/usr/lib64/llvm/libclang.so",
++      "@libclang@/lib/libclang.so",
+    };
+-   
+-   // iterate through the set of available 'llvm' directories
+-   for (const char* prefix : {"/usr/lib", "/usr/lib64"})
+-   {
+-      FilePath prefixPath(prefix);
+-      if (!prefixPath.exists())
+-         continue;
+-      
+-      std::vector<FilePath> directories;
+-      Error error = prefixPath.getChildren(directories);
+-      if (error)
+-         LOG_ERROR(error);
+-
+-      // generate a path for each 'llvm' directory
+-      for (const FilePath& path : directories)
+-         if (path.getFilename().find("llvm") == 0)
+-            clangVersions.push_back(path.completePath("lib/libclang.so.1").getAbsolutePath());
+-   }
+ #endif
+    
+    return clangVersions;

@@ -1,0 +1,15 @@
+diff --git a/pixel.c b/pixel.c
+
+--- a/pixel.c
++++ b/pixel.c
+@@ -19,6 +19,10 @@
+ #include <fcntl.h>
+ #include "libg15render.h"
+
++#include <math.h>
++#include <stdlib.h>
++#include <unistd.h>
++
+ void
+ swap (int *x, int *y)
+ {

@@ -1,0 +1,13 @@
+diff --git a/sensors.js b/sensors.js
+index 39d175a..9815b77 100644
+--- a/sensors.js
++++ b/sensors.js
+@@ -29,6 +29,8 @@ import * as FileModule from './helpers/file.js';
+ import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
+ import NM from 'gi://NM';
+
++imports.gi.GIRepository.Repository.dup_default().prepend_search_path('@gtop_path@');
++
+ let GTop, hasGTop = true;
+ try {
+     ({default: GTop} = await import('gi://GTop'));

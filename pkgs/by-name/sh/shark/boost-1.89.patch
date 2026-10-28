@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 830f0baf..a9048f14 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -147,7 +147,7 @@ endif()
+ find_package( 
+ 	Boost 1.48.0 REQUIRED COMPONENTS
+ 	serialization
+-	filesystem system
++	filesystem
+ )
+ 
+ if(NOT Boost_FOUND)

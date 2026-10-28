@@ -1,0 +1,219 @@
+From acac333599739ed8cf4c8dd4a7337bc101b77ec7 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 28 Sep 2026 11:24:18 +0200
+Subject: [PATCH 1/2] Printers: Check more CUPS things before resorting to
+ manual search
+
+1. CUPS_DATADIR envvar may be used to override the prefix of the data dir
+2. The value of cups_datadir from cups.pc points to the datadir that CUPS normally uses
+---
+ CMakeLists.txt                                |  2 ++
+ .../Components/Extras/Printers/CMakeLists.txt | 15 ++++----
+ .../Extras/Printers/cupsconfig.h.in           | 24 +++++++++++++
+ .../Extras/Printers/printers/printers.cpp     | 34 +++++++++++++++----
+ .../Components/Extras/plugin/CMakeLists.txt   |  1 -
+ tests/unittests/Printers/CMakeLists.txt       |  6 +++-
+ .../cups/data/default-testpage.pdf            |  0
+ tests/unittests/Printers/tst_printers.cpp     | 22 ++++++++++--
+ 8 files changed, 87 insertions(+), 17 deletions(-)
+ create mode 100644 modules/Lomiri/Components/Extras/Printers/cupsconfig.h.in
+ create mode 100644 tests/unittests/Printers/envvar_override_testdata/cups/data/default-testpage.pdf
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8e96b74..110a217 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,6 +32,8 @@ add_definitions(-DQT_NO_KEYWORDS)
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(CMAKE_AUTOMOC ON)
+ 
++find_package(PkgConfig REQUIRED)
++
+ # make non compiled files visible in qtcreator
+ file(GLOB_RECURSE NON_COMPILED_FILES *.qml *.js *.py *.svg *.png *.in *.json *.desktop *.pot qmldir)
+ add_custom_target(NON_COMPILED_TARGET ALL SOURCES ${NON_COMPILED_FILES})
+diff --git a/modules/Lomiri/Components/Extras/Printers/CMakeLists.txt b/modules/Lomiri/Components/Extras/Printers/CMakeLists.txt
+index 12d53df..ade884c 100644
+--- a/modules/Lomiri/Components/Extras/Printers/CMakeLists.txt
++++ b/modules/Lomiri/Components/Extras/Printers/CMakeLists.txt
+@@ -2,15 +2,18 @@ project(LomiriComponentsExtrasPrintersQml)
+ 
+ add_definitions(-DUBUNTUCOMPONENTSEXTRASPRINTERS_LIBRARY)
+ 
+-include(FindCups)
++pkg_check_modules(CUPS REQUIRED cups)
+ 
+-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CUPS_INCLUDE_DIR})
++pkg_get_variable(CUPS_DATADIR cups cups_datadir)
++configure_file(
++    cupsconfig.h.in
++    ${CMAKE_CURRENT_BINARY_DIR}/cupsconfig.h
++    @ONLY
++)
+ 
+-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui PrintSupport Qml Concurrent)
++include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CUPS_INCLUDE_DIRS})
+ 
+-if(NOT CUPS_FOUND)
+-message(FATAL_ERROR "Could not find cups.")
+-endif()
++find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui PrintSupport Qml Concurrent)
+ 
+ qt_add_dbus_interface(
+     GEN_SOURCES
+diff --git a/modules/Lomiri/Components/Extras/Printers/cupsconfig.h.in b/modules/Lomiri/Components/Extras/Printers/cupsconfig.h.in
+new file mode 100644
+index 0000000..764d03d
+--- /dev/null
++++ b/modules/Lomiri/Components/Extras/Printers/cupsconfig.h.in
+@@ -0,0 +1,24 @@
++/*
++ * Copyright (C) 2026 UBports Foundation
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU Lesser General Public License as published by
++ * the Free Software Foundation; version 3.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef USC_PRINTERS_CUPSCONFIG_H
++#define USC_PRINTERS_CUPSCONFIG_H
++
++#include <QString>
++
++const QString cupsDataDirBaseDefault = "@CUPS_DATADIR@";
++
++#endif /* USC_PRINTERS_CUPSCONFIG_H */
+diff --git a/modules/Lomiri/Components/Extras/Printers/printers/printers.cpp b/modules/Lomiri/Components/Extras/Printers/printers/printers.cpp
+index 6b0cebf..cdc76c5 100644
+--- a/modules/Lomiri/Components/Extras/Printers/printers/printers.cpp
++++ b/modules/Lomiri/Components/Extras/Printers/printers/printers.cpp
+@@ -15,6 +15,7 @@
+  */
+ 
+ #include "backend/backend_cups.h"
++#include "cupsconfig.h" // Note: this file gets generated
+ #include "i18n.h"
+ #include "printers/printers.h"
+ #include "cupsdnotifier.h" // Note: this file was generated.
+@@ -382,13 +383,34 @@ void Printers::printTestPage(const QString &name)
+         return;
+     }
+ 
+-    auto page = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+-                                       "cups/data/default-testpage.pdf",
+-                                       QStandardPaths::LocateFile);
++    const QString testPagePathSuffix = "/data/default-testpage.pdf";
+ 
+-    static const QString fallbackPage = "/snap/cups/current/share/cups/data/default-testpage.pdf";
+-    if (page.isEmpty() && QFileInfo(fallbackPage).exists()) {
+-        page = fallbackPage;
++    auto cupsDataDirCustomSearch = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
++                                                    "cups" + testPagePathSuffix,
++                                                    QStandardPaths::LocateFile);
++
++    const QStringList testPagePathBaseCandidates = {
++        qEnvironmentVariable("CUPS_DATADIR"),
++        cupsDataDirBaseDefault,
++        cupsDataDirCustomSearch,
++        "/snap/cups/current/share/cups"
++    };
++
++    QString page;
++
++    for (const QString &testPagePathBaseCandidate : testPagePathBaseCandidates) {
++        QString pageCandidate = testPagePathBaseCandidate + testPagePathSuffix;
++        if (QFileInfo(pageCandidate).exists()) {
++            page = pageCandidate;
++            break;
++        }
++
++        // QStandardPaths::locate result already points at the file if it succeeded
++        QFileInfo baseCandidateInfo = QFileInfo(testPagePathBaseCandidate);
++        if (baseCandidateInfo.filePath().endsWith (testPagePathSuffix) && baseCandidateInfo.exists()) {
++          page = testPagePathBaseCandidate;
++          break;
++        }
+     }
+ 
+     if (page.isEmpty()) {
+diff --git a/modules/Lomiri/Components/Extras/plugin/CMakeLists.txt b/modules/Lomiri/Components/Extras/plugin/CMakeLists.txt
+index 34ab9e3..9a94599 100644
+--- a/modules/Lomiri/Components/Extras/plugin/CMakeLists.txt
++++ b/modules/Lomiri/Components/Extras/plugin/CMakeLists.txt
+@@ -1,4 +1,3 @@
+-include(FindPkgConfig)
+ pkg_check_modules(EXIV2 REQUIRED exiv2)             # photoeditor
+ 
+ set(PLUGIN_SRC
+diff --git a/tests/unittests/Printers/CMakeLists.txt b/tests/unittests/Printers/CMakeLists.txt
+index 73b35fe..9cb766c 100644
+--- a/tests/unittests/Printers/CMakeLists.txt
++++ b/tests/unittests/Printers/CMakeLists.txt
+@@ -17,8 +17,12 @@ add_test(tst_printerjob testPrintersPrinterJob)
+ add_executable(testPrintersPrinters tst_printers.cpp ${MOCK_SOURCES})
+ target_link_libraries(testPrintersPrinters LomiriComponentsExtrasPrintersQml Qt::Test Qt::Gui)
+ add_test(tst_printers testPrintersPrinters)
++list (APPEND tst_printers_envvars
++    "CUPS_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/envvar_override_testdata/cups"
++    "XDG_DATA_DIRS=${CMAKE_CURRENT_SOURCE_DIR}/testdata"
++)
+ set_tests_properties(tst_printers PROPERTIES
+-    ENVIRONMENT "XDG_DATA_DIRS=${CMAKE_CURRENT_SOURCE_DIR}/testdata")
++    ENVIRONMENT "${tst_printers_envvars}")
+ 
+ add_executable(testPrintersPrinterModel tst_printermodel.cpp ${MOCK_SOURCES})
+ target_link_libraries(testPrintersPrinterModel LomiriComponentsExtrasPrintersQml Qt::Test Qt::Gui)
+diff --git a/tests/unittests/Printers/envvar_override_testdata/cups/data/default-testpage.pdf b/tests/unittests/Printers/envvar_override_testdata/cups/data/default-testpage.pdf
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/unittests/Printers/tst_printers.cpp b/tests/unittests/Printers/tst_printers.cpp
+index 250f5c9..597eaff 100644
+--- a/tests/unittests/Printers/tst_printers.cpp
++++ b/tests/unittests/Printers/tst_printers.cpp
+@@ -315,16 +315,32 @@ private Q_SLOTS:
+         auto printer = QSharedPointer<Printer>(new Printer(printerBackend));
+         backend->mockPrinterLoaded(printer);
+         p.loadPrinter("printer-a");
++        QSignalSpy printFileSpy(printerBackend, SIGNAL(printToFile(QString, QString)));
++        QList<QVariant> args;
++
++        // Test overriding with envvar
++        const QString testCupsDatadirBase = qEnvironmentVariable("CUPS_DATADIR");
++        QVERIFY(!testCupsDatadirBase.isEmpty());
++
++        p.printTestPage("printer-a");
+ 
+-        // Set the target url
++        QCOMPARE(printFileSpy.count(), 1);
++        args = printFileSpy.takeFirst();
++        QVERIFY(args.at(0).toString().startsWith(testCupsDatadirBase));
++
++        // Test custom search
+         auto target = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                              "cups/data/default-testpage.pdf",
+                                              QStandardPaths::LocateFile);
++        // being *extra* sure about these being different
++        QVERIFY(!target.startsWith(testCupsDatadirBase));
+ 
+-        QSignalSpy printFileSpy(printerBackend, SIGNAL(printToFile(QString, QString)));
++        QVERIFY(qunsetenv("CUPS_DATADIR"));
+         p.printTestPage("printer-a");
++        QVERIFY(qputenv("CUPS_DATADIR", testCupsDatadirBase.toUtf8()));
++
+         QCOMPARE(printFileSpy.count(), 1);
+-        QList<QVariant> args = printFileSpy.takeFirst();
++        args = printFileSpy.takeFirst();
+         QCOMPARE(args.at(0).toString(), target);
+     }
+ 
+-- 
+2.54.0
+

@@ -1,0 +1,17 @@
+diff -u a/Makefile b/Makefile
+--- a/Makefile	2011-05-14 22:24:57.000000000 -0400
++++ b/Makefile	2016-04-01 14:53:05.000000000 -0400
+@@ -19,9 +19,9 @@
+ 
+ #****************************************************************************
+ 
+-CC     := gcc
+-CXX    := g++
+-LD     := g++
++CC     ?= gcc
++CXX    ?= g++
++LD     ?= g++
+ AR     := ar rc
+ RANLIB := ranlib
+ 
+Common subdirectories: a/docs and b/docs

@@ -1,0 +1,16 @@
+docstring_parser 0.18 excludes its tests from built wheels, so
+`docstring_parser.__path__[0] / 'tests'` does not exist and test
+collection fails with FileNotFoundError. Skip generating the cross-check
+test cases when the directory is unavailable.
+
+--- a/tests/test_linter/test_extractors/test_exceptions.py
++++ b/tests/test_linter/test_extractors/test_exceptions.py
+@@ -293,6 +293,8 @@ def get_docstring_parser_tests():
+     tests_found = 0
+     if astroid is None:
+         return
++    if not root.is_dir():
++        return
+     for path in root.iterdir():
+         if path.suffix != '.py':
+             continue

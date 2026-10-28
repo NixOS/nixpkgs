@@ -1,0 +1,8 @@
+source "https://rubygems.org"
+gem "jekyll"
+# jekyll alone might be enough for most use-cases
+gem "jekyll-avatar"
+gem "jekyll-mentions"
+gem "jekyll-seo-tag"
+gem "jekyll-sitemap"
+gem "jemoji"

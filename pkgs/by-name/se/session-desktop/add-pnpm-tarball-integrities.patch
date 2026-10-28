@@ -1,0 +1,44 @@
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -1160 +1160 @@
+-    resolution: {tarball: https://github.com/session-foundation/session-emoji-mart/releases/download/v5.6.0/emoji-mart-data-v1.2.1.tgz}
++    resolution: {integrity: sha512-JR40zY+VXUMdI9itDS8PGJK8ThRpxKb2eL4lHv/uUFVHdqt2GdBNj1mhKg1RiAqq4/MZDQYQyia8kxDX/TsdtA==, tarball: https://github.com/session-foundation/session-emoji-mart/releases/download/v5.6.0/emoji-mart-data-v1.2.1.tgz}
+@@ -1164 +1164 @@
+-    resolution: {tarball: https://github.com/session-foundation/session-emoji-mart/releases/download/v5.6.0/emoji-mart-react-v1.1.1.tgz}
++    resolution: {integrity: sha512-yysTeYN2fOaK9e9rgohm7UiDnVaX5DFooQziHKutRL/m44AILqqpbgwzNDsHt5Q+E7kF/tIO09O0OHWbAEWHkg==, tarball: https://github.com/session-foundation/session-emoji-mart/releases/download/v5.6.0/emoji-mart-react-v1.1.1.tgz}
+@@ -1223 +1223 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-darwin-arm64-0.34.5.tgz}
++    resolution: {integrity: sha512-0OrdgJ6O6iS3EJwhqIBKUCgFlXGj+IuTehPtkents2kfg7Bi6rOgxEH4E1tPBaPAvO1ot0np/DbJ5a8yTqxUEQ==, tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-darwin-arm64-0.34.5.tgz}
+@@ -1230 +1230 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-darwin-x64-0.34.5.tgz}
++    resolution: {integrity: sha512-lDdMW6VAz8/lCLRVsdbepsqqohxpJqXDYxU6xHU+amtI9eE16VTqdMdTBU3cc3PqTWF/rX1qhIIi5UbhB69i+w==, tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-darwin-x64-0.34.5.tgz}
+@@ -1237 +1237 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-darwin-arm64-1.2.4.tar.gz}
++    resolution: {integrity: sha512-29f2Pg9m4JrkDn6Zw7bM8egPFfFVg6csVZt+CHvkjsEcxa86g9zFdsOOCiezlqeLx1Q8TtmzY5Qb1v7YAJd+ug==, tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-darwin-arm64-1.2.4.tar.gz}
+@@ -1243 +1243 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-darwin-x64-1.2.4.tar.gz}
++    resolution: {integrity: sha512-kKENFPJsmcCApNQCClvu/CBfNZ2F3D7ne8QVfTQCNd4xOTAqbUSJIWjWk/O+8isR+Z7cRJel4bbDPkIPcAHfCg==, tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-darwin-x64-1.2.4.tar.gz}
+@@ -1249 +1249 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-linux-arm64-1.2.4.tar.gz}
++    resolution: {integrity: sha512-yO7Tjt8yDg7gD0nco7MTkmn47JVRS+NvES4kDYleommmyZpyXIFSqxn1uej80O9+HJrBZNCI3joIb8UoyFkDIw==, tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-linux-arm64-1.2.4.tar.gz}
+@@ -1255 +1255 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-linux-sse2-x64-1.2.4.tar.gz}
++    resolution: {integrity: sha512-uEDadTSKFHrkW+spQBKEE+cIBGA7niUbAs0tdpmiWsXnFjvcmPlNM6vBikDcgUtkor7I1hS2OFWUusJhjO6kew==, tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-linux-sse2-x64-1.2.4.tar.gz}
+@@ -1261 +1261 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-linux-x64-1.2.4.tar.gz}
++    resolution: {integrity: sha512-2BRxNvxW4ZmjilIsS2MPBygl6PAQVFc2GE0+4bFrtUuVuMJG/+xwstfBIHWVzZY8zc436RFNlg11uIxMIy7WcQ==, tarball: https://github.com/session-foundation/sharp-libvips/releases/download/v1.2.4/sharp-libvips-linux-x64-1.2.4.tar.gz}
+@@ -1267 +1267 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-linux-arm64-0.34.5.tgz}
++    resolution: {integrity: sha512-yffSwlxntiFtk4rcAZDRdX6nMTfW7W4W8+tEOYLSYYwzmPGaRo1uLsKxJQZs1a02HXD1ToXs1mx6KItMY78SQw==, tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-linux-arm64-0.34.5.tgz}
+@@ -1274 +1274 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-linux-sse2-x64-0.34.5.tgz}
++    resolution: {integrity: sha512-Is4HvNKBGw2wIJuyO9zxmDnpO+AAOitAMXw44ioasiDSi1haOBH6knGu4pII0zwzX2XjR+Wp3OyksXZ43xqFcw==, tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-linux-sse2-x64-0.34.5.tgz}
+@@ -1281 +1281 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-linux-x64-0.34.5.tgz}
++    resolution: {integrity: sha512-Lta92mZ5KsN1GmAdQSfpIXxRy44TSY6ZUIKaTPw0LSUl3LtrqPeMJAHLulZpEBRLBh6lW/Cv0AENtvWEVZtu1A==, tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-linux-x64-0.34.5.tgz}
+@@ -1288 +1288 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-win32-x64-0.34.5.tgz}
++    resolution: {integrity: sha512-NkWwtSB5y/F3ACj3cW284BhgXsP2KIdW8k0WWj4hqGGbZd3lE5zpcZYdcZjvOPQQkSSX2ePw88PQ5WrK2llCHQ==, tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/img-sharp-win32-x64-0.34.5.tgz}
+@@ -5209 +5209 @@
+-    resolution: {tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/sharp-0.34.5.tgz}
++    resolution: {integrity: sha512-sW1/dqImBRgiIdVf3ku68Ci6aFA2s1fXzEBDYxuuXZQwwWarAJZOzoFCXhWs5XGepLfrQ+T//jaxYqgPgkHQmA==, tarball: https://github.com/session-foundation/sharp/releases/download/v0.34.5/sharp-0.34.5.tgz}

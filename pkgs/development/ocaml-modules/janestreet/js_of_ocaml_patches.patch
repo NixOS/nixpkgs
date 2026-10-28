@@ -1,0 +1,24 @@
+diff --git a/js_of_ocaml_patches.ml b/js_of_ocaml_patches.ml
+index 58dd9d5..964b55e 100644
+--- a/js_of_ocaml_patches.ml
++++ b/js_of_ocaml_patches.ml
+@@ -15,6 +15,6 @@ module Dom_html = struct
+     inherit Js_of_ocaml.Dom_html.canvasRenderingContext2D
+ 
+     method ellipse :
+-      float -> float -> float -> float -> float -> float -> float -> unit meth
++      float -> float -> float -> float -> float -> float -> float -> bool t -> unit meth
+   end
+ end
+diff --git a/js_of_ocaml_patches.mli b/js_of_ocaml_patches.mli
+index 4aecc41..8ed5d50 100644
+--- a/js_of_ocaml_patches.mli
++++ b/js_of_ocaml_patches.mli
+@@ -14,6 +14,6 @@ module Dom_html : sig
+     inherit Js_of_ocaml.Dom_html.canvasRenderingContext2D
+ 
+     method ellipse :
+-      float -> float -> float -> float -> float -> float -> float -> unit meth
++      float -> float -> float -> float -> float -> float -> float -> bool t -> unit meth
+   end
+ end

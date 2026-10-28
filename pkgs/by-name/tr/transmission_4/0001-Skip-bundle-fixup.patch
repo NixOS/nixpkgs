@@ -1,0 +1,61 @@
+From a8122a78c496f09711e81c669ca3ee44c8df79f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stanis=C5=82aw=20Pitucha?= <stan.pitucha@envato.com>
+Date: Fri, 27 Mar 2026 08:58:08 +1100
+Subject: [PATCH] Skip fixup; it's unnecessary for nixpkgs
+
+---
+ cmake/TrMacros.cmake | 38 --------------------------------------
+ 1 file changed, 38 deletions(-)
+
+diff --git a/cmake/TrMacros.cmake b/cmake/TrMacros.cmake
+index 2efa8767c..cc17a47a5 100644
+--- a/cmake/TrMacros.cmake
++++ b/cmake/TrMacros.cmake
+@@ -376,44 +376,6 @@ function(tr_select_library LIBNAMES FUNCNAME DIRS OVAR)
+ endfunction()
+ 
+ function(tr_fixup_bundle_item BUNDLE_DIR BUNDLE_ITEMS DEP_DIRS)
+-    while(BUNDLE_ITEMS)
+-        list(GET BUNDLE_ITEMS 0 ITEM)
+-        list(REMOVE_AT BUNDLE_ITEMS 0)
+-
+-        set(ITEM_FULL_BUNDLE_PATH "${BUNDLE_DIR}/${ITEM}")
+-        get_filename_component(ITEM_FULL_BUNDLE_DIR "${ITEM_FULL_BUNDLE_PATH}" PATH)
+-
+-        unset(ITEM_DEPS)
+-        get_prerequisites("${ITEM_FULL_BUNDLE_PATH}" ITEM_DEPS 1 0 "${ITEM_FULL_BUNDLE_PATH}" "${DEP_DIRS}")
+-
+-        foreach(DEP IN LISTS ITEM_DEPS)
+-            gp_resolve_item("${ITEM_FULL_BUNDLE_PATH}" "${DEP}" "${ITEM_FULL_BUNDLE_DIR}" "${DEP_DIRS}" DEP_FULL_PATH)
+-
+-            if(DEP_FULL_PATH MATCHES "[.]dylib$")
+-                get_filename_component(DEP_NAME "${DEP_FULL_PATH}" NAME)
+-                file(COPY "${DEP_FULL_PATH}" DESTINATION "${BUNDLE_DIR}/Contents/MacOS/")
+-                set(DEP_BUNDLE_PATH "Contents/MacOS/${DEP_NAME}")
+-            elseif(DEP_FULL_PATH MATCHES "^(.+)/(([^/]+[.]framework)/.+)$")
+-                set(DEP_NAME "${CMAKE_MATCH_2}")
+-                file(
+-                    COPY "${CMAKE_MATCH_1}/${CMAKE_MATCH_3}"
+-                    DESTINATION "${BUNDLE_DIR}/Contents/Frameworks/"
+-                    PATTERN "Headers" EXCLUDE)
+-                set(DEP_BUNDLE_PATH "Contents/Frameworks/${DEP_NAME}")
+-            else()
+-                message(FATAL_ERROR "Don't know how to fixup '${DEP_FULL_PATH}'")
+-            endif()
+-
+-            execute_process(COMMAND install_name_tool -change "${DEP}" "@rpath/${DEP_NAME}" "${ITEM_FULL_BUNDLE_PATH}")
+-
+-            set(DEP_FULL_BUNDLE_PATH "${BUNDLE_DIR}/${DEP_BUNDLE_PATH}")
+-            execute_process(COMMAND chmod u+w "${DEP_FULL_BUNDLE_PATH}")
+-            execute_process(COMMAND install_name_tool -id "@rpath/${DEP_NAME}" "${DEP_FULL_BUNDLE_PATH}")
+-
+-            list(REMOVE_ITEM BUNDLE_ITEMS "${DEP_BUNDLE_PATH}")
+-            list(APPEND BUNDLE_ITEMS "${DEP_BUNDLE_PATH}")
+-        endforeach()
+-    endwhile()
+ endfunction()
+ 
+ function(tr_glib_compile_resources TGT NAME INPUT_DIR INPUT_FILE OUTPUT_FILE_BASE)
+-- 
+2.51.2
+

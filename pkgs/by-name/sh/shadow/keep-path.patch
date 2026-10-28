@@ -1,0 +1,19 @@
+diff -ru shadow-4.1.5.1-orig/src/su.c shadow-4.1.5.1/src/su.c
+--- shadow-4.1.5.1-orig/src/su.c	2012-05-25 07:51:55.000000000 -0400
++++ shadow-4.1.5.1/src/su.c	2012-07-25 17:22:57.013547930 -0400
+@@ -879,6 +879,7 @@
+ 		}
+ 	}
+ 
++#if 0
+ 	cp = getdef_str ((pw->pw_uid == 0) ? "ENV_SUPATH" : "ENV_PATH");
+ 	if (NULL == cp) {
+ 		addenv ((pw->pw_uid == 0) ? "PATH=/sbin:/bin:/usr/sbin:/usr/bin" : "PATH=/bin:/usr/bin", NULL);
+@@ -887,6 +888,7 @@
+ 	} else {
+ 		addenv ("PATH", cp);
+ 	}
++#endif
+ 
+ 	if (getenv ("IFS") != NULL) {	/* don't export user IFS ... */
+ 		addenv ("IFS= \t\n", NULL);	/* ... instead, set a safe IFS */

@@ -1,0 +1,35 @@
+From b8b4a6bcfe35ba9539a120cfd16573123ddd9241 Mon Sep 17 00:00:00 2001
+From: "Sv. Lockal" <lockalsash@gmail.com>
+Date: Mon, 15 Dec 2025 03:46:35 +0800
+Subject: [PATCH] Fix compilation with libdrm-2.4.130
+
+Fix error: redefinition of 'struct drm_color_ctm_3x4'.
+
+drm_color_ctm_3x4 structure is now defined in https://github.com/torvalds/linux/commit/e5719e7f19009d4fbedf685fc22eec9cd8de154f#diff-4c51fb416ec7cc69566cd7b795ee57eb070aa1006ad65d6962081f039ffb2718
+
+As this structure is unused and not a part of amdsmi public interface,
+it is safe to remove it.
+---
+ include/amd_smi/impl/amdgpu_drm.h | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/include/amd_smi/impl/amdgpu_drm.h b/include/amd_smi/impl/amdgpu_drm.h
+index b56a5ac4b..0e483d13b 100644
+--- a/include/amd_smi/impl/amdgpu_drm.h
++++ b/include/amd_smi/impl/amdgpu_drm.h
+@@ -1625,15 +1625,6 @@ struct drm_amdgpu_info_uq_metadata {
+ #define AMDGPU_FAMILY_GC_11_5_0			150 /* GC 11.5.0 */
+ #define AMDGPU_FAMILY_GC_12_0_0			152 /* GC 12.0.0 */
+ 
+-/* FIXME wrong namespace! */
+-struct drm_color_ctm_3x4 {
+-	/*
+-	 * Conversion matrix with 3x4 dimensions in S31.32 sign-magnitude
+-	 * (not two's complement!) format.
+-	 */
+-	__u64 matrix[12];
+-};
+-
+ #if defined(__cplusplus)
+ }
+ #endif

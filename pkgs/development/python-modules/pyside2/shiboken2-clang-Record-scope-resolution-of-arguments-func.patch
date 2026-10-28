@@ -1,0 +1,178 @@
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Thu, 27 Apr 2023 12:44:10 +0200
+Subject: shiboken2/clang: Record scope resolution of arguments/function
+ return
+
+Add a flag indicating whether a type was specified with a leading "::"
+(scope resolution). Such parameters previously caused the function to
+rejected due to the "::TypeName" not being found. The type resolution
+added for clang 16 strips these qualifiers though, so, the information
+needs to be stored.
+
+Task-number: PYSIDE-2288
+Pick-to: 6.5 5.15
+Change-Id: I27d27c94ec43bcc4cb3b79e6e9ce6706c749a1e9
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+(cherry picked from commit 075d8ad4660f05e6d2583ff1c05e9987ad624bfe)
+---
+ .../ApiExtractor/clangparser/clangbuilder.cpp      |  8 ++++++--
+ .../ApiExtractor/clangparser/clangutils.cpp        | 11 ++++++++++
+ .../ApiExtractor/clangparser/clangutils.h          |  1 +
+ .../shiboken2/ApiExtractor/parser/codemodel.cpp    | 24 ++++++++++++++++++++++
+ sources/shiboken2/ApiExtractor/parser/codemodel.h  |  8 ++++++++
+ 5 files changed, 50 insertions(+), 2 deletions(-)
+
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+index ed1e15d..1b5cc5c 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+@@ -294,7 +294,9 @@ FunctionModelItem BuilderPrivate::createFunction(const CXCursor &cursor,
+         name = fixTypeName(name);
+     FunctionModelItem result(new _FunctionModelItem(m_model, name));
+     setFileName(cursor, result.data());
+-    result->setType(createTypeInfoHelper(clang_getCursorResultType(cursor)));
++    const auto type = clang_getCursorResultType(cursor);
++    result->setType(createTypeInfoHelper(type));
++    result->setScopeResolution(hasScopeResolution(type));
+     result->setFunctionType(t);
+     result->setScope(m_scope);
+     result->setStatic(clang_Cursor_getStorageClass(cursor) == CX_SC_Static);
+@@ -1031,7 +1033,9 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+         if (d->m_currentArgument.isNull() && !d->m_currentFunction.isNull()) {
+             const QString name = getCursorSpelling(cursor);
+             d->m_currentArgument.reset(new _ArgumentModelItem(d->m_model, name));
+-            d->m_currentArgument->setType(d->createTypeInfo(cursor));
++            const auto type = clang_getCursorType(cursor);
++            d->m_currentArgument->setScopeResolution(hasScopeResolution(type));
++            d->m_currentArgument->setType(d->createTypeInfo(type));
+             d->m_currentFunction->addArgument(d->m_currentArgument);
+             QString defaultValueExpression = d->cursorValueExpression(this, cursor);
+             if (!defaultValueExpression.isEmpty()) {
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp b/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp
+index 295ede3..ec6d228 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangutils.cpp
+@@ -155,6 +155,17 @@ QString getTypeName(const CXType &type)
+     return result;
+ }
+ 
++// Quick check for "::Type"
++bool hasScopeResolution(const CXType &type)
++{
++    CXString typeSpelling = clang_getTypeSpelling(type);
++    const QString spelling = QString::fromUtf8(clang_getCString(typeSpelling));
++    const bool result = spelling.startsWith(QLatin1String("::"))
++        || spelling.contains(QLatin1String(" ::"));
++    clang_disposeString(typeSpelling);
++    return result;
++}
++
+ // Resolve elaborated types occurring with clang 16
+ QString getResolvedTypeName(const CXType &type)
+ {
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangutils.h b/sources/shiboken2/ApiExtractor/clangparser/clangutils.h
+index aacaf63..33f362c 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangutils.h
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangutils.h
+@@ -52,6 +52,7 @@ QString getCursorKindName(CXCursorKind cursorKind);
+ QString getCursorSpelling(const CXCursor &cursor);
+ QString getCursorDisplayName(const CXCursor &cursor);
+ QString getTypeName(const CXType &type);
++bool hasScopeResolution(const CXType &type);
+ QString getResolvedTypeName(const CXType &type);
+ inline QString getCursorTypeName(const CXCursor &cursor)
+     { return getTypeName(clang_getCursorType(cursor)); }
+diff --git a/sources/shiboken2/ApiExtractor/parser/codemodel.cpp b/sources/shiboken2/ApiExtractor/parser/codemodel.cpp
+index dea0812..ba07a01 100644
+--- a/sources/shiboken2/ApiExtractor/parser/codemodel.cpp
++++ b/sources/shiboken2/ApiExtractor/parser/codemodel.cpp
+@@ -1121,11 +1121,23 @@ void _ArgumentModelItem::setDefaultValue(bool defaultValue)
+     m_defaultValue = defaultValue;
+ }
+ 
++bool _ArgumentModelItem::scopeResolution() const
++{
++    return m_scopeResolution;
++}
++
++void _ArgumentModelItem::setScopeResolution(bool v)
++{
++    m_scopeResolution = v;
++}
++
+ #ifndef QT_NO_DEBUG_STREAM
+ void _ArgumentModelItem::formatDebug(QDebug &d) const
+ {
+     _CodeModelItem::formatDebug(d);
+     d << ", type=" << m_type;
++    if (m_scopeResolution)
++        d << ", [m_scope resolution]";
+     if (m_defaultValue)
+         d << ", defaultValue=\"" << m_defaultValueExpression << '"';
+ }
+@@ -1200,6 +1212,16 @@ void _FunctionModelItem::setVariadics(bool isVariadics)
+     m_isVariadics = isVariadics;
+ }
+ 
++bool _FunctionModelItem::scopeResolution() const
++{
++    return m_scopeResolution;
++}
++
++void _FunctionModelItem::setScopeResolution(bool v)
++{
++    m_scopeResolution = v;
++}
++
+ bool _FunctionModelItem::isNoExcept() const
+ {
+     return m_exceptionSpecification == ExceptionSpecification::NoExcept;
+@@ -1343,6 +1365,8 @@ void _FunctionModelItem::formatDebug(QDebug &d) const
+         d << " [explicit]";
+     if (m_isInvokable)
+         d << " [invokable]";
++    if (m_scopeResolution)
++        d << " [scope resolution]";
+     formatModelItemList(d, ", arguments=", m_arguments);
+     if (m_isVariadics)
+         d << ",...";
+diff --git a/sources/shiboken2/ApiExtractor/parser/codemodel.h b/sources/shiboken2/ApiExtractor/parser/codemodel.h
+index b990ad9..85f298c 100644
+--- a/sources/shiboken2/ApiExtractor/parser/codemodel.h
++++ b/sources/shiboken2/ApiExtractor/parser/codemodel.h
+@@ -499,6 +499,10 @@ public:
+     QString defaultValueExpression() const { return m_defaultValueExpression; }
+     void setDefaultValueExpression(const QString &expr) { m_defaultValueExpression = expr; }
+ 
++    // Argument type has scope resolution "::ArgumentType"
++    bool scopeResolution() const;
++    void setScopeResolution(bool v);
++
+ #ifndef QT_NO_DEBUG_STREAM
+     void formatDebug(QDebug &d) const override;
+ #endif
+@@ -507,6 +511,7 @@ private:
+     TypeInfo m_type;
+     QString m_defaultValueExpression;
+     bool m_defaultValue = false;
++    bool m_scopeResolution = false;
+ };
+ 
+ class _MemberModelItem: public _CodeModelItem
+@@ -623,6 +628,8 @@ public:
+     bool isVariadics() const;
+     void setVariadics(bool isVariadics);
+ 
++    bool scopeResolution() const; // Return type has scope resolution "::ReturnType"
++    void setScopeResolution(bool v);
+ 
+     bool isSimilar(const FunctionModelItem &other) const;
+ 
+@@ -652,6 +659,7 @@ private:
+             uint m_isExplicit: 1;
+             uint m_isVariadics: 1;
+             uint m_isInvokable : 1; // Qt
++            uint m_scopeResolution: 1;
+         };
+         uint m_flags;
+     };

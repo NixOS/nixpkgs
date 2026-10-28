@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e6b30c83..ec74fd5f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -134,7 +134,7 @@ add_subdirectory(c/spot)
+ add_subdirectory(c/type1)
+ add_subdirectory(c/addfeatures)
+ 
+-target_link_libraries(_internal PRIVATE afdko_version detype1 type1 addfeatures spot sfntedit sfntdiff mergefonts rotatefont shared afdko::antlr4)
++target_link_libraries(_internal PRIVATE afdko_version detype1 type1 addfeatures spot sfntedit sfntdiff mergefonts rotatefont shared antlr4-runtime)
+ 
+ if(CMAKE_USE_PTHREADS_INIT)
+     target_link_libraries(_internal PRIVATE Threads::Threads)
+diff --git a/c/addfeatures/hotconv/CMakeLists.txt b/c/addfeatures/hotconv/CMakeLists.txt
+index 7e281af9..f7100558 100644
+--- a/c/addfeatures/hotconv/CMakeLists.txt
++++ b/c/addfeatures/hotconv/CMakeLists.txt
+@@ -72,7 +72,7 @@ target_include_directories(hotconv BEFORE PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${AN
+ target_include_directories(hotconv AFTER PRIVATE ../include ../../shared/resource)
+ # Because hotconv is an object library, all this should do is
+ # establish the build dependency
+-target_link_libraries(hotconv PUBLIC afdko::antlr4 shared)
++target_link_libraries(hotconv PUBLIC antlr4-runtime shared)
+ 
+ if ( CMAKE_COMPILER_IS_GNUCC )
+         set_property(TARGET hotconv APPEND PROPERTY

@@ -1,0 +1,167 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  replaceVars,
+  fetchFromGitHub,
+  copyDesktopItems,
+  pkg-config,
+  wrapGAppsHook3,
+  unzip,
+  cacert,
+  curl,
+  glib,
+  gtk3,
+  libidn2,
+  libssh2,
+  openssl,
+  wxwidgets_3_3,
+  makeDesktopItem,
+}:
+
+let
+  wxwidgets_3_3_4 = wxwidgets_3_3.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "3.3.4";
+      src = fetchFromGitHub {
+        owner = "wxWidgets";
+        repo = "wxWidgets";
+        tag = "v${finalAttrs.version}";
+        fetchSubmodules = true;
+        hash = "sha256-J04XE/62Ih+ZnYkl3cMEAAKRnFhPmOynMbZUbozk/gY=";
+      };
+      patches = [
+        ./wxcolorhook.patch
+      ];
+    }
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "freefilesync";
+  version = "14.13";
+
+  src = fetchurl {
+    url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
+    # The URL only redirects to the file on the second attempt
+    postFetch = ''
+      rm -f "$out"
+      tryDownload "$url" "$out"
+    '';
+    hash = "sha256-w8KbiP76gEPDg53owlLmY3pkJj9NfK5KKy9kgYg6k2A=";
+  };
+
+  sourceRoot = ".";
+
+  patches = [
+    # Disable loading of the missing Animal.dat
+    ./skip-missing-Animal.dat.patch
+    # Fix build with GTK 3
+    (replaceVars ./Makefile.patch {
+      gtk3-dev = lib.getDev gtk3;
+    })
+    # Fix build with vanilla wxWidgets (rebased from Debian patch)
+    ./Disable_wxWidgets_uncaught_exception_handling.patch
+    # ../../zen/string_traits.h:60:41: error: call of overloaded 'conversionType(wxCStrData)' is ambiguous
+    ./string_traits.patch
+    # ../../zen/argon2.cpp:42:10: error: missing binary operator before token '16'
+    ./fatal_errors.patch
+  ];
+
+  postPatch = ''
+    touch zen/warn_static.h
+  '';
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+    wrapGAppsHook3
+    unzip
+  ];
+
+  buildInputs = [
+    curl
+    glib
+    gtk3
+    libidn2
+    libssh2
+    openssl
+    wxwidgets_3_3_4
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Undef g_object_ref on GLib 2.56+
+    "-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_54"
+    "-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_54"
+    # Define libssh2 constants
+    "-DLIBSSH2_ERROR_STORE_OVERFLOW=-55"
+    "-DMAX_SFTP_READ_SIZE=30000"
+    "-DMAX_SFTP_OUTGOING_SIZE=30000"
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    chmod +w FreeFileSync/Build
+    cd FreeFileSync/Source
+    make -j$NIX_BUILD_CORES
+    cd RealTimeSync
+    make -j$NIX_BUILD_CORES
+    cd ../../..
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp -R FreeFileSync/Build/* $out
+    mv $out/{Bin,bin}
+
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/icons/hicolor/128x128/apps
+
+    rm $out/Resources/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/Resources/cacert.pem
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "FreeFileSync";
+      desktopName = name;
+      genericName = "Folder Comparison and Synchronization";
+      icon = name;
+      exec = name;
+      categories = [
+        "Utility"
+        "FileTools"
+      ];
+    })
+    (makeDesktopItem rec {
+      name = "RealTimeSync";
+      desktopName = name;
+      genericName = "Automated Synchronization";
+      icon = name;
+      exec = name;
+      categories = [
+        "Utility"
+        "FileTools"
+      ];
+    })
+  ];
+
+  meta = {
+    description = "Open Source File Synchronization & Backup Software";
+    homepage = "https://freefilesync.org";
+    license = [
+      lib.licenses.gpl3Only
+      lib.licenses.openssl
+      lib.licenses.curl
+      lib.licenses.bsd3
+    ];
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.linux;
+  };
+})

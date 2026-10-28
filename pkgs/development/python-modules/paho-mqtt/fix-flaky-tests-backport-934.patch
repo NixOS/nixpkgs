@@ -1,0 +1,184 @@
+diff --git a/tests/lib/conftest.py b/tests/lib/conftest.py
+index 98bbebe..5999085 100644
+--- a/tests/lib/conftest.py
++++ b/tests/lib/conftest.py
+@@ -2,6 +2,7 @@ import os
+ import signal
+ import subprocess
+ import sys
++import time
+ 
+ import pytest
+ 
+@@ -45,7 +46,29 @@ def alpn_ssl_server_socket(monkeypatch, ssl_certs_path):
+     yield from _yield_server(monkeypatch, create_server_socket_ssl(path=ssl_certs_path, alpn_protocols=["paho-test-protocol"]))
+ 
+ 
+-def stop_process(proc: subprocess.Popen) -> None:
++def terminate_process(proc: subprocess.Popen) -> None:
++    proc.terminate()
++    try:
++        # At least on Unix, terminate() isn't an unconditional kill, process
++        # could ignore/handle it.
++        proc.wait(1)
++    except subprocess.TimeoutExpired:
++        # So use kill which is unstoppable on Unix
++        proc.kill()
++        proc.wait(1)  # If here we timeout, there is nothing more to do.
++
++
++def stop_process(proc: subprocess.Popen, ready_file) -> None:
++    deadline = time.monotonic() + 5
++    while proc.poll() is None and not ready_file.exists():
++        if time.monotonic() >= deadline:
++            terminate_process(proc)
++            raise RuntimeError("Client did not become ready to stop")
++        time.sleep(0.01)
++
++    if proc.poll() is not None:
++        return
++
+     if sys.platform == "win32":
+         proc.send_signal(signal.CTRL_C_EVENT)
+     else:
+@@ -53,17 +76,19 @@ def stop_process(proc: subprocess.Popen) -> None:
+     try:
+         proc.wait(5)
+     except subprocess.TimeoutExpired:
+-        proc.terminate()
++        terminate_process(proc)
+ 
+ 
+ @pytest.fixture()
+-def start_client(request: pytest.FixtureRequest, ssl_certs_path):
++def start_client(request: pytest.FixtureRequest, ssl_certs_path, tmp_path):
+     def starter(name: str, expected_returncode: int = 0) -> None:
+         client_path = clients_path / name
+         if not client_path.exists():
+             raise FileNotFoundError(client_path)
++        ready_file = tmp_path / f"{name}.ready"
+         env = dict(
+             os.environ,
++            PAHO_TEST_READY_FILE=str(ready_file),
+             PAHO_SSL_PATH=str(ssl_certs_path),
+             PYTHONPATH=f"{tests_path}{os.pathsep}{os.environ.get('PYTHONPATH', '')}",
+         )
+@@ -74,7 +99,7 @@ def start_client(request: pytest.FixtureRequest, ssl_certs_path):
+         ], env=env)
+ 
+         def fin():
+-            stop_process(proc)
++            stop_process(proc, ready_file)
+             if proc.returncode != expected_returncode:
+                 raise RuntimeError(f"Client {name} exited with code {proc.returncode}, expected {expected_returncode}")
+ 
+diff --git a/tests/paho_test.py b/tests/paho_test.py
+index 3df996e..188ceef 100644
+--- a/tests/paho_test.py
++++ b/tests/paho_test.py
+@@ -402,6 +402,11 @@ def pack_remaining_length(remaining_length):
+         if remaining_length == 0:
+             return s
+ 
++def signal_client_ready():
++    ready_file = os.environ.get("PAHO_TEST_READY_FILE")
++    if ready_file is not None:
++        with open(ready_file, "w"):
++            pass
+ 
+ def loop_until_keyboard_interrupt(mqttc):
+     """
+@@ -413,6 +418,7 @@ def loop_until_keyboard_interrupt(mqttc):
+     and stop the client gracefully.
+     """
+     try:
++        signal_client_ready()
+         while True:
+             mqttc.loop()
+     except KeyboardInterrupt:
+@@ -431,6 +437,7 @@ def wait_for_keyboard_interrupt():
+     """
+     yield  # If we get a KeyboardInterrupt during the block, it's too soon!
+     try:
++        signal_client_ready()
+         while True:
+             time.sleep(0.1)
+     except KeyboardInterrupt:
+diff --git a/tests/test_client.py b/tests/test_client.py
+index 09e4606..86652ca 100644
+--- a/tests/test_client.py
++++ b/tests/test_client.py
+@@ -864,19 +864,19 @@ class TestCompatibility:
+             disconnect_packet = paho_test.gen_disconnect()
+             fake_broker.expect_packet("disconnect", disconnect_packet)
+ 
+-            assert callback_called == [
+-                "on_connect",
+-                "on_subscribe",
+-                "on_publish",
+-                "on_message",
+-                "on_unsubscribe",
+-                "on_disconnect",
+-            ]
+-
+         finally:
+             mqttc.disconnect()
+             mqttc.loop_stop()
+ 
++        assert callback_called == [
++            "on_connect",
++            "on_subscribe",
++            "on_publish",
++            "on_message",
++            "on_unsubscribe",
++            "on_disconnect",
++        ]
++
+         packet_in = fake_broker.receive_packet(1)
+         assert not packet_in  # Check connection is closed
+ 
+@@ -1004,18 +1004,18 @@ class TestCompatibility:
+             disconnect_packet = paho_test.gen_disconnect()
+             fake_broker.expect_packet("disconnect", disconnect_packet)
+ 
+-            assert callback_called == [
+-                "on_connect",
+-                "on_subscribe",
+-                "on_publish",
+-                "on_message",
+-                "on_unsubscribe",
+-                "on_disconnect",
+-            ]
+-
+         finally:
+             mqttc.disconnect()
+             mqttc.loop_stop()
+ 
++        assert callback_called == [
++            "on_connect",
++            "on_subscribe",
++            "on_publish",
++            "on_message",
++            "on_unsubscribe",
++            "on_disconnect",
++        ]
++
+         packet_in = fake_broker.receive_packet(1)
+         assert not packet_in  # Check connection is closed
+diff --git a/tests/testsupport/broker.py b/tests/testsupport/broker.py
+index e08cf73..a587599 100644
+--- a/tests/testsupport/broker.py
++++ b/tests/testsupport/broker.py
+@@ -59,8 +59,10 @@ class FakeBroker:
+         if self._conn is None:
+             raise ValueError('Connection is not open')
+ 
+-        packet_in = self._conn.recv(num_bytes)
+-        return packet_in
++        try:
++            return self._conn.recv(num_bytes)
++        except ConnectionResetError:
++            return b""
+ 
+     def send_packet(self, packet_out):
+         if self._conn is None:

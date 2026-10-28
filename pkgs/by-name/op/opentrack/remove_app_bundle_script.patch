@@ -1,0 +1,15 @@
+diff --git a/macosx/CMakeLists.txt b/macosx/CMakeLists.txt
+index 8520e9e9..6428e91e 100644
+--- a/macosx/CMakeLists.txt
++++ b/macosx/CMakeLists.txt
+@@ -2,10 +2,4 @@ if(APPLE)
+     otr_escape_string(srcdir "${CMAKE_SOURCE_DIR}")
+     otr_escape_string(instdir "${CMAKE_INSTALL_PREFIX}")
+     otr_escape_string(commit "${OPENTRACK_COMMIT}")
+-    install(CODE "
+-       execute_process(COMMAND /bin/sh \"${srcdir}/macosx/make-app-bundle.sh\"
+-                                        \"${srcdir}/macosx\"
+-                                        \"${instdir}\"
+-                                       \"${commit}\")
+-    ")
+ endif()

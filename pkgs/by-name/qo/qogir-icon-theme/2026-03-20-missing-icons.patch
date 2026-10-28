@@ -1,0 +1,16 @@
+diff --git a/src/symbolic/status/audio-input-microphone-symbolic.svg b/src/symbolic/status/audio-input-microphone-symbolic.svg
+new file mode 120000
+index 00000000..87887c28
+--- /dev/null
++++ b/src/symbolic/status/audio-input-microphone-symbolic.svg
+@@ -0,0 +1 @@
++../devices/audio-input-microphone-symbolic.svg
+\ No newline at end of file
+diff --git a/src/symbolic/status/microphone-sensitivity-muted-symbolic.svg b/src/symbolic/status/microphone-sensitivity-muted-symbolic.svg
+new file mode 120000
+index 00000000..0f3dee8d
+--- /dev/null
++++ b/src/symbolic/status/microphone-sensitivity-muted-symbolic.svg
+@@ -0,0 +1 @@
++../../24/panel/microphone-sensitivity-muted-symbolic.svg
+\ No newline at end of file

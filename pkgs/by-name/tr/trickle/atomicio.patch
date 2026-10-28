@@ -1,0 +1,30 @@
+diff --git i/atomicio.c w/atomicio.c
+index 3930a07..81a14a4 100644
+--- i/atomicio.c
++++ w/atomicio.c
+@@ -37,11 +37,7 @@
+  * ensure all of data on socket comes through. f==read || f==write
+  */
+ ssize_t
+-atomicio(f, fd, _s, n)
+-	ssize_t (*f) ();
+-	int fd;
+-	void *_s;
+-	size_t n;
++atomicio(ssize_t (*f)(int, const void *, size_t), int fd, const void *_s, size_t n)
+ {
+ 	char *s = _s;
+ 	ssize_t res, pos = 0;
+diff --git i/util.h w/util.h
+index b00059c..f24d0c3 100644
+--- i/util.h
++++ w/util.h
+@@ -41,7 +41,7 @@
+ #define MAX(a, b) ((a) > (b) ? (a) : (b))
+ #define MIN(a, b) ((a) < (b) ? (a) : (b))
+ 
+-ssize_t    atomicio(ssize_t (*)(), int, void *, size_t);
++ssize_t    atomicio(ssize_t (*f)(int, const void *, size_t), int fd, const void *s, size_t n);
+ char      *get_progname(char *);
+ 
+ 

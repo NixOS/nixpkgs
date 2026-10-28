@@ -1,0 +1,19 @@
+# USB-Blaster
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6001", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6002", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6003", TAG+="uaccess"
+
+# USB-Blaster II
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6010", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6810", TAG+="uaccess"
+
+# USB-Blaster III
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6020", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6022", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6023", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6024", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6025", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6026", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="602C", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="602D", TAG+="uaccess"
+ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="602E", TAG+="uaccess"

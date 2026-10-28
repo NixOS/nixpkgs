@@ -1,0 +1,14 @@
+diff --git a/app/Providers/AppServiceProvider.php b/app/Providers/AppServiceProvider.php
+index b6e86bb6..3aaa3933 100644
+--- a/app/Providers/AppServiceProvider.php
++++ b/app/Providers/AppServiceProvider.php
+@@ -219,6 +219,8 @@ public function boot(): void
+ 
+     protected function configureSecureUrls()
+     {
+-        URL::forceHttps(true);
++        if (config('app.force_https')) {
++            URL::forceHttps(true);
++        }
+     }
+ }

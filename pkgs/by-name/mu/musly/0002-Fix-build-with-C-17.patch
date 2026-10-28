@@ -1,0 +1,35 @@
+From 75efe27cbb03f2883e53e7a7f68386d93e2c1874 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Sat, 3 Aug 2024 12:17:19 +0100
+Subject: [PATCH 2/4] Fix build with C++17
+
+---
+ musly/main.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/musly/main.cpp b/musly/main.cpp
+index a9644f2..bb8b7ae 100644
+--- a/musly/main.cpp
++++ b/musly/main.cpp
+@@ -14,6 +14,7 @@
+ #include <cstdio>
+ #include <iostream>
+ #include <fstream>
++#include <random>
+ #include <algorithm>
+ #include <limits>
+ #include <map>
+@@ -239,7 +240,9 @@ tracks_initialize(
+     else {
+         // use a random subset of 1000 tracks
+         std::vector<musly_track*> tracks2(tracks);
+-        std::random_shuffle(tracks2.begin(), tracks2.end());
++        std::random_device seeder;
++        std::default_random_engine rng(seeder());
++        std::shuffle(tracks2.begin(), tracks2.end(), rng);
+         ret = musly_jukebox_setmusicstyle(mj, tracks2.data(), 1000);
+     }
+     if (ret != 0) {
+-- 
+2.45.2
+

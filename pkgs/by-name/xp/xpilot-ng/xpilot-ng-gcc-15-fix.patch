@@ -1,0 +1,13 @@
+Only in xpilot-ng-4.7.3/src/server: .suibotdef.c.swp
+diff -r -U3 xpilot-ng-4.7.3.orig/src/server/suibotdef.c xpilot-ng-4.7.3/src/server/suibotdef.c
+--- xpilot-ng-4.7.3.orig/src/server/suibotdef.c	2026-01-03 16:26:37.070168944 +0100
++++ xpilot-ng-4.7.3/src/server/suibotdef.c	2026-01-03 16:27:31.970201518 +0100
+@@ -372,7 +372,7 @@
+ } object_proximity_t;
+ 
+ 
+-static bool Get_object_proximity();
++static bool Get_object_proximity(player_t *pl, object_t *shot, double sqmaxdist,int maxtime, object_proximity_t *object_proximity);
+ static bool Get_object_proximity(player_t *pl, object_t *shot, double sqmaxdist,int maxtime, object_proximity_t *object_proximity){
+    /* get square of closest distance between player and object
+     * compare with sqmaxdist and maxtime and return sqdistance and time

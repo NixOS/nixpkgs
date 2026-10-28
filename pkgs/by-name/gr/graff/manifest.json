@@ -1,0 +1,21 @@
+{
+  "version": "0.302.46",
+  "assets": {
+    "x86_64-linux": {
+      "url": "https://github.com/justrach/codegraff/releases/download/v0.302.46/graff-x86_64-linux.tar.gz",
+      "hash": "sha256-lSKHrf34hrrRefEHZGH2qhA/5/MqsqHPXe4DyXL3HHs="
+    },
+    "aarch64-linux": {
+      "url": "https://github.com/justrach/codegraff/releases/download/v0.302.46/graff-aarch64-linux.tar.gz",
+      "hash": "sha256-aMunRNomOVp3lJEcVJBz+volgeA4cTwz5ia5rDbAVg8="
+    },
+    "aarch64-darwin": {
+      "url": "https://github.com/justrach/codegraff/releases/download/v0.302.46/graff-aarch64-macos.tar.gz",
+      "hash": "sha256-ymYwMBRWdXjnOnMJFJ5jX6o53n+FzXLgZe3hEkNFrIw="
+    },
+    "x86_64-darwin": {
+      "url": "https://github.com/justrach/codegraff/releases/download/v0.302.46/graff-x86_64-macos.tar.gz",
+      "hash": "sha256-eMQKtxvt6GJMrU+SLiZCt4zlPsRSeKbH8/IE8cQUqbQ="
+    }
+  }
+}

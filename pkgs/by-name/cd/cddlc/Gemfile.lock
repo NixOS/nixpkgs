@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    cddlc (0.4.2)
+      neatjson (~> 0.10)
+      treetop (~> 1)
+    neatjson (0.10.5)
+    polyglot (0.3.5)
+    treetop (1.6.14)
+      polyglot (~> 0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cddlc
+
+BUNDLED WITH
+   2.6.9

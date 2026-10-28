@@ -1,0 +1,26 @@
+diff --git a/unix/portnm.c b/unix/portnm.c
+index 9eda4ab..019337c 100644
+--- a/unix/portnm.c
++++ b/unix/portnm.c
+@@ -32,7 +32,7 @@ zsysdep_port_name (ftcp_port)
+ 
+ #if HAVE_TCP
+   {
+-    size_t clen;
++    socklen_t clen;
+     struct sockaddr s;
+ 
+     clen = sizeof (struct sockaddr);
+diff --git a/unix/tcp.c b/unix/tcp.c
+index 1bbcec7..af52cab 100644
+--- a/unix/tcp.c
++++ b/unix/tcp.c
+@@ -395,7 +395,7 @@ ftcp_open (qconn, ibaud, fwait, fuser)
+   while (! FGOT_SIGNAL ())
+     {
+       sockaddr_storage speer;
+-      size_t clen;
++      socklen_t clen;
+       int onew;
+       pid_t ipid;
+ 

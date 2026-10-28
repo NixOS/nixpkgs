@@ -1,0 +1,14 @@
+diff --git a/test/test-all.sh b/test/test-all.sh
+index 2a47b21e..a45ca580 100755
+--- a/test/test-all.sh
++++ b/test/test-all.sh
+@@ -15,7 +15,8 @@ for script in test-*.sh; do
+   # Skip exclusions
+   if [ "$script" = "test-pre.sh" ] || \
+      [ "$script" = "test-post.sh" ] || \
+-     [ "$script" = "test-all.sh" ]; then
++     [ "$script" = "test-all.sh" ] || \
++     [ "$script" = "test-performance.sh" ]; then
+     continue
+   fi
+ 

@@ -1,0 +1,69 @@
+--- a/src/game/Makefile
++++ b/src/game/Makefile
+@@ -16,7 +16,7 @@
+ 	script_functions.c server.c sound.c texture.c ui.c egoboo.c physics.c\
+ 	egoboo_process.c ChrList.c EncList.c PrtList.c egoboo_object.c
+ 
+-EGO_PLATFORM    := platform/file_linux.c platform/sys_linux.c
++EGO_PLATFORM    := platform/file_linux.c platform/sys_mac.c
+ EGO_FILE_FORMAT := $(wildcard ./file_formats/*.c)
+ EGO_EXTENSIONS  := $(wildcard ./extensions/*.c)
+ 
+@@ -32,17 +32,17 @@
+ #---------------------
+ # the compiler options
+ 
+-CC      := gcc
++CC      := cc
+ INC     := -I. -I.. -I../enet/include ${SDLCONF_I} -I./extensions -I./file_formats -I./platform
+-LDFLAGS := ${SDLCONF_L} -L../enet/lib -lSDL_ttf -lSDL_mixer -lGL -lGLU -lSDL_image -lphysfs -lenet
++LDFLAGS := ${SDLCONF_L} -L../enet/lib -lSDL_ttf -lSDL_mixer -framework OpenGL -lSDL_image -lphysfs -lenet
+ 
+ # use different options if the environmental variable PREFIX is defined
+ ifdef ($(PREFIX),"")
+ 	OPT := -Os -Wall
+ else
+ 	OPT := -Os -Wall -DPREFIX=\"${PREFIX}\" -D_NIX_PREFIX
+ endif
+
+ CFLAGS  := ${OPT} ${INC}
+ 
+ #------------------------------------
+--- a/src/game/platform/sys_mac.c
++++ b/src/game/platform/sys_mac.c
+@@ -21,7 +21,7 @@
+ /// @brief Implementation of mac system-dependent functions
+ /// @details
+ 
+-#include "System.h"
++#include "system.h"
+ 
+ #include "file_common.h" /* for NULL */
+ #include <sys/time.h>
+--- a/src/OSX/Info.plist
++++ b/src/OSX/Info.plist
+@@ -5,7 +5,7 @@
+ 	<key>CFBundleDevelopmentRegion</key>
+ 	<string>English</string>
+ 	<key>CFBundleExecutable</key>
+-	<string>${EXECUTABLE_NAME}</string>
++	<string>egoboo</string>
+ 	<key>CFBundleIconFile</key>
+ 	<string>skull</string>
+ 	<key>CFBundleIdentifier</key>
+@@ -13,13 +13,13 @@
+ 	<key>CFBundleInfoDictionaryVersion</key>
+ 	<string>6.0</string>
+ 	<key>CFBundleName</key>
+-	<string>${PRODUCT_NAME}</string>
++	<string>Egoboo</string>
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleSignature</key>
+ 	<string>????</string>
+ 	<key>CFBundleVersion</key>
+-	<string>2.6.7 beta</string>
++	<string>2.8.1</string>
+ 	<key>NSMainNibFile</key>
+ 	<string>SDLMain</string>
+ 	<key>NSPrincipalClass</key>

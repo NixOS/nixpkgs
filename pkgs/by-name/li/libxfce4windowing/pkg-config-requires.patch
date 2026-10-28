@@ -1,0 +1,24 @@
+diff --git a/libxfce4windowing/meson.build b/libxfce4windowing/meson.build
+index b1a020b..fcb1b12 100644
+--- a/libxfce4windowing/meson.build
++++ b/libxfce4windowing/meson.build
+@@ -144,6 +144,7 @@ pkgconfig.generate(
+   name: libxfce4windowing_pkgname,
+   filebase: libxfce4windowing_pkgname,
+   description: 'X11/Wayland windowing utility library for Xfce',
++  requires: ['gtk+-3.0'],
+   subdirs: ['xfce4' / libxfce4windowing_pkgname],
+   install_dir: get_option('prefix') / get_option('libdir') / 'pkgconfig',
+ )
+diff --git a/libxfce4windowingui/meson.build b/libxfce4windowingui/meson.build
+index 68aa909..f56c3c1 100644
+--- a/libxfce4windowingui/meson.build
++++ b/libxfce4windowingui/meson.build
+@@ -76,6 +76,7 @@ pkgconfig.generate(
+   name: libxfce4windowingui_pkgname,
+   filebase: libxfce4windowingui_pkgname,
+   description: 'X11/Wayland windowing utility library for Xfce - extra widgets',
++  requires: ['gtk+-3.0'],
+   subdirs: ['xfce4' / libxfce4windowing_pkgname],
+   install_dir: get_option('prefix') / get_option('libdir') / 'pkgconfig',
+ )

@@ -1,0 +1,18 @@
+Export hip_set_pinfo and hip_finish_pinfo.
+
+The frontend (get_audio.c) links against these symbols when built with
+--enable-analyzer-hooks, but they were missing from the -export-symbols
+list, so linking the lame binary failed. Fixed in upstream SVN trunk
+after the 4.0 release.
+
+--- a/include/libmp3lame.sym
++++ b/include/libmp3lame.sym
+@@ -188,6 +188,8 @@ hip_decode_exit
+ hip_set_errorf
+ hip_set_debugf
+ hip_set_msgf
++hip_set_pinfo
++hip_finish_pinfo
+ hip_decode
+ hip_decode_headers
+ hip_decode1

@@ -1,0 +1,10 @@
+--- a/libexec/rtld-elf/Makefile
++++ b/libexec/rtld-elf/Makefile
+@@ -86,7 +86,6 @@ 
+ 
+ # Some of the required math functions (div & mod) are implemented in
+ # libcompiler_rt on some architectures.
+-LIBADD+=	compiler_rt
+ 
+ .include <bsd.prog.mk>
+ ${PROG_FULL}:  ${VERSION_MAP}

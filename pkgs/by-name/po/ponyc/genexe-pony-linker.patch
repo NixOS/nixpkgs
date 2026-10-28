@@ -1,0 +1,158 @@
+diff --git a/src/libponyc/codegen/genexe.cc b/src/libponyc/codegen/genexe.cc
+index 826d69f0bcba..897afba953bb 100644
+--- a/src/libponyc/codegen/genexe.cc
++++ b/src/libponyc/codegen/genexe.cc
+@@ -22,6 +22,7 @@ LLD_HAS_DRIVER(wasm)
+ #include "../type/lookup.h"
+ #include "../../libponyrt/mem/pool.h"
+ #include "ponyassert.h"
++#include "nix.h"
+ #include <string.h>
+ 
+ #include <llvm/Support/raw_ostream.h>
+@@ -38,6 +39,8 @@ LLD_HAS_DRIVER(wasm)
+ #  include <llvm/TargetParser/Triple.h>
+ #endif
+ 
++static bool dir_has_arch_libc_crt(const char* dir, uint16_t target_machine);
++
+ #if defined(PONY_SANITIZER)
+ // Generated at configure time (top-level CMakeLists.txt, PONY_SANITIZERS_ENABLED
+ // block): the sanitizer runtime link fragment captured from the compiler driver.
+@@ -965,6 +968,9 @@ static bool link_exe_lld_elf(compile_t* c, ast_t* program,
+ 
+   program_lib_build_args_embedded(program, c->opt);
+ 
++  std::vector<const char*> env_libdirs;
++  nix_collect_link_libdirs(c->opt->strtab, env_libdirs);
++
+   const char* sys_triple = system_triple(c->opt);
+   bool is_freebsd = target_is_freebsd(c->opt->triple);
+   bool is_dragonfly = target_is_dragonfly(c->opt->triple);
+@@ -996,7 +1002,11 @@ static bool link_exe_lld_elf(compile_t* c, ast_t* program,
+     return false;
+   }
+ 
+-  const char* dynlinker = dynamic_linker_path(c);
++  // Prefer a Nix-provided ELF interpreter (baked default or environment);
++  // fall back to the built-in FHS search when none is configured.
++  const char* dynlinker = nix_dynamic_linker(c->opt->strtab);
++  if(dynlinker[0] == '\0')
++    dynlinker = dynamic_linker_path(c);
+   if(!c->opt->staticbin && dynlinker == NULL)
+   {
+     errorf(errors, NULL,
+@@ -1009,10 +1019,23 @@ static bool link_exe_lld_elf(compile_t* c, ast_t* program,
+   const char* libc_crt_dir = find_libc_crt_dir(sysroot, sys_triple,
+     target_machine, c->opt->strtab);
+   if(libc_crt_dir == NULL)
++  {
++    for(size_t i = 0; i < env_libdirs.size(); i++)
++    {
++      if(dir_has_arch_libc_crt(env_libdirs[i], target_machine))
++      {
++        libc_crt_dir = env_libdirs[i];
++        break;
++      }
++    }
++  }
++  if(libc_crt_dir == NULL)
+   {
+     errorf(errors, NULL,
+       "could not find a libc crt startup object (crt1.o or crt0.o) "
+-      "matching target architecture '%s' in sysroot '%s'",
++      "matching target architecture '%s' in sysroot '%s'\n"
++      "  On NixOS systems, set PONY_LINK_LIBDIRS to the directory holding "
++      "the arch-matching libc startup object (crt1.o or crt0.o).",
+       c->opt->triple, sysroot);
+     return false;
+   }
+@@ -1305,6 +1328,21 @@ static bool link_exe_lld_elf(compile_t* c, ast_t* program,
+     }
+   }
+ 
++/*
++  Add /nix/store lib directories to the embedded linker args
++*/
++  for(size_t i = 0; i < env_libdirs.size(); i++)
++  {
++    snprintf(buf, sizeof(buf), "-L%s", env_libdirs[i]);
++    args.push_back(stringtab(c->opt->strtab, buf));
++
++    if(!c->opt->staticbin)
++    {
++      args.push_back("-rpath");
++      args.push_back(env_libdirs[i]);
++    }
++  }
++
+   // Standard system library fallback paths. The paths above cover
+   // distro-specific locations (libc_crt_dir, gcc_lib_dir, etc.) but miss
+   // common install locations like /usr/local/lib (where libraries built
+@@ -1732,9 +1770,10 @@ static const char* find_macos_sdk_path(strtable_t* strtab)
+     pclose(f);
+   }
+ 
+-  // Hardcoded fallback.
++  // Fall back to the Nix apple-sdk when xcrun is unavailable. The unversioned
++  // MacOSX.sdk symlink keeps this independent of the SDK version.
+   const char* fallback =
+-    "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib";
++    "@apple-sdk@/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib";
+ 
+   struct stat st;
+   if(stat(fallback, &st) == 0 && S_ISDIR(st.st_mode))
+@@ -1947,6 +1986,31 @@ static bool link_exe_lld_macho(compile_t* c, ast_t* program,
+     }
+   }
+ 
++/*
++  Add /nix/store lib directories to the embedded Mach-O linker args, mirroring
++  the ELF path. On NixOS the C++ standard library, buildInputs and user FFI
++  libraries live under /nix/store, not in the SDK's usr/lib or the Homebrew and
++  /usr/local fallbacks above. nix_collect_link_libdirs() (see nix.h) gathers
++  them from the baked PONY_NIX_LINK_LIBDIRS default, the PONY_LINK_LIBDIRS /
++  NIX_LDFLAGS env vars, and the cc-wrapper's $NIX_CC/nix-support/cc-ldflags
++  (which carries the -L<libc++> path on Darwin). Without this,
++  `use "lib:c++" if osx` (as used by pony-compiler) fails to link with
++  "library not found for -lc++".
++*/
++  std::vector<const char*> env_libdirs;
++  nix_collect_link_libdirs(c->opt->strtab, env_libdirs);
++  for(size_t i = 0; i < env_libdirs.size(); i++)
++  {
++    snprintf(buf, sizeof(buf), "-L%s", env_libdirs[i]);
++    args.push_back(stringtab(c->opt->strtab, buf));
++
++    if(!c->opt->staticbin)
++    {
++      args.push_back("-rpath");
++      args.push_back(env_libdirs[i]);
++    }
++  }
++
+   // Object file.
+   args.push_back(file_o);
+ 
+@@ -2417,3 +2481,21 @@ bool genexe(compile_t* c, ast_t* program)
+ 
+   return true;
+ }
++
++// Does `dir` hold a libc startup object (crt1.o / crt0.o) whose ELF machine
++// matches the target? Used to pick the crt directory out of the Nix libdirs
++// gathered by nix_collect_link_libdirs().
++static bool dir_has_arch_libc_crt(const char* dir, uint16_t target_machine)
++{
++  static const char* sentinels[] = { "crt1.o", "crt0.o" };
++  char buf[PATH_MAX];
++
++  for(size_t j = 0; j < sizeof(sentinels) / sizeof(sentinels[0]); j++)
++  {
++    snprintf(buf, sizeof(buf), "%s/%s", dir, sentinels[j]);
++    if(file_exists(buf) && elf_matches_target(buf, target_machine))
++      return true;
++  }
++
++  return false;
++}

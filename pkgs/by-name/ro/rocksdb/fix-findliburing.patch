@@ -1,0 +1,29 @@
+From 23432b7958ecea64b49ba680767ea5dc696768c9 Mon Sep 17 00:00:00 2001
+From: Benjamin Lee <benjamin@computer.surgery>
+Date: Sun, 26 May 2024 17:17:01 -0700
+Subject: [PATCH] fix findliburing
+
+`find_package(... NAMES lib*)` is basically always wrong. The previous
+code was just hardcoding the static library path to work around the fact
+that this doesn't work. This breaks the build when only dynamic liburing
+builds are available.
+---
+ cmake/modules/Finduring.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/modules/Finduring.cmake b/cmake/modules/Finduring.cmake
+index 8cb14cb27..87f2df474 100644
+--- a/cmake/modules/Finduring.cmake
++++ b/cmake/modules/Finduring.cmake
+@@ -7,7 +7,7 @@
+ find_path(uring_INCLUDE_DIR
+   NAMES liburing.h)
+ find_library(uring_LIBRARIES
+-  NAMES liburing.a liburing)
++  NAMES uring)
+ 
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(uring
+-- 
+2.44.0
+

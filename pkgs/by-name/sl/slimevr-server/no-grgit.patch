@@ -1,0 +1,26 @@
+diff --git a/server/desktop/build.gradle.kts b/server/desktop/build.gradle.kts
+index d72fd8d3..7463cd05 100644
+--- a/server/desktop/build.gradle.kts
++++ b/server/desktop/build.gradle.kts
+@@ -88,18 +88,9 @@ buildConfig {
+ 	useKotlinOutput { topLevelConstants = true }
+ 	packageName("dev.slimevr.desktop")
+ 
+-	val gitCommitHash = providers.exec {
+-		commandLine("git", "rev-parse", "--short=8", "HEAD")
+-	}.standardOutput.asText.get().trim()
+-	val gitVersionTag = providers.exec {
+-		commandLine("git", "--no-pager", "tag", "--sort", "-taggerdate", "--points-at", "HEAD")
+-	}.standardOutput.asText.get().trim()
+-	val gitIsClean = providers.exec {
+-		commandLine("git", "status", "--porcelain")
+-	}.standardOutput.asText.get().trim().isEmpty()
+-	buildConfigField("String", "GIT_COMMIT_HASH", "\"${gitCommitHash}\"")
+-	buildConfigField("String", "GIT_VERSION_TAG", "\"${gitVersionTag}\"")
+-	buildConfigField("boolean", "GIT_CLEAN", gitIsClean.toString())
++	buildConfigField("String", "GIT_COMMIT_HASH", "\"NOT AVAILABLE\"")
++	buildConfigField("String", "GIT_VERSION_TAG", "\"@version@\"")
++	buildConfigField("boolean", "GIT_CLEAN", "true")
+ }
+ 
+ tasks.run<JavaExec> {

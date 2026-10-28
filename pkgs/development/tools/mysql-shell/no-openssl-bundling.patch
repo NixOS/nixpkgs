@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 33931e02a..59f613a9d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -901,7 +901,6 @@ endif()
+ ### Bundling of OpenSSL libraries (if needed)
+ # macro MYSQL_CHECK_SSL_DLLS() adapted for Shell
+ IF (WITH_SSL_PATH AND (APPLE OR WIN32 OR LINUX_STANDALONE))
+-  SET(BUNDLED_OPENSSL 1)
+   MESSAGE(STATUS "WITH_SSL_PATH ${WITH_SSL_PATH}")
+ 
+   # In MySQL Server 8.0.4 and up, OpenSSL is linked dynamically and

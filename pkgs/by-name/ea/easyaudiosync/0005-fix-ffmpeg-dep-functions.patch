@@ -1,0 +1,70 @@
+commit 5bf22927f9e83dc3043e09370bb54815085a00ba
+Author: complexlogic <complexlogic@users.noreply.github.com>
+Date:   Tue Aug 12 07:19:29 2025 -0700
+
+    Replace deprecated FFmpeg functions
+
+diff --git a/src/config.hpp b/src/config.hpp
+index ea9723c..1f6cc30 100644
+--- a/src/config.hpp
++++ b/src/config.hpp
+@@ -133,7 +133,11 @@ struct Config {
+         };
+         FDK fdk;
+         LAVC lavc;
++#if LIBAVCODEC_VERSION_MAJOR >= 62
++        int profile = AV_PROFILE_AAC_LOW;
++#else
+         int profile = FF_PROFILE_AAC_LOW;
++#endif
+     };
+     struct OGG {
+         int quality = VORBIS_DEFAULT_QUALITY;
+diff --git a/src/transcode.cpp b/src/transcode.cpp
+index 1ea286c..a0d6292 100644
+--- a/src/transcode.cpp
++++ b/src/transcode.cpp
+@@ -171,7 +171,16 @@ bool Transcoder::OutputFile::open(Codec out_codec, const InputFile &in_file, con
+         const auto &preset = config.opus.get_preset();
+         codec_ctx->bit_rate = determine_bitrate(preset.bit_rate, codec_ctx->ch_layout.nb_channels);
+     }
++#if LIBAVCODEC_VERSION_MAJOR >= 62
++    AVSampleFormat *fmts = nullptr;
++    if ((avcodec_get_supported_config(codec_ctx, codec, AV_CODEC_CONFIG_SAMPLE_FORMAT, 0, const_cast<const void**>(reinterpret_cast<void**>(&fmts)), nullptr) < 0) || !fmts) {
++        transcoder->logger.error("Could not find a valid sample format for the encoder");
++        return false;
++    }
++    codec_ctx->sample_fmt = fmts[0];
++#else
+     codec_ctx->sample_fmt = codec->sample_fmts[0];
++#endif
+     stream->time_base.den = codec_ctx->sample_rate;
+     stream->time_base.num = 1;
+ 
+diff --git a/src/util.cpp b/src/util.cpp
+index 6a52903..fa69d3a 100644
+--- a/src/util.cpp
++++ b/src/util.cpp
+@@ -158,13 +158,19 @@ int determine_sample_rate(Codec codec, const AVCodec *avcodec, int in_rate)
+ {
+     if (codec == Codec::MP3)
+         return std::min(48000, in_rate);
+-    if (!avcodec->supported_samplerates)
++    int *supported_samplerates = nullptr;
++#if LIBAVCODEC_VERSION_MAJOR >= 62
++    if ((avcodec_get_supported_config(nullptr, avcodec, AV_CODEC_CONFIG_SAMPLE_RATE, 0, const_cast<const void**>(reinterpret_cast<void**>(&supported_samplerates)), nullptr) < 0) || !supported_samplerates)
++#else
++    supported_samplerates = avcodec->supported_samplerates;
++    if (!supported_samplerates)
++#endif
+         return in_rate;
+     
+-    const int *rate = avcodec->supported_samplerates;
++    const int *rate = supported_samplerates;
+     while (*(rate + 1))
+         rate++;
+-    while (rate > avcodec->supported_samplerates && (*rate - in_rate < 0))
++    while (rate > supported_samplerates && (*rate - in_rate < 0))
+         rate--;
+     return *rate;
+ }

@@ -1,0 +1,44 @@
+From 1ae0eca39ba6af27f37e2fe81395b91a2761a408 Mon Sep 17 00:00:00 2001
+Message-Id: <1ae0eca39ba6af27f37e2fe81395b91a2761a408.1600627676.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Sun, 20 Sep 2020 14:46:59 -0400
+Subject: [PATCH] fix paths
+
+---
+ gnome-initial-setup/pages/keyboard/cc-input-chooser.c | 6 +++---
+ gnome-initial-setup/pages/timezone/tz.h               | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
+index 196abf6..613d0e5 100644
+--- a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
++++ b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
+@@ -177,9 +177,9 @@ preview_cb (GtkLabel       *label,
+ 		return TRUE;
+ 
+ 	if (variant[0])
+-		commandline = g_strdup_printf ("tecla \"%s+%s\"", layout, variant);
++		commandline = g_strdup_printf ("@tecla@/bin/tecla \"%s+%s\"", layout, variant);
+ 	else
+-		commandline = g_strdup_printf ("tecla %s", layout);
++		commandline = g_strdup_printf ("@tecla@/bin/tecla %s", layout);
+ 	g_spawn_command_line_async (commandline, NULL);
+ 	g_free (commandline);
+ 
+diff --git a/gnome-initial-setup/pages/timezone/tz.h b/gnome-initial-setup/pages/timezone/tz.h
+index a2376f8..5cb7bc9 100644
+--- a/gnome-initial-setup/pages/timezone/tz.h
++++ b/gnome-initial-setup/pages/timezone/tz.h
+@@ -28,7 +28,7 @@
+ G_BEGIN_DECLS
+ 
+ #ifndef __sun
+-#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
++#  define TZ_DATA_FILE "@tzdata@/share/zoneinfo/zone.tab"
+ #else
+ #  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab"
+ #endif
+
+base-commit: 5132e206a6bf81964450561d68473ac015760455
+-- 
+git-series 0.9.1

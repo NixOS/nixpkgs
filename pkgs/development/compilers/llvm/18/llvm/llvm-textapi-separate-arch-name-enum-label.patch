@@ -1,0 +1,123 @@
+--- llvm/include/llvm/TextAPI/Architecture.def
++++ llvm/include/llvm/TextAPI/Architecture.def
+@@ -13,33 +13,33 @@
+ ///
+ /// X86 architectures sorted by cpu type and sub type id.
+ ///
+-ARCHINFO(i386, MachO::CPU_TYPE_I386, MachO::CPU_SUBTYPE_I386_ALL, 32)
+-ARCHINFO(x86_64, MachO::CPU_TYPE_X86_64, MachO::CPU_SUBTYPE_X86_64_ALL, 64)
+-ARCHINFO(x86_64h, MachO::CPU_TYPE_X86_64, MachO::CPU_SUBTYPE_X86_64_H, 64)
++ARCHINFO(i386, i386, MachO::CPU_TYPE_I386, MachO::CPU_SUBTYPE_I386_ALL, 32)
++ARCHINFO(x86_64, x86_64, MachO::CPU_TYPE_X86_64, MachO::CPU_SUBTYPE_X86_64_ALL, 64)
++ARCHINFO(x86_64h, x86_64h, MachO::CPU_TYPE_X86_64, MachO::CPU_SUBTYPE_X86_64_H, 64)
+ 
+ 
+ ///
+ /// ARM architectures sorted by cpu sub type id.
+ ///
+-ARCHINFO(armv4t, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V4T, 32)
+-ARCHINFO(armv6, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V6, 32)
+-ARCHINFO(armv5, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V5TEJ, 32)
+-ARCHINFO(armv7, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7, 32)
+-ARCHINFO(armv7s, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7S, 32)
+-ARCHINFO(armv7k, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7K, 32)
+-ARCHINFO(armv6m, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V6M, 32)
+-ARCHINFO(armv7m, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7M, 32)
+-ARCHINFO(armv7em, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7EM, 32)
++ARCHINFO(armv4t, armv4t, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V4T, 32)
++ARCHINFO(armv6, armv6, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V6, 32)
++ARCHINFO(armv5, armv5, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V5TEJ, 32)
++ARCHINFO(armv7, armv7, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7, 32)
++ARCHINFO(armv7s, armv7s, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7S, 32)
++ARCHINFO(armv7k, armv7k, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7K, 32)
++ARCHINFO(armv6m, armv6m, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V6M, 32)
++ARCHINFO(armv7m, armv7m, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7M, 32)
++ARCHINFO(armv7em, armv7em, MachO::CPU_TYPE_ARM, MachO::CPU_SUBTYPE_ARM_V7EM, 32)
+ 
+ 
+ ///
+ /// ARM64 architectures sorted by cpu sub type id.
+ ///
+-ARCHINFO(arm64, MachO::CPU_TYPE_ARM64, MachO::CPU_SUBTYPE_ARM64_ALL, 64)
+-ARCHINFO(arm64e, MachO::CPU_TYPE_ARM64, MachO::CPU_SUBTYPE_ARM64E, 64)
++ARCHINFO(arm64, arm64, MachO::CPU_TYPE_ARM64, MachO::CPU_SUBTYPE_ARM64_ALL, 64)
++ARCHINFO(arm64e, arm64e, MachO::CPU_TYPE_ARM64, MachO::CPU_SUBTYPE_ARM64E, 64)
+ 
+ 
+ ///
+ /// ARM64_32 architectures sorted by cpu sub type id
+ ///
+-ARCHINFO(arm64_32, MachO::CPU_TYPE_ARM64_32, MachO::CPU_SUBTYPE_ARM64_32_V8, 32)
++ARCHINFO(arm64_32, arm64_32, MachO::CPU_TYPE_ARM64_32, MachO::CPU_SUBTYPE_ARM64_32_V8, 32)
+--- llvm/include/llvm/TextAPI/Architecture.h
++++ llvm/include/llvm/TextAPI/Architecture.h
+@@ -26,7 +26,7 @@
+ 
+ /// Defines the architecture slices that are supported by Text-based Stub files.
+ enum Architecture : uint8_t {
+-#define ARCHINFO(Arch, Type, SubType, NumBits) AK_##Arch,
++#define ARCHINFO(Arch, Name, Type, SubType, NumBits) AK_##Arch,
+ #include "llvm/TextAPI/Architecture.def"
+ #undef ARCHINFO
+   AK_unknown, // this has to go last.
+--- llvm/lib/TextAPI/Architecture.cpp
++++ llvm/lib/TextAPI/Architecture.cpp
+@@ -21,7 +21,7 @@
+ namespace MachO {
+ 
+ Architecture getArchitectureFromCpuType(uint32_t CPUType, uint32_t CPUSubType) {
+-#define ARCHINFO(Arch, Type, Subtype, NumBits)                                 \
++#define ARCHINFO(Arch, Name, Type, Subtype, NumBits)                           \
+   if (CPUType == (Type) &&                                                     \
+       (CPUSubType & ~MachO::CPU_SUBTYPE_MASK) == (Subtype))                    \
+     return AK_##Arch;
+@@ -33,7 +33,7 @@
+ 
+ Architecture getArchitectureFromName(StringRef Name) {
+   return StringSwitch<Architecture>(Name)
+-#define ARCHINFO(Arch, Type, Subtype, NumBits) .Case(#Arch, AK_##Arch)
++#define ARCHINFO(Arch, Name, Type, Subtype, NumBits) .Case(#Name, AK_##Arch)
+ #include "llvm/TextAPI/Architecture.def"
+ #undef ARCHINFO
+       .Default(AK_unknown);
+@@ -41,9 +41,9 @@
+ 
+ StringRef getArchitectureName(Architecture Arch) {
+   switch (Arch) {
+-#define ARCHINFO(Arch, Type, Subtype, NumBits)                                 \
++#define ARCHINFO(Arch, Name, Type, Subtype, NumBits)                           \
+   case AK_##Arch:                                                              \
+-    return #Arch;
++    return #Name;
+ #include "llvm/TextAPI/Architecture.def"
+ #undef ARCHINFO
+   case AK_unknown:
+@@ -57,7 +57,7 @@
+ 
+ std::pair<uint32_t, uint32_t> getCPUTypeFromArchitecture(Architecture Arch) {
+   switch (Arch) {
+-#define ARCHINFO(Arch, Type, Subtype, NumBits)                                 \
++#define ARCHINFO(Arch, Name, Type, Subtype, NumBits)                           \
+   case AK_##Arch:                                                              \
+     return std::make_pair(Type, Subtype);
+ #include "llvm/TextAPI/Architecture.def"
+@@ -77,7 +77,7 @@
+ 
+ bool is64Bit(Architecture Arch) {
+   switch (Arch) {
+-#define ARCHINFO(Arch, Type, Subtype, NumBits)                                 \
++#define ARCHINFO(Arch, Name, Type, Subtype, NumBits)                           \
+   case AK_##Arch:                                                              \
+     return NumBits == 64;
+ #include "llvm/TextAPI/Architecture.def"
+--- llvm/lib/TextAPI/TextStubCommon.cpp
++++ llvm/lib/TextAPI/TextStubCommon.cpp
+@@ -133,7 +133,7 @@
+ 
+ void ScalarBitSetTraits<ArchitectureSet>::bitset(IO &IO,
+                                                  ArchitectureSet &Archs) {
+-#define ARCHINFO(arch, type, subtype, numbits)                                 \
++#define ARCHINFO(arch, name, type, subtype, numbits)                           \
+   IO.bitSetCase(Archs, #arch, 1U << static_cast<int>(AK_##arch));
+ #include "llvm/TextAPI/Architecture.def"
+ #undef ARCHINFO

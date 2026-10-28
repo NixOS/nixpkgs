@@ -1,0 +1,13 @@
+diff --git a/opuslib_next/api/__init__.py b/opuslib_next/api/__init__.py
+index dc498b2..b2ded08 100644
+--- a/opuslib_next/api/__init__.py
++++ b/opuslib_next/api/__init__.py
+@@ -15,7 +15,7 @@ __copyright__ = "Copyright (c) 2025, Kalicyh"
+ __license__ = "BSD 3-Clause License"
+ 
+ 
+-lib_location = find_library("opus")
++lib_location = "@libopus@"
+ 
+ if lib_location is None:
+     # find opus library in macOS

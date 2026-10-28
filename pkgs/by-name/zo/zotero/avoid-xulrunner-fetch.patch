@@ -1,0 +1,135 @@
+diff --git a/app/scripts/fetch_xulrunner b/app/scripts/fetch_xulrunner
+index 30c3a9073d..aa953744f8 100755
+--- a/app/scripts/fetch_xulrunner
++++ b/app/scripts/fetch_xulrunner
+@@ -148,15 +148,6 @@ function modify_omni {
+ 	# Continue using app.update.auto in prefs.js on Windows
+ 	replace_line 'PER_INSTALLATION_PREFS_PLATFORMS = \["win"\]' 'PER_INSTALLATION_PREFS_PLATFORMS = []' modules/UpdateUtils.sys.mjs
+ 	
+-	# Prompt if major update is available instead of installing automatically on restart
+-	replace_line 'if \(!updateAuto\) \{' 'if (update.type == "major") {
+-      LOG("UpdateService:_selectAndInstallUpdate - prompting because it is a major update");
+-      AUSTLMY.pingCheckCode(this._pingSuffix, AUSTLMY.CHK_SHOWPROMPT_PREF);
+-      Services.obs.notifyObservers(update, "update-available", "show-prompt");
+-      return;
+-    }
+-    if (!updateAuto) {' modules/UpdateService.sys.mjs
+-	
+ 	# Avoid console warning about resource://gre/modules/FxAccountsCommon.js
+ 	replace_line 'const logins = this._data.logins;' 'const logins = this._data.logins; if (this._data.logins.length != -1) return;' modules/LoginStore.sys.mjs
+ 	
+@@ -506,70 +497,9 @@ cd xulrunner
+ 
+ if [ $BUILD_MAC == 1 ]; then
+ 	GECKO_VERSION="$GECKO_VERSION_MAC"
+-	DOWNLOAD_URL="https://ftp.mozilla.org/pub/firefox/releases/$GECKO_VERSION"
+-	rm -rf Firefox.app
+-	
+-	if [ -e "Firefox $GECKO_VERSION.app.zip" ]; then
+-		echo "Using Firefox $GECKO_VERSION.app.zip"
+-		unzip "Firefox $GECKO_VERSION.app.zip"
+-	else
+-		curl -o Firefox.dmg "$DOWNLOAD_URL/mac/en-US/Firefox%20$GECKO_VERSION.dmg"
+-		set +e
+-		hdiutil detach -quiet /Volumes/Firefox 2>/dev/null
+-		set -e
+-		hdiutil attach -quiet Firefox.dmg
+-		cp -a /Volumes/Firefox/Firefox.app .
+-		# Store local copy of unmodified app
+-		zip -r "Firefox $GECKO_VERSION.app.zip" Firefox.app
+-		hdiutil detach -quiet /Volumes/Firefox
+-	fi
+-	
+-	# Download custom components (e.g., XUL), as an xz-compressed tarball of the MacOS folder with
+-	# custom files in it
+-	echo
+-	rm -rf MacOS
+-	if [ -n "$custom_components_hash_mac" ]; then
+-		if [ -e "Firefox $GECKO_VERSION MacOS.zip" ]; then
+-			echo "Using Firefox $GECKO_VERSION MacOS.zip"
+-			unzip "Firefox $GECKO_VERSION MacOS.zip"
+-		else
+-			echo "Downloading custom Firefox components"
+-			echo
+-			curl -o MacOS.tar.xz "${custom_components_url}mac/$custom_components_hash_mac.tar.xz"
+-			
+-			# Verify hash
+-			if [[ "`uname`" = "Darwin" ]]; then
+-				shasum="shasum -a 256"
+-			else
+-				shasum=sha256sum
+-			fi
+-			echo
+-			echo "$custom_components_hash_mac  MacOS.tar.xz" | $shasum -c -
+-			echo
+-			
+-			tar xvf MacOS.tar.xz
+-		fi
+-		echo
+-	fi
+-	
+ 	pushd Firefox.app/Contents/Resources
+ 	modify_omni mac
+ 	popd
+-	
+-	# Replace "FirefoxCP" with "ZoteroCP" for subprocesses ("Isolated Web Content", "Socket Process", "Web Content", etc.)
+-	info_plist=Firefox.app/Contents/MacOS/plugin-container.app/Contents/Resources/English.lproj/InfoPlist.strings
+-	from=$(get_utf16_chars "FirefoxCP")
+-	to=$(get_utf16_chars "ZoteroCP")
+-	perl -pi -e "s/$from/$to/" $info_plist
+-	# Check for UTF-16 "ZoteroCP"
+-	if ! grep -a -q "Z.o.t.e.r.o.C.P." $info_plist; then
+-		echo '"ZoteroCP" not found in InfoPlist.strings after replacement'
+-		exit 1
+-	fi
+-	
+-	rm -f Firefox.dmg
+-	
+-	echo $("$SCRIPT_DIR/xulrunner_hash" -p m) > hash-mac
+ fi
+ 
+ if [ $BUILD_WIN == 1 ]; then
+@@ -709,9 +639,6 @@ if [ $BUILD_WIN == 1 ]; then
+ fi
+ 
+ if [ $BUILD_LINUX == 1 ]; then
+-	GECKO_VERSION="$GECKO_VERSION_LINUX"
+-	DOWNLOAD_URL="https://ftp.mozilla.org/pub/firefox/releases/$GECKO_VERSION"
+-	
+ 	if [[ -n $arch ]]; then
+ 		arch_list=("$arch")
+ 	else
+@@ -719,33 +646,11 @@ if [ $BUILD_LINUX == 1 ]; then
+ 	fi
+ 	for arch in "${arch_list[@]}"; do
+ 		xdir="firefox-linux-$arch"
+-		rm -rf $xdir
+-		
+-		archived_file="firefox-$GECKO_VERSION-$arch.tar.xz"
+-		if [ -e "$archived_file" ]; then
+-			echo "Using $archived_file"
+-			cp "$archived_file" "firefox-$GECKO_VERSION.tar.xz"
+-		else
+-			if [ $arch = "arm64" ]; then
+-				moz_arch=aarch64
+-			else
+-				moz_arch=$arch
+-			fi
+-			curl -O "$DOWNLOAD_URL/linux-$moz_arch/en-US/firefox-$GECKO_VERSION.tar.xz"
+-			# Store local copy of unmodified app
+-			cp "firefox-$GECKO_VERSION.tar.xz" "$archived_file"
+-		fi
+-
+-		tar xvf firefox-$GECKO_VERSION.tar.xz
+-		mv firefox $xdir
+ 
+ 		pushd $xdir
+ 		modify_omni $arch
+ 		popd
+ 		
+-		rm "firefox-$GECKO_VERSION.tar.xz"
+-		
+-		echo "$( $SCRIPT_DIR/xulrunner_hash -p l -a "$arch" )" > "hash-linux-${arch}"
+ 	done
+ fi
+ 

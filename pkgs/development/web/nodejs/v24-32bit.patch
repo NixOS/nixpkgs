@@ -1,0 +1,26 @@
+diff --git a/deps/v8/src/compiler/turboshaft/int64-lowering-reducer.h b/deps/v8/src/compiler/turboshaft/int64-lowering-reducer.h
+index ee6fe95a603..58d091a0dc7 100644
+--- a/deps/v8/src/compiler/turboshaft/int64-lowering-reducer.h
++++ b/deps/v8/src/compiler/turboshaft/int64-lowering-reducer.h
+@@ -637,7 +637,9 @@ class Int64LoweringReducer : public Next {
+       result = __ Word32CountLeadingZeros(high);
+     }
+ 
+-    return __ Tuple<Word32, Word32>(result, __ Word32Constant(0));
++    // patched for arm build. see https://github.com/nodejs/node/issues/58458
++    V<Word32> result_ = result;
++    return __ Tuple(result_, __ Word32Constant(0));
+   }
+ 
+   V<Word32Pair> LowerCtz(V<Word32Pair> input) {
+@@ -650,7 +652,9 @@ class Int64LoweringReducer : public Next {
+       result = __ Word32CountTrailingZeros(low);
+     }
+ 
+-    return __ Tuple<Word32, Word32>(result, __ Word32Constant(0));
++    // patched for arm build. see https://github.com/nodejs/node/issues/58458
++    V<Word32> result_ = result;
++    return __ Tuple(result_, __ Word32Constant(0));
+   }
+ 
+   V<Word32Pair> LowerPopCount(V<Word32Pair> input) {

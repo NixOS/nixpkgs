@@ -1,0 +1,35 @@
+From 99a7e55a60c8d96e160f9104a3dd31b7914d3488 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Fri, 31 Jul 2020 09:22:03 +0100
+Subject: [PATCH] Fix scan-build to use NIX_CFLAGS_COMPILE
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ clang/tools/scan-build/libexec/ccc-analyzer | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/clang/tools/scan-build/libexec/ccc-analyzer
+b/clang/tools/scan-build/libexec/ccc-analyzer
+index ed0d4d3d73f3..2d5113435ca5 100755
+--- a/clang/tools/scan-build/libexec/ccc-analyzer
++++ b/clang/tools/scan-build/libexec/ccc-analyzer
+@@ -249,6 +249,14 @@ sub Analyze {
+       push @Args, "-target", $AnalyzerTarget;
+     }
+ 
++    # Add Nix flags to analysis
++    if (defined $ENV{'NIX_CFLAGS_COMPILE'}) {
++      my @nixArgs = split(/\s+/, $ENV{'NIX_CFLAGS_COMPILE'});
++      foreach my $nixArg (@nixArgs) {
++        push @Args, $nixArg;
++      }
++    }
++
+     my $AnalysisArgs = GetCCArgs($HtmlDir, "--analyze", \@Args);
+     @CmdArgs = @$AnalysisArgs;
+   }
+-- 
+2.33.0

@@ -1,0 +1,34 @@
+From ddb81649092776ecac635af7040685588798b5a5 Mon Sep 17 00:00:00 2001
+From: hacker1024 <hacker1024@users.sourceforge.net>
+Date: Sun, 27 Aug 2023 22:47:24 +1000
+Subject: [PATCH] Allow replacing the Dart binary used for Pub commands with
+ NIX_FLUTTER_PUB_DART
+
+---
+ packages/flutter_tools/lib/src/dart/pub.dart | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/packages/flutter_tools/lib/src/dart/pub.dart b/packages/flutter_tools/lib/src/dart/pub.dart
+index 40e60f9005..22fd3cebc7 100644
+--- a/packages/flutter_tools/lib/src/dart/pub.dart
++++ b/packages/flutter_tools/lib/src/dart/pub.dart
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file.
+ 
+ import 'dart:async';
++import 'dart:io' as io;
+ 
+ import 'package:meta/meta.dart';
+ import 'package:package_config/package_config.dart';
+@@ -544,7 +545,7 @@ class _DefaultPub implements Pub {
+ 
+   List<String> _computePubCommand() {
+     // TODO(zanderso): refactor to use artifacts.
+-    final String sdkPath = _fileSystem.path.joinAll(<String>[
++    final String sdkPath = io.Platform.environment['NIX_FLUTTER_PUB_DART'] ?? _fileSystem.path.joinAll(<String>[
+       Cache.flutterRoot!,
+       'bin',
+       'cache',
+-- 
+2.41.0
+

@@ -1,0 +1,189 @@
+diff --git a/Make.rules.in b/Make.rules.in
+index 2666b2c..bce4b2b 100644
+--- a/Make.rules.in
++++ b/Make.rules.in
+@@ -30,9 +30,9 @@ INSTALL=@INSTALL@
+ INSTALL_STRIP=@INSTALL_STRIP@
+ INSTALL_USER=@install_user@
+ INSTALL_GROUP=@install_group@
+-INSTALL_BIN=$(INSTALL) $(INSTALL_STRIP) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0755
+-INSTALL_SBIN=$(INSTALL) $(INSTALL_STRIP) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0755
+-INSTALL_MAN=$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0644
++INSTALL_BIN=$(INSTALL) $(INSTALL_STRIP) -m 0755
++INSTALL_SBIN=$(INSTALL) $(INSTALL_STRIP) -m 0755
++INSTALL_MAN=$(INSTALL) -m 0644
+ 
+ RM=rm -f
+ SHELL=@CONFIG_SHELL@
+diff --git a/Makefile.in b/Makefile.in
+index 32fd5f3..37c8907 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -129,7 +129,6 @@ check: proftpd$(EXEEXT)
+ $(DESTDIR)$(localedir) $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd $(DESTDIR)$(libdir) $(DESTDIR)$(pkgconfigdir) $(DESTDIR)$(libdir)/proftpd $(DESTDIR)$(libexecdir) $(DESTDIR)$(localstatedir) $(DESTDIR)$(sysconfdir) $(DESTDIR)$(bindir) $(DESTDIR)$(sbindir) $(DESTDIR)$(mandir) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5 $(DESTDIR)$(mandir)/man8:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+@@ -139,7 +138,6 @@ install-proftpd: $(DESTDIR)$(includedir) $(DESTDIR)$(localstatedir) $(DESTDIR)$(
+ 		rm -f $(DESTDIR)$(sbindir)/in.proftpd ; \
+ 	fi
+ 	ln -s $(top_builddir)/proftpd $(DESTDIR)$(sbindir)/in.proftpd
+-	-chown -h $(INSTALL_USER):$(INSTALL_GROUP) $(DESTDIR)$(sbindir)/in.proftpd
+ 
+ install-libs: $(DESTDIR)$(libdir)/proftpd
+ 	cd lib/ && $(MAKE) install
+@@ -177,11 +175,11 @@ install-utils: $(DESTDIR)$(sbindir) $(DESTDIR)$(bindir)
+ 	$(INSTALL_SBIN) $(top_builddir)/ftpshut  $(DESTDIR)$(sbindir)/ftpshut
+ 	$(INSTALL_BIN)  $(top_builddir)/ftptop   $(DESTDIR)$(bindir)/ftptop
+ 	$(INSTALL_BIN)  $(top_builddir)/ftpwho   $(DESTDIR)$(bindir)/ftpwho
+-	$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0755 $(top_builddir)/src/prxs $(DESTDIR)$(bindir)/prxs
++	$(INSTALL) -m 0755 $(top_builddir)/src/prxs $(DESTDIR)$(bindir)/prxs
+ 
+ install-conf: $(DESTDIR)$(sysconfdir)
+ 	if [ ! -f $(DESTDIR)$(sysconfdir)/proftpd.conf ] ; then \
+-		$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0644 \
++		$(INSTALL) -m 0644 \
+ 		           $(top_srcdir)/sample-configurations/basic.conf \
+ 	       	           $(DESTDIR)$(sysconfdir)/proftpd.conf ; \
+ 	fi
+diff --git a/contrib/Makefile.in b/contrib/Makefile.in
+index d1a31af..65d2abc 100644
+--- a/contrib/Makefile.in
++++ b/contrib/Makefile.in
+@@ -17,6 +17,6 @@ Makefile: Makefile.in ../config.status
+ 	cd ../ && ./config.status
+ 
+ install-utils:
+-	$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0755 $(srcdir)/ftpasswd $(DESTDIR)$(bindir)/ftpasswd
+-	$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0755 $(srcdir)/ftpmail $(DESTDIR)$(bindir)/ftpmail
+-	$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0755 $(srcdir)/ftpquota $(DESTDIR)$(bindir)/ftpquota
++	$(INSTALL) -m 0755 $(srcdir)/ftpasswd $(DESTDIR)$(bindir)/ftpasswd
++	$(INSTALL) -m 0755 $(srcdir)/ftpmail $(DESTDIR)$(bindir)/ftpmail
++	$(INSTALL) -m 0755 $(srcdir)/ftpquota $(DESTDIR)$(bindir)/ftpquota
+diff --git a/contrib/mod_auth_otp/Makefile.in b/contrib/mod_auth_otp/Makefile.in
+index 4026969..f07914c 100644
+--- a/contrib/mod_auth_otp/Makefile.in
++++ b/contrib/mod_auth_otp/Makefile.in
+@@ -52,7 +52,6 @@ install: install-headers install-man install-utils
+ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd $(DESTDIR)$(mandir) $(DESTDIR)$(mandir)/man1 $(DESTDIR)$(mandir)/man5 $(DESTDIR)$(mandir)/man8:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+diff --git a/contrib/mod_dnsbl/Makefile.in b/contrib/mod_dnsbl/Makefile.in
+index 4bb54c4..7d70972 100644
+--- a/contrib/mod_dnsbl/Makefile.in
++++ b/contrib/mod_dnsbl/Makefile.in
+@@ -46,7 +46,6 @@ install: install-headers
+ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+diff --git a/contrib/mod_load/Makefile.in b/contrib/mod_load/Makefile.in
+index 5ec575e..e7e41cc 100644
+--- a/contrib/mod_load/Makefile.in
++++ b/contrib/mod_load/Makefile.in
+@@ -47,7 +47,6 @@ install: install-headers
+ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+diff --git a/contrib/mod_sftp/Makefile.in b/contrib/mod_sftp/Makefile.in
+index 4b8df1f..f7526b9 100644
+--- a/contrib/mod_sftp/Makefile.in
++++ b/contrib/mod_sftp/Makefile.in
+@@ -65,7 +65,6 @@ install: install-headers install-misc
+ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+@@ -73,7 +72,6 @@ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd:
+ $(DESTDIR)$(includedir)/proftpd/$(MODULE_NAME):
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+@@ -83,8 +81,8 @@ install-headers: $(DESTDIR)$(includedir)/proftpd $(DESTDIR)$(includedir)/proftpd
+ 	$(RM) $(DESTDIR)$(includedir)/proftpd/$(MODULE_NAME)/$(MODULE_NAME).h
+ 
+ install-misc:
+-	$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0644 $(top_srcdir)/dhparams.pem $(DESTDIR)$(sysconfdir)/dhparams.pem
+-	$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0644 $(top_srcdir)/blacklist.dat $(DESTDIR)$(sysconfdir)/blacklist.dat
++	$(INSTALL) -m 0644 $(top_srcdir)/dhparams.pem $(DESTDIR)$(sysconfdir)/dhparams.pem
++	$(INSTALL) -m 0644 $(top_srcdir)/blacklist.dat $(DESTDIR)$(sysconfdir)/blacklist.dat
+ 
+ clean:
+ 	$(LIBTOOL) --mode=clean $(RM) $(MODULE_NAME).a $(MODULE_NAME).la *.o *.lo .libs/*.o
+diff --git a/contrib/mod_snmp/Makefile.in b/contrib/mod_snmp/Makefile.in
+index 7de4c1c..5987896 100644
+--- a/contrib/mod_snmp/Makefile.in
++++ b/contrib/mod_snmp/Makefile.in
+@@ -45,7 +45,6 @@ install: install-headers install-misc
+ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+@@ -53,7 +52,7 @@ install-headers: $(DESTDIR)$(includedir)/proftpd
+ 	$(INSTALL_MAN) $(MODULE_NAME).h $(DESTDIR)$(includedir)/proftpd/$(MODULE_NAME).h
+ 
+ install-misc:
+-	$(INSTALL) -o $(INSTALL_USER) -g $(INSTALL_GROUP) -m 0644 $(top_srcdir)/PROFTPD-MIB.txt $(DESTDIR)$(sysconfdir)/PROFTPD-MIB.txt
++	$(INSTALL) -m 0644 $(top_srcdir)/PROFTPD-MIB.txt $(DESTDIR)$(sysconfdir)/PROFTPD-MIB.txt
+ 
+ clean:
+ 	$(LIBTOOL) --mode=clean $(RM) $(MODULE_NAME).a $(MODULE_NAME).la *.o *.lo .libs/*.o
+diff --git a/contrib/mod_wrap2/Makefile.in b/contrib/mod_wrap2/Makefile.in
+index 7da015f..d912d23 100644
+--- a/contrib/mod_wrap2/Makefile.in
++++ b/contrib/mod_wrap2/Makefile.in
+@@ -46,7 +46,6 @@ install: install-headers
+ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+diff --git a/include/Makefile.in b/include/Makefile.in
+index 1b69d93..b7e8f5a 100644
+--- a/include/Makefile.in
++++ b/include/Makefile.in
+@@ -24,7 +24,6 @@ Makefile: Makefile.in ../config.status
+ $(DESTDIR)$(includedir) $(DESTDIR)$(includedir)/proftpd:
+ 	@if [ ! -d $@ ]; then \
+ 		mkdir -p $@; \
+-		chown $(INSTALL_USER):$(INSTALL_GROUP) $@; \
+ 		chmod 0755 $@; \
+ 	fi
+ 
+diff --git a/locale/Makefile.in b/locale/Makefile.in
+index 77fd787..1c41c0e 100644
+--- a/locale/Makefile.in
++++ b/locale/Makefile.in
+@@ -52,7 +52,6 @@ install: $(LANGS)
+ 		if [ -f $(top_builddir)/locale/$$lang.mo ]; then \
+  			if [ ! -d $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES ]; then \
+ 				mkdir -p $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES; \
+-				chown $(INSTALL_USER):$(INSTALL_GROUP) $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES; \
+ 				chmod 0755 $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES; \
+ 			fi; \
+ 			$(INSTALL_MAN) $$lang.mo $(DESTDIR)$(localedir)/$$lang/LC_MESSAGES/$(PACKAGE).mo; \

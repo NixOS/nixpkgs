@@ -1,0 +1,1 @@
+{ vikunja }: vikunja.passthru.desktop

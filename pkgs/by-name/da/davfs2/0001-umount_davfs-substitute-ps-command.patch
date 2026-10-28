@@ -1,0 +1,25 @@
+From 0cb1321c4cbb2978318ddad73c9ee6f2a19c55c8 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sat, 11 Jan 2020 21:06:33 +0100
+Subject: [PATCH] umount_davfs: substitute ps command
+
+---
+ src/umount_davfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/umount_davfs.c b/src/umount_davfs.c
+index b7019c3..a278679 100644
+--- a/src/umount_davfs.c
++++ b/src/umount_davfs.c
+@@ -157,7 +157,7 @@ main(int argc, char *argv[])
+     }
+     fclose(file);
+ 
+-    char *ps_command = ne_concat("ps -p ", pid, NULL);
++    char *ps_command = ne_concat("@ps@ -p ", pid, NULL);
+     FILE *ps_in = popen(ps_command, "r");
+     if (!ps_in) {
+         error(0, 0,
+-- 
+2.24.1
+

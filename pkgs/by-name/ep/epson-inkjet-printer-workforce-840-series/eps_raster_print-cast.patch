@@ -1,0 +1,21 @@
+diff --git a/src/raster_to_epson.c b/src/raster_to_epson.c
+index 6e621c8..a5ca797 100644
+--- a/src/raster_to_epson.c
++++ b/src/raster_to_epson.c
+@@ -438,14 +438,14 @@ static int print_page (void)
+ 					break;
+ 				}
+ 
+-				if (eps_raster_print(raster_h, image_raw, pageRegion.bytesPerLine, pageRegion.width, &nraster)) {
++				if (eps_raster_print(raster_h, image_raw, pageRegion.bytesPerLine, pageRegion.width, (int *) &nraster)) {
+ 					error  = 1;
+ 					break;
+ 				}
+ 			}
+ 
+ 			// flushing page
+-			eps_raster_print(raster_h, NULL, 0, 0, &nraster);
++			eps_raster_print(raster_h, NULL, 0, 0, (int *) &nraster);
+ 
+ 			bAbort = (error) ? TRUE : FALSE;
+ 			if (epcgEndPage (bAbort)) {

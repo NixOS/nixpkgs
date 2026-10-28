@@ -1,0 +1,33 @@
+diff --git a/zen/string_traits.h b/zen/string_traits.h
+index 12d9c6c..4e8d503 100644
+--- a/zen/string_traits.h
++++ b/zen/string_traits.h
+@@ -45,6 +45,18 @@ enum class StringType
+ template <class S, StringType st>
+ class GetCharTypeImpl;
+ 
++template <class S, class Char> //test if result of S::c_str() can convert to const Char*
++class HasConversion
++{
++    using Yes = char[1];
++    using No  = char[2];
++
++    static Yes& hasConversion(const Char*);
++    static  No& hasConversion(...);
++
++public:
++    static constexpr bool value = sizeof(hasConversion(std::declval<S>().c_str())) == sizeof(Yes);
++};
+ 
+ template <class S>
+ class GetCharTypeImpl<S, StringType::class_>
+@@ -57,7 +69,8 @@ class GetCharTypeImpl<S, StringType::class_>
+     static void    conversionType(...);
+ 
+ public:
+-    using Type = decltype(conversionType(std::declval<S>().c_str()));
++    using Type = std::conditional_t<HasConversion<S, wchar_t>::value, wchar_t,
++          /**/   std::conditional_t<HasConversion<S, char   >::value, char, void>>;
+     //using Type = typename S::value_type;
+     /*DON'T use S::value_type:
+         1. support Glib::ustring: value_type is "unsigned int" but c_str() returns "const char*"

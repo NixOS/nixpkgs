@@ -1,0 +1,12 @@
+--- a/src/robot/utils/robottypes.py
++++ b/src/robot/utils/robottypes.py
+@@ -84,6 +84,9 @@
+ 
+     For example, 'integer' instead of 'int' and 'file' instead of 'TextIOWrapper'.
+     """
++    # With Python 3.14+ `Union` is `types.UnionType` and it has no `_name`.
++    if item is Union or is_union(item):
++        return 'Union'
+     if getattr(item, '__origin__', None):
+         item = item.__origin__
+     if hasattr(item, '_name') and item._name:

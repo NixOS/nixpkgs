@@ -1,0 +1,17 @@
+diff --git a/gui/ui/ui_sdl.c b/gui/ui/ui_sdl.c
+index 023165d..09bf82e 100644
+--- a/gui/ui/ui_sdl.c
++++ b/gui/ui/ui_sdl.c
+@@ -5,9 +5,9 @@
+ #include <SDL2/SDL.h>
+ #include <SDL2/SDL_hints.h>
+ #include <SDL2/SDL_syswm.h>
+-#include <SDL_image.h>
+-#include <SDL_power.h>
+-#include <SDL_ttf.h>
++#include <SDL2/SDL_image.h>
++#include <SDL2/SDL_power.h>
++#include <SDL2/SDL_ttf.h>
+ #include <pthread.h>
+ #include <vanilla.h>
+ #include <libavutil/hwcontext.h>

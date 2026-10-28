@@ -1,0 +1,34 @@
+--- a/share/gpodder/ui/gtk/menus.ui
++++ b/share/gpodder/ui/gtk/menus.ui
+@@ -13,10 +13,6 @@
+         <attribute name="action">app.gotoMygpo</attribute>
+         <attribute name="label" translatable="yes">Go to gpodder.net</attribute>
+       </item>
+-      <item>
+-        <attribute name="action">app.checkForUpdates</attribute>
+-        <attribute name="label" translatable="yes">Software updates</attribute>
+-      </item>
+     </section>
+     <section>
+       <item>
+--- a/src/gpodder/config.py
++++ b/src/gpodder/config.py
+@@ -94,7 +94,7 @@
+ 
+     # Software updates from gpodder.org
+     'software_update': {
+-        'check_on_startup': True,  # check for updates on start
++       'check_on_startup': False,  # check for updates on start
+         'last_check': 0,  # unix timestamp of last update check
+         'interval': 5,  # interval (in days) to check for updates
+     },
+--- a/src/gpodder/gtkui/main.py
++++ b/src/gpodder/gtkui/main.py
+@@ -3445,6 +3445,7 @@
+         If silent=False, a message will be shown even if no updates are
+         available (set silent=False when the check is manually triggered).
+         """
++        return
+         try:
+             up_to_date, version, released, days = util.get_update_info()
+         except Exception as e:

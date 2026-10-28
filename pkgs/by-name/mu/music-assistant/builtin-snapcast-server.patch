@@ -1,0 +1,36 @@
+diff --git a/music_assistant/providers/snapcast/constants.py b/music_assistant/providers/snapcast/constants.py
+index 8a8a470fd..86d33f2f6 100644
+--- a/music_assistant/providers/snapcast/constants.py
++++ b/music_assistant/providers/snapcast/constants.py
+@@ -45,7 +45,8 @@
+ MASS_STREAM_PREFIX = "Music Assistant - "
+ MASS_ANNOUNCEMENT_POSTFIX = " (announcement)"
+ SNAPWEB_DIR = pathlib.Path(__file__).parent.resolve().joinpath("snapweb")
+-CONTROL_SCRIPT = pathlib.Path(__file__).parent.resolve().joinpath("control.py")
++CONTROL_SCRIPT_DIR = pathlib.Path(__file__).parent.resolve()
++CONTROL_SCRIPT = CONTROL_SCRIPT_DIR.joinpath("control.py")
+ 
+ # Supported PCM formats for the Music Assistant -> Snapserver TCP source.
+ # 24-bit requires Snapserver packed_s24le ingest support (snapcast/snapcast#1532).
+diff --git a/music_assistant/providers/snapcast/provider.py b/music_assistant/providers/snapcast/provider.py
+index b1e7abc2f..2182f71a1 100644
+--- a/music_assistant/providers/snapcast/provider.py
++++ b/music_assistant/providers/snapcast/provider.py
+@@ -41,6 +41,7 @@
+     CONF_STREAM_SAMPLE_RATE,
+     CONF_USE_EXTERNAL_SERVER,
+     CONTROL_SCRIPT,
++    CONTROL_SCRIPT_DIR,
+     DEFAULT_SNAPCAST_FORMAT,
+     DEFAULT_SNAPSERVER_CONFIG_FILE,
+     DEFAULT_SNAPSERVER_IP,
+@@ -508,8 +509,7 @@ async def _builtin_server_runner(self) -> None:
+             f"--stream.send_to_muted={str(self._snapcast_server_send_to_muted).lower()}",
+             f"--streaming_client.initial_volume={self._snapcast_server_initial_volume}",
+         ]
+-        loop = asyncio.get_running_loop()
+-        plugin_dir = await loop.run_in_executor(None, self._setup_controlscript)
++        plugin_dir = CONTROL_SCRIPT_DIR
+         if plugin_dir is not None:
+             args.append(f"--stream.plugin_dir={plugin_dir}")
+             self._controlscript_available = True

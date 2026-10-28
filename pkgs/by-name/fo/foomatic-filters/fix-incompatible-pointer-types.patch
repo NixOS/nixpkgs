@@ -1,0 +1,25 @@
+From 822bf358b1e47704365feb84cac8a0af08611ea5 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Thu, 1 Jan 2026 20:28:52 +0800
+Subject: [PATCH] fix incompatible pointer types
+
+---
+ process.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/process.h b/process.h
+index b95dcb4..58aa8bf 100644
+--- a/process.h
++++ b/process.h
+@@ -28,7 +28,7 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ 
+-pid_t start_process(const char *name, int (*proc_func)(), void *user_arg, FILE **fdin, FILE **fdout);
++pid_t start_process(const char *name, int (*proc_func)(FILE *, FILE *, void *), void *user_arg, FILE **fdin, FILE **fdout);
+ pid_t start_system_process(const char *name, const char *command, FILE **fdin, FILE **fdout);
+ 
+ /* returns command's return status (see waitpid(2)) */
+-- 
+2.51.2
+

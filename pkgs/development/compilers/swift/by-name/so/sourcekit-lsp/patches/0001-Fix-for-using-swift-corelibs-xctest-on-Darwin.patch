@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 11 Jul 2026 15:55:24 -0400
+Subject: [PATCH 1/2] Fix for using swift-corelibs-xctest on Darwin
+
+Darwin in Nixpkgs also uses swift-corelibs-xctest, so we need to use the
+logic as other platforms to define the base class for performance tests.
+---
+ Sources/SKTestSupport/PerfTestCase.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/SKTestSupport/PerfTestCase.swift b/Sources/SKTestSupport/PerfTestCase.swift
+index ba716c49..5b5cfccc 100644
+--- a/Sources/SKTestSupport/PerfTestCase.swift
++++ b/Sources/SKTestSupport/PerfTestCase.swift
+@@ -23,7 +23,7 @@ open class PerfTestCase: XCTestCase {
+ 
+   #if !ENABLE_PERF_TESTS
+ 
+-  #if os(macOS)
++  #if false
+   open override func startMeasuring() {}
+   open override func stopMeasuring() {}
+   open override func measureMetrics(
+-- 
+2.54.0
+

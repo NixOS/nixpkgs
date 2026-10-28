@@ -1,0 +1,28 @@
+diff --git i/magic/loader.py w/magic/loader.py
+index 931f161..b8096d1 100644
+--- i/magic/loader.py
++++ w/magic/loader.py
+@@ -35,16 +35,12 @@ def _lib_candidates():
+ 
+ 
+ def load_lib():
++  lib = '@libmagic@'
+ 
+-  for lib in _lib_candidates():
+-    # find_library returns None when lib not found
+-    if lib is None:
+-      continue
+-    try:
+-      return ctypes.CDLL(lib)
+-    except OSError:
+-      pass
+-  else:
+-    # It is better to raise an ImportError since we are importing magic module
+-    raise ImportError('failed to find libmagic.  Check your installation')
++  try:
++    return ctypes.CDLL(lib)
++  except OSError:
++    pass
+ 
++  # It is better to raise an ImportError since we are importing magic module
++  raise ImportError('failed to find libmagic.  Check your installation')

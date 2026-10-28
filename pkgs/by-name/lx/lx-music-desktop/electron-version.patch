@@ -1,0 +1,35 @@
+--- a/package.json
++++ b/package.json
+@@ -123,7 +123,7 @@
+     "css-loader": "^7.1.5",
+     "css-minimizer-webpack-plugin": "^8.0.0",
+     "del": "^6.1.1",
+-    "electron": "42.11.6",
++    "electron": "44.9.1",
+     "electron-builder": "^26.15.7",
+     "electron-debug": "^3.2.0",
+     "electron-devtools-installer": "github:lyswhut/electron-devtools-installer#64596d615c1fc891eefd8aef1dfcb2c87aaadf03",
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -50,7 +50,7 @@
+         "css-loader": "^7.1.5",
+         "css-minimizer-webpack-plugin": "^8.0.0",
+         "del": "^6.1.1",
+-        "electron": "42.11.6",
++        "electron": "44.9.1",
+         "electron-builder": "^26.15.7",
+         "electron-debug": "^3.2.0",
+         "electron-devtools-installer": "github:lyswhut/electron-devtools-installer#64596d615c1fc891eefd8aef1dfcb2c87aaadf03",
+@@ -5396,9 +5396,9 @@
+       }
+     },
+     "node_modules/electron": {
+-      "version": "42.11.6",
+-      "resolved": "https://registry.npmjs.org/electron/-/electron-42.11.6.tgz",
+-      "integrity": "sha512-IgDsjQp+CYLnArfQbzzS2VmkRgHmSU1G9nGVOtSnFpkUYR8rkeAUSDO77qtqAPX1jgAGly1kgisUmwB9CbUHXw==",
++      "version": "44.9.1",
++      "resolved": "https://registry.npmjs.org/electron/-/electron-44.9.1.tgz",
++      "integrity": "sha512-x/tECFFDa2OFNjMObFH0EGKWrCnFZPOR1wP2iMIVt0STecGl8FmDXdaiaryY0kf8mtw9kSLP2yK8dfdaWkfDmw==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {

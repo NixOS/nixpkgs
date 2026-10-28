@@ -1,0 +1,1 @@
+# Standard environment {#part-stdenv}

@@ -1,0 +1,103 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 4b817ca..5d73d46 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -382,9 +382,9 @@ checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
+ 
+ [[package]]
+ name = "aws-lc-rs"
+-version = "1.17.1"
++version = "1.18.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4342d8937fc7e5dd9b1c60292261c0670c882a2cd1719cfc11b1af41731e32ad"
++checksum = "faac5829c2b74c28f830747e7818ccfb684261b5f48a1118b1e2a13d36dfab13"
+ dependencies = [
+  "aws-lc-sys",
+  "zeroize",
+@@ -392,9 +392,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "aws-lc-sys"
+-version = "0.42.0"
++version = "0.46.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6d9ceb1da931507a12f4fccea479dccd00da1943e1b4ae72d8e502d707361444"
++checksum = "f1622d8446a2d4b2ce0c7eefc73dd43a99779028d5ee5c2dd8073a658ba8a2bc"
+ dependencies = [
+  "cc",
+  "cmake",
+@@ -2259,7 +2259,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
+ dependencies = [
+  "libc",
+- "windows-sys 0.52.0",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -5987,7 +5987,7 @@ dependencies = [
+  "errno",
+  "libc",
+  "linux-raw-sys 0.12.1",
+- "windows-sys 0.52.0",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -6046,7 +6046,7 @@ dependencies = [
+  "security-framework",
+  "security-framework-sys",
+  "webpki-root-certs",
+- "windows-sys 0.52.0",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -6057,9 +6057,9 @@ checksum = "f87165f0995f63a9fbeea62b64d10b4d9d8e78ec6d7d51fb2125fda7bb36788f"
+ 
+ [[package]]
+ name = "rustls-webpki"
+-version = "0.103.13"
++version = "0.103.16"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "61c429a8649f110dddef65e2a5ad240f747e85f7758a6bccc7e5777bd33f756e"
++checksum = "4443b1b6d39d7c663139942cc4558262562d2c84123bb6282ef177009ca8b281"
+ dependencies = [
+  "aws-lc-rs",
+  "ring",
+@@ -7551,10 +7551,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
+ dependencies = [
+  "fastrand",
+- "getrandom 0.3.4",
++ "getrandom 0.4.3",
+  "once_cell",
+  "rustix 1.1.4",
+- "windows-sys 0.52.0",
++ "windows-sys 0.59.0",
+ ]
+ 
+ [[package]]
+@@ -8852,18 +8852,18 @@ dependencies = [
+ 
+ [[package]]
+ name = "webpki-root-certs"
+-version = "1.0.8"
++version = "1.0.10"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "0d46a5a140e6f7afeccd8eae97eff335163939eac8b929834875168b29b3d267"
++checksum = "58ec80e73fd8baf57bf0d9615554c75348bda990d6d5bbeab964dd068319fecb"
+ dependencies = [
+  "rustls-pki-types",
+ ]
+ 
+ [[package]]
+ name = "webpki-roots"
+-version = "1.0.8"
++version = "1.0.10"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "bf85cb06032201fa7c6f829d7db5a7e5aa45bcc0655327713065f6f0576731bf"
++checksum = "1c1c8e20c8a38fc7d65abfe74eb7280e4aa667e8eec8bc84996d2874810748d9"
+ dependencies = [
+  "rustls-pki-types",
+ ]

@@ -1,0 +1,71 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  id,
+  keyring,
+  packaging,
+  pkginfo,
+  readme-renderer,
+  requests,
+  requests-toolbelt,
+  rich,
+  rfc3986,
+  setuptools,
+  setuptools-scm,
+  urllib3,
+  build,
+  pretend,
+  pytest-socket,
+  pytestCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "twine";
+  version = "6.2.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-5e0NL9cMmVl3Dc5RyPOciUXFdOGBc6e4GALatRtLdc8=";
+  };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    id
+    keyring
+    packaging
+    pkginfo
+    readme-renderer
+    requests
+    requests-toolbelt
+    rfc3986
+    rich
+    urllib3
+  ];
+
+  nativeCheckInputs = [
+    build
+    pretend
+    pytest-socket
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # docutils 0.23 string changes
+    "test_fails_rst_syntax_error"
+  ];
+
+  pythonImportsCheck = [ "twine" ];
+
+  meta = {
+    description = "Collection of utilities for interacting with PyPI";
+    mainProgram = "twine";
+    homepage = "https://github.com/pypa/twine";
+    license = lib.licenses.asl20;
+  };
+}

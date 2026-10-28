@@ -1,0 +1,389 @@
+{
+  lib,
+  pkgs,
+  config,
+  utils,
+  ...
+}:
+let
+  cfg = config.services.lemmy;
+  settingsFormat = pkgs.formats.json { };
+in
+{
+  meta.maintainers = with lib.maintainers; [
+    happysalada
+    lucasew
+  ];
+  meta.teams = [ lib.teams.ngi ];
+  meta.doc = ./lemmy.md;
+
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "lemmy"
+      "jwtSecretPath"
+    ] "As of v0.13.0, Lemmy auto-generates the JWT secret.")
+  ];
+
+  options.services.lemmy = {
+
+    enable = lib.mkEnableOption "Lemmy, a federated alternative to Reddit";
+
+    server = {
+      package = lib.mkPackageOption pkgs "lemmy-server" { };
+    };
+
+    ui = {
+      package = lib.mkPackageOption pkgs "lemmy-ui" { };
+
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 1234;
+        description = "Port where lemmy-ui should listen for incoming requests.";
+      };
+    };
+
+    caddy.enable = lib.mkEnableOption "exposing Lemmy with the Caddy reverse proxy";
+    nginx.enable = lib.mkEnableOption "exposing Lemmy with the nginx reverse proxy";
+
+    database = {
+      createLocally = lib.mkEnableOption "creation of a local PostgreSQL database";
+
+      uri = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "postgres:///lemmy?host=/run/postgresql&user=lemmy";
+        description = "The connection URI to use. Takes priority over the configuration file if set.";
+      };
+
+      uriFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "File which contains the database uri.";
+      };
+    };
+
+    pictrsApiKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "File which contains the value of `pictrs.api_key`.";
+    };
+
+    smtpPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "File which contains the value of `email.smtp_password`.";
+    };
+
+    adminPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "File which contains the value of `setup.admin_password`.";
+    };
+
+    settings = lib.mkOption {
+      default = { };
+      description = "Lemmy configuration";
+
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
+
+        options.hostname = lib.mkOption {
+          type = lib.types.str;
+          example = "lemmy.ml";
+          description = "Public domain name of the instance.";
+        };
+
+        options.port = lib.mkOption {
+          type = lib.types.port;
+          default = 8536;
+          description = "Port where Lemmy should listen for incoming requests.";
+        };
+
+        options.captcha = {
+          enabled = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Whether to enable captcha.";
+          };
+          difficulty = lib.mkOption {
+            type = lib.types.enum [
+              "easy"
+              "medium"
+              "hard"
+            ];
+            default = "medium";
+            description = "Difficulty of the captcha to solve.";
+          };
+        };
+      };
+    };
+  };
+
+  config =
+    let
+      secretOptions = {
+        pictrsApiKeyFile = {
+          setting = [
+            "pictrs"
+            "api_key"
+          ];
+          path = cfg.pictrsApiKeyFile;
+        };
+        smtpPasswordFile = {
+          setting = [
+            "email"
+            "smtp_password"
+          ];
+          path = cfg.smtpPasswordFile;
+        };
+        adminPasswordFile = {
+          setting = [
+            "setup"
+            "admin_password"
+          ];
+          path = cfg.adminPasswordFile;
+        };
+        uriFile = {
+          setting = [
+            "database"
+            "uri"
+          ];
+          path = cfg.database.uriFile;
+        };
+      };
+      secrets = lib.filterAttrs (option: data: data.path != null) secretOptions;
+    in
+    lib.mkIf cfg.enable {
+      services.lemmy.settings =
+        lib.attrsets.recursiveUpdate
+          (
+            lib.mapAttrs (name: lib.mkDefault) {
+              bind = "127.0.0.1";
+              tls_enabled = true;
+              pictrs = {
+                url = with config.services.pict-rs; "http://${address}:${toString port}";
+              };
+              actor_name_max_length = 20;
+
+              rate_limit.message = 180;
+              rate_limit.message_per_second = 60;
+              rate_limit.post = 6;
+              rate_limit.post_per_second = 600;
+              rate_limit.register = 3;
+              rate_limit.register_per_second = 3600;
+              rate_limit.image = 6;
+              rate_limit.image_per_second = 3600;
+            }
+            // {
+              database = lib.mapAttrs (name: lib.mkDefault) {
+                user = "lemmy";
+                host = "/run/postgresql";
+                port = 5432;
+                database = "lemmy";
+                pool_size = 5;
+              };
+            }
+          )
+          (
+            lib.foldlAttrs (
+              acc: option: data:
+              acc // lib.setAttrByPath data.setting { _secret = option; }
+            ) { } secrets
+          );
+      # the option name is the id of the credential loaded by LoadCredential
+
+      services.postgresql = lib.mkIf cfg.database.createLocally {
+        enable = true;
+        ensureDatabases = [ cfg.settings.database.database ];
+        ensureUsers = [
+          {
+            name = cfg.settings.database.user;
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+
+      services.pict-rs.enable = true;
+
+      services.caddy = lib.mkIf cfg.caddy.enable {
+        enable = lib.mkDefault true;
+        virtualHosts."${cfg.settings.hostname}" = {
+          extraConfig = ''
+            handle_path /static/* {
+              root * ${cfg.ui.package}/dist
+              file_server
+            }
+            handle_path /static/${cfg.ui.package.version}/* {
+              root * ${cfg.ui.package}/dist
+              file_server
+            }
+            @for_backend {
+              path /api/* /pictrs/* /feeds/* /nodeinfo/*
+            }
+            handle @for_backend {
+              reverse_proxy 127.0.0.1:${toString cfg.settings.port}
+            }
+            @post {
+              method POST
+            }
+            handle @post {
+              reverse_proxy 127.0.0.1:${toString cfg.settings.port}
+            }
+            @jsonld {
+              header Accept "application/activity+json"
+              header Accept "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\""
+            }
+            handle @jsonld {
+              reverse_proxy 127.0.0.1:${toString cfg.settings.port}
+            }
+            handle {
+              reverse_proxy 127.0.0.1:${toString cfg.ui.port}
+            }
+          '';
+        };
+      };
+
+      services.nginx = lib.mkIf cfg.nginx.enable {
+        enable = lib.mkDefault true;
+        virtualHosts."${cfg.settings.hostname}".locations =
+          let
+            ui = "http://127.0.0.1:${toString cfg.ui.port}";
+            backend = "http://127.0.0.1:${toString cfg.settings.port}";
+          in
+          {
+            "~ ^/(api|pictrs|feeds|nodeinfo|.well-known)" = {
+              # backend requests
+              proxyPass = backend;
+              proxyWebsockets = true;
+              recommendedProxySettings = true;
+            };
+            "/" = {
+              # mixed frontend and backend requests, based on the request headers
+              extraConfig = ''
+                set $proxpass "${ui}";
+                if ($http_accept = "application/activity+json") {
+                  set $proxpass "${backend}";
+                }
+                if ($http_accept = "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\"") {
+                  set $proxpass "${backend}";
+                }
+                if ($request_method = POST) {
+                  set $proxpass "${backend}";
+                }
+
+                # Cuts off the trailing slash on URLs to make them valid
+                rewrite ^(.+)/+$ $1 permanent;
+
+                proxy_pass $proxpass;
+                # Proxied `Host` header is required to validate ActivityPub HTTP signatures for incoming events.
+                # The other headers are optional, for the sake of better log data.
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              '';
+            };
+          };
+      };
+
+      assertions = [
+        {
+          assertion =
+            cfg.database.createLocally
+            -> cfg.settings.database.host == "localhost" || cfg.settings.database.host == "/run/postgresql";
+          message = "if you want to create the database locally, you need to use a local database";
+        }
+        {
+          assertion =
+            (!(lib.hasAttrByPath [ "federation" ] cfg.settings))
+            && (!(lib.hasAttrByPath [ "federation" "enabled" ] cfg.settings));
+          message = "`services.lemmy.settings.federation` was removed in 0.17.0 and no longer has any effect";
+        }
+        {
+          assertion = cfg.database.uriFile != null -> cfg.database.uri == null && !cfg.database.createLocally;
+          message = "specifying a database uri while also specifying a database uri file is not allowed";
+        }
+      ];
+
+      systemd.services.lemmy =
+        let
+          substitutedConfig = "/run/lemmy/config.hjson";
+        in
+        {
+          description = "Lemmy server";
+
+          environment = {
+            LEMMY_CONFIG_LOCATION =
+              if secrets == { } then settingsFormat.generate "config.hjson" cfg.settings else substitutedConfig;
+            LEMMY_DATABASE_URL =
+              if cfg.database.uri != null then
+                cfg.database.uri
+              else
+                (lib.mkIf cfg.database.createLocally "postgres:///lemmy?host=/run/postgresql&user=lemmy");
+          };
+
+          documentation = [
+            "https://join-lemmy.org/docs/en/admins/from_scratch.html"
+            "https://join-lemmy.org/docs/en/"
+          ];
+
+          wantedBy = [ "multi-user.target" ];
+
+          after = [ "pict-rs.service" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.target" ];
+
+          requires = lib.optionals cfg.database.createLocally [ "postgresql.target" ];
+
+          # substitute secrets and prevent others from reading the result
+          # if somehow $CREDENTIALS_DIRECTORY is not set we fail
+          preStart = lib.mkIf (secrets != { }) ''
+            set -u
+            umask u=rw,g=,o=
+            cd "$CREDENTIALS_DIRECTORY"
+            ${utils.genJqSecretsReplacementSnippet cfg.settings substitutedConfig}
+          '';
+
+          serviceConfig = {
+            DynamicUser = true;
+            RuntimeDirectory = "lemmy";
+            ExecStart = "${cfg.server.package}/bin/lemmy_server";
+            LoadCredential = lib.foldlAttrs (
+              acc: option: data:
+              acc ++ [ "${option}:${toString data.path}" ]
+            ) [ ] secrets;
+            PrivateTmp = true;
+            MemoryDenyWriteExecute = true;
+            NoNewPrivileges = true;
+          };
+        };
+
+      systemd.services.lemmy-ui = {
+        description = "Lemmy ui";
+
+        environment = {
+          LEMMY_UI_HOST = "127.0.0.1:${toString cfg.ui.port}";
+          LEMMY_UI_LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
+          LEMMY_UI_LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
+          LEMMY_UI_HTTPS = "false";
+          NODE_ENV = "production";
+        };
+
+        documentation = [
+          "https://join-lemmy.org/docs/en/admins/from_scratch.html"
+          "https://join-lemmy.org/docs/en/"
+        ];
+
+        wantedBy = [ "multi-user.target" ];
+
+        after = [ "lemmy.service" ];
+
+        requires = [ "lemmy.service" ];
+
+        serviceConfig = {
+          DynamicUser = true;
+          WorkingDirectory = "${cfg.ui.package}";
+          ExecStart = "${lib.getExe pkgs.nodejs-slim} ${cfg.ui.package}/dist/js/server.js";
+        };
+      };
+    };
+
+}

@@ -1,0 +1,19 @@
+diff --git a/src/static/js/pluginfw/installer.ts b/src/static/js/pluginfw/installer.ts
+index c605378e1..27e3e487b 100644
+--- a/src/static/js/pluginfw/installer.ts
++++ b/src/static/js/pluginfw/installer.ts
+@@ -83,7 +83,13 @@ export const checkForMigration = async () => {
+   try {
+     await fs.access(installedPluginsPath, fs.constants.F_OK);
+   } catch (err) {
+-    await migratePluginsFromNodeModules();
++    logger.info(`${installedPluginsPath} not found, creating using current node modules`);
++    try {
++      await migratePluginsFromNodeModules();
++    } catch (err2) {
++      logger.warn(`unable to create ${installedPluginsPath}, skipping plugin migrations`);
++      return;
++    }
+   }
+ 
+   /*

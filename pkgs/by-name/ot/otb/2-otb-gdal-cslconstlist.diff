@@ -1,0 +1,78 @@
+diff -ru a/Modules/Core/IO/IOGDAL/src/otbGDALImageIO.cxx b/Modules/Core/IO/IOGDAL/src/otbGDALImageIO.cxx
+--- a/Modules/Core/IO/IOGDAL/src/otbGDALImageIO.cxx
++++ b/Modules/Core/IO/IOGDAL/src/otbGDALImageIO.cxx
+@@ -278,7 +278,7 @@
+ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string>& names, std::vector<std::string>& desc)
+ {
+   // Note: we assume that the subdatasets are in order : SUBDATASET_ID_NAME, SUBDATASET_ID_DESC, SUBDATASET_ID+1_NAME, SUBDATASET_ID+1_DESC
+-  char** papszMetadata;
++  CSLConstList papszMetadata;
+   papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
+ 
+   // Have we find some dataSet ?
+@@ -436,7 +436,7 @@
+   {
+     // this happen in the case of a hdf file with SUBDATASETS
+     // Note: we assume that the datasets are in order
+-    char** papszMetadata;
++    CSLConstList papszMetadata;
+     papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
+     // TODO: we might want to keep the list of names somewhere, at least the number of datasets
+     std::vector<std::string> names;
+@@ -741,7 +741,7 @@
+ 
+   if (m_NumberOfDimensions == 3)
+     m_Spacing[2] = 1;
+-  char** papszMetadata = dataset->GetMetadata(nullptr);
++  CSLConstList papszMetadata = dataset->GetMetadata(nullptr);
+ 
+   /* -------------------------------------------------------------------- */
+   /*      Report general info.                                            */
+diff -ru a/Modules/Core/IO/IOGDAL/test/otbGDALImageIOTestWriteMetadata.cxx b/Modules/Core/IO/IOGDAL/test/otbGDALImageIOTestWriteMetadata.cxx
+--- a/Modules/Core/IO/IOGDAL/test/otbGDALImageIOTestWriteMetadata.cxx
++++ b/Modules/Core/IO/IOGDAL/test/otbGDALImageIOTestWriteMetadata.cxx
+@@ -457,7 +457,7 @@
+ 
+   // Check the driver used
+   GDALDriver* poDriver;
+-  char**      papszMetadata;
++  CSLConstList papszMetadata;
+ 
+   GDALAllRegister();
+   poDriver = GetGDALDriverManager()->GetDriverByName(pszFormat);
+diff -ru a/Modules/Core/Metadata/src/otbCosmoImageMetadataInterface.cxx b/Modules/Core/Metadata/src/otbCosmoImageMetadataInterface.cxx
+--- a/Modules/Core/Metadata/src/otbCosmoImageMetadataInterface.cxx
++++ b/Modules/Core/Metadata/src/otbCosmoImageMetadataInterface.cxx
+@@ -50,7 +50,7 @@
+   std::vector<std::map<std::string, std::string> > metadataBands;
+   GDALDataset * dataset = static_cast<GDALDataset*>(GDALOpen(file.c_str(), GA_ReadOnly));
+   // Metadata for dataset
+-  char** papszMetadata = dataset->GetMetadata(nullptr);
++  CSLConstList papszMetadata = dataset->GetMetadata(nullptr);
+   for (int cpt = 0; papszMetadata[cpt] != nullptr; ++cpt)
+     {
+     std::string key, value;
+diff -ru a/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx b/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx
+--- a/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx
++++ b/Modules/ThirdParty/GDAL/gdalCreateCopyTest.cxx
+@@ -43,7 +43,7 @@
+   papszCreateOptions = CSLAddString( papszCreateOptions, argv[4] );
+   }
+ 
+-  char **papszMetadata;
++  CSLConstList papszMetadata;
+   papszMetadata = GDALGetMetadata( hDriver, NULL );
+   if( CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATECOPY, FALSE ) )
+     printf( "Driver %s supports CreateCopy() method.\n", pszFormat );
+diff -ru a/Modules/ThirdParty/GDAL/gdalCreateTest.cxx b/Modules/ThirdParty/GDAL/gdalCreateTest.cxx
+--- a/Modules/ThirdParty/GDAL/gdalCreateTest.cxx
++++ b/Modules/ThirdParty/GDAL/gdalCreateTest.cxx
+@@ -28,7 +28,7 @@
+ int main(int argc, char * argv[])
+ {
+   const char *pszFormat = argv[1];
+-  char **papszMetadata;
++  CSLConstList papszMetadata;
+ 
+ 	GDALAllRegister();
+ 

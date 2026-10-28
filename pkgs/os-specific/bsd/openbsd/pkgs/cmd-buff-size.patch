@@ -1,0 +1,17 @@
+OpenBSD's bootloader supports input configuration lines from both the console
+and configuration files of only up to 133 characters. This is easy to break
+with nix store paths. Triple it to 399.
+
+diff --git a/sys/stand/boot/cmd.h b/sys/stand/boot/cmd.h
+index 5045f052b8b..9fc5ce9e50a 100644
+--- a/sys/stand/boot/cmd.h
++++ b/sys/stand/boot/cmd.h
+@@ -27,7 +27,7 @@
+  *
+  */
+ 
+-#define CMD_BUFF_SIZE		133
++#define CMD_BUFF_SIZE		399
+ #define BOOTDEVLEN		1024
+ 
+ struct cmd_table {

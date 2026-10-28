@@ -1,0 +1,25 @@
+From 223cd67eb3070279f51f8080f69505a64706305a Mon Sep 17 00:00:00 2001
+From: "renovate[bot]" <29139614+renovate[bot]@users.noreply.github.com>
+Date: Fri, 23 Oct 2026 08:45:51 +0000
+Subject: [PATCH] chore(deps): update rust crate webpki-roots to v1.0.11
+
+---
+ Cargo.lock | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 869be8f0fa6f..e9e4f8a5e688 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4102,9 +4102,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "webpki-roots"
+-version = "1.0.9"
++version = "1.0.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7dcd9d09a39985f5344844e66b0c530a33843579125f23e21e9f0f220850f22a"
++checksum = "f5f280bbb2b287bc8e7de7e3852945a0ff50d1bbcb5ed42b6c7a568c546df171"
+ dependencies = [
+  "rustls-pki-types",
+ ]

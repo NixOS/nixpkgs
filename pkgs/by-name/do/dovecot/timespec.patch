@@ -1,0 +1,15 @@
+diff --git a/src/lib-storage/index/dbox-common/dbox-storage.h b/src/lib-storage/index/dbox-common/dbox-storage.h
+index 8e8aaa1..a3018a4 100644
+--- a/src/lib-storage/index/dbox-common/dbox-storage.h
++++ b/src/lib-storage/index/dbox-common/dbox-storage.h
+@@ -86,4 +86,10 @@ int dbox_verify_alt_storage(struct mailbox_list *list);
+ bool dbox_header_have_flag(struct mailbox *box, uint32_t ext_id,
+ 			   unsigned int flags_offset, uint8_t flag);
+ 
++#if defined(__APPLE__) || defined(__NetBSD__) 
++#define st_atim st_atimespec
++#define st_ctim st_ctimespec
++#define st_mtim st_mtimespec
++#endif
++
+ #endif

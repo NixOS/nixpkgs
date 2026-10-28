@@ -1,0 +1,14 @@
+{
+  "version": "0.31.3",
+  "tag": "v0.31.3",
+  "platforms": {
+    "x86_64-darwin": {
+      "filename": "Screendrop.dmg",
+      "hash": "sha256-Sh8GRKu51Bo4UFvyaxMfqcPnQaE7FNTwTG54Tnkr9ls="
+    },
+    "aarch64-darwin": {
+      "filename": "Screendrop.dmg",
+      "hash": "sha256-Sh8GRKu51Bo4UFvyaxMfqcPnQaE7FNTwTG54Tnkr9ls="
+    }
+  }
+}

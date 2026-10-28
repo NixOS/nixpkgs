@@ -1,0 +1,17 @@
+Index: MelonLoader.Installer/Updater.cs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/MelonLoader.Installer/Updater.cs b/MelonLoader.Installer/Updater.cs
+--- a/MelonLoader.Installer/Updater.cs	(revision 617af4f21813ab4e997effdd6ee78a52ad22b59e)
++++ b/MelonLoader.Installer/Updater.cs	(date 1779144321145)
+@@ -18,7 +18,7 @@
+             return null;
+ 
+         // Don't auto-update on CI builds
+-        if (Program.Version.Revision > 0)
++        if (true)
+         {
+             State = UpdateState.AlreadyChecked;
+             return null;

@@ -1,0 +1,60 @@
+diff --git a/unix/Make-config b/unix/Make-config
+--- a/unix/Make-config
++++ b/unix/Make-config
+@@ -18,7 +18,7 @@
+ # Bourne Shell Configuration:
+ #   set SHELL=/bin/sh or wherever your bourne shell is
+ ##########################################################################
+-SHELL=/bin/sh
++# SHELL=/bin/sh
+ 
+ 
+ 
+@@ -30,7 +30,7 @@
+ 
+ # The following line should be set to -Ixxx where xxx is your X11 include path
+ # Sun puts X11 in /usr/openwin/xxx
+-X11INC= -I/usr/openwin/include
++# X11INC= -I/usr/openwin/include
+ 
+ # Others typically use /usr/X11 or /usr/X11R6
+ #X11INC= -I/usr/X11
+@@ -105,9 +105,9 @@
+ ##########################################################################
+ # Customize MPI directories and includes as-needed.
+ # A typical MPICH installation location:
+-MPIDIR=/usr/local/mpi
+-MPIINC=$(MPIDIR)/include
+-MPILIB=$(MPIDIR)/lib
++# MPIDIR=/usr/local/mpi
++# MPIINC=$(MPIDIR)/include
++# MPILIB=$(MPIDIR)/lib
+ 
+ # MPI defines and any flags needed by the local installation.
+ # Always list -DMPI at a minimum.  
+@@ -166,9 +166,9 @@
+ #   http://www.ijg.org/files/
+ ##########################################################################
+ # Uncomment the following lines to disable JPEG support
+-USEJPEG=
+-JPEGINC=
+-JPEGLIB=
++# USEJPEG=
++# JPEGINC=
++# JPEGLIB=
+ 
+ # Uncomment the following lines to enable JPEG support
+ #USEJPEG= -DUSEJPEG
+@@ -186,9 +186,9 @@
+ #   http://www.libpng.org/
+ ##########################################################################
+ # Uncomment the following lines to disable PNG support
+-USEPNG=
+-PNGINC=
+-PNGLIB=
++# USEPNG=
++# PNGINC=
++# PNGLIB=
+ 
+ # Uncomment the following lines to enable PNG support
+ #USEPNG= -DUSEPNG

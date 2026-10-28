@@ -1,0 +1,16 @@
+diff --git a/setup.py b/setup.py
+index 26f882d..b7ccf67 100644
+--- a/setup.py
++++ b/setup.py
+@@ -27,8 +27,8 @@ setup(
+         ]
+     },
+     install_requires=[
+-        'nbconvert>=5.3'
+-        'requests'
+-        'traitlets'
++        'nbconvert>=5.3',
++        'requests',
++        'traitlets',
+     ],
+ )

@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index 36feb62..ac77b25 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -380,7 +380,7 @@ dist: dist-clean doc
+ 	cp $(DIST_ROOT)/$(PKG_DIR).tar.gz $(top_builddir)
+ 
+ $(SCRIPTS):
+-	$(TCLSH) $(srcdir)/fixline1 $(SHORT_BINDIR) < $(srcdir)/example/$@ > $@
++	@tcl@ $(srcdir)/fixline1 $(SHORT_BINDIR) < $(srcdir)/example/$@ > $@
+ 
+ ## We cannot use TCL_LIBS below (after TCL_LIB_SPEC) because its
+ ## expansion references the contents of LIBS, which contains linker

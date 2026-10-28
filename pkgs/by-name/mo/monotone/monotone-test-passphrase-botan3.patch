@@ -1,0 +1,29 @@
+Passphrase errors now trigger a Botan error changing the exit code
+
+--- mtn-src/test/func/changing_passphrase_of_a_private_key/__driver__.lua	2026-08-05 21:18:01.996782227 +0200
++++ mtn-src/test/func/changing_passphrase_of_a_private_key/__driver__.lua	2026-08-05 21:18:06.973363633 +0200
+@@ -7,10 +7,10 @@
+ check(mtn("genkey", tkey), 0, false, false, string.rep(tkey.."\n", 2))
+ 
+ -- fail to enter any passphrase
+-check(mtn("passphrase", tkey), 1, false, false)
++check(mtn("passphrase", tkey), 3, false, false)
+ 
+ -- fail to give correct old passphrase
+-check(mtn("passphrase", tkey), 1, false, false, string.rep("bad\n", 3))
++check(mtn("passphrase", tkey), 3, false, false, string.rep("bad\n", 3))
+ 
+ -- fail to repeat new password
+ check(mtn("passphrase", tkey), 1, false, false,
+
+--- mtn-src/test/func/disallowing_persistence_of_passphrase/__driver__.lua	2026-08-05 21:20:28.892980316 +0200
++++ mtn-src/test/func/disallowing_persistence_of_passphrase/__driver__.lua	2026-08-05 21:20:35.546373425 +0200
+@@ -9,7 +9,7 @@
+ 
+ check(mtn("--ssh-sign=no", "--branch=testbranch", "--rcfile=persist.lua",
+           "commit", "--message=blah-blah"),
+-      1, false, false, "tester@test.net\n")
++      3, false, false, "tester@test.net\n")
+ 
+ check(mtn("--ssh-sign=no", "--branch=testbranch", "--rcfile=persist.lua",
+           "commit", "--message=blah-blah"),

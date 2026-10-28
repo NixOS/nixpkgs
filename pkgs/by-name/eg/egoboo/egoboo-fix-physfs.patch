@@ -1,0 +1,24 @@
+--- a/src/game/egoboo_vfs.c
++++ b/src/game/egoboo_vfs.c
+@@ -1251,7 +1251,9 @@
+     }
+     else if ( vfs_physfs == pfile->type )
+     {
+-        retval = PHYSFS_readSLE64( pfile->ptr.p, val );
++        PHYSFS_sint64 itmp;
++        retval = PHYSFS_readSLE64( pfile->ptr.p, &itmp );
++        if ( retval ) *val = (Sint64)itmp;
+ 
+         error = ( 0 == retval );
+     }
+@@ -1283,7 +1285,9 @@
+     }
+     else if ( vfs_physfs == pfile->type )
+     {
+-        retval = PHYSFS_readULE64( pfile->ptr.p, val );
++        PHYSFS_uint64 itmp;
++        retval = PHYSFS_readULE64( pfile->ptr.p, &itmp );
++        if ( retval ) *val = (Uint64)itmp;
+ 
+         error = ( 0 == retval );
+     }

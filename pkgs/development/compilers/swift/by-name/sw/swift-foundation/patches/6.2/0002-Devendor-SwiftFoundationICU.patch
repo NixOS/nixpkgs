@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 27 Jun 2026 20:50:03 -0400
+Subject: [PATCH 2/3] Devendor SwiftFoundationICU
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Swift Collections is not devendored because its module needs to be in
+the toolchain, and we don’t want to leak Swift Collections into it.
+---
+ CMakeLists.txt | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8b4f45e..f71be26 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -67,16 +67,7 @@ set(SwiftFoundation_MACRO "" CACHE STRING "Path to Foundation macro plugin")
+ 
+ # Make sure our dependencies exists
+ include(FetchContent)
+-if (_SwiftFoundationICU_SourceDIR)
+-    message(STATUS "_SwiftFoundationICU_SourceDIR provided, using swift-foundation-icu checkout at ${_SwiftFoundationICU_SourceDIR}")
+-    FetchContent_Declare(SwiftFoundationICU
+-        SOURCE_DIR ${_SwiftFoundationICU_SourceDIR})
+-else()
+-    message(STATUS "_SwiftFoundationICU_SourceDIR not provided, checking out local copy of swift-foundation-icu")
+-    FetchContent_Declare(SwiftFoundationICU
+-        GIT_REPOSITORY https://github.com/apple/swift-foundation-icu.git
+-        GIT_TAG release/6.2)
+-endif()
++find_package(SwiftFoundationICU)
+ 
+ if (_SwiftCollections_SourceDIR)
+     message(STATUS "_SwiftCollections_SourceDIR provided, using swift-foundation-icu checkout at ${_SwiftCollections_SourceDIR}")
+@@ -88,7 +79,7 @@ else()
+         GIT_REPOSITORY https://github.com/apple/swift-collections.git
+         GIT_TAG 1.1.2)
+ endif()
+-FetchContent_MakeAvailable(SwiftFoundationICU SwiftCollections)
++FetchContent_MakeAvailable(SwiftCollections)
+ 
+ list(APPEND CMAKE_MODULE_PATH ${SwiftFoundation_SOURCE_DIR}/cmake/modules)
+ 
+-- 
+2.54.0
+

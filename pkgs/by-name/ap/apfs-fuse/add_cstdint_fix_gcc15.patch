@@ -1,0 +1,20 @@
+From 53cae3b21af9dca65cbe244ab72ec310a2e02164 Mon Sep 17 00:00:00 2001
+From: dkarpo <dkarpo@gmail.com>
+Date: Tue, 30 Sep 2025 10:18:03 -0600
+Subject: [PATCH] Add "<cstdint>" include to fix compilation.
+
+---
+ ApfsLib/PList.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/ApfsLib/PList.h b/ApfsLib/PList.h
+index 645df2d..a752059 100644
+--- a/ApfsLib/PList.h
++++ b/ApfsLib/PList.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <cstdint>
+ #include <vector>
+ #include <map>
+ #include <memory>

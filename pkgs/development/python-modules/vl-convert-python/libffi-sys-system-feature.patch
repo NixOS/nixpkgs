@@ -1,0 +1,10 @@
+diff --git a/vl-convert-python/Cargo.toml b/vl-convert-python/Cargo.toml
+index 3d24fa4..25020db 100644
+--- a/vl-convert-python/Cargo.toml
++++ b/vl-convert-python/Cargo.toml
+@@ -22,3 +22,5 @@ lazy_static = { workspace = true }
+ futures = { workspace = true }
+ pythonize = { workspace = true }
+ tokio = { workspace = true }
++
++libffi = { version = "3.2.0", features = ["system"] }

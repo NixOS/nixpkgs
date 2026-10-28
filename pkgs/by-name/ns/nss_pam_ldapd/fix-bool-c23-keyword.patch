@@ -1,0 +1,31 @@
+From 8ddb983a546f632986a84a784c4625110f7782a2 Mon Sep 17 00:00:00 2001
+From: Arthur de Jong <arthur@arthurdejong.org>
+Date: Sun, 23 Feb 2025 15:22:38 +0100
+Subject: Fix variable name (bool) which is a keyword in C23
+
+Closes https://bugs.debian.org/1097481
+---
+ nslcd/cfg.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/nslcd/cfg.c b/nslcd/cfg.c
+index ded797a..b984b0e 100644
+--- a/nslcd/cfg.c
++++ b/nslcd/cfg.c
+@@ -207,10 +207,10 @@ static int get_boolean(const char *filename, int lnr,
+   return parse_boolean(filename, lnr, token);
+ }
+ 
+-static const char *print_boolean(int bool)
++static const char *print_boolean(int value)
+ {
+-  if (bool) return "yes";
+-  else      return "no";
++  if (value) return "yes";
++  else       return "no";
+ }
+ 
+ #define TIME_MINUTES 60
+-- 
+cgit v1.2.3
+

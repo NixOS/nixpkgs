@@ -1,0 +1,13 @@
+diff --git a/xed/meson.build b/xed/meson.build
+index 7525bad..ae0814e 100644
+--- a/xed/meson.build
++++ b/xed/meson.build
+@@ -143,7 +143,7 @@ libxed = library(
+     dependencies: xed_deps,
+     include_directories: include_dirs,
+     install: true,
+-    install_dir: join_paths(libdir, 'xed')
++    install_dir: join_paths(prefix, libdir, 'xed')
+ )
+ 
+ install_headers(

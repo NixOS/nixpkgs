@@ -1,0 +1,11 @@
+--- a/include/pinocchio/src/constraints/constraint-data-generic.hxx
++++ b/include/pinocchio/src/constraints/constraint-data-generic.hxx
+@@ -151,7 +151,7 @@
+     const ConstraintDataBase<ConstraintDataDerived> & data1,
+     const ConstraintDataTpl<Scalar, Options, ConstraintCollectionTpl> & data2)
+   {
+-    return data2 == data1.derived();
++    return data2 == ConstraintDataTpl<Scalar, Options, ConstraintCollectionTpl>(data1.derived());
+   }
+ 
+ } // namespace pinocchio

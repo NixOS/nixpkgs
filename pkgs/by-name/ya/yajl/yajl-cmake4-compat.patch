@@ -1,0 +1,72 @@
+From 109f4e9665e6d8fd8ed4f647f362b5f147374f94 Mon Sep 17 00:00:00 2001
+From: Luna <git@lunnova.dev>
+Date: Sun, 21 Sep 2025 10:05:47 -0700
+Subject: [PATCH] build: update cmake_minimum_required to 3.5...4.1 for CMake 4
+ compat
+
+Replace deprecated EXEC_PROGRAM with execute_process and GET_TARGET_PROPERTY LOCATION with $<TARGET_FILE> generator expressions.
+
+Signed-off-by: Luna <git@lunnova.dev>
+---
+ CMakeLists.txt             | 2 +-
+ reformatter/CMakeLists.txt | 4 +---
+ src/CMakeLists.txt         | 2 +-
+ verify/CMakeLists.txt      | 4 +---
+ 4 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9af25203..45f4a2ad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,7 +12,7 @@
+ # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ 
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5...4.1)
+ 
+ PROJECT(YetAnotherJSONParser C)
+ 
+diff --git a/reformatter/CMakeLists.txt b/reformatter/CMakeLists.txt
+index 4b7b3fa4..8ba7cfce 100644
+--- a/reformatter/CMakeLists.txt
++++ b/reformatter/CMakeLists.txt
+@@ -35,9 +35,7 @@ IF (NOT WIN32)
+ ENDIF (NOT WIN32)
+ 
+ # copy the binary into the output directory
+-GET_TARGET_PROPERTY(binPath json_reformat LOCATION)
+-
+ ADD_CUSTOM_COMMAND(TARGET json_reformat POST_BUILD
+-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
++    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:json_reformat> ${binDir})
+ 
+ INSTALL(TARGETS json_reformat RUNTIME DESTINATION bin)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 78875032..43790aaf 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -65,7 +65,7 @@ CONFIGURE_FILE(yajl.pc.cmake ${pkgconfigDir}/yajl.pc)
+ FOREACH (header ${PUB_HDRS})
+   SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+ 
+-  EXEC_PROGRAM(${CMAKE_COMMAND} ARGS -E copy_if_different ${header} ${incDir})
++  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
+ 
+   ADD_CUSTOM_COMMAND(TARGET yajl POST_BUILD
+       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir})
+diff --git a/verify/CMakeLists.txt b/verify/CMakeLists.txt
+index 2bceb265..1ce3cca3 100644
+--- a/verify/CMakeLists.txt
++++ b/verify/CMakeLists.txt
+@@ -29,9 +29,7 @@ ADD_EXECUTABLE(json_verify ${SRCS})
+ TARGET_LINK_LIBRARIES(json_verify yajl)
+ 
+ # copy in the binary
+-GET_TARGET_PROPERTY(binPath json_verify LOCATION)
+-
+ ADD_CUSTOM_COMMAND(TARGET json_verify POST_BUILD
+-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
++    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:json_verify> ${binDir})
+ 
+ INSTALL(TARGETS json_verify RUNTIME DESTINATION bin)

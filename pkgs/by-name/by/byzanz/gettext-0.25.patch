@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 620bb26..ce48364 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -29,6 +29,8 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], "$GETTEXT_PACKAGE",
+ AM_GLIB_GNU_GETTEXT
+ AM_GLIB_DEFINE_LOCALEDIR(GNOMELOCALEDIR)
+ 
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
+ 
+ AC_PROG_CC
+ AM_PROG_CC_C_O

@@ -1,0 +1,33 @@
+From 6b8302213d37c84a7d4d036c733f68116d738189 Mon Sep 17 00:00:00 2001
+From: jopejoe1 <jopejoe1@missing.ninja>
+Date: Fri, 31 Jul 2026 09:39:27 +0200
+Subject: [PATCH] Install documentation
+
+This makes it so that documentation can be easly installed by distors
+---
+ doc/CMakeLists.txt | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
+index e6c43a5277..880e6bc728 100644
+--- a/doc/CMakeLists.txt
++++ b/doc/CMakeLists.txt
+@@ -38,6 +38,18 @@
+     VERBATIM
+     DEPENDS ${PROJECT_NAME}_doc
+   )
++
++  include(GNUInstallDirs)
++
++  install(
++    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/
++    DESTINATION ${CMAKE_INSTALL_DOCDIR}
++  )
++
++  install(
++    FILES ${CMAKE_CURRENT_BINARY_DIR}/doc/latex/refman.pdf
++    DESTINATION ${CMAKE_INSTALL_DOCDIR}
++  )
+ else()
+   message("Doxygen need to be installed to generate the doxygen documentation")
+ endif()

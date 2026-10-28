@@ -1,0 +1,103 @@
+diff --git a/linux_initramfs/pack.sh b/linux_initramfs/pack.sh
+index e042bb5..f04c0a1 100644
+--- a/linux_initramfs/pack.sh
++++ b/linux_initramfs/pack.sh
+@@ -40,15 +40,17 @@ mkdir rootTemplate/lib/i386-linux-gnu/
+ mkdir rootTemplate/lib/x86_64-linux-gnu/
+ 
+ cp -L /lib/ld-linux.so.2 rootTemplate/lib/ld-linux.so.2
+-cp -L /lib64/ld-linux-x86-64.so.2 rootTemplate/lib64/ld-linux-x86-64.so.2
+ cp -L /lib/x86_64-linux-gnu/libdl.so.2 rootTemplate/lib/x86_64-linux-gnu/libdl.so.2
+ cp -L /lib/x86_64-linux-gnu/libc.so.6 rootTemplate//lib/x86_64-linux-gnu/libc.so.6
++cp -L /lib64/ld-linux-x86-64.so.2 rootTemplate/lib64/ld-linux-x86-64.so.2
++cp -L /lib64/libdl.so.2 rootTemplate/lib64/libdl.so.2
++cp -L /lib64/libc.so.6 rootTemplate/lib64/libc.so.6
+ cp -L /lib32/libc.so.6  rootTemplate//lib32/libc.so.6
+-cp -L /lib/ld-linux.so.2 rootTemplate/lib/ld-linux.so.2
+ cp -L /lib32/libdl.so.2 rootTemplate/lib32/libdl.so.2
+ 
+ # fix nasty nss bugs (getpwnam_r, ...)
+ cp /lib/x86_64-linux-gnu/libnss_compat.so.2 rootTemplate//lib/x86_64-linux-gnu/
++cp /lib64/libnss_compat.so.2 rootTemplate/lib64/
+ 
+ cp -r "rootTemplate" "init"
+ sed '/START/c\./loader' init/init_template > init/init
+diff --git a/linux_initramfs/rootTemplate/init_template b/linux_initramfs/rootTemplate/init_template
+index 0d29602..f555082 100755
+--- a/linux_initramfs/rootTemplate/init_template
++++ b/linux_initramfs/rootTemplate/init_template
+@@ -19,7 +19,7 @@ adduser --gecos "ubuntu" --disabled-password --ingroup ubuntu ubuntu
+ echo "ubuntu:ubuntu" | chpasswd
+ 
+ # multiarch support
+-export LD_LIBRARY_PATH=/lib32
++export LD_LIBRARY_PATH=/lib64:/lib32
+ 
+ START
+ #./loader
+diff --git a/packer/common/config.py b/packer/common/config.py
+index 74f2b2e..e0fcf3a 100644
+--- a/packer/common/config.py
++++ b/packer/common/config.py
+@@ -39,7 +39,7 @@ default_config = {
+                   "QEMU-PT_PATH": "../../QEMU-Nyx/x86_64-softmmu/qemu-system-x86_64",
+                   "KERNEL": "../linux_initramfs/bzImage-linux-4.15-rc7",
+                   "INIT_RAMFS": "../linux_initramfs/init.cpio.gz",
+-                  "DEFAULT_FUZZER_CONFIG_FOLDER": "./fuzzer_configs/",
++                  "DEFAULT_FUZZER_CONFIG_FOLDER": os.path.expanduser("~/.nyx/fuzzer_configs/"),
+                   "DEFAULT_VM_HDA": "",
+                   "DEFAULT_VM_PRESNAPSHOT": "",
+                   }
+@@ -149,6 +149,9 @@ class ConfigReader(object):
+     def __init_config(self, config_file):    
+         if not os.path.exists(config_file):
+             print("Configuration \"%s\" not found -> Creating..."%(os.path.realpath(config_file)))
++            config_dir = os.path.dirname(os.path.abspath(config_file))
++            os.makedirs(config_dir, exist_ok=True)
++            os.makedirs(config_dir+"/fuzzer_configs/", exist_ok=True)
+             f = open(config_file, "w")
+             config = configparser.ConfigParser()
+             config["Packer"] = {}
+@@ -261,7 +264,7 @@ class PackerConfiguration:
+             self.load_old_state = False
+ 
+     def __load_config(self):
+-        self.config_values = ConfigReader(os.path.dirname(os.path.realpath(__file__))+"/../nyx.ini", self.__config_section, self.__config_default).get_values()
++        self.config_values = ConfigReader(os.path.expanduser("~/.nyx/nyx.ini"), self.__config_section, self.__config_default).get_values()
+ 
+     def __load_arguments(self):
+         modes = ["afl", "spec"]
+@@ -344,7 +347,7 @@ class ConfigGeneratorConfiguration:
+             self.load_old_state = False
+ 
+     def __load_config(self):
+-        self.config_values = ConfigReader(os.path.dirname(os.path.realpath(__file__)) +"/../nyx.ini", self.__config_section, self.__config_default).get_values()
++        self.config_values = ConfigReader(os.path.expanduser("~/.nyx/nyx.ini"), self.__config_section, self.__config_default).get_values()
+ 
+     def __load_arguments(self):
+ 
+diff --git a/packer/common/self_check.py b/packer/common/self_check.py
+index 10f2405..e16ac37 100644
+--- a/packer/common/self_check.py
++++ b/packer/common/self_check.py
+@@ -170,12 +170,14 @@ def check_apple_ignore_msrs(config):
+ 
+ 
+ def check_nyx_ini():
+-    if not os.path.exists(os.path.dirname(sys.argv[0])+"/nyx.ini") and not os.path.exists("nyx.ini"):
+-        from common.config import FuzzerConfiguration
+-        FuzzerConfiguration(skip_args=True).create_initial_config()
+-        print(WARNING + WARNING_PREFIX + "nyx.ini file does not exist. Creating..." + ENDC)
+-        return False
+-    return True
++    # comment this code out because FuzzerConfiguration does not exist
++    # see https://github.com/nyx-fuzz/packer/issues/35
++    # if not os.path.exists(os.path.dirname(sys.argv[0])+"/nyx.ini") and not os.path.exists("nyx.ini"):
++    #     from common.config import FuzzerConfiguration
++    #     FuzzerConfiguration(skip_args=True).create_initial_config()
++    #     print(WARNING + WARNING_PREFIX + "nyx.ini file does not exist. Creating..." + ENDC)
++    #     return False
++    return os.path.exists(os.path.expanduser("~/.nyx/nyx.ini"))
+ 
+ 
+ def check_qemu_version(config):

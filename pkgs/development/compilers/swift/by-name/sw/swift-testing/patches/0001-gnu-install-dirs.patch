@@ -1,0 +1,27 @@
+From 6d92a130bca4f066211e405ee733ea22eed54e37 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 26 Dec 2025 21:20:40 -0500
+Subject: [PATCH] gnu-install-dirs
+
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 38aeda61..2499a8db 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -51,8 +51,8 @@ include(PlatformInfo)
+ include(SwiftModuleInstallation)
+ 
+ option(SwiftTesting_INSTALL_NESTED_SUBDIR "Install libraries under a platform and architecture subdirectory" NO)
+-set(SwiftTesting_INSTALL_LIBDIR "${CMAKE_INSTALL_LIBDIR}/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/${SwiftTesting_PLATFORM_SUBDIR}$<$<AND:$<PLATFORM_ID:Darwin>,$<NOT:$<BOOL:${SwiftTesting_INSTALL_NESTED_SUBDIR}>>>:/testing>$<$<BOOL:${SwiftTesting_INSTALL_NESTED_SUBDIR}>:/${SwiftTesting_ARCH_SUBDIR}>")
+-set(SwiftTesting_INSTALL_SWIFTMODULEDIR "${CMAKE_INSTALL_LIBDIR}/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/${SwiftTesting_PLATFORM_SUBDIR}$<$<AND:$<PLATFORM_ID:Darwin>,$<NOT:$<BOOL:${SwiftTesting_INSTALL_NESTED_SUBDIR}>>>:/testing>")
++set(SwiftTesting_INSTALL_LIBDIR "${CMAKE_INSTALL_LIBDIR}")
++set(SwiftTesting_INSTALL_SWIFTMODULEDIR "@include@/lib/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/${SwiftTesting_PLATFORM_SUBDIR}$<$<AND:$<PLATFORM_ID:Darwin>,$<NOT:$<BOOL:${SwiftTesting_INSTALL_NESTED_SUBDIR}>>>:/testing>")
+ 
+ add_compile_options($<$<COMPILE_LANGUAGE:Swift>:-no-toolchain-stdlib-rpath>)
+ 
+-- 
+2.51.2
+

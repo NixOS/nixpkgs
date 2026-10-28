@@ -1,0 +1,21 @@
+diff --git a/aiomultiprocess/tests/base.py b/aiomultiprocess/tests/base.py
+--- a/aiomultiprocess/tests/base.py
++++ b/aiomultiprocess/tests/base.py
+@@ -56,7 +56,7 @@ async def terminate(process):
+ def async_test(fn):
+     @wraps(fn)
+     def wrapper(*args, **kwargs):
+-        loop = asyncio.get_event_loop()
++        loop = asyncio.new_event_loop()
+         return loop.run_until_complete(fn(*args, **kwargs))
+
+     return wrapper
+@@ -66,7 +66,7 @@ def perf_test(fn):
+     @wraps(fn)
+     @skipUnless(RUN_PERF_TESTS, "Performance test")
+     def wrapper(*args, **kwargs):
+-        loop = asyncio.get_event_loop()
++        loop = asyncio.new_event_loop()
+         return loop.run_until_complete(fn(*args, **kwargs))
+
+     return wrapper

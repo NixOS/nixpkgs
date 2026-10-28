@@ -1,0 +1,30 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
+
+# cannot be built as pythonApplication because the library functions are
+# required for home-assistant
+buildPythonPackage rec {
+  pname = "speedtest-cli";
+  version = "2.1.3";
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-XidzIzzttfo9gSDrf5e8xJdLUiGyVNM/8W4vHUE9kPA=";
+  };
+
+  # tests require working internet connection
+  doCheck = false;
+
+  meta = {
+    description = "Command line interface for testing internet bandwidth using speedtest.net";
+    homepage = "https://github.com/sivel/speedtest-cli";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      makefu
+    ];
+  };
+}

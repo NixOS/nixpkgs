@@ -1,0 +1,42 @@
+--- a/sys/modules/aesni/Makefile	2023-12-16 09:19:28.454892154 -0700
++++ b/sys/Modules/aesni/Makefile	2023-12-16 09:19:41.975047684 -0700
+@@ -1,6 +1,5 @@
+ 
+ .PATH: ${SRCTOP}/sys/crypto/aesni
+-.PATH: ${SRCTOP}/contrib/llvm-project/clang/lib/Headers
+ 
+ KMOD=	aesni
+ SRCS=	aesni.c
+@@ -39,8 +38,8 @@
+ aesni_ghash.o: aesni.h
+ aesni_wrap.o: aesni.h
+ aesni_ccm.o: aesni.h
+-intel_sha1.o: sha_sse.h immintrin.h shaintrin.h tmmintrin.h xmmintrin.h
+-intel_sha256.o: sha_sse.h immintrin.h shaintrin.h tmmintrin.h xmmintrin.h
++intel_sha1.o: sha_sse.h
++intel_sha256.o: sha_sse.h
+ 
+ .include <bsd.kmod.mk>
+ 
+diff --git a/sys/modules/blake2/Makefile b/sys/modules/blake2/Makefile
+index e4b3fb9f126..5bfd9c2ae02 100644
+--- a/sys/modules/blake2/Makefile
++++ b/sys/modules/blake2/Makefile
+@@ -3,7 +3,6 @@
+ .PATH:	${SRCTOP}/sys/contrib/libb2
+ .PATH:	${SRCTOP}/sys/crypto/blake2
+ .PATH:	${SRCTOP}/sys/opencrypto
+-.PATH:	${SRCTOP}/contrib/llvm-project/clang/lib/Headers
+ 
+ KMOD	= blake2
+ 
+@@ -64,8 +63,7 @@ ${src:S/.c/.o/}: ${src}
+ 	    -D_MM_MALLOC_H_INCLUDED -Wno-unused-function ${.IMPSRC}
+ 	${CTFCONVERT_CMD}
+ 
+-${src:S/.c/.o/}: intrin.h emmintrin.h tmmintrin.h smmintrin.h immintrin.h \
+-    x86intrin.h ${SRCS:M*.h}
++${src:S/.c/.o/}: ${SRCS:M*.h}
+ .endfor
+ 
+ # FreeBSD-specific sources:

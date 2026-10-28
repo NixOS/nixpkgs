@@ -1,0 +1,20 @@
+diff --git a/src/Lib.CLI.Elevated/src/ibase.cpp b/src/Lib.CLI.Elevated/src/ibase.cpp
+index 3f002048cf..c1814cd2af 100644
+--- a/src/Lib.CLI.Elevated/src/ibase.cpp
++++ b/src/Lib.CLI.Elevated/src/ibase.cpp
+@@ -427,15 +427,6 @@
+ 						if (clientProcessId != GetSpotClientPid())
+ 							ThrowException("Client not allowed: Spot mode, client PID mismatch");
+ 					}
+-
+-#if defined(Debug) || defined(_DEBUG)
+-#else
+-					if (true)
+-					{
+-						if (IntegrityCheckFileKnown(clientProcessPath) == false)
+-							ThrowException("Client not allowed: Integrity check failed ");
+-					}
+-#endif
+ 				}
+ 
+ 				ReplyPID(GetCurrentProcessId());

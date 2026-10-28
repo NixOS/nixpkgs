@@ -1,0 +1,49 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 33ec4e4a..9dff47cb 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -232,7 +232,6 @@ include(FetchContent)
+ ###############################################################################################
+ # Both are cloned by FetchContent. Fail here with a clear message instead of deep inside the
+ # populate sub-build if git is not on the PATH. Set GIT_EXECUTABLE if it is elsewhere.
+-find_package(Git REQUIRED)
+ 
+ # asmjit does not do official releases so pinned it to what was HEAD at time of writing this
+ set(ASMJIT_GIT_TAG  "0bd5787b54b575ed94bf32ac452153b34385c514" CACHE STRING "AsmJit git revision to fetch")
+@@ -243,34 +242,14 @@ set(BLEND2D_GIT_TAG "def0d1238c3e5d0983bb848e5676049d829e435b" CACHE STRING "Ble
+ # directory with no CMakeLists.txt so FetchContent_MakeAvailable populates without calling
+ # add_subdirectory(). Blend2D adds asmjit itself (via ASMJIT_DIR) and, because we build it
+ # statically, embeds it directly into the blend2d library.
+-FetchContent_Declare(asmjit
+-    GIT_REPOSITORY https://github.com/asmjit/asmjit.git
+-    GIT_TAG        ${ASMJIT_GIT_TAG}
+-    GIT_SHALLOW    FALSE # FALSE required when using a commit hash
+-    GIT_PROGRESS TRUE
+-    SOURCE_SUBDIR  __populate_only__
+-)
+-FetchContent_MakeAvailable(asmjit)
+-set(ASMJIT_DIR "${asmjit_SOURCE_DIR}" CACHE PATH "AsmJit source directory" FORCE)
++find_package(asmjit REQUIRED)
+ 
+-set(BLEND2D_STATIC TRUE)
+-FetchContent_Declare(blend2d
+-    GIT_REPOSITORY https://github.com/blend2d/blend2d.git
+-    GIT_TAG        ${BLEND2D_GIT_TAG}
+-    GIT_SHALLOW    FALSE
+-    GIT_PROGRESS TRUE
+-)
+-FetchContent_MakeAvailable(blend2d)
++find_package(blend2d REQUIRED)
+ 
+ # Blend2D's public headers use constructs our warning flags reject (anonymous structs vs
+ # -Wpedantic, ...). Re-publish its interface include dirs as system to supress any warnings.
+ # Once we bump our minimum cmake version to >= 3.25 we can instead just declare it `SYSTEM`
+ # in the `FetchContent_Declare` call and get rid of this.
+-get_target_property(BLEND2D_IFACE_INCLUDE_DIRS blend2d INTERFACE_INCLUDE_DIRECTORIES)
+-if(BLEND2D_IFACE_INCLUDE_DIRS)
+-    set_target_properties(blend2d PROPERTIES
+-        INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${BLEND2D_IFACE_INCLUDE_DIRS}")
+-endif()
+ 
+ ###############################################################################################
+ # Create library from Garmin's FIT SDK

@@ -1,0 +1,25 @@
+From 316e4fd40f53c96850128fd65097a42623d1e736 Mon Sep 17 00:00:00 2001
+From: Marcel Bargull <marcel.bargull@udo.edu>
+Date: Sat, 27 Mar 2021 16:23:34 +0100
+Subject: [PATCH] Fix linking Clang 11 compiled objects
+
+With Clang 11 htmlRecover from lib/htmshell.h is picked up as a
+definition, not just declaration of the jmp_buf. As such both
+lib/htmshell.c and hg/lib/cart.c export two symbols with the same name.
+---
+ src/inc/htmshell.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/inc/htmshell.h b/src/inc/htmshell.h
+index 9d85f45b936..dd586db761c 100644
+--- a/src/inc/htmshell.h
++++ b/src/inc/htmshell.h
+@@ -160,7 +160,7 @@ void htmlBadVar(char *varName);
+ void htmlImage(char *fileName, int width, int height);
+ /* Display centered image file. */
+ 
+-jmp_buf htmlRecover;  /* Error recovery jump. Exposed for cart's use. */
++extern jmp_buf htmlRecover;  /* Error recovery jump. Exposed for cart's use. */
+ 
+ void htmlVaWarn(char *format, va_list args);
+ /* Write an error message.  (Generally you just call warn() or errAbort().

@@ -1,0 +1,24 @@
+diff --git a/third_party/nvidia/backend/driver.c b/third_party/nvidia/backend/driver.c
+index f51d7b37c1..8971588282 100644
+--- a/third_party/nvidia/backend/driver.c
++++ b/third_party/nvidia/backend/driver.c
+@@ -1,4 +1,4 @@
+-#include "cuda.h"
++#include <cuda.h>
+ #include <dlfcn.h>
+ #include <stdalign.h>
+ #include <stdbool.h>
+diff --git a/third_party/nvidia/backend/driver.py b/third_party/nvidia/backend/driver.py
+index 21e9045b25..3660e32546 100644
+--- a/third_party/nvidia/backend/driver.py
++++ b/third_party/nvidia/backend/driver.py
+@@ -11,7 +11,8 @@ from triton.backends.compiler import GPUTarget
+ from triton.backends.driver import GPUDriver
+ 
+ dirname = os.path.dirname(os.path.realpath(__file__))
+-include_dirs = [os.path.join(dirname, "include")]
++import shlex
++include_dirs = [*shlex.split("@cudaToolkitIncludeDirs@"), os.path.join(dirname, "include")]
+ libdevice_dir = os.path.join(dirname, "lib")
+ libraries = ['libcuda.so.1']
+ PyCUtensorMap = None

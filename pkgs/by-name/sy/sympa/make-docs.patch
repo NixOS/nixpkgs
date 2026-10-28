@@ -1,0 +1,11 @@
+diff -ur sympa-6.2.44-orig/doc/Makefile.am sympa-6.2.44/doc/Makefile.am
+--- sympa-6.2.44-orig/doc/Makefile.am	2019-08-29 01:57:43.512539087 +0200
++++ sympa-6.2.44/doc/Makefile.am	2019-08-29 01:58:24.393531358 +0200
+@@ -83,6 +83,4 @@
+ 		--lax --release="$(VERSION)" $< $@
+ 
+ .podpl.pod:
+-	$(AM_V_GEN)PERL5LIB=$(top_builddir)/src/lib:$(top_srcdir)/src/lib; \
+-	export PERL5LIB; \
+-	$(PERL) $< --top_srcdir=$(top_srcdir) > $*.pod
++	$(AM_V_GEN)$(PERL) -I$(top_builddir)/src/lib -I$(top_srcdir)/src/lib $< --top_srcdir=$(top_srcdir) > $*.pod

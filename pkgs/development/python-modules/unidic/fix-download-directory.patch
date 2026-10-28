@@ -1,0 +1,23 @@
+diff --git a/unidic/download.py b/unidic/download.py
+index 445ce55..d488bd6 100644
+--- a/unidic/download.py
++++ b/unidic/download.py
+@@ -6,6 +6,8 @@ import sys
+ from wasabi import msg
+ from urllib.request import urlretrieve
+ from tqdm import tqdm
++from platformdirs import user_cache_dir
++from pathlib import Path
+ 
+ # This is used to show progress when downloading.
+ # see here: https://github.com/tqdm/tqdm#hooks-and-callbacks
+@@ -56,7 +58,8 @@ def download_and_clean(version, url, dirname='unidic', delfiles=[]):
+     This downloads the zip file from the source, extracts it, renames the
+     resulting directory, and removes large files not used at runtime.  
+     """
+-    cdir = os.path.dirname(os.path.abspath(__file__))
++    cdir = Path(user_cache_dir('unidic-py'))
++    cdir.mkdir(parents=True, exist_ok=True)
+     fname = os.path.join(cdir, 'unidic.zip')
+     print("Downloading UniDic v{}...".format(version), file=sys.stderr)
+     download_progress(url, fname)

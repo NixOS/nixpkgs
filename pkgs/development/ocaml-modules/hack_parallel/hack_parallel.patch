@@ -1,0 +1,68 @@
+diff --git a/src/heap/sharedMem.ml b/src/heap/sharedMem.ml
+index 600e272..511b724 100644
+--- a/src/heap/sharedMem.ml
++++ b/src/heap/sharedMem.ml
+@@ -521,7 +521,7 @@ end = struct
+ 
+     let stack: t option ref = ref None
+ 
+-    let has_local_changes () = Core_kernel.Option.is_some (!stack)
++    let has_local_changes () = Core.Option.is_some (!stack)
+ 
+     let rec mem stack_opt key =
+       match stack_opt with
+diff --git a/src/interface/memory.ml b/src/interface/memory.ml
+index 3554b17..09aa1f5 100644
+--- a/src/interface/memory.ml
++++ b/src/interface/memory.ml
+@@ -66,10 +66,10 @@ let get_heap_handle () =
+ 
+ 
+ let heap_use_ratio () =
+-  Core_kernel.Float.of_int (SharedMemory.heap_size ()) /.
+-  Core_kernel.Float.of_int initial_heap_size
++  Core.Float.of_int (SharedMemory.heap_size ()) /.
++  Core.Float.of_int initial_heap_size
+ 
+ 
+ let slot_use_ratio () =
+   let { SharedMemory.used_slots; slots; _ } = SharedMemory.hash_stats () in
+-  Core_kernel.Float.of_int used_slots /. Core_kernel.Float.of_int slots
++  Core.Float.of_int used_slots /. Core.Float.of_int slots
+diff --git a/src/interface/scheduler.ml b/src/interface/scheduler.ml
+index 9b8282a..b5d41b5 100644
+--- a/src/interface/scheduler.ml
++++ b/src/interface/scheduler.ml
+@@ -48,7 +48,7 @@ let map_reduce
+     | Some exact_size when exact_size > 0 ->
+       (List.length work / exact_size) + 1
+     | _ ->
+-      let bucket_multiplier = Core_kernel.Int.min bucket_multiplier (1 + (List.length work / 400)) in
++      let bucket_multiplier = Core.Int.min bucket_multiplier (1 + (List.length work / 400)) in
+       number_of_workers * bucket_multiplier
+   in
+   MultiWorker.call
+diff --git a/src/utils/dune b/src/utils/dune
+index 50a4c42..45e4a5a 100644
+--- a/src/utils/dune
++++ b/src/utils/dune
+@@ -15,6 +15,7 @@
+     sysinfo)
+   (libraries
+     core
++    core_unix
+     str
+     hack_parallel.collections
+     hack_parallel.disk
+diff --git a/src/utils/hh_logger.ml b/src/utils/hh_logger.ml
+index 4c99f05..8075ed5 100644
+--- a/src/utils/hh_logger.ml
++++ b/src/utils/hh_logger.ml
+@@ -9,6 +9,7 @@
+ *)
+ 
+ open Core
++module Unix = Core_unix
+ 
+ let timestamp_string () =
+   let open Unix in

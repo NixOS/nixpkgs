@@ -1,0 +1,25 @@
+diff --git a/rplugin/python3/fruzzy_mod.nim b/rplugin/python3/fruzzy_mod.nim
+index dba0689..0109285 100644
+--- a/rplugin/python3/fruzzy_mod.nim
++++ b/rplugin/python3/fruzzy_mod.nim
+@@ -12,9 +12,7 @@ when defined(profile):
+     import nimprof
+
+ proc getVersion(): string {.compileTime.}=
+-    let ver = staticExec("git describe --tags --always --dirty").strip()
+-    # let cTime = format(times.now(), "yyyy-MM-dd hh:mm:ss")
+-    let branch = staticExec("git rev-parse --abbrev-ref HEAD").strip()
++    let ver = "@version@"
+     var options:seq[string] = newSeq[string]()
+     if not defined(removelogger):
+         options.add("info")
+@@ -26,7 +24,7 @@ proc getVersion(): string {.compileTime.}=
+         options.add("release")
+     let optionsStr = options.join(",")
+
+-    return &"rev: {ver} on branch: {branch} with options: {optionsStr}"
++    return &"version: {ver} with options: {optionsStr}"
+
+ let L = newConsoleLogger(levelThreshold = logging.Level.lvlDebug)
+ addHandler(L)
+

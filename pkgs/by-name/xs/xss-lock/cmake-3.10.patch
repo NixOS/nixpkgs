@@ -1,0 +1,33 @@
+From be4ef8588a97235330b2b27f097e2c9f941f3c31 Mon Sep 17 00:00:00 2001
+From: Dave Walker <dave@daviey.com>
+Date: Thu, 9 Oct 2025 14:17:58 +0100
+Subject: [PATCH] Update CMake minimum required version to 3.10
+
+CMake 4 removed compatibility with CMake versions < 3.5, and versions
+between 3.5-3.10 are deprecated.
+
+This change updates the minimum required version to 3.10 to ensure
+compatibility with modern CMake versions including CMake 4.x.
+
+This issue is affecting NixOS users (see
+https://github.com/NixOS/nixpkgs/issues/450274) and will likely impact
+other distributions as they upgrade to CMake 4.x.
+
+Upstream PR: https://github.com/xdbob/xss-lock/pull/3
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b1e96a4..9c6bcf0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ project(xss-lock C)
+ set(PROJECT_VERSION 0.3.0)
+ 
+-- 
+2.51.0
+

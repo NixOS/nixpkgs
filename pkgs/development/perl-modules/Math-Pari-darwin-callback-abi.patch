@@ -1,0 +1,77 @@
+--- a/Pari.xs
++++ b/Pari.xs
+@@ -1518,21 +1518,63 @@
+ }
+ 
+ GEN
+-callPerlFunction(PerlFunctionArg1 long_ep, ...)
+-{
+-    GEN res;
++callPerlFunction_args(PerlFunctionArg1 long_ep, GEN *args)
++{
+     entree *ep = toEntreeP(long_ep);
+-    va_list args;
+     SV *cv = (SV*) ep->elt_CV;
+     int numargs = CV_NUMARGS_get(cv);
+-
+-    va_start(args, long_ep);
+-/*    warn("calling with numargs=%d", numargs); */
+-    res = callPerlFunction_va_list(G_SCALAR, numargs, cv, args);
+-/*    warn("ending call"); */
+-    va_end(args);
+-/*    warn("ended call"); */
++    GEN res;
++    int i;
++    dSP;
++    int count;
++    pari_sp oldavma = avma;
++    SV *oPariStack = PariStack;
++    SV *sv;
++
++    ENTER;
++    SAVETMPS;
++    SAVEINT(sentinel);
++    sentinel = avma;
++    PUSHMARK(sp);
++    EXTEND(sp, numargs + 1);
++    for (i = 0; i < numargs; i++)
++	PUSHs(pari2mortalsv(args[i], oldavma));
++    PUTBACK;
++    count = perl_call_sv(cv, G_SCALAR);
++
++    SPAGAIN;
++    if (count != 1)
++	croak("Perl function exported into PARI returns unexpected number %d of values (need 1)", count);
++
++    sv = SvREFCNT_inc(POPs);
++
++    PUTBACK;
++    FREETMPS;
++    LEAVE;
++
++    if (PariStack != oPariStack)
++	moveoffstack_newer_than(oPariStack);
++    res = sv2pari(sv);
++    res = myforcecopy(res);
++    SvREFCNT_dec(sv);
++
+     return res;
++}
++
++GEN
++callPerlFunction(PerlFunctionArg1 long_ep, GEN arg0, GEN arg1, GEN arg2, GEN arg3, GEN arg4, GEN arg5, GEN arg6, GEN arg7)
++{
++    GEN args[8];
++
++    args[0] = arg0;
++    args[1] = arg1;
++    args[2] = arg2;
++    args[3] = arg3;
++    args[4] = arg4;
++    args[5] = arg5;
++    args[6] = arg6;
++    args[7] = arg7;
++    return callPerlFunction_args(long_ep, args);
+ }
+ 
+ entree *

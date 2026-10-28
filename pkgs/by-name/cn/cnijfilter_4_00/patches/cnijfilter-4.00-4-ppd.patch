@@ -1,0 +1,10 @@
+--- a/backend/src/cnij_backend_common.c	2016-11-13 00:08:34.600824006 +0100
++++ a/backend/src/cnij_backend_common.c	2016-11-13 00:08:52.037823694 +0100
+@@ -37,6 +37,7 @@
+ // CUPS Header
+ #include <cups/cups.h>
+ #include <cups/ipp.h>
++#include <cups/ppd.h>
+ 
+ // Header file for CANON
+ #include "cnij_backend_common.h"

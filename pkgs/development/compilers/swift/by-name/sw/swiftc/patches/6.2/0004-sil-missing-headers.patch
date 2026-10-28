@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 4 Jan 2026 14:46:08 -0500
+Subject: [PATCH 04/10] sil-missing-headers
+
+Fix compilation errors when building the SIL module during bootstrap.
+
+    error: field has incomplete type 'clang::DeclContext::all_lookups_iterator'
+    error: field has incomplete type 'clang::DeclContext::ddiag_iterator'
+---
+ include/swift/AST/ASTBridging.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/swift/AST/ASTBridging.h b/include/swift/AST/ASTBridging.h
+index 115d6849866..deeb500e3b3 100644
+--- a/include/swift/AST/ASTBridging.h
++++ b/include/swift/AST/ASTBridging.h
+@@ -24,6 +24,8 @@
+ #ifdef USED_IN_CPP_SOURCE
+ #include "swift/AST/Attr.h"
+ #include "swift/AST/Decl.h"
++#include "clang/AST/DeclLookups.h"
++#include "clang/AST/DependentDiagnostic.h"
+ #endif
+ 
+ SWIFT_BEGIN_NULLABILITY_ANNOTATIONS
+-- 
+2.54.0
+
