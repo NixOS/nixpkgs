@@ -4,18 +4,15 @@
   callPackage,
   fetchurl,
   fetchFromGitHub,
-  gcc14Stdenv,
   coreutils,
   net-tools,
-  openjdk21,
+  openjdk25,
   scala_3,
   polyml,
   verit,
   vampire,
   eprover-ho,
   cvc5,
-  libpoly,
-  symfpu,
   csdp,
   rlwrap,
   perl,
@@ -25,14 +22,13 @@
   desktopToDarwinBundle,
   isabelle-components,
   symlinkJoin,
-  fetchhg,
   electron,
   writableTmpDirAsHomeHook,
   patchelf,
 }:
 
 let
-  java = openjdk21;
+  java = openjdk25;
 
   #FIXME: avoid pulling explicit patchelf after resolving https://github.com/NixOS/patchelf/pull/672
   patchelf' = patchelf.overrideAttrs (
@@ -57,7 +53,7 @@ let
   # so we pin polyml to the exact commit that upstream isabelle uses
   polyml' = polyml.overrideAttrs {
     pname = "polyml-for-isabelle";
-    version = "2025-1";
+    version = "2026";
 
     src = fetchFromGitHub {
       owner = "polyml";
@@ -72,104 +68,48 @@ let
       "--disable-shared"
     ];
     buildFlags = [ "compiler" ];
+
+    postInstall = ''
+      echo "ba433f9b-1286-450a-afb6-53f49be54d33" > $out/bin/poly.uuid
+    '';
   };
 
-  # Isabelle uses a branch of vampire that is not in the normal release line
-  # that adds support for higher order goals
-  vampireStdenv = if stdenv.hostPlatform.isLinux then gcc14Stdenv else stdenv;
-  vampire' =
-    (vampire.override {
-      stdenv = vampireStdenv;
-      enableZ3 = false;
-    }).overrideAttrs
-      (old: {
-        pname = "vampire-for-isabelle";
-        version = "4.8";
+  vampire' = vampire.override {
+    enableZ3 = false;
+  };
 
-        src = fetchFromGitHub {
-          owner = "vprover";
-          repo = "vampire";
-          tag = "v4.8HO4Sledgahammer";
-          hash = "sha256-CmppaGa4M9tkE1b25cY1LSPFygJy5yV4kpHKbPqvcVE=";
-        };
-
-        patches = [ ./vampire-add-install-directive.patch ];
-
-        postInstall = ''
-          mv $out/bin/vampire_rel $out/bin/vampire
-        '';
-
-        cmakeFlags = old.cmakeFlags ++ [
-          (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
-        ];
-      });
-
-  sha1 = stdenv.mkDerivation {
-    pname = "isabelle-sha1";
-    version = "2024";
-
-    src = fetchhg {
-      url = "https://isabelle.sketis.net/repos/sha1";
-      rev = "0ce12663fe76";
-      hash = "sha256-DB/ETVZhbT82IMZA97TmHG6gJcGpFavxDKDTwPzIF80=";
+  cvc5' = cvc5.overrideAttrs {
+    version = "1.3.4";
+    src = fetchFromGitHub {
+      owner = "cvc5";
+      repo = "cvc5";
+      tag = "cvc5-1.3.4";
+      hash = "sha256-PZcOArSTyJzyd2DKT8K0aFC4RlVXgTCnkoU0f08KPfY=";
     };
-
-    buildPhase = ''
-      CFLAGS="-fPIC -I."
-      LDFLAGS="-fPIC -shared"
-      $CC $CFLAGS -c sha1.c -o sha1.o
-      $CC $LDFLAGS sha1.o -o libsha1.so
-    '';
-
-    installPhase = ''
-      mkdir -p $out/lib
-      cp libsha1.so $out/lib/
-    '';
   };
-
-  cvc5' =
-    (cvc5.override {
-      libpoly = libpoly.overrideAttrs {
-        version = "0.2.0";
-        __intentionallyOverridingVersion = true;
-      };
-      symfpu = symfpu.overrideAttrs {
-        version = "0-unstable-2019-05-17";
-        __intentionallyOverridingVersion = true;
-      };
-    }).overrideAttrs
-      {
-        version = "1.2.0";
-        src = fetchFromGitHub {
-          owner = "cvc5";
-          repo = "cvc5";
-          tag = "cvc5-1.2.0";
-          hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
-        };
-      };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
-  version = "2025-2";
+  version = "2026";
 
   dirname = "Isabelle${finalAttrs.version}";
 
   src =
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
-        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
-        hash = "sha256-jxh0luKV8WmVLpRHRa+eSuAMnBzS7UytvPfYmOREkT4=";
+        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos_arm.tar.gz";
+        hash = "sha256-ckTlltRO6fu4uYjvKZBHSzOF+kp+wTQ4Z7IkoTtt3Cg=";
       }
     else if stdenv.hostPlatform.isx86 then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
-        hash = "sha256-ogpQe8fBJw2L6WqfP77AY0U4d4nS3CxNPfYmDUe/szw=";
+        hash = "sha256-hYyZWzIhazh2vzlcO+hDFH0fHu5AS8bJWNdTTuM15I0=";
       }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
-        hash = "sha256-ZQqWabSgh2da+zQpTYLe0vBwTUfVgN2e1FzdyfF2S90=";
+        hash = "sha256-7fsWcNi9+kJIiCnKA3nCGbh0oedUg0DJlR/9IlDaWn8=";
       };
 
   nativeBuildInputs = [
@@ -273,9 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'cmd.add("/usr/bin/env");' "" \
       --replace-fail 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
 
-    substituteInPlace src/Pure/General/sha1.ML \
-      --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
-
     rm -r heaps
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -323,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
       ARGS["''${#ARGS[@]}"]="src/Tools/Setup/$SRC"
     done
     echo "Building isabelle setup"
-    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/maven2/org/scala-lang/scala3-interfaces/${scala_3.version}/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/maven2/org/scala-lang/scala3-compiler_3/${scala_3.version}/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.6.2/lib/flatlaf-3.6.2-no-natives.jar" "''${ARGS[@]}"
+    javac -d "$TARGET_DIR" -classpath "${scala_3.bare}/maven2/org/scala-lang/scala3-interfaces/${scala_3.version}/scala3-interfaces-${scala_3.version}.jar:${scala_3.bare}/maven2/org/scala-lang/scala3-compiler_3/${scala_3.version}/scala3-compiler_3-${scala_3.version}.jar:./contrib/flatlaf-3.7.2/lib/flatlaf-3.7.2-no-natives.jar" "''${ARGS[@]}"
     jar -c -f "$TARGET_DIR/isabelle_setup.jar" -e "isabelle.setup.Setup" -C "$TARGET_DIR" isabelle
     rm -rf "$TARGET_DIR/isabelle"
 
@@ -372,7 +309,6 @@ stdenv.mkDerivation (finalAttrs: {
     vampire = vampire';
     polyml = polyml';
     cvc5 = cvc5';
-    sha1 = sha1;
     withComponents =
       f:
       let
