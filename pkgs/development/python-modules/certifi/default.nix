@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "certifi";
-  version = "2026.07.22";
+  version = "2026.10.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certifi";
     repo = "python-certifi";
     tag = finalAttrs.version;
-    hash = "sha256-euVWKJiFsx7F8YRMgRrrHswBmDBmrV/guiuvqtSUnSs=";
+    hash = "sha256-uESJgC07To+bUePmwi180SCtAzAZkmEn1UolTWpB4X0=";
   };
 
   patches = [
