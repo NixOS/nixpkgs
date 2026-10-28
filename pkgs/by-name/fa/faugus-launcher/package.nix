@@ -17,6 +17,7 @@
   ninja,
   nix-update-script,
   python3Packages,
+  pciutils,
   umu-launcher,
   wrapGAppsHook4,
   xdg-utils,
@@ -24,14 +25,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
-  version = "2.5.1";
+  version = "2.5.4";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = finalAttrs.version;
-    hash = "sha256-ggYvbiiPCrsd+VwvV00TcUqAlfGjGKl+H2NMk42RnVc=";
+    hash = "sha256-tDOum8u9GZsTmj1DzcByYoSkmzjAB3xOCdLfkboUClE=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
           gawk
           gnugrep
           icoextract
+          pciutils
           umu-launcher
           xdg-utils
         ]
