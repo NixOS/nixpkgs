@@ -3,6 +3,7 @@
   python3,
   fetchFromGitHub,
   versionCheckHook,
+  coreutils,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -32,7 +33,20 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # documentation installation; too bad it is counterproductive now
     sed -e '/datadir or prefix,/d' -i setup.py
     sed -e 's,/usr/bin/getmail,$(dirname $0)/getmail,' -i getmails
+
+    substituteInPlace test/test_mock_servers.py \
+      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # incompatible with sandbox
+    "test_full_imap"
+    "test_imap_ssl_parameters"
+  ];
 
   meta = {
     description = "Program for retrieving mail";
