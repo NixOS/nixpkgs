@@ -5,7 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   openssl,
-  testers,
+  versionCheckHook,
 }:
 
 buildNimPackage (finalAttrs: {
@@ -43,9 +43,9 @@ buildNimPackage (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ dbus ]}
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Economical coding agent for OpenAI-compatible endpoints";
