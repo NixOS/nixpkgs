@@ -1269,6 +1269,8 @@ with pkgs;
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
 
+  craftos-pc-accelerated = craftos-pc.override { enableLuaJIT = true; };
+
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
@@ -9194,18 +9196,6 @@ with pkgs;
         buildPackages.jdk17_headless;
     gbmSupport = true;
   };
-
-  xdg-desktop-portal-hyprland =
-    callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
-      {
-        stdenv = gcc16Stdenv;
-        inherit (qt6)
-          qtbase
-          qttools
-          qtwayland
-          wrapQtAppsHook
-          ;
-      };
 
   xpdf = qt6.callPackage ../applications/misc/xpdf { };
 

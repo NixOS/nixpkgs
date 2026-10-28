@@ -128,7 +128,7 @@ buildDotnetModule {
   ];
 
   postPatch = ''
-    sed -i '/Duplicati.ShellExtension.csproj/d' Duplicati.slnx
+    sed -i '/\(Duplicati.ShellExtension\|Duplicati.Library.WindowsModules\|Duplicati.WindowsModulesLoader\).csproj/d' Duplicati.slnx
 
     rm -rf Duplicati/Server/webroot/ngclient
     ln -s ${ngclient}/browser Duplicati/Server/webroot/ngclient
