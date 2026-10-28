@@ -63,6 +63,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python module to simplify setup.py files";
     homepage = "https://github.com/codrsquad/setupmeta";
+    changelog = "https://github.com/codrsquad/setupmeta/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
