@@ -13,14 +13,14 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy";
-  version = "4.0.3";
+  version = "4.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EmifQxL6HVZrBU1FXR8eMidllhK7Lt+pvfT0DrSP59U=";
+    hash = "sha256-2lRdnrAV2WUvC0vQbuWqm3KiI6cm2LKyYi+475YHquM=";
   };
 
   nativeBuildInputs = [ wrapGAppsNoGuiHook ];

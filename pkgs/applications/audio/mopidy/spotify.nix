@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   pythonPackages,
   mopidy,
   nix-update-script,
@@ -9,23 +8,15 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-spotify";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-spotify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0h1BkC3cY1klxVQ+QsyhY/ZJgbb+LlnDuQRYQbqpHJQ=";
+    hash = "sha256-lrbQFEEEv7vw2dvx26DDEh9k/VUomcpCAYeS85uRKY8=";
   };
-
-  patches = [
-    # Fix single-argument parametrization with pytest 9.1.
-    (fetchpatch {
-      url = "https://github.com/mopidy/mopidy-spotify/commit/5fbc4104d78ef15f81ef080c427551f9d4369873.patch";
-      hash = "sha256-JPy9l8uKWUggpfszpwfMiuNN8abnIlno+zOCB4r5s0s=";
-    })
-  ];
 
   build-system = [
     pythonPackages.setuptools
