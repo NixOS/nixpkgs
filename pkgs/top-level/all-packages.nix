@@ -9195,18 +9195,6 @@ with pkgs;
     gbmSupport = true;
   };
 
-  xdg-desktop-portal-hyprland =
-    callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
-      {
-        stdenv = gcc16Stdenv;
-        inherit (qt6)
-          qtbase
-          qttools
-          qtwayland
-          wrapQtAppsHook
-          ;
-      };
-
   xpdf = qt6.callPackage ../applications/misc/xpdf { };
 
   xmobar = haskellPackages.xmobar.bin;
