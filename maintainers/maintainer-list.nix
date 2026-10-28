@@ -28099,6 +28099,12 @@
     githubId = 219362;
     name = "Sarah Brofeldt";
   };
+  srinitude = {
+    name = "Kiren Srinivasan";
+    email = "kiren@fantasymetals.com";
+    github = "srinitude";
+    githubId = 4596037;
+  };
   srounce = {
     name = "Samuel Rounce";
     email = "me@samuelrounce.co.uk";
