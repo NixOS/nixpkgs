@@ -51,6 +51,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
   version = "0.17.0";
 
+  __structuredAttrs = true;
+
   src =
     # by default we want the official package
     if !withGraphics then
