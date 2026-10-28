@@ -99,7 +99,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
-  checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
+  checkFlags = [
+    "--skip=term::test::mock_term" # broken on aarch64
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=tty::unix::test_get_pw_entry"
+  ];
 
   postInstall =
     (
