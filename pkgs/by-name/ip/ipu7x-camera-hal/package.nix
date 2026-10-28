@@ -108,5 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.pseudocc
     ];
     platforms = [ "x86_64-linux" ];
+    broken = ipu7-camera-bins.meta.broken;
   };
 })
