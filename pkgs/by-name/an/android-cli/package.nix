@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
   ];
 
+  buildInputs = lib.optionals (with stdenv.hostPlatform; isLinux && isAarch64) [
+    stdenv.cc.cc.lib
+  ];
+
   dontConfigure = true;
   dontBuild = true;
 
