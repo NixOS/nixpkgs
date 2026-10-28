@@ -17,7 +17,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace src/radar-toolbar.ts \
+    substituteInPlace src/marker-icon.ts src/radar-toolbar.ts src/weather-radar-card.ts \
       --replace-fail "/local/community/weather-radar-card/" "/local/nixos-lovelace-modules/"
   '';
 

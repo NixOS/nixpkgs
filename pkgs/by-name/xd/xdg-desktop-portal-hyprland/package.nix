@@ -1,24 +1,25 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   makeWrapper,
   pkg-config,
-  wrapQtAppsHook,
   nix-update-script,
+  aquamarine,
+  cairo,
   grim,
+  hyprgraphics,
   hyprland,
   hyprland-protocols,
   hyprlang,
+  hyprtoolkit,
   hyprutils,
   hyprwayland-scanner,
   libdrm,
   libgbm,
+  libuuid,
   pipewire,
-  qtbase,
-  qttools,
-  qtwayland,
   sdbus-cpp_2,
   slurp,
   wayland,
@@ -26,15 +27,15 @@
   wayland-scanner,
   debug ? false,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sRAGZVUPgwxpx19uZwaSERa86g1AbsBUQ3SxhaRPgeg=";
+    hash = "sha256-uyd3OAvtB2TJ9Y1RooCyLr6dlFUZKDmac5QtMbbPq4c=";
   };
 
   depsBuildBuild = [
@@ -45,20 +46,21 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
-    wrapQtAppsHook
     hyprwayland-scanner
   ];
 
   buildInputs = [
+    aquamarine
+    cairo
+    hyprgraphics
     hyprland-protocols
     hyprlang
+    hyprtoolkit
     hyprutils
     libdrm
     libgbm
+    libuuid
     pipewire
-    qtbase
-    qttools
-    qtwayland
     sdbus-cpp_2
     wayland
     wayland-protocols
@@ -70,23 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = debug;
   separateDebugInfo = !debug;
 
-  dontWrapQtApps = true;
+  doCheck = true;
 
   postInstall = ''
     wrapProgramShell $out/bin/hyprland-share-picker \
-      "''${qtWrapperArgs[@]}" \
-      --prefix PATH ":" ${
-        lib.makeBinPath [
-          slurp
-          hyprland
-        ]
-      }
+      --prefix PATH ":" ${lib.makeBinPath [ slurp ]}
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
       --prefix PATH ":" ${
         lib.makeBinPath [
           (placeholder "out")
           grim
+          hyprland
+          slurp
         ]
       }
   '';

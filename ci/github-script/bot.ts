@@ -529,10 +529,21 @@ export default async ({
           ),
         ).map((id) => parseInt(id))
 
+        const hasNoDefaultReviewersFrom = (
+          idsOrLogins: number[] | string[],
+        ) => {
+          if (idsOrLogins.length !== 1) return idsOrLogins.length === 0
+
+          return typeof idsOrLogins[0] === 'number'
+            ? idsOrLogins[0] === pull_request.user.id
+            : idsOrLogins[0].toLowerCase() ===
+                pull_request.user.login.toLowerCase()
+        }
+
         prLabels['7.no default reviewers'] =
-          user_maintainers.length === 0 &&
-          team_maintainers.length === 0 &&
-          owners.length === 0
+          hasNoDefaultReviewersFrom(user_maintainers) &&
+          hasNoDefaultReviewersFrom(team_maintainers) &&
+          hasNoDefaultReviewersFrom(owners)
 
         // We set this label earlier already, but the current PR state can be very different
         // after handleReviewers has requested reviews, so update it in this case to prevent
