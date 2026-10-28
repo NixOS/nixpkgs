@@ -10,15 +10,16 @@
 
 buildNimPackage (finalAttrs: {
   pname = "3code";
-  version = "0.6.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "capocasa";
     repo = "3code";
     tag = finalAttrs.version;
-    hash = "sha256-AUJH7BKa5a6ApCj2cxth9wJbZjfjl2ISdd6BnJzf+jA=";
+    hash = "sha256-hTC8Yc4+d3zUs5p34qIu1P3HMvIHdzyIvjhTc1cvvo4=";
   };
 
+  # Match the dependency revisions in upstream's nimble.lock.
   lockFile = ./lock.json;
 
   buildInputs = [ openssl ];
