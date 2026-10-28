@@ -89,14 +89,8 @@ in
           pathsToLink = [ "/share/hypr" ];
         };
 
-        # Hyprland needs permissions to give itself SCHED_RR on startup:
-        # https://github.com/hyprwm/Hyprland/blob/main/src/init/initHelpers.cpp
-        security.wrappers.Hyprland = {
-          owner = "root";
-          group = "root";
-          capabilities = "cap_sys_nice+ep";
-          source = lib.getExe cfg.package;
-        };
+        # Hyprland asks rtkit for SCHED_RR on startup
+        security.rtkit.enable = lib.mkDefault true;
 
         xdg.portal = {
           enable = true;
