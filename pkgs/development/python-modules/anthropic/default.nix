@@ -40,7 +40,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "1.15.0";
+  version = "2.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8GBcsm/O02QJOZ2dw5e1iMBg/SwqFnP1XL41+wH4lks=";
+    hash = "sha256-w/hQKC74BvWah8bDRgeNsmipk95p36K3J3fQPe/Jj4E=";
   };
 
   postPatch = ''
