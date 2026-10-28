@@ -496,6 +496,36 @@ lib.extendMkDerivation {
                 '';
             };
 
+          # Deprecated unittestFlagsArray (internal)
+          ${
+            if
+              finalAttrs ? unittestFlagsArray
+              && finalAttrs.unittestFlagsArray != null
+              && finalAttrs.unittestFlagsArray != [ ]
+            then
+              "buildPythonPackage-internal-unittestFlagsArray"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos =
+                    if
+                      attrs ? unittestFlagsArray && attrs.unittestFlagsArray != null && attrs.unittestFlagsArray != [ ]
+                    then
+                      unsafeGetAttrPos "unittestFlagsArray" attrs
+                    else
+                      null;
+                  posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                in
+                ''
+                  ${finalAttrs.name}: Deprecated argument unittestFlagsArray found${posString}
+                    Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+                '';
+            };
+
           # Deprecated argument stdenv (internal)
           ${if attrs ? stdenv then "buildPythonPackage-internal-stdenv" else null} = {
             kind = "broken";
@@ -517,19 +547,6 @@ lib.extendMkDerivation {
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
-    // (
-      let
-        deprecatedFlagNotEmpty =
-          attrs ? unittestFlagsArray && attrs.unittestFlagsArray != null && attrs.unittestFlagsArray != [ ];
-        pos = builtins.unsafeGetAttrPos "unittestFlagsArray" attrs;
-      in
-      {
-        ${if deprecatedFlagNotEmpty then "unittestFlagsArray" else null} = lib.warn ''
-          buildPythonPackage: Deprecated flag unittestFlagsArray found at ${pos.file}:${toString pos.line}
-            Use unittestFlags instead.
-        '';
-      }
-    )
     //
       lib.mapAttrs
         (
