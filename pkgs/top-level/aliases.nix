@@ -1251,6 +1251,7 @@ mapAliases {
   hydraAntLogger = warnAlias "'hydraAntLogger' has been renamed to 'hydra-ant-logger'" hydra-ant-logger; # Added 2026-02-08
   hyena = throw "'hyena' has been removed, as it is archived upstream and relies on gtk2"; # Added 2026-07-28
   hyprfreeze = warnAlias "'hyprfreeze' has been renamed to 'wl-freeze'" wl-freeze; # Added 2026-04-10
+  hyprland-qtutils = throw "'hyprland-qtutils' has been removed, as it is archived upstream. Its successor 'hyprland-guiutils' is already on Hyprland's PATH"; # Added 2026-10-28
   hyprmagnifier = throw "'hyprmagnifier' has been removed as it was unmaintained, consider using 'hyprmag' instead"; # Added 2026-07-22
   hyprpanel = throw "'hyprpanel' has been archived, consider using 'wayle' instead"; # Added 2026-07-21
   i3-gaps = throw "'i3-gaps' has been renamed to/replaced by 'i3'"; # Converted to throw 2025-10-27
