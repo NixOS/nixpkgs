@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siege";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "https://download.joedog.org/siege/siege-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eK9IL8ZV8c9ycP28MXFYHtTLMWMAn39PBW/Ct+LSRFM=";
+    hash = "sha256-wNW/rBEIaus4KIiKcb8nbtVMn6Dwry6tmB0rL6JCFBs=";
   };
 
   env =
