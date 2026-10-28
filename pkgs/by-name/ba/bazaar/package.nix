@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   blueprint-compiler,
   desktop-file-utils,
   meson,
@@ -46,8 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  src = fetchFromGitHub {
-    owner = "bazaar-org";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
     hash = "sha256-9J+XI5JnV8Yfk3xRI/VM5RSG4eMafbw2rBRpPMIu5yA=";
@@ -112,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "FlatHub-first app store for GNOME";
-    homepage = "https://github.com/kolunmi/bazaar";
+    homepage = "https://gitlab.gnome.org/World/bazaar";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dtomvan
