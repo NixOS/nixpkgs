@@ -68,7 +68,7 @@ let
   desktopItem = makeDesktopItem {
     name = "obsidian";
     desktopName = "Obsidian";
-    startupWMClass = "md.Obsidian";
+    startupWMClass = "md.obsidian.Obsidian";
     comment = "Knowledge base";
     icon = "obsidian";
     exec = "obsidian %u";
