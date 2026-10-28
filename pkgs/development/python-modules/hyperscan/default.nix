@@ -14,9 +14,9 @@
 }:
 let
   lib-deps = symlinkJoin {
-    name = "hyperscan-static-deps";
+    name = "vectorscan-static-deps";
     paths = [
-      (pkgs.hyperscan.override { withStatic = true; })
+      (pkgs.vectorscan.override { enableShared = false; })
       pcre2
     ];
   };
