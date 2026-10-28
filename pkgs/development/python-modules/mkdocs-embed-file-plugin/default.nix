@@ -10,7 +10,6 @@
   mkdocs-callouts,
   mkdocs-custom-tags-attributes,
   pymdown-extensions,
-  pyprojectVersionPatchHook,
   python-frontmatter,
   ruamel-yaml,
   setuptools,
@@ -36,8 +35,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     hatchling
   ];
-
-  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     beautifulsoup4

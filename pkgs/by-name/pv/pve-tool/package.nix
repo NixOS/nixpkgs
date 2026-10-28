@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pve-tool";
-  version = "0.1.2";
+  version = "0.1.3";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "liberodark";
     repo = "pve-tool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GorEZTTHUta5Q4OLVVhf8nsHwRXygcV4SL0fmUVlZIg=";
+    hash = "sha256-ZzHTtQv47ZWluMDbq4JNMze44lwSYGhsILUNS9TygDw=";
   };
 
-  cargoHash = "sha256-OXwkrNTdsbZWLnbF5G91vwVX/vv1l1WUobRzA8Oen8Y=";
+  cargoHash = "sha256-ZEemiy10NqZM700PgHxpNmkAUD29XLOYBy7xdYHpCt0=";
 
   nativeBuildInputs = [
     pkg-config

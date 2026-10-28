@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "pytun";
-  version = "2.4.1";
+  version = "2.4.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "montag451";
     repo = "pytun";
-    hash = "sha256-DZ7CoLi6LPhuc55HF9dtek+/N4A29ecnZn7bk7jweuI=";
+    hash = "sha256-tzz3CJhdTCEzxgkjXBUl0Jt2K6PnDjDMfNdT7naGgOo=";
   };
 
   # Test directory contains examples, not tests.

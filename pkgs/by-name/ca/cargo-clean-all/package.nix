@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-clean-all";
-  version = "0.6.5";
+  version = "0.6.6";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dnlmlr";
     repo = "cargo-clean-all";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CJzjw/g0Ap7TKC2m+bVlH+/iCUOQITmE6HGvrNzWQ3o=";
+    hash = "sha256-RPDxeoUoAXNFh2ZabHigmwlztyRG9l9zez1UulrtNyo=";
   };
 
-  cargoHash = "sha256-9Qv2/XacE82AtZCZS5vtSeVdnD6Ugs+Qn/EVevMndQM=";
+  cargoHash = "sha256-s/xOS86ncB3gxGiZIXantF/ID/LhpMEkmtD0r8E1/bA=";
 
   meta = {
     description = "Fast recursive detection and cleaning of rust projects with interactive TUI and filters";

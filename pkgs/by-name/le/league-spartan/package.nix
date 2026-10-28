@@ -2,6 +2,7 @@
   lib,
   fetchzip,
   stdenvNoCC,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,13 +14,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-dkvWRYli8vk+E0DkZ2NWCJKfSfdo4jEcGo0puQpFVVc=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -D -m444 -t $out/share/fonts/truetype $src/static/TTF/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/static/OTF/*.otf
+  dontInstallWebfonts = true;
 
-    runHook postInstall
+  preInstall = ''
+    rm -r variable
   '';
 
   meta = {

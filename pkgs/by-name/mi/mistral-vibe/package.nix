@@ -24,7 +24,7 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W1gpG0eZYXbY4j3/dtOMpvIznLAmNDYGkXdJJvaA6eA=";
+    hash = "sha256-LY9YJbJO8Id1AFGpJvyDSGB8vJtUPdQteLiYE1IWrwU=";
   };
 
   patches = [
@@ -248,6 +248,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # RuntimeError: Session lease file watcher did not start
     "test_unified_lease_subscription_ends_with_its_connection"
     "test_unified_lease_subscription_reports_held_sessions_then_changes"
+
+    # The skill file watcher never reports changes in the sandbox (TimeoutError)
+    "test_a_configured_skill_path_created_later_is_picked_up"
+    "test_a_new_skill_file_yields_one_change"
+    "test_a_skill_written_after_the_session_opened_is_picked_up_without_reload"
+    "test_a_watch_with_nothing_to_watch_waits_for_a_folder"
   ];
 
   disabledTestPaths = [

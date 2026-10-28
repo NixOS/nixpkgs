@@ -2193,6 +2193,8 @@ self: super: with self; {
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
+  bacpypes3 = callPackage ../development/python-modules/bacpypes3 { };
+
   badauth = callPackage ../development/python-modules/badauth { };
 
   badges = callPackage ../development/python-modules/badges { };
@@ -2868,6 +2870,8 @@ self: super: with self; {
   cairosvg = callPackage ../development/python-modules/cairosvg { };
 
   caldav = callPackage ../development/python-modules/caldav { };
+
+  calendaring-config = callPackage ../development/python-modules/calendaring-config { };
 
   callee = callPackage ../development/python-modules/callee { };
 
@@ -6214,6 +6218,8 @@ self: super: with self; {
   fixtures = callPackage ../development/python-modules/fixtures { };
 
   fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
+
+  fla-core = callPackage ../development/python-modules/fla-core { };
 
   flake8 = callPackage ../development/python-modules/flake8 { };
 
@@ -12439,9 +12445,9 @@ self: super: with self; {
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
 
   nvtx = callPackage ../development/python-modules/nvtx {
-    # Only for its source and versions. Every CUDA package set from 12.9 on has the same source build, while earlier
-    # ones (possibly the default cudaPackages) use the redistributable.
-    nvtx = pkgs.cudaPackages_13.nvtx;
+    # Only for its source and versions. Every CUDA package set from 12.9 on has the same source
+    # build, while earlier ones (possibly the default cudaPackages) use the redistributable.
+    inherit (pkgs.cudaPackages) nvtx;
   };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
@@ -17151,6 +17157,10 @@ self: super: with self; {
 
   python-libnmap = callPackage ../development/python-modules/python-libnmap { };
 
+  python-libpcap = callPackage ../development/python-modules/python-libpcap {
+    inherit (pkgs) libpcap;
+  };
+
   python-linkplay = callPackage ../development/python-modules/python-linkplay { };
 
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
@@ -17761,6 +17771,20 @@ self: super: with self; {
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
+
+  pyzfs_2_3 = toPythonModule (
+    pkgs.zfs_2_3.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
+
+  pyzfs_2_4 = toPythonModule (
+    pkgs.zfs_2_4.override {
+      enablePyzfs = true;
+      python3Packages = self;
+    }
+  );
 
   pyzhuyin = callPackage ../development/python-modules/pyzhuyin { };
 
