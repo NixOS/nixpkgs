@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
     libxkbcommon
     libxcb
-    wayland
     fontconfig
     openssl
   ];
@@ -58,7 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         lib.makeLibraryPath [
           vulkan-loader
           wayland
-          libxkbcommon
         ]
       }
   '';
