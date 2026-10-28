@@ -120,7 +120,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "--prefix"
     "PYTHONPATH"
     ":"
-    "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
+    "${placeholder "out"}/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
 
     "--prefix"
     "LD_LIBRARY_PATH"
