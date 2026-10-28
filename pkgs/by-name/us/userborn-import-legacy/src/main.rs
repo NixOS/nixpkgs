@@ -6,9 +6,9 @@
 //! locked stub for every recorded name without a live entry, so the id is
 //! neither reassigned nor lost if the name is later re-added.
 //!
-//! Runs once: the unit is skipped when `/var/lib/userborn` already exists,
-//! which userborn creates on its first run. Will be removed once the perl
-//! implementation is gone.
+//! Runs once: on success it writes `previous-userborn.json` into the target
+//! directory, also with immutable users, and the unit is skipped while that
+//! file exists. Will be removed once the perl implementation is gone.
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fs::{self, File, OpenOptions};
@@ -20,7 +20,6 @@ use std::process::ExitCode;
 use anyhow::{Context, Result, bail};
 
 const LEGACY: &str = "/var/lib/nixos";
-const USERBORN_STATE: &str = "/var/lib/userborn";
 const PREVIOUS_NAME: &str = "previous-userborn.json";
 
 fn main() -> ExitCode {
@@ -87,11 +86,9 @@ fn run() -> Result<()> {
     import_ids(&args)?;
     import_subids(&args)?;
 
-    // Creating userborn's state directory marks the import as done. Only
-    // create it after a successful import so failed runs are retried on
-    // the next boot.
-    create_dir_recursive(Path::new(USERBORN_STATE), 0o755)?;
-    synthesise_previous_config()?;
+    // The previous config marks the import as done. Only write it after a
+    // successful import so failed runs are retried on the next boot.
+    synthesise_previous_config(&args.directory)?;
     Ok(())
 }
 
@@ -329,8 +326,8 @@ fn seed_subid_file(path: &Path, auto_map: &BTreeMap<String, u32>) -> Result<()> 
 /// dropped in the same switch would be treated as imperative and left
 /// enabled. Translate the perl script's declarative-{users,groups} into
 /// the minimal JSON userborn expects so its first run behaves correctly.
-fn synthesise_previous_config() -> Result<()> {
-    let previous = Path::new(USERBORN_STATE).join(PREVIOUS_NAME);
+fn synthesise_previous_config(directory: &Path) -> Result<()> {
+    let previous = directory.join(PREVIOUS_NAME);
     if previous.exists() {
         // Unreachable via the unit's ConditionPathExists, but never clobber
         // a real previous config.

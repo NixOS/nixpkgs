@@ -95,10 +95,10 @@
           )
 
       with subtest("userborn: legacy state is imported"):
-          # The import only runs while userborn's state directory is absent.
-          machine.fail("test -e /var/lib/userborn")
+          # The import only runs while the previous config is absent.
+          machine.fail("test -e /etc/previous-userborn.json")
           switch("userborn")
-          machine.succeed("test -d /var/lib/userborn")
+          machine.succeed("test -e /etc/previous-userborn.json")
 
           # ghost must be a locked stub with its original uid.
           ghost_passwd = machine.succeed("getent passwd ghost").strip()

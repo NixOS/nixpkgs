@@ -53,7 +53,7 @@ let
         mkdir -p $out
         userborn ${userbornConfigJson} $out
       '';
-  previousConfigPath = "/var/lib/userborn/previous-userborn.json";
+  previousConfigPath = "${cfg.passwordFilesLocation}/previous-userborn.json";
 
   immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
   # The files live outside /etc and need to be linked or bind-mounted there.
@@ -191,7 +191,7 @@ in
           DefaultDependencies = false;
           ConditionPathExists = [
             "/var/lib/nixos/uid-map"
-            "!/var/lib/userborn"
+            "!${previousConfigPath}"
           ];
         };
         serviceConfig = {
@@ -236,7 +236,6 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           TimeoutSec = "90s";
-          StateDirectory = "userborn";
 
           ExecStart = "${lib.getExe cfg.package} ${userbornConfigJson} ${cfg.passwordFilesLocation}";
 
