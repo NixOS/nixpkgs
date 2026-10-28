@@ -120,6 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
       # delete dangling symlink
       rm -f $python/${python3Packages.python.sitePackages}/z3/libz3.so.*
       ln -sf $lib/lib $python/${python3Packages.python.sitePackages}/z3/lib
+
+      # Generate upstream's Python distribution metadata without rebuilding Z3.
+      pushd ../src/api/python
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py egg_info \
+        --egg-base "$python/${python3Packages.python.sitePackages}"
+      popd
     '';
 
   doInstallCheck = true;
@@ -132,6 +138,16 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = [
     "z3"
   ];
+
+  postInstallCheck = lib.optionalString pythonBindings ''
+    PYTHONPATH="$python/${python3Packages.python.sitePackages}:$PYTHONPATH" \
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} - <<'PY'
+    import importlib.metadata
+    import z3
+
+    assert importlib.metadata.version("z3-solver") == ".".join(map(str, z3.get_version()))
+    PY
+  '';
 
   outputs = [
     "out"
