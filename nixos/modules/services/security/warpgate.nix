@@ -110,6 +110,13 @@ in
                       "_"
                     ];
                   };
+                  disable_local_logout = mkOption {
+                    description = ''
+                      Disables "log out from Warpgate" functionality when the provider supports single logout.
+                    '';
+                    default = false;
+                    type = bool;
+                  };
                 };
               });
               example = literalExpression ''
