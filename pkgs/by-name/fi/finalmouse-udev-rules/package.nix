@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "finalmouse-udev-rules";
-  version = "0-unstable-2026-01-27";
+  version = "0-unstable-2026-10-16";
 
   src = fetchFromGitHub {
     owner = "teamfinalmouse";
     repo = "xpanel-linux-permissions";
-    rev = "49ba1bf19e7d1f05306baaf72e4514c1f12f139a";
-    hash = "sha256-+tStBzGrPop0zKNf0qIp2PCrVRy2CcFpIrvgft9YkbE=";
+    rev = "153b46312ef4cd2775d7e0c8b3e256f2c0398265";
+    hash = "sha256-oDufIqFVW2rRRB8oWc36BZMYkeZvW5phJsbL9Ai7JaU=";
   };
 
   dontUnpack = true;
