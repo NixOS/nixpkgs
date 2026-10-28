@@ -227,6 +227,14 @@ in
                 default = null;
                 type = nullOr str;
               };
+              target_handshake_timeout = mkOption {
+                description = ''
+                  How long Warpgate wait for a target to accept the connection and complete key exchange.
+                  Covers the TCP connect (or the direct-tcpip hop through a jump host) and the SSH handshake, but not authentication. Set to `0s` to wait forever.
+                '';
+                default = "30s";
+                type = str;
+              };
             };
             http = {
               listen = mkOption {
