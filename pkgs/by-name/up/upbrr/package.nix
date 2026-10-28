@@ -18,18 +18,18 @@ let
 in
 buildGo127Module (finalAttrs: {
   pname = "upbrr";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "upbrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BouCKS4sz4Immx6OM7XackRcYJWSlSUwv7dSdZ6jo8s=";
+    hash = "sha256-H7+5s5OwpbGuUOTSKOStTigBsqCvn5FNaFWKNwcNOaQ=";
   };
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-B0+552arHY1tGKU3U0S41/fmWekHQRHRyO6dKppc6jk=";
+  vendorHash = "sha256-p12mIRlZiDPheJLcMJIo0D6x0SWF1ctogfo8D+2cQp4=";
 
   subPackages = [ "cmd/upbrr" ];
 
@@ -81,7 +81,7 @@ buildGo127Module (finalAttrs: {
           sourceRoot
           ;
         fetcherVersion = 4;
-        hash = "sha256-0KQ5TmPTmVvvqsiVm/rhT6i7v/Dd+JzWU0uhVGQwKhk=";
+        hash = "sha256-3uIqj2XeLdI96hXnEZIhtlLCeQVigfXE13iC0mfe4f4=";
       };
 
       pnpmBuildScript = "build:bundle";

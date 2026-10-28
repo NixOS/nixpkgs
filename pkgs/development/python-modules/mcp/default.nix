@@ -30,6 +30,7 @@
   rich,
 
   # tests
+  blockbuster,
   coverage,
   dirty-equals,
   griffelib,
@@ -47,14 +48,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mcp";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nnpNXnQiFSGx5KQBDXHCOH0wE3cznlmI6s7vtchcj3A=";
+    hash = "sha256-CnXi78zYxm0/R4fON/DzRYMSDYM/XM/9SE3s+Cf1BR0=";
   };
 
   build-system = [
@@ -92,6 +93,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "mcp" ];
 
   nativeCheckInputs = [
+    blockbuster
     coverage
     dirty-equals
     griffelib

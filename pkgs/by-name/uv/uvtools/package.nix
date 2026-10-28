@@ -69,7 +69,20 @@ buildDotnetModule (finalAttrs: {
   doCheck = true;
   testProjectFile = "tests/UVtools.Tests/UVtools.Tests.csproj";
 
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_10_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_10_0
+          sdk_9_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   executables = [

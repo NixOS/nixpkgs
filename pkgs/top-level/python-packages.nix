@@ -6586,7 +6586,7 @@ self: super: with self; {
 
   fressnapftracker = callPackage ../development/python-modules/fressnapftracker { };
 
-  freud = callPackage ../development/python-modules/freud { };
+  freud-analysis = callPackage ../development/python-modules/freud-analysis { };
 
   frictionless = callPackage ../development/python-modules/frictionless { };
 
@@ -12436,11 +12436,17 @@ self: super: with self; {
     callPackage ../development/python-modules/nvidia-cutlass-dsl-libs-base
       { };
 
+  nvidia-cutlass-operators = callPackage ../development/python-modules/nvidia-cutlass-operators { };
+
+  nvidia-dali = callPackage ../development/python-modules/nvidia-dali { };
+
   nvidia-dlprof-pytorch-nvtx =
     callPackage ../development/python-modules/nvidia-dlprof-pytorch-nvtx
       { };
 
   nvidia-dlprofviewer = callPackage ../development/python-modules/nvidia-dlprofviewer { };
+
+  nvidia-matmul-heuristics = callPackage ../development/python-modules/nvidia-matmul-heuristics { };
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
@@ -13339,7 +13345,7 @@ self: super: with self; {
 
   parsley = callPackage ../development/python-modules/parsley { };
 
-  parsnip = callPackage ../development/python-modules/parsnip { };
+  parsnip-cif = callPackage ../development/python-modules/parsnip-cif { };
 
   parso = callPackage ../development/python-modules/parso { };
 

@@ -168,12 +168,9 @@ python.pkgs.buildPythonApplication rec {
     installShellCompletion vectorcode.{bash,zsh}
   '';
 
-  makeWrapperArgs = [
-    "--prefix"
-    "PYTHONPATH"
-    ":"
-    "$PYTHONPATH"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
+  '';
 
   pythonImportsCheck = [ "vectorcode" ];
 

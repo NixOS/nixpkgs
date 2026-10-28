@@ -10,18 +10,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bittensor-core";
-  version = "0.1.3";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bittensor_core";
     inherit (finalAttrs) version;
-    hash = "sha256-yKSz88Vgu12cI8Y1pOABIsPvQls6oAgyAIeOswYNKkc=";
+    hash = "sha256-u2F1ZD7zUeivxQWcuQe28TCDvsdSWtKHwabbML6e6YA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-SxQGYwlrGpOX8J1yNGFjdR1YYoUvZbERHgX0IjzyJW4=";
+    hash = "sha256-5K5aQxkIO3g9/xhncBX80Nes4xd2AG0bsOgTPCuvMFQ=";
   };
 
   nativeBuildInputs = [

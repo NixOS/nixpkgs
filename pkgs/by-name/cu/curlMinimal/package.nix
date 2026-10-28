@@ -302,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
         # error: attribute 'override' missing
         # Additional checking with support http3 protocol.
         # nginx-http3 = useThisCurl nixosTests.nginx-http3;
-        nginx-http3 = nixosTests.nginx-http3;
+        nginx-http3 = nixosTests.nginx.mainline.http3;
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
         static = pkgsStatic.curl;
       };

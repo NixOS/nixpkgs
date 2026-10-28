@@ -39,6 +39,7 @@ let
     germinal.pkg = p: p.germinal;
 
     ghostty.pkg = p: p.ghostty;
+    ghostty.cmd = "ghostty -e $command";
 
     gnome-console.pkg = p: p.gnome-console;
     gnome-console.executable = "kgx";

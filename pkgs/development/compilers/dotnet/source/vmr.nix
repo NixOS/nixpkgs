@@ -389,6 +389,12 @@ stdenv.mkDerivation {
     # copy the patched script into runtime
     # v10+ does this itself in UpdateEngCommonFiles
     cp src/{arcade,runtime}/eng/common/native/init-compiler.sh
+  ''
+  + lib.optionalString (lib.versionAtLeast version "10.0.402" && lib.versionOlder version "11") ''
+    # https://github.com/dotnet/dotnet/issues/10416
+    substituteInPlace \
+      src/arcade/src/Microsoft.DotNet.ArcadeAzureIntegration/Microsoft.DotNet.ArcadeAzureIntegration.csproj \
+        --replace-fail ';$(NetMinimum)' ""
   '';
 
   prepFlags = [
