@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "airtouch5py";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danzel";
     repo = "airtouch5py";
     tag = version;
-    hash = "sha256-SJ6AVUbdEy0nvpLe39dH/Wc//fDTf0dIvrvVQDUl5eI=";
+    hash = "sha256-genoMa9L6jMBDmC3Bq621hmAZMkjwjeKcZfdog2hQVY=";
   };
 
   build-system = [ poetry-core ];
