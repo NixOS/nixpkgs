@@ -8735,6 +8735,11 @@
     githubId = 48213068;
     name = "Edgar Pireyn";
   };
+  eprovst = {
+    github = "eprovst";
+    githubId = 5394549;
+    name = "Evert Provoost";
+  };
   equirosa = {
     email = "eduardo@eduardoquiros.com";
     github = "equirosa";
