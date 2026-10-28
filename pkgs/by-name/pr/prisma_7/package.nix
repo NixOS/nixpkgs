@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "prisma";
-    repo = "prisma";
+    repo = "orm";
     tag = finalAttrs.version;
     hash = "sha256-hqYjtgr6fAGg44PkEy5XsnMmTrvoQ/JQWySEdCNu5oA=";
   };
