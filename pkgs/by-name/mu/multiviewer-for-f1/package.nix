@@ -32,11 +32,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "multiviewer-for-f1";
-  version = "2.8.4";
+  version = "2.12.0";
 
   src = fetchurl {
-    url = "https://releases.multiviewer.app/download/518116281/multiviewer_2.8.4_amd64.deb";
-    hash = "sha256-CTaFtxoV8XEBhD9b8dPLPqHloc1MoHKuEBYt7EJy9U0=";
+    url = "https://releases.multiviewer.app/v/2.12.0/1/96R-0C1s8UqDUXq5RCvEsGVBneRwcCF0/multiviewer_2.12.0_amd64.deb";
+    hash = "sha256-eppdmS5ZdZDwwSvMDB3TZbXbbns0NvlSbCj0ydnR36A=";
   };
 
   nativeBuildInputs = [
