@@ -85,11 +85,11 @@ class Pin:
         expr = f"""
             with import <nixpkgs> {{}};
             rustPlatform.fetchCargoVendor rec {{
-                src = fetchFromGitHub {{ 
-                    owner = "{self.owner}"; 
-                    repo = "{self.repo}"; 
-                    rev = "{self.rev}"; 
-                    hash = "{self.hash}"; 
+                src = fetchFromGitHub {{
+                    owner = "{self.owner}";
+                    repo = "{self.repo}";
+                    rev = "{self.rev}";
+                    hash = "{self.hash}";
                 }};
                 hash = "";
                 sourceRoot = "${{src.name}}/{src_root}";
@@ -106,11 +106,11 @@ class Pin:
             fetchPnpmDeps {{
                 pname = "{self.repo}-prefetch";
                 version = "0";
-                src = fetchFromGitHub {{ 
-                    owner = "{self.owner}"; 
-                    repo = "{self.repo}"; 
-                    rev = "{self.rev}"; 
-                    hash = "{self.hash}"; 
+                src = fetchFromGitHub {{
+                    owner = "{self.owner}";
+                    repo = "{self.repo}";
+                    rev = "{self.rev}";
+                    hash = "{self.hash}";
                 }};
                 inherit pnpm;
                 fetcherVersion = 4;
@@ -128,11 +128,11 @@ class Pin:
             (beamPackages.fetchRebar3Deps {{
                 name = "{self.repo}-prefetch";
                 version = "0";
-                src = "${{fetchFromGitHub {{ 
-                    owner = "{self.owner}"; 
-                    repo = "{self.repo}"; 
-                    rev = "{self.rev}"; 
-                    hash = "{self.hash}"; 
+                src = "${{fetchFromGitHub {{
+                    owner = "{self.owner}";
+                    repo = "{self.repo}";
+                    rev = "{self.rev}";
+                    hash = "{self.hash}";
                 }}}}/{path}";
                 sha256 = "";
             }}).overrideAttrs
@@ -190,18 +190,18 @@ if __name__ == "__main__":
         prog="update.py",
         description="Prefetches hashes for a specific fluxer revision"
     )
-    parser.add_argument("--rev", 
+    parser.add_argument("--rev",
                         help="revision to prefetch (defaults to latest release)")
-    parser.add_argument("--stdout", 
-                        action="store_true", 
-                        default=False, 
+    parser.add_argument("--stdout",
+                        action="store_true",
+                        default=False,
                         help="write pin info to stdout instead of file")
 
     results = parser.parse_args()
     if help in results:
         parser.print_help()
         sys.exit(0)
-    
+
     if not results.rev:
         rev = get_latest_release(OWNER, REPO)
         # Tag style: sub-service@yyyy.mdd.hhmmss
@@ -214,14 +214,14 @@ if __name__ == "__main__":
         version = "change-me"
 
     hash = prefetch_github(OWNER, REPO, rev)
-    pin = Pin(rev=rev, 
+    pin = Pin(rev=rev,
               hash=hash,
-              version=version, 
-              owner=OWNER, 
-              repo=REPO, 
+              version=version,
+              owner=OWNER,
+              repo=REPO,
               cargo=CargoPin(),
               filename=os.path.join(SCRIPT_DIR, "pin.json"))
-    
+
     pin.cargo.hash = pin.get_fod_hash_cargo("")
     pin.cargo.libFluxcore = pin.get_fod_hash_cargo("fluxer_app/rust/libfluxcore")
     pin.cargo.libFluxwebp = pin.get_fod_hash_cargo("fluxer_app/rust/libfluxwebp")
