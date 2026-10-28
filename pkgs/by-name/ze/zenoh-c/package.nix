@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenoh-c";
-  version = "1.10.1"; # nixpkgs-update: no auto update
+  version = "1.10.2"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-c";
     tag = finalAttrs.version;
-    hash = "sha256-d6M0mFgFhjMBwSdqqsPxZ22SKA29sghcc1tbD2CJvV0=";
+    hash = "sha256-jlOuBT+jU+BCCf6h3jxPwvQ2hZ6IRswe+2WjwCJs56A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-5VILqwKgQVKcQxILPFNGUWDLH5ryYeUz886JVxrUlV4=";
+    hash = "sha256-g43viDgW7MnT+0avfqTyhWXpt3eR91VuuNn9+QnKaPI=";
   };
 
   outputs = [
