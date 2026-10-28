@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "4.0.3";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pyflakes";
     tag = version;
-    hash = "sha256-uVNVSjaGuH2JRMnNBvrP6uvMu1ywhXvubpXgkVA1jZs=";
+    hash = "sha256-Z8m4IaTr0+3C15O05G24LT2iNhvWebKhfoaaK0DfWWI=";
   };
 
   build-system = [ setuptools ];
