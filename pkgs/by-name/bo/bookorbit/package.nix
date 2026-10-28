@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmWorkspaces = [
     "client..."
     "server..."
+    "@bookorbit/read-aloud-worker"
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-Uc/4Rj1mL7ZKx3gejtgyEO3uHe4ylU+sZwgGj1qkZvs=";
+    hash = "sha256-+xgLRlqOxSCGvEjGT+x6iu+C7n8wrJf7mIc3TqV1iTM=";
   };
 
   nativeBuildInputs = [
