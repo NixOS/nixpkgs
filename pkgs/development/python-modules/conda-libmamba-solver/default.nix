@@ -12,14 +12,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "conda-libmamba-solver";
-  version = "26.4.2";
+  version = "26.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conda";
     repo = "conda-libmamba-solver";
     tag = finalAttrs.version;
-    hash = "sha256-8+BIUQp2tg50P0UDjzBvywg8/mDelDYMtp/ejEcMH20=";
+    hash = "sha256-06AOZVFuKC9SjN0SGg+rHaMB8pacdxQCf8sGQh1lN2M=";
   };
 
   build-system = [
