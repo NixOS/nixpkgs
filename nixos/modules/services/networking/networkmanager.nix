@@ -183,9 +183,7 @@ in
         description = ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
-          [
-            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
-          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
+            <https://networkmanager.dev/docs/api/latest/NetworkManager.conf.html#id-1.2.3.11>
           or
           {manpage}`NetworkManager.conf(5)`
           for more information.
@@ -198,9 +196,7 @@ in
         description = ''
           Configuration added to the generated NetworkManager.conf, note that you can overwrite settings with this.
           Refer to
-          [
-            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
+            <https://networkmanager.dev/docs/api/latest/NetworkManager.conf.html>
           or
           {manpage}`NetworkManager.conf(5)`
           for more information.
@@ -214,9 +210,7 @@ in
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
           refer to
-          [
-            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
-          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec)
+            <https://networkmanager.dev/docs/api/latest/NetworkManager.conf.html#device-spec>
           or the "Device List Format" Appendix of
           {manpage}`NetworkManager.conf(5)`.
         '';
@@ -350,9 +344,7 @@ in
           Set the DNS ({file}`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
-          [
-            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
+            <https://networkmanager.dev/docs/api/latest/NetworkManager.conf.html>
           or in
           {manpage}`NetworkManager.conf(5)`.
         '';
@@ -374,7 +366,7 @@ in
                 default = "basic";
                 description = ''
                   Dispatcher hook type. Look up the hooks described at
-                  [https://developer.gnome.org/NetworkManager/stable/NetworkManager.html](https://developer.gnome.org/NetworkManager/stable/NetworkManager.html)
+                    <https://networkmanager.dev/docs/api/latest/NetworkManager-dispatcher.html>
                   and choose the type depending on the output folder.
                   You should then filter the event type (e.g., "up"/"down") from within your script.
                 '';
