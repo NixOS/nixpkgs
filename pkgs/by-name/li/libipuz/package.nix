@@ -53,8 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Library for parsing .ipuz puzzle files";
     homepage = "https://gitlab.gnome.org/jrb/libipuz";
