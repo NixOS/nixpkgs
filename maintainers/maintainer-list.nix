@@ -15561,12 +15561,6 @@
     github = "KnairdA";
     githubId = 498373;
   };
-  knarkzel = {
-    email = "knarkzel@gmail.com";
-    name = "Knarkzel";
-    github = "svelterust";
-    githubId = 85593302;
-  };
   knightfemale = {
     email = "2067834160@qq.com";
     github = "knightfemale";
