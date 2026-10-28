@@ -6584,7 +6584,7 @@ self: super: with self; {
 
   fressnapftracker = callPackage ../development/python-modules/fressnapftracker { };
 
-  freud = callPackage ../development/python-modules/freud { };
+  freud-analysis = callPackage ../development/python-modules/freud-analysis { };
 
   frictionless = callPackage ../development/python-modules/frictionless { };
 
@@ -13341,7 +13341,7 @@ self: super: with self; {
 
   parsley = callPackage ../development/python-modules/parsley { };
 
-  parsnip = callPackage ../development/python-modules/parsnip { };
+  parsnip-cif = callPackage ../development/python-modules/parsnip-cif { };
 
   parso = callPackage ../development/python-modules/parso { };
 
