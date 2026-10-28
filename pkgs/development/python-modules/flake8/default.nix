@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flake8";
   version = "7.5.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YrfzmVEvtr44qbrZ2oBcpPXhNexc+WNBwBVd8yjUDWw=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/PyCQA/flake8/blob/${src.tag}/docs/source/release-notes/${version}.rst";
+    changelog = "https://github.com/PyCQA/flake8/blob/${finalAttrs.src.tag}/docs/source/release-notes/${finalAttrs.version}.rst";
     description = "Modular source code checker: pep8, pyflakes and co";
     homepage = "https://github.com/PyCQA/flake8";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "flake8";
   };
-}
+})
