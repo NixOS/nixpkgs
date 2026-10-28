@@ -160,11 +160,12 @@ python3Packages.buildPythonApplication {
     "--prefix"
     "PYTHONPATH"
     ":"
-    "$out/share/tauon"
-    "--set"
-    "GI_TYPELIB_PATH"
-    "$GI_TYPELIB_PATH"
+    "${placeholder "out"}/share/tauon"
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=(--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH")
+  '';
 
   postInstall = ''
     mv $out/bin/tauonmb $out/bin/tauon
