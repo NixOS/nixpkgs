@@ -643,13 +643,13 @@
     "vendorHash": "sha256-CwAhh3SsTrwuIhlPOZUSumA8uywdXzu6OjikSYgU1iQ="
   },
   "hashicorp_kubernetes": {
-    "hash": "sha256-x/9LcRgn3q7wyzm2db748bfK4T+zQdJPR+9tBmwFukA=",
+    "hash": "sha256-OzXAQeKZmXOunKehNAVBMXvuPnlp1ft4OCV4mBbvOkQ=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/kubernetes",
     "owner": "hashicorp",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v3.3.0",
+    "rev": "v3.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-yyCmacjlbbrMfZohI76TRCzrEwaFdMIohl22Hc8KxZg="
+    "vendorHash": "sha256-sYTX1tbNzKnrt2ava0bVcAJnmxi4XVxzlWtytiTEnD4="
   },
   "hashicorp_local": {
     "hash": "sha256-oq1Nc03xfoDajrj0CVAO41embDGQ5cKJ8QbUZfaJv/M=",
