@@ -11,8 +11,10 @@ let
     inherit (config.security) wrapperDir;
   };
 
+  notifPackage = cfg.ui.notifPackage;
   uiPackage = cfg.ui.package.override {
     gpu-screen-recorder = package;
+    gpu-screen-recorder-notification = notifPackage;
     inherit (config.security) wrapperDir;
   };
 in
@@ -41,7 +43,7 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [ cfg.package ];
+        environment.systemPackages = [ package ];
 
         security.wrappers."gsr-kms-server" = {
           owner = "root";
@@ -53,8 +55,8 @@ in
 
       (lib.mkIf cfg.ui.enable {
         environment.systemPackages = [
-          cfg.ui.package
-          cfg.ui.notifPackage
+          uiPackage
+          notifPackage
         ];
 
         security.wrappers."gsr-global-hotkeys" = {
