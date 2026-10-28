@@ -47,14 +47,14 @@ in
 # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
-  version = "12.9.4";
+  version = "12.9.6";
 
   # We don't use the Git source but the release tarball, as the source has a
   # `./bootstrap` script performing network access to download resources.
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/Limine-Bootloader/Limine/releases/download/v${finalAttrs.version}/limine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-T3X/yo4RoQMOQ+K5q4L6waD4mF4cQNQp/qn9KXJpNEc=";
+    hash = "sha256-UCLQLAcJzPPNZwLokgbi6MlT0lPYD8BbJ2pSbCNxkzI=";
   };
 
   enableParallelBuilding = true;
@@ -102,8 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     badPlatforms = lib.platforms.darwin;
     # Caution. Some submodules have different licenses.
     license = with lib.licenses; [
-      asl20 # cc-runtime
-      bsd0 # freestanding-headers, freestanding-toolchain, limine-protocol, pdgzip
+      bsd0 # freestanding-lgrt, freestanding-headers, freestanding-toolchain, limine-protocol, pdgzip
       bsd2 # limine, flanterm, libfdt, PicoEFI
       bsd2Patent # PicoEFI
       bsd3 # PicoEFI
