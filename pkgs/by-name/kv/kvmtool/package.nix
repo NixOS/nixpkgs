@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchgit,
+  fetchpatch,
   lib,
   dtc,
 }:
@@ -19,7 +20,15 @@ stdenv.mkDerivation {
     hash = "sha256-eVE3lM0Xsv11T9IQ694639rLqvjjaee1Ob60vq3Ho3g=";
   };
 
-  patches = [ ./strlcpy-glibc-2.38-fix.patch ];
+  patches = [
+    ./strlcpy-glibc-2.38-fix.patch
+    # Fixes FDT_ERR_ALIGNMENT on riscv32; drop once kvmtool has it
+    (fetchpatch {
+      name = "align-fdt-staging-buffer.patch";
+      url = "https://lore.kernel.org/kvm/20261028190531.48302-1-mikatammi@gmail.com/raw";
+      hash = "sha256-RO1Ael0mkxIMA4F2pGKkzhhMz3Bq9faL+VSII03S26Q=";
+    })
+  ];
 
   buildInputs = lib.optionals withLibfdt [ dtc ];
 
