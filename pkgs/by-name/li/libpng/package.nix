@@ -24,11 +24,11 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
-  version = "1.6.58";
+  version = "1.6.59";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KOtAP1Hw90BSSRMs7P6C6lwO+X8bMsWmWCiBSuDTR3U=";
+    hash = "sha256-2A3So4o3+APLm2rHsUvW503cO2VHgKg4C9+TUj/bQ4k=";
   };
   postPatch =
     whenPatched "gunzip < ${patch_src} | patch -Np1"

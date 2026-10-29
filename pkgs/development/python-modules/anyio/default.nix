@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
 
   # build-system
   setuptools-scm,
@@ -20,6 +20,7 @@
   hypothesis,
   psutil,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   trustme,
@@ -31,22 +32,27 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.13.0";
+  version = "4.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-W2uR1VwI9u4QIPmbcYp8jDatEdya97NaJwAABlaRHzM=";
+    hash = "sha256-cuTOVLyqLfp4LMuBd1BnFgey2gu3wehDk7VAb7yoqng=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/agronholm/anyio/commit/818e4ac441fa27e9fac893496fc5a4fbe0a58689.patch";
+      hash = "sha256-BKREdk6kUQHxX8ab1dijdvNwBHNcCHK25cqal7lDbqA=";
+    })
+  ];
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
     idna
-  ]
-  ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
   ];
 
@@ -59,6 +65,7 @@ buildPythonPackage rec {
     hypothesis
     psutil
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     trustme
@@ -89,6 +96,9 @@ buildPythonPackage rec {
     "test_nonexistent_main_module"
     #  3 second timeout expired
     "test_keyboardinterrupt_during_test"
+    "test_dynamic_async_fixture_access_does_not_hang"
+    # 5 second timeout expires on weak hardware
+    "test_keyboard_interrupt_does_not_resume_test"
     # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
     "test_multiple_threads"
 
@@ -98,6 +108,12 @@ buildPythonPackage rec {
     "test_run_in_custom_limiter"
     "test_cancel_from_shielded_scope"
     "test_start_task_soon_cancel_later"
+
+    # fails to monkeypatch __file__.__main__
+    "test_entrypoint_main_module"
+
+    # pip install requires network access
+    "test_sourceless_install"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'

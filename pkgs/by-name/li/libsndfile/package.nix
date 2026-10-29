@@ -43,6 +43,28 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libsndfile/libsndfile/commit/2251737b3b175925684ec0d37029ff4cb521d302.patch";
       hash = "sha256-LaeptEicnjpVBExlK4dNMlN8+AAJhW8dIvemF6S4W2M=";
     })
+    # Fix an out-of-bounds read in `vorbis_analysis_wrote` (CVE-2024-50612)
+    # https://github.com/libsndfile/libsndfile/pull/1045
+    (fetchpatch {
+      name = "CVE-2024-50612.patch";
+      url = "https://github.com/libsndfile/libsndfile/commit/4755f5bd7854611d92ad0f1295587b439f9950ba.patch";
+      hash = "sha256-PtDNAOxzy0f6YmK84uznh+3qQF3bbbKeZTNCs0I7lXA=";
+    })
+    # Fix integer overflows in the IMA ADPCM codec.
+    # The first patch fixes the AIFF path and is a part of the CVE-2022-33065 fixes.
+    # The second patch fixes the WAV and close paths (CVE-2026-37555).
+    # https://github.com/libsndfile/libsndfile/pull/979
+    (fetchpatch {
+      name = "ima-adpcm-int-overflow-aiff.patch";
+      url = "https://github.com/libsndfile/libsndfile/commit/9a829113c88a51e57c1e46473e90609e4b7df151.patch";
+      hash = "sha256-gUCNPSj/F5M9QhkSPwhFV7r0tm9eIWSzEltWtIp/3cE=";
+    })
+    # https://github.com/libsndfile/libsndfile/pull/1123
+    (fetchpatch {
+      name = "CVE-2026-37555.patch";
+      url = "https://github.com/libsndfile/libsndfile/commit/cdadf9a65fdc1f28da9d235eb443d5f5e57010d2.patch";
+      hash = "sha256-GxyE9rYHFVT0RXjHYzHyrooqboa9SZKIR8kw1oEHffI=";
+    })
   ];
 
   nativeBuildInputs = [
