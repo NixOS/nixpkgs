@@ -1,0 +1,18 @@
+{
+  "status": "PENDING_HUMAN_REVIEW",
+  "reviewer_identity": null,
+  "role": "label_reviewer",
+  "reviewed_artifacts": [
+    {
+      "path": "tests/evaluation/external-review/blind-review/case-001.json",
+      "sha256": "da3b22cfb1c18e7964eaf529dd75a26dc849c9d2354f61590436ede9f2cddf2a"
+    }
+  ],
+  "prior_exposure_to_labels_or_predictions": null,
+  "independence_declaration": null,
+  "supports_proposal": null,
+  "rationale": null,
+  "reviewed_at_utc": null,
+  "comparison_with_previous_result": "NOT_PERFORMED",
+  "note": "No private keys requested. A completed form is a review record, not a cryptographic signature or governance approval."
+}

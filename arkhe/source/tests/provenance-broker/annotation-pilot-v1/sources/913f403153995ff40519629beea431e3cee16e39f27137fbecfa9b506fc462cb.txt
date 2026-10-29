@@ -1,0 +1,1 @@
+Relato de 20/10: o serviço Atlas migrou para PostgreSQL 16.

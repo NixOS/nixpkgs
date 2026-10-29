@@ -1,0 +1,28 @@
+[package]
+name = "arkhe-kernel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+rusqlite = { version = "=0.32.1", features = ["bundled"], optional = true }
+uuid = { workspace = true, optional = true }
+arkhe-core = { path = "../arkhe-core" }
+arkhe-governance = { path = "../../governance/arkhe-governance" }
+arkhe-verify-core = { path = "../../verification/crates/arkhe-verify-core" }
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+
+[features]
+sqlite-broker = ["dep:rusqlite", "dep:uuid"]
+
+[dev-dependencies]
+base64 = "0.22"
+sha2.workspace = true
+sha3 = "0.10"
+ed25519-dalek.workspace = true
+arkhe-agent = { path = "../../cognition/arkhe-agent" }
+async-trait.workspace = true
+tokio.workspace = true
+serde_json.workspace = true

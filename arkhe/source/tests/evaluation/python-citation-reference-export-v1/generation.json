@@ -1,0 +1,35 @@
+{
+  "answer": "{\"claims\": [{\"text\": \"The local Ollama provider uses the north-mini-code-1.0:latest model.\", \"evidence_id\": \"provider\"}]}",
+  "provider_response": {
+    "model": "north-mini-code-1.0:latest",
+    "created_at": "2026-10-26T23:15:38.4024192Z",
+    "response": "{\"claims\": [{\"text\": \"The local Ollama provider uses the north-mini-code-1.0:latest model.\", \"evidence_id\": \"provider\"}]}",
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 39499803600,
+    "load_duration": 33148611800,
+    "prompt_eval_count": 110,
+    "prompt_eval_cached_count": 0,
+    "prompt_eval_duration": 3113105000,
+    "eval_count": 33,
+    "eval_duration": 3219446000
+  },
+  "model": "north-mini-code-1.0:latest",
+  "model_digest": "d8b269ad5c7c7144ce104b83ce93bc3efb85e0f74e01be6be5f5d6f7ca90b60f",
+  "identity_trust": "LOCAL_SERVER_TAG_ASSERTION_NOT_ATTESTATION",
+  "token_meter": "OLLAMA_SERVER_REPORTED",
+  "token_meter_class": "PROVIDER_REPORTED",
+  "total_token_cap": "POSTCHECK_ONLY",
+  "output_token_cap": 256,
+  "prompt_sha256": "bddb75d8990410c4ebe09a70c59d4f37fae557009c93a51f80a453961f09a001",
+  "request_sha256": "75fc9aa3c62de812c2c91183edb0a2898294e7913fc7ab1e1708f45b3b5520aa",
+  "sampling": {
+    "num_predict": 256,
+    "temperature": 0,
+    "seed": 20261026,
+    "num_ctx": 4096,
+    "num_gpu": 0
+  },
+  "device_placement_requested": "cpu",
+  "response_format_sha256": "7f24b6d773adccc296a2a1fb26c16ae1887fc56bf01d538da162e065a630b1fc"
+}

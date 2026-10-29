@@ -1,0 +1,35 @@
+{
+  "schema": "arkhe/abc-development-smoke/v1",
+  "purpose": "integration only, no capability grading",
+  "tasks": [
+    {
+      "id": "protocol-repeat-1",
+      "prompt": "Reply with the single word OK."
+    },
+    {
+      "id": "protocol-repeat-2",
+      "prompt": "Reply with the single word OK."
+    },
+    {
+      "id": "protocol-repeat-3",
+      "prompt": "Reply with the single word OK."
+    },
+    {
+      "id": "protocol-repeat-4",
+      "prompt": "Reply with the single word OK."
+    },
+    {
+      "id": "protocol-repeat-5",
+      "prompt": "Reply with the single word OK."
+    }
+  ],
+  "memory": "Reply with the single word OK.",
+  "limits": {
+    "max_tokens": 2048,
+    "max_tool_calls": 0,
+    "max_wall_clock": 90
+  },
+  "output_cap": 256,
+  "placement": "cpu",
+  "seed": 20261026
+}

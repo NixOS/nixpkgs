@@ -1,0 +1,30 @@
+[package]
+name = "arkhe-rag"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-cognition-sdk = { path = "../arkhe-cognition-sdk" }
+
+serde.workspace = true
+serde_json.workspace = true
+llguidance = "1.2"
+# C++ binding: server target only, behind a feature so the default build
+# (and WASM) never needs CMake/C++. Compilation budget guard against
+# CVE-2025-57809-style blowups lives in `decoder.rs`.
+xgrammar = { version = "0.5", optional = true }
+
+[features]
+default = []
+server = ["dep:xgrammar"]
+
+[dev-dependencies]
+# e2e: the verified PolicyBinding from governance is the policy_digest the
+# NCM harness anchors under. No cycle: governance does not depend on rag.
+arkhe-governance = { path = "../../governance/arkhe-governance" }
+ed25519-dalek.workspace = true
+
+[lints.rust]
+# `cargo kani` sets this cfg; registered per-crate as elsewhere in the workspace.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }

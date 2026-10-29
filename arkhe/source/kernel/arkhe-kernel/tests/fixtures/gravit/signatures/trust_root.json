@@ -1,0 +1,26 @@
+{
+ "root_keys": [
+  {
+   "key_id": "c7c02414a0924885",
+   "public_key": "p7EWz1io72YS5AEQJavQ8O3xhQkMQvExw/59suQeLvI="
+  },
+  {
+   "key_id": "54c8de60f2e2f19f",
+   "public_key": "jyn+pOSyjHCAcotBALWYLLmaXGa8J0wrRkd9UUrL52A="
+  },
+  {
+   "key_id": "6882528305eef33c",
+   "public_key": "pBS+U6xvrffh1Rpszfl7ETiTjLFBjX/BKB3n+3p5LvE="
+  },
+  {
+   "key_id": "a115e6db13fa6e02",
+   "public_key": "iM1LkSMpV9yPfWvve9KNVS44AB0lgg/ux76YgYza7n8="
+  },
+  {
+   "key_id": "9f958d4b99569e7c",
+   "public_key": "lIh1J+Fvt9zQvi2WMZWPkFY02qU6a7EHw8a0NHELGc4="
+  }
+ ],
+ "threshold": 3,
+ "trust_root_version": 1
+}

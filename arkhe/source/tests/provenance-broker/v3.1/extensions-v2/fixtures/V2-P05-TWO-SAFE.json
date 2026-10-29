@@ -1,0 +1,310 @@
+{
+  "fixture_id": "V2-P05-TWO-SAFE",
+  "profile_id": "arkhe-broker-local-v2",
+  "description": "Two verified current chunks released; no Claim or semantic relationship.",
+  "clock_ms": 1793232000000,
+  "candidate": {
+    "candidate_id": "candidate-atlas",
+    "claim": {
+      "subject": "service:atlas",
+      "predicate": "migrated_to",
+      "object": "database:postgresql-16",
+      "polarity": "Positive",
+      "modality": "Asserted",
+      "qualifiers": []
+    },
+    "query": {
+      "purpose": "Analysis"
+    }
+  },
+  "session": {
+    "principal": "researcher-1",
+    "session_id": "session-1",
+    "tenant": "arkhe-test",
+    "scopes": [
+      "research"
+    ]
+  },
+  "policy": {
+    "policy_id": "broker-pilot",
+    "policy_version": "1",
+    "profile_id": "arkhe-broker-local-v2",
+    "purposes": [
+      "Analysis",
+      "Assertion"
+    ],
+    "best_effort_permitted": true,
+    "historical_permitted": true,
+    "grants_permitted": true,
+    "max_state_age_ms": 1000,
+    "max_decision_ttl_ms": 1000,
+    "accepted_interval_ms": 250,
+    "accepted_evaluator": "fixture-reviewer",
+    "accepted_transforms": [
+      "utf8-identity@1"
+    ],
+    "rejected_transforms": [],
+    "accepted_rules": [
+      "fixture-identity@1"
+    ],
+    "accepted_revision_combinations": [
+      {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      }
+    ],
+    "cross_tenant_aggregation_permitted": false
+  },
+  "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+  "chunks": [
+    {
+      "chunk_id": "chunk-1",
+      "bytes_hex": "4f207365727669c3a76f2041746c6173206d6967726f75207061726120506f737467726553514c2031362e",
+      "source_bytes_hex": "4f207365727669c3a76f2041746c6173206d6967726f75207061726120506f737467726553514c2031362e",
+      "representation_hex": "4f207365727669c3a76f2041746c6173206d6967726f75207061726120506f737467726553514c2031362e",
+      "record": {
+        "chunk_id": "chunk-1",
+        "chunk_digest": "50c959029a947b4ecddbc19918f37db0214d297f3a3ffd7afedd2f892610cee6",
+        "source_digest": "d13dff9e81c6d96fa4f03ee959b4b5e2c4dabaf958fcbfbe8a77634d0422acd8",
+        "text_position": {
+          "repr_digest": "e21b27f2ebc6a229d2bc61fccd169656c42a87c4f832c67b0875a36dcb0cb4f2",
+          "offset": 0,
+          "length": 43
+        },
+        "transformation_ref": "utf8-identity@1",
+        "tenant": "arkhe-test",
+        "scope": "research"
+      },
+      "record_hash": "86f757f7312795f6cf497ed6c9327c3f3dcd1bfe3832da4a78f7d4e6f32acddb",
+      "per_chunk": {
+        "integrity": "OK",
+        "access": "Permitted",
+        "state": "Current",
+        "transform": "Accepted"
+      },
+      "proof": {
+        "profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+        "leaf_count": 2,
+        "leaf_index": 0,
+        "steps": [
+          {
+            "kind": "node",
+            "direction": "right",
+            "hash": "a96e05a9a2bad229f04a5424a82a1db520caba4fe6259ff22465d910d2849e07"
+          }
+        ]
+      }
+    },
+    {
+      "chunk_id": "chunk-2",
+      "bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+      "source_bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+      "representation_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+      "record": {
+        "chunk_id": "chunk-2",
+        "chunk_digest": "a8549d7a28c4fe31592cc3ba2c00a1e1c880713194ce94f4a3b67ca9b35f60bc",
+        "source_digest": "8786f9d72bc5c58625770f1b22b12097b78ceadbb66dac01df86842a3ff06305",
+        "text_position": {
+          "repr_digest": "f520e6ed6e867131c0e0fcb5535f3b0027e7a355ca8eaaa4ecaaf599b8b7d017",
+          "offset": 0,
+          "length": 39
+        },
+        "transformation_ref": "utf8-identity@1",
+        "tenant": "arkhe-test",
+        "scope": "research"
+      },
+      "record_hash": "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154",
+      "per_chunk": {
+        "integrity": "OK",
+        "access": "Permitted",
+        "state": "Current",
+        "transform": "Accepted"
+      },
+      "proof": {
+        "profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+        "leaf_count": 2,
+        "leaf_index": 1,
+        "steps": [
+          {
+            "kind": "node",
+            "direction": "left",
+            "hash": "0a43c4ff67ad9f8176c52e729b3722551f329ac94f900a50503c36465fbbe9eb"
+          }
+        ]
+      }
+    }
+  ],
+  "anchors": {
+    "checkpoint_id": "extension-checkpoint-2",
+    "root": "523a7ec245b9dbc2a3ab9a9732de360f932fe2e3901fee01946e2d74b3208690",
+    "leaf_count": 2,
+    "mmr_profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+    "public_key_hex": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+    "key_id": "fixture-authority-1",
+    "state_record_hash": "2e570cfbfc34ef656086077aa7366c4ca79c0041c5e170cc3cc85765a344863e",
+    "state_root": "1290b1284cbfbec50876601a7c808fd0411cebecc638e4962eb21d6038c56d3d",
+    "state_proof": {
+      "leaf_count": 1,
+      "leaf_index": 0,
+      "steps": []
+    },
+    "stream_id": "fixture-evidence-stream",
+    "minimum_leaf_count": 2
+  },
+  "observations": {
+    "integrity": "OK",
+    "transform_items": [
+      {
+        "transformation_ref": "utf8-identity@1",
+        "verdict": "Accepted"
+      }
+    ],
+    "documental": "Incomplete",
+    "mechanism": {
+      "kind": "Extracted",
+      "predicate_span_valid": false
+    },
+    "bundle": {
+      "key_id": "fixture-authority-1",
+      "body": {
+        "authority": "fixture-authority-1",
+        "subject": "researcher-1",
+        "resources": [
+          "chunk-1",
+          "chunk-2"
+        ],
+        "revisions": {
+          "authorization": "auth-1",
+          "state": "state-1",
+          "policy": "policy-1",
+          "anchor_set": "anchors-1"
+        },
+        "observed_at": 1793231999900,
+        "expires_at": {
+          "authorization": 1793232000800,
+          "state": 1793232000800,
+          "policy": 1793232000800,
+          "anchor_set": 1793232000800
+        },
+        "access": "Permitted",
+        "state": "Current",
+        "effective_from": 1793231990000,
+        "effective_to": 1793232010000,
+        "historical_state": "Active",
+        "source_authorizations": [],
+        "aggregate_authorizations": []
+      },
+      "signature_hex": "012e89eeb387f9588ea54be9554fbd58b36d9eb66164c4f9d5182d69baae021d017362222c1e59d889b5deb2f74871b9fba9cb75d739c60b876129d39bdc1e05"
+    },
+    "failures": [],
+    "semantic": {
+      "key_id": "fixture-authority-1",
+      "body": {
+        "claim_digest": "a4d94b7017f229f383c984e0cf444244f9fb40f51a45bb5f2218c0f3f8574eb7",
+        "support_set_digest": "ade9e9764ba64f9270ed946c72526980ea8a28dd1b5c353d4a344166b753e126",
+        "outcome": "Supported",
+        "method": "Human",
+        "evaluator": "fixture-reviewer",
+        "evaluator_version": "1",
+        "support_refs": [
+          "86f757f7312795f6cf497ed6c9327c3f3dcd1bfe3832da4a78f7d4e6f32acddb",
+          "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154"
+        ]
+      },
+      "signature_hex": "3f7e140c3e007929a2d35c201e23c19d3bf26c090f4907f5bda1fc54bcd717f78817e15d2c55debe1f7bd6b6d928aea751d0f8176c293b346c41b4dea8cf490f"
+    }
+  },
+  "delivery": {
+    "attempted_at": 1793232000100,
+    "authorization_source_available": true,
+    "other_sources_available": true,
+    "observed_revisions": {
+      "authorization": "auth-1",
+      "state": "state-1",
+      "policy": "policy-1",
+      "anchor_set": "anchors-1"
+    }
+  },
+  "independent_review": {
+    "status": "pending"
+  },
+  "expected_output": {
+    "decision": "AdmitChunksOnly",
+    "applied_rule": "ANALYSIS_CHUNKS_ONLY",
+    "flags": [
+      "RELATION_OMITTED"
+    ],
+    "reasons": [
+      {
+        "rule_id": "ANALYSIS_CHUNKS_ONLY",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [
+        {
+          "chunk_id": "chunk-1",
+          "bytes_hex": "4f207365727669c3a76f2041746c6173206d6967726f75207061726120506f737467726553514c2031362e",
+          "chunk_digest": "50c959029a947b4ecddbc19918f37db0214d297f3a3ffd7afedd2f892610cee6",
+          "source_digest": "d13dff9e81c6d96fa4f03ee959b4b5e2c4dabaf958fcbfbe8a77634d0422acd8",
+          "text_position": {
+            "repr_digest": "e21b27f2ebc6a229d2bc61fccd169656c42a87c4f832c67b0875a36dcb0cb4f2",
+            "offset": 0,
+            "length": 43
+          },
+          "evidence_ref": "86f757f7312795f6cf497ed6c9327c3f3dcd1bfe3832da4a78f7d4e6f32acddb"
+        },
+        {
+          "chunk_id": "chunk-2",
+          "bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+          "chunk_digest": "a8549d7a28c4fe31592cc3ba2c00a1e1c880713194ce94f4a3b67ca9b35f60bc",
+          "source_digest": "8786f9d72bc5c58625770f1b22b12097b78ceadbb66dac01df86842a3ff06305",
+          "text_position": {
+            "repr_digest": "f520e6ed6e867131c0e0fcb5535f3b0027e7a355ca8eaaa4ecaaf599b8b7d017",
+            "offset": 0,
+            "length": 39
+          },
+          "evidence_ref": "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154"
+        }
+      ],
+      "claim_status": "Omitted",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": [
+        "ANALYSIS_ONLY",
+        "NO_RELATION_SUPPORT"
+      ]
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+      "anchor_set_digest": "14539879b1b057c62b32414d4ae8a641d39a135ea4db72f0bea678c8370f733b",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "c8f0384c00e6ccd1a606b253982d80985d6cb03db8163f2a825e51c8eb148ef3"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Release",
+      "code": "VALIDATION_WINDOW"
+    },
+    "material_errors": []
+  },
+  "expected_schema_error_paths": []
+}

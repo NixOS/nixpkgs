@@ -1,0 +1,1 @@
+Correção de 21/10: o relato de 20/10 estava errado; o serviço Atlas não migrou para PostgreSQL 16.

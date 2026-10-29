@@ -1,0 +1,39 @@
+[package]
+name = "arkhe-ask"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-cognition-sdk = { path = "../../cognition/arkhe-cognition-sdk" }
+arkhe-core = { path = "../../kernel/arkhe-core" }
+arkhe-wormgraph = { path = "../../evidence/arkhe-wormgraph" }
+arkhe-rag = { path = "../../cognition/arkhe-rag" }
+arkhe-verify-core = { path = "../../verification/crates/arkhe-verify-core" }
+
+async-trait.workspace = true
+axum.workspace = true
+axum-keycloak-auth = { version = "=0.8.1", default-features = false, features = ["rustls-tls"] }
+pgvector.workspace = true
+reqwest.workspace = true
+metrics = "0.24"
+axum-prometheus = "0.10.1"
+metrics-exporter-prometheus = { version = "0.18.3", default-features = false }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing-opentelemetry = "0.34"
+opentelemetry = "0.33"
+opentelemetry_sdk = "0.33"
+opentelemetry-otlp = { version = "0.33", default-features = false, features = ["trace", "http-proto", "reqwest-blocking-client", "reqwest-rustls"] }
+rskafka = { version = "0.6", default-features = false }
+uuid.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+tokio = { workspace = true, features = ["signal"] }
+
+[dev-dependencies]
+opentelemetry_sdk = { version = "0.33", features = ["testing"] }
+jsonwebtoken = "9.3"
+http-body-util = "0.1"
+tower = { version = "0.5", features = ["util"] }

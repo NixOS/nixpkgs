@@ -1,0 +1,30 @@
+{
+  "scenario": "helper process exits after committed HTTP enqueue and before any publish",
+  "child_exit_code": 73,
+  "rust_destructors_and_sdk_shutdown_bypassed": true,
+  "pending_after_child_exit": 1,
+  "kafka_records_before_recovery": 0,
+  "kafka_records_after_recovery": 1,
+  "durable_anchors_after_recovery": 1,
+  "trace_id": "11112222333344445555666677778888",
+  "persisted_enqueue_span_id": "71d627891a2a9dcb",
+  "kafka_traceparent": "00-11112222333344445555666677778888-4f802c6c6f60adf9-01",
+  "recovered_span_tree": [
+    {
+      "name": "arkhe.ask.proof.publish",
+      "span_id": "4f802c6c6f60adf9",
+      "parent_span_id": "71d627891a2a9dcb"
+    },
+    {
+      "name": "arkhe.ask.proof.consume",
+      "span_id": "788d542b6a7d9f3b",
+      "parent_span_id": "4f802c6c6f60adf9"
+    },
+    {
+      "name": "arkhe.ask.proof.anchor",
+      "span_id": "b752c77eacd0531e",
+      "parent_span_id": "788d542b6a7d9f3b"
+    }
+  ],
+  "limits": "process termination with database and broker kept running; not broker outage, power failure or guaranteed export of pre-crash spans"
+}

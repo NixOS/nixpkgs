@@ -1,0 +1,17 @@
+{
+  "schema": 2,
+  "log_id": "fixture-log",
+  "event_id": "evt-1",
+  "producer_id": "producer-1",
+  "issued_at": 1000,
+  "expires_at": 1300,
+  "record": {
+    "org_id": "00D-fixture",
+    "object": "Lead",
+    "record_id": "00Q-fixture",
+    "field": "LeadSource",
+    "value": "Web",
+    "source_system": "web-form-fixture",
+    "observed_at": "2026-10-22T12:00:00Z"
+  }
+}

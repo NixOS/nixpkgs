@@ -1,0 +1,23 @@
+   Compiling arkhe-ask v0.1.0 (D:\arkhe\apps\arkhe-ask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 23.02s
+     Running tests\events.rs (target\debug\deps\events-f5ba8c8f9e61ece6.exe)
+
+running 3 tests
+test outbox_survives_publication_failure_and_detects_event_id_conflicts ... ok
+Durable W3C trace tree after journal restart: [{"name":"arkhe.ask.rag.retrieve","span_id":"4a55ea7e2854e03e","parent_span_id":"3621c8566dc7ad71"},{"name":"arkhe.ask.rag.generate","span_id":"c8d7c38eee8a9d64","parent_span_id":"3621c8566dc7ad71"},{"name":"arkhe.ask.rag.verify","span_id":"3811b7e76b9b631e","parent_span_id":"3621c8566dc7ad71"},{"name":"arkhe.ask.proof.enqueue","span_id":"fd7a99f425cbcbc8","parent_span_id":"3621c8566dc7ad71"},{"name":"POST /v1/ask","span_id":"3621c8566dc7ad71","parent_span_id":"0123456789abcdef"},{"name":"arkhe.ask.proof.publish","span_id":"aa4a858a08d17b12","parent_span_id":"fd7a99f425cbcbc8"},{"name":"arkhe.ask.proof.anchor","span_id":"bd11ac6e1ff4d640","parent_span_id":"ce77298ace7f091d"},{"name":"arkhe.ask.proof.consume","span_id":"ce77298ace7f091d","parent_span_id":"aa4a858a08d17b12"}]
+test durable_trace_context_survives_journal_restart_and_kafka ... ok
+HTTP verified=1 refused=1; Kafka records=2; durable anchors=1; restart rehydrated; forged event blocked at offset=2
+test kafka_replays_lost_ack_once_and_rehydrates_wormgraph ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 1.03s
+
+   Compiling arkhe-ask v0.1.0 (D:\arkhe\apps\arkhe-ask)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.30s
+     Running tests\crash_recovery.rs (target\debug\deps\crash_recovery-32b1f952a28d6349.exe)
+
+running 1 test
+Process crash recovery verified: {"scenario":"helper process exits after committed HTTP enqueue and before any publish","child_exit_code":73,"rust_destructors_and_sdk_shutdown_bypassed":true,"pending_after_child_exit":1,"kafka_records_before_recovery":0,"kafka_records_after_recovery":1,"durable_anchors_after_recovery":1,"trace_id":"11112222333344445555666677778888","persisted_enqueue_span_id":"71d627891a2a9dcb","kafka_traceparent":"00-11112222333344445555666677778888-4f802c6c6f60adf9-01","recovered_span_tree":[{"name":"arkhe.ask.proof.publish","span_id":"4f802c6c6f60adf9","parent_span_id":"71d627891a2a9dcb"},{"name":"arkhe.ask.proof.consume","span_id":"788d542b6a7d9f3b","parent_span_id":"4f802c6c6f60adf9"},{"name":"arkhe.ask.proof.anchor","span_id":"b752c77eacd0531e","parent_span_id":"788d542b6a7d9f3b"}],"limits":"process termination with database and broker kept running; not broker outage, power failure or guaranteed export of pre-crash spans"}
+test crash_between_enqueue_and_publish_keeps_trace_context ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.74s
+

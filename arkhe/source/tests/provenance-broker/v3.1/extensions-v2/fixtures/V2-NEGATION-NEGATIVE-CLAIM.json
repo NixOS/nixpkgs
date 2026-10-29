@@ -1,0 +1,325 @@
+{
+  "fixture_id": "V2-NEGATION-NEGATIVE-CLAIM",
+  "profile_id": "arkhe-broker-local-v2",
+  "description": "Negative Claim supported by literal negative source.",
+  "clock_ms": 1793232000000,
+  "candidate": {
+    "candidate_id": "candidate-atlas",
+    "claim": {
+      "subject": "service:atlas",
+      "predicate": "migrated_to",
+      "object": "database:postgresql-16",
+      "polarity": "Negative",
+      "modality": "Asserted",
+      "qualifiers": []
+    },
+    "query": {
+      "purpose": "Assertion"
+    }
+  },
+  "session": {
+    "principal": "researcher-1",
+    "session_id": "session-1",
+    "tenant": "arkhe-test",
+    "scopes": [
+      "research"
+    ]
+  },
+  "policy": {
+    "policy_id": "broker-pilot",
+    "policy_version": "1",
+    "profile_id": "arkhe-broker-local-v2",
+    "purposes": [
+      "Analysis",
+      "Assertion"
+    ],
+    "best_effort_permitted": true,
+    "historical_permitted": true,
+    "grants_permitted": true,
+    "max_state_age_ms": 1000,
+    "max_decision_ttl_ms": 1000,
+    "accepted_interval_ms": 250,
+    "accepted_evaluator": "fixture-reviewer",
+    "accepted_transforms": [
+      "utf8-identity@1"
+    ],
+    "rejected_transforms": [],
+    "accepted_rules": [
+      "fixture-identity@1"
+    ],
+    "accepted_revision_combinations": [
+      {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      }
+    ],
+    "cross_tenant_aggregation_permitted": false
+  },
+  "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+  "chunks": [
+    {
+      "chunk_id": "chunk-1",
+      "bytes_hex": "4f207365727669c3a76f2041746c6173206ec3a36f206d6967726f75207061726120506f737467726553514c2031362e",
+      "source_bytes_hex": "4f207365727669c3a76f2041746c6173206ec3a36f206d6967726f75207061726120506f737467726553514c2031362e",
+      "representation_hex": "4f207365727669c3a76f2041746c6173206ec3a36f206d6967726f75207061726120506f737467726553514c2031362e",
+      "record": {
+        "chunk_id": "chunk-1",
+        "chunk_digest": "cf25cd6e568ded191553f8d83b230de9d281b70e971e7716cd2b333091433622",
+        "source_digest": "ba1d07c3a39d6e6e8798dcfaa62bffdc816902838be26a1ec678c939473575f3",
+        "text_position": {
+          "repr_digest": "01b56e87b9660817912f9a21a493018e7d47bb1ba4c72a705111d961b5cc905c",
+          "offset": 0,
+          "length": 48
+        },
+        "transformation_ref": "utf8-identity@1",
+        "tenant": "arkhe-test",
+        "scope": "research"
+      },
+      "record_hash": "4f6ef1e97c17c6593b5045784963c3f5e5a168b9842b06de929fe7aeadc5ed69",
+      "per_chunk": {
+        "integrity": "OK",
+        "access": "Permitted",
+        "state": "Current",
+        "transform": "Accepted"
+      },
+      "proof": {
+        "profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+        "leaf_count": 2,
+        "leaf_index": 0,
+        "steps": [
+          {
+            "kind": "node",
+            "direction": "right",
+            "hash": "a96e05a9a2bad229f04a5424a82a1db520caba4fe6259ff22465d910d2849e07"
+          }
+        ]
+      }
+    },
+    {
+      "chunk_id": "chunk-2",
+      "bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+      "source_bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+      "representation_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+      "record": {
+        "chunk_id": "chunk-2",
+        "chunk_digest": "a8549d7a28c4fe31592cc3ba2c00a1e1c880713194ce94f4a3b67ca9b35f60bc",
+        "source_digest": "8786f9d72bc5c58625770f1b22b12097b78ceadbb66dac01df86842a3ff06305",
+        "text_position": {
+          "repr_digest": "f520e6ed6e867131c0e0fcb5535f3b0027e7a355ca8eaaa4ecaaf599b8b7d017",
+          "offset": 0,
+          "length": 39
+        },
+        "transformation_ref": "utf8-identity@1",
+        "tenant": "arkhe-test",
+        "scope": "research"
+      },
+      "record_hash": "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154",
+      "per_chunk": {
+        "integrity": "OK",
+        "access": "Permitted",
+        "state": "Current",
+        "transform": "Accepted"
+      },
+      "proof": {
+        "profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+        "leaf_count": 2,
+        "leaf_index": 1,
+        "steps": [
+          {
+            "kind": "node",
+            "direction": "left",
+            "hash": "8816f80d41398fa918688fdfc6b0c3954bfe92b3ac8fba8922750bf0f89d83fc"
+          }
+        ]
+      }
+    }
+  ],
+  "anchors": {
+    "checkpoint_id": "extension-checkpoint-2",
+    "root": "468f722cdb2f6ac46d1cb003d58b745f13664d9b014e3e1fe9a30eea2313c72e",
+    "leaf_count": 2,
+    "mmr_profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+    "public_key_hex": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+    "key_id": "fixture-authority-1",
+    "state_record_hash": "2e570cfbfc34ef656086077aa7366c4ca79c0041c5e170cc3cc85765a344863e",
+    "state_root": "1290b1284cbfbec50876601a7c808fd0411cebecc638e4962eb21d6038c56d3d",
+    "state_proof": {
+      "leaf_count": 1,
+      "leaf_index": 0,
+      "steps": []
+    },
+    "stream_id": "fixture-evidence-stream",
+    "minimum_leaf_count": 2
+  },
+  "observations": {
+    "integrity": "OK",
+    "transform_items": [
+      {
+        "transformation_ref": "utf8-identity@1",
+        "verdict": "Accepted"
+      }
+    ],
+    "documental": "Complete",
+    "mechanism": {
+      "kind": "Extracted",
+      "predicate_span_valid": true
+    },
+    "bundle": {
+      "key_id": "fixture-authority-1",
+      "body": {
+        "authority": "fixture-authority-1",
+        "subject": "researcher-1",
+        "resources": [
+          "chunk-1",
+          "chunk-2"
+        ],
+        "revisions": {
+          "authorization": "auth-1",
+          "state": "state-1",
+          "policy": "policy-1",
+          "anchor_set": "anchors-1"
+        },
+        "observed_at": 1793231999900,
+        "expires_at": {
+          "authorization": 1793232000800,
+          "state": 1793232000800,
+          "policy": 1793232000800,
+          "anchor_set": 1793232000800
+        },
+        "access": "Permitted",
+        "state": "Current",
+        "effective_from": 1793231990000,
+        "effective_to": 1793232010000,
+        "historical_state": "Active",
+        "source_authorizations": [],
+        "aggregate_authorizations": []
+      },
+      "signature_hex": "012e89eeb387f9588ea54be9554fbd58b36d9eb66164c4f9d5182d69baae021d017362222c1e59d889b5deb2f74871b9fba9cb75d739c60b876129d39bdc1e05"
+    },
+    "failures": [],
+    "semantic": {
+      "key_id": "fixture-authority-1",
+      "body": {
+        "claim_digest": "2026bd01efa1ef2fadfe2d507c751dc0008fad04a8141190a7fb1f194358783b",
+        "support_set_digest": "6547d0edf3f0e48de8dda3b9b616ba4296e83a2fa3585e1dbbc5e0aa99550e1c",
+        "outcome": "Supported",
+        "method": "Human",
+        "evaluator": "fixture-reviewer",
+        "evaluator_version": "1",
+        "support_refs": [
+          "4f6ef1e97c17c6593b5045784963c3f5e5a168b9842b06de929fe7aeadc5ed69",
+          "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154"
+        ]
+      },
+      "signature_hex": "f735f2fb7288ae1e00380b78883bff0a9befa0a9d6c3167dd9422e951465b08ea2932ae8f9f2621e6447d63d87e8f23fa92a597dbc24f801fd2c1134385ffa00"
+    }
+  },
+  "delivery": {
+    "attempted_at": 1793232000100,
+    "authorization_source_available": true,
+    "other_sources_available": true,
+    "observed_revisions": {
+      "authorization": "auth-1",
+      "state": "state-1",
+      "policy": "policy-1",
+      "anchor_set": "anchors-1"
+    }
+  },
+  "independent_review": {
+    "status": "pending"
+  },
+  "expected_output": {
+    "decision": "Admit",
+    "applied_rule": "RELEASE_CURRENT",
+    "flags": [],
+    "reasons": [
+      {
+        "rule_id": "RELEASE_CURRENT",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [
+        {
+          "chunk_id": "chunk-1",
+          "bytes_hex": "4f207365727669c3a76f2041746c6173206ec3a36f206d6967726f75207061726120506f737467726553514c2031362e",
+          "chunk_digest": "cf25cd6e568ded191553f8d83b230de9d281b70e971e7716cd2b333091433622",
+          "source_digest": "ba1d07c3a39d6e6e8798dcfaa62bffdc816902838be26a1ec678c939473575f3",
+          "text_position": {
+            "repr_digest": "01b56e87b9660817912f9a21a493018e7d47bb1ba4c72a705111d961b5cc905c",
+            "offset": 0,
+            "length": 48
+          },
+          "evidence_ref": "4f6ef1e97c17c6593b5045784963c3f5e5a168b9842b06de929fe7aeadc5ed69"
+        },
+        {
+          "chunk_id": "chunk-2",
+          "bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+          "chunk_digest": "a8549d7a28c4fe31592cc3ba2c00a1e1c880713194ce94f4a3b67ca9b35f60bc",
+          "source_digest": "8786f9d72bc5c58625770f1b22b12097b78ceadbb66dac01df86842a3ff06305",
+          "text_position": {
+            "repr_digest": "f520e6ed6e867131c0e0fcb5535f3b0027e7a355ca8eaaa4ecaaf599b8b7d017",
+            "offset": 0,
+            "length": 39
+          },
+          "evidence_ref": "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154"
+        }
+      ],
+      "claim_status": "SupportedByEvaluation",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": [],
+      "claim": {
+        "subject": "service:atlas",
+        "predicate": "migrated_to",
+        "object": "database:postgresql-16",
+        "polarity": "Negative",
+        "modality": "Asserted",
+        "qualifiers": []
+      },
+      "semantic": {
+        "claim_digest": "2026bd01efa1ef2fadfe2d507c751dc0008fad04a8141190a7fb1f194358783b",
+        "support_set_digest": "6547d0edf3f0e48de8dda3b9b616ba4296e83a2fa3585e1dbbc5e0aa99550e1c",
+        "outcome": "Supported",
+        "method": "Human",
+        "evaluator": "fixture-reviewer",
+        "evaluator_version": "1",
+        "support_refs": [
+          "4f6ef1e97c17c6593b5045784963c3f5e5a168b9842b06de929fe7aeadc5ed69",
+          "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154"
+        ]
+      }
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+      "anchor_set_digest": "d926511ca7cea31445886aec25607bc57c83a2854c1067254199aa5153f7c487",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "b04c9e1cd9532092dff596e105a9e1514a46fb31fafe7fe80699afa3dd5112d5"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Release",
+      "code": "VALIDATION_WINDOW"
+    },
+    "material_errors": []
+  },
+  "expected_schema_error_paths": []
+}

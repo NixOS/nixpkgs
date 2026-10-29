@@ -1,0 +1,21 @@
+[package]
+name = "arkhe-wormgraph"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-core = { path = "../../kernel/arkhe-core" }
+async-trait.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+hex.workspace = true
+ed25519-dalek.workspace = true
+sqlx.workspace = true
+arkhe-sql = { path = "../../storage/sql/crates/arkhe-sql" }
+arkhe-verify-core = { path = "../../verification/crates/arkhe-verify-core" }
+
+[lints.rust]
+# `cargo kani` sets this cfg; register it so normal builds don't warn.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }

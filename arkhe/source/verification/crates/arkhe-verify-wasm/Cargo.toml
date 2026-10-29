@@ -1,0 +1,16 @@
+[package]
+name = "arkhe-verify-wasm"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+arkhe-auth-md = { path = "../../../integration/auth-md", default-features = false }
+ed25519-dalek = "2.2.0"
+arkhe-verify-core = { path = "../arkhe-verify-core" }
+hex.workspace = true
+serde_json.workspace = true
+wasm-bindgen.workspace = true

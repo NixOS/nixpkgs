@@ -1,0 +1,68 @@
+{
+  "stage": "Integration",
+  "fixture_id": "V2-AGG-SOURCE-UNKNOWN",
+  "extraction_refs": [
+    "c0dd29de59a3fb6063def55eff5dc4facc1672e4269694867d9cb4054a18a09a",
+    "4c5ae557a4ffad33ac82142d41914677d4ce3cd1c16669dfe90cfddda0f76d3e"
+  ],
+  "evaluation_ref": "e6d92169c1132d3ba67c7578c825eb551727f79bb9903589bc88d183250ab534",
+  "retained_control_decision": "Exclude",
+  "retained_control_payload_match": true,
+  "experimental_ingestion": {
+    "status": "Blocked",
+    "reason": "EVALUATOR_NOT_TRUSTED",
+    "agent_payload": {
+      "chunks": []
+    }
+  },
+  "pure_policy_simulation_only": true,
+  "simulation": {
+    "decision": "Exclude",
+    "applied_rule": "ACCESS_UNKNOWN",
+    "flags": [],
+    "reasons": [
+      {
+        "rule_id": "ACCESS_UNKNOWN",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [],
+      "claim_status": "Omitted",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": []
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "4bb8f895898287ebd2a2f2c49406bdde0125a9f77d19c941662d6630c482f29c",
+      "anchor_set_digest": "dcbbcf2981347e89e4e8485fe50042835c81433e74c64a27aac44e9ef2752581",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "57025ed60744457f44c5583b77dd66b99f8ae3c88b6e4939cef8557dcf33358b"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Blocked",
+      "code": "DECISION_DENIED"
+    }
+  },
+  "simulation_decision_matches_authored_oracle": true,
+  "simulation_payload_matches_authored_oracle": true,
+  "policy_unchanged": true,
+  "authenticated_experimental_integration": false
+}

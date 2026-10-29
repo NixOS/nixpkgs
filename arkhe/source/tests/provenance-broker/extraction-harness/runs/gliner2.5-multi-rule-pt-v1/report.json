@@ -1,0 +1,243 @@
+{
+  "experiment_id": "arkhe-extraction-support-pilot-v1",
+  "status": "executed",
+  "model": {
+    "id": "fastino/gliner2.5-multi-v1",
+    "revision": "cf5593a5d45e3bbf204b9df621b13b1c0cf25ee3",
+    "library_version": "2.1.0",
+    "torch": "2.11.0",
+    "transformers": "5.2.0",
+    "config_ref": "dfdc6302a678a53a4e79f7998823c7b20067c295fdf59700a7c8c51193f7269a",
+    "checkpoint_file_hashes": {
+      "config.json": "3e4a96bf01da1094180f2d8998411c1a9fd6e2ae4b5b3e4bc6950318cee95bb7",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "README.md": "bf5b8862eeebc0110a9f627219f3975ab5c8b90af199392adda87358b1c2027d",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716"
+    }
+  },
+  "config": {
+    "experiment_id": "arkhe-extraction-support-pilot-v1",
+    "model_id": "fastino/gliner2.5-multi-v1",
+    "model_revision": "cf5593a5d45e3bbf204b9df621b13b1c0cf25ee3",
+    "device": "cpu",
+    "seed": 0,
+    "threads": 4,
+    "max_text_bytes": 4096,
+    "max_len": 512,
+    "threshold": 0.5,
+    "entity_labels": {
+      "service": "Named software services or applications, such as Atlas",
+      "database": "Database systems including version, such as PostgreSQL 16",
+      "organization": "Named companies or teams, such as Aurora or Acme",
+      "person": "Named people, such as Alice"
+    },
+    "predicate_labels": [
+      "migrated_to",
+      "operates",
+      "works_for"
+    ],
+    "polarity_labels": [
+      "affirmative statement",
+      "negated statement",
+      "mixed affirmative and negated statements",
+      "unknown"
+    ],
+    "modality_labels": [
+      "factual assertion",
+      "possibility",
+      "conditional",
+      "mixed modality",
+      "unknown"
+    ],
+    "support_evaluator": {
+      "id": "arkhe-support-rule-pt",
+      "version": "1",
+      "method": "Rule",
+      "scope": "literal Portuguese Atlas migration grammar; explicit correction references; abstains on unsupported predicates",
+      "accepted_by_current_broker_policy": false
+    },
+    "independent_review": "pending",
+    "reserved_corpus": false
+  },
+  "fixture_count": 19,
+  "unique_sources": 8,
+  "skipped": [
+    "V2-LIMIT-* structural byte-limit tests; no silent truncation"
+  ],
+  "extraction_comparison": {
+    "reference_status": "provisional authored literal spans; independent review pending",
+    "sources": 8,
+    "entity_exact_span_tp": 14,
+    "fp": 1,
+    "fn": 0,
+    "precision": 0.9333333333333333,
+    "recall": 1.0,
+    "f1": 0.9655172413793104,
+    "qualifier_matches": {
+      "polarity": 8,
+      "modality": 1
+    },
+    "disagreements": [
+      {
+        "source_sha256": "c2c1e02045741d04df2ab669e3465d4dc8ba7689536333980f99573af1672806",
+        "missing_entities": [],
+        "extra_entities": [],
+        "qualifiers_expected": {
+          "polarity": "affirmative statement",
+          "modality": "factual assertion"
+        },
+        "qualifiers_observed": {
+          "polarity": "affirmative statement",
+          "modality": "mixed modality"
+        }
+      },
+      {
+        "source_sha256": "fb8ace96357ff613187f34cbe5d24baeed79ce161e5e246ac7aa0aa99ef2dd27",
+        "missing_entities": [],
+        "extra_entities": [],
+        "qualifiers_expected": {
+          "polarity": "affirmative statement",
+          "modality": "factual assertion"
+        },
+        "qualifiers_observed": {
+          "polarity": "affirmative statement",
+          "modality": "mixed modality"
+        }
+      },
+      {
+        "source_sha256": "913f403153995ff40519629beea431e3cee16e39f27137fbecfa9b506fc462cb",
+        "missing_entities": [],
+        "extra_entities": [],
+        "qualifiers_expected": {
+          "polarity": "affirmative statement",
+          "modality": "factual assertion"
+        },
+        "qualifiers_observed": {
+          "polarity": "affirmative statement",
+          "modality": "possibility"
+        }
+      },
+      {
+        "source_sha256": "6f06b7afcfdff57609d4ebc2cf60d88f0b720b11bafa8912a717d510c48cebf1",
+        "missing_entities": [],
+        "extra_entities": [],
+        "qualifiers_expected": {
+          "polarity": "negated statement",
+          "modality": "factual assertion"
+        },
+        "qualifiers_observed": {
+          "polarity": "negated statement",
+          "modality": "mixed modality"
+        }
+      },
+      {
+        "source_sha256": "5367459ce1f12115cee88857f06e6ee01b8dd01aa975bd039279417b6c381e94",
+        "missing_entities": [],
+        "extra_entities": [
+          [
+            "organization",
+            16,
+            26
+          ]
+        ],
+        "qualifiers_expected": {
+          "polarity": "affirmative statement",
+          "modality": "factual assertion"
+        },
+        "qualifiers_observed": {
+          "polarity": "affirmative statement",
+          "modality": "possibility"
+        }
+      },
+      {
+        "source_sha256": "40e2505fd136fa5b6098d08f8f72646093f6ce93278c15fd62e327f7d77ca80b",
+        "missing_entities": [],
+        "extra_entities": [],
+        "qualifiers_expected": {
+          "polarity": "affirmative statement",
+          "modality": "factual assertion"
+        },
+        "qualifiers_observed": {
+          "polarity": "affirmative statement",
+          "modality": "mixed modality"
+        }
+      },
+      {
+        "source_sha256": "f630831d662d72c9e62f5b7450f203861860106f7c5fe4ce309425ef4fd90b39",
+        "missing_entities": [],
+        "extra_entities": [],
+        "qualifiers_expected": {
+          "polarity": "negated statement",
+          "modality": "factual assertion"
+        },
+        "qualifiers_observed": {
+          "polarity": "negated statement",
+          "modality": "possibility"
+        }
+      }
+    ],
+    "predicate_quality": "not scored: no independently reviewed relation annotations"
+  },
+  "support_comparison": {
+    "metric": "agreement with provisional authored labels, not independently established accuracy",
+    "agreements": 18,
+    "count": 19,
+    "fraction": 0.9473684210526315,
+    "confusion": {
+      "Supported->Supported": 14,
+      "Contradicted->Contradicted": 3,
+      "Indeterminate->NotEvaluated": 1,
+      "Indeterminate->Indeterminate": 1
+    },
+    "disagreements": [
+      {
+        "fixture_id": "V2-ENDPOINTS-NO-RELATION",
+        "expected_provisional": "Indeterminate",
+        "observed": "NotEvaluated",
+        "reason": "UNSUPPORTED_PREDICATE"
+      }
+    ]
+  },
+  "integration": {
+    "authenticated_experimental_ingestion": false,
+    "blocked_untrusted_evaluators": 19,
+    "simulation_decision_matches": 15,
+    "simulation_payload_matches": 12,
+    "policy_promoted": false
+  },
+  "independent_review": "pending",
+  "reserved_corpus": false,
+  "hf_offline_flags_enabled": true,
+  "network_isolation_verified": false,
+  "limitations": [
+    "same author and known corpus",
+    "rule evaluator limited to Atlas migration grammar",
+    "no automatic relation-level qualifier binding",
+    "no live services",
+    "experimental evaluator not trusted by broker policy"
+  ],
+  "fixture_hashes": {
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-AGG-EXPLICIT-ALLOW.json": "dd58050cacf836eadb700e0ecd025698e3a1bd2f5702f62a698463bdb1ec7a2b",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-AGG-GRANT-DENIED.json": "8f01bb2d55be1a53149bbbdae751bb87248cce92226318a7876d6f348f6bbada",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-AGG-POLICY-DENIED.json": "2b2279b1f98ef573f68c932ab6db61da035cdaded73ff1ce6ada84ab7dd172da",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-AGG-SCOPE-ALLOW.json": "afd171a6d823b0961af94a0b4a270f90521574abd8463764282cb4a05826dcc4",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-AGG-SCOPE-DENIED.json": "405d204685589c4e4fad36198a191f7d1162a657d3f7b8cc8da651e6a5603007",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-AGG-SOURCE-DENIED.json": "f4a619b1129378f55adb00fbe6e78744d948a7e41f478980b9b1a2ddb1b50661",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-AGG-SOURCE-UNKNOWN.json": "368a1bfcf44a82501d04c55e02a173b21ddaafcc4cd63643efdf921b2397a9bb",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-CORRECTION-ANALYSIS.json": "cb0e8ad4e471b783180d926658c3df7b1b582423b5803f701c1f7b1791887694",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-CORRECTION-OLD-CLAIM.json": "e321931e876e2ac6a8a1f015eaa24ab7f5d7541aa8c8433c46723caf871289de",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-ENDPOINTS-NO-RELATION.json": "4452f99da243e280caa2506f122de4d67d21b6841dcff1c056632f24e1f42145",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-HYPOTHESIS-ASSERTED.json": "bfc76c298ce8060bcbe912c781d2269838eeb468f6f8aceaa78d9bc0405730cf",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-HYPOTHESIS-POSSIBLE.json": "b6a20d4b8e07af2c5b22d5b6d3aa8fe594bbf4fcb08d6ece0db2c1b698b8b46b",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-NEGATION-NEGATIVE-CLAIM.json": "a881d2881dc935514162373a57ebcc59b9fffd870f7fcf54e45f04d1702742ee",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-NEGATION-POSITIVE-CLAIM.json": "c1cb3150c9473e9654eb8895b2b67be7431166be47dfb8f5229f90fe329b6f1d",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-P05-TWO-SAFE.json": "7b2788227193e7b2f23a9c3cab55ce3677151c76550fc7fbc1e4db55c5060973",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-PROJECTION-REVOKED.json": "bb356eca83aae562b45bc2a6672cf2c89f25ba355f6b40b000e84614b18dc09c",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-PROJECTION-STILL-CURRENT.json": "c813c225ffa94704b23250672c28c8cc70ae3c3bace9928e64da062c9b90c07a",
+    "tests\\provenance-broker\\v3.1\\extensions-v2\\fixtures\\V2-ROLLBACK-VALID-OLD-PROOF.json": "9cb5070fd802a904d00720c41e82f42a19fc0f96869971774cd09e409e0090de",
+    "tests\\provenance-broker\\v3.1\\fixtures\\P-02.json": "ede213fbbc78dc6df722e4afb36a28597286ae7c428e1c016eaeef0fd9d77ef7"
+  },
+  "source_code_sha256": "8f46af9d37a0140f4f776a7da0be4f8587ae3cf9f294e6fad7c9b5019f411af5"
+}

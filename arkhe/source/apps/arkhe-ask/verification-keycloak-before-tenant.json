@@ -1,0 +1,40 @@
+{
+  "authentication": "real Keycloak client_credentials tokens; signature via discovered JWKS",
+  "health_status": 200,
+  "cases": [
+    {
+      "status": 200,
+      "case": "valid token with spoofed tenant header"
+    },
+    {
+      "status": 401,
+      "case": "header only"
+    },
+    {
+      "status": 401,
+      "case": "malformed JWT"
+    },
+    {
+      "status": 401,
+      "case": "tampered signature"
+    },
+    {
+      "status": 401,
+      "case": "signed token without tenant plus spoofed header"
+    },
+    {
+      "status": 401,
+      "case": "signed token for another audience"
+    }
+  ],
+  "dependencies": [
+    "arkhe-jobplan-postgres healthy",
+    "arkhe-jobplan-keycloak healthy"
+  ],
+  "vector_version": "0.8.7",
+  "generation": "EchoProvider + InMemoryStore; Azure unverified",
+  "tenant_scope": "JWT tenant identity only; storage is not tenant-partitioned",
+  "missing_auth_config_exit": 101,
+  "image_id": "a1e3d5a083016eff7c537c2d70671ea63c698179b587b6b26b3ef159502202d0",
+  "local_tests": "11 passed, 7 ignored; 5 real pgvector tests passed separately"
+}

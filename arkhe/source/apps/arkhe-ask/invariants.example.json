@@ -1,0 +1,4 @@
+[
+  { "tenant_id": "tenant-a", "id": "approval-payments-v1", "text": "Pagamentos exigem aprovação humana." },
+  { "tenant_id": "tenant-a", "id": "retain-logs-v1", "text": "Logs preservam evidências de execução." }
+]

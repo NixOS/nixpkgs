@@ -1,0 +1,30 @@
+[package]
+name = "arkhe-verify-core"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-core = { path = "../../../kernel/arkhe-core" }
+blake3.workspace = true
+ed25519-dalek = "2.2.0"
+hex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+sha3 = "=0.10.8"
+thiserror.workspace = true
+spdx = { version = "=0.13.5", default-features = false }
+
+[dev-dependencies]
+proptest = "=1.9.0"
+fips204 = { version = "=0.4.6", default-features = false, features = ["ml-dsa-44"] }
+
+[features]
+rbb-pqc = ["dep:fips204"]
+
+[dependencies.fips204]
+version = "=0.4.6"
+optional = true
+default-features = false
+features = ["ml-dsa-44"]

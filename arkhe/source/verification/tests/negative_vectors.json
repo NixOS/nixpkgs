@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "vectors": [
+    {
+      "id": "NEG-C2PA-MISSING-001",
+      "kind": "c2pa",
+      "expected": "REJECT",
+      "reason": "missing required claim-map-v2 fields"
+    },
+    {
+      "id": "NEG-C2PA-ALG-001",
+      "kind": "c2pa",
+      "expected": "REJECT",
+      "reason": "Ed25519 used as C2PA claim hash algorithm"
+    },
+    {
+      "id": "NEG-MMR-EMPTY-001",
+      "kind": "mmr",
+      "expected": "REJECT",
+      "reason": "empty MMR forbidden by profile v1"
+    },
+    {
+      "id": "NEG-MMR-DIR-001",
+      "kind": "mmr",
+      "expected": "REJECT",
+      "reason": "unknown proof direction"
+    }
+  ]
+}

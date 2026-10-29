@@ -1,0 +1,12 @@
+{
+  "name": "arkhe-verify-wasm",
+  "version": "0.1.0",
+  "license": "Apache-2.0 OR MIT",
+  "files": [
+    "arkhe_verify_wasm_bg.wasm",
+    "arkhe_verify_wasm.js",
+    "arkhe_verify_wasm.d.ts"
+  ],
+  "main": "arkhe_verify_wasm.js",
+  "types": "arkhe_verify_wasm.d.ts"
+}

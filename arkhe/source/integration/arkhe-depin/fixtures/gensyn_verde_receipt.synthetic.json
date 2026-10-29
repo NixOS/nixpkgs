@@ -1,0 +1,9 @@
+{
+  "task_id": "synthetic-task-1",
+  "providers": ["synthetic-worker-a", "synthetic-worker-b"],
+  "divergent_provider": "synthetic-worker-b",
+  "divergence_op": "matmul-1",
+  "referee_decision": "synthetic-worker-a accepted",
+  "referee_signature": [1, 2, 3],
+  "completed_at": 1780000000
+}

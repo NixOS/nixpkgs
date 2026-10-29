@@ -1,0 +1,110 @@
+{
+  "stage": "Extraction",
+  "extractor": {
+    "id": "fastino/gliner2.5-multi-v1",
+    "revision": "cf5593a5d45e3bbf204b9df621b13b1c0cf25ee3",
+    "library_version": "2.1.0",
+    "torch": "2.11.0",
+    "transformers": "5.2.0",
+    "config_ref": "dfdc6302a678a53a4e79f7998823c7b20067c295fdf59700a7c8c51193f7269a",
+    "checkpoint_file_hashes": {
+      "config.json": "3e4a96bf01da1094180f2d8998411c1a9fd6e2ae4b5b3e4bc6950318cee95bb7",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "README.md": "bf5b8862eeebc0110a9f627219f3975ab5c8b90af199392adda87358b1c2027d",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716"
+    }
+  },
+  "source_utf8_sha256": "c2c1e02045741d04df2ab669e3465d4dc8ba7689536333980f99573af1672806",
+  "source_bytes": 43,
+  "word_tokens": 8,
+  "truncated": false,
+  "raw": {
+    "entities": {
+      "service": [
+        {
+          "text": "Atlas",
+          "confidence": 0.9989078044891357,
+          "start": 10,
+          "end": 15
+        }
+      ],
+      "database": [
+        {
+          "text": "PostgreSQL 16",
+          "confidence": 0.9973351359367371,
+          "start": 28,
+          "end": 41
+        }
+      ],
+      "organization": [],
+      "person": []
+    },
+    "polarity": {
+      "label": "affirmative statement",
+      "confidence": 0.3392062783241272
+    },
+    "modality": {
+      "label": "mixed modality",
+      "confidence": 0.33574432134628296
+    },
+    "relation_extraction": {
+      "migrated_to": [
+        {
+          "head": {
+            "text": "Atlas",
+            "start": 10,
+            "end": 15,
+            "confidence": 0.9985029697418213
+          },
+          "tail": {
+            "text": "PostgreSQL 16",
+            "start": 28,
+            "end": 41,
+            "confidence": 0.998173713684082
+          },
+          "confidence": 0.9694011211395264
+        }
+      ],
+      "operates": [],
+      "works_for": []
+    }
+  },
+  "span_checks": [
+    {
+      "path": "/entities/service/0",
+      "character_start": 10,
+      "character_end": 15,
+      "valid": true,
+      "byte_start": 11,
+      "byte_end": 16
+    },
+    {
+      "path": "/entities/database/0",
+      "character_start": 28,
+      "character_end": 41,
+      "valid": true,
+      "byte_start": 29,
+      "byte_end": 42
+    },
+    {
+      "path": "/relation_extraction/migrated_to/0/head",
+      "character_start": 10,
+      "character_end": 15,
+      "valid": true,
+      "byte_start": 11,
+      "byte_end": 16
+    },
+    {
+      "path": "/relation_extraction/migrated_to/0/tail",
+      "character_start": 28,
+      "character_end": 41,
+      "valid": true,
+      "byte_start": 29,
+      "byte_end": 42
+    }
+  ],
+  "qualifier_scope": "document-level classification; not assigned automatically to each predicate",
+  "score_calibrated": false
+}

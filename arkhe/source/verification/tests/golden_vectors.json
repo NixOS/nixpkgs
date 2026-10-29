@@ -1,0 +1,640 @@
+{
+  "$schema": "https://arkhe.dev/schemas/golden-vectors-v1.json",
+  "version": "AKG-CBOR-v1",
+  "generated_by": "hand-authored-contract + independent stdlib reference",
+  "generated_at": "2026-10-17T00:00:00Z",
+  "mmr_profile_ref": {
+    "profile_id": "arkhe-mmr",
+    "version": 1,
+    "digest_algorithm": "BLAKE3-256",
+    "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+  },
+  "vectors": [
+    {
+      "id": "BLAKE3-001",
+      "component": "BLAKE3",
+      "status": "READY",
+      "normative_source": "BLAKE3 official test vectors",
+      "description": "BLAKE3 hash of empty input",
+      "input": {
+        "data_hex": "",
+        "domain": "none"
+      },
+      "expected_output": {
+        "hash_hex": "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262"
+      }
+    },
+    {
+      "id": "BLAKE3-002",
+      "component": "BLAKE3",
+      "status": "READY",
+      "normative_source": "BLAKE3 known-answer vector for ASCII abc",
+      "description": "BLAKE3 hash of ASCII abc",
+      "input": {
+        "data_hex": "616263",
+        "domain": "none"
+      },
+      "expected_output": {
+        "hash_hex": "6437b3ac38465133ffb63b75273a8db548c558465d79db03fd359c6cd5bd9d85"
+      }
+    },
+    {
+      "id": "GGUF-CANON-001",
+      "component": "GGUF Canonicalization",
+      "status": "READY",
+      "normative_source": "AKG-CBOR-v1 + RFC 8949 §4.2.1",
+      "description": "Core-deterministic CBOR encoding of selected GGUF metadata",
+      "input": {
+        "metadata": {
+          "architecture": "llama",
+          "context_length": 4096,
+          "license": "MIT"
+        }
+      },
+      "expected_output": {
+        "canonical_cbor_hex": "a3676c6963656e7365634d49546c617263686974656374757265656c6c616d616e636f6e746578745f6c656e677468191000",
+        "canonical_blake3_hex": "f21ac0a3545177abf1fac5a4b315ad6db71b5495febfdfc5e0db0a6273a34d12"
+      }
+    },
+    {
+      "id": "MMR-001",
+      "component": "WormGraph MMR",
+      "normative_source": "Arkhe MMR Profile v1 (spec/mmr-profile-v1.md)",
+      "description": "Arkhe MMR Profile v1 with 4 leaf/leaves; complete inclusion proofs for every leaf",
+      "status": "READY",
+      "profile_ref": {
+        "profile_id": "arkhe-mmr",
+        "version": 1,
+        "digest_algorithm": "BLAKE3-256",
+        "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+      },
+      "input": {
+        "leaves": [
+          "0000000000000000000000000000000000000000000000000000000000000001",
+          "0000000000000000000000000000000000000000000000000000000000000002",
+          "0000000000000000000000000000000000000000000000000000000000000003",
+          "0000000000000000000000000000000000000000000000000000000000000004"
+        ],
+        "leaf_count": 4,
+        "mmr_size": 7,
+        "target_index": 2,
+        "index_base": 0
+      },
+      "expected_output": {
+        "peak_hashes": [
+          "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94"
+        ],
+        "root_hash_hex": "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94",
+        "inclusion_proof_hashes": [
+          "ae0a16419db8f57ecc730b1fcd8c2957637e5a5dbd83078960759a9b9bf8b637",
+          "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c"
+        ],
+        "inclusion_proof_directions": [
+          "right",
+          "left"
+        ],
+        "inclusion_proof_kinds": [
+          "node",
+          "node"
+        ],
+        "proofs": [
+          {
+            "target_index": 0,
+            "inclusion_proof_hashes": [
+              "f158535bbffb524797d1a34a9dc6b59281f7e5eafacfef8ab9bbbda2a97d0be5",
+              "093480f00e08134da4e5aabcb1034e154800e07f9db0888a9631fca322aa3c95"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node"
+            ]
+          },
+          {
+            "target_index": 1,
+            "inclusion_proof_hashes": [
+              "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b",
+              "093480f00e08134da4e5aabcb1034e154800e07f9db0888a9631fca322aa3c95"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node"
+            ]
+          },
+          {
+            "target_index": 2,
+            "inclusion_proof_hashes": [
+              "ae0a16419db8f57ecc730b1fcd8c2957637e5a5dbd83078960759a9b9bf8b637",
+              "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "left"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node"
+            ]
+          },
+          {
+            "target_index": 3,
+            "inclusion_proof_hashes": [
+              "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5",
+              "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "left"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "MMR-1LEAF-001",
+      "component": "WormGraph MMR",
+      "normative_source": "Arkhe MMR Profile v1 (spec/mmr-profile-v1.md)",
+      "description": "Arkhe MMR Profile v1 with 1 leaf/leaves; complete inclusion proofs for every leaf",
+      "status": "READY",
+      "profile_ref": {
+        "profile_id": "arkhe-mmr",
+        "version": 1,
+        "digest_algorithm": "BLAKE3-256",
+        "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+      },
+      "input": {
+        "leaves": [
+          "0000000000000000000000000000000000000000000000000000000000000001"
+        ],
+        "leaf_count": 1,
+        "mmr_size": 1,
+        "target_index": 0,
+        "index_base": 0
+      },
+      "expected_output": {
+        "peak_hashes": [
+          "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b"
+        ],
+        "root_hash_hex": "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b",
+        "inclusion_proof_hashes": [],
+        "inclusion_proof_directions": [],
+        "inclusion_proof_kinds": [],
+        "proofs": [
+          {
+            "target_index": 0,
+            "inclusion_proof_hashes": [],
+            "inclusion_proof_directions": [],
+            "inclusion_proof_kinds": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "MMR-3LEAF-001",
+      "component": "WormGraph MMR",
+      "normative_source": "Arkhe MMR Profile v1 (spec/mmr-profile-v1.md)",
+      "description": "Arkhe MMR Profile v1 with 3 leaf/leaves; complete inclusion proofs for every leaf",
+      "status": "READY",
+      "profile_ref": {
+        "profile_id": "arkhe-mmr",
+        "version": 1,
+        "digest_algorithm": "BLAKE3-256",
+        "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+      },
+      "input": {
+        "leaves": [
+          "0000000000000000000000000000000000000000000000000000000000000001",
+          "0000000000000000000000000000000000000000000000000000000000000002",
+          "0000000000000000000000000000000000000000000000000000000000000003"
+        ],
+        "leaf_count": 3,
+        "mmr_size": 4,
+        "target_index": 2,
+        "index_base": 0
+      },
+      "expected_output": {
+        "peak_hashes": [
+          "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c",
+          "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5"
+        ],
+        "root_hash_hex": "edf432b5854467f8ceaa0102e37dae99200e96c9b184b02681ad4145ac4cbbf0",
+        "inclusion_proof_hashes": [
+          "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c"
+        ],
+        "inclusion_proof_directions": [
+          "left"
+        ],
+        "inclusion_proof_kinds": [
+          "bag"
+        ],
+        "proofs": [
+          {
+            "target_index": 0,
+            "inclusion_proof_hashes": [
+              "f158535bbffb524797d1a34a9dc6b59281f7e5eafacfef8ab9bbbda2a97d0be5",
+              "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 1,
+            "inclusion_proof_hashes": [
+              "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b",
+              "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 2,
+            "inclusion_proof_hashes": [
+              "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c"
+            ],
+            "inclusion_proof_directions": [
+              "left"
+            ],
+            "inclusion_proof_kinds": [
+              "bag"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "MMR-5LEAF-001",
+      "component": "WormGraph MMR",
+      "normative_source": "Arkhe MMR Profile v1 (spec/mmr-profile-v1.md)",
+      "description": "Arkhe MMR Profile v1 with 5 leaf/leaves; complete inclusion proofs for every leaf",
+      "status": "READY",
+      "profile_ref": {
+        "profile_id": "arkhe-mmr",
+        "version": 1,
+        "digest_algorithm": "BLAKE3-256",
+        "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+      },
+      "input": {
+        "leaves": [
+          "0000000000000000000000000000000000000000000000000000000000000001",
+          "0000000000000000000000000000000000000000000000000000000000000002",
+          "0000000000000000000000000000000000000000000000000000000000000003",
+          "0000000000000000000000000000000000000000000000000000000000000004",
+          "0000000000000000000000000000000000000000000000000000000000000005"
+        ],
+        "leaf_count": 5,
+        "mmr_size": 8,
+        "target_index": 4,
+        "index_base": 0
+      },
+      "expected_output": {
+        "peak_hashes": [
+          "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94",
+          "014486f26ca863608c1ffb242275bbcbcf1479a662124e631d1719a0b795f71a"
+        ],
+        "root_hash_hex": "3686670ec4a843bc3caaf0d302906e7cb161f791ddbd739ffa0dbeda61f069bf",
+        "inclusion_proof_hashes": [
+          "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94"
+        ],
+        "inclusion_proof_directions": [
+          "left"
+        ],
+        "inclusion_proof_kinds": [
+          "bag"
+        ],
+        "proofs": [
+          {
+            "target_index": 0,
+            "inclusion_proof_hashes": [
+              "f158535bbffb524797d1a34a9dc6b59281f7e5eafacfef8ab9bbbda2a97d0be5",
+              "093480f00e08134da4e5aabcb1034e154800e07f9db0888a9631fca322aa3c95",
+              "014486f26ca863608c1ffb242275bbcbcf1479a662124e631d1719a0b795f71a"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "right",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 1,
+            "inclusion_proof_hashes": [
+              "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b",
+              "093480f00e08134da4e5aabcb1034e154800e07f9db0888a9631fca322aa3c95",
+              "014486f26ca863608c1ffb242275bbcbcf1479a662124e631d1719a0b795f71a"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "right",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 2,
+            "inclusion_proof_hashes": [
+              "ae0a16419db8f57ecc730b1fcd8c2957637e5a5dbd83078960759a9b9bf8b637",
+              "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c",
+              "014486f26ca863608c1ffb242275bbcbcf1479a662124e631d1719a0b795f71a"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "left",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 3,
+            "inclusion_proof_hashes": [
+              "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5",
+              "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c",
+              "014486f26ca863608c1ffb242275bbcbcf1479a662124e631d1719a0b795f71a"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "left",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 4,
+            "inclusion_proof_hashes": [
+              "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94"
+            ],
+            "inclusion_proof_directions": [
+              "left"
+            ],
+            "inclusion_proof_kinds": [
+              "bag"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "MMR-7LEAF-001",
+      "component": "WormGraph MMR",
+      "normative_source": "Arkhe MMR Profile v1 (spec/mmr-profile-v1.md)",
+      "description": "Arkhe MMR Profile v1 with 7 leaf/leaves; complete inclusion proofs for every leaf",
+      "status": "READY",
+      "profile_ref": {
+        "profile_id": "arkhe-mmr",
+        "version": 1,
+        "digest_algorithm": "BLAKE3-256",
+        "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+      },
+      "input": {
+        "leaves": [
+          "0000000000000000000000000000000000000000000000000000000000000001",
+          "0000000000000000000000000000000000000000000000000000000000000002",
+          "0000000000000000000000000000000000000000000000000000000000000003",
+          "0000000000000000000000000000000000000000000000000000000000000004",
+          "0000000000000000000000000000000000000000000000000000000000000005",
+          "0000000000000000000000000000000000000000000000000000000000000006",
+          "0000000000000000000000000000000000000000000000000000000000000007"
+        ],
+        "leaf_count": 7,
+        "mmr_size": 11,
+        "target_index": 4,
+        "index_base": 0
+      },
+      "expected_output": {
+        "peak_hashes": [
+          "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94",
+          "3e405514d5bd48d670e457b92c484d3f6089cb692472e9c2ffc6a68415ba1543",
+          "fbb0dc973121b4536952de0370b3dfd5cc1eb45c432d8b7c33e8142cc9fb91ed"
+        ],
+        "root_hash_hex": "5b72738d4f0581752327a48be16dae227da624f7e0316b39f512f1f787fbdb64",
+        "inclusion_proof_hashes": [
+          "e88886ac2cabaacbc23f315a0fd46f93fc3525d0436fe39ea701d5676b789ba6",
+          "fbb0dc973121b4536952de0370b3dfd5cc1eb45c432d8b7c33e8142cc9fb91ed",
+          "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94"
+        ],
+        "inclusion_proof_directions": [
+          "right",
+          "right",
+          "left"
+        ],
+        "inclusion_proof_kinds": [
+          "node",
+          "bag",
+          "bag"
+        ],
+        "proofs": [
+          {
+            "target_index": 0,
+            "inclusion_proof_hashes": [
+              "f158535bbffb524797d1a34a9dc6b59281f7e5eafacfef8ab9bbbda2a97d0be5",
+              "093480f00e08134da4e5aabcb1034e154800e07f9db0888a9631fca322aa3c95",
+              "46fd3d1a890b0a08d21c605536a42e5759f98504c92344a8225e12b4fa709d0e"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "right",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 1,
+            "inclusion_proof_hashes": [
+              "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b",
+              "093480f00e08134da4e5aabcb1034e154800e07f9db0888a9631fca322aa3c95",
+              "46fd3d1a890b0a08d21c605536a42e5759f98504c92344a8225e12b4fa709d0e"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "right",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 2,
+            "inclusion_proof_hashes": [
+              "ae0a16419db8f57ecc730b1fcd8c2957637e5a5dbd83078960759a9b9bf8b637",
+              "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c",
+              "46fd3d1a890b0a08d21c605536a42e5759f98504c92344a8225e12b4fa709d0e"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "left",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 3,
+            "inclusion_proof_hashes": [
+              "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5",
+              "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c",
+              "46fd3d1a890b0a08d21c605536a42e5759f98504c92344a8225e12b4fa709d0e"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "left",
+              "right"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "node",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 4,
+            "inclusion_proof_hashes": [
+              "e88886ac2cabaacbc23f315a0fd46f93fc3525d0436fe39ea701d5676b789ba6",
+              "fbb0dc973121b4536952de0370b3dfd5cc1eb45c432d8b7c33e8142cc9fb91ed",
+              "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94"
+            ],
+            "inclusion_proof_directions": [
+              "right",
+              "right",
+              "left"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "bag",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 5,
+            "inclusion_proof_hashes": [
+              "014486f26ca863608c1ffb242275bbcbcf1479a662124e631d1719a0b795f71a",
+              "fbb0dc973121b4536952de0370b3dfd5cc1eb45c432d8b7c33e8142cc9fb91ed",
+              "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "right",
+              "left"
+            ],
+            "inclusion_proof_kinds": [
+              "node",
+              "bag",
+              "bag"
+            ]
+          },
+          {
+            "target_index": 6,
+            "inclusion_proof_hashes": [
+              "3e405514d5bd48d670e457b92c484d3f6089cb692472e9c2ffc6a68415ba1543",
+              "ff55b1c86c203cbc5c84a79803d4f921e317a8e72c0645535db4c1cc2e7d5d94"
+            ],
+            "inclusion_proof_directions": [
+              "left",
+              "left"
+            ],
+            "inclusion_proof_kinds": [
+              "bag",
+              "bag"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "C2PA-001",
+      "component": "C2PA Manifest Parsing",
+      "status": "CANDIDATE",
+      "normative_source": "C2PA Technical Specification 2.3 claim-map-v2 + RFC 8949 §4.2.1",
+      "description": "Core-deterministic CBOR serialization of a minimal hand-authored claim-map-v2 fixture",
+      "input": {
+        "claim_v2": {
+          "instanceID": "urn:c2pa:00000000-0000-4000-8000-000000000001",
+          "claim_generator_info": {
+            "name": "Arkhe",
+            "version": "1.0"
+          },
+          "signature": "self#jumbf=c2pa.signature",
+          "created_assertions": [
+            {
+              "url": "self#jumbf=c2pa.assertions/c2pa.hash.data",
+              "hash_hex": "0000000000000000000000000000000000000000000000000000000000000000"
+            }
+          ],
+          "alg": "sha256",
+          "dc:title": "test_asset.jpg",
+          "specVersion": "2.3"
+        }
+      },
+      "expected_output": {
+        "canonical_cbor_hex": "a763616c67667368613235366864633a7469746c656e746573745f61737365742e6a7067697369676e6174757265781973656c66236a756d62663d633270612e7369676e61747572656a696e7374616e63654944782d75726e3a633270613a30303030303030302d303030302d343030302d383030302d3030303030303030303030316b7370656356657273696f6e63322e3372637265617465645f617373657274696f6e7381a26375726c782973656c66236a756d62663d633270612e617373657274696f6e732f633270612e686173682e6461746164686173685820000000000000000000000000000000000000000000000000000000000000000074636c61696d5f67656e657261746f725f696e666fa2646e616d656541726b68656776657273696f6e63312e30",
+        "sha256_of_canonical_claim_bytes": "895d7897427039f7574407f8209cc72d084fabc16e259db0baaf2597c4d4f3c7"
+      }
+    },
+    {
+      "id": "C2PA-NEG-001",
+      "component": "C2PA Manifest Parsing",
+      "status": "READY",
+      "normative_source": "C2PA Technical Specification 2.3 claim-map-v2",
+      "description": "Original simplified claim must be rejected as claim-map-v2",
+      "input": {
+        "claim_json": {
+          "claim_generator": "Arkhe/1.0",
+          "title": "test_asset.jpg",
+          "format": "image/jpeg",
+          "alg": "Ed25519"
+        }
+      },
+      "expected_output": {
+        "valid_claim_map_v2": false
+      }
+    }
+  ]
+}

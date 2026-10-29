@@ -1,0 +1,12 @@
+{
+  "path": "real Keycloak JWT -> HTTP -> PostgreSQL outbox -> Apache Kafka -> durable proof projection",
+  "verified_responses": 1,
+  "outbox_rows": 1,
+  "published_rows": 1,
+  "durable_anchors": 1,
+  "cursor": 1,
+  "kafka_image": "apache/kafka:3.9.1",
+  "ask_image_id": "6d980d939660d62c7340fce222853ed8436b4a3d3b20b4465e8117f9a3fed692",
+  "providers": "EchoProvider + tenant-scoped InMemoryStore",
+  "graph": "WormGraph reference plus durable Ask projection; not global PgWormGraph/MMR"
+}

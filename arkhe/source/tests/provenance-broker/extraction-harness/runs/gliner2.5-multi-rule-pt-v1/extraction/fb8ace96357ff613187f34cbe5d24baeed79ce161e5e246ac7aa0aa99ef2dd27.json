@@ -1,0 +1,110 @@
+{
+  "stage": "Extraction",
+  "extractor": {
+    "id": "fastino/gliner2.5-multi-v1",
+    "revision": "cf5593a5d45e3bbf204b9df621b13b1c0cf25ee3",
+    "library_version": "2.1.0",
+    "torch": "2.11.0",
+    "transformers": "5.2.0",
+    "config_ref": "dfdc6302a678a53a4e79f7998823c7b20067c295fdf59700a7c8c51193f7269a",
+    "checkpoint_file_hashes": {
+      "config.json": "3e4a96bf01da1094180f2d8998411c1a9fd6e2ae4b5b3e4bc6950318cee95bb7",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "README.md": "bf5b8862eeebc0110a9f627219f3975ab5c8b90af199392adda87358b1c2027d",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716"
+    }
+  },
+  "source_utf8_sha256": "fb8ace96357ff613187f34cbe5d24baeed79ce161e5e246ac7aa0aa99ef2dd27",
+  "source_bytes": 39,
+  "word_tokens": 8,
+  "truncated": false,
+  "raw": {
+    "entities": {
+      "service": [
+        {
+          "text": "Atlas",
+          "confidence": 0.9972813129425049,
+          "start": 32,
+          "end": 37
+        }
+      ],
+      "database": [],
+      "organization": [
+        {
+          "text": "Aurora",
+          "confidence": 0.9990181922912598,
+          "start": 9,
+          "end": 15
+        }
+      ],
+      "person": []
+    },
+    "polarity": {
+      "label": "affirmative statement",
+      "confidence": 0.4153408408164978
+    },
+    "modality": {
+      "label": "mixed modality",
+      "confidence": 0.33838003873825073
+    },
+    "relation_extraction": {
+      "operates": [
+        {
+          "head": {
+            "text": "Aurora",
+            "start": 9,
+            "end": 15,
+            "confidence": 0.9863015413284302
+          },
+          "tail": {
+            "text": "Atlas",
+            "start": 32,
+            "end": 37,
+            "confidence": 0.9860361814498901
+          },
+          "confidence": 0.8169383406639099
+        }
+      ],
+      "migrated_to": [],
+      "works_for": []
+    }
+  },
+  "span_checks": [
+    {
+      "path": "/entities/service/0",
+      "character_start": 32,
+      "character_end": 37,
+      "valid": true,
+      "byte_start": 33,
+      "byte_end": 38
+    },
+    {
+      "path": "/entities/organization/0",
+      "character_start": 9,
+      "character_end": 15,
+      "valid": true,
+      "byte_start": 9,
+      "byte_end": 15
+    },
+    {
+      "path": "/relation_extraction/operates/0/head",
+      "character_start": 9,
+      "character_end": 15,
+      "valid": true,
+      "byte_start": 9,
+      "byte_end": 15
+    },
+    {
+      "path": "/relation_extraction/operates/0/tail",
+      "character_start": 32,
+      "character_end": 37,
+      "valid": true,
+      "byte_start": 33,
+      "byte_end": 38
+    }
+  ],
+  "qualifier_scope": "document-level classification; not assigned automatically to each predicate",
+  "score_calibrated": false
+}

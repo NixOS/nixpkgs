@@ -82,3 +82,7 @@ Nixpkgs is licensed under the [MIT License](COPYING).
 > MIT license does not apply to the packages built by Nixpkgs, merely to the files in this repository (the Nix expressions, build scripts, NixOS modules, etc.).
 It also might not apply to patches included in Nixpkgs, which may be derivative works of the packages to which they apply.
 The aforementioned artifacts are all covered by the licenses of the respective packages.
+
+## Arkhe packages
+
+The Arkhe packaging layer is in [arkhe/](arkhe/README.md). Build the offline verifier with `nix build ./arkhe#arkhe-verify`. For flake consumers use `github:rafael-arkhe/nixpkgs-arkhe?dir=arkhe`. The Nixpkgs interface at this repository root is preserved.

@@ -1,0 +1,28 @@
+[package]
+name = "arkhe-governance"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-core = { path = "../../kernel/arkhe-core" }
+arkhe-verify-core = { path = "../../verification/crates/arkhe-verify-core" }
+ed25519-dalek.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[lints.rust]
+# `cargo kani` sets this cfg; register it so normal builds don't warn.
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+
+[features]
+default = []
+duckdb-backend = ["dep:duckdb"]
+
+[dependencies.blake3]
+workspace = true
+
+[dependencies.duckdb]
+version = "1"
+optional = true
+features = ["bundled"]

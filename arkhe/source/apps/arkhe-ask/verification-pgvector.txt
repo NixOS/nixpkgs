@@ -1,0 +1,15 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.20s
+     Running tests\providers.rs (target\debug\deps\providers-06ce935b1ee63441.exe)
+
+running 8 tests
+test pgvector_retrieve_returns_nearest ... ok
+test pgvector_insert_is_idempotent ... ok
+test pgvector_concurrent_upserts_keep_one_consistent_row ... ok
+test pgvector_tenant_scope_blocks_reads_and_cross_tenant_overwrites ... ok
+test pgvector_local_search_setting_does_not_leak ... ok
+test pgvector_concurrent_retrievals_agree ... ok
+test pgvector_legacy_migration_preserves_unassigned_rows_without_exposing_them ... ok
+test pgvector_iterative_scan_fills_small_tenant_results_without_pool_leak ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 3.56s
+

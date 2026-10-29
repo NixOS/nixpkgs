@@ -1,0 +1,68 @@
+{
+  "stage": "Integration",
+  "fixture_id": "V2-AGG-SOURCE-DENIED",
+  "extraction_refs": [
+    "c0dd29de59a3fb6063def55eff5dc4facc1672e4269694867d9cb4054a18a09a",
+    "4c5ae557a4ffad33ac82142d41914677d4ce3cd1c16669dfe90cfddda0f76d3e"
+  ],
+  "evaluation_ref": "e6d92169c1132d3ba67c7578c825eb551727f79bb9903589bc88d183250ab534",
+  "retained_control_decision": "Reject",
+  "retained_control_payload_match": true,
+  "experimental_ingestion": {
+    "status": "Blocked",
+    "reason": "EVALUATOR_NOT_TRUSTED",
+    "agent_payload": {
+      "chunks": []
+    }
+  },
+  "pure_policy_simulation_only": true,
+  "simulation": {
+    "decision": "Reject",
+    "applied_rule": "ACCESS_DENIED",
+    "flags": [],
+    "reasons": [
+      {
+        "rule_id": "ACCESS_DENIED",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [],
+      "claim_status": "Omitted",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": []
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "4bb8f895898287ebd2a2f2c49406bdde0125a9f77d19c941662d6630c482f29c",
+      "anchor_set_digest": "871753a2675c6740289ae0958901dc48e8cbdf9fbbcc51ebda5568917916a839",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "1c763a05505e74ae361983e6f6cca44a56c5132f7dd2fa9a02d0614e420f96c1"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Blocked",
+      "code": "DECISION_DENIED"
+    }
+  },
+  "simulation_decision_matches_authored_oracle": true,
+  "simulation_payload_matches_authored_oracle": true,
+  "policy_unchanged": true,
+  "authenticated_experimental_integration": false
+}

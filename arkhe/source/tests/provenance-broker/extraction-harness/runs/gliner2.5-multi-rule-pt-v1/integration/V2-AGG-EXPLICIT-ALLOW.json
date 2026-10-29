@@ -1,0 +1,113 @@
+{
+  "stage": "Integration",
+  "fixture_id": "V2-AGG-EXPLICIT-ALLOW",
+  "extraction_refs": [
+    "c0dd29de59a3fb6063def55eff5dc4facc1672e4269694867d9cb4054a18a09a",
+    "4c5ae557a4ffad33ac82142d41914677d4ce3cd1c16669dfe90cfddda0f76d3e"
+  ],
+  "evaluation_ref": "e6d92169c1132d3ba67c7578c825eb551727f79bb9903589bc88d183250ab534",
+  "retained_control_decision": "Admit",
+  "retained_control_payload_match": true,
+  "experimental_ingestion": {
+    "status": "Blocked",
+    "reason": "EVALUATOR_NOT_TRUSTED",
+    "agent_payload": {
+      "chunks": []
+    }
+  },
+  "pure_policy_simulation_only": true,
+  "simulation": {
+    "decision": "Admit",
+    "applied_rule": "RELEASE_CURRENT",
+    "flags": [],
+    "reasons": [
+      {
+        "rule_id": "RELEASE_CURRENT",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [
+        {
+          "chunk_id": "chunk-1",
+          "bytes_hex": "4f207365727669c3a76f2041746c6173206d6967726f75207061726120506f737467726553514c2031362e",
+          "chunk_digest": "50c959029a947b4ecddbc19918f37db0214d297f3a3ffd7afedd2f892610cee6",
+          "text_position": {
+            "repr_digest": "e21b27f2ebc6a229d2bc61fccd169656c42a87c4f832c67b0875a36dcb0cb4f2",
+            "offset": 0,
+            "length": 43
+          },
+          "source_digest": "d13dff9e81c6d96fa4f03ee959b4b5e2c4dabaf958fcbfbe8a77634d0422acd8",
+          "evidence_ref": "86f757f7312795f6cf497ed6c9327c3f3dcd1bfe3832da4a78f7d4e6f32acddb"
+        },
+        {
+          "chunk_id": "chunk-2",
+          "bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+          "chunk_digest": "a8549d7a28c4fe31592cc3ba2c00a1e1c880713194ce94f4a3b67ca9b35f60bc",
+          "text_position": {
+            "repr_digest": "f520e6ed6e867131c0e0fcb5535f3b0027e7a355ca8eaaa4ecaaf599b8b7d017",
+            "offset": 0,
+            "length": 39
+          },
+          "source_digest": "8786f9d72bc5c58625770f1b22b12097b78ceadbb66dac01df86842a3ff06305",
+          "evidence_ref": "f452f1c5cfdf318028c478cbcefc54ca0da06cf3eca6bfb0fe14dbbb53f2b764"
+        }
+      ],
+      "claim_status": "ForAnalysis",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": [],
+      "claim": {
+        "subject": "service:atlas",
+        "predicate": "migrated_to",
+        "object": "database:postgresql-16",
+        "polarity": "Positive",
+        "modality": "Asserted",
+        "qualifiers": []
+      },
+      "semantic": {
+        "claim_digest": "a4d94b7017f229f383c984e0cf444244f9fb40f51a45bb5f2218c0f3f8574eb7",
+        "support_set_digest": "45742d65215225cd7eb1825eac2ecfd191152d49522028a8f3e18fcf98f42a96",
+        "outcome": "Supported",
+        "method": "Rule",
+        "evaluator": "arkhe-support-rule-pt",
+        "evaluator_version": "1",
+        "support_refs": [
+          "86f757f7312795f6cf497ed6c9327c3f3dcd1bfe3832da4a78f7d4e6f32acddb",
+          "f452f1c5cfdf318028c478cbcefc54ca0da06cf3eca6bfb0fe14dbbb53f2b764"
+        ]
+      }
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "4bb8f895898287ebd2a2f2c49406bdde0125a9f77d19c941662d6630c482f29c",
+      "anchor_set_digest": "616531981ca1e7339f649fc6659f24ef6c287fc5b0a6476e454910ce8d49e4ed",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "709366ff3df75c1deca007ab7e77d77674d99a15a4a0d90d1add8cc08f9a5a9a"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Release",
+      "code": "VALIDATION_WINDOW"
+    }
+  },
+  "simulation_decision_matches_authored_oracle": true,
+  "simulation_payload_matches_authored_oracle": false,
+  "policy_unchanged": true,
+  "authenticated_experimental_integration": false
+}

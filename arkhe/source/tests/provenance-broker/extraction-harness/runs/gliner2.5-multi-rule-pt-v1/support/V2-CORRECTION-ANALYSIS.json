@@ -1,0 +1,39 @@
+{
+  "stage": "SupportEvaluation",
+  "evaluator": {
+    "id": "arkhe-support-rule-pt",
+    "version": "1",
+    "method": "Rule",
+    "scope": "literal Portuguese Atlas migration grammar; explicit correction references; abstains on unsupported predicates",
+    "accepted_by_current_broker_policy": false
+  },
+  "claim_digest": "a4d94b7017f229f383c984e0cf444244f9fb40f51a45bb5f2218c0f3f8574eb7",
+  "support_refs": [
+    "2bf626eca2cda48a844d67c47cede822b51503e9eb35532db4f9c38dbb465d89",
+    "565da6d7958eb9a4657627944cbcb8d3aed6f89a69e14705d7635153cda9de5c"
+  ],
+  "extraction_refs": [
+    "430dcaaeeb372350edeeacc9b3708907aeca562697b9d3074efa9c8460281d0e",
+    "b343ead4558206d68c65cdf2ffd2fa59dd84783735f5221e48d0d9215a0297e3"
+  ],
+  "semantic_outcome": "Contradicted",
+  "reason": "POLARITY_MISMATCH",
+  "evidence": [
+    {
+      "chunk_id": "chunk-1",
+      "polarity": "Positive",
+      "modality": "Asserted",
+      "byte_start": 28,
+      "byte_end": 59,
+      "explicit_linked_correction": false
+    },
+    {
+      "chunk_id": "chunk-2",
+      "polarity": "Negative",
+      "modality": "Asserted",
+      "byte_start": 65,
+      "byte_end": 101,
+      "explicit_linked_correction": true
+    }
+  ]
+}

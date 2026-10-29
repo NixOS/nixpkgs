@@ -1,0 +1,68 @@
+{
+  "stage": "Integration",
+  "fixture_id": "V2-HYPOTHESIS-ASSERTED",
+  "extraction_refs": [
+    "c5c1af8d0c7ea01565d9b8f90d5a6b7a0e1ee556d7c458b4765438afb6cc5547",
+    "4c5ae557a4ffad33ac82142d41914677d4ce3cd1c16669dfe90cfddda0f76d3e"
+  ],
+  "evaluation_ref": "4008eb01bf49b7c43959d3233d14377859043c46f9f9843f357001c8aabd1b3a",
+  "retained_control_decision": "Reject",
+  "retained_control_payload_match": true,
+  "experimental_ingestion": {
+    "status": "Blocked",
+    "reason": "EVALUATOR_NOT_TRUSTED",
+    "agent_payload": {
+      "chunks": []
+    }
+  },
+  "pure_policy_simulation_only": true,
+  "simulation": {
+    "decision": "Reject",
+    "applied_rule": "ASSERTION_UNSUPPORTED",
+    "flags": [],
+    "reasons": [
+      {
+        "rule_id": "ASSERTION_UNSUPPORTED",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [],
+      "claim_status": "Omitted",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": []
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+      "anchor_set_digest": "28c7fb5c5ad25d5c2b146b1984624f16358859abbf6605afb4c16277b1e1544c",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "918b46a63d8f674f4ffc7b177063709c802ac1304a4ac03cd3c31e385861c8f5"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Blocked",
+      "code": "DECISION_DENIED"
+    }
+  },
+  "simulation_decision_matches_authored_oracle": true,
+  "simulation_payload_matches_authored_oracle": true,
+  "policy_unchanged": true,
+  "authenticated_experimental_integration": false
+}

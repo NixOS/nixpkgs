@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-29",
+  "nix": "2.35.4",
+  "host": "Ubuntu WSL x86_64-linux",
+  "evaluation": {
+    "systems": [
+      "x86_64-linux",
+      "aarch64-linux"
+    ],
+    "status": "PASS",
+    "builds_all_packages": false
+  },
+  "arkhe_verify": {
+    "build": "PASS",
+    "tests_passed": 81,
+    "smoke": "PASS",
+    "same_machine_rebuild": "PASS",
+    "nar_hash": "sha256-2ZFcAmxcgSg7jsWFmfWimN/9d2VPx3ifr3GOSSxKc3Y=",
+    "content_addressing": "PASS",
+    "ca_path": "/nix/store/z120virsy1in3hs7ixj8nw69qmixrph1-arkhe-verify-0.1.0"
+  },
+  "modules_eval": "PASS",
+  "snapshot_files": 593,
+  "independent_machine_reproducibility": "NOT_RUN",
+  "other_package_builds": "NOT_RUN",
+  "wasm_build": "NOT_RUN"
+}

@@ -1,0 +1,110 @@
+{
+  "stage": "Extraction",
+  "extractor": {
+    "id": "fastino/gliner2.5-multi-v1",
+    "revision": "cf5593a5d45e3bbf204b9df621b13b1c0cf25ee3",
+    "library_version": "2.1.0",
+    "torch": "2.11.0",
+    "transformers": "5.2.0",
+    "config_ref": "dfdc6302a678a53a4e79f7998823c7b20067c295fdf59700a7c8c51193f7269a",
+    "checkpoint_file_hashes": {
+      "config.json": "3e4a96bf01da1094180f2d8998411c1a9fd6e2ae4b5b3e4bc6950318cee95bb7",
+      "model.safetensors": "c1ff4ec0bc00031c15530b8f3c33d3677f27949e6a0cb52e1247a6224b6c5395",
+      "README.md": "bf5b8862eeebc0110a9f627219f3975ab5c8b90af199392adda87358b1c2027d",
+      "tokenizer.json": "c62446df87ae18ec98b133f8f84fc449a07cc89bbf8ef192a4cb5f9c53777a7a",
+      "tokenizer_config.json": "0bf3ea0873234bd9bfdd3853c440395009ac6365a925b91654daed5396d655e1",
+      "encoder_config/config.json": "fa4f9ef2903b5369ab172333aae4574e6a476511d7465845cf59f8360ee18716"
+    }
+  },
+  "source_utf8_sha256": "5367459ce1f12115cee88857f06e6ee01b8dd01aa975bd039279417b6c381e94",
+  "source_bytes": 27,
+  "word_tokens": 5,
+  "truncated": false,
+  "raw": {
+    "entities": {
+      "service": [],
+      "database": [],
+      "organization": [
+        {
+          "text": "biblioteca",
+          "confidence": 0.5890054702758789,
+          "start": 16,
+          "end": 26
+        }
+      ],
+      "person": [
+        {
+          "text": "Alice",
+          "confidence": 0.9988609552383423,
+          "start": 0,
+          "end": 5
+        }
+      ]
+    },
+    "polarity": {
+      "label": "affirmative statement",
+      "confidence": 0.5974735617637634
+    },
+    "modality": {
+      "label": "possibility",
+      "confidence": 0.29283633828163147
+    },
+    "relation_extraction": {
+      "works_for": [
+        {
+          "head": {
+            "text": "Alice",
+            "start": 0,
+            "end": 5,
+            "confidence": 0.9945412278175354
+          },
+          "tail": {
+            "text": "biblioteca",
+            "start": 16,
+            "end": 26,
+            "confidence": 0.9242997169494629
+          },
+          "confidence": 0.7101063132286072
+        }
+      ],
+      "migrated_to": [],
+      "operates": []
+    }
+  },
+  "span_checks": [
+    {
+      "path": "/entities/organization/0",
+      "character_start": 16,
+      "character_end": 26,
+      "valid": true,
+      "byte_start": 16,
+      "byte_end": 26
+    },
+    {
+      "path": "/entities/person/0",
+      "character_start": 0,
+      "character_end": 5,
+      "valid": true,
+      "byte_start": 0,
+      "byte_end": 5
+    },
+    {
+      "path": "/relation_extraction/works_for/0/head",
+      "character_start": 0,
+      "character_end": 5,
+      "valid": true,
+      "byte_start": 0,
+      "byte_end": 5
+    },
+    {
+      "path": "/relation_extraction/works_for/0/tail",
+      "character_start": 16,
+      "character_end": 26,
+      "valid": true,
+      "byte_start": 16,
+      "byte_end": 26
+    }
+  ],
+  "qualifier_scope": "document-level classification; not assigned automatically to each predicate",
+  "score_calibrated": false
+}

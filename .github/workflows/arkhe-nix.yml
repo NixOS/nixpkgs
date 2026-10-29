@@ -1,0 +1,75 @@
+name: arkhe-nix
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    name: eval
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v30
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Verificar snapshot
+        run: python3 arkhe/scripts/validate-source.py
+
+      - name: Avaliar sem construir
+        working-directory: arkhe
+        run: nix flake check --no-build --all-systems --no-update-lock-file -L
+
+      - name: Listar saídas
+        working-directory: arkhe
+        run: nix flake show --all-systems
+
+  build:
+    name: build e reprodutibilidade
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v30
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Permissões dos scripts
+        working-directory: arkhe
+        run: chmod +x scripts/*.sh
+
+      - name: Build dos pacotes leves
+        working-directory: arkhe
+        run: nix build .#arkhe-verify .#arkhe-sql-migrate --print-build-logs
+
+      - name: Reprodutibilidade de arkhe-verify
+        working-directory: arkhe
+        run: bash ./scripts/check-reproducibility.sh arkhe-verify
+
+  ca:
+    name: conteúdo endereçado
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v30
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes ca-derivations
+
+      - name: Instalar jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Build CA
+        working-directory: arkhe
+        run: bash ./scripts/verify-content-addressing.sh arkhe-verify

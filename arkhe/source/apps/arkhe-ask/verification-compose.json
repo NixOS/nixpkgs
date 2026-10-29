@@ -1,0 +1,64 @@
+{
+  "health_status": 200,
+  "health_body": "ok",
+  "oidc_issuer": "http://127.0.0.1:8180/realms/master",
+  "ask_status": 200,
+  "ask_body": {
+    "answer": "Sydney is the capital of Australia.",
+    "claims": [
+      {
+        "text": "Sydney is the capital of Australia.",
+        "evidence_id": "e1"
+      }
+    ],
+    "citation_proof": {
+      "evidence_ids": [
+        "e1"
+      ],
+      "record_digest": [
+        221,
+        81,
+        74,
+        29,
+        38,
+        240,
+        147,
+        146,
+        101,
+        92,
+        69,
+        79,
+        112,
+        163,
+        138,
+        228,
+        74,
+        87,
+        81,
+        137,
+        44,
+        180,
+        234,
+        20,
+        253,
+        27,
+        48,
+        226,
+        144,
+        239,
+        125,
+        22
+      ]
+    }
+  },
+  "missing_tenant_status": 401,
+  "provider_mode": "echo + in-memory; Azure credentials absent",
+  "postgres_vector": "vector|0.8.7",
+  "container_health": [
+    "arkhe-jobplan-postgres healthy",
+    "arkhe-jobplan-keycloak healthy"
+  ],
+  "image_id": "b13ffce944dce0071e790df25b69d08a218e6bc5aa4aa2f68bd5a37018cacc60",
+  "keycloak_readiness": "HTTP 200, status UP on management port 9000",
+  "build_context": "Reduced copy of workspace source in tmp/jobplan-build-context; same Dockerfile, source and Cargo.lock"
+}

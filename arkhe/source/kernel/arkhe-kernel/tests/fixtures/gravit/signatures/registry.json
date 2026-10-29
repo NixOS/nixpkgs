@@ -1,0 +1,77 @@
+{
+ "registry_version": 1,
+ "verifiers": [
+  {
+   "key_id": "cca2ba4e22252230",
+   "operator": "op-v1",
+   "public_key": "563Q2x8itB+RwthGdSXlcGBR1LmB6ooPRiFS/F5foBk=",
+   "revoked": false
+  },
+  {
+   "key_id": "5360925ba455e21a",
+   "operator": "op-v2",
+   "public_key": "3ys1NQ2jSIAT0AWDxlI1LTlQIr6pm3wZGkazzvctA9U=",
+   "revoked": false
+  },
+  {
+   "key_id": "92f387aa787d0512",
+   "operator": "op-v3",
+   "public_key": "Wi+FHb7bFJIA1VZCHURmMAIay+oik7mj0P918i5dogQ=",
+   "revoked": false
+  },
+  {
+   "key_id": "2e2d784ee45c4a4a",
+   "operator": "op-v4",
+   "public_key": "/ntzFh+C2RpPNNnLyg23VdQkUsdCcfIiTKz25R4kao0=",
+   "revoked": false
+  },
+  {
+   "key_id": "549602a22a1ed79a",
+   "operator": "op-v5",
+   "public_key": "kBbzMdbc/dDFkq9YiF5aQM5BSZ/ITgDBQpGVxiRunbQ=",
+   "revoked": false
+  },
+  {
+   "key_id": "1629977abe3a9d7e",
+   "operator": "op-v6",
+   "public_key": "p3xl0FUi8C8/3b8vYtGx13y/QU31ih9/YRm9K3KE6no=",
+   "revoked": false
+  },
+  {
+   "key_id": "0c197b3d3efe7d3b",
+   "operator": "op-v7",
+   "public_key": "U65BwRMDigJPNLYsahijX/AUrjgZJwtAjdL3mT/peF4=",
+   "revoked": false
+  },
+  {
+   "key_id": "827df55cac7376c7",
+   "operator": "op-v8",
+   "public_key": "E+dQ+I55vAdSMv7NcSru8gU/2EwdA4idLNb+2E80ZfM=",
+   "revoked": false
+  },
+  {
+   "key_id": "6701c5e63039e3c1",
+   "operator": "op-v9",
+   "public_key": "2UW9ndY2dpq45ZTZ3oWjYlM/lxqO9R9GL16Tphw/Npo=",
+   "revoked": false
+  },
+  {
+   "key_id": "c0ae6d33c19ed8d7",
+   "operator": "op-v10",
+   "public_key": "g3M9Hw6SHBuoT/So1PF4UbBvJS/0s1H5qwfpTj/Iwt4=",
+   "revoked": false
+  },
+  {
+   "key_id": "3eea1ba9e9352f6d",
+   "operator": "op-v1",
+   "public_key": "CT7R+U9mRZLpVm9p86HQmWeceixMOqxxzyadXh5RduE=",
+   "revoked": false
+  },
+  {
+   "key_id": "9b5e5ae23bbb397b",
+   "operator": "op-revoked",
+   "public_key": "NcLaut/0EvKbHRHRGYlKwi5dX7YSQY++aM8fzYkf588=",
+   "revoked": true
+  }
+ ]
+}

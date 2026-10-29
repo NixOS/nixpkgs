@@ -1,0 +1,98 @@
+{
+  "stage": "Integration",
+  "fixture_id": "V2-P05-TWO-SAFE",
+  "extraction_refs": [
+    "c0dd29de59a3fb6063def55eff5dc4facc1672e4269694867d9cb4054a18a09a",
+    "4c5ae557a4ffad33ac82142d41914677d4ce3cd1c16669dfe90cfddda0f76d3e"
+  ],
+  "evaluation_ref": "ab284bc926ac498f970b86087b668f9c230f741cfa5edb7bc091b41f5636abb1",
+  "retained_control_decision": "AdmitChunksOnly",
+  "retained_control_payload_match": true,
+  "experimental_ingestion": {
+    "status": "Blocked",
+    "reason": "EVALUATOR_NOT_TRUSTED",
+    "agent_payload": {
+      "chunks": []
+    }
+  },
+  "pure_policy_simulation_only": true,
+  "simulation": {
+    "decision": "AdmitChunksOnly",
+    "applied_rule": "ANALYSIS_CHUNKS_ONLY",
+    "flags": [
+      "RELATION_OMITTED"
+    ],
+    "reasons": [
+      {
+        "rule_id": "ANALYSIS_CHUNKS_ONLY",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [
+        {
+          "chunk_id": "chunk-1",
+          "bytes_hex": "4f207365727669c3a76f2041746c6173206d6967726f75207061726120506f737467726553514c2031362e",
+          "chunk_digest": "50c959029a947b4ecddbc19918f37db0214d297f3a3ffd7afedd2f892610cee6",
+          "text_position": {
+            "repr_digest": "e21b27f2ebc6a229d2bc61fccd169656c42a87c4f832c67b0875a36dcb0cb4f2",
+            "offset": 0,
+            "length": 43
+          },
+          "source_digest": "d13dff9e81c6d96fa4f03ee959b4b5e2c4dabaf958fcbfbe8a77634d0422acd8",
+          "evidence_ref": "86f757f7312795f6cf497ed6c9327c3f3dcd1bfe3832da4a78f7d4e6f32acddb"
+        },
+        {
+          "chunk_id": "chunk-2",
+          "bytes_hex": "4120657175697065204175726f7261206f70657261206f207365727669c3a76f2041746c61732e",
+          "chunk_digest": "a8549d7a28c4fe31592cc3ba2c00a1e1c880713194ce94f4a3b67ca9b35f60bc",
+          "text_position": {
+            "repr_digest": "f520e6ed6e867131c0e0fcb5535f3b0027e7a355ca8eaaa4ecaaf599b8b7d017",
+            "offset": 0,
+            "length": 39
+          },
+          "source_digest": "8786f9d72bc5c58625770f1b22b12097b78ceadbb66dac01df86842a3ff06305",
+          "evidence_ref": "aa66dd08b2e617bff9325044e168daa50defe98ca4aa879ba1a56f784d0d8154"
+        }
+      ],
+      "claim_status": "Omitted",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": [
+        "ANALYSIS_ONLY",
+        "NO_RELATION_SUPPORT"
+      ]
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+      "anchor_set_digest": "14539879b1b057c62b32414d4ae8a641d39a135ea4db72f0bea678c8370f733b",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "fef927ce53a0323dd0e8e802f9c3ac771f3e1e2a99c280607afea598a52a66e3"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Release",
+      "code": "VALIDATION_WINDOW"
+    }
+  },
+  "simulation_decision_matches_authored_oracle": true,
+  "simulation_payload_matches_authored_oracle": true,
+  "policy_unchanged": true,
+  "authenticated_experimental_integration": false
+}

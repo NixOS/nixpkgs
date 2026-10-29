@@ -1,0 +1,15 @@
+{
+  "verifier_commit": "7887252fc84def69a794d2e32ce65721eb9a25d9",
+  "scope": "Public test keys; Python reference outputs, not independently trusted decisions",
+  "root_sha256": "38bf337eadc5e565c32f26da16ce368fb1f88ada4758cd90ea529d53d14a3c3c",
+  "registry_sha256": "65579301a6f35f5ca8d20c0b5a538934d3c48860e545a3355f571748fbb5d40c",
+  "files": {
+    "cases.json": "6e2bcc89b792659ecf05231dcc3d41cff71b3a814426c024411af76ab798e9c1",
+    "reference-decision.json": "b912ef3b66a6ca97ee7782eb469b1ce89783b2f3682735ebd3f7b6d1d4db73e1",
+    "registry.json": "65579301a6f35f5ca8d20c0b5a538934d3c48860e545a3355f571748fbb5d40c",
+    "registry.json.sig": "adeda2b7fb82690a497f90931cf5762c2e2fa31e038d6fd0720a3a99b84b25c9",
+    "signed-request.json": "10fdaf06cdac6af5cb1609c4b16f2639d9b54bd54224f4b2d939857bfbc1672f",
+    "tampered-decision.json": "764e6c59aaada923d69aa09482fe80a704cea623bdf16833425750adb62bd11d",
+    "trust_root.json": "38bf337eadc5e565c32f26da16ce368fb1f88ada4758cd90ea529d53d14a3c3c"
+  }
+}

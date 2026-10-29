@@ -1,0 +1,30 @@
+{
+  "profile_id": "arkhe-broker-local-v2",
+  "fixture_count": 20,
+  "independent_review": "pending",
+  "v1_manifest_sha256": "4a43fd5bd6346ceb7a866b9b93d5b968f1d2caa934cf7197be3b03e6658548c5",
+  "files": {
+    "schemas/provenance-broker/profile-v2.json": "da0f3467db9c4ee447e6ca1a5d312e019da461effbfefc96a23fd9fbc7356e3d",
+    "schemas/provenance-broker/fixture-v2.schema.json": "d63b36ea7f7df604aeaed1018e4f1bbcb4246b72fa5eeed76ec3f788ea24868a",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-AGG-EXPLICIT-ALLOW.json": "dd58050cacf836eadb700e0ecd025698e3a1bd2f5702f62a698463bdb1ec7a2b",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-AGG-GRANT-DENIED.json": "8f01bb2d55be1a53149bbbdae751bb87248cce92226318a7876d6f348f6bbada",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-AGG-POLICY-DENIED.json": "2b2279b1f98ef573f68c932ab6db61da035cdaded73ff1ce6ada84ab7dd172da",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-AGG-SCOPE-ALLOW.json": "afd171a6d823b0961af94a0b4a270f90521574abd8463764282cb4a05826dcc4",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-AGG-SCOPE-DENIED.json": "405d204685589c4e4fad36198a191f7d1162a657d3f7b8cc8da651e6a5603007",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-AGG-SOURCE-DENIED.json": "f4a619b1129378f55adb00fbe6e78744d948a7e41f478980b9b1a2ddb1b50661",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-AGG-SOURCE-UNKNOWN.json": "368a1bfcf44a82501d04c55e02a173b21ddaafcc4cd63643efdf921b2397a9bb",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-CORRECTION-ANALYSIS.json": "cb0e8ad4e471b783180d926658c3df7b1b582423b5803f701c1f7b1791887694",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-CORRECTION-OLD-CLAIM.json": "e321931e876e2ac6a8a1f015eaa24ab7f5d7541aa8c8433c46723caf871289de",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-ENDPOINTS-NO-RELATION.json": "4452f99da243e280caa2506f122de4d67d21b6841dcff1c056632f24e1f42145",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-HYPOTHESIS-ASSERTED.json": "bfc76c298ce8060bcbe912c781d2269838eeb468f6f8aceaa78d9bc0405730cf",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-HYPOTHESIS-POSSIBLE.json": "b6a20d4b8e07af2c5b22d5b6d3aa8fe594bbf4fcb08d6ece0db2c1b698b8b46b",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-LIMIT-CHUNK-AND-PAYLOAD-EXACT.json": "b9bf3f386a5e9d56df0eb47b83d6be80c482878ca34e372ef299e8cefc765265",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-LIMIT-CHUNK-OVER.json": "b7e1261553c2cf61d510f301037c4855f500ef6b0f9465a952e939015ee03d0a",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-NEGATION-NEGATIVE-CLAIM.json": "a881d2881dc935514162373a57ebcc59b9fffd870f7fcf54e45f04d1702742ee",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-NEGATION-POSITIVE-CLAIM.json": "c1cb3150c9473e9654eb8895b2b67be7431166be47dfb8f5229f90fe329b6f1d",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-P05-TWO-SAFE.json": "7b2788227193e7b2f23a9c3cab55ce3677151c76550fc7fbc1e4db55c5060973",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-PROJECTION-REVOKED.json": "bb356eca83aae562b45bc2a6672cf2c89f25ba355f6b40b000e84614b18dc09c",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-PROJECTION-STILL-CURRENT.json": "c813c225ffa94704b23250672c28c8cc70ae3c3bace9928e64da062c9b90c07a",
+    "tests/provenance-broker/v3.1/extensions-v2/fixtures/V2-ROLLBACK-VALID-OLD-PROOF.json": "9cb5070fd802a904d00720c41e82f42a19fc0f96869971774cd09e409e0090de"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "protocol_id": "arkhe-annotation-v1",
+  "status": "prepared_not_annotated",
+  "source_count": 8,
+  "task_count": 19,
+  "independent_review": "pending",
+  "baseline": {
+    "model_id": "fastino/gliner2.5-multi-v1",
+    "model_revision": "cf5593a5d45e3bbf204b9df621b13b1c0cf25ee3",
+    "config_sha256": "d87b1fbe3cdca43098dc4e12d862dcf4058d862fe3500ea1fa9900659d515e5d",
+    "report_sha256": "e7d7d15c52fd2b575087d24ce8fee452bb4823a4b38e2936270b396de904aca5"
+  },
+  "protocol_sha256": "ba21ebfcdd640de596569a71aa6cb5ff4f248c0f343461212cd2b815c9878257",
+  "annotation_schema_sha256": "a0b4bcff60a5395fd310e2cc5ace364618cdd53f95c8be1b9c6c14fd259aa605",
+  "files": {
+    "tasks.json": "f719aa32f5e765d05c42d8aaa7feeef4c37aea470f4013028e505c1ba15260a3",
+    "sources/40e2505fd136fa5b6098d08f8f72646093f6ce93278c15fd62e327f7d77ca80b.txt": "40e2505fd136fa5b6098d08f8f72646093f6ce93278c15fd62e327f7d77ca80b",
+    "sources/5367459ce1f12115cee88857f06e6ee01b8dd01aa975bd039279417b6c381e94.txt": "5367459ce1f12115cee88857f06e6ee01b8dd01aa975bd039279417b6c381e94",
+    "sources/5d16facd9d5de2b9fe9a03ade40ea5ee439089d6845ab5029d8978d553684697.txt": "5d16facd9d5de2b9fe9a03ade40ea5ee439089d6845ab5029d8978d553684697",
+    "sources/6f06b7afcfdff57609d4ebc2cf60d88f0b720b11bafa8912a717d510c48cebf1.txt": "6f06b7afcfdff57609d4ebc2cf60d88f0b720b11bafa8912a717d510c48cebf1",
+    "sources/913f403153995ff40519629beea431e3cee16e39f27137fbecfa9b506fc462cb.txt": "913f403153995ff40519629beea431e3cee16e39f27137fbecfa9b506fc462cb",
+    "sources/c2c1e02045741d04df2ab669e3465d4dc8ba7689536333980f99573af1672806.txt": "c2c1e02045741d04df2ab669e3465d4dc8ba7689536333980f99573af1672806",
+    "sources/f630831d662d72c9e62f5b7450f203861860106f7c5fe4ce309425ef4fd90b39.txt": "f630831d662d72c9e62f5b7450f203861860106f7c5fe4ce309425ef4fd90b39",
+    "sources/fb8ace96357ff613187f34cbe5d24baeed79ce161e5e246ac7aa0aa99ef2dd27.txt": "fb8ace96357ff613187f34cbe5d24baeed79ce161e5e246ac7aa0aa99ef2dd27"
+  }
+}

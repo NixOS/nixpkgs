@@ -1,0 +1,13 @@
+{
+  "phase": "authorized_retrieval",
+  "retriever": "arkhe_rag::retrieval::Bm25Index",
+  "chunks": [
+    {
+      "id": "provider",
+      "text": "The local provider uses the installed Ollama HTTP API and the existing north-mini-code-1.0:latest model. config/ollama.json pins the installed digest; a changed/missing model fails closed. No model is downloaded automatically."
+    }
+  ],
+  "tenant": "pilot",
+  "subject": "local-evaluator",
+  "capability_demonstrated": false
+}

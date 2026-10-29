@@ -1,0 +1,62 @@
+[workspace]
+resolver = "2"
+members = [
+  "work/arkhe-twin",
+  "integration/arkhe-crm-bridge",
+  "integration/arkhe-depin",
+  "integration/auth-md",
+  "integration/orkut",
+  "integration/arkhe-ollama",
+  "integration/arkhe-bugbounty",
+  "kernel/arkhe-core",
+  "kernel/arkhe-kernel",
+  "evidence/arkhe-wormgraph",
+  "evidence/arkhe-memory",
+  "governance/arkhe-governance",
+  "work/arkhe-work",
+  "work/arkhe-work-channels",
+  "cognition/arkhe-cognition-sdk",
+  "cognition/arkhe-perception",
+  "cognition/arkhe-rag",
+  "cognition/arkhe-metacognition",
+  "cognition/arkhe-world-model",
+  "cognition/arkhe-learning",
+  "cognition/arkhe-agent",
+  "orchestration/arkhe-runtime",
+  "storage/sql/crates/arkhe-sql",
+  "storage/sql/crates/arkhe-sql-migrate",
+  "verification/crates/arkhe-verify-core",
+  "verification/crates/arkhe-verify-cli",
+  "verification/crates/arkhe-verify-wasm",
+  "integrations/arkhe-python-runtime/bridge",
+  "apps/arkhe-ask",
+]
+
+[workspace.package]
+edition = "2021"
+license = "Apache-2.0 OR MIT"
+version = "0.1.0"
+
+[workspace.dependencies]
+anyhow = "1"
+async-trait = "0.1"
+blake3 = "1.5"
+chrono = { version = "0.4", features = ["serde"] }
+hex = "0.4"
+ed25519-dalek = "2.2.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["macros","rt-multi-thread","sync","time","fs"] }
+uuid = { version = "1", features = ["v4","serde"] }
+
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono", "json", "migrate", "macros"] }
+axum = "0.8"
+
+clap = { version = "4.5", features = ["derive"] }
+sha2 = "0.10"
+wasm-bindgen = "0.2"
+
+# job-plan service (apps/arkhe-ask)
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+pgvector = { version = "0.4", features = ["sqlx"] }

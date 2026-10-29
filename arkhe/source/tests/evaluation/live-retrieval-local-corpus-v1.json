@@ -1,0 +1,51 @@
+{
+  "tenant": "pilot",
+  "subject": "local-evaluator",
+  "chunks": [
+    {
+      "id": "provider",
+      "tenant": "pilot",
+      "readers": [
+        "local-evaluator"
+      ],
+      "text": "The local provider uses the installed Ollama HTTP API and the existing north-mini-code-1.0:latest model. config/ollama.json pins the installed digest; a changed/missing model fails closed. No model is downloaded automatically.",
+      "expected_digest_hex": "3fc7ff62ee4c5e8706225136c69938b3f20ec7504cf4c9fece237bdabb4bd3f0",
+      "source_ref_hex": "4194bfa788b5a74260e98af5dc2233f42060b5c126f83adf63aa068cbfc73006"
+    },
+    {
+      "id": "environment",
+      "tenant": "pilot",
+      "readers": [
+        "local-evaluator"
+      ],
+      "text": "Monorepo do ambiente Arkhe: kernel, cognição, governança, evidência persistente, verificação, aplicações e adapters seguem uma arquitetura comum na raiz.",
+      "expected_digest_hex": "2845f144baa35b92114562516fda7f524f12b9268c4446444a9028c0ecab2764",
+      "source_ref_hex": "18dafa2750a71fb28876cf70e59ea561e3cf510def9ff0658c23cd2f4445d437"
+    },
+    {
+      "id": "private-sentinel",
+      "tenant": "another-tenant",
+      "readers": [
+        "local-evaluator"
+      ],
+      "text": "Ollama provider model DO_NOT_EXPOSE_PRIVATE_CHUNK",
+      "expected_digest_hex": "582198882a2d82c955dcbf2b24d4671302abe4122b75aca69e94628cedfac98d",
+      "source_ref_hex": "abababababababababababababababababababababababababababababababab"
+    }
+  ],
+  "provenance": [
+    {
+      "id": "provider",
+      "path": "D:\\arkhe\\integration\\arkhe-ollama\\README.md",
+      "raw_sha256": "251d516917ff348eb4159e33a7f3e201cd85ef96d9d2cbfed5495034a5b91bf2",
+      "excerpt_transform": "join_whitespace"
+    },
+    {
+      "id": "environment",
+      "path": "D:\\arkhe\\README.md",
+      "raw_sha256": "fb9ed6d87b82c3dcd8d2c7c8df4e1d3634a56a92defacf61419fe511e64c2203",
+      "excerpt_transform": "join_whitespace"
+    }
+  ],
+  "private_chunk": "synthetic ACL control, not confidential user data"
+}

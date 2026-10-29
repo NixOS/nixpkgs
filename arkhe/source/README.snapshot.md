@@ -1,0 +1,1 @@
+Snapshot local para build, 2026-10-29. Licenças declaradas em cada Cargo.toml. O arquivo apps/arkhe-ask/tests/fixtures/test-only-rsa.pem é fixture pública de teste referenciada por include_str!, não credencial de produção. Veja source-manifest.json no diretório pai.

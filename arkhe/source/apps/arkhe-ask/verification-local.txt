@@ -1,0 +1,85 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.67s
+     Running unittests src\lib.rs (target\debug\deps\arkhe_ask-c5b4497dbbd1178c.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\main.rs (target\debug\deps\arkhe_ask-ad1d1ffe71440fd7.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\ask_e2e.rs (target\debug\deps\ask_e2e-7a0c79ff6af7a22c.exe)
+
+running 6 tests
+test pipeline_refuses_a_store_that_returns_another_tenants_chunk ... ok
+test tenant_scoping_changes_proof_digest_even_for_identical_claims ... ok
+test empty_query_is_bad_request ... ok
+test missing_tenant_is_unauthorized ... ok
+test hallucinated_entity_is_refused_with_nothing ... ok
+test grounded_answer_returns_with_citation_proof ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running tests\auth.rs (target\debug\deps\auth-a553c8d619adacd1.exe)
+
+running 3 tests
+test jwt_tenant_scopes_real_pgvector_evidence_despite_spoofed_header ... ignored, requires a live pgvector Postgres
+test jwt_tenant_overrides_untrusted_header_and_health_is_public ... ok
+test invalid_tokens_never_reach_the_pipeline ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests\crash_recovery.rs (target\debug\deps\crash_recovery-32b1f952a28d6349.exe)
+
+running 1 test
+test crash_between_enqueue_and_publish_keeps_trace_context ... ignored, requires Postgres, real Kafka and a fresh KAFKA_CRASH_TEST_TOPIC; terminates only its own helper subprocess
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\events.rs (target\debug\deps\events-f5ba8c8f9e61ece6.exe)
+
+running 4 tests
+test durable_trace_context_survives_journal_restart_and_kafka ... ignored, requires Postgres and a fresh KAFKA_TRACE_TEST_TOPIC
+test kafka_replays_lost_ack_once_and_rehydrates_wormgraph ... ignored, requires Postgres and a provisioned single-partition Kafka topic in KAFKA_TEST_TOPIC
+test outbox_survives_publication_failure_and_detects_event_id_conflicts ... ignored, requires Postgres
+test only_verified_responses_are_journaled_and_storage_failure_withholds_answer ... ok
+
+test result: ok. 1 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\providers.rs (target\debug\deps\providers-06ce935b1ee63441.exe)
+
+running 15 tests
+test azure_generate_returns_text ... ignored, requires Azure OpenAI credentials
+test full_pipeline_real_llm_rejects_hallucination ... ignored, requires Azure OpenAI credentials and pgvector; adversarial model behavior is not guaranteed
+test pgvector_concurrent_retrievals_agree ... ignored, requires a live pgvector Postgres
+test pgvector_concurrent_upserts_keep_one_consistent_row ... ignored, requires a live pgvector Postgres
+test pgvector_insert_is_idempotent ... ignored, needs a live pgvector Postgres (see module docs)
+test pgvector_iterative_scan_fills_small_tenant_results_without_pool_leak ... ignored, requires pgvector >= 0.8 with HNSW
+test pgvector_legacy_migration_preserves_unassigned_rows_without_exposing_them ... ignored, requires a live pgvector Postgres
+test pgvector_local_search_setting_does_not_leak ... ignored, requires a live pgvector Postgres
+test pgvector_retrieve_returns_nearest ... ignored, needs a live pgvector Postgres (see module docs)
+test pgvector_tenant_scope_blocks_reads_and_cross_tenant_overwrites ... ignored, requires a live pgvector Postgres
+test azure_provider_fails_closed_on_error_status ... ok
+test azure_provider_refuses_claimless_answers ... ok
+test azure_provider_answers_and_sends_the_api_key_header ... ok
+test azure_provider_embeds ... ok
+test azure_provider_rejects_wrong_embedding_dimension ... ok
+
+test result: ok. 5 passed; 0 failed; 10 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests\telemetry.rs (target\debug\deps\telemetry-55c88d92764181bb.exe)
+
+running 1 test
+test metrics_and_spans_include_failures_and_pipeline_without_sensitive_labels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests arkhe_ask
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

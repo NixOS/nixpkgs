@@ -1,0 +1,63 @@
+{
+  "authenticated_status": 200,
+  "unauthorized_status": 401,
+  "metrics_status": 200,
+  "prometheus_target_up": 1,
+  "collector_trace_id": "a21b48a18e5c4e4ea80b7c17630ca5be",
+  "collector_span_names": [
+    "arkhe.ask.proof.anchor",
+    "arkhe.ask.proof.consume",
+    "arkhe.ask.proof.enqueue",
+    "arkhe.ask.proof.publish",
+    "arkhe.ask.rag.generate",
+    "arkhe.ask.rag.retrieve",
+    "arkhe.ask.rag.verify",
+    "POST /v1/ask"
+  ],
+  "collector_span_tree": [
+    {
+      "name": "arkhe.ask.rag.retrieve",
+      "span_id": "0969befc018e034a",
+      "parent_span_id": "6ec6b63b68e74ab4"
+    },
+    {
+      "name": "arkhe.ask.proof.publish",
+      "span_id": "30588b4ae5716b6d",
+      "parent_span_id": "3066422263168f3e"
+    },
+    {
+      "name": "arkhe.ask.proof.enqueue",
+      "span_id": "3066422263168f3e",
+      "parent_span_id": "6ec6b63b68e74ab4"
+    },
+    {
+      "name": "arkhe.ask.proof.anchor",
+      "span_id": "5838118648f08db1",
+      "parent_span_id": "5ce7973499cfe1d5"
+    },
+    {
+      "name": "arkhe.ask.rag.verify",
+      "span_id": "5bb61d27c7b7bbe5",
+      "parent_span_id": "6ec6b63b68e74ab4"
+    },
+    {
+      "name": "arkhe.ask.proof.consume",
+      "span_id": "5ce7973499cfe1d5",
+      "parent_span_id": "30588b4ae5716b6d"
+    },
+    {
+      "name": "POST /v1/ask",
+      "span_id": "6ec6b63b68e74ab4",
+      "parent_span_id": "0123456789abcdef"
+    },
+    {
+      "name": "arkhe.ask.rag.generate",
+      "span_id": "f241d7b816a54236",
+      "parent_span_id": "6ec6b63b68e74ab4"
+    }
+  ],
+  "parent_child_verified": true,
+  "transport": "OTLP HTTP/protobuf to OpenTelemetry Collector",
+  "providers": "EchoProvider + tenant-scoped InMemoryStore",
+  "scope": "HTTP -> durable outbox context -> Kafka headers -> consumer -> anchor; parent IDs verified"
+}

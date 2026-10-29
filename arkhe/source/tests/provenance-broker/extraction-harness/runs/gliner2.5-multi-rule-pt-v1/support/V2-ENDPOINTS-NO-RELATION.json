@@ -1,0 +1,22 @@
+{
+  "stage": "SupportEvaluation",
+  "evaluator": {
+    "id": "arkhe-support-rule-pt",
+    "version": "1",
+    "method": "Rule",
+    "scope": "literal Portuguese Atlas migration grammar; explicit correction references; abstains on unsupported predicates",
+    "accepted_by_current_broker_policy": false
+  },
+  "claim_digest": "e34ebb74c38d59b03be625554267e7af0714781bf89116f78f96d58e65bc7702",
+  "support_refs": [
+    "6027c32df2ba35aed04b486fadf6ced8cbad3c6367c2bcf2579738a256fb23c9",
+    "e22edf3649035c62753208993f04a765d172d20aad3629726d293eb09e4bc6b7"
+  ],
+  "extraction_refs": [
+    "2e94c83005d43383452f94d8db6adc43b7ef5bb1d9cf65784044502e50e78d0c",
+    "09ca57bd1d5a8ebe62315b87ec937d94158522ef0466b59756ac0aa234b714e8"
+  ],
+  "semantic_outcome": "NotEvaluated",
+  "reason": "UNSUPPORTED_PREDICATE",
+  "evidence": []
+}

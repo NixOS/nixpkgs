@@ -1,0 +1,38 @@
+{
+  "status": "PENDING_HUMAN_REVIEW_NOT_ACTIVE_NOT_A_GOVERNANCE_POLICY",
+  "purpose": "Stabilize external labels before run-02; no model execution authorized by this file",
+  "protocol_candidate_version": 2,
+  "minimum_repetitions_per_case": 5,
+  "prompt_or_model_tuning_on_run_01": false,
+  "evidence_grade": "PRELIMINARY",
+  "prospective_criteria": "docs/security/run-02-criteria.md",
+  "criteria_status": "CANDIDATE_NOT_HUMAN_RATIFIED",
+  "expanded_source_package": "tests/evaluation/external-review/expanded-24/REVIEW.json",
+  "expanded_sources": 24,
+  "candidate_split": {"development_sources": 18, "holdout_sources": 6, "status": "PENDING_PROVENANCE_ALIAS_DUPLICATE_AND_LABEL_REVIEW"},
+  "second_human_review": {"reviewer": null, "role": "label_reviewer", "reviewed_artifacts": [], "status": "PENDING", "includes_origin_corrected": true, "ai_self_check_counts_as_human_review": false, "blind_review_requires_no_prior_exposure_attestation": true},
+  "escalation_evaluation_candidate": {
+    "status": "PROPOSED_NOT_IMPLEMENTED_OR_APPROVED",
+    "Critical": "human_review",
+    "High": "human_review",
+    "Medium": "human_review",
+    "Low": "human_review",
+    "Info": "human_review",
+    "confidence_is_authority_or_review_bypass": false,
+    "external_writes": "disabled"
+  },
+  "before_inference": [
+    "Second human reviews source, compiler assumptions, exploitability and exact proposal label",
+    "Confirm or reject origin-corrected label without rewriting its retained prediction",
+    "Build reviewed negative controls; missing annotations never imply safe",
+    "Finalize severity and report facts separately from upstream vulnerability category",
+    "Assign dev and holdout by provenance group, with no derived pair crossing splits",
+    "Holdout is reserved from tuning, not claimed unseen by model training or current operator",
+    "Strip answer-bearing comments and paths from model input and retain transformation mapping",
+    "Freeze hashes of reviewed corpus, prompts, split, model and escalation rule",
+    "Define acceptance criteria and compare trivial baselines on same labels"
+  ],
+  "required_reporting": ["per-repetition results and errors", "per-case agreement", "FP/FN and coverage", "sample variance and standard deviation across repetitions with defined denominators", "flip rate Wilson interval and incomplete-case sensitivity bounds", "latency aggregates", "cost measured or explicitly unknown", "review burden separate from classifier FP rate", "static comparison descriptive and contextual, not oracle"],
+  "holdout": {"status": "PENDING_SPLIT_REVIEW", "model_queries": 0},
+  "approved_by": null
+}

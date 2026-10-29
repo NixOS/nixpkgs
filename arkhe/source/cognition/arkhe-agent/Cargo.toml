@@ -1,0 +1,11 @@
+[package]
+name = "arkhe-agent"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-cognition-sdk = { path = "../arkhe-cognition-sdk" }
+
+serde.workspace = true
+serde_json.workspace = true

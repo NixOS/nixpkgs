@@ -1,0 +1,80 @@
+{
+  "uid": "arkhe-ask-ops",
+  "title": "Arkhe Ask — RED and PostgreSQL USE",
+  "url": "http://127.0.0.1:59096/d/arkhe-ask-ops",
+  "access": "local anonymous Viewer",
+  "datasource": "arkhe-prometheus",
+  "panels": [
+    {
+      "title": "Ask — Requests/s",
+      "expression": "sum(rate(axum_http_requests_total{endpoint=\"/v1/ask\"}[5m]))",
+      "series_count": 1,
+      "current_values": [
+        "0"
+      ]
+    },
+    {
+      "title": "Ask — HTTP 5xx/s",
+      "expression": "sum(rate(axum_http_requests_total{endpoint=\"/v1/ask\",status=~\"5..\"}[5m])) or vector(0)",
+      "series_count": 1,
+      "current_values": [
+        "0"
+      ]
+    },
+    {
+      "title": "Ask — Latency p95",
+      "expression": "histogram_quantile(0.95,sum by(le)(rate(axum_http_requests_duration_seconds_bucket{endpoint=\"/v1/ask\"}[5m])))",
+      "series_count": 1,
+      "current_values": [
+        "NaN"
+      ]
+    },
+    {
+      "title": "Citation support gate — Decisions/s",
+      "expression": "sum by(decision)(rate(arkhe_gate_decisions_total[5m]))",
+      "series_count": 1,
+      "current_values": [
+        "0"
+      ]
+    },
+    {
+      "title": "Postgres — Connection utilization",
+      "expression": "sum(pg_stat_activity_count{datname=\"arkhe\"}) / on() group_left() max(pg_settings_max_connections)",
+      "series_count": 1,
+      "current_values": [
+        "0.04"
+      ]
+    },
+    {
+      "title": "Postgres — Waiting locks",
+      "expression": "arkhe_pg_waiting_locks{job=\"arkhe-postgres\"}",
+      "series_count": 1,
+      "current_values": [
+        "0"
+      ]
+    },
+    {
+      "title": "Postgres — Deadlocks/s",
+      "expression": "sum(rate(pg_stat_database_deadlocks{datname=\"arkhe\"}[5m])) or vector(0)",
+      "series_count": 1,
+      "current_values": [
+        "0"
+      ]
+    },
+    {
+      "title": "Monitoring — Scrape health",
+      "expression": "up{job=~\"arkhe-ask|arkhe-postgres\"}",
+      "series_count": 2,
+      "current_values": [
+        "1",
+        "1"
+      ]
+    }
+  ],
+  "p95_display": {
+    "zero_latency_imputed": false,
+    "missing_value_text": "Sem tráfego",
+    "nan_mapping_text": "Sem tráfego"
+  },
+  "note": "Postgres USE proxies: connection usage, waiting locks and deadlocks. NaN p95 is possible during zero traffic."
+}

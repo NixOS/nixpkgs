@@ -1,0 +1,310 @@
+{
+  "scenario": "bounded local demo workload; EchoProvider/InMemoryStore plus real JWT, outbox, Kafka and Postgres",
+  "warmup_requests": 1,
+  "measured_requests": 48,
+  "authenticated_200": 40,
+  "unauthorized_401": 8,
+  "unexpected_statuses": 0,
+  "concurrency": 4,
+  "client_wall_seconds": 0.2971794,
+  "client_sample_p95_ms": 68.3563,
+  "server_success_counter_delta": 40.0,
+  "server_unauthorized_counter_delta": 8.0,
+  "citation_gate_accepted_delta": 40.0,
+  "prometheus_rate_window": "5m",
+  "prometheus_request_rate_per_second": 0.1694915254237288,
+  "prometheus_http_histogram_p95_seconds": 0.0075,
+  "workload_trace_id": "1829105be98c4658b807656059dc971e",
+  "workload_outbox_published_anchored": "40|40|40",
+  "observations": [
+    {
+      "index": 1,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 69.465
+    },
+    {
+      "index": 2,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 72.5477
+    },
+    {
+      "index": 3,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 68.3563
+    },
+    {
+      "index": 4,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 67.3653
+    },
+    {
+      "index": 5,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.4577
+    },
+    {
+      "index": 6,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.2328
+    },
+    {
+      "index": 7,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.3949
+    },
+    {
+      "index": 8,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.5566
+    },
+    {
+      "index": 9,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.3336
+    },
+    {
+      "index": 10,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.1167
+    },
+    {
+      "index": 11,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.0218
+    },
+    {
+      "index": 12,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 12.0831
+    },
+    {
+      "index": 13,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.8558
+    },
+    {
+      "index": 14,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.9051
+    },
+    {
+      "index": 15,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.8976
+    },
+    {
+      "index": 16,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.0623
+    },
+    {
+      "index": 17,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.9145
+    },
+    {
+      "index": 18,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.9308
+    },
+    {
+      "index": 19,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.3887
+    },
+    {
+      "index": 20,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.9057
+    },
+    {
+      "index": 21,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.3695
+    },
+    {
+      "index": 22,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 5.6394
+    },
+    {
+      "index": 23,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.248
+    },
+    {
+      "index": 24,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 8.0184
+    },
+    {
+      "index": 25,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 11.5497
+    },
+    {
+      "index": 26,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 9.6392
+    },
+    {
+      "index": 27,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 9.2541
+    },
+    {
+      "index": 28,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.6688
+    },
+    {
+      "index": 29,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.8842
+    },
+    {
+      "index": 30,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.718
+    },
+    {
+      "index": 31,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.9113
+    },
+    {
+      "index": 32,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.0232
+    },
+    {
+      "index": 33,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 6.8012
+    },
+    {
+      "index": 34,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.6315
+    },
+    {
+      "index": 35,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 8.4648
+    },
+    {
+      "index": 36,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.0016
+    },
+    {
+      "index": 37,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.2751
+    },
+    {
+      "index": 38,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.2997
+    },
+    {
+      "index": 39,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 7.1816
+    },
+    {
+      "index": 40,
+      "expected_status": 200,
+      "status": 200,
+      "client_elapsed_ms": 10.3451
+    },
+    {
+      "index": 41,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 7.2761
+    },
+    {
+      "index": 42,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 5.5915
+    },
+    {
+      "index": 43,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 5.2772
+    },
+    {
+      "index": 44,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 4.6066
+    },
+    {
+      "index": 45,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 4.8661
+    },
+    {
+      "index": 46,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 6.0349
+    },
+    {
+      "index": 47,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 5.2769
+    },
+    {
+      "index": 48,
+      "expected_status": 401,
+      "status": 401,
+      "client_elapsed_ms": 3.7909
+    }
+  ],
+  "limitations": "Not production load, capacity, stress or SLO evidence. Counter windows can include other traffic; client durations include driver/network overhead. Server p95 is a histogram estimate over all HTTP outcomes."
+}

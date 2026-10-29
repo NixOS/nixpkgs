@@ -1,0 +1,21 @@
+{
+  "phase": "structured_citation_diagnostic",
+  "verifier": "arkhe_rag::citation::OverlapVerifier",
+  "status": "FAIL_LEXICAL",
+  "scope": "EXPLICIT_CLAIMS_VS_AUTHORIZED_TEXT_CHUNKS",
+  "claims": [
+    {
+      "status": "FAIL_LEXICAL",
+      "evidence_id": "provider",
+      "reason": "InsufficientSupport { claim: \"The local Ollama provider uses the north-mini-code-1.0:latest model.\", score: 0.391304347826087 }"
+    }
+  ],
+  "authorized_chunks": [
+    "provider"
+  ],
+  "authorized_content_digests": 2,
+  "semantic_entailment": "NOT_MEASURED",
+  "source_factual_validity": "NOT_VERIFIED",
+  "host_supplied_acl_and_digest_trust": true,
+  "capability_demonstrated": false
+}

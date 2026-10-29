@@ -1,0 +1,443 @@
+{
+  "status": "pass",
+  "scope": "pure policy over frozen host observations; not live source verification",
+  "python": "3.14.2",
+  "node": "v24.13.0",
+  "independent_authorship": false,
+  "independent_fixture_review": "pending",
+  "fixtures": [
+    {
+      "fixture_id": "D-EXPIRED",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Reevaluate",
+        "code": "SNAPSHOT_EXPIRED"
+      }
+    },
+    {
+      "fixture_id": "D-EXPIRY-BOUNDARY",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Reevaluate",
+        "code": "SNAPSHOT_EXPIRED"
+      }
+    },
+    {
+      "fixture_id": "D-GRANT-EXPIRED",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "SOURCE_UNAVAILABLE"
+      }
+    },
+    {
+      "fixture_id": "D-GRANT-INVALID",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "GRANT_INVALID"
+      }
+    },
+    {
+      "fixture_id": "D-GRANT",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Release",
+        "code": "ACCESS_GRANT"
+      }
+    },
+    {
+      "fixture_id": "D-OTHER-UNAVAILABLE",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "SOURCE_UNAVAILABLE"
+      }
+    },
+    {
+      "fixture_id": "D-REVISION",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Reevaluate",
+        "code": "REVISION_CHANGED"
+      }
+    },
+    {
+      "fixture_id": "D-UNAVAILABLE",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "SOURCE_UNAVAILABLE"
+      }
+    },
+    {
+      "fixture_id": "D-WINDOW-BOUNDARY",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Reevaluate",
+        "code": "VALIDATION_WINDOW_EXPIRED"
+      }
+    },
+    {
+      "fixture_id": "N-01",
+      "match": true,
+      "decision": "Reject",
+      "rule": "INTEGRITY_INVALID",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-02",
+      "match": true,
+      "decision": "Reject",
+      "rule": "TRANSFORM_REJECTED",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-03",
+      "match": true,
+      "decision": "Exclude",
+      "rule": "TRANSFORM_UNKNOWN",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-04",
+      "match": true,
+      "decision": "Exclude",
+      "rule": "ACCESS_UNKNOWN",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-05",
+      "match": true,
+      "decision": "Reject",
+      "rule": "HISTORICAL_DENIED",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-06",
+      "match": true,
+      "decision": "Exclude",
+      "rule": "STATE_UNAVAILABLE",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-07",
+      "match": true,
+      "decision": "Reject",
+      "rule": "ASSERTION_UNSUPPORTED",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-08",
+      "match": true,
+      "decision": "Reject",
+      "rule": "DOCUMENT_INCOMPLETE",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-09",
+      "match": true,
+      "decision": "Reject",
+      "rule": "DOCUMENT_INCOMPLETE",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-10",
+      "match": true,
+      "decision": "Reject",
+      "rule": "DOCUMENT_INVALID",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-11",
+      "match": true,
+      "decision": "Reject",
+      "rule": "STATE_DISALLOWED",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-12",
+      "match": true,
+      "decision": "Reject",
+      "rule": "ACCESS_DENIED",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-13",
+      "match": true,
+      "decision": "Exclude",
+      "rule": "POLICY_UNRESOLVED",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "N-PROOF",
+      "match": true,
+      "decision": "Reject",
+      "rule": "INTEGRITY_INVALID",
+      "delivery": {
+        "outcome": "Blocked",
+        "code": "DECISION_DENIED"
+      }
+    },
+    {
+      "fixture_id": "P-02",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Release",
+        "code": "VALIDATION_WINDOW"
+      }
+    },
+    {
+      "fixture_id": "P-03",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Release",
+        "code": "VALIDATION_WINDOW"
+      }
+    },
+    {
+      "fixture_id": "P-04",
+      "match": true,
+      "decision": "AdmitHistorical",
+      "rule": "RELEASE_HISTORICAL",
+      "delivery": {
+        "outcome": "Release",
+        "code": "VALIDATION_WINDOW"
+      }
+    },
+    {
+      "fixture_id": "P-05",
+      "match": true,
+      "decision": "AdmitChunksOnly",
+      "rule": "ANALYSIS_CHUNKS_ONLY",
+      "delivery": {
+        "outcome": "Release",
+        "code": "VALIDATION_WINDOW"
+      }
+    },
+    {
+      "fixture_id": "P-06",
+      "match": true,
+      "decision": "Admit",
+      "rule": "RELEASE_CURRENT",
+      "delivery": {
+        "outcome": "Release",
+        "code": "VALIDATION_WINDOW"
+      }
+    }
+  ],
+  "policy_boundary_cases": [
+    {
+      "case": "empty-principal",
+      "match": true
+    },
+    {
+      "case": "no-chunks",
+      "match": true
+    },
+    {
+      "case": "purpose-uncovered",
+      "match": true
+    },
+    {
+      "case": "best-effort-denied",
+      "match": true
+    },
+    {
+      "case": "access-denied",
+      "match": true
+    },
+    {
+      "case": "access-unknown",
+      "match": true
+    },
+    {
+      "case": "wrong-tenant",
+      "match": true
+    },
+    {
+      "case": "scope-denied",
+      "match": true
+    },
+    {
+      "case": "integrity-unknown",
+      "match": true
+    },
+    {
+      "case": "revoked",
+      "match": true
+    },
+    {
+      "case": "superseded",
+      "match": true
+    },
+    {
+      "case": "unknown-state",
+      "match": true
+    },
+    {
+      "case": "state-age-expired",
+      "match": true
+    },
+    {
+      "case": "state-age-boundary-accepted",
+      "match": true
+    },
+    {
+      "case": "future-observation",
+      "match": true
+    },
+    {
+      "case": "document-invalid",
+      "match": true
+    },
+    {
+      "case": "document-not-evaluated",
+      "match": true
+    },
+    {
+      "case": "document-incomplete-assertion",
+      "match": true
+    },
+    {
+      "case": "assertion-Partial",
+      "match": true
+    },
+    {
+      "case": "assertion-Contradicted",
+      "match": true
+    },
+    {
+      "case": "assertion-Indeterminate",
+      "match": true
+    },
+    {
+      "case": "assertion-NotEvaluated",
+      "match": true
+    },
+    {
+      "case": "semantic-wrong-claim",
+      "match": true
+    },
+    {
+      "case": "semantic-evaluator-unaccepted",
+      "match": true
+    },
+    {
+      "case": "analysis-changed-claim",
+      "match": true
+    },
+    {
+      "case": "window-boundary",
+      "match": true
+    },
+    {
+      "case": "expiry-boundary",
+      "match": true
+    },
+    {
+      "case": "delivery-before-validation",
+      "match": true
+    },
+    {
+      "case": "other-source-unavailable",
+      "match": true
+    },
+    {
+      "case": "u64-above-js-safe-integer",
+      "match": true
+    }
+  ],
+  "local_tests": {
+    "command": [
+      "C:\\Python314\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "D:\\arkhe\\tests\\provenance-broker\\v3.1",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "output": "test_analysis_does_not_relabel_evaluation_for_changed_claim (test_decision_integration.FrozenSourceIntegration.test_analysis_does_not_relabel_evaluation_for_changed_claim) ... ok\ntest_blocked_delivery_does_not_export_admitted_payload (test_decision_integration.FrozenSourceIntegration.test_blocked_delivery_does_not_export_admitted_payload) ... ok\ntest_caller_cannot_supply_principal_or_policy (test_decision_integration.FrozenSourceIntegration.test_caller_cannot_supply_principal_or_policy) ... ok\ntest_chunks_only_omits_superseded_source_and_claim (test_decision_integration.FrozenSourceIntegration.test_chunks_only_omits_superseded_source_and_claim) ... ok\ntest_genuine_sources_release_bound_payload (test_decision_integration.FrozenSourceIntegration.test_genuine_sources_release_bound_payload) ... ok\ntest_proof_corruption_overrides_positive_observation (test_decision_integration.FrozenSourceIntegration.test_proof_corruption_overrides_positive_observation) ... ok\ntest_revision_change_blocks_delivery (test_decision_integration.FrozenSourceIntegration.test_revision_change_blocks_delivery) ... ok\ntest_signed_revocation_blocks_agent_payload (test_decision_integration.FrozenSourceIntegration.test_signed_revocation_blocks_agent_payload) ... ok\ntest_unknown_candidate_cannot_resolve_sources (test_decision_integration.FrozenSourceIntegration.test_unknown_candidate_cannot_resolve_sources) ... ok\ntest_unsigned_state_change_is_not_accepted (test_decision_integration.FrozenSourceIntegration.test_unsigned_state_change_is_not_accepted) ... ok\ntest_valid_lease_covers_only_authorization_query (test_decision_integration.FrozenSourceIntegration.test_valid_lease_covers_only_authorization_query) ... ok\ntest_chunk_and_payload_limits (test_extension_v2.ExtensionV2Host.test_chunk_and_payload_limits) ... ok\ntest_constituent_substitution_is_denied (test_extension_v2.ExtensionV2Host.test_constituent_substitution_is_denied) ... ok\ntest_literal_corpus_is_bound_to_expected_semantic_cases (test_extension_v2.ExtensionV2Host.test_literal_corpus_is_bound_to_expected_semantic_cases) ... ok\ntest_projection_does_not_override_authoritative_state (test_extension_v2.ExtensionV2Host.test_projection_does_not_override_authoritative_state) ... ok\ntest_same_tenant_separate_scopes_need_aggregate_permission (test_extension_v2.ExtensionV2Host.test_same_tenant_separate_scopes_need_aggregate_permission) ... ok\ntest_signed_wrong_tenant_binding_still_denies (test_extension_v2.ExtensionV2Host.test_signed_wrong_tenant_binding_still_denies) ... ok\ntest_source_authorization_cannot_be_overridden_by_aggregate_grant (test_extension_v2.ExtensionV2Host.test_source_authorization_cannot_be_overridden_by_aggregate_grant) ... ok\ntest_two_safe_chunks_omit_claim_and_semantics (test_extension_v2.ExtensionV2Host.test_two_safe_chunks_omit_claim_and_semantics) ... ok\ntest_unsigned_authorization_change_is_rejected (test_extension_v2.ExtensionV2Host.test_unsigned_authorization_change_is_rejected) ... ok\ntest_valid_old_proof_fails_monotonic_freshness (test_extension_v2.ExtensionV2Host.test_valid_old_proof_fails_monotonic_freshness) ... ok\ntest_rejects_changed_policy_without_binding_update (test_material_audit.MaterialAuditMutations.test_rejects_changed_policy_without_binding_update) ... ok\ntest_rejects_extended_snapshot_validity (test_material_audit.MaterialAuditMutations.test_rejects_extended_snapshot_validity) ... ok\ntest_rejects_payload_bytes_not_bound_to_source (test_material_audit.MaterialAuditMutations.test_rejects_payload_bytes_not_bound_to_source) ... ok\ntest_rejects_payload_on_negative_decision (test_material_audit.MaterialAuditMutations.test_rejects_payload_on_negative_decision) ... ok\ntest_rejects_superseded_chunk_in_chunks_only_payload (test_material_audit.MaterialAuditMutations.test_rejects_superseded_chunk_in_chunks_only_payload) ... ok\ntest_rejects_unpinned_signing_key (test_material_audit.MaterialAuditMutations.test_rejects_unpinned_signing_key) ... ok\n\n----------------------------------------------------------------------\nRan 27 tests in 0.093s\n\nOK\n"
+  },
+  "sha256": {
+    "scripts/provenance_broker_decision.py": "9af897c6db8ca600f712a7631f44abb3932fd4de02d30f2ce093f1ac753f1e81",
+    "scripts/provenance_broker_decision.mjs": "d6898626318900021ae015142911bc2bd8a403df327822183df6f660e217b6ac",
+    "scripts/compare_provenance_broker.py": "0442d55a03521bab7caad998e5f873c0802ff94a80aca6f5b399111a0897de9c",
+    "schemas/provenance-broker/profile-v1.json": "575a9998e2a7ca05fdacf6b6a881208fcc6ea885c2839b7f17db7b8807e6d109",
+    "scripts/provenance_broker_host.py": "4f19baebf0fc2d8655bc1e3c67e9055b7c3e48cc532e98215b3575baa8a9f896",
+    "scripts/validate_provenance_broker.py": "b8031b74ec555e7e297e63bf8cd96cc145ac68caa016df218fb42b87bf854c36",
+    "scripts/materialize_provenance_broker.py": "f04bea8ff071cb88021057d2227d7e569c07463db71019d08401716fbe31ebb3",
+    "tests/provenance-broker/v3.1/test_decision_integration.py": "e25e2933d4ee04abb68f1023a745f6d9ac7224d31f13c0f22aed485bf8845e93",
+    "tests/provenance-broker/v3.1/test_material_audit.py": "df974b1a64340c6bcd1f72e7af64467856467d88b3a079621a4e2617de143853",
+    "tests/provenance-broker/v3.1/manifest.json": "4a43fd5bd6346ceb7a866b9b93d5b968f1d2caa934cf7197be3b03e6658548c5",
+    "tests/provenance-broker/v3.1/test_extension_v2.py": "9bf2dba602d0deebeeeb65c2da50fbcd3cd86336fb83e069996d7d28110f8162",
+    "tests/provenance-broker/v3.1/extensions-v2/manifest.json": "c6face556289a6a2152b288450ffb084178815b26b5822ae5dc4505736dae351",
+    "schemas/provenance-broker/profile-v2.json": "da0f3467db9c4ee447e6ca1a5d312e019da461effbfefc96a23fd9fbc7356e3d",
+    "schemas/provenance-broker/fixture-v2.schema.json": "d63b36ea7f7df604aeaed1018e4f1bbcb4246b72fa5eeed76ec3f788ea24868a"
+  }
+}

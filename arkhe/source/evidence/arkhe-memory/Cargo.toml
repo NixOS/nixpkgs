@@ -1,0 +1,10 @@
+[package]
+name = "arkhe-memory"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-core = { path = "../../kernel/arkhe-core" }
+serde.workspace = true
+tokio.workspace = true

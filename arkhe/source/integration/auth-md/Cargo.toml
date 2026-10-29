@@ -1,0 +1,19 @@
+[package]
+name = "arkhe-auth-md"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-core = { path = "../../kernel/arkhe-core" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+ed25519-dalek = "2.2.0"
+base64 = "0.22"
+rand_core = { version = "0.6", features = ["getrandom"], optional = true }
+
+[features]
+default = ["host"]
+host = ["dep:rand_core"]
+

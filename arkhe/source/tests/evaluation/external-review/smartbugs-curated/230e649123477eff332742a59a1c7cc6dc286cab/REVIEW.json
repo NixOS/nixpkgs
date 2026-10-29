@@ -1,0 +1,184 @@
+{
+  "status": "REVIEW_PACKAGE_ONLY_NO_INFERENCE",
+  "repository": "https://github.com/smartbugs/smartbugs-curated",
+  "commit": "230e649123477eff332742a59a1c7cc6dc286cab",
+  "files_sha256": {
+    "vulnerabilities.json": "2a7c119406b1c56df6087fbfb041f5d3aacbb07a82ee350e2220b51f429646bc",
+    "README.md": "36602edded733f5445de08a0f788d1caa5605b7165914e367754548991625a0c",
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "dataset/access_control/FibonacciBalance.sol": "784009c0758940079bd3a7402a3acdf60e3a9a659012e19b0aa21dbc9c0a35ab",
+    "dataset/access_control/arbitrary_location_write_simple.sol": "bbbdb5367463fd3d1e11b2c569695d8b4734e3f88fcf937a34469a23121b01ab",
+    "dataset/arithmetic/BECToken.sol": "5765dccd66c76ce39da689c314364dc380e0b6a984ad351c5f81eb8e35e749b9",
+    "dataset/arithmetic/insecure_transfer.sol": "3b0317da6075edb0df489502797d928ae0e6cd903da90b5818b4f7c0f581b9b8",
+    "dataset/reentrancy/0x01f8c4e3fa3edeb29e514cba738d87ce8c091d3f.sol": "0196d033850b295690465d0f7d2baae8b3570df29c9d03d507496b45155a84e5",
+    "dataset/reentrancy/0x23a91059fdc9579a9fbd0edc5f2ea0bfdb70deb4.sol": "bcd0fdfad9f6594fdbc940967321856490ed4bffbe8b6ab9c75c6b85072528a5"
+  },
+  "selection": "first two paths alphabetically in each of three categories",
+  "upstream_labels_are_not_arkhe_severity_or_exploitability_proof": true,
+  "source_comments_contain_labels_do_not_feed_unmodified_to_model": true,
+  "repetitions_after_review": 3,
+  "cases": [
+    {
+      "path": "dataset/access_control/FibonacciBalance.sol",
+      "source_url": "https://raw.githubusercontent.com/smartbugs/smartbugs-curated/230e649123477eff332742a59a1c7cc6dc286cab/dataset/access_control/FibonacciBalance.sol",
+      "upstream_annotation": {
+        "name": "FibonacciBalance.sol",
+        "path": "dataset/access_control/FibonacciBalance.sol",
+        "pragma": "0.4.22",
+        "source": "https://github.com/sigp/solidity-security-blog",
+        "vulnerabilities": [
+          {
+            "lines": [
+              31
+            ],
+            "category": "access_control"
+          },
+          {
+            "lines": [
+              38
+            ],
+            "category": "access_control"
+          }
+        ]
+      },
+      "review_status": "PENDING_SECOND_HUMAN_REVIEW",
+      "reviewer": null,
+      "label_supports_proposal": null,
+      "severity": null,
+      "report_facts": null,
+      "negative_control": null,
+      "split": "UNASSIGNED",
+      "review_notes": null
+    },
+    {
+      "path": "dataset/access_control/arbitrary_location_write_simple.sol",
+      "source_url": "https://raw.githubusercontent.com/smartbugs/smartbugs-curated/230e649123477eff332742a59a1c7cc6dc286cab/dataset/access_control/arbitrary_location_write_simple.sol",
+      "upstream_annotation": {
+        "name": "arbitrary_location_write_simple.sol",
+        "path": "dataset/access_control/arbitrary_location_write_simple.sol",
+        "pragma": "0.4.25",
+        "source": "https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-124#arbitrary-location-write-simplesol",
+        "vulnerabilities": [
+          {
+            "lines": [
+              27
+            ],
+            "category": "access_control"
+          }
+        ]
+      },
+      "review_status": "PENDING_SECOND_HUMAN_REVIEW",
+      "reviewer": null,
+      "label_supports_proposal": null,
+      "severity": null,
+      "report_facts": null,
+      "negative_control": null,
+      "split": "UNASSIGNED",
+      "review_notes": null
+    },
+    {
+      "path": "dataset/arithmetic/BECToken.sol",
+      "source_url": "https://raw.githubusercontent.com/smartbugs/smartbugs-curated/230e649123477eff332742a59a1c7cc6dc286cab/dataset/arithmetic/BECToken.sol",
+      "upstream_annotation": {
+        "name": "BECToken.sol",
+        "path": "dataset/arithmetic/BECToken.sol",
+        "pragma": "0.4.16",
+        "source": "https://smartcontractsecurity.github.io/SWC-registry/docs/SWC-101#bectokensol",
+        "vulnerabilities": [
+          {
+            "lines": [
+              264
+            ],
+            "category": "arithmetic"
+          }
+        ]
+      },
+      "review_status": "PENDING_SECOND_HUMAN_REVIEW",
+      "reviewer": null,
+      "label_supports_proposal": null,
+      "severity": null,
+      "report_facts": null,
+      "negative_control": null,
+      "split": "UNASSIGNED",
+      "review_notes": null
+    },
+    {
+      "path": "dataset/arithmetic/insecure_transfer.sol",
+      "source_url": "https://raw.githubusercontent.com/smartbugs/smartbugs-curated/230e649123477eff332742a59a1c7cc6dc286cab/dataset/arithmetic/insecure_transfer.sol",
+      "upstream_annotation": {
+        "name": "insecure_transfer.sol",
+        "path": "dataset/arithmetic/insecure_transfer.sol",
+        "pragma": "0.4.10",
+        "source": "https://consensys.github.io/smart-contract-best-practices/known_attacks/#front-running-aka-transaction-ordering-dependence",
+        "vulnerabilities": [
+          {
+            "lines": [
+              18
+            ],
+            "category": "arithmetic"
+          }
+        ]
+      },
+      "review_status": "PENDING_SECOND_HUMAN_REVIEW",
+      "reviewer": null,
+      "label_supports_proposal": null,
+      "severity": null,
+      "report_facts": null,
+      "negative_control": null,
+      "split": "UNASSIGNED",
+      "review_notes": null
+    },
+    {
+      "path": "dataset/reentrancy/0x01f8c4e3fa3edeb29e514cba738d87ce8c091d3f.sol",
+      "source_url": "https://raw.githubusercontent.com/smartbugs/smartbugs-curated/230e649123477eff332742a59a1c7cc6dc286cab/dataset/reentrancy/0x01f8c4e3fa3edeb29e514cba738d87ce8c091d3f.sol",
+      "upstream_annotation": {
+        "name": "0x01f8c4e3fa3edeb29e514cba738d87ce8c091d3f.sol",
+        "path": "dataset/reentrancy/0x01f8c4e3fa3edeb29e514cba738d87ce8c091d3f.sol",
+        "pragma": "0.4.19",
+        "source": "etherscan.io",
+        "vulnerabilities": [
+          {
+            "lines": [
+              54
+            ],
+            "category": "reentrancy"
+          }
+        ]
+      },
+      "review_status": "PENDING_SECOND_HUMAN_REVIEW",
+      "reviewer": null,
+      "label_supports_proposal": null,
+      "severity": null,
+      "report_facts": null,
+      "negative_control": null,
+      "split": "UNASSIGNED",
+      "review_notes": null
+    },
+    {
+      "path": "dataset/reentrancy/0x23a91059fdc9579a9fbd0edc5f2ea0bfdb70deb4.sol",
+      "source_url": "https://raw.githubusercontent.com/smartbugs/smartbugs-curated/230e649123477eff332742a59a1c7cc6dc286cab/dataset/reentrancy/0x23a91059fdc9579a9fbd0edc5f2ea0bfdb70deb4.sol",
+      "upstream_annotation": {
+        "name": "0x23a91059fdc9579a9fbd0edc5f2ea0bfdb70deb4.sol",
+        "path": "dataset/reentrancy/0x23a91059fdc9579a9fbd0edc5f2ea0bfdb70deb4.sol",
+        "pragma": "0.4.19",
+        "source": "etherscan.io",
+        "vulnerabilities": [
+          {
+            "lines": [
+              38
+            ],
+            "category": "reentrancy"
+          }
+        ]
+      },
+      "review_status": "PENDING_SECOND_HUMAN_REVIEW",
+      "reviewer": null,
+      "label_supports_proposal": null,
+      "severity": null,
+      "report_facts": null,
+      "negative_control": null,
+      "split": "UNASSIGNED",
+      "review_notes": null
+    }
+  ]
+}

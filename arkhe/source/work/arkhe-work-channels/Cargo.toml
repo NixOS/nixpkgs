@@ -1,0 +1,9 @@
+[package]
+name = "arkhe-work-channels"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-core = { path = "../../kernel/arkhe-core" }
+arkhe-work = { path = "../arkhe-work" }

@@ -1,0 +1,29 @@
+{
+  "experiment_id": "arkhe-extraction-support-pilot-v1",
+  "model_id": "fastino/gliner2.5-multi-v1",
+  "model_revision": "cf5593a5d45e3bbf204b9df621b13b1c0cf25ee3",
+  "device": "cpu",
+  "seed": 0,
+  "threads": 4,
+  "max_text_bytes": 4096,
+  "max_len": 512,
+  "threshold": 0.5,
+  "entity_labels": {
+    "service": "Named software services or applications, such as Atlas",
+    "database": "Database systems including version, such as PostgreSQL 16",
+    "organization": "Named companies or teams, such as Aurora or Acme",
+    "person": "Named people, such as Alice"
+  },
+  "predicate_labels": ["migrated_to", "operates", "works_for"],
+  "polarity_labels": ["affirmative statement", "negated statement", "mixed affirmative and negated statements", "unknown"],
+  "modality_labels": ["factual assertion", "possibility", "conditional", "mixed modality", "unknown"],
+  "support_evaluator": {
+    "id": "arkhe-support-rule-pt",
+    "version": "1",
+    "method": "Rule",
+    "scope": "literal Portuguese Atlas migration grammar; explicit correction references; abstains on unsupported predicates",
+    "accepted_by_current_broker_policy": false
+  },
+  "independent_review": "pending",
+  "reserved_corpus": false
+}

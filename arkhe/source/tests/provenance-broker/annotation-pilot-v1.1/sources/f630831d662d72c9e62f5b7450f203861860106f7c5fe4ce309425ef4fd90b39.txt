@@ -1,0 +1,1 @@
+O serviço Atlas não migrou para PostgreSQL 16.

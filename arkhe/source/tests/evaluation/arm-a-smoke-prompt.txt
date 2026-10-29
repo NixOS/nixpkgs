@@ -1,0 +1,1 @@
+Return only the integer result of 2 + 2.

@@ -1,0 +1,7 @@
+gliner2==2.1.0
+torch==2.11.0
+transformers==5.2.0
+huggingface-hub==1.4.1
+cryptography==50.0.1
+jsonschema==4.26.0
+blake3==1.0.9

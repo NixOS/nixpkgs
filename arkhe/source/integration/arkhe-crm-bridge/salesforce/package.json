@@ -1,0 +1,7 @@
+{
+  "name": "arkhe-salesforce-gate-validation",
+  "private": true,
+  "type": "module",
+  "scripts": { "check:syntax": "node scripts/check-syntax.mjs" },
+  "devDependencies": { "@apexdevtools/apex-parser": "5.3.0" }
+}

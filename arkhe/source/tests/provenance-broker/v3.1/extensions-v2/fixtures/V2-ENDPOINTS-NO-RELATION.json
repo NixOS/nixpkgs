@@ -1,0 +1,280 @@
+{
+  "fixture_id": "V2-ENDPOINTS-NO-RELATION",
+  "profile_id": "arkhe-broker-local-v2",
+  "description": "Person and organization mentioned separately with no employment relation.",
+  "clock_ms": 1793232000000,
+  "candidate": {
+    "candidate_id": "candidate-atlas",
+    "claim": {
+      "subject": "person:alice",
+      "predicate": "works_for",
+      "object": "organization:acme",
+      "polarity": "Positive",
+      "modality": "Asserted",
+      "qualifiers": []
+    },
+    "query": {
+      "purpose": "Assertion"
+    }
+  },
+  "session": {
+    "principal": "researcher-1",
+    "session_id": "session-1",
+    "tenant": "arkhe-test",
+    "scopes": [
+      "research"
+    ]
+  },
+  "policy": {
+    "policy_id": "broker-pilot",
+    "policy_version": "1",
+    "profile_id": "arkhe-broker-local-v2",
+    "purposes": [
+      "Analysis",
+      "Assertion"
+    ],
+    "best_effort_permitted": true,
+    "historical_permitted": true,
+    "grants_permitted": true,
+    "max_state_age_ms": 1000,
+    "max_decision_ttl_ms": 1000,
+    "accepted_interval_ms": 250,
+    "accepted_evaluator": "fixture-reviewer",
+    "accepted_transforms": [
+      "utf8-identity@1"
+    ],
+    "rejected_transforms": [],
+    "accepted_rules": [
+      "fixture-identity@1"
+    ],
+    "accepted_revision_combinations": [
+      {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      }
+    ],
+    "cross_tenant_aggregation_permitted": false
+  },
+  "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+  "chunks": [
+    {
+      "chunk_id": "chunk-1",
+      "bytes_hex": "416c6963652076697369746f752061206269626c696f746563612e",
+      "source_bytes_hex": "416c6963652076697369746f752061206269626c696f746563612e",
+      "representation_hex": "416c6963652076697369746f752061206269626c696f746563612e",
+      "record": {
+        "chunk_id": "chunk-1",
+        "chunk_digest": "c0b2ef5026a2b63fc79bd93e79f6b497ec3e49b0bdf974dcc633b1844c0c330d",
+        "source_digest": "2db43271a22a5b89294dcb4bf8057e40e8c05628f010c691d67e5d98d2b18081",
+        "text_position": {
+          "repr_digest": "14e67ac59d80c005b76bf2feab77d625ccb11ff3480d8ec7d04ecd5e6d41165a",
+          "offset": 0,
+          "length": 27
+        },
+        "transformation_ref": "utf8-identity@1",
+        "tenant": "arkhe-test",
+        "scope": "research"
+      },
+      "record_hash": "6027c32df2ba35aed04b486fadf6ced8cbad3c6367c2bcf2579738a256fb23c9",
+      "per_chunk": {
+        "integrity": "OK",
+        "access": "Permitted",
+        "state": "Current",
+        "transform": "Accepted"
+      },
+      "proof": {
+        "profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+        "leaf_count": 2,
+        "leaf_index": 0,
+        "steps": [
+          {
+            "kind": "node",
+            "direction": "right",
+            "hash": "abd13f2f6468fc2b8739fcf3981449b7a4f364426b566e22f8b0da97a1c56aba"
+          }
+        ]
+      }
+    },
+    {
+      "chunk_id": "chunk-2",
+      "bytes_hex": "41636d6520666162726963612066657272616d656e7461732e",
+      "source_bytes_hex": "41636d6520666162726963612066657272616d656e7461732e",
+      "representation_hex": "41636d6520666162726963612066657272616d656e7461732e",
+      "record": {
+        "chunk_id": "chunk-2",
+        "chunk_digest": "a46afe548ab821d14e35bf63c361cd328ecc303a228f0570c453526cd79e73c9",
+        "source_digest": "25a7e75eda4eae156f8b97fa8aeca614a04917ced16e3618c4a70b16b69e0fe3",
+        "text_position": {
+          "repr_digest": "ba0e872b7387da2991f1cda422d8e6e0fa7eb7451fa4ddbffc2627f1f8b217d6",
+          "offset": 0,
+          "length": 25
+        },
+        "transformation_ref": "utf8-identity@1",
+        "tenant": "arkhe-test",
+        "scope": "research"
+      },
+      "record_hash": "e22edf3649035c62753208993f04a765d172d20aad3629726d293eb09e4bc6b7",
+      "per_chunk": {
+        "integrity": "OK",
+        "access": "Permitted",
+        "state": "Current",
+        "transform": "Accepted"
+      },
+      "proof": {
+        "profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+        "leaf_count": 2,
+        "leaf_index": 1,
+        "steps": [
+          {
+            "kind": "node",
+            "direction": "left",
+            "hash": "e4eb6321c855f69c763b68b9343323c1f87f096c5b9ae32e0ee68d70ad062e1b"
+          }
+        ]
+      }
+    }
+  ],
+  "anchors": {
+    "checkpoint_id": "extension-checkpoint-2",
+    "root": "811438be0252991d51e94fbd56f378c5bc787037d2347895a7f340ac595d5017",
+    "leaf_count": 2,
+    "mmr_profile_digest": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450",
+    "public_key_hex": "03a107bff3ce10be1d70dd18e74bc09967e4d6309ba50d5f1ddc8664125531b8",
+    "key_id": "fixture-authority-1",
+    "state_record_hash": "2e570cfbfc34ef656086077aa7366c4ca79c0041c5e170cc3cc85765a344863e",
+    "state_root": "1290b1284cbfbec50876601a7c808fd0411cebecc638e4962eb21d6038c56d3d",
+    "state_proof": {
+      "leaf_count": 1,
+      "leaf_index": 0,
+      "steps": []
+    },
+    "stream_id": "fixture-evidence-stream",
+    "minimum_leaf_count": 2
+  },
+  "observations": {
+    "integrity": "OK",
+    "transform_items": [
+      {
+        "transformation_ref": "utf8-identity@1",
+        "verdict": "Accepted"
+      }
+    ],
+    "documental": "Complete",
+    "mechanism": {
+      "kind": "Extracted",
+      "predicate_span_valid": true
+    },
+    "bundle": {
+      "key_id": "fixture-authority-1",
+      "body": {
+        "authority": "fixture-authority-1",
+        "subject": "researcher-1",
+        "resources": [
+          "chunk-1",
+          "chunk-2"
+        ],
+        "revisions": {
+          "authorization": "auth-1",
+          "state": "state-1",
+          "policy": "policy-1",
+          "anchor_set": "anchors-1"
+        },
+        "observed_at": 1793231999900,
+        "expires_at": {
+          "authorization": 1793232000800,
+          "state": 1793232000800,
+          "policy": 1793232000800,
+          "anchor_set": 1793232000800
+        },
+        "access": "Permitted",
+        "state": "Current",
+        "effective_from": 1793231990000,
+        "effective_to": 1793232010000,
+        "historical_state": "Active",
+        "source_authorizations": [],
+        "aggregate_authorizations": []
+      },
+      "signature_hex": "012e89eeb387f9588ea54be9554fbd58b36d9eb66164c4f9d5182d69baae021d017362222c1e59d889b5deb2f74871b9fba9cb75d739c60b876129d39bdc1e05"
+    },
+    "failures": [],
+    "semantic": {
+      "key_id": "fixture-authority-1",
+      "body": {
+        "claim_digest": "e34ebb74c38d59b03be625554267e7af0714781bf89116f78f96d58e65bc7702",
+        "support_set_digest": "b7a113299d4ba829a237b12b72854099405872d5c7160bbd2727ef6a87fdc963",
+        "outcome": "Indeterminate",
+        "method": "Human",
+        "evaluator": "fixture-reviewer",
+        "evaluator_version": "1",
+        "support_refs": [
+          "6027c32df2ba35aed04b486fadf6ced8cbad3c6367c2bcf2579738a256fb23c9",
+          "e22edf3649035c62753208993f04a765d172d20aad3629726d293eb09e4bc6b7"
+        ]
+      },
+      "signature_hex": "a3d6333a63fe7ddfd7d7c2d4b43036901def881f9c59d4e486ff0c9a98bd67fb389a1e8612e6f221b47901640fe1ad883d08227439a255f5b7d7f2f095cf4b09"
+    }
+  },
+  "delivery": {
+    "attempted_at": 1793232000100,
+    "authorization_source_available": true,
+    "other_sources_available": true,
+    "observed_revisions": {
+      "authorization": "auth-1",
+      "state": "state-1",
+      "policy": "policy-1",
+      "anchor_set": "anchors-1"
+    }
+  },
+  "independent_review": {
+    "status": "pending"
+  },
+  "expected_output": {
+    "decision": "Reject",
+    "applied_rule": "ASSERTION_UNSUPPORTED",
+    "flags": [],
+    "reasons": [
+      {
+        "rule_id": "ASSERTION_UNSUPPORTED",
+        "code": "RULE_MATCH"
+      }
+    ],
+    "released_payload": {
+      "chunks": [],
+      "claim_status": "Omitted",
+      "temporal_context": {
+        "mode": "Current"
+      },
+      "restrictions": []
+    },
+    "snapshot": {
+      "evaluated_at": 1793232000000,
+      "valid_until": 1793232000800,
+      "revisions": {
+        "authorization": "auth-1",
+        "state": "state-1",
+        "policy": "policy-1",
+        "anchor_set": "anchors-1"
+      },
+      "policy_digest": "7615e5c1e9fbf3e98727cb16745c732332ef88d2354c77dd1496b6a06a77ad29",
+      "anchor_set_digest": "e857397ef3773703761c40c433ed054fae7e05010b0e785bdabe4ce832304d6a",
+      "consistency": {
+        "mode": "BestEffort",
+        "profile_id": "frozen-observations-v1",
+        "observation_digest": "6caa456527b9326cad5d4ae9e42d9ca0cb49105c85c38a56962ee20092492309"
+      },
+      "temporal_guarantee": {
+        "kind": "ValidatedAt",
+        "validated_at": 1793232000000,
+        "accepted_interval_ms": 250
+      }
+    },
+    "delivery": {
+      "outcome": "Blocked",
+      "code": "DECISION_DENIED"
+    },
+    "material_errors": []
+  },
+  "expected_schema_error_paths": []
+}

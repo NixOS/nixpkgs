@@ -1,0 +1,1543 @@
+[
+  {
+    "id": 1,
+    "title": "SQL Injection",
+    "cwe": "CWE-89",
+    "hackenproof_basis": [
+      {
+        "domain": "WebMobile",
+        "typical_severity": "Critical",
+        "table_row": "SQL Injection (SQLi)",
+        "source": "https://docs.hackenproof.com/bug-bounty/vulnerability-classification/web-and-mobile"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "XSS",
+    "cwe": "CWE-79",
+    "hackenproof_basis": [
+      {
+        "domain": "WebMobile",
+        "typical_severity": "High",
+        "table_row": "Stored Cross-Site Scripting (XSS)",
+        "source": "https://docs.hackenproof.com/bug-bounty/vulnerability-classification/web-and-mobile"
+      },
+      {
+        "domain": "WebMobile",
+        "typical_severity": "Medium",
+        "table_row": "Reflected Cross-Site Scripting (XSS)",
+        "source": "https://docs.hackenproof.com/bug-bounty/vulnerability-classification/web-and-mobile"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "CSRF",
+    "cwe": "CWE-352",
+    "hackenproof_basis": [
+      {
+        "domain": "WebMobile",
+        "typical_severity": "Medium",
+        "table_row": "Cross-Site Request Forgery (CSRF)",
+        "source": "https://docs.hackenproof.com/bug-bounty/vulnerability-classification/web-and-mobile"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "CORS",
+    "cwe": "CWE-942",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 5,
+    "title": "SSRF",
+    "cwe": "CWE-918",
+    "hackenproof_basis": [
+      {
+        "domain": "WebMobile",
+        "typical_severity": "High",
+        "table_row": "Server-Side Request Forgery (SSRF)",
+        "source": "https://docs.hackenproof.com/bug-bounty/vulnerability-classification/web-and-mobile"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "IDOR",
+    "cwe": "CWE-639",
+    "hackenproof_basis": [
+      {
+        "domain": "WebMobile",
+        "typical_severity": "High",
+        "table_row": "Insecure Direct Object Reference (IDOR)",
+        "source": "https://docs.hackenproof.com/bug-bounty/vulnerability-classification/web-and-mobile"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Path Traversal",
+    "cwe": "CWE-22",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 8,
+    "title": "Mass Assignment",
+    "cwe": "CWE-915",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 9,
+    "title": "Clickjacking",
+    "cwe": "CWE-1021",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 10,
+    "title": "Content Security Policy",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 11,
+    "title": "Security Headers",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 12,
+    "title": "Input Validation",
+    "cwe": "CWE-20",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 13,
+    "title": "Server-Side Authorization",
+    "cwe": "CWE-862",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 14,
+    "title": "Row-Level Security",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 15,
+    "title": "Least Privilege",
+    "cwe": "CWE-250",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 16,
+    "title": "RBAC",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 17,
+    "title": "Secrets Management",
+    "cwe": "CWE-798",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 18,
+    "title": ".env in .gitignore",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 19,
+    "title": "API Key Rotation",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 20,
+    "title": "Secret Scanning",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 21,
+    "title": "Hashing vs Encryption",
+    "cwe": "CWE-327",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 22,
+    "title": "Password Salting",
+    "cwe": "CWE-759",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 23,
+    "title": "bcrypt & Argon2",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 24,
+    "title": "JWT Expiry",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 25,
+    "title": "Refresh Tokens",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 26,
+    "title": "OAuth 2.0",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 27,
+    "title": "OpenID Connect",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 28,
+    "title": "Session Fixation",
+    "cwe": "CWE-384",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 29,
+    "title": "MFA",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 30,
+    "title": "Brute Force Protection",
+    "cwe": "CWE-307",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 31,
+    "title": "Account Enumeration",
+    "cwe": "CWE-203",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 32,
+    "title": "Timing Attacks",
+    "cwe": "CWE-208",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 33,
+    "title": "File Upload Validation",
+    "cwe": "CWE-434",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 34,
+    "title": "Webhook Signature Verification",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 35,
+    "title": "TLS Certificate Expiry",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 36,
+    "title": "HSTS",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 37,
+    "title": "Encryption at Rest",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 38,
+    "title": "Dependency Vulnerabilities",
+    "cwe": "CWE-1395",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 39,
+    "title": "Supply Chain Attacks",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 40,
+    "title": "Threat Modeling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 41,
+    "title": "Indexes",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 42,
+    "title": "EXPLAIN ANALYZE",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 43,
+    "title": "N+1 Queries",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 44,
+    "title": "Full Table Scans",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 45,
+    "title": "Connection Pooling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 46,
+    "title": "Database Migrations",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 47,
+    "title": "Down Migrations",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 48,
+    "title": "Transactions",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 49,
+    "title": "ACID",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 50,
+    "title": "Isolation Levels",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 51,
+    "title": "Deadlocks",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 52,
+    "title": "Optimistic Locking",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 53,
+    "title": "Pessimistic Locking",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 54,
+    "title": "Normalization",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 55,
+    "title": "Denormalization",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 56,
+    "title": "Foreign Keys",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 57,
+    "title": "Unique Constraints",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 58,
+    "title": "Cascading Deletes",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 59,
+    "title": "Soft Deletes",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 60,
+    "title": "UUIDs vs Auto-Increment",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 61,
+    "title": "Cursor-Based Pagination",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 62,
+    "title": "Full-Text Search",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 63,
+    "title": "Read Replicas",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 64,
+    "title": "Replication Lag",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 65,
+    "title": "Sharding",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 66,
+    "title": "Partitioning",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 67,
+    "title": "Hot Partitions",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 68,
+    "title": "Postgres VACUUM",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 69,
+    "title": "Materialized Views",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 70,
+    "title": "Backups",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 71,
+    "title": "Testing Your Restores",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 72,
+    "title": "Point-in-Time Recovery",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 73,
+    "title": "Change Data Capture",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 74,
+    "title": "Outbox Pattern",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 75,
+    "title": "ORM Lazy Loading",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 76,
+    "title": "CAP Theorem",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 77,
+    "title": "Eventual Consistency",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 78,
+    "title": "Strong Consistency",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 79,
+    "title": "Raft Consensus",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 80,
+    "title": "Leader Election",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 81,
+    "title": "Split Brain",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 82,
+    "title": "Quorums",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 83,
+    "title": "Clock Skew",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 84,
+    "title": "Distributed Locks",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 85,
+    "title": "Consistent Hashing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 86,
+    "title": "Bloom Filters",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 87,
+    "title": "Two-Phase Commit",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 88,
+    "title": "CQRS",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 89,
+    "title": "Event Sourcing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 90,
+    "title": "Race Conditions",
+    "cwe": "CWE-362",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 91,
+    "title": "Backpressure",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 92,
+    "title": "Load Shedding",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 93,
+    "title": "Bulkheads",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 94,
+    "title": "Jitter",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 95,
+    "title": "Retry Storms",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 96,
+    "title": "Cascading Failures",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 97,
+    "title": "Thundering Herd",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 98,
+    "title": "Cache Invalidation",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 99,
+    "title": "Cache Hit Ratio",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 100,
+    "title": "TTLs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 101,
+    "title": "Cache Warming",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 102,
+    "title": "Write-Through vs Write-Back",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 103,
+    "title": "Redis Eviction Policies",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 104,
+    "title": "CDNs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 105,
+    "title": "Cache-Control Headers",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 106,
+    "title": "ETags",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 107,
+    "title": "Dead Letter Queues",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 108,
+    "title": "Poison Messages",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 109,
+    "title": "At-Least-Once Delivery",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 110,
+    "title": "Exactly-Once Semantics",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 111,
+    "title": "Message Ordering",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 112,
+    "title": "Kafka Consumer Groups",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 113,
+    "title": "Partition Keys",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 114,
+    "title": "Background Jobs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 115,
+    "title": "Webhook Retries",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 116,
+    "title": "DNS",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 117,
+    "title": "DNS Propagation",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 118,
+    "title": "HTTP Status Codes",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 119,
+    "title": "HTTP Method Semantics",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 120,
+    "title": "Keep-Alive",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 121,
+    "title": "HTTP/2",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 122,
+    "title": "WebSockets",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 123,
+    "title": "Server-Sent Events",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 124,
+    "title": "Long Polling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 125,
+    "title": "gRPC",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 126,
+    "title": "Protocol Buffers",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 127,
+    "title": "API Versioning",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 128,
+    "title": "OpenAPI Specs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 129,
+    "title": "Backward Compatibility",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 130,
+    "title": "Request Size Limits",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 131,
+    "title": "Compression",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 132,
+    "title": "Latency vs Throughput",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 133,
+    "title": "Egress Fees",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 134,
+    "title": "VPCs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 135,
+    "title": "Subnets",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 136,
+    "title": "NAT Gateways",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 137,
+    "title": "Firewalls",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 138,
+    "title": "Security Groups",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 139,
+    "title": "Service Mesh",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 140,
+    "title": "Ingress Controllers",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 141,
+    "title": "Health Checks",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 142,
+    "title": "Liveness vs Readiness Probes",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 143,
+    "title": "Graceful Shutdown",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 144,
+    "title": "Connection Draining",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 145,
+    "title": "Stateless Services",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 146,
+    "title": "Failover",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 147,
+    "title": "Multi-Region",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 148,
+    "title": "Availability Zones",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 149,
+    "title": "Single Points of Failure",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 150,
+    "title": "Disaster Recovery",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 151,
+    "title": "RTO & RPO",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 152,
+    "title": "SLAs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 153,
+    "title": "SLOs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 154,
+    "title": "Error Budgets",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 155,
+    "title": "Incident Response",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 156,
+    "title": "On-Call",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 157,
+    "title": "Runbooks",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 158,
+    "title": "Postmortems",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 159,
+    "title": "Chaos Engineering",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 160,
+    "title": "Graceful Degradation",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 161,
+    "title": "Autoscaling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 162,
+    "title": "Horizontal vs Vertical Scaling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 163,
+    "title": "Cold Starts",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 164,
+    "title": "Capacity Planning",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 165,
+    "title": "Load Testing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 166,
+    "title": "Memory Leaks",
+    "cwe": "CWE-401",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 167,
+    "title": "OOM Killer",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 168,
+    "title": "Structured Logging",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 169,
+    "title": "Log Levels",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 170,
+    "title": "Log Rotation",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 171,
+    "title": "Distributed Tracing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 172,
+    "title": "OpenTelemetry",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 173,
+    "title": "Correlation IDs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 174,
+    "title": "Metrics Cardinality",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 175,
+    "title": "p99 Latency",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 176,
+    "title": "Alert Fatigue",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 177,
+    "title": "Error Tracking",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 178,
+    "title": "Profiling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 179,
+    "title": "Flame Graphs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 180,
+    "title": "Infrastructure as Code",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 181,
+    "title": "Terraform State",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 182,
+    "title": "GitOps",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 183,
+    "title": "Blue-Green Deployments",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 184,
+    "title": "Canary Releases",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 185,
+    "title": "Rollbacks",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 186,
+    "title": "Feature Flags",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 187,
+    "title": "Environment Parity",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 188,
+    "title": "Staging Environments",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 189,
+    "title": "12-Factor Apps",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 190,
+    "title": "Multi-Stage Builds",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 191,
+    "title": "Non-Root Containers",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 192,
+    "title": "Image Scanning",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 193,
+    "title": "Resource Requests & Limits",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 194,
+    "title": "Pod Disruption Budgets",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 195,
+    "title": "Semantic Versioning",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 196,
+    "title": "Lockfiles",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 197,
+    "title": "Reproducible Builds",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 198,
+    "title": "Branch Protection",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 199,
+    "title": "Public S3 Buckets",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 200,
+    "title": "Presigned URLs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 201,
+    "title": "Cloud Billing Alerts",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 202,
+    "title": "Unit Tests",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 203,
+    "title": "Integration Tests",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 204,
+    "title": "End-to-End Tests",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 205,
+    "title": "Contract Testing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 206,
+    "title": "Flaky Tests",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 207,
+    "title": "Mocking",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 208,
+    "title": "Regression Tests",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 209,
+    "title": "Smoke Tests",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 210,
+    "title": "Property-Based Testing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 211,
+    "title": "Fuzzing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 212,
+    "title": "Error Handling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 213,
+    "title": "Edge Cases",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 214,
+    "title": "Off-by-One Errors",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 215,
+    "title": "Floating Point Math",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 216,
+    "title": "Storing Money as Floats",
+    "cwe": "CWE-1339",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 217,
+    "title": "Time Zones",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 218,
+    "title": "Daylight Saving Time",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 219,
+    "title": "Unicode",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 220,
+    "title": "Character Encoding",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 221,
+    "title": "Thread Safety",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 222,
+    "title": "Event Loop Blocking",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 223,
+    "title": "Unhandled Promise Rejections",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 224,
+    "title": "Integer Overflow",
+    "cwe": "CWE-190",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 225,
+    "title": "Garbage Collection",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 226,
+    "title": "Schema Validation",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 227,
+    "title": "Debouncing",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 228,
+    "title": "Big O Notation",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 229,
+    "title": "Technical Debt",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 230,
+    "title": "Dead Code",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 231,
+    "title": "Merge Conflicts",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 232,
+    "title": "GDPR",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 233,
+    "title": "PII Handling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 234,
+    "title": "Audit Logs",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 235,
+    "title": "Data Residency",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 236,
+    "title": "SOC 2",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 237,
+    "title": "PCI DSS",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 238,
+    "title": "Cookie Consent",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 239,
+    "title": "Software Licenses",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 240,
+    "title": "SPF, DKIM & DMARC",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 241,
+    "title": "Email Bounce Handling",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 242,
+    "title": "Chargebacks",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 243,
+    "title": "Bot Protection",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 244,
+    "title": "Prompt Injection",
+    "cwe": "CWE-1427",
+    "hackenproof_basis": []
+  },
+  {
+    "id": 245,
+    "title": "Hallucinated Packages",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 246,
+    "title": "Real-time streaming",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 247,
+    "title": "Context Windows",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 248,
+    "title": "Evals",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 249,
+    "title": "Model Version Pinning",
+    "cwe": null,
+    "hackenproof_basis": []
+  },
+  {
+    "id": 250,
+    "title": "Reading the maxed LOC Diff",
+    "cwe": null,
+    "hackenproof_basis": []
+  }
+]

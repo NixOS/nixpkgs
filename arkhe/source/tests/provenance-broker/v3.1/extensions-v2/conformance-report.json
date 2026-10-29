@@ -1,0 +1,202 @@
+{
+  "status": "pass",
+  "profile_id": "arkhe-broker-local-v2",
+  "independent_review": "pending",
+  "independent_authorship": false,
+  "scope": "synthetic source bindings, frozen policy, local host delivery",
+  "fixtures": [
+    {
+      "fixture_id": "V2-AGG-EXPLICIT-ALLOW",
+      "schema_errors_expected": [],
+      "decision": "Admit",
+      "applied_rule": "RELEASE_CURRENT",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-AGG-GRANT-DENIED",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ACCESS_DENIED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-AGG-POLICY-DENIED",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ACCESS_DENIED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-AGG-SCOPE-ALLOW",
+      "schema_errors_expected": [],
+      "decision": "Admit",
+      "applied_rule": "RELEASE_CURRENT",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-AGG-SCOPE-DENIED",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ACCESS_DENIED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-AGG-SOURCE-DENIED",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ACCESS_DENIED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-AGG-SOURCE-UNKNOWN",
+      "schema_errors_expected": [],
+      "decision": "Exclude",
+      "applied_rule": "ACCESS_UNKNOWN",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-CORRECTION-ANALYSIS",
+      "schema_errors_expected": [],
+      "decision": "Admit",
+      "applied_rule": "RELEASE_CURRENT",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-CORRECTION-OLD-CLAIM",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ASSERTION_UNSUPPORTED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-ENDPOINTS-NO-RELATION",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ASSERTION_UNSUPPORTED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-HYPOTHESIS-ASSERTED",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ASSERTION_UNSUPPORTED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-HYPOTHESIS-POSSIBLE",
+      "schema_errors_expected": [],
+      "decision": "Admit",
+      "applied_rule": "RELEASE_CURRENT",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-LIMIT-CHUNK-AND-PAYLOAD-EXACT",
+      "schema_errors_expected": [],
+      "decision": "Admit",
+      "applied_rule": "RELEASE_CURRENT",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-LIMIT-CHUNK-OVER",
+      "schema_errors_expected": [
+        "chunks/0/bytes_hex"
+      ],
+      "decision": "Reject",
+      "applied_rule": "REQUEST_INVALID",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-NEGATION-NEGATIVE-CLAIM",
+      "schema_errors_expected": [],
+      "decision": "Admit",
+      "applied_rule": "RELEASE_CURRENT",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-NEGATION-POSITIVE-CLAIM",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "ASSERTION_UNSUPPORTED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-P05-TWO-SAFE",
+      "schema_errors_expected": [],
+      "decision": "AdmitChunksOnly",
+      "applied_rule": "ANALYSIS_CHUNKS_ONLY",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-PROJECTION-REVOKED",
+      "schema_errors_expected": [],
+      "decision": "Reject",
+      "applied_rule": "STATE_DISALLOWED",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-PROJECTION-STILL-CURRENT",
+      "schema_errors_expected": [],
+      "decision": "Admit",
+      "applied_rule": "RELEASE_CURRENT",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    },
+    {
+      "fixture_id": "V2-ROLLBACK-VALID-OLD-PROOF",
+      "schema_errors_expected": [],
+      "decision": "Exclude",
+      "applied_rule": "STATE_UNAVAILABLE",
+      "python_match": true,
+      "node_match": true,
+      "local_host_match": true
+    }
+  ],
+  "v1_material_preserved": true,
+  "sha256": {
+    "scripts/materialize_provenance_broker_v2.py": "d61bebbae6ed39f3707af31b4b7daed4fc76d4cfa91090a69fac8cc715d624c5",
+    "scripts/validate_provenance_broker_v2.py": "93e303fecdc362686c4126c57eab707f62b18316c53fba9f5f0ee9b1cc38cffe",
+    "scripts/materialize_provenance_broker.py": "f04bea8ff071cb88021057d2227d7e569c07463db71019d08401716fbe31ebb3",
+    "tests/provenance-broker/v3.1/test_extension_v2.py": "9bf2dba602d0deebeeeb65c2da50fbcd3cd86336fb83e069996d7d28110f8162",
+    "scripts/provenance_broker_decision.py": "9af897c6db8ca600f712a7631f44abb3932fd4de02d30f2ce093f1ac753f1e81",
+    "scripts/provenance_broker_decision.mjs": "d6898626318900021ae015142911bc2bd8a403df327822183df6f660e217b6ac",
+    "scripts/provenance_broker_host.py": "4f19baebf0fc2d8655bc1e3c67e9055b7c3e48cc532e98215b3575baa8a9f896",
+    "tests/provenance-broker/v3.1/extensions-v2/manifest.json": "c6face556289a6a2152b288450ffb084178815b26b5822ae5dc4505736dae351"
+  }
+}

@@ -1,0 +1,1686 @@
+{
+  "schema": "arkhe:twin:ontology:v5",
+  "version": 5,
+  "status": "definition-only",
+  "semantics": {
+    "requirements": "all",
+    "counting": "distinct signed execution IDs with distinct output digests",
+    "freshness": "all counted records within window relative to verifier-supplied time",
+    "trust": "verifier supplies trusted runtime and external attester keys",
+    "unsupported_requirements": "fail closed; never award checked status",
+    "attestations": "claims must bind the output digest; local command names are not attestations",
+    "evidence_status": "PENDING is catalog metadata, not an evaluated count of available records. CHECKED requires a verifier, trusted keys, freshness, distinct evidence and every requirement.",
+    "market_scope": "User-provided job taxonomy; no labor-market statistics or 2026 demand claims independently validated.",
+    "policy_scope": "Thresholds and time windows are proposed policies. Related skill IDs are not interchangeable and do not imply one another.",
+    "definition_identity": "Consumers must bind ontology schema, catalog version and content digest; skill IDs alone do not freeze policy. Version 5 adds supply-chain transparency, hardware-rooted attestation, verifiable computation and agent-runtime evidence lanes while retaining prior IDs.",
+    "transparency": "Attestations MAY be registered with a Transparency Service (SCITT, RFC 9943) or a Rekor-compatible log. A transparency receipt is evidence of registration, not of truth; it MUST be evaluated alongside the signed statement.",
+    "sbom_binding": "SBOM predicates MUST bind the subject artifact digest. CycloneDX and SPDX are accepted formats; a bare SBOM without digest binding is not attestation evidence.",
+    "formal_isolation": "Negative isolation tests MAY be complemented by a formal analyzer proof or a reproducing counterexample. A solver result without a bound schema digest and tool version is not attestation evidence.",
+    "agent_runtime": "Arkhe proposed agent evidence requires signed tool contracts and session-bound runtime evidence; these are local policy requirements, not guarantees supplied by MCP itself.",
+    "predicate_families": "predicate_families lists compatible families, not implicit conjunction. family_policy specifies required conjunctions or alternatives. Unsupported family policies remain PENDING."
+  },
+  "skills": [
+    {
+      "skill_id": "skill:rust-backend:v1",
+      "name": "Rust Backend",
+      "family": "software-backend",
+      "min_evidence_count": 5,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "rust-axum-",
+          "min_count": 5,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "clippy-deny-warnings",
+            "cargo-test-coverage"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "predicate_families": [
+            "predicate:in-toto:statement:v1",
+            "predicate:slsa:provenance:v1"
+          ],
+          "family_policy": {
+            "all_of": [
+              "predicate:in-toto:statement:v1",
+              "predicate:slsa:provenance:v1"
+            ]
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:nextjs-frontend:v1",
+      "name": "Next.js Frontend",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "nextjs-",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "build",
+            "e2e"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:wasm-verifier:v1",
+      "name": "WASM Verifier",
+      "min_evidence_count": 1,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-verify-wasm",
+          "min_count": 1,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "wasm-parity-8",
+            "mmr-inclusion"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:zk-pco:v1",
+      "name": "ZK / Proof-Carrying Output",
+      "family": "security",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-pco",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "valid-pco-statement",
+            "negative-tests-6"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "predicate_families": [
+            "predicate:zkvm:stark-receipt:v1"
+          ],
+          "verifiable_computation": {
+            "require_program_digest_binding": true,
+            "require_output_digest_binding": true,
+            "accepted_proof_systems": [
+              "stark",
+              "snark"
+            ],
+            "require_known_verifier_key": true
+          },
+          "family_policy": {
+            "all_of": [
+              "predicate:zkvm:stark-receipt:v1"
+            ]
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:security-audit:v1",
+      "name": "Security Audit",
+      "family": "security",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "security-audit",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "documented-findings",
+            "remediation-pr"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "skill_id": "skill:ai-agent-integration:v1",
+      "name": "AI Agent Integration",
+      "family": "ai-native",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "ai-agent-",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "tool-contract-digest"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "predicate_families": [
+            "predicate:agent-tool-contract:v1"
+          ],
+          "require_content_addressed_contract": true,
+          "require_signature_verification": true,
+          "family_policy": {
+            "all_of": [
+              "predicate:agent-tool-contract:v1"
+            ]
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:postgres-rls:v1",
+      "name": "Postgres RLS",
+      "family": "software-backend",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "postgres-rls",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "rls-isolation-negative-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "formal_isolation": {
+            "accepted_evidence": [
+              "proof_of_isolation"
+            ],
+            "require_schema_digest": true,
+            "require_tool_version": true,
+            "require_intent_model": true,
+            "negative_control_required": true,
+            "counterexample_policy": "A reproducing exploit is a negative control or finding; it cannot satisfy proof of isolation for the deployed schema."
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:rust-testing:v1",
+      "name": "Rust Testing",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "rust-test-",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "unit-and-integration-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:api-security:v1",
+      "name": "API Security",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "api-security-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "authentication-negative-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:reproducible-build:v1",
+      "name": "Reproducible Build",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "reproducible-build",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "independent-build-hash-parity"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:rust-systems:v1",
+      "name": "Rust Systems Programming",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-kernel",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "deterministic-replay",
+            "concurrency-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:cryptographic-data-structures:v1",
+      "name": "Cryptographic Data Structures",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-wormgraph",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "all-position-tamper-tests",
+            "domain-separation"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:secure-parsing:v1",
+      "name": "Secure Parsing",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-verify-core",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "bounds-negative-tests",
+            "overflow-negative-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:api-design:v1",
+      "name": "API Design",
+      "family": "software-backend",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-fintech-api",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "openapi-contract-tests",
+            "idempotency-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "skill_id": "skill:devops-supply-chain:v1",
+      "name": "DevOps / Supply Chain",
+      "family": "platform",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "ci-supply-chain",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "verified-build-provenance",
+            "signed-sbom"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "predicate_families": [
+            "predicate:slsa:provenance:v1",
+            "predicate:cyclonedx:bom",
+            "predicate:spdx:document"
+          ],
+          "transparency": {
+            "accepted": [
+              "scitt",
+              "rekor"
+            ],
+            "require_inclusion_or_receipt": true
+          },
+          "family_policy": {
+            "all_of": [
+              "predicate:slsa:provenance:v1"
+            ],
+            "any_sbom_of": [
+              "predicate:cyclonedx:bom",
+              "predicate:spdx:document"
+            ]
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:rust-production:v1",
+      "name": "Rust Production",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-kernel",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "clippy-deny-warnings",
+            "wal-replay-determinism"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-backend",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:sql-schema-design:v1",
+      "name": "SQL Schema Design",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "sql-schema-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "migration-up-down-tests",
+            "schema-constraint-negative-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-backend",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:distributed-systems:v1",
+      "name": "Distributed Systems",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "distributed-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "outbox-crash-recovery-tests",
+            "duplicate-delivery-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-backend",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:async-rust:v1",
+      "name": "Async Rust",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "async-rust-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "cancellation-safety-tests",
+            "concurrency-invariant-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-backend",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:typescript-strict:v1",
+      "name": "TypeScript Strict",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "typescript-strict-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "strict-tsconfig",
+            "typecheck-pass"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-fullstack",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:nextjs-app-router:v1",
+      "name": "Next.js App Router",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "nextjs-app-router-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "production-build",
+            "server-client-boundary-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-fullstack",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:react-component-design:v1",
+      "name": "React Component Design",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "react-components-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "component-tests",
+            "accessibility-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-fullstack",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:testing-pyramid:v1",
+      "name": "Testing Pyramid",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "testing-pyramid-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "unit-tests",
+            "integration-tests",
+            "e2e-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-fullstack",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:api-integration:v1",
+      "name": "API Integration",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "api-integration-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "contract-tests",
+            "error-retry-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "software-fullstack",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:advanced-sql:v1",
+      "name": "Advanced SQL",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "advanced-sql-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "window-cte-result-tests",
+            "query-plan-review"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "data-ml",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:python-data-stack:v1",
+      "name": "Python Data Stack",
+      "family": "data-ml",
+      "min_evidence_count": 3,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "python-data-",
+          "min_count": 3,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "pytest-suite",
+            "pydantic-schema-validation"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:dbt-transformations:v1",
+      "name": "dbt Transformations",
+      "family": "data-ml",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "dbt-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "dbt-build-success",
+            "contract-tests",
+            "incremental-idempotency"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:orchestration:v1",
+      "name": "Data Pipeline Orchestration",
+      "family": "data-ml",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "data-orchestration-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "pipeline-retry-tests",
+            "checkpoint-recovery-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:ml-lifecycle:v1",
+      "name": "ML Lifecycle",
+      "family": "data-ml",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "ml-lifecycle-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "versioned-dataset-model-binding",
+            "held-out-evaluation",
+            "training-or-finetuning-run"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "skill_id": "skill:applied-cryptography:v1",
+      "name": "Applied Cryptography",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "applied-crypto-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "signature-negative-tests",
+            "key-lifecycle-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "security",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "skill_id": "skill:tee-attestation:v1",
+      "name": "TEE Attestation",
+      "family": "security",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "tee-attestation-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "hardware-quote-verification",
+            "nonce-freshness-negative-tests",
+            "trusted-vendor-chain"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "predicate_families": [
+            "predicate:dice:evidence:v1"
+          ],
+          "hardware_root": {
+            "accepted_formats": [
+              "x509_der_with_dice_tcb_info",
+              "canonical_json_quote"
+            ],
+            "require_rotr_anchor": true,
+            "require_alias_key_body_signature": true,
+            "require_freshness_binding": true
+          },
+          "family_policy": {
+            "all_of": [
+              "predicate:dice:evidence:v1"
+            ]
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:secure-systems-rust:v1",
+      "name": "Secure Systems Rust",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "secure-systems-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "threat-model-review",
+            "unsafe-boundary-audit",
+            "security-negative-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "security",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:merkle-proofs:v1",
+      "name": "Merkle Proofs",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "arkhe-wormgraph",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "all-position-tamper-tests",
+            "domain-separation"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "security",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "skill_id": "skill:supply-chain-security:v1",
+      "name": "Supply Chain Security",
+      "family": "security",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "supply-chain-security-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "verified-build-provenance",
+            "signature-identity-policy",
+            "sbom-validation"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "predicate_families": [
+            "predicate:slsa:provenance:v1",
+            "predicate:cyclonedx:bom",
+            "predicate:spdx:document",
+            "predicate:scitt:receipt:v1",
+            "predicate:rekor:inclusion:v1"
+          ],
+          "family_policy": {
+            "all_of": [
+              "predicate:slsa:provenance:v1"
+            ],
+            "any_sbom_of": [
+              "predicate:cyclonedx:bom",
+              "predicate:spdx:document"
+            ],
+            "any_transparency_of": [
+              "predicate:scitt:receipt:v1",
+              "predicate:rekor:inclusion:v1"
+            ]
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:kubernetes-operations:v1",
+      "name": "Kubernetes Operations",
+      "family": "platform",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "kubernetes-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "cluster-rollout-tests",
+            "network-policy-negative-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:infrastructure-as-code:v1",
+      "name": "Infrastructure as Code",
+      "family": "platform",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "iac-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "plan-policy-validation",
+            "apply-destroy-integration-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "skill_id": "skill:ci-cd-pipelines:v1",
+      "name": "CI/CD Pipelines",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "ci-pipelines-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "trusted-ci-run-binding",
+            "pipeline-negative-gate-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "platform",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:supply-chain-integrity:v1",
+      "name": "Supply Chain Integrity",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "supply-chain-integrity-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "artifact-provenance-binding",
+            "signature-identity-policy",
+            "toolchain-digest-binding"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "platform",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:observability:v1",
+      "name": "Observability",
+      "family": "platform",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "observability-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "telemetry-integration-tests",
+            "slo-alert-firing-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:solana-programming:v1",
+      "name": "Solana Programming",
+      "family": "blockchain",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "solana-program-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "program-test-pass",
+            "pda-cpi-negative-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:smart-contract-security:v1",
+      "name": "Smart Contract Security",
+      "family": "blockchain",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "smart-contract-security-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "exploit-regression-tests",
+            "independent-audit-review"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:merkle-proofs-blockchain:v1",
+      "name": "Blockchain Merkle Proofs",
+      "family": "blockchain",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "merkle-blockchain-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "portable-inclusion-tests",
+            "onchain-offchain-parity"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:wallet-integration:v1",
+      "name": "Wallet Integration",
+      "family": "blockchain",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "wallet-integration-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "transaction-signature-tests",
+            "rejected-signature-tests",
+            "network-binding-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "evidence_status": "PENDING"
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "skill_id": "skill:agent-orchestration:v1",
+      "name": "Agent Orchestration",
+      "family": "ai-native",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "agent-orchestration-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "tool-contract-tests",
+            "agent-loop-termination-tests"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2",
+          "predicate_families": [
+            "predicate:agent-tool-contract:v1",
+            "predicate:agent-runtime-evidence:v1"
+          ],
+          "runtime_evidence": {
+            "require_gated_pretooluse": true,
+            "require_gated_posttooluse": true,
+            "require_session_nonce": true,
+            "fail_mode": "deny"
+          },
+          "family_policy": {
+            "all_of": [
+              "predicate:agent-tool-contract:v1",
+              "predicate:agent-runtime-evidence:v1"
+            ]
+          }
+        }
+      ],
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:prompt-engineering:v1",
+      "name": "Prompt Engineering",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "prompt-engineering-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "versioned-prompt-workintent-binding",
+            "held-out-task-evaluation"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "ai-native",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "assessment_limit": "Authenticates artifacts, approvals or reviewer attestations; does not prove a human trait, exclusive authorship, or decision quality.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:ai-output-validation:v1",
+      "name": "AI Output Validation",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "ai-output-validation-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "containment-rejection-tests",
+            "output-digest-test-binding"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "ai-native",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "skill_id": "skill:communication:v1",
+      "name": "Communication Evidence",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "communication-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "signed-document-review",
+            "rubric-review-attestation"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "ai-native",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "assessment_limit": "Authenticates artifacts, approvals or reviewer attestations; does not prove a human trait, exclusive authorship, or decision quality.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    },
+    {
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy.",
+      "skill_id": "skill:ownership:v1",
+      "name": "Human Approval Evidence",
+      "family": "ai-native",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "ownership-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "human-approval-signature",
+            "approved-output-digest-binding"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "assessment_limit": "Authenticates artifacts, approvals or reviewer attestations; does not prove a human trait, exclusive authorship, or decision quality.",
+      "evidence_status": "PENDING"
+    },
+    {
+      "skill_id": "skill:systems-thinking:v1",
+      "name": "Systems Thinking Evidence",
+      "min_evidence_count": 2,
+      "time_window_days": 365,
+      "requirements": [
+        {
+          "kind": "module_execution",
+          "module_prefix": "systems-thinking-",
+          "min_count": 2,
+          "require_pass": true
+        },
+        {
+          "kind": "external_attestation",
+          "claims": [
+            "versioned-adr-stencil-binding",
+            "architecture-review-attestation"
+          ],
+          "min_count": 1,
+          "require_trusted_verifier": true,
+          "contract": "arkhe:twin:attestation-contract:v2"
+        }
+      ],
+      "family": "ai-native",
+      "verification_scope": "Only the explicit evidence predicates; not every technology or capability in the job family.",
+      "assessment_limit": "Authenticates artifacts, approvals or reviewer attestations; does not prove a human trait, exclusive authorship, or decision quality.",
+      "evidence_status": "PENDING",
+      "evidence_status_reason": "No signed evidence set evaluated against this predicate and an independent trust policy."
+    }
+  ],
+  "attestation_contract": {
+    "schema": "arkhe:twin:attestation-contract:v2",
+    "supersedes": "arkhe:twin:attestation-contract:v1",
+    "status": "definition-only",
+    "required_fields": [
+      "claim_id",
+      "subject_execution_id",
+      "subject_output_digest",
+      "source_commit",
+      "source_snapshot_digest",
+      "command_argv",
+      "exit_code",
+      "stdout_digest",
+      "stderr_digest",
+      "report_digest",
+      "issued_at",
+      "verifier_public_key",
+      "signature"
+    ],
+    "optional_fields": [
+      "predicate_type",
+      "predicate_digest",
+      "dsse_envelope_digest",
+      "transparency_receipt",
+      "sbom_digest",
+      "hardware_evidence_digest",
+      "formal_proof_digest",
+      "tool_contract_digest"
+    ],
+    "subject_binding": "Each Arkhe claim binds execution ID, output digest and source identity. In an in-toto Statement the artifact digest is in Statement.subject, not inside predicate. External SLSA verification alone does not establish an Arkhe claim contract.",
+    "signing": "Verifier signature must bind all required fields under a versioned domain-separated encoding; embedded keys alone are not trusted. DSSE envelopes are accepted when payloadType is application/vnd.in-toto+json and signatures are over the PAE.",
+    "result": "exit_code must be zero; report must contain claim-specific measurements or findings; command names and URLs alone never satisfy claims.",
+    "coverage": "cargo-test-coverage requires an attached report naming measured scope, measurement tool/version, covered/total counts and explicit threshold; running cargo test alone is insufficient.",
+    "freshness": "Verifier-supplied time and trust policy govern freshness and accepted signing keys; missing or future timestamps fail closed. Transparency receipts and Rekor checkpoints MUST be fresh relative to verifier time.",
+    "transparency": "When transparency is required, the attestation MUST be accompanied by either (a) a SCITT receipt from a trusted Transparency Service or (b) a Rekor inclusion proof + checkpoint signed by a trusted log key. The verifier MUST evaluate the receipt/proof against the statement digest, not against a detached claim.",
+    "sbom": "When an SBOM claim is evaluated, the SBOM predicate MUST be digest-bound to the subject artifact. CycloneDX and SPDX are accepted. A raw SBOM file without digest binding fails closed.",
+    "hardware_attestation": "Hardware evidence requires a profile-specific verifier, trusted endorsements/root, accepted measurements and verifier freshness. DICE/X.509/COSE encodings are profile-specific; no universal RISC-V quote wire format is assumed.",
+    "verifiable_computation": "When a zkVM/STARK receipt is evaluated, the verifier MUST know the allowed program_digest and verifier_key_digest. output_digest MUST bind the claimed output. A proof without program binding fails closed.",
+    "agent_evidence": "When agent runtime evidence is evaluated, PreToolUse and PostToolUse MUST be gated, the nonce MUST be session-bound or verifier-supplied, and fail_mode MUST be deny. A tool contract without a signature over the canonical digest is not evidence.",
+    "missing_or_unsupported": "PENDING; no CHECKED result. No parser or evaluator for this contract is implemented yet."
+  },
+  "supersedes": "arkhe:twin:ontology:v4",
+  "evidence_predicate_families": [
+    {
+      "family_id": "predicate:in-toto:statement:v1",
+      "description": "Base in-toto Statement envelope. Required fields: _type (https://in-toto.io/Statement/v1), subject (name + digest map), predicateType, predicate.",
+      "binding": "subject[*].digest binds the tested artifact or output digest.",
+      "signing": "Wrapped in a DSSE envelope (payloadType application/vnd.in-toto+json) or equivalent domain-separated signature. Signatures are over the PAE, not over the raw JSON.",
+      "evaluator_status": "RESTRICTED_PROFILE_IMPLEMENTED"
+    },
+    {
+      "family_id": "predicate:slsa:provenance:v1",
+      "predicate_type": "https://slsa.dev/provenance/v1",
+      "description": "SLSA Build Provenance v1; this catalog uses a restricted verifier profile, not SLSA-level certification. Optional SLSA fields are not globally required.",
+      "sub_fields": {
+        "buildDefinition": [
+          "buildType",
+          "externalParameters",
+          "internalParameters",
+          "resolvedDependencies"
+        ],
+        "runDetails": [
+          "builder",
+          "metadata",
+          "byproducts"
+        ]
+      },
+      "binding": "Artifact digest belongs to Statement.subject; source dependencies belong to predicate.buildDefinition.resolvedDependencies. Builder and buildType must be pinned by verifier policy.",
+      "evaluator_status": "RESTRICTED_PROFILE_IMPLEMENTED"
+    },
+    {
+      "family_id": "predicate:cyclonedx:bom",
+      "predicate_type": "https://cyclonedx.org/bom",
+      "description": "CycloneDX SBOM as an in-toto predicate. The SBOM JSON body is the predicate; the statement subject MUST carry the manifest digest of the attested artifact.",
+      "binding": "subject.digest.sha256 MUST equal the container image or artifact digest the SBOM describes.",
+      "note": "cosign attest --type cyclonedx produces this envelope.",
+      "evaluator_status": "PENDING"
+    },
+    {
+      "family_id": "predicate:spdx:document",
+      "predicate_type": "https://spdx.dev/Document",
+      "description": "SPDX document as an in-toto predicate, digest-bound to the artifact.",
+      "binding": "subject.digest.sha256 MUST match the artifact under attestation.",
+      "evaluator_status": "PENDING"
+    },
+    {
+      "family_id": "predicate:scitt:receipt:v1",
+      "description": "SCITT architecture (RFC 9943); listed fields describe an Arkhe adapter plan, not a normative SCITT wire receipt. Native signed statements/receipts need a dedicated verifier.",
+      "required_fields": [
+        "transparency_service_id",
+        "statement_digest",
+        "registration_time",
+        "ledger_index_or_checkpoint",
+        "service_signature"
+      ],
+      "binding": "statement_digest MUST bind the DSSE envelope or statement digest that was registered.",
+      "scope": "A SCITT receipt does not assert that the statement is true; it asserts that the statement was notarized. It MUST be evaluated together with the underlying signed statement.",
+      "evaluator_status": "PENDING"
+    },
+    {
+      "family_id": "predicate:rekor:inclusion:v1",
+      "description": "Sigstore Rekor inclusion proof + checkpoint. Proves an entry is part of a tamper-evident Merkle tree at a given tree size.",
+      "required_fields": [
+        "log_index",
+        "log_id",
+        "integrated_time",
+        "inclusion_proof",
+        "checkpoint",
+        "checkpoint_signature"
+      ],
+      "binding": "The leaf hash MUST bind the signature or DSSE envelope under evaluation.",
+      "verification": "Verifier MUST check the checkpoint signature against a trusted Rekor key and MUST require a consistency proof or witness quorum when the checkpoint is newer than the entry's witness.",
+      "evaluator_status": "PENDING"
+    },
+    {
+      "family_id": "predicate:dice:evidence:v1",
+      "description": "DICE is an attestation architecture with profile-specific certificate/claim encodings. No universal RISC-V CoVE quote format is asserted here; vendor/profile verification remains pending.",
+      "required_fields": [
+        "x509_der_chain",
+        "dice_tcb_info",
+        "firmware_measurements",
+        "alias_key_signature_over_quote_body"
+      ],
+      "binding": "The Alias key signature MUST cover the quote body containing measurements and freshness/report data. The chain MUST anchor in a trusted RoT public key.",
+      "evaluator_status": "PENDING"
+    },
+    {
+      "family_id": "predicate:zkvm:stark-receipt:v1",
+      "description": "Verifiable computation receipt from a zkVM/STARK prover. Proves that a computation was executed correctly without revealing private inputs.",
+      "required_fields": [
+        "program_digest",
+        "public_inputs_digest",
+        "output_digest",
+        "proof_system",
+        "verifier_key_digest",
+        "proof_bytes_digest"
+      ],
+      "binding": "output_digest MUST bind the execution output being claimed; program_digest MUST bind the exact program/ circuit under evaluation.",
+      "note": "The verifier MUST know the allowed verifier_key_digest and proof_system ahead of time; a proof alone does not establish which circuit it proves.",
+      "evaluator_status": "PENDING",
+      "privacy_limit": "Verifiable execution does not automatically imply zero knowledge; privacy depends on the selected proof system and its configuration."
+    },
+    {
+      "family_id": "predicate:agent-tool-contract:v1",
+      "description": "Cryptographically signed, content-addressed tool contract for AI agents (e.g. Glyph Protocol or an equivalent signed MCP tool card).",
+      "required_fields": [
+        "tool_schema_digest",
+        "intent",
+        "cost",
+        "risk",
+        "reversibility",
+        "signature",
+        "canonical_digest"
+      ],
+      "binding": "canonical_digest MUST bind the full contract; tool_schema_digest MUST bind the executable schema. Runtime execution receipts MUST reference this digest.",
+      "evaluator_status": "PENDING",
+      "standardization": "Arkhe proposed profile, not a normative MCP or external industry standard."
+    },
+    {
+      "family_id": "predicate:agent-runtime-evidence:v1",
+      "description": "Sealed runtime evidence from an agent runtime (e.g. AgentHook runtime attestation).",
+      "required_fields": [
+        "session_id",
+        "nonce",
+        "gated_events",
+        "fail_mode",
+        "issued_at",
+        "signature"
+      ],
+      "binding": "nonce MUST be verifier-supplied or session-bound; gated_events MUST cover PreToolUse and PostToolUse for any tool execution claim.",
+      "fail_closed": "Runtime evidence MUST fail closed on missing gates or invalid signatures.",
+      "evaluator_status": "PENDING",
+      "standardization": "Arkhe proposed profile, not a normative MCP or external industry standard."
+    }
+  ],
+  "research_sources": [
+    "https://slsa.dev/spec/v1.2/build-provenance",
+    "https://github.com/secure-systems-lab/dsse/blob/master/protocol.md",
+    "https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md",
+    "https://www.rfc-editor.org/rfc/rfc9943.html",
+    "https://docs.sigstore.dev/about/bundle/",
+    "https://cyclonedx.org/specification/overview/",
+    "https://trustedcomputinggroup.org/wp-content/uploads/DICE-Attestation-Architecture-Version-1.1-Revision-18_pub.pdf"
+  ]
+}

@@ -1,0 +1,38 @@
+[package]
+name = "arkhe-bugbounty"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+arkhe-ollama = { path = "../arkhe-ollama" }
+arkhe-core = { path = "../../kernel/arkhe-core" }
+arkhe-kernel = { path = "../../kernel/arkhe-kernel" }
+arkhe-governance = { path = "../../governance/arkhe-governance" }
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+sqlx.workspace = true
+uuid.workspace = true
+arkhe-sql = { path = "../../storage/sql/crates/arkhe-sql" }
+arkhe-wormgraph = { path = "../../evidence/arkhe-wormgraph" }
+
+arkhe-verify-core = { path = "../../verification/crates/arkhe-verify-core" }
+hex.workspace = true
+sha2.workspace = true
+
+ed25519-dalek = "2.2.0"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+[dev-dependencies]
+axum.workspace = true
+rand_core = { version = "0.6", features = ["getrandom"] }
+
+[features]
+postgres-integration = []
+ollama-integration = []
+
+# Explicit real-evidence qualification; missing configuration fails, never mocks.
+workload-integration = []

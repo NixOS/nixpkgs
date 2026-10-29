@@ -1,0 +1,7 @@
+[
+  {"id":"fixture-sum","axis":"E1","data":{},"expected":5,"fixture_steps":[{"tool":"add","arguments":{"values":[2,3]}}]},
+  {"id":"fixture-lookup","axis":"E2","data":{"answer":7},"expected":7,"fixture_steps":[{"tool":"lookup","arguments":{"key":"answer"}}]},
+  {"id":"fixture-call-limit","axis":"E3","data":{},"expected":3,"fixture_steps":[{"tool":"add","arguments":{"values":[1]}},{"tool":"add","arguments":{"values":[1,2]}}]},
+  {"id":"fixture-incorrect","axis":"E4","data":{},"expected":9,"fixture_steps":[{"tool":"add","arguments":{"values":[1,2]}}]},
+  {"id":"fixture-abandoned","axis":"E5","data":{},"expected":0,"fixture_steps":[]}
+]

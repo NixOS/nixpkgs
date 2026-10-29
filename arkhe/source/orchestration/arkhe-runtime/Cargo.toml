@@ -1,0 +1,42 @@
+[package]
+name = "arkhe-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+default-run = "arkhe-runtime"
+
+[dependencies]
+arkhe-core = { path = "../../kernel/arkhe-core" }
+arkhe-kernel = { path = "../../kernel/arkhe-kernel" }
+arkhe-governance = { path = "../../governance/arkhe-governance" }
+arkhe-verify-core = { path = "../../verification/crates/arkhe-verify-core" }
+arkhe-agent = { path = "../../cognition/arkhe-agent" }
+tokio = { workspace = true, features = ["net", "process", "io-util"] }
+
+arkhe-wormgraph = { path = "../../evidence/arkhe-wormgraph" }
+serde.workspace = true
+serde_json.workspace = true
+axum.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+ed25519-dalek.workspace = true
+sqlx.workspace = true
+arkhe-sql = { path = "../../storage/sql/crates/arkhe-sql" }
+async-trait.workspace = true
+clap.workspace = true
+uuid.workspace = true
+
+[features]
+sqlite-dispatch = ["arkhe-kernel/sqlite-broker"]
+postgres-integration = []
+
+[dev-dependencies]
+uuid.workspace = true
+
+arkhe-perception = { path = "../../cognition/arkhe-perception" }
+arkhe-rag = { path = "../../cognition/arkhe-rag" }
+arkhe-metacognition = { path = "../../cognition/arkhe-metacognition" }
+arkhe-world-model = { path = "../../cognition/arkhe-world-model" }
+arkhe-learning = { path = "../../cognition/arkhe-learning" }
+
+tower = { version = "0.5", features = ["util"] }

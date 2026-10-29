@@ -1,0 +1,20 @@
+[package]
+name = "arkhe-python-bridge"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "arkhe-python-gate"
+path = "src/main.rs"
+
+[dependencies]
+arkhe-verify-core = { path = "../../../verification/crates/arkhe-verify-core" }
+arkhe-core = { path = "../../../kernel/arkhe-core" }
+arkhe-kernel = { path = "../../../kernel/arkhe-kernel" }
+arkhe-governance = { path = "../../../governance/arkhe-governance" }
+serde.workspace = true
+serde_json.workspace = true

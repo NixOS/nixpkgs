@@ -1,0 +1,505 @@
+{
+  "schema": "arkhe:twin:source-map:v3",
+  "ontology_version": 5,
+  "mappings": [
+    {
+      "path": "kernel/arkhe-kernel",
+      "skill_id": "skill:rust-systems:v1",
+      "record_module": "arkhe-kernel",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "evidence/arkhe-wormgraph",
+      "skill_id": "skill:cryptographic-data-structures:v1",
+      "record_module": "arkhe-wormgraph",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "verification/crates/arkhe-verify-core",
+      "skill_id": "skill:secure-parsing:v1",
+      "record_module": "arkhe-verify-core",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "verification/crates/arkhe-verify-wasm",
+      "skill_id": "skill:wasm-verifier:v1",
+      "record_module": "arkhe-verify-wasm",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "apps/arkhe-intra",
+      "skill_id": "skill:nextjs-frontend:v1",
+      "record_module": "nextjs-arkhe-intra",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "orchestration/arkhe-runtime",
+      "skill_id": "skill:ai-agent-integration:v1",
+      "record_module": "ai-agent-arkhe-runtime",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "storage/sql",
+      "skill_id": "skill:postgres-rls:v1",
+      "record_module": "postgres-rls-arkhe-sql",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "kernel/arkhe-core",
+      "skill_id": "skill:rust-testing:v1",
+      "record_module": "rust-test-arkhe-core",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "integration/auth-md",
+      "skill_id": "skill:api-security:v1",
+      "record_module": "api-security-auth-md",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": ".github/workflows",
+      "skill_id": "skill:devops-supply-chain:v1",
+      "record_module": "ci-supply-chain",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "work/arkhe-twin",
+      "skill_id": "skill:reproducible-build:v1",
+      "record_module": "reproducible-build-arkhe-twin",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "kernel/arkhe-kernel",
+      "skill_id": "skill:rust-production:v1",
+      "record_module": "arkhe-kernel",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "storage/sql",
+      "skill_id": "skill:sql-schema-design:v1",
+      "record_module": "sql-schema-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "orchestration/arkhe-runtime",
+      "skill_id": "skill:distributed-systems:v1",
+      "record_module": "distributed-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "kernel/arkhe-kernel",
+      "skill_id": "skill:async-rust:v1",
+      "record_module": "async-rust-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "apps/arkhe-intra",
+      "skill_id": "skill:typescript-strict:v1",
+      "record_module": "typescript-strict-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "apps/arkhe-intra",
+      "skill_id": "skill:nextjs-app-router:v1",
+      "record_module": "nextjs-app-router-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "apps/arkhe-intra",
+      "skill_id": "skill:react-component-design:v1",
+      "record_module": "react-components-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "apps/arkhe-intra",
+      "skill_id": "skill:testing-pyramid:v1",
+      "record_module": "testing-pyramid-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "apps/arkhe-intra",
+      "skill_id": "skill:api-integration:v1",
+      "record_module": "api-integration-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "storage/sql",
+      "skill_id": "skill:advanced-sql:v1",
+      "record_module": "advanced-sql-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "work/arkhe-twin",
+      "skill_id": "skill:applied-cryptography:v1",
+      "record_module": "applied-crypto-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "integration/arkhe-depin",
+      "skill_id": "skill:tee-attestation:v1",
+      "record_module": "tee-attestation-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "kernel/arkhe-kernel",
+      "skill_id": "skill:secure-systems-rust:v1",
+      "record_module": "secure-systems-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "evidence/arkhe-wormgraph",
+      "skill_id": "skill:merkle-proofs:v1",
+      "record_module": "arkhe-wormgraph",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": ".github/workflows",
+      "skill_id": "skill:supply-chain-security:v1",
+      "record_module": "supply-chain-security-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": ".github/workflows",
+      "skill_id": "skill:ci-cd-pipelines:v1",
+      "record_module": "ci-pipelines-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": ".github/workflows",
+      "skill_id": "skill:supply-chain-integrity:v1",
+      "record_module": "supply-chain-integrity-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "orchestration/arkhe-runtime",
+      "skill_id": "skill:agent-orchestration:v1",
+      "record_module": "agent-orchestration-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "docs",
+      "skill_id": "skill:prompt-engineering:v1",
+      "record_module": "prompt-engineering-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "kernel/arkhe-kernel",
+      "skill_id": "skill:ai-output-validation:v1",
+      "record_module": "ai-output-validation-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "docs",
+      "skill_id": "skill:communication:v1",
+      "record_module": "communication-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "docs",
+      "skill_id": "skill:systems-thinking:v1",
+      "record_module": "systems-thinking-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "kernel/arkhe-kernel",
+      "skill_id": "skill:rust-backend:v1",
+      "record_module": "rust-axum-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance.",
+      "proposed_module": "arkhe-kernel",
+      "module_note": "Collection label normalized to predicate prefix; not a claim that this source already emits this module."
+    },
+    {
+      "path": "crates/arkhe-fintech-api",
+      "skill_id": "skill:rust-backend:v1",
+      "record_module": "rust-axum-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping.",
+      "proposed_module": "arkhe-fintech-api",
+      "module_note": "Collection label normalized to predicate prefix; not a claim that this source already emits this module."
+    },
+    {
+      "path": "crates/arkhe-fintech-api",
+      "skill_id": "skill:api-design:v1",
+      "record_module": "arkhe-fintech-api",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "crates/arkhe-fintech-store",
+      "skill_id": "skill:sql-schema-design:v1",
+      "record_module": "sql-schema-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping.",
+      "proposed_module": "arkhe-fintech-store",
+      "module_note": "Collection label normalized to predicate prefix; not a claim that this source already emits this module."
+    },
+    {
+      "path": "crates/arkhe-fintech-store",
+      "skill_id": "skill:postgres-rls:v1",
+      "record_module": "postgres-rlsarkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping.",
+      "proposed_module": "arkhe-fintech-store",
+      "module_note": "Collection label normalized to predicate prefix; not a claim that this source already emits this module."
+    },
+    {
+      "path": "crates/arkhe-fintech-webhooks",
+      "skill_id": "skill:distributed-systems:v1",
+      "record_module": "distributed-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping.",
+      "proposed_module": "arkhe-fintech-webhooks",
+      "module_note": "Collection label normalized to predicate prefix; not a claim that this source already emits this module."
+    },
+    {
+      "path": "crates/arkhe-pco",
+      "skill_id": "skill:zk-pco:v1",
+      "record_module": "arkhe-pco",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "crates/arkhe-validator",
+      "skill_id": "skill:zk-pco:v1",
+      "record_module": "arkhe-pcoarkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping.",
+      "proposed_module": "arkhe-validator",
+      "module_note": "Collection label normalized to predicate prefix; not a claim that this source already emits this module."
+    },
+    {
+      "path": "tests/stencil/adversarial.rs",
+      "skill_id": "skill:security-audit:v1",
+      "record_module": "security-audit",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "docs/adr",
+      "skill_id": "skill:security-audit:v1",
+      "record_module": "security-audit",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "scripts",
+      "skill_id": "skill:python-data-stack:v1",
+      "record_module": "python-data-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "dbt",
+      "skill_id": "skill:dbt-transformations:v1",
+      "record_module": "dbt-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": ".github/workflows",
+      "skill_id": "skill:orchestration:v1",
+      "record_module": "data-orchestration-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "ml/training",
+      "skill_id": "skill:ml-lifecycle:v1",
+      "record_module": "ml-lifecycle-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "deploy/kubernetes",
+      "skill_id": "skill:kubernetes-operations:v1",
+      "record_module": "kubernetes-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "deploy/helm",
+      "skill_id": "skill:infrastructure-as-code:v1",
+      "record_module": "iac-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "deploy/kubernetes",
+      "skill_id": "skill:observability:v1",
+      "record_module": "observability-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "programs",
+      "skill_id": "skill:solana-programming:v1",
+      "record_module": "solana-program-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "tests/solana-security",
+      "skill_id": "skill:smart-contract-security:v1",
+      "record_module": "smart-contract-security-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "crates/arkhe-wormgraph",
+      "skill_id": "skill:merkle-proofs:v1",
+      "record_module": "arkhe-wormgraph",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "apps/web",
+      "skill_id": "skill:wallet-integration:v1",
+      "record_module": "wallet-integration-arkhe",
+      "path_present": false,
+      "status": "planned-evidence-source",
+      "qualification": "Planned target absent in this checkout; no qualifying evidence can be inferred from this mapping."
+    },
+    {
+      "path": "docs/adr",
+      "skill_id": "skill:ownership:v1",
+      "record_module": "ownership-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "kernel/arkhe-kernel/tests/budget_pco.rs",
+      "skill_id": "skill:zk-pco:v1",
+      "record_module": "arkhe-pco-kernel",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "docs/audits",
+      "skill_id": "skill:security-audit:v1",
+      "record_module": "security-audit-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    },
+    {
+      "path": "evidence/arkhe-wormgraph",
+      "skill_id": "skill:merkle-proofs-blockchain:v1",
+      "record_module": "merkle-blockchain-arkhe",
+      "path_present": true,
+      "status": "candidate-evidence-source",
+      "qualification": "Path exists; required signed executions and claim-specific attestations remain unverified. Source labels do not establish evidence provenance."
+    }
+  ],
+  "unmapped_skills": [],
+  "note": "All skills have a candidate or planned target. Empty unmapped_skills means catalog coverage only, not evidence availability. path_present is a checkout snapshot. Skills without any present source are listed separately. No directories were created to simulate implementation.",
+  "skills_without_present_source": [
+    "skill:api-design:v1",
+    "skill:dbt-transformations:v1",
+    "skill:ml-lifecycle:v1",
+    "skill:kubernetes-operations:v1",
+    "skill:infrastructure-as-code:v1",
+    "skill:observability:v1",
+    "skill:solana-programming:v1",
+    "skill:smart-contract-security:v1",
+    "skill:wallet-integration:v1"
+  ],
+  "new_predicate_families_requiring_evaluator": [
+    "predicate:cyclonedx:bom",
+    "predicate:spdx:document",
+    "predicate:scitt:receipt:v1",
+    "predicate:rekor:inclusion:v1",
+    "predicate:dice:evidence:v1",
+    "predicate:zkvm:stark-receipt:v1",
+    "predicate:agent-tool-contract:v1",
+    "predicate:agent-runtime-evidence:v1"
+  ]
+}

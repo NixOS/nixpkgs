@@ -1,0 +1,10 @@
+[
+  {
+    "expression": "(vector(0) / vector(0)) or vector(0)",
+    "value": "NaN"
+  },
+  {
+    "expression": "clamp_min(vector(0) / vector(0), 0)",
+    "value": "NaN"
+  }
+]
