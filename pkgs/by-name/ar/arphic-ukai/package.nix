@@ -36,7 +36,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
     license = lib.licenses.arphicpl;
-    maintainers = [ lib.maintainers.changlinli ];
+    maintainers = with lib.maintainers; [
+      changlinli
+      ccicnce113424
+    ];
     platforms = lib.platforms.all;
   };
 }
