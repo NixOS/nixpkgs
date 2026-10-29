@@ -47,6 +47,11 @@ buildPythonPackage rec {
     "test_misc_good_WKS_text"
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.9.21,<0.13.0' "uv_build"
+  '';
+
   # disable network on all builds (including darwin)
   # see https://github.com/NixOS/nixpkgs/issues/356803
   preCheck = ''
