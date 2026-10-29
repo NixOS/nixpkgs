@@ -15,14 +15,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "comrade";
-  version = "0.2.2";
+  version = "0.3.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dangowrt";
     repo = "comrade";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RDjjruOY5ootz5MMlIjIOaG6hngIx51mf40veADeERE=";
+    hash = "sha256-3eIqYiiiGMyvCxHJuWPLUaqZfP/9UQhpIk51KwHxml0=";
   };
 
   strictDeps = true;
