@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-designateclient";
-  version = "6.4.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-designateclient";
     tag = finalAttrs.version;
-    hash = "sha256-OBvPdulj2lg2FCyMDOp1iw12MxLre0/jkMdc7syJatc=";
+    hash = "sha256-cqMtXbmDuAUvBoBAMsHTSgb1G1a/cUYAnt7g4umAXZM=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)
