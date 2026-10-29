@@ -5870,6 +5870,8 @@ self: super: with self; {
 
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
+  ezgb = callPackage ../development/python-modules/ezgb { };
+
   ezodf = callPackage ../development/python-modules/ezodf { };
 
   ezyrb = callPackage ../development/python-modules/ezyrb { };
