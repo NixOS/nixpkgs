@@ -20946,6 +20946,13 @@
     matrix = "@neobrain:matrix.org";
     name = "Tony Wasserka";
   };
+  neolouker = {
+    email = "neolouker@gmail.com";
+    github = "neolouker";
+    githubId = 36087559;
+    matrix = "@neolouker:matrix.org";
+    name = "Neolouker";
+  };
   neonvoid = {
     email = "me@neonvoid.dev";
     github = "neonvoidx";
