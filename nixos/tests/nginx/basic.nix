@@ -85,6 +85,7 @@
             reloadWithErrorsSystem.configuration = {
               services.nginx.package = lib.mkForce pkgs.nginxMainline;
               services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
+              services.nginx.validateSyntax = false;
             };
           })
         ];
