@@ -3,7 +3,7 @@
 #
 # Uso: ./scripts/verify-content-addressing.sh [atributo] [flake-ref]
 #
-# Requer as features experimentais `ca-derivations` e `jq` no PATH.
+# Requer a feature experimental `ca-derivations`.
 set -euo pipefail
 
 attr="${1:-arkhe-verify}"
@@ -17,9 +17,9 @@ echo "== build CA: ${ref}"
 out="$(nix build "${ref}" --no-link --print-out-paths \
   --extra-experimental-features "${features}")"
 
-ca="$(nix path-info --json "${out}" \
+ca="$(nix path-info --json --json-format 1 "${out}" \
   --extra-experimental-features "${features}" \
-  | jq -r '(if type == "array" then .[0] else to_entries[0].value end) | .ca // empty')"
+  | grep -oE '"ca":"[^"]*"' | head -n1 | cut -d'"' -f4 || true)"
 
 if [[ -z "${ca}" ]]; then
   echo "SEM ENDERECO DE CONTEUDO: ${out}" >&2

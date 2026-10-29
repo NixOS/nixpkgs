@@ -16,6 +16,8 @@ pub enum WorkIntentType {
     AgentRegistration,
     CommunityJoin,
     CommunityPost,
+    /// Implement one spec task (arkhe-sdd). Protected: classified by the kernel default.
+    Implement,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

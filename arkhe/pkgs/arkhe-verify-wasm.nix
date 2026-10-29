@@ -1,5 +1,25 @@
-# WASM compilado com std do rustc fixado, lld e bindings Node.js.
-{ mkArkhePackage, src, contentAddressed, version, lld, wasm-bindgen-cli }:
+# WASM compilado com o rust-std wasm32 da toolchain fixada, lld e bindings
+# Node.js. `wasm-bindgen-cli` precisa ter exatamente a versão do crate
+# `wasm-bindgen` no Cargo.lock; divergência é erro de avaliação.
+{
+  lib,
+  mkArkhePackage,
+  src,
+  contentAddressed,
+  version,
+  lockFile,
+  lld,
+  wasm-bindgen-cli,
+}:
+
+let
+  lockedBindgen =
+    (lib.findFirst (p: p.name == "wasm-bindgen") (throw "nixpkgs-arkhe: wasm-bindgen ausente do Cargo.lock")
+      (lib.importTOML lockFile).package
+    ).version;
+in
+assert lib.assertMsg (wasm-bindgen-cli.version == lockedBindgen)
+  "nixpkgs-arkhe: wasm-bindgen-cli ${wasm-bindgen-cli.version} != wasm-bindgen ${lockedBindgen} do Cargo.lock";
 
 mkArkhePackage {
   pname = "arkhe-verify-wasm";
@@ -10,16 +30,18 @@ mkArkhePackage {
   doCheck = false;
   nativeBuildInputs = [ lld wasm-bindgen-cli ];
 
-  cargoBuildFlags = [
-    "--lib"
-    "--target"
-    "wasm32-unknown-unknown"
-  ];
-
   extraAttrs = {
-    CARGO_BUILD_TARGET = "wasm32-unknown-unknown";
     CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "${lld}/bin/wasm-ld";
 
+    # Só o alvo wasm32: o cargoBuildHook padrão também compilaria para o host.
+    buildPhase = ''
+      runHook preBuild
+      cargo build --locked --offline --release -j "$NIX_BUILD_CORES" \
+        -p arkhe-verify-wasm --lib --target wasm32-unknown-unknown
+      runHook postBuild
+    '';
+
+    dontCargoInstall = true;
     installPhase = ''
       runHook preInstall
       mkdir -p $out/lib

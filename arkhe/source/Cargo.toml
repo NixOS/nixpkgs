@@ -13,6 +13,7 @@ members = [
   "evidence/arkhe-wormgraph",
   "evidence/arkhe-memory",
   "governance/arkhe-governance",
+  "governance/arkhe-sdd-parser",
   "work/arkhe-work",
   "work/arkhe-work-channels",
   "cognition/arkhe-cognition-sdk",

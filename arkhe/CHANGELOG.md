@@ -1,5 +1,30 @@
 # Changelog
 
+## [Não lançado]
+
+### Adicionado
+
+- Toolchain Rust do `rust-toolchain.toml` (1.96.0) via `rust-overlay`
+  travado no `flake.lock` (`lib/toolchain.nix`); check `toolchain-version`.
+- Fonte por pacote (`lib/workspace.nix`): fecho de crates `path` lido dos
+  `Cargo.toml`, alvos vazios para os demais membros.
+- Pacote `arkhe-sdd-parser` e alias `arkhe-verify-cli`.
+- Checks `tests-arkhe-core` (golden vectors obrigatórios), `tests-arkhe-kernel`,
+  `tests-arkhe-governance`, `tests-clippy`, `reproducible-*`, `source-manifest`,
+  `sdd-parser-smoke`.
+- `scripts/update-source.py` para atualizar o snapshot e o manifesto.
+
+### Alterado
+
+- Snapshot `source/` atualizado do workspace (598 arquivos).
+- `arkhe-verify` exige `golden_vectors` e `golden_contract` não vazios no
+  checkPhase.
+- `arkhe-verify-wasm` compila só para wasm32 e falha na avaliação se
+  `wasm-bindgen-cli` diverge do `Cargo.lock`.
+- `scripts/check-reproducibility.sh` aceita vários atributos e mantém a
+  saída divergente (`--keep-failed`); `verify-content-addressing.sh` não
+  depende mais de `jq`.
+
 ## [0.1.0] - 2026-10-29
 
 ### Adicionado

@@ -1,10 +1,19 @@
 {
   description = "Pacotes Arkhe para Nix: builds reprodutíveis e endereçados por conteúdo";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    # Fornece a toolchain do rust-toolchain.toml (tarballs oficiais com hash
+    # fixo). `follows` evita um segundo nixpkgs no flake.lock.
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 
   outputs =
-    { nixpkgs, ... }:
+    { nixpkgs, rust-overlay, ... }:
     let
       inherit (nixpkgs) lib;
 
@@ -15,20 +24,37 @@
 
       forAllSystems = lib.genAttrs systems;
 
-      pkgsFor = system: import nixpkgs { inherit system; };
+      pkgsFor = system: nixpkgs.legacyPackages.${system};
 
-      packagesFor = system: import ./default.nix { pkgs = pkgsFor system; };
-
-      contentAddressedFor =
-        system:
-        import ./default.nix {
-          pkgs = pkgsFor system;
-          contentAddressed = true;
+      toolchainFor =
+        pkgs:
+        pkgs.callPackage ./lib/toolchain.nix {
+          rust-bin = rust-overlay.lib.mkRustBin { } pkgs;
+          toolchainFile = ./source/rust-toolchain.toml;
         };
+
+      setFor =
+        {
+          system,
+          contentAddressed ? false,
+        }:
+        let
+          pkgs = pkgsFor system;
+          toolchain = toolchainFor pkgs;
+        in
+        import ./default.nix {
+          inherit pkgs contentAddressed;
+          inherit (toolchain) rustPlatform rustPlatformWasm rustPlatformDev;
+        };
+
+      packagesFor = system: setFor { inherit system; };
     in
     {
-      overlays.default = import ./overlay.nix { };
-      overlays.contentAddressed = import ./overlay.nix { contentAddressed = true; };
+      overlays.default = import ./overlay.nix { toolchain = toolchainFor; };
+      overlays.contentAddressed = import ./overlay.nix {
+        toolchain = toolchainFor;
+        contentAddressed = true;
+      };
 
       packages = forAllSystems (
         system:
@@ -46,7 +72,10 @@
         system:
         let
           p = packagesFor system;
-          ca = contentAddressedFor system;
+          ca = setFor {
+            inherit system;
+            contentAddressed = true;
+          };
         in
         p // { ca = lib.filterAttrs (name: value: lib.isDerivation value) ca; }
       );
@@ -56,6 +85,7 @@
         import ./checks/default.nix {
           pkgs = pkgsFor system;
           packages = packagesFor system;
+          toolchain = toolchainFor (pkgsFor system);
         }
       );
 
@@ -64,6 +94,11 @@
           type = "app";
           meta.description = "Verificador offline Arkhe";
           program = "${(packagesFor system).arkhe-verify}/bin/arkhe-verify";
+        };
+        arkhe-sdd-parser = {
+          type = "app";
+          meta.description = "spec.md/tasks.md SDD para CBOR canônico Arkhe";
+          program = "${(packagesFor system).arkhe-sdd-parser}/bin/arkhe-sdd-parser";
         };
       });
 
@@ -74,14 +109,12 @@
         in
         {
           default = pkgs.mkShell {
-            packages = with pkgs; [
-              cargo
-              clippy
-              gnumake
-              jq
-              nix
-              rustc
-              rustfmt
+            packages = [
+              (toolchainFor pkgs).dev
+              pkgs.diffoscopeMinimal
+              pkgs.gnumake
+              pkgs.jq
+              pkgs.nix
             ];
           };
         }
@@ -95,11 +128,16 @@
             pkgs,
             src,
             contentAddressed ? false,
-            rustPlatform ? pkgs.rustPlatform,
           }:
-          import ./default.nix { inherit pkgs src contentAddressed rustPlatform; };
+          let
+            toolchain = toolchainFor pkgs;
+          in
+          import ./default.nix {
+            inherit pkgs src contentAddressed;
+            inherit (toolchain) rustPlatform rustPlatformWasm rustPlatformDev;
+          };
 
-        mkOverlay = args: import ./overlay.nix args;
+        mkOverlay = args: import ./overlay.nix ({ toolchain = toolchainFor; } // args);
       };
 
       nixosModules = {

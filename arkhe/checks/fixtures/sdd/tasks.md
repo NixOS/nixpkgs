@@ -1,0 +1,7 @@
+- [ ] 1. Implement MFA
+  - [ ] 1.1 Prompt for second factor
+    - _Requirements: 1.1_
+  - [ ] 1.2 Lockout and storage
+    - _Requirements: 1.2, 1.3_
+- [ ] 2. Recovery email
+  - _Requirements: 2.1_

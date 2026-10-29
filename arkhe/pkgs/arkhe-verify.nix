@@ -8,8 +8,14 @@ mkArkhePackage {
 
   # Testes do crate são puros (golden vectors locais).
   doCheck = true;
+  testCrates = [ "arkhe-verify-core" "arkhe-core" ];
 
-  cargoTestFlags = [ "-p" "arkhe-verify-core" "-p" "arkhe-core" ];
+  # O binário só é aceito se os golden vectors AKG-CBOR-v1 passarem com o
+  # mesmo compilador e as mesmas dependências que o produziram.
+  requiredTests = [
+    { crate = "arkhe-core"; test = "golden_vectors"; }
+    { crate = "arkhe-verify-core"; test = "golden_contract"; }
+  ];
 
   meta = {
     description = "Verificador offline Arkhe (CLI)";

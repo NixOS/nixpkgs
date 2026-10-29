@@ -87,6 +87,7 @@ fn every_protected_intent_requires_admitted_evidence_before_policy() {
         AgentRegistration,
         CommunityJoin,
         CommunityPost,
+        Implement,
     ] {
         let mut intent = intent();
         intent.intent_type = kind;

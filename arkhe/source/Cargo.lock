@@ -383,6 +383,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "arkhe-sdd-parser"
+version = "0.1.0"
+dependencies = [
+ "arkhe-core",
+ "arkhe-governance",
+ "arkhe-kernel",
+ "regex",
+ "serde_json",
+]
+
+[[package]]
 name = "arkhe-sql"
 version = "0.1.0"
 dependencies = [

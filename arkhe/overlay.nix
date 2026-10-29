@@ -3,23 +3,34 @@
 #   nixpkgs.overlays = [ inputs.nixpkgs-arkhe.overlays.default ];
 #   environment.systemPackages = [ pkgs.arkhe.arkhe-verify ];
 #
-# Para derivar com endereçamento por conteúdo:
+# Pelo flake, `overlays.default` já usa a toolchain Rust fixada
+# (rust-toolchain.toml via rust-overlay). Importado direto, sem
+# `toolchain`, cai no rustPlatform do nixpkgs consumidor.
 #
-#   nixpkgs.overlays = [
-#     (import inputs.nixpkgs-arkhe { contentAddressed = true; })
-#   ];
+# Para derivar com endereçamento por conteúdo: `overlays.contentAddressed`.
 {
   src ? ./source,
   contentAddressed ? false,
-  rustPlatform ? null,
+  # pkgs -> { rustPlatform, rustPlatformWasm, rustPlatformDev }
+  toolchain ? null,
 }:
 final: prev:
 let
-  arkhe = import ./default.nix {
-    pkgs = final;
-    inherit src contentAddressed;
-    rustPlatform = if rustPlatform == null then final.rustPlatform else rustPlatform;
-  };
+  platforms =
+    if toolchain == null then
+      { rustPlatform = final.rustPlatform; }
+    else
+      {
+        inherit (toolchain final) rustPlatform rustPlatformWasm rustPlatformDev;
+      };
+
+  arkhe = import ./default.nix (
+    {
+      pkgs = final;
+      inherit src contentAddressed;
+    }
+    // platforms
+  );
 in
 {
   inherit arkhe;
