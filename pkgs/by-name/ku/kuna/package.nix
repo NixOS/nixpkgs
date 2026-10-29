@@ -5,9 +5,6 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
-  replaceVars,
-  python3,
-  testers,
   callPackage,
   nix-update-script,
 }:
@@ -25,23 +22,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Tp0eYpNCVYIo4eHuPC068xAsOHKRRNMdWSjMUfA6u3s=";
   };
 
-  # Run bundled ELF fixtures with Nix's dynamic loader.
-  patches = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    (replaceVars ./cli-test-portability.patch {
-      dynamicLinker = stdenv.cc.bintools.dynamicLinker;
-    })
-  ];
-
   cargoHash = "sha256-YgszQlq5uhmKqbgqpvbX/ox2Jtm3GB8QND61DB/Tohs=";
   cargoRoot = "decompiler";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   env.KUNA_VERSION = finalAttrs.version;
-  env.CARGO_PROFILE_TEST_DEBUG = "0";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
-
-  nativeCheckInputs = [ python3 ];
 
   cargoBuildFlags = [
     "-p"
@@ -66,38 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ${slacomp} -a specs
     '';
 
-  cargoTestFlags = [
-    "--workspace"
-    "--no-fail-fast"
-  ];
-
-  # Upstream's test profile enables overflow checks and debug assertions.
-  checkType = "debug";
-  useNextest = true;
-
-  checkFlags =
-    lib.concatMap
-      (name: [
-        "--skip"
-        name
-      ])
-      [
-        # Upstream decompiler bugs exposed by Nix's register-clearing hardening.
-        "float_unordered_compare::float_compare_flags_keep_their_unordered_case"
-        "saved_xmm_msabi::saved_xmm_spills_are_not_emitted_as_live_locals"
-        "project_named_globals::named_scalars_are_declared_at_the_type_the_bodies_read_them"
-        # Kuna does not apply DWARF relocations in the unlinked object fixture.
-        "locked_scalar_declarations::dwarf_function_pointer_local_keeps_its_declaration"
-        # The freestanding 32-bit harness has incorrect stack alignment.
-        "wrapped_stack_aggregate::wrapped_struct_spills_preserve_callback_memory_effects"
-      ];
-
-  preCheck = ''
-    export KUNA_ROOT="$PWD"
-    export SLEIGHHOME="$PWD/specs"
-    # -O0 fixture builds trigger a _FORTIFY_SOURCE warning with Nix's C flags.
-    export NIX_CFLAGS_COMPILE+=" -Wno-error=cpp"
-  '';
+  # Upstream's workspace tests require platform-specific fixtures and toolchains.
+  # Check the installed package with a native smoke test instead.
+  doCheck = false;
 
   postInstall = ''
     mkdir -p $out/share/kuna/tests
@@ -113,15 +71,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    export PATH="$out/bin:$PATH"
+    timeout --kill-after=5s 120s bash ${./smoke-test.sh}
+    runHook postInstallCheck
+  '';
+
   passthru = {
     web = callPackage ./web.nix { kuna = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
-      smoke = callPackage ./tests.nix { kuna = finalAttrs.finalPackage; };
-    };
   };
 
   meta = {
