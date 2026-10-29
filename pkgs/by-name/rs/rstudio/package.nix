@@ -211,8 +211,14 @@ stdenv.mkDerivation (finalAttrs: {
     # electron-forge's console output is squeezed into one narrow column if unset
     CI = "1";
 
-    # on Darwin, cmake uses find_library to locate R instead of using the PATH
-    NIX_LDFLAGS = "-L${R}/lib/R/lib";
+    NIX_LDFLAGS = toString (
+      lib.optionals stdenv.hostPlatform.isDarwin [
+        # on Darwin, cmake uses find_library to locate R instead of using the PATH
+        "-L${R}/lib/R/lib"
+        # The build fails without this due to undefined symbol "_OBJC_CLASS_$_NSNumber"
+        "-framework Foundation"
+      ]
+    );
 
     RSTUDIO_VERSION_MAJOR = lib.versions.major finalAttrs.version;
     RSTUDIO_VERSION_MINOR = lib.versions.minor finalAttrs.version;
@@ -233,6 +239,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-yarn-install.patch
     ./dont-npm-ci.patch
     ./fix-darwin.patch
+
+    # seems to only cause an issue on Darwin (maybe clang-only issue?)
+    ./add-missing-header.patch
   ];
 
   postPatch = ''

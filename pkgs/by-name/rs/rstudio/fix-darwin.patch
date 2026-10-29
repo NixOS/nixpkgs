@@ -77,22 +77,6 @@ index 1c77171..53f5585 100644
        find_library(SOCI_CORE_LIB NAMES "libsoci_core.a" "soci_core" REQUIRED)
        find_library(SOCI_SQLITE_LIB NAMES "libsoci_sqlite3.a" "soci_sqlite3" REQUIRED)
        if(RSTUDIO_PRO_BUILD)
-diff --git a/src/cpp/session/postback/CMakeLists.txt b/src/cpp/session/postback/CMakeLists.txt
-index 67a462e..ba0d132 100644
---- a/src/cpp/session/postback/CMakeLists.txt
-+++ b/src/cpp/session/postback/CMakeLists.txt
-@@ -51,9 +51,9 @@ add_stripped_executable(rpostback ${POSTBACK_SOURCE_FILES} ${POSTBACK_HEADER_FIL
- 
- # set link dependencies
- if (RSTUDIO_SERVER)
--   target_link_libraries(rpostback rstudio-server-core)
-+   target_link_libraries(rpostback rstudio-server-core ${FOUNDATION_LIBRARY})
- else()
--   target_link_libraries(rpostback rstudio-core)
-+   target_link_libraries(rpostback rstudio-core ${FOUNDATION_LIBRARY})
- endif()
- 
- # configure postback scripts
 diff --git a/src/node/CMakeNodeTools.txt b/src/node/CMakeNodeTools.txt
 index 54b39d4..09d27b3 100644
 --- a/src/node/CMakeNodeTools.txt
