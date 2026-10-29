@@ -138,3 +138,7 @@ More importantly, a backend's `set` script should perform the update in an atomi
 ### Passing secrets to the backends
 
 Since backend scripts are not sandboxed (unlike generator scripts), they are free to reference secrets passed by the user through external means (be it environment variables or configuration files). For instance, the example `age` backend reads the private key to encrypt the secrets with from an absolute path passed in through the added NixOS options.
+
+### Avoiding evaluation cycles
+
+Backend authors might be tempted to allow reading the contents of public files directly from within Nix. This is recommended against, as it can lead to evaluation cycles where a secret's script depends on the value of the secret at evaluation time. Instead, one should express such dependencies through the built-in secret dependency mechanism.
