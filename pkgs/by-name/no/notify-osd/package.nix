@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "notify-osd";
     homepage = "https://launchpad.net/notify-osd";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ bodil ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })
