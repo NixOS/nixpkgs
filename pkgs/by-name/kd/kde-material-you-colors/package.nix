@@ -16,6 +16,10 @@ python3.pkgs.buildPythonPackage (finalAttrs: {
     hash = "sha256-sN7u3jePevJnTHhQL6eAYKU2AD2QNW7VYuEHLN5RsK8=";
   };
 
+  patches = [
+    ./fix-warning.patch
+  ];
+
   build-system = with python3.pkgs; [ setuptools ];
   dependencies = with python3.pkgs; [
     dbus-python
@@ -25,6 +29,11 @@ python3.pkgs.buildPythonPackage (finalAttrs: {
     python-magic
     pywal16
   ];
+
+  postInstall = ''
+    mkdir -p $out/share/plasma/plasmoids/luisbocanegra.kdematerialyou.colors
+    cp -r src/plasmoid/package/* $out/share/plasma/plasmoids/luisbocanegra.kdematerialyou.colors
+  '';
 
   pythonImportsCheck = [ "kde_material_you_colors" ];
 
