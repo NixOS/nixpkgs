@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmage";
-  version = "1.4.60-dev_2026-06-28_13-19";
+  version = "1.4.62-dev_2026-10-03_20-47";
 
   src = fetchurl {
     url = "https://xmage.today/files/mage-full_${finalAttrs.version}.zip";
-    sha256 = "sha256-n6g38rE19ZSyipoOp3cnLTsJirLRXeLF1ft7gvx3bVs=";
+    sha256 = "sha256-0lYlGuQRVWOCM8LLIKf+yC8/Lep6Rol2aRZkxV41exY=";
   };
 
   preferLocalBuild = true;
