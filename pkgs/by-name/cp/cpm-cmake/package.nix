@@ -27,6 +27,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  setupHook = ./setup-hook.sh;
+
   installPhase = ''
     runHook preInstall
 
