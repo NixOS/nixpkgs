@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://atari800.github.io/";
+    changelog = "https://github.com/atari800/atari800/releases/tag/${finalAttrs.src.rev}";
     description = "Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and 5200 game
