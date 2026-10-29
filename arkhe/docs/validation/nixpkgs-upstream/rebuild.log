@@ -1,0 +1,361 @@
+checking outputs of '/nix/store/5c54vlydr2qwlxrzqsrlkrlfh16qzf5g-arkhe-verify-0.1.0-unstable-2026-10-29.drv'...
+Running phase: unpackPhase
+unpacking source archive /nix/store/d4xh8dfr4dw2mww1c45mf6rysj5zb78k-source
+source root is source
+Executing cargoSetupPostUnpackHook
+Finished cargoSetupPostUnpackHook
+Running phase: patchPhase
+Executing cargoSetupPostPatchHook
+Validating consistency between /build/source/Cargo.lock and /build/arkhe-verify-0.1.0-unstable-2026-10-29-vendor/Cargo.lock
+Finished cargoSetupPostPatchHook
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+Running phase: configurePhase
+Running phase: buildPhase
+Executing cargoBuildHook
+cargoBuildHook flags: -j 12 --target x86_64-unknown-linux-gnu --offline --profile release --frozen -p arkhe-verify-cli --bin arkhe-verify
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling find-msvc-tools v0.1.14
+   Compiling shlex v2.0.1
+   Compiling serde_core v1.0.229
+   Compiling semver v1.0.28
+   Compiling zmij v1.0.23
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling thiserror v2.0.21
+   Compiling cpufeatures v0.2.17
+   Compiling cc v1.8.0
+   Compiling utf8parse v0.2.2
+   Compiling cpufeatures v0.3.1
+   Compiling rustc_version v0.4.1
+   Compiling generic-array v0.14.9
+   Compiling anstyle-parse v1.0.0
+   Compiling anstyle v1.0.14
+   Compiling arrayvec v0.7.8
+   Compiling zeroize v1.9.0
+   Compiling colorchoice v1.0.5
+   Compiling anstyle-query v1.1.5
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling itoa v1.0.18
+   Compiling curve25519-dalek v4.1.3
+   Compiling subtle v2.6.1
+   Compiling signature v2.2.0
+   Compiling memchr v2.8.3
+   Compiling constant_time_eq v0.4.2
+   Compiling anstream v1.0.0
+   Compiling ed25519 v2.2.3
+   Compiling strsim v0.11.1
+   Compiling clap_lex v1.1.1
+   Compiling anyhow v1.0.104
+   Compiling smallvec v1.16.2
+   Compiling keccak v0.1.6
+   Compiling heck v0.5.0
+   Compiling spdx v0.13.5
+   Compiling clap_builder v4.6.7
+   Compiling hex v0.4.3
+   Compiling syn v3.0.9
+   Compiling syn v2.0.119
+   Compiling crypto-common v0.1.6
+   Compiling block-buffer v0.10.4
+   Compiling blake3 v1.8.7
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling sha3 v0.10.8
+   Compiling curve25519-dalek-derive v0.1.1
+   Compiling thiserror-impl v2.0.21
+   Compiling serde_derive v1.0.229
+   Compiling async-trait v0.1.92
+   Compiling clap_derive v4.6.7
+   Compiling ed25519-dalek v2.2.0
+   Compiling clap v4.6.7
+   Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+   Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+   Compiling arkhe-verify-cli v0.1.0 (/build/source/verification/crates/arkhe-verify-cli)
+    Finished `release` profile [optimized] target(s) in 31.34s
+Executing cargoInstallPostBuildHook
+Finished cargoInstallPostBuildHook
+Finished cargoBuildHook
+buildPhase completed in 33 seconds
+Running phase: checkPhase
+Executing cargoCheckHook
+cargoCheckHook flags: -j 12 --profile release --target x86_64-unknown-linux-gnu --offline --frozen -p arkhe-verify-cli -p arkhe-verify-core -p arkhe-core --
+   Compiling libc v0.2.189
+   Compiling syn v2.0.119
+   Compiling getrandom v0.3.4
+   Compiling rustix v1.1.5
+   Compiling getrandom v0.4.3
+   Compiling zerocopy v0.8.57
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.2
+   Compiling autocfg v1.5.1
+   Compiling once_cell v1.21.4
+   Compiling fastrand v2.5.0
+   Compiling fnv v1.0.7
+   Compiling quick-error v1.2.3
+   Compiling bit-vec v0.8.0
+   Compiling regex-syntax v0.8.11
+   Compiling unarray v0.1.4
+   Compiling rand_core v0.6.4
+   Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+   Compiling bit-set v0.8.0
+   Compiling num-traits v0.2.19
+   Compiling rand_core v0.9.5
+   Compiling wait-timeout v0.2.1
+   Compiling rand_xorshift v0.4.0
+   Compiling rand v0.9.5
+   Compiling tempfile v3.27.0
+   Compiling rusty-fork v0.3.1
+   Compiling zeroize_derive v1.5.0
+   Compiling curve25519-dalek-derive v0.1.1
+   Compiling zeroize v1.9.0
+   Compiling curve25519-dalek v4.1.3
+   Compiling fips204 v0.4.6
+   Compiling ppv-lite86 v0.2.21
+   Compiling rand_chacha v0.9.0
+   Compiling ed25519-dalek v2.2.0
+   Compiling proptest v1.9.0
+   Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+   Compiling arkhe-verify-cli v0.1.0 (/build/source/verification/crates/arkhe-verify-cli)
+    Finished `release` profile [optimized] target(s) in 36.51s
+     Running unittests src/lib.rs (target/x86_64-unknown-linux-gnu/release/deps/arkhe_core-e78203edd9383917)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/canonical_bytes.rs (target/x86_64-unknown-linux-gnu/release/deps/canonical_bytes-000fdd9607b08458)
+
+running 3 tests
+test duplicate_keys_cannot_create_ambiguous_cbor ... ok
+test typed_bytes_match_literal_cbor_and_maps_ignore_insertion_order ... ok
+test byte_string_length_headers_use_shortest_encoding ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/golden_vectors.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_vectors-733c8378a5ec974f)
+
+running 4 tests
+test canonical_booleans_for_opt_in_formal_predicates ... ok
+test optional_classification_matches_independent_python_vectors ... ok
+test worker_unsigned_fields_and_reference_order_are_digest_bound ... ok
+test independent_python_vectors ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/x86_64-unknown-linux-gnu/release/deps/arkhe_verify-6e8b21f0efe0e2cb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/x86_64-unknown-linux-gnu/release/deps/arkhe_verify_core-9a0cd9596b815011)
+
+running 2 tests
+test release::tests::rejects_tamper_substitution_rollback_and_policy_changes ... ok
+test release::tests::verify_is_not_admission_and_keys_are_separate ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arc_reconciliation.rs (target/x86_64-unknown-linux-gnu/release/deps/arc_reconciliation-68a3b57550db06a8)
+
+running 14 tests
+test altered_rule_cannot_be_adopted_by_bundle ... ok
+test ambiguous_case_requires_review ... ok
+test changed_amount_rejected ... ok
+test document_truth_is_not_claimed ... ok
+test evidence_from_another_operation_rejected ... ok
+test explicit_partial_excess_and_unmatched_outcomes ... ok
+test foreign_operation_with_consistent_commitments_rejected ... ok
+test forged_decision_with_consistent_hash_and_membership_still_rejected ... ok
+test malformed_and_oversized_inputs_rejected ... ok
+test malformed_proof_and_profile_rejected ... ok
+test swapped_invoice_rejected ... ok
+test swapped_invoice_with_refreshed_worker_requires_intent_commitment ... ok
+test untrusted_checkpoint_rejected ... ok
+test offline_roundtrip_reproduces_decision ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/c2pa_signature.rs (target/x86_64-unknown-linux-gnu/release/deps/c2pa_signature-04c7e5e79cd18212)
+
+running 9 tests
+test envelope_deserialization_rejects_unknown_fields ... ok
+test malformed_profiles_duplicates_and_fields_are_errors ... ok
+test identity_binding_includes_kid_and_issuer ... ok
+test signing_payload_is_deterministic_and_domain_separated ... ok
+test matching_identity_with_rogue_key_fails_signature ... ok
+test missing_and_revoked_roots_are_rejected ... ok
+test tampered_claim_reuses_signature_and_fails ... ok
+test unsupported_algorithm_never_reports_verification ... ok
+test valid_signature_over_pinned_ed25519_root ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cbor.rs (target/x86_64-unknown-linux-gnu/release/deps/cbor-5ad8cd9e44f2f9b9)
+
+running 1 test
+test gguf_golden_cbor ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gguf_supply_chain.rs (target/x86_64-unknown-linux-gnu/release/deps/gguf_supply_chain-8ec03e75ff70ebaa)
+
+running 11 tests
+test minimal_24_byte_header_is_not_an_accepted_model_in_the_lab_profile ... ok
+test rejects_overlapping_tensor_ranges ... ok
+test rejects_tensor_dimension_overflow_alignment_and_type ... ok
+test rejects_unsafe_duplicate_and_unsupported_metadata ... ok
+test binds_both_artifact_digests_and_metadata_digest ... ok
+test rfc6962_unbalanced_tree_and_exact_path_consumption ... ok
+test rejects_truncation_unknown_versions_counts_and_trailing_bytes ... ok
+test synthetic_gguf_passes_all_four_gates ... ok
+test rejects_wrong_builder_identity_key_and_signature ... ok
+test rejects_inclusion_tampering_even_with_valid_checkpoint_signature ... ok
+test rejects_wrong_log_key_identity_signature_and_stale_checkpoint ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/golden_contract.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_contract-890d2201f0e2975a)
+
+running 1 test
+test committed_ready_vectors_match_active_verifier ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gov_lifecycle.rs (target/x86_64-unknown-linux-gnu/release/deps/gov_lifecycle-68b8bd38ec0fa719)
+
+running 4 tests
+test real_qualification_and_untrusted_empty_challenge_cannot_be_enabled ... ok
+test receipt_context_cannot_be_replayed_for_another_credential_or_challenge ... ok
+test both_profile_contracts_require_the_matching_host_trust ... ok
+test expiry_revocation_and_freshness_reject_even_authentic_stale_receipts ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gov_offline.rs (target/x86_64-unknown-linux-gnu/release/deps/gov_offline-08c232fc228e6202)
+
+running 2 tests
+test four_synthetic_credentials_verify_against_signed_checkpoint ... ok
+test tampering_replay_and_untrusted_checkpoint_fail_closed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/hash.rs (target/x86_64-unknown-linux-gnu/release/deps/hash-9552a692f555d4ec)
+
+running 1 test
+test blake3_known_answers ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memo_reconciliation.rs (target/x86_64-unknown-linux-gnu/release/deps/memo_reconciliation-1d1a7d5bc45336e2)
+
+running 11 tests
+test altered_calldata_hash_is_rejected_by_decoder ... ok
+test duplicate_index_on_unrecognized_event_is_rejected ... ok
+test malformed_abi_and_ambiguous_frames_rejected ... ok
+test archived_real_memo_is_decoded_independently ... ok
+test wrong_network_and_unfinalized_block_rejected ... ok
+test unsupported_profile_and_size_are_rejected ... ok
+test sender_frame_and_mirror_corruptions_are_rejected ... ok
+test changed_raw_memo_id_cannot_substitute_committed_evidence ... ok
+test oversized_valid_rpc_json_is_rejected_by_size_bound ... ok
+test real_memo_plus_synthetic_invoice_matches_offline ... ok
+test coherent_invoice_changes_classify_without_weakening_rule ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mmr.rs (target/x86_64-unknown-linux-gnu/release/deps/mmr-bceda5e1bff5f4fc)
+
+running 2 tests
+test single_leaf_root_cannot_claim_a_larger_tree_or_unbounded_count ... ok
+test proof_roundtrip_for_1_3_4_5_7_leaves ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/policy_adversarial.rs (target/x86_64-unknown-linux-gnu/release/deps/policy_adversarial-b7ed27fcd6a66a3a)
+
+running 5 tests
+test unknown_principal_cannot_authorize_itself ... ok
+test delimiter_ambiguity_and_signing_domains_are_separated ... ok
+test scenario_10_digest_replay_is_rejected ... ok
+test worker_a_key_cannot_claim_worker_b ... ok
+test adversarial_vectors_reject_every_attack_with_valid_positive_control ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/policy_compatibility.rs (target/x86_64-unknown-linux-gnu/release/deps/policy_compatibility-d4cc71b538ce6665)
+
+running 4 tests
+test migration_reason_never_grants_runtime_access_or_relaxes_spending ... ok
+test unjustified_restriction_has_deterministic_counterexample ... ok
+test compatible_expansion_for_10000_allowed_requests ... ok
+test explicitly_justified_removal_for_10000_allowed_requests ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/rbb_protocol.rs (target/x86_64-unknown-linux-gnu/release/deps/rbb_protocol-cbaad1e50fc8197e)
+
+running 7 tests
+test mmr_extension_requires_authenticated_previous_frontier_and_exact_count ... ok
+test identity_changes_with_every_header_word_and_is_independent_of_signature_randomness ... ok
+test rejects_padding_offsets_trailing_data_and_oversized_input ... ok
+test mmr_matches_independent_python_and_checks_every_position ... ok
+test python_abi_keccak_and_rust_match_byte_for_byte ... ok
+test rejects_invalid_intervals_flags_algorithms_and_zero_identifiers ... ok
+test arbitrary_bytes_do_not_panic ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/rbb_trust.rs (target/x86_64-unknown-linux-gnu/release/deps/rbb_trust-9d2f700877889b7c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests arkhe_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests arkhe_verify_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+Finished cargoCheckHook
+    Finished `release` profile [optimized] target(s) in 0.25s
+     Running tests/golden_vectors.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_vectors-733c8378a5ec974f)
+
+running 4 tests
+test canonical_booleans_for_opt_in_formal_predicates ... ok
+test optional_classification_matches_independent_python_vectors ... ok
+test worker_unsigned_fields_and_reference_order_are_digest_bound ... ok
+test independent_python_vectors ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `release` profile [optimized] target(s) in 0.18s
+     Running tests/golden_contract.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_contract-890d2201f0e2975a)
+
+running 1 test
+test committed_ready_vectors_match_active_verifier ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+checkPhase completed in 40 seconds
+Running phase: installPhase
+Executing cargoInstallHook
+Finished cargoInstallHook
+Running phase: fixupPhase
+shrinking RPATHs of ELF executables and libraries in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29
+shrinking /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29/bin/arkhe-verify
+checking for references to /build/ in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29...
+patching script interpreter paths in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29
+stripping (with command strip and flags -S -p) in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29/bin
+/nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29

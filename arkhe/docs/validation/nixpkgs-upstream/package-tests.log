@@ -1,0 +1,4 @@
+this derivation will be built:
+  /nix/store/mmy8z0vmbn0h3qb8aq6dk7dnn7fm9rsm-arkhe-verify-blake3.drv
+building '/nix/store/mmy8z0vmbn0h3qb8aq6dk7dnn7fm9rsm-arkhe-verify-blake3.drv'...
+/nix/store/giqpnyb2f36cn1k3vla6bdkdbd33gas3-arkhe-verify-blake3

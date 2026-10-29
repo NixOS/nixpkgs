@@ -1,3 +1,66 @@
+# nixpkgs-arkhe
+
+Fork do [NixOS/nixpkgs](https://github.com/NixOS/nixpkgs) que hospeda o
+empacotamento dos crates Rust Arkhe: flake, overlay e módulos NixOS.
+Os arquivos do projeto estão em [`arkhe/`](arkhe/). A integração oficial no
+Nixpkgs está sendo preparada; ainda não há PR aberto nem pacote aceito upstream.
+
+## Usar os pacotes Arkhe
+
+Execute no Linux ou WSL com Nix e os recursos `nix-command flakes` habilitados:
+
+```sh
+nix build 'github:rafael-arkhe/nixpkgs-arkhe?dir=arkhe#arkhe-verify-cli'
+nix run 'github:rafael-arkhe/nixpkgs-arkhe?dir=arkhe#arkhe-verify-cli' -- --help
+nix build 'github:rafael-arkhe/nixpkgs-arkhe?dir=arkhe#arkhe-verify-wasm'
+nix build 'github:rafael-arkhe/nixpkgs-arkhe?dir=arkhe#arkhe-sdd-parser'
+```
+
+O parâmetro `dir=arkhe` seleciona o flake Arkhe. O flake na raiz continua sendo
+o do Nixpkgs. Para fixar também esta integração, use uma revisão do repositório:
+`github:rafael-arkhe/nixpkgs-arkhe/<commit>?dir=arkhe`.
+
+Em um checkout local:
+
+```sh
+cd arkhe
+nix flake check --no-update-lock-file --print-build-logs
+bash scripts/check-reproducibility.sh arkhe-verify-cli arkhe-verify-wasm arkhe-sdd-parser
+```
+
+## Validação observada em 29/10/2026
+
+| Escopo | Resultado |
+|---|---|
+| Overlay com Rust 1.96.0 fixado | 24 checks passaram em x86_64-linux, Ubuntu WSL, Nix 2.35.4 |
+| Verificador, WASM e SDD | Reconstruções idênticas na mesma máquina; hashes e logs versionados |
+| Variante CA do verificador | Construída; endereçamento por conteúdo confirmado |
+| Receita proposta ao Nixpkgs | Build, golden vectors, teste BLAKE3 e `nix-build --check` passaram com o Rust 1.99.0 padrão da base upstream |
+| Outra máquina/VM na rodada atual | Pendente; os registros históricos de VM usam outra revisão/toolchain |
+| aarch64 e Darwin | Não construídos nesta rodada |
+
+Os resultados locais não representam aprovação ou sucesso do CI no GitHub.
+A variante CA é opcional e exige `ca-derivations`; os builds normais não exigem
+esse recurso experimental.
+
+## Documentação e contribuição upstream
+
+- [Pacotes, overlay, módulos e comandos de verificação](arkhe/README.md).
+- [Evidências do overlay com Rust 1.96.0](arkhe/docs/validation/rust-1.96.0/results.json).
+- [Proposta de `arkhe-verify` ao NixOS/nixpkgs](arkhe/nixpkgs/README.md).
+- [Evidências da receita upstream com Rust 1.99.0](arkhe/docs/validation/nixpkgs-upstream/results.json).
+- [Reprodutibilidade e limites das verificações](arkhe/docs/reproducibility.md).
+
+A revisão de fontes
+[`228da8e803e9f81041066e3a3a50f61e6ff4201c`](https://github.com/rafael-arkhe/nixpkgs-arkhe/tree/228da8e803e9f81041066e3a3a50f61e6ff4201c)
+contém somente o workspace Arkhe na raiz, com Cargo.lock, sem a árvore do
+Nixpkgs. Ela é a fonte pública imutável da proposta inicial, mantida por
+`rafael-arkhe`. WASM, SDD e os demais pacotes permanecem no overlay.
+
+## Referência do upstream Nixpkgs
+
+O conteúdo abaixo é o README original da base deste fork.
+
 <p align="center">
   <a href="https://nixos.org">
     <picture>

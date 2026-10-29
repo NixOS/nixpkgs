@@ -1,0 +1,918 @@
+these 2 derivations will be built:
+  /nix/store/lhvh7ib8m0s17n2m7lv0axinahzhsbc7-arkhe-verify-0.1.0-unstable-2026-10-29-vendor.drv
+  /nix/store/5c54vlydr2qwlxrzqsrlkrlfh16qzf5g-arkhe-verify-0.1.0-unstable-2026-10-29.drv
+building '/nix/store/lhvh7ib8m0s17n2m7lv0axinahzhsbc7-arkhe-verify-0.1.0-unstable-2026-10-29-vendor.drv'...
+structuredAttrs is enabled
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/adler2-2.0.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ahash-0.8.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/aho-corasick-1.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/allocator-api2-0.2.21
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/android_system_properties-0.1.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/anstream-1.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/anstyle-1.0.14
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/anstyle-parse-1.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/anstyle-query-1.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/anstyle-wincon-3.0.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/anyhow-1.0.104
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrayvec-0.7.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-arith-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-array-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-buffer-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-cast-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-cmp-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-data-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-ord-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-row-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-schema-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-select-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/arrow-string-60.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/async-trait-0.1.92
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/atoi-2.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/atoi-3.1.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/atomic-time-0.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/atomic-waker-1.1.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/autocfg-1.5.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/aws-lc-rs-1.18.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/aws-lc-sys-0.46.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/axum-0.8.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/axum-core-0.5.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/axum-keycloak-auth-0.8.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/axum-prometheus-0.10.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/base64-0.13.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/base64-0.22.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/base64-0.23.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/base64ct-1.8.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bit-set-0.8.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bit-vec-0.8.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bitflags-1.3.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bitflags-2.13.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/blake3-1.8.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/block-buffer-0.10.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/borrow-or-share-0.2.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bs58-0.5.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bstr-1.13.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bumpalo-3.20.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bytemuck-1.25.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bytemuck_derive-1.12.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/byteorder-1.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/bytes-1.12.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cast-0.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/castaway-0.2.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cc-1.8.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cfg-if-1.0.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cfg_aliases-0.2.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/chacha20-0.10.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/chrono-0.4.45
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/clap-4.6.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/clap_builder-4.6.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/clap_derive-4.6.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/clap_lex-1.1.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cmake-0.1.58
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/colorchoice-1.0.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/combine-4.6.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/comfy-table-8.0.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/compact_str-0.9.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/console-0.15.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/const-oid-0.9.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/const-random-0.1.18
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/const-random-macro-0.1.16
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/constant_time_eq-0.4.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/core-foundation-0.10.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/core-foundation-sys-0.8.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cpp-0.5.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cpp_build-0.5.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cpp_common-0.5.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cpp_macros-0.5.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cpufeatures-0.2.17
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/cpufeatures-0.3.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crc-3.4.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crc-catalog-2.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crc32c-0.6.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crc32fast-1.5.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crossbeam-deque-0.8.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crossbeam-epoch-0.9.21
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crossbeam-queue-0.3.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crossbeam-utils-0.8.23
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crunchy-0.2.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/crypto-common-0.1.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/curve25519-dalek-4.1.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/curve25519-dalek-derive-0.1.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/darling-0.20.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/darling-0.24.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/darling_core-0.20.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/darling_core-0.24.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/darling_macro-0.20.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/darling_macro-0.24.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/dary_heap-0.3.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/defmt-1.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/defmt-macros-1.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/defmt-parser-1.1.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/der-0.7.10
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/deranged-0.5.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/derive_builder-0.20.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/derive_builder_core-0.20.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/derive_builder_macro-0.20.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/derivre-0.3.13
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/digest-0.10.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/dirs-6.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/dirs-sys-0.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/displaydoc-0.2.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/dlpark-0.6.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/dotenvy-0.15.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/duckdb-1.20000.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/dunce-1.0.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/dyn-clone-1.0.20
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ed25519-2.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ed25519-dalek-2.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/educe-0.6.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/either-1.18.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/encode_unicode-1.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/enum-ordinalize-4.4.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/enum-ordinalize-derive-4.4.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/equivalent-1.0.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/errno-0.3.14
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/esaxx-rs-0.1.10
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/etcetera-0.8.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/event-listener-5.4.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/evmap-11.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fallible-iterator-0.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fallible-streaming-iterator-0.1.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fastrand-2.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fiat-crypto-0.2.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/filetime-0.2.29
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/find-msvc-tools-0.1.14
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fips204-0.4.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/flate2-1.1.10
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fluent-uri-0.3.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/flume-0.11.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fnv-1.0.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/foldhash-0.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/foldhash-0.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/form_urlencoded-1.2.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/fs_extra-1.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-channel-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-core-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-executor-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-intrusive-0.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-io-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-macro-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-sink-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-task-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/futures-util-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/generator-0.8.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/generic-array-0.14.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/getrandom-0.2.17
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/getrandom-0.3.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/getrandom-0.4.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/globset-0.4.20
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/half-2.7.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashbag-0.1.13
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashbrown-0.12.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashbrown-0.14.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashbrown-0.15.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashbrown-0.16.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashbrown-0.17.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashlink-0.9.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hashlink-0.10.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/heck-0.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hex-0.4.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hf-hub-0.4.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hkdf-0.12.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hmac-0.12.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/home-0.5.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/http-1.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/http-body-1.1.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/http-body-util-0.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/httparse-1.10.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/httpdate-1.0.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hyper-1.11.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hyper-rustls-0.27.10
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/hyper-util-0.1.20
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/iana-time-zone-0.1.65
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/iana-time-zone-haiku-0.1.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/icu_collections-2.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/icu_locale_core-2.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/icu_normalizer-2.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/icu_normalizer_data-2.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/icu_properties-2.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/icu_properties_data-2.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/icu_provider-2.3.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ident_case-1.0.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/idna-1.1.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/idna_adapter-1.2.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/indexmap-1.9.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/indexmap-2.14.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/indicatif-0.17.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/integer-encoding-4.1.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ipnet-2.12.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/is_terminal_polyfill-1.70.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/itertools-0.14.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/itoa-1.0.18
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jiff-0.2.38
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jiff-core-0.1.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jiff-static-0.2.38
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jiff-tzdb-0.1.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jiff-tzdb-platform-0.1.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jni-0.22.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jni-macros-0.22.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jni-sys-0.4.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jni-sys-macros-0.4.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jobserver-0.1.35
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/js-sys-0.3.106
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/jsonwebtoken-9.3.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/keccak-0.1.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lazy_static-1.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/left-right-0.11.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lexical-7.0.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lexical-core-1.0.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lexical-parse-float-1.0.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lexical-parse-integer-1.0.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lexical-util-1.0.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lexical-write-float-1.0.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lexical-write-integer-1.0.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/libc-0.2.189
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/libduckdb-sys-1.20000.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/libm-0.2.16
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/libredox-0.1.24
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/libsqlite3-sys-0.30.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/linux-raw-sys-0.12.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/litemap-0.8.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/llguidance-1.9.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lock_api-0.4.14
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/log-0.4.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/loom-0.7.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/lru-slab-0.1.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/macro_rules_attribute-0.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/macro_rules_attribute-proc_macro-0.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/matchers-0.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/matchit-0.8.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/matrixmultiply-0.3.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/md-5-0.10.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/memchr-2.8.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/metrics-0.24.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/metrics-exporter-prometheus-0.18.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/metrics-util-0.20.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/mime-0.3.17
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/minimal-lexical-0.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/miniz_oxide-0.9.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/mio-1.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/monostate-0.1.18
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/monostate-impl-0.1.18
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ndarray-0.16.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/nom-7.1.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/nonempty-0.11.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/nu-ansi-term-0.50.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-bigint-0.4.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-bigint-0.5.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-bigint-dig-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-complex-0.4.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-conv-0.2.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-integer-0.1.47
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-iter-0.1.46
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/num-traits-0.2.19
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/number_prefix-0.4.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/once_cell-1.21.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/once_cell_polyfill-1.70.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/onig-6.5.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/onig_sys-69.9.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/openssl-probe-0.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/opentelemetry-0.33.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/opentelemetry-http-0.33.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/opentelemetry-otlp-0.33.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/opentelemetry-proto-0.33.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/opentelemetry_sdk-0.33.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/option-ext-0.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/parking-2.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/parking_lot-0.12.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/parking_lot_core-0.9.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/paste-1.0.15
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pastey-0.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pbkdf2-0.12.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pem-3.0.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pem-rfc7468-0.7.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/percent-encoding-2.3.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pgvector-0.4.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pin-project-lite-0.2.17
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pkcs1-0.7.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pkcs8-0.10.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/pkg-config-0.3.34
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/plain-0.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/portable-atomic-1.15.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/portable-atomic-util-0.2.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/potential_utf-0.1.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/powerfmt-0.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ppv-lite86-0.2.21
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/proc-macro2-1.0.107
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/proptest-1.9.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/prost-0.14.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/prost-derive-0.14.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/quanta-0.12.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/quick-error-1.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/quinn-0.11.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/quinn-proto-0.11.19
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/quinn-udp-0.5.16
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/quote-1.0.47
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/r-efi-5.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/r-efi-6.0.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand-0.8.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand-0.9.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand-0.10.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_chacha-0.3.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_chacha-0.9.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_core-0.6.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_core-0.9.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_core-0.10.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_pcg-0.10.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_xorshift-0.4.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rand_xoshiro-0.7.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rapidhash-4.5.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/raw-cpuid-11.6.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rawpointer-0.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rayon-1.12.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rayon-cond-0.4.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rayon-core-1.13.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/redox_syscall-0.5.18
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/redox_syscall-0.9.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/redox_users-0.5.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ref-cast-1.0.27
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ref-cast-impl-1.0.27
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/referencing-0.29.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/regex-1.13.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/regex-automata-0.4.18
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/regex-syntax-0.8.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/reqwest-0.12.28
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/reqwest-0.13.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ring-0.17.14
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rsa-0.9.10
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rsasl-2.3.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rskafka-0.6.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rusqlite-0.32.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustc-hash-2.1.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustc_version-0.4.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustix-1.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustls-0.23.45
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustls-native-certs-0.8.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustls-pki-types-1.15.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustls-platform-verifier-0.7.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustls-platform-verifier-android-0.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustls-webpki-0.103.15
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rustversion-1.0.23
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/rusty-fork-0.3.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ryu-1.0.23
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/same-file-1.0.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/schannel-0.1.30
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/schemars-0.9.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/schemars-1.2.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/scoped-tls-1.0.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/scopeguard-1.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/security-framework-3.7.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/security-framework-sys-2.17.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/semver-1.0.28
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde-1.0.229
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde-querystring-0.3.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde_core-1.0.229
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde_derive-1.0.229
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde_json-1.0.154
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde_path_to_error-0.1.20
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde_urlencoded-0.7.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde_with-3.24.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/serde_with_macros-3.24.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sha1-0.10.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sha2-0.10.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sha3-0.10.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sharded-slab-0.1.7
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/shlex-2.0.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/signal-hook-registry-1.4.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/signature-2.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/simd-adler32-0.3.10
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/simd_cesu8-1.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/simdutf8-0.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/simple_asn1-0.6.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sketches-ddsketch-0.3.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/slab-0.4.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/smallvec-1.16.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/snafu-0.8.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/snafu-derive-0.8.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/socket2-0.6.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/socks-0.3.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/spdx-0.13.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/spin-0.9.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/spki-0.7.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/spm_precompiled-0.1.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sqlx-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sqlx-core-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sqlx-macros-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sqlx-macros-core-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sqlx-mysql-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sqlx-postgres-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sqlx-sqlite-0.8.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/stable_deref_trait-1.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/static_assertions-1.1.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/stringprep-0.1.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/strsim-0.11.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/strum-0.27.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/strum-0.28.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/strum_macros-0.27.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/strum_macros-0.28.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/subtle-2.6.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/syn-2.0.119
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/syn-3.0.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/sync_wrapper-1.0.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/synstructure-0.13.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/synstructure-0.14.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tar-0.4.46
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tempfile-3.27.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/thiserror-1.0.69
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/thiserror-2.0.21
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/thiserror-impl-1.0.69
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/thiserror-impl-2.0.21
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/thread_local-1.1.10
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/time-0.3.55
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/time-core-0.1.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/time-macros-0.2.32
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tiny-keccak-2.0.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tinystr-0.8.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tinyvec-1.13.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tokenizers-0.21.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tokio-1.53.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tokio-macros-2.7.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tokio-rustls-0.26.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tokio-stream-0.1.19
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/toktrie-1.9.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tower-0.5.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tower-http-0.6.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tower-http-0.7.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tower-layer-0.3.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tower-service-0.3.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tracing-0.1.44
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tracing-attributes-0.1.31
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tracing-core-0.1.36
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tracing-log-0.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tracing-opentelemetry-0.34.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tracing-serde-0.2.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/tracing-subscriber-0.3.23
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/try-again-0.2.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/try-lock-0.2.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/typed-builder-0.20.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/typed-builder-macro-0.20.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/typenum-1.20.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unarray-0.1.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-bidi-0.3.18
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-ident-1.0.27
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-normalization-0.1.25
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-normalization-alignments-0.1.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-properties-0.1.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-segmentation-1.13.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-width-0.2.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode-xid-0.2.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/unicode_categories-0.1.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/untrusted-0.9.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ureq-2.12.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ureq-3.4.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/ureq-proto-0.6.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/url-2.5.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/utf8-zero-0.8.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/utf8_iter-1.0.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/utf8parse-0.2.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/uuid-1.28.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/valuable-0.1.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/vcpkg-0.2.15
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/version_check-0.9.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wait-timeout-0.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/walkdir-2.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/want-0.3.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasi-0.11.1+wasi-snapshot-preview1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasip2-1.0.4+wasi-0.2.12
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasite-0.1.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasm-bindgen-0.2.129
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasm-bindgen-futures-0.4.79
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasm-bindgen-macro-0.2.129
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasm-bindgen-macro-support-0.2.129
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wasm-bindgen-shared-0.2.129
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/web-sys-0.3.106
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/web-time-1.1.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/webpki-root-certs-1.0.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/webpki-roots-0.26.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/webpki-roots-1.0.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/whoami-1.6.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/winapi-0.3.9
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/winapi-i686-pc-windows-gnu-0.4.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/winapi-util-0.1.11
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/winapi-x86_64-pc-windows-gnu-0.4.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-core-0.62.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-implement-0.60.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-interface-0.59.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-link-0.2.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-result-0.4.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-strings-0.5.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-sys-0.48.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-sys-0.52.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-sys-0.59.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-sys-0.60.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-sys-0.61.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-targets-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-targets-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows-targets-0.53.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_aarch64_gnullvm-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_aarch64_gnullvm-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_aarch64_gnullvm-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_aarch64_msvc-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_aarch64_msvc-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_aarch64_msvc-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_gnu-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_gnu-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_gnu-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_gnullvm-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_gnullvm-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_msvc-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_msvc-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_i686_msvc-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_gnu-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_gnu-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_gnu-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_gnullvm-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_gnullvm-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_gnullvm-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_msvc-0.48.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_msvc-0.52.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/windows_x86_64_msvc-0.53.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/wit-bindgen-0.57.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/writeable-0.6.4
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/xattr-1.6.1
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/xgrammar-0.5.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/yoke-0.8.3
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/yoke-derive-0.8.2
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zerocopy-0.8.57
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zerocopy-derive-0.8.57
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zerofrom-0.1.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zerofrom-derive-0.1.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zeroize-1.9.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zeroize_derive-1.5.0
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zerotrie-0.2.5
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zerovec-0.11.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zerovec-derive-0.11.6
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zlib-rs-0.6.8
+Unpacking to /nix/store/m3majysglqfz5flhb0gicyp5zjpfkwlf-arkhe-verify-0.1.0-unstable-2026-10-29-vendor/source-registry-0/zmij-1.0.23
+building '/nix/store/5c54vlydr2qwlxrzqsrlkrlfh16qzf5g-arkhe-verify-0.1.0-unstable-2026-10-29.drv'...
+Running phase: unpackPhase
+unpacking source archive /nix/store/d4xh8dfr4dw2mww1c45mf6rysj5zb78k-source
+source root is source
+Executing cargoSetupPostUnpackHook
+Finished cargoSetupPostUnpackHook
+Running phase: patchPhase
+Executing cargoSetupPostPatchHook
+Validating consistency between /build/source/Cargo.lock and /build/arkhe-verify-0.1.0-unstable-2026-10-29-vendor/Cargo.lock
+Finished cargoSetupPostPatchHook
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+Running phase: configurePhase
+Running phase: buildPhase
+Executing cargoBuildHook
+cargoBuildHook flags: -j 12 --target x86_64-unknown-linux-gnu --offline --profile release --frozen -p arkhe-verify-cli --bin arkhe-verify
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling find-msvc-tools v0.1.14
+   Compiling semver v1.0.28
+   Compiling shlex v2.0.1
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling thiserror v2.0.21
+   Compiling serde_json v1.0.154
+   Compiling utf8parse v0.2.2
+   Compiling serde v1.0.229
+   Compiling cpufeatures v0.2.17
+   Compiling anstyle-parse v1.0.0
+   Compiling rustc_version v0.4.1
+   Compiling cc v1.8.0
+   Compiling anstyle v1.0.14
+   Compiling cpufeatures v0.3.1
+   Compiling generic-array v0.14.9
+   Compiling constant_time_eq v0.4.2
+   Compiling curve25519-dalek v4.1.3
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling memchr v2.8.3
+   Compiling arrayvec v0.7.8
+   Compiling zeroize v1.9.0
+   Compiling colorchoice v1.0.5
+   Compiling subtle v2.6.1
+   Compiling signature v2.2.0
+   Compiling anstyle-query v1.1.5
+   Compiling itoa v1.0.18
+   Compiling anstream v1.0.0
+   Compiling ed25519 v2.2.3
+   Compiling heck v0.5.0
+   Compiling clap_lex v1.1.1
+   Compiling anyhow v1.0.104
+   Compiling keccak v0.1.6
+   Compiling smallvec v1.16.2
+   Compiling blake3 v1.8.7
+   Compiling strsim v0.11.1
+   Compiling clap_builder v4.6.7
+   Compiling spdx v0.13.5
+   Compiling hex v0.4.3
+   Compiling crypto-common v0.1.6
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling sha3 v0.10.8
+   Compiling syn v3.0.9
+   Compiling syn v2.0.119
+   Compiling curve25519-dalek-derive v0.1.1
+   Compiling thiserror-impl v2.0.21
+   Compiling serde_derive v1.0.229
+   Compiling async-trait v0.1.92
+   Compiling clap_derive v4.6.7
+   Compiling ed25519-dalek v2.2.0
+   Compiling clap v4.6.7
+   Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+   Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+   Compiling arkhe-verify-cli v0.1.0 (/build/source/verification/crates/arkhe-verify-cli)
+    Finished `release` profile [optimized] target(s) in 55.59s
+Executing cargoInstallPostBuildHook
+Finished cargoInstallPostBuildHook
+Finished cargoBuildHook
+buildPhase completed in 1 minutes 0 seconds
+Running phase: checkPhase
+Executing cargoCheckHook
+cargoCheckHook flags: -j 12 --profile release --target x86_64-unknown-linux-gnu --offline --frozen -p arkhe-verify-cli -p arkhe-verify-core -p arkhe-core --
+   Compiling libc v0.2.189
+   Compiling syn v2.0.119
+   Compiling getrandom v0.3.4
+   Compiling getrandom v0.4.3
+   Compiling rustix v1.1.5
+   Compiling zerocopy v0.8.57
+   Compiling autocfg v1.5.1
+   Compiling bitflags v2.13.2
+   Compiling linux-raw-sys v0.12.1
+   Compiling fastrand v2.5.0
+   Compiling once_cell v1.21.4
+   Compiling quick-error v1.2.3
+   Compiling fnv v1.0.7
+   Compiling bit-vec v0.8.0
+   Compiling unarray v0.1.4
+   Compiling regex-syntax v0.8.11
+   Compiling rand_core v0.6.4
+   Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+   Compiling bit-set v0.8.0
+   Compiling num-traits v0.2.19
+   Compiling rand_core v0.9.5
+   Compiling wait-timeout v0.2.1
+   Compiling rand_xorshift v0.4.0
+   Compiling rand v0.9.5
+   Compiling tempfile v3.27.0
+   Compiling rusty-fork v0.3.1
+   Compiling zeroize_derive v1.5.0
+   Compiling curve25519-dalek-derive v0.1.1
+   Compiling zeroize v1.9.0
+   Compiling ppv-lite86 v0.2.21
+   Compiling curve25519-dalek v4.1.3
+   Compiling fips204 v0.4.6
+   Compiling rand_chacha v0.9.0
+   Compiling proptest v1.9.0
+   Compiling ed25519-dalek v2.2.0
+   Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+   Compiling arkhe-verify-cli v0.1.0 (/build/source/verification/crates/arkhe-verify-cli)
+    Finished `release` profile [optimized] target(s) in 50.66s
+     Running unittests src/lib.rs (target/x86_64-unknown-linux-gnu/release/deps/arkhe_core-e78203edd9383917)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/canonical_bytes.rs (target/x86_64-unknown-linux-gnu/release/deps/canonical_bytes-000fdd9607b08458)
+
+running 3 tests
+test duplicate_keys_cannot_create_ambiguous_cbor ... ok
+test typed_bytes_match_literal_cbor_and_maps_ignore_insertion_order ... ok
+test byte_string_length_headers_use_shortest_encoding ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/golden_vectors.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_vectors-733c8378a5ec974f)
+
+running 4 tests
+test canonical_booleans_for_opt_in_formal_predicates ... ok
+test optional_classification_matches_independent_python_vectors ... ok
+test worker_unsigned_fields_and_reference_order_are_digest_bound ... ok
+test independent_python_vectors ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/x86_64-unknown-linux-gnu/release/deps/arkhe_verify-6e8b21f0efe0e2cb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/x86_64-unknown-linux-gnu/release/deps/arkhe_verify_core-9a0cd9596b815011)
+
+running 2 tests
+test release::tests::rejects_tamper_substitution_rollback_and_policy_changes ... ok
+test release::tests::verify_is_not_admission_and_keys_are_separate ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/arc_reconciliation.rs (target/x86_64-unknown-linux-gnu/release/deps/arc_reconciliation-68a3b57550db06a8)
+
+running 14 tests
+test altered_rule_cannot_be_adopted_by_bundle ... ok
+test ambiguous_case_requires_review ... ok
+test changed_amount_rejected ... ok
+test evidence_from_another_operation_rejected ... ok
+test document_truth_is_not_claimed ... ok
+test explicit_partial_excess_and_unmatched_outcomes ... ok
+test foreign_operation_with_consistent_commitments_rejected ... ok
+test malformed_and_oversized_inputs_rejected ... ok
+test forged_decision_with_consistent_hash_and_membership_still_rejected ... ok
+test malformed_proof_and_profile_rejected ... ok
+test swapped_invoice_rejected ... ok
+test swapped_invoice_with_refreshed_worker_requires_intent_commitment ... ok
+test untrusted_checkpoint_rejected ... ok
+test offline_roundtrip_reproduces_decision ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/c2pa_signature.rs (target/x86_64-unknown-linux-gnu/release/deps/c2pa_signature-04c7e5e79cd18212)
+
+running 9 tests
+test envelope_deserialization_rejects_unknown_fields ... ok
+test malformed_profiles_duplicates_and_fields_are_errors ... ok
+test identity_binding_includes_kid_and_issuer ... ok
+test matching_identity_with_rogue_key_fails_signature ... ok
+test missing_and_revoked_roots_are_rejected ... ok
+test signing_payload_is_deterministic_and_domain_separated ... ok
+test unsupported_algorithm_never_reports_verification ... ok
+test valid_signature_over_pinned_ed25519_root ... ok
+test tampered_claim_reuses_signature_and_fails ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cbor.rs (target/x86_64-unknown-linux-gnu/release/deps/cbor-5ad8cd9e44f2f9b9)
+
+running 1 test
+test gguf_golden_cbor ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gguf_supply_chain.rs (target/x86_64-unknown-linux-gnu/release/deps/gguf_supply_chain-8ec03e75ff70ebaa)
+
+running 11 tests
+test minimal_24_byte_header_is_not_an_accepted_model_in_the_lab_profile ... ok
+test rejects_overlapping_tensor_ranges ... ok
+test rejects_tensor_dimension_overflow_alignment_and_type ... ok
+test rejects_unsafe_duplicate_and_unsupported_metadata ... ok
+test rejects_truncation_unknown_versions_counts_and_trailing_bytes ... ok
+test rfc6962_unbalanced_tree_and_exact_path_consumption ... ok
+test binds_both_artifact_digests_and_metadata_digest ... ok
+test rejects_wrong_builder_identity_key_and_signature ... ok
+test synthetic_gguf_passes_all_four_gates ... ok
+test rejects_inclusion_tampering_even_with_valid_checkpoint_signature ... ok
+test rejects_wrong_log_key_identity_signature_and_stale_checkpoint ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/golden_contract.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_contract-890d2201f0e2975a)
+
+running 1 test
+test committed_ready_vectors_match_active_verifier ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gov_lifecycle.rs (target/x86_64-unknown-linux-gnu/release/deps/gov_lifecycle-68b8bd38ec0fa719)
+
+running 4 tests
+test real_qualification_and_untrusted_empty_challenge_cannot_be_enabled ... ok
+test receipt_context_cannot_be_replayed_for_another_credential_or_challenge ... ok
+test both_profile_contracts_require_the_matching_host_trust ... ok
+test expiry_revocation_and_freshness_reject_even_authentic_stale_receipts ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gov_offline.rs (target/x86_64-unknown-linux-gnu/release/deps/gov_offline-08c232fc228e6202)
+
+running 2 tests
+test four_synthetic_credentials_verify_against_signed_checkpoint ... ok
+test tampering_replay_and_untrusted_checkpoint_fail_closed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/hash.rs (target/x86_64-unknown-linux-gnu/release/deps/hash-9552a692f555d4ec)
+
+running 1 test
+test blake3_known_answers ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/memo_reconciliation.rs (target/x86_64-unknown-linux-gnu/release/deps/memo_reconciliation-1d1a7d5bc45336e2)
+
+running 11 tests
+test altered_calldata_hash_is_rejected_by_decoder ... ok
+test duplicate_index_on_unrecognized_event_is_rejected ... ok
+test malformed_abi_and_ambiguous_frames_rejected ... ok
+test archived_real_memo_is_decoded_independently ... ok
+test unsupported_profile_and_size_are_rejected ... ok
+test wrong_network_and_unfinalized_block_rejected ... ok
+test sender_frame_and_mirror_corruptions_are_rejected ... ok
+test oversized_valid_rpc_json_is_rejected_by_size_bound ... ok
+test changed_raw_memo_id_cannot_substitute_committed_evidence ... ok
+test real_memo_plus_synthetic_invoice_matches_offline ... ok
+test coherent_invoice_changes_classify_without_weakening_rule ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/mmr.rs (target/x86_64-unknown-linux-gnu/release/deps/mmr-bceda5e1bff5f4fc)
+
+running 2 tests
+test single_leaf_root_cannot_claim_a_larger_tree_or_unbounded_count ... ok
+test proof_roundtrip_for_1_3_4_5_7_leaves ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/policy_adversarial.rs (target/x86_64-unknown-linux-gnu/release/deps/policy_adversarial-b7ed27fcd6a66a3a)
+
+running 5 tests
+test delimiter_ambiguity_and_signing_domains_are_separated ... ok
+test unknown_principal_cannot_authorize_itself ... ok
+test scenario_10_digest_replay_is_rejected ... ok
+test worker_a_key_cannot_claim_worker_b ... ok
+test adversarial_vectors_reject_every_attack_with_valid_positive_control ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/policy_compatibility.rs (target/x86_64-unknown-linux-gnu/release/deps/policy_compatibility-d4cc71b538ce6665)
+
+running 4 tests
+test migration_reason_never_grants_runtime_access_or_relaxes_spending ... ok
+test unjustified_restriction_has_deterministic_counterexample ... ok
+test compatible_expansion_for_10000_allowed_requests ... ok
+test explicitly_justified_removal_for_10000_allowed_requests ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/rbb_protocol.rs (target/x86_64-unknown-linux-gnu/release/deps/rbb_protocol-cbaad1e50fc8197e)
+
+running 7 tests
+test mmr_extension_requires_authenticated_previous_frontier_and_exact_count ... ok
+test identity_changes_with_every_header_word_and_is_independent_of_signature_randomness ... ok
+test rejects_padding_offsets_trailing_data_and_oversized_input ... ok
+test python_abi_keccak_and_rust_match_byte_for_byte ... ok
+test mmr_matches_independent_python_and_checks_every_position ... ok
+test rejects_invalid_intervals_flags_algorithms_and_zero_identifiers ... ok
+test arbitrary_bytes_do_not_panic ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/rbb_trust.rs (target/x86_64-unknown-linux-gnu/release/deps/rbb_trust-9d2f700877889b7c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests arkhe_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests arkhe_verify_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+Finished cargoCheckHook
+    Finished `release` profile [optimized] target(s) in 0.30s
+     Running tests/golden_vectors.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_vectors-733c8378a5ec974f)
+
+running 4 tests
+test canonical_booleans_for_opt_in_formal_predicates ... ok
+test optional_classification_matches_independent_python_vectors ... ok
+test worker_unsigned_fields_and_reference_order_are_digest_bound ... ok
+test independent_python_vectors ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `release` profile [optimized] target(s) in 0.19s
+     Running tests/golden_contract.rs (target/x86_64-unknown-linux-gnu/release/deps/golden_contract-890d2201f0e2975a)
+
+running 1 test
+test committed_ready_vectors_match_active_verifier ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+checkPhase completed in 56 seconds
+Running phase: installPhase
+Executing cargoInstallHook
+Finished cargoInstallHook
+Running phase: fixupPhase
+shrinking RPATHs of ELF executables and libraries in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29
+shrinking /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29/bin/arkhe-verify
+checking for references to /build/ in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29...
+patching script interpreter paths in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29
+stripping (with command strip and flags -S -p) in /nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29/bin
+/nix/store/hs2mqmz7s1d4i9v2fjm0r97k8qfbzkc4-arkhe-verify-0.1.0-unstable-2026-10-29

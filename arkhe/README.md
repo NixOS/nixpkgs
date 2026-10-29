@@ -47,7 +47,8 @@ O workflow em `../.github/workflows/arkhe-nix.yml` repete os checks de build. A 
   (estação offline).
 - **Scripts de verificação** de reprodutibilidade, endereçamento por conteúdo e
   proveniência.
-- **Template `by-name`** para submissão de `arkhe-verify` ao nixpkgs.
+- **Receita `by-name` validada** para a proposta de `arkhe-verify` ao nixpkgs,
+  com fontes públicas e hashes reais; [estado e diff](nixpkgs/README.md).
 
 ## Pacotes
 
@@ -254,7 +255,7 @@ pkgs/                  um arquivo por pacote
 modules/               módulos NixOS (node, audit)
 checks/                checks do `nix flake check`
 scripts/               reprodutibilidade, CA e proveniência
-nixpkgs/               template by-name para submissão upstream
+nixpkgs/               receita by-name validada, patch e proposta upstream
 docs/                  pacotes, reprodutibilidade e ADRs
 ```
 

@@ -1,0 +1,125 @@
+From 503967add73e246956305131909f5d04ab23648c Mon Sep 17 00:00:00 2001
+From: rafael-arkhe <306333870+rafael-arkhe@users.noreply.github.com>
+Date: Thu, 29 Oct 2026 18:24:55 -0300
+Subject: [PATCH 1/2] maintainers: add rafael-arkhe
+
+Assisted-by: OpenAI Codex (GPT-6)
+---
+ maintainers/maintainer-list.nix | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/maintainers/maintainer-list.nix b/maintainers/maintainer-list.nix
+index ea5a991c7..7eba626cd 100644
+--- a/maintainers/maintainer-list.nix
++++ b/maintainers/maintainer-list.nix
+@@ -24453,6 +24453,11 @@
+     githubId = 104688305;
+     keys = [ { fingerprint = "5F0B 3EAC F1F9 8155 0946 CDF5 469E 3255 A40D 2AD6"; } ];
+   };
++  rafael-arkhe = {
++    name = "rafael-arkhe";
++    github = "rafael-arkhe";
++    githubId = 306333870;
++  };
+   rafaelgg = {
+     email = "rafael.garcia.gallego@gmail.com";
+     github = "rafaelgg";
+
+
+From de3aa5574369b3b863ce4ce4da461de01ee406a5 Mon Sep 17 00:00:00 2001
+From: rafael-arkhe <306333870+rafael-arkhe@users.noreply.github.com>
+Date: Thu, 29 Oct 2026 18:24:56 -0300
+Subject: [PATCH 2/2] arkhe-verify: init at 0.1.0-unstable-2026-10-29
+
+Package the public source-only Arkhe workspace snapshot with fixed source
+and Cargo hashes. Run the offline verifier/core suites, golden vectors
+and a BLAKE3 known-answer test using the standard rustPlatform.
+
+Assisted-by: OpenAI Codex (GPT-6)
+---
+ pkgs/by-name/ar/arkhe-verify/package.nix | 76 ++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 pkgs/by-name/ar/arkhe-verify/package.nix
+
+diff --git a/pkgs/by-name/ar/arkhe-verify/package.nix b/pkgs/by-name/ar/arkhe-verify/package.nix
+new file mode 100644
+index 000000000..bb920e661
+--- /dev/null
++++ b/pkgs/by-name/ar/arkhe-verify/package.nix
+@@ -0,0 +1,76 @@
++{
++  lib,
++  rustPlatform,
++  fetchFromGitHub,
++  runCommand,
++  stdenv,
++}:
++
++rustPlatform.buildRustPackage (finalAttrs: {
++  pname = "arkhe-verify";
++  version = "0.1.0-unstable-2026-10-29";
++
++  src = fetchFromGitHub {
++    owner = "rafael-arkhe";
++    repo = "nixpkgs-arkhe";
++    rev = "228da8e803e9f81041066e3a3a50f61e6ff4201c";
++    hash = "sha256-IX8kHrWuRQn9jOb1mwXwJ9eoMkelO+1PpFlbu/dEiiI=";
++  };
++
++  cargoHash = "sha256-J2aSDP8/OcFVQdilWyYs+4f8VXwhxEhT9uSh+8egyH8=";
++
++  cargoBuildFlags = [
++    "--frozen"
++    "-p"
++    "arkhe-verify-cli"
++    "--bin"
++    "arkhe-verify"
++  ];
++  cargoTestFlags = [
++    "--frozen"
++    "-p"
++    "arkhe-verify-cli"
++    "-p"
++    "arkhe-verify-core"
++    "-p"
++    "arkhe-core"
++  ];
++
++  env = {
++    SOURCE_DATE_EPOCH = "315532800";
++    CARGO_INCREMENTAL = "0";
++    CARGO_NET_OFFLINE = "true";
++  };
++
++  preBuild = ''
++    export RUSTFLAGS="''${RUSTFLAGS-} --remap-path-prefix=$PWD=/build/source --remap-path-prefix=$NIX_BUILD_TOP=/build"
++  '';
++
++  postCheck = ''
++    set -o pipefail
++    cargo test --frozen --release --target ${stdenv.hostPlatform.rust.rustcTargetSpec} \
++      -p arkhe-core --test golden_vectors 2>&1 | tee golden-vectors.log
++    grep -Eq '^test result: ok\. [1-9][0-9]* passed' golden-vectors.log
++    cargo test --frozen --release --target ${stdenv.hostPlatform.rust.rustcTargetSpec} \
++      -p arkhe-verify-core --test golden_contract 2>&1 | tee golden-contract.log
++    grep -Eq '^test result: ok\. [1-9][0-9]* passed' golden-contract.log
++  '';
++
++  passthru.tests.blake3 = runCommand "arkhe-verify-blake3" { } ''
++    test "$(${lib.getExe finalAttrs.finalPackage} blake3 "")" = \
++      af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262
++    touch "$out"
++  '';
++
++  meta = {
++    description = "Offline verifier for Arkhe artifacts and attestations";
++    homepage = "https://github.com/rafael-arkhe/nixpkgs-arkhe/tree/arkhe/nix-packages-integration/arkhe";
++    license = with lib.licenses; [
++      asl20
++      mit
++    ];
++    maintainers = with lib.maintainers; [ rafael-arkhe ];
++    mainProgram = "arkhe-verify";
++    platforms = lib.platforms.linux;
++  };
++})

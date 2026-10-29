@@ -4,6 +4,10 @@
 
 ### Adicionado
 
+- README principal do fork com acesso ao flake Arkhe, comandos e limites da validação.
+- Proposta upstream de `arkhe-verify` com fontes públicas imutáveis, hashes reais,
+  patch de dois commits e evidências de build/rebuild com Rust 1.99.0.
+
 - Toolchain Rust do `rust-toolchain.toml` (1.96.0) via `rust-overlay`
   travado no `flake.lock` (`lib/toolchain.nix`); check `toolchain-version`.
 - Fonte por pacote (`lib/workspace.nix`): fecho de crates `path` lido dos
