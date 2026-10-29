@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "pycketcasts";
-  version = "1.0.1";
+  version = "1.0.1-unstable-2022-07-12";
   pyproject = true;
 
   src = fetchFromCodeberg {
