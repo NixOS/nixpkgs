@@ -1,0 +1,388 @@
+diff --git a/src/GPS/CMakeLists.txt b/src/GPS/CMakeLists.txt
+index 4b75ad4..7e558ef 100644
+--- a/src/GPS/CMakeLists.txt
++++ b/src/GPS/CMakeLists.txt
+@@ -14,9 +14,6 @@
+         GPSRTKFactGroup.h
+         RTCMMavlink.cc
+         RTCMMavlink.h
+-        satellite_info.h
+-        sensor_gnss_relative.h
+-        sensor_gps.h
+ )
+ 
+ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt6::Core)
+@@ -25,20 +22,6 @@
+ 
+ #===========================================================================#
+ 
+-CPMAddPackage(
+-    NAME px4-gpsdrivers
+-    GITHUB_REPOSITORY PX4/PX4-GPSDrivers
+-    GIT_TAG main
+-    SOURCE_SUBDIR src
+-)
+-
+-file(GLOB GPS_DRIVERS_SOURCES "${px4-gpsdrivers_SOURCE_DIR}/src/*")
+-target_sources(${CMAKE_PROJECT_NAME}
+-    PRIVATE
+-        definitions.h
+-        ${GPS_DRIVERS_SOURCES}
+-)
+-
+-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE GPS_DEFINITIONS_HEADER=<${CMAKE_CURRENT_SOURCE_DIR}/definitions.h>)
++find_package(px4-gpsdrivers REQUIRED)
+ 
+-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${px4-gpsdrivers_SOURCE_DIR}/src)
++target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE px4-gpsdrivers::gps)
+diff --git a/src/GPS/GPSProvider.h b/src/GPS/GPSProvider.h
+index 1111111..2222222 100644
+--- a/src/GPS/GPSProvider.h
++++ b/src/GPS/GPSProvider.h
+@@ -11,16 +11,13 @@
+ 
+ #include <QtCore/QByteArray>
+ #include <QtCore/QLoggingCategory>
+-#include <QtCore/QMetaType>
+ #include <QtCore/QObject>
+ #include <QtCore/QString>
+ #include <QtCore/QThread>
+ 
+ #include <gps_helper.h>
+ 
+-#include "satellite_info.h"
+-#include "sensor_gnss_relative.h"
+-#include "sensor_gps.h"
++#include "GPSMetaTypes.h"
+ 
+ Q_DECLARE_LOGGING_CATEGORY(GPSProviderLog)
+ 
+diff --git a/src/GPS/GPSRtk.h b/src/GPS/GPSRtk.h
+index 4e69c84..83a4220 100644
+--- a/src/GPS/GPSRtk.h
++++ b/src/GPS/GPSRtk.h
+@@ -13,9 +13,7 @@
+ #include <QtCore/QObject>
+ #include <QtCore/QString>
+ 
+-#include "satellite_info.h"
+-#include "sensor_gnss_relative.h"
+-#include "sensor_gps.h"
++#include "GPSMetaTypes.h"
+ 
+ Q_DECLARE_LOGGING_CATEGORY(GPSRtkLog)
+ 
+diff --git a/src/GPS/GPSMetaTypes.h b/src/GPS/GPSMetaTypes.h
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/GPS/GPSMetaTypes.h
+@@ -0,0 +1,20 @@
++/****************************************************************************
++ *
++ * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
++ *
++ * QGroundControl is licensed according to the terms in the file
++ * COPYING.md in the root of the source code directory.
++ *
++ ****************************************************************************/
++
++#pragma once
++
++#include "satellite_info.h"
++#include "sensor_gnss_relative.h"
++#include "sensor_gps.h"
++
++#include <QtCore/QMetaType>
++
++Q_DECLARE_METATYPE(satellite_info_s)
++Q_DECLARE_METATYPE(sensor_gnss_relative_s)
++Q_DECLARE_METATYPE(sensor_gps_s)
+diff --git a/src/GPS/definitions.h b/src/GPS/definitions.h
+deleted file mode 100644
+index 1111111..0000000
+--- a/src/GPS/definitions.h
++++ /dev/null
+@@ -1,94 +0,0 @@
+-/****************************************************************************
+- *
+- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
+- *
+- * QGroundControl is licensed according to the terms in the file
+- * COPYING.md in the root of the source code directory.
+- *
+- ****************************************************************************/
+-
+-/****************************************************************************
+- *
+- *   Copyright (c) 2016 PX4 Development Team. All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- *
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in
+- *    the documentation and/or other materials provided with the
+- *    distribution.
+- * 3. Neither the name PX4 nor the names of its contributors may be
+- *    used to endorse or promote products derived from this software
+- *    without specific prior written permission.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+- * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+- * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+- * POSSIBILITY OF SUCH DAMAGE.
+- *
+- ****************************************************************************/
+-
+-/**
+- * @file definitions.h
+- * common platform-specific definitions & abstractions for gps
+- * @author Beat Küng <beat-kueng@gmx.net>
+- */
+-
+-#pragma once
+-
+-#include <QtCore/QtGlobal>
+-#include <QtCore/QDateTime>
+-#include <QtCore/QLoggingCategory>
+-#include <QtCore/QThread>
+-
+-#include "sensor_gps.h"
+-#include "sensor_gnss_relative.h"
+-#include "satellite_info.h"
+-
+-Q_DECLARE_LOGGING_CATEGORY(GPSDriversLog)
+-
+-#define GPS_INFO(...) qCInfo(GPSDriversLog, __VA_ARGS__)
+-#define GPS_WARN(...) qCWarning(GPSDriversLog, __VA_ARGS__)
+-#define GPS_ERR(...) qCCritical(GPSDriversLog, __VA_ARGS__)
+-
+-#define M_DEG_TO_RAD (M_PI / 180.0)
+-#define M_RAD_TO_DEG (180.0 / M_PI)
+-#define M_DEG_TO_RAD_F 0.0174532925f
+-#define M_RAD_TO_DEG_F 57.2957795f
+-
+-#define M_PI_2_F 0.63661977f
+-
+-#ifdef _WIN32
+-#if (_MSC_VER < 1900)
+-struct timespec
+-{
+-    time_t tv_sec;
+-    long tv_nsec;
+-};
+-#else
+-#include <time.h>
+-#endif
+-#endif
+-
+-static inline void gps_usleep(unsigned long usecs)
+-{
+-    QThread::usleep(usecs);
+-}
+-
+-typedef uint64_t gps_abstime;
+-static inline gps_abstime gps_absolute_time()
+-{
+-    return (QDateTime::currentMSecsSinceEpoch() * 1000);
+-}
+diff --git a/src/GPS/sensor_gps.h b/src/GPS/sensor_gps.h
+deleted file mode 100644
+index 1111111..0000000
+--- a/src/GPS/sensor_gps.h
++++ /dev/null
+@@ -1,90 +0,0 @@
+-/****************************************************************************
+- *
+- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
+- *
+- * QGroundControl is licensed according to the terms in the file
+- * COPYING.md in the root of the source code directory.
+- *
+- ****************************************************************************/
+-
+-/* https://github.com/PX4/Firmware/blob/master/msg/SensorGps.msg */
+-
+-#pragma once
+-
+-#include <stdint.h>
+-
+-#include <QtCore/QMetaType>
+-
+-struct sensor_gps_s
+-{
+-	uint64_t timestamp;
+-	uint64_t timestamp_sample;
+-
+-	uint32_t device_id;
+-
+-	double latitude_deg;
+-	double longitude_deg;
+-	double altitude_msl_m;
+-	double altitude_ellipsoid_m;
+-
+-	float s_variance_m_s;
+-	float c_variance_rad;
+-
+-	static constexpr uint8_t FIX_TYPE_NONE = 1;
+-	static constexpr uint8_t FIX_TYPE_2D = 2;
+-	static constexpr uint8_t FIX_TYPE_3D = 3;
+-	static constexpr uint8_t FIX_TYPE_RTCM_CODE_DIFFERENTIAL = 4;
+-	static constexpr uint8_t FIX_TYPE_RTK_FLOAT = 5;
+-	static constexpr uint8_t FIX_TYPE_RTK_FIXED = 6;
+-	static constexpr uint8_t FIX_TYPE_EXTRAPOLATED = 8;
+-	uint8_t fix_type;
+-
+-	float eph;
+-	float epv;
+-
+-	float hdop;
+-	float vdop;
+-
+-	int32_t noise_per_ms;
+-	uint16_t automatic_gain_control;
+-
+-	static constexpr uint8_t JAMMING_STATE_UNKNOWN = 0;
+-	static constexpr uint8_t JAMMING_STATE_OK = 1;
+-	static constexpr uint8_t JAMMING_STATE_WARNING = 2;
+-	static constexpr uint8_t JAMMING_STATE_CRITICAL = 3;
+-	uint8_t jamming_state;
+-	int32_t jamming_indicator;
+-
+-	static constexpr uint8_t SPOOFING_STATE_UNKNOWN = 0;
+-	static constexpr uint8_t SPOOFING_STATE_NONE = 1;
+-	static constexpr uint8_t SPOOFING_STATE_INDICATED = 2;
+-	static constexpr uint8_t SPOOFING_STATE_MULTIPLE = 3;
+-	uint8_t spoofing_state;
+-
+-	float vel_m_s;
+-	float vel_n_m_s;
+-	float vel_e_m_s;
+-	float vel_d_m_s;
+-	float cog_rad;
+-	bool vel_ned_valid;
+-
+-	int32_t timestamp_time_relative;
+-	uint64_t time_utc_usec;
+-
+-	uint8_t satellites_used;
+-
+-	float heading;
+-	float heading_offset;
+-	float heading_accuracy;
+-
+-	float rtcm_injection_rate;
+-	uint8_t selected_rtcm_instance;
+-
+-	bool rtcm_crc_failed;
+-
+-	static constexpr uint8_t RTCM_MSG_USED_UNKNOWN = 0;
+-	static constexpr uint8_t RTCM_MSG_USED_NOT_USED = 1;
+-	static constexpr uint8_t RTCM_MSG_USED_USED = 2;
+-	uint8_t rtcm_msg_used;
+-};
+-Q_DECLARE_METATYPE(sensor_gps_s);
+diff --git a/src/GPS/satellite_info.h b/src/GPS/satellite_info.h
+deleted file mode 100644
+index 1111111..0000000
+--- a/src/GPS/satellite_info.h
++++ /dev/null
+@@ -1,31 +0,0 @@
+-/****************************************************************************
+- *
+- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
+- *
+- * QGroundControl is licensed according to the terms in the file
+- * COPYING.md in the root of the source code directory.
+- *
+- ****************************************************************************/
+-
+-/* https://github.com/PX4/Firmware/blob/master/msg/SatelliteInfo.msg */
+-
+-#pragma once
+-
+-#include <stdint.h>
+-
+-#include <QtCore/QMetaType>
+-
+-struct satellite_info_s
+-{
+-	uint64_t timestamp;
+-	static constexpr uint8_t SAT_INFO_MAX_SATELLITES = 20;
+-
+-	uint8_t count;
+-	uint8_t svid[20];
+-	uint8_t used[20];
+-	uint8_t elevation[20];
+-	uint8_t azimuth[20];
+-	uint8_t snr[20];
+-	uint8_t prn[20];
+-};
+-Q_DECLARE_METATYPE(satellite_info_s);
+diff --git a/src/GPS/sensor_gnss_relative.h b/src/GPS/sensor_gnss_relative.h
+deleted file mode 100644
+index 1111111..0000000
+--- a/src/GPS/sensor_gnss_relative.h
++++ /dev/null
+@@ -1,49 +0,0 @@
+-/****************************************************************************
+- *
+- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
+- *
+- * QGroundControl is licensed according to the terms in the file
+- * COPYING.md in the root of the source code directory.
+- *
+- ****************************************************************************/
+-
+-/* https://github.com/PX4/Firmware/blob/master/msg/SensorGnssRelative.msg */
+-
+-#pragma once
+-
+-#include <stdint.h>
+-
+-#include <QtCore/QMetaType>
+-
+-struct sensor_gnss_relative_s
+-{
+-	uint64_t timestamp;
+-	uint64_t timestamp_sample;
+-
+-	uint32_t device_id;
+-
+-	uint64_t time_utc_usec;
+-
+-	uint16_t reference_station_id;
+-
+-	float position[3];
+-	float position_accuracy[3];
+-
+-	float heading;
+-	float heading_accuracy;
+-
+-	float position_length;
+-	float accuracy_length;
+-
+-	bool gnss_fix_ok;
+-	bool differential_solution;
+-	bool relative_position_valid;
+-	bool carrier_solution_floating;
+-	bool carrier_solution_fixed;
+-	bool moving_base_mode;
+-	bool reference_position_miss;
+-	bool reference_observations_miss;
+-	bool heading_valid;
+-	bool relative_position_normalized;
+-};
+-Q_DECLARE_METATYPE(sensor_gnss_relative_s);

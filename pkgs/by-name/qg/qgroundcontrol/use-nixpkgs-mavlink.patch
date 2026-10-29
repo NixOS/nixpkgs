@@ -1,0 +1,27 @@
+diff --git a/src/MAVLink/CMakeLists.txt b/src/MAVLink/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/MAVLink/CMakeLists.txt
++++ b/src/MAVLink/CMakeLists.txt
+@@ -33,20 +33,10 @@
+ #         "MAVLINK_VERSION 2.0"
+ # )
+ 
+-CPMAddPackage(
+-    NAME mavlink
+-    GIT_REPOSITORY ${QGC_MAVLINK_GIT_REPO}
+-    GIT_TAG ${QGC_MAVLINK_GIT_TAG}
+-)
++find_package(mavlink-c-library-v2 REQUIRED)
+ 
+ # For QGC all dialects means common and development. Though use of development mavlink code should be restricted to debug builds only.
+-target_include_directories(${CMAKE_PROJECT_NAME}
+-    PRIVATE
+-        ${mavlink_SOURCE_DIR}
+-        ${mavlink_SOURCE_DIR}/all
+-        ${mavlink_SOURCE_DIR}/common
+-        ${mavlink_SOURCE_DIR}/development
+-)
++target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE mavlink-c-library-v2::mavlink)
+ 
+ # if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+ #   target_compile_options(comm PRIVATE -Wno-address-of-packed-member)

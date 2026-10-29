@@ -1,0 +1,36 @@
+diff --git a/src/Utilities/Geo/CMakeLists.txt b/src/Utilities/Geo/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/Utilities/Geo/CMakeLists.txt
++++ b/src/Utilities/Geo/CMakeLists.txt
+@@ -8,30 +8,6 @@
+ 
+ #===========================================================================#
+ 
+-CPMAddPackage(
+-    NAME geographiclib
+-    VERSION 2.5
+-    GITHUB_REPOSITORY geographiclib/geographiclib
+-    GIT_TAG r2.5
+-    OPTIONS
+-        "BUILD_BOTH_LIBS OFF"
+-        "BUILD_DOCUMENTATION OFF"
+-        "BUILD_MANPAGES OFF"
+-        "PACKAGE_DEBUG_LIBS OFF"
+-        "APPLE_MULTIPLE_ARCHITECTURES OFF"
+-        "INCDIR OFF"
+-        "BINDIR OFF"
+-        "SBINDIR OFF"
+-        "LIBDIR ${CMAKE_INSTALL_LIBDIR}"
+-        "DLLDIR ${CMAKE_INSTALL_BINDIR}"
+-        "MANDIR OFF"
+-        "CMAKEDIR OFF"
+-        "PKGDIR OFF"
+-        "DOCDIR OFF"
+-        "EXAMPLEDIR OFF"
+-    PATCHES geographiclib.patch
+-)
+-
+-target_compile_options(GeographicLib_STATIC PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/wd9025>)
++find_package(GeographicLib REQUIRED)
+ 
+ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE GeographicLib::GeographicLib)

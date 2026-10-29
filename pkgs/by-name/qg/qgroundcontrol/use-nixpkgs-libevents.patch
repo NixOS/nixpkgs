@@ -1,0 +1,24 @@
+diff --git a/src/MAVLink/LibEvents/CMakeLists.txt b/src/MAVLink/LibEvents/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/MAVLink/LibEvents/CMakeLists.txt
++++ b/src/MAVLink/LibEvents/CMakeLists.txt
+@@ -11,12 +11,11 @@
+ 
+ #===========================================================================#
+ 
+-CPMAddPackage(
+-    NAME libevents
+-    GITHUB_REPOSITORY mavlink/libevents
+-    GIT_TAG main
+-    SOURCE_SUBDIR libs/cpp
+-)
++find_package(libevents REQUIRED)
+ 
+-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE libevents)
+-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${libevents_SOURCE_DIR}/libs/cpp)
++target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE LibEvents::LibEvents)
++
++# QGC's own libevents_includes.h uses paths like "parse/parser.h" relative to
++# libs/cpp, so (in addition to the libevents include dir itself, brought in
++# by the LibEvents::LibEvents target above) we need .../include/libevents.
++target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE @LIBEVENTS_INCLUDE_DIR@/libevents)

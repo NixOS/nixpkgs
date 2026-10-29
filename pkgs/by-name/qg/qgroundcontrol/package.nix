@@ -5,7 +5,13 @@
   cmake,
   cpm-cmake,
   geographiclib,
+  libevents,
+  mavlink-c-library-v2,
+  sdl_gamecontrollerdb,
+  shapelib,
   ulog-cpp,
+  xz-embedded,
+  zlib,
   ninja,
   SDL2,
   gst_all_1,
@@ -13,7 +19,6 @@
   pkg-config,
   nix-update-script,
   px4-gpsdrivers,
-  perl,
   qt6,
 }:
 
@@ -34,24 +39,39 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./disable-bad-message.patch # TODO: Upstream
+    # Each of these replaces a CPMAddPackage call (which vendors+recompiles a
+    # dependency's sources at build time, requiring network access) with the
+    # real nixpkgs package, found via find_package.
+    ./use-px4-gpsdrivers.patch
+    ./use-nixpkgs-mavlink.patch
+    ./use-nixpkgs-libevents.patch
+    ./use-nixpkgs-sdl2.patch
+    ./use-nixpkgs-compression.patch
+    ./use-nixpkgs-geographiclib.patch
+    ./use-nixpkgs-shapelib.patch
   ];
 
-  # Unvendor CPM
+  # Unvendor CPM. cpm-cmake's setup hook sets CPM_LOCAL_PACKAGES_ONLY, which
+  # makes every remaining (unpatched) CPMAddPackage call resolve via
+  # find_package against the real nixpkgs packages below instead of
+  # attempting a network fetch (e.g. ulog_cpp, whose upstream CMake project
+  # name happens to already match what find_package needs).
   postPatch = ''
     rm cmake/modules/CPM.cmake
     ln -s ${cpm-cmake}/share/cpm/CPM.cmake cmake/modules/CPM.cmake
 
-    # Replace CPM finds with find_packages
-    # TODO: Find a way to make this substitution that *doesn't* require bringing in perl
-    perl -0777 -i.original -pe 's|CPMAddPackage\([^)]*ulog_cpp[^)]*\)|find_package(ulog_cpp REQUIRED)|' src/AnalyzeView/CMakeLists.txt
-    perl -0777 -i.original -pe 's|CPMAddPackage\([^)]*px4-gpsdrivers[^)]*\)|find_package(px4-gpsdrivers REQUIRED)|' src/GPS/CMakeLists.txt
+    substituteInPlace src/Joystick/CMakeLists.txt \
+      --replace-fail '@SDL_GAMECONTROLLERDB_FILE@' "${sdl_gamecontrollerdb}/share/gamecontrollerdb.txt"
+
+    substituteInPlace src/MAVLink/LibEvents/CMakeLists.txt \
+      --replace-fail '@LIBEVENTS_INCLUDE_DIR@' "${libevents}/include"
   '';
 
   nativeBuildInputs = [
     cmake
+    cpm-cmake
     ninja
     pkg-config
-    perl # TODO: Used for temporary patching
   ] ++ (with qt6; [
     qttools
     wrapQtAppsHook
@@ -79,16 +99,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    geographiclib # TODO: Investigate why this does not require a patch to the CPMAddPackage
+    geographiclib
+    libevents
+    mavlink-c-library-v2
+    shapelib
     ulog-cpp
     px4-gpsdrivers
-  ] ++ finalAttrs.gstInputs ++ finalAttrs.propagatedBuildInputs;
+    xz-embedded
+    zlib
+  ]
+  ++ finalAttrs.gstInputs
+  ++ finalAttrs.propagatedBuildInputs;
 
   cmakeFlags = [
     # TODO: This needs rationale.
     (lib.cmakeBool "QGC_BUILD_STABLE" true)
-    # Override maximum version to always accept the packaged qr6
-    # TODO: Confirm this is still the case
+    # Override maximum version to always accept the packaged qt6
     (lib.cmakeFeature "QGC_QT_MAXIMUM_VERSION" qt6.qtbase.version)
     # Default install tries to copy Qt files into package
     # TODO: Confirm this is still the case
@@ -98,6 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Tries to download x86_64-only prebuilt binaries
     # TODO: Confirm this is still the case
     (lib.cmakeBool "DISABLE_AIRMAP" true)
+    # Qt's AUTOGEN machinery tries to add_dependencies() on every directly
+    # linked library for its timestamp-tracking target, which fails for any
+    # of them that's a plain IMPORTED target (as find_package Config-mode
+    # targets are, e.g. GeographicLib::GeographicLib) since those have no
+    # build step to depend on. AUTOGEN doesn't need this to work correctly.
+    (lib.cmakeBool "CMAKE_AUTOGEN_ORIGIN_DEPENDS" false)
   ];
 
   installPhase = ''

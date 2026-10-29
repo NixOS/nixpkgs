@@ -1,0 +1,19 @@
+diff --git a/src/Utilities/Shape/CMakeLists.txt b/src/Utilities/Shape/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/Utilities/Shape/CMakeLists.txt
++++ b/src/Utilities/Shape/CMakeLists.txt
+@@ -14,14 +14,4 @@
+ 
+ #===========================================================================#
+ 
+-CPMAddPackage(
+-    NAME Shapelib
+-    VERSION 1.6.1
+-    GITHUB_REPOSITORY OSGeo/shapelib
+-    OPTIONS
+-        "BUILD_SHAPELIB_CONTRIB OFF"
+-        "BUILD_APPS OFF"
+-        "BUILD_TESTING OFF"
+-)
+-
+ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shp)
