@@ -322,7 +322,7 @@ let
         lndir
         jq
       ];
-      buildInputs = lib.optionals (!isDarwin) [ browser.gtk3 ];
+      buildInputs = lib.optionals (!isDarwin) [ browser.gtk4 ];
 
       makeWrapperArgs = [
         "--prefix"
