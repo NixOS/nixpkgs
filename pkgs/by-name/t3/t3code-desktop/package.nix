@@ -78,7 +78,12 @@ symlinkJoin {
     writeDarwinBundle
   ];
 
-  postBuild = ''
+  # Both desktop and CLI expose t3. Keep the desktop's t3 wrapper in
+  # sync with the CLI's provider PATH and resource-monitor environment.
+  postBuild = lib.optionalString (configuredCli.wrapperArgs != [ ]) ''
+    wrapProgram "$out/bin/t3" ${lib.escapeShellArgs configuredCli.wrapperArgs}
+  ''
+  + ''
     makeWrapper ${lib.getExe electron} "$out/bin/t3code-desktop" \
       --add-flags "$out/libexec/t3code/apps/desktop" \
       --set T3CODE_SERVER_ROOT "$out/libexec/t3code" \
