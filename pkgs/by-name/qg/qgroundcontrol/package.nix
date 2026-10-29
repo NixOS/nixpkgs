@@ -21,6 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "qgroundcontrol";
   version = "5.1.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "mavlink";
     repo = "qgroundcontrol";
