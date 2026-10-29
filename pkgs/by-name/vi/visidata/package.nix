@@ -3,6 +3,8 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  groff,
+  man-db,
 
   # dependencies
   xclip,
@@ -29,8 +31,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-Lvs8BFgHdr51MCFtTbQVK4iFUwn5b5o/L6rmMGwA5To=";
   };
 
+  postPatch = ''
+    patchShebangs dev/mkman.sh visidata/man/parse_options.py
+  '';
+
   build-system = with python3Packages; [
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    groff
+    man-db
   ];
 
   dependencies =
