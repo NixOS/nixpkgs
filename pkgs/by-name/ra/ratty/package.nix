@@ -2,8 +2,12 @@
   fetchFromGitHub,
   fontconfig,
   lib,
+  libx11,
   libxcb,
+  libxcursor,
+  libxi,
   libxkbcommon,
+  libxrandr,
   makeBinaryWrapper,
   pkg-config,
   rustPlatform,
@@ -48,7 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapProgram $out/bin/ratty \
       --set LD_LIBRARY_PATH "${
         lib.makeLibraryPath [
+          libx11
+          libxcursor
+          libxi
           libxkbcommon
+          libxrandr
           vulkan-loader
           wayland
         ]
