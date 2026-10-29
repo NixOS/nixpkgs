@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pycketcasts";
   version = "1.0.1-unstable-2022-07-12";
   pyproject = true;
@@ -37,4 +37,4 @@ buildPythonPackage {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
