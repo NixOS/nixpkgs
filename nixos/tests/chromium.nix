@@ -16,7 +16,7 @@
     inherit (chromiumPackage.meta) timeout;
   };
 
-  nodes.machine =
+  containers.machine =
     { config, ... }:
 
     {
