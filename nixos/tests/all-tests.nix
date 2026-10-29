@@ -419,7 +419,10 @@ in
   chhoto-url = runTest ./chhoto-url.nix;
   chipass = runTest ./chipass.nix;
   chromadb = runTest ./chromadb.nix;
-  chromium = (handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./chromium.nix { }).stable or { };
+  chromium = runTestOn [ "aarch64-linux" "x86_64-linux" ] {
+    imports = [ ./chromium.nix ];
+    _module.args.chromiumPackage = pkgs.chromium;
+  };
   chrony = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./chrony.nix;
   chrony-ptp = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./chrony-ptp.nix;
   cinnamon = runTest ./cinnamon.nix;
