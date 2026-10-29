@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  fixDarwinDylibNames,
   gtest,
   static ? stdenv.hostPlatform.isStatic,
   cxxStandard ? null,
@@ -22,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    # Test helper libraries linking against GoogleTest
+    "testing"
   ];
 
   cmakeFlags = [
@@ -35,9 +38,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [ gtest ];
+
+  postInstall = ''
+    for lib in scoped_mock_log status_matchers; do
+      moveToOutput "lib/libabsl_$lib.*" "$testing"
+      substituteInPlace $out/lib/cmake/absl/abslTargets-*.cmake \
+        --replace-fail "$out/lib/libabsl_$lib." "$testing/lib/libabsl_$lib."
+      substituteInPlace "$out/lib/pkgconfig/absl_$lib.pc" \
+        --replace-fail "libdir=$out/lib" "libdir=$testing/lib"
+    done
+  '';
+
+  outputChecks.out.disallowedRequisites = [ gtest ];
 
   __structuredAttrs = true;
 

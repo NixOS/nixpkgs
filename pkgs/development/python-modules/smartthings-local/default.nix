@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "smartthings-local";
   version = "0.1.24";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "QuiteYellow";

@@ -63,8 +63,6 @@ buildPythonPackage rec {
   version = "0.10.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";

@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "llm-tools-sqlite";
   version = "0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
@@ -36,6 +35,10 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
+
+  # There's only one test and it's failing due to a bad comparison
+  # https://github.com/simonw/llm-tools-sqlite/issues/4
+  doCheck = false;
 
   pythonImportsCheck = [ "llm_tools_sqlite" ];
 

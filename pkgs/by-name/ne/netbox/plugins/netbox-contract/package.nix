@@ -10,8 +10,6 @@
   netaddr,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-contract";
   version = "2.5.0";
   pyproject = true;

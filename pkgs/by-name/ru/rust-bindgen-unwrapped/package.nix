@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
   version = "0.72.1";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     pname = "bindgen-cli";
     inherit version;

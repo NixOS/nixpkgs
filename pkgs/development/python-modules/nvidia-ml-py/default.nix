@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nvidia-ml-py";
   version = "13.615.71";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "nvidia_ml_py";

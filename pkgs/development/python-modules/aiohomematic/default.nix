@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "aiohomematic";
   version = "2026.10.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   disabled = pythonOlder "3.14";
 

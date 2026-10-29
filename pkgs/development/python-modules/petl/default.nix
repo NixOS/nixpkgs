@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "petl";
   version = "1.7.29";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "petl-developers";

@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mindsdb-evaluator";
   version = "0.0.21";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mindsdb";
     repo = "mindsdb_evaluator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eUdGtHLbI6T7HsUqkVkTp040pbq7qVzgaldQxPAzjTc=";
   };
 
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "dataprep-ml"
     "numpy"
+    "pandas"
     "scikit-learn"
   ];
 
@@ -46,10 +47,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mindsdb/mindsdb_evaluator/releases/tag/${src.tag}";
+    changelog = "https://github.com/mindsdb/mindsdb_evaluator/releases/tag/${finalAttrs.src.tag}";
     description = "Model evaluation for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/mindsdb_evaluator";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

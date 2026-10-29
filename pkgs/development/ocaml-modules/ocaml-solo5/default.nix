@@ -112,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
 
               env.MODE = mode;
 
+              # The custom installPhase installs everything into $out.
+              outputs = [ "out" ];
+
               buildPhase = ''
                 runHook preBuild
                 dune build @default

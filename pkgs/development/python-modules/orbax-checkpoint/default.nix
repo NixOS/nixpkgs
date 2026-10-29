@@ -45,7 +45,6 @@ buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
   version = "0.12.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";

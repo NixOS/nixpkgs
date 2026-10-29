@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "plover-combo";
   version = "2.0.0-unstable-2025-09-11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "opensteno";

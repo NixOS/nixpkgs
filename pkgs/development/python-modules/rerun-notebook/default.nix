@@ -13,7 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rerun-notebook";
   inherit (rerun) version;
   format = "wheel";
-  __structuredAttrs = true;
 
   # Building this package from source is very cumbersome (it requires a wasm web-viewer
   # cross-compile via cargo + an npm/esbuild bundle). Using the upstream wheel for now.

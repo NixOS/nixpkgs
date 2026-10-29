@@ -1,8 +1,11 @@
 {
   lib,
   cmake,
+  createToolchainStubsHook,
   curl,
+  darwin,
   fetchFromGitHub,
+  fixUnhelpfulCmakeRpathsHook,
   libxml2,
   ninja,
   stdenv,
@@ -43,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    createToolchainStubsHook
+    fixUnhelpfulCmakeRpathsHook
     ninja
     swift-minimal
   ];
@@ -66,10 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '@lib@' "''${!outputLib}" \
       --replace-fail '@swiftPlatform@' ${stdenv.hostPlatform.swift.platform}
   ''
+  # Make sure swift-corelibs-foundation has an rpath pointing at the stdlib (since it is installed outside of it)
+  # as well as to Dispatch and Swift Foundation. Also do the same for `plutil`.
   + lib.optionalString (stdenv.hostPlatform.isElf && !stdenv.hostPlatform.isStatic) ''
-    # Make sure swift-corelibs-foundation has an rpath pointing at the stdlib (since it is installed outside of it)
-    # as well as to Dispatch and Swift Foundation. Also do the same for `plutil`.
-    for f in "$out/bin/plutil" "$out/lib/libFoundation${stdenv.hostPlatform.extensions.sharedLibrary}"; do
+    for f in "$out/bin/plutil" "$out/lib"/*${stdenv.hostPlatform.extensions.sharedLibrary}; do
       patchelf --add-rpath ${
         lib.escapeShellArg (
           lib.makeSearchPathOutput "out" "lib/swift/${stdenv.hostPlatform.swift.platform}" [ swift-minimal ]
@@ -78,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --add-rpath ${
         lib.escapeShellArg (
           lib.makeLibraryPath [
+            curl
+            darwin.ICU
+            libxml2
             # Need both for the Swift and non-Swift shared libraries
             swift-corelibs-libdispatch
             (swift-corelibs-libdispatch.override { useSwift = false; })
@@ -86,12 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
         )
       } "$f"
     done
-    patchelf --add-rpath ${
-      lib.escapeShellArg (lib.makeLibraryPath [ curl ])
-    } "$out/lib/libFoundationNetworking${stdenv.hostPlatform.extensions.sharedLibrary}"
-    patchelf --add-rpath ${
-      lib.escapeShellArg (lib.makeLibraryPath [ libxml2 ])
-    } "$out/lib/libFoundationXML${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
   inherit doInstallCheck;

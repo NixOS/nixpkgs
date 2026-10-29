@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
     rev = "5264";
-    sha256 = "sha256-5G2OitW25ZNsdBcVkKfLpFJWjTm9VcB3ca0QllOSugI=";
+    hash = "sha256-5G2OitW25ZNsdBcVkKfLpFJWjTm9VcB3ca0QllOSugI=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
-      --replace '/sharedlink' '/lib'
+      --replace-fail '/sharedlink' '/lib'
   '';
 
   configurePhase = ''
@@ -127,6 +127,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://sourceforge.net/p/netpbm/code/${finalAttrs.src.rev}/tree/advanced/doc/HISTORY";

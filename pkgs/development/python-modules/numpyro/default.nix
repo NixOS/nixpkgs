@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "numpyro";
   version = "0.22.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";

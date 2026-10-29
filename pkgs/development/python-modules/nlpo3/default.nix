@@ -12,7 +12,7 @@
   setuptools-rust,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nlpo3";
   version = "1.4.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyThaiNLP";
     repo = "nlpo3";
-    tag = "nlpo3-python-v${version}";
+    tag = "nlpo3-python-v${finalAttrs.version}";
     hash = "sha256-GQwUKc6VXF1mDzvB2HBwHlaC0Eu3sZvlTuGe0CDrP4k=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
       --replace-fail "data/test_dict.txt" "$src/nlpo3-python/tests/data/test_dict.txt"
   '';
 
-  sourceRoot = "${src.name}/nlpo3-python";
+  sourceRoot = "${finalAttrs.src.name}/nlpo3-python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src sourceRoot;
+    inherit (finalAttrs) src sourceRoot;
     hash = "sha256-Kp2FL6GXb5g5jqvFWZxZUy7OuGaavN9DZkp9kdI4d/4=";
   };
 
@@ -55,9 +55,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "tests"
+  unittestFlags = [
+    "--start-directory=tests"
     "-v"
   ];
 
@@ -66,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Thai Natural Language Processing library in Rust, with Python and Node bindings";
     homepage = "https://github.com/PyThaiNLP/nlpo3";
-    changelog = "https://github.com/PyThaiNLP/nlpo3/releases/tag/${src.tag}";
+    changelog = "https://github.com/PyThaiNLP/nlpo3/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

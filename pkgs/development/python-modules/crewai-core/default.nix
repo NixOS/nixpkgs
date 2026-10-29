@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "crewai-core";
   version = "1.15.18";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";

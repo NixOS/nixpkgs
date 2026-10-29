@@ -22,7 +22,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "openmm-torch";
   version = "1.5.1";
   pyproject = false;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openmm";

@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "JakubOnderka";
     repo = "pydeep";

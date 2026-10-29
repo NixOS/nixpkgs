@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   disabled = !isPy3k;
 
   src = fetchPypi {

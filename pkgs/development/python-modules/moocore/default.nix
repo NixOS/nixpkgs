@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "moocore";
   version = "0.3.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "multi-objective";

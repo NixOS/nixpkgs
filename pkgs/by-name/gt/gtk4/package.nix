@@ -4,7 +4,6 @@
   buildPackages,
   replaceVars,
   fetchurl,
-  fetchpatch,
   pkg-config,
   docutils,
   gettext,
@@ -76,7 +75,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.22.4";
+  version = "4.24.0";
 
   outputs = [
     "out"
@@ -92,21 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Ub2fYMfSOmZaVWxzZMIfsuTiglZrPn4JJFXo+RAzCJM=";
+    hash = "sha256-KLpKwcBPhurAm3mhY8sWOkwrVEQtn37MwEZ5BipYEEQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-32bit-VkImage-null.patch";
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
-      hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
-    })
-    (fetchpatch {
-      name = "gtkapplication-wayland-null-check.patch";
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/221cd8e1904f2ca35d89dff3c1068616c6ce588c.patch";
-      hash = "sha256-SLMmWDZ2mLXW3/GJfFdoszthNg4Hd15yvZO2XOld4Uw=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -210,9 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "vulkan" vulkanSupport)
     (lib.mesonEnable "print-cups" cupsSupport)
     (lib.mesonBool "x11-backend" x11Support)
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
-    "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ];
 
   doCheck = false; # needs X11
@@ -261,11 +244,6 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/gtk4-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
-
-    # TODO: patch glib directly
-    for f in $dev/bin/gtk4-encode-symbolic-svg; do
-      wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-    done
   ''
   + lib.optionalString broadwaySupport ''
     # Broadway daemon

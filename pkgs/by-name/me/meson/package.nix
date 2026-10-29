@@ -19,7 +19,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meson";
   version = "1.12.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mesonbuild";

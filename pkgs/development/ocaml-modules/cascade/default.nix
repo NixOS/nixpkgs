@@ -36,7 +36,7 @@ buildDunePackage (finalAttrs: {
     lambdasoup
   ];
 
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
   checkInputs = [
     (mdx.override { inherit logs; })
     alcobar

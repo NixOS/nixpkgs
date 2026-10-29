@@ -53,7 +53,6 @@ buildPythonPackage (finalAttrs: {
   pname = "datamodel-code-generator";
   version = "0.71.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";

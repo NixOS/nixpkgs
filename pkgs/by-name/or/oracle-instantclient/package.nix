@@ -69,7 +69,7 @@ let
   # assemble srcs
   srcs = map (component: fetcher (srcFilename component) hashes.${component}) components;
 
-  isDarwinAarch64 = stdenv.hostPlatform.system == "aarch64-darwin";
+  inherit (stdenv.hostPlatform) isDarwin;
 
   pname = "oracle-instantclient";
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
-    (if isDarwinAarch64 then _7zz else unzip)
+    (if isDarwin then _7zz else unzip)
   ]
   ++ optional stdenv.hostPlatform.isLinux autoPatchelfHook
   ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
   ];
 
   unpackCmd =
-    if isDarwinAarch64 then
+    if isDarwin then
       "7zz x $curSrc -aoa -oinstantclient -x!META-INF"
     else
       "unzip $curSrc -x 'META-INF/*'";

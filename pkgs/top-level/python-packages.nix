@@ -3783,7 +3783,9 @@ self: super: with self; {
 
   cram = callPackage ../development/python-modules/cram { };
 
-  cramjam = callPackage ../development/python-modules/cramjam { };
+  cramjam = callPackage ../development/python-modules/cramjam {
+    inherit (pkgs) zstd;
+  };
 
   crashtest = callPackage ../development/python-modules/crashtest { };
 
@@ -7944,6 +7946,8 @@ self: super: with self; {
   httpx-ws = callPackage ../development/python-modules/httpx-ws { };
 
   httpx2 = callPackage ../development/python-modules/httpx2 { };
+
+  httpx2-pytest = callPackage ../development/python-modules/httpx2-pytest { };
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
@@ -14891,7 +14895,9 @@ self: super: with self; {
 
   pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
 
-  pydantic-monty = callPackage ../development/python-modules/pydantic-monty { };
+  pydantic-monty = callPackage ../development/python-modules/pydantic-monty {
+    inherit (pkgs) zstd;
+  };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
@@ -15317,7 +15323,9 @@ self: super: with self; {
 
   pyiceberg = callPackage ../development/python-modules/pyiceberg { };
 
-  pyiceberg-core = callPackage ../development/python-modules/pyiceberg-core { };
+  pyiceberg-core = callPackage ../development/python-modules/pyiceberg-core {
+    inherit (pkgs) zstd;
+  };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 

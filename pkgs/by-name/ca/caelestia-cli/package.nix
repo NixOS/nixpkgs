@@ -17,15 +17,14 @@
   killall,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "caelestia-cli";
-  __structuredAttrs = true;
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "caelestia-dots";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-71nGzEgBK7lZVjjKC9h1zmVlloZOmSlzn0Q4VoYo6gI=";
   };
 
@@ -64,10 +63,10 @@ python3.pkgs.buildPythonApplication rec {
     "--suffix"
     "PATH"
     ":"
-    "${lib.makeBinPath runtimeDeps}"
+    "${lib.makeBinPath finalAttrs.runtimeDeps}"
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   postPatch = ''
     substituteInPlace src/caelestia/subcommands/{shell.py,screenshot.py} \
@@ -89,4 +88,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ rachalaraj ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -55,7 +55,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
   version = "6.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";

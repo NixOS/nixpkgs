@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "dulwich";
   version = "1.2.17";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";

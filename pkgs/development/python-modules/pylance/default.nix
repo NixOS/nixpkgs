@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pylance";
   version = "14.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";

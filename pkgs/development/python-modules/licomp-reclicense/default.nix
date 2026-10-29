@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "licomp-reclicense";
   version = "0.5.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hesa";

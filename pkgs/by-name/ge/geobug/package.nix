@@ -43,8 +43,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "geobug"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Adaptive GeoClue client";
     longDescription = ''

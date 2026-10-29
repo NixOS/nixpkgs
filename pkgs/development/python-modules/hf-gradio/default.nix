@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hf-gradio";
   version = "0.4.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   # https://github.com/gradio-app/hf-gradio/issues/2

@@ -33,7 +33,7 @@ let
           '';
 
           postInstall = ''
-            echo "version = \"${version}\"" >> $out/lib/ocaml/${ocaml.version}/site-lib/camomile/META
+            echo "version = \"${version}\"" >> $OCAMLFIND_DESTDIR/camomile/META
           '';
 
         };

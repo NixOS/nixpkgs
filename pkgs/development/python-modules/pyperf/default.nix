@@ -7,13 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyperf";
   version = "2.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pyperf";
+    inherit (finalAttrs) version;
     hash = "sha256-3ZPM/aeSFHJSk+lfH6bgDLSmStzxMmA5SG1OH5HKqmI=";
   };
 
@@ -23,9 +24,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "pyperf/tests/"
+  unittestFlags = [
+    "--start-directory=pyperf/tests"
     "-v"
   ];
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
     description = "Python module to generate and modify perf";
     mainProgram = "pyperf";
     homepage = "https://pyperf.readthedocs.io/";
-    changelog = "https://github.com/psf/pyperf/releases/tag/${version}";
+    changelog = "https://github.com/psf/pyperf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "dask-ml";
   version = "2025.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";

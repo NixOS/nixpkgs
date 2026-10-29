@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 12 Oct 2026 15:41:55 -0400
+Subject: [PATCH 6/6] Link against XCTest from swift-corelibs-xctest even on
+ Darwin
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+We don’t have access to the XCTest frameworks to Xcode. The best we can
+do is link against XCTest for compatibility and then not use it.
+---
+ Sources/SWBUniversalPlatform/Specs/ProductTypes.xcspec | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Sources/SWBUniversalPlatform/Specs/ProductTypes.xcspec b/Sources/SWBUniversalPlatform/Specs/ProductTypes.xcspec
+index 329a91f2..4ce66db4 100644
+--- a/Sources/SWBUniversalPlatform/Specs/ProductTypes.xcspec
++++ b/Sources/SWBUniversalPlatform/Specs/ProductTypes.xcspec
+@@ -351,10 +351,10 @@
+         DefaultBuildProperties = {
+             WRAPPER_EXTENSION = "xctest";
+             ENABLE_TESTING_SEARCH_PATHS = YES;
+-            PRODUCT_SPECIFIC_LDFLAGS = "$(PRODUCT_SPECIFIC_LDFLAGS_NO_XCTEST_$(NO_XCTEST:default=NO))";
+-            PRODUCT_SPECIFIC_LDFLAGS_NO_XCTEST_NO = (-Xlinker, -needed_framework, -Xlinker, XCTest, -framework, XCTest, -Xlinker, -needed-lXCTestSwiftSupport, -lXCTestSwiftSupport);
+-            PRODUCT_TYPE_SWIFT_STDLIB_TOOL_FLAGS = "$(PRODUCT_TYPE_SWIFT_STDLIB_TOOL_FLAGS_NO_XCTEST_$(NO_XCTEST:default=NO))";
+-            PRODUCT_TYPE_SWIFT_STDLIB_TOOL_FLAGS_NO_XCTEST_NO = ("--scan-executable", "$(PLATFORM_DIR)/Developer/usr/lib/libXCTestSwiftSupport.dylib");
++            PRODUCT_SPECIFIC_LDFLAGS = "$(PRODUCT_SPECIFIC_LDFLAGS_NO_XCTEST_$(NO_XCTEST:default=YES))";
++            PRODUCT_SPECIFIC_LDFLAGS_NO_XCTEST_NO = (-Xlinker, -lXCTest);
++            PRODUCT_TYPE_SWIFT_STDLIB_TOOL_FLAGS = "$(PRODUCT_TYPE_SWIFT_STDLIB_TOOL_FLAGS_NO_XCTEST_$(NO_XCTEST:default=YES))";
++            PRODUCT_TYPE_SWIFT_STDLIB_TOOL_FLAGS_NO_XCTEST_NO = ("--scan-executable", "@swift-corelibs-xctest@/lib/libXCTest.dylib");
+             XCTRUNNER_PATH = "$(XCTRUNNER_PATH$(TEST_BUILD_STYLE))";
+             LD_RUNPATH_SEARCH_PATHS = "$(inherited) $(LD_RUNPATH_SEARCH_PATHS_SHALLOW_BUNDLE_$(SHALLOW_BUNDLE))";
+             LD_RUNPATH_SEARCH_PATHS_SHALLOW_BUNDLE_YES = "@loader_path/Frameworks";
+-- 
+2.54.0
+

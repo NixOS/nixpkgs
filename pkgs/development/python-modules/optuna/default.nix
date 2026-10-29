@@ -46,7 +46,6 @@ buildPythonPackage (finalAttrs: {
   pname = "optuna";
   version = "4.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "optuna";

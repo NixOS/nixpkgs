@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pygame-ce";
   version = "2.5.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pygame-community";

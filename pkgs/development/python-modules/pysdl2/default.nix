@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pysdl2";
   version = "0.9.17-unstable-2025-11-18";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "py-sdl";

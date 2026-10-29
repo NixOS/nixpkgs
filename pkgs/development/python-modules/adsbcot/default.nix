@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "adsbcot";
   version = "9.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snstac";

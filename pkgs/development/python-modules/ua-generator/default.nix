@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.1.7";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "iamdual";
     repo = "ua-generator";

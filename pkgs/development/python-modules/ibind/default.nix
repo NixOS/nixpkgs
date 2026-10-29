@@ -22,8 +22,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.22";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Voyz";
     repo = "ibind";

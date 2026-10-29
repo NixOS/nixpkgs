@@ -21,8 +21,6 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   };
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # remove supervisor from dependencies, we use systemd
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml

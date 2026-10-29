@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "2.6.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "LBeaudoux";
     repo = "iso639";

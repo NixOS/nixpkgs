@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.6.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "stackit_iaas";
     inherit (finalAttrs) version;

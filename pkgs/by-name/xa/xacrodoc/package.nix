@@ -41,8 +41,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "xacrodoc"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Compile xacro files to plain URDF or MJCF from Python or the command line (no ROS required)";
     homepage = "https://github.com/adamheins/xacrodoc";

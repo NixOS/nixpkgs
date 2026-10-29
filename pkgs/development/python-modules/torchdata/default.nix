@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torchdata";
   version = "0.11.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";

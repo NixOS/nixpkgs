@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.11";
 
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phfaist";

@@ -41,6 +41,11 @@ let
     ghostty.pkg = p: p.ghostty;
     ghostty.cmd = "ghostty -e $command";
 
+    gnome-console.pkg = p: p.gnome-console;
+    gnome-console.executable = "kgx";
+    gnome-console.cmd = "kgx -e $command";
+    gnome-console.kill = true;
+
     gnome-terminal.pkg = p: p.gnome-terminal;
 
     guake.pkg = p: p.guake;
@@ -50,10 +55,6 @@ let
     hyper.pkg = p: p.hyper;
 
     kermit.pkg = p: p.kermit-terminal;
-
-    kgx.pkg = p: p.kgx;
-    kgx.cmd = "kgx -e $command";
-    kgx.kill = true;
 
     kitty.pkg = p: p.kitty;
     kitty.cmd = "kitty $command";

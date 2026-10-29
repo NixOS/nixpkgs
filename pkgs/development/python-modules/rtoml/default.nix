@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rtoml";
   version = "0.13";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";

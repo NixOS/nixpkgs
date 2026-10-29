@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hepdata_lib";
   version = "0.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HEPData";

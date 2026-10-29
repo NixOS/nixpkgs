@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gpuctypes";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "gpuctypes";

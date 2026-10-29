@@ -19,7 +19,6 @@
 buildPythonPackage {
   inherit (pkgs.usearch) pname version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace python/usearch/__init__.py \

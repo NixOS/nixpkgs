@@ -30,8 +30,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.21.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "HexRaysSA";
     repo = "ida-hcli";

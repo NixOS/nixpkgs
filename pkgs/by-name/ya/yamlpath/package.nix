@@ -10,7 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yamlpath";
   version = "3.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wwkimball";

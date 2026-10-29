@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "before_after";
     inherit (finalAttrs) version;

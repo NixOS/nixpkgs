@@ -14,8 +14,6 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Reusables";

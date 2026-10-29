@@ -5,6 +5,8 @@
   fetchFromGitHub,
   buildPackages,
   cmake,
+  pkg-config,
+  zstd,
   installShellFiles,
   versionCheckHook,
   _experimental-update-script-combinators,
@@ -20,6 +22,11 @@ let
       version = "36.0.18";
       hash = "sha256-HTWu8NI7SnaMR2dUzBAxVyWd9pbe51aPnYUoNkyHgKo=";
       cargoHash = "sha256-r//pGU4r/GUPQSaRk001JPhuplNZEtRfeq7wqB6mn78=";
+    };
+    lts-48 = {
+      version = "48.0.6";
+      hash = "sha256-UysbVNsE9OVYF3e2+JVIedrKEn34NprLL1S8IUuWgF8=";
+      cargoHash = "sha256-W40zAZKKKEIOZaSDq8jgv2dz3LVHS0+2l2Hwt/zsMo0=";
     };
     main = {
       version = "50.0.0";
@@ -64,8 +71,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     installShellFiles
   ];
+
+  buildInputs = [ zstd ];
 
   doCheck =
     with stdenv.buildPlatform;

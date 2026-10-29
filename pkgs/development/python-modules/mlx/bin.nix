@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mlx";
   inherit version;
   format = "wheel";
-  __structuredAttrs = true;
 
   disabled = !(srcs ? ${sourceKey});
 

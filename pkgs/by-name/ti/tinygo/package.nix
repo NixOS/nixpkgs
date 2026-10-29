@@ -128,7 +128,7 @@ buildGoModule (finalAttrs: {
     openocd
     binaryen
   ]
-  ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gdb ];
 
   installPhase = ''
     runHook preInstall

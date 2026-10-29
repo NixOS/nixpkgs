@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "drms";
   version = "0.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sunpy";

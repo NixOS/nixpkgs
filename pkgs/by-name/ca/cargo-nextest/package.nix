@@ -3,17 +3,20 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  aws-lc,
+  zstd,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-nextest";
-  version = "0.9.146";
+  version = "0.9.149";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     tag = "cargo-nextest-${finalAttrs.version}";
-    hash = "sha256-2ndrHZ1pmu1oBZGlq5pyv0vhSEUf23gNRyyenNw0fdk=";
+    hash = "sha256-63Ub21JqjnKAhpIXpVUvM6sVa+xGaB15N+3NjrA+vzc=";
   };
 
   # FIXME: we don't support dtrace probe generation on macOS until we have a dtrace build: https://github.com/NixOS/nixpkgs/pull/392918
@@ -21,12 +24,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./no-dtrace-macos.patch
   ];
 
-  cargoHash = "sha256-ZW0/JQ9RECxfDn479ww4bO4ixoMGaM+GtGUOCWy2Cyg=";
+  cargoHash = "sha256-Qss1AxTNR68C0F/OT8qLHhKdxwzr+b/TeIIQQRfHdfQ=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   cargoBuildFlags = [
     "-p"
     "cargo-nextest"
   ];
+  # Upstream recommends this feature set for distributor builds:
+  # https://github.com/nextest-rs/nextest/blob/cargo-nextest-0.9.149/cargo-nextest/Cargo.toml#L63-L65
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "default-no-update" ];
+
   cargoTestFlags = [
     "-p"
     "cargo-nextest"
@@ -35,6 +50,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^cargo-nextest-([0-9.]+)$" ];
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Next-generation test runner for Rust projects";

@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "LLHTTP_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "LLHTTP_BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
@@ -45,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Port of http_parser to llparse";

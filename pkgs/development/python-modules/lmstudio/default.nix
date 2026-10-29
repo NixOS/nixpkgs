@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lmstudio";
   version = "1.6.0b1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lmstudio-ai";

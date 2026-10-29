@@ -9,6 +9,9 @@
   buildPackages,
   sudo,
   versionCheckHook,
+  aws-lc,
+  zstd,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh-unwrapped";
@@ -32,9 +35,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
   ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    sqlite
+    aws-lc
+    zstd
+  ];
 
   # pkgs.sudo is not available on the Darwin platform, and thus breaks build
   # if added to nativeCheckInputs. We must manually disable the tests that

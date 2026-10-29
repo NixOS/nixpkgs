@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hvplot";
   version = "0.12.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";

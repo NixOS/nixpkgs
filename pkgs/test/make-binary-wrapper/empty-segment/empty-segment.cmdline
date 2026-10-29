@@ -1,0 +1,2 @@
+    --prefix PATH : '/usr/bin:' \
+    --suffix PATH : ''

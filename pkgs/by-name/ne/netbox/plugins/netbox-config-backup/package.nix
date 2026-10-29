@@ -12,8 +12,6 @@ let
   inherit (netboxPlugins) netbox-napalm-plugin;
 in
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-config-backup";
   version = "2.2.2";
   pyproject = true;

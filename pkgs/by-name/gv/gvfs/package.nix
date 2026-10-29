@@ -16,7 +16,6 @@
   polkit,
   libgphoto2,
   avahi,
-  libarchive,
   fuse3,
   libcdio,
   libxml2,
@@ -45,11 +44,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.60.3";
+  version = "1.62.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TLIdURwuKVEamfOhk96qkUqLt9njciKGc8awha/2P0s=";
+    hash = "sha256-3Y5sJV/TvtXusZC1kCfIizjmPBvgky3c6c/rSPPEPQ8=";
   };
 
   patches = [
@@ -79,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libgphoto2
     avahi
-    libarchive
     libimobiledevice
     libbluray
     libnfs

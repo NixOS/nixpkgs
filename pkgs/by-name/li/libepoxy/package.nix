@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       libx11
     ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Degl=${lib.boolToYesNo (x11Support && !stdenv.hostPlatform.isDarwin)}"
     "-Dglx=${lib.boolToYesNo x11Support}"
@@ -80,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for handling OpenGL function pointer management";

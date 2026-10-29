@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "adbutils";
   version = "2.12.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openatx";

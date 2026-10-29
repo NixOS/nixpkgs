@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "libsast";
   version = "3.1.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ajinabraham";

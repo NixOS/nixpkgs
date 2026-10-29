@@ -17,7 +17,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "visidata";
   version = "3.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saulpw";

@@ -8,8 +8,6 @@
   django-polymorphic,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-routing";
   version = "0.5.0";
   pyproject = true;

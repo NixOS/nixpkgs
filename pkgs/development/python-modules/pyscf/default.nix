@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyscf";
   version = "2.14.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyscf";

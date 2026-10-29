@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.99.11";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "dbf";
     inherit (finalAttrs) version;

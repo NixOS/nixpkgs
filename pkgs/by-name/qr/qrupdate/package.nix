@@ -70,15 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     ctestCheckHook
   ];
 
-  disabledTests =
-    lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-      # https://github.com/mpimd-csc/qrupdate-ng/issues/7
-      "test_tchshx"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
-      # https://github.com/mpimd-csc/qrupdate-ng/issues/4
-      "test_tch1dn"
-    ];
+  disabledTests = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    # https://github.com/mpimd-csc/qrupdate-ng/issues/7
+    "test_tchshx"
+  ];
 
   meta = {
     description = "Library for fast updating of qr and cholesky decompositions";
