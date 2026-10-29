@@ -25,7 +25,12 @@ buildHomeAssistantComponent (finalAttrs: {
     pytestCheckHook
   ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex=^v([0-9]+\\.[0-9]+(\\.[0-9]+)?)$"
+    ];
+  };
 
   meta = {
     description = "Custom TTS component for Home Assistant. Utilizes the OpenAI speech engine or any compatible endpoint to deliver high-quality speech";
