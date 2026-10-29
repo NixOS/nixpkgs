@@ -1,18 +1,10 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-
-  dbus-python,
-  numpy,
-  pillow,
-  materialyoucolor,
-  python-magic,
-  pywal16,
+  python3,
 }:
 
-buildPythonPackage (finalAttrs: {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "kde-material-you-colors";
   version = "2.2.0";
   pyproject = true;
@@ -24,8 +16,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-sN7u3jePevJnTHhQL6eAYKU2AD2QNW7VYuEHLN5RsK8=";
   };
 
-  build-system = [ setuptools ];
-  dependencies = [
+  build-system = with python3.pkgs; [ setuptools ];
+  dependencies = with python3.pkgs; [
     dbus-python
     numpy
     pillow
