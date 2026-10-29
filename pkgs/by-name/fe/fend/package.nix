@@ -4,7 +4,7 @@
   rustPlatform,
   pandoc,
   pkg-config,
-  openssl,
+  aws-lc,
   installShellFiles,
   copyDesktopItems,
   makeDesktopItem,
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     pkg-config
-    openssl
+    aws-lc
   ];
 
   postBuild = ''
