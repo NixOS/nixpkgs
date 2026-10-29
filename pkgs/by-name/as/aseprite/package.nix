@@ -34,21 +34,21 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.18.1";
+  version = "1.3.18.6";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-uItjmYg21Ph2QIYFKm0N6kVwJtedH0aVKm8hSbQcJIM=";
+    hash = "sha256-oeTO93T/BQcM0PkrFVMw+kLDG6w3uT2798Kzgua4gsE=";
   };
 
   asepriteStrings = fetchFromGitHub {
     owner = "aseprite";
     repo = "strings";
-    rev = "417074f649f359f98511fc87a707c276d87f5739";
-    hash = "sha256-5bB7yK4eJHhkUwGYtIFYdFXpRrBt69VBbTh7EmPFI08=";
+    rev = "c6a218e3629ab5c0924682425091be6dec87f489";
+    hash = "sha256-JAKKxkWXJGchPYyr504vQs7QqF4c2Q7RYqFJ/AhOw9A=";
   };
 
   # Translation files are copied without overwriting existing ones to preserve
@@ -103,6 +103,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/ver/CMakeLists.txt \
       --replace-fail '"1.x-dev"' '"${finalAttrs.version}"'
+
+    # fmt 12.2 no longer exposes fmt::format through fmt/core.h.
+    substituteInPlace src/app/i18n/strings.h \
+      --replace-fail '"fmt/core.h"' '"fmt/format.h"'
 
     # Fix build on Darwin with `-Werror=format-security`
     # (NSLog requires a string-literal format)

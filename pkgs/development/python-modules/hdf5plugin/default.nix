@@ -28,14 +28,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "hdf5plugin";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wi5EITlRI8tgAXUV5u/CA3eiWjNAVs5ynT+PUsqcqVA=";
+    hash = "sha256-xk8rnqZs6I/RoEF1rothdosORaLzkdCKyME0uVWg0d8=";
   };
 
   build-system = [

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   hiredis,
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -24,6 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-Fix-pkg-config-paths.patch
+
+    # https://github.com/sewenew/redis-plus-plus/issues/678
+    (fetchpatch2 {
+      name = "walk-around-gcc-16-bug.patch";
+      url = "https://github.com/sewenew/redis-plus-plus/commit/4b4cd0dc2931e96842ef05e165673b8679e32f48.patch?full_index=1";
+      hash = "sha256-neZj/J9nRg3Ft/+wQcRzvTjwm41odNnEfHnrs8/KiL4=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];

@@ -18,7 +18,7 @@ build-idris-package {
     owner = "bamboo";
     repo = "idris-hamt";
     rev = "e70f3eedddb5ccafea8e386762b8421ba63c495a";
-    sha256 = "0m2yjr20dxkfmn3nzc68l6vh0rdaw6b637yijwl4c83b5xiac1mi";
+    hash = "sha256-sQamYi9rIEYol9GfYZbhqmUAt6HIsG+HrW72BkSWXlQ=";
   };
 
   meta = {

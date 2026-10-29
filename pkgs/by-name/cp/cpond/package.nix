@@ -22,9 +22,10 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
+      --replace-fail "gcc" "$CC" \
       --replace-fail '$(eflags)$(ncursesw_macros)' '$(eflags) $(ncursesw_macros)'
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace-fail '-lncursesw' '-lncurses'
   '';

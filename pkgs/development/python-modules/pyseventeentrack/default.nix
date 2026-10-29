@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyseventeentrack";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shaiu";
     repo = "pyseventeentrack";
     tag = "v${version}";
-    hash = "sha256-aIECWBOozGdCpyqih3YNMioq4Fcc6Ttw9hiTl7m/r28=";
+    hash = "sha256-6XNPKNyJERT75RfRuiQXG9gI+gQ2yFzmsdX+bmbRVns=";
   };
 
   build-system = [ poetry-core ];

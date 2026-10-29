@@ -3,26 +3,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   fpyutils,
+  hatchling,
   pyfakefs,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "md-toc";
-  version = "9.0.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
-    tag = version;
-    hash = "sha256-YVDFYxxKMKOrHyymewLTTkmBgg6YVqWou4hTKHJmbOg=";
+    tag = finalAttrs.version;
+    hash = "sha256-dgbAAaQDxeOkJV+XI9ZTaHPhrLUrm7v5zFr9LVT48ow=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ fpyutils ];
+  dependencies = [ fpyutils ];
 
   nativeCheckInputs = [
     pyfakefs
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Table of contents generator for Markdown";
-    mainProgram = "md_toc";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
     changelog = "https://blog.franco.net.eu.org/software/CHANGELOG-md-toc.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "md_toc";
   };
-}
+})

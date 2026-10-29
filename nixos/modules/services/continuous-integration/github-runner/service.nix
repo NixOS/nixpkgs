@@ -10,6 +10,22 @@
       name: cfg:
       map (lib.mkIf cfg.enable) [
         {
+          assertion = (cfg.tokenFile == null) != (cfg.githubApp == null);
+          message = "`services.github-runners.${name}`: Exactly one of `tokenFile` and `githubApp` must be set";
+        }
+        {
+          assertion = cfg.orgs != { } || cfg.url != null;
+          message = "`services.github-runners.${name}`: `url` must be set unless `orgs` is used";
+        }
+        {
+          assertion = cfg.orgs != { } || cfg.githubApp == null || cfg.githubApp.login != null;
+          message = "`services.github-runners.${name}`: `githubApp.login` must be set unless `orgs` is used (the login is then derived per org)";
+        }
+        {
+          assertion = cfg.orgs != { } || cfg.count == 1 || cfg.name != null;
+          message = "`services.github-runners.${name}`: `name` must not be null when `count > 1` (each replica needs a distinct registration name)";
+        }
+        {
           assertion = !cfg.noDefaultLabels || (cfg.extraLabels != [ ]);
           message = "`services.github-runners.${name}`: The `extraLabels` option is mandatory if `noDefaultLabels` is set";
         }
@@ -24,8 +40,49 @@
   config.systemd.services =
     let
       enabledRunners = lib.filterAttrs (_: cfg: cfg.enable) config.services.github-runners;
+      runnerInstances = lib.concatMapAttrs (
+        name: cfg:
+        if cfg.orgs == { } then
+          # Single org/repo (entry-level `url`), fanned out by `count`. For
+          # `count == 1` the service keeps the bare `github-runner-<name>` name
+          # for backwards compatibility; `count > 1` suffixes `-<n>`.
+          let
+            suffixes = if cfg.count == 1 then [ "" ] else map (n: "-${toString n}") (lib.range 1 cfg.count);
+          in
+          lib.listToAttrs (
+            map (
+              suffix:
+              lib.nameValuePair "${name}${suffix}" (
+                cfg // { name = if cfg.name == null then null else "${cfg.name}${suffix}"; }
+              )
+            ) suffixes
+          )
+        else
+          lib.listToAttrs (
+            lib.concatLists (
+              lib.flip lib.mapAttrsToList cfg.orgs (
+                orgName: org:
+                map (
+                  n:
+                  let
+                    key = "${name}-${orgName}-${toString n}";
+                  in
+                  lib.nameValuePair key (
+                    cfg
+                    // {
+                      url = org.url;
+                      name = key;
+                      extraLabels = cfg.extraLabels ++ org.extraLabels;
+                      githubApp = if cfg.githubApp == null then null else cfg.githubApp // { login = org.login; };
+                    }
+                  )
+                ) (lib.range 1 org.count)
+              )
+            )
+          )
+      ) enabledRunners;
     in
-    (lib.flip lib.mapAttrs' enabledRunners (
+    (lib.flip lib.mapAttrs' runnerInstances (
       name: cfg:
       let
         svcName = "github-runner-${name}";
@@ -41,6 +98,66 @@
         currentConfigTokenFilename = ".current-token";
 
         workDir = if cfg.workDir == null then runtimeDir else cfg.workDir;
+
+        newConfigTokenPath = "$STATE_DIRECTORY/.new-token";
+        currentConfigTokenPath = "$STATE_DIRECTORY/${currentConfigTokenFilename}";
+
+        # Wrapper script which expects the full path of the state, working and logs
+        # directory as arguments. Overrides the respective systemd variables to provide
+        # unambiguous directory names. This becomes relevant, for example, if the
+        # caller overrides any of the StateDirectory=, RuntimeDirectory= or LogDirectory=
+        # to contain more than one directory. This causes systemd to set the respective
+        # environment variables with the path of all of the given directories, separated
+        # by a colon.
+        writeScript =
+          scriptName: lines:
+          pkgs.writeShellScript "${svcName}-${scriptName}.sh" ''
+            set -euo pipefail
+
+            STATE_DIRECTORY="$1"
+            WORK_DIRECTORY="$2"
+            LOGS_DIRECTORY="$3"
+
+            ${lines}
+          '';
+
+        ghUrlPath = lib.removePrefix "https://github.com/" cfg.url;
+        ghUrlSegments = lib.filter (s: s != "") (lib.splitString "/" ghUrlPath);
+        runnerScope = if lib.length ghUrlSegments >= 2 then "repo" else "org";
+        appHelper =
+          helperName: scriptFile:
+          pkgs.writeShellApplication {
+            name = helperName;
+            runtimeInputs = with pkgs; [
+              jq
+              curl
+              openssl
+              coreutils
+            ];
+            excludeShellChecks = [
+              "SC2154"
+              "SC2116"
+            ];
+            text = builtins.readFile scriptFile;
+          };
+        fetchAccessToken = appHelper "github-app-access-token" ./app-token.sh;
+        fetchRegistrationToken = appHelper "github-runner-registration-token" ./registration-token.sh;
+        removeRunner = appHelper "github-runner-remove" ./remove-runner.sh;
+        appEnv = lib.optionalString (cfg.githubApp != null) ''
+          export APP_ID=${toString cfg.githubApp.id}
+          export APP_LOGIN=${lib.escapeShellArg cfg.githubApp.login}
+          APP_PRIVATE_KEY="$(cat ${lib.escapeShellArg cfg.githubApp.privateKeyFile})"
+          export APP_PRIVATE_KEY
+          export RUNNER_SCOPE=${runnerScope}
+          export ORG_NAME=${lib.escapeShellArg cfg.githubApp.login}
+          export REPO_URL=${lib.escapeShellArg cfg.url}
+          ${
+            if cfg.name != null then
+              "export RUNNER_NAME=${lib.escapeShellArg cfg.name}"
+            else
+              ''export RUNNER_NAME="$(uname -n)"''
+          }
+        '';
       in
       lib.nameValuePair svcName {
         description = "GitHub Actions runner";
@@ -84,24 +201,6 @@
             # - Set up the directory structure by creating the necessary symlinks.
             ExecStartPre =
               let
-                # Wrapper script which expects the full path of the state, working and logs
-                # directory as arguments. Overrides the respective systemd variables to provide
-                # unambiguous directory names. This becomes relevant, for example, if the
-                # caller overrides any of the StateDirectory=, RuntimeDirectory= or LogDirectory=
-                # to contain more than one directory. This causes systemd to set the respective
-                # environment variables with the path of all of the given directories, separated
-                # by a colon.
-                writeScript =
-                  name: lines:
-                  pkgs.writeShellScript "${svcName}-${name}.sh" ''
-                    set -euo pipefail
-
-                    STATE_DIRECTORY="$1"
-                    WORK_DIRECTORY="$2"
-                    LOGS_DIRECTORY="$3"
-
-                    ${lines}
-                  '';
                 runnerRegistrationConfig = lib.getAttrs [
                   "ephemeral"
                   "extraLabels"
@@ -114,8 +213,6 @@
                 ] cfg;
                 newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
                 currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
-                newConfigTokenPath = "$STATE_DIRECTORY/.new-token";
-                currentConfigTokenPath = "$STATE_DIRECTORY/${currentConfigTokenFilename}";
 
                 runnerCredFiles = [
                   ".credentials"
@@ -164,6 +261,23 @@
                   # Always clean workDir
                   find -H "$WORK_DIRECTORY" -mindepth 1 -delete
                 '';
+                unconfigureRunnerGitHubApp = writeScript "unconfigure-github-app" ''
+                  ${appEnv}
+                  ACCESS_TOKEN="$(${lib.getExe' fetchAccessToken "github-app-access-token"})"
+                  export ACCESS_TOKEN
+
+                  ${lib.getExe' removeRunner "github-runner-remove"} || true
+
+                  find "$STATE_DIRECTORY/" -mindepth 1 -delete
+
+                  umask 000
+                  ${lib.getExe' fetchRegistrationToken "github-runner-registration-token"} \
+                    | ${pkgs.jq}/bin/jq -r '.token' > "${newConfigTokenPath}"
+                  install --mode=600 "${newConfigTokenPath}" "${currentConfigTokenPath}"
+
+                  # Always clean workDir
+                  find -H "$WORK_DIRECTORY" -mindepth 1 -delete
+                '';
                 configureRunner =
                   writeScript "configure" # bash
                     ''
@@ -185,24 +299,33 @@
                           ${lib.optionalString cfg.noDefaultLabels "--no-default-labels"}
                         )
                         token=$(<"${newConfigTokenPath}")
-                        case ${cfg.tokenType} in
-                        access)
-                          args+=(--pat "$token")
-                          ;;
-                        registration)
-                          args+=(--token "$token")
-                          ;;
-                        auto)
-                          # If the token file contains a PAT (i.e., it starts with "ghp_" or "github_pat_"),
-                          # we have to use the --pat option, if it is not a PAT, we assume it contains a
-                          # registration token and use the --token option
-                          if [[ "$token" =~ ^gh[a-z]+_* ]] || [[ "$token" =~ ^github_pat_* ]]; then
-                            args+=(--pat "$token")
+                        ${
+                          if cfg.githubApp != null then
+                            ''
+                              args+=(--token "$token")
+                            ''
                           else
-                            args+=(--token "$token")
-                          fi
-                          ;;
-                        esac
+                            ''
+                              case ${cfg.tokenType} in
+                              access)
+                                args+=(--pat "$token")
+                                ;;
+                              registration)
+                                args+=(--token "$token")
+                                ;;
+                              auto)
+                                # If the token file contains a PAT (i.e., it starts with "ghp_" or "github_pat_"),
+                                # we have to use the --pat option, if it is not a PAT, we assume it contains a
+                                # registration token and use the --token option
+                                if [[ "$token" =~ ^gh[a-z]+_* ]] || [[ "$token" =~ ^github_pat_* ]]; then
+                                  args+=(--pat "$token")
+                                else
+                                  args+=(--token "$token")
+                                fi
+                                ;;
+                              esac
+                            ''
+                        }
                         ${cfg.package}/bin/Runner.Listener configure "''${args[@]}"
                         # Move the automatically created _diag dir to the logs dir
                         mkdir -p  "$STATE_DIRECTORY/_diag"
@@ -234,10 +357,32 @@
                   }"
                 )
                 [
-                  "+${unconfigureRunner}" # runs as root
+                  # runs as root
+                  "+${if cfg.githubApp != null then unconfigureRunnerGitHubApp else unconfigureRunner}"
                   configureRunner
                   setupWorkDir
                 ];
+
+            ExecStopPost = lib.optionals (cfg.githubApp != null) (
+              let
+                unregister = writeScript "unregister-github-app" ''
+                  ${appEnv}
+                  ACCESS_TOKEN="$(${lib.getExe' fetchAccessToken "github-app-access-token"})"
+                  export ACCESS_TOKEN
+                  ${lib.getExe' removeRunner "github-runner-remove"} || true
+                '';
+              in
+              map (
+                x:
+                "${x} ${
+                  lib.escapeShellArgs [
+                    stateDir
+                    workDir
+                    logsDir
+                  ]
+                }"
+              ) [ "-+${unregister}" ] # runs as root
+            );
 
             # If running in ephemeral mode, restart the service on-exit (i.e., successful de-registration of the runner)
             # to trigger a fresh registration.
@@ -256,11 +401,12 @@
             WorkingDirectory = workDir;
 
             InaccessiblePaths = [
-              # Token file path given in the configuration, if visible to the service
-              "-${cfg.tokenFile}"
               # Token file in the state directory
               "${stateDir}/${currentConfigTokenFilename}"
-            ];
+            ]
+            # Token file path given in the configuration, if visible to the service
+            ++ lib.optional (cfg.tokenFile != null) "-${cfg.tokenFile}"
+            ++ lib.optional (cfg.githubApp != null) "-${cfg.githubApp.privateKeyFile}";
 
             KillSignal = "SIGINT";
 

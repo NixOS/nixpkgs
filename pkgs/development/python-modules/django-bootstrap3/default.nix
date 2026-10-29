@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "26.1";
+  version = "26.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
     tag = "v${version}";
-    hash = "sha256-DpdgwG+4We/r3NZ50no/SurEtL1BkB3P0nMv8KRj+GY=";
+    hash = "sha256-8w8Wf+Iroow58AZN0/07VhFLRViXQ6sfOwM9G9lSSUA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+      --replace-fail "uv_build>=0.9.6,<0.13.0" uv_build
   '';
 
   build-system = [ uv-build ];

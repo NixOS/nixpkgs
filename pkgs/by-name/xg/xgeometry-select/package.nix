@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.linux;
     mainProgram = "xgeometry-select";
+    license = lib.licenses.unfree;
   };
 })

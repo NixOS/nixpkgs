@@ -2,26 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  uv-build,
   pynacl,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "pynuki";
-  version = "1.6.3";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "pynuki";
     tag = version;
-    hash = "sha256-PF5FmAuPcJXq8gQ8HyzdtL2HiiUjueT+LAS1lYRvrwM=";
+    hash = "sha256-oEdR4Ze11IfNzNup8oOECDTIWPjjAyE/KhGdgAQZHGE=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.13.0,<0.14.0" "uv_build"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ uv-build ];
+
+  dependencies = [
     pynacl
     requests
   ];

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-archive";
-  version = "1.22";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fuse-archive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uE+22ONNnPqAi8zBV0v3qu3um2gNoX4/jNUA7E+UQOE=";
+    hash = "sha256-wSjjC660SL1o6lY3A23cvjQ7k/t1E1g1IaC4RbI7hho=";
   };
 
   postPatch = ''

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  squashfsTools,
+  squashfs-tools,
   makeWrapper,
   autoPatchelfHook,
   c-ares,
@@ -14,8 +14,7 @@
   libvpx,
   libxslt,
   libnotify,
-  libappindicator-gtk2,
-  libappindicator-gtk3,
+  libappindicator,
   libxkbcommon,
   libGL,
   wrapGAppsHook3,
@@ -23,7 +22,7 @@
   atk,
   libgbm,
   cups,
-  systemd,
+  systemdLibs,
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -58,14 +57,13 @@ let
     libvpx
     libxslt
     libnotify
-    libappindicator-gtk2
-    libappindicator-gtk3
+    libappindicator
     libxkbcommon
     libGL
     atk
     libgbm
     cups
-    systemd
+    systemdLibs
     alsa-lib
     at-spi2-atk
     at-spi2-core
@@ -94,16 +92,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hey-mail";
-  version = "1.3.3";
-  rev = "31";
+  version = "1.3.9";
+  rev = "36";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/lfWUNpR7PrPGsDfuxIhVxbj0wZHoH7bK_${finalAttrs.rev}.snap";
-    hash = "sha512-0KhmZ1xkEPuuzukeKbWW7jeNh2TOINMnOtuwpZQIM7sgDhCSl2DEZnguEKY2DvGNTTQxVWSZcuU/KSSblqIE4Q==";
+    hash = "sha512-GPC3zd0B21CbFb5TuQ+7cZ0HZ87pnEePaMAkczd17yOfW9F0VEq3WuU4RepokOYBgteRL7tiJ71rbks+dEpI3A==";
   };
 
   nativeBuildInputs = [
-    squashfsTools
+    squashfs-tools
     makeWrapper
     autoPatchelfHook
     wrapGAppsHook3

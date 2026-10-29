@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
 
       # $out/${sitePackages}/torchaudio/lib/libtorchaudio*.so wants libnvToolsExt.so.2 but torch/lib only ships
       # libnvToolsExt-$hash.so.1
-      cuda_nvtx
+      nvtx
     ]
   );
 
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ torch-bin ];
 
-  preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 

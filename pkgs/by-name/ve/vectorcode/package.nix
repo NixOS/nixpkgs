@@ -30,6 +30,7 @@ let
           inherit version src;
           hash = "sha256-lHRBXJa/OFNf4x7afEJw9XcuDveTBIy3XpQ3+19JXn4=";
         };
+        pythonRelaxDeps = [ "chroma-hnswlib" ];
         postPatch = null;
         build-system = with self; [
           setuptools
@@ -167,12 +168,9 @@ python.pkgs.buildPythonApplication rec {
     installShellCompletion vectorcode.{bash,zsh}
   '';
 
-  makeWrapperArgs = [
-    "--prefix"
-    "PYTHONPATH"
-    ":"
-    "$PYTHONPATH"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
+  '';
 
   pythonImportsCheck = [ "vectorcode" ];
 

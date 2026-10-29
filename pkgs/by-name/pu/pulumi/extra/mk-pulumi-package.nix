@@ -128,6 +128,7 @@ in
   meta,
   fetchSubmodules ? false,
   pythonArgs ? { },
+  postPatch ? "",
   ...
 }@args:
 let
@@ -149,6 +150,7 @@ let
       vendorHash
       extraLdflags
       env
+      postPatch
       ;
 
     cmd = cmdGen;

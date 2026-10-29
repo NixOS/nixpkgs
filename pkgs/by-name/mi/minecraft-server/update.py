@@ -67,7 +67,7 @@ class Version(DataClassJsonMixin):
         """
         If the version has a server download available, return the Download
         object for the server download. If the version does not have a server
-        download avilable, return None.
+        download available, return None.
         """
         downloads = self.get_downloads()
         if "server" in downloads:
@@ -240,7 +240,7 @@ def generate_commit(
     if len(actions) == 1:
         commit_message = commit_body_lines[0]
 
-        # the body should only be the release notes to avoid repeatition
+        # the body should only be the release notes to avoid repetition
         # if the release notes don't exist this will be blank
         commit_body = "\n".join(commit_body_lines[1:]).strip()
     else:

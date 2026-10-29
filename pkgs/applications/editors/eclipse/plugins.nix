@@ -317,7 +317,7 @@ rec {
     };
 
     meta = {
-      homepage = "http://eclipsecolorthemes.org/";
+      homepage = "https://github.com/eclipse-color-theme/eclipse-color-theme";
       description = "Plugin to switch color themes conveniently and without side effects";
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.epl10;

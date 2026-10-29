@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-profile/releases/download/v${finalAttrs.version}/mirage-profile-v${finalAttrs.version}.tbz";
-    sha256 = "0lh3591ad4v7nxpd410b75idmgdq668mqdilvkg4avrwqw1wzdib";
+    hash = "sha256-K7bPA8c8b0Xe3DQ2XJExuL3aYjkLBNJut2eTpkIqA1I=";
   };
 
   buildInputs = [ ppx_cstruct ];

@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  procps,
   stdenv,
   versionCheckHook,
   nix-update-script,
@@ -9,20 +11,31 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tailspin";
-  version = "5.5.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
     tag = finalAttrs.version;
-    hash = "sha256-coatx8Ud6iLnXvr+/X9hUEe3+0j9jnP5N3+aHQ+eWV8=";
+    hash = "sha256-RI604v8ImQSgvNUGsnCLe6FuzEMJwE0tNVuFLmJLwvM=";
   };
 
-  cargoHash = "sha256-7N/vkhytkDF2ef0T6RJv8YzCpjzi+hjg061Uz9dyEM0=";
+  cargoHash = "sha256-kcd6rBoonoCKuybVIVtZqt+njHFhVDTjTyF2UURuOSI=";
 
-  postPatch = ''
-    substituteInPlace tests/utils.rs --replace-fail \
-      'target/debug' "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType"
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ procps ];
+  checkFlags = lib.optionals (!(stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isCygwin)) [
+    # Requires pgrep, which is not provided by procps on non-Linux systems
+    "--skip=failing_pager_spawn_kills_the_exec_child"
+    "--skip=pager_killed_by_ctrl_c_is_a_quiet_quit"
+    "--skip=quitting_the_pager_kills_the_exec_child"
+    "--skip=stream_error_while_paging_kills_the_pager"
+  ];
+
+  postInstall = ''
+    installShellCompletion completions/tspin.{bash,fish,zsh}
+    installManPage man/tspin.1
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];

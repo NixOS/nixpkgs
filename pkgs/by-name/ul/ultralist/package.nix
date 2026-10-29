@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.7.0";
 
   src = fetchFromGitHub {
-    owner = "ultralist";
+    owner = "gammons";
     repo = "ultralist";
     rev = finalAttrs.version;
     sha256 = "sha256-GGBW6rpwv1bVbLTD//cU8jNbq/27Ls0su7DymCJTSmY=";
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Simple GTD-style todo list for the command line";
-    homepage = "https://ultralist.io";
+    homepage = "https://github.com/gammons/ultralist";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
     mainProgram = "ultralist";

@@ -1,8 +1,9 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron_41,
+  electron_44,
   fetchFromGitHub,
+  gitMinimal,
   lib,
   makeDesktopItem,
   nix-update-script,
@@ -15,20 +16,20 @@
   cargo,
 }:
 let
-  electron = electron_41;
+  electron = electron_44;
   nodejs = nodejs_22;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
-  version = "18.15.1";
+  version = "19.3.1";
 
   inherit nodejs;
 
   src = fetchFromGitHub {
-    owner = "johannesjo";
+    owner = "super-productivity";
     repo = "super-productivity";
-    tag = "v${version}";
-    hash = "sha256-vBv6+mc6XB89gR4j6GaBj15Z3NBBCwqfGc4HQQcpL7w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RlDpD+dfJiMjXlbVq1hW16eyt+S/IFGiJvoce6ZWAEM=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -38,7 +39,7 @@ buildNpmPackage rec {
   npmDeps = stdenv.mkDerivation (
     lib.fetchers.normalizeHash { } {
       pname = "super-productivity-deps";
-      inherit version src;
+      inherit (finalAttrs) version src;
 
       nativeBuildInputs = [
         prefetch-npm-deps
@@ -74,7 +75,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-stY7Kc1GDm7z3uQN+5iXFDMy9qQs4CvmCYMHCCOJUcc=";
+      hash = "sha256-q0mj8EJ2RE/i6u5FjT/Fm+7GyMLnF2FqIxsfKQO2SNU=";
     }
   );
 
@@ -83,7 +84,7 @@ buildNpmPackage rec {
 
   cargoRoot = "electron/wayland-idle-helper";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -95,9 +96,15 @@ buildNpmPackage rec {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     CHROMEDRIVER_SKIP_DOWNLOAD = "true";
+    # Use JavaScript Sass implementation instead bundled Dart executable.
+    NG_BUILD_SASS_EMBEDDED = "false";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    # Required by the build-time tests.
+    gitMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     cargo
     copyDesktopItems
     rustPlatform.cargoSetupHook
@@ -112,6 +119,12 @@ buildNpmPackage rec {
     # not our app directory, so it would search the wrong location.
     substituteInPlace electron/idle-time-handler.ts \
       --replace-fail "path.dirname(process.execPath)" "path.dirname(app.getAppPath())"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # build/icon.icns is checked in and already contains all ten macOS icon
+    # representations. Avoid regenerating it with sandbox-unavailable iconutil.
+    substituteInPlace electron-builder.yaml \
+      --replace-fail "beforePack: ./tools/beforePack.js" ""
   '';
 
   buildPhase = ''
@@ -205,4 +218,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "superproductivity";
   };
-}
+})

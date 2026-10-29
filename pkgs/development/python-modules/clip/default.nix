@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "clip";
-  version = "unstable-2022-11-17";
+  version = "1.0-unstable-2022-07-27";
   pyproject = true;
 
   __structuredAttrs = true;

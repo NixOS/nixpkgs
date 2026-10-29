@@ -29,8 +29,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-pGEh9ugDWjaAjVL8mFUVqU+WFwcpRcstc11ikDxhihI=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     appstream
     blueprint-compiler
@@ -57,7 +55,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postFixup = ''
     wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"

@@ -13,11 +13,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xconsole";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xconsole-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DHdZeMrN2nbfyLWpcULxRaF30mIg3TB4ZtndYuc5EYk=";
+    hash = "sha256-1BKrvqJCPykwRDxD2xyD19DPK2d0Gbhu1Uql1H8HIyI=";
   };
 
   strictDeps = true;

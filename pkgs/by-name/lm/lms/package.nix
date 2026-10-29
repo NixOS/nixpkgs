@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   gtest,
-  boost,
+  boost190,
   wt,
   taglib,
   libconfig,
@@ -20,15 +20,18 @@
   onnxruntime,
 }:
 
+let
+  boost = boost190;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lms";
-  version = "3.78.0";
+  version = "3.81.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uOijIipay4ncE8hP6vJG9vOGiD/Ad6WJHEQ7P1HKi/Y=";
+    hash = "sha256-wyMTnTlKMS4N3zTY4C574BTB88nRugsi21QWjDeLZrg=";
   };
 
   strictDeps = true;
@@ -52,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     xxhash
     pugixml
     onnxruntime
+    ffmpeg
   ];
 
   postPatch = ''
@@ -59,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${lib.getExe ffmpeg}"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/Wt/resources" "${wt}/share/Wt/resources"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms" "$out/share/lms"
     substituteInPlace $out/share/lms/default.service --replace-fail "/usr/bin/lms" "$out/bin/lms"

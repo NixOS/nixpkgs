@@ -7,15 +7,16 @@
   writeShellApplication,
   curl,
   common-updater-scripts,
+  desktop-file-utils,
 }:
 let
   pname = "clickup";
-  version = "3.5.185";
+  version = "3.5.262";
 
   src = fetchurl {
     # Using archive.org because the website doesn't store older versions of the software.
-    url = "https://web.archive.org/web/20260323060753/https://desktop.clickup.com/linux";
-    hash = "sha256-szPbhY1vsEG0Zq4TD2I9qVTa4wAUYfoVA2O2xP4HGeE=";
+    url = "https://web.archive.org/web/20260727110257/https://desktop.clickup.com/linux";
+    hash = "sha256-8stmEBpvU75JSMBZCjcObLndq+51bqTYb0PK1Yypudc=";
   };
 
   appimage = appimageTools.wrapType2 {
@@ -23,14 +24,17 @@ let
     extraPkgs = pkgs: [ pkgs.libxkbfile ];
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 stdenvNoCC.mkDerivation {
   inherit pname version;
 
   src = appimage;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    desktop-file-utils
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -46,9 +50,10 @@ stdenvNoCC.mkDerivation {
 
     install -m 444 -D ${appimageContents}/desktop.desktop $out/share/applications/clickup.desktop
 
-    substituteInPlace $out/share/applications/clickup.desktop \
-      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=clickup' \
-      --replace-fail 'Icon=desktop' 'Icon=clickup'
+    desktop-file-edit \
+      --set-key=Exec --set-value=clickup \
+      --set-key=Icon --set-value=clickup \
+      "$out/share/applications/clickup.desktop"
 
     wrapProgram $out/bin/${pname} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} --no-update"
@@ -82,7 +87,8 @@ stdenvNoCC.mkDerivation {
         exit 1
       fi
 
-      update-source-version clickup "$upstream_version" "" "$archived_url"
+      update-source-version clickup "$upstream_version" "" "$archived_url" \
+        --source-key=src.src
     '';
   });
 

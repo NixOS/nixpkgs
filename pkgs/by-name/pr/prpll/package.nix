@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # Fix stricter compilation rules on aarch64
+  # Fix stricter compilation rules on aarch64 and riscv64
   postPatch = ''
     substituteInPlace src/common.h \
       --replace-fail "__float128" "_Float128"
@@ -51,10 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/preda/gpuowl";
     maintainers = with lib.maintainers; [ dstremur ];
     license = lib.licenses.gpl3Only;
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.platforms.linux;
     mainProgram = "prpll";
   };
 })

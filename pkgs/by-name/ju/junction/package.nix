@@ -11,6 +11,7 @@
   pkg-config,
   wrapGAppsHook4,
   gjs,
+  glib,
   gtk4,
   libadwaita,
   libportal-gtk4,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "junction";
-  version = "1.12";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "junction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sl/NeElAp/SWHp0BdXycrZYCgm4I4MFx/uHnQf78H8g=";
+    hash = "sha256-eAcf7iIYOZeQcUt8F06gCY6jGAtGHuLIAzoShOF0MRo=";
     fetchSubmodules = true;
   };
 
@@ -62,6 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # autoPatchShebangs does not like "/usr/bin/env -S <environment-setting> gjs -m"
     sed -i "1s|.*|#!/usr/bin/gjs -m|" $out/bin/re.sonny.Junction
+  '';
+
+  # Needs `gio` to modify mime defaults at runtime.
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix "PATH" : "${lib.makeBinPath [ glib ]}"
+    )
   '';
 
   passthru = {

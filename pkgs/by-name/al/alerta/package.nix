@@ -1,7 +1,7 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -9,9 +9,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "8.5.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-ePvT2icsgv+io5aDDUr1Zhfodm4wlqh/iqXtNkFhS10=";
+  src = fetchFromGitHub {
+    owner = "alerta";
+    repo = "python-alerta-client";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6J5BL+Tn3VoDq+K2jEGiqjd9k73qnsw2ctAIc/MrJLQ=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -23,8 +25,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytz
     tabulate
   ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "alertaclient" ];
 
@@ -38,8 +38,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     homepage = "https://alerta.io";
-    description = "Alerta Monitoring System command-line interface";
+    description = "Monitoring System command-line interface";
     mainProgram = "alerta";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eljamm ];
   };
 })

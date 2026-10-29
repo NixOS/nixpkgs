@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Check Cache Availablility of NixOS Configurations";
+    description = "Check Cache Availability of NixOS Configurations";
     longDescription = ''
       Fast rust tool to check availability of your entire system in caches. It
       so to speak "checks the weather" before going to update. Useful for
@@ -67,8 +67,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       Heavily inspired by guix weather.
     '';
-    homepage = "https://git.fem.gg/cafkafk/nix-weather";
-    changelog = "https://git.fem.gg/cafkafk/nix-weather/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/cafkafk/nix-weather";
+    changelog = "https://github.com/cafkafk/nix-weather/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.eupl12;
     mainProgram = "nix-weather";
     maintainers = with lib.maintainers; [

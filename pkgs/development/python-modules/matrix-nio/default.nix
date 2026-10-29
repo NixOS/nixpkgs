@@ -20,7 +20,7 @@
   atomicwrites,
   cachetools,
   peewee,
-  python-olm,
+  vodozemac,
 
   # tests
   aioresponses,
@@ -40,32 +40,25 @@
   weechatScripts,
   zulip,
 
-  withOlm ? false,
+  withVodozemac ? false,
 }:
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.25.2";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     tag = version;
-    hash = "sha256-ZNYK5D4aDKE+N62A/hPmTphir+UsWvj3BW2EPG1z+R4=";
+    hash = "sha256-bypPBVArN+UnS4Zje603CgJspQsirgkkIHm6juwRigc=";
   };
 
   patches = [
     # Ignore olm import failures when testing
     ./allow-tests-without-olm.patch
   ];
-
-  postPatch = ''
-    # Fix yarl compat about url normalization
-    substituteInPlace tests/async_client_test.py \
-      --replace-fail "?&" "?"
-
-  '';
 
   build-system = [ setuptools ];
 
@@ -79,13 +72,13 @@ buildPythonPackage rec {
     pycryptodome
     unpaddedbase64
   ]
-  ++ lib.optionals withOlm optional-dependencies.e2e;
+  ++ lib.optionals withVodozemac optional-dependencies.e2e;
 
   optional-dependencies = {
     e2e = [
       atomicwrites
       cachetools
-      python-olm
+      vodozemac
       peewee
     ];
   };
@@ -108,7 +101,7 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  disabledTestPaths = lib.optionals (!withOlm) [
+  disabledTestPaths = lib.optionals (!withVodozemac) [
     "tests/encryption_test.py"
     "tests/key_export_test.py"
     "tests/memory_store_test.py"
@@ -122,11 +115,11 @@ buildPythonPackage rec {
     "test_connect_wrapper"
     # time dependent and flaky
     "test_transfer_monitor_callbacks"
-    # _plain_data_generator yields str but test expectes bytes
+    # _plain_data_generator yields str but test expects bytes
     "test_upload_retry"
     "test_upload_text_file_object"
   ]
-  ++ lib.optionals (!withOlm) [
+  ++ lib.optionals (!withVodozemac) [
     "test_client_account_sharing"
     "test_client_key_query"
     "test_client_login"

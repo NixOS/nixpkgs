@@ -7,13 +7,13 @@
 buildLakePackage {
   pname = "lean4-LeanSearchClient";
   # nixpkgs-update: no auto update
-  version = "4.12.0-unstable-2026-02-12";
+  version = "4.35.0-unstable-2026-10-12";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "LeanSearchClient";
-    rev = "c5d5b8fe6e5158def25cd28eb94e4141ad97c843";
-    hash = "sha256-L2aAwn3OeRLVt/VccLdBS0ogqmIIKAwnz94PpAOhaRc=";
+    rev = "d6b4c7be5be75ec4917c873ac50c756dc1436372";
+    hash = "sha256-Yp3i1ygUXANiA1sRJc54QdjXeospB4IbGEeioY5x7ec=";
   };
 
   leanPackageName = "LeanSearchClient";

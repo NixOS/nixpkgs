@@ -2,21 +2,21 @@
   lib,
   buildPythonPackage,
   click,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "kml2geojson";
-  version = "5.1.1";
+  version = "6.0.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "mrcagney";
+  src = fetchFromCodeberg {
+    owner = "araichev";
     repo = "kml2geojson";
-    tag = finalAttrs.version;
-    hash = "sha256-50hKosd4tgTV5GUXHAdTsz4S5QFtM7FTqUHy5TGcq0c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zNvV42dRSQLZnOr65SuJIVOjOKmlF1fQZkCs7SXSokI=";
   };
 
   build-system = [ hatchling ];
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Library to convert KML to GeoJSON";
-    homepage = "https://github.com/mrcagney/kml2geojson";
+    homepage = "https://codeberg.org/araichev/kml2geojson";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "k2g";

@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fromager";
-  version = "0.91.0";
+  version = "0.101.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-wheel-build";
     repo = "fromager";
     tag = finalAttrs.version;
-    hash = "sha256-N+4DbKNUpQdkJAfr0vwlfXJS8FLLBOXxuzkLoJblJM4=";
+    hash = "sha256-3zDHBVwjPCwqGFuwXw6+l1tZH4aguoVuwh8O7HuZG2M=";
   };
 
   build-system = with python3Packages; [
@@ -55,14 +55,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  # Bootstrap tests leave resolver cache warm-up requests unmocked. Avoid
+  # HTTP retry backoffs when those requests fail in the sandbox.
+  # Remove after https://github.com/python-wheel-build/fromager/pull/1362
+  env.FROMAGER_HTTP_RETRIES = 0;
+
   pythonImportsCheck = [
     "fromager"
   ];
-
-  # Upstream runs pytest with `--log-level DEBUG`, which this test suite
-  # relies on for caplog assertions against INFO records.
-  # Reported: https://github.com/python-wheel-build/fromager/issues/1274
-  pytestFlags = [ "--log-level=DEBUG" ];
 
   meta = {
     description = "Wheel maker";

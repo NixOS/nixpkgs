@@ -17,21 +17,16 @@ buildDunePackage {
 
   inherit (happy-eyeballs) src version;
 
-  minimalOCamlVersion = "4.08";
-
-  buildInputs = [
-    duration
-    ipaddr
-    domain-name
-    fmt
-    mirage-mtime
-    mirage-sleep
-  ];
-
   propagatedBuildInputs = [
+    domain-name
+    duration
+    fmt
     happy-eyeballs
+    ipaddr
     logs
     lwt
+    mirage-mtime
+    mirage-sleep
     tcpip
   ];
 

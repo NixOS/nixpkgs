@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.forEach plugins (plugin: plugin.buildInputs) ++ plugins;
+  buildInputs = lib.concatMap (plugin: plugin.buildInputs or [ ]) plugins ++ plugins;
 
   dontUnpack = true;
   dontConfigure = true;

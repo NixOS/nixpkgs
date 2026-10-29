@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Client for an accouting economic system";
+    description = "Client for an accounting economic system";
     homepage = "https://www.flexibee.eu/";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.mmahut ];

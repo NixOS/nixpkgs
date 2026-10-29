@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchurl,
 
   # build-system
   hatchling,
@@ -31,39 +31,41 @@
   xmltodict,
 
   # test
+  iana-etc,
+  libredirect,
   pytestCheckHook,
 }:
 
-let
-  dashboard = fetchurl {
-    url = "https://raw.githubusercontent.com/domainaware/parsedmarc/77331b55c54cb3269205295bd57d0ab680638964/grafana/Grafana-DMARC_Reports.json";
-    sha256 = "0wbihyqbb4ndjg79qs8088zgrcg88km8khjhv2474y7nzjzkf43i";
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parsedmarc";
-  version = "10.2.0";
+  version = "11.0.4";
   pyproject = true;
+
+  outputs = [
+    "out"
+    "dashboard"
+  ];
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
-    tag = version;
-    hash = "sha256-ed6t96CcemrUE6NtBmP1Am7l7dYmcNLGFN8slTSfgOM=";
+    tag = finalAttrs.version;
+    hash = "sha256-jRPOg1bQgNCpb7uLUjYkxvh2ELnS1VGlFQRzuRgJ4Sw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'requires_python = ">=3.10,<3.15"' ""
+
+    substituteInPlace dashboards/grafana/Grafana-DMARC_Reports.json \
+      --replace-fail elasticsearch grafana-opensearch-datasource \
+      --replace-fail Elasticsearch OpenSearch
+
+    install -D dashboards/grafana/Grafana-DMARC_Reports.json $dashboard/DMARC_Reports.json
   '';
 
   build-system = [
     hatchling
-  ];
-
-  pythonRelaxDeps = [
-    "elasticsearch"
-    "elasticsearch-dsl"
   ];
 
   dependencies = [
@@ -95,24 +97,31 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
+      LD_PRELOAD=${libredirect}/lib/libredirect.so
+  '';
+
   disabledTests = [
     # contacts DNS servers at 1.1.1.1 and 8.8.8.8
     "test_general_dns_settings_with_defaults"
+    # AssertionError
+    "testWithoutAssumeUtcNaiveIsLocal"
   ];
 
   pythonImportsCheck = [ "parsedmarc" ];
 
   passthru = {
-    inherit dashboard;
     tests = nixosTests.parsedmarc;
   };
 
   meta = {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    changelog = "https://github.com/domainaware/parsedmarc/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/domainaware/parsedmarc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ talyz ];
     mainProgram = "parsedmarc";
   };
-}
+})

@@ -14,53 +14,6 @@ let
     n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)
   ) config.fileSystems;
 
-  commonFunctions = ''
-    prompt() {
-        local name="$1"
-        printf "enter passphrase for $name: "
-    }
-
-    tryUnlock() {
-        local name="$1"
-        local path="$2"
-        local success=false
-        local target
-        local uuid=$(echo -n $path | sed -e 's,UUID=\(.*\),\1,g')
-
-        printf "waiting for device to appear $path"
-        for try in $(seq 10); do
-          if [ -e $path ]; then
-              target=$(readlink -f $path)
-              success=true
-              break
-          else
-              target=$(blkid --uuid $uuid)
-              if [ $? == 0 ]; then
-                 success=true
-                 break
-              fi
-          fi
-          echo -n "."
-          sleep 1
-        done
-        printf "\n"
-        if [ $success == true ]; then
-            path=$target
-        fi
-
-        if bcachefs unlock -c $path > /dev/null 2> /dev/null; then    # test for encryption
-            prompt $name
-            until bcachefs unlock $path 2> /dev/null; do              # repeat until successfully unlocked
-                printf "unlocking failed!\n"
-                prompt $name
-            done
-            printf "unlocking successful.\n"
-        else
-            echo "Cannot unlock device $uuid with path $path" >&2
-        fi
-    }
-  '';
-
   # we need only unlock one device manually, and cannot pass multiple at once
   # remove this adaptation when bcachefs implements mounting by filesystem uuid
   # also, implement automatic waiting for the constituent devices when that happens
@@ -71,23 +24,6 @@ let
     fs:
     config.boot.initrd.clevis.enable
     && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices);
-
-  openCommand =
-    name: fs:
-    if useClevis fs then
-      ''
-        if clevis decrypt < /etc/clevis/${firstDevice fs}.jwe | bcachefs unlock ${firstDevice fs}
-        then
-          printf "unlocked ${name} using clevis\n"
-        else
-          printf "falling back to interactive unlocking...\n"
-          tryUnlock ${name} ${firstDevice fs}
-        fi
-      ''
-    else
-      ''
-        tryUnlock ${name} ${firstDevice fs}
-      '';
 
   mkUnits =
     prefix: name: fs:
@@ -277,17 +213,6 @@ in
           # Used by the ExecStart= in bcachefs-wait-devices@.service.
           "${cfg.package}/sbin/bcachefs"
         ];
-        boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          copy_bin_and_libs ${cfg.package}/bin/bcachefs
-          copy_bin_and_libs ${cfg.package}/bin/mount.bcachefs
-        '';
-        boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          $out/bin/bcachefs version
-        '';
-
-        boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
-          commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs)
-        );
 
         boot.initrd.systemd.packages = [ cfg.package ];
         boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;

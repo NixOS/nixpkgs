@@ -29,10 +29,9 @@
   makeWrapper,
   rpm,
   system-sendmail,
-  gnome2,
   curl,
   procps,
-  systemd,
+  systemdLibs,
   perl,
   doxygen,
   pkg-config,
@@ -87,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       libgcrypt
       libxml2
-      systemd
+      systemdLibs
       haskellPackages.pthread
       graphviz
       system-sendmail
@@ -95,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
       libsepol
       curl
       glib
-      gnome2.ORBit2
       opendbx
     ];
 

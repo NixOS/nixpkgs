@@ -166,7 +166,7 @@ in
       ++ lib.optional cfg.enableScreensaver xfce4-screensaver
     ) excludePackages;
 
-    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gnome3;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
     programs.labwc.enable = mkDefault (
@@ -209,9 +209,9 @@ in
           DesktopNames=XFCE
           Keywords=xfce;wayland;desktop;environment;session;
         '').overrideAttrs
-        (_: {
-          passthru.providedSessions = [ "xfce-wayland" ];
-        })
+          (_: {
+            passthru.providedSessions = [ "xfce-wayland" ];
+          })
       )
     ];
 

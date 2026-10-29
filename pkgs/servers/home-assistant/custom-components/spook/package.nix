@@ -1,22 +1,19 @@
 {
   lib,
   buildHomeAssistantComponent,
+  cronsim,
   fetchFromGitHub,
-  pillow,
-  fnv-hash-fast,
-  psutil-home-assistant,
-  sqlalchemy,
 }:
 buildHomeAssistantComponent rec {
   owner = "frenck";
   domain = "spook";
-  version = "5.0.0";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = "v${version}";
-    hash = "sha256-tIVEI5oZcvI0uyCQfajb1WVldkx7aQF8gV0UBWYPUnI=";
+    hash = "sha256-LO4WnmsPlvc26e4Sx/RxrZVIgEUak1oVm7Qa+SKkYUo=";
   };
 
   patches = [ ./remove-sub-integration-symlink-hack.patch ];
@@ -27,10 +24,7 @@ buildHomeAssistantComponent rec {
   '';
 
   dependencies = [
-    pillow
-    fnv-hash-fast
-    psutil-home-assistant
-    sqlalchemy
+    cronsim
   ];
 
   meta = {

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
+  installShellFiles,
   bash,
   gitMinimal,
   delta,
@@ -15,16 +16,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-recent";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qE6UNNuFfB2n3MuR+9gCRQCJKe0jOgW8ZwzlBZwvkrs=";
+    hash = "sha256-ScgzMG40uR9+4cjTIHwmefSoAxVNELNx8fDVXGFl8rU=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
+
   buildInputs = [ bash ];
 
   __structuredAttrs = true;
@@ -53,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }" \
       --suffix PATH : "${lib.makeBinPath [ delta ]}"
+
+    installManPage man/man1/git-recent.1
 
     runHook postInstall
   '';

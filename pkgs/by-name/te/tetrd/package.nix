@@ -17,7 +17,6 @@
   re2,
   snappy,
   libnotify,
-  libappindicator-gtk3,
   libappindicator,
   udev,
   libgbm,
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
     re2
     snappy
     libnotify
-    libappindicator-gtk3
     libappindicator
     udev
     libgbm

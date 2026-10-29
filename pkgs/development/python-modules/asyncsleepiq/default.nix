@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "asyncsleepiq";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gOg1cxd2OsDRg5jtc6MfEMsK9T0Croo8K1jzsvbAbdY=";
+    hash = "sha256-m0Is5X46pOGTu7TBBBY/sgC3GNxULYkONe5H1rCAnb0=";
   };
 
   nativeBuildInputs = [ setuptools ];

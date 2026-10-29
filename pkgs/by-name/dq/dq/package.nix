@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Recursive DNS/DNSCurve server and comandline tool";
+    description = "Recursive DNS/DNSCurve server and commandline tool";
     homepage = "https://github.com/janmojzis/dq";
     changelog = "https://github.com/janmojzis/dq/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [

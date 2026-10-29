@@ -27,7 +27,7 @@
   pango,
   polkit,
   webkitgtk_6_0,
-  systemd,
+  systemdLibs,
   libadwaita,
   libnma-gtk4,
   tzdata,
@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "50.0";
+  version = "50.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LalrdqNDRGilV/5IG4z+YGJi81N7AKTCDUqiOaROluE=";
+    hash = "sha256-su0FI1iW9H9VJJirWrKfVQHmqMQe5kXyqRhiCx3pHmA=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    systemd
+    systemdLibs
     wrapGAppsHook4
   ];
 

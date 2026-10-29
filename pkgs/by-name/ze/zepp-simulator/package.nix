@@ -41,12 +41,12 @@
 let
   srcs = {
     x86_64-linux = {
-      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20260410/simulator_2.1.1_linux_amd64.deb";
-      hash = "sha256-+cRt2jZexe3hI+jN2Lp58uM8GBDvEDqt/u3rp5F0wPo=";
+      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20260717/simulator_2.1.2_linux_amd64.deb";
+      hash = "sha256-q5s1wErlsBaWX+fQUVB7W1out7XA+FBZKUwQBNK+mqA=";
     };
     aarch64-linux = {
-      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20260509/simulator_2.1.1_arm64.deb";
-      hash = "sha256-JnMfiKmA3tyMYDtO2XoeGYOLE2wANKixcfz9wesXoLk=";
+      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20260717/simulator_2.1.2_arm64.deb";
+      hash = "sha256-I7yklSKHwgHm4QNEVLX4O5eXaoS2+SxLMJJjA3aTFCM=";
     };
   };
 
@@ -54,7 +54,7 @@ in
 
 stdenv.mkDerivation {
   pname = "zepp-simulator";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchurl srcs.${stdenv.hostPlatform.system};
 

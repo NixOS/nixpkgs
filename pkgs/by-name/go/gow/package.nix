@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://github.com/mitranim/gow";
     description = "Missing watch mode for Go commands";
-    mainProgram = "gox";
+    mainProgram = "gow";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ baloo ];
   };

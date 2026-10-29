@@ -8,7 +8,6 @@
   wrapGAppsHook3,
   gtkmm3,
   gtksourceview4,
-  gtksourceviewmm,
   gspell,
   libxmlxx,
   sqlite,
@@ -21,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherrytree";
-  version = "1.6.3";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9wqn9fAo9FKrhTAyMM4rg9gpvtH6t+NSAGga2RScz4Y=";
+    hash = "sha256-0x1IXsIvEKFslQaZAnAG1YT81Rk8MZf5vHTXgZ1FbsM=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtkmm3
     gtksourceview4
-    gtksourceviewmm
     gspell
     libxmlxx
     sqlite

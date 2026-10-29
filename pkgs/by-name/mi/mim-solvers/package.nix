@@ -1,12 +1,10 @@
 {
-  cmake,
   crocoddyl,
   ctestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
+  jrl-cmakemodules,
   lib,
   llvmPackages,
-  pkg-config,
   proxsuite,
   stdenv,
   nix-update-script,
@@ -19,25 +17,23 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t21zzUo+Oiqvr3lYN9v1lCeoki3I1FWPqo3gWzM6Kdw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
-  buildInputs = lib.optional (
-    stdenv.hostPlatform.isDarwin && crocoddyl.withMultithread
-  ) llvmPackages.openmp;
+  buildInputs = [
+    jrl-cmakemodules
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isDarwin && crocoddyl.withMultithread) llvmPackages.openmp;
 
   propagatedBuildInputs = [
     crocoddyl
     proxsuite
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
     (lib.cmakeBool "BUILD_WITH_MULTITHREADS" crocoddyl.withMultithread)

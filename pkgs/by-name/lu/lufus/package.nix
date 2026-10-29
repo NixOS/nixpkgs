@@ -44,7 +44,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
       --add-flags "-m lufus" \
       --prefix PYTHONPATH : "$out/${python313Packages.python.sitePackages}:${python313Packages.makePythonPath finalAttrs.propagatedBuildInputs}"
 
-    install -Dm644 src/lufus/gui/assets/lufus.png $out/share/pixmaps/lufus.png
+    install -Dm644 src/lufus/gui/assets/lufus.png -t $out/share/icons/hicolor/64x64/apps
 
     copyDesktopItems
   '';
@@ -67,7 +67,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     description = "A rufus clone written in py and designed to work with linux";
     homepage = "https://github.com/Hogjects/Lufus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Simon-Weij ];
+    maintainers = with lib.maintainers; [ inomish ];
     platforms = lib.platforms.linux;
     mainProgram = "lufus";
   };

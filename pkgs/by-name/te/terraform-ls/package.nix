@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "terraform-ls";
-  version = "0.38.7";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-ls";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uxdQHfjqthvNqqLjuuQsIPbjSx7STpH4Pmtw1Z2Npy4=";
+    hash = "sha256-9h5DqKZrs0MBEhCk8Bwt3pxK9+bSMUzWseH2BIrMwc4=";
   };
 
-  vendorHash = "sha256-GVToa/RfXZaKIPWRkCu6rLN8qU3sI6zmgn4kjeNW6iI=";
+  vendorHash = "sha256-jk0xaiFxGUbR7SlXvWezpmjhxK19mK7OLdAfRQviFgs=";
 
   ldflags = [
     "-s"

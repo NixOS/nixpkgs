@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "egl-wayland2";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "egl-wayland2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Udr+tihx/Si2ynFyM1FW2CIUgTg9SQn7AgrOPpGTxpY=";
+    hash = "sha256-oL5qXRmPqOASfEQN7eEltDj4+R2JxczDrKWWkY29amQ=";
   };
 
   depsBuildBuild = [

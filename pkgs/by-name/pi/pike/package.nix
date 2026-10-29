@@ -10,7 +10,7 @@
   bison,
   flex,
   gmp,
-  pcre,
+  pcre2,
   nettle,
   libjpeg,
   libpng,
@@ -113,20 +113,20 @@ let
         mpl20
       ];
       maintainers = with lib.maintainers; [ siraben ];
-      platforms = with lib.platforms; unix ++ windows;
+      platforms = [ "x86_64-linux" ];
       mainProgram = "pike";
     };
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pike";
-  version = "8.0.2042";
+  version = "9.0.16";
 
   src = fetchFromGitHub {
     owner = "pikelang";
     repo = "Pike";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N/hwbH8hhG9v/PJKwvGgS/ttS4TRJeeV2zAcRNDVL4k=";
+    hash = "sha256-K3lRGaCkNkzdkSJrrjJkPf1qfwItiz6RpcyP6eoeZW8=";
   };
 
   nativeBuildInputs = [
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmp
-    pcre
+    pcre2
     nettle
     libjpeg
     libpng
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "INSTALLARGS=--traditional" ];
 
-  passthru.updateScript = gitUpdater { allowedVersions = "^8\\..*"; };
+  passthru.updateScript = gitUpdater { allowedVersions = "^9\\..*"; };
 
   meta = {
     description = "Pike programming language";
@@ -208,7 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
       mpl20
     ];
     maintainers = with lib.maintainers; [ siraben ];
-    platforms = with lib.platforms; unix ++ windows;
+    # Bootstrap binary is only available for x86_64-linux
+    platforms = [ "x86_64-linux" ];
     mainProgram = "pike";
   };
 })

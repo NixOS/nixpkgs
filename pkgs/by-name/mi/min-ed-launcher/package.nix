@@ -1,18 +1,23 @@
 {
   lib,
   buildDotnetModule,
+  dotnet-sdk_10,
+  dotnet-runtime_10,
   fetchFromGitHub,
   git,
 }:
 buildDotnetModule rec {
   pname = "min-ed-launcher";
-  version = "0.13.0";
+  version = "0.14.0";
+
+  dotnet-sdk = dotnet-sdk_10;
+  dotnet-runtime = dotnet-runtime_10;
 
   src = fetchFromGitHub {
     owner = "rfvgyhn";
     repo = "min-ed-launcher";
     tag = "v${version}";
-    hash = "sha256-blqGq6PORBEtCLO007TR3xJ6UXX8nFSOIoFh8Dc/5B8=";
+    hash = "sha256-1vSZ2DWzqPdxiake9FkpZhB/hi/xnIf+npaHV+yazCI=";
 
     leaveDotGit = true; # During build the current commit is appended to the version
   };
@@ -22,6 +27,11 @@ buildDotnetModule rec {
   buildInputs = [
     git # During build the current commit is appended to the version
   ];
+
+  postPatch = ''
+    substituteInPlace global.json \
+      --replace-fail '10.0.402' '10.0.401'
+  '';
 
   executables = [ "MinEdLauncher" ];
 

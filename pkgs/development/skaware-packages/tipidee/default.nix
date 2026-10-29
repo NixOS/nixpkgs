@@ -9,26 +9,26 @@ skawarePackages.buildPackage {
   version = "0.0.8.0";
   sha256 = "sha256-GjllM2YqxwvCsKC4xlYW/6f6IBUIhZMA67mtM82mEC0=";
 
-  description = "HTTP 1.1 webserver, serving static files and CGI/NPH";
+  meta.description = "HTTP 1.1 webserver, serving static files and CGI/NPH";
 
   outputs = [
     "bin"
     "lib"
-    "out"
     "dev"
     "doc"
+    "out"
   ];
 
+  buildInputs = [ skalibs ];
+
   configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--libexecdir=\${lib}/libexec"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "lib"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "lib"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
 
     # we set sysconfdir to /etc here to allow tipidee-config
     # to look in the global paths for its configs.
@@ -45,5 +45,5 @@ skawarePackages.buildPackage {
     mv examples $doc/share/doc/tipidee/examples
   '';
 
-  broken = stdenv.hostPlatform.isDarwin;
+  meta.broken = stdenv.hostPlatform.isDarwin;
 }

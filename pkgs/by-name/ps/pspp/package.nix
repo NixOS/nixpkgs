@@ -55,10 +55,17 @@ stdenv.mkDerivation rec {
     iconv
   ];
 
+  patches = [
+    ./fix-glibc-2.42.patch
+  ];
+
   env = {
     C_INCLUDE_PATH =
       "${libxml2.dev}/include/libxml2/:" + lib.makeSearchPathOutput "dev" "include" buildInputs;
     LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+
+    # fix build w/ glibc-2.44
+    NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
   };
 
   doCheck = false;

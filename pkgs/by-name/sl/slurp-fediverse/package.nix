@@ -8,7 +8,6 @@ buildGoModule (finalAttrs: {
   pname = "slurp";
   version = "1.1.1";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromCodeberg {
     owner = "vyr";

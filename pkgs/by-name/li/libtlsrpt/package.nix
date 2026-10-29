@@ -3,11 +3,12 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  asciidoctor,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtlsrpt";
-  version = "0.5.0";
+  version = "0.5.1";
 
   outputs = [
     "out"
@@ -19,10 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sys4";
     repo = "libtlsrpt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h7bWxxllKFj8+/FfC4yHSmz+Qij1BcgV4OCQZr1OkA8=";
+    hash = "sha256-U11VMaLGnWMe4EALaOQUFJ35hDUX2jAYadGJNYDpeK0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    asciidoctor
+  ];
 
   separateDebugInfo = true;
 

@@ -12,23 +12,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gns3-gui";
-  version = "2.2.56.1";
+  version = "2.2.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "gns3-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HBTBwn7jAW/SXFTfPbO08bDG5NfS3tuic/Z0ib1/Uo8=";
+    hash = "sha256-eYtuGVRfgUFBLxGT0xfiMhbjoMzc6F/VHjI9VN3ADAs=";
   };
-
-  patches = [
-    # Fix tests after PyQt6 migration
-    (fetchpatch {
-      url = "https://github.com/GNS3/gns3-gui/commit/e6e2a1cafbc3ce4be9cca3428e60400f25806cde.patch";
-      hash = "sha256-T15OCqm+Te9ZOCg/kFf/fd2DY75LfaLHskAAgGYMloI=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "jsonschema"
@@ -51,6 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools
     sip
     truststore
+    qdarkstyle
   ];
 
   dontWrapQtApps = true;

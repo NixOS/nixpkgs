@@ -191,7 +191,8 @@ stdenv.mkDerivation (finalAttrs: {
     }.htm";
     description = "Dyalog APL interpreter";
     homepage = "https://www.dyalog.com";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "dyalog";
       fullName = "Dyalog License";
       url = licenseUrl;
       free = false;

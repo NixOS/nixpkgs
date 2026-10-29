@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-payments";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-payments";
     tag = "v${version}";
-    hash = "sha256-AWWgjLIt3uG5QUVkHLaxWVwqq2dfuPbxUn8VwqMlPwo=";
+    hash = "sha256-vEmmX+IjE6HaIq/i1h2xc5ArkNlenVhD19mBgHvvmbM=";
   };
 
   build-system = [

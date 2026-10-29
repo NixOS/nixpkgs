@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "knowsmore";
-  version = "0.1.51";
+  version = "0.1.52";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "knowsmore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GpFcRLPyWmkqyF4cpsm7uNv2U1TTJI0NoRV6IQQiQw4=";
+    hash = "sha256-duNYODXWYAXAx6zjhtmiHNdImipJsGoalpfVpnuAzq4=";
   };
 
   pythonRelaxDeps = [

@@ -6,7 +6,7 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-K7cHC6IVawJmlCLR45SKEowXw7SfURIePHzj1LvKS84=",
+  vendorHash ? "sha256-UWj9jDecEBLhuERrfhQHhdYHfKeKdbGSFZqhQn/vm10=",
 }:
 
 let
@@ -14,13 +14,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
-  version = "1.14.6";
+  version = "1.14.7";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3BKXmrsSsDWFl6MT6c5Q8wcQiApO1vG0KeUtJLm89jU=";
+    hash = "sha256-83GPahSGGCckvb9uqz7aWzMDSDNfHfr69Tihvu/OSpY=";
   };
 
   inherit vendorHash;
@@ -123,10 +123,6 @@ buildGoModule (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # loopback interface is lo0 on macos
     sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
-
-    # test is apparently outdated but only exhibits this on darwin
-    substituteInPlace test/corefile_test.go \
-      --replace-fail "TestCorefile1" "SkipCorefile1"
   '';
 
   __darwinAllowLocalNetworking = true;

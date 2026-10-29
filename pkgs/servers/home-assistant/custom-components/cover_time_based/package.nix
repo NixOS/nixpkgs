@@ -9,13 +9,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "Sese-Schneider";
   domain = "cover_time_based";
-  version = "4.9.0";
+  version = "4.14.1";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "ha-cover-time-based";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NVws0FAB88PfgyfrCymyeHVSMzBc/KyILmVOyUQ8T7g=";
+    hash = "sha256-v0vfVUNkyjMJfVLRv7uTFwXlvDR56vclCbBs7YWW2/Y=";
   };
 
   nativeCheckInputs = [

@@ -2,33 +2,32 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  runitor,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "runitor";
   version = "1.4.1";
-  vendorHash = "sha256-SYYAAtuWt/mTmZPBilYxf2uZ6OcgeTnobYiye47i8mI=";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-y4wIfal8aiVD5ZoRF6GnYUGRssBLMOPSWa40+3OU4y0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y4wIfal8aiVD5ZoRF6GnYUGRssBLMOPSWa40+3OU4y0=";
   };
+
+  vendorHash = "sha256-SYYAAtuWt/mTmZPBilYxf2uZ6OcgeTnobYiye47i8mI=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.Version=v${finalAttrs.version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = runitor;
-    command = "runitor -version";
-    version = "v${finalAttrs.version}";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
+  doInstallCheck = true;
 
   # Unit tests require binding to local addresses for listening sockets.
   __darwinAllowLocalNetworking = true;

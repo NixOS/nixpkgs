@@ -7,6 +7,7 @@
   version,
   getVersionFile,
   monorepoSrc ? null,
+  fetchpatch,
   autoreconfHook269,
   libiberty,
   buildPackages,
@@ -26,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  buildInputs = [ libbacktrace ];
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     autoreconfHook269
@@ -34,6 +37,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # From the posting to gcc-patches, which covers every component that links
+    # libbacktrace. Take only this component's non-generated files: the
+    # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
+    # slightly different from the one the patch was made against.
+    (fetchpatch {
+      name = "system-libbacktrace.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20260814013206.3818461-1-git@JohnEricson.me/raw";
+      includes = [
+        "config/libbacktrace.m4"
+        "libgfortran/configure.ac"
+        "libgfortran/Makefile.am"
+      ];
+      hash = "sha256-QB+Wto9V1XXYhUhUSeP7Mxoj/iZQdMOT+7aSWyHjXX0=";
+    })
+
+    # Applied after `system-libbacktrace.patch` above: both rewrite the same
+    # region of `libgfortran/Makefile.am`, and this one is ours to rebase --
+    # the other is the version posted upstream, kept as posted.
     (getVersionFile "libgfortran/force-regular-dirs.patch")
   ];
 
@@ -87,16 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     )
     mkdir -p "$buildRoot/gcc/include"
 
-    mkdir -p "$buildRoot/gcc/libbacktrace/.libs"
-    cp ${libbacktrace}/lib/libbacktrace.a "$buildRoot/gcc/libbacktrace/.libs/libbacktrace.a"
-    cp -r ${libbacktrace}/lib/*.la "$buildRoot/gcc/libbacktrace"
-    cp -r ${libbacktrace.dev}/include/*.h "$buildRoot/gcc/libbacktrace"
-
     mkdir -p "$buildRoot/gcc/libgcc"
     ln -s "${libgcc.dev}/include/gthr-default.h" "$buildRoot/gcc/libgcc"
 
     mkdir -p "$buildRoot/gcc/${stdenv.hostPlatform.config}/libgfortran"
-    ln -s "$buildRoot/gcc/libbacktrace" "$buildRoot/gcc/${stdenv.buildPlatform.config}/libbacktrace"
     ln -s "$buildRoot/gcc/libgcc" "$buildRoot/gcc/${stdenv.buildPlatform.config}/libgcc"
     cd "$buildRoot/gcc/${stdenv.hostPlatform.config}/libgfortran"
     configureScript=$sourceRoot/configure
@@ -166,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
     "--with-toolexeclibdir=${placeholder "dev"}/lib"
+
+    "--with-system-libbacktrace"
   ];
 
   # Set the variable back the way it was, see corresponding code in

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "protobuf-language-server";
-  version = "0.1.2";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "lasorda";
     repo = "protobuf-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xaWcQMoahOVm6pAP8Y01fkSOuvuwS+aRFEb5ztbL3pk=";
+    hash = "sha256-Agi3/xsGM+TvfYc/JGaa2AVXukaA9X3u17u8VJKBjRQ=";
   };
 
   vendorHash = "sha256-4nTpKBe7ekJsfQf+P6edT/9Vp2SBYbKz1ITawD3bhkI=";

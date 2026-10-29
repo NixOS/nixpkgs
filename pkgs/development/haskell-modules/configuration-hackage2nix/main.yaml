@@ -856,6 +856,12 @@ dont-distribute-packages:
   # Depends on shine, which is a ghcjs project.
   - shine-varying
 
+  # these packages are deprecated or unmaintained upstream
+  # TODO: fully exclude. See:
+  # - https://github.com/NixOS/cabal2nix/pull/667
+  # - https://github.com/NixOS/nixpkgs/pull/441204
+  - nixfmt # 2026-08-18 maintained versions are not released on hackage
+
   # these packages depend on software with an unfree license
   - accelerate-bignum
   - accelerate-blas

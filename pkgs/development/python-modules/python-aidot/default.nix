@@ -6,19 +6,20 @@
   setuptools,
   aiohttp,
   cryptography,
+  dacite,
   requests,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-aidot";
-  version = "0.3.53";
+  version = "0.3.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AiDot-Development-Team";
     repo = "python-AiDot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wo3eadMg1HxMjoGpiDSUImw36qN3zC5QrIAaEwdvbS8=";
+    hash = "sha256-aikO6OzbA4Dfa71c72vChpIzZrqW6nAhkKURQA6JZ8U=";
   };
 
   build-system = [ setuptools ];
@@ -26,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     cryptography
+    dacite
     requests
   ];
 

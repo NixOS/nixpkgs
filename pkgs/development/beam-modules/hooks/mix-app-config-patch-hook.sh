@@ -9,11 +9,13 @@ mixAppConfigPatchHook() {
   rm -rvf config
 
   # But we still need a way to provide config for deps that need compile time config
-  if [ ! -z "${appConfigPath}" ]; then
+  if [ -n "${appConfigPath-}" ]; then
     ln -sf "${appConfigPath}" config
   fi
 
   echo "Finished mixAppConfigPatchHook"
 }
 
-prePatchHooks+=(mixAppConfigPatchHook)
+if [ -z "${dontMixAppConfigPatch-}" ]; then
+  prePatchHooks+=(mixAppConfigPatchHook)
+fi

@@ -13,7 +13,7 @@
   systemd,
   mariadb-connector-c,
   libpq,
-  lua,
+  lua5_2_compat,
   openldap,
   geoip,
   curl,
@@ -21,14 +21,17 @@
   lmdb,
   tinycdb,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "5.1.3";
+  version = "5.1.5";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-X7BdXhl/Y6tmfZuQXmncgpMkSolvvQRrNjCyI+pQUeY=";
+    hash = "sha256-e2cGU8zXK+MNlzu900nEUFvtobh7hCr3AqNB+mg3+Ko=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];

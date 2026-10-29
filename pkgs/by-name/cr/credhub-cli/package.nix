@@ -2,17 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "credhub-cli";
-  version = "2.9.54";
+  version = "2.9.60";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "credhub-cli";
     rev = finalAttrs.version;
-    sha256 = "sha256-qp7Oj207uu2P/Jt9O5tZM0ra9fMx+DfuHPaKr5z+ef0=";
+    sha256 = "sha256-sus0jCdRj9ZwDeAGgw85tJkWC4UAZQPzonAjUvY3sfs=";
   };
 
   # these tests require network access that we're not going to give them
@@ -34,9 +35,7 @@ buildGoModule (finalAttrs: {
     ln -s $out/bin/credhub-cli $out/bin/credhub
   '';
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "Provides a command line interface to interact with CredHub servers";

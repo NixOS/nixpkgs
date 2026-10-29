@@ -31,7 +31,11 @@ stdenv.mkDerivation {
     description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
     homepage = "https://github.com/patjak/mba6x_bl";
     license = lib.licenses.gpl2Only;
-    broken = lib.versionAtLeast kernel.version "6.11";
+    # This out-of-tree module calls acpi_video_set_dmi_backlight_type(), which
+    # was removed from the kernel in 6.1, so it fails to build (the kernel uses
+    # -Werror=implicit-function-declaration). Upstream is unmaintained since 2017.
+    # API removal: https://github.com/torvalds/linux/commit/77ab9d4d44cd235322d2f30b1c4026302c3ce8c6
+    broken = kernel.kernelAtLeast "6.1";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.simonvandel ];
   };

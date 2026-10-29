@@ -2,7 +2,7 @@
   lib,
   _7zz,
   alsa-lib,
-  systemd,
+  systemdLibs,
   wrapGAppsHook4,
   autoPatchelfHook,
   blas,
@@ -24,10 +24,14 @@
   libxkbfile,
   libsecret,
   webkitgtk_4_1,
+  libxtst,
+  libei,
+  libjpeg8,
+  pipewire,
 }:
 let
   pname = "positron-bin";
-  version = "2026.06.1-6";
+  version = "2026.08.2-4";
 in
 stdenv.mkDerivation {
   dontFixup = stdenv.hostPlatform.isDarwin;
@@ -37,17 +41,17 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/mac/arm64/Positron-${version}-arm64.dmg";
-        hash = "sha256-v5FaquIX7zYHvU6FddR4dDyt9uLheHr0+IpxLVpuKMg=";
+        hash = "sha256-ocDWNEWiIfgLcFOTD6KqaqswRpQqf4dVqJe28lDYs9k=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-Xc+ZlYPqKkiZgTvpfKo79LXGhD0voanEj98aJOsfjo0=";
+        hash = "sha256-EHZZYLGquikmhWYPjv7+I4f1ZkSvyI9Q6nRJXvgGBk0=";
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
-        hash = "sha256-kTVHMNRbPoLg2Ua+Fo6UaUiUA6OqPwNAXXpgtqaBjls=";
+        hash = "sha256-DmlFAr24drfuqWK22uPXfHvPIuvQrtq3Yl5hUgcY3Oo=";
       };
 
   buildInputs = [
@@ -69,6 +73,10 @@ stdenv.mkDerivation {
     libxkbfile
     libsecret
     webkitgtk_4_1
+    libei
+    libjpeg8
+    pipewire
+    libxtst
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     blas
@@ -86,8 +94,8 @@ stdenv.mkDerivation {
     ];
 
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
-    # Needed to fix the "Zygote could not fork" error.
-    (lib.getLib systemd)
+    (lib.getLib systemdLibs) # Needed to fix the "Zygote could not fork" error.
+    (lib.getLib libsecret) # Undeclared `dlopen`, buildInputs can't see it.
   ];
 
   installPhase =
@@ -119,19 +127,19 @@ stdenv.mkDerivation {
           "Icon=$out/share/pixmaps/co.posit.positron.png" \
           --replace-fail \
           "Exec=/usr/share/positron/positron %F" \
-          "Exec=$out/share/positron/.positron-wrapped %F" \
+          "Exec=$out/bin/positron %F" \
           --replace-fail \
           "/usr/share/positron/positron --new-window %F" \
-          "$out/share/positron/.positron-wrapped --new-window %F"
+          "$out/bin/positron --new-window %F"
 
         # Fix libGL.so not found errors.
         wrapProgram "$out/share/positron/positron" \
           --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}" \
-          --add-flags "--disable-updates"
+          --append-flags "--disable-updates"
 
 
         mkdir -p "$out/bin"
-        ln -s "$out/share/positron/positron" "$out/bin/positron"
+        ln -s "$out/share/positron/bin/positron" "$out/bin/positron"
         runHook postInstall
       '';
 
@@ -144,6 +152,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       b-rodrigues
       detroyejr
+      hectorgray
     ];
     mainProgram = "positron";
     platforms = [

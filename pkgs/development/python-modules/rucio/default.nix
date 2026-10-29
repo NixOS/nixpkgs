@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   packaging,
@@ -40,22 +39,19 @@
 }:
 
 let
-  version = "40.4.1";
+  version = "41.5.1";
 
   src = fetchFromGitHub {
     owner = "rucio";
     repo = "rucio";
     tag = version;
-    hash = "sha256-0o4rJbl4GOH0M0sWkNtDqKJgdgrQyCLihao99RVIXqs=";
+    hash = "sha256-FR0QiUtp+YxF0S9gJYkBpUss8kISkoV9GIzNOERLQlk=";
   };
 in
 buildPythonPackage {
   pname = "rucio";
   inherit version src;
   pyproject = true;
-
-  # future-1.0.0 not supported for interpreter python3.13
-  disabled = pythonAtLeast "3.13";
 
   pythonRelaxDeps = true;
 

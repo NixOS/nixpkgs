@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       The itools package is a set of user friendly applications utilizing Arabeyes' ITL library.
 
       The package addresses two main areas - hijri date and prayertime calculation. The package
-      is envisioned to mimick the development of the underlying ITL library and is meant to
+      is envisioned to mimic the development of the underlying ITL library and is meant to
       always give the end-user a simple means to access its functions.
     '';
     homepage = "https://www.arabeyes.org/ITL";

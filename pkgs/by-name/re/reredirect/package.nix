@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Tool to dynamicly redirect outputs of a running process";
+    description = "Tool to dynamically redirect outputs of a running process";
     homepage = "https://github.com/jerome-pouiller/reredirect";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.tobim ];

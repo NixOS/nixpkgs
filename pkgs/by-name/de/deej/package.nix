@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   webkitgtk_4_1,
 }:
 
@@ -29,7 +29,7 @@ buildGoModule {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
     webkitgtk_4_1
   ];
 

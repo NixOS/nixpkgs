@@ -19,7 +19,7 @@ buildDunePackage (finalAttrs: {
     owner = "mirage";
     repo = "ocaml-github";
     rev = finalAttrs.version;
-    sha256 = "sha256-nxHXOdZAvFe5/lKNw7tTJmY86xzfdFT+fW+lnKioyPM=";
+    hash = "sha256-nxHXOdZAvFe5/lKNw7tTJmY86xzfdFT+fW+lnKioyPM=";
   };
 
   duneVersion = "3";

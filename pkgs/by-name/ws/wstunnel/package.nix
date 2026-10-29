@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wstunnel";
-  version = "10.6.2";
+  version = "11.1.0";
 
   src = fetchFromGitHub {
     owner = "erebe";
     repo = "wstunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DIhVmhexsB0SI+dVkIJBr3JCiNIjrAFMHnCySD9cYWE=";
+    hash = "sha256-mgkoulB9+6USkojl7EIPJqeVxwQdH/z54ZMIMq3rxnA=";
   };
 
-  cargoHash = "sha256-BDlX9GcPF3fHgXNx1EZK36YHqW1Mtonk+4XSZDWslI0=";
+  cargoHash = "sha256-K6AQlANNkAm/vZhsQQZrN/QInF9AkAJkVFGoE9he3q4=";
 
   cargoBuildFlags = [ "--package wstunnel-cli" ];
 

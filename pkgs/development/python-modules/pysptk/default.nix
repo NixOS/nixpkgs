@@ -1,39 +1,55 @@
 {
   lib,
   buildPythonPackage,
-  cython,
-  decorator,
   fetchPypi,
+  cython,
+  pytestCheckHook,
+  setuptools,
+  decorator,
   numpy,
   scipy,
-  setuptools,
-  six,
+  standard-pkg-resources,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysptk";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) version;
+    pname = "pysptk";
     hash = "sha256-eLHJM4v3laQc3D/wP81GmcQBwyP1RjC7caGXEAeNCz8=";
   };
 
-  env.PYSPTK_BUILD_VERSION = 0;
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  nativeBuildInputs = [ cython ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
     numpy
     scipy
-    setuptools
-    six
+    standard-pkg-resources
   ];
 
-  # Tests are not part of the PyPI releases
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # Remove source to prevent the tests from trying to import it
+  preCheck = ''
+    rm -r pysptk
+  '';
+
+  disabledTests = [
+    # These tests rely on test data not present in the pypi release
+    "test_rapt_regression"
+    "test_swipe_regression"
+  ];
 
   pythonImportsCheck = [ "pysptk" ];
 
@@ -43,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

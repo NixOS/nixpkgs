@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   dependencies = with python3.pkgs; [
     aiohttp
     beautifulsoup4
+    pkg-resources-backport
     requests
     setuptools
   ];

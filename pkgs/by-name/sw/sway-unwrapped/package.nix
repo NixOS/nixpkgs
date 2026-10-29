@@ -29,8 +29,8 @@
   isNixOS ? false,
   enableXWayland ? true,
   libxcb-wm,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   trayEnabled ? systemdSupport,
 }:
 
@@ -139,7 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/swaywm/sway/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = with lib.maintainers; [ c6rg0 ];
+    maintainers = with lib.maintainers; [
+      c6rg0
+      sotormd
+    ];
     mainProgram = "sway";
   };
 })

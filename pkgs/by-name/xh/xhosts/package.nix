@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "nss-xhosts";
-  version = "unstable-2023-12-30";
+  version = "0-unstable-2023-12-30";
 
   src = fetchFromGitHub {
     owner = "dvob";
@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "nss-xhosts";
+    platforms = lib.platforms.linux;
   };
 }

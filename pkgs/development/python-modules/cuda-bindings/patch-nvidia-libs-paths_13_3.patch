@@ -65,7 +65,7 @@ index 34ad6b5f0c..dc20de43a7 100644
  
  
 diff --git a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
-index 825931d756..77004f360c 100644
+index 825931d756..3bb4459c0b 100644
 --- a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
 @@ -10,7 +10,7 @@ import threading
@@ -77,12 +77,18 @@ index 825931d756..77004f360c 100644
  
  
  ###############################################################################
-@@ -414,7 +414,7 @@ cdef void* __nvmlGpuInstanceSetVgpuSchedulerState_v2 = NULL
+@@ -414,7 +414,13 @@ cdef void* __nvmlGpuInstanceSetVgpuSchedulerState_v2 = NULL
  
  
  cdef void* load_library() except* with gil:
 -    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvml")._handle_uint
-+    cdef uintptr_t handle = CDLL("@libnvml@/lib/libnvidia-ml.so")._handle
++    # Search like the dynamic linker would for a library with the driver link in its RUNPATH: LD_LIBRARY_PATH
++    # first (e.g. a host driver exposed by nixglhost or a container runtime), then the configured path.
++    cdef uintptr_t handle
++    try:
++        handle = CDLL("libnvidia-ml.so.1")._handle
++    except OSError:
++        handle = CDLL("@libnvml@/lib/libnvidia-ml.so")._handle
      return <void*>handle
  
  

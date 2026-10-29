@@ -51,11 +51,15 @@ stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
 
   meta = {
-    homepage = "https://tmate.io/";
+    homepage = "https://github.com/tmate-io/tmate";
     description = "Instant Terminal Sharing";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ck3d ];
     mainProgram = "tmate";
+    knownVulnerabilities = [
+      "There are no upstream releases since 2019-11."
+      "CVE-2018-19387"
+    ];
   };
 }

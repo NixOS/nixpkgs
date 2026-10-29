@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "7.5.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
     rev = version;
-    hash = "sha256-4E4ph++YP3c3+edmLHTGTGybKpiVoAzbehOmhYglzpo=";
+    hash = "sha256-22UlYQxxtInPYgj4rsu07MvusjoW4BoqCW6fbgwQ9Lc=";
   };
 
-  vendorHash = "sha256-cr5KUYuEDlahkz2DwTD2yw+Tl/QrTP2O6b1HzQqXnzE=";
+  vendorHash = "sha256-+phJFHid2ytXeLrvGMGTXplDAcN9YEDhRrO9ax/d8R8=";
 
   subPackages = [
     "cmd/src"

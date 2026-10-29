@@ -2,24 +2,30 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "amiri";
   version = "1.003";
 
   src = fetchzip {
-    url = "https://github.com/aliftype/amiri/releases/download/${version}/Amiri-${version}.zip";
+    url = "https://github.com/aliftype/amiri/releases/download/${finalAttrs.version}/Amiri-${finalAttrs.version}.zip";
     hash = "sha256-BsYPMBlRdzlkvyleZIxGDuGjmqhDlEJ4udj8zoKUSzA=";
   };
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [ installFonts ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/truetype
-    mv *.ttf $out/share/fonts/truetype/
-    mkdir -p $out/share/doc/${pname}-${version}
-    mv {*.html,*.txt,*.md} $out/share/doc/${pname}-${version}/
+    mkdir -p $doc/share/doc/amiri-${finalAttrs.version}
+    mv {*.html,*.txt,*.md} $doc/share/doc/amiri-${finalAttrs.version}/
 
     runHook postInstall
   '';
@@ -31,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.vbgl ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -21,21 +21,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2026.14";
+  version = "2026.20";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D/D0V7960g3AD9XM9FA1H/NP2sapFLO4UyH1MJ7O5Fo=";
+    hash = "sha256-nKqWKrONS+OEfG2A7UrL8aL3rDpevR8DeGBJg86yZys=";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    # Header location has moved in glslang 15+
-    substituteInPlace source/slang-glslang/slang-glslang.cpp \
-      --replace-fail '"SPIRV/GlslangToSpv.h"' '"glslang/SPIRV/GlslangToSpv.h"'
-  '';
 
   outputs = [
     "out"

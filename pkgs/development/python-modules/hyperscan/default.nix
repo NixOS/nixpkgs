@@ -7,33 +7,37 @@
   cmake,
   ninja,
   pathspec,
-  pcre,
+  pcre2,
   scikit-build-core,
   pytestCheckHook,
   pytest-mock,
 }:
 let
   lib-deps = symlinkJoin {
-    name = "hyperscan-static-deps";
+    name = "vectorscan-static-deps";
     paths = [
-      (pkgs.hyperscan.override { withStatic = true; })
-      (pcre.overrideAttrs { dontDisableStatic = 0; }).out
+      (pkgs.vectorscan.override { enableShared = false; })
+      pcre2
     ];
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyperscan";
-  version = "0.8.0";
+  version = "0.8.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
-    tag = "v${version}";
-    hash = "sha256-on++eSNaVY2Q6yT/O+unvE0x/Pt/SsIQFQblIqii2sM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jIDUfl6ReWvypfWecM8hReux6YxzXSsLCFU3AO97xUY=";
   };
 
-  env.CMAKE_ARGS = "-DHS_SRC_ROOT=${pkgs.hyperscan.src} -DHS_BUILD_LIB_ROOT=${lib-deps}/lib";
+  env.CMAKE_ARGS = lib.toString [
+    (lib.cmakeFeature "HS_SRC_ROOT" pkgs.vectorscan.src.outPath)
+    (lib.cmakeFeature "HS_BUILD_LIB_ROOT" "${lib-deps}/lib")
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -54,13 +58,14 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    broken = true; # doesn't build with pcre2
     description = "CPython extension for the Hyperscan regular expression matching library";
     homepage = "https://github.com/darvid/python-hyperscan";
-    changelog = "https://github.com/darvid/python-hyperscan/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/darvid/python-hyperscan/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     platforms = [
       "x86_64-linux"
     ];
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

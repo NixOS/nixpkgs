@@ -1,11 +1,9 @@
 {
-  cmake,
-  doxygen,
   eiquadprog,
   fetchFromGitHub,
+  jrl-cmakemodules,
   lib,
   osqp-eigen,
-  pkg-config,
   pinocchio,
   proxsuite,
   stdenv,
@@ -18,11 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "tsid";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f/SecQfEmrlelVR5584KIHFwwrp5Cy2aBMKI/rxuPmc=";
   };
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_OSQP" true)
     (lib.cmakeBool "BUILD_WITH_PROXQP" true)
@@ -34,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    doxygen
-    cmake
-    pkg-config
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+
+  buildInputs = [
+    jrl-cmakemodules
   ];
 
   propagatedBuildInputs = [

@@ -3,6 +3,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
 
   # keep-sorted start
   cmake,
@@ -108,13 +109,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kvrocks";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "kvrocks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CAbhOX7dmyXgl0STNjzALseXUzrpTPNy9tjoPACe0Os=";
+    hash = "sha256-OEHiAa634ooNLlBrIwHpvEmzzkHHprNuRIvQGxMPwl8=";
   };
 
   __structuredAttrs = true;
@@ -334,6 +335,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     hook = callPackage ./hook.nix { kvrocks = finalAttrs.finalPackage; };
     tests = {
+      inherit (nixosTests) kvrocks;
       hook = callPackage ./hook-test.nix { kvrocks = finalAttrs.finalPackage; };
     };
   };

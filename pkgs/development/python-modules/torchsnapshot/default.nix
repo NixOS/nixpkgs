@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   # _pickle.UnpicklingError: Weights only load failed.
-  # torchsnapshot needs to adapt to the change of torch.load that occured in 2.6.0:
+  # torchsnapshot needs to adapt to the change of torch.load that occurred in 2.6.0:
   # https://pytorch.org/docs/stable/generated/torch.load.html
   postPatch = ''
     substituteInPlace torchsnapshot/io_preparers/object.py \

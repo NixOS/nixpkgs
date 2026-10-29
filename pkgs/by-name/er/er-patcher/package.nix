@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     longDescription = ''
       A tool aimed at enhancing the experience when playing the game on linux through proton or natively on windows.
       This tool is based on patching the game executable through hex-edits. However it is done in a safe and non-destructive way,
-      that ensures the patched executable is never run with EAC enabled (unless explicity told to do so). Use at your own risk!
+      that ensures the patched executable is never run with EAC enabled (unless explicitly told to do so). Use at your own risk!
     '';
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sigmasquadron ];

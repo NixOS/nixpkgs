@@ -56,7 +56,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "root";
-  version = "6.40.00";
+  version = "6.40.04";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
-    hash = "sha256-Z2+P3okmzgWQK+f0TOfUkqSiBgAi/KsOPRxE9twPveg=";
+    hash = "sha256-RK2iU7GTXTS2gBIiIy1Qcx/nxePLz6tHc0yFAxz75NM=";
   };
 
   clad_src = fetchFromGitHub {

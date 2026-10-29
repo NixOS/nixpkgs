@@ -34,7 +34,6 @@ buildPythonPackage {
   inherit (libgdstk) src version;
 
   pyproject = true;
-  strictDeps = true;
 
   # scikit is supposed to handle the module build
   dontUseCmakeConfigure = true;

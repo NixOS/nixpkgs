@@ -24,19 +24,11 @@
   libunwind,
   orc,
   pkgsBuildBuild,
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 qtModule {
   pname = "qtmultimedia";
-  nativeBuildInputs = [
-    pkg-config
-  ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
-  ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     ffmpeg
   ]
@@ -75,13 +67,13 @@ qtModule {
 
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
+    # don't dlopen pipewire
+    "-DFEATURE_pipewire_symbolloader=0"
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
   ];
 
   env = {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include AudioToolbox/AudioToolbox.h";
-    # TODO: Clean up on `staging`.
-    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-fuse-ld=lld";
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AudioToolbox";
   };
 }

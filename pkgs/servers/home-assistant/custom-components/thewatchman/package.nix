@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "dummylabs";
   domain = "watchman";
-  version = "0.8.3";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "dummylabs";
     repo = "thewatchman";
     tag = "v${version}";
-    hash = "sha256-5BXIKh8uPKuxsLbxu0fUbuCR2LYOXk1HpOvrqehg0u0=";
+    hash = "sha256-y9Qug+ftJDZXUHCsmx+/KqauczoHPPHiCtnnngdJBu8=";
   };
 
   ignoreVersionRequirement = [
@@ -37,10 +37,10 @@ buildHomeAssistantComponent rec {
   ];
 
   disabledTests = [
-    # the test relies on NOT changing the hass config_dir and tries to write into the nix store
-    "test_status_sensor_safe_mode"
     # flaky
     "test_automations_parsing"
+    # Timing sensitive: Should still not be called (T=2.5 < T=3)
+    "test_debounce_rescan"
   ];
 
   meta = {

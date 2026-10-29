@@ -6,14 +6,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "queuelib";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sS/qef2MHdI+ISsfPbWAA7dzlJgB1PTm802IJGfUoZI=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-BjyCHDKFmui9zizJ50FWZFwHQhikZPgmLimjuN6Dlzc=";
   };
 
   build-system = [ hatchling ];
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of persistent (disk-based) queues for Python";
     homepage = "https://github.com/scrapy/queuelib";
-    changelog = "https://github.com/scrapy/queuelib/releases/tag/v${version}";
+    changelog = "https://github.com/scrapy/queuelib/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

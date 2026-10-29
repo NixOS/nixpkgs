@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_42,
+  electron_44,
   python3,
   makeWrapper,
   callPackage,
@@ -28,13 +28,13 @@
 
   withAppleEmojis ? false,
 }:
-assert lib.warnIf (commandLineArgs != "")
-  "`commandLineArgs` has been deprecated and will be removed in the future. Consider creating a wrapper script or a desktop entry with your desired flags."
+assert lib.throwIf (commandLineArgs != "")
+  "`commandLineArgs` has been removed. Consider creating a wrapper script or a desktop entry with your desired flags."
   true;
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_42;
+  electron = electron_44;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -42,16 +42,16 @@ let
     inherit nodejs;
   };
 
-  webrtc = callPackage ./webrtc.nix { };
+  webrtc = callPackage ./webrtc.nix { ringrtcSrc = ringrtc.src; };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.18.0";
+  version = "8.31.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-fynCFGmch3UecT5esNfVVlf0+xDrCdCBGw2HMMqBzWw=";
+    hash = "sha256-p4VFmMc5WaQCJAz+FVNkqURuO+5vK95BcHgcrzp5dG8=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -77,17 +77,15 @@ let
         pname
         src
         version
-        postPatch
         pnpmWorkspaces
         ;
       inherit pnpm;
+      prePnpmInstall = ''
+        pnpm config set fetch-timeout 300000
+      '';
       fetcherVersion = 4;
-      hash = "sha256-bWNs5W2NPk55Sm7UqwWvXU7bY+AXzevU3o2ji23HxtU=";
+      hash = "sha256-Rf/hyJVuFvhCM4LTTEiiqvrl76gzNekO2UXMhbSOFUc=";
     };
-
-    postPatch = ''
-      rm sticker-creator/pnpm-lock.yaml
-    '';
 
     strictDeps = true;
     nativeBuildInputs = [
@@ -189,14 +187,19 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
+    prePnpmInstall = ''
+      pnpm config set fetch-timeout 300000
+    '';
     fetcherVersion = 4;
-    hash = "sha256-bWNs5W2NPk55Sm7UqwWvXU7bY+AXzevU3o2ji23HxtU=";
+    hash = "sha256-Rf/hyJVuFvhCM4LTTEiiqvrl76gzNekO2UXMhbSOFUc=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1783606680;
+    # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
+    # We set the source-changed date to match the corresponding upstream release date.
+    SOURCE_DATE_EPOCH = 1792071284;
   };
 
   preBuild = ''
@@ -258,6 +261,13 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm run build
     popd
     test -f node_modules/@signalapp/windows-ucv/dist/index.js
+
+    # @signalapp/types is required at runtime by preload.wrapper.js, but its
+    # output is normally produced by the prepare script.
+    pushd packages/types
+    pnpm run build
+    popd
+    test -f node_modules/@signalapp/types/dist/index.std.cjs
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist

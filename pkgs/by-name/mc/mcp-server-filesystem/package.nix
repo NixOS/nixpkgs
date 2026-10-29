@@ -1,28 +1,40 @@
 {
   lib,
   buildNpmPackage,
-  typescript,
+  yq-go,
+  typescript_7,
   fetchFromGitHub,
+  fetchNpmDeps,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "mcp-server-filesystem";
-  version = "2026.7.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
-    tag = finalAttrs.version;
-    hash = "sha256-rBdJoTC1wOEMbAAeSccFqaHL7lacf2SFfxZ/pp2Lx90=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gzT45m4S/S7sighNwYw4I01jiLsUrGh+9H9p0neaQDE=";
   };
 
+  postPatch = ''
+    yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+    # Remove this since it fails during `npmInstallHook` otherwise
+    substituteInPlace src/filesystem/package.json \
+      --replace-fail "prepare" "dont-prepare"
+  '';
+
   nativeBuildInputs = [
-    typescript
+    yq-go
+    typescript_7
   ];
 
-  dontNpmPrune = true;
   npmWorkspace = "src/filesystem";
-  npmDepsHash = "sha256-KhlTXcS+VDSPGnEus9fA0xhIxfTGwX1Cr5hbxFvdc2k=";
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-2V/DxjLtxMm+X7BPApi4JXa6R91O6TaD6J0cH37Cyoo=";
+  };
 
   # TODO: revisit this when https://github.com/NixOS/nixpkgs/pull/333759 has landed
   postInstall = ''

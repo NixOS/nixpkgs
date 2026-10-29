@@ -33,7 +33,7 @@ let
 in
 buildPythonApplication (finalAttrs: {
   pname = "devede";
-  version = "4.21.3.1";
+  version = "4.22.1";
   pyproject = true;
   namePrefix = "";
 
@@ -41,7 +41,7 @@ buildPythonApplication (finalAttrs: {
     owner = "rastersoft";
     repo = "devedeng";
     tag = finalAttrs.version;
-    hash = "sha256-81H063PpBF/+JDsRgBLwfAevb11yNkDtH4KdtOAL/Fg=";
+    hash = "sha256-r3ReIdNIJss1FvbKT2WekzVugxelnTvgfpmZ1X0D5ss=";
   };
 
   nativeBuildInputs = [

@@ -28,17 +28,11 @@
         MAILADDR test@example.com
       '';
       boot.initrd = {
-        systemd = {
-          enable = true;
-          emergencyAccess = true;
-        };
+        systemd.emergencyAccess = true;
         kernelModules = [ "raid0" ];
       };
 
       specialisation.boot-swraid.configuration.virtualisation.rootDevice = "/dev/disk/by-label/testraid";
-      # This protects against a regression. We do not have to switch to it.
-      # It's sufficient to trigger its evaluation.
-      specialisation.build-old-initrd.configuration.boot.initrd.systemd.enable = lib.mkForce false;
     };
 
   testScript =

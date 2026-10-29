@@ -7,6 +7,7 @@
   makeWrapper,
   pkg-config,
   arp-scan,
+  cacert,
   curl,
   ffmpeg,
   glib,
@@ -30,6 +31,7 @@
   procps,
   psmisc,
   nixosTests,
+  nix-update-script,
 }:
 
 # NOTES:
@@ -88,13 +90,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.38.3";
+  version = "1.38.6";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
     tag = version;
-    hash = "sha256-Hko5ViEevcKp0kiSFK9DBcSoYkZY3KttazhEexv4klI=";
+    hash = "sha256-sSFEarFMbCHDMbrWRJT1Y/0owLJqr033t0eaVDPjzdw=";
     fetchSubmodules = true;
   };
 
@@ -237,6 +239,9 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit dirName;
     tests = nixosTests.zoneminder;
+    updateScript = nix-update-script {
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   postInstall = ''
@@ -256,6 +261,9 @@ stdenv.mkDerivation rec {
     done
 
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
+
+    rm $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/zoneminder/www/api/lib/Cake/Config/cacert.pem
 
     # Combine configs under $out/etc/zoneminder/conf.d/ into
     # $out/etc/zoneminder/zm.conf, because we patch so that we read from

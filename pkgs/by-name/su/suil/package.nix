@@ -16,8 +16,6 @@
   lv2,
 
   # options
-  withGtk2 ? false,
-  gtk2,
   withGtk3 ? true,
   gtk3,
   withQt5 ? true,
@@ -51,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (mesonEnable "gtk2" withGtk2)
+    (mesonEnable "gtk2" false)
     (mesonEnable "gtk3" withGtk3)
     (mesonEnable "qt5" withQt5)
     (mesonEnable "x11" withX11)
@@ -60,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     lv2
   ]
-  ++ lib.optionals withGtk2 [ gtk2 ]
   ++ lib.optionals withGtk3 [ gtk3 ]
   ++ lib.optionals withQt5 (
     with qt5;

@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "snis_assets";
-  version = "2025-07-26";
+  version = "2026-10-12";
 
   src = fetchFromGitHub {
     owner = "marcin-serwin";
     repo = "snis-assets-snapshotter";
     tag = finalAttrs.version;
-    hash = "sha256-K/X66txXKpGtWPRtWXvKiVMYb6vGJtrv2CdHVuXbT8M=";
+    hash = "sha256-ygLMOtZ6z8HNW6Ct+oNlFq6t5gBr07fpa66UmqWBvh0=";
   };
 
   dontConfigure = true;

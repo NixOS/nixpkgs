@@ -5,7 +5,7 @@
   extraModules ? [ ],
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = blender.pname + "-wrapped";
+  pname = blender.pname;
   src = blender;
 
   inherit (blender) version meta;

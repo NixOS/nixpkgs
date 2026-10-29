@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amiloradovsky";
     repo = "magnify";
     rev = finalAttrs.version;
-    sha256 = "1ngnp5f5zl3v35vhbdyjpymy6mwrs0476fm5nd7dzkba7n841jdh";
+    hash = "sha256-sMlAkD1qzd9Os6U6cwjQmVfjq7/StwV3GXvQX1y59tk=";
   };
 
   prePatch = ''

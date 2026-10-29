@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   buildPackages,
   pkg-config,
   xorgproto,
@@ -13,7 +14,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libx11";
-  version = "1.8.13";
+  version = "1.8.14";
 
   outputs = [
     "out"
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libX11-${finalAttrs.version}.tar.xz";
-    hash = "sha256-aWBvSFwsB8FO9k91t7sybUhYevM3ldmrPmB8C1+U8Rw=";
+    hash = "sha256-u8eMRiFxdGVcKzKxOK0RnzrBX1CAi00LOiZ3pLGvyVA=";
   };
 
   strictDeps = true;

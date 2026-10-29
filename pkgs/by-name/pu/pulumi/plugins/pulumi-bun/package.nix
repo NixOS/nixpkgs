@@ -41,6 +41,8 @@ symlinkJoin (finalAttrs: {
     mainProgram = "pulumi-language-bun";
     maintainers = with lib.maintainers; [
       niklasravnsborg
+      wrbbz
     ];
+    teams = [ lib.teams.pulumi ];
   };
 })

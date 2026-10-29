@@ -91,7 +91,7 @@ symlinkJoin {
 
     glibPostInstallHook
     gappsWrapperArgsHook
-    wrapGAppsHook
+    wrapGApp "$out/bin/ModrinthApp"
   '';
 
   meta = {

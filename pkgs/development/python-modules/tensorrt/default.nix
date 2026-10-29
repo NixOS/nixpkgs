@@ -1,10 +1,11 @@
 {
-  autoPatchelfHook,
-  buildPythonPackage,
-  cudaPackages,
   lib,
-  python,
   stdenv,
+  cudaPackages,
+  buildPythonPackage,
+  pythonAtLeast,
+  python,
+  autoPatchelfHook,
 }:
 let
   inherit (cudaPackages.tensorrt)
@@ -23,6 +24,9 @@ buildPythonPackage {
 
   inherit version;
 
+  # cudaPackages.tensorrt.src contains wheels for python 3.14 from TensorRT 11.1.
+  disabled = pythonAtLeast (if lib.versionOlder version "11.1" then "3.14" else "3.15");
+
   src =
     let
       # https://peps.python.org/pep-0427/#file-name-convention
@@ -34,6 +38,7 @@ buildPythonPackage {
     src + "/python/${distribution}-${version}-${pythonTag}-${abiTag}-${platformTag}.whl";
 
   format = "wheel";
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     autoPatchelfHook

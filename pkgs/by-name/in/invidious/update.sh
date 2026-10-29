@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nurl pkg-config pcre gnugrep
+#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nurl pkg-config pcre2 gnugrep
 git_url='https://github.com/iv-org/invidious.git'
 git_branch='master'
 git_dir='/var/tmp/invidious.git'

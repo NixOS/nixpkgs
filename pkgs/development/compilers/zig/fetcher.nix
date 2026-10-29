@@ -17,7 +17,7 @@ runCommand "${name}-zig-deps"
 
     nativeBuildInputs = [ zig ];
 
-    outputHashAlgo = null;
+    outputHashAlgo = if hash == "" then "sha256" else null;
     outputHashMode = "recursive";
     outputHash = hash;
   }

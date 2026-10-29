@@ -12,14 +12,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "exiv2";
-  version = "0.18.1";
+  version = "0.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
     tag = finalAttrs.version;
-    hash = "sha256-3r0qGsCkfe2sQuXiCipXzW0vF2JRg77L1IcOiLTPslM=";
+    hash = "sha256-o7COS308ALPYgcQtKGrgwx+4KLGlsZ29J1LSrAldTw4=";
   };
 
   build-system = [

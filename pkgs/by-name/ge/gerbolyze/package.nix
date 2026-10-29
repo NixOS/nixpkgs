@@ -71,12 +71,13 @@ python3Packages.buildPythonApplication {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        resvg
-        svg-flatten
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      resvg
+      svg-flatten
+    ])
   ];
 
   preCheck = ''

@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "terraform-docs";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = "terraform-docs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yroGYLZX1MnCTVmDiTbWDNnwLcmTOT/jYECmFy/ZmRk=";
+    hash = "sha256-9bTri27VyZgpCsgKoClQh9PCHK5WkARdp1DphlGKxeA=";
   };
 
   vendorHash = "sha256-k4xypyNk80EXH823oItjc45kkupjTSXHybnMrKEgFvs=";

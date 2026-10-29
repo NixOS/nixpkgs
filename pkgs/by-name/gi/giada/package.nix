@@ -45,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error"
   ];
 
+  # fmt 12.2.0 made <fmt/core.h> a shim for <fmt/base.h>, which no longer
+  # declares fmt::format.
+  patches = [ ./fmt-12-format-header.patch ];
+
   cmakeFlags = [
     "-DCMAKE_INSTALL_BINDIR=bin"
   ];

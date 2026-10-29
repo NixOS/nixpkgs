@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "character-encoding-utils";
-  version = "0.0.12";
+  version = "0.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "character-encoding-utils";
     tag = version;
-    hash = "sha256-4WaVvr6/d/oePtmwpGJ/D6tv10V/ok9iN4BrqGk97f0=";
+    hash = "sha256-JGgjOFzPA7IseeGyDNUX1QEtV5OT+ptwZDy/XkNN3rY=";
   };
 
   build-system = [ uv-build ];

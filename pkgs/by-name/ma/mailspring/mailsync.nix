@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     xz
     zlib
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -84,6 +84,10 @@ stdenv.mkDerivation {
       CXXFLAGS = FLAGS;
     };
 
+  cmakeFlags = [
+    (lib.cmakeFeature "ETPAN_LIB" "${mailspring-libetpan}/lib/libetpan${stdenv.hostPlatform.extensions.sharedLibrary}")
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'IF(''${CMAKE_SYSTEM_NAME} MATCHES "Linux")' 'if(TRUE)'
@@ -91,18 +95,12 @@ stdenv.mkDerivation {
     # Replace hardcoded host paths and vendored dependencies
     substituteInPlace CMakeLists.txt \
       --replace-fail "/usr/include/libxml2" "${lib.getDev libxml2}/include/libxml2" \
-      --replace-fail "find_library(RESOLV_LIB NAMES libresolv.a libresolv)" "set(RESOLV_LIB \"resolv\")" \
-      --replace-fail "target_link_libraries(mailsync libetpan.a)" "target_link_libraries(mailsync ${mailspring-libetpan}/lib/libetpan${stdenv.hostPlatform.extensions.sharedLibrary})" \
       --replace-fail "target_link_libraries(mailsync libMailCore.a)" "target_link_libraries(mailsync ${mailspring-mailcore2}/lib/libMailCore.a)"
-
-    # Replace hardcoded references to archives with library references
-    # Transforms 'NAMES libfoo.a libfoo' into 'NAMES foo'
-    sed -i -E 's/NAMES lib([a-zA-Z0-9]+)\.a lib\1/NAMES \1/g' CMakeLists.txt
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # UUID_LIB is provided by system frameworks
     substituteInPlace CMakeLists.txt \
-      --replace-fail "find_library(UUID_LIB NAMES uuid)" "set(UUID_LIB \"\")"
+      --replace-fail "find_library(UUID_LIB NAMES libuuid.a uuid REQUIRED)" "set(UUID_LIB \"\")"
 
     # Remove GCC related linker flags
     substituteInPlace CMakeLists.txt \

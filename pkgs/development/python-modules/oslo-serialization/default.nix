@@ -7,18 +7,18 @@
   oslotest,
   pbr,
   setuptools,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-serialization";
-  version = "5.9.1";
+  version = "5.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_serialization";
     inherit version;
-    hash = "sha256-CGq3ihXzPwLmR72zyjZjJIDZTPZhzx+xGK3r3u5dS+c=";
+    hash = "sha256-gyboWoCFbBBoAHQj/Pb+Kd0v5Xoy9dh//wEgtVW0tnw=";
   };
 
   build-system = [
@@ -33,14 +33,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "oslo_serialization" ];
 

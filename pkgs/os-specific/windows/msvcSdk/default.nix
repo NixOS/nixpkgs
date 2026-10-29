@@ -93,11 +93,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "MSVC SDK and Windows CRT for cross compiling";
     homepage = "https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/";
     maintainers = [ lib.maintainers.RossSmyth ];
-    license = {
-      deprecated = false;
+    license = lib.licenses.mkLicense {
       fullName = "Microsoft Software License Terms";
       shortName = "msvc";
-      spdxId = "unknown";
       free = false;
       url = "https://www.visualstudio.com/license-terms/mt644918/";
     };

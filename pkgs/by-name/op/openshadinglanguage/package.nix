@@ -22,14 +22,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
-  version = "1.15.5.0";
+  version = "1.15.6.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-edtYKN2obQexQtclrIUflm3upc14MhHQ7eLvit5Hqq0=";
+    hash = "sha256-UOto23uF2WabTraR+pkLkg0zEPUUnDVmgnctZYzhqWk=";
   };
+
+  patches = [ ./libclang-no-shared.patch ];
 
   cmakeFlags = [
     (lib.cmakeBool "LLVM_STATIC" true)
@@ -38,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
     (lib.cmakeFeature "LLVM_BC_GENERATOR" "${clang}/bin/clang++")
-    (lib.cmakeFeature "LLVM_CONFIG" "${llvm.dev}/bin/llvm-config")
     (lib.cmakeFeature "LLVM_DIRECTORY" "${llvm}")
   ];
 
@@ -53,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bison
-    clang
     cmake
     flex
   ];

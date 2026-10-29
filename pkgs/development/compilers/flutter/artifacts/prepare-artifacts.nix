@@ -12,6 +12,8 @@
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
+  autoPatchelfFlags = [ "--preserve-origin" ];
+
   installPhase = ''
     runHook preInstall
 

@@ -24,6 +24,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ python3 ];
 
+  strictDeps = true;
+
   installPhase = ''
     mkdir -p $out/bin
     cp -r * $out/
@@ -38,6 +40,8 @@ stdenv.mkDerivation {
     memcpy-fix = ./memcpy-fix.patch;
     memcpy-fix-backport-250512 = ./memcpy-fix-backport-250512.patch;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Central location for code to be shared among GNU packages";

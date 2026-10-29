@@ -13,22 +13,26 @@
   curl,
   ftgl,
   glew,
-  lua,
+  lua5_5,
   mpg123,
   wrapGAppsHook3,
   unstableGitUpdater,
   libwebp,
 }:
 
+let
+  lua = lua5_5;
+in
+
 stdenv.mkDerivation {
   pname = "slade";
-  version = "3.2.12-unstable-2026-06-08";
+  version = "3.2.12-unstable-2026-10-15";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "46fc51ac57f4fe54caf036b3d1e9b028a120be27";
-    hash = "sha256-mSddQstwZYkTzeA9fHswfuIUaoQlqXT+zTXWp20jgDc=";
+    rev = "4ff634d4698383a14e1ff3c1e610ed10cab666c6";
+    hash = "sha256-fIYsW4AYJXLOGUXIpb3AACAZl1UHqtEaxojiqc1Fxpo=";
   };
 
   nativeBuildInputs = [

@@ -1,24 +1,22 @@
 {
   lib,
   fetchFromGitHub,
-  llvmPackages,
-  swiftPackages,
+  fetchSwiftPMDeps,
+  stdenv,
   swift,
   swiftpm,
   nix-update-script,
 }:
-let
-  inherit (llvmPackages) stdenv;
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "age-plugin-se";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "remko";
     repo = "age-plugin-se";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sg73DzlW4aXNbIIePZox4JkF10OfsMtPw0q/0DWwgDk=";
+    hash = "sha256-ga9EYfvscXf8VHSptjgnjaeZT+D/69PAr/s53JOHG20=";
   };
 
   nativeBuildInputs = [
@@ -26,32 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     swiftpm
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    # Can't find libdispatch without this on NixOS. (swift 5.8)
-    LD_LIBRARY_PATH = "${swiftPackages.Dispatch}/lib";
+  swiftpmDeps = fetchSwiftPMDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-rGPaSlNmW4zn2bBhu3LnJvPUWBQhAfFmHnNFm9jKR+8=";
   };
-
-  postPatch =
-    let
-      swift-crypto = fetchFromGitHub {
-        owner = "apple";
-        repo = "swift-crypto";
-        # FIXME: Update to a newer version once https://github.com/NixOS/nixpkgs/issues/343210 is fixed
-        # This is the last version to support swift tools 5.8 which is newest version supported by nixpkgs:
-        # https://github.com/apple/swift-crypto/commit/35703579f63c2518fc929a1ce49805ba6134137c
-        tag = "3.7.1";
-        hash = "sha256-zxmHxTryAezgqU5qjXlFFThJlfUsPxb1KRBan4DSm9A=";
-      };
-    in
-    ''
-      ln -s ${swift-crypto} swift-crypto
-      substituteInPlace Package.swift --replace-fail 'url: "https://github.com/apple/swift-crypto.git"' 'path: "./swift-crypto"), //'
-    '';
 
   makeFlags = [
     "PREFIX=$(out)"
     "RELEASE=1"
   ];
+
+  dontUseSwiftpmInstall = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -31,8 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-wDEhXIt1iup7QxKsmWUjQZGTEZhOuNjpLqzpqs+TPHo=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     appstream
     blueprint-compiler
@@ -54,9 +52,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [ pygobject3 ];
 
   dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ pandoc ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ pandoc ])
   ];
 
   passthru = {

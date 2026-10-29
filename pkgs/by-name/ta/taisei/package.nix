@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taisei";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "taisei-project";
     repo = "taisei";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xjEfSrtxZBBWUU8nv0fyNAofHSGVTeO3CBR/BhKSGHg=";
+    hash = "sha256-F5fmTY3kl5HW4C/SH5JDZF0vTWescExTANQDYZ2vPmI=";
     fetchSubmodules = true;
   };
 
@@ -73,8 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     mimalloc
     libogg
     libunibreak
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     glslang
     spirv-cross
   ]
@@ -91,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "install_freedesktop" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "install_macos_bundle" stdenv.hostPlatform.isDarwin)
     (lib.mesonEnable "install_relocatable" stdenv.hostPlatform.isDarwin)
-    (lib.mesonEnable "shader_transpiler" stdenv.hostPlatform.isDarwin)
   ];
 
   preConfigure = ''

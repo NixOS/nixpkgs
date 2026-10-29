@@ -18,6 +18,7 @@ in
     server =
       { config, pkgs, ... }:
       {
+        virtualisation.memorySize = 4096;
         services.stirling-pdf = {
           enable = true;
           package = pkgs.stirling-pdf;
@@ -36,8 +37,8 @@ in
           memorySize = 4096;
           cores = 4;
           qemu.options = [
-            # Force qemu at 640x480 resolution
-            "-vga none -device virtio-gpu-pci,xres=640,yres=480"
+            # The v3 onboarding dialog needs a larger display.
+            "-vga none -device virtio-gpu-pci,xres=1280,yres=800"
           ];
         };
         imports = [ ./common/wayland-cage.nix ];
@@ -51,8 +52,6 @@ in
               }
             ''
           );
-        programs.ydotool.enable = true;
-        users.users.alice.extraGroups = [ "ydotool" ];
       };
   };
 
@@ -61,46 +60,17 @@ in
     server.wait_for_unit("stirling-pdf.service")
     server.wait_for_console_text("Stirling-PDF Started")
 
-    # initial login
+    # Complete the desktop onboarding and sign in to the provisioned server.
     client.start()
-    client.wait_for_text("Sign in to Server")
+    client.wait_for_text("Step")
+    client.send_key("kp_enter", 1)
+    client.wait_for_text("Step2of2")
     client.send_chars("admin", 0.1)
     client.send_key("tab", 1)
     client.send_chars("stirling\n", 0.1)
-
-    # skip telemetry prompt
-    client.wait_for_text("analytics")
-    client.send_key("shift-tab", 1)
-    client.send_key("tab", 1)
-    client.send_key("tab", 1)
-    client.send_key("kp_enter", 1)
-
-    # update password
-    client.wait_for_text("password")
-    client.send_key("tab", 1)
-    client.send_key("shift-tab", 1)
-    client.send_key("shift-tab", 1)
-    client.send_key("shift-tab", 1)
-    client.send_chars("stirling2", 0.1)
-    client.send_key("tab", 1)
-    client.send_chars("stirling2", 0.1)
-    client.send_key("tab", 1)
-    client.send_key("kp_enter", 1)
-
-    # final login
-    client.wait_for_text("Sign in to Server")
-    client.send_chars("admin", 0.1)
-    client.send_key("tab", 1)
-    client.send_chars("stirling2\n", 0.1)
-    client.wait_for_text("Welcome to Stirling")
-    client.send_key("kp_enter", 1)
-
-    # version prompt
-    client.wait_for_text("Config")
-    client.execute("ydotool mousemove -a -- 290 220") # Config button
-    client.execute("ydotool click 0xC0")
-    client.wait_for_text("Current Frontend Version")
-    client.screenshot("stirling-pdf-version")
+    client.wait_for_console_text("Auth token saved to keyring")
+    client.sleep(2)
+    client.screenshot("stirling-pdf-desktop")
   '';
 
   # Debug interactively with:

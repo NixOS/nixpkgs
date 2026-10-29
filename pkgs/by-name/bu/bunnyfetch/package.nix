@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner = "Rosettea";
+    owner = "sammy-ette";
     repo = "bunnyfetch";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-6MnjCXc9/8twdf8PHKsVJY1yWYwUf5R01vtQFJbyy7M=";
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tiny system info fetch utility";
-    homepage = "https://github.com/Rosettea/bunnyfetch";
+    homepage = "https://github.com/sammy-ette/bunnyfetch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ devins2518 ];
     platforms = lib.platforms.linux;

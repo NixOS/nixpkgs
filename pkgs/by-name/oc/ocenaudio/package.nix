@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocenaudio";
-  version = "3.20.0";
+  version = "3.20.1";
 
   src = fetchurl {
     name = "ocenaudio.deb";
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian12.deb?version=v${finalAttrs.version}";
-    hash = "sha256-iykGoFPyxJGyF4S1YjNS1XKkGrxxgK+xxA4gyVsgw8E=";
+    hash = "sha256-flO5jlWZllUPl31okwmNjHI/9ctR0pziUx4/i+YRWQY=";
   };
 
   autoPatchelfIgnoreMissingDeps = [

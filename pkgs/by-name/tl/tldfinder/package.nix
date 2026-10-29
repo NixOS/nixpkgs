@@ -4,11 +4,13 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "tldfinder";
   version = "0.0.2";
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -21,6 +23,15 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-lY9AouIIj2OFBRLeaE/8KdF2siiBTuD8ieWdPZVNI9I=";
 
   ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 

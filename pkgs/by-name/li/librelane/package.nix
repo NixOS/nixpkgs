@@ -23,14 +23,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.4";
+  version = "3.0.14";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librelane";
     repo = "librelane";
     tag = finalAttrs.version;
-    hash = "sha256-y1h2KEbK2rSn54uDuCfH9ouo2FLTFbVxpgOqnR+kwhM=";
+    hash = "sha256-/ZzATYRi9JH6YyFWnI4lLkQ2/e2B0xa7WEI65a/ArJI=";
   };
 
   build-system = [
@@ -43,6 +44,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "click"
+    # librelane pins ciel<3; only Family.by_name/get_ciel_home/fetch()
+    # (unchanged in ciel 3.0.0) are used, so the pin is safe to relax.
+    "ciel"
   ];
 
   dependencies = with python3Packages; [

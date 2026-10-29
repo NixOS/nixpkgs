@@ -1,4 +1,4 @@
-From c1c36f73aa3085a856c7cf36d69c21d18d3ef5ac Mon Sep 17 00:00:00 2001
+From 0ea28d2f38500559734cb0fe99eae40c04783730 Mon Sep 17 00:00:00 2001
 From: Bernardo Meurer <bernardo@meurer.org>
 Date: Fri, 22 Jul 2022 22:11:07 -0700
 Subject: [PATCH] Revert "Remove all usage of @BASH@ or ${BASH} in installed
@@ -22,10 +22,10 @@ Co-authored-by: Maximilian Bosch <maximilian@mbosch.me>
  8 files changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/debug/Makefile b/debug/Makefile
-index 6a05205ce6..dd63b16ae8 100644
+index c6c1069b40..ccecf6b70b 100644
 --- a/debug/Makefile
 +++ b/debug/Makefile
-@@ -345,8 +345,9 @@ $(objpfx)pcprofiledump: $(objpfx)pcprofiledump.o
+@@ -407,8 +407,9 @@ $(objpfx)pcprofiledump: $(objpfx)pcprofiledump.o
  
  $(objpfx)xtrace: xtrace.sh
  	rm -f $@.new
@@ -38,17 +38,17 @@ index 6a05205ce6..dd63b16ae8 100644
  	&& rm -f $@ && mv $@.new $@ && chmod +x $@
  
 diff --git a/debug/xtrace.sh b/debug/xtrace.sh
-index 00bafd33db..d0f9fca9a9 100755
+index a1bb50eeaf..01383c7c79 100755
 --- a/debug/xtrace.sh
 +++ b/debug/xtrace.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2025 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/elf/Makefile b/elf/Makefile
-index 4b1d0d8741..bbcf688c99 100644
+index d279a5135c..dc39ccea60 100644
 --- a/elf/Makefile
 +++ b/elf/Makefile
 @@ -250,7 +250,8 @@ $(objpfx)sotruss-lib.so: $(common-objpfx)libc.so $(objpfx)ld.so \
@@ -61,7 +61,7 @@ index 4b1d0d8741..bbcf688c99 100644
  	    -e 's%@TEXTDOMAINDIR@%$(localedir)%g' \
  	    -e 's%@PREFIX@%$(prefix)%g' \
  	    -e 's|@PKGVERSION@|$(PKGVERSION)|g' \
-@@ -1556,6 +1557,7 @@ ldd-rewrite = -e 's%@RTLD@%$(rtlddir)/$(rtld-installed-name)%g' \
+@@ -1720,6 +1721,7 @@ ldd-rewrite = -e 's%@RTLD@%$(rtlddir)/$(rtld-installed-name)%g' \
  	      -e 's%@VERSION@%$(version)%g' \
  	      -e 's|@PKGVERSION@|$(PKGVERSION)|g' \
  	      -e 's|@REPORT_BUGS_TO@|$(REPORT_BUGS_TO)|g' \
@@ -70,30 +70,30 @@ index 4b1d0d8741..bbcf688c99 100644
  
  ifeq ($(ldd-rewrite-script),no)
 diff --git a/elf/ldd.bash.in b/elf/ldd.bash.in
-index 2d3df6e57e..0faf83dc86 100644
+index bfc40f6505..59ca54e2d9 100644
 --- a/elf/ldd.bash.in
 +++ b/elf/ldd.bash.in
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1996-2025 Free Software Foundation, Inc.
+ # Copyright (C) 1996-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/elf/sotruss.sh b/elf/sotruss.sh
-index 8944645df9..1c36981b22 100755
+index c90abaaed9..03cb25bc57 100755
 --- a/elf/sotruss.sh
 +++ b/elf/sotruss.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 2011-2025 Free Software Foundation, Inc.
+ # Copyright (C) 2011-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/malloc/Makefile b/malloc/Makefile
-index e2b2c1ae1b..67a399f1dd 100644
+index 72aa77af20..e148b6480a 100644
 --- a/malloc/Makefile
 +++ b/malloc/Makefile
-@@ -359,8 +359,9 @@ $(objpfx)mtrace: mtrace.pl
+@@ -484,8 +484,9 @@ $(objpfx)mtrace: mtrace.pl
  
  $(objpfx)memusage: memusage.sh
  	rm -f $@.new
@@ -106,20 +106,20 @@ index e2b2c1ae1b..67a399f1dd 100644
  	&& rm -f $@ && mv $@.new $@ && chmod +x $@
  
 diff --git a/malloc/memusage.sh b/malloc/memusage.sh
-index 8ae435d2f8..c929d16af7 100755
+index 309991a7c9..28117c4561 100755
 --- a/malloc/memusage.sh
 +++ b/malloc/memusage.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2025 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/timezone/Makefile b/timezone/Makefile
-index ebe5cf73a1..e9cf92861c 100644
+index ce9abe6cb2..3ee1eed54a 100644
 --- a/timezone/Makefile
 +++ b/timezone/Makefile
-@@ -139,7 +139,8 @@ $(testdata)/XT5: testdata/gen-XT5.sh
+@@ -136,7 +136,8 @@ $(testdata)/XT5: testdata/gen-XT5.sh
  	mv $@.tmp $@
  
  $(objpfx)tzselect: tzselect.ksh $(common-objpfx)config.make
@@ -130,5 +130,5 @@ index ebe5cf73a1..e9cf92861c 100644
  	    -e '/PKGVERSION=/s|=.*|="$(PKGVERSION)"|' \
  	    -e '/REPORT_BUGS_TO=/s|=.*|="$(REPORT_BUGS_TO)"|' \
 -- 
-2.47.2
+2.54.0
 

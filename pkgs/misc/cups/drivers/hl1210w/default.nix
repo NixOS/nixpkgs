@@ -18,11 +18,11 @@ let
   version = "3.0.1-1";
   cupsdeb = fetchurl {
     url = "https://download.brother.com/welcome/dlf101546/hl1210wcupswrapper-${version}.i386.deb";
-    sha256 = "0395mnw6c7qpjgjch9in5q9p2fjdqvz9bwfwp6q1hzhs08ryk7w0";
+    hash = "sha256-gJ/pMwIafhiwudzxlf7GTTpxEy42JsjkkxcfZritJQ0=";
   };
   lprdeb = fetchurl {
     url = "https://download.brother.com/welcome/dlf101547/hl1210wlpr-${version}.i386.deb";
-    sha256 = "1sl3g2cd4a2gygryrr27ax3qaa65cbirz3kzskd8afkwqpmjyv7j";
+    hash = "sha256-8mwv68V8OoXa1H+On+NixSiFR1dH5Ozz808o0ph4g+o=";
   };
 in
 stdenv.mkDerivation {

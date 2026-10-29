@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "brook";
-  version = "20240606";
+  version = "20270101";
 
   src = fetchFromGitHub {
     owner = "txthinking";
     repo = "brook";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rfCqYI0T/nbK+rlPGl5orLo3qHKITesdFNtXc/ECATA=";
+    sha256 = "sha256-OIuEJFGOUkvHjxI4FPKWU65VFvgXG0+pu9giGJXYS0w=";
   };
 
-  vendorHash = "sha256-dYiifLUOq6RKAVSXuoGlok9Jp8jHmbXN/EjQeQpoqWw=";
+  vendorHash = "sha256-974jdNwpQbdTbYjY/6KaicwNclizeIQXfyMZI3v/9aA=";
 
   meta = {
     homepage = "https://github.com/txthinking/brook";

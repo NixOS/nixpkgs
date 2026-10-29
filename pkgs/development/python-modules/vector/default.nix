@@ -14,7 +14,6 @@
 
   # tests
   awkward,
-  dask-awkward,
   notebook,
   numba,
   papermill,
@@ -24,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vector";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scikit-hep";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qQesB6xYzAHMEmscdzoBLJqj36NLd5K1EaPLJlkSFOU=";
+    hash = "sha256-7LssN38bnxZDc1lUp0Tq+6oNjJcA5pTkR3UHAizKvoc=";
   };
 
   build-system = [
@@ -47,7 +46,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     awkward
-    dask-awkward
     notebook
     numba
     papermill

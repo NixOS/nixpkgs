@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
       -e '/argparse/d' \
       -e '/asyncio/d' \
       -e '/datetime/d' \
+      -e '/async-timeout/d' \
       setup.cfg requirements.txt
   '';
 
@@ -33,7 +34,7 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ (with python3Packages; [
     setuptools
-    (matrix-nio.override { withOlm = true; })
+    (matrix-nio.override { withVodozemac = true; })
     python-magic
     markdown
     pillow

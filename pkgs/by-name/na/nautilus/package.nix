@@ -40,6 +40,7 @@
   gsettings-desktop-schemas,
   gnome-user-share,
   gobject-introspection,
+  glycin-loaders,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -100,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-autoar
     libglycin
     libglycin-gtk4
+    glycin-loaders
   ];
 
   propagatedBuildInputs = [

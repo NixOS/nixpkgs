@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpredict";
-  version = "2.5.1";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gpredict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lP+QakQ+uTgBY8NNEC7DwQifh3Zi0ZKbarxNGB4onq0=";
+    hash = "sha256-OlE0NycV/4h6LA+BnRxfBo0+9yWMM4qEHrs+mVx04do=";
   };
 
   strictDeps = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gpredict";
     longDescription = ''
       Gpredict is a real time satellite tracking and orbit prediction program
-      written using the GTK widgets. Gpredict is targetted mainly towards ham radio
+      written using the GTK widgets. Gpredict is targeted mainly towards ham radio
       operators but others interested in satellite tracking may find it useful as
       well. Gpredict uses the SGP4/SDP4 algorithms, which are compatible with the
       NORAD Keplerian elements.

@@ -48,7 +48,7 @@ let
       ) "<VaapiDevice>${escapeXML cfg.hardwareAcceleration.device}</VaapiDevice>"}
       ${optionalString (
         cfg.hardwareAcceleration.type == "qsv" && cfg.hardwareAcceleration.device != null
-      ) "<OpenclDevice>${escapeXML cfg.hardwareAcceleration.device}</OpenclDevice>"}
+      ) "<QsvDevice>${escapeXML cfg.hardwareAcceleration.device}</QsvDevice>"}
       <EncodingThreadCount>${
         if cfg.transcoding.threadCount != null then toString cfg.transcoding.threadCount else "-1"
       }</EncodingThreadCount>

@@ -201,25 +201,35 @@ let
         extraSandboxProfile
         ;
 
-      # Utility flags to test the type of platform.
-      inherit (hostPlatform)
-        isDarwin
-        isLinux
-        isSunOS
-        isCygwin
-        isBSD
-        isFreeBSD
-        isOpenBSD
-        isi686
-        isx86_32
-        isx86_64
-        is32bit
-        is64bit
-        isAarch32
-        isAarch64
-        isMips
-        isBigEndian
-        ;
+    }
+    // lib.optionalAttrs config.allowAliases (
+      lib.mapAttrs
+        (
+          name: value: lib.warn "stdenv.${name} is deprecated, use stdenv.hostPlatform.${name} instead" value
+        )
+        {
+          # Added 2026-05-09
+          inherit (hostPlatform)
+            isDarwin
+            isLinux
+            isSunOS
+            isCygwin
+            isBSD
+            isFreeBSD
+            isOpenBSD
+            isi686
+            isx86_32
+            isx86_64
+            is32bit
+            is64bit
+            isAarch32
+            isAarch64
+            isMips
+            isBigEndian
+            ;
+        }
+    )
+    // {
 
       # Override `system` so that packages can get the system of the host
       # platform through `stdenv.system`. `system` is originally set to the

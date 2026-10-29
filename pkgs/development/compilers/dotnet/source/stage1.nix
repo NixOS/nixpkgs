@@ -7,13 +7,21 @@
   tarballHash,
   depsFile,
   bootstrapSdk,
+  pkgsBuildBuild,
 }@args:
 
 let
   mkVMR = callPackage ./vmr.nix;
 
-  stage0 = callPackage ./stage0.nix (
-    args
+  stage0 = pkgsBuildBuild.dotnetCorePackages.callPackage ./stage0.nix (
+    {
+      inherit (args)
+        releaseManifestFile
+        tarballHash
+        depsFile
+        bootstrapSdk
+        ;
+    }
     // {
       baseName = "dotnet-stage0";
     }

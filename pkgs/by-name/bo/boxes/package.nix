@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boxes";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "ascii-boxes";
     repo = "boxes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dvhb5KWBQt7g4n0ZTQMcJQljIfavV3g8i+P3PWB6Gwk=";
+    hash = "sha256-dkL5VYs6j9LzvhCLU4BEbiTDWJpW1vQrmLWQ40P3Yzo=";
   };
 
   # Building instructions:

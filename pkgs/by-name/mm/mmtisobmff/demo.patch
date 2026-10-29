@@ -1,0 +1,109 @@
+From 226e5da303449d034957621573eecaa1c9fca267 Mon Sep 17 00:00:00 2001
+From: jopejoe1 <jopejoe1@missing.ninja>
+Date: Fri, 31 Jul 2026 10:57:47 +0200
+Subject: [PATCH] install demo bins
+
+---
+ demo/CMakeLists.txt | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/demo/CMakeLists.txt b/demo/CMakeLists.txt
+index 38ab146..8e6632f 100644
+--- a/demo/CMakeLists.txt
++++ b/demo/CMakeLists.txt
+@@ -16,6 +16,7 @@ add_executable(printMP4 print_mp4_boxes.cpp)
+ target_link_libraries(printMP4 mmtisobmff)
+ target_compile_features(printMP4 PUBLIC cxx_std_11)
+ set_target_properties(printMP4 PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS printMP4 RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(printMP4 PUBLIC ${emscriptenLinkOptions})
+@@ -27,6 +28,7 @@ add_executable(simpleFileReader simple_file_reader.cpp)
+ target_link_libraries(simpleFileReader mmtisobmff)
+ target_compile_features(simpleFileReader PUBLIC cxx_std_11)
+ set_target_properties(simpleFileReader PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS simpleFileReader RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(simpleFileReader PUBLIC ${emscriptenLinkOptions})
+@@ -38,6 +40,7 @@ add_executable(advancedFileReader advanced_file_reader.cpp)
+ target_link_libraries(advancedFileReader mmtisobmff)
+ target_compile_features(advancedFileReader PUBLIC cxx_std_11)
+ set_target_properties(advancedFileReader PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS advancedFileReader RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(advancedFileReader PUBLIC ${emscriptenLinkOptions})
+@@ -49,6 +52,7 @@ add_executable(simpleFileReader_c simple_file_reader_c.c)
+ target_link_libraries(simpleFileReader_c mmtisobmff_c)
+ target_compile_features(simpleFileReader_c PUBLIC cxx_std_11)
+ set_target_properties(simpleFileReader_c PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS simpleFileReader_c RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(simpleFileReader_c PUBLIC ${emscriptenLinkOptions})
+@@ -60,6 +64,7 @@ add_executable(simpleMemoryReader_c simple_memory_reader_c.c)
+ target_link_libraries(simpleMemoryReader_c mmtisobmff_c)
+ target_compile_features(simpleMemoryReader_c PUBLIC cxx_std_11)
+ set_target_properties(simpleMemoryReader_c PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS simpleMemoryReader_c RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(simpleMemoryReader_c PUBLIC ${emscriptenLinkOptions})
+@@ -71,6 +76,7 @@ add_executable(seekingAndTimestampsApiDemo seeking_and_timestamps_api_demo.cpp)
+ target_link_libraries(seekingAndTimestampsApiDemo mmtisobmff)
+ target_compile_features(seekingAndTimestampsApiDemo PUBLIC cxx_std_11)
+ set_target_properties(seekingAndTimestampsApiDemo PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS seekingAndTimestampsApiDemo RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(seekingAndTimestampsApiDemo PUBLIC ${emscriptenLinkOptions})
+@@ -82,6 +88,7 @@ add_executable(mp4Defragment mp4_defragment.cpp)
+ target_link_libraries(mp4Defragment mmtisobmff)
+ target_compile_features(mp4Defragment PUBLIC cxx_std_11)
+ set_target_properties(mp4Defragment PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS mp4Defragment RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(mp4Defragment PUBLIC ${emscriptenLinkOptions})
+@@ -93,6 +100,7 @@ add_executable( mp4SamplesDiff mp4_samples_diff.cpp )
+ target_link_libraries( mp4SamplesDiff mmtisobmff )
+ target_compile_features(mp4SamplesDiff PUBLIC cxx_std_11)
+ set_target_properties(mp4SamplesDiff PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS mp4SamplesDiff RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(mp4SamplesDiff PUBLIC ${emscriptenLinkOptions})
+@@ -104,6 +112,7 @@ add_executable(mp4Combine mp4_combine.cpp)
+ target_link_libraries(mp4Combine mmtisobmff)
+ target_compile_features(mp4Combine PUBLIC cxx_std_11)
+ set_target_properties(mp4Combine PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS mp4Combine RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(mp4Combine PUBLIC ${emscriptenLinkOptions})
+@@ -115,6 +124,7 @@ add_executable(mp4Fragment mp4_fragment.cpp)
+ target_link_libraries(mp4Fragment mmtisobmff)
+ target_compile_features(mp4Fragment PUBLIC cxx_std_11)
+ set_target_properties(mp4Fragment PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS mp4Fragment RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(mp4Fragment PUBLIC ${emscriptenLinkOptions})
+@@ -126,6 +136,7 @@ add_executable(mp4Segment mp4_segment.cpp)
+ target_link_libraries(mp4Segment mmtisobmff)
+ target_compile_features(mp4Segment PUBLIC cxx_std_11)
+ set_target_properties(mp4Segment PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS mp4Segment RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(mp4Segment PUBLIC ${emscriptenLinkOptions})
+@@ -137,6 +148,7 @@ add_executable(simpleFileWriter simple_file_writer.cpp)
+ target_link_libraries(simpleFileWriter mmtisobmff)
+ target_compile_features(simpleFileWriter PUBLIC cxx_std_11)
+ set_target_properties(simpleFileWriter PROPERTIES CXX_EXTENSIONS OFF)
++install(TARGETS simpleFileWriter RUNTIME)
+ 
+ if (EMSCRIPTEN)
+   target_link_options(simpleFileWriter PUBLIC ${emscriptenLinkOptions})

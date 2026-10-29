@@ -1,13 +1,15 @@
 {
   lib,
   buildNpmPackage,
+  cargo,
   electron,
   fetchFromGitHub,
-  buildPackages,
-  python3,
-  pkg-config,
   libsecret,
-  nodejs_22,
+  nodejs_24,
+  pkg-config,
+  python3,
+  rustc,
+  rustPlatform,
 }:
 
 let
@@ -17,41 +19,64 @@ let
       npmBuildScript,
       installPhase,
     }:
-    buildNpmPackage rec {
+    buildNpmPackage (finalAttrs: {
       pname = name;
-      version = "2026.4.0";
-      nodejs = nodejs_22;
+      version = "2026.6.1";
+      nodejs = nodejs_24;
 
       src = fetchFromGitHub {
         owner = "bitwarden";
         repo = "directory-connector";
-        rev = "v${version}";
-        hash = "sha256-FcT+rZkSqlDjSXjmNTHWoNXzW8WPo8LTED8Do5sDvwE=";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-4u1RwZfjjdwK8mPb7jV4Vg22CqjcHBwX+CXdQDHCVFw=";
       };
 
+      patches = [
+        ./lockfile-add-resolved.patch
+      ];
+
       postPatch = ''
-        ${lib.getExe buildPackages.jq} 'del(.scripts.preinstall)' package.json > package.json.tmp
-        mv -f package.json{.tmp,}
+        substituteInPlace package.json \
+          --replace-fail '"preinstall": "npm run sub:init",' "" \
+          --replace-fail "cd native && npm install && npm run build:release" "cd native && npm run build:release"
 
         substituteInPlace electron-builder.json \
-          --replace-fail '"afterSign": "scripts/notarize.js",' "" \
-          --replace-fail "AppImage" "dir"
+          --replace-fail '"afterSign": "scripts/notarize.mjs",' ""
       '';
 
-      npmDepsHash = "sha256-kFuSCcIWAEJ0KNVqEabjqqSZ8CVBbPyxkAxhrbRBqVc=";
+      npmDepsFetcherVersion = 2;
+      npmDepsHash = "sha256-1Yu/drKTE6GgFetnJpQSOiTHCUK2XN3KGFGEXeu5vKA=";
+
+      cargoRoot = "native";
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs)
+          pname
+          src
+          version
+          cargoRoot
+          ;
+        hash = "sha256-1YcdUuAAIFevZJg4dY9xEBw0TLsUFoMGoMW7ZPKbqjQ=";
+      };
 
       env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
       makeCacheWritable = true;
       inherit npmBuildScript installPhase;
 
+      preBuild = ''
+        ln -s ../node_modules native/node_modules
+      '';
+
       buildInputs = [
         libsecret
       ];
 
       nativeBuildInputs = [
+        cargo
         (python3.withPackages (ps: with ps; [ setuptools ]))
         pkg-config
+        rustc
+        rustPlatform.cargoSetupHook
       ];
 
       meta = {
@@ -65,7 +90,7 @@ let
         platforms = lib.platforms.linux;
         mainProgram = name;
       };
-    };
+    });
 in
 {
   bitwarden-directory-connector = common {
@@ -100,7 +125,7 @@ in
       runHook preInstall
 
       mkdir -p $out/libexec/bitwarden-directory-connector
-      cp -R build-cli node_modules $out/libexec/bitwarden-directory-connector
+      cp -R build-cli native node_modules $out/libexec/bitwarden-directory-connector
 
       # needs to be wrapped with nodejs so that it can be executed
       chmod +x $out/libexec/bitwarden-directory-connector/build-cli/bwdc.js

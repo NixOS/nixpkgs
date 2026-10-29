@@ -44,7 +44,11 @@ let
         nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
           lua.pkgs.luarocksMoveDataFolder
         ];
-        version = "${originalLuaDrv.version}-unstable-${old.version}";
+        version =
+          if attrs ? version then
+            "${originalLuaDrv.version}-unstable-${attrs.version}"
+          else
+            originalLuaDrv.version;
         __intentionallyOverridingVersion = true;
       }
     )

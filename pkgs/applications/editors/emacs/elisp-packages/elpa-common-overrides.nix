@@ -54,6 +54,7 @@ in
 
       meta = previousAttrs.meta // {
         maintainers = [ lib.maintainers.sternenseemann ];
+        broken = true; # https://github.com/NixOS/nixpkgs/issues/544219
       };
     }
   );

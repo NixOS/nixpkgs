@@ -35,6 +35,11 @@ buildPythonPackage rec {
       url = "https://github.com/eclipse-paho/paho.mqtt.python/pull/931.diff";
       hash = "sha256-A7rWwpR4PnCi77F1VqsQKHBxHNrdeHgmVM6BGMeUpjs=";
     })
+    # backports an upstream fix for flaky tests as repoted here:
+    # https://github.com/NixOS/nixpkgs/issues/542586
+    # the fix has already landed in master of paho-mqtt:
+    # https://github.com/eclipse-paho/paho.mqtt.python/pull/934
+    ./fix-flaky-tests-backport-934.patch
   ];
 
   build-system = [
@@ -72,6 +77,11 @@ buildPythonPackage rec {
     "tests/lib/test_08_ssl_connect_cert_auth_pw.py"
     "tests/lib/test_08_ssl_connect_no_auth.py"
   ];
+
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
 
   meta = {
     changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";

@@ -11,6 +11,9 @@
   versionCheckHook,
 }:
 
+let
+  withSystemd = lib.meta.availableOn stdenv.hostPlatform systemdMinimal;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "conmon";
   version = "2.2.1";
@@ -37,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     libseccomp
-    systemdMinimal
   ]
+  ++ lib.optional withSystemd systemdMinimal
   ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
     glibc
     glibc.static
@@ -47,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   # manpage requires building the vendored go-md2man
   makeFlags = [
     "bin/conmon"
-  ];
+  ]
+  ++ lib.optional (!withSystemd) "DISABLE_SYSTEMD=1";
 
   installPhase = ''
     runHook preInstall

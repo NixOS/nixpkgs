@@ -25,14 +25,14 @@
 }:
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.15.0";
+  version = "0.16.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
-    hash = "sha256-I8rQj28IvLD7HWuog46E0dLFgnWSA6oE4Jyn9Flr7mQ=";
+    hash = "sha256-KagVuHhsHmA5/CY/1y5GLOFXx2ETPud6xk2vn4sG1hI=";
   };
 
   patches = [ ./use-system-libs.patch ];

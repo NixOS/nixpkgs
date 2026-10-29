@@ -92,6 +92,10 @@ cd /my/git/clone/of/nixpkgs
 nix-build -A nixosTests.hostname
 ```
 
+In-tree tests run with a few changes to defaults, notably
+- The `pkgs.*` are read only by default. You can opt out with `node.pkgsReadOnly = false;` at the test level.
+- `nix.enable` defaults to `false` to reduce build closure size; in particular the reverse build closure of `nix` and its dependencies.
+
 ### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
 
 Outside the `nixpkgs` repository, you can use the `runNixOSTest` function from
@@ -103,12 +107,15 @@ let
 
 in
 pkgs.testers.runNixOSTest {
+  name = "test";
   imports = [ ./test.nix ];
   defaults.services.foo.package = mypkg;
 }
 ```
 
 `runNixOSTest` returns a derivation that runs the test.
+
+Out-of-tree tests evaluate with a set of defaults that balances the principle of least surprise in the general case, but has a few differences from in-tree NixOS tests. See [Testing within NixOS](#sec-call-nixos-test-in-nixos).
 
 ## Test machines {#ssec-nixos-test-machines}
 
@@ -144,11 +151,15 @@ Some advantages of virtual machines over containers are:
 
 - Virtual machines run a separate kernel, which allows testing kernel features
   (kernel modules, etc.).
-- Virtual machines support testing graphical applications on X11.
 - Virtual machines allow testing NixOS modules that use systemd's namespacing options (such as `ProtectSystem=` or `MountAPIVFS=`).
 - Virtual machines allow testing [`specialisation`](options.html#opt-specialisation).
   (Switching to a specialisation requires the creation of SUID/SGID wrappers, which is disallowed in `systemd-nspawn` within the Nix sandbox.)
 - Virtual machines allow the execution of `setuid` binaries.
+
+Both backends support testing graphical applications on X11. Virtual machines
+provide emulated display hardware, while containers use a headless X server.
+See [running tests interactively](#sec-nixos-test-interactive-graphical) for how
+to view container displays during debugging.
 
 Refer to the sections on [QEMU virtual machines](#ssec-nixos-test-qemu-vms)
 and [systemd-nspawn containers](#ssec-nixos-test-nspawn-containers) below
@@ -276,12 +287,15 @@ with foo_running:
 
 `polling_condition` takes the following (optional) arguments:
 
-`seconds_interval`
+`interval`
 
-:   specifies how often the condition should be polled:
+:   specifies how often the condition should be polled, as a `datetime.timedelta`:
 
 ```py
-@polling_condition(seconds_interval=10)
+import datetime as dt
+
+
+@polling_condition(interval=dt.timedelta(seconds=10))
 def foo_running():
     machine.succeed("pgrep -x foo")
 ```
@@ -487,7 +501,7 @@ There, you can attach to a [`pdb`](https://docs.python.org/3/library/pdb.html) s
 to step through the Python test script:
 
 ```
-bash# telnet 127.0.0.1 4444
+bash# socat readline tcp:127.0.0.1:4444
 pdb$
 ```
 

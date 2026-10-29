@@ -3,6 +3,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  fetchpatch,
   bundlerEnv,
   ruby_4_0,
   makeWrapper,
@@ -15,7 +16,7 @@
 }:
 
 let
-  version = "7.0.0";
+  version = "7.0.2";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -67,9 +68,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hX6fiGDDHkxTE4nl2T7qJkiNummDBISjsKqQS+YV6Qo=";
+    hash = "sha256-1F5tTDc8w8jTPx9NSi/64eGtsYcDFgcHRnST3ntL5ZE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

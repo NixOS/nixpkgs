@@ -101,6 +101,7 @@ let
 
   harfbuzz-raster = harfbuzz.override {
     withRaster = lib.versionAtLeast version "4.7";
+    withVector = lib.versionAtLeast version "4.7";
     withCairo = lib.versionAtLeast version "4.7";
   };
 
@@ -325,7 +326,7 @@ let
 
                     # stripping dlls results in:
                     # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
-                    stripExclude = lib.optional withMono [ "*.dll" ];
+                    stripExclude = lib.optionals withMono [ "*.dll" ];
 
                     runtimeDependencies =
                       prev.runtimeDependencies or [ ]

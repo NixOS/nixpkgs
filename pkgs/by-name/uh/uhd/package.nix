@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  llvmPackages_20,
   fetchurl,
+  fetchpatch2,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -15,6 +15,9 @@
   enableExamples ? false,
   enableUtils ? true,
   libusb1,
+  protobuf,
+  grpc,
+  openssl,
   # Disable dpdk for now due to compilation issues.
   enableDpdk ? false,
   dpdk,
@@ -31,27 +34,21 @@
   enableN320 ? true,
   enableE300 ? true,
   enableE320 ? true,
+  # passthru.tests
+  soapyuhd,
 }:
 
 let
-  inherit (lib) optionals cmakeBool;
-  stdenv' = (
-    # Fix a compilation issue on Darwin, that upstream is aware of:
-    # https://github.com/EttusResearch/uhd/issues/881
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-      llvmPackages_20.stdenv
-    else
-      stdenv
-  );
+  inherit (lib) optionals cmakeBool cmakeFeature;
 in
 
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uhd";
   # NOTE: Use the following command to update the package, and the uhdImageSrc attribute:
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --arg commit true
   #
-  version = "4.9.0.1";
+  version = "4.11.0.0";
 
   outputs = [
     "out"
@@ -64,15 +61,16 @@ stdenv'.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-AOZYCmkgsM09YORW7dVsPAwecXNZQOxOscJnVOlMoP0=";
+    hash = "sha256-L8bd9KP3WauFKN6jEI5VECaTBgEuB8IcSiiLbXFMWZY=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
-    sha256 = "15ahcxb7hsylvdzzv0q0shd3wqm7p2y4kzbqk85cvsxbdklxhsvn";
+    sha256 = "0b5hy1bjyhd5s2b98jdjfk8r7aa939z6jwfnpl5qqp4dvhiyc9bm";
   };
+
   inherit (finalAttrs.finalPackage.passthru) pythonPath;
   passthru = {
     runtimePython = python3.withPackages (ps: finalAttrs.finalPackage.passthru.pythonPath);
@@ -155,17 +153,21 @@ stdenv'.mkDerivation (finalAttrs: {
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
+
+    # Force protobuf into config mode instead of using CMake's builtin module, as gRPC's later re-import of Protobuf causes conflicts with libupb targets.
+    # https://github.com/protocolbuffers/protobuf/issues/18307
+    (cmakeBool "CMAKE_FIND_PACKAGE_PREFER_CONFIG" true)
+    (cmakeFeature "GRPC_CPP_PLUGIN" (lib.getExe' grpc "grpc_cpp_plugin"))
   ]
-  ++ optionals stdenv'.hostPlatform.isAarch32 [
-    "-DCMAKE_CXX_FLAGS=-Wno-psabi"
+  ++ optionals stdenv.hostPlatform.isAarch32 [
+    (cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-psabi")
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    # Present both here and in buildInputs for cross compilation.
-    python3
-    python3.pkgs.mako
+    grpc
+    (python3.withPackages (ps: [ ps.mako ]))
     # We add this unconditionally, but actually run wrapPythonPrograms only if
     # python utilities are enabled
     python3.pkgs.wrapPython
@@ -175,6 +177,8 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ [
       boost
       libusb1
+      protobuf
+      openssl
     ]
     ++ optionals enableExamples [
       ncurses
@@ -184,14 +188,19 @@ stdenv'.mkDerivation (finalAttrs: {
       dpdk
     ];
 
-  patches = [
-    ./fix-pkg-config.patch
-  ];
-
   # many tests fails on darwin, according to ofborg
-  doCheck = !stdenv'.hostPlatform.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
+
+  # Add missing log_add_impl.hpp to the installed headers.
+  # https://github.com/EttusResearch/uhd/pull/945
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/EttusResearch/uhd/commit/6bc1d4d011825b2dca6d60b1cfb327dc07c63414.patch?full_index=1";
+      hash = "sha256-Rx1B3za4sFbX3d6Vj8bVaPvPunNwc4Ir0WiXjLDgoQk=";
+    })
+  ];
 
   # Build only the host software
   preConfigure = "cd host";
@@ -200,7 +209,7 @@ stdenv'.mkDerivation (finalAttrs: {
     "installFirmware"
     "removeInstalledTests"
   ]
-  ++ optionals (enableUtils && stdenv'.hostPlatform.isLinux) [
+  ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [
     "moveUdevRules"
   ];
 
@@ -230,6 +239,8 @@ stdenv'.mkDerivation (finalAttrs: {
     python3
   ];
 
+  passthru.tests = { inherit soapyuhd; };
+
   meta = {
     description = "USRP Hardware Driver (for Software Defined Radio)";
     longDescription = ''
@@ -239,7 +250,7 @@ stdenv'.mkDerivation (finalAttrs: {
       USRP devices are designed and sold by Ettus Research, LLC and its parent
       company, National Instruments.
     '';
-    homepage = "https://uhd.ettus.com/";
+    homepage = "https://uhd.readthedocs.io";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [

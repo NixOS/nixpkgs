@@ -33,14 +33,14 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "9.2.4";
+  version = "9.2.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-rZ1H4QfxkBo+fVFCDODaio+1NEwRVjIY388Q9sR8qO4=";
+    hash = "sha256-tKbxWDTGiblXBr4LOap0ZjojM2ommERRU/i/WpFykdE=";
   };
 
   postPatch = ''
@@ -89,6 +89,10 @@ pythonPackages.buildPythonApplication rec {
       zstandard
       pythonPackages.ollama
     ]
+    ++ markitdown.optional-dependencies.pptx
+    ++ markitdown.optional-dependencies.docx
+    ++ markitdown.optional-dependencies.pdf
+    ++ markitdown.optional-dependencies.youtube-transcription
     ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = with pythonPackages; {
@@ -107,14 +111,18 @@ pythonPackages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        xdg-utils
-        ollama
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      xdg-utils
+      ollama
+    ]}"
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = nix-update-script { };
 

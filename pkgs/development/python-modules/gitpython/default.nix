@@ -1,36 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  ddt,
   fetchFromGitHub,
   gitdb,
-  pkgs,
+  gitMinimal,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "gitpython";
-  version = "3.1.51";
+  version = "3.1.62";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
     tag = finalAttrs.version;
-    hash = "sha256-c8tjBvWjVR7krR59Tfx5jKoJc/fcLWVt5D4xk15DvP4=";
+    hash = "sha256-g7qZSFFWAa7iJSn+HAxCTfNZfrYZsZRJGUIZGYQjoUI=";
   };
 
   postPatch = ''
     substituteInPlace git/cmd.py \
-      --replace 'git_exec_name = "git"' 'git_exec_name = "${pkgs.gitMinimal}/bin/git"'
+      --replace-fail 'git_exec_name = "git"' 'git_exec_name = "${lib.getExe gitMinimal}"'
   '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    ddt
     gitdb
-    pkgs.gitMinimal
   ];
 
   # Tests require a git repo

@@ -17,18 +17,18 @@
   which,
   debug ? false,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sgx-psw";
   # Version as given in se_version.h
-  version = "2.27.100.1";
+  version = "2.29.100.1";
   # Version as used in the Git tag
-  versionTag = "2.27";
+  versionTag = "2.29";
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = "linux-sgx";
-    rev = "sgx_${versionTag}";
-    hash = "sha256-hNmh4IgNJDNqt2xF8zBnD/x+saMyMk5hZLA3aOqzqEA=";
+    repo = "confidential-computing.sgx";
+    rev = "sgx_${finalAttrs.versionTag}";
+    hash = "sha256-gi4aNXHMHuPmc36JalALAXjIdn4COuXOZzC6dQRB6nU=";
     fetchSubmodules = true;
   };
 
@@ -39,37 +39,38 @@ stdenv.mkDerivation rec {
       # run user application enclaves, verify launch policies, produce remote
       # attestation quotes, and do platform certification.
       ae.prebuilt = fetchurl {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
+        url = "https://download.01.org/intel-sgx/sgx-linux/${finalAttrs.versionTag}/prebuilt_ae_${finalAttrs.versionTag}.tar.gz";
         hash = "sha256-Hlh96rYOyml2y50d8ASKz6U97Fl0hbGYECeZiG9nMSQ=";
       };
 
       # Pre-built ipp-crypto with mitigations.
       optlib.prebuilt = fetchurl {
-        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/optimized_libs_${versionTag}.tar.gz";
+        url = "https://download.01.org/intel-sgx/sgx-linux/${finalAttrs.versionTag}/optimized_libs_${finalAttrs.versionTag}.tar.gz";
         hash = "sha256-7mDTaLtpOQLHQ6Fv+FWJ2k/veJZPXIcuj7kOdRtRqhg=";
       };
 
       # Fetch the Data Center Attestation Primitives (DCAP) platform enclaves
       # and pre-built sgxssl.
       dcap = rec {
-        version = "1.24";
+        version = "1.26";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-sc/eYIPdhwAyDk2Zh1HU6yuFlobqVy/4++m5OnQE3Bc=";
+          hash = "sha256-TXQ8xh0q9RKPyKqjMvxoQtIH2lxbhCiwpV+HvQxACaw=";
         };
       };
     in
     ''
       # Make sure this is the right version of linux-sgx
-      grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
-        || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+      grep -q '"${finalAttrs.version}"' "$src/common/inc/internal/se_version.h" \
+        || (echo "Could not find expected version ${finalAttrs.version} in linux-sgx source" >&2 && exit 1)
 
       tar -xzvf ${ae.prebuilt}     -C $sourceRoot/
       tar -xzvf ${optlib.prebuilt} -C $sourceRoot/
 
       # Make sure we use the correct version of prebuilt DCAP
-      grep -q 'ae_file_name=${dcap.filename}' "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
+      grep -qE '(dcap_version=${dcap.version}|ae_file_name=${dcap.filename})' \
+        "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
         || (echo "Could not find expected prebuilt DCAP ${dcap.filename} in linux-sgx source" >&2 && exit 1)
 
       tar -xzvf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source prebuilt/
@@ -91,11 +92,7 @@ stdenv.mkDerivation rec {
     # build because the embedded zip file contents have different modified times.
     ./cppmicroservices-no-mtime.patch
 
-    # CppMicroServices is failing to build with CMake 4 and GCC 15
-    # PR: <https://github.com/intel/confidential-computing.sgx/pull/1098>
-    # - CMake 4 dropped support for <3.5 and warns on <3.10, so bump the
-    #   `cmake_minimum_required` to 3.10
-    # - Various header files now need `#include <cstdint>` to compile
+    # Add `#include <cstdint>` to CppMicroServices headers that GCC 15 needs
     ./cppmicroservices-compat.patch
   ];
 
@@ -270,7 +267,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Intel SGX Architectural Enclave Service Manager";
-    homepage = "https://github.com/intel/linux-sgx";
+    homepage = "https://github.com/intel/confidential-computing.sgx";
     maintainers = with lib.maintainers; [
       phlip9
       veehaitch
@@ -279,4 +276,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.bsd3;
   };
-}
+})

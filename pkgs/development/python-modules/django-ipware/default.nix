@@ -1,37 +1,47 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   django,
+  hatchling,
   python-ipware,
+  pytestCheckHook,
+  pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-ipware";
-  version = "7.0.1";
-  format = "setuptools";
+  version = "8.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2exD0r983yFv7Y1JSghN61dhpUhgpTsudDRqTzhM/0c=";
+  src = fetchFromGitHub {
+    owner = "un33k";
+    repo = "django-ipware";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T+9AUpxe7VrB6UzS9sWYaMtti6cz35S0nKJbYWLSF2c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     django
     python-ipware
   ];
 
-  # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_TRUSTED_PROXY_LIST, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
-  doCheck = false;
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  # pythonImportsCheck fails with:
-  # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_META_PRECEDENCE_ORDER, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+  ];
+
+  pythonImportsCheck = [ "ipware" ];
 
   meta = {
     description = "Django application to retrieve user's IP address";
     homepage = "https://github.com/un33k/django-ipware";
-    changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/un33k/django-ipware/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

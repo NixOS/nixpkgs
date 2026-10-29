@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "kalign";
     homepage = "https://github.com/TimoLassmann/kalign";
     changelog = "https://github.com/TimoLassmann/kalign/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;
   };

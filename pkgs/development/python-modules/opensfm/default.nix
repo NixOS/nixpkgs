@@ -53,15 +53,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opensfm";
-  version = "0.5.1-unstable-2026-07-13";
+  version = "0.5.1-unstable-2026-08-17";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mapillary";
     repo = "OpenSfM";
-    rev = "238744cdf3b5d50149c50d136a87f7fea25ad5cd";
-    hash = "sha256-3T9wjuuN5AjM/MtSo3xGoHJcvXOI8Keyxcqv7BQavlw=";
+    rev = "36034bb0939fced472b6173d93a4d9bddb570fc0";
+    hash = "sha256-Au8rf2gmm7abpFmYZ9zBBmVMfMZE+k3K2ngDZ2g8ojY=";
   };
 
   patches = [

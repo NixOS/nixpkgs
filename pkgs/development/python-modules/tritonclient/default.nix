@@ -69,6 +69,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/triton-inference-server/client";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ happysalada ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

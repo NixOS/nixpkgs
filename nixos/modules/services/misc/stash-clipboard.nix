@@ -26,7 +26,18 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--max-items 10" ];
-      description = "A list of arguments to pass to stash watch.";
+      description = ''
+        A list of arguments which are passed to `stash`. For a list of available arguments, run `stash --help`.
+      '';
+    };
+
+    serviceArguments = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "--persist" ];
+      description = ''
+        A list of arguments which are passed to `stash watch`. For a list of available arguments, run `stash watch --help`.
+      '';
     };
 
     filterFile = mkOption {
@@ -61,7 +72,7 @@ in
         wantedBy = [ "graphical-session.target" ];
         after = [ "graphical-session.target" ];
         serviceConfig = {
-          ExecStart = "${getExe cfg.package} ${concatStringsSep " " cfg.arguments} watch";
+          ExecStart = "${getExe cfg.package} ${concatStringsSep " " cfg.arguments} watch ${concatStringsSep " " cfg.serviceArguments}";
           LoadCredential = mkIf (cfg.filterFile != "") "clipboard_filter:${cfg.filterFile}";
         };
         environment = mkIf (cfg.excludedApps != [ ]) {

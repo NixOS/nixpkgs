@@ -45,6 +45,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/PyCQA/pylint-django";
     changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

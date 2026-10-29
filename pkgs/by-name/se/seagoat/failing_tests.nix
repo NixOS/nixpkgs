@@ -22,14 +22,9 @@
   "test_does_not_crash_because_of_non_existent_files"
   "test_ignored_files_is_really_ignored"
   "test_allows_limiting_how_many_files_are_automatically_analized"
-  "test_allows_limiting_how_many_files_are_automatically_analized"
-  "test_allows_limiting_how_many_files_are_automatically_analized"
   "test_includes_all_matching_lines_from_line"
   "test_search_is_case_insensitive"
   "test_respects_file_extension_restrictions"
-  "test_includes_context_lines_properly"
-  "test_includes_context_lines_properly"
-  "test_includes_context_lines_properly"
   "test_includes_context_lines_properly"
   "test_ripgrep_respects_custom_ignore_patterns"
   "test_filters_stop_words"
@@ -38,8 +33,6 @@
   "test_integration_test_vimgrep_mode"
   "test_integration_test_no_results"
   "test_server_is_not_running_error"
-  "test_server_is_not_running_error"
-  "test_reverse_ordering"
   "test_reverse_ordering"
   "test_file_returns_global_metadata_1"
   "test_file_returns_global_metadata_2"
@@ -54,11 +47,13 @@
 
   # Compatibility issue with click 8.2
   # https://github.com/kantord/SeaGOAT/issues/1021
-  "test_seagoat_warns_on_incomplete_accuracy[99]"
-  "test_seagoat_warns_on_incomplete_accuracy[100]"
-  "test_server_error_handling[File Not Found on Server-500]"
-  "test_server_error_handling[Database Connection Failed-503]"
+  "test_seagoat_warns_on_incomplete_accuracy"
+  "test_server_error_handling"
   "test_server_does_not_exist_error"
   "test_no_network_to_update"
   "test_server_shows_error_when_folder_is_not_a_git_repo"
+
+  # These only assert that chardet mis-detects the given UTF-8 sequences,
+  # which it no longer does since chardet 6
+  "test_file_reader_does_not_crash_because_of_misdetected_utf8"
 ]

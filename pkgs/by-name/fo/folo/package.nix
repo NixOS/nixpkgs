@@ -15,13 +15,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "folo";
 
-  version = "1.11.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Folo";
     tag = "desktop/v${finalAttrs.version}";
-    hash = "sha256-kJ5FX6whBPTPJoWBmgaMeDSJAF7pGl5WkGmDzQSKLpo=";
+    hash = "sha256-16hKEgTv2pWDsoxMG7Ct2xCvjCnmbPK2bymyutb1uW8=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-W8vzjbBBK3wvr6abIniW5oRpSJU45Gua6EjBTTA326I=";
+    hash = "sha256-6ExELKJr6oAkywYSjsw+c24IHtipJ213N74aSzhEUTs=";
   };
 
   __structuredAttrs = true;
@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Several build scripts import transitive dependencies directly (e.g.
   # ast-kit from unplugin-ast).
   pnpmInstallFlags = [ "--shamefully-hoist" ];
+
+  patches = [ ./runtime-jsdom.patch ];
 
   postPatch = ''
     # pnpm 11 verifies node_modules before every `pnpm run` which conflicts

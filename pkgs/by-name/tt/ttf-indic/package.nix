@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.2";
 
   src = fetchurl {
-    url = "https://www.indlinux.org/downloads/files/indic-otf-${version}.tar.gz";
+    url = "https://laban.lysator.liu.se/pub/void-ppc-sources/indic-otf-${version}/indic-otf-${version}.tar.gz";
     hash = "sha256-ZFmg1JanAf3eeF7M+yohrXYSUb0zLgNSFldEMzkhXnI=";
   };
 

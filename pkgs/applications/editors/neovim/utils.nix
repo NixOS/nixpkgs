@@ -70,6 +70,11 @@ let
     #       config   = "let g:grug_far = { 'startInInsertMode': v:false }";
     #       optional = false;
     #     }
+    #     {
+    #       plugin = vimPlugins.far-vim;
+    #       type   = "lua";
+    #       config = "vim.g['far#source'] = 'rg'";
+    #     }
     #     vimPlugins.vim-fugitive
     #  ]
     plugins:

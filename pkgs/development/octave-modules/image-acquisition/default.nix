@@ -15,7 +15,7 @@ buildOctavePackage rec {
     owner = "Andy1978";
     repo = "octave-image-acquisition";
     tag = "image-acquisition-${version}";
-    sha256 = "sha256-vS1i0PNAyfkxuMSfm+OGvFXkpbD4H6VJrs4eb+LxYBA=";
+    hash = "sha256-vS1i0PNAyfkxuMSfm+OGvFXkpbD4H6VJrs4eb+LxYBA=";
   };
 
   buildInputs = [
@@ -39,7 +39,7 @@ buildOctavePackage rec {
     maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Functions to capture images from connected devices";
     longDescription = ''
-      The Octave-forge Image Aquisition package provides functions to
+      The Octave-forge Image Acquisition package provides functions to
       capture images from connected devices. Currently only v4l2 is supported.
     '';
   };

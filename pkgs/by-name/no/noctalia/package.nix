@@ -11,6 +11,8 @@
   wayland-scanner,
   makeBinaryWrapper,
   autoAddDriverRunpath,
+  installShellFiles,
+  versionCheckHook,
 
   # libraries
   cairo,
@@ -21,10 +23,13 @@
   harfbuzz,
   jemalloc,
   libGL,
+  libheif,
+  libical,
   libjxl,
   libqalculate,
   librsvg,
   libsecret,
+  libsndfile,
   libsodium,
   libwebp,
   libxkbcommon,
@@ -39,37 +44,27 @@
   stb,
   systemdLibs,
   tomlplusplus,
+  tzdata,
   wayland,
   wayland-protocols,
   wireplumber,
 
   # runtime
   gitMinimal,
+  gsettings-desktop-schemas,
 }:
 
-let
-  # nixpkgs stb doesn't have stb_image_resize2.h which noctalia needs
-  stb' = stb.overrideAttrs {
-    version = "0-unstable-2025-10-26";
-    src = fetchFromGitHub {
-      owner = "nothings";
-      repo = "stb";
-      rev = "f1c79c02822848a9bed4315b12c8c8f3761e1296";
-      hash = "sha256-BlyXJtAI7WqXCTT3ylww8zoG0hBxaojJnQDvdQOXJPE=";
-    };
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "noctalia";
-  version = "5.0.0-beta.6";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VJXqeaxCqyMOt/k7ePNoD4nAHdF1eTSuuddmrh/5O6Q=";
+    hash = "sha256-XuCihFGu51wBr4GaO+RgNeP7nJ1iOZC/uss5FVtqOLI=";
   };
 
   strictDeps = true;
@@ -81,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     makeBinaryWrapper
     autoAddDriverRunpath
+    installShellFiles
   ];
 
   buildInputs = [
@@ -92,10 +88,13 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     jemalloc
     libGL
+    libheif
+    libical
     libjxl
     libqalculate
     librsvg
     libsecret
+    libsndfile
     libsodium
     libwebp
     libxkbcommon
@@ -107,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     polkit
     sdbus-cpp_2
-    stb'
+    stb
     systemdLibs
     tomlplusplus
     wayland
@@ -115,22 +114,42 @@ stdenv.mkDerivation (finalAttrs: {
     wireplumber
   ];
 
+  mesonFlags = [
+    (lib.mesonEnable "tests" true)
+    (lib.mesonEnable "jemalloc" (!stdenv.hostPlatform.isMusl))
+  ];
+
   mesonBuildType = "release";
 
-  # plugins are installed by cloning their repos
-  postFixup = ''
-    wrapProgram $out/bin/noctalia \
-      --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd noctalia \
+      --bash <($out/bin/noctalia completions bash) \
+      --fish <($out/bin/noctalia completions fish) \
+      --zsh <($out/bin/noctalia completions zsh)
   '';
 
-  # remove --version=unstable once 5.0.0 stable is released
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=unstable"
-      "--version-regex"
-      "v(5\\..*)"
-    ];
-  };
+  # plugins are installed by cloning their repos; the icon theme is read and
+  # color-scheme written through the org.gnome.desktop.interface GSettings schema
+  postFixup = ''
+    wrapProgram $out/bin/noctalia \
+      --suffix PATH : ${lib.makeBinPath [ gitMinimal ]} \
+      --suffix XDG_DATA_DIRS : ${glib.getSchemaDataDirPath gsettings-desktop-schemas}
+  '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  nativeCheckInputs = [
+    tzdata
+    gitMinimal
+  ];
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sleek, customizable desktop shell crafted for Wayland";

@@ -56,7 +56,15 @@ stdenv.mkDerivation {
   meta = {
     description = "Mach-O loader for Linux";
     homepage = "https://github.com/shinh/maloader";
-    license = lib.licenses.bsd2;
+    license =
+      with lib.licenses;
+      AND [
+        (OR [
+          bsd2
+          gpl3Only
+        ])
+        apple-psl10
+      ];
     maintainers = with lib.maintainers; [ wegank ];
     inherit (opencflite.meta) platforms;
   };

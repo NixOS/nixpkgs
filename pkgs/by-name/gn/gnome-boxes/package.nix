@@ -19,7 +19,7 @@
   libhandy,
   libsoup_3,
   libosinfo,
-  systemd,
+  systemdLibs,
   vala,
   libcap,
   yajl,
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     spice-gtk
     spice-protocol
-    systemd
+    systemdLibs
     vte
     webkitgtk_4_1
     yajl
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Simple GNOME 3 application to access remote or virtual systems";
+    description = "Simple GNOME application to access virtual systems";
     mainProgram = "gnome-boxes";
     homepage = "https://apps.gnome.org/Boxes/";
     license = lib.licenses.lgpl2Plus;

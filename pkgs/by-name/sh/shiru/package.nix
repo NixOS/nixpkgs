@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shiru";
-  version = "6.7.1";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "RockinChaos";
     repo = "shiru";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hlxwpTQp8ZD1dGeo2eKeE7MPZSi/qV74Q+5NEox5UkY=";
+    hash = "sha256-9bSFTjoQSslye0kML8co0QKTLaN9KOMo8W3QEMxOeqE=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       cd electron
     '';
     fetcherVersion = 3;
-    hash = "sha256-dBoVmqSnJG0KsvLuZQVoZWX4m1BEqLYumofbNHgPgz0=";
+    hash = "sha256-4WlYGN5MicJZ9b/XObLjttznLh24DEbQwLS/rW4mrsI=";
   };
 
   buildPhase = ''

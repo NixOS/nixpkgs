@@ -6,7 +6,6 @@
   libjpeg,
   log4cpp,
   openjpeg,
-  libpng12,
   libsForQt5,
   qt5,
 }:
@@ -31,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qtbase
     qt5.qttools
     libsForQt5.poppler
-    libpng12
     openjpeg
     openjpeg.dev
     log4cpp

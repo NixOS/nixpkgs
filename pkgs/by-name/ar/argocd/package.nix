@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "argocd";
-  version = "3.4.5";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hM7ss948dr7KntUGwiFDhr1OrbI+LAJlDgUMnegm+es=";
+    hash = "sha256-Dpn4KHKs766/cmh0gLwaFExQ2tMRbdXZK+2v2jM3iF8=";
   };
 
   ui = stdenv.mkDerivation {

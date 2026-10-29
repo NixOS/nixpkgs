@@ -21,6 +21,7 @@
   libva-minimal,
   llvmPackages,
   lm_sensors,
+  mesa-libclc,
   meson,
   ninja,
   pkg-config,
@@ -200,6 +201,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "--sysconfdir=/etc"
 
+    # Disable debug assertions for performance/compatibility
+    # https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/docs/meson.rst?ref_type=heads#options
+    (lib.mesonBool "b_ndebug" true)
+
     # What to build
     (lib.mesonOption "platforms" (lib.concatStringsSep "," eglPlatforms))
     (lib.mesonOption "gallium-drivers" (lib.concatStringsSep "," galliumDrivers))
@@ -280,9 +285,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
-    llvmPackages.libclc
     llvmPackages.libllvm
     lm_sensors
+    mesa-libclc
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev

@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "22.23.1";
-  sha256 = "b27385d6845089bdb91285d94b06c2a5cf1c37f8173a3c4e10824cc1ffadeaba";
+  version = "22.23.4";
+  sha256 = "7b9adc82d612d0a2a863d96c46de2292552e250cee51956ebbe0146c42aacae9";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -57,6 +57,18 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove when support for Ada 4.x has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/eb1a49b0aec9e05cbb59f093d38f0a92818b7de1.patch?full_index=1";
+        hash = "sha256-LmLbsRZKkOGXzqDQxNrK/B8TGIrsr4pXIUEv3P6C9Sc=";
+        excludes = [ "deps/*" ];
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/064e2eee1ec7b17c4bc6e36befc2935eee80d0f7.patch?full_index=1";
+        hash = "sha256-RcmWiTpWYwA952nNmhaiq4zw/iuVAXFnuTeuB6ltR1U=";
+        includes = [ "test/fixtures/wpt/url/resources/urltestdata.json" ];
+      })
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
       # Fix builds with shared llhttp

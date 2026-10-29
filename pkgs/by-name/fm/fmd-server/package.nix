@@ -17,12 +17,12 @@ buildGoModule (
   in
   {
     pname = "fmd-server";
-    version = "0.15.0";
+    version = "0.17.0";
     src = fetchFromGitLab {
       owner = "fmd-foss";
       repo = "fmd-server";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-EzhXrB15lRtDnFicdH7fjpcm1BYoAb1SBeylGSub69s=";
+      hash = "sha256-drZQj5tp0cHvrc+T1ESBHNNt0VoHhS9O93LIwjw2eCc=";
     };
 
     pnpmDeps = fetchPnpmDeps {
@@ -30,10 +30,10 @@ buildGoModule (
       pnpm = pnpm_11;
       sourceRoot = "${finalAttrs.src.name}/${ui.pnpmRoot}";
       fetcherVersion = 4;
-      hash = "sha256-RdCB43NIu+LmVti3g+gBTAGeYgCtVXr6q3lCh5UCdMg=";
+      hash = "sha256-L6O1xsRw3ZwWg+83hC5n3a83RzSh9u0289gUHzfubJE=";
     };
 
-    vendorHash = "sha256-cFIg9mOSQbrYHW4kg4aTeTaF+gy1jNpAlg8qepb81Jc=";
+    vendorHash = "sha256-fTteh+h4PqiISrqSjEK59jBog+tOu7Yzql8nYRK7q74=";
 
     preBuild = ''
       cp -r ${ui}/${ui.distRoot} web/

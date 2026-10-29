@@ -78,7 +78,7 @@ let
       runHook postInstall
     '';
 
-    # make toggle-able, so that overrided versions can disable this check if
+    # make toggle-able, so that overridden versions can disable this check if
     # they want newer versions of the plugins without having to modify
     # the output logic
     doInstallCheck = true;

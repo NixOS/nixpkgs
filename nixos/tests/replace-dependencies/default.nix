@@ -8,6 +8,8 @@ import ../make-test-python.nix (
       { ... }:
       {
         nix.settings.experimental-features = [ "ca-derivations" ];
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
         system.extraDependencies = [ pkgs.stdenvNoCC ];
       };
 

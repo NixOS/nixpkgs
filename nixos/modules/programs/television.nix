@@ -18,6 +18,7 @@ in
     enableBashIntegration = mkEnableOption "Bash integration";
     enableZshIntegration = mkEnableOption "Zsh integration";
     enableFishIntegration = mkEnableOption "Fish integration";
+    enableNushellIntegration = mkEnableOption "Nushell integration";
   };
 
   config = mkIf cfg.enable {
@@ -32,6 +33,9 @@ in
       '';
       fish.interactiveShellInit = mkIf cfg.enableFishIntegration ''
         source ${cfg.package}/share/television/completion.fish
+      '';
+      nushell.interactiveShellInit = mkIf cfg.enableNushellIntegration ''
+        source ${cfg.package}/share/television/completion.nu
       '';
     };
 

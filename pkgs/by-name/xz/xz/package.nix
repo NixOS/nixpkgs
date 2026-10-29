@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.8.3";
+  version = "5.8.4";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
-    hash = "sha256-//H/zysNqE0wihTeUToaoj1OmqNGTRfmS5cUv90Lv7Y=";
+    hash = "sha256-TOJAOP1CIeDRO8Gi3npNtW6QuSs791Mh9sFL5z9l3ks=";
   };
 
   strictDeps = true;
@@ -61,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-xz" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '>xz-5.2.6.tar.xz</a>'
       # We pick first match where a stable release goes first.
       new_version="$(curl -s https://tukaani.org/xz/ |
-          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]xz</a>' |
+          pcre2grep -o1 '>xz-([0-9.]+)[.]tar[.]xz</a>' |
           head -n1)"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';
@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/tukaani-project/xz/releases/tag/v${finalAttrs.version}";

@@ -3,31 +3,25 @@
   appimageTools,
   fetchurl,
 }:
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "ankama-launcher";
-  version = "3.14.14";
+  version = "3.15.5";
 
   # The original URL for the launcher is:
   # https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage
   # As it does not encode the version, we use the wayback machine (web.archive.org) to get a fixed URL.
   # To update the client, head to web.archive.org and create a new snapshot of the download page.
   src = fetchurl {
-    url = "https://web.archive.org/web/20260605015300/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
-    hash = "sha256-9w1ho9DZvDHXQbXjpMY1wnWDwYlMKO1igrJcCahQkVQ=";
+    url = "https://web.archive.org/web/20260909143802/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
+    hash = "sha256-6q0kAFXtrnud8rvxN6o6mIiwklzjZYAopf1MlS3ODbU=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-
-in
-
-appimageTools.wrapType2 {
-  inherit pname version src;
   extraPkgs = pkgs: [ pkgs.wine ];
 
   extraInstallCommands = ''
-    desktop_file="${appimageContents}/zaap.desktop"
+    desktop_file="${finalAttrs.contents}/zaap.desktop"
 
-    nix_version="${version}"
+    nix_version="${finalAttrs.version}"
     archive_version=$(grep -oP '(?<=X-AppImage-Version=).*' $desktop_file)
 
     if [[ "$archive_version" != "$nix_version"* ]]; then
@@ -41,7 +35,7 @@ appimageTools.wrapType2 {
 
     install -m 444 -D "$desktop_file" $out/share/applications/ankama-launcher.desktop
     sed -i 's/.*Exec.*/Exec=ankama-launcher/' $out/share/applications/ankama-launcher.desktop
-    install -m 444 -D ${appimageContents}/zaap.png $out/share/icons/hicolor/256x256/apps/zaap.png
+    install -m 444 -D ${finalAttrs.contents}/zaap.png $out/share/icons/hicolor/256x256/apps/zaap.png
   '';
 
   meta = {
@@ -56,4 +50,4 @@ appimageTools.wrapType2 {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2026.01.19.00";
+  version = "2026.07.27.00";
 
   outputs = [
     "out"
@@ -35,12 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tGq6jbBPotuBK1PuRRGvdNb208glzlt7dehjIY+4nvk=";
+    hash = "sha256-BGl1LGaYRmYdG4h98HhAT7X4tXEMjlzh27nGLCY/B1c=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake

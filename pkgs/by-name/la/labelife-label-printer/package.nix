@@ -15,18 +15,19 @@ let
     i686-linux = "i386";
     x86_64-linux = "x86_64";
   };
+  archiveSnapshot = "20260804054912";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "labelife-label-printer";
-  version = "2.3.1.001";
+  version = "2.3.2.002";
 
   arch =
     archAttrset.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20260607010653/https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
-    hash = "sha256-qpsyOuTrOTcXEQeCNNRV0QeV0s0RD2eqy/tGTA7qMWA=";
+    url = "https://web.archive.org/web/${archiveSnapshot}/https://oss.qu-in.ltd/Labelife/Label_Printer_Driver_Linux.zip";
+    hash = "sha256-UJ2wHQllvj1nY/rwrINwBzyCQP/KwwTSrlyuNXguq5o=";
   };
 
   nativeBuildInputs = [
@@ -38,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   unpackPhase = ''
     runHook preUnpack
 
-    # Extract outer ZIP file
-    unzip -q ${finalAttrs.src}
+    # Extract outer ZIP file, flattening paths (so the inner tarball lands in cwd)
+    unzip -qj ${finalAttrs.src}
 
-    # Extract inner tar.gz with --strip-components=1 to remove the `LabelPrinter-${finalAttrs.version}/` prefix
-    tar -xzf LabelPrinter-${finalAttrs.version}.tar.gz --strip-components=1
+    # Extract inner tar.gz with --strip-components=1 to remove the version-prefixed top directory
+    tar -xzf *.tar.gz --strip-components=1
 
     runHook postUnpack
   '';
@@ -61,25 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "CUPS driver for several Labelife-compatible thermal label printers";
+    description = "CUPS driver for Labelife-compatible thermal label printers";
     downloadPage = "https://labelife.net/#/chart";
     homepage = "https://labelife.net";
     license = lib.licenses.unfree;
     longDescription = ''
-      CUPS driver for Labelife-compatible thermal label printers.
-      Supported printer families include D-series (D420D, D520, D530,
-      D550), PM-series (PM-241, PM-246S, PM-249, PM-344), T-series
-      (T200, T300, T410, T460, T800), CT-series (CT200, CT310, CT510),
-      AM-series (AM-242, AM-243), and others (A646, PL70, DS-50P, 6XL).
-
-      Many models are available in multiple connectivity variants
-      (BT, WF, WIFI).
-
-      Brands using Labelife drivers include:
-      - Phomemo
-      - Itari
-      - Omezizy
-      - Aimo
+      Supports printers from Phomemo, Itari, Omezizy, and Aimo.
     '';
     maintainers = with lib.maintainers; [ daniel-fahey ];
     platforms = lib.attrNames archAttrset;

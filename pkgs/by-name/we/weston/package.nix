@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch, # Added for applying patch
   meson,
   ninja,
   nix-update-script,
@@ -11,7 +10,7 @@
   wayland-scanner,
   cairo,
   libGL,
-  libdisplay-info_0_2,
+  libdisplay-info_0_3,
   libdrm,
   libevdev,
   libinput,
@@ -32,14 +31,12 @@
   lua5_4_compat,
   pangoSupport ? true,
   pango,
-  pipewireSupport ? true,
+  pipewireSupport ? false,
   pipewire,
   rdpSupport ? true,
   freerdp,
-  remotingSupport ? true,
+  remotingSupport ? false,
   gst_all_1,
-  vaapiSupport ? false,
-  libva,
   vncSupport ? true,
   aml,
   neatvnc,
@@ -56,25 +53,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "weston";
-  version = "15.0.1";
+  version = "16.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wayland";
     repo = "weston";
     rev = finalAttrs.version;
-    hash = "sha256-c6h8GQt1S3t2+K+8A4ncxBtWLtaV61EABdYA55o9i4o=";
+    hash = "sha256-0TBVyqnfd7GMGPAzbYOmDZgv4gF5kxiqaA8+A0+sEqU=";
   };
-
-  patches = [
-    # backend-vnc, gitlab-ci: Update to Neat VNC 1.0.0, aml 1.0.0
-    # https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/2064
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/8a1c91e771312d1e0d0cd92495ef717402784dae.patch";
-      hash = "sha256-9eBONM7OfzHhCuT8Wnq534KS51q2VtUyOOLjYHohEds=";
-      excludes = [ ".gitlab-ci.yml" ];
-    })
-  ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
@@ -89,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libGL
-    libdisplay-info_0_2
+    libdisplay-info_0_3
     libdrm
     libevdev
     libinput
@@ -109,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
   ]
-  ++ lib.optional vaapiSupport libva
   ++ lib.optionals vncSupport [
     aml
     neatvnc
@@ -127,7 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "deprecated-backend-drm-screencast-vaapi" vaapiSupport)
     (lib.mesonBool "backend-pipewire" pipewireSupport)
     (lib.mesonBool "backend-rdp" rdpSupport)
     (lib.mesonBool "backend-vnc" vncSupport)
@@ -135,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "demo-clients" demoSupport)
     (lib.mesonBool "image-jpeg" jpegSupport)
     (lib.mesonBool "image-webp" webpSupport)
-    (lib.mesonBool "pipewire" pipewireSupport)
-    (lib.mesonBool "remoting" remotingSupport)
+    (lib.mesonBool "deprecated-pipewire" pipewireSupport)
+    (lib.mesonBool "deprecated-remoting" remotingSupport)
     (lib.mesonBool "renderer-vulkan" vulkanSupport)
     (lib.mesonOption "simple-clients" "")
     (lib.mesonBool "shell-lua" luaSupport)

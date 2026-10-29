@@ -4,7 +4,7 @@
   requireFile,
   unzip,
   glib,
-  systemd,
+  systemdLibs,
   nss,
   nspr,
   gtk3-x11,
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
         at-spi2-core
         cups.lib
         libpulseaudio
-        systemd
+        systemdLibs
         vivaldi-ffmpeg-codecs
         libxkbcommon
         libgbm

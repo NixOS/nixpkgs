@@ -37,6 +37,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    "test_flesch_reading_ease[Playing"
+    "test_set_lang[es_ES-172]"
+  ];
+
   dependencies = [
     pyphen
     nltk

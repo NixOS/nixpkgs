@@ -6,6 +6,7 @@
   hatch-mypyc,
   pytestCheckHook,
   result,
+  ast-serialize,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,6 +24,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     hatchling
     hatch-mypyc
+    ast-serialize
   ];
 
   dependencies = [ result ];

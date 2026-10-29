@@ -19,21 +19,29 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tigerjython";
 
+  #################################################################
   # UPDATE instructions
   #
   # We cache potentially unstable upstream input (.tar.gz file) via https://web.archive.org - this is a common procedure in Nixpkgs.
   #
-  # - Open https://tigerjython.ch/en/products/download and identify the new version string for "TigerJython IDE for Linux"
-  version = "2.40";
+  # - Open https://www.tjgroup.ch/index.php?site=download and identify the new version string
+  version = "2.42";
 
-  # - and copy download link (most likely https://tjgroup.ch/user/pages/download/TigerJython.tar.gz) to clipboard.
-  # - Open http://web.archive.org and paste download link from clipboard into "Save Page Now" field and hit the "Save Page" button.
+  # - and copy the download link (most likely https://www.tjgroup.ch/download/TigerJython.tar.gz) to the clipboard.
+  # - Open http://web.archive.org and paste the download link into the "Save Page Now" field and hit the "Save Page" button.
   # - Unselect "Save Error Pages" and hit "Save Page" again.
-  # - Wait for the archive link to be generated and copy it to the url field - adjust hash accordingly.
   src = fetchurl {
-    url = "https://web.archive.org/web/20250104142121/https://tjgroup.ch/download/TigerJython.tar.gz";
-    hash = "sha256-V/POFftRs/jjgNaHOrKcW2AdlQY2yjO+xiwJi63oECo=";
+    # - Wait for the archive link to be generated and copy it to the url parameter below
+    url = "https://web.archive.org/web/20260804083812/https://www.tjgroup.ch/download/TigerJython.tar.gz";
+    # - Run 'nix --extra-experimental-features "nix-command flakes" store prefetch-file $archive-link' to get the hash of the newly archived file
+    hash = "sha256-jQUQiunrEi3cJhMV9URFeI7JKbGXL/Q2mgd2v0YWRBE=";
   };
+  # build and run the new package locally
+  # - 'nix-build -A tigerjython'
+  # - e.g. '/nix/store/...-tigerjython-2.42/bin/tigerjython'
+  # - optionally run 'nixfmt pkgs/by-name/ti/tigerjython/package.nix'
+  # - finally commit the changes as e.g. "tigerjython: 2.40 -> 2.42" to the working branch, e.g. "tigerjython-2.42" and create a pull request to the main Nixpkgs repository
+  #################################################################
 
   nativeBuildInputs = [
     makeWrapper

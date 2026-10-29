@@ -143,13 +143,9 @@ rec {
     fold' 0;
 
   /**
-    `fold` is an alias of `foldr` for historic reasons.
-
-    ::: {.warning}
-    This function will be removed in 26.05.
-    :::
+    `fold` was an alias of `foldr` for historic reasons.
   */
-  fold = warn "fold has been deprecated, use foldr instead" foldr;
+  fold = throw "fold is a removed alias of foldr, use it instead"; # TODO: Remove in 26.11
 
   /**
     “left fold”, like `foldr`, but from the left:
@@ -646,11 +642,28 @@ rec {
     :::
   */
   findFirst =
+    let
+      init = {
+        found = false;
+      };
+    in
     pred: default: list:
     let
-      index = findFirstIndex pred null list;
+      result = foldl' (
+        acc: el:
+        if !acc.found && pred el then
+          # We haven't found a match yet, and the current element passes the
+          # predicate!
+          {
+            found = true;
+            value = el;
+          }
+        else
+          # There's already a match, or the current element fails the predicate
+          acc
+      ) init list;
     in
-    if index == null then default else elemAt list index;
+    if result.found then result.value else default;
 
   /**
     Returns true if function `pred` returns true for at least one
@@ -1805,7 +1818,37 @@ rec {
 
     :::
   */
-  commonPrefix =
+  commonPrefix = list1: list2: take (commonPrefixLength list1 list2) list1;
+
+  /**
+    Returns the length of the common prefix of two lists,
+    i.e. the number of leading elements that are pairwise equal.
+
+    This is more efficient than `length (commonPrefix a b)` because
+    it avoids allocating an intermediate list.
+
+    # Type
+
+    ```
+    commonPrefixLength :: [a] -> [a] -> Int
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.commonPrefixLength` usage example
+
+    ```nix
+    commonPrefixLength [ 1 2 3 4 5 6 ] [ 1 2 4 8 ]
+    => 2
+    commonPrefixLength [ 1 2 3 ] [ 1 2 3 4 5 ]
+    => 3
+    commonPrefixLength [ 1 2 3 ] [ 4 5 6 ]
+    => 0
+    ```
+
+    :::
+  */
+  commonPrefixLength =
     list1: list2:
     let
       # Zip the lists together into a list of booleans whether each element matches
@@ -1814,9 +1857,8 @@ rec {
       # which will then also be the length of the common prefix.
       # If all elements match, we fall back to the length of the zipped list,
       # which is the same as the length of the smaller list.
-      commonPrefixLength = findFirstIndex id (length matchings) matchings;
     in
-    take commonPrefixLength list1;
+    findFirstIndex id (length matchings) matchings;
 
   /**
     Returns the last element of a list.

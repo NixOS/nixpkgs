@@ -26,8 +26,6 @@ buildGoModule (finalAttrs: {
     "-X src.elv.sh/pkg/buildinfo.Version==${finalAttrs.version}"
   ];
 
-  strictDeps = true;
-
   doCheck = false;
 
   passthru = {

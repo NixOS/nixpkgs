@@ -12,12 +12,12 @@
   jaraco-envs,
   jaraco-path,
   jaraco-text,
-  libz,
   more-itertools,
   packaging,
   path,
   pyfakefs,
   pytestCheckHook,
+  zlib,
   stdenv,
 }:
 
@@ -66,7 +66,7 @@ buildPythonPackage {
 
   checkInputs = [
     # https://github.com/pypa/distutils/blob/5ad8291ff2ad3e43583bc72a4c09299ca6134f09/distutils/tests/test_build_ext.py#L107
-    libz
+    zlib
   ];
 
   # jaraco-path depends ob pyobjc

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~raphi";
     repo = "somebar";
     rev = finalAttrs.version;
-    sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
+    hash = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 
   nativeBuildInputs = [

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
   beautifulsoup4,
   pyuseragents,
@@ -13,7 +14,9 @@
 buildPythonPackage (finalAttrs: {
   pname = "translatepy";
   version = "2.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Animenosekai";
@@ -22,7 +25,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     beautifulsoup4
     pyuseragents

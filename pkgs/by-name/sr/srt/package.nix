@@ -3,29 +3,33 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  bashNonInteractive,
   openssl,
   windows,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "srt";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "Haivision";
     repo = "srt";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hOkLlmtF9dKqXZTjAeBntkkg5WsmsZN6DKhyakoIF1k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fdgj6URuMaem+ZVy7D8Hnf2Ev1HindevdvX0xyxCL4M=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    bashNonInteractive
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     windows.pthreads
   ];
+
+  strictDeps = true;
 
   patches = [
   ]
@@ -44,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     # see https://github.com/NixOS/nixpkgs/pull/54463#discussion_r249878330
     "-UCMAKE_INSTALL_LIBDIR"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Secure, Reliable, Transport";

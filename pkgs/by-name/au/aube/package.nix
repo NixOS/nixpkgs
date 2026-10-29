@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   meta = {

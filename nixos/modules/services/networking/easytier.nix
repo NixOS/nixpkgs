@@ -134,7 +134,8 @@ let
             except `hostname` will be ignored. Valid formats are:
 
             - full uri for custom server: `udp://example.com:22020/<token>`
-            - username only for official server: `<token>`
+
+            Since 2.7.0 a full URL is required; a bare `<token>` is rejected.
           '';
           example = "udp://example.com:22020/myusername";
         };

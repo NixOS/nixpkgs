@@ -4,19 +4,18 @@
   melpaBuild,
   nix-update-script,
   stdenv,
-  zig_0_15,
+  zig_0_16,
   emacs,
   xcbuild,
 }:
 
 let
-  zig = zig_0_15;
-
   mkModule =
     {
       pname,
       version,
       src,
+      zig,
       zigDeps,
     }:
     stdenv.mkDerivation (finalAttrs: {
@@ -24,10 +23,11 @@ let
         pname
         version
         src
+        zig
         zigDeps
         ;
 
-      nativeBuildInputs = [ zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+      nativeBuildInputs = [ finalAttrs.zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
       env.EMACS_INCLUDE_DIR = "${emacs}/include";
 
@@ -47,6 +47,10 @@ let
         cp -rLT ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
         chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
       '';
+
+      strictDeps = true;
+
+      __structuredAttrs = true;
     });
 
   libExt = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -54,20 +58,21 @@ in
 melpaBuild (finalAttrs: {
   pname = "ghostel";
 
-  version = "0.45.0";
+  version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SY8tF7KqhlP49lgCvwH6TbVbeY+/gWryK2HVLWoqbpA=";
+    hash = "sha256-1eIMfkPrczsirteuN3uM4axj8ZW3pt0TpPG+Lpos2uU=";
   };
 
-  # this can be put into mkModule, but we put it here to ease user overrideAttrs
-  zigDeps = zig.fetchDeps {
+  # these can be put into mkModule, but we put them here to ease user overrideAttrs
+  zig = zig_0_16;
+  zigDeps = finalAttrs.zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-yrVgiofdmVjTGJ+PGPGRCc8gb/JcEca1uAzIoPgHHqU=";
+    hash = "sha256-BZzOCIY/3kkpYN115YLeu8snFqW77cJBXF+z+cpNYLk=";
   };
 
   files = ''
@@ -87,6 +92,7 @@ melpaBuild (finalAttrs: {
       inherit (finalAttrs)
         version
         src
+        zig
         zigDeps
         ;
     };

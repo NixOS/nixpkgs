@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "DamienCassou";
     repo = "rofi-vpn";
     rev = "v${finalAttrs.version}";
-    sha256 = "04jcfb2jy8yyrk4mg68krwh3zb5qcyj1aq1bwk96fhybrq9k2hhp";
+    hash = "sha256-F0IxE87LQ2fS5CtgFaRnuKw/IM8TmVfJzN4jL8VyTBI=";
   };
 
   installPhase = ''

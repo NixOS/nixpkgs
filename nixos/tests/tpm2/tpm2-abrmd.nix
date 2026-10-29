@@ -32,12 +32,23 @@
       environment.systemPackages = [
         pkgs.tpm2-tools
         pkgs.openssl
+        pkgs.p11-kit
+        pkgs.opensc
       ];
     };
 
   testScript = ''
     machine.start()
     machine.wait_for_unit("multi-user.target")
+
+    with subtest("p11-kit discovers the tpm2_pkcs11 module"):
+        machine.succeed("p11-kit list-modules | grep 'library-description: TPM2.0 Cryptoki'")
+
+    with subtest("TPM2 token is reachable through the p11-kit proxy"):
+        machine.succeed(
+            "pkcs11-tool --module ${lib.getLib pkgs.p11-kit}/lib/p11-kit-proxy.so --list-slots"
+            " | grep 'token state'"
+        )
 
     with subtest("/dev/tpmrm0 has correct ownership"):
         machine.succeed('[ `stat -c "%U" /dev/tpmrm0` = "tss" ]')

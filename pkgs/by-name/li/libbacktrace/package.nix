@@ -1,5 +1,8 @@
 {
+  stdenvNoCC,
   stdenv,
+  overrideCC,
+  buildPackages,
   lib,
   fetchFromGitHub,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -7,6 +10,33 @@
   unstableGitUpdater,
   autoreconfHook,
 }:
+
+let
+  # With GCC NG, `libstdc++` links this rather than compiling its own copy,
+  # which puts it below the C++ standard library rather than above; built with
+  # the ordinary `stdenv` the two would create a cycle.
+  #
+  # I would rather this bootstrapping detail not leak into the `package.nix`,
+  # but I don't see another solution available since all-package.nix overrides
+  # of "by-name" packages are no longer allowed.
+  #
+  # TODO: hoist this back out to a `stdenvNoCXX` in `all-packages.nix`,
+  # where the next package needing a hosted-but-C++-free compiler can
+  # share it. `nixpkgs-vet` blocks that today: it wants `strictDeps` and
+  # `__structuredAttrs`, but this is only relevant for derivations made
+  # with `stdenv.mkDerivation` --- `stdenv` itself is *not* such a
+  # derivation!
+  stdenv' =
+    if stdenvNoCC.hostPlatform.useLLVM or false then
+      overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibcxx
+    else if stdenvNoCC.hostPlatform.useGccNG or false then
+      overrideCC stdenvNoCC buildPackages.gccNGPackages.gccWithLibatomic
+    else
+      stdenv;
+in
+let
+  stdenv = stdenv';
+in
 
 stdenv.mkDerivation {
   pname = "libbacktrace";
@@ -46,6 +76,17 @@ stdenv.mkDerivation {
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
   ];
+
+  # A (PE/COFF) DLL has to resolve every symbol at link time, and
+  # libtool declines to build one at all unless told unresolved symbols
+  # are not allowed. We don't have any unresolved symbols so we can pass
+  # this flag.
+  #
+  # We only want this affecting the build. It could mess up configure
+  # scripts if we defined it for the entire derivation.
+  #
+  # TODO use `lib.optionalString` at the cost of some rebuilds.
+  makeFlags = if enableShared && stdenv.hostPlatform.isPE then "LDFLAGS=-no-undefined" else null;
 
   doCheck = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl;
 

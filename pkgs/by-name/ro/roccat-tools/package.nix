@@ -9,13 +9,16 @@
   dbus-glib,
   libgaminggear,
   libgudev,
-  lua,
+  lua5_2_compat,
   harfbuzz,
   runtimeShell,
   coreutils,
   kmod,
   udevCheckHook,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "roccat-tools";

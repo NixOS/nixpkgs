@@ -10,6 +10,7 @@ let
     "x86_64" = "amd64";
     "i686" = "386";
     "aarch64" = "arm64";
+    "riscv64" = "riscv64";
   };
   targetSystem = lib.systems.parse.mkSystemFromString stdenv.targetPlatform.system;
   targetOS = targetSystem.kernel.name;

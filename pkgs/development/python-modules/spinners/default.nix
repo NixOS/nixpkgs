@@ -2,17 +2,22 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spinners";
   version = "0.0.24";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0zz2z6dpdjdq5z8m8w8dfi8by0ih1zrdq0caxm1anwhxg2saxdhy";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-HrautHgdcqtC7YoB3PIPMAK/UHQNcVTRL7jJdpv54n8=";
   };
+
+  build-system = [ setuptools ];
 
   # Tests are not included in the PyPI distribution and the git repo does not have tagged releases
   doCheck = false;
@@ -24,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
   };
-}
+})

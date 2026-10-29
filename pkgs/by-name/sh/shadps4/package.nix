@@ -2,7 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
 
   nixosTests,
   alsa-lib,
@@ -12,7 +12,9 @@
   cryptopp,
   ffmpeg,
   fmt,
+  freetype,
   half,
+  httplib,
   jack2,
   libdecor,
   libpng,
@@ -21,8 +23,10 @@
   libusb1,
   magic-enum,
   minimp3,
+  miniupnpc,
   miniz,
   nlohmann_json,
+  python3,
   libgbm,
   libx11,
   libxcb,
@@ -49,27 +53,30 @@
   vulkan-memory-allocator,
   xbyak,
   xxhash,
+  zarchive,
+  zstd,
   zlib,
   nix-update-script,
+
+  withRpc ? true,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.16.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-SavSUHtnJeRi2mzIyUhLfLk37Y/PSuI3bbbqWA7qVbg=";
+    hash = "sha256-xf8m8mVP1YyfocLLsH4YhBzVpkOQQQTtq2SDkyuI5EU=";
 
     postCheckout = ''
-      cd "$out"
+      git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
+      date -u -d "@$(git -C "$out" log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
 
-      git rev-parse --short=8 HEAD > $out/COMMIT
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-
-      git -C externals submodule update --init --recursive \
+      git -C "$out/externals" submodule update --init --recursive \
+        abseil-cpp \
         glslang \
         zydis \
         sirit \
@@ -78,14 +85,18 @@ clangStdenv.mkDerivation (finalAttrs: {
         discord-rpc \
         hwinfo \
         openal-soft \
-        dear_imgui \
+        imgui \
         LibAtrac9 \
         aacdec/fdk-aac \
         spdlog \
         libressl \
-        ImGuiFileDialog
+        ImGuiFileDialog \
+        protobuf
     '';
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace src/common/scm_rev.cpp.in \
@@ -94,7 +105,26 @@ clangStdenv.mkDerivation (finalAttrs: {
       --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
       --replace-fail @GIT_DESC@ nixpkgs \
       --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
+
+    sed -i '3i #include <fmt/format.h>' src/core/loader/elf.cpp
+
+    sed -i '3i #include <cstring>' src/video_core/amdgpu/regs.cpp
+    sed -i '/#pragma once/a #include <cstring>' src/video_core/amdgpu/resource.h
   '';
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
+    # System Zstd is not linked by default
+    NIX_LDFLAGS = "-lzstd";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeBinaryWrapper
+    python3
+  ];
 
   buildInputs = [
     alsa-lib
@@ -103,7 +133,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     cryptopp
     ffmpeg
     fmt
+    freetype
     half
+    httplib
     jack2
     libdecor
     libpng
@@ -120,6 +152,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libxtst
     magic-enum
     minimp3
+    miniupnpc
     miniz
     libgbm
     nlohmann_json
@@ -139,17 +172,16 @@ clangStdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
     xbyak
     xxhash
+    zarchive
+    zstd
     zlib
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeWrapper
-  ];
-
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_DISCORD_RPC" withRpc)
+    (lib.cmakeBool "ENABLE_TESTS" false)
     (lib.cmakeBool "ENABLE_UPDATER" false)
+    (lib.cmakeBool "ENABLE_SYSTEM_LIBRARIES" true)
   ];
 
   # Still in development, help with debugging
@@ -183,7 +215,9 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Early in development PS4 emulator";
-    homepage = "https://github.com/shadps4-emu/shadPS4";
+    homepage = "https://shadps4.net";
+    downloadPage = "https://shadps4.net/downloads";
+    donationPage = "https://ko-fi.com/shadps4";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       ryand56

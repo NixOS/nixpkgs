@@ -29,6 +29,7 @@ in
     default =
       { ... }:
       {
+        security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           inherit adminCredentialsFile;
@@ -38,6 +39,7 @@ in
     withoutSudo =
       { ... }:
       {
+        security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           inherit adminCredentialsFile;
@@ -48,6 +50,7 @@ in
     customized =
       { ... }:
       {
+        security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           config = {
@@ -82,6 +85,7 @@ in
     externalDb =
       { ... }:
       {
+        security.apparmor.enable = true;
         services.miniflux = {
           enable = true;
           createDatabaseLocally = false;
@@ -105,6 +109,7 @@ in
       machine.succeed(
           f"curl 'http://localhost:{port}/v1/me' -u '{user}' -H Content-Type:application/json | grep '\"is_admin\":true'"
       )
+      machine.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
 
     default.start()
     withoutSudo.start()

@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Amaranth HDL library for building USB-capable SoC designs";
     homepage = "https://github.com/greatscottgadgets/luna-soc";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ carlossless ];
+    maintainers = with lib.maintainers; [ karstx ];
   };
 }

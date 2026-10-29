@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
       It comes in 7 incremental weights: ExtraLight, Light, Book, Medium,
       Semibold, Bold & ExtraBold
     '';
-    homepage = "http://www.impallari.com/dosis";
+    homepage = "https://github.com/impallari/Dosis";
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;

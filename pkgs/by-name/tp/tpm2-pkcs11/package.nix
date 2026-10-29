@@ -46,13 +46,13 @@ let
 in
 chosenStdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-pkcs11";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-pkcs11";
     tag = finalAttrs.version;
-    hash = "sha256-89lChdkheSEC0JKMKNXN11BqjeJgt1Hdk+QxjLPY72M=";
+    hash = "sha256-zO52OcSSlkWjrj5Wgftu8bxU3vHS8Lkli6sAiIt1tAc=";
   };
 
   # Disable Java‐based tests because of missing dependencies

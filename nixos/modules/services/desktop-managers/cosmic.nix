@@ -30,6 +30,7 @@ let
       cosmic-launcher
       cosmic-notifications
       cosmic-osd
+      cosmic-osk
       cosmic-panel
       cosmic-session
       cosmic-settings
@@ -41,6 +42,9 @@ let
       # providing XWayland support? Doesn't make sense. Add `xwayland` to the
       # `corePkgs` list.
       xwayland
+      # cosmic-comp runs `xrdb -merge` on the Xwayland display to set the X11
+      # cursor size and theme; like xwayland, it is looked up on $PATH.
+      xrdb
     ];
 in
 {
@@ -90,6 +94,7 @@ in
           cosmic-reader
           cosmic-screenshot
           cosmic-term
+          cosmic-viewer
           cosmic-wallpapers
           cosmic-sound-theme
           glib
@@ -134,6 +139,11 @@ in
       open-sans
     ];
 
+    qt = {
+      enable = lib.mkDefault true;
+      platformTheme = lib.mkDefault "qt5ct";
+    };
+
     # Required options for the COSMIC DE
     environment.sessionVariables.X11_BASE_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.xml";
     environment.sessionVariables.X11_EXTRA_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.extras.xml";
@@ -151,17 +161,8 @@ in
     # Required for screen locker
     security.pam.services.cosmic-greeter = { };
 
-    # geoclue2 stuff
-    services.geoclue2.enable = true;
-    # We _do_ use the demo agent in the `cosmic-settings-daemon` package,
-    # but this option also creates a systemd service that conflicts with the
-    # `cosmic-settings-daemon` package's geoclue2 agent. Therefore, disable it.
-    services.geoclue2.enableDemoAgent = false;
-    # As mentioned above, we do use the demo agent. And it needs to be
-    # whitelisted, otherwise it doesn't run.
-    services.geoclue2.whitelistedAgents = [ "geoclue-demo-agent" ]; # whitelist our own geoclue2 agent o
-
     # Good to have defaults
+    services.geoclue2.enable = lib.mkDefault true;
     hardware.bluetooth.enable = lib.mkDefault true;
     networking.networkmanager.enable = lib.mkDefault true;
     services.acpid.enable = lib.mkDefault true;
@@ -169,9 +170,11 @@ in
     services.gnome.gnome-keyring.enable = lib.mkDefault true;
     services.gvfs.enable = lib.mkDefault true;
     services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
-    services.power-profiles-daemon.enable = lib.mkDefault (
-      !config.hardware.system76.power-daemon.enable
+    services.system76-scheduler.enable = lib.mkDefault true;
+    hardware.system76.power-daemon.enable = lib.mkDefault (
+      !config.services.power-profiles-daemon.enable && !config.services.tuned.enable
     );
+    services.switcherooControl.enable = lib.mkDefault true;
 
     warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [
       ''

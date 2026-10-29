@@ -4,6 +4,7 @@
   qtdeclarative,
   qtsvg,
   kirigami,
+  aubio,
   fluidsynth,
 }:
 mkKdeDerivation {
@@ -14,6 +15,8 @@ mkKdeDerivation {
     qtdeclarative
     qtsvg
     kirigami
+
+    aubio
     fluidsynth
   ];
   meta.mainProgram = "minuet";

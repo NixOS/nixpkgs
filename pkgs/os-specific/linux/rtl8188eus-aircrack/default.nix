@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
-  version = "${kernel.version}-unstable-2026-06-22";
+  version = "${kernel.version}-unstable-2026-08-18";
 
   src = fetchFromGitHub {
     owner = "gglluukk";
     repo = "rtl8188eus";
-    rev = "cbeae98cb423378dfd5e5efb63290fe43a6ed965";
-    hash = "sha256-wiWG0ndtQML/h88alNyQOX64krpJOf56HyB8LW5dYbA=";
+    rev = "f48878a7a66b1281e6eab0cf2b55e7149510daf2";
+    hash = "sha256-uothRY0G4FFKYDDhzoHTWnlLcuULBNWOz22Bps7yujw=";
   };
 
   prePatch = ''

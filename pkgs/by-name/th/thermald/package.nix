@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thermald";
-  version = "2.5.11";
+  version = "2.5.13";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IHBfNqiMd2q5vj+xpo31LFy19zwv0GkB0GoHq8Ni7aA=";
+    sha256 = "sha256-SFVQQzWOG8vdxiWV9lFnz9niVJB5QaclWGENzGgqZCk=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=${placeholder "out"}/etc"
     "--localstatedir=/var"
     "--enable-gtk-doc"
+    "--enable-doc"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ];

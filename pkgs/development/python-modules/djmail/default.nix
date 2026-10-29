@@ -14,14 +14,14 @@ buildPythonPackage rec {
   format = "setuptools";
 
   meta = {
-    description = "Simple, powerfull and nonobstructive django email middleware";
+    description = "Simple, powerful and nonobstructive django email middleware";
     homepage = "https://github.com/bameda/djmail";
     license = lib.licenses.bsd3;
   };
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf3ce7626305d218a8bf2b6a219266ef8061aceeefc1c70a54170f4105465202";
+    hash = "sha256-zzznYmMF0hiovytqIZJm74BhrO7vwccKVBcPQQVGUgI=";
   };
 
   nativeBuildInputs = [ glibcLocales ];

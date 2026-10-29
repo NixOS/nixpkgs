@@ -8,21 +8,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rabbitmqadmin-ng";
-  version = "2.32.0";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "rabbitmq";
     repo = "rabbitmqadmin-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RCDjMOKPRRm1l9hcLPyxa6Qzf7fHXe1898SLqwZ+n7I=";
+    hash = "sha256-GLpWOdXip7QeQWyp77ncXJvKMrxJLqW3gaxHwrEc9Ng=";
   };
 
-  cargoHash = "sha256-VO7Kwm2mtED4/eirL6lsYSFMsyE8A2LdAFkXIjHFgUE=";
+  cargoHash = "sha256-VDPyBm0v2DZEXpEbOMwbrvBvjELHEzRAgTJnm3MRrVY=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
-
-  strictDeps = true;
 
   # This requires a running rabbitmq instance to communicate with that needs
   # to be set up by hand. It should be possible to run tests in the future

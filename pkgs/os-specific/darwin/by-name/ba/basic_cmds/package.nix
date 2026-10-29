@@ -12,9 +12,6 @@ mkAppleDerivation {
 
   meta = {
     description = "Basic commands for Darwin";
-    license = [
-      lib.licenses.isc
-      lib.licenses.bsd3
-    ];
+    license = lib.licenses.bsd3;
   };
 }

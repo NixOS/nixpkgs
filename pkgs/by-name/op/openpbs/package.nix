@@ -7,8 +7,8 @@
   libtool,
   gnum4,
   symlinkJoin,
-  tcl-8_5,
-  tk-8_5,
+  tcl,
+  tk,
   swig,
   pkg-config,
   cjson,
@@ -31,9 +31,9 @@ let
   tclWithTk = symlinkJoin {
     name = "tcl-with-tk";
     paths = [
-      tcl-8_5
-      tk-8_5
-      tk-8_5.dev
+      tcl
+      tk
+      tk.dev
     ];
   };
 in

@@ -1,6 +1,11 @@
-{ libbluray }:
+{
+  lib,
+  stdenv,
+  jdk21,
+  libbluray,
+}:
 libbluray.override {
   withAACS = true;
   withBDplus = true;
-  withJava = true;
+  withJava = lib.meta.availableOn stdenv.buildPlatform jdk21;
 }

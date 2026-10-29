@@ -4,16 +4,17 @@
   fetchFromGitHub,
   git,
   fishtape_3,
+  nix-update-script,
 }:
 buildFishPlugin (finalAttrs: {
   pname = "pure";
-  version = "4.15.0";
+  version = "4.19.0";
 
   src = fetchFromGitHub {
     owner = "pure-fish";
     repo = "pure";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-fqcIfst9YnkOi50pIUMoJJQ7s1w1Vr6hRdEFo+FWIZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8rxCmKu1pvBMm+/Ski7q3ikNnnX3gAqQ0jo0f2mIXrI=";
   };
 
   nativeCheckInputs = [ git ];
@@ -24,6 +25,8 @@ buildFishPlugin (finalAttrs: {
 
     fishtape tests/*.test.fish
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pretty, minimal and fast Fish prompt, ported from zsh";

@@ -9,19 +9,18 @@
   gtk3,
   pantheon,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elementary-xfce-icon-theme";
-  version = "0.22";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-snNh6883YUmzU1OG8jLf41/0NrEzfwFikyVtX1JeNdw=";
+    hash = "sha256-tEU2gDKjFx/BC3fzaaP5gtG30dQn9zpzbQpI8ISvYQI=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     pantheon.elementary-icon-theme
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

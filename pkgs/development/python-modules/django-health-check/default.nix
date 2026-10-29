@@ -18,18 +18,20 @@
   aio-pika,
   httpx,
   feedparser,
+  fakeredis,
+  testcontainers,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.4.3";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-brC/gMqxo6BsfMA+4u9alOtIH4js4EgdExT1LL0QXxU=";
+    hash = "sha256-nz6ymaUz9FsNexFfMebVZ7+a1zExXCaDRC52Ly/OgP4=";
   };
 
   build-system = [
@@ -61,15 +63,23 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytest-asyncio
     libredirect.hook
+    fakeredis
+    testcontainers
   ];
 
   disabledTests = [
     # require online DNS resolution
     "test_run_check__dns_working"
+    "test_run_check__custom_nameservers"
+    "test_run_check__custom_record_type"
+    "test_run_check__custom_record_type_str"
     "test_check_status__nonexistent_hostname"
     "test_check_status__no_answer"
+    # not reproducible
+    "test_run_check__disk_accessible"
+    "test_run_check__custom_path"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # sensors_temperatures is not available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.sensors_temperatures
     "TestTemperature"
     # some metrics aren't available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.virtual_memory

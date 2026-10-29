@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tkrev";
-  version = "9.6.1";
+  version = "9.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/tkcvs/tkrev_${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-hWGxxL7ArWPi1uCeigJIccke5vYTLn2OWHR7t8TIrZc=";
+    sha256 = "sha256-EDtRauiNoJDps/UHVw4tkfQ8vO5xvZehwtVzf75Hxww=";
   };
 
   buildInputs = [

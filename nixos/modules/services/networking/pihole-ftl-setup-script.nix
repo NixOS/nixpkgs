@@ -41,7 +41,7 @@ in
   any_failed=0
 
   addList() {
-    local payload="$1" result type error
+    local payload="$1" result type id error
 
     echo "Adding list: $payload"
     type=$($jq -r '.type' <<< "$payload")
@@ -49,17 +49,25 @@ in
 
     error="$($jq '.error' <<< "$result")"
     if [[ "$error" != "null" ]]; then
-        echo "Error: $error"
-        any_failed=1
+      if $jq -e '
+        .error.key == "database_error"
+        and .error.hint == "The item is already present"
+      ' <<< "$result" > /dev/null; then
+        echo "List already present"
         return
+      fi
+
+      echo "Error: $error"
+      any_failed=1
+      return
     fi
 
     id="$($jq '.lists.[].id?' <<< "$result")"
     if [[ "$id" == "null" ]]; then
-        any_failed=1
-        error="$($jq '.processed.errors.[].error' <<< "$result")"
-        echo "Error: $error"
-        return
+      any_failed=1
+      error="$($jq '.processed.errors.[].error' <<< "$result")"
+      echo "Error: $error"
+      return
     fi
 
     echo "Added list ID $id: $result"

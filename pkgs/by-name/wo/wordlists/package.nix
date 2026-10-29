@@ -58,7 +58,7 @@ symlinkJoin {
       [rockyou](https://en.wikipedia.org/wiki/RockYou#Data_breach)
       wordlist. If you want to modify the available wordlists you can override
       the `lists` attribute`. In your nixos configuration this would look
-      similiar to this:
+      similar to this:
 
       ```nix
       environment.systemPackages = [

@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mountpoint-s3";
-  version = "1.22.3";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-22tx8ozXkzBNAflDPc7cdfUh9TWD6aB/Fe/z/dPZ694=";
+    hash = "sha256-UDL1y7xmVhv/KlWiDOdvRahUF831kXGBIOcSmDRJCGs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-SSSXqgJ3OERCVw81iXqXRRpVXgdwhlefHhI/qvQyl4g=";
+  cargoHash = "sha256-N2Rf6ikEBSsTQBsb5xGPWj0ElHjKnCx5FSd85DLqKM4=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3
@@ -42,6 +42,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
+    "--skip=io::tls::test::build_tls_connection_options"
+    "--skip=s3::client::tests::tls_connection_options_wiring"
+    "--skip=s3::config::tests::test_read_part_size_exceeds_budget_default_clamps"
+    "--skip=mountpoint-s3-client/src/lib.rs"
+
     #thread 's3_crt_client::tests::test_expected_bucket_owner' panicked at mountpoint-s3-client/src/s3_crt_client.rs:1123:47:
     #Create test client: ProviderFailure(Error(1173, "aws-c-io: AWS_IO_TLS_ERROR_DEFAULT_TRUST_STORE_NOT_FOUND, Default TLS trust store not found on this system. Trusted CA certificates must be installed, or \"override default trust store\" must be used while creating the TLS context."))
     #

@@ -163,7 +163,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       jcelerier
-      minijackson
     ];
   };
 })

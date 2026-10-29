@@ -2,45 +2,35 @@
   lib,
   stdenv,
   fetchurl,
-  wrapQtAppsHook,
   python3,
-  zbar,
+  zxing-cpp,
   enableQt ? true,
+  qt5,
   enablePythonEcdsa ? false,
   callPackage,
-  qtwayland,
+
+  writableTmpDirAsHomeHook,
 }:
 
-let
-  libzbar_name =
-    if stdenv.hostPlatform.isLinux then
-      "libzbar.so.0"
-    else if stdenv.hostPlatform.isDarwin then
-      "libzbar.0.dylib"
-    else
-      "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
-in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "electrum";
-  version = "4.8.0";
+  version = "4.8.3";
   pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${finalAttrs.version}/Electrum-${finalAttrs.version}.tar.gz";
-    hash = "sha256-z14bzs81eJNTMSWSBLTyCmsljDNztG54SVkoTcSqvsM=";
+    hash = "sha256-30H6guV59yCjhZv/neCd2Yu5MHmwH6KXO3P9vb/ecog=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = [ python3.pkgs.setuptools ];
 
   nativeBuildInputs = [
     python3.pkgs.pythonRelaxDepsHook
   ]
   ++ lib.optionals enableQt [
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
-  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qt5.qtwayland;
 
   dependencies =
     with python3.pkgs;
@@ -53,7 +43,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       cryptography
       dnspython
       jsonrpclib-pelix
-      matplotlib
       pbkdf2
       protobuf
       pysocks
@@ -67,22 +56,24 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       ledger-bitcoin
       cbor2
       pyserial
+      trezor
     ]
     ++ lib.optionals enablePythonEcdsa [
       # enablePythonEcdsa gates plugins known to pull in python-ecdsa, which we
       # avoid by default due to CVE-2024-23342.
       ckcc-protocol
       keepkey
-      trezor
       bitbox02
     ]
     ++ lib.optionals enableQt [
+      matplotlib
       pyqt6
       qdarkstyle
     ];
 
   pythonRelaxDeps = [
     "attrs"
+    "certifi"
     "dnspython"
   ];
 
@@ -90,20 +81,19 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "protobuf"
   ];
 
-  checkInputs =
-    with python3.pkgs;
-    lib.optionals enableQt [
-      pyqt6
-    ];
+  checkInputs = lib.optionals enableQt [
+    python3.pkgs.pyqt6
+  ];
   disabledTestPaths = lib.optionals (!enableQt) [
-    "tests/test_qml_types.py"
+    "tests/qml"
   ];
 
   postPatch =
     if enableQt then
       ''
-        substituteInPlace ./electrum/qrscanner.py \
-          --replace-fail ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+        substituteInPlace ./electrum/qrreader/zxing.py \
+          --replace-fail "'libZXing${stdenv.hostPlatform.extensions.sharedLibrary}'" \
+            "'${lib.getLib zxing-cpp}/lib/libZXing${stdenv.hostPlatform.extensions.sharedLibrary}'"
       ''
     else
       ''
@@ -132,18 +122,22 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     pyaes
     pycryptodomex
+
+    # avoid homeless-shelter error in tests
+    writableTmpDirAsHomeHook
   ];
 
   enabledTestPaths = [ "tests" ];
 
-  # avoid homeless-shelter error in tests
   preCheck = ''
     export PYTHONPATH=${python3.pkgs.protobuf}/${python3.sitePackages}:$PYTHONPATH
-    export HOME="$(mktemp -d)"
   '';
 
   postCheck = ''
     $out/bin/electrum help >/dev/null
+  ''
+  + lib.optionalString enableQt ''
+    ${python3.interpreter} -c 'from electrum.qrreader import get_qr_reader; get_qr_reader()'
   '';
 
   passthru.updateScript = callPackage ./update.nix { };
@@ -160,7 +154,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     downloadPage = "https://electrum.org/#download";
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       np
       prusnak

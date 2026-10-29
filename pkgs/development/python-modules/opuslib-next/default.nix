@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opuslib-next";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "kalicyh";
     repo = "opuslib-next";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rR1tsijKUBUH3bZZSISsx1JUO35TZevcTcfPtoQow/E=";
+    hash = "sha256-5pfv1wMqFuduoUn3HzVuygJdnpfTY/MdXhYZ5S83B2g=";
   };
 
   patches = [

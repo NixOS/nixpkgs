@@ -1,24 +1,29 @@
 {
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   torch,
   buildPythonPackage,
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ttach";
   version = "0.0.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qubvel";
     repo = "ttach";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R6QO+9hv0eI7dZW5iJf096+LU1q+vnmOpveurgZemPc=";
   };
 
-  propagatedBuildInputs = [ torch ];
+  build-system = [ setuptools ];
+
+  dependencies = [ torch ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ttach" ];
@@ -28,4 +33,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/qubvel/ttach";
     license = lib.licenses.mit;
   };
-}
+})

@@ -10,7 +10,7 @@
   hicolor-icon-theme,
   procps,
   libwnck,
-  libappindicator-gtk3,
+  libappindicator,
   xdg-utils,
 }:
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     librsvg
     libwnck
-    libappindicator-gtk3
+    libappindicator
     hicolor-icon-theme
   ]
   ++ perlModules;

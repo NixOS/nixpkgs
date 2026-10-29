@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   isPyPy,
   pythonOlder,
 
@@ -48,15 +49,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohttp";
-  version = "3.14.1";
+  version = "3.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OJSLv/NfVrKESZqNr51FJUzLRz7wLMRdGoNjKC5EhlI=";
+    hash = "sha256-n8LH34N9V2Smqc23q/49gqRbP0U1glJAYiyPEGFtEmM=";
   };
+
+  patches = [
+    # https://github.com/aio-libs/aiohttp/issues/13520
+    (fetchpatch2 {
+      name = "cython-3.3.0-compat.patch";
+      url = "https://github.com/aio-libs/aiohttp/commit/fdebfa2b81c7f85c6dccddcbf4ab45d311970b03.patch?full_index=1";
+      hash = "sha256-feKp/utDEuFUqTjQOtpRgNKD9xq/CtcgLfsKGO5P2EQ=";
+    })
+  ];
 
   postPatch = ''
     rm -r vendor

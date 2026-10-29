@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libxslt,
   libaio,
-  systemd,
+  systemdLibs,
   perl,
   docbook_xsl,
   coreutils,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     libaio
   ];
 

@@ -12,7 +12,7 @@
 
 let
   pname = "expresslrs-configurator";
-  version = "1.8.2";
+  version = "1.8.3";
   installPath = "share/${pname}";
   resourcesPath = "${installPath}/resources";
 in
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   src = fetchzip {
     url = "https://github.com/ExpressLRS/ExpressLRS-Configurator/releases/download/v${version}/${pname}-${version}.zip";
     stripRoot = false;
-    hash = "sha256-fVERT1JkXYwEqP0UJZZxT8AgkEMRzlvSqWPM4Zo9KXU=";
+    hash = "sha256-KoT9YoeAkYrr9FIS7+Lm1CafTNwvV+jLTYYHziCVvrs=";
   };
 
   nativeBuildInputs = [

@@ -140,6 +140,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
+    # This is to work around an issue on old Ubuntu versions, which don't need it.
+    # Entering that branch errors out unless we add lsb_release. Just don't enter it.
+    (lib.cmakeBool "skip-dbus-tests" false)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

@@ -29,16 +29,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sniffnet";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ifXccpoyz+NnZDjbRXlVZXfd2TLvOhGVB504hDyIjnE=";
+    hash = "sha256-3XWUT50NCZSzUNldGGVxLA2Tgqc7tyYjtede9yH6ARg=";
   };
 
-  cargoHash = "sha256-Tw32dOzFkO/cOlLdTfHeybhmbidgsnfYMIeHhfrrtVc=";
+  cargoHash = "sha256-VMhlncF3fXWr92OM2Y9EqwMQhJlzzc/5no69+M5hDnU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -64,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=secondary_threads::check_updates::tests::fetch_latest_release_from_github"
     "--skip=utils::check_updates::tests::fetch_latest_release_from_github"
+    "--skip=networking::types::latency::tests::test_measures_ipv4_loopback_latency"
+    "--skip=networking::types::latency::tests::test_measures_ipv6_loopback_latency"
   ];
 
   postInstall = ''

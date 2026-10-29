@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python markup module for Telegram messenger";
     downloadPage = "https://github.com/SKY-ALIN/telegram-text";
-    homepage = "https://telegram-text.alinsky.tech/";
+    homepage = "https://github.com/SKY-ALIN/telegram-text";
     changelog = "https://github.com/SKY-ALIN/telegram-text/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];

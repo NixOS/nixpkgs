@@ -6,6 +6,7 @@
   cmake,
   python3,
   gfortran,
+  boost,
   blas,
   lapack,
   dbcsr,
@@ -35,6 +36,7 @@
   toml-f,
   greenx,
   gmp,
+  addDriverRunpath,
   enableElpa ? false,
   elpa,
   cudaPackages,
@@ -131,7 +133,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cp2k";
-  version = "2026.1-unstable-2026-06-16";
+  version = "2026.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -139,8 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
-    rev = "c28f603b5956aa638ef130b21b091da4e3a17639";
-    hash = "sha256-LIghR2gCYbJDux4bFfeKCi+a+VDVbjcZfcVpYwjPkEg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ojG00n6KiaDW9vLgw/sIrhS8ceyh1mmlxgacw8KfMnA=";
     fetchSubmodules = true;
   };
 
@@ -151,6 +153,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix pkg-config path generation
     ./pkgconfig.patch
+
+    # SIRIUS 7.12 removed the call_fftw_fin argument from sirius_finalize()
+    ./sirius-7.12-finalize-api.patch
   ];
 
   nativeBuildInputs = [
@@ -164,9 +169,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_nvcc
+    addDriverRunpath
   ];
 
   buildInputs = [
+    boost
     fftw
     gsl
     libint
@@ -261,6 +268,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/cp2k
     cp -r ../data/* $out/share/cp2k
+
+    # Patch RPATH so libcuda.so.1 (NVIDIA driver) is found at runtime.
+    # Must run before wrapProgram, which renames the original ELF binary.
+    ${lib.optionalString (gpuBackend == "cuda") ''
+      for i in $out/bin/* $out/lib/*.so*; do
+        addDriverRunpath "$i" || true
+      done
+    ''}
 
     for i in $out/bin/*; do
       wrapProgram $i \

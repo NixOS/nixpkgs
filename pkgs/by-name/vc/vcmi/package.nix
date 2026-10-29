@@ -29,7 +29,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
-  version = "1.7.4";
+  version = "1.7.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       export GIT_CONFIG_GLOBAL="$TMPDIR/gitconfig"
       printf '[maintenance]\n\tauto = false\n' > "$GIT_CONFIG_GLOBAL"
     '';
-    hash = "sha256-iV1twkoOJyUsUkq17mdTYk1YvfmUtLHdtR3H77BoNJk=";
+    hash = "sha256-7ovRB73FkZHfZOHuxEJukQT+FdlH02tk+UvcRrh3UXM=";
   };
 
   nativeBuildInputs = [

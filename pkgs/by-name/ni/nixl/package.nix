@@ -20,6 +20,7 @@
   libfabric,
   liburing,
   numactl,
+  rdma-core,
   taskflow,
   tomlplusplus,
   ucx,
@@ -36,7 +37,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "nixl";
-  version = "1.3.1";
+  version = "1.5.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,7 +46,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ai-dynamo";
     repo = "nixl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nimu8WSeG+BHPx0VQ56TwL0ThVwuGOi2OHLvso46oe4=";
+    hash = "sha256-tk8OpbBac8UCZZV8dRNClXNOvemjtE3MuBwwZlo7Xek=";
   };
 
   postPatch =
@@ -58,26 +59,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         --replace-fail 'm.ReaderLock()' 'm.lock_shared()' \
         --replace-fail 'm.ReaderUnlock()' 'm.unlock_shared()'
     ''
-    # Fix asio::io_context::post() removed in asio 1.36+
-    # Use the free function asio::post(io_context, handler) instead
+    # asio 1.38 removed the deprecated io_context::post() member function
     + ''
       substituteInPlace src/plugins/ucx/ucx_backend.cpp \
-        --replace-fail 'io_->post(' 'asio::post(*io_, '
-    ''
-    # Fix UB: explicit destructor call on lock_guard (GCC 15 -Werror=maybe-uninitialized)
-    # Replace lock_guard + manual destructor with unique_lock + unlock()
-    + ''
-      substituteInPlace src/plugins/libfabric/libfabric_backend.cpp \
         --replace-fail \
-          'std::lock_guard<std::mutex> lock(connection_state_mutex_);' \
-          'std::unique_lock<std::mutex> lock(connection_state_mutex_);' \
-        --replace-fail \
-          'lock.~lock_guard();' \
-          'lock.unlock();'
+          'io_->post(' \
+          'asio::post(*io_, '
     ''
     # Fix GDS plugin: Nix uses lib/ not lib64/
     + ''
-      substituteInPlace src/plugins/cuda_gds/meson.build src/plugins/gds_mt/meson.build \
+      substituteInPlace src/plugins/cuda_gds/meson.build \
         --replace-fail "'/lib64'" "'/lib'"
     '';
 
@@ -103,6 +94,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     libfabric
     liburing
     numactl
+    rdma-core
     taskflow
     tomlplusplus
     ucx

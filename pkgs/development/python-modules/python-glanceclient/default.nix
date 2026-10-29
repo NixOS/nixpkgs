@@ -14,36 +14,14 @@
   oslo-utils,
   wrapt,
   pyopenssl,
-  stestr,
+  stestrCheckHook,
   testscenarios,
   ddt,
   requests-mock,
-  writeText,
 }:
 let
   pname = "python-glanceclient";
-  version = "4.11.0";
-
-  disabledTests = [
-    # Skip tests which require networking.
-    "test_http_chunked_response"
-    "test_v1_download_has_no_stray_output_to_stdout"
-    "test_v2_requests_valid_cert_verification"
-    "test_download_has_no_stray_output_to_stdout"
-    "test_v1_requests_cert_verification_no_compression"
-    "test_v1_requests_cert_verification"
-    "test_v2_download_has_no_stray_output_to_stdout"
-    "test_v2_requests_bad_ca"
-    "test_v2_requests_bad_cert"
-    "test_v2_requests_cert_verification_no_compression"
-    "test_v2_requests_cert_verification"
-    "test_v2_requests_valid_cert_no_key"
-    "test_v2_requests_valid_cert_verification_no_compression"
-    "test_log_request_id_once"
-    # asserts exact amount of mock calls
-    "test_cache_schemas_gets_when_forced"
-    "test_cache_schemas_gets_when_not_exists"
-  ];
+  version = "4.13.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -52,7 +30,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "python_glanceclient";
     inherit version;
-    hash = "sha256-XOIRi/50YpNIBZFmF+U3vFsA/UyrP7e7iKT5JTlwVi0=";
+    hash = "sha256-+jNZvIvZPnrryjctr+yOGQA7TB9kSZ4uuCsncdqPpBw=";
   };
 
   postPatch = ''
@@ -78,15 +56,19 @@ buildPythonPackage {
     ddt
     openstacksdk
     requests-mock
-    stestr
+    stestrCheckHook
     testscenarios
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e ${writeText "disabled-tests" (lib.concatStringsSep "\n" disabledTests)}
-    runHook postCheck
-  '';
+  # Skip tests which require networking.
+  disabledTests = [
+    "glanceclient.tests.unit.test_http.TestClient.test_http_chunked_response"
+    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
+  ];
+
+  disabledTestsRegex = [
+    ''glanceclient\.tests\.unit\.test_ssl\.TestHTTPSVerifyCert\..*''
+  ];
 
   pythonImportsCheck = [ "glanceclient" ];
 

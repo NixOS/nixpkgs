@@ -112,13 +112,11 @@
   guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
-  # TODO: Clean up on `staging`.
-  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.28.4";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -127,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MytzIPMMYPLVlBRG0DudBeN4HywlYb776IcYvXd/Dkc=";
+    hash = "sha256-3FJTg8GLLCZbvmpD1JhlbNkYqqEwqk46vqvNqnQcP/4=";
   };
 
   patches = [
@@ -158,10 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
     wayland-scanner
-  ]
-  # TODO: Clean up on `staging`.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -414,9 +408,6 @@ stdenv.mkDerivation (finalAttrs: {
   # that trip up clang with format security enabled.
   hardeningDisable = [ "format" ];
 
-  # TODO: Clean up on `staging`.
-  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-fuse-ld=lld";
-
   doCheck = false; # fails 20 out of 58 tests, expensive
 
   preFixup = ''
@@ -452,5 +443,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

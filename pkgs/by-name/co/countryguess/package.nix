@@ -1,23 +1,26 @@
 {
   lib,
   python3Packages,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   makeWrapper,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "countryguess";
-  version = "0-unstable-2025-03-04";
+  version = "0-unstable-2025-05-03";
   # upstream pyproject.toml is nonsense. Copied from another project
   # without customizing it for this project.
   pyproject = false;
 
-  src = fetchFromGitHub {
-    owner = "swarbler";
+  src = fetchFromCodeberg {
+    owner = "sbird";
     repo = "countryguess";
-    rev = "28f45231bc3d8bedeb7d1b51d56ca1b56796ff8c";
-    hash = "sha256-S/fy94aRoVI2CvICrviQ2ZgVESWYLuREb5mwsfXL6Hc=";
+    rev = "36d840cbd27d3f0103f2786b7f64796965d23a9a";
+    hash = "sha256-OaCHrUvUKvdTNophi9qpGMzAIDcKfRJ9o5DkT1PrwDc=";
   };
+
+  __structuredAttrs = true;
 
   dependencies = with python3Packages; [
     art
@@ -37,9 +40,13 @@ python3Packages.buildPythonApplication {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   meta = {
     description = "Guess the 193 U.N. recognised countries";
-    homepage = "https://github.com/swarbler/countryguess";
+    homepage = "https://codeberg.org/sbird/countryguess";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];

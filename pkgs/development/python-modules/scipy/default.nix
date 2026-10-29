@@ -44,14 +44,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scipy";
-  version = "1.18.0";
+  version = "1.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qVTFWYZ9krhZNYLyuZTfiS7UYmMZL40GFqod84l+VHI=";
+    hash = "sha256-gVHCO4+DmZ6Jg+zenfIY90v1/De1qbPYecoT+amQKJ0=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +63,13 @@ buildPythonPackage (finalAttrs: {
       excludes = [ "doc/source/building/cross_compilation.rst" ];
     })
   ];
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pybind11>=2.13.2,<3.1.0",' '"pybind11",' \
+      --replace-fail "Cython>=3.2.0,<3.3.0" "Cython>=3.2.0"
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     substituteInPlace scipy/meson.build \
       --replace-fail "r = run_command('xcrun', '-sdk', 'macosx', '--show-sdk-version', check: true)" ""
     substituteInPlace scipy/meson.build \
@@ -131,9 +137,10 @@ buildPythonPackage (finalAttrs: {
     "test_hyp0f1_gh5764"
     "test_simple_det_shapes_real_complex"
   ]
-  ++ lib.optionals (python.isPy311) [
-    # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
-    "test_funcs"
+  ++ lib.optionals (python.isPy312) [
+    # failure caused by the inconsistent RNG implementation across python versions
+    # https://github.com/NixOS/nixpkgs/issues/547063
+    "test_support_moments_sample"
   ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);

@@ -9,18 +9,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bencher-cli";
-  version = "0.6.10";
+  version = "0.6.13";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "bencherdev";
     repo = "bencher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0RP1Q5tsN+2PMT+EfdgkDrOAqPZiHiKXR83VyjojyNU=";
+    hash = "sha256-QvziTC/ju+rqNZEjtZagbNfy+PwjD+vRVa7UHDJ1gVY=";
   };
 
-  cargoHash = "sha256-Hk6bnEoAXUDXts1tj6QgYvr7GVw3d6FleeLN4MWBRgw=";
+  cargoHash = "sha256-i6OXpMYZXnQLO+oya1D5mikTTRGlxtqJu2DcMfhPlXc=";
 
   nativeBuildInputs = [ mold ];
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -66,6 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       The Nix derivation does not compile the proprietary features.
     '';
     homepage = "https://bencher.dev";
+    changelog = "https://github.com/bencherdev/bencher/releases/tag/v${finalAttrs.version}";
     license =
       if finalAttrs.buildNoDefaultFeatures then
         lib.licenses.OR [

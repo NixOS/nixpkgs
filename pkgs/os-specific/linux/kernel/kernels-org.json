@@ -1,42 +1,37 @@
 {
     "testing": {
-        "version": "7.2-rc5",
-        "hash": "sha256:05vi7q57qj4nybk3m38araknj6yxaaqjdd0cnw07c07qrjcd2lm7",
+        "version": "7.3-rc7",
+        "hash": "sha256:119ld4v32ydw63yj5jd15i9gmh3h3lbz3mvdrfnz9m6szyzsbm3g",
         "lts": false
     },
     "6.1": {
-        "version": "6.1.178",
-        "hash": "sha256:03vjdk7lk9zgydzamhwvrg066f8748vrfjggqqd2n0vmr9kzm0vx",
-        "lts": true
-    },
-    "5.15": {
-        "version": "5.15.212",
-        "hash": "sha256:1zk51f3pv7ghz68hxkxhds9cjwmk35651pxbyyvyqyhcr7msx5n3",
-        "lts": true
-    },
-    "5.10": {
-        "version": "5.10.261",
-        "hash": "sha256:1i6pzaib30r1nmyxsrhqmfsdxy1jvvlmzc9f8lxzv9a00q8a3751",
+        "version": "6.1.190",
+        "hash": "sha256:033vvcn6bgn9ggxka9hknd03sxrr9xsg6ym8c453saj1l2n0v9ca",
         "lts": true
     },
     "6.6": {
-        "version": "6.6.145",
-        "hash": "sha256:09h1pzcai0i10pdyyfbsmq03rgk1x5wv2d937m5nz2xdv0rhw46y",
+        "version": "6.6.160",
+        "hash": "sha256:09f29v25lpm4zjz7v994chbq0h0wlpfpwmjq6f09b1hqwall0k5j",
         "lts": true
     },
     "6.12": {
-        "version": "6.12.97",
-        "hash": "sha256:0vswyjh91x52ay99mqrdfhwnvd6nnzv4hpncywk908njpfixzgbc",
+        "version": "6.12.114",
+        "hash": "sha256:1wsa9caz0m26ama8kvxcbyiq5x1ccn1l41zdgyqava6p5f8qk1bs",
         "lts": true
     },
     "6.18": {
-        "version": "6.18.40",
-        "hash": "sha256:0cd42fb4390x73jdzbhacm9g9s0ji58whxhik2ndmr1rr0ggq4ip",
+        "version": "6.18.59",
+        "hash": "sha256:0qrrw85mbg2dqjkjhm3x2b8hs962wka83qxqjbi4fm9shv4mm9ak",
         "lts": true
     },
-    "7.1": {
-        "version": "7.1.5",
-        "hash": "sha256:1rs162gcf6hsafrrmp3y8k9myn20s3s62xdp4zf39pxw7imik812",
+    "7.2": {
+        "version": "7.2.13",
+        "hash": "sha256:0v7accir5bx5l7bsqmmcj29ri64sb1g4n9ysfbwp26fxyb2b1rq8",
+        "lts": false
+    },
+    "7.3": {
+        "version": "7.3",
+        "hash": "sha256:0ls902gz6h1ydcnwx2zzdcglg52f14hmaxk2ncg341hfy4j3qdl7",
         "lts": false
     }
 }

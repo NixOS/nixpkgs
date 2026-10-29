@@ -14,13 +14,13 @@
 buildHomeAssistantComponent rec {
   owner = "AN3Orik";
   domain = "systemair";
-  version = "1.0.36";
+  version = "1.0.37";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "systemair";
     tag = "v${version}";
-    hash = "sha256-QL3R9mDPaQrFneBKSP8arZL1xxqmz7vp1zGn0eYBrj4=";
+    hash = "sha256-Evo7H6Np1QVjqQBifav1WhNiFDY/NIdFI/bADNZJo9Q=";
   };
 
   ignoreVersionRequirement = [

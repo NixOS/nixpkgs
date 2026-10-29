@@ -9,7 +9,7 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
-  phpWithPspell = pkgs.php84.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+  phpWithPspell = pkgs.php85.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 
   env = {
     ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
@@ -199,10 +199,11 @@ in
               fastcgi_param PATH_INFO $fastcgi_path_info;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
-
-              client_max_body_size ${toString cfg.maxAttachmentSize};
             '';
           };
+          extraConfig = ''
+            client_max_body_size ${toString cfg.maxAttachmentSize};
+          '';
         };
       };
     };
@@ -237,12 +238,12 @@ in
 
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
-      phpOptions = ''
-        error_log = '/dev/stderr'
-        log_errors = on
-        post_max_size = ${cfg.maxAttachmentSize}
-        upload_max_filesize = ${cfg.maxAttachmentSize}
-      '';
+      phpOptions = {
+        error_log = "/dev/stderr";
+        log_errors = "on";
+        post_max_size = cfg.maxAttachmentSize;
+        upload_max_filesize = cfg.maxAttachmentSize;
+      };
       settings = lib.mapAttrs (name: lib.mkDefault) {
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;

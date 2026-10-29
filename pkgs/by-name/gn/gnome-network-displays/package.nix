@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     networkmanager
     json-glib
-    # Not stricly required according to configure phase log, but putting it
+    # Not strictly required according to configure phase log, but putting it
     # here adds gio modules to the GIO_EXTRA_MODULES environment variables - as
     # required for TLS. See https://github.com/NixOS/nixpkgs/issues/502092
     glib-networking

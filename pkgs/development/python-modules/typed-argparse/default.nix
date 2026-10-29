@@ -30,13 +30,27 @@ buildPythonPackage {
     pytest-cov-stub
   ];
 
+  # The test suite checks for exact output in a way that seems fragile to
+  # cosmetic changes in Python's argparse output, and means some tests fail on
+  # more recent releases.  Disable the affected tests while we're waiting for
+  # upstream fixes.
+  #
   # https://github.com/typed-argparse/typed-argparse/pull/82
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    "test_nargs_with_choices__literal_illegal_default"
-    "test_nargs_with_choices__enum_illegal_default"
-    "test_bindings_check"
-    "test_check_reserved_names"
-  ];
+  # https://github.com/typed-argparse/typed-argparse/issues/84
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.14") [
+      "test_nargs_with_choices__literal_illegal_default"
+      "test_nargs_with_choices__enum_illegal_default"
+      "test_bindings_check"
+      "test_check_reserved_names"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      "test_dynamic_choices"
+      "test_literal__basics"
+      "test_enum__basics[False]"
+      "test_enum__basics[True]"
+      "test_subparsers_common_args__subparser_after_positional"
+    ];
 
   pythonImportsCheck = [ "typed_argparse" ];
 

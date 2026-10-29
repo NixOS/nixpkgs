@@ -8,7 +8,6 @@
   setuptools,
 
   # dependencies
-  audioread,
   decorator,
   joblib,
   lazy-loader,
@@ -21,12 +20,8 @@
   scipy,
   soundfile,
   soxr,
-  standard-aifc,
-  standard-sunau,
-  typing-extensions,
 
   # tests
-  ffmpeg-headless,
   packaging,
   pytest-cov-stub,
   pytest-mpl,
@@ -38,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "librosa";
-  version = "0.11.0";
+  version = "1.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -47,18 +42,12 @@ buildPythonPackage (finalAttrs: {
     repo = "librosa";
     tag = finalAttrs.version;
     fetchSubmodules = true; # for test data
-    hash = "sha256-T58J/Gi3tHzelr4enbYJi1KmO46QxE5Zlhkc0+EgvRg=";
+    hash = "sha256-+RjGbnAP0rYjRe/QVwKsCUIhRZM8DzY1JnmoJvDagwM=";
   };
-
-  patches = [
-    # <https://github.com/librosa/librosa/pull/1977>
-    ./fix-with-numba-0.62.0.patch
-  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    audioread
     decorator
     joblib
     lazy-loader
@@ -70,18 +59,14 @@ buildPythonPackage (finalAttrs: {
     scipy
     soundfile
     soxr
-    standard-aifc
-    standard-sunau
-    typing-extensions
   ];
 
-  optional-dependencies.matplotlib = [ matplotlib ];
+  optional-dependencies.display = [ matplotlib ];
 
   # check that import works, this allows to capture errors like https://github.com/librosa/librosa/issues/1160
   pythonImportsCheck = [ "librosa" ];
 
   nativeCheckInputs = [
-    ffmpeg-headless
     packaging
     pytest-cov-stub
     pytest-mpl
@@ -90,33 +75,22 @@ buildPythonPackage (finalAttrs: {
     samplerate
     writableTmpDirAsHomeHook
   ]
-  ++ finalAttrs.passthru.optional-dependencies.matplotlib;
+  ++ finalAttrs.passthru.optional-dependencies.display;
+
+  # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export MPLBACKEND="Agg"
+  '';
 
   disabledTests = [
     # requires network access
+    "test_cite_badversion"
+    "test_cite_released"
+    "test_cite_unreleased"
     "test_example"
     "test_example_info"
     "test_load_resample"
-    "test_cite_released"
-    "test_cite_badversion"
-    "test_cite_unreleased"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # crashing the python interpreter
-    "test_unknown_time_unit"
-    "test_unknown_wavaxis"
-    "test_waveshow_unknown_wavaxis"
-    "test_waveshow_bad_maxpoints"
-    "test_waveshow_deladaptor"
-    "test_waveshow_disconnect"
-    "test_unknown_axis"
-    "test_axis_bound_warning"
-    "test_auto_aspect"
-
-    # audioread.exceptions.NoBackendError
-    "test_get_duration_audioread"
-    "test_get_samplerate_audioread"
-    "test_load_force_audioread"
+    "test_loadx"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # AssertionError (numerical comparison fails)
@@ -134,11 +108,6 @@ buildPythonPackage (finalAttrs: {
     "test_pitch_shift_multi"
     "test_time_stretch_multi"
     "test_resample_multichannel"
-  ];
-
-  disabledTestPaths = [
-    # matplotlib 3.11 exceeds tolerances for image comparison
-    "tests/test_display.py"
   ];
 
   meta = {

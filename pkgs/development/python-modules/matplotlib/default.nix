@@ -69,13 +69,13 @@ let
 in
 
 buildPythonPackage (finalAttrs: {
-  version = "3.11.0";
+  version = "3.11.2";
   pname = "matplotlib";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-aMDHvgGzDcyjY4k09/WR33NAEjXL2/DRqxxx59t/i1c=";
+    hash = "sha256-zsWWMWZA8rOUuPDaoOphqOroLQF7YgufICvvuXKlnqQ=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -110,6 +110,7 @@ buildPythonPackage (finalAttrs: {
     ffmpeg-headless
     freetype
     qhull
+    pybind11
     libraqm
   ]
   ++ lib.optionals enableGtk3 [
@@ -123,7 +124,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [
     certifi
     numpy
-    pybind11
     meson-python
     setuptools-scm
   ];

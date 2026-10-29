@@ -10,7 +10,7 @@
   vala,
   gtk3,
   libgee,
-  libindicator-gtk3,
+  libindicator,
   pantheon,
   indicator-application-gtk3,
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   buildInputs = [
     gtk3
     libgee
-    libindicator-gtk3
+    libindicator
     pantheon.granite
     pantheon.wingpanel
   ];

@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8340288..7660e07 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,6 +35,16 @@ if(APPLE)
+ 	set(ZLIB_LIBRARY "-lz" CACHE STRING "Use generic linker flag for Xcode to support multiple SDKs")
+ endif()
+ 
++if(APPLE AND NOT IOS)
++    set_source_files_properties(
++        shell/apple/common/http_client.mm
++        shell/apple/common/util.mm
++        shell/apple/emulator-osx/emulator-osx/SDLApplicationDelegate.mm
++        shell/apple/emulator-osx/emulator-osx/osx-main.mm
++        PROPERTIES SKIP_PRECOMPILE_HEADERS ON
++    )
++endif()
++
+ if(LIBRETRO)
+ 	project(flycast_libretro)
+ else()

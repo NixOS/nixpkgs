@@ -25,7 +25,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "i3lock";
-  version = "2.15";
+  version = "2.16";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "i3";
     repo = "i3lock";
     tag = finalAttrs.version;
-    hash = "sha256-OyV6GSLnNV3GUqrfs3OBnIaBvicH2PXgeY4acOk5dR4=";
+    hash = "sha256-keTHSNWEtnMfwUWT6EN0Zq0Yr54R6ywmfmfIPQBzGBs=";
   };
 
   separateDebugInfo = true;

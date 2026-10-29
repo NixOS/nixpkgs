@@ -11,8 +11,6 @@
   gdbm,
   ncurses6,
   sqlite,
-  tcl-8_5,
-  tk-8_5,
   tcl-8_6,
   tk-8_6,
   zlib,
@@ -83,12 +81,6 @@ stdenv.mkDerivation {
     sqlite
     zlib
     stdenv.cc.cc.libgcc or null
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    tcl-8_5
-    tk-8_5
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     tcl-8_6
     tk-8_6
   ];
@@ -102,10 +94,24 @@ stdenv.mkDerivation {
     echo "Moving files to $out"
     mv -t $out bin include lib
     mv $out/bin/libpypy*-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
-    ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      rm $out/bin/*.debug
-    ''}
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    rm $out/bin/*.debug
+  ''
+  # The tarball vendors Tcl/Tk. Drop it so `tkinter` -- which is stdlib, not an
+  # optional extra -- resolves against ours instead: the same 8.6 the extension
+  # module asks for by soname, but one that gets updated.
+  #
+  # The script libraries have to go with the shared ones. `init.tcl` checks the
+  # exact patchlevel, so our 8.6.16 rejects the bundled 8.6.14 copy as "not
+  # usable" and `Tcl_Init` fails -- which `import tkinter` alone does not
+  # catch, since that never creates an interpreter.
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    rm $out/lib/libtcl8.6${stdenv.hostPlatform.extensions.sharedLibrary}
+    rm $out/lib/libtk8.6${stdenv.hostPlatform.extensions.sharedLibrary}
+    rm -r $out/lib/tcl8.6 $out/lib/tk8.6
+  ''
+  + ''
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -delete
 

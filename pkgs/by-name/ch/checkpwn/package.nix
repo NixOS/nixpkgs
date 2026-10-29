@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "checkpwn";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-RX3DCcCrZqv4REg+KGHOAXva8ta1PwvlXtS9MTFSlRo=";
+    hash = "sha256-EMSq4uK5pDZ3IhakTbKF2ljcIgOeLxydTMmBgwT2iCU=";
   };
 
-  cargoHash = "sha256-YIQbGOkW51KsO6vdqm8w1z4UDBmkpCUbvRIViE0a0KQ=";
+  cargoHash = "sha256-O8EGkW4/OJzSsOG8E1SpdZT87kRc8WMt7Rn5OzzXZrM=";
 
   # requires internet access
   checkFlags = [

@@ -14,6 +14,8 @@
   libxext,
   libx11,
   pillow,
+  gdk-pixbuf,
+  gtk3-x11,
   pytestCheckHook,
   glibc,
   fontconfig,
@@ -26,7 +28,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.12";
+  version = "2.1.16";
   pname = "pyglet";
   pyproject = true;
 
@@ -34,7 +36,7 @@ buildPythonPackage rec {
     owner = "pyglet";
     repo = "pyglet";
     tag = "v${version}";
-    hash = "sha256-stzz7sxPH6cduhG2ySw/Zg+wdTE/Y0ZeBU90D0Aa2oU=";
+    hash = "sha256-Wnpl2sqaK4AX6v70OjA10B9vMXQoC5QU1BP0UkYnJmU=";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
@@ -61,6 +63,10 @@ buildPythonPackage rec {
                   path = '${glibc}/lib/libc${ext}.6'
               elif name == 'X11':
                   path = '${libx11}/lib/libX11${ext}'
+              elif name == 'gdk-x11-2.0':
+                  path = '${gtk3-x11}/lib/libgdk-3${ext}'
+              elif name == 'gdk_pixbuf-2.0':
+                  path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
               elif name == 'Xext':
                   path = '${libxext}/lib/libXext${ext}'
               elif name == 'fontconfig':

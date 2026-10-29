@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komodo";
-  version = "2.2.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "moghtech";
     repo = "komodo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hw0JD4e/ODK19M/bZtX9foCu5c79XA8Jgv2fleltdLs=";
+    hash = "sha256-AT3YIT/aB5ZqfWZqv2M6hDs7xPRBGlSsU/wI38ZttNw=";
   };
 
-  cargoHash = "sha256-b/AgQBmS1QfP+BOCT4xL8majVKobig5M2YJhGuXMToc=";
+  cargoHash = "sha256-btiCaK/Tw5shuRRzxqGSpNsqst+XQANNbSge702zSnY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,6 +28,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # disable for check. document generation is fail
   # > error: doctest failed, to rerun pass `-p komodo_client --doc`
   doCheck = false;
+
+  # upstream moved to build-time versioning in moghtech/komodo#1605
+  # this sets [workspace.package] so binaries inherit/report correct version
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
 
   # xtask is a workspace-internal build helper, not a user-facing program.
   postInstall = ''

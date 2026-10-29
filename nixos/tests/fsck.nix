@@ -1,4 +1,4 @@
-{ systemdStage1, ... }:
+{ ... }:
 
 {
   name = "fsck";
@@ -13,8 +13,6 @@
         autoFormat = true;
       };
     };
-
-    boot.initrd.systemd.enable = systemdStage1;
   };
 
   testScript =
@@ -26,9 +24,7 @@
       machine.wait_for_unit("default.target")
 
       with subtest("root fs is fsckd"):
-          machine.succeed("journalctl -b | grep '${
-            if systemdStage1 then "fsck.*${baseNameOf rootDevice}.*clean" else "fsck.ext4.*${rootDevice}"
-          }'")
+          machine.succeed("journalctl -b | grep 'fsck.*${baseNameOf rootDevice}.*clean'")
 
       with subtest("mnt fs is fsckd"):
           machine.succeed("journalctl -b | grep 'fsck.*vdb.*clean'")

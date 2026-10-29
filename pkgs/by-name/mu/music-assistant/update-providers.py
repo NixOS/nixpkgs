@@ -12,7 +12,7 @@ from functools import cache
 from io import BytesIO
 from pathlib import Path
 from subprocess import check_output, run
-from typing import Dict, Final, List, Optional, Set, Union, cast
+from typing import Final, cast
 from urllib.request import urlopen
 
 from jinja2 import Environment
@@ -82,15 +82,12 @@ EXTRA_LIST_DEPS = {
 }
 
 
-def run_sync(cmd: List[str]) -> None:
+def run_sync(cmd: list[str]) -> None:
     print(f"$ {' '.join(cmd)}")
-    process = run(cmd)
-
-    if process.returncode != 0:
-        sys.exit(1)
+    run(cmd, check=True)
 
 
-async def check_async(cmd: List[str]) -> str:
+async def check_async(cmd: list[str]) -> str:
     print(f"$ {' '.join(cmd)}")
     process = await asyncio.create_subprocess_exec(
         *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
@@ -113,11 +110,11 @@ class Nix:
     ]
 
     @classmethod
-    async def _run(cls, args: List[str]) -> Optional[str]:
+    async def _run(cls, args: list[str]) -> str | None:
         return await check_async(cls.base_cmd + args)
 
     @classmethod
-    async def eval(cls, expr: str) -> Union[List, Dict, int, float, str, bool]:
+    async def eval(cls, expr: str) -> list | dict | int | float | str | bool:
         response = await cls._run(["eval", "-f", f"{ROOT}/default.nix", "--json", expr])
         if response is None:
             raise RuntimeError("Nix eval expression returned no response")
@@ -127,15 +124,16 @@ class Nix:
             raise RuntimeError("Nix eval response could not be parsed from JSON")
 
 
-async def get_provider_manifests(version: str = "master") -> List:
+async def get_provider_manifests(version: str = "master") -> list:
     manifests = []
     with tempfile.TemporaryDirectory() as tmp:
-        with urlopen(
-            f"https://github.com/music-assistant/music-assistant/archive/refs/tags/{version}.tar.gz"
-        ) as response:
-            tarfile.open(fileobj=BytesIO(response.read())).extractall(
-                tmp, filter="data"
-            )
+        with (
+            urlopen(  # noqa: ASYNC210
+                f"https://github.com/music-assistant/music-assistant/archive/refs/tags/{version}.tar.gz"
+            ) as response,
+            tarfile.open(fileobj=BytesIO(response.read())) as tar,
+        ):
+            tar.extractall(tmp, filter="data")
 
         basedir = Path(os.path.join(tmp, f"server-{version}"))
         sys.path.append(str(basedir))
@@ -179,10 +177,12 @@ class NoMatch(Exception):
 
 
 def resolve_package_attribute(package: str) -> str:
-    pattern = re.compile(rf"^music-assistant\.pythonPackages\.{package}$", re.I)
+    pattern = re.compile(
+        rf"^music-assistant\.pythonPackages\.{package}$", re.IGNORECASE
+    )
     packages = packageset_attributes()
     matches = []
-    for attr in packages.keys():
+    for attr in packages:
         if pattern.match(attr):
             matches.append(attr.split(".")[-1])
 
@@ -215,7 +215,7 @@ class Provider:
         return hash(self.domain)
 
 
-async def resolve_providers(manifests) -> tuple[Set, Set]:
+async def resolve_providers(manifests) -> tuple[set, set]:
     errors = []
     providers = set()
     for manifest in manifests:
@@ -257,7 +257,7 @@ async def resolve_providers(manifests) -> tuple[Set, Set]:
     return providers, builtins
 
 
-def render(outpath: str, version: str, providers: Set, builtins: Set):
+def render(outpath: str, version: str, providers: set, builtins: set):
     env = Environment()
     template = env.from_string(TEMPLATE)
     template.stream(version=version, providers=providers, builtins=builtins).dump(
@@ -278,7 +278,7 @@ async def main():
 
 if __name__ == "__main__":
     run_sync(["pyright", __file__])
-    run_sync(["ruff", "check", "--ignore=E501", __file__])
+    run_sync(["ruff", "check", "--ignore=EXE005", __file__])
     run_sync(["isort", __file__])
     run_sync(["ruff", "format", __file__])
     asyncio.run(main())

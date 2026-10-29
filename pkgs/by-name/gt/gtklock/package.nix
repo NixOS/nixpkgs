@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GTK-based lockscreen for Wayland";
     longDescription = ''
       Important note: for gtklock to work you need to set "security.pam.services.gtklock = {};" manually.
-      Otherwise you'll lock youself out of desktop and unable to authenticate.
+      Otherwise you'll lock yourself out of desktop and unable to authenticate.
     ''; # Following  nixpkgs/pkgs/applications/window-managers/sway/lock.nix
     homepage = "https://github.com/jovanlanik/gtklock";
     license = lib.licenses.gpl3Only;

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "bannhead";
     repo = "pyaehw4a1";
     rev = "v${version}";
-    sha256 = "0grs7kiyhzlwqzmw2yxkkglnwjfpimgwxbgp0047rlp3k8md7sjv";
+    hash = "sha256-W+rTKprj0nwIAPetzl+N10lu6Zuze8Hrx5x+6OM8Oj8=";
   };
 
   # no tests implemented

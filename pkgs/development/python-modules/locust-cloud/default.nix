@@ -44,6 +44,10 @@ buildPythonPackage rec {
     tomli
   ];
 
+  pythonRelaxDeps = [
+    "gevent"
+  ];
+
   nativeCheckInputs = [
     flask
     gevent-websocket

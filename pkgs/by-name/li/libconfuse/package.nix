@@ -2,33 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   flex,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libconfuse";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchFromGitHub {
-    sha256 = "1npfk5jv59kk4n8pkyx89fn9s6p8x3gbffs42jaw24frgxfgp8ca";
-    rev = "v${finalAttrs.version}";
-    repo = "libconfuse";
     owner = "libconfuse";
+    repo = "libconfuse";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sC8O6vcMKvRdRCTXpKl6lgmzFUVG8/LBE7XsGX8F9e4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-40320.patch";
-      urls = [
-        "https://sources.debian.org/data/main/libc/libconfuse/3.3-3/debian/patches/CVE-2022-40320.patch"
-        # files on sources.debian.org can disappear
-        "https://web.archive.org/web/20230107133212/https://sources.debian.org/data/main/libc/libconfuse/3.3-3/debian/patches/CVE-2022-40320.patch"
-      ];
-      sha256 = "sha256-ftfE9JFz4nyRSOb2xHb9BAtgWn5Yv2WLm4RegDLtiBw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace tests/Makefile.am \

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gatus";
-  version = "5.36.0";
+  version = "5.38.0";
 
   src = fetchFromGitHub {
     owner = "TwiN";
     repo = "gatus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YduXhHra6w7zo1f+brCjiusH7xCSdAzo5uF6aN5uv/A=";
+    hash = "sha256-ols3YIqrrpZk+aNc5o5mCtvS2YDkqhMsIrL57YA7pLo=";
   };
 
-  vendorHash = "sha256-RbFNtojZthf7bKMhGStH/jOkeIR6EHpw2vvAMLEFtKI=";
+  vendorHash = "sha256-/IfnwjAtBK0qlGQz7uqGzQ0nw7emW7jdptEMYoTMSoQ=";
 
   subPackages = [ "." ];
 

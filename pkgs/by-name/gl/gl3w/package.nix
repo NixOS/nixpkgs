@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "gl3w";
-  version = "0-unstable-2025-09-23";
+  version = "0-unstable-2026-08-17";
 
   src = fetchFromGitHub {
     owner = "skaslev";
     repo = "gl3w";
-    rev = "97a85e153d7f43c8d2de8b776a33721e238ddb96";
-    hash = "sha256-cpB/8qo9dDyKPxD6mRriKGZf7N7ei1oL5JtM4jgXsAw=";
+    rev = "372e391702acac616e0fd32e3eaccf19d58b9626";
+    hash = "sha256-CQZ12557ruFkuoKFyaFja6rEgzqRtbVAupHYfM2J4XQ=";
   };
 
   nativeBuildInputs = [

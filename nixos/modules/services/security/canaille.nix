@@ -15,6 +15,7 @@ let
     mkPackageOption
     types
     getExe
+    getExe'
     optional
     converge
     filterAttrsRecursive
@@ -28,29 +29,40 @@ let
   # Remove null values, so we can document optional/forbidden values that don't end up in the generated TOML file.
   filterConfig = converge (filterAttrsRecursive (_: v: v != null));
 
-  finalPackage = cfg.package.overridePythonAttrs (old: {
-    dependencies =
-      old.dependencies
-      ++ old.optional-dependencies.front
-      ++ old.optional-dependencies.oidc
-      ++ old.optional-dependencies.scim
-      ++ old.optional-dependencies.ldap
-      ++ old.optional-dependencies.sentry
-      ++ old.optional-dependencies.postgresql
-      ++ old.optional-dependencies.otp
-      ++ old.optional-dependencies.sms;
-    makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-      "--set CANAILLE_CONFIG /etc/canaille/config.toml"
-      "--set SECRETS_DIR \"${secretsDir}\""
-    ];
-  });
-  inherit (finalPackage) python;
-  pythonEnv = python.buildEnv.override {
-    extraLibs = with python.pkgs; [
-      (toPythonModule finalPackage)
-      celery
-    ];
+  python = cfg.package.python.override {
+    self = python;
+    packageOverrides = _final: prev: {
+      gunicorn = prev.gunicorn.overridePythonAttrs (old: {
+        # Allows Gunicorn to set a meaningful process name
+        dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
+      });
+      canaille = prev.toPythonModule (
+        (cfg.package.override { python3 = python; }).overridePythonAttrs (old: {
+          dependencies =
+            old.dependencies
+            ++ old.optional-dependencies.front
+            ++ old.optional-dependencies.oidc
+            ++ old.optional-dependencies.scim
+            ++ old.optional-dependencies.ldap
+            ++ old.optional-dependencies.sentry
+            ++ old.optional-dependencies.postgresql
+            ++ old.optional-dependencies.otp
+            ++ old.optional-dependencies.sms;
+          makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
+            "--set CANAILLE_CONFIG /etc/canaille/config.toml"
+            "--set SECRETS_DIR \"${secretsDir}\""
+          ];
+        })
+      );
+    };
   };
+  pythonEnv = python.withPackages (
+    ps: with ps; [
+      canaille
+      gunicorn
+      celery
+    ]
+  );
 
   commonServiceConfig = {
     WorkingDirectory = dataDir;
@@ -285,7 +297,7 @@ in
       after = optional createLocalPostgresqlDb "postgresql.target";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
-        ExecStart = "${getExe finalPackage} install";
+        ExecStart = "${getExe python.pkgs.canaille} install";
       };
     };
 
@@ -308,21 +320,16 @@ in
       };
       serviceConfig = commonServiceConfig // {
         Restart = "on-failure";
-        ExecStart =
-          let
-            gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
-              # Allows Gunicorn to set a meaningful process name
-              dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
-            });
-          in
-          ''
-            ${getExe gunicorn} \
-              --name=canaille \
-              --bind='unix:///run/canaille.socket' \
-              'canaille:create_app()'
-          '';
+        ExecStart = ''
+          ${getExe' pythonEnv "gunicorn"} \
+            --name=canaille \
+            --bind='unix:///run/canaille.socket' \
+            'canaille:create_app()'
+        '';
       };
-      restartTriggers = [ "/etc/canaille/config.toml" ];
+      restartTriggers = [
+        config.environment.etc."canaille/config.toml".source
+      ];
     };
 
     systemd.sockets.canaille = {
@@ -355,10 +362,10 @@ in
       locations = {
         "/".proxyPass = "http://unix:///run/canaille.socket";
         "/static" = {
-          root = "${finalPackage}/${python.sitePackages}/canaille";
+          root = "${python.pkgs.canaille}/${python.sitePackages}/canaille";
         };
         "~* ^/static/.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$" = {
-          root = "${finalPackage}/${python.sitePackages}/canaille";
+          root = "${python.pkgs.canaille}/${python.sitePackages}/canaille";
           extraConfig = ''
             access_log off;
             expires 30d;
@@ -382,7 +389,7 @@ in
     users.users.canaille = {
       isSystemUser = true;
       group = "canaille";
-      packages = [ finalPackage ];
+      packages = [ python.pkgs.canaille ];
     };
 
     users.groups.canaille.members = [ config.services.nginx.user ];

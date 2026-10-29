@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "jjlawren";
     repo = "python-plexauth";
     rev = "v${version}";
-    sha256 = "1wy6syz3cgfw28zvigh2br4jabg8rzpi5l0bhfb6vjjc7aam13ag";
+    hash = "sha256-T41QlTpMym2WgwvQEu/P6C0lSV4Cvrg/Etw9Nr7XxvM=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

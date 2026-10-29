@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   openssl,
   enableSIMD ? stdenv.hostPlatform.avx2Support,
@@ -11,14 +12,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glaze";
-  version = "7.9.1";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "stephenberry";
     repo = "glaze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NRRq5MGF2f5PW0teYnq58ELzson+U6KHVPaY6r30KLA=";
+    hash = "sha256-dzvKhaSfaDuJ+yHep+OgC6kTRMW59kOtSDw2KD1drVI=";
   };
+  # Rename minify/prettify emit lambda to avoid Qt macro (fixes vicinae until a newer release drops)
+  patches = [
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/stephenberry/glaze/pull/2977.patch";
+      hash = "sha256-xNdjTSsbjyLFoIM/wKvA8janCm8SXX8PpjKYnRoR9fg=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = lib.optionals enableSSL [ openssl ];

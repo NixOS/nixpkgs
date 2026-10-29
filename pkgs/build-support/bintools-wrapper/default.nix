@@ -478,6 +478,8 @@ stdenvNoCC.mkDerivation {
       apple-sdk.__spliced.buildTarget or apple-sdk;
   };
 
+  __structuredAttrs = true;
+
   meta =
     let
       bintools_ = optionalAttrs (bintools != null) bintools;

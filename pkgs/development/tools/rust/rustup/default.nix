@@ -25,16 +25,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.29.0";
+  version = "1.29.2";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     tag = finalAttrs.version;
-    hash = "sha256-jbB0nmXtc95Ac+YfmyELh6n5OTRMmeDPT4OFIlJNrZc=";
+    hash = "sha256-vtfZNMkUAmbdXv0sv7wdm62AjCkYJY188jLx8RrmO2M=";
   };
 
-  cargoHash = "sha256-m/KoXNJh00zYKZo7MIJsBvo4zldfKdofrUh8AItJqXI=";
+  cargoHash = "sha256-UL6nS3SbxKXFWftJLeFY622VQEyAimhNz+YJgZsLHJc=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -91,6 +91,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # reaches out to the network to test TLS roots, which can't be done in the
     # build sandbox
     "--skip=suite::static_roots::store_static_roots"
+    # tries to hide the cc from rustup by setting PATH to an empty directory,
+    # but this doesn't work due to how nixpkgs wraps binaries
+    "--skip=suite::cli_inst_interactive::install_warns_if_default_linker_missing"
   ];
 
   postInstall = ''

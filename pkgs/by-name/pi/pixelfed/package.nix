@@ -12,16 +12,16 @@ let
 in
 php'.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.7";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ay1WJWEPwzeTtScaj+g72lsoWODeHWtjnQT5aa6epbU=";
+    hash = "sha256-eWNpoCyKK7vDx4kCKsZhieMyZhTDC9FS6gVqLKPzviQ=";
   };
 
-  vendorHash = "sha256-RNJzvWrKfxr2uBFtc05N1pUfBmvy01JiJHMWgtJ01pA=";
+  vendorHash = "sha256-A7uHuE+9tfNMxtHhZL5+hsnW3qkJaPeKW119xB32qRM=";
 
   postInstall = ''
     chmod -R u+w $out/share

@@ -130,5 +130,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "sphinx_gallery_py2jupyter";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
 })

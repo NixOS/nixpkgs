@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "grpcui";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcui";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qJ8X4l4Efww6fJ1Xr/MXn2Nr7O0zCmDTb0YAWGInVp4=";
+    sha256 = "sha256-qamroFdchUtpZE5/6nanfLWXEUR/mXD+O89rdJL1wm4=";
   };
 
-  vendorHash = "sha256-S6GeFwxyrlHzsXWz66jrNa+mtoACn7w2oY3M9XjPusk=";
+  vendorHash = "sha256-rj7Ha5zsulosy0CEqDSwax3bCf21PpOTELVzw1hXceo=";
 
   doCheck = false;
 

@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "IBM Decision Optimization CPLEX Modeling for Python";
-    homepage = "https://onboarding-oaas.docloud.ibmcloud.com/software/analytics/docloud/";
+    homepage = "https://ibmdecisionoptimization.github.io/docplex-doc/";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

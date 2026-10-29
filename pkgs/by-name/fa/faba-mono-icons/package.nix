@@ -6,7 +6,6 @@
   gtk3,
   moka-icon-theme,
   faba-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
@@ -29,7 +28,6 @@ stdenvNoCC.mkDerivation {
   propagatedBuildInputs = [
     moka-icon-theme
     faba-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

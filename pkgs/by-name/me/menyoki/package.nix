@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "menyoki";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "menyoki";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-owP3G1Rygraifdc4iPURQ1Es0msNhYZIlfrtj0CSU6Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2l4umaJVsDCR/avrRGkBz+3zlkf7m6G7b3+dcEo4Wyw=";
   };
 
-  cargoHash = "sha256-6FRc/kEhGJXIZ+6GXeYj5j7QVmvZgIQgtDPvt94hlho=";
+  cargoHash = "sha256-EC7viho1Tv015MjbLPdia8b64sw2+6/7vRwNjP5Mvyg=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 

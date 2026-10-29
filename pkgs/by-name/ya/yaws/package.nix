@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yaws";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "erlyaws";
     repo = "yaws";
     rev = "yaws-${finalAttrs.version}";
-    hash = "sha256-acO8Vc8sZJl22HUml2kTxVswLEirqMbqHQdRIbkkcvs=";
+    hash = "sha256-JuQ1En9PwplW28n7H3degRFYzpqlqVzJZUCBvbl3Ev0=";
   };
 
   configureFlags = [ "--with-extrainclude=${pam}/include/security" ];

@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rioxarray";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corteva";
     repo = "rioxarray";
     tag = finalAttrs.version;
-    hash = "sha256-+0TJeEjAKIqi6cbLZiv14dPKW8Xza+4tn/Erzn88ZS0=";
+    hash = "sha256-3zRfoCHINLZt88tIu9wSOyZGzQEryxMSWhfEBcviKSQ=";
   };
 
   build-system = [ setuptools ];

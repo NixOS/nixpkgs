@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timelimit";
-  version = "1.9.2";
+  version = "1.9.5";
 
   src = fetchFromGitLab {
     owner = "timelimit";
     repo = "timelimit";
     rev = "release/${finalAttrs.version}";
-    hash = "sha256-5IEAF8zCKaCVH6BAxjoa/2rrue9pRGBBkFzN57d+g+g=";
+    hash = "sha256-nsjLRRIsDv4QJq73nCjd0r4zQbyaQsriPz/gDWu4K18=";
   };
 
   nativeCheckInputs = [ perl ];

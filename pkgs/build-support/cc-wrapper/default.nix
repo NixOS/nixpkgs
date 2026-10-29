@@ -370,7 +370,15 @@ let
     # Aarch64 uses TLSDESC by default and the option is completely ignored (at least on LLVM).
     # TODO: Enable by default in GCC via --with-tls since https://gcc.gnu.org/cgit/gcc/commit/?id=96a291c4bb0b8a00b0a125e6a60f60072ffe53a7 (GCC 16).
     # No equivalent build-time option for LLVM yet.
-    ++ optional (tlsDialect != null) "-mtls-dialect=${tlsDialect}";
+    ++ optional (tlsDialect != null) "-mtls-dialect=${tlsDialect}"
+    # LLVM default-enables AltiVec for powerpc64, and for many CPU targets that didn't actually have it.
+    # https://github.com/llvm/llvm-project/blob/40977001fcb190a509897aee592819cdd7e83740/llvm/lib/Target/PowerPC/PPC.td#L791-L796
+    # GCC is more conservative: Requires selecting POWER7 or higher for auto-enable, or opting into it on older ones.
+    # If no CPU is specified, disable AltiVec like GCC does.
+    # TODO: Specify CPU + AltiVec preference?
+    ++ optional (
+      (targetPlatform.isPower64 && targetPlatform.isBigEndian) && isClang && !(targetPlatform ? gcc.cpu)
+    ) "-mno-altivec";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
 
@@ -634,6 +642,8 @@ stdenvNoCC.mkDerivation {
     stdenvNoCC.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
+      strictDeps = true;
+      __structuredAttrs = true;
       installPhase =
         if targetPlatform.isCygwin then
           ''
@@ -804,9 +814,15 @@ stdenvNoCC.mkDerivation {
       include -cxx-isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
     ''
-    # GCC NG friendly libc++
+    # This is the GCC NG case, libstdc++ is being built as a separate package.
+    #
+    # Point at `include-cxx`, not `include`. `libcxx` is also a propagated
+    # target-target dep, so the generic setup hook puts its `include` on the *C*
+    # include path -- and libstdc++ ships headers named after C headers
+    # (`math.h`, `stdlib.h`, `stdckdint.h`, ...) that are only meant to shadow
+    # the C ones in C++. A sibling directory the setup hook ignores is enough.
     + optionalString (libcxx != null && libcxx.isGNU or false) ''
-      include -isystem "${getDev libcxx}/include" >> $out/nix-support/libcxx-cxxflags
+      include -isystem "${getDev libcxx}/include-cxx" >> $out/nix-support/libcxx-cxxflags
     ''
 
     ##
@@ -1036,6 +1052,8 @@ stdenvNoCC.mkDerivation {
     ${if stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null then "fallback_sdk" else null} =
       apple-sdk.__spliced.buildTarget or apple-sdk;
   };
+
+  __structuredAttrs = true;
 
   meta =
     let

@@ -6,6 +6,7 @@
   aspell,
   audiofile,
   binutils-unwrapped,
+  cacert,
   cups,
   giflib,
   gmp,
@@ -94,6 +95,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postInstall = ''
+    bundle=$lib/lib/GNUstep/Libraries/gnustep-base/Versions/${lib.versions.majorMinor finalAttrs.version}/Resources/GSTLS/ca-certificates.crt
+    rm $bundle
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $bundle
+  '';
+
   meta = {
     changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
@@ -101,10 +108,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-    ];
+    maintainers = with lib.maintainers; [ dblsaiko ];
     platforms = lib.platforms.linux;
   };
 })

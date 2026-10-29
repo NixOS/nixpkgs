@@ -35,7 +35,7 @@ let
     enableAutologin:
     "${gettyCfg.loginProgram} ${baseLoginOptions}${lib.optionalString enableAutologin " -f -- ${gettyCfg.autologinUser}"}";
 
-  loginScript = pkgs.writers.writeDash "kmscon-login" (
+  loginScript = pkgs.writers.writeBash "kmscon-login" (
     lib.optionalString (gettyCfg.autologinUser != null && gettyCfg.autologinOnce) ''
       kms_tty=
       active_tty_file=/sys/class/tty/tty0/active
@@ -110,15 +110,7 @@ in
             ]);
           options = {
             hwaccel = mkEnableOption "use hardware acceleration for rendering";
-            libseat = mkOption {
-              type = types.bool;
-              default = true;
-              description = ''
-                Whether to use libseat for session management.
-                This is the default for kmscon newer than 10.0.0 and prevents
-                launching another GUI from kmscon by `kmscon-launch-gui`.
-              '';
-            };
+            libseat = mkEnableOption "use libseat for seat management";
           };
         };
       };
@@ -160,6 +152,10 @@ in
     );
 
     environment.systemPackages = [ cfg.package ];
+
+    # Install at least one monospace font, as otherwise the fallback is DejaVu Sans, a non-monospace font
+    fonts.packages = [ pkgs.hack-font ];
+
     systemd.packages = [ cfg.package ];
 
     systemd.services."kmsconvt@" = {
@@ -171,7 +167,7 @@ in
           "" # override upstream default with an empty ExecStart
           (builtins.concatStringsSep " " (
             [
-              "${cfg.package}/bin/kmscon"
+              (lib.getExe cfg.package)
               "--configdir"
               configDir
               "--vt=%I"

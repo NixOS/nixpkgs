@@ -51,7 +51,7 @@
   libexif,
   ffmpeg,
   pulseaudio,
-  systemd,
+  systemdLibs,
   libuuid,
   expat,
   bzip2,
@@ -133,7 +133,7 @@ let
     libdrm
     libgbm
     vulkan-loader
-    systemd
+    systemdLibs
     wayland
     pulseaudio
     qt6.qt5compat
@@ -149,7 +149,10 @@ let
       version = sources.version;
       src = fetchurl (
         {
-          curlOpts = "-A apt";
+          curlOptsList = [
+            "-H"
+            "User-Agent: Debian APT-HTTP/1.3 (2.2.4)"
+          ];
         }
         // (sources.${stdenv.hostPlatform.system}
           or (throw "Unsupported system: ${stdenv.hostPlatform.system}")

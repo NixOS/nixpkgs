@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "2.4.3";
+  version = "2.4.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pkg_about";
     inherit version;
-    hash = "sha256-CqO4k49pEhjYKPtKC088wdT77WjEc8QH23uKBtfBR0g=";
+    hash = "sha256-tURSRw79LnIOWij+JzDLLjKNPts9gcXdN4tQ9u/gbuQ=";
   };
 
   # Unnecessarily requires the newest versions available for these

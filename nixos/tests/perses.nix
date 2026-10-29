@@ -11,6 +11,11 @@
   };
 
   nodes.machine = {
+    # Perses extracts its bundled plugin archives into /run/perses/plugins
+    # (~260 MiB as of 0.54.0), and /run is a tmpfs sized at 25% of RAM — with
+    # the default 1 GiB of memory the extraction fails with ENOSPC.
+    virtualisation.memorySize = 2048;
+
     services.perses = {
       enable = true;
 

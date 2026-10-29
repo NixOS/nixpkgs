@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-druid";
-  version = "36.0.0";
+  version = "37.0.0";
 
   src = fetchurl {
     url = "mirror://apache/druid/${finalAttrs.version}/apache-druid-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-5KYbGtpq7bp3sSqYGaA+RS4WfZYF/XHBKvilkHS5tJA=";
+    hash = "sha256-xeYCvm70NWQ79fWCcTU5JXmMgYwj15qsB3ZjOMnKDdA=";
   };
 
   dontBuild = true;

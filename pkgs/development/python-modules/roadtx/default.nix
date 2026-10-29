@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "roadtx";
-  version = "1.22.0";
+  version = "1.22.1";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-2GIJAjLxOqy3E+5j1gnby8F5IAvdnChMT4Lfq5I5zeE=";
+    hash = "sha256-kOsXowM5LM5jX8XW+G8u65P9y2/6ZMIwMFvbAtO/b34=";
   };
 
   build-system = [ setuptools ];

@@ -1,26 +1,24 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nix-update-script,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polkit-stdin-agent";
-  version = "0.3.2";
+  version = "0.3.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "r-vdp";
     repo = "polkit-stdin-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8eqom9btX5JnlOGzeQLPPSop9MSGqfIeBC4XAHCReCs=";
+    hash = "sha256-aZIKtIt/Z63o+81pW31iRmbVULx2ULz46UFfMaBQGVc=";
   };
 
-  cargoHash = "sha256-BDPVpF+nIHCmZwUZNp6fzUL60NXWrz+eacDNTgFU+AA=";
+  cargoHash = "sha256-Vbs5GwT9oPf0tm8PfyOs8TpEfeStxElWh7ftmvgodCo=";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   passthru = {

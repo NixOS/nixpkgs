@@ -2,15 +2,16 @@
   lib,
   buildPythonPackage,
   capstone_4,
-  stdenv,
-  setuptools,
   fetchpatch,
+  pkg-resources-backport,
+  setuptools,
+  stdenv,
 }:
 
 buildPythonPackage {
-  format = "setuptools";
   pname = "capstone";
   inherit (capstone_4) version src;
+  pyproject = true;
 
   sourceRoot = "${capstone_4.src.name}/bindings/python";
   patches = [
@@ -36,7 +37,12 @@ buildPythonPackage {
     "macosx_11_0"
   ];
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    pkg-resources-backport
+  ];
+
+  dependencies = [ setuptools ];
 
   checkPhase = ''
     mv capstone capstone.hidden
@@ -45,9 +51,9 @@ buildPythonPackage {
   '';
 
   meta = {
+    description = "Python bindings for Capstone disassembly engine";
     homepage = "http://www.capstone-engine.org/";
     license = lib.licenses.bsdOriginal;
-    description = "Python bindings for Capstone disassembly engine";
     maintainers = with lib.maintainers; [
       bennofs
       ris

@@ -2,21 +2,24 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sg3_utils";
-  version = "1.48";
+  version = "1.49";
 
   src = fetchurl {
     url = "https://sg.danny.cz/sg/p/sg3_utils-${finalAttrs.version}.tgz";
-    sha256 = "sha256-1itsPPIDkPpzVwRDkAhBZtJfHZMqETXEULaf5cKD13M=";
+    sha256 = "sha256-hLpQlRCN2Xz7VU17OHIfKqK0P8H5PPgqvW7+TJ2iIKc=";
   };
 
   postPatch = ''
     substituteInPlace scripts/rescan-scsi-bus.sh \
       --replace-fail '/usr/bin/sg_' "$out/bin/sg_"
   '';
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [
     "out"

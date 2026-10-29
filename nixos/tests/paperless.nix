@@ -35,6 +35,9 @@
                 };
               };
             };
+
+            # OOMs randomly otherwise
+            virtualisation.memorySize = 2048;
           };
         postgres = {
           imports = [ self.simple ];

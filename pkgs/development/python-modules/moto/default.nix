@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.2.2";
+  version = "5.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-edMV/EDSVxbQfTjl81y4aM490qtt5NnHSFOvO5o015I=";
+    hash = "sha256-7wE44MYdRf9p3/ac2qOPpLaS0bkpoh84R+rdJp5oycU=";
   };
 
   build-system = [

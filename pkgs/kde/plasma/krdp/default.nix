@@ -3,11 +3,11 @@
   mkKdeDerivation,
   replaceVars,
   openssl,
-  pam,
   pkg-config,
   qtwayland,
-  kirigami-addons,
   freerdp,
+  libei,
+  pam,
 }:
 mkKdeDerivation {
   pname = "krdp";
@@ -22,9 +22,8 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtwayland
 
-    kirigami-addons
-
     freerdp
+    libei
     pam
   ];
 

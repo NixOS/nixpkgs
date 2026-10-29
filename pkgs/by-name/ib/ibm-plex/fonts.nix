@@ -11,6 +11,13 @@
     url = "https://github.com/IBM/plex/releases/download/%40ibm/plex-mono%402.5.0/ibm-plex-mono.zip";
     version = "2.5.0";
   };
+  mono-variable = {
+    hash = "sha256-lvgkqijKYDpUUJF/YsFHesy8I4w+qhduObzM7m3xZas=";
+    name = "IBM Plex Mono (Variable)";
+    stripRoot = false;
+    url = "https://github.com/IBM/plex/releases/download/%40ibm/plex-mono-variable%401.0.0/plex-mono-variable.zip";
+    version = "1.0.0";
+  };
   sans = {
     hash = "sha256-mK+8GGl2ugF2+fS6yd3p5NWPHHcKEJWiShDS3lihOlI=";
     name = "IBM Plex Sans";

@@ -1,11 +1,9 @@
 # The test template is taken from the `./keymap.nix`
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  pkgs,
+  runTest,
+  lib,
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   readyFile = "/tmp/readerReady";
@@ -29,8 +27,8 @@ let
   mkKeyboardTest =
     name:
     { default, test }:
-    with pkgs.lib;
-    makeTest {
+
+    runTest {
       inherit name;
 
       nodes.machine = {
@@ -72,7 +70,7 @@ let
     };
 
 in
-pkgs.lib.mapAttrs mkKeyboardTest {
+lib.mapAttrs mkKeyboardTest {
   swap-ab_and_ctrl-as-shift = {
     test.press = [
       "a"

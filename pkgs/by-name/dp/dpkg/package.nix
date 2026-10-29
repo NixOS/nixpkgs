@@ -16,6 +16,7 @@
   diffutils,
   versionCheckHook,
   glibc,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -113,13 +114,17 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     zstd
     libmd
+    bashNonInteractive
   ];
+
   nativeBuildInputs = [
     makeWrapper
     perl
     autoreconfHook
     pkg-config
   ];
+
+  strictDeps = true;
 
   postInstall = ''
     for i in $out/bin/*; do
@@ -137,6 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   setupHook = ./setup-hook.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Debian package manager";

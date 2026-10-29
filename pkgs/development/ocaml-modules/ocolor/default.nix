@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "marc-chevalier";
     repo = "ocolor";
     tag = finalAttrs.version;
-    sha256 = "osQTZGJp9yDoKNa6WoyhViNbRg1ukcD0Jxiu4VxqeUc=";
+    hash = "sha256-osQTZGJp9yDoKNa6WoyhViNbRg1ukcD0Jxiu4VxqeUc=";
   };
 
   nativeBuildInputs = [

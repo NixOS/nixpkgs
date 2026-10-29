@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "argcomplete"
+    "docker"
     "requests"
     "rich"
   ];

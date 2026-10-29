@@ -8,16 +8,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcron";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "mirror://gnu/mcron/mcron-${finalAttrs.version}.tar.gz";
-    sha256 = "0bkn235g2ia4f7ispr9d55c7bc18282r3qd8ldhh5q2kiin75zi0";
+    sha256 = "sha256-G8jA02LTsaMPoAcdf6tpa7/B2h7VNsQuBIC7n/0iFU4=";
   };
 
-  # don't attempt to chmod +s files in the nix store
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    ./mac-username.patch
+  ];
+
+  # Setuid is not usable from the Nix store; also drop -static on the
+  # crontab-access helper (needs a static libc, fails on Darwin).
   postPatch = ''
     sed -E -i '/chmod u\+s/d' Makefile.in
+    substituteInPlace Makefile.in \
+      --replace-fail 'bin_crontab_access_LDFLAGS = -static' 'bin_crontab_access_LDFLAGS ='
   '';
 
   nativeBuildInputs = [ pkg-config ];

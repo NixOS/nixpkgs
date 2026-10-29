@@ -1,35 +1,34 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
   setuptools,
   unittestCheckHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "giturlparse";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nephila";
     repo = "giturlparse";
-    tag = version;
-    hash = "sha256-EGhmWudQjzqw8xK/pIj5nZqosBX2lnYEgNRNQ/ePEmo=";
+    tag = finalAttrs.version;
+    hash = "sha256-EzybKpff9u4axubSbFR/knSVYtOoz7Ls9rAjMohWP8k=";
   };
 
-  build-system = [
-    setuptools
-  ];
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "giturlparse" ];
 
   meta = {
     description = "Parse & rewrite git urls (supports GitHub, Bitbucket, Assembla ...)";
     homepage = "https://github.com/nephila/giturlparse";
+    changelog = "https://github.com/nephila/giturlparse/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

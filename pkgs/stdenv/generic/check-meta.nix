@@ -8,38 +8,48 @@
 
 let
   inherit (lib)
-    all
     attrValues
-    concatMapStrings
-    concatStrings
-    filter
-    findFirst
-    getName
-    length
     concatMap
+    concatMapStrings
+    findFirst
+    foldl'
+    getName
+    isAttrs
+    isFunction
+    isString
+    length
+    mapAttrsToList
     mutuallyExclusive
     optional
-    isAttrs
-    isString
+    optionalString
+    seq
+    toLower
+    unsafeGetAttrPos
     warn
-    foldl'
+    all
+    groupBy
     ;
 
   inherit (lib.lists)
     any
-    toList
-    isList
     elem
+    isList
+    toList
     unique
     ;
 
   inherit (lib.meta)
-    platformMatch
     cpeFullVersionWithVendor
+    platformMatch
     ;
 
   inherit (lib.generators)
     toPretty
+    ;
+
+  inherit (lib.licenses)
+    containsLicenses
+    isFree
     ;
 
   inherit (builtins)
@@ -53,12 +63,17 @@ let
     ;
   checkProblems = genCheckProblems config;
 
+  inherit (import ./remediations.nix { inherit lib; })
+    remediateOutputsToInstall
+    remediate_allowlist
+    remediate_predicate
+    remediate_insecure
+    getNameWithVersion
+    ;
+
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
-
-  getNameWithVersion =
-    attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
 
   allowUnfree = config.allowUnfree || getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
@@ -69,7 +84,9 @@ let
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
+  nonEmptyAllowList = allowlist != [ ];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
+  nonEmptyBlocklist = blocklist != [ ];
 
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
@@ -81,7 +98,7 @@ let
     assert areLicenseListsValid;
     list:
     let
-      containsListLicenses = lib.licenses.containsLicenses list;
+      containsListLicenses = containsLicenses list;
     in
     attrs:
     attrs ? meta.license
@@ -103,8 +120,9 @@ let
 
   isUnfree =
     licenses:
-    if isAttrs licenses && licenses ? "licenseType" then
-      !(lib.licenses.isFree licenses)
+    # ? is non-strict in its type, so it doubles as performing an isAttrs check
+    if licenses ? licenseType then
+      !(isFree licenses)
     else if isAttrs licenses then
       !(licenses.free or true)
     # TODO: Returning false in the case of a string is a bug that should be fixed.
@@ -114,63 +132,90 @@ let
     else if isString licenses then
       false
     else
-      any (l: !(l.free or true)) licenses;
+      # on a list, check if any of the licenses weren't free (boolean AND)
+      any (l: !l.free or false) licenses;
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
-  isMarkedBroken = attrs: attrs.meta.broken or false;
-
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
-    hostPlatform:
-    let
-      inherit (hostPlatform) system;
-      # in almost all cases, meta.platforms is a simple list of strings, and we
-      # can just check if it contains the current system. we only run the more
+    if allowUnsupportedSystem then
+      _: _: false
+    else
+      hostPlatform:
+      let
+        containsHostSystem = elem hostPlatform.system;
+        matchesHostPlatform = any (platformMatch hostPlatform);
+      in
+      pkg:
+      # in almost all cases, platforms are a simple list of strings, and we
+      # can just check if they contains the current system. we only run the more
       # intensive platformMatch if necessary
-      anyHostPlatform = list: elem system list || any (platformMatch hostPlatform) list;
-    in
-    pkg:
-    pkg ? meta.platforms && !(anyHostPlatform pkg.meta.platforms)
-    || pkg ? meta.badPlatforms && anyHostPlatform pkg.meta.badPlatforms;
+      (
+        pkg ? meta.platforms
+        && !(containsHostSystem pkg.meta.platforms || matchesHostPlatform pkg.meta.platforms)
+      )
+      || (
+        pkg ? meta.badPlatforms
+        && (containsHostSystem pkg.meta.badPlatforms || matchesHostPlatform pkg.meta.badPlatforms)
+      );
 
-  isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
+  isMarkedInsecure =
+    attrs: attrs ? meta.knownVulnerabilities && attrs.meta.knownVulnerabilities != [ ];
 
-  # Allow granular checks to allow only some unfree packages
+  # Check whether unfree packages are allowed and if not, whether the
+  # package has an unfree license and is not explicitly allowed by the
+  # `allowUnfreePredicate` function.
+  #
   # Example:
   # {pkgs, ...}:
   # {
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "vscode" x.name);
+  #   allowUnfreePackages = [ "steam" ];
   # }
-  # Defaults to allow all names defined in config.allowUnfreePackages
-  allowUnfreePredicate =
-    let
-      listPredicate = pkg: builtins.elem (lib.getName pkg) (config.allowUnfreePackages or [ ]);
-
-      # Be robust against misconfigured allowUnfreePredicate values such as null
-      explicitPredicate =
-        let
-          raw = config.allowUnfreePredicate or null;
-        in
-        if builtins.isFunction raw then raw else (_: false);
-    in
-    pkg: (listPredicate pkg) || (explicitPredicate pkg);
-
-  # Check whether unfree packages are allowed and if not, whether the
-  # package has an unfree license and is not explicitly allowed by the
-  # `allowUnfreePredicate` function.
+  # Defaults to allow all names defined in config.allowUnfreePackages, and all
+  # packages that match the unfree predicate function
   hasDeniedUnfreeLicense =
-    attrs: hasUnfreeLicense attrs && !allowUnfree && !allowUnfreePredicate attrs;
+    if allowUnfree then
+      _: false
+    else
+      let
+        listPredicate = pkg: elem (getName pkg) config.allowUnfreePackages;
+        definedListPredicate = config.allowUnfreePackages or [ ] != [ ];
 
-  allowInsecureDefaultPredicate =
-    x: elem (getNameWithVersion x) (config.permittedInsecurePackages or [ ]);
-  allowInsecurePredicate = config.allowInsecurePredicate or allowInsecureDefaultPredicate;
+        explicitPredicate = config.allowUnfreePredicate;
+        # Be robust against misconfigured allowUnfreePredicate values such as null
+        definedExplicitPredicate = isFunction (config.allowUnfreePredicate or null);
+      in
+      if definedListPredicate then
+        if definedExplicitPredicate then
+          attrs: hasUnfreeLicense attrs && !(listPredicate attrs || explicitPredicate attrs)
+        else
+          attrs: hasUnfreeLicense attrs && !listPredicate attrs
+      else if definedExplicitPredicate then
+        attrs: hasUnfreeLicense attrs && !explicitPredicate attrs
+      else
+        hasUnfreeLicense;
 
   allowInsecure = getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
   hasDisallowedInsecure =
-    attrs: isMarkedInsecure attrs && !allowInsecure && !allowInsecurePredicate attrs;
+    if allowInsecure then
+      _: false
+    else if config ? allowInsecurePredicate then
+      let
+        inherit (config) allowInsecurePredicate;
+      in
+      attrs: isMarkedInsecure attrs && !allowInsecurePredicate attrs
+    else if config ? permittedInsecurePackages then
+      let
+        inherit (config) permittedInsecurePackages;
+        allowInsecurePredicate = x: elem (getNameWithVersion x) permittedInsecurePackages;
+      in
+      attrs: isMarkedInsecure attrs && !allowInsecurePredicate attrs
+    else
+      isMarkedInsecure;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
@@ -197,108 +242,6 @@ let
 
   pos_str = meta: meta.position or "«unknown-file»";
 
-  remediation_env_var =
-    allow_attr:
-    {
-      Unfree = "NIXPKGS_ALLOW_UNFREE";
-      UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
-      NonSource = "NIXPKGS_ALLOW_NONSOURCE";
-    }
-    .${allow_attr};
-  remediation_phrase =
-    allow_attr:
-    {
-      Unfree = "unfree packages";
-      UnsupportedSystem = "packages that are unsupported for this system";
-      NonSource = "packages not built from source";
-    }
-    .${allow_attr};
-  remediate_predicate = predicateConfigAttr: attrs: ''
-
-    Alternatively you can configure a predicate to allow specific packages:
-      { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
-          "${getName attrs}"
-        ];
-      }
-  '';
-
-  # flakeNote will be printed in the remediation messages below.
-  flakeNote = "
-   Note: When using `nix shell`, `nix build`, `nix develop`, etc with a flake,
-         then pass `--impure` in order to allow use of environment variables.
-    ";
-
-  remediate_allowlist = allow_attr: rebuild_amendment: ''
-    a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
-       for a single invocation of the nix tools.
-
-         $ export ${remediation_env_var allow_attr}=1
-         ${flakeNote}
-    b) For `nixos-rebuild` you can set
-      { nixpkgs.config.allow${allow_attr} = true; }
-    in configuration.nix to override this.
-    ${rebuild_amendment}
-    c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-      { allow${allow_attr} = true; }
-    to ~/.config/nixpkgs/config.nix.
-  '';
-
-  remediate_insecure =
-    attrs:
-    ''
-
-      Known issues:
-    ''
-    + (concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities))
-    + ''
-
-      You can install it anyway by allowing this package, using the
-      following methods:
-
-      a) To temporarily allow all insecure packages, you can use an environment
-         variable for a single invocation of the nix tools:
-
-           $ export NIXPKGS_ALLOW_INSECURE=1
-           ${flakeNote}
-      b) for `nixos-rebuild` you can add ‘${getNameWithVersion attrs}’ to
-         `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
-         like so:
-
-           {
-             nixpkgs.config.permittedInsecurePackages = [
-               "${getNameWithVersion attrs}"
-             ];
-           }
-
-      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-         ‘${getNameWithVersion attrs}’ to `permittedInsecurePackages` in
-         ~/.config/nixpkgs/config.nix, like so:
-
-           {
-             permittedInsecurePackages = [
-               "${getNameWithVersion attrs}"
-             ];
-           }
-
-    '';
-
-  remediateOutputsToInstall =
-    attrs:
-    let
-      expectedOutputs = attrs.meta.outputsToInstall or [ ];
-      actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = filter (output: !elem output actualOutputs) expectedOutputs;
-    in
-    ''
-      The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
-
-      however ${getNameWithVersion attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
-
-      and is missing the following outputs:
-
-      ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
-    '';
-
   metaType =
     let
       types = import ../../../lib/meta-types.nix { inherit lib; };
@@ -321,6 +264,7 @@ let
       # These keys are documented
       description = str;
       mainProgram = str;
+      mainDarwinApp = str;
       longDescription = str;
       branch = str;
       homepage = either str (listOf str);
@@ -339,6 +283,7 @@ let
       teams = listOf attrs; # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
+      cmakeConfigModules = listOf str;
       inherit platforms;
       hydraPlatforms = listOf str;
       # Automatically turns into meta.problems.broken, see ./problems.nix
@@ -427,13 +372,13 @@ let
       }
 
     # --- Put checks that can be ignored here ---
-    else if hasDeniedUnfreeLicense attrs && !(allowlist != [ ] && hasAllowlistedLicense attrs) then
+    else if hasDeniedUnfreeLicense attrs && !(nonEmptyAllowList && hasAllowlistedLicense attrs) then
       {
         reason = "unfree";
         msg = "has an unfree license (‘${showLicense attrs.meta.license}’)";
         remediation = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate" attrs);
       }
-    else if blocklist != [ ] && hasBlocklistedLicense attrs then
+    else if nonEmptyBlocklist && hasBlocklistedLicense attrs then
       {
         reason = "blocklisted";
         msg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)";
@@ -445,7 +390,7 @@ let
         msg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)";
         remediation = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate" attrs);
       }
-    else if hasUnsupportedPlatform' attrs && !allowUnsupportedSystem then
+    else if hasUnsupportedPlatform' attrs then
       let
         toPretty' = toPretty {
           allowPrettyValues = true;
@@ -508,6 +453,9 @@ let
   #   meta = checkMeta.commonMeta hostPlatform { inherit validity attrs pos references; };
   #   validity = checkMeta.assertValidity hostPlatform { inherit meta attrs; };
   commonMeta =
+    let
+      completeMetaProblems' = completeMetaProblems config;
+    in
     hostPlatform:
     let
       hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
@@ -520,9 +468,20 @@ let
     }:
     let
       outputs = attrs.outputs or [ "out" ];
-      hasOutput = out: builtins.elem out outputs;
-      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
-      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
+      hasOutput = out: elem out outputs;
+      maintainersPosition = unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
+
+      problems = completeMetaProblems' attrs;
+      problemsGroupedByKind = groupBy (p: p.name) (
+        mapAttrsToList (name: problem: {
+          inherit name;
+          inherit problem;
+        }) problems
+      );
+
+      problemsByKind = kind: problemsGroupedByKind.${kind} or [ ];
+      hasProblemKind = kind: (problemsByKind kind) != [ ];
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -581,7 +540,7 @@ let
           defaultCPEParts = {
             part = "a";
             #vendor = null;
-            ${if attrs.pname or null != null then "product" else null} = attrs.pname;
+            ${if attrs.pname or null != null then "product" else null} = toLower attrs.pname;
             #version = null;
             #update = null;
             edition = "*";
@@ -649,11 +608,11 @@ let
 
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
-      broken = isMarkedBroken attrs;
+      broken = hasProblemKind "broken";
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
-      problems = completeMetaProblems config attrs;
+      inherit problems;
 
       available =
         validity.valid != "no"
@@ -675,7 +634,7 @@ let
           let
             msg =
               "Refusing to evaluate package '${getNameWithVersion attrs}' in ${pos_str meta} because it ${error.msg}"
-              + lib.optionalString (!inHydra && error.remediation != "") "\n${error.remediation}";
+              + optionalString (!inHydra && error.remediation != "") "\n${error.remediation}";
           in
           if config ? handleEvalIssue then
             if error.reason == "problem" then
@@ -690,12 +649,12 @@ let
         let
           msg =
             "Package '${getNameWithVersion attrs}' in ${pos_str meta} ${warning.msg}"
-            + lib.optionalString (!inHydra && warning.remediation != "") " ${warning.remediation}";
+            + optionalString (!inHydra && warning.remediation != "") " ${warning.remediation}";
         in
         warn msg acc;
     in
     # Give all warnings first, then error if any
-    builtins.seq (foldl' giveWarning null warnings) withError;
+    seq (foldl' giveWarning null warnings) withError;
 
   assertValidity =
     hostPlatform:

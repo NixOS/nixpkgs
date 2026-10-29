@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdsf";
-  version = "0.11.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "mdsf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UfLgrukVYqkUKBI7CNLIkANO1md6ArrbSIh+f0F3bek=";
+    hash = "sha256-f1hNGTAQoriCWL5g6b5MXej2Qc4pVAEf3k/J9eyHjVQ=";
   };
 
-  cargoHash = "sha256-dohbFCxoPPXZa6mKkDNmdkqH3T52hHiRTDgQJTJHfYU=";
+  cargoHash = "sha256-VjiJn9kvl+WtWKx7nvmw2ukAiEsO3hVCRSoR2XqjIO4=";
 
   # many tests fail for various reasons of which most depend on the build sandbox
   doCheck = false;

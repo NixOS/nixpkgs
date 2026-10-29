@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "materialyoucolor";
-  version = "3.0.3";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "T-Dynamos";
     repo = "materialyoucolor-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wD6Vh0Ao+zq8FmUXcBaJYGcdw+hCk8lZ2FvODhwJBCE=";
+    hash = "sha256-F4Tl9MBf41K5y1wmuCcDIqGU/vuspRGuiX/47CBl6FQ=";
   };
 
   build-system = [

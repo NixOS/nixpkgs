@@ -14,5 +14,6 @@ buildRedist {
       also does control flow analysis to annotate jump/branch targets and makes the output easier to read.
     '';
     homepage = "https://docs.nvidia.com/cuda/cuda-binary-utilities#nvdisasm";
+    mainProgram = "nvdisasm";
   };
 }

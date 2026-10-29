@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.5.0";
+  version = "3.6.0";
   pname = "libzdb";
 
   src = fetchFromBitbucket {
     owner = "tildeslash";
     repo = "libzdb";
     tag = "release-${lib.replaceString "." "-" finalAttrs.version}";
-    hash = "sha256-fZSTu/BGIFsbEHSB/+2SObb9myg+Iyc1IDxnpv/EEhU=";
+    hash = "sha256-D9JHIpIEA1Y8y5ZinQzs32rjnKkdknM9I1OofCD0zK0=";
   };
 
   nativeBuildInputs = [

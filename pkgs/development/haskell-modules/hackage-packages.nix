@@ -12179,7 +12179,7 @@ self: {
       )
       {
         inherit (pkgs) libxcrypt;
-        inherit (pkgs) pcre;
+        pcre = null;
       };
 
   Etage = callPackage (
@@ -18023,6 +18023,7 @@ self: {
       description = "HFuse is a binding for the Linux FUSE library";
       license = lib.licenses.bsd3;
       platforms = lib.platforms.linux;
+      broken = true;
     }
   ) { inherit (pkgs) fuse; };
 
@@ -258270,7 +258271,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs.gnome2) GConf; };
+  ) { GConf = null; };
 
   gd =
     callPackage
@@ -279720,7 +279721,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs.gnome2) libglade; };
+  ) { libglade = null; };
 
   gladexml-accessor = callPackage (
     {
@@ -295103,7 +295104,7 @@ self: {
       )
       {
         inherit (pkgs) gtk2;
-        inherit (pkgs.gnome2) gtkglext;
+        inherit (pkgs) gtkglext;
         inherit (pkgs) libGLU;
         inherit (pkgs) libice;
         inherit (pkgs) libsm;
@@ -295144,7 +295145,7 @@ self: {
       license = lib.licenses.lgpl21Only;
       hydraPlatforms = lib.platforms.none;
     }
-  ) { inherit (pkgs) gtkimageview; };
+  ) { gtkimageview = null; };
 
   gtkrsync = callPackage (
     {
@@ -295221,7 +295222,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) gtksourceview; };
+  ) { gtksourceview = null; };
 
   gtksourceview3 = callPackage (
     {
@@ -304694,7 +304695,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libappindicator-gtk2; };
+  ) { libappindicator-gtk2 = null; };
 
   happindicator3 = callPackage (
     {
@@ -304721,7 +304722,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libappindicator-gtk3; };
+  ) { libappindicator-gtk3 = null; };
 
   happlets = callPackage (
     {
@@ -309381,6 +309382,7 @@ self: {
       ];
       description = "A breakout game written in Yampa using SDL";
       license = "unknown";
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "haskanoid";
     }
   ) { };
@@ -454527,7 +454529,7 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
     }
-  ) { inherit (pkgs) pcre; };
+  ) { pcre = null; };
 
   math-extras = callPackage (
     {
@@ -496547,6 +496549,7 @@ self: {
       ];
       description = "An opinionated formatter for Nix";
       license = lib.licenses.mpl20;
+      hydraPlatforms = lib.platforms.none;
       mainProgram = "nixfmt";
     }
   ) { };
@@ -527569,7 +527572,7 @@ self: {
       description = "Portable regex library for Perl 5 compatible regular expressions";
       license = lib.licenses.bsd3;
     }
-  ) { inherit (pkgs) pcre; };
+  ) { pcre = null; };
 
   pcre-light-extra = callPackage (
     {
@@ -587493,7 +587496,7 @@ self: {
       description = "PCRE Backend for \"Text.Regex\" (regex-base)";
       license = lib.licenses.bsd3;
     }
-  ) { inherit (pkgs) pcre; };
+  ) { pcre = null; };
 
   regex-pcre-builtin = callPackage (
     {
@@ -694069,7 +694072,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libtensorflow; };
+  ) { libtensorflow = null; };
 
   tensorflow-core-ops = callPackage (
     {

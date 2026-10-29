@@ -67,7 +67,6 @@ with pkgs.lib;
           boot.initrd.supportedFilesystems = [ "btrfs" ];
 
           boot.initrd.systemd = {
-            enable = true;
             repart = {
               enable = true;
               device = disk;
@@ -179,7 +178,7 @@ with pkgs.lib;
           f.write("squashfs")
 
         subprocess.run([
-          "${pkgs.squashfsTools}/bin/mksquashfs",
+          "${pkgs.squashfs-tools}/bin/mksquashfs",
           "filesystem",
           "${fsImage}",
         ])

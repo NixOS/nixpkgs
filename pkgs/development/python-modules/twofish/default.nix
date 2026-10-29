@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yihp2n42amrxw0wk9f66llpb3w5kwhgkcdg9krkzcik1nsqp7dh";
+    hash = "sha256-sJ2LtQ0zsj/zTK+x+SCfhY91KTXGpckB77kqQay4MPo=";
   };
 
   propagatedBuildInputs = [ javaobj-py3 ];
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Bindings for the Twofish implementation by Niels Ferguson";
     homepage = "https://github.com/keybase/python-twofish";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

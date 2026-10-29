@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "tilequant";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     tag = version;
     # Fetch tilequant source files
     fetchSubmodules = true;
-    hash = "sha256-MgyKLwVdL2DRR8J88q7Q57rQiX4FTOlQ5rTY3UuhaJM=";
+    hash = "sha256-XYSdhRHx+TGDg24ujNedI0CwWUa1IE089jrvv6nHFXA=";
   };
 
   build-system = [

@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "stestr";
-  version = "4.2.0";
+  version = "4.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Rexjny0cw3LjYwYTuT83zynT3+adSdTz+UCNN7Ebwpw=";
+    hash = "sha256-tgSVIl+ng0diUlcq3aKdM643BvlfwyVk94+058nl3yA=";
   };
 
   build-system = [

@@ -1,6 +1,6 @@
-{ lib, ... }:
+{ lib, package, ... }:
 {
-  name = "flarum";
+  name = "flarum-${package.version}";
 
   meta = {
     maintainers = with lib.maintainers; [
@@ -18,6 +18,7 @@
 
       services.flarum = {
         enable = true;
+        inherit package;
         forumTitle = "NixOS Flarum Test Forum";
         domain = "localhost";
         baseUrl = "http://localhost";
@@ -69,5 +70,30 @@
     # not be world-readable.
     machine.succeed("grep -q 'flarum-db-password' /var/lib/flarum/config.php")
     machine.succeed("[ $(stat -c %a /var/lib/flarum/config.php) = 600 ]")
+
+    # `flarum install` must not rerun on later activations, or it errors out
+    # since the database already exists.
+    machine.succeed(
+        "echo 'create table nixos_test_marker (id int); insert into nixos_test_marker values (1);' "
+        + "| sudo -u flarum mysql -u flarum flarum"
+    )
+    machine.succeed("systemctl restart flarum-install.service")
+    machine.succeed(
+        "echo 'select id from nixos_test_marker;' | sudo -u flarum mysql -u flarum flarum -N | grep -q 1"
+    )
+    machine.succeed("[ -f /var/lib/flarum/.flarum-installed ]")
+
+    # A config.php present without the .flarum-installed marker (hand-maintained,
+    # or from before this module managed config.php) must be left untouched.
+    machine.succeed("rm /var/lib/flarum/.flarum-installed")
+    machine.succeed(
+        "echo '<?php return array (\"url\" => \"http://localhost\", \"database\" => "
+        + "array (\"driver\" => \"mysql\", \"host\" => \"localhost\", \"database\" => "
+        + "\"flarum\", \"username\" => \"flarum\", \"password\" => \"flarum-db-password\"), "
+        + "\"nixos_test_marker\" => \"foreign-config\");' "
+        + "| sudo -u flarum tee /var/lib/flarum/config.php"
+    )
+    machine.succeed("systemctl restart flarum-install.service")
+    machine.succeed("grep -q 'nixos_test_marker' /var/lib/flarum/config.php")
   '';
 }

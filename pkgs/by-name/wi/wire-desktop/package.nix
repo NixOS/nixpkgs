@@ -8,6 +8,7 @@
   yarn-berry_3,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   darwin,
   zip,
   jq,
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
     yarn-berry
     makeWrapper
+    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     jq
@@ -152,21 +154,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    categories = [
-      "Network"
-      "InstantMessaging"
-      "Chat"
-      "VideoConference"
-    ];
-    comment = "Secure messenger for everyone";
-    desktopName = "Wire";
-    exec = "wire-desktop %U";
-    genericName = "Secure messenger";
-    icon = "wire-desktop";
-    name = "wire-desktop";
-    startupWMClass = "Wire";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Network"
+        "InstantMessaging"
+        "Chat"
+        "VideoConference"
+      ];
+      comment = "Secure messenger for everyone";
+      desktopName = "Wire";
+      exec = "wire-desktop %U";
+      genericName = "Secure messenger";
+      icon = "wire-desktop";
+      name = "wire-desktop";
+      startupWMClass = "Wire";
+    })
+  ];
 
   meta = {
     description = "Modern, secure messenger for everyone";

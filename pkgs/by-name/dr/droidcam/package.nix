@@ -8,19 +8,19 @@
   alsa-lib,
   speex,
   libusbmuxd,
-  libappindicator-gtk3,
+  libappindicator,
   pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "dev47apps";
     repo = "droidcam-linux-client";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-22lRmtXumjR/83Fg1edBisM1GjNZvNUvPs1Yg7Na1xw=";
+    sha256 = "sha256-C+uKsiSF1NbHvHOGlMPlPWbbnE3CcibejdReE8xAYP4=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     speex
     libusbmuxd
-    libappindicator-gtk3
+    libappindicator
   ];
 
   postPatch = ''

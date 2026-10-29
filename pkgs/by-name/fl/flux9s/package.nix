@@ -9,16 +9,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flux9s";
-  version = "0.12.0";
+  version = "1.4.5";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dgunzy";
     repo = "flux9s";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kwUoA5NTjJjCI3aUgpFOcDpRZbDEPCTzzsk7TxVn6K4=";
+    hash = "sha256-Y1hj2zsIfTuqSS0mS2Zk4MOpU9LBM1uycY+9zHNPgdM=";
   };
 
-  cargoHash = "sha256-5UOaIbaAlBufB4BJ+ZX82xaKTQ4qDDRZWaweM8d2AOY=";
+  cargoHash = "sha256-jh+vzDufuF7dteDIuMF/8gRp5jIZy4m0HHSwJBAyJLE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "K9s-inspired terminal UI for monitoring Flux GitOps resources in real-time";
     mainProgram = "flux9s";
     homepage = "https://flux9s.ca/";
+    changelog = "https://github.com/dgunzy/flux9s/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.skyesoss ];
   };

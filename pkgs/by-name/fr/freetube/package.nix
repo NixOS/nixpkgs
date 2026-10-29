@@ -9,26 +9,27 @@
   nodejs,
   pnpmConfigHook,
   pnpmBuildHook,
-  pnpm_10,
+  pnpm_11,
   makeShellWrapper,
   copyDesktopItems,
-  electron,
-
+  darwin,
+  electron_44,
   nixosTests,
 }:
 let
   description = "Open Source YouTube app for privacy";
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
+  electron = electron_44;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.25.1";
+  version = "0.25.3-unstable-2026-10-23";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
-    tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-CQiwAoOJoAZpcDIwqcOfUAvJHLWTdj8fIInlR3qyjg8=";
+    rev = "59cdc37fe76128732a65d7567bb4a1141f87dd76";
+    hash = "sha256-C8/UCKfENOekXLNYCPwfERW3qmIaFGjd/5iAa2/mPTc=";
   };
 
   __structuredAttrs = true;
@@ -57,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-NWCgUjBuSeEl65mmAeJzOyIxCi2ha0Nr5qjOQq+CtMQ=";
+    hash = "sha256-lr79nLk/zdKlE9fmmmipp1jqLqJu1oPjXGP4JFuWNts=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +68,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pnpm
     makeShellWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   installPhase = ''

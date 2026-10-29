@@ -36,7 +36,7 @@
   openvdb,
   openexr,
   opencv,
-  systemd,
+  systemdLibs,
   onetbb,
   webkitgtk_4_1,
   wxwidgets_3_1,
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     libharu
     opencv
   ]
-  ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withSystemd [ systemdLibs ]
   ++ finalAttrs.checkInputs;
 
   patches = [

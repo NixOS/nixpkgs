@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.3.0.5";
+  version = "8.4.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "asyncclick";
     tag = "${version}+async";
-    hash = "sha256-gKtxwI/vDB2pDrhiA+e1TClwW5nXvBRCMF3oCNoLaDo=";
+    hash = "sha256-KTWNftj/nYoknBPyFfz//S2AwJNp1RCUT2QsTU3DISg=";
   };
 
   build-system = [ flit-core ];

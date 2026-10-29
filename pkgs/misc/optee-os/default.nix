@@ -55,6 +55,7 @@ let
         ];
 
         strictDeps = true;
+        __structuredAttrs = true;
 
         enableParallelBuilding = true;
 
@@ -112,7 +113,10 @@ let
           homepage = "https://github.com/OP-TEE/optee_os";
           changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
           license = lib.licenses.bsd2;
-          maintainers = [ lib.maintainers.jmbaur ];
+          maintainers = [
+            lib.maintainers.jmbaur
+            lib.maintainers.tomfitzhenry
+          ];
         }
         // extraMeta;
       }
@@ -132,6 +136,24 @@ in
   opteeQemuAarch64 = buildOptee {
     platform = "vexpress";
     extraMakeFlags = [ "PLATFORM_FLAVOR=qemu_armv8a" ];
+    extraMeta.platforms = [ "aarch64-linux" ];
+  };
+
+  opteeAllwinnerA64 = buildOptee {
+    platform = "sunxi";
+    extraMakeFlags = [ "PLATFORM_FLAVOR=sun50i_a64" ];
+    extraMeta.platforms = [ "aarch64-linux" ];
+  };
+
+  opteeRockchipRK3399 = buildOptee {
+    platform = "rockchip";
+    extraMakeFlags = [ "PLATFORM_FLAVOR=rk3399" ];
+    extraMeta.platforms = [ "aarch64-linux" ];
+  };
+
+  opteeRockchipRK3588 = buildOptee {
+    platform = "rockchip";
+    extraMakeFlags = [ "PLATFORM_FLAVOR=rk3588" ];
     extraMeta.platforms = [ "aarch64-linux" ];
   };
 }

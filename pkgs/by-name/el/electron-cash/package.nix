@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.4.2";
+  version = "4.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     tag = version;
-    sha256 = "sha256-hqaPxetS6JONvlRMjNonXUGFpdmnuadD00gcPzY07x0=";
+    sha256 = "sha256-uzYkkth38PaAz8EULh1qwdY6/NxOW7xtjW2tmYyMC1Q=";
   };
 
   build-system = with python3Packages; [
@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py \
       --replace-fail "(share_dir" '("share"'
     substituteInPlace electroncash/secp256k1.py \
-      --replace-fail "libsecp256k1.so.0" "${secp256k1}/lib/libsecp256k1.so.5"
+      --replace-fail "libsecp256k1.so.0" "${secp256k1}/lib/libsecp256k1.so"
     substituteInPlace contrib/requirements/requirements.txt \
       --replace-fail "python-dateutil<2.9" "python-dateutil<2.10"
   '';

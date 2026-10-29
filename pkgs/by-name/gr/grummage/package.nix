@@ -25,7 +25,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.textual
   ];
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ grype ]}" ];
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ grype ])
+  ];
 
   # no included tests or version flag
   doCheck = false;

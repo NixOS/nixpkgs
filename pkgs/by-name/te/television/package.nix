@@ -44,6 +44,9 @@ let
 
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
+
+      mkdir -p $out/share
+      cp -r cable $out/share/cable
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       mkdir -p $out/share/television

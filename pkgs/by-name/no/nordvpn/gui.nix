@@ -9,6 +9,8 @@
   lib,
   makeDesktopItem,
   libx11,
+  runCommand,
+  yq-go,
 }:
 flutter.buildFlutterApplication {
   pname = "nordvpn-gui";
@@ -40,6 +42,16 @@ flutter.buildFlutterApplication {
       }
     ))
   ];
+
+  passthru.pubspecSource =
+    runCommand "pubspec.lock.json"
+      {
+        inherit src;
+        nativeBuildInputs = [ yq-go ];
+      }
+      ''
+        yq eval --output-format=json --prettyPrint $src/gui/pubspec.lock > "$out"
+      '';
 
   meta = meta // {
     description = "NordVPN graphical interface";

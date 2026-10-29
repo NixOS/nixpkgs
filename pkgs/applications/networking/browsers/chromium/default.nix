@@ -22,7 +22,6 @@
   lib,
   libkrb5,
   widevine-cdm,
-  electron-source, # for warnObsoleteVersionConditional
 
   # package customization
   # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
@@ -41,29 +40,11 @@ let
   stdenv = pkgs.rustc.llvmPackages.stdenv;
 
   # Helper functions for changes that depend on specific versions:
-  warnObsoleteVersionConditional =
-    min-version: result:
-    let
-      min-supported-version = (lib.head (lib.attrValues electron-source)).unwrapped.info.chromium.version;
-      # Warning can be toggled by changing the value of enabled:
-      enabled = false;
-    in
-    lib.warnIf (enabled && lib.versionAtLeast min-supported-version min-version)
-      "chromium: min-supported-version ${min-supported-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
-      result;
-  chromiumVersionAtLeast =
-    min-version:
-    let
-      result = lib.versionAtLeast upstream-info.version min-version;
-    in
-    warnObsoleteVersionConditional min-version result;
+  chromiumVersionAtLeast = min-version: lib.versionAtLeast upstream-info.version min-version;
   versionRange =
     min-version: upto-version:
-    let
-      inherit (upstream-info) version;
-      result = lib.versionAtLeast version min-version && lib.versionOlder version upto-version;
-    in
-    warnObsoleteVersionConditional upto-version result;
+    lib.versionAtLeast upstream-info.version min-version
+    && lib.versionOlder upstream-info.version upto-version;
 
   callPackage = newScope chromium;
 

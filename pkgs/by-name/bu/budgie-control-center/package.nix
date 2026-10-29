@@ -10,7 +10,7 @@
   cups,
   docbook-xsl-nons,
   fontconfig,
-  gcr,
+  gcr_3,
   gdk-pixbuf,
   gettext,
   glib,
@@ -20,22 +20,22 @@
   gst_all_1,
   gnome-desktop,
   gnome-settings-daemon,
+  gnome-tecla,
   gsettings-desktop-schemas,
   gsound,
   gtk3,
   ibus,
   libepoxy,
-  libgnomekbd,
   libgtop,
   libgudev,
   libhandy,
+  libjxl,
   libkrb5,
   libnma,
   libpulseaudio,
   libpwquality,
   librsvg,
   libsecret,
-  libwacom,
   libxml2,
   libxslt,
   meson,
@@ -69,14 +69,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UiKMYLQ44U4w9MdSTp/AJg3scOoSCeG6gXUBCrM9pc8=";
+    hash = "sha256-zxhMRmRfwBX8a7T0G4hq+zf3xVyryOiCYSOl4BbSObc=";
   };
 
   patches = [
@@ -84,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
       budgie_desktop = budgie-desktop;
       inherit
         cups
-        libgnomekbd
         shadow
         ;
       inherit networkmanagerapplet tzdata;
@@ -107,11 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
     colord
     colord-gtk
     fontconfig
-    gcr
+    gcr_3
     gdk-pixbuf
     glib
     glib-networking
     gnome-desktop
+    gnome-tecla
     gst_all_1.gstreamer
     gnome-settings-daemon
     gsettings-desktop-schemas
@@ -127,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libpwquality
     libsecret
-    libwacom
     libxml2
     modemmanager
     networkmanager
@@ -150,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
+          libjxl
           librsvg
           webp-pixbuf-loader
         ];

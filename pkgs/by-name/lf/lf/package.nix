@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lf";
-  version = "41";
+  version = "42";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     tag = "r${finalAttrs.version}";
-    hash = "sha256-s9d9nIOSpYeK6WNpbhauAEEv3SSBeJQ+J8ip+IE4LOc=";
+    hash = "sha256-WxXbvj17c1yq4Xkj2BE9nENNBMW677aeFq4TYyCt9yE=";
   };
 
-  vendorHash = "sha256-3i6Vp3rhE8R+TGLQE3axxKjVI/3nL+WSqEp7rHtSvNs=";
+  vendorHash = "sha256-VSQf04uyQ49oENlxmGIIrukq5kmHgr8lwmQnJt/50Fo=";
 
   nativeBuildInputs = [ installShellFiles ];
 

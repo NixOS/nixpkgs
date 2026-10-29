@@ -34,7 +34,6 @@ in
     ./pekwm.nix
     ./notion.nix
     ./ratpoison.nix
-    ./sawfish.nix
     ./smallwm.nix
     ./stumpwm.nix
     ./spectrwm.nix

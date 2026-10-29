@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "25.12.0";
+  version = "25.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic";
     tag = "v${version}";
-    hash = "sha256-ygMTULkavd/5Mqxn/iS1TC29hfFcF6q3/kT8S7V1Xdo=";
+    hash = "sha256-0P5UyLi9W5maoR1EpRxfhysckDWpjgmqndgxsVHm47c=";
   };
 
   # test compat for testing with pytest-asyncio
@@ -107,6 +107,8 @@ buildPythonPackage rec {
     # Our mailcap database has a different mime type name for xml documentations
     # AssertionError: assert 'text/xml; charset=utf-8' == 'application/xml'
     "test_guess_content_type"
+    # ValueError: Request and response object expected, got ([None, None])"
+    "test_cert_sni_list"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # KeyError: "getgrnam(): name not found: 'root'"
@@ -122,6 +124,8 @@ buildPythonPackage rec {
     "test_multiprocessing.py"
     # Failed: async def functions are not natively supported.
     "test_touchup.py"
+    # Test is outdated
+    "test_websockets.py"
   ];
 
   # Avoid usage of nixpkgs-review in darwin since tests will compete usage

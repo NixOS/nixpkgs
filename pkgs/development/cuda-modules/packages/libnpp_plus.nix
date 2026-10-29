@@ -1,5 +1,9 @@
-{ buildRedist }:
-buildRedist {
+{
+  backendStdenv,
+  buildRedist,
+  lib,
+}:
+buildRedist (finalAttrs: {
   redistName = "nppplus";
   pname = "libnpp_plus";
 
@@ -12,6 +16,18 @@ buildRedist {
     "stubs"
   ];
 
+  # https://docs.nvidia.com/cuda/nppplus/releasenotes.html
+  platformAssertions = [
+    {
+      message =
+        "NPP+ releases since 0.10.0 (found ${finalAttrs.version})"
+        + " support CUDA compute capabilities 7.5 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
+      assertion =
+        lib.versionAtLeast finalAttrs.version "0.10"
+        -> lib.all (lib.flip lib.versionAtLeast "7.5") backendStdenv.cudaCapabilities;
+    }
+  ];
+
   meta = {
     description = "C++ support for interfacing with the NVIDIA Performance Primitives (NPP) library";
     longDescription = ''
@@ -19,6 +35,6 @@ buildRedist {
       such as color conversion, image compression, filtering, thresholding, and image manipulation.
     '';
     homepage = "https://developer.nvidia.com/npp";
-    changelog = "https://docs.nvidia.com/cuda/nppplus/releasenotes";
+    changelog = "https://docs.nvidia.com/cuda/nppplus/releasenotes.html";
   };
-}
+})

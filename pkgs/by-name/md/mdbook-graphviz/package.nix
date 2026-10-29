@@ -3,24 +3,30 @@
   fetchFromGitHub,
   rustPlatform,
   graphviz,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-graphviz";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "dylanowen";
     repo = "mdbook-graphviz";
     # Upstream has rewritten tags before:
     # https://github.com/dylanowen/mdbook-graphviz/issues/180
-    rev = "6e368ad745934fb9e10f224cfc0dc15d4f6fa114";
-    hash = "sha256-f02SOyU5REm+uP4/vB/1yG9M0Vg8ShF2hj5NKuh0jLU=";
+    rev = "36abbdff3d1f67128d81ff86336fe31619663abe";
+    hash = "sha256-uqNgP1rRgP6NecReqpinsg7u01gNDpIxX2qag8IyklY=";
   };
 
-  cargoHash = "sha256-A1pFifxshWynwA88iLTMOm21NKCH8fHl5nFiV4wEG8A=";
+  cargoHash = "sha256-OBCECv9ZN9xjkOestZbjCXNAA/hAl2u0AtfqxA+cV78=";
 
   nativeCheckInputs = [ graphviz ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  updateScript = nix-update-script { };
 
   meta = {
     description = "Preprocessor for mdbook, rendering Graphviz graphs to HTML at build time";

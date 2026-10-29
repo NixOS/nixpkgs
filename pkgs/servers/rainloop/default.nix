@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  cacert,
   unzip,
   writeText,
   dos2unix,
@@ -59,6 +60,9 @@ let
       installPhase = ''
         mkdir $out
         cp -r rainloop/* $out
+        rm $out/rainloop/v/${version}/app/libraries/tmhOAuth/cacert.pem
+        ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt \
+          $out/rainloop/v/${version}/app/libraries/tmhOAuth/cacert.pem
         rm -rf $out/data
         cp ${includeScript} $out/include.php
         mkdir $out/data
@@ -71,7 +75,7 @@ let
         downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
         license = with lib.licenses; if edition == "" then unfree else agpl3Only;
         platforms = lib.platforms.all;
-        maintainers = with lib.maintainers; [ das_j ];
+        maintainers = [ ];
       };
     };
 in

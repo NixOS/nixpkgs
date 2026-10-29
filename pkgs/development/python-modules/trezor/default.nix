@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
+  flit-core,
   pytestCheckHook,
   pytest-random-order,
   # dependencies
@@ -30,15 +30,15 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.20.0";
+  version = "0.20.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TAmOIDFbJxZnOr3vQCgi5xiRAVmMfAPyN0ndIBDuJQQ=";
+    hash = "sha256-CrPOu0T+y1Mrd9WitAG1AYeh1wtyUabMLfVJTlL/31c=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ flit-core ];
 
   dependencies = [
     click

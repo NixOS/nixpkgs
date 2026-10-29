@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-statemachine";
-  version = "3.2.0";
+  version = "3.2.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "python_statemachine";
     inherit (finalAttrs) version;
-    hash = "sha256-RLmMubsQgYke9u+pB8gh0FyuUxSiuZcT5W1Wqcli3gg=";
+    hash = "sha256-3/NmgsqwC6f3l+AevdkMTbssLgD+fPzJ+Sb2PFAmZQc=";
   };
 
   build-system = [ hatchling ];

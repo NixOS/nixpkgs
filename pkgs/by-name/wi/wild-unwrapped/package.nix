@@ -11,18 +11,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wild-unwrapped";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "wild-linker";
     repo = "wild";
     tag = finalAttrs.version;
-    hash = "sha256-v4lPgZDPvRTAekkU9Vku9llgpOsaVtKt91VFUGrEeKw=";
+    hash = "sha256-2E5W7UmWi9nBoWobZtZ5Td+0qaFSC7gKeF2t8yuZFK4=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-ADJLtTRXcVWcbvgwXvCs0wxcGp2XP1LZJUJ4hpuzVHQ=";
+  cargoHash = "sha256-QqSKVBus3D/JkzhxudTtlcQFsY+KQPdWAbnCcf0L2pY=";
 
   cargoBuildFlags = [
     "-p"
@@ -39,6 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   doCheck = false; # Tests are ran in passthru tests
+  checkFlags = [
+    "--skip=wasm/"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # https://github.com/davidlattimore/wild/discussions/832#discussioncomment-14482948
+    "--skip=integration_test::program_name_71___unresolved_symbols_object_c__"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

@@ -152,9 +152,9 @@ in
         user = "part-db";
         group = "part-db";
         phpPackage = cfg.phpPackage;
-        phpOptions = ''
-          log_errors = on
-        '';
+        phpOptions = {
+          log_errors = "on";
+        };
         settings = {
           "listen.mode" = lib.mkDefault "0660";
           "listen.owner" = lib.mkDefault "part-db";
@@ -257,6 +257,7 @@ in
           ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
+            ExecStart = "${lib.getExe cfg.phpPackage} ${lib.getExe' cfg.package "console"} doctrine:migrations:migrate --no-interaction";
             Type = "oneshot";
             RemainAfterExit = true;
             User = "part-db";
@@ -264,10 +265,6 @@ in
           restartTriggers = [
             cfg.package
           ];
-          script = ''
-            set -euo pipefail
-            ${lib.getExe cfg.phpPackage} ${lib.getExe' cfg.package "console"} doctrine:migrations:migrate --no-interaction
-          '';
         };
 
         phpfpm-part-db = {

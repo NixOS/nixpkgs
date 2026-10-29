@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "nirimon";
-  version = "2026.605.1";
+  version = "2026.819.0";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "stepbrobd";
     repo = "nirimon";
     tag = finalAttrs.version;
-    hash = "sha256-mdBl2QuvAYEltGB2kE0EJhQtWSSZ78qdpSzWKreDZUY=";
+    hash = "sha256-3fh0oNStHCOwjht+rCvJ4RTuSLqAKvjF+b8KXf89kaU=";
   };
 
-  vendorHash = "sha256-txuaYMyYYalKGQ5RIuPL/ERyDt/eMeo85aZSgx4HbZk=";
+  vendorHash = "sha256-eSKuDWtzRxwrRvBKA6z85P/+Lqf7djgqMVu3xv7ttDM=";
 
   ldflags = [
     "-s"

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   libxml2,
-  glibmm,
+  glibmm_2_4,
   meson,
   ninja,
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  buildInputs = [ glibmm ];
+  buildInputs = [ glibmm_2_4 ];
 
   propagatedBuildInputs = [ libxml2 ];
 

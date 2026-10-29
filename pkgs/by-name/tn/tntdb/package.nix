@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.tntnet.org/tntdb.html";
+    homepage = "https://github.com/maekitalo/tntdb";
     description = "C++ library which makes accessing SQL databases easy and robust";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;

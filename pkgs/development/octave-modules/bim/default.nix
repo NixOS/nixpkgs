@@ -14,7 +14,7 @@ buildOctavePackage rec {
     owner = "carlodefalco";
     repo = "bim";
     tag = "v${version}";
-    sha256 = "sha256-nK/VZ+thMuMU5RBiNYpzylOuVxKbcfSyrXZfka5+g4I=";
+    hash = "sha256-nK/VZ+thMuMU5RBiNYpzylOuVxKbcfSyrXZfka5+g4I=";
   };
 
   requiredOctavePackages = [

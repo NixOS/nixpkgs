@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "4.0.18.2971";
+  version = "4.0.20.3014";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,16 +29,26 @@ let
       owner = "Sonarr";
       repo = "Sonarr";
       tag = "v${version}";
-      hash = "sha256-83qbbBNk42KjKZNvYaAINoWZa3uEgaV0eveGl9dKTd8=";
+      hash = "sha256-XEGGcrMAZd/9ta02QlMQD2nwogJSgNCBswlYwyMTRzo=";
     };
     postPatch = ''
       mv src/NuGet.Config NuGet.Config
-
-      # error CS0104: 'IPNetwork' is an ambiguous reference between 'Microsoft.AspNetCore.HttpOverrides.IPNetwork' and 'System.Net.IPNetwork'
-      substituteInPlace src/NzbDrone.Host/Startup.cs \
-        --replace-fail 'IPNetwork' 'Microsoft.AspNetCore.HttpOverrides.IPNetwork'
     '';
     patches = lib.optionals (lib.versionOlder version "5.0") [
+      # Prerequisite for .NET 8 patches, some commits
+      # touching the same files have to be reverted
+      (fetchpatch {
+        name = "revert-ffprobe-bump";
+        url = "https://github.com/Sonarr/Sonarr/commit/34761ca2162eb45d1f207a097f0d546239665bfa.patch";
+        revert = true;
+        hash = "sha256-8DNXrWtaTwNthI4tCXIf9a3xF2dBwo7IPdbtGStFX50=";
+      })
+      (fetchpatch {
+        name = "revert-mailkit-bump";
+        url = "https://github.com/Sonarr/Sonarr/commit/0718ba00041bf2d74749dc246bc02ad0540ec24e.patch";
+        revert = true;
+        hash = "sha256-+S4bt5Ult48nwXXOhZ57UIOYg0sInZDlvBWeySZfGyY=";
+      })
       # See https://github.com/Sonarr/Sonarr/issues/7442 and
       # https://github.com/Sonarr/Sonarr/pull/7443.
       # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
@@ -135,6 +145,11 @@ buildDotnetModule {
     "src/NzbDrone.Libraries.Test/Sonarr.Libraries.Test.csproj"
     "src/NzbDrone.Mono.Test/Sonarr.Mono.Test.csproj"
     "src/NzbDrone.Test.Common/Sonarr.Test.Common.csproj"
+  ];
+
+  # https://github.com/NixOS/nixpkgs/pull/491217
+  dotnetTestFlags = lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    "--environment:DOTNET_SYSTEM_NET_DISABLEIPV6=1"
   ];
 
   dotnetFlags = [

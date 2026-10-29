@@ -29,17 +29,12 @@ ocamlPackages.buildDunePackage {
     oseq
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    dune build -p logtk,libzipperposition,zipperposition,zipperposition-tools ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR logtk libzipperposition zipperposition zipperposition-tools
-    runHook postInstall
-  '';
+  dunePackages = [
+    "logtk"
+    "libzipperposition"
+    "zipperposition"
+    "zipperposition-tools"
+  ];
 
   doCheck = true;
 
@@ -48,12 +43,6 @@ ocamlPackages.buildDunePackage {
     qcheck-core
     qcheck-alcotest
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    dune runtest -p logtk,libzipperposition,zipperposition,zipperposition-tools ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
-    runHook postCheck
-  '';
 
   meta = {
     description = "Superposition prover for full first order logic";

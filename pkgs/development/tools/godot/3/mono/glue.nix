@@ -44,17 +44,15 @@
           # official glue version by building from the official source.
           #
           # To address this, we are patching the python script with a hard-coded glue version number. This
-          # patch file needs to be updated for every new version of godot, so to enforce this, the godot
-          # version is baked in to the file name, causing the build to fail until the patch is updated.
+          # patch file needs to be updated for every new version of godot.
           #
           # The correct glue version number for a given godot version is obtained by running the official
           # build of that version of godot with the --generate-mono-glue flag. This generates the mono
           # glue files.  One of those files, mono_glue.gen.cpp, has a function called get_cs_glue_version()
           # which contains a hard-coded number.  This is the glue version to put in the patch file.
           #
-          # For convenience, the accompanying update-glue-version.sh script automates this work. Run it by
-          # passing the godot version as an argument, e.g. "3.5.2".
-          "/gen_cs_glue_version.py/hardcodeGlueVersion_${self.version}.patch"
+          # For convenience, the accompanying update-glue-version.sh script automates this work.
+          "/gen_cs_glue_version.py/hardcodeGlueVersion.patch"
         ];
 
       outputs = [ "out" ];

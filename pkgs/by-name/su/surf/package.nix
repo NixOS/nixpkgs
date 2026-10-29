@@ -5,7 +5,7 @@
   pkg-config,
   wrapGAppsHook3,
   glib,
-  gcr,
+  gcr_3,
   glib-networking,
   gsettings-desktop-schemas,
   gtk3,
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     glib
-    gcr
+    gcr_3
     glib-networking
     gsettings-desktop-schemas
     libsoup_3

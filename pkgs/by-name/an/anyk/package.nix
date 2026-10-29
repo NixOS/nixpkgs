@@ -29,14 +29,14 @@ let
   # We don't really want to use openjdk8 because it's unusable on HiDPI
   # and people are more likely to have a modern OpenJDK installed.
   # We use Maven to resolve these unbundled dependencies.
-  # jdk_headless is just overriden so we don't have to fetch another OpenJDK for no reason.
+  # jdk_headless is just overridden so we don't have to fetch another OpenJDK for no reason.
   soapDeps = (maven.override { jdk_headless = jre; }).buildMavenPackage {
     pname = "anyk-soap-deps";
     version = "1.0.0";
 
     src = lib.sources.sourceFilesBySuffices ./. [ "pom.xml" ];
 
-    mvnHash = "sha256-6pezqcTIPR5NYFQUmLZ5Y3TOd+XRcB/eRmNSAEoBmls=";
+    mvnHash = "sha256-TqF23rZP7S+myxhFnHvq5yP0a+kWR4OWjr1BI/6REoA=";
 
     installPhase = ''
       mkdir -p $out/share/java

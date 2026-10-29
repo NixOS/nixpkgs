@@ -21,7 +21,7 @@ let
             owner = "yoriyuki";
             repo = "camomile";
             rev = version;
-            sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
+            hash = "sha256-TX2qLo1d5xB+NvU4yRfQCut40nPlOjUtmHeZLTEIKQI=";
           };
 
           nativeBuildInputs = [ cppo ];
@@ -42,7 +42,7 @@ let
       src = fetchFromGitHub {
         owner = "ocaml-community";
         repo = "camomile";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-HklX+VPD0Ta3Knv++dBT2rhsDSlDRH90k4Cj1YtWIa8=";
       };
 

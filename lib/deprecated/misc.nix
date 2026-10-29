@@ -241,7 +241,7 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/194391 for details.
   closePropagationFast =
     list:
-    map (x: x.val) (
+    builtins.catAttrs "val" (
       builtins.genericClosure {
         startSet = map (x: {
           key = x.outPath;

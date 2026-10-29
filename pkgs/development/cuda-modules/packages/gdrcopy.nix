@@ -8,6 +8,7 @@
   fetchFromGitHub,
   flags,
   lib,
+  removeReferencesTo,
   # passthru.updateScript
   gitUpdater,
 }:
@@ -35,6 +36,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cuda_nvcc
+    removeReferencesTo
   ];
 
   postPatch = ''
@@ -84,6 +86,23 @@ backendStdenv.mkDerivation (finalAttrs: {
     # NOTE: We cannot use `all` because it includes the driver, which needs the driver source code.
     "lib"
     "exes"
+  ];
+
+  # Since CUDA 13, gdrcopy_pplat -- the only test built with relocatable device code -- embeds the
+  # nvlink command line, naming the store paths of both nvcc and the cudart supplying cudadevrt.
+  # Neither is needed at runtime: no binary here has libcudart in DT_NEEDED, and libcuda.so.1 comes
+  # from the driver. Same leak as nccl's; see https://github.com/NixOS/nixpkgs/pull/457803
+  postFixup = ''
+    remove-references-to \
+      -t "${lib.getBin cuda_nvcc}" \
+      -t "${lib.getLib cuda_cudart}" \
+      "$out"/bin/*
+  '';
+
+  # C.f. remove-references-to above. Ensure *all* such references are removed.
+  disallowedRequisites = [
+    (lib.getBin cuda_nvcc)
+    (lib.getLib cuda_cudart)
   ];
 
   # Tests require gdrdrv be installed (don't know how to communicate dependency on the driver).

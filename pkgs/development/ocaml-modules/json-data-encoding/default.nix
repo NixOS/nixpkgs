@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "data-encoding";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KoA4xX4tNyi6bX5kso/Wof1LA7431EXJ34eD5X4jnd8=";
   };
 

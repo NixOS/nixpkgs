@@ -25,6 +25,11 @@ for k in "${!sources[@]}"; do
     mkdir "$TMPDIR/$k"
     tar -C "$TMPDIR/$k" -xf "${sources[$k]}"
 
+    if [ "$k" == "kdenlive" ]; then
+        echo "[kdenlive] Applying horrible hack"
+        rm -rf "$TMPDIR/$k/"*"/data/lumas"
+    fi
+
     (cd "$TMPDIR/$k"; reuse lint --json) | jq --arg name "$k" '{$name: .summary.used_licenses | sort}' -c > "$TMPDIR/$k.json"
 done
 

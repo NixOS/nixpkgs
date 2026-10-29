@@ -1,25 +1,23 @@
 {
   lib,
-  python3Packages,
+  rustPlatform,
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "confy-tui";
-  version = "3.0.0";
-  pyproject = true;
+  version = "3.1.1";
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phluxjr";
     repo = "confy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yhzmkIPrOckDxoB10RBX5ul/rYzVKtU6l6O1Zm69e9c=";
+    hash = "sha256-SFcRMJn8AfNdLnBHEDQ9MVUiTo/8wmtEWwCKMgLTo74=";
   };
 
-  build-system = [
-    python3Packages.hatchling
-  ];
+  cargoHash = "sha256-E4AK2WLwr7GEexM8JncfHoSBQxQ1OuCkro9jEq+9I4s=";
 
   postInstall = ''
     install -Dm644 confy.1 $out/share/man/man1/confy.1

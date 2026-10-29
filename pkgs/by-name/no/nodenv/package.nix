@@ -8,11 +8,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "nodenv";
   version = "1.5.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "nodenv";
     repo = "nodenv";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PGeZKL7qsffMAZIsCLB244Fuu48GyWw5Rh67ePu6h38=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PGeZKL7qsffMAZIsCLB244Fuu48GyWw5Rh67ePu6h38=";
   };
 
   buildPhase = ''

@@ -35,7 +35,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.cc0;
     maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.intersectLists lib.platforms.linux (
-      lib.platforms.x86 ++ lib.platforms.x86_64 ++ lib.platforms.aarch64
+      lib.platforms.x86
+      ++ lib.platforms.x86_64
+      ++ lib.platforms.aarch64
+      ++ lib.platforms.riscv64
+      ++ lib.platforms.loongarch64
     );
   };
 })

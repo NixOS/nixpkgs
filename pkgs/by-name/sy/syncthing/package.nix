@@ -22,16 +22,16 @@ assert builtins.elem target [
 
 buildGoModule (finalAttrs: {
   pname = "syncthing";
-  version = "2.1.2";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tR4yXoEYbCi8Uh3wCyATc+J4+cGvD7k0d9egjHS5H4k=";
+    hash = "sha256-XJqXWzZ0gePbrXeMpCgwXhYN1Lqco16wmEESJDAhFiA=";
   };
 
-  vendorHash = "sha256-t2wjl4eWvcUHMaBS7KEPzZejqrlI+7c5fRqWqxuCZy8=";
+  vendorHash = "sha256-gLbRwLPldH4GRuDu8nmZagBfFzg3FZ7Rpa2nDBRWcZo=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # Recent versions of macOS seem to require binaries to be signed when
@@ -43,6 +43,8 @@ buildGoModule (finalAttrs: {
   ];
 
   doCheck = false;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env = {
     BUILD_USER = "nix";
@@ -100,11 +102,14 @@ buildGoModule (finalAttrs: {
     tests = {
       inherit (nixosTests)
         syncthing
+        syncthing-defaults
         syncthing-folders
         syncthing-guiPassword
         syncthing-guiPasswordFile
         syncthing-init
+        syncthing-many-devices
         syncthing-no-settings
+        syncthing-private-relay
         syncthing-relay
         ;
     };
@@ -122,6 +127,7 @@ buildGoModule (finalAttrs: {
       noahbiewesch
       peterhoeg
       zainkergaye
+      nivalux
     ];
     mainProgram = target;
     platforms = lib.platforms.unix;

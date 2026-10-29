@@ -4,47 +4,94 @@
 
   buildNpmPackage,
   fetchFromGitHub,
+  runCommand,
   pkg-config,
   electron,
   chromium,
+  libicns,
   cacert,
   clojure,
   git,
   vips,
+  python3,
+  xvfb-run,
 
   writeShellScriptBin,
+  writableTmpDirAsHomeHook,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
 
   nixosTests,
 }:
+let
+  jediSrc = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "jedi";
+    rev = "v0.19.2"; # updateScript
+    hash = "sha256-2nDQJS6LIaq91PG3Av85OMFfs1ZwId00K/kvog3PGXE=";
+    fetchSubmodules = true;
+  };
+
+  parsoSrc = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "parso";
+    rev = "v0.8.6"; # updateScript
+    hash = "sha256-SKXVU19zCYpPik8QF/r2J9V4+ygGiDPEc9Xv6qRb4dM=";
+  };
+
+  pyodideWheels =
+    runCommand "pyodide-wheels"
+      {
+        nativeBuildInputs = with python3.pkgs; [
+          build
+          flit-core
+          setuptools
+          wheel
+        ];
+      }
+      ''
+        mkdir -p $out
+        cp -r ${jediSrc} jedi && chmod -R u+w jedi
+        python -m build --wheel --no-isolation jedi --outdir $out
+        cp -r ${parsoSrc} parso && chmod -R u+w parso
+        python -m build --wheel --no-isolation parso --outdir $out
+      '';
+in
 buildNpmPackage (finalAttrs: {
   pname = "repath-studio";
-  version = "0.4.16";
+  version = "0.4.27";
 
   src = fetchFromGitHub {
     owner = "repath-studio";
     repo = "repath-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wqDsjr+ZQDRFINzr38i7ClgREEmAaKt+U/Ma63vAH1k=";
+    hash = "sha256-Jjx5vz7k6koSftw3oPHHAWVjwz+wZ1Jdc3cLZcmbjHI=";
   };
 
   patches = [
     # outputHash of clojureHome changes each time `clojure` is updated
     # https://github.com/ngi-nix/ngipkgs/pull/1727#discussion_r2470180998
     ./pin-clojure.patch
+    # checks have become flaky in nix build sandbox, increase timeout and disable dev/shm for chrome
+    ./fix-karma-sandbox.patch
+    ./0001-disable-auto-update-check.patch
+    # pyodide wheels are built locally from source
+    ./use-local-pyodide-wheels.patch
   ];
 
   makeCacheWritable = true;
 
-  npmDepsHash = "sha256-IvKHLxX7rTB3AGDzNQIVNhfXs0C6TVATdVGUDHGrpOo=";
+  npmDepsHash = "sha256-l43osku0AiJo1s8x4ze/SFO1L2G/rN0Iw4A+tv7+zc4=";
 
   nativeBuildInputs = [
     finalAttrs.passthru.clojureWithHome
     makeWrapper
     copyDesktopItems
     pkg-config # sharp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
   ];
 
   # For 'sharp' dependency, otherwise it will try to build it
@@ -53,11 +100,19 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
     PUPPETEER_SKIP_DOWNLOAD = true;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   postPatch = ''
     substituteInPlace shadow-cljs.edn \
       --replace-fail ":shadow-git-inject/version" '"v${finalAttrs.version}"'
+
+    mkdir -p resources/public/pyodide src/generated
+    cp ${pyodideWheels}/*.whl resources/public/pyodide/
+    chmod -R u+w resources/public/pyodide
   '';
 
   buildPhase = ''
@@ -68,13 +123,21 @@ buildNpmPackage (finalAttrs: {
     chmod -R u+w "$electron_dist"
 
     npm run build
+    rm -rf .shadow-cljs .cpcache android ios
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p build
+      png2icns build/icon.icns resources/public/img/icon.png
+    ''}
     npm exec electron-builder -- --dir \
       -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.icon=build/icon.icns"}
 
     runHook postBuild
   '';
 
+  # NOTE: use "--set-default ELECTRON_ENABLE_LOGGING 1" to debug
   installPhase = ''
     runHook preInstall
 
@@ -84,19 +147,21 @@ buildNpmPackage (finalAttrs: {
         ''
           mkdir -p $out/Applications
           cp -r "dist/mac"*"/Repath Studio.app" "$out/Applications"
-          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio"
+          makeWrapper "$out/Applications/Repath Studio.app/Contents/MacOS/Repath Studio" "$out/bin/repath-studio" \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
         ''
       else
         # bash
         ''
           mkdir -p $out/share/{repath-studio,icons/hicolor/scalable/apps}
-          cp -r dist/*-unpacked/resources/app.asar $out/share/repath-studio
+          cp -r dist/*-unpacked/resources/app.asar* $out/share/repath-studio/
           cp resources/public/img/icon.svg $out/share/icons/hicolor/scalable/apps/repath-studio.svg
 
           makeWrapper '${lib.getExe electron}' "$out/bin/repath-studio" \
             --add-flags "$out/share/repath-studio/app.asar" \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+            --prefix PATH : ${lib.makeBinPath [ python3 ]} \
             --inherit-argv0
         ''
     }
@@ -104,9 +169,14 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeCheckInputs = lib.optionals finalAttrs.doCheck [
+    writableTmpDirAsHomeHook
+    xvfb-run
+  ];
+
   # chromium package not available for darwin
   doCheck = stdenv.hostPlatform.isLinux;
-  checkPhase = ''
+  checkPhase = lib.optionalString finalAttrs.doCheck /* sh */ ''
     runHook preCheck
     export ELECTRON_OVERRIDE_DIST_PATH="$electron_dist"
     export PUPPETEER_EXECUTABLE_PATH=${chromium}/bin/chromium
@@ -150,7 +220,8 @@ buildNpmPackage (finalAttrs: {
 
         # -P       -> resolve all normal deps
         # -M:alias -> resolve extra-deps of the listed aliases
-        clojure -P -M:dev:cljs
+        clojure -P
+        clojure -M:dev
 
         runHook postBuild
       '';
@@ -188,7 +259,7 @@ buildNpmPackage (finalAttrs: {
 
       dontFixup = true;
 
-      outputHash = "sha256-2ijBbKXKiXStWAyeLoRv8OSMoCfB2xA1TVw6xtlBPes=";
+      outputHash = "sha256-Q9O7vZtpxL/JaV2gVNdmZJg3X4uJoUNFdrnDCZF/KUs=";
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
     };
@@ -200,6 +271,7 @@ buildNpmPackage (finalAttrs: {
     '';
 
     updateScript = ./update.sh;
+    inherit jediSrc parsoSrc;
     tests = { inherit (nixosTests) repath-studio; };
   };
 

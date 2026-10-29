@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "jameshilliard";
     repo = "hlk-sw16";
     rev = version;
-    sha256 = "010s85nr6xn89i8yvdagg72a97dh1v2pyfqa33v76p9p8xbgh8dz";
+    hash = "sha256-vyH4Vkc3XXP2GAo7f8UOsJ2kxHlPte1RTMh2k21BGgQ=";
   };
 
   # no tests implemented

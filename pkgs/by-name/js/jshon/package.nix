@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://kmkeen.com/jshon";
+    homepage = "https://github.com/keenerd/jshon";
     description = "JSON parser designed for maximum convenience within the shell";
     mainProgram = "jshon";
     license = lib.licenses.free;

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_9,
   nix-update-script,
   libGL,
   jdk21,
@@ -14,44 +14,45 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.07.13";
+  version = "26.10.26";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Akm57GxGtEymDbfq879uglxEoENp/g+aFUNM1O0qRo=";
+    hash = "sha256-fpfLgmLXmM7SGSp6qZtEQc3WK+fd8++Toi0Jad37ZYE=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-TIpT2g00f99qTGPA+bBaEz4kj5BC1scEywv6oDCFlkQ=";
+    hash = "sha256-OhASitog//ojP4zy/u05x9nN4+KhQKgYDEjItCgAwJo=";
   };
 
   nativeBuildInputs = [
     jdk21
-    gradle
+    gradle_9
     git
     cargo
     rustc
     rustPlatform.cargoSetupHook
   ];
 
+  # Workaround for a Vergen related build failure
+  env = {
+    VERGEN_GIT_SHA = "0000000000000000000000000000000000000000";
+  };
+
   gradleBuildTask = "createReleaseDistributable";
 
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle composeApp:dependencies composeApp:checkRuntime --write-verification-metadata sha256
-    ##### Fallback
-    ## If the update script starts missing dependencies after an update this should still work.
-    ## Unfortunately it also unnecessarily builds the entire rust crate
-    #gradle createReleaseDistributable --write-verification-metadata sha256
+    gradle createReleaseDistributable composeApp:kspCommonMainKotlinMetadata --write-verification-metadata sha256
   '';
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     pkg = finalAttrs.finalPackage;
     data = ./deps.json;
   };
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    patchelf $out/lib/app/libskiko-linux-x64.so \
+    patchelf $out/lib/app/libskiko-linux-*.so \
     --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 

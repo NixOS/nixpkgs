@@ -6,23 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "url-parser";
-  version = "2.1.19";
+  version = "2.1.22";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "url-parser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mHQ93vi10nEJWeAbi3nvBVA2E5EQX/992qGsyJglmmU=";
+    hash = "sha256-U095AxIo8bQccqAXrhqIMgEf7jjmSqMq7mb7vI1GGpM=";
   };
 
-  vendorHash = "sha256-2IHNuj4q6aVKmGlXysvieHaP2fqKDGRaYUN0/I1byuI=";
-
-  # buildGoModule puts go in the passthru. NOTE this can be removed once
-  # https://github.com/NixOS/nixpkgs/pull/527289 reaches master.
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.26.4" "go ${finalAttrs.finalPackage.passthru.go.version}"
-  '';
+  vendorHash = "sha256-aal4P5ZUvU/mkDllxDiO6hHvozQCbCuEGvgOjy7euBo=";
 
   ldflags = [
     "-s"

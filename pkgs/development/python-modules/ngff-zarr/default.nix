@@ -1,57 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  dask,
-  importlib-resources,
-  itkwasm,
-  itkwasm-downsample,
-  numpy,
-  platformdirs,
-  psutil,
-  rich,
-  rich-argparse,
-  typing-extensions,
-  zarr,
-
-  # optional-dependencies
-  # dask-image:
   dask-image,
-  # cli:
+  dask,
+  deepdiff,
+  fetchFromGitHub,
+  hatchling,
   imagecodecs,
   imageio,
+  importlib-resources,
   itk,
+  itkwasm-downsample,
   itkwasm-image-io,
-  nibabel,
-  tifffile,
-  # tensorstore:
-  tensorstore,
-  # validate:
+  itkwasm,
   jsonschema,
-
-  # tests
-  deepdiff,
+  nibabel,
+  numpy,
+  platformdirs,
   pooch,
+  psutil,
   pytestCheckHook,
+  rich-argparse,
+  rich,
+  tensorstore,
+  tifffile,
+  typing-extensions,
   writableTmpDirAsHomeHook,
+  zarr,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ngff-zarr";
-  version = "0.39.0";
+  version = "0.43.0";
   pyproject = true;
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fideus-labs";
     repo = "ngff-zarr";
     tag = "py-v${finalAttrs.version}";
-    hash = "sha256-ukr/P1I9Y6eu7yP6LyUcxAG02vNvmI3OhVKiibSi2Rs=";
+    hash = "sha256-sif/OhQ/bfnUd7wp5Y+eWqY7uv5peiAt4Zl/alWvGu0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/py/";
@@ -139,6 +128,7 @@ buildPythonPackage (finalAttrs: {
 
     # Missing dependencies
     "test/test_lif_to_ngff_image.py"
+    "test/test_itk_transform_resample_bounding_box.py"
   ];
 
   disabledTests = [
@@ -163,6 +153,7 @@ buildPythonPackage (finalAttrs: {
     "test_tiff_file_to_ngff_images_with_channel_names"
     "test_tiff_file_to_ngff_images_with_channels"
     "test_tiff_file_to_ngff_images_with_ome_metadata"
+    "test_tiff_file_to_ngff_images_with_ome_translation"
     "test_tiff_file_to_ngff_images_with_partial_channel_names"
     "test_tiff_file_to_ngff_images_with_sample_axis"
     "test_tiff_file_to_ngff_images_without_channel_names"

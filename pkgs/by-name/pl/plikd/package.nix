@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-WCtfkzlZnyzZDwNDBrW06bUbLYTL2C704Y7aXbiVi5c=";
   };
 
-  # TODO build webapp from source (how to hanndle npm and bower deps?)
+  # TODO build webapp from source (how to handle npm and bower deps?)
   src-webapp = fetchurl {
     url = "https://github.com/root-gg/plik/releases/download/${finalAttrs.version}/plik-${finalAttrs.version}-linux-amd64.tar.gz";
     hash = "sha256-taUFXZJeUHYjjhrVlLgKYPxNn6W5o8uoEVcu+f5flCA=";
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Scalable & friendly temporary file upload system";
-    homepage = "https://plik.root.gg/";
+    homepage = "https://github.com/root-gg/plik";
     license = lib.licenses.mit;
     mainProgram = "plikd";
     maintainers = [ ];

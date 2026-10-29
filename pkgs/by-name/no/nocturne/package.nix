@@ -16,6 +16,8 @@
   python3,
   python3Packages,
   libadwaita,
+  libportal,
+  libportal-gtk4,
   gobject-introspection,
   libsecret,
   gst_all_1,
@@ -31,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.4.2";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-q2jN1X/2Iayzqf+2d1roQ9dbZKGqWy3sXC78lKXLzPM=";
+    hash = "sha256-wFLsbBXbKo6z0DGxv427Vi8WkQiIE9k49ftIsVZYq5c=";
   };
 
   __structuredAttrs = true;
@@ -63,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
+    libportal
+    libportal-gtk4
     libsecret
     python3
     glib-networking

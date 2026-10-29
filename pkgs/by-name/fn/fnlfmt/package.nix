@@ -2,9 +2,13 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  lua,
-  luaPackages,
+  lua5_5,
 }:
+
+let
+  lua = lua5_5;
+  luaPackages = lua.luaOnBuild.pkgs;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnlfmt";

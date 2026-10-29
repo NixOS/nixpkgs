@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  gtk2-x11,
+  gtk3,
+  gtk3-x11,
   pkg-config,
   python3,
   gfortran,
@@ -21,11 +22,12 @@ let
       setuptools
     ]
   );
+  gtk3' = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "jun26a";
-  version = "20260601_a";
+  srcVersion = "oct26a";
+  version = "20261001_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
       "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
     ];
-    hash = "sha256-Fi6yVuTXxffkZ0lyxIZXOlDDqSbnrnP5nJI5cS3Mrt4=";
+    hash = "sha256-5z7UFWxM4rFqhXiw/NwEpblPZT0dd8H8PB1MIaUqoqw=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2-x11
+    gtk3'
     cfitsio
     python3Env
     ncurses
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  userExec = "astro class greg mapping sic";
+  userExec = "astro class cube greg mapping sic";
 
   postInstall = ''
     mkdir -p $out/bin
@@ -105,7 +107,7 @@ stdenv.mkDerivation rec {
       extensible. GILDAS is written in Fortran-90, with a
       few parts in C/C++ (mainly keyboard interaction,
       plotting, widgets).'';
-    homepage = "http://www.iram.fr/IRAMFR/GILDAS/gildas.html";
+    homepage = "https://www.iram.fr/IRAMFR/GILDAS/";
     license = lib.licenses.free;
     maintainers = [
       lib.maintainers.bzizou

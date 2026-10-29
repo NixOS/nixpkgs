@@ -12,7 +12,6 @@ buildGoModule (finalAttrs: {
   version = "7.1.2";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "llimllib";

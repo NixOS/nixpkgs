@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "nexusformat";
-  version = "2.0.2";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uDHWO+nxfWe1d1eBona4fsqNDt0Swbkb513sSOPI9Sk=";
+    hash = "sha256-FeAM5iwTfC/EcVl/L/1l7NTuZcVnZISQppTKaRqWldA=";
   };
 
   build-system = [

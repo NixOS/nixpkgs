@@ -1,6 +1,5 @@
 {
   bash,
-  fetchHex,
   buildRebar3,
   config,
   coreutils,
@@ -19,23 +18,12 @@ let
     versions
     ;
 
-  version = "2.2.0";
-  hash = "sha256-47lEUVU9Api1Yj1q+Ch8aIV8kaALhst1ty8RHTwMVcI=";
+  version = "2.2.2";
+  hash = "sha256-krUjWu+wWv2+22m+YEE66myRIb7dm5ecaMm07hIlHgA=";
 
-  maximumOTPVersion = "27";
+  maximumOTPVersion = "29";
   mainVersion = versions.major (getVersion erlang);
   maxAssert = versionAtLeast maximumOTPVersion mainVersion;
-
-  proper = buildRebar3 rec {
-    name = "proper";
-    version = "1.4.0";
-
-    src = fetchHex {
-      pkg = name;
-      inherit version;
-      sha256 = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
-    };
-  };
 
 in
 if !config.allowAliases && !maxAssert then
@@ -65,8 +53,6 @@ else
       makeWrapper
       erlang
     ];
-
-    beamDeps = [ proper ];
 
     # override buildRebar3's install to let the builder use make install
     installPhase = ''

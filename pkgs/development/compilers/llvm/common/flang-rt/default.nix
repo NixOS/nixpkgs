@@ -15,7 +15,10 @@ let
 
   minDarwinVersion = "10.12";
   effectiveDarwinVersion =
-    if stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion minDarwinVersion then
+    if
+      stdenv.hostPlatform.isDarwin
+      && lib.versionOlder stdenv.hostPlatform.darwinMinVersion minDarwinVersion
+    then
       minDarwinVersion
     else
       stdenv.hostPlatform.darwinMinVersion;
@@ -28,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "${finalAttrs.pname}-src-${version}"
       {
         inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
       }
       ''
         mkdir -p "$out"
@@ -57,7 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     libllvm
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  strictDeps = true;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     MACOSX_DEPLOYMENT_TARGET = effectiveDarwinVersion;
     NIX_CFLAGS_COMPILE = "-mmacosx-version-min=${effectiveDarwinVersion}";
   };
@@ -70,9 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm")
     (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "flang-rt")
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" effectiveDarwinVersion)
   ];
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://flang.llvm.org";

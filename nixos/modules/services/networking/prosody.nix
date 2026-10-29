@@ -422,6 +422,11 @@ let
         default = "en";
         description = "Default room language.";
       };
+      extraModules = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "Additional modules to load on this MUC component.";
+      };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -584,7 +589,15 @@ let
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''}${optionalString (lib.elem "muc_notifications" cfg.package.communityModules) ''"muc_notifications",''} }
+            modules_enabled = ${
+              toLua (
+                optional cfg.modules.mam "muc_mam"
+                ++ optional muc.allowners_muc "muc_allowners"
+                ++ optional muc.moderation "muc_moderation"
+                ++ optional (lib.elem "muc_notifications" cfg.package.communityModules) "muc_notifications"
+                ++ muc.extraModules
+              )
+            }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}

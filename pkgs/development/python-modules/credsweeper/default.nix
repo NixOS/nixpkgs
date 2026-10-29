@@ -1,7 +1,10 @@
 {
   lib,
+  stdenv,
   base58,
   beautifulsoup4,
+  bech32,
+  brotli,
   buildPythonPackage,
   colorama,
   cryptography,
@@ -12,39 +15,45 @@
   humanfriendly,
   hypothesis,
   lxml,
-  nix-update-script,
   numpy,
   odfpy,
   onnxruntime,
   openpyxl,
   pandas,
   pdfminer-six,
+  psutil,
   pybase62,
+  pygments,
   pyjks,
+  pysquashfsimage,
   pytestCheckHook,
   python-dateutil,
   python-docx,
   python-pptx,
+  pythonOlder,
   pyxlsb,
   pyyaml,
   rpmfile,
   striprtf,
+  tabulate,
+  tqdm,
+  versionCheckHook,
   whatthepatch,
   xlrd,
+  zstandard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.16.0";
+  version = "1.19.4";
   pyproject = true;
-
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DiIT7DzH6ut/Ax2qgga5vKjeXocROGbHdARLWJijejY=";
+    hash = "sha256-MQB0auf5G48tSkxAWHE4o6ldlN9u78/Y5TENtMgqXeE=";
   };
 
   build-system = [ hatchling ];
@@ -52,6 +61,8 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     base58
     beautifulsoup4
+    bech32
+    brotli
     colorama
     cryptography
     gitpython
@@ -64,7 +75,9 @@ buildPythonPackage (finalAttrs: {
     pandas
     pdfminer-six
     pybase62
+    pygments
     pyjks
+    pysquashfsimage
     python-dateutil
     python-docx
     python-pptx
@@ -72,14 +85,21 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     rpmfile
     striprtf
+    tqdm
     whatthepatch
     xlrd
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    zstandard
   ];
 
   nativeCheckInputs = [
     deepdiff
     hypothesis
+    psutil
     pytestCheckHook
+    tabulate
+    versionCheckHook
   ];
 
   pythonImportsCheck = [ "credsweeper" ];
@@ -87,14 +107,31 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Probability tests
     "test_data_p"
+    "test_data_scan_depth_3_pedantic_p"
+    "test_data_scan_doc_p"
+    "test_data_scan_no_filters_p"
+    "test_data_scan_output_p"
     "test_depth_n"
     "test_depth_p"
     "test_match_n"
     "test_multi_jobs_p"
     "test_rules_ml_p"
-  ];
 
-  passthru.updateScript = nix-update-script { };
+    # Hang indefinitely on some CPUs
+    "TestInt"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_external_ml_n"
+    "test_external_ml_p"
+    "test_import_config_n"
+    "test_import_config_p"
+    "test_it_works_n"
+    "test_log_n"
+    "test_log_p"
+    "test_sqlite_injection_n"
+  ];
 
   meta = {
     description = "Tool to detect credentials in any directories or files";

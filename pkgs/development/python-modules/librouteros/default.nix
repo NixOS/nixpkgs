@@ -2,52 +2,54 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hypothesis,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
-  poetry-core,
+  stamina,
+  uv-build,
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "librouteros";
-  version = "3.4.1";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = "librouteros";
-    tag = version;
-    hash = "sha256-vN12LYqFOU7flD6bTFtGw5VhPJ238pZ0MStM3ljwDU4=";
+    tag = finalAttrs.version;
+    hash = "sha256-PbRnHsZSSbr7dkVb3F+1CB5TH30wgoGGXEcRBVjuN5Y=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build==0.12.*" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ toml ];
 
   nativeCheckInputs = [
+    hypothesis
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
+    stamina
   ];
 
-  disabledTests = [
-    # Disable tests which require QEMU to run
-    "test_login"
-    "test_long_word"
-    "test_query"
-    "test_add_then_remove"
-    "test_add_then_update"
-    "test_generator_ditch"
-  ];
+  # Disable tests which require QEMU to run
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "librouteros" ];
 
   meta = {
     description = "Python implementation of the MikroTik RouterOS API";
     homepage = "https://librouteros.readthedocs.io/";
-    changelog = "https://github.com/luqasz/librouteros/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/luqasz/librouteros/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

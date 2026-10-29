@@ -15,11 +15,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsnow";
-  version = "3.9.0";
+  version = "3.9.7";
 
   src = fetchurl {
     url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-PMZsxZUmVHZwU6+KBPMq8sjyt42jlrXazgk7DGc9bvo=";
+    sha256 = "sha256-cGp/yelojhLwECPk0WRl+yPUeH6KMD4EhuEH/3pEjOw=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
+    # last successful hydra build on darwin and aarch64-linux were in 2024
+    broken =
+      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "X-windows application that will let it snow on the root, in between and on windows";
     mainProgram = "xsnow";
     homepage = "https://ratrabbit.nl/ratrabbit/xsnow/";

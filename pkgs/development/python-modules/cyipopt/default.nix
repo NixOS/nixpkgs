@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cyipopt" ];
 
   meta = {
-    description = "Cython interface for the interior point optimzer IPOPT";
+    description = "Cython interface for the interior point optimizer IPOPT";
     homepage = "https://github.com/mechmotum/cyipopt";
     changelog = "https://github.com/mechmotum/cyipopt/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.epl20;

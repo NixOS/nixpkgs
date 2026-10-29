@@ -29,6 +29,7 @@
 
       environment.systemPackages = with pkgs; [
         gxmessage
+        jq
       ];
 
     };
@@ -65,7 +66,13 @@
     moonlight.wait_for_console_text("Executing request.*pair")
 
     # respond to pairing request from sunshine
-    sunshine.succeed("curl --fail --insecure -u sunshine:sunshine -H 'Content-Type: application/json' -d '{\"pin\":\"1234\",\"name\":\"sunshine\"}' https://localhost:47990/api/pin")
+    pairing_id = sunshine.wait_until_succeeds(
+        "curl --fail --insecure -u sunshine:sunshine https://localhost:47990/api/pin | jq -er '.pairings[0].id'",
+        timeout=30,
+    ).strip()
+    sunshine.succeed(
+        f"curl --fail --insecure -u sunshine:sunshine -H 'Content-Type: application/json' -d '{{\"pairing_id\":\"{pairing_id}\",\"pin\":\"1234\",\"name\":\"sunshine\"}}' https://localhost:47990/api/pin | jq -e '.status == true'"
+    )
 
     # wait until pairing is complete
     moonlight.wait_for_console_text("Executing request.*phrase=pairchallenge")

@@ -9,7 +9,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "git-pw";
-  version = "2.7.1";
+  version = "2.9.0";
   pyproject = true;
 
   env.PBR_VERSION = finalAttrs.version;
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "getpatchwork";
     repo = "git-pw";
     tag = finalAttrs.version;
-    hash = "sha256-Ce+Nc2NZ42dIpeLg8OutD8ONxj1XRiNodGbTWlkK9qw=";
+    hash = "sha256-Oi6k7r/agSV+TjJtaCI1VbkEpe4/pKsf/DMZoyg09wY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

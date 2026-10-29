@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ur7GGXbYvVmrEUq/CTRyuVNLDHKfFrYHJibo0JvYhyM=";
   };
 
-  postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/mCRL2.app $out/Applications
     mkdir $out/bin
     makeWrapper "$out/Applications/mCRL2.app/Contents/MacOS/mCRL2" "$out/bin/mcrl2ide"
   '';
 
-  postFixup = lib.optional stdenv.hostPlatform.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_DIR="$out/Applications/mCRL2.app/Contents"
     find "$APP_DIR/lib" -name "*.dylib" | while read lib; do
       install_name_tool -id "@rpath/$(basename "$lib")" "$lib" || true

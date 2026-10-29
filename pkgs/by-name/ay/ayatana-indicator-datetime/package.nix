@@ -25,7 +25,7 @@
   pkg-config,
   properties-cpp,
   python3,
-  systemd,
+  systemdLibs,
   tzdata,
   wrapGAppsHook3,
   # Generates a different indicator
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     libuuid
     properties-cpp
-    systemd
+    systemdLibs
   ]
   ++ (with gst_all_1; [
     gstreamer

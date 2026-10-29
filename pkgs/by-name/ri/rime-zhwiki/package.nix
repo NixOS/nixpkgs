@@ -5,10 +5,10 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "rime-zhwiki";
-  version = "20250823";
+  version = "20260416";
   src = fetchurl {
-    url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.5/zhwiki-20250823.dict.yaml";
-    hash = "sha256-on8oYS/5K24R1wWhsz276B6hA7rHVd124uFHx2Ent70=";
+    url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.3.0/zhwiki-20260416.dict.yaml";
+    hash = "sha256-XBQORi+cAKEZUAt/7A07kn8Pg5IAAafqQI4mdI0J6gc=";
   };
 
   dontUnpack = true;

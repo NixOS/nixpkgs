@@ -17,18 +17,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pulumi";
-  version = "3.253.0";
+  version = "3.268.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZwK9IXuKD583MJ+6VG9CsrEIwh4aJGBlCXys/TYfrmg=";
+    hash = "sha256-b3dWvPxaOfpreVEHZ3SxgWo5XEZGr/NrPZRwFL443zQ=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-5HYYesdKfZqCqDNrD2LZc25hxrczxRV/jsMXWeFT6fc=";
+  vendorHash = "sha256-BkSrtTfrpTuC05aTsgH+wOwdLYudYT7/NvPgQMOInVU=";
 
   sourceRoot = "${finalAttrs.src.name}/pkg";
 
@@ -86,6 +86,10 @@ buildGoModule (finalAttrs: {
         "TestNewCmdYesWritesMinimalPulumiYAMLWithExplicitName"
         "TestNewCmdYesSanitizesDefaultDirectoryName"
         "TestNewCmdYesUsesCurrentDirectoryNameByDefault"
+        "TestRetrieveStandardTemplate"
+        "TestRetrieveHttpsTemplate"
+        "TestRetrieveNonExistingTemplate"
+        "TestRetrieveNonExistingTemplateSimilar"
 
         # Connects to https://api.pulumi.com/…
         "TestGetLatestPluginIncludedVersion"
@@ -101,6 +105,15 @@ buildGoModule (finalAttrs: {
         # Requires pulumi-yaml
         "TestProjectNameDefaults"
         "TestProjectNameOverrides"
+        "TestGuidedNewAcceptSkipsAllPrompts"
+        "TestGuidedNewDeclineRepromptsPrefilled"
+        "TestGuidedNewDeclineDoesNotReofferFlagConfig"
+        "TestGuidedNewNoDefaultConfigAskedBeforeBlock"
+        "TestGuidedNewSecretConfigIsMaskedAndEncrypted"
+        "TestGuidedNewCollidingDefaultNameAsksThenConfirms"
+        "TestGuidedNewExistingStackNameAsksBeforeBlock"
+        "TestGeneratingProjectWithExistingArgsSpecifiedNameSucceeds"
+        "TestGeneratingProjectWithExistingPromptedNameSucceeds"
 
         # Downloads pulumi-resource-random from Pulumi plugin registry.
         "TestPluginInstallCancellation"
@@ -153,6 +166,8 @@ buildGoModule (finalAttrs: {
         # Requires invoking pulumi binary.
         "TestDecryptEncryptedLog"
         "TestDecryptGzipLog"
+        "TestShareEncryptedLogIntegration"
+        "TestShareGzipLogIntegration"
 
         # Requires unavailable access token.
         "TestRunNewYesWithAILanguage"
@@ -234,11 +249,7 @@ buildGoModule (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.asl20;
     mainProgram = "pulumi";
-    maintainers = with lib.maintainers; [
-      nicoo
-      tie
-      untio11
-      veehaitch
-    ];
+    maintainers = [ lib.maintainers.wrbbz ];
+    teams = [ lib.teams.pulumi ];
   };
 })

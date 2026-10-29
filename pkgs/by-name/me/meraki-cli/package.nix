@@ -23,6 +23,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "TestUpgrade"
   ];
 
+  disabledTestPaths = [
+    # requests-mock cannot intercept meraki's httpx client
+    "tests/test_user_agent.py"
+  ];
+
   build-system = with python3Packages; [
     setuptools
   ];
@@ -36,7 +41,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
-    requests-mock
   ];
 
   pythonImportsCheck = [

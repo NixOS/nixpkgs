@@ -16,6 +16,7 @@
   pkg-config,
   valgrind,
   python3,
+  xxd,
   nix-update-script,
 }:
 
@@ -24,14 +25,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkcs11-provider";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "openssl-projects";
     repo = "pkcs11-provider";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-rymH/0otZ553lKqfdTRR5ttNsom9A3ObNNxptqB/eno=";
+    hash = "sha256-//sVGWSXCRc7zimD78ykoyJ0gQk/LFrdf+A6yKJkxGs=";
   };
 
   buildInputs = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     openssl.bin
     expect
+    xxd
     pkcs11ProviderPython3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

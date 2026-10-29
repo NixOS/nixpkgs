@@ -17,7 +17,7 @@
   nodejs,
   pkg-config,
   python3,
-  typescript,
+  typescript_5,
   zip,
 
   gnome-keyring,
@@ -29,19 +29,19 @@
 
 let
   inherit (stdenv.hostPlatform.node) arch platform;
-  cacheRootHash = "sha256-2LV8hZCuX96h1KYYcL6b6XGC3uGcH5IQM4D61R7Em/U=";
-  cacheAppHash = "sha256-zX4V9mg7ljQ1AKl1fgATPVrFpx1a6jsyiLzN2VixpFE=";
+  cacheRootHash = "sha256-WruQopxE9uROdbBFiMsjuQj7jlEdNrbhWym6JxGIBi8=";
+  cacheAppHash = "sha256-YlqykBZXcvWOkb07ojZsnWdJTb/OKbDeXh1VpATGS2M=";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.6.3";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-HzfecIgPp/Hof5djWkKrrZD83Z0Afr1iC2WbzQrOyyI=";
+    hash = "sha256-qdfa8+v0JSdqiR7NhcQIany51Lv0l7v4MtLXUJY0o+4=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     # desktop-notifications build doesn't pick up tsc from node_modules for some reason
-    typescript
+    typescript_5
     zip
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;

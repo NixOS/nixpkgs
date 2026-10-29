@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "2.0.4";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "GoogleChrome";
     repo = "ripunzip";
     rev = "v${finalAttrs.version}";
     hash = "sha256-oujRw/4yKNNqLJLTN4wxaOllSUGMu077YgWZkD0DJ4M=";
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchzipWithRipunzip =
       testers.invalidateFetcherByDrvHash (fetchzip.override { unzip = ripunzip; })
         {
-          url = "https://github.com/google/ripunzip/archive/cb9caa3ba4b0e27a85e165be64c40f1f6dfcc085.zip";
+          url = "https://github.com/GoogleChrome/ripunzip/archive/cb9caa3ba4b0e27a85e165be64c40f1f6dfcc085.zip";
           hash = "sha256-BoErC5VL3Vpvkx6xJq6J+eUJrBnjVEdTuSo7zh98Jy4=";
         };
     version = testers.testVersion {
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tool to unzip files in parallel";
     mainProgram = "ripunzip";
-    homepage = "https://github.com/google/ripunzip";
+    homepage = "https://github.com/GoogleChrome/ripunzip";
     license = with lib.licenses; [
       mit
       asl20

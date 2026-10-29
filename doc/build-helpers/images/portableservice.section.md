@@ -68,7 +68,7 @@ See [](#ex-portableService-hello) to understand how to use the output of `portab
 
 : Allows you to override the package that provides {manpage}`mksquashfs(1)`, which is used internally by `portableService`.
 
-  _Default value:_ `pkgs.squashfsTools`.
+  _Default value:_ `pkgs.squashfs-tools`.
 
 `squash-compression` (String; _optional_)
 

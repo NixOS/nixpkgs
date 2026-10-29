@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pygame-ce";
-  version = "2.5.7";
+  version = "2.5.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pygame-community";
     repo = "pygame-ce";
     tag = finalAttrs.version;
-    hash = "sha256-Yjs2SLgPVMOy8DCS+Pfk0fs0G//sY20jfGQNJ5rN58Q=";
+    hash = "sha256-1aUrnTllhaMjsCd/vVQ6aPDgcUdjBTPTeLzfrI6YLCI=";
     # Unicode files cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -78,10 +78,10 @@ buildPythonPackage (finalAttrs: {
     # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
     ''
       substituteInPlace pyproject.toml \
-        --replace-fail "meson-python<=0.18.0" "meson-python" \
-        --replace-fail "meson<=1.10.0" "meson" \
+        --replace-fail "meson-python<=0.20.0" "meson-python" \
+        --replace-fail "meson<=1.11.2" "meson" \
         --replace-fail "ninja<=1.13.0" "ninja" \
-        --replace-fail "cython<=3.2.4" "cython" \
+        --replace-fail "cython<=3.2.9" "cython" \
         --replace-fail "sphinx<=8.2.3" "sphinx" \
         --replace-fail "astroid<4.0.0" "astroid" \
         --replace-fail "sphinx-autoapi<=3.6.0" "sphinx-autoapi" \

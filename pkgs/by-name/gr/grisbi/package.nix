@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Personnal accounting application";
+    description = "Personal accounting application";
     mainProgram = "grisbi";
     longDescription = ''
       Grisbi is an application written by French developers, so it perfectly

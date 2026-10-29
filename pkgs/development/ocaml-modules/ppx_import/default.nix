@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   ocaml,
   buildDunePackage,
   ounit,
@@ -38,6 +39,14 @@ buildDunePackage {
       ."${version}";
   };
 
+  patches =
+    # Compatibility with OCaml 5.5
+    # See https://github.com/ocaml-ppx/ppx_import/pull/107
+    lib.optional (lib.versionAtLeast ocaml.version "5.5") (fetchpatch {
+      url = "https://github.com/ocaml-ppx/ppx_import/commit/ddff918dc86f3d336af60ea67de4a0b5373b7409.patch";
+      hash = "sha256-PenEGKPltvzJY//YoU5iNqZIYGz3vBGXZONBcwgQgjY=";
+    });
+
   propagatedBuildInputs = [
     ppxlib
   ];
@@ -54,6 +63,5 @@ buildDunePackage {
     description = "Syntax extension for importing declarations from interface files";
     license = lib.licenses.mit;
     homepage = "https://github.com/ocaml-ppx/ppx_import";
-    broken = lib.versionAtLeast ocaml.version "5.5";
   };
 }

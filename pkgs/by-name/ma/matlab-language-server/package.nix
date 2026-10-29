@@ -6,16 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "matlab-language-server";
-  version = "1.3.12";
+  version = "1.3.15";
 
   src = fetchFromGitHub {
     owner = "mathworks";
     repo = "matlab-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+0aVg5SesV8zOndRLTpz3WwLW32GxLLVlMcWj46vVIM=";
+    hash = "sha256-lcLI2tirXSAk/8gjSMOgiiTqiZpojyJTU2n8/NVOFMk=";
   };
 
-  npmDepsHash = "sha256-SQtUgX3yNXwUxZxPvNdYAtLBAu++2DiAx301X0LnAQo=";
+  npmDepsHash = "sha256-lyIxWcmARqZVaqPuL1xu4VBQnWCCuCBlAlEdj8IZvn8=";
 
   npmBuildScript = "package";
 

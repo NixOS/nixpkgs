@@ -10,6 +10,7 @@
       { ... }:
       {
         services.metabase.enable = true;
+        virtualisation.memorySize = 2048;
       };
   };
 

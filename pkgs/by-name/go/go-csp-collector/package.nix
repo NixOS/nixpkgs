@@ -1,28 +1,27 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.22";
+  version = "0.0.27";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-30+rLt0VonbwP3I09OrAxiCqrUuIvGivE3+6sQ/hnRo=";
+    hash = "sha256-h9CtMzHOQj2ev/9rx8DvdskH7SK31S7i43uezYoHZI8=";
   };
 
-  vendorHash = "sha256-gto2lD3atZTy5QMECarLBWQR7Z1bBlFAoJtJYrzg7bY=";
+  vendorHash = "sha256-aIvIHFCucqJqGF0EcuJ9lJ2xUM/MvQs4UExSQvphCuE=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.Rev=${finalAttrs.version}"
   ];
 
@@ -33,6 +32,7 @@ buildGoModule (finalAttrs: {
       --replace-fail "/usr/local/bin/go-csp-collector" "$out/bin/go-csp-collector"
   '';
 
+  __darwinAllowLocalNetworking = true;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";

@@ -1,23 +1,22 @@
 {
   lib,
   fetchFromGitHub,
-  # Requires Go 1.26, drop when that's the default.
-  buildGo126Module,
+  buildGoModule,
   nix-update-script,
   versionCheckHook,
   applyPatches,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "athens";
-  version = "0.18.0";
+  version = "0.19.2";
 
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "gomods";
       repo = "athens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-sFNxAG0hIxsoKCuef/ROy2MOjA7iC5ehXRvnUr20U0Y=";
+      hash = "sha256-e1vV3foK9fiJeTcYcgrNUnXB3Zo6XRq9HwVnY3OuIe0=";
     };
     # Trim the patch version, not needed anyway.
     postPatch = ''
@@ -25,7 +24,7 @@ buildGo126Module (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-nTkrma32+JR+5a5u/XM+EFh9o7YwKMvZJ9cz4evo7Ec=";
+  vendorHash = "sha256-v1uJXiOeU4OtVHPFUgI7Lhu/AQqRcrSAH1VYo1d6EIQ=";
 
   env.CGO_ENABLED = "0";
   ldflags = [

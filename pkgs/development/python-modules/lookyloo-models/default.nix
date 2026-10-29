@@ -6,27 +6,31 @@
   dateparser,
   orjson,
   pydantic,
+  pydantic-extra-types,
   ua-parser,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lookyloo-models";
-  version = "0.2.9";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "lookyloo-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jqbG8wYUePYnQqqJEek9zFnuuGLarJvwzri19lvRUbY=";
+    hash = "sha256-JQJxGlwBMJpIHRbk5snxY0Y0WkE5suv/p7H7Z0qqK2s=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.11,<0.12" "uv_build"
+      --replace-fail "uv_build>=0.13,<0.14" "uv_build"
   '';
 
-  pythonRelaxDeps = [ "pydantic" ];
+  pythonRelaxDeps = [
+    "orjson"
+    "pydantic"
+  ];
 
   build-system = [ uv-build ];
 
@@ -34,6 +38,7 @@ buildPythonPackage (finalAttrs: {
     dateparser
     orjson
     pydantic
+    pydantic-extra-types
     ua-parser
   ];
 
@@ -45,8 +50,8 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Set of models representing data passed around across the toolchain";
     homepage = "https://github.com/Lookyloo/lookyloo-models";
-    # https://github.com/Lookyloo/lookyloo-models/issues/2
-    license = lib.licenses.unfree;
+    changelog = "https://github.com/Lookyloo/lookyloo-models/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

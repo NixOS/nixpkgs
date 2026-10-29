@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Language server for vim help files";
     homepage = "https://github.com/barrettruth/vimdoc-language-server";
     changelog = "https://github.com/barrettruth/vimdoc-language-server/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ barrettruth ];
     mainProgram = "vimdoc-language-server";
   };

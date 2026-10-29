@@ -1,12 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  llvmPackages_18,
+  llvmPackages_20,
   python3,
   cmake,
   boost,
   libxml2,
   libffi,
+  numactl,
   makeWrapper,
   config,
   cudaPackages,
@@ -23,17 +24,17 @@
 }:
 let
   inherit (llvmPackages) stdenv;
-  llvmPackages = llvmPackages_18;
+  llvmPackages = llvmPackages_20;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "adaptivecpp";
-  version = "25.02.0";
+  version = "25.10.0";
 
   src = fetchFromGitHub {
     owner = "AdaptiveCpp";
     repo = "AdaptiveCpp";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-vXfw8+xn3/DYxUKp3QGdQ8sEbDwyk+8jDCyuvQOXigc=";
+    sha256 = "sha256-Z3YuBtR6TVCLQHZCA88oA5N10SnLATVv0/cvb8xwZWs=";
   };
 
   # do not use old FindCUDA cmake module
@@ -72,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     boost
     python3
+    numactl
     llvmPackages.openmp
     llvmPackages.libclang.dev
     llvmPackages.llvm
@@ -83,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # adaptivecpp makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually
   cmakeFlags = [
+    (lib.cmakeFeature "ACPP_LLD_PATH" (lib.getExe' llvmPackages.lld "ld.lld"))
     (lib.cmakeFeature "CLANG_INCLUDE_PATH" "${llvmPackages.libclang.dev}/include")
     (lib.cmakeBool "WITH_CPU_BACKEND" ompSupport)
     (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)

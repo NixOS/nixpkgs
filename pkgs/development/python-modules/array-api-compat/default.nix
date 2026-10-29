@@ -5,8 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  meson-python,
 
   # tests
   array-api-strict,
@@ -22,21 +21,21 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "array-api-compat";
-  version = "1.14";
+  version = "1.15";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-compat";
-    tag = version;
-    hash = "sha256-Dhiq6GWxVm9BEeO81VSa3L644gp00LxFPJAliz8LbAE=";
+    tag = finalAttrs.version;
+    hash = "sha256-z6B+lOYciT71Uz3Py9M/8x7R+8IZ46nd8i8AYot5Rlo=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    meson-python
   ];
 
   nativeCheckInputs = [
@@ -53,16 +52,25 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "array_api_compat" ];
 
-  # CUDA (used via cupy) is not available in the testing sandbox
+  # Otherwise, cupy will try to write in $HOME (/homeless-shelter)
+  preCheck = ''
+    export CUPY_CACHE_DIR=$(mktemp -d)
+  '';
+
   disabledTests = [
+    # CUDA (used via cupy) is not available in the testing sandbox
     "cupy"
+
+    # ValueError: api_version='2024.12' is not available; available versions are: ['2025.12']
+    "test_array_namespace[jax.numpy-2024.12-False]"
+    "test_array_namespace[jax.numpy-2024.12-None]"
   ];
 
   meta = {
-    homepage = "https://data-apis.org/array-api-compat";
-    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${src.tag}";
     description = "Compatibility layer for NumPy to support the Python array API";
+    homepage = "https://data-apis.org/array-api-compat";
+    changelog = "https://github.com/data-apis/array-api-compat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ berquist ];
   };
-}
+})

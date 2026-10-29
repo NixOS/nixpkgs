@@ -222,11 +222,11 @@ builtins.intersectAttrs super {
   cuda = overrideCabal (drv: {
     extraLibraries = (drv.extraLibraries or [ ]) ++ [ pkgs.linuxPackages.nvidia_x11 ];
     configureFlags = (drv.configureFlags or [ ]) ++ [
-      "--extra-lib-dirs=${pkgs.cudatoolkit.lib}/lib"
-      "--extra-include-dirs=${pkgs.cudatoolkit}/include"
+      "--extra-lib-dirs=${pkgs.cudaPackages.cudatoolkit.lib}/lib"
+      "--extra-include-dirs=${pkgs.cudaPackages.cudatoolkit}/include"
     ];
     preConfigure = ''
-      export CUDA_PATH=${pkgs.cudatoolkit}
+      export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
     '';
   }) super.cuda;
 
@@ -244,7 +244,7 @@ builtins.intersectAttrs super {
 
   nvvm = overrideCabal (drv: {
     preConfigure = ''
-      export CUDA_PATH=${pkgs.cudatoolkit}
+      export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
     '';
   }) super.nvvm;
 
@@ -296,7 +296,7 @@ builtins.intersectAttrs super {
 
   cufft = overrideCabal (drv: {
     preConfigure = ''
-      export CUDA_PATH=${pkgs.cudatoolkit}
+      export CUDA_PATH=${pkgs.cudaPackages.cudatoolkit}
     '';
   }) super.cufft;
 
@@ -404,6 +404,13 @@ builtins.intersectAttrs super {
     postInstall = ''
       ${drv.postInstall or ""}
       ln -s "''${!outputBin}/bin/pandoc" "''${!outputBin}/bin/pandoc-server"
+    ''
+    # Assert the lua and server features are enabled by default
+    # c.f. https://github.com/NixOS/nixpkgs/issues/540900
+    # FIXME: overrideCabal does not allow configuring installCheckPhase, so use postInstall
+    + lib.optionalString canExecute ''
+      "''${!outputBin}/bin/pandoc" --version | grep -qF '+lua'
+      "''${!outputBin}/bin/pandoc" --version | grep -qF '+server'
     '';
   }) super.pandoc-cli;
 
@@ -1237,6 +1244,7 @@ builtins.intersectAttrs super {
         pkgs.git
         pkgs.gnupg
         pkgs.lsof
+        pkgs.magic-wormhole # p2p pairing
         pkgs.openssh
         pkgs.perl
         pkgs.rsync
@@ -1850,7 +1858,7 @@ builtins.intersectAttrs super {
     overrideCabal
       (old: {
         passthru = old.passthru or { } // {
-          nixPackage = pkgs.nixVersions.nix_2_31;
+          nixPackage = pkgs.nixVersions.nix_2_34;
         };
       })
       (

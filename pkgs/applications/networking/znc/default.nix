@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "znc";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "https://znc.in/releases/archive/znc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Tm52hR2/JgYYWXK1PsXeytaP5TtjpW5N+LizwKbEaAA=";
+    hash = "sha256-aPP2ZBtIDAQQEMVZbhI0BD4FyRN+2gYjOEUBdgMJX1s=";
   };
 
   postPatch = ''

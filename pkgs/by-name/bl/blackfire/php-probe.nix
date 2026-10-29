@@ -16,47 +16,51 @@ let
   phpMajor = lib.versions.majorMinor php.version;
   inherit (stdenv.hostPlatform) system;
 
-  version = "2026.7.1";
+  version = "2026.10.4";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-nkLVqnzw63ZftmVE1KWDPDSaiNkk8v9I+D1EipS6eYA=";
-        "8.2" = "sha256-PbZrm6fV28D4oyUW+OgRINK5ySJdnXO/ZBTliPtb4c8=";
-        "8.3" = "sha256-Yhl0UTQyQaUbMD3XAmzxqsmjxMRl2gr9S17SpFrTGto=";
-        "8.4" = "sha256-nR/um5sD0qrU91FCB3uYMqBc50IKGwsBwenJ9mSFpRA=";
-        "8.5" = "sha256-QzvH/VZ2SFSw5wioKMcM1nqcyOZq2Z1q6z3z0H/l3KE=";
+        "8.1" = "sha256-qrwrvPX2xq2cMmS0si00DiCBlXiec8QPYot+N1HwsAc=";
+        "8.2" = "sha256-V+pqyuGpLmRwkYKxnSZJ3IG3YuPhe0YN3jmpNmR54dw=";
+        "8.3" = "sha256-+pbjjO3DSY4YW+thIYLupiQ+QEVMx7umR3fXLmR9c2I=";
+        "8.4" = "sha256-14uJeYFVmPekXQEWPgurWYWH1JOy0XSDugfwF1t+eEw=";
+        "8.5" = "sha256-XXe2GECe0VYZWztZn6uvBLpNxSnW/c4Zz+zqEi5Dkdg=";
+        "8.6" = "sha256-bj4RPgC47FV9y5n7EeYUtPD2QOFDN6R7mcxOi4x4ZKU=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-MQBYuc3KSozbI4WPslsqWC8XwHeOOAZ46OlVxqwsNdk=";
-        "8.2" = "sha256-bJiDWWZlnHtXNg67bWjgpew5o8LIuFEPGvI5Ziooi+U=";
-        "8.3" = "sha256-WpRKROLWscmr7+IDqFpvEheaW5l2AEtCFfy46JTdHPw=";
-        "8.4" = "sha256-mMLPqB7U8iUtJbFxAOGU6ZEUd2AzFd0EeDScy1zmfwk=";
-        "8.5" = "sha256-472Bm0y/kJT75IEfno2LSG+dPDF6ODKEJURWWTQg0Fo=";
+        "8.1" = "sha256-zI3RAnKCUJO1RTCJiICS7MHUnpQvKGwOT17WwtlYJ5s=";
+        "8.2" = "sha256-fDk5VlIIC/ZAikZcNYsdEIiPWnmNEDNFJ+9E0OBuzHc=";
+        "8.3" = "sha256-0YcNeiasxp388k6LG5g0RM912usFoQSjGkMpHaH37x4=";
+        "8.4" = "sha256-XCAl9T9EIjlkAFjVqIbrVYKOKOpJZbgS15eAX09PeBw=";
+        "8.5" = "sha256-SeBSjIaNHADVh64Qy0LKH3SLDo/5CUsIXOArAPo2AyE=";
+        "8.6" = "sha256-DcKQevIjaXuCD72qBgSd/cQNr+iczQU1/repg9ZFY1Y=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-16A1dICRcNMorBAKHvD9YK6oddmrfiOy3hrHpW2KfpA=";
-        "8.2" = "sha256-Y1+CEIGQHWPNfaXevTNNiOyeV2HwX+od277s+FNsTiM=";
-        "8.3" = "sha256-PrFcGI8RlhO54jDgqpdl+he8ly+nSUVHbX6zQDLuKtA=";
-        "8.4" = "sha256-HETb8SSeDITKaeazk8K0acZkEQUzIqVnS6F6ZBqbSSo=";
-        "8.5" = "sha256-cyuHH9X3w9d4tCSKDUqaYz8Cq0z0nQFZHIR9U1CMQl4=";
+        "8.1" = "sha256-xfGUvVK8xMzFyKXLLswYArdYzFVKitDp9iNo67gDwGc=";
+        "8.2" = "sha256-9tG2VOTOn+pZlW0MNgBObuykw7uOnWz08mAcQiqprWM=";
+        "8.3" = "sha256-QFdKoY2RH7bQegjMeHVCDSmdJkPv47WQvUut7BJFalI=";
+        "8.4" = "sha256-G2SOpOYFdCNUxmDmPnMVVdPXtegqdGuc6XSiTrHH/DA=";
+        "8.5" = "sha256-W2WyIq1ELqmswb34TAk1vizKwVnuGxlTSyHwyQBvgYE=";
+        "8.6" = "sha256-4fY7HKMh0UP0rwnbXacvcJ7JaS5VBW+2j2fTPoEWGoY=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-IYKuYK4jLavOEmtvt/21m5u/BNuWQKQvqPcVYx4XEmE=";
-        "8.2" = "sha256-uitcd/WSs089ADBd5oEyJS7HObTY2N+e7CGrVy72fSE=";
-        "8.3" = "sha256-z6vDJ/k9acNM9HnQOL4OeaaQpjf/g9F85iwKHZdeCkw=";
-        "8.4" = "sha256-BzNouJIeKGzHG3rxf8u4TUOH/3mfjl4oJAdtkQbxu3Q=";
-        "8.5" = "sha256-XGgRPF4PpgOa3ZjGVIyYTZXrd0bOayek+zK6L9ZUyv4=";
+        "8.1" = "sha256-k3pAgvNil3MXX+xEcoMh0JwiWtOMBBu6GP9ReD380bs=";
+        "8.2" = "sha256-lkiKFhLk8O/Zbxje4jiqcqmDllyt5Unq0/mHk/SakA8=";
+        "8.3" = "sha256-hm9z9cHufTqiPaAf6n2e48MbYlu//jxYFvJmc1MaKsc=";
+        "8.4" = "sha256-PHIzFcBkNB0Ro7vj2jUTY39gOEZbcuvtzzff8sJSgL4=";
+        "8.5" = "sha256-fICz5UhbzsX60ygg8ZcqJV3HrgXlZMoTrp/V2I47rmc=";
+        "8.6" = "sha256-qvz0UarQeoiQcrjsaRHu5A5YRaLQw9WUiYFn9nQy1Fw=";
       };
     };
   };
@@ -70,13 +74,11 @@ let
       url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${
         if isLinux then "linux" else "darwin"
       }_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
-      hash = hashes.${system}.hash.${phpMajor};
+      hash =
+        hashes.${system}.hash.${phpMajor}
+          or (throw "php-blackfire: unsupported PHP version ${phpMajor} on ${system}");
     };
 in
-
-assert lib.assertMsg (
-  hashes ? ${system}.hash.${phpMajor}
-) "blackfire does not support PHP version ${phpMajor} on ${system}.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "php-blackfire";
@@ -152,12 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blackfire.io/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ spk ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "i686-linux"
-      "aarch64-darwin"
-    ];
+    platforms = lib.attrNames (lib.filterAttrs (_: v: v.hash ? ${phpMajor}) hashes);
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

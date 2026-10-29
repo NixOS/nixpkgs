@@ -12,17 +12,20 @@ let
 
   # Only placeholders reach the world-readable Nix store; the install
   # script substitutes the real secrets at runtime.
+  dbConfig =
+    # `engine` is MySQL-only; omit for other drivers
+    (if cfg.database.driver == "mysql" then cfg.database else removeAttrs cfg.database [ "engine" ])
+    // optionalAttrs (cfg.databasePasswordFile != null) {
+      password = "@databasePassword@";
+    };
+
   flarumInstallConfig = pkgs.writeText "config.json" (
     builtins.toJSON {
       debug = false;
       offline = false;
 
       baseUrl = cfg.baseUrl;
-      databaseConfiguration =
-        cfg.database
-        // optionalAttrs (cfg.databasePasswordFile != null) {
-          password = "@databasePassword@";
-        };
+      databaseConfiguration = dbConfig;
       adminUser = {
         username = cfg.adminUser;
         password =
@@ -34,12 +37,53 @@ let
       };
     }
   );
+
+  # Flarum 2's cache:clear rebuilds all compiled assets, which needs more
+  # than PHP's default 128M memory limit.
+  memoryLimit = "512M";
+  flarumCli = "php -d memory_limit=${memoryLimit} flarum";
+
+  phpFormat = pkgs.formats.php { };
+
+  configPhpFile = phpFormat.generate "flarum-config.php" {
+    debug = false;
+    database = dbConfig;
+    url = cfg.baseUrl;
+    paths = {
+      api = "api";
+      admin = "admin";
+    };
+    headers = {
+      poweredByHeader = true;
+      referrerPolicy = "same-origin";
+    };
+    queue = {
+      driver = "sync";
+    };
+  };
 in
 {
   options.services.flarum = {
     enable = mkEnableOption "Flarum discussion platform";
 
-    package = mkPackageOption pkgs "flarum" { };
+    package = mkOption {
+      type = types.package;
+      default = if versionOlder config.system.stateVersion "26.11" then pkgs.flarum_1 else pkgs.flarum_2;
+      defaultText = literalExpression ''
+        if versionOlder config.system.stateVersion "26.11" then pkgs.flarum_1 else pkgs.flarum_2
+      '';
+      relatedPackages = [
+        "flarum_1"
+        "flarum_2"
+      ];
+      description = ''
+        Flarum package to use.
+
+        Upgrading from Flarum 1.x to 2.x migrates the database and can't be
+        undone, so back up the database and make sure all extensions support
+        Flarum 2 before switching.
+      '';
+    };
 
     forumTitle = mkOption {
       type = types.str;
@@ -117,36 +161,84 @@ in
     };
 
     database = mkOption {
-      type =
-        with types;
-        attrsOf (oneOf [
-          str
-          bool
-          int
-        ]);
+      type = types.submodule {
+        freeformType =
+          with types;
+          attrsOf (oneOf [
+            str
+            bool
+            int
+          ]);
+        options = {
+          driver = mkOption {
+            type = types.str;
+            default = "mysql";
+            description = "Database driver; i.e. MySQL, MariaDB...";
+          };
+          host = mkOption {
+            type = types.str;
+            default = "localhost";
+            description = "Database server hostname.";
+          };
+          port = mkOption {
+            type = types.port;
+            default = 3306;
+            description = "Database connection port; defaults to 3306 with MySQL.";
+          };
+          database = mkOption {
+            type = types.str;
+            default = "flarum";
+            description = "Database name.";
+          };
+          username = mkOption {
+            type = types.str;
+            default = "flarum";
+            description = "Username for database server access.";
+          };
+          password = mkOption {
+            type = types.str;
+            default = "";
+            description = "Password for database server access.";
+          };
+          charset = mkOption {
+            type = types.str;
+            default = "utf8mb4";
+            description = "Character encoding for the database.";
+          };
+          collation = mkOption {
+            type = types.str;
+            default = "utf8mb4_unicode_ci";
+            description = "Character collation for database sorting and comparison.";
+          };
+          prefix = mkOption {
+            type = types.str;
+            default = "";
+            description = "Table prefix; useful for sharing a database with other services.";
+          };
+          strict = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Enable strict SQL mode.";
+          };
+          engine = mkOption {
+            type = types.str;
+            default = "InnoDB";
+            description = "Storage engine for new tables; MySQL-only.";
+          };
+          prefix_indexes = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Apply table prefix to database index names.";
+          };
+        };
+      };
+      default = { };
       description = ''
         MySQL database parameters.
 
         WARNING: A `password` set here is stored world-readable in the
         Nix store. Use {option}`databasePasswordFile` instead.
       '';
-      default = {
-        # the database driver; i.e. MySQL; MariaDB...
-        driver = "mysql";
-        # the host of the connection; localhost in most cases unless using an external service
-        host = "localhost";
-        # the name of the database in the instance
-        database = "flarum";
-        # database username
-        username = "flarum";
-        # database password
-        password = "";
-        # the prefix for the tables; useful if you are sharing the same database with another service
-        prefix = "";
-        # the port of the connection; defaults to 3306 with MySQL
-        port = 3306;
-        strict = false;
-      };
     };
 
     databasePasswordFile = mkOption {
@@ -174,6 +266,25 @@ in
         Only set this to true if you are certain you are working with a fresh, empty database.
       '';
     };
+
+    adoptConfig = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to let this module manage a pre-existing config.php,
+        such as a hand-maintained one (typically with
+        {option}`createDatabaseLocally` = false).
+
+        By default, a config.php this module didn't create is left alone:
+        {option}`baseUrl` and {option}`database` are not applied to it, so
+        real settings can't get silently overwritten by their defaults.
+
+        Before enabling this, make sure {option}`baseUrl` and
+        {option}`database` already match the file's real values. Once
+        enabled, config.php is regenerated from these options on every
+        activation, and anything in the file not covered by them is lost.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -199,10 +310,11 @@ in
         "pm.min_spare_servers" = mkDefault 1;
         "pm.max_spare_servers" = mkDefault 3;
       };
-      phpOptions = ''
-        error_log = syslog
-        log_errors = on
-      '';
+      phpOptions = {
+        error_log = "syslog";
+        log_errors = "on";
+        memory_limit = "${memoryLimit}";
+      };
     };
 
     services.nginx = {
@@ -251,8 +363,13 @@ in
       before = [ "phpfpm-flarum.service" ];
       requires = [ "mysql.service" ];
       after = [ "mysql.service" ];
+      restartTriggers = [
+        cfg.package
+        configPhpFile
+      ];
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
         User = cfg.user;
         Group = cfg.group;
         # The secret-filled install config is staged in /tmp
@@ -261,32 +378,51 @@ in
       path = [ config.services.phpfpm.phpPackage ];
       script = ''
         mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
-        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
+        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,logs,sessions,views}
         cd ${cfg.stateDir}
         cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
         ln -sf ${cfg.package}/share/php/flarum/vendor .
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
+
+        ${optionalString cfg.adoptConfig "touch .flarum-installed"}
+
+        # config.php with no marker means we didn't write it, so leave it alone.
+        # This check must come before the guard below: that guard also touches
+        # the marker, which would make this check pass for the wrong reason.
+        if [ ! -f .flarum-installed ] && [ -f config.php ]; then
+          echo "flarum-install: config.php exists but wasn't written by this module; leaving it untouched." >&2
+          echo "flarum-install: set services.flarum.adoptConfig = true to adopt it." >&2
+        else
       ''
       + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
-        if [ ! -f config.php ]; then
-          install -m 0600 ${flarumInstallConfig} /tmp/flarum-install.json
-          ${optionalString (cfg.initialAdminPasswordFile != null) ''
-            ${pkgs.replace-secret}/bin/replace-secret '@adminPassword@' \
-              ${escapeShellArg cfg.initialAdminPasswordFile} /tmp/flarum-install.json
-          ''}
-          ${optionalString (cfg.databasePasswordFile != null) ''
-            ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
-              ${escapeShellArg cfg.databasePasswordFile} /tmp/flarum-install.json
-          ''}
-          php flarum install --file=/tmp/flarum-install.json
-          # config.php contains the database password; stateDir is world-readable
-          chmod 600 config.php
+        if [ ! -f .flarum-installed ]; then
+          if [ ! -f config.php ]; then
+            install -m 0600 ${flarumInstallConfig} /tmp/flarum-install.json
+            ${optionalString (cfg.initialAdminPasswordFile != null) ''
+              ${pkgs.replace-secret}/bin/replace-secret '@adminPassword@' \
+                ${escapeShellArg cfg.initialAdminPasswordFile} /tmp/flarum-install.json
+            ''}
+            ${optionalString (cfg.databasePasswordFile != null) ''
+              ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+                ${escapeShellArg cfg.databasePasswordFile} /tmp/flarum-install.json
+            ''}
+            ${flarumCli} install --file=/tmp/flarum-install.json
+          fi
+          touch .flarum-installed
         fi
       ''
       + ''
+          touch .flarum-installed
+          install -m 0600 ${configPhpFile} config.php
+          ${optionalString (cfg.databasePasswordFile != null) ''
+            ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+              ${escapeShellArg cfg.databasePasswordFile} config.php
+          ''}
+        fi
+
         if [ -f config.php ]; then
-          php flarum migrate
-          php flarum cache:clear
+          ${flarumCli} migrate
+          ${flarumCli} cache:clear
         fi
       '';
     };

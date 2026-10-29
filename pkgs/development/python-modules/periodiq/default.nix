@@ -5,13 +5,12 @@
   uv-build,
   dramatiq,
   pendulum,
-  setuptools,
   pytest-mock,
   pytestCheckHook,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "periodiq";
   version = "0.14.0";
   pyproject = true;
@@ -19,16 +18,20 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "bersace";
     repo = "periodiq";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XYQ0cR0gdiX7GePqpMDG/Ml0CK+SBcNbsNB99FZ/D3I=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11,<0.12" "uv_build"
+  '';
 
   build-system = [ uv-build ];
 
   dependencies = [
     dramatiq
     pendulum
-    setuptools
   ];
 
   nativeCheckInputs = [
@@ -37,15 +40,14 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
-  enabledTestPaths = [ "tests/unit" ];
-
   pythonImportsCheck = [ "periodiq" ];
 
   meta = {
     description = "Simple Scheduler for Dramatiq Task Queue";
-    mainProgram = "periodiq";
     homepage = "https://gitlab.com/bersace/periodiq";
+    changelog = "https://gitlab.com/bersace/periodiq/-/blob/${finalAttrs.src.tag}/CHANGELOG.md?ref_type=tags";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
+    mainProgram = "periodiq";
   };
-}
+})

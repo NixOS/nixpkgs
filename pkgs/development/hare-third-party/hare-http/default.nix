@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-http";
-  version = "0.26.0.0";
+  version = "0.26.0.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-http";
     tag = finalAttrs.version;
-    hash = "sha256-0NPLYuoAVvIiDH7d0KtJnmKX/C1ShdBZIo9w3EPsmkA=";
+    hash = "sha256-REpU2vqec758lRAXslY36xBmNdrvlvXIRv/n44G7Pn4=";
   };
 
   nativeBuildInputs = [ hareHook ];

@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biglybt";
-  version = "3.9.0.0";
+  version = "4.1.0.0";
 
   src = fetchurl {
     url = "https://github.com/BiglySoftware/BiglyBT/releases/download/v${finalAttrs.version}/GitHub_BiglyBT_unix.tar.gz";
-    hash = "sha256-NBXEY5f2kVPoZit7Gy4rM61bwQSdXovg0gURukhxJJ4=";
+    hash = "sha256-P9CscKANZUZd49tPelT8fZVVaf5P5CKnq5eAbE7H6eU=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/BiglySoftware/BiglyBT/releases/tag/v${finalAttrs.version}";
     description = "BitTorrent client based on the Azureus that supports I2P darknet for privacy";
     downloadPage = "https://github.com/BiglySoftware/BiglyBT";

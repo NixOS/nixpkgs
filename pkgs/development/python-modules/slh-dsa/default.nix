@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "slh-dsa";
-  version = "0.2.0";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "slh_dsa";
     inherit version;
-    hash = "sha256-p4eWMVayOFiEjFtlnsmmtH6HMfcIeYIpgdfjuB4mmAY=";
+    hash = "sha256-3L6lv58nIrSencAQTroaYXrbvcpbLGS/ihkark+7CP0=";
   };
 
   env.SLHDSA_BUILD_OPTIMIZED = "1";

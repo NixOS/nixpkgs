@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cacert,
   pkg-config,
   cmake,
   makeBinaryWrapper,
@@ -22,18 +23,19 @@
   liburing,
   withZstandard ? true,
   zstd,
+  withVendoredCACert ? false,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0-rolling-2026-06-29";
+  version = "2.3.0-rolling-2026-10-27";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "edd7a120bfc4af11ac0cbebce2a43cc1f93f9af1";
-    hash = "sha256-WQy+v4zpwzgbMxT43+Nd33+YPynyZIwqzVTaknqjCmE=";
+    rev = "229e9c15b2eb709af4e4e43ad5c51400bc05f5c4";
+    hash = "sha256-oQucQcFbNXF56W1Vk8wVT4O/f3cGn8PeVRUhxFhsQ3g=";
   };
 
   outputs = [
@@ -71,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withZstandard zstd;
 
   cmakeFlags = [
-    "-DWITH_BROTLI=${if withBrotli then "ON" else "OFF"}"
-    "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
-    "-DWITH_ZSTD=${if withZstandard then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_BROTLI" withBrotli)
+    (lib.cmakeBool "WITH_MRUBY" withMruby)
+    (lib.cmakeBool "WITH_ZSTD" withZstandard)
   ];
 
   postInstall = ''
@@ -86,6 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram "$out/bin/h2olog" \
         --set "PERL5LIB" "$PERL5LIB"
+  ''
+  + lib.optionalString (!withVendoredCACert) ''
+    rm $out/share/h2o/ca-bundle.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/h2o/ca-bundle.crt
   '';
 
   passthru = {

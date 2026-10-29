@@ -3,15 +3,23 @@
   buildNpmPackage,
   src,
   version,
+  nix-update-script,
 }:
 
 buildNpmPackage {
   inherit src version;
   pname = "photoprism-frontend";
 
-  npmDepsHash = "sha256-HBzul2fyISwOqf8w92yt0friMnLhMmvKPm8yI2I3ngE=";
+  npmDepsHash = "sha256-iU81WODu0RCoCZg8Ds/R5j0Dxa9YFzBtKCvnow+bcyE=";
 
   npmWorkspace = "frontend";
+
+  preBuild = ''
+    (
+      cd frontend
+      npm rm sass-embedded
+    )
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -21,6 +29,8 @@ buildNpmPackage {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://photoprism.app";

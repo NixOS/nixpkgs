@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -11,21 +10,17 @@
 
 buildPythonPackage rec {
   pname = "meteo-lt-pkg";
-  version = "0.2.4";
+  version = "0.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Brunas";
     repo = "meteo_lt-pkg";
     tag = "v${version}";
-    hash = "sha256-OjIBgIOSJ65ryIF4D/UUUa1Oq0sPkKnaQEJeviimqhE=";
+    hash = "sha256-BOLmU4Hj/vL8HUrRJ0mC2s/rPOXI5kqPQPsL7a8rip8=";
   };
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
 
   dependencies = [
     aiohttp
@@ -40,6 +35,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # tests contact api.meteo.lt
+    "test_context_manager"
     "test_get_forecast"
     "test_get_nearest_place"
   ];

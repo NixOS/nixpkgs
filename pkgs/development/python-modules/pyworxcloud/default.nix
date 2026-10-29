@@ -6,6 +6,7 @@
   fetchFromGitHub,
   poetry-core,
   paho-mqtt,
+  pyprojectVersionPatchHook,
   requests,
   urllib3,
   tzdata,
@@ -26,6 +27,8 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [ "awsiotsdk" ];
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp

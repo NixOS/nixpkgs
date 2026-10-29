@@ -6,7 +6,7 @@
   meson,
   ninja,
   cmake,
-  systemd,
+  systemdLibs,
   glib,
   gtk4,
   libdrm,
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reframe";
-  version = "1.19.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
     repo = "reframe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WbF52bXRYKj3q4SqTrICrZgWKFg+YnJt0hXjz4S6aRo=";
+    hash = "sha256-xp1KIxkvWBuP6nCtS/BtuIaVXuGchnupREw50VbrDBE=";
     fetchSubmodules = true;
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     glib
     gtk4
     libdrm

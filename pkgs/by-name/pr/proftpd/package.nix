@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "proftpd";
-  version = "1.3.9c";
+  version = "1.3.9e";
 
   src = fetchFromGitHub {
     owner = "proftpd";
     repo = "proftpd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Wy5Xm9vynYWmNhoFYtYXCVfAaAMU4kB/ZaRNyRwiQQ=";
+    hash = "sha256-TdPdZHQt6H58s/MblgWs2Dd4r8dgL09cC3hk77nkkQM=";
   };
 
   patches = [ ./no-install-user.patch ];

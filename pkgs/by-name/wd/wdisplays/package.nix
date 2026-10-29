@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wdisplays";
-  version = "1.1.3";
+  version = "1.3.0";
 
   nativeBuildInputs = [
     meson
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "artizirk";
     repo = "wdisplays";
     rev = finalAttrs.version;
-    sha256 = "sha256-KabaW2BH4zAS0xWkzCM8YaAnP/hkZL7Wq3EARantRis=";
+    sha256 = "sha256-y8tE3R0kGWVSqPFcT8EX2PBIwpdnyAaxICyXJ4J9NCA=";
   };
 
   meta = {

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "umlaeute";
     repo = "pyftgl";
     tag = version;
-    sha256 = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
+    hash = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
   };
 
   build-system = [ setuptools ];

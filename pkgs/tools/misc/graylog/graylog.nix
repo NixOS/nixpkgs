@@ -5,7 +5,7 @@
   makeWrapper,
   openjdk11_headless,
   openjdk17_headless,
-  systemd,
+  systemdLibs,
   nixosTests,
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "--set-default"
     "JAVA_HOME"
     "${if (lib.versionAtLeast version "5.0") then openjdk17_headless else openjdk11_headless}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemdLibs ]}"
   ];
 
   passthru.tests = { inherit (nixosTests) graylog; };

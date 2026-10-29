@@ -6,7 +6,7 @@
 {
   lib,
   stdenv,
-  fetchpatch,
+  fetchpatch2,
   fetchurl,
   runCommand,
   writeShellScript,
@@ -48,11 +48,15 @@
   texinfo,
   texlive,
   # for bin.nix
+  fetchpatch,
   gnum4,
   jdk_headless,
   perlPackages,
   python3Packages,
   pkg-config,
+  autoconf,
+  automake,
+  libtool,
   cmake,
   ninja,
   libpaper,
@@ -103,7 +107,7 @@ let
         inherit
           stdenv
           lib
-          fetchpatch
+          fetchpatch2
           bin
           tlpdb
           tlpdbxz
@@ -128,6 +132,7 @@ let
           zip
           luajit
           texinfo
+          unzip
           ;
       };
     in
@@ -347,7 +352,6 @@ let
     scheme-basic = [
       cc-by-sa-40
       free
-      gfl
       gpl1Only
       gpl2Only
       gpl2Plus
@@ -366,7 +370,6 @@ let
       cc-by-sa-40
       fdl13Only
       free
-      gfl
       gpl1Only
       gpl2Only
       gpl2Plus
@@ -386,7 +389,6 @@ let
       eupl12
       fdl13Only
       free
-      gfl
       gfsl
       gpl1Only
       gpl2Only
@@ -424,7 +426,6 @@ let
       eupl12
       fdl13Only
       free
-      gfl
       gfsl
       gpl1Only
       gpl2Only
@@ -456,7 +457,6 @@ let
       eupl12
       fdl13Only
       free
-      gfl
       gfsl
       gpl1Only
       gpl2Only
@@ -492,7 +492,6 @@ let
       eupl12
       fdl13Only
       free
-      gfl
       gpl1Only
       gpl2Only
       gpl2Plus
@@ -533,7 +532,6 @@ let
       eupl12
       fdl13Only
       free
-      gfl
       gpl1Only
       gpl2Only
       gpl2Plus
@@ -566,7 +564,6 @@ let
       eupl12
       fdl13Only
       free
-      gfl
       gpl1Only
       gpl2Only
       gpl2Plus
@@ -671,7 +668,7 @@ allPkgLists
     // {
       # for backward compatibility
       latexindent = texlive.pkgs.latexindent;
-      pygmentex = texlive.pkgs.pigmentex;
+      pygmentex = texlive.pkgs.pygmentex;
     };
 
   combine =

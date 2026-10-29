@@ -1,9 +1,12 @@
 {
+  _experimental-update-script-combinators,
   lib,
   stdenv,
   buildGoModule,
   fetchgit,
   gitMinimal,
+  gitUpdater,
+  nix-update-script,
   makeWrapper,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -14,20 +17,20 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "atomgit-cli";
-  version = "0.5.0";
+  version = "0.7.4";
 
   src = fetchgit {
     url = "https://atomgit.com/hust-open-atom-club/atomgit-cli.git";
-    rev = "11f1ff216053bf47c0a3baaed6698c9222f1ce77";
-    hash = "sha256-ZvQ8S0f1jUfN48UE/U+JnTTrtoWYZfwhDPDBbKKLlC0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8Q/LvACc3qsPwhCCYrq0LU+ji39KhjZ90qkhGM/v6AQ=";
   };
 
-  vendorHash = "sha256-7K17JaXFsjf163g5PXCb5ng2gYdotnZ2IDKk8KFjNj0=";
+  vendorHash = "sha256-2YBsLa+pX6+ZAf+kLh2I0FJdbggdC8TBUAOOcoJuhaQ=";
 
-  subPackages = [ "cmd/ag" ];
+  subPackages = [ "cmd/ag-cli" ];
 
   preCheck = ''
-    # Test all packages, not only cmd/ag.
+    # Test all packages, not only cmd/ag-cli.
     unset subPackages
   '';
 
@@ -36,19 +39,25 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.Version=v${finalAttrs.version}"
     "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.Commit=${finalAttrs.src.rev}"
-    "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.BuildDate=2026-07-13T07:53:45Z"
+    "-X atomgit.com/hust-open-atom-club/atomgit-cli/internal/version.BuildDate=2026-07-18T16:40:02Z"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
 
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (gitUpdater { rev-prefix = "v"; }).command
+    (nix-update-script { extraArgs = [ "--version=skip" ]; })
+  ];
+
   postFixup = ''
-    wrapProgram $out/bin/ag \
+    wrapProgram $out/bin/ag-cli \
       --prefix PATH : ${
         lib.makeBinPath ([ gitMinimal ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xdg-utils ])
       }
   '';
 
   nativeInstallCheckInputs = [
+    gitMinimal
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
@@ -61,7 +70,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://atomgit.com/hust-open-atom-club/atomgit-cli";
     changelog = "https://atomgit.com/hust-open-atom-club/atomgit-cli/tags/v${finalAttrs.version}";
     license = lib.licenses.mulan-psl2;
-    mainProgram = "ag";
+    mainProgram = "ag-cli";
     maintainers = [ lib.maintainers.silicalet ];
   };
 })

@@ -9,22 +9,17 @@
 
 stdenv.mkDerivation rec {
   pname = "liquid-dsp";
-  version = "1.8.0";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "jgaeddert";
     repo = "liquid-dsp";
     rev = "v${version}";
-    sha256 = "sha256-IvWtoXuuIvpJfY4cyRUsPHgax2/aytYShSdxEStiPYI=";
+    sha256 = "sha256-QRCPdngQCpC+o8fCLVoixPsZ25yI1ZEo8ePreC2S0Yk=";
   };
 
   patches = [
-    # Fix CMake absolute include/lib paths issue, see also
-    # - https://github.com/NixOS/nixpkgs/issues/144170
-    # - https://github.com/jgaeddert/liquid-dsp/pull/450
     ./fix-cmake-pc-paths.patch
-    # liquid.h uses va_list; needs stdarg.h
-    ./include-stdarg.patch
   ];
 
   nativeBuildInputs = [
@@ -39,6 +34,9 @@ stdenv.mkDerivation rec {
     # Prevent native cpu arch from leaking into binaries.
     (lib.cmakeBool "ENABLE_SIMD" false)
     (lib.cmakeBool "FIND_SIMD" false)
+    # Some build info is included as of 1.8.1. Most of these are not a problem
+    # or handled by the build sandbox but the hostname should be stripped.
+    (lib.cmakeBool "ENABLE_TIMESTAMPS" false)
   ];
 
   doCheck = true;

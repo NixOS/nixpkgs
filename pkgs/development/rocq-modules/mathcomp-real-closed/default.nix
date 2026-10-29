@@ -7,46 +7,74 @@
   version ? null,
 }:
 
-mkRocqDerivation {
+let
+  derivation = mkRocqDerivation {
 
-  namePrefix = [
-    "rocq"
-    "mathcomp"
-  ];
-  pname = "real-closed";
-  owner = "math-comp";
-  inherit version;
-  release = {
-    "2.0.5".sha256 = "sha256-nns1TF3isv8FpWqtXilfMEVKvR50fvS6MXnYVzbCzVs=";
-    "2.0.6".sha256 = "sha256-c+0nlNTjTf115vjvnpLrgXye5YdjsWlsCBpGZj+hU9E=";
+    namePrefix = [
+      "rocq"
+      "mathcomp"
+    ];
+    pname = "real-closed";
+    owner = "math-comp";
+    inherit version;
+    release = {
+      "2.0.6".sha256 = "sha256-c+0nlNTjTf115vjvnpLrgXye5YdjsWlsCBpGZj+hU9E=";
+      "2.0.5".sha256 = "sha256-nns1TF3isv8FpWqtXilfMEVKvR50fvS6MXnYVzbCzVs=";
+      "2.0.3".hash = "sha256-heZ7aZ7TO9YNAESIvbAc1qqzO91xMyLAox8VKueIk/s=";
+      "2.0.2".hash = "sha256-hBo9JMtmXDYBmf5ihKGksQLHv3c0+zDBnd8/aI2V/ao=";
+      "2.0.1".hash = "sha256-tQTI3PCl0q1vWpps28oATlzOI8TpVQh1jhTwVmhaZic=";
+      "2.0.0".hash = "sha256-sZvfiC5+5Lg4nRhfKKqyFzovCj2foAhqaq/w9F2bdU8=";
+      "1.1.4".hash = "sha256-8Hs6XfowbpeRD8RhMRf4ZJe2xf8kE0e8m7bPUzR/IM4=";
+      "1.1.3".hash = "sha256:1vwmmnzy8i4f203i2s60dn9i0kr27lsmwlqlyyzdpsghvbr8h5b7";
+      "1.1.2".hash = "sha256:0907x4nf7nnvn764q3x9lx41g74rilvq5cki5ziwgpsdgb98pppn";
+      "1.1.1".hash = "sha256:0ksjscrgq1i79vys4zrmgvzy2y4ylxa8wdsf4kih63apw6v5ws6b";
+      "1.0.5".hash = "sha256:0q8nkxr9fba4naylr5xk7hfxsqzq2pvwlg1j0xxlhlgr3fmlavg2";
+      "1.0.4".hash = "sha256:058v9dj973h9kfhqmvcy9a6xhhxzljr90cf99hdfcdx68fi2ha1b";
+      "1.0.3".hash = "sha256:1xbzkzqgw5p42dx1liy6wy8lzdk39zwd6j14fwvv5735k660z7yb";
+      "1.0.1".hash = "sha256:0j81gkjbza5vg89v4n9z598mfdbql416963rj4b8fzm7dp2r4rxg";
+    };
+
+    defaultVersion =
+      let
+        case = rocq: mc: out: {
+          cases = [
+            rocq
+            mc
+          ];
+          inherit out;
+        };
+      in
+      with lib.versions;
+      lib.switch
+        [ rocq-core.version mathcomp.version ]
+        [
+          (case (range "9.0" "9.3") (isGe "2.6.0") "2.0.6")
+          (case (range "9.0" "9.2") (isEq "2.5.0") "2.0.5")
+          (case (range "8.18" "9.1") (isGe "2.2.0") "2.0.3")
+          (case (range "8.17" "9.0") (range "2.1.0" "2.3.0") "2.0.2")
+          (case (range "8.17" "8.20") (range "2.0.0" "2.2.0") "2.0.1")
+          (case (range "8.16" "8.19") (range "2.0.0" "2.2.0") "2.0.0")
+          (case (range "8.13" "8.19") (range "1.13.0" "1.19.0") "1.1.4")
+          (case (isGe "8.13") (range "1.12.0" "1.18.0") "1.1.3")
+          (case (isGe "8.10") (range "1.12.0" "1.18.0") "1.1.2")
+          (case (isGe "8.7") "1.11.0" "1.1.1")
+          (case (isGe "8.7") (range "1.9.0" "1.10.0") "1.0.4")
+          (case (isGe "8.7") "1.8.0" "1.0.3")
+          (case (isGe "8.7") "1.7.0" "1.0.1")
+        ]
+        null;
+
+    propagatedBuildInputs = [
+      mathcomp.field
+      mathcomp-bigenough
+    ];
+
+    useCoqifVersion = v: v != null && v != "dev" && lib.versions.isLe "2.0.3" v;
+
+    meta = {
+      description = "Mathematical Components Library on real closed fields";
+      license = lib.licenses.cecill-c;
+    };
   };
-
-  defaultVersion =
-    let
-      case = rocq: mc: out: {
-        cases = [
-          rocq
-          mc
-        ];
-        inherit out;
-      };
-    in
-    with lib.versions;
-    lib.switch
-      [ rocq-core.version mathcomp.version ]
-      [
-        (case (range "9.0" "9.3") (isGe "2.6.0") "2.0.6")
-        (case (range "9.0" "9.2") (isEq "2.5.0") "2.0.5")
-      ]
-      null;
-
-  propagatedBuildInputs = [
-    mathcomp.field
-    mathcomp-bigenough
-  ];
-
-  meta = {
-    description = "Mathematical Components Library on real closed fields";
-    license = lib.licenses.cecill-c;
-  };
-}
+in
+derivation

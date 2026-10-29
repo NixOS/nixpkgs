@@ -19,21 +19,7 @@ let
     packageOverrides = self: super: {
       chardet = super.chardet_5;
       django = super.django_5;
-
-      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
-        };
-        disabledTests = [
-          # error message mismatch
-          "test_validation_failed_message"
-          # fails dns resolution
-          "test_response_when_auth_server_response_return_404"
-        ];
-      });
+      django-oauth-toolkit = super.django-oauth-toolkit_2;
 
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
@@ -55,26 +41,27 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.6.1";
+  version = "2026.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P8anV87K/UFOCztGz8iNb5NbmAC3JkFqAm8vKXkr0qY=";
+    hash = "sha256-PnCZbfGjp9aRrRld68KSqhawys0mynrNRdjfQPJ+iZA=";
   };
 
   patches = [
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # [2026.7.0] Inherit PYTHONPATH in test that tries starting Pretix with a
+    # naked interpreter.
+    ./test_startup_pythonpath.patch
   ];
 
   postPatch = ''
-    # unused
-    sed -i "/setuptools-rust/d" pyproject.toml
-
     # unbreak dependency relaxation
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
@@ -88,7 +75,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-DJCvNcgDIY71Q9qg4Ng7SAM9i9wHhHOdJonpt5t/Xx8=";
+    hash = "sha256-hh/VZCmM8PXsSnzueSaw4PcUrtSjMIQIqNhbl8tXbxQ=";
   };
 
   nativeBuildInputs = [
@@ -135,6 +122,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-oauth-toolkit
       django-otp
       django-phonenumber-field
+      django-querytagger
       django-redis
       django-scopes
       django-statici18n
@@ -203,6 +191,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "cryptography"
     "django-bootstrap3"
     "django-compressor"
+    "django-countries"
     "django-filter"
     "django-formset-js-improved"
     "django-i18nfield"
@@ -223,6 +212,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "pyjwt"
     "pypdf"
     "python-bidi"
+    "python-dateutil"
     "qrcode"
     "redis"
     "reportlab"
@@ -253,6 +243,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     with pythonPackages;
     [
       libredirect.hook
+      pypdfium2
       pytestCheckHook
       pytest-xdist
       pytest-mock

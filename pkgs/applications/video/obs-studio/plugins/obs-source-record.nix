@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "exeldro";
     repo = "obs-source-record";
     rev = version;
-    sha256 = "sha256-EykXa+7iVTnyCbT8rmadF3OP9Dmc1A4zxi4RukhuZ8s=";
+    hash = "sha256-EykXa+7iVTnyCbT8rmadF3OP9Dmc1A4zxi4RukhuZ8s=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-source-record";
     maintainers = with lib.maintainers; [
       robbins
-      shackra
+      elzorrorebelde
     ];
     license = lib.licenses.gpl2Only;
     inherit (obs-studio.meta) platforms;

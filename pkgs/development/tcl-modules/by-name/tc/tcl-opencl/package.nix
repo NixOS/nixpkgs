@@ -7,14 +7,14 @@
   vectcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tcl-opencl";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "ray2501";
     repo = "tcl-opencl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nVqHWP6YbWbOAJsz0+4xYkOW3zWVmwhOI421Ak+8E3Q=";
   };
 
@@ -37,4 +37,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     license = lib.licenses.mit;
   };
-}
+})

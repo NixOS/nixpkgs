@@ -23,8 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.9.4";
+  version = "1.9.7";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "lib"
@@ -36,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libgit2";
     repo = "libgit2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZKUiz3pdFE2SKxh53X2oyr7hs32Njj5YVA0OXDXz7h0=";
+    hash = "sha256-kBQqTxMIWMCZJA1SuxVb29Y7k+V1Y2qVR2EntoY4FUo=";
   };
 
   cmakeFlags = [
@@ -109,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linkable library implementation of Git that you can use in your application";
     mainProgram = "git2";
     homepage = "https://libgit2.org/";
-    license = lib.licenses.gpl2Only;
+    license = with lib.licenses; WITH gpl2Only gccException20;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 })

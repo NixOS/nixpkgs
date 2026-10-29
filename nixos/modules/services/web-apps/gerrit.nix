@@ -246,7 +246,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProtectSystem = "full";
+        ProtectSystem = "strict";
         RestrictAddressFamilies = [
           "AF_UNIX"
           "AF_INET"

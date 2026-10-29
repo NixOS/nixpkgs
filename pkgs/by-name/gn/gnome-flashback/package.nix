@@ -22,7 +22,7 @@
   polkit,
   gdm,
   replaceVars,
-  systemd,
+  systemdLibs,
   tecla,
   upower,
   pam,
@@ -32,7 +32,6 @@
   libxxf86vm,
   nixosTests,
   runCommand,
-  buildEnv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     gdm
     gnome-panel
-    systemd
+    systemdLibs
     upower
     pam
     xkeyboard_config

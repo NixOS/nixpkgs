@@ -2,8 +2,14 @@
   lib,
   buildPythonPackage,
   autodock-vina,
-  swig,
+
+  # build-system
   setuptools,
+
+  # nativeBuildInputs
+  swig,
+
+  # dependencies
   numpy,
 }:
 
@@ -12,39 +18,35 @@ let
 in
 
 buildPythonPackage {
+  pname = "vina";
   inherit (autodock-vina)
-    pname
     version
     src
-    meta
     ;
-
   pyproject = true;
+  __structuredAttrs = true;
 
   sourceRoot = "${autodock-vina.src.name}/build/python";
 
-  postPatch = ''
-    # wildcards are not allowed
-    # https://github.com/ccsb-scripps/AutoDock-Vina/issues/176
-    substituteInPlace setup.py \
-      --replace "python_requires='>=3.5.*'" "python_requires='>=3.5'"
-
+  postPatch =
     # setupPyBuildFlags are not applied with `pyproject = true`
-    substituteInPlace setup.py \
-      --replace "= locate_boost()" "= '${lib.getDev boost}/include', '${boost}/lib'"
-
+    ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          "= locate_boost()" \
+          "= '${lib.getDev boost}/include', '${lib.getLib boost}/lib'"
+    ''
     # this line attempts to delete the source code
-    substituteInPlace setup.py \
-      --replace "shutil.rmtree('src')" "..."
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail "shutil.rmtree('src')" "..."
+    '';
 
-    # np.int is deprecated
-    # https://github.com/ccsb-scripps/AutoDock-Vina/pull/167 and so on
-    substituteInPlace vina/vina.py \
-      --replace "np.int" "int"
-  '';
+  build-system = [
+    setuptools
+  ];
 
   nativeBuildInputs = [
-    setuptools
     swig
   ];
 
@@ -52,7 +54,7 @@ buildPythonPackage {
     boost
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
   ];
 
@@ -62,4 +64,8 @@ buildPythonPackage {
   pythonImportsCheck = [
     "vina"
   ];
+
+  meta = removeAttrs autodock-vina.meta [ "mainProgram" ] // {
+    description = "Python bindings for AutoDock Vina, an open-source molecular docking engine";
+  };
 }

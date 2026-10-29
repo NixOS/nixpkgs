@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-insta";
-  version = "1.48.0";
+  version = "1.49.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
     tag = finalAttrs.version;
-    hash = "sha256-xIveukm1BsvY6z6bCsV4L9RZGIalspFEYFthE4hCaH8=";
+    hash = "sha256-mw+qpTc+J6xjirjxRAhbIF0Nw/lkpnEtTaIxDOWqFmc=";
   };
 
-  cargoHash = "sha256-OlCNm4N+cLreN7iR25cD06vsGnE+IWo5T15h3I6tCa8=";
+  cargoHash = "sha256-s1BLfuBOfjuP+TnmPC9h5OnUCSLGA0TCZrn8Qb/ZCk8=";
 
   nativeCheckInputs = [
     # used by test_binary_accept_missing_old_binary

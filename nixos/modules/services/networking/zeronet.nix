@@ -43,7 +43,7 @@ with lib;
   options.services.zeronet = {
     enable = mkEnableOption "zeronet";
 
-    package = mkPackageOption pkgs "zeronet" { };
+    package = mkPackageOption pkgs "zeronet-conservancy" { };
 
     settings = mkOption {
       type =
@@ -134,6 +134,6 @@ with lib;
   ];
 
   meta = {
-    inherit (pkgs.zeronet.meta) maintainers;
+    inherit (pkgs.zeronet-conservancy.meta) maintainers;
   };
 }

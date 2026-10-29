@@ -46,7 +46,7 @@ in
 
     powerManagement.powerDownCommands = ''
       #flush any bytes in pipe
-      while read -n 1 -t 1 SUSPEND_RESULT < /tmp/PmMessagesPort_out; do : ; done;
+      while read -r -n 1 -t 1 < /tmp/PmMessagesPort_out; do : ; done;
 
       #suspend DisplayLinkManager
       echo "S" > /tmp/PmMessagesPort_in
@@ -54,7 +54,7 @@ in
       #wait until suspend of DisplayLinkManager finish
       if [ -f /tmp/PmMessagesPort_out ]; then
         #wait until suspend of DisplayLinkManager finish
-        read -n 1 -t 10 SUSPEND_RESULT < /tmp/PmMessagesPort_out
+        read -r -n 1 -t 10 < /tmp/PmMessagesPort_out
       fi
     '';
 

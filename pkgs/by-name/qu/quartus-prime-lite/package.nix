@@ -5,10 +5,12 @@
   makeDesktopItem,
   runtimeShell,
   runCommand,
+  writeShellScriptBin,
+  xdg-utils,
   unstick,
-  quartus-prime-lite,
   libfaketime,
   pkgsi686Linux,
+  variant ? "lite",
   withQuesta ? true,
   supportedDevices ? [
     "Arria II"
@@ -18,23 +20,44 @@
     "MAX II/V"
     "MAX 10 FPGA"
   ],
-  unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; },
+  unwrapped ? callPackage ./quartus.nix {
+    inherit
+      unstick
+      supportedDevices
+      variant
+      withQuesta
+      ;
+  },
   extraProfile ? "",
 }:
 
 let
   desktopItem = makeDesktopItem {
-    name = "quartus-prime-lite";
+    name = "quartus-prime-${variant}";
     exec = "quartus";
     icon = "quartus";
     desktopName = "Quartus";
     genericName = "Quartus Prime";
     categories = [ "Development" ];
   };
+  # Quartus's own launcher (quartus/adm/qenv.sh) prepends quartus/linux64
+  # (which bundles an older libstdc++.so.6) to LD_LIBRARY_PATH for its whole
+  # session. When a user clicks a web link, Quartus execs `xdg-open` (found
+  # via $PATH) to open it, and that process inherits the polluted
+  # LD_LIBRARY_PATH, causing the browser it eventually launches to pick up
+  # Quartus's outdated libstdc++ instead of its own and fail to start. Shadow
+  # `xdg-open` on $PATH with a wrapper that restores the environment's
+  # original LD_LIBRARY_PATH (conveniently saved by qenv.sh as
+  # $QUARTUS_ORIG_LIBPATH) before delegating to nixpkgs' own xdg-utils
+  # xdg-open.
+  xdgOpenWrapper = writeShellScriptBin "xdg-open" ''
+    export LD_LIBRARY_PATH=$QUARTUS_ORIG_LIBPATH
+    exec ${lib.getExe' xdg-utils "xdg-open"} "$@"
+  '';
 in
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-buildFHSEnv rec {
-  pname = "quartus-prime-lite"; # wrapped
+buildFHSEnv (finalAttrs: {
+  pname = "quartus-prime-${variant}"; # wrapped
   inherit (unwrapped) version;
 
   targetPkgs =
@@ -72,15 +95,7 @@ buildFHSEnv rec {
 
   # these libs are installed as 64 bit, plus as 32 bit when multiArch is true
   multiPkgs =
-    pkgs:
-    with pkgs;
-    let
-      # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
-      freetype = pkgs.freetype.override { libpng = libpng12; };
-      fontconfig = pkgs.fontconfig.override { inherit freetype; };
-      libxft = pkgs.libxft.override { inherit freetype fontconfig; };
-    in
-    [
+    pkgs: with pkgs; [
       # questa requirements
       libxml2
       ncurses5
@@ -95,6 +110,11 @@ buildFHSEnv rec {
       libxcrypt-legacy
     ];
 
+  # See above NOTE regarding libpng
+  disallowedReferences = [
+    pkgsi686Linux.libpng
+  ];
+
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/64x64/apps
     ln -s ${desktopItem}/share/applications/* $out/share/applications
@@ -102,12 +122,13 @@ buildFHSEnv rec {
 
     progs_to_wrap=(
       "${unwrapped}"/quartus/bin/*
+      "${unwrapped}"/niosv/bin/*
       "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
       "${unwrapped}"/questa_fse/bin/*
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
-    wrapper=$out/bin/${pname}
+    wrapper=$out/bin/quartus-prime-${variant}
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
@@ -124,6 +145,12 @@ buildFHSEnv rec {
                 # SOURCE_DATE_EPOCH code path.
                 NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=0
                 ;;
+            niosv/*)
+                # Both are needed for a functional niosv-bsp and possibly other
+                # executables.
+                echo "export QUARTUS_ROOTDIR=${unwrapped}/quartus" >> "$wrapped"
+                echo "export SOPC_KIT_NIOS2=${unwrapped}/niosv" >> "$wrapped"
+                ;;
         esac
         # SOURCE_DATE_EPOCH blocklist for programs that are known to hang/break
         # with fixed/static clock.
@@ -133,6 +160,11 @@ buildFHSEnv rec {
                 ;;
         esac
         echo "export NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" >> "$wrapped"
+        # If a Wayland user has QT_QPA_PLATFORM=wayland, Quartus executables
+        # that use Qt won't work, so let's be explicit.
+        echo "export QT_QPA_PLATFORM=xcb" >> "$wrapped"
+        # See above NOTE regarding `xdgOpenWrapper`
+        echo "export PATH=${xdgOpenWrapper}/bin:\$PATH" >> "$wrapped"
         echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
@@ -179,52 +211,63 @@ buildFHSEnv rec {
 
   passthru = {
     inherit unwrapped;
-    tests = {
-      buildSof =
-        runCommand "quartus-prime-lite-test-build-sof"
-          {
-            nativeBuildInputs = [ quartus-prime-lite ];
-            env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
-          }
-          ''
-            cat >mydesign.vhd <<EOF
-            library ieee;
-            use ieee.std_logic_1164.all;
+    tests =
+      {
+        lite = {
+          buildSof =
+            runCommand "quartus-prime-lite-test-build-sof"
+              {
+                nativeBuildInputs = [ finalAttrs.finalPackage ];
+                env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
+              }
+              ''
+                cat >mydesign.vhd <<EOF
+                library ieee;
+                use ieee.std_logic_1164.all;
 
-            entity mydesign is
-            port (
-                in_0: in std_logic;
-                in_1: in std_logic;
-                out_1: out std_logic
-            );
-            end mydesign;
+                entity mydesign is
+                port (
+                    in_0: in std_logic;
+                    in_1: in std_logic;
+                    out_1: out std_logic
+                );
+                end mydesign;
 
-            architecture dataflow of mydesign is
-            begin
-                out_1 <= in_0 and in_1;
-            end dataflow;
-            EOF
+                architecture dataflow of mydesign is
+                begin
+                    out_1 <= in_0 and in_1;
+                end dataflow;
+                EOF
 
-            quartus_sh --flow compile mydesign
+                quartus_sh --flow compile mydesign
 
-            if ! [ -f mydesign.sof ]; then
-                echo "error: failed to produce mydesign.sof" >&2
-                exit 1
-            fi
+                if ! [ -f mydesign.sof ]; then
+                    echo "error: failed to produce mydesign.sof" >&2
+                    exit 1
+                fi
 
-            sha1sum mydesign.sof > "$out"
-          '';
-      questaEncryptedModel =
-        runCommand "quartus-prime-lite-test-questa-encrypted-model"
-          {
-            env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
-          }
-          ''
-            "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
-            touch "$out"
-          '';
-    };
+                sha1sum mydesign.sof > "$out"
+              '';
+          questaEncryptedModel =
+            runCommand "quartus-prime-lite-test-questa-encrypted-model"
+              {
+                env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
+              }
+              ''
+                "${finalAttrs.finalPackage}/bin/vlog" "${finalAttrs.passthru.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
+                touch "$out"
+              '';
+        };
+        standard = {
+          # quartus-prime-standard requires a license to run synthesis so we can't run tests here :(
+        };
+        pro = {
+          # No encrypted models to test in questa_fse/intel/verilog/src
+          # Hangs on the buildSof test (due to issues with faketime?)
+        };
+      }
+      .${variant};
   };
 
   inherit (unwrapped) meta;
-}
+})

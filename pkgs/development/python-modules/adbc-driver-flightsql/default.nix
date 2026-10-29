@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-flightsql";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "adbc_driver_flightsql";
     inherit (finalAttrs) version;
-    hash = "sha256-dfcD7vGBLDky5fRkPF4htWkLI99+CeiLcn95UqpVnyo=";
+    hash = "sha256-MA9ngB6gFleODEu3mPwrkCTkBc/dP3n9d+N0gaV2fkU=";
   };
 
   build-system = [

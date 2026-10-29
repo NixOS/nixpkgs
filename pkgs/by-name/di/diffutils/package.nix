@@ -12,12 +12,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diffutils";
   version = "3.12";
 
   src = fetchurl {
-    url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
+    url = "mirror://gnu/diffutils/diffutils-${finalAttrs.version}.tar.xz";
     hash = "sha256-fIt/n8hgkUH96pzs6FJJ0whiQ5H/Yd7a9Sj8szdyff0=";
   };
 
@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
   ];
   # If no explicit coreutils is given, use the one from stdenv.
   buildInputs = [ coreutils ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
   # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow and test-sigaction fail.
@@ -70,8 +74,10 @@ stdenv.mkDerivation rec {
     # "pr" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isGnu) [
       "gl_cv_func_getopt_gnu=yes"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "gl_cv_func_strcasecmp_works=yes"
     ];
 
@@ -88,4 +94,4 @@ stdenv.mkDerivation rec {
       helsinki-Jo
     ];
   };
-}
+})

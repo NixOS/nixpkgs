@@ -14,7 +14,7 @@
   pulseaudio,
   gtk3,
   glib,
-  glibmm,
+  glibmm_2_4,
   gtkmm3,
   lilv,
   lv2,
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "wwmm";
-    repo = "pulseeffects";
+    repo = "easyeffects";
     rev = "fbe0a724c1405cee624802f381476cf003dfcfa";
     hash = "sha256-tyVUWc8w08WUnJRTjJVTIiG/YBWTETNYG+4amwEYezY=";
   };
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   buildInputs = [
     pulseaudio
     glib
-    glibmm
+    glibmm_2_4
     gtk3
     gtkmm3
     gst_all_1.gstreamer
@@ -109,7 +109,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     mainProgram = "pulseeffects";
-    homepage = "https://github.com/wwmm/pulseeffects";
+    homepage = "https://github.com/wwmm/easyeffects";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;

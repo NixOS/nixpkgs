@@ -1,8 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  click,
   click-log,
+  click,
   fetchFromGitHub,
   geopandas,
   networkx,
@@ -19,8 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "alphashape";
   version = "1.3.1";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bellockk";
@@ -51,15 +50,19 @@ buildPythonPackage (finalAttrs: {
     # TypeError
     "test_given_a_four_point_polygon_with_no_alpha_return_input"
     "test_given_a_point_return_a_point"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_3_dimensional_regression"
+    "test_3_dimensional_regression_with_dynamic_alpha"
   ];
 
   pythonImportsCheck = [ "alphashape" ];
 
-  meta = with lib; {
+  meta = {
     description = "Toolbox for generating n-dimensional alpha shapes";
     homepage = "https://github.com/bellockk/alphashape";
     changelog = "https://github.com/bellockk/alphashape/releases/tag/${finalAttrs.src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 })

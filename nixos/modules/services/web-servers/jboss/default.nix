@@ -93,7 +93,7 @@ in
   config = mkIf config.services.jboss.enable {
     systemd.services.jboss = {
       description = "JBoss server";
-      script = "${jbossService}/bin/control start";
+      serviceConfig.ExecStart = "${jbossService}/bin/control start";
       wantedBy = [ "multi-user.target" ];
     };
   };

@@ -5,7 +5,6 @@
   makeWrapper,
   runCommand,
   stdenv,
-  writableTmpDirAsHomeHook,
 
   _4ti2,
   autoreconfHook,
@@ -17,7 +16,6 @@
   cohomcalg,
   csdp,
   eigen,
-  emacs-nox,
   fflas-ffpack,
   flex,
   flint,
@@ -70,8 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Macaulay2";
     repo = "M2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-2e39qzBO63Ft+yw+tJChLsupeinalTkDwXp3WBF2wms=";
-    fetchSubmodules = true;
+    hash = "sha256-kYxqbMKW+7r6nI4i3o7vvJVf0TGRVLaDviZTFx3PTBI=";
   };
 
   docs = fetchurl {
@@ -122,13 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     bison
-    emacs-nox
     flex
+    flint
     gdbm
     getconf
     gfortran
     makeWrapper
     pkg-config
+    R
     texinfo
     which
 
@@ -152,10 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i 's/AC_SUBST(REL,.*uname -r.*)/AC_SUBST(REL,"")/' configure.ac
-    substituteInPlace configure.ac \
-      --replace-fail "[\$gfan_version], [ge], [0.8]" "[\$gfan_version], [ge], [0.6]"
-    substituteInPlace Macaulay2/packages/gfanInterface.m2 \
-      --replace-fail 'MinimumVersion => ("0.8"' 'MinimumVersion => ("0.6"'
+    # remove editor stuff from Makefiles
+    substituteInPlace Macaulay2/Makefile.in \
+      --replace-fail "all-in-editors" "" \
+      --replace-fail "editors" ""
   '';
 
   preConfigure = ''
@@ -197,10 +195,9 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postInstall = ''
-    substituteInPlace "$out/bin/M2" \
-      --replace-fail "/bin/sh" "${runtimeShell}"
+    rm "$out/bin/M2"
 
-    wrapProgram "$out/bin/M2-binary" \
+    makeWrapper "$out/bin/M2-binary" "$out/bin/M2" \
       --prefix PATH : ${
         lib.makeBinPath [
           _4ti2
@@ -216,7 +213,9 @@ stdenv.mkDerivation (finalAttrs: {
           topcom
         ]
       } \
-      --prefix ${if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${
+      --prefix ${
+        if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
+      } : $out/lib/Macaulay2/lib:${
         lib.makeLibraryPath [
           cddlib
           flint
@@ -233,6 +232,14 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix R_LIBS_SITE : ${lib.makeSearchPath "library" rWrapper.recommendedPackages}
   '';
 
+  # run engine tests only
+  checkFlags = [
+    "-C"
+    "Macaulay2/e"
+  ];
+
+  doCheck = true;
+
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/M2 --check 1
@@ -247,23 +254,21 @@ stdenv.mkDerivation (finalAttrs: {
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
-            writableTmpDirAsHomeHook
           ];
         }
         ''
-          M2 --check 2 && touch $out
+          M2 -q --check 2 && touch $out
         '';
 
     all-packages =
-      runCommand "macaulay2-all-packages-test"
+      runCommand "macaulay2-all-package-tests"
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
-            writableTmpDirAsHomeHook
           ];
         }
         ''
-          M2 --check 3 && touch $out
+          M2 -q --check 3 && touch $out
         '';
   };
 
@@ -286,7 +291,8 @@ stdenv.mkDerivation (finalAttrs: {
       decomposition of ideals, integral closure of rings, and more.
     '';
     homepage = "https://macaulay2.com/";
-    license = lib.licenses.gpl2Plus;
+    changelog = "https://macaulay2.com/doc/Macaulay2/share/doc/Macaulay2/Macaulay2Doc/html/_changes_cm_sp${finalAttrs.version}.html";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

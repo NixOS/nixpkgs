@@ -1,7 +1,6 @@
 {
   acl,
   bash,
-  buildPackages,
   cockpit,
   coreutils,
   fetchFromGitHub,
@@ -15,61 +14,45 @@
   mbuffer,
   msmtp,
   nix-update-script,
-  nodejs_22,
+  nodejs,
   openssh,
   samba,
   shadow,
   smartmontools,
   stdenv,
   su,
-  systemd,
+  systemdLibs,
   util-linux,
   yarn-berry,
   zfs,
 }:
-let
-  # Pin to Node <24.15.0: Yarn Berry's PnP linker breaks `require.cache` on
-  # newer Node, which crashes tailwindcss mid-build (and ESLint, per
-  # yarnpkg/berry#7106). See NixOS/nixpkgs#530137.
-  #
-  # `nodejs` is rebound here (rather than touched at every call site below)
-  # so the rest of this file is unaffected.
-  #
-  # yarn-berry's own `yarn` binary gets patchShebang'd against whatever
-  # `nodejs` *it* was built with, so overriding nativeBuildInputs alone does
-  # nothing - we have to rebuild yarn-berry itself against nodejs_22, for
-  # both the host and build-platform (cross-compilation) variants.
-  nodejs = nodejs_22;
-  yarnBerry = yarn-berry.override { inherit nodejs; };
-  yarnBerryForBuild = buildPackages.yarn-berry.override { nodejs = buildPackages.nodejs_22; };
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.33";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-3KoCp4gcWYuama+7t1oQhif3/Ii/zSlhyeNTH3mvbNg=";
+    hash = "sha256-AeHawdStX+A+/8z4IWaf1w5irNZDIWs52y1nsEF+fHg=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   # Use buildPackages for cross-compilation support
-  offlineCache = yarnBerryForBuild.fetchYarnBerryDeps {
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     hash = "sha256-nm3iHf9Rm5JFKzH0HAvglkQPFIV6Fl1e9WvNdqevTug=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs_22
+    nodejs
     jq
-    yarnBerry
-    yarnBerryForBuild.yarnBerryConfigHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
   ];
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
@@ -86,13 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     lsscsi
     mbuffer
     msmtp
-    nodejs_22
+    nodejs
     openssh
     samba
     shadow
     smartmontools
     su
-    systemd
+    systemdLibs
     util-linux
     zfs
     cockpit.passthru.python3Packages.pyudev

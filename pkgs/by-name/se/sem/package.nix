@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "sem";
-  version = "0.35.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "semaphoreci";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+rT8Kni7094OjNmGRxPUxXaHopyCNGMCM2ac4lIm9PE=";
+    sha256 = "sha256-lDtJBogEDNWuBn0xgOLdy2OF81+6If/QkYb/FtVvQ/Q=";
   };
 
-  vendorHash = "sha256-XEr/vXamJ7GTRpXNdcVQ9PcUVvQ8EW3pmq/tEZMHSDo=";
+  vendorHash = "sha256-8DyLs19SGXJfGlibPJUKJauTRIXAK9MtIrmiD2i8lqU=";
   subPackages = [ "." ];
 
   ldflags = [

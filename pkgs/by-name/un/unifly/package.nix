@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "unifly";
-  version = "0.9.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "hyperb1iss";
     repo = "unifly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hw/zm9OjBcAI0H2vvwnAj4tjF0E+d6RHpWIexhPBuy8=";
+    hash = "sha256-CxZCpZ+eKPziwpX9IbXN5kVKFiw27hXAGde9Wn9Jbrs=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ dbus ];
 
-  cargoHash = "sha256-4nLfMzlN5KQK3JvmoHbktI/tyc3aaI78Oa5RtQN4xLo=";
+  cargoHash = "sha256-dsixPXNHuYkOuNt0s95q9UG2KO2WJYcmT7k51gZtZuk=";
 
   doCheck = false;
   doInstallCheck = true;
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Elegant UniFi network management CLI & TUI - for humans and agents";
     homepage = "https://hyperb1iss.github.io/unifly";
     changelog = "https://github.com/hyperb1iss/unifly/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ britter ];
     mainProgram = "unifly";
   };

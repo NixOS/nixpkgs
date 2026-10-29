@@ -40,6 +40,11 @@ python3.pkgs.buildPythonApplication {
     hatch-vcs
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"src/sas/example_data/" = "sas/example_data"' ""
+  '';
+
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
     pyside-tools-rcc
@@ -92,9 +97,9 @@ python3.pkgs.buildPythonApplication {
 
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   nativeCheckInputs =
     with python3.pkgs;

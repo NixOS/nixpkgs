@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.28.4";
+  version = "1.28.6";
 
   pyproject = false;
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${version}.tar.xz";
-    hash = "sha256-xOs4JyC0RD+4AaU0GN/wvUzXR4cW1c7Uk1BKZ1tNCf0=";
+    hash = "sha256-NNWEQMU7VJWhI9Ckt7ervG6XkqWyGVTbhqB5Gxb24BI=";
   };
 
   patches = [

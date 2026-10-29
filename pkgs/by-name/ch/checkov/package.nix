@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -35,18 +36,19 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.3.6";
+  version = "3.3.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = finalAttrs.version;
-    hash = "sha256-4wOFbEv1MVVuMpYQLs+oHQxCLw/tk++yTiR+yyLiCa8=";
+    hash = "sha256-q2aZfFoeBvg78uCLQxws4KaWH7yaE9CDm5TIOokscTs=";
   };
 
   pythonRelaxDeps = [
     "aiodns" # breaking change is that it requires pycares >= 5.0.0, which is fine.
+    "aiohttp"
     "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
@@ -132,11 +134,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     responses
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # No API key available

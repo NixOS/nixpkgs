@@ -32,8 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "run_command('git', 'describe', '--tags', check: false).stdout().strip()" "'v${finalAttrs.version}'"
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     appstream-glib
     blueprint-compiler
@@ -56,7 +54,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapGAppsHook = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "Graphical librespeed client written using GTK4 + libadwaita";

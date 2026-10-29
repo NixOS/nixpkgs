@@ -1,30 +1,34 @@
 {
-  rustPlatform,
   lib,
+  aircrack-ng,
+  copyDesktopItems,
   fetchFromGitHub,
-  pkg-config,
-  glib,
-  pango,
   gdk-pixbuf,
+  glib,
   graphene,
   gtk4,
-  copyDesktopItems,
+  iw,
+  macchanger,
   makeDesktopItem,
+  pango,
+  pkg-config,
+  rustPlatform,
+  wireshark-cli,
   wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "airgorah";
-  version = "0.7.4";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "martin-olivier";
     repo = "airgorah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6TH+DRDtWajZjHNmFSKL4XJK+AuDNUbWKRPRryOpSGY=";
+    hash = "sha256-gRQ596NhvOmsGscYsl4o+bhPbanx5kFOJnEeXPTVJEY=";
   };
 
-  cargoHash = "sha256-LiSaNyqsKBZ5nNP7mws1pjhVwTXNBF6e1wSUdG/qYog=";
+  cargoHash = "sha256-y9akyXjNHaqSJIvFOiYbg+AygSV9KTWJ2pBlgGaJFOs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,7 +45,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 icons/app_icon.png $out/share/icons/airgorah.png
+    install -Dm644 crates/gui/icons/app_icon.png $out/share/icons/airgorah.png
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${
+      lib.makeBinPath [
+        iw
+        aircrack-ng
+        wireshark-cli
+        macchanger
+      ]
+    })
   '';
 
   desktopItems = [

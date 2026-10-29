@@ -8,7 +8,7 @@
 }:
 
 let
-  inherit (lib) optional optionalString;
+  inherit (lib) optional;
 
 in
 stdenv.mkDerivation (finalAttrs: {

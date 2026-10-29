@@ -219,7 +219,6 @@ lib.extendMkDerivation {
       env = args.env or { } // {
         inherit (go) GOOS GOARCH;
 
-        GO111MODULE = "on";
         GOTOOLCHAIN = "local";
 
         CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
@@ -322,7 +321,7 @@ lib.extendMkDerivation {
               getGoDirs() {
                 local -r type="$1"
 
-                # Support strucuredAttrs, they are not space seperated
+                # Support structuredAttrs, they are not space separated
                 local -a subPackagesArray
                 concatTo subPackagesArray subPackages
 

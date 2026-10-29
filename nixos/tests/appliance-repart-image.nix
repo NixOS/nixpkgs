@@ -46,6 +46,8 @@ in
       };
 
       image.repart = {
+        enable = true;
+
         name = "appliance-gpt-image";
         # OVMF does not work with the default repart sector size of 4096
         sectorSize = 512;
@@ -57,7 +59,7 @@ in
               in
               {
                 "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
-                  "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
+                  "${config.systemd.package}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
 
                 "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
                   "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
@@ -90,7 +92,16 @@ in
               Minimize = "guess";
             };
           };
-        };
+        }
+        // (lib.genAttrs [ "squashfs" "erofs" "btrfs" "xfs" "swap" "empty" ] (fsType: {
+          repartConfig = {
+            Type = "linux-generic";
+            Format = fsType;
+
+            SizeMinBytes = "10M";
+            SizeMaxBytes = "10M";
+          };
+        }));
       };
     };
 

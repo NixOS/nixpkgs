@@ -27,6 +27,8 @@
       };
 
       image.repart = {
+        enable = true;
+
         verityStore = {
           enable = true;
           # by default the module works with systemd-boot, for simplicity this test directly boots the UKI
@@ -53,10 +55,7 @@
         useEFIBoot = true;
       };
 
-      boot = {
-        loader.grub.enable = false;
-        initrd.systemd.enable = true;
-      };
+      boot.loader.grub.enable = false;
 
       system.image.id = "nixos-appliance";
 
@@ -123,6 +122,6 @@
       without_version.wait_for_unit("default.target")
       run_verity_tests(without_version)
       with subtest("Image version is not set"):
-        without_version.succeed('grep IMAGE_VERSION="" /etc/os-release')
+        without_version.fail('grep IMAGE_VERSION /etc/os-release')
     '';
 }

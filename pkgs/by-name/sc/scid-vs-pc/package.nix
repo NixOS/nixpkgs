@@ -2,6 +2,7 @@
   lib,
   fetchurl,
   tcl,
+  bashNonInteractive,
   tk,
   libx11,
   zlib,
@@ -10,19 +11,18 @@
   makeDesktopItem,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "scid-vs-pc";
   version = "4.27";
 
   src = fetchurl {
-    url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
+    url = "mirror://sourceforge/scidvspc/scid_vs_pc-${finalAttrs.version}.tgz";
     hash = "sha256-aWN1w46dOW7VMACs8huvUsACtk3ggIS6BZ51BM9k+VM=";
   };
 
   postPatch = ''
     substituteInPlace configure Makefile.conf \
-      --replace "~/.fonts" "$out/share/fonts/truetype/Scid" \
-      --replace "which fc-cache" "false"
+      --replace-fail "~/.fonts" "$out/share/fonts/truetype/Scid"
   '';
 
   nativeBuildInputs = [
@@ -30,6 +30,7 @@ tcl.mkTclDerivation rec {
     which
   ];
   buildInputs = [
+    bashNonInteractive
     tk
     libx11
     zlib
@@ -55,7 +56,7 @@ tcl.mkTclDerivation rec {
     name = "scid-vs-pc";
     desktopName = "Scid vs. PC";
     genericName = "Chess Database";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     icon = "scid";
     exec = "scid";
     categories = [
@@ -72,4 +73,4 @@ tcl.mkTclDerivation rec {
     maintainers = [ lib.maintainers.paraseba ];
     platforms = lib.platforms.linux;
   };
-}
+})

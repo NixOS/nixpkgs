@@ -6,36 +6,38 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bbot";
-  version = "2.8.6";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-u8F995BD1l6nPWYckMIYSgErSO3fBcU2IyBFU1WZjF8=";
+    hash = "sha256-kr1nKzBtUA2LJHh+43UP8DF6NHtmMish2uQyOvzxHEU=";
   };
 
   pythonRelaxDeps = [
+    "blastdns"
+    "cloudcheck"
     "dnspython"
     "idna"
     "lxml"
+    "puremagic"
+    "pyjwt"
     "radixtarget"
     "regex"
     "tabulate"
     "websockets"
     "yara-python"
-    "pyjwt"
-    "cloudcheck"
   ];
 
-  build-system = with python3.pkgs; [
-    poetry-core
-    poetry-dynamic-versioning
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     ansible-core
     ansible-runner
+    asndb
     beautifulsoup4
+    blastdns
+    blasthttp
     cachetools
     cloudcheck
     deepdiff
@@ -47,6 +49,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mmh3
     omegaconf
     orjson
+    pip
     psutil
     puremagic
     pycryptodome
@@ -67,6 +70,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     yara-python
     starlette
     tornado
+    zstandard
   ];
 
   # Project has no tests
@@ -74,7 +78,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "OSINT automation for hackers";
-    homepage = "https://pypi.org/project/bbot/";
+    homepage = "https://github.com/blacklanternsecurity/bbot";
+    changelog = "https://github.com/blacklanternsecurity/bbot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab

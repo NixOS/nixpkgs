@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "us";
-  version = "3.2.0";
+  version = "4.0.0";
   pyproject = true;
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yyI+hTk9zFFx6tDdISutxH+WZ7I3AP6j5+pfMQ1UUzg=";
+    hash = "sha256-fdTE5gPJQnty1+B75wDY9kO9zX9RlaErxjnxt+OOdJY=";
   };
 
   propagatedBuildInputs = [

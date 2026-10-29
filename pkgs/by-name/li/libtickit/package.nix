@@ -9,7 +9,7 @@
   unibilium,
 }:
 let
-  version = "0.4.5";
+  version = "0.4.6";
 in
 stdenv.mkDerivation {
   pname = "libtickit";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "leonerd";
     repo = "libtickit";
     rev = "v${version}";
-    hash = "sha256-q8JMNFxmnyOiUso4nXLZjJIBFYR/EF6g45lxVeY0f1s=";
+    hash = "sha256-5KGAPECXIi3V0oF7Gw2KjIIBhfKDDm1PE2k4+ooGmfM=";
   };
 
   patches = [

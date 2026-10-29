@@ -7,6 +7,7 @@
   electron,
   copyDesktopItems,
   grpc-tools,
+  librsvg,
   makeBinaryWrapper,
   versionCheckHook,
   makeDesktopItem,
@@ -17,7 +18,7 @@ buildNpmPackage (finalAttrs: {
   inherit (mullvad) src version;
 
   nodejs = nodejs_22;
-  npmDepsHash = "sha256-DWLMf+fHCm3hqKt25vmoZ+uEL90/hEpQS+5k8sBFo/c=";
+  npmDepsHash = "sha256-CKhPOV0Nd/YoTXqbTQOFrKp3QUacrTJ/B+oEkuFMWsM=";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -33,6 +34,7 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     grpc-tools
+    librsvg
     makeBinaryWrapper
   ];
 
@@ -63,14 +65,18 @@ buildNpmPackage (finalAttrs: {
   npmWorkspace = "mullvad-vpn";
   npmBuildScript = "pack:linux";
 
-  # Mullvad currently depends on iproute2 being available at runtime to
-  # set the userspace routing for certain obfuscation types.
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/mullvad-vpn/
     cp -r ../dist/*-unpacked/{locales,resources{,.pak}} $out/share/mullvad-vpn/
-    cp ../graphics/icon{-square.svg,.svg} $out/share/mullvad-vpn/resources/
+    cp ../graphics/icon{-square,}.svg $out/share/mullvad-vpn/resources/
+
+    install -D ../graphics/icon.svg $out/share/icons/hicolor/scalable/apps/mullvad-vpn.svg
+    for size in 16 32 48 64 128 256 512 1024; do
+      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
+      rsvg-convert -o $out/share/icons/hicolor/''${size}x''${size}/apps/mullvad-vpn.png -w $size -h $size ../graphics/icon.svg
+    done
 
     makeWrapper ${lib.getExe electron} $out/bin/mullvad-vpn \
         --add-flags $out/share/mullvad-vpn/resources/app.asar \
@@ -95,18 +101,16 @@ buildNpmPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "mullvad-vpn";
-      categories = [ "Network" ];
-      comment = "Mullvad VPN client";
-      desktopName = "Mullvad VPN";
-      exec = "mullvad-vpn";
-      icon = "mullvad-vpn";
-      startupWMClass = "Mullvad VPN";
-      terminal = false;
-    })
-  ];
+  desktopItems = lib.singleton (makeDesktopItem {
+    name = "mullvad-vpn";
+    categories = [ "Network" ];
+    comment = "Mullvad VPN client";
+    desktopName = "Mullvad VPN";
+    exec = "mullvad-vpn";
+    icon = "mullvad-vpn";
+    startupWMClass = "Mullvad VPN";
+    terminal = false;
+  });
 
   passthru.hasMullvadGUI = true;
 
@@ -123,5 +127,8 @@ buildNpmPackage (finalAttrs: {
       sigmasquadron
     ];
     mainProgram = "mullvad-vpn";
+    # Never built on darwin since first introduction in nixpkgs
+    # The build is currently hardcoded for linux (pack:linux), so adding darwin support will likely require major changes
+    badPlatforms = lib.platforms.darwin;
   };
 })

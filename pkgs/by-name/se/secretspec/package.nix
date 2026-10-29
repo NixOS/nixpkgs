@@ -2,42 +2,38 @@
   lib,
   rustPlatform,
   fetchCrate,
-  fetchurl,
-  pkg-config,
-  dbus,
+  cacert,
+  gitMinimal,
+  jq,
   sops,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.17.0";
+  version = "0.21.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-3UW0j5i+2r8yWaYYCtbdtiPJe8epLKeR1cpP35Bxko4=";
+    hash = "sha256-VCvo+O3IHVUeZG6cxBmWy8/CEDZOwVr8IVcWxroUd00=";
   };
 
-  cargoHash = "sha256-I6HFcWPB5TUSMtnk+SEHMxiKlPBxHLrj8zgzEWllV2w=";
+  cargoHash = "sha256-cA7HmOxCrfPiBKI8xxxpRBvGLUgyl4Ts1uhoCt0bBuk=";
 
   postPatch = ''
-    mkdir -p schema
-    cp ${
-      fetchurl {
-        url = "https://raw.githubusercontent.com/cachix/secretspec/v${finalAttrs.version}/schema/resolution-report.schema.json";
-        hash = "sha256-MDuWWa05hh3g5AtaJnoe6qDvf1XVO3C29zKJDm+f+h0=";
-      }
-    } schema/resolution-report.schema.json
-    substituteInPlace src/tests.rs \
-      --replace-fail '../../schema/resolution-report.schema.json' '../schema/resolution-report.schema.json'
+    patchShebangs tests/fixtures/bw-shim.sh
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  nativeCheckInputs = [ sops ];
-  buildInputs = [ dbus ];
+  nativeCheckInputs = [
+    gitMinimal
+    jq
+    sops
+  ];
 
   preCheck = ''
     export HOME="$TMPDIR"
+    export NO_COLOR=1
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
   # A test binds to localhost, which requires an explicit Darwin sandbox exception.

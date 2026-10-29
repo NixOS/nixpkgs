@@ -5,7 +5,7 @@
   zig_0_15,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  # fast-cli existed, was removed as noted in aliasses.nix on 2025-11-17. Consider to rename this package after 1 to 2 releases of nixos
+  # fast-cli existed, was removed as noted in aliases.nix on 2025-11-17. Consider to rename this package after 1 to 2 releases of nixos
   pname = "fast-cli-zig";
   version = "0.3.5";
 

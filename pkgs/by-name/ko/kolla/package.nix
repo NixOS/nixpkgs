@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kolla";
-  version = "21.0.0";
+  version = "23.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
     tag = finalAttrs.version;
-    hash = "sha256-wbVaPIvn4jPcb+h5yKhLDmvT6/widfSX2iV+2KNW8pM=";
+    hash = "sha256-UOYTDdT7aJUbzwYkmUOsHNid0CUGu+LrHomDPQQDRIQ=";
   };
 
   postPatch = ''
@@ -51,18 +51,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     testtools
-    stestr
+    stestrCheckHook
     oslotest
     hacking
     bashate
+    ddt
   ];
-
-  # Tests output a few exceptions but still succeed
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "test_load_ok")
-    runHook postCheck
-  '';
 
   meta = {
     description = "Provides production-ready containers and deployment tools for operating OpenStack clouds";

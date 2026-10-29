@@ -177,6 +177,7 @@ with self;
       async_websocket
       cohttp_async_websocket
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   async_sendfile = janePackage {
@@ -438,6 +439,7 @@ with self;
       ppx_jane
       uri-sexp
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   cohttp_static_handler = janePackage {
@@ -445,6 +447,7 @@ with self;
     hash = "sha256-RB/sUq1tL8A3m9YhHHx2LFqoExTX187VeZI9MRb1NeA=";
     meta.description = "Library for easily creating a cohttp handler for static files";
     propagatedBuildInputs = [ cohttp-async_5_3 ];
+    __darwinAllowLocalNetworking = true;
   };
 
   content_security_policy = janePackage {

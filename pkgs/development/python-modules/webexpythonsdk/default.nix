@@ -3,24 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyjwt,
-  pythonOlder,
   requests,
   requests-toolbelt,
   poetry-core,
   poetry-dynamic-versioning,
+  pyprojectVersionPatchHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webexpythonsdk";
   version = "2.0.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
-
   src = fetchFromGitHub {
     owner = "WebexCommunity";
     repo = "WebexPythonSDK";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2yyGR5gCJVRsEnoPAr8tkMeG19vTfATl/ybuMydnplU=";
   };
 
@@ -28,6 +26,8 @@ buildPythonPackage rec {
     poetry-core
     poetry-dynamic-versioning
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     pyjwt
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/WebexCommunity/WebexPythonSDK";
-    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/${src.tag}";
+    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

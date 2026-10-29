@@ -3,7 +3,7 @@
   buildRedist,
   lib,
 }:
-buildRedist {
+buildRedist (finalAttrs: {
   redistName = "cuda";
   pname = "cuda_cupti";
 
@@ -14,7 +14,13 @@ buildRedist {
     "lib"
     "samples"
   ]
-  ++ lib.optionals (backendStdenv.hostNixSystem == "x86_64-linux") [ "static" ];
+  # NOTE: declaring an output with nothing to move into it is a build failure, and which redist
+  # systems ship static archives has changed over time: linux-x86_64 always has, linux-sbsa only
+  # since 12.6.37, and linux-aarch64 (Jetson) and linux-ppc64le never have.
+  ++ lib.optionals (
+    backendStdenv.hostRedistSystem == "linux-x86_64"
+    || (backendStdenv.hostRedistSystem == "linux-sbsa" && lib.versionAtLeast finalAttrs.version "12.6")
+  ) [ "static" ];
 
   allowFHSReferences = true;
 
@@ -27,4 +33,4 @@ buildRedist {
     homepage = "https://docs.nvidia.com/cupti";
     changelog = "https://docs.nvidia.com/cupti/release-notes/release-notes.html";
   };
-}
+})

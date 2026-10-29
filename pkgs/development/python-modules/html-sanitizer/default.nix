@@ -1,30 +1,24 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # build-system
   hatchling,
-
-  # dependencies
-  lxml,
   lxml-html-clean,
-  beautifulsoup4,
-
-  # tests
+  lxml,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "html-sanitizer";
-  version = "2.6";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = "html-sanitizer";
-    tag = version;
-    hash = "sha256-egBGhv7vudH32jwh9rAXuXfMzPDxJ60S5WKbc4kzCTU=";
+    tag = finalAttrs.version;
+    hash = "sha256-F+af1cyHAKc7FhTBHxc+LHhE46rE0rm23ONIqFIZolo=";
   };
 
   build-system = [ hatchling ];
@@ -50,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Allowlist-based and very opinionated HTML sanitizer";
     homepage = "https://github.com/matthiask/html-sanitizer";
-    changelog = "https://github.com/matthiask/html-sanitizer/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/matthiask/html-sanitizer/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

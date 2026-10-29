@@ -80,7 +80,7 @@ buildPythonPackage (finalAttrs: {
     "compressai._CXX"
   ];
 
-  # We have to delete the source because otherwise it is used intead the installed package.
+  # We have to delete the source because otherwise it is used instead the installed package.
   preCheck = ''
     rm -rf compressai
   '';

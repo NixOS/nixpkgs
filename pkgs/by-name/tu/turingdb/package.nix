@@ -105,7 +105,7 @@ turingstdenv.mkDerivation (finalAttrs: {
     pugixml
     zlib
   ]
-  ++ lib.optionals turingstdenv.isDarwin [ llvmPackages_20.openmp ]
+  ++ lib.optionals turingstdenv.hostPlatform.isDarwin [ llvmPackages_20.openmp ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -114,7 +114,6 @@ turingstdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "NIX_BUILD" true)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-fopenmp")
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-lgomp")
     (lib.cmakeFeature "FLEX_INCLUDE_DIR" "${lib.getDev flex}/include")

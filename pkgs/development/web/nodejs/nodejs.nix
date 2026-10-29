@@ -5,12 +5,14 @@
   fetchpatch2,
   fetchFromGitHub,
   python,
+  abseil-cpp,
   ada,
   brotli,
   c-ares,
   gtest,
   hdrhistogram_c,
   libffiReal,
+  libhwy,
   libuv,
   lief,
   llhttp,
@@ -22,33 +24,13 @@
   openssl,
   simdjson,
   simdutf,
-  simdutf_6 ? (
-    simdutf.overrideAttrs (
-      {
-        version = "6.5.0";
-
-        src = fetchFromGitHub {
-          owner = "simdutf";
-          repo = "simdutf";
-          rev = "v6.5.0";
-          hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
-        };
-      }
-      // (lib.optionalAttrs stdenv.buildPlatform.isDarwin {
-        # Fix build on darwin
-        postPatch = ''
-          substituteInPlace tools/CMakeLists.txt --replace-fail '-Wl,--gc-sections' ""
-        '';
-      })
-    )
-  ),
   sqlite,
   temporal_capi,
   uvwasi,
   zlib,
   zstd,
   icu,
-  bash,
+  bashNonInteractive,
   ninja,
   pkgconf,
   unixtools,
@@ -137,7 +119,9 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedAdaAndSimd = lib.versionAtLeast version "22.2";
+  useSharedAbseilAndHighway = lib.versionAtLeast version "26.9";
+  useSharedAdaAndSimdjson = lib.versionAtLeast version "22.2";
+  useSharedSimdutf = lib.versionAtLeast version "26.10";
   useSharedFFI = lib.versionAtLeast version "26.1";
   useSharedGtestAndHistogram = lib.versionAtLeast version (
     if majorVersion == "24" then "24.14.0" else "25.4"
@@ -150,8 +134,22 @@ let
   useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps = {
+    # TODO: remove this on staging and land with https://github.com/NixOS/nixpkgs/pull/576792
+    brotli =
+      if majorVersion == "24" then
+        brotli
+      else
+        brotli.overrideAttrs (old: {
+          patches = old.patches ++ [
+            # Fix for CVE-2026-111497
+            (fetchurl {
+              url = "https://github.com/google/brotli/commit/0ed4268a4401abcb4472096340477cf4af7d1a2b.patch?full_index=1";
+              hash = "sha256-1vliUJAAIj3vcGKVgim9CEV+XgMuftDR2U+3kLBUsfw=";
+            })
+          ];
+        });
+
     inherit
-      brotli
       libuv
       nghttp2
       nghttp3
@@ -163,12 +161,18 @@ let
     cares = c-ares;
     http-parser = llhttp;
   }
-  // (lib.optionalAttrs useSharedAdaAndSimd {
+  // (lib.optionalAttrs useSharedAbseilAndHighway {
+    abseil = abseil-cpp;
+    highway = libhwy;
+  })
+  // (lib.optionalAttrs useSharedAdaAndSimdjson {
     inherit
       ada
       simdjson
       ;
-    simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
+  })
+  // (lib.optionalAttrs useSharedSimdutf {
+    inherit simdutf;
   })
   // (lib.optionalAttrs useSharedSQLite {
     inherit sqlite;
@@ -197,9 +201,15 @@ let
     inherit zstd;
   });
 
-  copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
-    builtins.attrNames sharedLibDeps
-  );
+  sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
+
+  # node-gyp expects headers for the following libs (the list is maintained upstream in tools/install.py)
+  # to be at the path given by `process.config.variables.node_prefix`, which is set to $out.
+  libHeadersForGYP = [
+    libuv
+    openssl
+    zlib
+  ];
 
   bundlesCorepack = !lib.versionAtLeast version "25.0.0";
 
@@ -262,6 +272,14 @@ let
         # Note: do not set TERM=dumb environment variable globally, it is used in
         # test-ci-js test suite to skip tests that otherwise run fine.
         NINJA = "TERM=dumb ninja";
+
+        # configure.py queries pkg-config for every --shared-* lib (and needs it
+        # for system-icu and shared abseil), then embeds the resulting -I/-L flags
+        # in config.gypi, i.e. process.config in bin/node, which would keep the
+        # -dev outputs in the runtime closure. The cc wrapper already passes these
+        # paths, so have pkgconf treat them as system paths and omit them.
+        PKG_CONFIG_SYSTEM_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" sharedLibInputs;
+        PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.makeSearchPathOutput "dev" "lib" sharedLibInputs;
       }
       // lib.optionalAttrs (!canExecute && !canEmulate) {
         # these are used in the --cross-compiling case. see comment at postConfigure.
@@ -270,14 +288,8 @@ let
         AR_host = touchScript "${buildPackages.stdenv.cc}/bin/ar";
       };
 
-      # NB: technically, we do not need bash in build inputs since all scripts are
-      # wrappers over the corresponding JS scripts. There are some packages though
-      # that use bash wrappers, e.g. polaris-web.
-      buildInputs = [
-        bash
-        icu
-      ]
-      ++ builtins.attrValues sharedLibDeps;
+      # NB: we need bash for npm (and corepack) outputs
+      buildInputs = [ bashNonInteractive ] ++ sharedLibInputs;
 
       nativeBuildInputs = [
         installShellFiles
@@ -335,14 +347,6 @@ let
       ++ lib.concatMap (name: [
         "--shared-${name}"
         "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
-        /**
-          Closure notes: we explicitly avoid specifying --shared-*-includes,
-          as that would put the paths into bin/nodejs.
-          Including pkg-config in build inputs would also have the same effect!
-
-          FIXME: the statement above is outdated, we have to include pkg-config
-          in build inputs for system-icu.
-        */
       ]) (builtins.attrNames sharedLibDeps);
 
       configurePlatforms = [ ];
@@ -542,6 +546,8 @@ let
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
+            ++ lib.optional (majorVersion == "22" && stdenv.hostPlatform.isRiscV64) "test-worker-messaging"
+            ++ lib.optional (majorVersion == "26" && !stdenv.buildPlatform.isDarwin) "test-net-boundsocket"
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
@@ -562,6 +568,10 @@ let
             "npm"
           ]
           ++ lib.optional bundlesCorepack "corepack";
+          # See PKG_CONFIG_SYSTEM_INCLUDE_PATH.
+          disallowedRequisites = map (dep: dep.dev) (
+            lib.filter (dep: !(builtins.elem dep libHeadersForGYP) && dep ? dev) sharedLibInputs
+          );
         };
         corepack = {
           disallowedReferences = [
@@ -630,9 +640,9 @@ let
           ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
             $npm/share/bash-completion/completions/npm
 
-          # install the missing headers for node-gyp
-          # TODO: use propagatedBuildInputs instead of copying headers.
-          cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
+          ln -s ${
+            lib.concatStringsSep " " (map (dep: "${lib.getDev dep}/include/*") libHeadersForGYP)
+          } $out/include/node/
 
           # assemble a static v8 library and put it in the 'libv8' output
           mkdir -p $libv8/lib

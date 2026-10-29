@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
-      minijackson
       euxane
     ];
     mainProgram = "pandoc-katex";

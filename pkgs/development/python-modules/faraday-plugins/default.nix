@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "faraday-plugins";
-  version = "1.28.0";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
     tag = finalAttrs.version;
-    hash = "sha256-NSJBxOD6zgDcKopU7ko6zGiN7AhIXWGQaetCkydhRwo=";
+    hash = "sha256-Z2jkw2HS3NNZ0YURHe7sEWpZ8FArDGHEvXvyC3AMaYc=";
   };
 
   postPatch = ''

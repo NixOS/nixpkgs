@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cutlass";
-  version = "0.5.0";
+  version = "0.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-dAxt/1EROwJix/Sz889XJ9MXfN1FBFQYSNeB3H43g7E=";
+    hash = "sha256-LknpjOJU9qdiGuxbjgJgOAPZeuOxP8z67fMM9ga835E=";
   };
 
   build-system = [
@@ -48,6 +48,11 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # subprocess.CalledProcessError: Command...
+    "test_importing_batch_contracts_does_not_import_cupy"
   ];
 
   meta = {

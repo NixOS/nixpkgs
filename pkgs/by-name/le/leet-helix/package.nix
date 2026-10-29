@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication {
@@ -27,10 +28,7 @@ python3Packages.buildPythonApplication {
 
   build-system = [ python3Packages.hatchling ];
 
-  # necessary for tests which require a writable home
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   doCheck = true;
 

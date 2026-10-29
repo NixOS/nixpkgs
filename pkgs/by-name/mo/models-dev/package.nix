@@ -7,75 +7,79 @@
   writableTmpDirAsHomeHook,
 }:
 let
+  node_modules =
+    finalAttrs:
+    stdenvNoCC.mkDerivation {
+      pname = "${finalAttrs.pname}-node_modules";
+      inherit (finalAttrs) version src;
+
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+      ];
+
+      nativeBuildInputs = [
+        bun
+        writableTmpDirAsHomeHook
+      ];
+
+      dontConfigure = true;
+
+      buildPhase = ''
+        runHook preBuild
+
+        bun install \
+          --cpu="*" \
+          --frozen-lockfile \
+          --ignore-scripts \
+          --no-progress \
+          --os="*"
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out
+        find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+        runHook postInstall
+      '';
+
+      # NOTE: Required else we get errors that our fixed-output derivation references store paths
+      dontFixup = true;
+
+      outputHash = "sha256-aL2kNCYF6Y4QnEvlpQ9U5Qe+K8a1J2X7BvJqE+BnRcY=";
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+    };
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "sdk-v0.0.5-unstable-2026-07-26";
+  version = "sdk-v0.0.5-unstable-2026-10-25";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "c40d2ae92595fd40962923b100b93405e597b6b1";
-    hash = "sha256-ci4Flm9HETLm8Zgmwprtl8fAnUssgbGadjB6fEW6eo4=";
+    rev = "b7ea0f2912b64f9d486a382aa2923279283fc8c0";
+    hash = "sha256-feTlt/WmSKbG31jmyQH5Ci8fcnrQpIhxsc6iCISZwhU=";
   };
 
-  node_modules = stdenvNoCC.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit version src;
-
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND"
-      "SOCKS_SERVER"
-    ];
-
-    nativeBuildInputs = [
-      bun
-      writableTmpDirAsHomeHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      bun install \
-        --cpu="*" \
-        --frozen-lockfile \
-        --ignore-scripts \
-        --no-progress \
-        --os="*"
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      find . -type d -name node_modules -exec cp -R --parents {} $out \;
-
-      runHook postInstall
-    '';
-
-    # NOTE: Required else we get errors that our fixed-output derivation references store paths
-    dontFixup = true;
-
-    outputHash = "sha256-aL2kNCYF6Y4QnEvlpQ9U5Qe+K8a1J2X7BvJqE+BnRcY=";
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-  };
-in
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    src
-    node_modules
-    ;
+  node_modules = node_modules finalAttrs;
 
   nativeBuildInputs = [ bun ];
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${node_modules}/. .
+    cp -R $node_modules/. .
 
     runHook postConfigure
   '';
@@ -85,6 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd packages/web
     bun run ./script/build.ts
+    bun ${./generate-schema.ts} ./dist/_api.json ./dist/model-schema.json
 
     runHook postBuild
   '';
@@ -98,12 +103,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--subpackage"
-      "node_modules"
-    ];
+  passthru = {
+    jsonschema = "${finalAttrs.finalPackage}/dist/model-schema.json";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        "--subpackage"
+        "node_modules"
+      ];
+    };
   };
 
   meta = {

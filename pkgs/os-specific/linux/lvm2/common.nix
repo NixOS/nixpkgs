@@ -17,7 +17,7 @@
   udev,
   udevCheckHook,
   onlyLib ? stdenv.hostPlatform.isStatic,
-  # Otherwise we have a infinity recursion during static compilation
+  # Otherwise we have an infinite recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
   util-linux,
   enableVDO ? false,

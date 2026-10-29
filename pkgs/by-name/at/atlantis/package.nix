@@ -1,19 +1,20 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  nixosTests,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "atlantis";
-  version = "0.46.0";
+  version = "0.48.2";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4twWPp+ZgK6YmNL5RJmLKhtxe33T1GDCu1qejUbqXkA=";
+    hash = "sha256-iA5khLkukcBwrpHA7U3tZGN3l6c+fow9j0uzbR2I49A=";
   };
 
   ldflags = [
@@ -21,7 +22,7 @@ buildGoModule (finalAttrs: {
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  vendorHash = "sha256-/PnEQvaqADxwFvrHWOPFopQwdyUXBa6cf/H7a/RaHcg=";
+  vendorHash = "sha256-PRqmqqXbrk93bbWGKYfGbDSDn4pxKjintrPs77Re2Uo=";
 
   subPackages = [ "." ];
 
@@ -29,6 +30,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/atlantis";
   versionCheckProgramArg = "version";
+
+  passthru.tests = {
+    inherit (nixosTests) atlantis;
+  };
 
   meta = {
     homepage = "https://github.com/runatlantis/atlantis";

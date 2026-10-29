@@ -201,7 +201,6 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/zrythm-${finalAttrs.version}/glib-2.0/schemas/"
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${kdePackages.breeze-icons}/share"
     )
   '';
 
@@ -217,5 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.agpl3Plus;
+    mainProgram = "zrythm";
   };
 })

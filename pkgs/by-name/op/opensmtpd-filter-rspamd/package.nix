@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "opensmtpd-filter-rspamd";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "poolpOrg";
     repo = "filter-rspamd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ud1irvEyYr9QDsm2PsnWoWkXoDH0WWeH73k/IbLrVf4=";
+    sha256 = "sha256-mOUFTYXA+cJJpFjvnv9wOtxqAuxaaVqKfhV5Zds9wIY=";
   };
 
-  vendorHash = "sha256-sNF2c+22FMvKoROkA/3KtSnRdJh4YZLaIx35HD896HI=";
+  vendorHash = "sha256-9Vq7TdjkJv7646fr9bJ2pZN443vIObAYcI8mzFrbX18=";
 
   passthru.tests = {
     opensmtpd-rspamd-integration = nixosTests.opensmtpd-rspamd;

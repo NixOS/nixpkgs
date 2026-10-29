@@ -10,22 +10,22 @@
   rapidgzip,
   rarfile,
   ratarmountcore,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
   pname = "ratarmount";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TwZ11KxFYqQTrk04GCk2igLI9bUYqFJU8f8I2vvnq38=";
+    hash = "sha256-npbw+IfbZ6PqaMTsxiXAWjY2zY8p2ASR6xcNk008qgA=";
   };
 
   pythonRelaxDeps = [ "python-xz" ];
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     indexed-gzip

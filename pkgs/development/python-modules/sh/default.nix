@@ -38,7 +38,9 @@ buildPythonPackage rec {
     "test_unicode_path"
     # fails to import itself after modifying the environment
     "test_environment"
-    # timing sensitive through usage of sleep(1) and signal handling
+    # timing sensitive due to strict timeouts
+    "test_done_callback_no_deadlock"
+    "test_timeout_overstep"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Disable tests that fail on Darwin sandbox

@@ -76,16 +76,6 @@ buildPythonPackage {
     pulumi-python
   ];
 
-  disabledTestPaths = [
-    # Fail due to missing `pytest.mark.asyncio`, as of v3.253.0
-    "lib/test/test_deprecated.py::DeprecatedTests::test_non_deprecated_can_be_called"
-    "lib/test/test_deprecated.py::DeprecatedTests::test_deprecated_can_be_called"
-    "lib/test/test_deprecated.py::DeprecatedTests::test_deprecated_can_passthrough"
-    "lib/test/test_deprecated.py::DeprecatedTests::test_deprecated_prints_warnings"
-    "lib/test/runtime/test_resource_dep_cycle.py"
-    "lib/test/test_broken_dynamic_provider.py"
-  ];
-
   # CheckPhase script based on:
   # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L10-L11
   # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L16

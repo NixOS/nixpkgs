@@ -4,31 +4,28 @@
   nix-update-script,
   stdenv,
   swift,
-  swiftPackages,
   swiftpm,
-  swiftpm2nix,
+  fetchSwiftPMDeps,
 }:
-let
-  generated = swiftpm2nix.helpers ./generated;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgtcalc";
-  version = "0-unstable-2025-10-11";
+  version = "0.1.0-unstable-2026-08-07";
 
   src = fetchFromGitHub {
     owner = "mattjgalloway";
     repo = "cgtcalc";
-    # Repo has no tags or releases.
-    # This is the last commit before requiring Swift 6
-    rev = "1cf63741ddc0a5070680cb1339ad0abff0b7d69b";
-    hash = "sha256-+qgvl5y9ipVQIZlLZbkzkqb9bO7X9VGDvVsloOLZU/k=";
+    rev = "29adf5bf39f870d4098bc828f356864190e41969";
+    hash = "sha256-koyvaeJSbhql7ERuJY6EBRTtT3MCYS6Sp+XANJmvMms=";
   };
   nativeBuildInputs = [
     swift
     swiftpm
   ];
 
-  configurePhase = generated.configure;
+  swiftpmDeps = fetchSwiftPMDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-FBoYVbVMdSZ2q89h7Mcn6vlPNScTJqzoSJKS6wgUGwY=";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -37,13 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  buildInputs = [
-    swiftPackages.XCTest
-  ];
-
-  # libIndexStore.so: cannot open shared object file: No such file or directory
-  # https://github.com/NixOS/nixpkgs/issues/379859
-  doCheck = false;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];

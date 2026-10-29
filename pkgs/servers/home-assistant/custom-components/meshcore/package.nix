@@ -8,19 +8,20 @@
   paho-mqtt,
   pynacl,
   pytest-asyncio,
+  pytest-homeassistant-custom-component,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent (finalAttrs: {
   owner = "meshcore-dev";
   domain = "meshcore";
-  version = "2.8.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "meshcore-dev";
     repo = "meshcore-ha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K1DYBcuAilcKBzQVSUQvoA9OoxUbtfISYNY8IwgUdZk=";
+    hash = "sha256-G1mrYz40Z4Lrk5OBhk2i3knYA+tjfDFXYQibn2E5Y+A=";
   };
 
   dependencies = [
@@ -37,8 +38,12 @@ buildHomeAssistantComponent (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-homeassistant-custom-component
     pytestCheckHook
   ];
+
+  # https://github.com/meshcore-dev/meshcore-ha/issues/363
+  doCheck = false;
 
   meta = {
     changelog = "https://github.com/meshcore-dev/meshcore-ha/releases/tag/${finalAttrs.src.tag}";

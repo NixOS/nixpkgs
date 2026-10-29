@@ -12,8 +12,11 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torch-c-dlpack-ext";
-  inherit (apache-tvm-ffi) version src;
+  # This addon lives in the tvm-ffi repository, but is versioned independently
+  version = "0.1.5";
+  inherit (apache-tvm-ffi) src;
   pyproject = true;
+  __structuredAttrs = true;
 
   sourceRoot = "${finalAttrs.src.name}/addons/torch_c_dlpack_ext";
 

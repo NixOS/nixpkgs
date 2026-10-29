@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   cairo,
   meson,
   ninja,
@@ -28,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.28.4";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -37,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EdTxGIY506l2IDkGW7t7LDCbeo7Mb6Su0SJFVovwDbM=";
+    hash = "sha256-nzo4nWp++loY11ZHJKfzscP67P/Lj9E1HtDoEdGHOtU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -89,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "doc" enableDocumentation)
+    # dots-viewer requires nix 0.23.2, which is too old to build on loongarch64
+    (lib.mesonEnable "dots_viewer" (!stdenv.hostPlatform.isLoongArch64))
   ];
 
   cargoRoot = "dots-viewer";
@@ -131,5 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

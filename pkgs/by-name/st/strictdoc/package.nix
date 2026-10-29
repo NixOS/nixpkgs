@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "strictdoc";
-  version = "0.22.0";
+  version = "0.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
     tag = finalAttrs.version;
-    hash = "sha256-mDsI/pGMIcyfFqX9uWWlg09As+4Mth9WK5xylQvSVGM=";
+    hash = "sha256-z9e/ZkKeiuNgkn0FoAYX2fxo60TH5hqsLRzpaVvS2u4=";
   };
 
   build-system = [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
-    datauri
+    python-datauri
     docutils
     fastapi
     graphviz
@@ -48,10 +48,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     textx
     toml
     tree-sitter
+    tree-sitter-grammars.tree-sitter-c
     tree-sitter-grammars.tree-sitter-cpp
     tree-sitter-grammars.tree-sitter-python
     tree-sitter-grammars.tree-sitter-rust
     uvicorn
+    watchdog
     webdriver-manager
     websockets
     xlrd
@@ -81,7 +83,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/strictdoc-project/strictdoc";
     changelog = "https://github.com/strictdoc-project/strictdoc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.puzzlewolf ];
+    maintainers = with lib.maintainers; [
+      dadada
+      puzzlewolf
+    ];
     mainProgram = "strictdoc";
   };
 })

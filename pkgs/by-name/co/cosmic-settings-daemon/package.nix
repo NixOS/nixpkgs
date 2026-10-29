@@ -3,8 +3,8 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
+  just,
   makeBinaryWrapper,
-  pop-gtk-theme,
   adw-gtk3,
   pkg-config,
   libpulseaudio,
@@ -20,29 +20,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.4.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-j+AT56HYnenu5WQrBi9gqyog7oxDDf8vbUsKeGCiARM=";
+    hash = "sha256-icTGIcs9W7KNJE/2ULikbWM7RsMBN11vIeTJCuqgpmw=";
   };
 
   postPatch = ''
-    substituteInPlace src/battery.rs \
-      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
     substituteInPlace src/theme.rs \
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  cargoHash = "sha256-Le0FRKuSJWx6zRwU2b1+hyJzZJ+bsT039vn/Nhkf+k0=";
+  cargoHash = "sha256-19GGcZmxq/Yp0A6wnR6Y4zKwZ9EiQBj1i5+D9lDAFz8=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [
+    just
     pkg-config
     rustPlatform.bindgenHook
     makeBinaryWrapper
@@ -58,12 +57,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland
   ];
 
-  makeFlags = [
-    "prefix=$(out)"
-    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
-  ];
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
-  dontCargoInstall = true;
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/cosmic-settings-daemon \

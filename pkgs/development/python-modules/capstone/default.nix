@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "capstone";
   version = lib.getVersion capstone;
-  format = "setuptools";
+  pyproject = true;
 
   src = capstone.src;
   sourceRoot = "${src.name}/bindings/python";
@@ -29,7 +29,9 @@ buildPythonPackage rec {
     "macosx_11_0"
   ];
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [ setuptools ];
 
   checkPhase = ''
     mv capstone capstone.hidden
@@ -40,9 +42,9 @@ buildPythonPackage rec {
   '';
 
   meta = {
+    description = "Python bindings for Capstone disassembly engine";
     homepage = "http://www.capstone-engine.org/";
     license = lib.licenses.bsdOriginal;
-    description = "Python bindings for Capstone disassembly engine";
     maintainers = with lib.maintainers; [
       bennofs
       ris

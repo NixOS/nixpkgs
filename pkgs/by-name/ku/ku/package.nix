@@ -1,21 +1,21 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "ku";
-  version = "0.9.0";
+  version = "0.12.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bjarneo";
     repo = "ku";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4z4lPvmkEqC7YBEaAa8cUyB42hkFkTFRkHGaA58/Vpg=";
+    hash = "sha256-pdwfNP9RnD4LQKYJ315wrhiRdQN9i/KZ/13jMNlKzvw=";
   };
 
   vendorHash = "sha256-x7O2/uKnIIFDr8WK0ej3FJiIGxN5Fq5Czqrv4OJ5A44=";

@@ -6,7 +6,7 @@
   libxkbcommon,
   libinput,
   lua5_4,
-  libdisplay-info,
+  libdisplay-info_0_3,
   libgbm,
   pinnacle-src,
 }:
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (
       libxkbcommon
       libinput
       lua5_4
-      libdisplay-info
+      libdisplay-info_0_3
       libgbm
     ];
   }

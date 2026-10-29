@@ -2,30 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "sift";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "svent";
     repo = "sift";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IZ4Hwg5NzdSXtrIDNxtkzquuiHQOmLV1HSx8gpwE/i0=";
+    hash = "sha256-VH15TQ4LJt5koEmwDZtN7QRKBYCcJQzoEe/J2r6cNMw=";
   };
 
-  vendorHash = "sha256-y883la4R4jhsS99/ohgBC9SHggybAq9hreda6quG3IY=";
-
-  patches = [
-    # Add Go Modules support
-    (fetchpatch {
-      url = "https://github.com/svent/sift/commit/b56fb3d0fd914c8a6c08b148e15dd8a07c7d8a5a.patch";
-      hash = "sha256-mFCEpkgQ8XDPRQ3yKDZ5qY9tKGSuHs+RnhMeAlx33Ng=";
-    })
-  ];
+  vendorHash = "sha256-R1drGtR4jwB+1X++md3o0aEFm7g3IPrr5JbutrarKjY=";
 
   nativeBuildInputs = [ installShellFiles ];
 

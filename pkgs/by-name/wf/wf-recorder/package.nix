@@ -9,7 +9,7 @@
   wayland-scanner,
   wayland,
   wayland-protocols,
-  ffmpeg,
+  ffmpeg_8,
   x264,
   libpulseaudio,
   pipewire,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     wayland
     wayland-protocols
-    ffmpeg
+    ffmpeg_8
     x264
     libpulseaudio
     pipewire

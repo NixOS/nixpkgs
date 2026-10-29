@@ -12,7 +12,7 @@
   gtkmm3,
   gst_all_1,
   hicolor-icon-theme,
-  libsigcxx,
+  libsigcxx_2_0,
   libxmlxx,
   xdg-utils,
   isocodes,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "subtitleeditor";
-  version = "0.55.0";
+  version = "0.56.2";
 
   src = fetchFromGitHub {
     owner = "subtitleeditor";
     repo = "subtitleeditor";
     tag = finalAttrs.version;
-    hash = "sha256-jhKewfhJ97zxUPp1P2twmgNkMQa/hi2ZZZ8mOFcCOlQ=";
+    hash = "sha256-Pb4+FU8TiVc0iqV2NBJzrXWqM3vp4X8If2Opb6NdvLw=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     hicolor-icon-theme
-    libsigcxx
+    libsigcxx_2_0
     libxmlxx
     xdg-utils
     isocodes

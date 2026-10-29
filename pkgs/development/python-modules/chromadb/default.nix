@@ -112,6 +112,10 @@ buildPythonPackage (finalAttrs: {
       sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
     '';
 
+  pythonRemoveDeps = [
+    "build"
+  ];
+
   pythonRelaxDeps = [
     "fastapi"
     "posthog"
@@ -134,7 +138,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     bcrypt
-    build
     fastapi
     grpcio
     httpx
@@ -185,7 +188,7 @@ buildPythonPackage (finalAttrs: {
 
   # Disable on aarch64-linux due to broken onnxruntime
   # https://github.com/microsoft/onnxruntime/issues/10038
-  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "chromadb" ];
+  pythonImportsCheck = lib.optionals finalAttrs.finalPackage.doCheck [ "chromadb" ];
 
   # Test collection breaks on aarch64-linux
   doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);

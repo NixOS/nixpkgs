@@ -1,7 +1,7 @@
 import ./generic.nix {
-  hash = "sha256-Ivj0vWKuhgb4VvyxcuB+CXsJ02zwo65rqxD5/cLUmSk=";
-  version = "7.0.1";
-  vendorHash = "sha256-F3LhWVjckU0ypgOppHztjR6hDB6enHxoDmRWcSDfwQE=";
+  hash = "sha256-LYQ7PFYLjXGqztovhvfJ9XR7xpinPvMvKZgiqsAUvbc=";
+  version = "7.0.2";
+  vendorHash = "sha256-huplVEZrpV5jI2nXJcmtFeY5SPDBSYwoZ1EtvEUY5Q0=";
   lts = true;
   nixUpdateExtraArgs = [
     "--version-regex=^v(7\\.0\\.[0-9]+)$"

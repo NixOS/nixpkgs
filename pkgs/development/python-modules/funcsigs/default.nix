@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7";
+    hash = "sha256-p7sPLPOj/Rqycyy0nrpCUsKvQkBEJBW0q847hwIqj1A=";
   };
 
   # https://github.com/testing-cabal/funcsigs/issues/10

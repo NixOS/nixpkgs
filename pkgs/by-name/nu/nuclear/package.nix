@@ -3,29 +3,23 @@
   lib,
   fetchurl,
 }:
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "nuclear";
   version = "0.6.48";
-
   src = fetchurl {
     # Nuclear currently only publishes AppImage releases for x86_64, which is hardcoded in
     # the package name. We also hardcode the host arch in the release name, but should upstream
     # provide more arches, we should use stdenv.hostPlatform to determine the arch and choose
     # source URL accordingly.
-    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${pname}-v${version}-x86_64.AppImage";
+    url = "https://github.com/nukeop/nuclear/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-v${finalAttrs.version}-x86_64.AppImage";
     hash = "sha256-k3qGWPn+O4kazsrrZAYHIvSrrix9LNnnJgZGJqlJbJE=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    install -m 444 -D ${finalAttrs.contents}/${finalAttrs.pname}.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/${finalAttrs.pname}.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=${finalAttrs.pname}'
+    cp -r ${finalAttrs.contents}/usr/share/icons $out/share
   '';
 
   meta = {
@@ -36,4 +30,4 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     mainProgram = "nuclear";
   };
-}
+})

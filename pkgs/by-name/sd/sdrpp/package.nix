@@ -84,13 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sdrpp";
 
   upstreamVersion = "1.3.0";
-  version = "${finalAttrs.upstreamVersion}-unstable-2026-03-24";
+  version = "${finalAttrs.upstreamVersion}-unstable-2026-07-05";
 
   src = fetchFromGitHub {
     owner = "AlexandreRouma";
     repo = "SDRPlusPlus";
-    rev = "a6df4d58e5f6b3045883a70aeb8fb41fd5dbf1d9";
-    hash = "sha256-VzeLGQTnRur5vB+M5TovpLhI2QYKvpZjZjthuGyjcm0=";
+    rev = "8c9f5ee8fe405775bfcd62c8c8f8c0fc928a64af";
+    hash = "sha256-P5wFOqdjRQTzUyI7pPaO1cYj3QZSeu5YZsl2qKou4Is=";
   };
 
   patches = [

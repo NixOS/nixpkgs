@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       nick-linux
     ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
     mainProgram = "xdotool";
   };
 })

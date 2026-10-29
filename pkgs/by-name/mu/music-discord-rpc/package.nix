@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/patryk-ku/music-discord-rpc";
     changelog = "https://github.com/patryk-ku/music-discord-rpc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.lukaswrz ];
+    maintainers = [ ];
     mainProgram = "music-discord-rpc";
   };
 })

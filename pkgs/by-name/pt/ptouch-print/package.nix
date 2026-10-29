@@ -1,4 +1,5 @@
 {
+  argp-standalone,
   cmake,
   fetchgit,
   gd,
@@ -36,6 +37,9 @@ stdenv.mkDerivation {
     libpng
     zlib
     libusb1
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl) [
+    argp-standalone
   ];
 
   installPhase = ''

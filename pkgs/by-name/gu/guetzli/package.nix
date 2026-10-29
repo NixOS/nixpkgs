@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     longDescription = "Guetzli is a JPEG encoder that aims for excellent compression density at high visual quality.";
     homepage = "https://github.com/google/guetzli";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.x86_64;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.seppeljordan ];
     mainProgram = "guetzli";
   };

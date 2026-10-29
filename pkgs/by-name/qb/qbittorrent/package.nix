@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-5lGv1ajuDE/DTqUbnVeRRBcXntrzn6bs72mZbQMf7Fc=";
+    hash = "sha256-kJNl7AaH+vy57vFuofvEgW4fo5JbU9wwQJZJglmUkZA=";
   };
 
   nativeBuildInputs = [

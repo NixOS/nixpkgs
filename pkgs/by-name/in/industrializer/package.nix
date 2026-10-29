@@ -8,7 +8,6 @@
   automake,
   autoreconfHook,
   gettext,
-  gnome2,
   gtk2,
   libGL,
   libjack2,
@@ -41,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     audiofile
-    gnome2.gtkglext
     gtk2
     libGL
     libjack2

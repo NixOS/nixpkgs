@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tinyauth";
-  version = "5.1.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "tinyauthapp";
     repo = "tinyauth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L19CTiEMqyc8f0IyLFzCBnRruZfzGbCeDtvgsWzKVjI=";
+    hash = "sha256-JSD8MLWKLafdOCKBCCmlNq3sA4gsoN7QDhIw0sgqmyY=";
   };
 
-  vendorHash = "sha256-qugLh2PGdKF63/3flVHLAwbvbSJh/lpvDpcNQqz1HZM=";
+  vendorHash = "sha256-gkFKt/IoN29lw9laqxHmDK77E9hCkdEv7oIEg83sfgY=";
 
   subPackages = [ "cmd/tinyauth" ];
 
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
       sourceRoot = "${finalAttrs.src.name}/frontend";
       pnpm = pnpm_11;
       fetcherVersion = 4;
-      hash = "sha256-f42uvVccZ6/sMIpVLycqEXW08R5jkaE5V15CItSbN9o=";
+      hash = "sha256-gRn1hLzNcC7lcWOj6IllBNzhkUS7IzOPzGFc568cb8w=";
     };
 
     pnpmRoot = "frontend";

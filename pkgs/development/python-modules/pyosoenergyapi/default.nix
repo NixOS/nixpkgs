@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyosoenergyapi";
   version = "1.2.4";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "osohotwateriot";
     repo = "apyosohotwaterapi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hpbmiSOLawKVSh7BGV70bRi45HCDKmdxEEhCOdJuIww=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interface with the OSO Energy API";
     homepage = "https://github.com/osohotwateriot/apyosohotwaterapi";
-    changelog = "https://github.com/osohotwateriot/apyosohotwaterapi/releases/tag/${version}";
+    changelog = "https://github.com/osohotwateriot/apyosohotwaterapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

@@ -17,6 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit dediprogVersion dediprogHash;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "DediProgSW";
     repo = "SF100Linux";

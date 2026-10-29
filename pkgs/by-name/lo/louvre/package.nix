@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "louvre-views";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Only;
   };
 })

@@ -3,21 +3,29 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   pymodbus,
+  tmodbus,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "wills106";
   domain = "solax_modbus";
-  version = "2026.07.1";
+  version = "2026.10.01";
 
   src = fetchFromGitHub {
     owner = "wills106";
     repo = "homeassistant-solax-modbus";
     tag = version;
-    hash = "sha256-7/Wprn5PJhfnmSHenPFrQY3c1EBdmzqyH8ZclAmDwoI=";
+    hash = "sha256-DezbFCR4xZviZGaaQfEZ3p/f41dbOkLsdSRo/OiZzKk=";
   };
 
-  dependencies = [ pymodbus ];
+  ignoreVersionRequirement = [
+    "tmodbus"
+  ];
+
+  dependencies = [
+    pymodbus
+    tmodbus
+  ];
 
   meta = {
     changelog = "https://github.com/wills106/homeassistant-solax-modbus/releases/tag/${version}";

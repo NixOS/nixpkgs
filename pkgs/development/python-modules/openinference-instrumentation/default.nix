@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openinference-instrumentation";
-  version = "0.1.54";
+  version = "0.1.57";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Arize-ai";
     repo = "openinference";
     tag = "python-openinference-instrumentation-v${finalAttrs.version}";
-    hash = "sha256-6GWZmgb9ZcT/yx7MvGUQlht5fljQGCKMHMpJWZQKpPI=";
+    hash = "sha256-rEF7Ijx3Zo3NHywFJFa5+QpXZjIWOvkQBie+54v/f8A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/${finalAttrs.pname}";
@@ -57,7 +57,11 @@ buildPythonPackage (finalAttrs: {
     "TestTracerLLMDecorator"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "OpenTelemetry Instrumentation for AI Observability";

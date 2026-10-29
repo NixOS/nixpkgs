@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     pygobject3
-    dbus-python
   ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
@@ -28,7 +27,12 @@ python3Packages.buildPythonApplication {
     "install-man-pd"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ tlp ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ tlp ])
+  ];
 
   postInstall = ''
     substituteInPlace $out/share/dbus-1/system-services/*.service \

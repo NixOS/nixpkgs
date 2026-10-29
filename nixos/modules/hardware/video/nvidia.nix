@@ -225,7 +225,7 @@ in
 
         Example usage: `nvidia-offload sauerbraten_client`
 
-        This script can be renamed with {option}`hardware.nvidia.prime.offload.enableOffloadCmd`.
+        This script can be renamed with {option}`hardware.nvidia.prime.offload.offloadCmdMainProgram`.
       '';
       prime.offload.offloadCmdMainProgram = lib.mkOption {
         type = lib.types.str;
@@ -386,14 +386,12 @@ in
       moduleParams = lib.mkOption {
         type = lib.types.attrsOf (lib.types.attrsOf lib.types.raw);
         default = { };
-        example = ''
-          {
-            nvidia = {
-              NVreg_UsePageAttributeTable = 1;
-              NVreg_RegistryDwords = "EnableBrightnessControl=1"
-            };
-          }
-        '';
+        example = {
+          nvidia = {
+            NVreg_UsePageAttributeTable = 1;
+            NVreg_RegistryDwords = "EnableBrightnessControl=1";
+          };
+        };
         description = "Additional parameters to pass to the NVIDIA kernel module.";
       };
     };
@@ -458,12 +456,12 @@ in
             "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
           ];
           services.udev.extraRules = ''
-            # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
-            KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
-            KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do mknod -m 666 /dev/nvidia$${i} c 195 $${i}; done'"
-            KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c 195 254'"
-            KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
-            KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
+            # nvidia-modprobe honors the driver's device-file parameters.
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia|nvidia_modeset|nvidia_uvm", RUN+="${pkgs.coreutils}/bin/mkdir -m 755 -p /dev/char"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia", RUN+="${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -c 255"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do ${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -c $${i} || exit; done'"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia_modeset", RUN+="${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -m"
+            ACTION=="add", SUBSYSTEM=="module", KERNEL=="nvidia_uvm", RUN+="${pkgs.nvidia-modprobe}/bin/nvidia-modprobe -u -c 0"
           '';
           hardware.graphics =
             let
@@ -482,7 +480,7 @@ in
               combineIcdPkgs =
                 icd: pkgs:
                 pkgs.symlinkJoin {
-                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.is32bit "-x32"}";
+                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.hostPlatform.is32bit "-x32"}";
                   paths = lib.attrVals icd pkgs;
                   # Remediate reversed priorities in pre-595 drivers,
                   # https://github.com/NixOS/nixpkgs/pull/497342#issuecomment-4034876793
@@ -779,7 +777,7 @@ in
               })
             ];
 
-          services.acpid.enable = true;
+          services.acpid.enable = lib.mkDefault true;
 
           services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
 

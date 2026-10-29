@@ -1,14 +1,13 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromCodeberg,
-  fetchpatch,
   libGL,
   libx11,
   libevdev,
   libinput,
   libxkbcommon,
+  nix-update-script,
   pixman,
   pkg-config,
   scdoc,
@@ -28,7 +27,8 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.5";
+  version = "0.5.0";
+  __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -36,20 +36,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q4JAlr9/ex+BEgktBmFwOvZzQEAGvxXPD1QyKqyha4g=";
+    hash = "sha256-Yn0+V0PMT+PIV4dVuy4d3BAEfLj5hwLh5ngGpM3RbHY=";
   };
-
-  # this fixes aarch64 build, remove on next update
-  patches = [
-    (fetchpatch {
-      url = "https://codeberg.org/river/river/commit/8a1afd94ca477045f39bf91ac9ec31da9e9f932a.diff";
-      hash = "sha256-oBbM1meVAFb6j+qIFeG8Ol+FVFllrvFSKtvcY2q3ESs=";
-    })
-  ];
 
   strictDeps = true;
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-u7lnnqxrTdaiqNOeFrqvesDM6B4YUjYkmP7CtGOBDIs=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -75,12 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ]
-  ++ lib.optional withManpages "-Dman-pages"
-  ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags =
+    lib.optionals withManpages [
+      "-Dman-pages"
+    ]
+    ++ lib.optionals xwaylandSupport [
+      "-Dxwayland"
+    ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "river" ];
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -114,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       GaetanLepage
-      adamcstephens
     ];
     mainProgram = "river";
     platforms = lib.platforms.linux;

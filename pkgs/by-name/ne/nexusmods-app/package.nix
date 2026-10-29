@@ -188,6 +188,7 @@ buildDotnetModule (finalAttrs: {
     app = finalAttrs.finalPackage.overrideAttrs {
       pname = "${finalAttrs.pname}-tested";
       doCheck = true;
+      passthru.tests = { };
     };
   };
 

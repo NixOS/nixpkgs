@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -12,7 +11,6 @@
   torch,
 
   # tests
-  llvmPackages,
   pytestCheckHook,
 }:
 

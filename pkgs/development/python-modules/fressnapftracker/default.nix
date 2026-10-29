@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fressnapftracker";
-  version = "0.2.2";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "fressnapftracker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gJsE/1HnUXEDa5Y7eLtHexx+G00MGQDZJu3pui9OeMM=";
+    hash = "sha256-vabHsClyNR4AA5fpbVKR0lWCEgbxl4OTZZSOhXM3Wkk=";
   };
 
   nativeBuildInputs = [

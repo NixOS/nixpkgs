@@ -30,8 +30,6 @@ stdenv.mkDerivation {
   ]
   ++ selectedIndicators;
 
-  passAsFile = [ "paths" ];
-
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
@@ -48,7 +46,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out
-    for i in $(cat $pathsPath); do
+    for i in "''${paths[@]}"; do
       ${lndir}/bin/lndir -silent $i $out
     done
   '';
@@ -59,6 +57,8 @@ stdenv.mkDerivation {
       --set SWITCHBOARD_PLUGS_PATH "${switchboard-with-plugs}/lib/switchboard-3"
     )
   '';
+
+  __structuredAttrs = true;
 
   inherit (wingpanel) meta;
 }

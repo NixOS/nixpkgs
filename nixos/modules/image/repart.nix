@@ -58,7 +58,7 @@ let
           example = lib.literalExpression ''
             {
               "/EFI/BOOT/BOOTX64.EFI".source =
-                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+                "''${config.systemd.package}/lib/systemd/boot/efi/systemd-bootx64.efi";
 
               "/loader/entries/nixos.conf".source = systemdBootEntry;
             }
@@ -131,6 +131,7 @@ in
   ];
 
   options.image.repart = {
+    enable = lib.mkEnableOption "systemd-repart boot image";
 
     name = lib.mkOption {
       type = lib.types.str;
@@ -227,7 +228,7 @@ in
           "10-esp" = {
             contents = {
               "/EFI/BOOT/BOOTX64.EFI".source =
-                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+                "''${config.systemd.package}/lib/systemd/boot/efi/systemd-bootx64.efi";
             };
             repartConfig = {
               Type = "esp";
@@ -313,7 +314,7 @@ in
 
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     image.baseName =
       let
         version = config.image.repart.version;

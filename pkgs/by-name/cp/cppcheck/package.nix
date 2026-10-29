@@ -12,16 +12,13 @@
   python3,
   which,
 
-  # buildInputs
-  pcre,
-
   versionCheckHook,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.21.1";
+  version = "2.22.0";
 
   outputs = [
     "out"
@@ -32,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cppcheck-opensource";
     repo = "cppcheck";
     tag = finalAttrs.version;
-    hash = "sha256-kpolGzSk+1lY8EXFciAimhUlv7we3bMbu2/Y0DlO4YU=";
+    hash = "sha256-HbrNBDxo3/b4h6BeBD9gohI4PB4xeosy9Y0Y3uB4J2g=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    pcre
     (python3.withPackages (ps: [ ps.pygments ]))
   ];
 
@@ -54,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     "MATCHCOMPILER=yes"
     "FILESDIR=$(out)/share/cppcheck"
-    "HAVE_RULES=yes"
+    "HAVE_RULES=" # Requires pcre1. See https://github.com/cppcheck-opensource/cppcheck/pull/8382
   ];
 
   enableParallelBuilding = true;
@@ -64,16 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   doInstallCheck = true;
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
-  ''
   # Expected:
   # Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid
   #
   # Actual:
   # Internal Error. MathLib::toDoubleNumber: input was not completely consumed: 1invalid
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace test/testmathlib.cpp \
       --replace-fail \
         'ASSERT_THROW_INTERNAL_EQUALS(MathLib::toDoubleNumber("1invalid"), INTERNAL, "Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid");' \

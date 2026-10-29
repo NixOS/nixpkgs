@@ -23,7 +23,7 @@
   pkg-config,
   properties-cpp,
   python3,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   xsct,
 }:
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
     librda
     libsForQt5.qtbase
-    systemd
+    systemdLibs
   ]
   ++ (with lomiri; [
     cmake-extras

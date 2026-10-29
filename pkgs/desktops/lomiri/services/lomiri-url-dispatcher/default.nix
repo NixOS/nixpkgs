@@ -24,7 +24,7 @@
   qtwayland,
   runtimeShell,
   sqlite,
-  systemd,
+  systemdLibs,
   wrapQtAppsHook,
 }:
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-app-launch
     lomiri-ui-toolkit
     sqlite
-    systemd
+    systemdLibs
     libxkbcommon
   ];
 

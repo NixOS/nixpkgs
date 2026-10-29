@@ -5,7 +5,7 @@
   poetry-core,
 }:
 buildPythonPackage (finalAttrs: {
-  name = "runtype";
+  pname = "runtype";
   version = "0.5.3";
 
   __structuredAttrs = true;

@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-treebeard";
-  version = "4.8.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-treebeard";
     repo = "django-treebeard";
     tag = finalAttrs.version;
-    hash = "sha256-DrjI0HlrJhNqrYul3SO0xkkFwjWRn94OgvTA/Z3wv84=";
+    hash = "sha256-GvW5QjCuour56NhAt2o2eQ6g2UoXZnukXGVWop1tjSk=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Efficient tree implementations for Django";
     homepage = "https://tabo.pe/projects/django-treebeard/";
-    changelog = "https://github.com/django-treebeard/django-treebeard/blob/${finalAttrs.src.tag}/CHANGES.md";
+    changelog = "https://github.com/django-treebeard/django-treebeard/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.asl20;
   };
 })

@@ -13,16 +13,16 @@
 assert useUnrar -> unrar != null;
 assert !useUnrar -> libarchive != null;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rarfile";
-  version = "4.2";
+  version = "4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "markokr";
     repo = "rarfile";
-    tag = "v${version}";
-    hash = "sha256-ZiwD2LG25fMd4Z+QWsh/x3ceG5QRBH4s/TZDwMnfpNI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QhNzpNKOuBF/QEQ9XBXwKudcq4VqJyN/0chT+9uCcKg=";
   };
 
   prePatch = ''
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   + (
     if useUnrar then
       ''
-        --replace 'UNRAR_TOOL = "unrar"' "UNRAR_TOOL = \"${unrar}/bin/unrar\""
+        --replace-fail 'UNRAR_TOOL = "unrar"' "UNRAR_TOOL = \"${unrar}/bin/unrar\""
       ''
     else
       ''
-        --replace 'ALT_TOOL = "bsdtar"' "ALT_TOOL = \"${libarchive}/bin/bsdtar\""
+        --replace-fail 'BSDTAR_TOOL = "bsdtar"' "BSDTAR_TOOL = \"${libarchive}/bin/bsdtar\""
       ''
   )
   + "";
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "RAR archive reader for Python";
     homepage = "https://github.com/markokr/rarfile";
-    changelog = "https://github.com/markokr/rarfile/releases/tag/v${version}";
+    changelog = "https://github.com/markokr/rarfile/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

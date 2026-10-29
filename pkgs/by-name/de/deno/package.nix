@@ -13,7 +13,11 @@
   librusty_v8 ? callPackage ./rusty-v8 { },
   libffi,
   sqlite,
+  pkg-config,
+  zstd,
+  lcms2,
   lld,
+  vulkan-loader,
   writableTmpDirAsHomeHook,
 
   # Test deps
@@ -33,13 +37,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.4";
+  version = "2.9.8";
 
   __structuredAttrs = true;
 
   outputs = [
     "out"
     "denort"
+    "libdenort"
   ];
 
   src = fetchFromGitHub {
@@ -47,10 +52,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-ivch++yGRUyWtox/5QqomC4DlTvMBxK+gIcN9/7tt5E=";
+    hash = "sha256-piJetMgFpg8xzEveqRQEq4kJINaLRDOrHp7Nd0z8wok=";
   };
 
-  cargoHash = "sha256-ynbHLZXkPPYpsC4dCu6jA6x8ftiTHWZ/uxzdbUcUaa0=";
+  cargoHash = "sha256-LNYXzS0oespQMeT/1fGcOvaDy5ErVeY7jUPL19OgeZ4=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -65,16 +70,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libffi
     sqlite
+    zstd
   ];
 
-  # uses zlib-ng but can't dynamically link yet
-  # https://github.com/rust-lang/libz-sys/issues/158
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     # for tomlq to adjust Cargo.toml
     yq
     # required by libz-ng-sys crate
     cmake
+    # required to de-vendor zstd
+    pkg-config
     # required by deno_kv crate
     protobuf
     installShellFiles
@@ -92,7 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
   buildNoDefaultFeatures = true;
   buildFeatures = [
-    "__vendored_zlib_ng"
+    "v8"
   ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
@@ -100,6 +106,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
+  # Workaround for riscv64 because it has no pre-generated bindings.
+  env.RUSTY_V8_SRC_BINDING_PATH = librusty_v8.binding;
+
+  # de-vendor SQLite
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+  # de-vendor zstd
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+  # de-vendor lcms2
+  env.LCMS2_LIB_DIR = lib.makeLibraryPath [ lcms2 ];
 
   # Don't run checks on hydra as they've been observed to be flakey for us and
   # other distros CI: https://gitlab.alpinelinux.org/alpine/aports/-/blob/bec8b026686323b496365b825ad14fdf4473adf2/community/deno/APKBUILD#L79
@@ -126,6 +141,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "aarch64"
         else if stdenv.hostPlatform.isx86_64 then
           "x64"
+        else if stdenv.hostPlatform.isRiscV64 then
+          "riscv64"
         else
           throw "Unsupported architecture";
     in
@@ -160,10 +177,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=node_unit_tests::tls_test"
     "--skip=npm::lock_file_lock_write"
     "--skip=happy_eyeballs::tests::test_parallel_second_wins"
-
-    # GPU access
-    "--skip=js_unit_tests::webgpu_test"
-    "--skip=js_unit_tests::jupyter_test"
 
     # Use of /usr/bin
     "--skip=specs::permission::proc_self_fd"
@@ -228,14 +241,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preInstall = ''
     # Delete generated shared libraries that aren't needed in the final package
     find ./target \
-      -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
+      \( -name "libswc_common${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
       -name "libtest_ffi${stdenv.hostPlatform.extensions.sharedLibrary}" -o \
-      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \
+      -name "libtest_napi${stdenv.hostPlatform.extensions.sharedLibrary}" \) \
       -delete
   '';
 
   postInstall = ''
     moveToOutput "bin/denort" "$denort"
+    moveToOutput "lib/libdenort${stdenv.hostPlatform.extensions.sharedLibrary}" "$libdenort"
 
     # Remove non-essential binaries like test_server
     find $out/bin/* -not -name "deno" -delete
@@ -248,6 +262,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} $out/bin/deno
   '';
 
   doInstallCheck = canExecute;
@@ -297,6 +315,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "riscv64-linux"
       "aarch64-darwin"
     ];
   };

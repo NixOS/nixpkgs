@@ -3,21 +3,28 @@
   buildPythonPackage,
   fetchPypi,
   pyftdi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyi2cflash";
   version = "0.2.2";
-  format = "setuptools";
+
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1nkazgf7pajz7jym5rfy2df71lyfp4skxqbrg5ch0h4dwjdwllx1";
+    pname = "pyi2cflash";
+    inherit (finalAttrs) version;
+    hash = "sha256-oVPKm+SNQABZeXnhPjW5ztNwXBPe5VK9PF+qe9z7ato=";
   };
 
-  propagatedBuildInputs = [ pyftdi ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyftdi ];
 
   # tests are not shipped with the PyPI source
+  # and require ftdi connection that cannot be reproduced in sandbox
   doCheck = false;
 
   pythonImportsCheck = [ "i2cflash" ];
@@ -28,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

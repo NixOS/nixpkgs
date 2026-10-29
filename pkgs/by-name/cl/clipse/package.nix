@@ -33,7 +33,6 @@ buildGoModule (finalAttrs: {
     hash = "sha256-iDMHEhYuxspBYG54WivnVj2GfMxAc5dcrjNxtAMhsck=";
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   vendorHash = "sha256-LxwST4Zjxq6Fwc47VeOdv19J3g/DHZ7Fywp2ZvVR06I=";

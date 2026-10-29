@@ -11,7 +11,10 @@ let
 in
 stdenv.mkDerivation {
   pname = "mmh";
-  version = "unstable-2023-09-24";
+  version = "0.4-unstable-2023-09-24";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "http://git.marmaro.de/?p=mmh;a=snapshot;h=${rev};sf=tgz";

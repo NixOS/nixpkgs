@@ -12,7 +12,7 @@ let
     mkdir $out
 
     ${
-      if config.boot.initrd.enable && config.boot.initrd.systemd.enable then
+      if config.boot.initrd.enable then
         ''
           # This must not be a symlink or the abs_path of the grub builder for the tests
           # will resolve the symlink and we end up with a path that doesn't point to a
@@ -354,12 +354,6 @@ in
       # but some other script might still depend on them, although unlikely.
       installBootLoader = config.system.build.installBootLoader;
       distroId = config.system.nixos.distroId;
-      perl = pkgs.perl.withPackages (
-        p: with p; [
-          ConfigIniFiles
-          FileSlurp
-        ]
-      );
       # End if legacy environment variables
 
       preSwitchCheck = lib.mkIf (

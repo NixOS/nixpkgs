@@ -1,8 +1,8 @@
 diff --git a/tools/install.pl b/tools/install.pl
-index 0931979..50745d7 100644
+index 80b593e..f5c15b1 100644
 --- a/tools/install.pl
 +++ b/tools/install.pl
-@@ -92,36 +92,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
+@@ -100,66 +100,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
      $cpanopt = " -l " . $ENV{HOMEBREW_FORMULA_PREFIX} . "/libexec";
  }
  
@@ -12,23 +12,31 @@ index 0931979..50745d7 100644
 -IPC::Cmd->import('can_run');
 -require Config::AutoConf;
 -
--
 -say("\r\nWill now check if all LRR software dependencies are met. \r\n");
 -
--#Fails on win even if redis is in the path
--if ( IS_UNIX ) {
--    #Check for Redis
--    say("Checking for Redis...");
--    can_run('redis-server')
--      or die 'NOT FOUND! Please install a Redis server before proceeding.';
+-#Fails on win even if valkey or redis are in the path
+-if (IS_UNIX) {
+-
+-    #Check for Redis/Valkey
+-    say("Checking for Redis/Valkey...");
+-    can_run('valkey-server') || can_run('redis-server')
+-      or die 'NOT FOUND! Please install a Redis/Valkey server before proceeding.';
 -    say("OK!");
 -}
 -
--#Check for GhostScript
--say("Checking for GhostScript...");
--can_run('gs')
--  or warn 'NOT FOUND! PDF support will not work properly. Please install the "gs" tool.';
--say("OK!");
+-#Check for libvips
+-#Note, this check is probably not perfect so it will only complain rather than stop the install
+-say("Checking for libvips...");
+-my $vips_found;
+-if (can_check_lib()) {
+-    $vips_found = has_lib("vips") || has_lib("vips-42");
+-} else {
+-    say("UNKNOWN - ExtUtils::Liblist is not available, so we can't check if libvips is installed. Will assume it is!");
+-    $vips_found = 1;
+-}
+-$vips_found
+-    ? say("OK!")
+-    : say("NOT FOUND - Install libvips for much faster image processing and PDF support.\nlibvips may end up a requirement in future versions!");
 -
 -#Check for libarchive
 -say("Checking for libarchive...");
@@ -36,17 +44,38 @@ index 0931979..50745d7 100644
 -  or die 'NOT FOUND! Please install libarchive and ensure its headers are present.';
 -say("OK!");
 -
- #Check for PerlMagick
- say("Checking for ImageMagick/PerlMagick...");
- my $imgk;
-@@ -170,13 +140,6 @@ if ( $back || $full ) {
+-if (!$vips_found) {
+-    #Check for PerlMagick if libvips isn't installed
+-    say("Checking for ImageMagick/PerlMagick...");
+-    my $imgk;
+-
+-    eval {
+-        require Image::Magick;
+-        $imgk = Image::Magick->QuantumDepth;
+-    };
+-
+-    if ($@) {
+-        say("NOT FOUND");
+-        say("Please install libvips (recommended) OR ImageMagick with Perl installed for thumbnail support.");
+-        say("libvips is probably available in your package manager if you run linux.");
+-        say("Further instructions for ImageMagick are available at https://www.imagemagick.org/script/perl-magick.php .");
+-        say("The ImageMagick detection command returned: $imgk -- $@");
+-    } else {
+-        say( "Returned QuantumDepth: " . $imgk );
+-        say("OK!");
+-    }
+-}
+-
+ #Build & Install CPAN Dependencies
+ if ( $back || $full ) {
+     say("\r\nInstalling Perl modules... This might take a while.\r\n");
+@@ -196,12 +136,6 @@ if ( $back || $full ) {
  #Clientside Dependencies with Provisioning
  if ( $front || $full ) {
  
 -    say("\r\nObtaining remote Web dependencies...\r\n");
 -
--    my $npmcmd = $legacy ? "npm install" : "npm ci";
--    if ( system($npmcmd) != 0 ) {
+-    if ( system( "npm ci" ) != 0 ) {
 -        die "Something went wrong while obtaining node modules - Bailing out.";
 -    }
 -

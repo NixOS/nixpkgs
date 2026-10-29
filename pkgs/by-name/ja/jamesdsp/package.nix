@@ -2,7 +2,7 @@
   copyDesktopItems,
   fetchFromGitHub,
   fetchpatch,
-  glibmm,
+  glibmm_2_4,
   gst_all_1,
   lib,
   libarchive,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glibmm
+    glibmm_2_4
     libarchive
     kdePackages.qtbase
     kdePackages.qtsvg

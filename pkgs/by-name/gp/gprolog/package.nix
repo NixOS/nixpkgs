@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       interface, sockets,...).
 
       GNU Prolog also includes an efficient constraint solver over
-      Finite Domains (FD).  This opens contraint logic programming to
+      Finite Domains (FD).  This opens constraint logic programming to
       the user combining the power of constraint programming to the
       declarativity of logic programming.
     '';

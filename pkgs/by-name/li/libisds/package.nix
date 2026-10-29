@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
   meta = {
-    description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
+    description = "Client library for accessing SOAP services of Czech government-provided Databox information system";
     homepage = "http://xpisar.wz.cz/libisds/";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.mmahut ];

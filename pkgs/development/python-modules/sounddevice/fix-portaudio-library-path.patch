@@ -1,8 +1,18 @@
+From da647df0f0bf390a12493bc0cb73bcdbba58541b Mon Sep 17 00:00:00 2001
+From: Fabian Affolter <fabian@affolter-engineering.ch>
+Date: Tue, 25 Aug 2026 23:46:31 +0200
+Subject: [PATCH] Refactor PortAudio library loading mechanism
+
+Removed old PortAudio library loading logic and replaced it with a direct loading method.
+---
+ src/sounddevice.py | 31 +------------------------------
+ 1 file changed, 1 insertion(+), 30 deletions(-)
+
 diff --git a/src/sounddevice.py b/src/sounddevice.py
-index 00fc6f8..72abede 100644
+index a47e1e3..9de8b51 100644
 --- a/src/sounddevice.py
 +++ b/src/sounddevice.py
-@@ -59,36 +59,7 @@
+@@ -60,36 +60,7 @@
  from _sounddevice import ffi as _ffi
  
  
@@ -22,7 +32,7 @@ index 00fc6f8..72abede 100644
 -    if _platform.system() == 'Darwin':
 -        _libname = 'libportaudio.dylib'
 -    elif _platform.system() == 'Windows':
--        if _platform.machine().lower() in ('arm64', 'aarch64'):
+-        if 'arm64' in _sysconfig.get_platform() or 'aarch64' in _sysconfig.get_platform():
 -            _platform_suffix = 'arm64'
 -        else:
 -            _platform_suffix = _platform.architecture()[0]

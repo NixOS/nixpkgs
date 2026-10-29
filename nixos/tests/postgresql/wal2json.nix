@@ -22,6 +22,7 @@ let
               wal_level = "logical";
               max_replication_slots = "10";
               max_wal_senders = "10";
+              output_plugin_libraries = "wal2json";
             };
           };
         };

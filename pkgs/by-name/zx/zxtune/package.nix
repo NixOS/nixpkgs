@@ -1,31 +1,31 @@
 {
   lib,
   stdenv,
+  config,
   fetchFromBitbucket,
-  fetchpatch2,
   dos2unix,
-  nix-update-script,
+  gitUpdater,
   boost,
   zlib,
   # File backends (for decoding and encoding)
-  withMp3 ? true,
+  withMp3 ? config.zxtune.withMp3 or true,
   lame,
-  withOgg ? true,
+  withOgg ? config.zxtune.withOgg or true,
   libvorbis,
-  withFlac ? true,
+  withFlac ? config.zxtune.withFlac or true,
   flac,
   # Audio backends (for playback)
-  withOpenal ? false,
+  withOpenal ? config.zxtune.withOpenal or false,
   openal,
-  withSDL ? false,
+  withSDL ? config.zxtune.withSDL or false,
   SDL,
-  withOss ? false,
-  withAlsa ? stdenv.hostPlatform.isLinux,
+  withOss ? config.zxtune.withOss or false,
+  withAlsa ? config.zxtune.withAlsa or stdenv.hostPlatform.isLinux,
   alsa-lib,
-  withPulse ? stdenv.hostPlatform.isLinux,
+  withPulse ? config.zxtune.withPulse or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   # GUI audio player
-  withQt ? true,
+  withQt ? config.zxtune.withQt or true,
   qt5,
   zip,
   makeDesktopItem,
@@ -51,7 +51,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5101";
+  version = "5112";
 
   outputs = [ "out" ];
 
@@ -59,15 +59,10 @@ stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-C+1tmQ8cKGpigWDh5p0mqv9B7/Tv8iJ4JVc835Q4y40=";
+    hash = "sha256-903dvy7XegZzoP/+0ZTWQDg3nWib6k1g+05vGRfcenI=";
   };
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "r([0-9]+)"
-    ];
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "r"; };
 
   strictDeps = true;
 
@@ -85,23 +80,24 @@ stdenv.mkDerivation rec {
   '';
   patches = [
     # fix https://hydra.nixos.org/build/317966891
-    (fetchpatch2 {
-      name = "xmp-fix-for-gcc-15.patch";
-      url = "https://github.com/vitamin-caig/zxtune/commit/7f853a38924f78a25b86ac674b41e2f0fd2524a5.patch?full_index=1";
-      hash = "sha256-F6gD+w4lFymSRHXgDngYX/dZI26f7onOmYFlHkPKms8=";
-    })
-    (fetchpatch2 {
-      name = "update-vgm.patch";
-      url = "https://github.com/vitamin-caig/zxtune/commit/31e3ff7a8d13b72e6f72caecd15ae87cefca0465.patch?full_index=1";
-      hash = "sha256-uEa2LY/r/jVWHHEpFtsQba66YdIjA82fDlm+StKp/EI=";
-    })
     ./disable_updates.patch
   ];
 
-  # Fix use of old OpenAL header path
   postPatch = ''
+    # Fix use of old OpenAL header path
     substituteInPlace src/sound/backends/gates/openal_api.h \
-      --replace "#include <OpenAL/" "#include <AL/"
+      --replace-fail \
+        "#include <OpenAL/" \
+        "#include <AL/"
+    # Fix build for gcc16 - https://hydra.nixos.org/build/347457913
+    substituteInPlace src/strings/encoding.h \
+     --replace-fail \
+       '#include "string_view.h"' \
+       $'#include "string_view.h"\n#include <cstdint>'
+    substituteInPlace src/strings/conversion.h \
+     --replace-fail \
+       '#include <charconv>' \
+       $'#include <charconv>\n#include <cstdint>'
   '';
 
   buildPhase =
@@ -174,7 +170,10 @@ stdenv.mkDerivation rec {
       desktopName = "ZXTune";
       genericName = "ZXTune";
       comment = meta.description;
-      categories = [ "Audio" ];
+      categories = [
+        "Audio"
+        "AudioVideo"
+      ];
       type = "Application";
     })
   ];

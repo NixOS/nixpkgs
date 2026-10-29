@@ -23,6 +23,7 @@
   sentencepiece,
   soundfile,
   unidecode,
+  writableTmpDirAsHomeHook,
 
   # passthru
   torchaudio,
@@ -112,15 +113,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     librosa
     requests
     soundfile
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
     # Require internet access
     "test/integration_tests"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Passes, but hangs the build after Pytest completes
-    "test/torchaudio_unittest/models/models_test.py::TestConvTasNet"
   ];
 
   disabledTests = [
@@ -140,6 +138,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     "AutogradCPUTest"
     "TestAutogradLfilterCPU"
     "TestWav2Vec2Model"
+
+    # Massive RAM usage
+    "TestConvTasNet"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # AssertionError: Tensor-likes are not close!
@@ -154,6 +155,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
     pname = "${finalAttrs.pname}-gpuCheck";
+    # This is only a test derivation; its metadata still identifies the package as "torchaudio".
+    dontCheckPythonMetadata = true;
     requiredSystemFeatures = [ "cuda" ];
 
     env = (old.env or { }) // {

@@ -15,22 +15,25 @@
 
 buildGoModule rec {
   pname = "mautrix-meta";
-  version = "26.07";
-  tag = "v0.2607.0";
+  version = "26.10";
+  tag = "v0.2610.0";
 
-  subPackages = [ "cmd/mautrix-meta" ];
+  subPackages = [
+    "cmd/mautrix-meta"
+    "cmd/mautrix-instagram"
+  ];
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "meta";
     inherit tag;
-    hash = "sha256-/NwO6B3IevmkP6nOgZ+Zjg12PvY/cGmH++7pKsJjaAk=";
+    hash = "sha256-wqNOd+Y9pJ3sTKT4HIFlBj6m3uXyA0hdyzGUe3Mnq/g=";
   };
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-ykTk6JQ6cMBH0HYK7n1FWxhAJkD7HVKrg9HChtvuCMk=";
+  vendorHash = "sha256-laFTKwhHShyItSbcLJLIgZI7t0T9oX9hWtpcbWTSB40=";
 
   ldflags = [
     "-s"

@@ -11,13 +11,14 @@ inputs@{
   # Configuration options
   enableAvx ? stdenv.hostPlatform.avxSupport,
   enableCuda ? config.cudaSupport,
+  enableNccl ? enableCuda && cudaPackages.nccl.meta.available,
   enableSse41 ? stdenv.hostPlatform.sse4_1Support,
   enableSse42 ? stdenv.hostPlatform.sse4_2Support,
 }:
 let
   inherit (lib.attrsets) getOutput;
   inherit (lib.lists) optionals;
-  inherit (lib.strings) concatStringsSep;
+  inherit (lib.strings) concatStringsSep withFeature;
 
   inherit (cudaPackages)
     cccl
@@ -40,13 +41,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucc";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rH/bG0pYO4VKfrnkXLXy/67hjaz6i3R0YoYdsGBqPsU=";
+    hash = "sha256-UiVbvT/9lWlfAcxXynzcVNjV5tLn6GRFqg2/SwcEQSg=";
   };
 
   outputs = [
@@ -80,8 +81,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cccl
     cuda_cudart
     cuda_nvml_dev
-    nccl
-  ];
+  ]
+  ++ optionals enableNccl [ nccl ];
 
   # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
   # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
@@ -106,6 +107,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals enableCuda [
       "--with-cuda=${cuda_nvcc}"
       "--with-nvcc-gencode=${concatStringsSep " " flags.gencode}"
+      (withFeature enableNccl "nccl")
     ];
 
   postInstall = ''

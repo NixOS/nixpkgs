@@ -53,7 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hebg" ];
 
   meta = {
-    description = "Hierachical Explainable Behaviors using Graphs";
+    description = "Hierarchical Explainable Behaviors using Graphs";
     homepage = "https://github.com/IRLL/HEB_graphs";
     changelog = "https://github.com/IRLL/HEB_graphs/releases/tag/${version}";
     license = lib.licenses.gpl3Only;

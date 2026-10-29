@@ -2,6 +2,7 @@
   buildRedist,
   libcufile,
   numactl,
+  rdma-core,
 }:
 buildRedist {
   redistName = "cuda";
@@ -17,6 +18,9 @@ buildRedist {
   buildInputs = [
     libcufile
     numactl
+    # NOTE: DT_NEEDED, but until now resolved only because auto-patchelf harvests the runpath of
+    # libcufile's libcufile_rdma.so, which happens to point at rdma-core.
+    rdma-core # libibverbs.so.1, librdmacm.so.1, libmlx5.so.1
   ];
 
   meta = {

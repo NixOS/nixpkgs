@@ -11,7 +11,7 @@
   pkg-config,
   spdlog,
   sqlite,
-  systemd,
+  systemdLibs,
   unbound,
   zeromq,
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     nlohmann_json
     spdlog
     sqlite
-    systemd
+    systemdLibs
     unbound
     zeromq
   ];

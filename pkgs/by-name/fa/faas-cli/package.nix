@@ -6,8 +6,7 @@
   makeWrapper,
   git,
   installShellFiles,
-  testers,
-  faas-cli,
+  versionCheckHook,
 }:
 let
   faasPlatform =
@@ -24,13 +23,15 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "faas-cli";
-  version = "0.18.11";
+  version = "0.18.12";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
-    rev = finalAttrs.version;
-    sha256 = "sha256-4bfp9nM6cAglx9mNzjQZ4uo6nJNWI9Q9g9zIdkev9FM=";
+    tag = finalAttrs.version;
+    hash = "sha256-I7P30c7rEVqemgUu/1AtM6jq2f4KB8xyDpjGBMvkLRU=";
   };
 
   vendorHash = null;
@@ -41,7 +42,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${finalAttrs.version}"
     "-X github.com/openfaas/faas-cli/version.Version=${finalAttrs.version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.hostPlatform}"
@@ -61,10 +61,9 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/faas-cli completion --shell zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    command = "${faas-cli}/bin/faas-cli version --short-version --warn-update=false";
-    package = faas-cli;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Official CLI for OpenFaaS";

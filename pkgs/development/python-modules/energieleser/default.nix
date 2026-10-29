@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "energieleser";
-  version = "0.1.5";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nineti-GmbH";
     repo = "energieleser.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vJ4eJaf0ue4N9aXwsPR79sTVt3NM1GKNw5XomhQUUdU=";
+    hash = "sha256-u2Nu9zYd8dDRM0R/fU2AwMu8Y0xDa5ark2hNA6mvK64=";
   };
 
   build-system = [ poetry-core ];

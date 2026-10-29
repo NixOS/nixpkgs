@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  gcc14Stdenv,
   fetchFromGitHub,
   replaceVars,
   tracy,
@@ -17,13 +16,16 @@
   bzip2,
   geos,
   geographiclib,
-  glew,
   glm,
   gtest,
   howard-hinnant-date,
   libsm,
   libcpr,
+  libGLU,
+  libjpeg,
   libpng,
+  libtiff,
+  libzip,
   onetbb,
   openssl,
   python3,
@@ -34,7 +36,11 @@
   zlib,
 }:
 let
-  buildStdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
+  libtiffWithCxx = libtiff.overrideAttrs (old: {
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-Dcxx=ON"
+    ];
+  });
 
   gtestSkip = [
     # Skip tests requiring network access
@@ -57,33 +63,27 @@ let
     "MarkerModelTest.*"
   ];
 in
-buildStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "supercell-wx";
-  version = "0.5.3";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
     tag = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-1n1WXBLco2TpyhS8KA1tk6HzRIXLqS6YV3aYagoQiTM=";
+    hash = "sha256-SB24gcGuzuw1ISPRuI0dp7wRDsa79bJq2zxirEmXBi4=";
   };
 
   patches = [
     # These are for Nix compatibility {{{
     ./patches/use-find-package.patch # Replace some vendored dependencies with Nix provided versions
-    (replaceVars ./patches/skip-git-versioning.patch {
-      # Skip tagging build with git version, and substitute it with the src revision (still uses current year timestamp)
-      rev = finalAttrs.src.rev;
-    })
+
     # Prevents using some Qt scripts that seemed to break the install step. Fixes missing link to some targets.
     ./patches/fix-cmake-install.patch
-    # }}}
 
-    # These may be or already are submitted upstream {{{
-    ./patches/explicit-link-aws-crt.patch # fix missing symbols from aws-crt-cpp
-    ./patches/fix-qt-6.10.patch
-    ./patches/fix-find-opengl.patch
+    # libtiff with C++ support is required
+    ./patches/libtiff-cxx.patch
     # }}}
   ];
 
@@ -96,6 +96,7 @@ buildStdenv.mkDerivation (finalAttrs: {
   env = {
     CXXFLAGS = lib.concatStringsSep " " [
       "-Wno-error=deprecated-declarations"
+      "-Wno-error=free-nonheap-object"
       "-Wno-error=maybe-uninitialized"
       "-Wno-error=restrict"
       "-Wno-error=stringop-overflow"
@@ -105,6 +106,10 @@ buildStdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
+    # v0.6.2 Release Date
+    (lib.cmakeFeature "SCWX_RELEASE_DATE" "2026-10-17")
+    (lib.cmakeFeature "SCWX_COMMIT_STRING" "65e67897924510d47e6288ad297e46c3aaf87056")
+
     # CMake Error at external/aws-sdk-cpp/crt/aws-crt-cpp/cmake/EnforceSubmoduleVersions.cmake:18 (message):
     # ENFORCE_SUBMODULE_VERSIONS is ON but Git was not found.
     (lib.cmakeBool "ENFORCE_SUBMODULE_VERSIONS" false)
@@ -127,13 +132,16 @@ buildStdenv.mkDerivation (finalAttrs: {
     bzip2
     geos
     geographiclib
-    glew
     glm
     gtest
     howard-hinnant-date
     libsm
     libcpr
+    libGLU
+    libjpeg
     libpng
+    libtiffWithCxx
+    libzip
     onetbb
     openssl
     (python3.withPackages (ps: [
@@ -167,7 +175,7 @@ buildStdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://supercell-wx.rtfd.io";
+    homepage = "https://supercellwx.net/";
     downloadPage = "https://github.com/dpaulat/supercell-wx/releases";
     description = "Live visualization of NEXRAD weather data and alerts";
     changelog = "https://github.com/dpaulat/supercell-wx/releases/tag/${finalAttrs.src.tag}";
@@ -184,6 +192,9 @@ buildStdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ aware70 ];
+    maintainers = with lib.maintainers; [
+      aware70
+      dpaulat
+    ];
   };
 })

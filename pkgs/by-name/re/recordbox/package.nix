@@ -37,6 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HskhMZy8y61c/j/F5e5aM41AQ8t+TCUq/iY23SFB92o=";
   };
 
+  postPatch = ''
+    # With rustc of version 1.96.0 or later, the following error will occur:
+    # `error[E0446]: private type `LyricsSaveDestination` in public interface`.
+    # See also the upstream issue <https://codeberg.org/edestcroix/Recordbox/issues/258>.
+    sed -i 's/enum LyricsSaveDestination/pub enum LyricsSaveDestination/' src/lyrics/edit_dialog.rs
+  '';
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     hash = "sha256-xHukIMUG5himj1umKn+IKM7kJ29MH/pt/jPEHd2EeT0=";

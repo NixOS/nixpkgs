@@ -10,22 +10,25 @@
   cargo,
   rustc,
   rustPlatform,
+
+  # nativeInstallCheckInputs
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "decasify";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchurl {
     url = "https://github.com/alerque/decasify/releases/download/v${finalAttrs.version}/decasify-${finalAttrs.version}.tar.zst";
-    hash = "sha256-JATJ8cFjtCkK65NpTTrUkYHAo4nDrqftarqyJInRTpM=";
+    hash = "sha256-N+VnUMfMvnJfRN0GXG28Fw+Sr6lQwzXn+CVvIbo7j8w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
     dontConfigure = true;
     nativeBuildInputs = [ zstd ];
-    hash = "sha256-hXU9Yw9rGQDkNnwy63LYPIrreOO2P/f8jVaPnVOhrWI=";
+    hash = "sha256-nkuKeVGqn/stlezRDIf6vGQSqNzVCnrkvuFXqkLdvdE=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Utility to change the case of prose strings following natural language style guides";

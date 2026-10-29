@@ -16,6 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-qmT7WBWKtSWGIK/dEd3/bF1bBjqSjfkP99htfnlFLCw=";
   };
 
+  postPatch =
+    # Copy-pasting typo
+    # https://github.com/Dr-Noob/cpufetch/issues/350
+    ''
+      substituteInPlace src/ppc/udev.c \
+        --replace-fail 'memset(name, 0, sizeof(char) * 128)' 'memset(path, 0, sizeof(char) * 128)'
+    '';
+
   nativeBuildInputs = [
     installShellFiles
   ];

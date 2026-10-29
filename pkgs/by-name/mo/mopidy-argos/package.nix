@@ -13,14 +13,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-argos";
-  version = "1.17.0";
+  version = "1.19.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "orontee";
     repo = "argos";
     tag = "v${version}";
-    hash = "sha256-U6frnCor14dIDtgwn83dln+76NoIqBqPiwYLkVaa/x8=";
+    hash = "sha256-ijBAC1iobb64NPbvg/b1NIp/rXZpTemE0ewLVs4DFvM=";
   };
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     aiohttp
+    colorlog
     pycairo
     pygobject3
     pyxdg

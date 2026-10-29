@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       It features:
       - No dependencies other than a C99 compiler.
-      - Simple Authentication and Security Layer (SASL) procotol support.
+      - Simple Authentication and Security Layer (SASL) protocol support.
       - Client-to-client (CTCP) protocol support.
       - Transport Layer Security (TLS) protocol support (via external
         utilities).

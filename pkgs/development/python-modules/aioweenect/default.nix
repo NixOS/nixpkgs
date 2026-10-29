@@ -5,12 +5,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioweenect";
   version = "1.1.7";
   pyproject = true;
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "aioweenect";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YaIOCBBfL2lC6EPwBShVbPXiVlic7zK6pNOWjBJ/Y7I=";
   };
 
@@ -30,6 +31,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [ aiohttp ];
 
@@ -47,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for the weenect API";
     homepage = "https://github.com/eifinger/aioweenect";
-    changelog = "https://github.com/eifinger/aioweenect/releases/tag/v${version}";
+    changelog = "https://github.com/eifinger/aioweenect/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -81,7 +81,6 @@ in
           };
 
           systemd = {
-            enable = true;
             network.enable = false;
             services.boot-blocker = {
               before = [ "initrd.target" ];

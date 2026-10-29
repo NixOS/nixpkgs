@@ -11,6 +11,9 @@ stdenv.mkDerivation {
   pname = "em100";
   version = "0-unstable-2024-11-14";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchgit {
     url = "https://review.coreboot.org/em100";
     # No git tags available. Use latest rev from the main branch.

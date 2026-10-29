@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   jdk,
+  cacert,
+  jre-generate-cacerts,
   git,
   autoconf,
   unzip,
@@ -35,7 +37,6 @@
   build,
   sourceDateEpoch,
   srcHash,
-  homePath,
   jcefPackage ? null,
   extraBuildPhase ? "",
   vendorVersionString ? null,
@@ -116,6 +117,14 @@ jdk.overrideAttrs (oldAttrs: {
 
     ${lib.concatMapStringsSep "\n" (flag: ''realConfigureFlags+=("${flag}")'') extraConfigureFlags}
 
+    # dontConfigure skips openjdk's preConfigure, so generate cacerts from cacert here
+    mkdir "$NIX_BUILD_TOP/cacerts-gen"
+    pushd "$NIX_BUILD_TOP/cacerts-gen"
+    JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+      ${jre-generate-cacerts} ${jdk.home}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+    popd
+    realConfigureFlags+=("--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts")
+
     echo "computed configure flags: ''${realConfigureFlags[*]}"
     substituteInPlace jb/project/tools/linux/scripts/mkimages_${arch}.sh --replace-fail "STATIC_CONF_ARGS" "STATIC_CONF_ARGS ''${realConfigureFlags[*]}"
 
@@ -182,13 +191,15 @@ jdk.overrideAttrs (oldAttrs: {
       if [ "$output" = debug ]; then continue; fi
       LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
     done
-    # Add the local library paths to remove dependencies on the bootstrap
+    # Add the local library paths and drop rpath entries pointing at the
+    # boot JDK
     for output in ${lib.concatStringsSep " " oldAttrs.outputs}; do
       if [ "$output" = debug ]; then continue; fi
       OUTPUTDIR=$(eval echo \$$output)
       BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
       echo "$BINLIBS" | while read i; do
-        patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
+        OLD_RPATH="$(patchelf --print-rpath "$i" 2>/dev/null | tr ':' '\n' | grep -v "^${jdk}" | tr '\n' ':')" || true
+        patchelf --set-rpath "$LIBDIRS:''${OLD_RPATH%:}" "$i" || true
       done
     done
   '';
@@ -221,16 +232,12 @@ jdk.overrideAttrs (oldAttrs: {
       JetBrains Runtime is not a certified build of OpenJDK. Please, use at
       your own risk.
     '';
-    homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
-    inherit (jdk.meta) license platforms mainProgram;
+    homepage = "https://github.com/JetBrains/JetBrainsRuntime";
+    inherit (jdk.meta) license mainProgram;
     maintainers = with lib.maintainers; [
       aoli-al
     ];
 
-    broken = stdenv.hostPlatform.isDarwin;
-  };
-
-  passthru = oldAttrs.passthru // {
-    home = homePath;
+    platforms = lib.platforms.linux;
   };
 })

@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "spire";
-  version = "1.15.2";
+  version = "1.15.5";
 
   outputs = [
     "out"
@@ -21,12 +21,12 @@ buildGoModule (finalAttrs: {
     owner = "spiffe";
     repo = "spire";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Mmjx4moERdYXbGqaGdtHs/uH3Gsm3E6dA50UST5HfRE=";
+    sha256 = "sha256-PB9YWdJR7Iy5CXh4fPyp6buUQkijT9SW0Dx5dVGD5z0=";
   };
 
   # Needed for github.co/google/go-tpm-tools/simulator  which contains non-go files that `go mod vendor` strips
   proxyVendor = true;
-  vendorHash = "sha256-I2k5XiTkFo/Xn7XdzshjgjiBCQ8llhXnTbPWj4e8fzA=";
+  vendorHash = "sha256-4DLJ66GyhneMNSLMBb6lUUoYo63zoCDeXWxMv22NRfU=";
 
   buildInputs = [ openssl ];
 

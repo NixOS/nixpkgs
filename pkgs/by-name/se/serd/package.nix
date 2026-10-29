@@ -47,13 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-poke" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of 'download.drobilla.net/serd-0.30.16.tar.xz">'
       new_version="$(curl -s https://drobilla.net/category/serd/ |
-          pcregrep -o1 'download.drobilla.net/serd-([0-9.]+).tar.xz' |
+          pcre2grep -o1 'download.drobilla.net/serd-([0-9.]+).tar.xz' |
           head -n1)"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';

@@ -3,6 +3,7 @@
   stdenv,
   replaceVars,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   gettext,
   makeWrapper,
@@ -88,6 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
       PYTHON = null;
     })
     ./build-without-dbus-launch.patch
+
+    # Fix crashes in `gtk_im_multicontext_set_delegate` with latest GTK
+    # GTK issue: https://gitlab.gnome.org/GNOME/gtk/-/work_items/8341
+    # Upstream PR: https://github.com/ibus/ibus/pull/2929
+    (fetchpatch {
+      name = "fix-gtk-crashes.patch";
+      url = "https://github.com/ibus/ibus/commit/c534999a9dbea2666864250d74e058ecfb46e76f.patch";
+      hash = "sha256-1h48hvdrDh2Qh4+SufL147CxlfiwvP/Jv509X0WnbrA=";
+    })
   ];
 
   outputs = [

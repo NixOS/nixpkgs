@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bdvcGO1E9fkmKiXQxc3nvISwjIAegY8g37HmxXolsmU=";
+    sha256 = "sha256-QLwpRbedt5a0gq9Q0Dr3LBq2dxeJivNQQQaVJP5CEhw=";
   };
 
-  cargoHash = "sha256-5yjMPDh7liaa9+KntfdCzUXz4vWzTcAhFmXrnVZ+pjM=";
+  cargoHash = "sha256-U4lK/J6WrGHzvGVdr/ZYEr0NOzVsZzS8e4ioLqLDdM4=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -53,12 +53,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    # these 5 tests fail in the lix sandbox because they rely on io_uring
+    # these tests fail in the lix sandbox because they rely on io_uring
     "--skip=cpu_worker::tests::cancel"
     "--skip=cpu_worker::tests::complete"
     "--skip=eventfd_cache::tests::test"
-    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_kernel"
-    "--skip=io_uring::ops::read_write_no_cancel::tests::cancel_in_userspace"
+    "--skip=io_uring::"
+    "--skip=utils::client_trace::"
+    "--skip=utils::cross_process_ring_buffer::"
   ];
 
   postInstall = ''

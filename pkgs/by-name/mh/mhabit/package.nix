@@ -1,9 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter338,
-  sqlite,
-  libsecret,
+  flutter341,
   _experimental-update-script-combinators,
   nix-update-script,
   runCommand,
@@ -12,27 +10,22 @@
 }:
 
 let
-  version = "1.23.11+151";
+  version = "1.26.7+180";
 
   src = fetchFromGitHub {
     owner = "FriesI23";
     repo = "mhabit";
     tag = "v${version}";
-    hash = "sha256-1MGZE50ruHBLQ4Dma6mpJuLNevPIGtjHjlMucAwlK0c=";
+    hash = "sha256-QRPgtzMRdfuflw36okY8DiXqPC+EJLjz8HQ3iL2Yxh8=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "mhabit";
   inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = lib.importJSON ./git-hashes.json;
-
-  buildInputs = [
-    sqlite
-    libsecret
-  ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
   env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];

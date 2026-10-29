@@ -3,39 +3,34 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_41,
+  electron_43,
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm_11,
-  nodejs-slim_latest,
   darwin,
   actool,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
   webVersion ? false,
+  nixosTests,
 }:
 let
+  electron = electron_43;
+
+  pnpm = pnpm_11;
+in
+buildNpmPackage (finalAttrs: {
   pname = "feishin";
-  version = "1.15.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
-    tag = "v${version}";
-    hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1ZIw5XiN+2EhpHmdvN0HxgMSvn4QvN9B+ZJ3RlPXhLw=";
   };
-
-  electron = electron_41;
-
-  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
-  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
-in
-buildNpmPackage {
-  inherit pname version;
-
-  inherit src;
 
   __structuredAttrs = true;
 
@@ -44,14 +39,14 @@ buildNpmPackage {
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit pnpm;
+    inherit (finalAttrs)
       pname
-      pnpm
       version
       src
       ;
     fetcherVersion = 4;
-    hash = "sha256-9uG0AxIBAmuIPywg3p9fFCXmRvM9zDLhWfluSLRnUXY=";
+    hash = "sha256-ltpz4e5Vv2vxt/93M4+vHUFJZjwTRwb2zrwvl1Lqjo8=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -68,7 +63,7 @@ buildNpmPackage {
   postPatch = ''
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
-      --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
+      --replace-fail '"postinstall": "install-electron && electron-builder install-app-deps",' ""
   '';
 
   postBuild = lib.optionalString (!webVersion) ''
@@ -145,12 +140,19 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    # add a tests
+    tests = {
+      inherit (nixosTests.feishin) caddy nginx;
+    };
+  };
 
   meta = {
     description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
-    changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
+    changelog = "https://github.com/jeffvli/feishin/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
@@ -161,4 +163,4 @@ buildNpmPackage {
     ];
   }
   // lib.optionalAttrs (!webVersion) { mainProgram = "feishin"; };
-}
+})

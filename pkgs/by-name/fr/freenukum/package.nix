@@ -5,39 +5,22 @@
   fetchFromGitLab,
   makeDesktopItem,
   installShellFiles,
+  copyDesktopItems,
   dejavu_fonts,
   SDL2,
   SDL2_ttf,
   SDL2_image,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "freenukum";
-  description = "Clone of the original Duke Nukum 1 Jump'n Run game";
-
-  desktopItem = makeDesktopItem {
-    desktopName = pname;
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = description;
-    categories = [
-      "Game"
-      "ArcadeGame"
-      "ActionGame"
-    ];
-    genericName = pname;
-  };
-
-in
-rustPlatform.buildRustPackage rec {
-  inherit pname;
   version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "silwol";
     repo = "freenukum";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Tk9n2gPwyPin6JZ4RSO8d/+xVpEz4rF8C2eGKwrAXU0=";
   };
 
@@ -45,12 +28,29 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+    copyDesktopItems
   ];
 
   buildInputs = [
     SDL2
     SDL2_ttf
     SDL2_image
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = finalAttrs.pname;
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      icon = finalAttrs.pname;
+      comment = "Clone of the original Duke Nukum 1 Jump'n Run game";
+      categories = [
+        "Game"
+        "ArcadeGame"
+        "ActionGame"
+      ];
+      genericName = finalAttrs.pname;
+    })
   ];
 
   postPatch = ''
@@ -66,15 +66,14 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/doc/freenukum
     install -Dm644 README.md CHANGELOG.md $out/share/doc/freenukum/
     installManPage doc/freenukum.6
-    install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
   '';
 
   meta = {
     description = "Clone of the original Duke Nukum 1 Jump'n Run game";
     homepage = "https://salsa.debian.org/silwol/freenukum";
-    changelog = "https://salsa.debian.org/silwol/freenukum/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://salsa.debian.org/silwol/freenukum/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

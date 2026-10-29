@@ -12,7 +12,7 @@ buildPerlPackage {
     owner = "BIC-MNI";
     repo = "mni-perllib";
     rev = "b908472b4390180ea5d19a121ac5edad6ed88d83";
-    sha256 = "0vk99pwgbard62k63386r7dpnm3h435jdqywr4xqfq7p04dz6kyb";
+    hash = "sha256-y0/zGwH3YIc7ydzjJssgcFR728kGjWGmMC2r9fhNaW4=";
   };
 
   patches = [ ./no-stdin.patch ];

@@ -1,9 +1,21 @@
 From db427c55334dd2edc11397d3a92d55dc9c06d1c3 Mon Sep 17 00:00:00 2001
 From: John Ericson <git@JohnEricson.me>
 Date: Sun, 20 Jul 2025 14:20:00 -0400
-Subject: [PATCH] libstdc++: Force regular include/lib dir
+Subject: [PATCH] libstdc++: Force regular lib dir, headers in include-cxx
 
 Delete a bunch of unneeded logic to do this.
+
+The library goes straight in $(libdir), with no version-specific or
+target-specific subdirectory.
+
+The headers go in $(includedir)-cxx rather than $(includedir). libstdc++
+intentionally ships headers named after C headers -- `math.h`, `stdlib.h`,
+`complex.h`, `stdckdint.h` and friends -- whose whole purpose is to shadow
+the C ones when compiling C++. Installed into the ordinary include dir they
+shadow them when compiling *C* too, because the generic setup hook puts that
+directory on the C include path. A sibling directory keeps them out of C's
+way while staying findable for C++; no version or target subdirectory is
+needed, since the store path already separates one libstdc++ from another.
 ---
  libstdc++-v3/acinclude.m4        | 80 ++------------------------------
  libstdc++-v3/include/Makefile.am |  2 +-
@@ -21,7 +33,7 @@ index a0094c2dd95..a0718dff394 100644
 -  glibcxx_toolexeclibdir=no
 +  glibcxx_toolexecdir='$(libdir)'
 +  glibcxx_toolexeclibdir='$(libdir)'
-+  gxx_include_dir='$(includedir)'
++  gxx_include_dir='$(includedir)-cxx'
    glibcxx_prefixdir=$prefix
  
 -  AC_MSG_CHECKING([for gxx-include-dir])

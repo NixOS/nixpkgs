@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pysignalr";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "baking-bad";
     repo = "pysignalr";
     tag = version;
-    hash = "sha256-/Wa2ZeIuvF/4hM79N0rL0DxrBV60BM8/4uvV6ma79Xk=";
+    hash = "sha256-z6jo9ky3WF4jjHZejLIDv1OXL5SZ14srefy7/c7NQNA=";
   };
 
   build-system = [ hatchling ];

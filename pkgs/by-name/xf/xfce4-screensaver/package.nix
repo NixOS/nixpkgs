@@ -23,7 +23,7 @@
   libxklavier,
   pam,
   python3,
-  systemd,
+  systemdLibs,
   xfconf,
   xfdesktop,
   gitUpdater,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxklavier
     pam
     pythonEnv
-    systemd
+    systemdLibs
     xfconf
   ];
 

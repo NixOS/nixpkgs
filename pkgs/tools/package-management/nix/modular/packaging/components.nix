@@ -150,10 +150,7 @@ let
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
-    # See https://github.com/NixOS/nix/pull/14105 -- enabling this only for Nix 2.32+ as there are
-    # reports of undefined behavior on previous versions. Note that this does //not// use
-    # `finalAttrs.version` in order to avoid infinite recursion.
-    ${if lib.versionOlder version "2.32" then null else "preConfigure"} =
+    preConfigure =
       let
         interpositionFlags = [
           "-fno-semantic-interposition"
@@ -172,6 +169,17 @@ let
         export CXXFLAGS="''${CXXFLAGS:-} ${toString interpositionFlags}"
       '';
     outputs = prevAttrs.outputs or [ "out" ] ++ [ "dev" ];
+  };
+
+  fixupStaticLayer = finalAttrs: prevAttrs: {
+    postFixup =
+      prevAttrs.postFixup or ""
+      + lib.optionalString (stdenv.hostPlatform.isStatic) ''
+        # HACK: Otherwise the result will have the entire buildInputs closure
+        # injected by the pkgsStatic stdenv
+        # <https://github.com/NixOS/nixpkgs/issues/83667>
+        rm -f $out/nix-support/propagated-build-inputs
+      '';
   };
 
   # Work around weird `--as-needed` linker behavior with BSD, see
@@ -218,8 +226,6 @@ let
         patches = prevScope.patches ++ patches;
       }
     );
-
-  whenAtLeast = v: thing: if lib.versionAtLeast version v then thing else null;
 
 in
 
@@ -323,6 +329,7 @@ in
     scope.sourceLayer
     setVersionLayer
     mesonLayer
+    fixupStaticLayer
     scope.mesonComponentOverrides
   ];
   mkMesonExecutable = mkPackageBuilder [
@@ -332,6 +339,7 @@ in
     setVersionLayer
     mesonLayer
     mesonBuildLayer
+    fixupStaticLayer
     scope.mesonComponentOverrides
   ];
   mkMesonLibrary = mkPackageBuilder [
@@ -342,8 +350,16 @@ in
     setVersionLayer
     mesonBuildLayer
     mesonLibraryLayer
+    fixupStaticLayer
     scope.mesonComponentOverrides
   ];
+
+  /**
+    Whether to embed the public C API into nix-cli so plugins can resolve those symbols from the executable.
+  */
+  withPluginCAPI =
+    (lib.versionAtLeast (lib.versions.majorMinor version) "2.35")
+    && !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic);
 
   nix-util = callPackage ../src/libutil/package.nix { };
   nix-util-c = callPackage ../src/libutil-c/package.nix { };
@@ -356,7 +372,7 @@ in
   nix-store-tests = callPackage ../src/libstore-tests/package.nix { };
 
   nix-fetchers = callPackage ../src/libfetchers/package.nix { };
-  ${whenAtLeast "2.29pre" "nix-fetchers-c"} = callPackage ../src/libfetchers-c/package.nix { };
+  nix-fetchers-c = callPackage ../src/libfetchers-c/package.nix { };
   nix-fetchers-tests = callPackage ../src/libfetchers-tests/package.nix { };
 
   nix-expr = callPackage ../src/libexpr/package.nix { };
@@ -376,7 +392,7 @@ in
   nix-cmd-c = callPackage ../src/libcmd-c/package.nix { };
 
   nix-cli = callPackage ../src/nix/package.nix { };
-  ${whenAtLeast "2.34pre" "nix-nswrapper"} = callPackage ../src/nswrapper/package.nix { };
+  nix-nswrapper = callPackage ../src/nswrapper/package.nix { };
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 

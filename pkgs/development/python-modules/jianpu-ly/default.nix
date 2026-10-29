@@ -8,13 +8,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jianpu-ly";
-  version = "1.870";
+  version = "1.889";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "jianpu_ly";
-    hash = "sha256-1jhMoHqEkkuSrWzJ3yu/iPA9l29c0xTYN1/Mqaf8TdM=";
+    hash = "sha256-BrrpRD30Ch0L6kMUPSEkrReB5kafplIb1Bg9Vmp3r9A=";
   };
 
   build-system = [ setuptools ];

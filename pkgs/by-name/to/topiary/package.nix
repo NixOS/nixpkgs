@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.7.3";
 
   src = fetchFromGitHub {
-    owner = "tweag";
+    owner = "topiary";
     repo = "topiary";
     tag = "v${finalAttrs.version}";
     hash = "sha256-3zHO+a/m4Rv+pUm0Y1dBjFfHPZCfjsyAq56EiHSGJ1Y=";
@@ -86,8 +86,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
-    homepage = "https://github.com/tweag/topiary";
-    changelog = "https://github.com/tweag/topiary/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/topiary/topiary";
+    changelog = "https://github.com/topiary/topiary/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       nartsiss

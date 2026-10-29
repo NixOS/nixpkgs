@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # Only unvendor miniaudio on non-Darwin as Darwin cannot build the miniaudio package.
-  patches = lib.optional (!stdenv.hostPlatform.isDarwin) [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # Not upstreamble in the near future, see https://github.com/SFML/SFML/pull/3555
     ./unvendor-miniaudio.patch
   ];

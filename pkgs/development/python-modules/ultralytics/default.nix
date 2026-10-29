@@ -44,6 +44,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-vaedx45NlFi2RbrQj16M0bAWuSz+ZlVL8Ivykp54mQU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail '"setuptools>=70.0.0,<=82.0.1"' '"setuptools"'
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [

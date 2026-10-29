@@ -8,6 +8,7 @@
   vulkan-headers,
   vulkan-loader,
   libgbm,
+  wayland-scanner,
   wayland-protocols,
   wayland,
   glm,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
   buildInputs = [
     vulkan-headers

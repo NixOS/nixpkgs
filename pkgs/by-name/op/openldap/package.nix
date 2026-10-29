@@ -168,7 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.openldap;
     maintainers = with lib.maintainers; [
       conni2461
-      das_j
       helsinki-Jo
     ];
     platforms = lib.platforms.unix;

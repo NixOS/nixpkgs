@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fetchurl,
   makeDesktopItem,
+  nix-update-script,
 
   protobuf,
   protoc-gen-go,
@@ -17,24 +18,27 @@
 
   qt6Packages,
 
-  # override if you want to have more up-to-date rulesets
-  throne-srslist ? fetchurl {
-    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/c637d0bb8a3707eb5e122c81753600d3e18a5969/srslist.h";
-    hash = "sha256-Kf3TAGXi7Y0PhWjdTOZdPUMlimszWkcrQw9zv8pb76s=";
+  # To get the latest revision go to the rule-set branch and get the revision of the last commit
+  # Link: https://github.com/throneproj/routeprofiles/tree/rule-set
+  throne-srslist-info ? {
+    rev = "1aa995b5fc30c26b931a61171aea2ab49c3d1711";
+    hash = "sha256-jKYUjgxpE1zwcVv+9Fdj8H1QnPZpTzmzVsMfOMOKGFw=";
   },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.1.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
     tag = finalAttrs.version;
-    hash = "sha256-gtbGKyEOTq+1IP7v4ZhVVohGQFlDtP7NbbhyFD2rCnA=";
+    hash = "sha256-Jj8IVXUm+36sE/195DdrU2l/MpaN4WJtW3ST/j8xKVU=";
   };
 
+  # NKR_ELEVATION_HINT contains spaces
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -49,24 +53,33 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qttools
   ];
 
+  cmakeFlags = [
+    # use a writable config dir
+    (lib.cmakeBool "NKR_PACKAGE" true)
+    # use ThroneCore from PATH first to make use of security wrappers
+    (lib.cmakeBool "NKR_CORE_IN_PATH" true)
+    # the Exec field of the auto-run and the scheme-handler .desktop files
+    (lib.cmakeFeature "NKR_DESKTOP_EXEC" "Throne")
+    # suid cannot be set on ThroneCore in the Nix store, so point users to the NixOS module instead
+    (lib.cmakeFeature "NKR_ELEVATION_HINT" "On NixOS, use programs.throne with tunMode.enable.")
+  ];
+
   env.INPUT_VERSION = finalAttrs.version;
 
   # suppress errors in 3rdparty/simple-protobuf
   env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
 
-  patches = [
-    # disable suid request as it cannot be applied to ThroneCore in nix store
-    # and prompt users to use NixOS module instead. And use ThroneCore from PATH
-    # to make use of security wrappers
-    ./nixos-disable-setuid-request.patch
-
-    # sets the Exec field of the auto-run .desktop file to use the Throne binary from PATH
-    ./fix-autorun-desktop-exec.patch
-  ];
-
-  preBuild = ''
-    ln -s ${throne-srslist} ./srslist.h
-  '';
+  preBuild =
+    let
+      srslist = fetchurl {
+        name = "throne-srslist-${throne-srslist-info.rev}.h";
+        url = "https://raw.githubusercontent.com/throneproj/routeprofiles/${throne-srslist-info.rev}/srslist.h";
+        hash = throne-srslist-info.hash;
+      };
+    in
+    ''
+      ln -s ${srslist} ./srslist.h
+    '';
 
   # we'll wrap manually
   dontWrapQtApps = true;
@@ -77,8 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 Throne -t "$out/share/throne/"
     install -Dm644 "$src/res/public/Throne.png" -t "$out/share/icons/hicolor/512x512/apps/"
 
-    makeQtWrapper "$out/share/throne/Throne" "$out/bin/Throne" \
-      --append-flag "-appdata" # use writable config dir
+    makeQtWrapper "$out/share/throne/Throne" "$out/bin/Throne"
 
     ln -s ${finalAttrs.passthru.core}/bin/ThroneCore "$out/share/throne/ThroneCore"
 
@@ -100,15 +112,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.core = buildGoModule {
     pname = "throne-core";
     inherit (finalAttrs) version src;
-    sourceRoot = "${finalAttrs.src.name}/core/server";
+    modRoot = "./core";
 
-    patches = [
-      # also check cap_net_admin so we don't have to set suid
-      ./core-also-check-capabilities.patch
-    ];
+    # skip cmd/schemagen, a development tool
+    subPackages = [ "." ];
 
-    proxyVendor = true;
-    vendorHash = "sha256-G0ev2my+sHQFYdmfkR2Zq3ujSeqi5fZ4BdrnUS8mfDE=";
+    # the main package has no tests, checkPhase would only rebuild all deps without -trimpath
+    doCheck = false;
+
+    vendorHash = "sha256-NWTXF1f9yNxhzqgF9A7eYWCmGrJ2DV/z/wKW4Yf94ZA=";
 
     nativeBuildInputs = [
       protobuf
@@ -116,14 +128,22 @@ stdenv.mkDerivation (finalAttrs: {
       protoc-gen-go-grpc
     ];
 
-    # taken from script/build_go.sh
     preBuild = ''
-      pushd gen
-      protoc -I . --go_out=. --go-grpc_out=. libcore.proto
-      popd
+      # run only if we're not in the FOD fetcher
+      if [ -d vendor ]; then
+        install -Dm755 vendor/github.com/sagernet/cronet-go/lib/"$GOOS"_"$GOARCH"/libcronet.so -t "$out/lib/"
 
-      VERSION_SINGBOX=$(go list -m -f '{{.Version}}' github.com/sagernet/sing-box)
-      ldflags+=("-X 'github.com/sagernet/sing-box/constant.Version=$VERSION_SINGBOX'")
+        substituteInPlace vendor/github.com/sagernet/cronet-go/internal/cronet/loader_unix.go \
+          --replace-fail "path = findLibrary()" "path = \"$out/lib/libcronet.so\""
+
+        # taken from script/build_go.sh
+        pushd gen
+        protoc -I . --go_out=. --go-grpc_out=. libcore.proto
+        popd
+
+        VERSION_SINGBOX=$(go list -m -f '{{.Version}}' github.com/sagernet/sing-box)
+        ldflags+=("-X 'github.com/sagernet/sing-box/constant.Version=$VERSION_SINGBOX'")
+      fi
     '';
 
     # ldflags and tags are taken from script/build_go.sh
@@ -143,15 +163,22 @@ stdenv.mkDerivation (finalAttrs: {
       "with_utls"
       "with_dhcp"
       "with_tailscale"
+      "with_openvpn"
+      "with_openconnect"
       "badlinkname"
-      "tfogo_checklinkname"
+      "tfogo_checklinkname0"
       "with_naive_outbound"
-      "with_purego" # prebuilt .a files inside cronet-go are annoying to fix
+      "with_purego" # use prebuilt .so instead of prebuilt .a files for cronet-go
+      "noparentcheck" # ThroneCore and its security-wrapper live under a different store path than the GUI
     ];
   };
 
-  # this tricks nix-update into also updating the vendorHash of passthru.core
-  passthru.goModules = finalAttrs.passthru.core.goModules;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "core"
+    ];
+  };
 
   meta = {
     description = "Qt based cross-platform GUI proxy configuration manager";
@@ -162,7 +189,12 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       aleksana
+      Mahdi-zarei
     ];
     platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode # libcronet.so used by throne.core
+    ];
   };
 })

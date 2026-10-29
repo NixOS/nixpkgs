@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -21,6 +22,8 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "argparse_addons" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Additional Python argparse types and actions";

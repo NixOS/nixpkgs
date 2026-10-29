@@ -8,9 +8,27 @@
 }:
 {
   apple-identity-provider-keycloak = callPackage ./apple-identity-provider-keycloak { };
-  keycloak-2fa-sms-authenticator = callPackage ./keycloak-2fa-sms-authenticator { };
+  keycloak-2fa-app-authenticator = callPackage ./netzbegruenung-mfa-plugin.nix {
+    pname = "keycloak-2fa-app-authenticator";
+    module = "app-authenticator";
+    description = "Keycloak MFA provider connecting a native mobile app for login approval";
+  };
+  keycloak-2fa-email-authenticator = callPackage ./netzbegruenung-mfa-plugin.nix {
+    pname = "keycloak-2fa-email-authenticator";
+    module = "email-authenticator";
+    description = "Keycloak authentication provider for 2FA via email OTP";
+  };
+  keycloak-2fa-sms-authenticator = callPackage ./netzbegruenung-mfa-plugin.nix {
+    pname = "keycloak-2fa-sms-authenticator";
+    module = "sms-authenticator";
+    description = "Keycloak authentication provider for 2FA via SMS";
+  };
   keycloak-discord = callPackage ./keycloak-discord { };
-  keycloak-enforce-mfa-authenticator = callPackage ./keycloak-enforce-mfa-authenticator { };
+  keycloak-enforce-mfa-authenticator = callPackage ./netzbegruenung-mfa-plugin.nix {
+    pname = "keycloak-enforce-mfa-authenticator";
+    module = "enforce-mfa";
+    description = "Keycloak authenticator that enforces MFA";
+  };
   keycloak-home-idp-discovery = callPackage ./keycloak-home-idp-discovery { };
   keycloak-magic-link = callPackage ./keycloak-magic-link { };
   keycloak-orgs = callPackage ./keycloak-orgs { };

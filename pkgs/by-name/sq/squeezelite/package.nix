@@ -28,7 +28,7 @@
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optional optionalString;
 
   pulseSupport = audioBackend == "pulse";
 
@@ -39,13 +39,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1584";
+  version = "2.0.0.1611";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "e1028f3cd058789c12b765d68b82e8b3b0b43a7b";
-    hash = "sha256-FKO+5oYQhufN8kMIYYvoskR43BBjqI0fK70/jLH0Oj4=";
+    rev = "afa8e834b2e2774016ca244a5f19f67ed0bd7d3b";
+    hash = "sha256-pSW/YUVzGd1kmB36QnWJdDhZ1KeirymVzgsEsQjS5Zc=";
   };
 
   buildInputs = [

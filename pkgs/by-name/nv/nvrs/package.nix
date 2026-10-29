@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Fast new version checker for software releases";
-    homepage = "https://nvrs.adamperkowski.dev";
+    homepage = "https://nvrs.koi.rip/";
     changelog = "https://github.com/koibtw/nvrs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koi ];

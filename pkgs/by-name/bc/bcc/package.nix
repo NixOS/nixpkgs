@@ -16,6 +16,7 @@
   nixosTests,
   python3Packages,
   readline,
+  removeReferencesTo,
   replaceVars,
   zip,
 }:
@@ -55,6 +56,7 @@ python3Packages.buildPythonApplication rec {
     flex
     llvmPackages.llvm
     makeWrapper
+    removeReferencesTo
     zip
   ];
 
@@ -112,7 +114,16 @@ python3Packages.buildPythonApplication rec {
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out ''${pythonPath[*]}"
+  ''
+  # Remove string refs to LLVM static libs that are unused at runtime and bloat closure by 2G
+  + ''
+    remove-references-to -t ${lib.getLib llvmPackages.llvm} -t ${lib.getLib llvmPackages.libclang} $out/lib/libbcc.so.*
   '';
+
+  disallowedReferences = [
+    (lib.getLib llvmPackages.llvm)
+    (lib.getLib llvmPackages.libclang)
+  ];
 
   outputs = [
     "out"

@@ -10,13 +10,13 @@
   foundationdb,
   zstd,
   stdenv,
+  _experimental-update-script-combinators,
   nix-update-script,
   rocksdb,
   callPackage,
   python3Packages,
   cacert,
   libredirect,
-  rust-jemalloc-sys,
   writeTextFile,
   withFoundationdb ? false,
   stalwartEnterprise ? false,
@@ -51,7 +51,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.14";
+  version = "0.16.27";
 
   __structuredAttrs = true;
 
@@ -59,10 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FggCbIgn/7ncbuE02miIfwJh3Adaj0xcTTaOyYRHeQY=";
+    hash = "sha256-QaPhmiHFIFTdOai0+dfIZaXCctphYTm2h9lB2gcye5c=";
   };
 
-  cargoHash = "sha256-pdwXJ5/Ko+UloTYHEkXOcyw5gVuHmyAAHDfWoTFZ8FY=";
+  cargoHash = "sha256-imB0ItaQdHCJ5beJ0NOkl/8LdTF1Ocf6YPqSbjsn+Ps=";
 
   env = {
     # https://docs.rs/openssl/latest/openssl/#manual
@@ -72,7 +72,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
-  };
+  }
+  //
+    lib.optionalAttrs
+      (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
+      {
+        # Required to fix Stalwart on ARM systems with 16 KB page size.
+        # Using rust-jemalloc-sys causes segmentation faults on x86_64.
+        JEMALLOC_SYS_WITH_LG_PAGE = 16;
+      };
 
   depsBuildBuild = [
     pkg-config
@@ -87,7 +95,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
     openssl
-    rust-jemalloc-sys
     sqlite
     zstd
   ]
@@ -273,7 +280,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webui = callPackage ./webui.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
-    updateScript = nix-update-script { };
+    # subpackages have distinct version numbers, so we can't use nix-update's `--subpackage`
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (nix-update-script { attrPath = "stalwart_0_16.webui"; })
+      (nix-update-script { attrPath = "stalwart_0_16.spam-filter"; })
+    ];
   };
 
   meta = {
@@ -287,12 +299,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.agpl3Only
     ]
     ++ lib.optionals stalwartEnterprise [
-      {
-        fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
-        url = "https://github.com/stalwartlabs/stalwart/blob/${finalAttrs.src.tag}/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
     maxSilent = 14400; # 4 hours
     mainProgram = "stalwart";

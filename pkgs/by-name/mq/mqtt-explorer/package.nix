@@ -7,7 +7,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
-  typescript,
+  typescript_5,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     nodejs
     yarn
-    typescript
+    typescript_5
     fixup-yarn-lock
     makeWrapper
   ]

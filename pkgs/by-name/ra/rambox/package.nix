@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "rambox";
-  version = "2.6.3";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/Rambox-${version}-linux-x64.AppImage";
-    hash = "sha256-YVLT+6o2Py796LBgN7ZgMiigbjBFGyTNaG/bSwJYAXk=";
+    hash = "sha256-u/g1WDA/Tgfprykh2dcHYB2cvABp6UBJVJKS19rAyF8=";
   };
 
   desktopItem = makeDesktopItem {

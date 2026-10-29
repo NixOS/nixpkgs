@@ -31,6 +31,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ${stdenv.hostPlatform.emulator buildPackages} $out/bin/procs --gen-completion $shell
     done
     installShellCompletion procs.{bash,fish} --zsh _procs
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/procs --gen-man-page > procs.1
+    installManPage procs.1
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

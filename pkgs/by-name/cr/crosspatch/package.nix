@@ -13,7 +13,7 @@ let
   version = "1.1.5";
 
   src = fetchFromGitHub {
-    owner = "NickPlayzGITHUB";
+    owner = "nockcs";
     repo = "CrossPatch";
     hash = "sha256-Ux+tLP5Hv8ecnuITMqLiuX0YtF2ENZ7ezi2gNKfuNcM=";
     tag = version;
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
   meta = {
     mainProgram = "crosspatch";
     description = "A mod Manager for Sonic Racing: CrossWorlds";
-    homepage = "https://github.com/NickPlayzGITHUB/CrossPatch";
+    homepage = "https://github.com/nockcs/CrossPatch";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ luna-the-tuna ];

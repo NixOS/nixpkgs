@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  qt6,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
@@ -12,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mouser";
-  version = "3.7.0";
+  version = "3.7.3";
   pyproject = false;
 
   __structuredAttrs = true;
@@ -21,11 +22,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "TomBadash";
     repo = "Mouser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pjcx7YChgu7R8Kdv8fOJcxq98nwh/izpjbOO+4/cdk4=";
+    hash = "sha256-eAbaT9Q/dwmd++CXLjnWso8s7FGYKvbm+ja9MmRGq7A=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
+  ];
+
+  # pyside6 does not bundle Qt's QML modules or plugins the way the PyPI
+  # wheel does, so the QtQuick imports and the SVG image/icon plugins must be
+  # provided here for wrapQtAppsHook to pick up.
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
   ];
 
   dependencies =
@@ -89,8 +105,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     runHook postInstall
   '';
 
+  # The wrapper is created manually below; there is no binary for the hook to wrap.
+  dontWrapQtApps = true;
+
   postFixup = ''
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/mouser \
+    makeQtWrapper ${python3Packages.python.interpreter} $out/bin/mouser \
       --prefix PYTHONPATH : "$PYTHONPATH" \
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

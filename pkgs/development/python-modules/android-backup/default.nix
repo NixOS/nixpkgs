@@ -4,25 +4,29 @@
   fetchFromGitHub,
   pycrypto,
   python,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "android-backup";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bluec0re";
     repo = "android-backup-tools";
-    rev = "v${finalAttrs.version}";
-    sha256 = "0c436hv64ddqrjs77pa7z6spiv49pjflbmgg31p38haj5mzlrqvw";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fONMfy1SQTRuGO/VRZ28iex4tflH3XO0zLg1YjY0gzA=";
   };
 
-  propagatedBuildInputs = [ pycrypto ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    ${python.interpreter} -m android_backup.tests
-  '';
+  dependencies = [ pycrypto ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  enabledTestPaths = [ "android_backup/tests/__main__.py" ];
 
   pythonImportsCheck = [ "android_backup" ];
 

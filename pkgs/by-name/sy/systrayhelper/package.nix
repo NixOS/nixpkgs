@@ -1,14 +1,14 @@
 {
   lib,
   pkg-config,
-  libappindicator-gtk3,
+  libappindicator,
   buildGoModule,
   fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "systrayhelper";
-  version = "unstable-2021-05-20";
+  version = "0.0.5-unstable-2021-05-20";
   rev = "da47887f050cf0f22d9348cb4493df9ffda2a229";
 
   src = fetchFromGitHub {
@@ -32,9 +32,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     pkg-config
-    libappindicator-gtk3
+    libappindicator
   ];
-  buildInputs = [ libappindicator-gtk3 ];
+  buildInputs = [ libappindicator ];
 
   doCheck = false; # Display required
 

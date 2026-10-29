@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     # https://github.com/microsoft/edit/releases/tag/v2.0.0
-    # see section 'Additonal notes to Building & Packaging
+    # see section 'Additional notes to Building & Packaging
     EDIT_CFG_ICUUC_SONAME = "${lib.getLib icu76}/lib/libicuuc.so.76";
     EDIT_CFG_ICUI18N_SONAME = "${lib.getLib icu76}/lib/libicui18n.so.76";
     EDIT_CFG_ICU_RENAMING_VERSION = 76;

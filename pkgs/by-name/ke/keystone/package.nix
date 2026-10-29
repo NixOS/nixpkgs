@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lightweight multi-platform, multi-architecture assembler framework";
-    homepage = "https://www.keystone-engine.org";
+    homepage = "https://github.com/keystone-engine/keystone";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     mainProgram = "kstool";

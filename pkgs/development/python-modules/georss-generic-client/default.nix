@@ -4,21 +4,24 @@
   fetchFromGitHub,
   georss-client,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "georss-generic-client";
-  version = "0.8";
-  format = "setuptools";
+  version = "2026.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-generic-client";
-    rev = "v${version}";
-    hash = "sha256-Y19zMHL6DjAqiDi47Lmst8m9d9kEtTgyRiECKo6CqZY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1sEDkME4x0SK+5H9uenjfFDhnLUxUJMNEmtTx+VZ2I4=";
   };
 
-  propagatedBuildInputs = [ georss-client ];
+  build-system = [ setuptools ];
+
+  dependencies = [ georss-client ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,7 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for accessing generic GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-generic-client";
+    changelog = "https://github.com/exxamalte/python-georss-generic-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

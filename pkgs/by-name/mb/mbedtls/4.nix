@@ -5,8 +5,8 @@
 }:
 
 callPackage ./generic.nix {
-  version = "4.1.0";
-  hash = "sha256-TA1uka13So8URttw+JJVdKIL+IonkhIQSc0IfraXpIM=";
+  version = "4.2.0";
+  hash = "sha256-Xz5W5zYPNlASPyc1/Sz2O1LONdxpUkg1hgzKdax/3ag=";
 
   patches = [
     # Fixes the build with GCC 14 on aarch64.

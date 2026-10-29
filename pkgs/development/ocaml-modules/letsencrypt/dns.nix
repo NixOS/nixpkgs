@@ -11,7 +11,6 @@
 
 buildDunePackage {
   pname = "letsencrypt-dns";
-  minimalOCamlVersion = "4.08";
 
   inherit (letsencrypt)
     version

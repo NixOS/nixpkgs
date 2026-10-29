@@ -83,9 +83,6 @@ locally, and clients have to fetch them directly from the source server.
 
 ```nix
 {
-  # Enable nginx slice module distributed with Tengine
-  services.nginx.package = pkgs.tengine;
-
   # Enable media proxy
   services.akkoma.config.":pleroma".":media_proxy" = {
     enabled = true;

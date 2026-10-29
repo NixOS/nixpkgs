@@ -31,6 +31,7 @@
   fontconfig,
   imagemagick,
   libdbusmenu,
+  libpulseaudio,
   glib,
   wayland,
   libglvnd,
@@ -229,6 +230,11 @@ stdenv.mkDerivation (
           "Development"
           "IDE"
         ];
+        mimeTypes = [
+          "application/x-code-workspace"
+          "text/plain"
+          "inode/directory"
+        ];
         keywords = [ "vscode" ];
         actions.new-empty-window = {
           name = "New Empty Window";
@@ -283,6 +289,9 @@ stdenv.mkDerivation (
       libdbusmenu
       wayland
       libsecret
+      # dlopen()ed by Chromium; without it audio falls back to ALSA and
+      # accessibility signal sounds stay silent on PipeWire/PulseAudio setups
+      libpulseaudio
     ];
 
     nativeBuildInputs = [
@@ -420,6 +429,12 @@ stdenv.mkDerivation (
         # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
         + ''
           ln -rs "$unpacked" "$packed"
+        ''
+        # Some resources, such as Tree-Sitter WASM, are loaded directly from this directory.
+        # Keep it available without duplicating the extracted files.
+        + ''
+          rm -rf "resources/app/node_modules.asar.unpacked"
+          ln -rs "$unpacked" "resources/app/node_modules.asar.unpacked"
         ''
       )
       + (

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation {
   pname = "heroku";
-  version = "10.16.0";
+  version = "11.11.0";
 
   src = fetchzip {
-    url = "https://cli-assets.heroku.com/versions/10.16.0/3f0b8a2/heroku-v10.16.0-3f0b8a2-linux-x64.tar.xz";
-    hash = "sha256-WvabMaOvkaizRxA0d4Lk6pi693tpVd9VH7x77xuMzKU=";
+    url = "https://cli-assets.heroku.com/versions/11.11.0/052296c/heroku-v11.11.0-052296c-linux-x64.tar.xz";
+    hash = "sha256-p+TqmTh+Dyb71zf1eO0llVopn/Fof4r5cNWMj8yIUto=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,9 +23,9 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/share/heroku $out/bin
     cp -pr * $out/share/heroku
-    substituteInPlace $out/share/heroku/bin/run \
-      --replace "/usr/bin/env node" "${nodejs}/bin/node"
-    makeWrapper $out/share/heroku/bin/run $out/bin/heroku \
+    substituteInPlace $out/share/heroku/bin/run.js \
+      --replace "/usr/bin/env -S node" "${nodejs}/bin/node"
+    makeWrapper $out/share/heroku/bin/run.js $out/bin/heroku \
       --set HEROKU_DISABLE_AUTOUPDATE 1
   '';
 

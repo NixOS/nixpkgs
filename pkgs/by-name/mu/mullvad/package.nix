@@ -11,25 +11,26 @@
   libnftnl,
   pkg-config,
   protobuf,
+  rust-jemalloc-sys,
   versionCheckHook,
+  makeBinaryWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mullvad";
-  version = "2026.3";
+  version = "2026.5";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-1Q+i7W0T0Qst5ziO9St6Pcg0GgHQC+NGtRNmyA3A33g=";
+    hash = "sha256-ZhXOzoAPIftwvdMskwC0kbwfjPTK3b+0pP9ZI/rNn4E=";
   };
 
-  cargoHash = "sha256-zcZjjAPiIfkbU1nKhjdxyWP6PvkLEUCNYwFzIzRXArE=";
+  cargoHash = "sha256-qOBCfswWGwP7pWvd0ZAKTX7kYSJTMeJ5z1jHYjHyWZs=";
 
   cargoBuildFlags =
     let
@@ -68,17 +69,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     pkg-config
     protobuf
+    makeBinaryWrapper
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      dbus.dev
-      libmnl
-      libnftnl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libpcap
-    ];
+  buildInputs = [
+    rust-jemalloc-sys
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus.dev
+    libmnl
+    libnftnl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.libpcap
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     compdir=$(mktemp -d)
@@ -89,6 +93,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash $compdir/mullvad.bash \
       --zsh $compdir/_mullvad \
       --fish $compdir/mullvad.fish
+  '';
+
+  preFixup = ''
+    declare MULLVAD_RESOURCE_DIR=$out/share/mullvad/resources/
+    install -Dm444 dist-assets/relays/relays.json $MULLVAD_RESOURCE_DIR/relays.json
+    wrapProgram $out/bin/mullvad-daemon --set-default MULLVAD_RESOURCE_DIR $MULLVAD_RESOURCE_DIR
   '';
 
   __darwinAllowLocalNetworking = true;

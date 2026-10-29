@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://potassco.org/aspcud/";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.hakuch ];
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.mit;
   };
 })

@@ -2,64 +2,52 @@
   lib,
   buildPythonPackage,
   celery,
-  cron-descriptor,
-  django-timezone-field,
-  django,
   fakeredis,
   fetchFromGitHub,
-  mock,
   pytestCheckHook,
-  python-crontab,
   python-dateutil,
+  pbr,
+  redis,
   pytz,
-  setuptools,
+  tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "celery-redbeat";
-  version = "2.9.0";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "celery";
-    repo = "django-celery-beat";
-    tag = "v${version}";
-    hash = "sha256-UGKMSXB+Hg865sAk5ePc/noO3eNTr7b3pp7tvNvn1T8=";
+    owner = "sibson";
+    repo = "redbeat";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dva4th7CAvVKA8UeIQdFsDd5xOFxsluVYDzvn5Y5Pi4=";
   };
 
-  postPatch = ''
-    # Hack the custom dependency resolution in setup.py to avoid pulling in pip
-    substituteInPlace setup.py \
-      --replace-fail "install_requires=reqs('default.txt') + reqs('runtime.txt')," "install_requires=[],"
-  '';
+  build-system = [ pbr ];
 
-  build-system = [ setuptools ];
+  env.PBR_VERSION = finalAttrs.version;
 
   dependencies = [
     celery
-    cron-descriptor
-    django
-    django-timezone-field
-    python-crontab
     python-dateutil
+    redis
+    tenacity
   ];
 
   nativeCheckInputs = [
-    mock
+    fakeredis
     pytestCheckHook
     pytz
   ];
 
-  pythonImportsCheck = [ "django_celery_beat" ];
-
-  # Tests require additional work
-  doCheck = false;
+  pythonImportsCheck = [ "redbeat" ];
 
   meta = {
     description = "Database-backed Periodic Tasks";
-    homepage = "https://github.com/celery/django-celery-beat";
-    changelog = "https://github.com/celery/django-celery-beat/releases/tag/${src.tag}";
+    homepage = "https://github.com/sibson/redbeat";
+    changelog = "https://github.com/sibson/redbeat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

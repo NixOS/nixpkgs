@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "graphemeu";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timendum";
     repo = "grapheme";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qDspbeOmlfQ4VLPdKEuxNPYilKjwUcAJiEOMfx9fFlI=";
+    hash = "sha256-NheVptk7qP7beUd9iFQExaoj4rO7l4ZgI4aS5H7ZS5M=";
   };
 
   build-system = [

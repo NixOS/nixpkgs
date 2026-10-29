@@ -151,10 +151,9 @@ in
             path = lib.getExe' config.security.auditd.package "audisp-af_unix";
             args = [
               "0640"
-              "/var/run/audispd_events"
+              "/run/audit/audispd_events"
               "string"
             ];
-            format = "binary";
           };
           remote = {
             path = lib.getExe' config.security.auditd.package "audisp-remote";
@@ -234,7 +233,6 @@ in
           "/run/audit/audispd_events"
           "string"
         ];
-        format = "binary";
       };
       remote = {
         path = lib.getExe' cfg.package "audisp-remote";

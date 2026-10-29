@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "whool";
-  version = "1.3";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbidoul";
     repo = "whool";
     tag = "v${version}";
-    hash = "sha256-vY7MPTBjNy3LY29k0MjMDnPiU7l9lUvPvTCrji8A5Cw=";
+    hash = "sha256-mzkU8P+NAyDsVFfcAvWQi+ZYCiM34ZCO6H+qz4SZGfg=";
   };
 
   build-system = [ hatch-vcs ];

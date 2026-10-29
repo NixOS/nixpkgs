@@ -42,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlag = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DOSHU_DEFAULT_SKIN=minimal"
   ];
 

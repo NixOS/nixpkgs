@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ghorg";
-  version = "1.11.12";
+  version = "1.11.16";
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KOXUbjaw1TL6Q/fRXTU5fFkxgs1jJ5GcKbn7VVbAipY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gjEwl1MbITsXY6lSd18hJYOoZGYi6k4APiHeSdmnQYQ=";
   };
 
   doCheck = false;

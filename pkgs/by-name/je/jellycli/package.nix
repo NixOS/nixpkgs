@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
     description = "Jellyfin terminal client";
     longDescription = ''
       Terminal music player, works with Jellyfin (>= 10.6) , Emby (>= 4.4), and
-      Subsonic comptabile servers (API >= 1.16), e.g., Navidrome.
+      Subsonic compatible servers (API >= 1.16), e.g., Navidrome.
     '';
     homepage = "https://github.com/tryffel/jellycli";
     license = lib.licenses.gpl3Plus;

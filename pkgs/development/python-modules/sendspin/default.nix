@@ -16,19 +16,22 @@
   rich,
   setuptools,
   sounddevice,
+  textual-image,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sendspin";
-  version = "7.4.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-cli";
     tag = finalAttrs.version;
-    hash = "sha256-B375jsOik0IdLtozH3t3hZKqoO+dtqkzX2bk5YuoO9Y=";
+    hash = "sha256-88mKR0hmVMVLLl1GTVZYEAQg3b/DUOG30kHlyXQ2kLE=";
   };
+
+  pythonRelaxDeps = [ "aiosendspin" ];
 
   nativeBuildInputs = [
     pyprojectVersionPatchHook
@@ -46,6 +49,7 @@ buildPythonPackage (finalAttrs: {
     readchar
     rich
     sounddevice
+    textual-image
   ]
   ++ aiosendspin.optional-dependencies.server;
 

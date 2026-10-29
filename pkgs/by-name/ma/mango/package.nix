@@ -19,7 +19,7 @@
   enableXWayland ? true,
   meson,
   ninja,
-  scenefx_0_5,
+  scenefx,
   wlroots_0_20,
   libGL,
 }:
@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
   pname = "mango";
-  version = "0.15.5";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "mangowm";
     repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-dg2cRIOPqjW/Q+5NLS8OWfIyVsRoGZT1Dji8SSVnpmE=";
+    hash = "sha256-zqhXTuAJ+Mvxu6JSX0MrwsGhpVxkhKAJFMX1mOXjkZg=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_20
-    scenefx_0_5
+    scenefx
     libGL
   ]
   ++ lib.optionals enableXWayland [
@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       hustlerone
+      samiser
       yvnth
     ];
     platforms = lib.platforms.linux;

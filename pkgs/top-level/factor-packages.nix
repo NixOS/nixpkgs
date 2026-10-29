@@ -32,6 +32,8 @@ let
         enableDefaults = false;
       };
 
+      staging-images = callPackage ../development/compilers/factor-lang/staging.nix { };
+
       # Vocabularies
       bresenham = callPackage ../development/factor-vocabs/bresenham { };
 

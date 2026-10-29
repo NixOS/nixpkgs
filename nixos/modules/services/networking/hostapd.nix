@@ -88,12 +88,12 @@ let
 
   # Generates the header for a single BSS (i.e. WiFi network)
   writeBssHeader =
-    radio: bss: bssIdx:
+    radio: bss: interfaceName: bssIdx:
     pkgs.writeText "hostapd-radio-${radio}-bss-${bss}.conf" ''
       ''\n''\n# BSS ${toString bssIdx}: ${bss}
       ################################
 
-      ${if bssIdx == 0 then "interface" else "bss"}=${bss}
+      ${if bssIdx == 0 then "interface" else "bss"}=${interfaceName}
     '';
 
   makeRadioRuntimeFiles =
@@ -128,7 +128,7 @@ let
             rm -f "$mac_deny_file"
             touch "$mac_deny_file"
 
-            cat ${writeBssHeader radio bss bssIdx} >> "$hostapd_config_file"
+            cat ${writeBssHeader radio bss bssCfg.interfaceName bssIdx} >> "$hostapd_config_file"
             cat ${escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-bss-${bss}-extra.conf" bssCfg.settings)} >> "$hostapd_config_file"
             ${concatMapStrings (
               script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n"
@@ -569,6 +569,22 @@ in
                 type = types.attrsOf (
                   types.submodule (bssSubmod: {
                     options = {
+                      interfaceName = mkOption {
+                        type = types.str;
+                        default = bssSubmod.config._module.args.name;
+                        defaultText = lib.literalMD "the network's attribute name";
+                        example = "mld0";
+                        description = ''
+                          Network interface name emitted in the hostapd configuration.
+                          Secondary BSSs on different radios may share an interface
+                          name when configured as links of the same multi-link device
+                          (with `settings.mld_ap = true`). The attribute name remains
+                          the unique configuration identity, including for ACL files.
+
+                          The primary BSS must use the radio's interface name.
+                        '';
+                      };
+
                       logLevel = mkOption {
                         default = 2;
                         type = types.ints.between 0 4;
@@ -795,11 +811,32 @@ in
                             - {var}`"wpa2-sha256"`: WPA2-Personal using HMAC-SHA256 (IEEE 802.11i/RSN). Passwords are set
                               using {option}`wpaPassword` or preferably by {option}`wpaPasswordFile` or {option}`wpaPskFile`.
                             - {var}`"wpa3-sae-transition"`: Use WPA3-Personal (SAE) if possible, otherwise fallback
-                              to WPA2-SHA256. Only use if necessary and switch to the newer WPA3-SAE when possible.
+                              to WPA2-Personal. Only use if necessary and switch to the newer WPA3-SAE when possible.
                               You will have to specify both {option}`wpaPassword` and {option}`saePasswords` (or one of their alternatives).
                             - {var}`"wpa3-sae"`: Use WPA3-Personal (SAE). This is currently the recommended way to
                               setup a secured WiFi AP (as of March 2023) and therefore the default. Passwords are set
                               using either {option}`saePasswords` or {option}`saePasswordsFile`.
+                          '';
+                        };
+
+                        transitionDisable = mkOption {
+                          default = false;
+                          example = true;
+                          type = types.bool;
+                          description = ''
+                            Enable the WPA3-Personal Transition Disable indication. After a successful
+                            WPA3 association, compatible stations will disable WPA2-Personal for this
+                            network profile, protecting subsequent associations against downgrade attacks.
+                            Legacy stations can still connect using WPA2 in transition mode.
+
+                            This option is supported in `"wpa3-sae"` and `"wpa3-sae-transition"` modes.
+
+                            ::: {.warning}
+                            Enable this only when every BSS in the network using this SSID supports
+                            WPA3-Personal. The indication applies to a station's entire network profile
+                            and can prevent it from connecting to WPA2-only BSSs. Therefore, the WPA3 spec
+                            requires this to be disabled by default.
+                            :::
                           '';
                         };
 
@@ -1047,7 +1084,6 @@ in
 
                           # IEEE 802.11i (authentication) related configuration
                           # Encrypt management frames to protect against deauthentication and similar attacks
-                          ieee80211w = mkDefault 1;
                           sae_require_mfp = mkDefault 1;
 
                           # Only allow WPA by default and disable insecure WEP
@@ -1076,25 +1112,30 @@ in
                           wpa_key_mgmt = "SAE";
                           # Derive PWE using both hunting-and-pecking loop and hash-to-element
                           sae_pwe = 2;
-                          # Prevent downgrade attacks by indicating to clients that they should
-                          # disable any transition modes from now on.
-                          transition_disable = "0x01";
+                          # Per WPA3 spec, MFP is required.
+                          ieee80211w = 2;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
                           wpa = 2;
-                          wpa_key_mgmt = "WPA-PSK-SHA256 SAE";
+                          wpa_key_mgmt = "WPA-PSK WPA-PSK-SHA256 SAE";
+                          ieee80211w = 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
                           wpa = 2;
                           wpa_key_mgmt = "WPA-PSK";
+                          ieee80211w = 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha256") {
                           wpa = 2;
                           wpa_key_mgmt = "WPA-PSK-SHA256";
+                          ieee80211w = 1;
                         }
                         // optionalAttrs (bssCfg.authentication.mode != "none") {
                           wpa_pairwise = pairwiseCiphers;
                           rsn_pairwise = pairwiseCiphers;
+                        }
+                        // optionalAttrs bssCfg.authentication.transitionDisable {
+                          transition_disable = "0x01";
                         }
                         // optionalAttrs (bssCfg.authentication.wpaPassword != null) {
                           wpa_passphrase = bssCfg.authentication.wpaPassword;
@@ -1366,6 +1407,10 @@ in
             message = "hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.";
           }
           {
+            assertion = radioCfg.networks ? ${radio} && radioCfg.networks.${radio}.interfaceName == radio;
+            message = "hostapd radio ${radio}: The primary network's interfaceName must match the radio name used for device dependencies.";
+          }
+          {
             assertion =
               (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities)
               -> radioCfg.channel != 0;
@@ -1387,7 +1432,7 @@ in
             [
               {
                 assertion = hasPrefix radio bss;
-                message = "hostapd radio ${radio} bss ${bss}: The bss (network) name ${bss} is invalid. It must be prefixed by the radio name for reasons internal to hostapd. A valid name would be e.g. ${radio}, ${radio}-1, ...";
+                message = "hostapd radio ${radio} bss ${bss}: The network attribute name must be prefixed by the radio name to keep configuration identities distinct and order the primary BSS first. Use interfaceName to select a different secondary interface name.";
               }
               {
                 assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
@@ -1406,6 +1451,15 @@ in
               {
                 assertion = auth.saePasswords == [ ] || auth.saePasswordsFile == null;
                 message = "hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)";
+              }
+              {
+                assertion =
+                  auth.transitionDisable
+                  -> builtins.elem auth.mode [
+                    "wpa3-sae"
+                    "wpa3-sae-transition"
+                  ];
+                message = "hostapd radio ${radio} bss ${bss}: transitionDisable requires WPA3-SAE or WPA3-SAE transition mode";
               }
               {
                 assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null);

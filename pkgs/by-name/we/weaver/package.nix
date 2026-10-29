@@ -19,16 +19,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
-  version = "0.25.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nzj195qaFoz4oSYl3LgkmaNee3ouH7pgAWb7rTVtiZs=";
+    hash = "sha256-riGqVAimpaAPRK281JFRJxxlneQKjT/0zvqK0vMNIWM=";
   };
 
-  cargoHash = "sha256-6w9/yypMFNLGFXIrcUvbYNk6KRZMdiq8pIjH1rz+i4k=";
+  cargoHash = "sha256-hWewiXx5+wL2DNPi+9nUJ5IXHzg1mxass2ASSnTEKk0=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;

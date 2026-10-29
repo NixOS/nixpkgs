@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoenixd";
-  version = "0.9.0";
+  version = "0.9.3";
 
   src =
     let
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/ACINQ/phoenixd/releases/download/v${finalAttrs.version}/phoenixd-${finalAttrs.version}-${suffix}.zip";
       hash = selectSystem {
-        aarch64-darwin = "sha256-NQyHyQzfkdLPpQnuSP09cSZwITA9Q1ml7q2haU3qm5o=";
-        x86_64-linux = "sha256-2eVLk4E/F3GwcslsWulo/7WwUvLKHEJ2K2biy4A2Kg8=";
-        aarch64-linux = "sha256-yAbw2AWKSHKEFzU2rMupBBF2+CF/jITOWbbpfQSoizE=";
+        aarch64-darwin = "sha256-wtlRNxeQMc67RYRUOpDaHi+qBVC9mXOAoYKSqfvF2gU=";
+        x86_64-linux = "sha256-Tu+I8QZ/jT04yeiHemkOBMrvGPagBxVpU+e3TMJQgbI=";
+        aarch64-linux = "sha256-RUAMCYHsjR4+8ziJGVzlYEz52e1oKlwhDh5wLNa9588=";
       };
     };
 

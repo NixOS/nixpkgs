@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pkulak ];
     mainProgram = "filtile";
+    platforms = lib.platforms.linux;
   };
 })

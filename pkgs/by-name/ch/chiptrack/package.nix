@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-jqtWmhP8h8v8bMPVgVZtraWOXRpEir6WnSoCg5EJKs0=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     cmake

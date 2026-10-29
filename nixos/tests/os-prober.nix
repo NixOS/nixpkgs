@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { pkgs, lib, ... }:
   let
     # A filesystem image with a (presumably) bootable debian
-    debianImage = pkgs.vmTools.diskImageFuns.debian11i386 {
+    debianImage = pkgs.vmTools.diskImageFuns.debian12i386 {
       # os-prober cannot detect systems installed on disks without a partition table
       # so we create the disk ourselves
       createRootFS = with pkgs; ''
@@ -99,9 +99,11 @@ import ./make-test-python.nix (
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            hello
             kbd.dev
             kmod.dev
             libarchive.dev
+            libcap-text-verifier
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
@@ -112,6 +114,7 @@ import ./make-test-python.nix (
             perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
+            # make-options-doc/default.nix
             (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo

@@ -1,6 +1,11 @@
 {
   writeShellApplication,
   common-updater-scripts,
+  coreutils,
+  curl,
+  gnugrep,
+  gnupg,
+  gnused,
   xidel,
   baseUrl ? "https://archive.mozilla.org/pub/firefox/releases/",
   version ? "",
@@ -9,6 +14,11 @@ writeShellApplication {
   name = "update-spidermonkey_${version}";
   runtimeInputs = [
     common-updater-scripts
+    coreutils
+    curl
+    gnugrep
+    gnupg
+    gnused
     xidel
   ];
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   assimp,
+  cacert,
   copyDesktopItems,
   desktopToDarwinBundle,
   fetchFromGitHub,
@@ -226,6 +227,14 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
 
     runHook postInstall
+  '';
+
+  # replaced vendored cacert (upstream: https://github.com/renpy/renpy/issues/7466)
+  # copy instead of symlink because this file is distributed with games to end users outside nix
+  preFixup = lib.optionalString (finalAttrs.passthru.distributedRenpy != null) ''
+    chmod u+w $out/share/renpy/lib/python3.12/certifi
+    rm $out/share/renpy/lib/python3.12/certifi/cacert.pem
+    cp ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/renpy/lib/python3.12/certifi/cacert.pem
   '';
 
   desktopItems = lib.optional (!minimal) (makeDesktopItem {

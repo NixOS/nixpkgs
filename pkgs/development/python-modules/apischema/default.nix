@@ -6,7 +6,7 @@
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest8_3CheckHook,
-  pythonAtLeast,
+  pythonOlder,
   setuptools,
 }:
 
@@ -14,9 +14,6 @@ buildPythonPackage rec {
   pname = "apischema";
   version = "0.18.3";
   pyproject = true;
-
-  # Hasn't been updated in two years
-  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "wyfo";
@@ -40,6 +37,9 @@ buildPythonPackage rec {
   optional-dependencies = {
     graphql = [ graphql-core ];
   };
+
+  # Hasn't been updated in two years
+  doCheck = pythonOlder "3.14";
 
   nativeCheckInputs = [
     pytest-asyncio

@@ -13,12 +13,6 @@ in
 {
   options = { };
   config = lib.mkIf (requiredStratisFilesystems != { }) {
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "stratis root fs requires systemd stage 1";
-      }
-    ];
     boot.initrd = {
       systemd = {
         storePaths = [
@@ -34,6 +28,7 @@ in
           thin_repair = "${pkgs."thin-provisioning-tools"}/bin/thin_repair";
           thin_metadata_size = "${pkgs."thin-provisioning-tools"}/bin/thin_metadata_size";
           stratis-min = "${pkgs.stratisd}/bin/stratis-min";
+          cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
         };
         services = lib.attrsets.mapAttrs' (mountPoint: fileSystem: {
           name = "stratis-setup-${fileSystem.stratis.poolUuid}";

@@ -1,10 +1,8 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+  pkgs,
+  runTest,
+  lib,
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   readyFile = "/tmp/readerReady";
@@ -32,8 +30,8 @@ let
       extraConfig ? { },
       tests,
     }:
-    with pkgs.lib;
-    makeTest {
+    with lib;
+    runTest {
       name = "keymap-${layout}";
 
       nodes.machine.console.keyMap = mkOverride 900 layout;
@@ -105,7 +103,7 @@ let
     };
 
 in
-pkgs.lib.mapAttrs mkKeyboardTest {
+lib.mapAttrs mkKeyboardTest {
   azerty = {
     tests = {
       azqw.qwerty = [

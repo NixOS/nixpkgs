@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
+  bashNonInteractive,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
@@ -37,13 +39,13 @@ assert lib.asserts.assertOneOf "pageSizeKiB" (toString pageSizeKiB) (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "jemalloc";
     repo = "jemalloc";
     tag = finalAttrs.version;
-    hash = "sha256-uGQppR2LS/Hhx4eWnavPDW3tzMyI1Df4XYrWEMQwBuw=";
+    hash = "sha256-T3f+BWk+/LeB2Ul7If7TqtJH7qYLq53CcYaU82EMeSg=";
   };
 
   patches = [
@@ -64,6 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
   ];
+
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
@@ -96,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Parallel builds break reproducibility.
   enableParallelBuilding = false;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://jemalloc.net/";

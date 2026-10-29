@@ -29,20 +29,20 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "downkyicore";
-  version = "1.0.24";
+  version = "1.0.32";
 
   src = fetchFromGitHub {
-    owner = "yaobiao131";
+    owner = "crazysmile-PhD";
     repo = "downkyicore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fE4n/PMMkt6m/CuQrPlIIIMPgWiwtN1oh1q5AijlaS8=";
+    hash = "sha256-IAwa5LvhIb2dNrRrON8KNc4rLLGDLfm78vsrx/ZHwak=";
   };
 
   projectFile = "DownKyi/DownKyi.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
   executables = [ "DownKyi" ];
 
   nativeBuildInputs = [
@@ -77,11 +77,6 @@ buildDotnetModule (finalAttrs: {
     libice
     libsm
   ];
-
-  postPatch = ''
-    substituteInPlace DownKyi/DownKyi.csproj DownKyi.Core/DownKyi.Core.csproj \
-      --replace-fail net6.0 net8.0
-  '';
 
   makeWrapperArgs = [
     "--chdir"
@@ -132,10 +127,12 @@ buildDotnetModule (finalAttrs: {
 
   meta = {
     description = "Cross-platform Bilibili downloader built with Avalonia";
-    homepage = "https://github.com/yaobiao131/downkyicore";
+    homepage = "https://github.com/crazysmile-PhD/downkyicore";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mio ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "DownKyi";
+    # due to error MSB6006 protoc exited with code 139
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 })

@@ -4,6 +4,7 @@
   cffi,
   fetchFromGitHub,
   pytestCheckHook,
+  pkg-resources-backport,
   setuptools,
   six,
   ssdeep,
@@ -29,6 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     cffi
+    pkg-resources-backport
     six
   ];
 

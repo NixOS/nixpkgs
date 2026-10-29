@@ -20,14 +20,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylitterbot";
-  version = "2025.6.2";
+  version = "2025.7.0";
   pyproject = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
     tag = finalAttrs.version;
-    hash = "sha256-8hPM5YWt6wI1duW929np5ZvAoUMCXa5QrUIKfYcp/wg=";
+    hash = "sha256-2TuN3pAIJDh6H++iWGcoJOjT0lHVlia74dOGiRIva40=";
   };
 
   build-system = [

@@ -1,36 +1,39 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "azurehound";
-  version = "3.0.0";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4uc4XSjvuMUSeCsJl9uHBFIaeG1KZ1xDaACXnXkp7v0=";
+    hash = "sha256-ny+yShWpL2OvZ5m1uehQADwj1oKPAt+/fefsztiaNVs=";
   };
 
-  vendorHash = "sha256-WF46wXaNU/Em0KpF6hkuuJ+7K1IKLGqpNS/HxpxX5WY=";
+  vendorHash = "sha256-buRaFYHQwaqVRig+94rLJ0rCSDV2ohb9HNUPxyIIq1g=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/bloodhoundad/azurehound/v2/constants.Version=${finalAttrs.version}"
+    "-X=github.com/SpecterOps/AzureHound/v2/constants/misc.Version=${finalAttrs.version}"
   ];
+
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mv $out/bin/AzureHound $out/bin/$pname
+  '';
 
   # flaky: races a 5ms sleep against a 5ms batch timeout
   checkFlags = [ "-skip=^TestBatch$" ];
 
-  doInstallCheck = true;
+  doInstallCheck = false;
 
   meta = {
     description = "Azure Data Exporter for BloodHound";

@@ -2,6 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitLab,
+  fetchpatch,
   cmake,
   pkg-config,
   spdlog,
@@ -29,6 +30,11 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./match-wrappers.patch
+    (fetchpatch {
+      name = "fix-cstring-include.patch";
+      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/merge_requests/43.diff";
+      hash = "sha256-drBUVh+N3KedJttzQIIA1s+38ngK9BgZFOdpxqBWV0E=";
+    })
   ];
 
   strictDeps = true;

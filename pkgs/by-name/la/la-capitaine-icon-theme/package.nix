@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gnome-icon-theme,
   hicolor-icon-theme,
   pantheon,
   kdePackages,
@@ -22,7 +21,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     kdePackages.breeze-icons
     pantheon.elementary-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

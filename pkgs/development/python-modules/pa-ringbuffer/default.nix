@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "spatialaudio";
     repo = "python-pa-ringbuffer";
     rev = version;
-    sha256 = "1d4k6z13mc1f88m6wbhfx8hillb7q78n33ws5bmyblsdkv1gx607";
+    hash = "sha256-B5j+wp5N0+XrKpqPYdHBZ1EaIeoOLm4qQi6wOsI3k7Q=";
   };
 
   meta = {

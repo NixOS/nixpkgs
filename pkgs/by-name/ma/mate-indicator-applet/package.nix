@@ -1,11 +1,14 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
   pkg-config,
   gettext,
   gtk3,
   libayatana-indicator,
+  mate-common,
   mate-panel,
   hicolor-icon-theme,
   wrapGAppsHook3,
@@ -14,11 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-indicator-applet";
-  version = "1.28.0";
+  version = "1.28.1";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-indicator-applet-${finalAttrs.version}.tar.xz";
-    sha256 = "zrPXA5cKPlWNfNffCxwhceOvdSolSVrO0uIiwemtSc0=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-indicator-applet";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lI4iiOUc7AZHGFH5Xp1UsAoT1U11WvSgVrSXFS29RNQ=";
   };
 
   postPatch = ''
@@ -28,8 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     pkg-config
     gettext
+    mate-common
     wrapGAppsHook3
   ];
 
@@ -45,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-indicator-applet";
     odd-unstable = true;
     rev-prefix = "v";
   };

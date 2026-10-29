@@ -15,17 +15,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tyrolienne";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitea {
     domain = "git.uku3lig.net";
     owner = "uku";
     repo = "tyrolienne";
     tag = finalAttrs.version;
-    hash = "sha256-JdXamx+pwUEJWSbPFvROrx/XJojZ5sC+MEH0QVpKD+Y=";
+    hash = "sha256-oos96EU172bmt9WBV84xbkw5zgEbzaB/s+BcjMsPH5U=";
   };
 
-  cargoHash = "sha256-JM4Y0FyqVYqChpPh9p/QulfV8IesUJ0p/ooxAJLfo6I=";
+  cargoHash = "sha256-/rY3QXrnnxLjowHzj1O78FP0KLTViDdLwzmPrec/zmA=";
 
   nativeBuildInputs = [
     pkg-config

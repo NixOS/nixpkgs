@@ -11,22 +11,25 @@
   libmaxminddb,
   libxml2,
   lmdb,
-  lua,
+  lua5_5,
   pcre2,
   ssdeep,
   yajl,
   nixosTests,
 }:
+let
+  lua = lua5_5;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmodsecurity";
-  version = "3.0.15";
+  version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gI874wkqy8VuwxUmIgb8d7fULJUQ+rKBBF492NtuRMY=";
+    hash = "sha256-OebDDhaOQfOf22MoQ1htHwB25O52OnJBSzZlxhnJ0Zo=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # https://github.com/owasp-modsecurity/ModSecurity/blob/v3.0.15/build.sh#L6-L25
+    # https://github.com/owasp-modsecurity/ModSecurity/blob/v3.0.17/build.sh#L6-L25
     echo "noinst_HEADERS = \\" > ./src/headers.mk
     ls -1 ./src/ \
         actions/*.h \

@@ -3,6 +3,7 @@
   stdenv,
   nodejs,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
   python3,
   pkg-config,
@@ -15,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "joplin-cli";
-  version = "3.6.2";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "laurent22";
@@ -24,15 +25,20 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
     '';
-    hash = "sha256-nWMUvAseKoTOv5ui9uYDUiGlvO+8nNV4ux7JbsnrM5U=";
+    hash = "sha256-g5b1DwSG0JgzGeL17q50CaTU0mG6u/v5IUwoVBcoMsM=";
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/laurent22/joplin/blob/dev/package.json#L103
-    ./yarn-4.14-support.patch
-  ];
 
   missingHashes = ./missing-hashes.json;
 
@@ -40,10 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs)
       src
       missingHashes
-      patches
       postPatch
       ;
-    hash = "sha256-mdDVYLJ4ZN7zJJdf/2Wh+or+p1uJPTrMCyDYWwc04YM=";
+    hash = "sha256-IyOnSB21bOYiPnYUorne8/11zxUItIqMtT88ExCoEmU=";
   };
 
   nativeBuildInputs = [
@@ -108,11 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/lib/packages/lib/node_modules/canvas
 
     # Remove extra files
-    rm -rf $out/lib/packages/app-cli/{app/*.test.ts,*.md,.*ignore,tests/,tools/,*.js,*.json,*.sh}
+    rm -rf $out/lib/packages/app-cli/{app/,*.md,.*ignore,tests/,tools/,*.js,tsconfig.json,*.sh}
 
     # Link final binary
-    chmod +x $out/lib/packages/app-cli/app/main.js
-    ln -s $out/lib/packages/app-cli/app/main.js $out/bin/joplin
+    chmod +x $out/lib/packages/app-cli/build/main.js
+    ln -s $out/lib/packages/app-cli/build/main.js $out/bin/joplin
     patchShebangs $out/bin/joplin
 
     runHook postInstall

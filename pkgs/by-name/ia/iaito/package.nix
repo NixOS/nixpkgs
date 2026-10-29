@@ -8,20 +8,19 @@
   qt6Packages,
   radare2,
   xvfb-run,
-  breakpointHook,
   writableTmpDirAsHomeHook,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "iaito";
-  version = "6.1.6";
+  version = "6.2.4";
 
   srcs = [
     (fetchFromGitHub {
       owner = "radareorg";
       repo = "iaito";
       tag = finalAttrs.version;
-      hash = "sha256-hGJ8f/auUDAM/pWT52X5fiDAt/un//oBniMG1lLbofc=";
+      hash = "sha256-LFRbRMwB2Lg1cmoP2LmleGJuIBi/4DZXnTcZYXsSDmY=";
       name = "main";
     })
     (fetchFromGitHub {
@@ -50,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     qt6Packages.qttools
     qt6Packages.wrapQtAppsHook
-    breakpointHook
   ];
 
   buildInputs = [

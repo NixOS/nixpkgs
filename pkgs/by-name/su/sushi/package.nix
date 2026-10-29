@@ -62,6 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-ugly
   ];
 
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "gjs = find_program('gjs', 'gjs-console')" "gjs = find_program('${lib.getExe gjs}')"
+  '';
+
   # See https://github.com/NixOS/nixpkgs/issues/31168
   postInstall = ''
     for file in $out/libexec/org.gnome.NautilusPreviewer
@@ -76,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "sushi";
     };
   };
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/sushi";

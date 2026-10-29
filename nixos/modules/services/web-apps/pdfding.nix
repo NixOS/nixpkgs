@@ -43,11 +43,6 @@ let
     CONSUME_ENABLE = "TRUE";
     CONSUME_SCHEDULE = cfg.consume.schedule;
   }
-  // optionalAttrs cfg.backup.enable {
-    BACKUP_ENABLE = "TRUE";
-    BACKUP_ENDPOINT = cfg.backup.endpoint;
-    BACKUP_SCHEDULE = cfg.backup.schedule;
-  }
   // cfg.extraEnvironment;
 
   envFile = pkgs.writeText "pdfding.env" (
@@ -68,6 +63,14 @@ let
   secretRecommendation = "Consider using a secret managing scheme such as `agenix` or `sops-nix` to generate this file.";
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "pdfding"
+      "backup"
+    ] "The automated backup functionality has been removed by upstream in 1.14.0.")
+  ];
+
   options.services.pdfding = {
     enable = mkEnableOption "PdfDing service" // {
       description = ''
@@ -213,35 +216,6 @@ in
       };
     };
 
-    backup = {
-      enable = mkEnableOption "Backup functionality" // {
-        description = ''
-          Automatic backup of important data to a AWS S3 (or compatible) instance.
-
-          When enabled and properly configured via environment variables,
-          important data is periodically uploaded to the specified s3
-          instance via cronjob.
-        '';
-      };
-      schedule = mkOption {
-        type = types.str;
-        default = "0 2 * * *";
-        description = ''
-          The cron schedule for the consume task to trigger.
-          The format is "minute hour day month day_of_week"
-          Read
-            - https://github.com/mrmn2/PdfDing/blob/d0f21ec2f9fbee4b1a2f6b7e0e6c7ea7784ab1bc/pdfding/base/task_helpers.py#L5
-            - https://huey.readthedocs.io/en/latest/api.html#crontab
-        '';
-      };
-      endpoint = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "The s3 endpoint for backups";
-        example = "127.0.0.1:9000";
-      };
-    };
-
     openFirewall = lib.mkOption {
       type = types.bool;
       default = false;
@@ -261,10 +235,6 @@ in
       {
         assertion = cfg.secretKeyFile != null;
         message = "services.pdfding.secretKeyFile must be set when using PdfDing";
-      }
-      {
-        assertion = cfg.backup.enable -> envVars.BACKUP_ENDPOINT != null;
-        message = "services.pdfding.extraEnvironment.BACKUP_ENDPOINT must be set when backup is enabled";
       }
       {
         assertion = cfg.database.createLocally -> usePostgres;
@@ -314,10 +284,7 @@ in
           echo "from pdf.tasks import consume_function; consume_function(True)" | \
             $sudo ${lib.getExe cfg.package} shell
         '';
-        commands.backup-immediate = ''
-          echo "from backup.tasks import backup_function; backup_function()" | \
-            $sudo ${lib.getExe cfg.package} shell
-        '';
+
         packages = lib.genAttrs (lib.attrNames commands) (name: genWrapper name commands.${name});
       in
       lib.mkMerge [
@@ -326,7 +293,6 @@ in
         ]
         (lib.mkIf cfg.installTestHelpers [
           packages.consume-immediate
-          packages.backup-immediate
         ])
       ];
 
@@ -408,7 +374,7 @@ in
       };
     };
 
-    systemd.services.pdfding-background = lib.mkIf (cfg.consume.enable || cfg.backup.enable) {
+    systemd.services.pdfding-background = lib.mkIf cfg.consume.enable {
       description = "PdfDing Background Tasks (Huey)";
       after = [ "pdfding.service" ];
       wantedBy = [ "multi-user.target" ];

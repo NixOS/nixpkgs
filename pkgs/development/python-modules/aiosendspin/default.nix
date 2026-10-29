@@ -10,10 +10,14 @@
   # dependencies
   aiohttp,
   av,
+  cpace,
+  cryptography,
   mashumaro,
+  noiseprotocol,
   numpy,
   orjson,
   pillow,
+  soxr,
   zeroconf,
 
   # test dependencies
@@ -30,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosendspin";
-  version = "6.0.5";
+  version = "10.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = finalAttrs.version;
-    hash = "sha256-veX6MZSqEQb+tEqZTEgdCObLdaVPJEdTFW5Ivmb0TNQ=";
+    hash = "sha256-Bwnm4FevQkOGWr3CPLpHVO9r83MuBY7g3Ik7MBK5+ao=";
   };
 
   postPatch = ''
@@ -50,22 +54,34 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    # https://github.com/Sendspin/aiosendspin/blob/5.3.0/pyproject.toml#L27
+    # https://github.com/Sendspin/aiosendspin/blob/9.1.1/pyproject.toml#L30
     pyprojectVersionPatchHook
   ];
 
   dependencies = [
     aiohttp
+    cpace
+    cryptography
     mashumaro
+    noiseprotocol
     orjson
     zeroconf
   ];
 
   optional-dependencies = {
+    asrc = [
+      av
+      numpy
+      soxr
+    ];
     server = [
       av
       numpy
       pillow
+    ];
+    source = [
+      av
+      numpy
     ];
   };
 
@@ -79,6 +95,15 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [
     "aiosendspin"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # This test fails due to our ffmpeg/pyav being build with libsoxr and it automatically being chosen.
+    # When forcefully disabling libsoxr, the test passes, but Music Assistant, the primary consumer of this library,
+    # builds a custom ffmpeg with libsoxr and then links their PyAV against it, so it cannot be that bad, right?
+    "test_format_change_during_inflight_commit_aborts_old_format_delivery"
   ];
 
   passthru = {

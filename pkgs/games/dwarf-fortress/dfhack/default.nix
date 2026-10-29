@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchgit,
   fetchpatch,
   cmake,
   fmt,
@@ -108,13 +108,19 @@ stdenv.mkDerivation {
   inherit version;
 
   # Beware of submodules
-  src = fetchFromGitHub {
-    owner = "DFHack";
-    repo = "dfhack";
-    tag = release.git.revision;
-    hash = release.git.outputHash;
-    fetchSubmodules = true;
-  };
+  src = fetchgit (
+    {
+      inherit (release.git) url;
+      hash = release.git.outputHash;
+      fetchSubmodules = true;
+    }
+    // (
+      if (release.git.refType or "tag") == "rev" then
+        { rev = release.git.revision; }
+      else
+        { tag = release.git.revision; }
+    )
+  );
 
   patches =
     optional (versionOlder version "0.44.12-r3") (fetchpatch {
@@ -267,6 +273,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       robbinch
       a1russell
+      cizra
       numinit
     ];
   };

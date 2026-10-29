@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-Ig4cxZepvmI1EH0j2fuQ33jHOLWfS40UE+A4UHdo8oE=";
 
   meta = {
-    description = "Lex/flex like utility rendering .l formated data to Go source code";
+    description = "Lex/flex like utility rendering .l formatted data to Go source code";
     homepage = "https://pkg.go.dev/modernc.org/golex";
     license = lib.licenses.bsd3;
     mainProgram = "golex";

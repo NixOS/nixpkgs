@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nightlight";
-  version = "0.3.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "smudge";
     repo = "nightlight";
     tag = "v${version}";
-    hash = "sha256-NOphjrqsnO5693Zw3NkX3c74I3PdJ8W6sxYwOEJ1yCU=";
+    hash = "sha256-xoYqC48WFeulr1m3EiLouVH007PD9bdE7ERZzbjxdvk=";
   };
 
-  cargoHash = "sha256-v5Oo1AxwvJs66l9CtVjO+WfwgsM16zSLT1SSnDi1kSo=";
+  cargoHash = "sha256-WtzCk2kBO2cWUfNN+xZ84Go4m5/a3BmBayOzy3uU5Wk=";
 
   checkFlags = [
     "--skip=repl"

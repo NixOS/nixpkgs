@@ -8,6 +8,7 @@
   qt6Packages,
   hunspell,
   zlib,
+  wrapGAppsHook3,
   pkg-config,
 }:
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
   buildInputs = [

@@ -20,7 +20,9 @@ buildPythonPackage rec {
     # replace all default values of paths to poppler-utils
     substituteInPlace pdf2image/pdf2image.py \
       --replace-fail 'poppler_path: Union[str, PurePath] = None' \
-                     'poppler_path: Union[str, PurePath] = "${poppler-utils}/bin"'
+                     'poppler_path: Union[str, PurePath] = "${poppler-utils}/bin"' \
+      --replace-fail 'poppler_path: str = None' \
+                     'poppler_path: str = "${poppler-utils}/bin"'
   '';
 
   propagatedBuildInputs = [ pillow ];

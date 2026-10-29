@@ -5,14 +5,17 @@
   nix-update-script,
   versionCheckHook,
   pkg-config,
+  libgit2,
   openssl,
   zlib,
-  git,
+  gitMinimal,
   git-lfs,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-xet";
   version = "0.2.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -23,11 +26,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-2f2lLSYcvllIKvyMlT5hphhkb0QY70wdTvncC1Lf4NI=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
+    libgit2
     openssl
     zlib
   ];
@@ -36,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "git_xet";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     git-lfs
   ];
   nativeInstallCheckInputs = [

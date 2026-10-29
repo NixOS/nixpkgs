@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  prek,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
@@ -33,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    prek
     pytest-asyncio
     pytestCheckHook
   ];

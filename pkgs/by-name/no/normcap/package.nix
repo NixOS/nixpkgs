@@ -46,6 +46,7 @@ ps.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "jeepney"
     "shiboken6"
+    "zxing-cpp"
   ];
 
   build-system = [

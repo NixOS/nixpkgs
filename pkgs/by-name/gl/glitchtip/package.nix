@@ -2,6 +2,7 @@
   lib,
   python314,
   fetchFromGitLab,
+  fetchpatch,
   callPackage,
   stdenv,
   makeWrapper,
@@ -13,6 +14,7 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = final.django_6;
+      django-allauth-async = final.callPackage ./django-allauth-async.nix { };
       glitchtip-rust = final.callPackage ./glitchtip-rust.nix { };
     };
   };
@@ -27,7 +29,7 @@ let
       boto3
       cxxfilt
       django
-      django-allauth
+      django-allauth-async
       django-anymail
       django-async-backend
       django-cors-headers
@@ -60,9 +62,9 @@ let
       uwsgi-chunked
       whitenoise
     ]
-    ++ django-allauth.optional-dependencies.headless-spec
-    ++ django-allauth.optional-dependencies.mfa
-    ++ django-allauth.optional-dependencies.socialaccount
+    ++ django-allauth-async.optional-dependencies.headless-spec
+    ++ django-allauth-async.optional-dependencies.mfa
+    ++ django-allauth-async.optional-dependencies.socialaccount
     ++ django-storages.optional-dependencies.boto3
     ++ django-storages.optional-dependencies.azure
     ++ django-storages.optional-dependencies.google
@@ -70,8 +72,6 @@ let
     ++ granian.optional-dependencies.reload
     ++ granian.optional-dependencies.uvloop
     ++ mcp.optional-dependencies.cli
-    ++ psycopg.optional-dependencies.c
-    ++ psycopg.optional-dependencies.pool
     ++ pydantic.optional-dependencies.email;
 
   frontend = callPackage ./frontend.nix { };
@@ -79,15 +79,27 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "6.2.0";
+  version = "6.2.6";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E1YwJwfL5+Q68xRfnoi2Sg+vAZxGQa0IKfOSVuLVnK0=";
+    hash = "sha256-RGYD6HAFZZTSNJWd8n7/gMy9FkjZno9LO1jGxav5d9M=";
   };
+
+  patches = [
+    # support django-async-backend>=6.1
+    (fetchpatch {
+      url = "https://gitlab.com/glitchtip/glitchtip-backend/-/commit/4cf8c9d1518f5835b71c0692a72b63d8a62bea4a.patch";
+      includes = [
+        "glitchtip/ingest_asgi.py"
+        "glitchtip/settings.py"
+      ];
+      hash = "sha256-FwOJYSsJcJoqUwuHwHPWkzQqVB81Chex4RFTIhl82XM=";
+    })
+  ];
 
   postPatch = ''
     echo 'import os
@@ -130,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit frontend python;
-    inherit (python.pkgs) glitchtip-rust;
+    inherit (python.pkgs) django-allauth-async glitchtip-rust;
     tests = { inherit (nixosTests) glitchtip; };
     updateScript = ./update.sh;
   };

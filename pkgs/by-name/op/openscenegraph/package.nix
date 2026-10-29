@@ -49,7 +49,7 @@
   lasSupport ? false,
   liblas,
   luaSupport ? false,
-  lua,
+  lua5_2_compat,
   sdlSupport ? false,
   SDL2,
   restSupport ? false,
@@ -58,6 +58,9 @@
   withExamples ? false,
   fltk,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openscenegraph";

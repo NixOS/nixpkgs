@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "norihiro";
     repo = "obs-text-pthread";
     rev = version;
-    sha256 = "sha256-Br7cX1/7VYIruLA5107+PjTMNEFAE2P/cvmu5EuXbWI=";
+    hash = "sha256-Br7cX1/7VYIruLA5107+PjTMNEFAE2P/cvmu5EuXbWI=";
   };
 
   nativeBuildInputs = [

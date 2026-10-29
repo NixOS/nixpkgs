@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   six,
   tldextract,
@@ -10,7 +11,9 @@
 buildPythonPackage {
   pname = "surt";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "internetarchive";
@@ -21,7 +24,9 @@ buildPythonPackage {
     hash = "sha256-pSMNpFfq2V0ANWNFPcb1DwPHccbfddo9P4xZ+ghwbz4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     six
     tldextract
   ];
@@ -29,12 +34,6 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "surt" ];
-
-  disabledTests = [
-    # Tests want to download Public Suffix List
-    "test_getPublicPrefix"
-    "test_getPublicSuffix"
-  ];
 
   meta = {
     description = "Sort-friendly URI Reordering Transform (SURT) python module";
