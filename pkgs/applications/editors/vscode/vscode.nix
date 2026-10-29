@@ -10,7 +10,7 @@
   # sourceExecutableName is the name of the binary in the source archive over
   # which we have no control and it is needed to run the insider version as
   # documented in https://wiki.nixos.org/wiki/Visual_Studio_Code#Insiders_Build
-  # On MacOS the insider binary is still called code instead of code-insiders as
+  # On macOS the insider binary is still called code instead of code-insiders as
   # of 2023-08-06.
   sourceExecutableName ?
     "code" + lib.optionalString (isInsiders && stdenv.hostPlatform.isLinux) "-insiders",
@@ -24,7 +24,6 @@ let
   plat =
     {
       x86_64-linux = "linux-x64";
-      x86_64-darwin = "darwin";
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
       armv7l-linux = "linux-armhf";
@@ -35,17 +34,16 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-SPZYBS5U4CChwb57N6wPmuOfB+jM2oBcY/BTz9pysr4=";
-      x86_64-darwin = "sha256-mMDxEAt/Lst4ifeczcL+QT8mVVXNk8fDNTM1YHGZ8tY=";
-      aarch64-linux = "sha256-6EvyDREv23PCm4WzF7pQ1aSL6gXAcRUJZpyEZmOenrY=";
-      aarch64-darwin = "sha256-Zc7XAg6ZXCluEhiBsQzXukZjjOvF3eDLkhvILeE813I=";
-      armv7l-linux = "sha256-92pC8FFYCP2uQl5Y3wTerzXYr8vZyJN24NoRu1M+vTs=";
+      x86_64-linux = "sha256-F7cqfm9ApbXc6YUPEO6hPOc0pjBStn+gIcwB5xWtTPE=";
+      aarch64-linux = "sha256-wXWPIUTGiylfsqNUPpO8A6uZ+OpxXP0FYDdwkqug8Zg=";
+      aarch64-darwin = "sha256-zyoh28sjxCE7kSQ+PN03GX6RafkFZSWHET8WMp/JK4c=";
+      armv7l-linux = "sha256-NX8yU3IjxzVVjPvIJWT0cKAuVYDF9eX2FLPsJQ9YsvI=";
     }
     .${system} or throwSystem;
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.143.1";
+  version = "1.144.0";
 
   # The update server (update.code.visualstudio.com) expects the version path
   # segment in X.Y.Z form, so we normalize X.Y to X.Y.0 (e.g. "1.110" → "1.110.0").
@@ -53,7 +51,7 @@ let
   downloadVersion = lib.versions.pad 3 version;
 
   # This is used for VS Code - Remote SSH test
-  rev = "e646868227c3e3a9e3f24277c8c7220be42c0be7";
+  rev = "2c33b50b16c472efe58357d1d2a8a5414bc23fbf";
 in
 buildVscode {
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
@@ -86,7 +84,7 @@ buildVscode {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      hash = "sha256-XMkR8Ax/12Kvofl4SF2WBM6sWYTyteZgfZgQkviUMmo=";
+      hash = "sha256-ZacT2Vu1mDEK2G202uoo+cP5aHtZ7p5Xs+cGCoEL+RY=";
     };
     stdenv = stdenvNoCC;
   };
@@ -113,6 +111,9 @@ buildVscode {
     '';
     homepage = "https://code.visualstudio.com/";
     downloadPage = "https://code.visualstudio.com/Updates";
+    changelog = "https://code.visualstudio.com/updates/v${
+      lib.replaceString "." "_" (lib.versions.majorMinor version)
+    }";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       eadwu
@@ -125,7 +126,6 @@ buildVscode {
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
       "armv7l-linux"
