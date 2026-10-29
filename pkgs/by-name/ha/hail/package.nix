@@ -5,7 +5,12 @@
   pkg-config,
   fontconfig,
   freetype,
+  libGL,
+  libx11,
+  libxcb,
+  libxi,
   libxkbcommon,
+  vulkan-loader,
   wayland,
   SDL2,
   SDL2_image,
@@ -26,6 +31,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-4nHOyQ2hEhwf4iSDuHjRawYDfv3b0a508IFcq6JUN8M=";
 
+  # Configurator and split editor, which hail starts from its keybinds
+  cargoBuildFlags = [
+    "--package=hail"
+    "--package=hail_config"
+    "--package=hail_editor"
+  ];
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
@@ -37,6 +49,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     SDL2_image
     SDL2_gfx
   ];
+
+  # Windowing and graphics libraries the configurator and split editor load at runtime
+  postFixup = ''
+    patchelf --add-rpath ${
+      lib.makeLibraryPath [
+        libGL
+        libx11
+        libxcb
+        libxi
+        libxkbcommon
+        vulkan-loader
+        wayland
+      ]
+    } $out/bin/hail_config $out/bin/hail_editor
+  '';
 
   passthru.updateScript = nix-update-script { };
 
