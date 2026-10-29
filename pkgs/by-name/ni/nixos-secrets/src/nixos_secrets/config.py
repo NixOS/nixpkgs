@@ -1,9 +1,8 @@
-from dataclasses import dataclass
-
-from typing import Self
-from .error import SecretsError
 import re
+from dataclasses import dataclass
+from typing import Self
 
+from .error import SecretsError
 
 safe_name_regex = re.compile("^[a-zA-Z0-9:_\\.-]+$")
 meta_file_name = ".nixos-secrets-metadata"  # In this file to prevent cyclic imports
@@ -145,12 +144,12 @@ class SecretsConfig:
         referencedStoreBackends: set[str] = set()
         referencedPromptBackends: set[str] = set()
 
-        for name, gen in result.generators.items():
+        for gen in result.generators.values():
             referencedGenerators.update(gen.dependencies)
             referencedStoreBackends.add(gen.backend)
 
         for secret in result.generators.values():
-            for name, prompt in secret.prompts.items():
+            for prompt in secret.prompts.values():
                 referencedPromptBackends.add(prompt.backend)
 
         if missingPromptBackends := referencedPromptBackends - set(

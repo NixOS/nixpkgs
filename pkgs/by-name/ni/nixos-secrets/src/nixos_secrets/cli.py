@@ -1,12 +1,13 @@
 import argparse
 import sys
 from pathlib import Path
-from .error import SecretsError
-from .eval import evaluate_config
-from .generate import generate_secrets
-from .gc import collect_garbage
+
 from .args import SecretsArgs
 from .deploy import deploy
+from .error import SecretsError
+from .eval import evaluate_config
+from .gc import collect_garbage
+from .generate import generate_secrets
 
 
 def common_args(parser: argparse.ArgumentParser):
@@ -136,4 +137,4 @@ def main() -> None:
             raise SecretsError(f"Command '{args.command}' is not implemented :(")
     except SecretsError as e:
         print(str(e), file=sys.stderr)
-        exit(1)
+        sys.exit(1)

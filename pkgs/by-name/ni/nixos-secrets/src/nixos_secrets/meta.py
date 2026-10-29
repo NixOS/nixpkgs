@@ -1,19 +1,19 @@
-import tempfile
 import json
+import tempfile
 from dataclasses import dataclass
-from typing import Self
 from pathlib import Path
+from typing import Self
 
-from .error import SecretsError
 from .args import SecretsArgs
-from .exec import get_secret, set_secret
-from .list import SecretsFileList
 from .config import (
     SecretsConfig,
-    SecretsSecret,
     SecretsFile,
+    SecretsSecret,
     meta_file_name,
 )
+from .error import SecretsError
+from .exec import get_secret, set_secret
+from .list import SecretsFileList
 
 VersionID = str
 

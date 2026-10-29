@@ -1,10 +1,11 @@
+import functools
 import json
 import subprocess
-import functools
 from pathlib import Path
-from .error import SecretsError
+
 from .args import SecretsArgs
 from .config import SecretsConfig
+from .error import SecretsError
 
 jsonify_path = Path(__file__).parent / "nix" / "jsonify.nix"
 with open(jsonify_path) as f:

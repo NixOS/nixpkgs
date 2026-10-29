@@ -1,7 +1,7 @@
 from .args import SecretsArgs
 from .config import SecretsConfig
-from .generate import generate_secrets
 from .exec import deploy_secrets
+from .generate import generate_secrets
 
 
 def deploy(args: SecretsArgs, config: SecretsConfig):

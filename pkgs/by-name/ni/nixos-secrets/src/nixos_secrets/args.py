@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Self
+
 from .error import SecretsError
 
 
@@ -29,7 +30,7 @@ class SecretsArgs:
         if "timeout" not in d:
             d["timeout"] = None
 
-        setArgDict = dict()
+        setArgDict = {}
         if "set" in d:
             for arg in d["set"]:
                 try:

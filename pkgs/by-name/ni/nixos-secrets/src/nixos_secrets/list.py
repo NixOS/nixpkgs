@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from typing import Self
-from .exec import list_secrets
-from .config import SecretsConfig
+
 from .args import SecretsArgs
+from .config import SecretsConfig
+from .exec import list_secrets
 
 
 # This is a workaround around the fact that tuples are not hashable

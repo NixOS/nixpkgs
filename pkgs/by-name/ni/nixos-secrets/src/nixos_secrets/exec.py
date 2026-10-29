@@ -1,17 +1,18 @@
+import functools
+import graphlib
 import os
 import subprocess
-import graphlib
-import functools
 from pathlib import Path
+
+from .args import SecretsArgs
 from .config import (
     SecretsConfig,
-    SecretsStoreBackend,
-    SecretsSecret,
     SecretsFile,
     SecretsPrompt,
+    SecretsSecret,
+    SecretsStoreBackend,
 )
 from .error import SecretsError
-from .args import SecretsArgs
 
 
 # Prevents the terminal from getting stuck in an invalid state (i.e. no echo) after, for example, a generator script has finished running.
@@ -38,7 +39,7 @@ def build_binary(path: Path) -> Path:
 
 
 def backend_env_vars(args: SecretsArgs) -> dict[str, str]:
-    out = dict()
+    out = {}
     if args.json:
         out["NIXOS_SECRETS_CONFIG"] = args.json
     elif args.file:
@@ -240,7 +241,7 @@ def execution_order(config: SecretsConfig) -> list[str]:
 
     try:
         return list(ts.static_order())
-    except Exception as e:
+    except graphlib.CycleError as e:
         raise SecretsError(f"Dependency cycle detected in configuration:\n{e}")
 
 

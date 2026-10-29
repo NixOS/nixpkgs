@@ -1,23 +1,23 @@
 import os
-import tempfile
 import subprocess
-from uuid import uuid4
+import tempfile
 from pathlib import Path
+from uuid import uuid4
 
 from .args import SecretsArgs
 from .config import SecretsConfig, SecretsSecret
-from .meta import SecretsMetadata, VersionID, get_meta, set_meta
-from .exec import (
-    execution_order,
-    build_binary,
-    get_secret,
-    set_secret,
-    fixup_all,
-    run_prompt,
-    reset_terminal_state,
-)
 from .error import SecretsError
+from .exec import (
+    build_binary,
+    execution_order,
+    fixup_all,
+    get_secret,
+    reset_terminal_state,
+    run_prompt,
+    set_secret,
+)
 from .list import build_file_list
+from .meta import SecretsMetadata, VersionID, get_meta, set_meta
 
 
 def generate_secrets(args: SecretsArgs, config: SecretsConfig):
@@ -25,7 +25,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
     for gen_name in forced_regens:
         if gen_name not in config.generators:
             raise SecretsError(f"Invalid secret name '{gen_name}'.")
-    for gen_name in args.set.keys():
+    for gen_name in args.set:
         generator = config.generators[gen_name]
         if generator.dependencies:
             raise SecretsError(
@@ -272,7 +272,7 @@ def set_files_from_path(
                 f"The secret '{generator.name}' requires {file_count} files, yet only one was provided. Arrange the files in a directory containing files named {file_names} and try again."
             )
 
-        file = list(generator.files.values())[0]
+        file = next(generator.files.values())
         try:
             set_secret(args, config, generator, file, source)
             return
