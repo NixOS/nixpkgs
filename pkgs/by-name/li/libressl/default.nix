@@ -60,7 +60,7 @@ let
         rm configure
       '';
 
-      inherit patches;
+      patches = [ ./nix-ssl-cert-file.patch ] ++ patches;
 
       postPatch = ''
         patchShebangs tests/
