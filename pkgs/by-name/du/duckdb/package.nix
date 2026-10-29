@@ -82,10 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!canExecute) [
     (lib.cmakeFeature "DUCKDB_EXPLICIT_PLATFORM" duckdbPlatform)
-  ]
-  ++ lib.optionals stdenv.cc.isGNU [
-    # causes massive amounts of logs, exceeding hydra's limits on some platforms
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-sfinae-incomplete")
   ];
 
   doInstallCheck = canExecute;
