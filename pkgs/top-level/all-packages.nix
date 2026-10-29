@@ -999,6 +999,8 @@ with pkgs;
 
   mkosi-full = mkosi.override { withQemu = true; };
 
+  nix-manipulator = with python3Packages; toPythonApplication nix-manipulator;
+
   openusd = python3Packages.openusd.override {
     withTools = true;
     withUsdView = true;
