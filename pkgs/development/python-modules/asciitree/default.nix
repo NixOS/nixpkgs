@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbr";
     repo = "asciitree";
-    rev = version;
+    tag = version;
     hash = "sha256-67GWk6K2AyEyt5lzL0LMRnY+Uxtsig6ld2rNTvZe5ro=";
   };
 
@@ -25,6 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Draws ASCII trees";
     homepage = "https://github.com/mbr/asciitree";
+    changelog = "https://github.com/mbr/asciitree/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
