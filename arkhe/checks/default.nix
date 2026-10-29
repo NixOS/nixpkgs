@@ -1,7 +1,4 @@
-# Checks executados por `nix flake check`.
-#
-# Cada pacote é o próprio check (build completo). O artefato WASM fica de fora
-# porque depende de uma toolchain com std para `wasm32-unknown-unknown`.
+# Builds nativos, WASM e testes funcionais executados por nix flake check.
 { pkgs, packages }:
 
 let
@@ -21,7 +18,7 @@ let
   }).config;
 
   checkable = lib.filterAttrs (
-    name: value: lib.isDerivation value && name != "arkhe-verify-wasm"
+    name: value: lib.isDerivation value
   ) packages;
 in
 checkable
@@ -29,6 +26,11 @@ checkable
   modules = assert moduleConfig.systemd.services.arkhe-runtime.serviceConfig.EnvironmentFile == "/run/secrets/arkhe.env";
     assert builtins.length moduleConfig.environment.systemPackages >= 1;
     pkgs.runCommand "arkhe-modules-eval" { } "touch $out";
+
+  wasm-smoke = pkgs.runCommand "arkhe-wasm-smoke" { nativeBuildInputs = [ pkgs.nodejs ]; } ''
+    mkdir -p $out
+    node ${./wasm-smoke.cjs} ${packages.arkhe-verify-wasm}/lib ${./fixtures/mmr} > $out/results.json
+  '';
 
   smoke = pkgs.runCommand "arkhe-verify-smoke" { } ''
     mkdir -p $out

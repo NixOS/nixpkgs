@@ -8,19 +8,17 @@ builds reprodutíveis e suporte opt-in a derivações endereçadas por conteúdo
 | Item | Estado |
 |---|---|
 | Expressões Nix escritas e revisadas | observado neste diretório |
-| `nix flake check` / builds | avaliação sem build aprovada em WSL/Nix 2.35.4 para x86_64-linux e aarch64-linux; builds documentados na revisão |
-| Reprodutibilidade bit-a-bit | `arkhe-verify`: reconstrução na mesma máquina aprovada; máquinas independentes pendentes |
+| `nix flake check` / builds | PASS em x86_64-linux; avaliação ARM64 aprovada; veja a revisão |
+| Reprodutibilidade bit-a-bit | dez outputs idênticos entre host e VM QEMU/KVM com store próprio, no mesmo equipamento físico |
 | Derivações CA | `arkhe-verify`: build e endereço CA verificados |
 | `flake.lock` | versionado; conferir com `nix flake metadata` |
 | `arkhe-mmrd`, `arkhe-journald`, `arkhe-gate`, `arkhe-anchor`, `arkhe-prove` | **não existem como crates** neste monorepo; não há pacote para eles |
 
-O workflow em `../.github/workflows/arkhe-nix.yml` é a fonte de verdade: ele avalia,
-constrói e testa a reprodutibilidade. Enquanto ele não rodar, trate tudo aqui
-como proposta revisada, não como artefato comprovado.
+O workflow em `../.github/workflows/arkhe-nix.yml` repete os checks de build. As execuções locais no host e na VM, com seus hashes e logs, estão registradas em [docs/INTEGRATION-REVIEW.md](docs/INTEGRATION-REVIEW.md).
 
 ## O que este repositório entrega
 
-- **8 pacotes nativos e 1 expressão WASM com toolchain explícita** derivados dos crates que existem no monorepo (ver tabela).
+- **8 pacotes nativos e 1 pacote WASM** derivados dos crates que existem no monorepo (ver tabela).
 - **1 metapacote** (`arkhe`) que reúne os CLIs em um único perfil.
 - **Overlay** (`overlays.default`) e **overlay CA** (`overlays.contentAddressed`).
 - **Módulos NixOS** para dois perfis: `arkhe-node` (runtime) e `arkhe-audit`
@@ -41,7 +39,7 @@ como proposta revisada, não como artefato comprovado.
 | `arkhe-ollama` | `arkhe-ollama` | `arkhe-ollama` | não |
 | `arkhe-crm-bridge` | `arkhe-crm-bridge-cli` | `arkhe-crm-bridge-cli` | não |
 | `arkhe-python-gate` | `arkhe-python-bridge` | `arkhe-python-gate` | não |
-| `arkhe-verify-wasm` | `arkhe-verify-wasm` | `arkhe-verify-pqc.wasm` | não |
+| `arkhe-verify-wasm` | `arkhe-verify-wasm` | `arkhe-verify.wasm` | não |
 | `arkhe` | — | metapacote (`symlinkJoin`) | — |
 
 Detalhes, dependências pesadas e riscos por pacote: [docs/packages.md](docs/packages.md).
@@ -57,9 +55,7 @@ nix build .#arkhe                # metapacote com todos os CLIs
 nix develop                      # cargo, rustc, clippy, rustfmt, jq, nix
 ```
 
-O flake assume que este diretório está na raiz do monorepo Arkhe (o `src`
-padrão é `../.`, filtrado). Para outro layout, use `default.nix` com `src`
-explícito.
+O flake usa o snapshot `source/`, acompanhado de `source-manifest.json`. No fork Nixpkgs, execute estes comandos dentro de `arkhe/`. Para outro workspace, passe `src` explicitamente à API `lib.mkPackages` ou a `default.nix`.
 
 ### Overlay
 
@@ -78,22 +74,21 @@ explícito.
 nix profile install .#arkhe
 ```
 
-### Fonte fixada por hash
+### Fonte versionada
 
-Para builds que não dependem do checkout local:
+O snapshot local está versionado junto ao pacote. O commit do flake fixa os fontes; `source-manifest.json` registra SHA-256 por arquivo e é conferido pelo CI. O workspace público `rafael-arkhe/arkhe` tem outra estrutura e não deve ser usado como substituto automático deste snapshot.
 
 ```nix
 let
-  arkheSrc = pkgs.fetchFromGitHub {
-    owner = "rafael-arkhe";
-    repo = "arkhe";
-    rev = "v0.1.0";
-    hash = "sha256-...";
+  arkhe = import ./default.nix {
+    inherit pkgs;
+    src = ./source;
   };
-  arkhe = import ./default.nix { pkgs = pkgs; src = arkheSrc; };
 in
 arkhe.arkhe-verify
 ```
+
+Para outra fonte, forneça um snapshot com `Cargo.lock` e os mesmos crates, fixado por revisão/hash, e repita os checks.
 
 ## Reprodutibilidade
 
@@ -188,3 +183,5 @@ Apache-2.0. Ver [LICENSE](LICENSE).
 ## Revisão de integração
 
 Veja [docs/INTEGRATION-REVIEW.md](docs/INTEGRATION-REVIEW.md). A raiz do fork Nixpkgs permanece independente.
+
+O pacote WASM usa `lld` e `wasm-bindgen-cli` do mesmo nixpkgs fixado. Inclui o módulo bruto `lib/arkhe-verify.wasm` e bindings Node.js `lib/arkhe_verify.js`. A nomenclatura não implica habilitação da camada PQC.

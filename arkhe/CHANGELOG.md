@@ -25,3 +25,11 @@
 - `arkhe-verify-wasm` depende de toolchain com std para `wasm32-unknown-unknown`.
 - Componentes `arkhe-mmrd`, `arkhe-journald`, `arkhe-gate`, `arkhe-anchor` e
   `arkhe-prove` não existem como crates e não foram empacotados.
+
+## Validação complementar — 2026-10-29
+
+- WASM: std do Rust fixado, linker lld explícito e bindings wasm-bindgen para Node.js.
+- Pacote WASM exposto no flake e teste funcional com vetores MMR no CI.
+- CI constrói todos os pacotes e checks.
+- Configuração QEMU/KVM e helpers para reproduzir em store próprio, sem saídas Arkhe copiadas.
+- Evidências por pacote em docs/validation/.

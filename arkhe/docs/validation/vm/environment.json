@@ -1,0 +1,15 @@
+{
+  "hypervisor": "QEMU 11.1.2 / KVM",
+  "guest_hostname": "arkhe-repro-vm",
+  "guest_kernel": "6.18.59",
+  "guest_nix": "2.34.9",
+  "host_nix": "2.35.4",
+  "same_physical_host": true,
+  "mount_host_nix_store": false,
+  "shared_directories": {},
+  "guest_memory_mib": 6144,
+  "guest_vcpus": 4,
+  "guest_disk_mib": 65536,
+  "disk_location": "Ubuntu WSL: /home/arkhen/.cache/arkhe-repro/vm/arkhe-repro.qcow2",
+  "shutdown_after_validation": true
+}

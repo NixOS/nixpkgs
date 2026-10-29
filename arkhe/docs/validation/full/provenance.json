@@ -1,0 +1,34 @@
+{
+  "nix": "nix (Nix) 2.35.4",
+  "flake": {
+    "url": "path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe?lastModified=1793289853&narHash=sha256-xCdBdgL2XYQeXZkaYDX7OsAUrK2FhMsx1IWQC7un3sM%3D",
+    "revision": null,
+    "locked": {
+      "__final": true,
+      "lastModified": 1793289853,
+      "narHash": "sha256-xCdBdgL2XYQeXZkaYDX7OsAUrK2FhMsx1IWQC7un3sM=",
+      "path": "/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe",
+      "type": "path"
+    }
+  },
+  "packages": [
+    {
+      "attr": "arkhe-verify",
+      "path": "/nix/store/gg0qk1d7cga0zhaqr7gzfackdya6jbqy-arkhe-verify-0.1.0",
+      "hash": "sha256-2ZFcAmxcgSg7jsWFmfWimN/9d2VPx3ifr3GOSSxKc3Y=",
+      "ca": null
+    },
+    {
+      "attr": "arkhe-verify-wasm",
+      "path": "/nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0",
+      "hash": "sha256-GOFokeh00zNILhZt+jNElEksmAY/URJVvxrs+Ruf0TY=",
+      "ca": null
+    },
+    {
+      "attr": "legacyPackages.x86_64-linux.ca.arkhe-verify",
+      "path": "/nix/store/z120virsy1in3hs7ixj8nw69qmixrph1-arkhe-verify-0.1.0",
+      "hash": "sha256-2ZFcAmxcgSg7jsWFmfWimN/9d2VPx3ifr3GOSSxKc3Y=",
+      "ca": "fixed:r:sha256:0xkk98n4k3kimygpiisgcmvzvpwqlbsrk1f5iqxji0awdh15r4fr"
+    }
+  ]
+}

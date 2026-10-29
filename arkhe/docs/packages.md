@@ -67,14 +67,11 @@ Todos os pacotes usam `lib/mk-arkhe-package.nix`, que fixa `--locked`,
 ## `arkhe-verify-wasm`
 
 - Crate: `verification/crates/arkhe-verify-wasm`
-- Artefato: `$out/lib/arkhe-verify-pqc.wasm`
+- Artefato: `$out/lib/arkhe-verify.wasm`
 - `doCheck = false`; `installPhase` próprio.
-- **Ressalva:** compilar para `wasm32-unknown-unknown` exige uma toolchain com
-  a std desse alvo. O `rustc` do nixpkgs normalmente instala só a std do host,
-  então este atributo pode falhar com a toolchain padrão. Ele fica fora de
-  `checks` e do build padrão do CI por isso. Para habilitar, passe um
-  `rustPlatform` que tenha o alvo (por exemplo via rust-overlay) em
-  `import ./default.nix { rustPlatform = ...; }`.
+- Usa a std WASM do rustc fixado, `lld` explícito e `wasm-bindgen-cli` compatível.
+- Inclui bindings Node.js. O check `wasm-smoke` executa 20 provas MMR válidas, 106 adulterações e uma política malformada.
+- Faz parte de `packages`, `checks` e do CI.
 
 ## `arkhe`
 

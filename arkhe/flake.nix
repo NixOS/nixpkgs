@@ -35,7 +35,7 @@
         let
           p = packagesFor system;
         in
-        (lib.filterAttrs (name: value: lib.isDerivation value && name != "arkhe-verify-wasm") p) // { default = p.arkhe-verify; }
+        (lib.filterAttrs (name: value: lib.isDerivation value) p) // { default = p.arkhe-verify; }
       );
 
       # `ca` fica fora de `packages` de propósito: instanciar uma derivação
@@ -48,7 +48,7 @@
           p = packagesFor system;
           ca = contentAddressedFor system;
         in
-        p // { ca = lib.filterAttrs (name: value: lib.isDerivation value && name != "arkhe-verify-wasm") ca; }
+        p // { ca = lib.filterAttrs (name: value: lib.isDerivation value) ca; }
       );
 
       checks = forAllSystems (

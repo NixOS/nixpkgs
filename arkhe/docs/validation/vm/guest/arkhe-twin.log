@@ -1,0 +1,97 @@
+this derivation will be built:
+  /nix/store/n693gdghsdfhkwfwgk5yvri66m5mbp70-arkhe-twin-0.1.0.drv
+building '/nix/store/n693gdghsdfhkwfwgk5yvri66m5mbp70-arkhe-twin-0.1.0.drv'...
+arkhe-twin> Running phase: unpackPhase
+arkhe-twin> unpacking source archive /nix/store/5klza853s3gbrz33schywb49ckkak725-source
+arkhe-twin> source root is source
+arkhe-twin> Executing cargoSetupPostUnpackHook
+arkhe-twin> Finished cargoSetupPostUnpackHook
+arkhe-twin> Running phase: patchPhase
+arkhe-twin> Executing cargoSetupPostPatchHook
+arkhe-twin> Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+arkhe-twin> Finished cargoSetupPostPatchHook
+arkhe-twin> Running phase: updateAutotoolsGnuConfigScriptsPhase
+arkhe-twin> Running phase: configurePhase
+arkhe-twin> Running phase: buildPhase
+arkhe-twin> Executing cargoBuildHook
+arkhe-twin> cargoBuildHook flags: -j 3 --target x86_64-unknown-linux-gnu --offline --profile release --locked -p arkhe-twin --bin arkhe-twin
+arkhe-twin>    Compiling proc-macro2 v1.0.107
+arkhe-twin>    Compiling quote v1.0.47
+arkhe-twin>    Compiling unicode-ident v1.0.27
+arkhe-twin>    Compiling version_check v0.9.5
+arkhe-twin>    Compiling cfg-if v1.0.5
+arkhe-twin>    Compiling serde_core v1.0.229
+arkhe-twin>    Compiling generic-array v0.14.9
+arkhe-twin>    Compiling typenum v1.20.1
+arkhe-twin>    Compiling syn v3.0.9
+arkhe-twin>    Compiling shlex v2.0.1
+arkhe-twin>    Compiling find-msvc-tools v0.1.14
+arkhe-twin>    Compiling semver v1.0.28
+arkhe-twin>    Compiling rustc_version v0.4.1
+arkhe-twin>    Compiling cc v1.8.0
+arkhe-twin>    Compiling block-buffer v0.10.4
+arkhe-twin>    Compiling crypto-common v0.1.6
+arkhe-twin>    Compiling zmij v1.0.23
+arkhe-twin>    Compiling serde v1.0.229
+arkhe-twin>    Compiling autocfg v1.5.1
+arkhe-twin>    Compiling libc v0.2.189
+arkhe-twin>    Compiling utf8parse v0.2.2
+arkhe-twin>    Compiling anstyle-parse v1.0.0
+arkhe-twin>    Compiling blake3 v1.8.7
+arkhe-twin>    Compiling num-traits v0.2.19
+arkhe-twin>    Compiling digest v0.10.7
+arkhe-twin>    Compiling curve25519-dalek v4.1.3
+arkhe-twin>    Compiling syn v2.0.119
+arkhe-twin>    Compiling is_terminal_polyfill v1.70.2
+arkhe-twin>    Compiling anstyle v1.0.14
+arkhe-twin>    Compiling thiserror v2.0.21
+arkhe-twin>    Compiling serde_derive v1.0.229
+arkhe-twin>    Compiling serde_json v1.0.154
+arkhe-twin>    Compiling colorchoice v1.0.5
+arkhe-twin>    Compiling anstyle-query v1.1.5
+arkhe-twin>    Compiling getrandom v0.4.3
+arkhe-twin>    Compiling cpufeatures v0.2.17
+arkhe-twin>    Compiling anstream v1.0.0
+arkhe-twin>    Compiling thiserror-impl v2.0.21
+arkhe-twin>    Compiling curve25519-dalek-derive v0.1.1
+arkhe-twin>    Compiling memchr v2.8.3
+arkhe-twin>    Compiling zeroize v1.9.0
+arkhe-twin>    Compiling cpufeatures v0.3.1
+arkhe-twin>    Compiling constant_time_eq v0.4.2
+arkhe-twin>    Compiling arrayvec v0.7.8
+arkhe-twin>    Compiling subtle v2.6.1
+arkhe-twin>    Compiling anyhow v1.0.104
+arkhe-twin>    Compiling strsim v0.11.1
+arkhe-twin>    Compiling clap_lex v1.1.1
+arkhe-twin>    Compiling heck v0.5.0
+arkhe-twin>    Compiling itoa v1.0.18
+arkhe-twin>    Compiling signature v2.2.0
+arkhe-twin>    Compiling ed25519 v2.2.3
+arkhe-twin>    Compiling clap_derive v4.6.7
+arkhe-twin>    Compiling clap_builder v4.6.7
+arkhe-twin>    Compiling sha2 v0.10.9
+arkhe-twin>    Compiling async-trait v0.1.92
+arkhe-twin>    Compiling iana-time-zone v0.1.65
+arkhe-twin>    Compiling chrono v0.4.45
+arkhe-twin>    Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+arkhe-twin>    Compiling ed25519-dalek v2.2.0
+arkhe-twin>    Compiling uuid v1.28.0
+arkhe-twin>    Compiling clap v4.6.7
+arkhe-twin>    Compiling hex v0.4.3
+arkhe-twin>    Compiling base64 v0.22.1
+arkhe-twin>    Compiling arkhe-twin v0.1.0 (/build/source/work/arkhe-twin)
+arkhe-twin>     Finished `release` profile [optimized] target(s) in 45.68s
+arkhe-twin> Executing cargoInstallPostBuildHook
+arkhe-twin> Finished cargoInstallPostBuildHook
+arkhe-twin> Finished cargoBuildHook
+arkhe-twin> buildPhase completed in 46 seconds
+arkhe-twin> Running phase: installPhase
+arkhe-twin> Executing cargoInstallHook
+arkhe-twin> Finished cargoInstallHook
+arkhe-twin> Running phase: fixupPhase
+arkhe-twin> shrinking RPATHs of ELF executables and libraries in /nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0
+arkhe-twin> shrinking /nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0/bin/arkhe-twin
+arkhe-twin> checking for references to /build/ in /nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0...
+arkhe-twin> patching script interpreter paths in /nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0
+arkhe-twin> stripping (with command strip and flags -S -p) in /nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0/bin
+/nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0

@@ -1,19 +1,7 @@
-# Conjunto de pacotes Arkhe para Nix.
-#
-# `src` aponta para a raiz do monorepo Arkhe. Por padrão é o diretório pai
-# deste repositório (uso local). Para builds reproduzíveis em CI, passe uma
-# fonte fixada por hash, por exemplo:
-#
-#   src = pkgs.fetchFromGitHub {
-#     owner = "rafael-arkhe";
-#     repo = "arkhe";
-#     rev = "v0.1.0";
-#     hash = "sha256-...";
-#   };
-#
-# O filtro abaixo existe apenas para o caso de path local: sem ele, o Nix
-# copiaria `node_modules`, `target`, snapshots e binários de release para o
-# store. Ele não é aplicado quando `src` já é uma derivação (fonte fixada).
+# Pacotes Arkhe. O src padrão é o snapshot versionado em source/.
+# Para outro workspace, passe src explicitamente, fixado por revisão/hash,
+# contendo Cargo.lock e os crates descritos nos arquivos pkgs/.
+# O filtro limita fontes locais aos diretórios necessários ao workspace Cargo.
 {
   pkgs,
   src ? ./source,

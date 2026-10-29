@@ -1,0 +1,226 @@
+this derivation will be built:
+  /nix/store/lnqv28szj12q02xl6sdpp57cdivmaa3y-arkhe-runtime-0.1.0.drv
+building '/nix/store/lnqv28szj12q02xl6sdpp57cdivmaa3y-arkhe-runtime-0.1.0.drv'...
+arkhe-runtime> Running phase: unpackPhase
+arkhe-runtime> unpacking source archive /nix/store/5klza853s3gbrz33schywb49ckkak725-source
+arkhe-runtime> source root is source
+arkhe-runtime> Executing cargoSetupPostUnpackHook
+arkhe-runtime> Finished cargoSetupPostUnpackHook
+arkhe-runtime> Running phase: patchPhase
+arkhe-runtime> Executing cargoSetupPostPatchHook
+arkhe-runtime> Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+arkhe-runtime> Finished cargoSetupPostPatchHook
+arkhe-runtime> Running phase: updateAutotoolsGnuConfigScriptsPhase
+arkhe-runtime> Running phase: configurePhase
+arkhe-runtime> Running phase: buildPhase
+arkhe-runtime> Executing cargoBuildHook
+arkhe-runtime> cargoBuildHook flags: -j 4 --target x86_64-unknown-linux-gnu --offline --profile release --locked -p arkhe-runtime --bin arkhe-runtime
+arkhe-runtime>    Compiling proc-macro2 v1.0.107
+arkhe-runtime>    Compiling unicode-ident v1.0.27
+arkhe-runtime>    Compiling quote v1.0.47
+arkhe-runtime>    Compiling libc v0.2.189
+arkhe-runtime>    Compiling serde v1.0.229
+arkhe-runtime>    Compiling version_check v0.9.5
+arkhe-runtime>    Compiling serde_core v1.0.229
+arkhe-runtime>    Compiling shlex v2.0.1
+arkhe-runtime>    Compiling find-msvc-tools v0.1.14
+arkhe-runtime>    Compiling generic-array v0.14.9
+arkhe-runtime>    Compiling cc v1.8.0
+arkhe-runtime>    Compiling cfg-if v1.0.5
+arkhe-runtime>    Compiling syn v3.0.9
+arkhe-runtime>    Compiling syn v2.0.119
+arkhe-runtime>    Compiling zmij v1.0.23
+arkhe-runtime>    Compiling icu_properties_data v2.3.0
+arkhe-runtime>    Compiling itoa v1.0.18
+arkhe-runtime>    Compiling icu_normalizer_data v2.3.0
+arkhe-runtime>    Compiling stable_deref_trait v1.2.1
+arkhe-runtime>    Compiling serde_json v1.0.154
+arkhe-runtime>    Compiling ring v0.17.14
+arkhe-runtime>    Compiling typenum v1.20.1
+arkhe-runtime>    Compiling thiserror v2.0.21
+arkhe-runtime>    Compiling synstructure v0.14.0
+arkhe-runtime>    Compiling synstructure v0.13.2
+arkhe-runtime>    Compiling autocfg v1.5.1
+arkhe-runtime>    Compiling num-traits v0.2.19
+arkhe-runtime>    Compiling parking_lot_core v0.9.12
+arkhe-runtime>    Compiling serde_derive v1.0.229
+arkhe-runtime>    Compiling zerofrom-derive v0.1.8
+arkhe-runtime>    Compiling zerovec-derive v0.11.6
+arkhe-runtime>    Compiling yoke-derive v0.8.2
+arkhe-runtime>    Compiling displaydoc v0.2.7
+arkhe-runtime>    Compiling zerofrom v0.1.8
+arkhe-runtime>    Compiling thiserror-impl v2.0.21
+arkhe-runtime>    Compiling yoke v0.8.3
+arkhe-runtime>    Compiling zerovec v0.11.8
+arkhe-runtime>    Compiling zerocopy v0.8.57
+arkhe-runtime>    Compiling subtle v2.6.1
+arkhe-runtime>    Compiling block-buffer v0.10.4
+arkhe-runtime>    Compiling crypto-common v0.1.6
+arkhe-runtime>    Compiling pin-project-lite v0.2.17
+arkhe-runtime>    Compiling digest v0.10.7
+arkhe-runtime>    Compiling crossbeam-utils v0.8.23
+arkhe-runtime>    Compiling futures-core v0.3.34
+arkhe-runtime>    Compiling bytes v1.12.1
+arkhe-runtime>    Compiling zeroize v1.9.0
+arkhe-runtime>    Compiling memchr v2.8.3
+arkhe-runtime>    Compiling smallvec v1.16.2
+arkhe-runtime>    Compiling tinystr v0.8.4
+arkhe-runtime>    Compiling tracing-attributes v0.1.31
+arkhe-runtime>    Compiling litemap v0.8.3
+arkhe-runtime>    Compiling writeable v0.6.4
+arkhe-runtime>    Compiling icu_locale_core v2.3.0
+arkhe-runtime>    Compiling potential_utf v0.1.6
+arkhe-runtime>    Compiling zerotrie v0.2.5
+arkhe-runtime>    Compiling getrandom v0.2.17
+arkhe-runtime>    Compiling utf8_iter v1.0.4
+arkhe-runtime>    Compiling rustls v0.23.45
+arkhe-runtime>    Compiling icu_collections v2.3.0
+arkhe-runtime>    Compiling icu_provider v2.3.1
+arkhe-runtime>    Compiling errno v0.3.14
+arkhe-runtime>    Compiling rustls-pki-types v1.15.1
+arkhe-runtime>    Compiling signal-hook-registry v1.4.8
+arkhe-runtime>    Compiling tokio-macros v2.7.2
+arkhe-runtime>    Compiling socket2 v0.6.5
+arkhe-runtime>    Compiling mio v1.2.3
+arkhe-runtime>    Compiling cpufeatures v0.2.17
+arkhe-runtime>    Compiling once_cell v1.21.4
+arkhe-runtime>    Compiling futures-sink v0.3.34
+arkhe-runtime>    Compiling tokio v1.53.3
+arkhe-runtime>    Compiling icu_properties v2.3.0
+arkhe-runtime>    Compiling icu_normalizer v2.3.0
+arkhe-runtime>    Compiling blake3 v1.8.7
+arkhe-runtime>    Compiling scopeguard v1.2.0
+arkhe-runtime>    Compiling untrusted v0.9.0
+arkhe-runtime>    Compiling semver v1.0.28
+arkhe-runtime>    Compiling equivalent v1.0.2
+arkhe-runtime>    Compiling rustc_version v0.4.1
+arkhe-runtime>    Compiling lock_api v0.4.14
+arkhe-runtime>    Compiling idna_adapter v1.2.2
+arkhe-runtime>    Compiling tracing-core v0.1.36
+arkhe-runtime>    Compiling sha2 v0.10.9
+arkhe-runtime>    Compiling arrayvec v0.7.8
+arkhe-runtime>    Compiling foldhash v0.1.5
+arkhe-runtime>    Compiling percent-encoding v2.3.2
+arkhe-runtime>    Compiling cpufeatures v0.3.1
+arkhe-runtime>    Compiling constant_time_eq v0.4.2
+arkhe-runtime>    Compiling log v0.4.34
+arkhe-runtime>    Compiling allocator-api2 v0.2.21
+arkhe-runtime>    Compiling hashbrown v0.15.5
+arkhe-runtime>    Compiling tracing v0.1.44
+arkhe-runtime>    Compiling form_urlencoded v1.2.2
+arkhe-runtime>    Compiling ppv-lite86 v0.2.21
+arkhe-runtime>    Compiling rustls-webpki v0.103.15
+arkhe-runtime>    Compiling parking_lot v0.12.5
+arkhe-runtime>    Compiling idna v1.1.0
+arkhe-runtime>    Compiling curve25519-dalek v4.1.3
+arkhe-runtime>    Compiling webpki-roots v1.0.9
+arkhe-runtime>    Compiling rand_core v0.6.4
+arkhe-runtime>    Compiling async-trait v0.1.92
+arkhe-runtime>    Compiling futures-task v0.3.34
+arkhe-runtime>    Compiling getrandom v0.4.3
+arkhe-runtime>    Compiling hashbrown v0.17.1
+arkhe-runtime>    Compiling futures-io v0.3.34
+arkhe-runtime>    Compiling slab v0.4.12
+arkhe-runtime>    Compiling tinyvec v1.13.3
+arkhe-runtime>    Compiling crc-catalog v2.5.0
+arkhe-runtime>    Compiling parking v2.2.1
+arkhe-runtime>    Compiling iana-time-zone v0.1.65
+arkhe-runtime>    Compiling chrono v0.4.45
+arkhe-runtime>    Compiling indexmap v2.14.2
+arkhe-runtime>    Compiling unicode-normalization v0.1.25
+arkhe-runtime>    Compiling futures-util v0.3.34
+arkhe-runtime>    Compiling event-listener v5.4.2
+arkhe-runtime>    Compiling crc v3.4.0
+arkhe-runtime>    Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+arkhe-runtime>    Compiling rand_chacha v0.3.1
+arkhe-runtime>    Compiling webpki-roots v0.26.11
+arkhe-runtime>    Compiling url v2.5.8
+arkhe-runtime>    Compiling tokio-stream v0.1.19
+arkhe-runtime>    Compiling futures-intrusive v0.5.0
+arkhe-runtime>    Compiling crossbeam-queue v0.3.12
+arkhe-runtime>    Compiling hashlink v0.10.0
+arkhe-runtime>    Compiling futures-channel v0.3.34
+arkhe-runtime>    Compiling hmac v0.12.1
+arkhe-runtime>    Compiling either v1.18.0
+arkhe-runtime>    Compiling curve25519-dalek-derive v0.1.1
+arkhe-runtime>    Compiling unicode-bidi v0.3.18
+arkhe-runtime>    Compiling unicode-properties v0.1.4
+arkhe-runtime>    Compiling heck v0.5.0
+arkhe-runtime>    Compiling uuid v1.28.0
+arkhe-runtime>    Compiling signature v2.2.0
+arkhe-runtime>    Compiling hex v0.4.3
+arkhe-runtime>    Compiling base64 v0.22.1
+arkhe-runtime>    Compiling sqlx-core v0.8.6
+arkhe-runtime>    Compiling ed25519 v2.2.3
+arkhe-runtime>    Compiling stringprep v0.1.5
+arkhe-runtime>    Compiling hkdf v0.12.4
+arkhe-runtime>    Compiling rand v0.8.8
+arkhe-runtime>    Compiling atoi v2.0.0
+arkhe-runtime>    Compiling md-5 v0.10.6
+arkhe-runtime>    Compiling http v1.5.0
+arkhe-runtime>    Compiling dotenvy v0.15.7
+arkhe-runtime>    Compiling whoami v1.6.1
+arkhe-runtime>    Compiling home v0.5.12
+arkhe-runtime>    Compiling byteorder v1.5.0
+arkhe-runtime>    Compiling bitflags v2.13.2
+arkhe-runtime>    Compiling keccak v0.1.6
+arkhe-runtime>    Compiling http-body v1.1.0
+arkhe-runtime>    Compiling sha3 v0.10.8
+arkhe-runtime>    Compiling sqlx-postgres v0.8.6
+arkhe-runtime>    Compiling ed25519-dalek v2.2.0
+arkhe-runtime>    Compiling spdx v0.13.5
+arkhe-runtime>    Compiling httparse v1.10.1
+arkhe-runtime>    Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+arkhe-runtime>    Compiling sqlx-macros-core v0.8.6
+arkhe-runtime>    Compiling tower-service v0.3.3
+arkhe-runtime>    Compiling utf8parse v0.2.2
+arkhe-runtime>    Compiling anstyle-parse v1.0.0
+arkhe-runtime>    Compiling sqlx-macros v0.8.6
+arkhe-runtime>    Compiling anstyle v1.0.14
+arkhe-runtime>    Compiling anstyle-query v1.1.5
+arkhe-runtime>    Compiling sync_wrapper v1.0.2
+arkhe-runtime>    Compiling httpdate v1.0.3
+arkhe-runtime>    Compiling is_terminal_polyfill v1.70.2
+arkhe-runtime>    Compiling colorchoice v1.0.5
+arkhe-runtime>    Compiling tower-layer v0.3.3
+arkhe-runtime>    Compiling atomic-waker v1.1.2
+arkhe-runtime>    Compiling hyper v1.11.1
+arkhe-runtime>    Compiling sqlx v0.8.6
+arkhe-runtime>    Compiling anstream v1.0.0
+arkhe-runtime>    Compiling http-body-util v0.1.5
+arkhe-runtime>    Compiling mime v0.3.17
+arkhe-runtime>    Compiling strsim v0.11.1
+arkhe-runtime>    Compiling ryu v1.0.23
+arkhe-runtime>    Compiling clap_lex v1.1.1
+arkhe-runtime>    Compiling arkhe-wormgraph v0.1.0 (/build/source/evidence/arkhe-wormgraph)
+arkhe-runtime>    Compiling clap_builder v4.6.7
+arkhe-runtime>    Compiling serde_urlencoded v0.7.1
+arkhe-runtime>    Compiling axum-core v0.5.6
+arkhe-runtime>    Compiling arkhe-sql v0.1.0 (/build/source/storage/sql/crates/arkhe-sql)
+arkhe-runtime>    Compiling hyper-util v0.1.20
+arkhe-runtime>    Compiling tower v0.5.3
+arkhe-runtime>    Compiling arkhe-governance v0.1.0 (/build/source/governance/arkhe-governance)
+arkhe-runtime>    Compiling clap_derive v4.6.7
+arkhe-runtime>    Compiling arkhe-cognition-sdk v0.1.0 (/build/source/cognition/arkhe-cognition-sdk)
+arkhe-runtime>    Compiling serde_path_to_error v0.1.20
+arkhe-runtime>    Compiling matchit v0.8.4
+arkhe-runtime>    Compiling arkhe-runtime v0.1.0 (/build/source/orchestration/arkhe-runtime)
+arkhe-runtime>    Compiling axum v0.8.9
+arkhe-runtime>    Compiling clap v4.6.7
+arkhe-runtime>    Compiling arkhe-agent v0.1.0 (/build/source/cognition/arkhe-agent)
+arkhe-runtime>    Compiling arkhe-kernel v0.1.0 (/build/source/kernel/arkhe-kernel)
+arkhe-runtime>     Finished `release` profile [optimized] target(s) in 5m 26s
+arkhe-runtime> Executing cargoInstallPostBuildHook
+arkhe-runtime> Finished cargoInstallPostBuildHook
+arkhe-runtime> Finished cargoBuildHook
+arkhe-runtime> buildPhase completed in 5 minutes 43 seconds
+arkhe-runtime> Running phase: installPhase
+arkhe-runtime> Executing cargoInstallHook
+arkhe-runtime> Finished cargoInstallHook
+arkhe-runtime> Running phase: fixupPhase
+arkhe-runtime> shrinking RPATHs of ELF executables and libraries in /nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0
+arkhe-runtime> shrinking /nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0/bin/arkhe-runtime
+arkhe-runtime> checking for references to /build/ in /nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0...
+arkhe-runtime> patching script interpreter paths in /nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0
+arkhe-runtime> stripping (with command strip and flags -S -p) in /nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0/bin
+/nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0

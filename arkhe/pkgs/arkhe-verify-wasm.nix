@@ -1,10 +1,5 @@
-# Artefato WASM do verificador.
-#
-# Ressalva importante: o rustc do nixpkgs normalmente instala apenas a std do
-# host. Compilar para `wasm32-unknown-unknown` exige uma toolchain que traga
-# essa std (por exemplo um `rustPlatform` vindo de rust-overlay). Por isso este
-# atributo existe, mas NÃO entra em `checks` nem no build padrão do CI.
-{ mkArkhePackage, src, contentAddressed, version }:
+# WASM compilado com std do rustc fixado, lld e bindings Node.js.
+{ mkArkhePackage, src, contentAddressed, version, lld, wasm-bindgen-cli }:
 
 mkArkhePackage {
   pname = "arkhe-verify-wasm";
@@ -13,6 +8,7 @@ mkArkhePackage {
   inherit src contentAddressed version;
 
   doCheck = false;
+  nativeBuildInputs = [ lld wasm-bindgen-cli ];
 
   cargoBuildFlags = [
     "--lib"
@@ -22,12 +18,15 @@ mkArkhePackage {
 
   extraAttrs = {
     CARGO_BUILD_TARGET = "wasm32-unknown-unknown";
+    CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "${lld}/bin/wasm-ld";
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out/lib
       cp target/wasm32-unknown-unknown/release/arkhe_verify_wasm.wasm \
-        $out/lib/arkhe-verify-pqc.wasm
+        $out/lib/arkhe-verify.wasm
+      wasm-bindgen $out/lib/arkhe-verify.wasm --target nodejs \
+        --out-dir $out/lib --out-name arkhe_verify
       runHook postInstall
     '';
   };

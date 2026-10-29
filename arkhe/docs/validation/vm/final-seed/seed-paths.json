@@ -1,0 +1,36 @@
+{
+  "targets_not_copied": [
+    "/nix/store/25by62nasrgrvypk4xhzyn8ffbgyjqsx-arkhe-0.1.0",
+    "/nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0",
+    "/nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0",
+    "/nix/store/6jprb40p06v2294gm0p67kkv2wsk6qmk-arkhe-ask-0.1.0",
+    "/nix/store/gg0qk1d7cga0zhaqr7gzfackdya6jbqy-arkhe-verify-0.1.0",
+    "/nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0",
+    "/nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0",
+    "/nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0",
+    "/nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0",
+    "/nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0"
+  ],
+  "seed_paths": [
+    "/nix/store/15lmizfgdxxqsijdq5a6w27lnf7qc1yq-wasm-bindgen-cli-0.2.129",
+    "/nix/store/1vpxqwfrwzlj4a3cjms8inxalysclviv-cargo-install-hook.sh",
+    "/nix/store/3bhkgxnypcgaf8y4yrc6wb3q23d16pnc-cargo-vendor-dir",
+    "/nix/store/3naz0qnnfax2pdvwlgmjd3j57axrass4-lld-21.1.8",
+    "/nix/store/5klza853s3gbrz33schywb49ckkak725-source",
+    "/nix/store/6dvdar2gsd9x0amsx5lx842b5l91xllj-lndir-1.0.6",
+    "/nix/store/6l9kbzxwq9ij2lcmwl2qb1jdpqisjr8l-rustc-wrapper-1.99.0",
+    "/nix/store/9c7hxszw6x7z0lwrq78mjcsgx76a664j-auditable-cargo-1.99.0",
+    "/nix/store/an9g93vg5b02j74y38zfajswa0f10p2z-stdenv-linux",
+    "/nix/store/c3k15jk20fccs90qgffdwzhxy15b5fdj-stdenv-linux-no-cc",
+    "/nix/store/l3jrya2cdjmzxgdpnxzwvx3h416lcbr6-cargo-1.99.0",
+    "/nix/store/l622p70vy8k5sh7y5wizi5f2mic6ynpg-source-stdenv.sh",
+    "/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20",
+    "/nix/store/qwc313sk0dq3cj1vdyrr6csb0fqln414-cargo-build-hook.sh",
+    "/nix/store/qwywch68n075dakka4cyvndwggkjhszp-lld-21.1.8-dev",
+    "/nix/store/shkw4qm9qcw5sc5n1k5jznc83ny02r39-default-builder.sh",
+    "/nix/store/sl5mjxc60hk7d2v8hz6y920wv63bfzc8-cargo-setup-hook.sh",
+    "/nix/store/sxb2ijsbdhi8s1lvc6ph692nm84vms3y-source",
+    "/nix/store/zrvwh2pc53rrn8f7sjjhfvw82cwaqxqv-cargo-check-hook.sh"
+  ],
+  "seed_closure_count": 648
+}

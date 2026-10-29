@@ -1,0 +1,127 @@
+this derivation will be built:
+  /nix/store/pagqmg1p45gm63nl4aca2s73mklpc9k5-arkhe-ollama-0.1.0.drv
+building '/nix/store/pagqmg1p45gm63nl4aca2s73mklpc9k5-arkhe-ollama-0.1.0.drv'...
+arkhe-ollama> Running phase: unpackPhase
+arkhe-ollama> unpacking source archive /nix/store/5klza853s3gbrz33schywb49ckkak725-source
+arkhe-ollama> source root is source
+arkhe-ollama> Executing cargoSetupPostUnpackHook
+arkhe-ollama> Finished cargoSetupPostUnpackHook
+arkhe-ollama> Running phase: patchPhase
+arkhe-ollama> Executing cargoSetupPostPatchHook
+arkhe-ollama> Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+arkhe-ollama> Finished cargoSetupPostPatchHook
+arkhe-ollama> Running phase: updateAutotoolsGnuConfigScriptsPhase
+arkhe-ollama> Running phase: configurePhase
+arkhe-ollama> Running phase: buildPhase
+arkhe-ollama> Executing cargoBuildHook
+arkhe-ollama> cargoBuildHook flags: -j 3 --target x86_64-unknown-linux-gnu --offline --profile release --locked -p arkhe-ollama --bin arkhe-ollama
+arkhe-ollama>    Compiling proc-macro2 v1.0.107
+arkhe-ollama>    Compiling unicode-ident v1.0.27
+arkhe-ollama>    Compiling quote v1.0.47
+arkhe-ollama>    Compiling libc v0.2.189
+arkhe-ollama>    Compiling stable_deref_trait v1.2.1
+arkhe-ollama>    Compiling pin-project-lite v0.2.17
+arkhe-ollama>    Compiling bytes v1.12.1
+arkhe-ollama>    Compiling syn v3.0.9
+arkhe-ollama>    Compiling syn v2.0.119
+arkhe-ollama>    Compiling itoa v1.0.18
+arkhe-ollama>    Compiling futures-core v0.3.34
+arkhe-ollama>    Compiling find-msvc-tools v0.1.14
+arkhe-ollama>    Compiling shlex v2.0.1
+arkhe-ollama>    Compiling cc v1.8.0
+arkhe-ollama>    Compiling synstructure v0.13.2
+arkhe-ollama>    Compiling litemap v0.8.3
+arkhe-ollama>    Compiling writeable v0.6.4
+arkhe-ollama>    Compiling yoke-derive v0.8.2
+arkhe-ollama>    Compiling smallvec v1.16.2
+arkhe-ollama>    Compiling ring v0.17.14
+arkhe-ollama>    Compiling synstructure v0.14.0
+arkhe-ollama>    Compiling socket2 v0.6.5
+arkhe-ollama>    Compiling mio v1.2.3
+arkhe-ollama>    Compiling icu_normalizer_data v2.3.0
+arkhe-ollama>    Compiling icu_properties_data v2.3.0
+arkhe-ollama>    Compiling utf8_iter v1.0.4
+arkhe-ollama>    Compiling http v1.5.0
+arkhe-ollama>    Compiling zerofrom-derive v0.1.8
+arkhe-ollama>    Compiling zerofrom v0.1.8
+arkhe-ollama>    Compiling yoke v0.8.3
+arkhe-ollama>    Compiling zerovec-derive v0.11.6
+arkhe-ollama>    Compiling displaydoc v0.2.7
+arkhe-ollama>    Compiling zerovec v0.11.8
+arkhe-ollama>    Compiling zerotrie v0.2.5
+arkhe-ollama>    Compiling tokio-macros v2.7.2
+arkhe-ollama>    Compiling tinystr v0.8.4
+arkhe-ollama>    Compiling icu_locale_core v2.3.0
+arkhe-ollama>    Compiling potential_utf v0.1.6
+arkhe-ollama>    Compiling icu_collections v2.3.0
+arkhe-ollama>    Compiling icu_provider v2.3.1
+arkhe-ollama>    Compiling tokio v1.53.3
+arkhe-ollama>    Compiling percent-encoding v2.3.2
+arkhe-ollama>    Compiling cfg-if v1.0.5
+arkhe-ollama>    Compiling once_cell v1.21.4
+arkhe-ollama>    Compiling zeroize v1.9.0
+arkhe-ollama>    Compiling getrandom v0.2.17
+arkhe-ollama>    Compiling rustls-pki-types v1.15.1
+arkhe-ollama>    Compiling http-body v1.1.0
+arkhe-ollama>    Compiling serde_core v1.0.229
+arkhe-ollama>    Compiling slab v0.4.12
+arkhe-ollama>    Compiling httparse v1.10.1
+arkhe-ollama>    Compiling futures-task v0.3.34
+arkhe-ollama>    Compiling untrusted v0.9.0
+arkhe-ollama>    Compiling futures-util v0.3.34
+arkhe-ollama>    Compiling icu_properties v2.3.0
+arkhe-ollama>    Compiling icu_normalizer v2.3.0
+arkhe-ollama>    Compiling rustls v0.23.45
+arkhe-ollama>    Compiling tower-service v0.3.3
+arkhe-ollama>    Compiling try-lock v0.2.5
+arkhe-ollama>    Compiling want v0.3.2
+arkhe-ollama>    Compiling idna_adapter v1.2.2
+arkhe-ollama>    Compiling rustls-webpki v0.103.15
+arkhe-ollama>    Compiling tracing-core v0.1.36
+arkhe-ollama>    Compiling form_urlencoded v1.2.2
+arkhe-ollama>    Compiling futures-channel v0.3.34
+arkhe-ollama>    Compiling zmij v1.0.23
+arkhe-ollama>    Compiling subtle v2.6.1
+arkhe-ollama>    Compiling atomic-waker v1.1.2
+arkhe-ollama>    Compiling serde v1.0.229
+arkhe-ollama>    Compiling hyper v1.11.1
+arkhe-ollama>    Compiling tracing v0.1.44
+arkhe-ollama>    Compiling idna v1.1.0
+arkhe-ollama>    Compiling serde_derive v1.0.229
+arkhe-ollama>    Compiling sync_wrapper v1.0.2
+arkhe-ollama>    Compiling base64 v0.22.1
+arkhe-ollama>    Compiling serde_json v1.0.154
+arkhe-ollama>    Compiling tower-layer v0.3.3
+arkhe-ollama>    Compiling ipnet v2.12.2
+arkhe-ollama>    Compiling hyper-util v0.1.20
+arkhe-ollama>    Compiling tower v0.5.3
+arkhe-ollama>    Compiling tokio-rustls v0.26.6
+arkhe-ollama>    Compiling url v2.5.8
+arkhe-ollama>    Compiling webpki-roots v1.0.9
+arkhe-ollama>    Compiling ryu v1.0.23
+arkhe-ollama>    Compiling bitflags v2.13.2
+arkhe-ollama>    Compiling thiserror v2.0.21
+arkhe-ollama>    Compiling memchr v2.8.3
+arkhe-ollama>    Compiling tower-http v0.6.11
+arkhe-ollama>    Compiling serde_urlencoded v0.7.1
+arkhe-ollama>    Compiling hyper-rustls v0.27.10
+arkhe-ollama>    Compiling http-body-util v0.1.5
+arkhe-ollama>    Compiling thiserror-impl v2.0.21
+arkhe-ollama>    Compiling log v0.4.34
+arkhe-ollama>    Compiling reqwest v0.12.28
+arkhe-ollama>    Compiling arkhe-ollama v0.1.0 (/build/source/integration/arkhe-ollama)
+arkhe-ollama>     Finished `release` profile [optimized] target(s) in 1m 35s
+arkhe-ollama> Executing cargoInstallPostBuildHook
+arkhe-ollama> Finished cargoInstallPostBuildHook
+arkhe-ollama> Finished cargoBuildHook
+arkhe-ollama> buildPhase completed in 1 minutes 36 seconds
+arkhe-ollama> Running phase: installPhase
+arkhe-ollama> Executing cargoInstallHook
+arkhe-ollama> Finished cargoInstallHook
+arkhe-ollama> Running phase: fixupPhase
+arkhe-ollama> shrinking RPATHs of ELF executables and libraries in /nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0
+arkhe-ollama> shrinking /nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0/bin/arkhe-ollama
+arkhe-ollama> checking for references to /build/ in /nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0...
+arkhe-ollama> patching script interpreter paths in /nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0
+arkhe-ollama> stripping (with command strip and flags -S -p) in /nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0/bin
+/nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0

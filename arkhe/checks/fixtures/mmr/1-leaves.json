@@ -1,0 +1,39 @@
+{
+  "id": "MMR-1LEAF-001",
+  "component": "WormGraph MMR",
+  "normative_source": "Arkhe MMR Profile v1 (spec/mmr-profile-v1.md)",
+  "description": "Arkhe MMR Profile v1 with 1 leaf/leaves; complete inclusion proofs for every leaf",
+  "status": "READY",
+  "profile_ref": {
+    "profile_id": "arkhe-mmr",
+    "version": 1,
+    "digest_algorithm": "BLAKE3-256",
+    "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+  },
+  "input": {
+    "leaves": [
+      "0000000000000000000000000000000000000000000000000000000000000001"
+    ],
+    "leaf_count": 1,
+    "mmr_size": 1,
+    "target_index": 0,
+    "index_base": 0
+  },
+  "expected_output": {
+    "peak_hashes": [
+      "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b"
+    ],
+    "root_hash_hex": "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b",
+    "inclusion_proof_hashes": [],
+    "inclusion_proof_directions": [],
+    "inclusion_proof_kinds": [],
+    "proofs": [
+      {
+        "target_index": 0,
+        "inclusion_proof_hashes": [],
+        "inclusion_proof_directions": [],
+        "inclusion_proof_kinds": []
+      }
+    ]
+  }
+}

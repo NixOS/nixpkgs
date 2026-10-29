@@ -77,9 +77,9 @@ Consequências práticas:
 | As expressões Nix existem e referenciam crates reais do monorepo | observado (inspeção dos arquivos e dos `Cargo.toml`) |
 | Avaliação `nix flake check --no-build --all-systems` | **PASS** em WSL/Nix 2.35.4 |
 | `arkhe-verify` constrói | **PASS** em x86_64-linux |
-| `arkhe-verify` reconstrói idêntico na mesma máquina | **PASS**; outra máquina pendente |
+| Dez outputs reproduzidos em VM com store próprio | **PASS**; hashes e derivações idênticos ao host |
 | `arkhe-verify` CA tem endereço de conteúdo | **PASS** |
-| `arkhe-ask` constrói no sandbox | **não verificado**; é o build mais pesado e mais provável de exigir ajuste |
+| Todos os pacotes, incluindo `arkhe-ask` e WASM, constroem | **PASS** em x86_64-linux |
 
 Nenhuma linha acima deve ser lida como "passou". O CI é quem produz essa
 evidência.
@@ -95,6 +95,8 @@ evidência.
 4. **Workspace compartilhado**: `cargoLock.lockFile` resolve os pacotes do
    `Cargo.lock` para cada pacote. O cache do Nix amortiza, mas o primeiro build
    baixa e verifica tudo.
-5. **`rust-toolchain.toml` ≠ rustc do nixpkgs**: o arquivo fixa 1.96.0; o
-   nixpkgs pode trazer outra versão. Se o código usar recurso exclusivo de
-   1.96, o build falha — e isso é visível, não silencioso.
+5. **Toolchain efetivo**: estes builds usam Rust 1.99.0 do nixpkgs fixado pelo `flake.lock`, independentemente do arquivo `rust-toolchain.toml` do workspace original.
+
+## Ensaio em VM concluído
+
+Oito executáveis, o WASM e o metapacote foram compilados em uma VM QEMU/KVM com kernel e discos próprios, sem montagem do store do host. O seed excluiu todos os outputs Arkhe, verificados ausentes no início. Os dez hashes e derivações coincidiram com o host. Dependências e toolchain foram fornecidos como insumos fixados comuns; host e VM usam o mesmo equipamento físico. Veja [comparação](validation/vm/comparison.json) e [procedimento](vm-reproduction.md).

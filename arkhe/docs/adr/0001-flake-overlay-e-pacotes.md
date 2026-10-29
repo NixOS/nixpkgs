@@ -2,7 +2,7 @@
 
 ## Contexto
 
-O monorepo Arkhe é um workspace Cargo com 29 membros, 581 pacotes no
+O monorepo Arkhe é um workspace Cargo com múltiplos membros e dependências no
 `Cargo.lock` e nenhuma dependência git. O objetivo é distribuir os binários
 Arkhe para Nix sem duplicar o grafo de dependências nem introduzir resolução
 flutuante.
@@ -29,7 +29,7 @@ flutuante.
 
 ## Consequências
 
-- O primeiro build resolve e verifica os 581 crates do lock, mesmo para um
+- O primeiro build resolve e verifica os crates do lock, mesmo para um
   binário pequeno. O cache do Nix amortiza os builds seguintes.
 - O `src` local é filtrado para não copiar `target/`, `node_modules/` e
   snapshots para o store.

@@ -1,0 +1,83 @@
+error (ignored): SQLite database '/root/.cache/nix/eval-cache-v6/39816072a5c0af97cdd9f5ab0150baad0c8743fa17a82818afb8f098bdf4fdbe.sqlite' is busy
+this derivation will be built:
+  /nix/store/0w5mq71myp860zld7v3n310fd1ni2m84-arkhe-python-gate-0.1.0.drv
+building '/nix/store/0w5mq71myp860zld7v3n310fd1ni2m84-arkhe-python-gate-0.1.0.drv'...
+arkhe-python-gate> Running phase: unpackPhase
+arkhe-python-gate> unpacking source archive /nix/store/5klza853s3gbrz33schywb49ckkak725-source
+arkhe-python-gate> source root is source
+arkhe-python-gate> Executing cargoSetupPostUnpackHook
+arkhe-python-gate> Finished cargoSetupPostUnpackHook
+arkhe-python-gate> Running phase: patchPhase
+arkhe-python-gate> Executing cargoSetupPostPatchHook
+arkhe-python-gate> Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+arkhe-python-gate> Finished cargoSetupPostPatchHook
+arkhe-python-gate> Running phase: updateAutotoolsGnuConfigScriptsPhase
+arkhe-python-gate> Running phase: configurePhase
+arkhe-python-gate> Running phase: buildPhase
+arkhe-python-gate> Executing cargoBuildHook
+arkhe-python-gate> cargoBuildHook flags: -j 1 --target x86_64-unknown-linux-gnu --offline --profile release --locked -p arkhe-python-bridge --bin arkhe-python-gate
+arkhe-python-gate>    Compiling proc-macro2 v1.0.107
+arkhe-python-gate>    Compiling unicode-ident v1.0.27
+arkhe-python-gate>    Compiling quote v1.0.47
+arkhe-python-gate>    Compiling version_check v0.9.5
+arkhe-python-gate>    Compiling generic-array v0.14.9
+arkhe-python-gate>    Compiling typenum v1.20.1
+arkhe-python-gate>    Compiling syn v3.0.9
+arkhe-python-gate>    Compiling block-buffer v0.10.4
+arkhe-python-gate>    Compiling crypto-common v0.1.6
+arkhe-python-gate>    Compiling find-msvc-tools v0.1.14
+arkhe-python-gate>    Compiling semver v1.0.28
+arkhe-python-gate>    Compiling shlex v2.0.1
+arkhe-python-gate>    Compiling cfg-if v1.0.5
+arkhe-python-gate>    Compiling serde_core v1.0.229
+arkhe-python-gate>    Compiling cc v1.8.0
+arkhe-python-gate>    Compiling rustc_version v0.4.1
+arkhe-python-gate>    Compiling digest v0.10.7
+arkhe-python-gate>    Compiling zmij v1.0.23
+arkhe-python-gate>    Compiling curve25519-dalek v4.1.3
+arkhe-python-gate>    Compiling blake3 v1.8.7
+arkhe-python-gate>    Compiling syn v2.0.119
+arkhe-python-gate>    Compiling serde v1.0.229
+arkhe-python-gate>    Compiling cpufeatures v0.2.17
+arkhe-python-gate>    Compiling thiserror v2.0.21
+arkhe-python-gate>    Compiling serde_json v1.0.154
+arkhe-python-gate>    Compiling curve25519-dalek-derive v0.1.1
+arkhe-python-gate>    Compiling thiserror-impl v2.0.21
+arkhe-python-gate>    Compiling serde_derive v1.0.229
+arkhe-python-gate>    Compiling constant_time_eq v0.4.2
+arkhe-python-gate>    Compiling subtle v2.6.1
+arkhe-python-gate>    Compiling arrayvec v0.7.8
+arkhe-python-gate>    Compiling memchr v2.8.3
+arkhe-python-gate>    Compiling itoa v1.0.18
+arkhe-python-gate>    Compiling zeroize v1.9.0
+arkhe-python-gate>    Compiling cpufeatures v0.3.1
+arkhe-python-gate>    Compiling signature v2.2.0
+arkhe-python-gate>    Compiling ed25519 v2.2.3
+arkhe-python-gate>    Compiling sha2 v0.10.9
+arkhe-python-gate>    Compiling async-trait v0.1.92
+arkhe-python-gate>    Compiling smallvec v1.16.2
+arkhe-python-gate>    Compiling keccak v0.1.6
+arkhe-python-gate>    Compiling sha3 v0.10.8
+arkhe-python-gate>    Compiling spdx v0.13.5
+arkhe-python-gate>    Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+arkhe-python-gate>    Compiling ed25519-dalek v2.2.0
+arkhe-python-gate>    Compiling hex v0.4.3
+arkhe-python-gate>    Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+arkhe-python-gate>    Compiling arkhe-governance v0.1.0 (/build/source/governance/arkhe-governance)
+arkhe-python-gate>    Compiling arkhe-kernel v0.1.0 (/build/source/kernel/arkhe-kernel)
+arkhe-python-gate>    Compiling arkhe-python-bridge v0.1.0 (/build/source/integrations/arkhe-python-runtime/bridge)
+arkhe-python-gate>     Finished `release` profile [optimized] target(s) in 1m 46s
+arkhe-python-gate> Executing cargoInstallPostBuildHook
+arkhe-python-gate> Finished cargoInstallPostBuildHook
+arkhe-python-gate> Finished cargoBuildHook
+arkhe-python-gate> buildPhase completed in 1 minutes 46 seconds
+arkhe-python-gate> Running phase: installPhase
+arkhe-python-gate> Executing cargoInstallHook
+arkhe-python-gate> Finished cargoInstallHook
+arkhe-python-gate> Running phase: fixupPhase
+arkhe-python-gate> shrinking RPATHs of ELF executables and libraries in /nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0
+arkhe-python-gate> shrinking /nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0/bin/arkhe-python-gate
+arkhe-python-gate> checking for references to /build/ in /nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0...
+arkhe-python-gate> patching script interpreter paths in /nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0
+arkhe-python-gate> stripping (with command strip and flags -S -p) in /nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0/bin
+/nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0

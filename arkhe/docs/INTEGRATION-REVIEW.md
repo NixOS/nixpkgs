@@ -1,24 +1,49 @@
 # Revisão e integração — 2026-10-29
 
-A integração reside em `arkhe/`, preservando o flake e os pacotes Nixpkgs na raiz.
-Use `nix build ./arkhe#arkhe-verify` ou o flake remoto com `?dir=arkhe`.
+A camada Arkhe reside em `arkhe/`, preservando o flake e os pacotes Nixpkgs na raiz. Use `nix build ./arkhe#arkhe-verify` ou `github:rafael-arkhe/nixpkgs-arkhe?dir=arkhe` após integrar a branch.
 
 ## Correções
 
-- Fonte local implícita substituída por snapshot em `source/`, com manifesto SHA-256 por arquivo. O workspace público rafael-arkhe/arkhe tem outra estrutura e não é uma fonte válida para estes pacotes.
-- CI próprio na raiz, disparado em master/main e PRs; execução em arkhe/.
-- Verificador padrão; WASM disponível apenas pela API parametrizada/legacyPackages com toolchain adequada, fora de packages.
-- Testes do verificador incluem arkhe-verify-core e arkhe-core; testar apenas o CLI não cobria os vetores.
-- Perfil audit instala somente o verificador escolhido, sem arrastar runtime e integrações.
-- Arquivo de ambiente tratado como caminho de execução (string), sem copiar segredos para o store.
-- Scripts aceitam os formatos array e objeto de `nix path-info --json`.
+- Snapshot de fontes explícito em `source/`, com manifesto SHA-256 validando 593 arquivos. O workspace público rafael-arkhe/arkhe tem outra estrutura e não serve como fonte destes pacotes.
+- CI na raiz, para master/main e PRs, construindo todos os pacotes e checks.
+- Testes nativos do verificador incluem CLI, arkhe-verify-core e arkhe-core.
+- Perfil audit instala somente o verificador escolhido; arquivo de ambiente do serviço permanece como caminho de execução, fora do store.
+- LF nos arquivos Nix/scripts; bytes originais do snapshot preservados.
+- WASM com std do Rust fixado, `lld` explícito e `wasm-bindgen-cli` compatível. Artefato bruto `lib/arkhe-verify.wasm` e bindings Node.js `lib/arkhe_verify.js`.
+- WASM incluído em packages/checks. O nome do artefato não implica habilitação da camada PQC.
+- Helpers QEMU/KVM para seed de dependências, build em guest e comparação. O seed inclui as dependências próprias do metapacote e exclui os outputs Arkhe.
 
-## Limites
+## Resultado
 
-O snapshot é uma cópia de fontes locais, não um release upstream assinado. Confira `source-manifest.json` antes de publicar. Não há alegação de reprodutibilidade bit-a-bit nem de CA validada até executar os checks. O template by-name contém fakeHash e não está pronto para submissão upstream. WASM requer toolchain com std do alvo. Não foram implementadas cadeia de boot, IMA, TPM ou assinatura híbrida do sistema operacional.
+| Validação | Estado |
+|---|---|
+| Avaliação x86_64-linux e aarch64-linux | PASS |
+| Oito executáveis nativos, WASM e metapacote em x86_64-linux | PASS |
+| `nix flake check`, incluindo módulos e smoke tests | PASS |
+| Testes nativos do verificador | 81 aprovados |
+| WASM executado em Node.js | 20 provas válidas, 106 adulterações recusadas e política malformada recusada |
+| Reconstrução local do verificador | Hash idêntico |
+| Build CA do verificador | PASS |
+| Reprodução dos dez outputs em VM QEMU/KVM | Derivações e hashes NAR idênticos aos do host |
 
-Os bytes originais do snapshot (inclusive CRLF) são preservados para conferir o manifesto. Arquivos de empacotamento Nix, scripts e CI usam LF. O teste de módulos usa pacotes substitutos para conferir caminhos de segredos e instalação sem exigir overlay.
+O host usa Nix 2.35.4; a VM usa Nix 2.34.9, NixOS e kernel próprio 6.18.59. Ambos usam o mesmo nixpkgs fixado e Rust 1.99.0. A VM possui discos próprios, sem montagem do store do host. Todos os outputs alvo estavam ausentes antes da compilação; substituição de binários e builders remotos foram desativados.
 
-## Validação executada
+O ensaio ocorreu no mesmo equipamento físico, com dependências/toolchain comuns. Demonstra reprodução dos outputs especificados neste ambiente fixado. ARM64 foi avaliado, mas os builds executados foram x86_64-linux.
 
-Nix 2.35.4 no Ubuntu/WSL: avaliação para x86_64-linux e aarch64-linux aprovada; build e 81 testes de arkhe-verify aprovados; smoke e módulos aprovados; reconstrução na mesma máquina com hash idêntico e build CA aprovados. Resultados e logs em `validation/`. Builds dos demais pacotes, WASM e repetição em máquina independente permanecem pendentes.
+## Evidências
+
+- [Resultados consolidados](validation/results.json)
+- [Host: derivações e hashes](validation/full/host-results.json)
+- [Comparação final dos dez outputs](validation/vm/comparison.json)
+- [Resultados originais da VM](validation/vm/guest/results.json)
+- [Seed final sem outputs Arkhe](validation/vm/final-seed/seed-paths.json)
+- Logs completos em `validation/full/` e `validation/vm/guest/`.
+- [Procedimento para repetir o ensaio](vm-reproduction.md)
+
+Os campos `matches_host: null` em alguns resultados originais da VM refletem hashes do host ainda indisponíveis no início da rodada concorrente. A comparação final foi realizada depois que ambos terminaram e aprovou todos os outputs.
+
+O preparo inicial omitiu `lndir` e `stdenv-linux-no-cc`, dependências exclusivas do metapacote. O helper foi corrigido e o metapacote recompilou com hash idêntico; o log da tentativa inicial foi preservado. Logs `prebuild-*` registram compilações paralelas dentro da mesma VM, após a verificação inicial de ausência dos alvos.
+
+## Escopo
+
+O snapshot é uma cópia de fontes locais, sem release upstream assinado. O template by-name ainda contém fakeHash e exige fonte/revisão/hash reais antes de submissão ao Nixpkgs oficial. Esta camada não implementa boot medido, TPM, IMA nem assinatura híbrida do sistema operacional. As integrações com bancos e serviços externos não foram exercitadas pelos builds.

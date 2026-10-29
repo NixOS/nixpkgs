@@ -1,0 +1,85 @@
+error (ignored): SQLite database '/root/.cache/nix/eval-cache-v6/39816072a5c0af97cdd9f5ab0150baad0c8743fa17a82818afb8f098bdf4fdbe.sqlite' is busy
+this derivation will be built:
+  /nix/store/2a8mz04wwhzh7ii11fkybqff6w35i6qd-arkhe-verify-wasm-0.1.0.drv
+building '/nix/store/2a8mz04wwhzh7ii11fkybqff6w35i6qd-arkhe-verify-wasm-0.1.0.drv'...
+arkhe-verify-wasm> Running phase: unpackPhase
+arkhe-verify-wasm> unpacking source archive /nix/store/5klza853s3gbrz33schywb49ckkak725-source
+arkhe-verify-wasm> source root is source
+arkhe-verify-wasm> Executing cargoSetupPostUnpackHook
+arkhe-verify-wasm> Finished cargoSetupPostUnpackHook
+arkhe-verify-wasm> Running phase: patchPhase
+arkhe-verify-wasm> Executing cargoSetupPostPatchHook
+arkhe-verify-wasm> Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+arkhe-verify-wasm> Finished cargoSetupPostPatchHook
+arkhe-verify-wasm> Running phase: updateAutotoolsGnuConfigScriptsPhase
+arkhe-verify-wasm> Running phase: configurePhase
+arkhe-verify-wasm> Running phase: buildPhase
+arkhe-verify-wasm> Executing cargoBuildHook
+arkhe-verify-wasm> cargoBuildHook flags: -j 1 --target x86_64-unknown-linux-gnu --offline --profile release --locked -p arkhe-verify-wasm --lib --target wasm32-unknown-unknown
+arkhe-verify-wasm>    Compiling proc-macro2 v1.0.107
+arkhe-verify-wasm>    Compiling unicode-ident v1.0.27
+arkhe-verify-wasm>    Compiling quote v1.0.47
+arkhe-verify-wasm>    Compiling version_check v0.9.5
+arkhe-verify-wasm>    Compiling generic-array v0.14.9
+arkhe-verify-wasm>    Compiling syn v3.0.9
+arkhe-verify-wasm>    Compiling serde_core v1.0.229
+arkhe-verify-wasm>    Compiling find-msvc-tools v0.1.14
+arkhe-verify-wasm>    Compiling zmij v1.0.23
+arkhe-verify-wasm>    Compiling wasm-bindgen-shared v0.2.129
+arkhe-verify-wasm>    Compiling semver v1.0.28
+arkhe-verify-wasm>    Compiling shlex v2.0.1
+arkhe-verify-wasm>    Compiling cc v1.8.0
+arkhe-verify-wasm>    Compiling rustc_version v0.4.1
+arkhe-verify-wasm>    Compiling curve25519-dalek v4.1.3
+arkhe-verify-wasm>    Compiling blake3 v1.8.7
+arkhe-verify-wasm>    Compiling thiserror v2.0.21
+arkhe-verify-wasm>    Compiling serde_json v1.0.154
+arkhe-verify-wasm>    Compiling serde v1.0.229
+arkhe-verify-wasm>    Compiling typenum v1.20.1
+arkhe-verify-wasm>    Compiling serde_derive v1.0.229
+arkhe-verify-wasm>    Compiling thiserror-impl v2.0.21
+arkhe-verify-wasm>    Compiling rustversion v1.0.23
+arkhe-verify-wasm>    Compiling cfg-if v1.0.5
+arkhe-verify-wasm>    Compiling crypto-common v0.1.6
+arkhe-verify-wasm>    Compiling block-buffer v0.10.4
+arkhe-verify-wasm>    Compiling async-trait v0.1.92
+arkhe-verify-wasm>    Compiling digest v0.10.7
+arkhe-verify-wasm>    Compiling wasm-bindgen v0.2.129
+arkhe-verify-wasm>    Compiling syn v2.0.119
+arkhe-verify-wasm>    Compiling cpufeatures v0.2.17
+arkhe-verify-wasm>    Compiling bumpalo v3.20.3
+arkhe-verify-wasm>    Compiling wasm-bindgen-macro-support v0.2.129
+arkhe-verify-wasm>    Compiling curve25519-dalek-derive v0.1.1
+arkhe-verify-wasm>    Compiling subtle v2.6.1
+arkhe-verify-wasm>    Compiling signature v2.2.0
+arkhe-verify-wasm>    Compiling itoa v1.0.18
+arkhe-verify-wasm>    Compiling arrayvec v0.7.8
+arkhe-verify-wasm>    Compiling memchr v2.8.3
+arkhe-verify-wasm>    Compiling constant_time_eq v0.4.2
+arkhe-verify-wasm>    Compiling cpufeatures v0.3.1
+arkhe-verify-wasm>    Compiling zeroize v1.9.0
+arkhe-verify-wasm>    Compiling ed25519 v2.2.3
+arkhe-verify-wasm>    Compiling wasm-bindgen-macro v0.2.129
+arkhe-verify-wasm>    Compiling sha2 v0.10.9
+arkhe-verify-wasm>    Compiling ed25519-dalek v2.2.0
+arkhe-verify-wasm>    Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+arkhe-verify-wasm>    Compiling smallvec v1.16.2
+arkhe-verify-wasm>    Compiling keccak v0.1.6
+arkhe-verify-wasm>    Compiling spdx v0.13.5
+arkhe-verify-wasm>    Compiling sha3 v0.10.8
+arkhe-verify-wasm>    Compiling base64 v0.22.1
+arkhe-verify-wasm>    Compiling hex v0.4.3
+arkhe-verify-wasm>    Compiling once_cell v1.21.4
+arkhe-verify-wasm>    Compiling arkhe-auth-md v0.1.0 (/build/source/integration/auth-md)
+arkhe-verify-wasm>    Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+arkhe-verify-wasm>    Compiling arkhe-verify-wasm v0.1.0 (/build/source/verification/crates/arkhe-verify-wasm)
+arkhe-verify-wasm>     Finished `release` profile [optimized] target(s) in 4m 56s
+arkhe-verify-wasm> Finished cargoBuildHook
+arkhe-verify-wasm> buildPhase completed in 4 minutes 57 seconds
+arkhe-verify-wasm> Running phase: installPhase
+arkhe-verify-wasm> Running phase: fixupPhase
+arkhe-verify-wasm> shrinking RPATHs of ELF executables and libraries in /nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0
+arkhe-verify-wasm> checking for references to /build/ in /nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0...
+arkhe-verify-wasm> patching script interpreter paths in /nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0
+arkhe-verify-wasm> stripping (with command strip and flags -S -p) in /nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0/lib
+/nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0

@@ -1,0 +1,95 @@
+{
+  "environment": {
+    "hostname": "arkhe-repro-vm",
+    "kernel": "6.18.59",
+    "boot_id": "f9753ff5-20f8-456f-bd10-160627f5289c",
+    "nix": "nix (Nix) 2.34.9",
+    "store_mounts": "{\n   \"filesystems\": [\n      {\n         \"target\": \"/nix/.ro-store\",\n         \"source\": \"/dev/vdb\",\n         \"fstype\": \"erofs\",\n         \"options\": \"ro,relatime,user_xattr,acl,cache_strategy=readaround\"\n      }\n   ]\n}\n"
+  },
+  "substitutions": false,
+  "remote_builders": false,
+  "packages": {
+    "arkhe-verify": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/r0sw70i3rzq3cql5w77vbvgzd5f8bdm0-arkhe-verify-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-2ZFcAmxcgSg7jsWFmfWimN/9d2VPx3ifr3GOSSxKc3Y=",
+      "matches_host": true,
+      "path": "/nix/store/gg0qk1d7cga0zhaqr7gzfackdya6jbqy-arkhe-verify-0.1.0"
+    },
+    "arkhe-runtime": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/lnqv28szj12q02xl6sdpp57cdivmaa3y-arkhe-runtime-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-qhzQzfR7LJfngUwFgMMjRrRduffw9tusCXhmWHzBTOo=",
+      "matches_host": true,
+      "path": "/nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0"
+    },
+    "arkhe-sql-migrate": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/q0px2c5yf1khkgzw5vsh8g4f58raiq9p-arkhe-sql-migrate-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-YEL9EwS90A65QGL/qyIVp/26Oj9DGGNJZAQv7vDDW/4=",
+      "matches_host": true,
+      "path": "/nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0"
+    },
+    "arkhe-twin": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/n693gdghsdfhkwfwgk5yvri66m5mbp70-arkhe-twin-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-282S9Wh9BZE4KPr8crJ2O/oRfORWwz03RsxgWBGKnCA=",
+      "matches_host": true,
+      "path": "/nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0"
+    },
+    "arkhe-ollama": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/pagqmg1p45gm63nl4aca2s73mklpc9k5-arkhe-ollama-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-yIXB3AhGqaGutQBXUY4tKkBRE5+3O9sbuvx9nsBeo0k=",
+      "matches_host": null,
+      "path": "/nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0"
+    },
+    "arkhe-crm-bridge": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/8i5jc7g8kjpk37ywxz1nf0v4j2spjagx-arkhe-crm-bridge-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-RQEhCb3loJM235+Fc8ckkcfKqCqBUx2S9c0EsQViAm8=",
+      "matches_host": null,
+      "path": "/nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0"
+    },
+    "arkhe-python-gate": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/0w5mq71myp860zld7v3n310fd1ni2m84-arkhe-python-gate-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-Gn2pf7CANvziL1hqxFyWl+O154Vq+pokgBxxsbKV1iw=",
+      "matches_host": null,
+      "path": "/nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0"
+    },
+    "arkhe-ask": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/99g8dm56w38nrjvjcagwlxl0pj30zckp-arkhe-ask-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-U+lTUSW5SDnWO7cWaebnLyeEEDjAwBwaAVU7SQF80uw=",
+      "matches_host": null,
+      "path": "/nix/store/6jprb40p06v2294gm0p67kkv2wsk6qmk-arkhe-ask-0.1.0"
+    },
+    "arkhe-verify-wasm": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/2a8mz04wwhzh7ii11fkybqff6w35i6qd-arkhe-verify-wasm-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-GOFokeh00zNILhZt+jNElEksmAY/URJVvxrs+Ruf0TY=",
+      "matches_host": true,
+      "path": "/nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0"
+    },
+    "arkhe": {
+      "build_exit_code": 0,
+      "drv": "/nix/store/vfz0cq6lqj3cgw3rypb3m2d7zanzbgpv-arkhe-0.1.0.drv",
+      "derivation_matches_host": true,
+      "hash": "sha256-M24HpWk21+lx9+JJxGGVw3213iorMxVuJRmFy2UfsGY=",
+      "matches_host": true,
+      "path": "/nix/store/25by62nasrgrvypk4xhzyn8ffbgyjqsx-arkhe-0.1.0"
+    }
+  },
+  "preflight_all_targets_absent": true,
+  "metapackage_retry_reason": "Added omitted build inputs lndir and stdenv-linux-no-cc; no Arkhe target output was copied"
+}

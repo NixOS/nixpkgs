@@ -1,0 +1,84 @@
+{
+  "id": "MMR-3LEAF-001",
+  "component": "WormGraph MMR",
+  "normative_source": "Arkhe MMR Profile v1 (spec/mmr-profile-v1.md)",
+  "description": "Arkhe MMR Profile v1 with 3 leaf/leaves; complete inclusion proofs for every leaf",
+  "status": "READY",
+  "profile_ref": {
+    "profile_id": "arkhe-mmr",
+    "version": 1,
+    "digest_algorithm": "BLAKE3-256",
+    "digest_hex": "bcd07a275061ef385fccdd184030c2358fdd0937477cb0ef30cf8148342f2450"
+  },
+  "input": {
+    "leaves": [
+      "0000000000000000000000000000000000000000000000000000000000000001",
+      "0000000000000000000000000000000000000000000000000000000000000002",
+      "0000000000000000000000000000000000000000000000000000000000000003"
+    ],
+    "leaf_count": 3,
+    "mmr_size": 4,
+    "target_index": 2,
+    "index_base": 0
+  },
+  "expected_output": {
+    "peak_hashes": [
+      "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c",
+      "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5"
+    ],
+    "root_hash_hex": "edf432b5854467f8ceaa0102e37dae99200e96c9b184b02681ad4145ac4cbbf0",
+    "inclusion_proof_hashes": [
+      "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c"
+    ],
+    "inclusion_proof_directions": [
+      "left"
+    ],
+    "inclusion_proof_kinds": [
+      "bag"
+    ],
+    "proofs": [
+      {
+        "target_index": 0,
+        "inclusion_proof_hashes": [
+          "f158535bbffb524797d1a34a9dc6b59281f7e5eafacfef8ab9bbbda2a97d0be5",
+          "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5"
+        ],
+        "inclusion_proof_directions": [
+          "right",
+          "right"
+        ],
+        "inclusion_proof_kinds": [
+          "node",
+          "bag"
+        ]
+      },
+      {
+        "target_index": 1,
+        "inclusion_proof_hashes": [
+          "60499eb380feaca0c5b5385982e20abe3b4b3ef7ff5037dfad344b5f8a802c7b",
+          "00f32b9b5d0c34bf15d666e0f470631491902efe447db7c262a1d54d3ff591c5"
+        ],
+        "inclusion_proof_directions": [
+          "left",
+          "right"
+        ],
+        "inclusion_proof_kinds": [
+          "node",
+          "bag"
+        ]
+      },
+      {
+        "target_index": 2,
+        "inclusion_proof_hashes": [
+          "f372742b780b1e913a79685dfa797b92716f38576d35b08840a369eafb26360c"
+        ],
+        "inclusion_proof_directions": [
+          "left"
+        ],
+        "inclusion_proof_kinds": [
+          "bag"
+        ]
+      }
+    ]
+  }
+}

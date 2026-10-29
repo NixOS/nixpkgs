@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-29",
+  "system": "x86_64-linux",
+  "nix": "2.35.4",
+  "rustc": "1.99.0",
+  "nixpkgs_rev": "31ecbaca1bdefa45dffc409f0250bd8039ea0010",
+  "source_manifest_sha256": "dd7b2f78193b35371bbf77d10e01ec2656f130d8167050e89a03a182fd4f8ef0",
+  "flake_check": "PASS",
+  "packages": {
+    "arkhe-verify": {
+      "drv": "/nix/store/r0sw70i3rzq3cql5w77vbvgzd5f8bdm0-arkhe-verify-0.1.0.drv",
+      "path": "/nix/store/gg0qk1d7cga0zhaqr7gzfackdya6jbqy-arkhe-verify-0.1.0",
+      "hash": "sha256-2ZFcAmxcgSg7jsWFmfWimN/9d2VPx3ifr3GOSSxKc3Y="
+    },
+    "arkhe-runtime": {
+      "drv": "/nix/store/lnqv28szj12q02xl6sdpp57cdivmaa3y-arkhe-runtime-0.1.0.drv",
+      "path": "/nix/store/mngspc308844krfszj0jasqbkzmb1kbc-arkhe-runtime-0.1.0",
+      "hash": "sha256-qhzQzfR7LJfngUwFgMMjRrRduffw9tusCXhmWHzBTOo="
+    },
+    "arkhe-sql-migrate": {
+      "drv": "/nix/store/q0px2c5yf1khkgzw5vsh8g4f58raiq9p-arkhe-sql-migrate-0.1.0.drv",
+      "path": "/nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0",
+      "hash": "sha256-YEL9EwS90A65QGL/qyIVp/26Oj9DGGNJZAQv7vDDW/4="
+    },
+    "arkhe-twin": {
+      "drv": "/nix/store/n693gdghsdfhkwfwgk5yvri66m5mbp70-arkhe-twin-0.1.0.drv",
+      "path": "/nix/store/m84jmbhayhxjcb4hv9j793xjkf77q1dc-arkhe-twin-0.1.0",
+      "hash": "sha256-282S9Wh9BZE4KPr8crJ2O/oRfORWwz03RsxgWBGKnCA="
+    },
+    "arkhe-ollama": {
+      "drv": "/nix/store/pagqmg1p45gm63nl4aca2s73mklpc9k5-arkhe-ollama-0.1.0.drv",
+      "path": "/nix/store/3qqnnasi2mwmnlxivxh7sfr9yjxdfl9n-arkhe-ollama-0.1.0",
+      "hash": "sha256-yIXB3AhGqaGutQBXUY4tKkBRE5+3O9sbuvx9nsBeo0k="
+    },
+    "arkhe-crm-bridge": {
+      "drv": "/nix/store/8i5jc7g8kjpk37ywxz1nf0v4j2spjagx-arkhe-crm-bridge-0.1.0.drv",
+      "path": "/nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0",
+      "hash": "sha256-RQEhCb3loJM235+Fc8ckkcfKqCqBUx2S9c0EsQViAm8="
+    },
+    "arkhe-python-gate": {
+      "drv": "/nix/store/0w5mq71myp860zld7v3n310fd1ni2m84-arkhe-python-gate-0.1.0.drv",
+      "path": "/nix/store/298y7mas4ya5ls55r49hlxi6z02hpr5r-arkhe-python-gate-0.1.0",
+      "hash": "sha256-Gn2pf7CANvziL1hqxFyWl+O154Vq+pokgBxxsbKV1iw="
+    },
+    "arkhe-ask": {
+      "drv": "/nix/store/99g8dm56w38nrjvjcagwlxl0pj30zckp-arkhe-ask-0.1.0.drv",
+      "path": "/nix/store/6jprb40p06v2294gm0p67kkv2wsk6qmk-arkhe-ask-0.1.0",
+      "hash": "sha256-U+lTUSW5SDnWO7cWaebnLyeEEDjAwBwaAVU7SQF80uw="
+    },
+    "arkhe-verify-wasm": {
+      "drv": "/nix/store/2a8mz04wwhzh7ii11fkybqff6w35i6qd-arkhe-verify-wasm-0.1.0.drv",
+      "path": "/nix/store/h3y8zk85jliw4qvq4dx3sfx0372qkdwz-arkhe-verify-wasm-0.1.0",
+      "hash": "sha256-GOFokeh00zNILhZt+jNElEksmAY/URJVvxrs+Ruf0TY="
+    },
+    "arkhe": {
+      "drv": "/nix/store/vfz0cq6lqj3cgw3rypb3m2d7zanzbgpv-arkhe-0.1.0.drv",
+      "path": "/nix/store/25by62nasrgrvypk4xhzyn8ffbgyjqsx-arkhe-0.1.0",
+      "hash": "sha256-M24HpWk21+lx9+JJxGGVw3213iorMxVuJRmFy2UfsGY="
+    }
+  }
+}

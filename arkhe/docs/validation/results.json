@@ -8,7 +8,7 @@
       "aarch64-linux"
     ],
     "status": "PASS",
-    "builds_all_packages": false
+    "builds_all_packages": true
   },
   "arkhe_verify": {
     "build": "PASS",
@@ -21,7 +21,13 @@
   },
   "modules_eval": "PASS",
   "snapshot_files": 593,
-  "independent_machine_reproducibility": "NOT_RUN",
-  "other_package_builds": "NOT_RUN",
-  "wasm_build": "NOT_RUN"
+  "independent_machine_reproducibility": "PASS: 10 package outputs in QEMU/KVM, same physical host, separate disk and Nix store",
+  "other_package_builds": "PASS: all x86_64-linux packages",
+  "wasm_build": "PASS",
+  "comparison": "vm/comparison.json",
+  "wasm_tests": {
+    "accepted": 20,
+    "rejected": 106,
+    "invalid_policy_rejected": true
+  }
 }

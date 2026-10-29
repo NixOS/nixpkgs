@@ -1,0 +1,1305 @@
+these 544 derivations will be built:
+  /nix/store/2kbbzfsz1hzd21yj0h989s3z40cgrp58-stage0-posix-1.9.1-source.drv
+  /nix/store/j76if9fyh6aw41qvc8nqr9c8ha4azayn-hex0-seed.drv
+  /nix/store/zf8dvv680i9z2wpggik614r20n54hyii-hex0-1.9.1.drv
+  /nix/store/fmhwfv6ikfd8wsg2mha7rw8nmdc4jxrx-hex1-1.9.1.drv
+  /nix/store/rxpmjxrz1xnr2pkamsa59afl929cj57k-hex2-1.9.1.drv
+  /nix/store/2jwh5pdbg0mff2bhxvc2vam8bm05wa08-catm-1.9.1.drv
+  /nix/store/rq77y1w9cbyx76dqcnw4wa24w1wq3ybw-M2-0.c-1.9.1.drv
+  /nix/store/kkr0ncy5fyd3rv59wdb679q0fhah7fn6-M0.hex2-1.9.1.drv
+  /nix/store/z4xincpdf0q9ikjbma0s5sf5jrl3s187-M0-1.9.1.drv
+  /nix/store/pj475p4a7p2hzb49xslzyrbzmnwvjp4c-cc_arch-0.hex2-1.9.1.drv
+  /nix/store/yx1ipzzcjya556sz0z3vc3gvgw86lb5c-cc_arch-1.hex2-1.9.1.drv
+  /nix/store/s47mlxqkjc26fvmx2yrps4hkpigimxi1-cc_arch-1.9.1.drv
+  /nix/store/fg5yn059hlcxgb0116bq8s47rbg4gzs2-M2-0.M1-1.9.1.drv
+  /nix/store/dschwsfi21lwar5ldv5wdqnm1waf197a-M2-0-0.M1-1.9.1.drv
+  /nix/store/fxii7wgh8167mckd8bbjal5mxq9l9p05-M2-0.hex2-1.9.1.drv
+  /nix/store/9mj2rqzivmn0skmx8kgy0qsrm8n2ph0z-M2-0-0.hex2-1.9.1.drv
+  /nix/store/46c2vwwb9lcd8976mmwaqiy2glsh8a6s-M2-1.9.1.drv
+  /nix/store/j4wjiwwh98lysm3nj7gidv06ch0zns2p-hex2_linker-2.M1-1.9.1.drv
+  /nix/store/9knysaa0w5wbkbi2c1hbvvf7gjv8iqfb-blood-elf-0.M1-1.9.1.drv
+  /nix/store/drh372b18rwrl15nrww5bc105xpwd3kx-blood-elf-0-0.M1-1.9.1.drv
+  /nix/store/nnkx70rnb45cksjrsh24ral5jd6al5h2-blood-elf-0.hex2-1.9.1.drv
+  /nix/store/x9sj5ai5qx2c6wmy5qz6dpl90g6rbrxg-blood-elf-0-0.hex2-1.9.1.drv
+  /nix/store/xsn3z4sqkn6ac7mlq35b62qs31mlnhbw-blood-elf-0-1.9.1.drv
+  /nix/store/83kd55avbcj2wx0gc643yhph72ahdacn-hex2_linker-2-footer.M1-1.9.1.drv
+  /nix/store/12kq01qr9jcw4gpgvzqg962gixgjg4w8-M1-macro-1.M1-1.9.1.drv
+  /nix/store/1l0a69sq1vbdjjcbhnr0yic533yvkpdj-M1-macro-1-footer.M1-1.9.1.drv
+  /nix/store/d9q3m3dkpm5f2yidcnf39bxqy3xniw6q-M1-macro-0.M1-1.9.1.drv
+  /nix/store/zhwaq1pghk6gqbjlcjgw3crf8ggrazay-M1-macro-0-footer.M1-1.9.1.drv
+  /nix/store/dyffnfdiz10lpiraxazf9k9chkx1prqj-M1-macro-0-0.M1-1.9.1.drv
+  /nix/store/9qrfjhdgqij7dg7pvy85yw848hchjj86-M1-macro-0.hex2-1.9.1.drv
+  /nix/store/ncn47n6zrpsy3kxc146392s75fk4lk2c-M1-macro-0-0.hex2-1.9.1.drv
+  /nix/store/wzc5vlgxwlx8xjs4v6jgw8xan080jxks-M1-0-1.9.1.drv
+  /nix/store/hq2cbwrkyyck3hl3vcddi1256qk4kd9y-M1-macro-1.hex2-1.9.1.drv
+  /nix/store/9nh28gh5xv970hclrry924m5s9a7pc04-hex2_linker-0.M1-1.9.1.drv
+  /nix/store/ppw8q27avhjirlrdcharilyf3lfih28f-hex2_linker-0-footer.M1-1.9.1.drv
+  /nix/store/33fk6f3q18k6ifvg92vgsnmck9dcsqli-hex2_linker-0.hex2-1.9.1.drv
+  /nix/store/salhf0y3pwji5rc43kgh51czb4ck6qgx-hex2_linker-0-0.hex2-1.9.1.drv
+  /nix/store/qsyqpi5hy1i3rzmg1x5l2nm0d3hcdmdc-hex2-1-1.9.1.drv
+  /nix/store/zf7smly23scq1jpgwy8lbv6vksd5si6b-M1-1.9.1.drv
+  /nix/store/387n5gn04pv4cjjlrxxh4plc6c60ifl6-hex2_linker-2.hex2-1.9.1.drv
+  /nix/store/jfgdmzd75pybl8jbyv0qharzncawvfjk-hex2-1.9.1.drv
+  /nix/store/zp92khnxilvlvdha1wan9c8xh3ns7qsc-kaem.M1-1.9.1.drv
+  /nix/store/nqn9nizwqy5201zcv0jn5l7pnjm8i637-kaem-footer.M1-1.9.1.drv
+  /nix/store/scff6n77m9an0n7wzdm221b5diz0k4rj-kaem.hex2-1.9.1.drv
+  /nix/store/mls5sqcps3yi6iwbn5bbyr1pymsk8cyy-kaem-unwrapped-1.9.1.drv
+  /nix/store/dbasqqw4gv4864jxfc7i9fir1ik1h91b-mescc-tools-extra-mkdir-1.9.1.drv
+  /nix/store/faklixjfqrpfwz3z513s6p9lmk2qf3mw-mescc-tools-extra-cp-1.9.1.drv
+  /nix/store/fx1ariccq0k411lvhjl3iwbql4qq6xiv-mescc-tools-extra-replace-1.9.1.drv
+  /nix/store/gs9mwc2r1p7hs6xrnqz5s36dsw3c9nqm-mescc-tools-extra-chmod-1.9.1.drv
+  /nix/store/pz3m6g7iabylyazm40p363y8795vybf9-mescc-tools-1.9.1.drv
+  /nix/store/bkmjhag9fkyxdmh3khll3hd7fbjqz5zl-nyacc-1.09.1.tar.gz.drv
+  /nix/store/yjp7zwabw9xcm6g42736mbhlvcddw410-mescc-tools-extra-1.9.1.drv
+  /nix/store/zlsfxdxsnzp1nzzw113avl2v0s5mgjpr-kaem-1.9.1.drv
+  /nix/store/hz2a2dlrpqz662khc2f2nqcfx03wgn3r-nyacc-1.09.1-builder.drv
+  /nix/store/wxbms5xmv39yyyqy337w0xylps100055-nyacc-1.09.1.drv
+  /nix/store/zkwvl1yljz9gp7zbppzslzdhyq5zwg19-mes-0.27.1.tar.gz.drv
+  /nix/store/q8c5l3jqyqw4g02k0anhhxh1g4307ni5-mes-src-0.27.1-builder.drv
+  /nix/store/h6pi2cyw7j5liy0fbzq8i1ippcqwdjd3-mes-src-0.27.1.drv
+  /nix/store/9y32j8hnjm4748k0v0lal6d5kwisjw12-mes-libc-0.27.1-builder.drv
+  /nix/store/19gcd6n26b45lwx33i6acl4ldlaf2k43-mes-libc-0.27.1.drv
+  /nix/store/3k34lryz96awdk6bxidq2zlcas5rnpgi-mes-libmescc-0.27.1-builder.drv
+  /nix/store/6nv15acmyh9mfckms0rikjswhgxfzdyb-mes-libmescc-0.27.1.drv
+  /nix/store/n8xfn5p7ap99jqirj54202i7g7mwscbb-mes-libc+tcc-0.27.1-builder.drv
+  /nix/store/i4a7vp8h1mg0gf9dkr7lqda402qi2blz-mes-libc+tcc-0.27.1.drv
+  /nix/store/7sn98bdbh4x5b58q0ghni71ginkqxcms-mes-libc-mini-0.27.1-builder.drv
+  /nix/store/mf9br2m8vddsnqxjla1xsj0d160l6bw6-mes-libc-mini-0.27.1.drv
+  /nix/store/9b5xvzhkkyvf9k6mxskgawzsq2129iga-mes-crt1-0.27.1-builder.drv
+  /nix/store/w2qpwakkd81nr6k45p2wyd24x5n2ij9k-mes-crt1-0.27.1.drv
+  /nix/store/2yl6ma5h3sa91z9qbm5x2vgjw2mzsxfc-mes-m2-libs-0.27.1-builder.drv
+  /nix/store/wxcd19yxlnk6lm4i1zilx667r8r0v5gv-mes-m2-libs-0.27.1.drv
+  /nix/store/7hjbjqdb5l8r9pzgi9w11px2zayfq4zv-mes-0.27.1-builder.drv
+  /nix/store/97pk2m5858047hvw1b764cqxq4qwl6nz-mes-0.27.1.drv
+  /nix/store/cwsp8d28ypl2yvhbbhlvd9c3w0mdrkp3-ln-boot-unstable-2023-05-22-builder.drv
+  /nix/store/qjzpl6l7b9sr55xh576zyr61p6pawzf7-ln-boot-unstable-2023-05-22.drv
+  /nix/store/50i25hvxfg4dqzs5w1bb3rw4drzslf55-mes-libc-0.27.1-builder.drv
+  /nix/store/fbaq796w3day6gw5sdvw014v9ppip38q-mes-libc-0.27.1.drv
+  /nix/store/h699vzb1lagddixp8liilf9kihibax6x-tinycc-ea3900f6d5e71776c5cfabcabee317652e3a19ee.tar.gz.drv
+  /nix/store/j3n345fjfih7z96sngf55600v93d7hax-tinycc-bootstrappable-unstable-2024-07-07-source-builder.drv
+  /nix/store/mvpsnrvkh6xw1q5fzdyfc6b6hbh4k9hh-tinycc-bootstrappable-unstable-2024-07-07-source.drv
+  /nix/store/vagpxvb1akpkk9n8ffsml1i6rdf0n3cd-tinycc-boot-mes-unstable-2024-07-07-builder.drv
+  /nix/store/43c53m8vn9xgm336dgb8fzm24a0sfak9-tinycc-boot-mes-unstable-2024-07-07.drv
+  /nix/store/rkkh200y25pyypsy8a0nxagk4znsykg8-libtcc1.a-builder.drv
+  /nix/store/5y67rlqwiiv7607z9204zmfmw7bl4wwy-libtcc1.a.drv
+  /nix/store/1n8hr73p3kk1yy3xgqfrq4qr7qz8yfyg-libc.a-builder.drv
+  /nix/store/80hl2ggqpv6dl9y8vz1ihw426xpxyhzd-libc.a.drv
+  /nix/store/p8dji0ijyy5nns9mpsckkbpqs90sqb6c-libgetopt.a-builder.drv
+  /nix/store/m2wna3vj5z443p58l22dmzmbpjvp2729-libgetopt.a.drv
+  /nix/store/x8z156d2j6jdbgjpdg8qpn7jnsixl0xk-crt-builder.drv
+  /nix/store/nxnmlkxgx3sag011nblc9qdzm2n4gyc1-crt.drv
+  /nix/store/q5vw71pn6828mpqzy0jmhqk7vhmh6d6x-tinycc-boot-mes-libs-unstable-2024-07-07-builder.drv
+  /nix/store/5x29mx2gd40d2czfi0zyc9l58dk9330w-tinycc-boot-mes-libs-unstable-2024-07-07.drv
+  /nix/store/bjc8i84bb6jnh1i3qg8cjlrjjdxx22bq-tinycc-boot0-unstable-2024-07-07-builder.drv
+  /nix/store/0l34k7h5j6q5v2z62nycmljc5wqh5xsl-tinycc-boot0-unstable-2024-07-07.drv
+  /nix/store/nhkgypjy4jshsf2456585xkfja5dfwy5-libc.a-builder.drv
+  /nix/store/6lykzbpcmpg8bzxlhibf96xri3d3k6sg-libc.a.drv
+  /nix/store/yi8m4j3x7ksfrzf7i8l905l05l4yfs82-crt-builder.drv
+  /nix/store/bf3svqb80f7xfxaiyb5la5w7aaqm6rdk-crt.drv
+  /nix/store/0il3m1vk0g99m1wd36lbhay2z9jxwlcs-libgetopt.a-builder.drv
+  /nix/store/d14y8vpfg6frm2cvvjdmhajcmxjnxrbx-libgetopt.a.drv
+  /nix/store/w53c22i4pcfhl2zqb7k9bcb68b5h64l8-libtcc1.a-builder.drv
+  /nix/store/lbx3zx8kqf3g9hj8fk64jny3lj3f2v22-libtcc1.a.drv
+  /nix/store/gpbjcaajjjl2iviwgmi21m5lhc05hljn-tinycc-boot0-libs-unstable-2024-07-07-builder.drv
+  /nix/store/0l66lj2d5szifcn5n7b12z0zz1az9656-tinycc-boot0-libs-unstable-2024-07-07.drv
+  /nix/store/xkfrk9y4k59vrxdfz4q2lradcnsygc99-tinycc-boot1-unstable-2024-07-07-builder.drv
+  /nix/store/j1afwhpvqaxkbj0mqmjbc8s95radz2yl-tinycc-boot1-unstable-2024-07-07.drv
+  /nix/store/dipc6gf1wqlcxm2qximla4vjxf1hcbax-libc.a-builder.drv
+  /nix/store/3d3pihrlggvslps72rdpsm0xmrf8lnhm-libc.a.drv
+  /nix/store/w1ikqpjknr8xbi15sk2qyd0qkmq94m9m-libtcc1.a-builder.drv
+  /nix/store/8r05lbizar4p42s6vcqc5c3vvxw6mr65-libtcc1.a.drv
+  /nix/store/wignb9bpy2y83qwixsgiabml57wbknjv-libgetopt.a-builder.drv
+  /nix/store/hhlbiv75flpi91p8gf11g6m7sa7qna2w-libgetopt.a.drv
+  /nix/store/54zbninnz5i47975x5gzfmal50q29zyq-crt-builder.drv
+  /nix/store/r2bqnrxf9bpbq0h013h2yh6piacz49ql-crt.drv
+  /nix/store/34vmg1140k58kb2j63gsp0f1n45rg5cc-tinycc-boot1-libs-unstable-2024-07-07-builder.drv
+  /nix/store/z1k71ibnlv0616akq6fg0yk2clv2ppfj-tinycc-boot1-libs-unstable-2024-07-07.drv
+  /nix/store/zm8ca8q83ik9bqhmc9a4zzvk180apwm6-tinycc-boot2-unstable-2024-07-07-builder.drv
+  /nix/store/fj495b44lwa9hf18j49c68bx4gxwc7fs-tinycc-boot2-unstable-2024-07-07.drv
+  /nix/store/zmqwzshi4c70c0f594xp5bl3xgj5r2h8-libtcc1.a-builder.drv
+  /nix/store/75avwysha6izjqzi07c906k9js42dyq2-libtcc1.a.drv
+  /nix/store/qiwh9dxqfa3657qajvfsbd4zaf2rqi9d-libgetopt.a-builder.drv
+  /nix/store/gb6347xcjsb2dr9h86qh44lnbzaf3mbw-libgetopt.a.drv
+  /nix/store/kxbdqvzm00n3ka41yqszgvfm4g44ili4-libc.a-builder.drv
+  /nix/store/gv0k831vybd1djhcsn7kb3acx1q1z5d7-libc.a.drv
+  /nix/store/6nz7fix73p045w536s53idblfknf8zcp-crt-builder.drv
+  /nix/store/z71ygq0f15ygaq9yxqbssdqrryzx9xn9-crt.drv
+  /nix/store/cqqnh2l20m98k54l0r7a73xicbrr5r3z-tinycc-boot2-libs-unstable-2024-07-07-builder.drv
+  /nix/store/qx08mxrrg99z99qajmz2mpnli4xlnkxd-tinycc-boot2-libs-unstable-2024-07-07.drv
+  /nix/store/8ia0abjkxn8nwhbvih4s5wpb4rgqyw26-tinycc-boot3-unstable-2024-07-07-builder.drv
+  /nix/store/n6zlfnkcsf2gpqaal4jqrdk71h06vhfc-tinycc-boot3-unstable-2024-07-07.drv
+  /nix/store/afmfwdjcy5j5ch5yrd8k51nh0shkgpv1-libgetopt.a-builder.drv
+  /nix/store/nxw2yr1lk45ypcnira1m153ar8dwdzj2-libgetopt.a.drv
+  /nix/store/i7i9xc2mcnjip3ffs7ikrfc8j896ifr3-libtcc1.a-builder.drv
+  /nix/store/ssj4nwq1miqn3i5rhihvgd3mck7fwm40-libtcc1.a.drv
+  /nix/store/r7byyllamzwvniamnjwf0ngscll0mjs4-crt-builder.drv
+  /nix/store/xi58f9jv14p2pdq63g1d789m7jb3dxlr-crt.drv
+  /nix/store/id646xlknkz05khl5vsqkvh9db4gz5jz-libc.a-builder.drv
+  /nix/store/ygvpm2yg35mziv51ciadbpxa4kbdvwl7-libc.a.drv
+  /nix/store/c9f499q7q1nz8wjkbkgd0hkhlpqpxmnd-tinycc-boot3-libs-unstable-2024-07-07-builder.drv
+  /nix/store/r2xf2w2lpbazr9hv05x690j7jrpy595h-tinycc-boot3-libs-unstable-2024-07-07.drv
+  /nix/store/a1zlf186cybnlgwqlxvybb3y6i5k1sjf-tinycc-bootstrappable-unstable-2024-07-07-builder.drv
+  /nix/store/bgjwrca3m6p7r00sfk7s6fg78zfawxa9-tinycc-bootstrappable-unstable-2024-07-07.drv
+  /nix/store/ahbb2x4llmfxmq8glzbzapp4xnx2x293-crt-builder.drv
+  /nix/store/d8csphjlja3v3yr58916nfx80kiwgry1-crt.drv
+  /nix/store/78wbbjsmjfyifwwg19zisls4m6bs266v-libc.a-builder.drv
+  /nix/store/drr39sd38ib9m1rrfhlg72741s2xnb7g-libc.a.drv
+  /nix/store/qvfqccw9xfc9jd2n2ska6v5bk8f52bl8-libgetopt.a-builder.drv
+  /nix/store/iv1jc57sl4b5imgylsfnhzdmk37f3dg9-libgetopt.a.drv
+  /nix/store/j77g0bas1ssjcvw321g1m9zj5g9qizlx-libtcc1.a-builder.drv
+  /nix/store/vdqpafi8prhn23j4c071yifwcn00ri7f-libtcc1.a.drv
+  /nix/store/4dcp8d7vc5n9pdigcrzjky366mpb4d8p-tinycc-bootstrappable-libs-unstable-2024-07-07-builder.drv
+  /nix/store/midrq54p6py7mx6bcnfdf0j0dbashz81-tinycc-bootstrappable-libs-unstable-2024-07-07.drv
+  /nix/store/d1simrxi41d15h88m043y00yd400fpd4-cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341.tar.gz.drv
+  /nix/store/5qbjq17pking8vfi5n2d1vsm6hknwdgs-tinycc-unstable-2025-12-03-source-builder.drv
+  /nix/store/w5008ccs8cadyjvgpx3bzk9d387ml2dw-tinycc-unstable-2025-12-03-source.drv
+  /nix/store/03iyd8lp5m91y4dlkkrp5axn1pn16khz-tccdefs-unstable-2025-12-03-builder.drv
+  /nix/store/d2yrpi3davv5fspma2frdhdscjav6w0s-tccdefs-unstable-2025-12-03.drv
+  /nix/store/8hvca5zvj9yc33mf32qfngnwly35l7rv-tinycc-mes-boot-unstable-2025-12-03-builder.drv
+  /nix/store/wwqgham7gb49l0ydylkknmyxq989lmbg-tinycc-mes-boot-unstable-2025-12-03.drv
+  /nix/store/p2w4wsi197vac6qkgwmr8kjbr0glvafy-libtcc1.a-builder.drv
+  /nix/store/4qhihzw3lr6q3gycpr6lcfhndxdk7qdl-libtcc1.a.drv
+  /nix/store/92nj358zg2ighg83c80g76hnxhqsingf-libc.a-builder.drv
+  /nix/store/c5j5h0gl5i9r027zyn7lmj5983v548vp-libc.a.drv
+  /nix/store/j5pakxwsg6ixphssx948iv60q497lvyg-crt-builder.drv
+  /nix/store/n21cr0v5j5cy6x3px80m9zg1bfz6bn59-crt.drv
+  /nix/store/nzzl4z2gkpzda9ilchlhg13yw1jng2ps-libgetopt.a-builder.drv
+  /nix/store/qhw9kcn3w0bji9df170336i5rqnb1snb-libgetopt.a.drv
+  /nix/store/zzpcr3cr60kqvw5rnx8jhvvmnhkrr0dr-tinycc-mes-boot-libs-unstable-2025-12-03-builder.drv
+  /nix/store/dlsp3yw6y1qhswc6idpfg0shgbdmrmsm-tinycc-mes-boot-libs-unstable-2025-12-03.drv
+  /nix/store/v3s7w0xs9ivj38ng1cq0xx1hc49szlr1-tinycc-mes-unstable-2025-12-03-builder.drv
+  /nix/store/9d46md37a38ibk0zxjll9s58sfjf0jb6-tinycc-mes-unstable-2025-12-03.drv
+  /nix/store/013mqc5ymx4cih72blz21l6ync49i3jg-expr-strcmp.patch.drv
+  /nix/store/aspfvh0wlsi4w6kva34p3m9kkcxr7vym-sort-locale.patch.drv
+  /nix/store/b147bn8sgyn2s58vy3cw59d89vrd482g-mbstate.patch.drv
+  /nix/store/br3yqsjafxyhh91879brxq1xzbyjwlwb-ls-strcmp.patch.drv
+  /nix/store/c672ird0l7wv8dr5idknpgnh1rhzlnqf-coreutils-5.0.tar.gz.drv
+  /nix/store/lbn6dc55b8f36v2p2hkqbpk2z63wnjyx-touch-dereference.patch.drv
+  /nix/store/qp9mn19nkyp680m55w409i550zni62gh-modechange.patch.drv
+  /nix/store/vrkgrz8l2z0yq45fai507hpcaqp0i9cq-touch-getdate.patch.drv
+  /nix/store/x7l0vwljyrwyncsxkyvzh6gmc1f8p2rw-main.mk.drv
+  /nix/store/xfz5c7irzix5sakph3m18v0h400s6id6-uniq-fopen.patch.drv
+  /nix/store/9s3dq2qqgzldiih6234z88rk5d9q4jjk-libgetopt.a-builder.drv
+  /nix/store/0623pvccfhl94vg972csnqdjradpsdf2-libgetopt.a.drv
+  /nix/store/vqjfb7g1xij1hi8b8ak63grkwkkaf3s3-libtcc1.a-builder.drv
+  /nix/store/cm5ddm76bg800rrg9qfwh6jxi1lybllj-libtcc1.a.drv
+  /nix/store/x5fkm1fmj4jm6k0jbj0inz3hpbmbadp7-crt-builder.drv
+  /nix/store/hdb46nmm17s3kwq4ck4qk0wm3fjfw15v-crt.drv
+  /nix/store/hjv0nwiddxfd9hgl0x2fx1spwhxs7lpj-libc.a-builder.drv
+  /nix/store/mcb9mciwdmhmd16m0yr6d7pxqy6s3hnr-libc.a.drv
+  /nix/store/hazdy76bgdqmqiria9lmgg5jl6ykxirc-tinycc-mes-libs-unstable-2025-12-03-builder.drv
+  /nix/store/y0yxb5kxhvzffj19ggf3d7snxrc0xbjb-tinycc-mes-libs-unstable-2025-12-03.drv
+  /nix/store/j7d18sh2cswmq89k6r7a9xhxfaipdjhk-bootstrap-coreutils-5.0-builder.drv
+  /nix/store/whkczx14wnzmkchfys92zgas16rnzqw9-make-4.4.1.tar.gz.drv
+  /nix/store/dssfydlc7dafzw5h9v8bcma1mwsg6jj2-gnumake-4.4.1-builder.drv
+  /nix/store/m2khnp0iw665w7zjkyvil62v5wjlbl8i-patch-2.5.9.tar.gz.drv
+  /nix/store/qpqnca9ayp12d6qhlx9amvb1lg63br9p-gnupatch-2.5.9-builder.drv
+  /nix/store/zil1l444xh348yy1hvy5w5f0g2p72f9v-gnupatch-2.5.9.drv
+  /nix/store/vix3mhga9d9pjgm0smc84w5608k8c7yb-gnumake-4.4.1.drv
+  /nix/store/05z44243pvwk3qrcimv1cf5g3nxi5jjb-bootstrap-coreutils-5.0.drv
+  /nix/store/2vknf2sz2fdbpqkpsph03x5qyp7pprzy-dev-tty.patch.drv
+  /nix/store/377arxf1jfpbv6shjl3iczj9v07v07h1-locale.patch.drv
+  /nix/store/3qg3iia0yapdaqy7wh3ysih94vi3ng0z-mes-libc.patch.drv
+  /nix/store/80i37dl6zigax7nh3w81ysgbjjs6j3gl-tinycc.patch.drv
+  /nix/store/8m1p5s3mfpbp48ihlp8bnp1ssqj6k409-main.mk.drv
+  /nix/store/gfjavirn9zvghj3r86wbbpkhw9xpipzi-builtins.mk.drv
+  /nix/store/mkwbpkxwzssdkc9c1rsx0s37kj951sz4-missing-defines.patch.drv
+  /nix/store/rivkjf3vnb267xl9xpjwj8wyzis4y0hs-bash-2.05b.tar.gz.drv
+  /nix/store/wa6xxcihyrcglxac311wc59lxsfssh9x-common.mk.drv
+  /nix/store/nchz8bzhdvj6ml607yywi6d3gicj9l25-bash-2.05b-builder.drv
+  /nix/store/6f6p45qkd5mhdwvfzgxdydwdpplccvgj-bash-2.05b.drv
+  /nix/store/59pgig863abfc3p6lmz20vh8gjf2nsv1-musl-1.2.6.tar.gz.drv
+  /nix/store/64w55pscmwz6wl53nh5x11n5qag8gylp-sed-4.0.9.tar.gz.drv
+  /nix/store/fj69pic5k2hr161cw3spagly2cspp3x7-main.mk.drv
+  /nix/store/agzpw52wkapzm6z6yjlmf5321gr7ngxd-gnused-mes-4.0.9.drv
+  /nix/store/mvwqinqcy1zjvb5zmhji91rjnmzh0fqf-tar-1.12.tar.gz.drv
+  /nix/store/pxxi73ah5w9h8987s2fdwspybf6jabvh-grep-2.4.tar.gz.drv
+  /nix/store/zgf0vd9gfdd8qbj1m8a0rdjrgsl6xmds-gnugrep-2.4.drv
+  /nix/store/7g9biqznf18jyzs1r19hhlbf1jvwyivl-gnutar-1.12.drv
+  /nix/store/rvcb8pzv5f8ax35ggc1hdk2vh5n6fq25-gzip-1.2.4.tar.gz.drv
+  /nix/store/qcz565439vz47snj3vky7rbdd4ihvxzl-gzip-1.2.4.drv
+  /nix/store/zc4i6kv4525v20s2zh7fhxj1gcbcgggq-sigsetjmp.patch.drv
+  /nix/store/jhnpyml16ir8hlv92jnkbag81hhjjvg5-musl-1.2.6.drv
+  /nix/store/jmgi0aram7my7q2fzdbk4jjf24wygl3b-tinycc-musl-unstable-2025-12-03.drv
+  /nix/store/lgd7h63qh3mjndrhj3q41h8g2xn1bar9-tinycc-musl-unstable-2025-12-03-compiler.drv
+  /nix/store/whq0s6ghclpnf52df7f03msah0fqr4vs-tinycc-musl-unstable-2025-12-03-libs.drv
+  /nix/store/hyz2fh44bhyj16rypvs556g2rr9sycv1-musl-1.2.6.drv
+  /nix/store/s2hjwqhh6xz3h8dwl73r97g7191nm5pr-tinycc-musl-unstable-2025-12-03.drv
+  /nix/store/a9zsjk7jcksa22bv35f7rhnbkhd71d66-tinycc-musl-unstable-2025-12-03-libs.drv
+  /nix/store/fw6qa513xbkv6cmywc5bmnl42vn3is7a-make-4.4.1.tar.gz.drv
+  /nix/store/dvl148vwwn460fa0zq13z8wlyrd2fz8k-gawk-3.0.6.tar.gz.drv
+  /nix/store/midmv1nrkyyhi1q9lrqpnf3ybyaw71d2-gawk-mes-3.0.6.drv
+  /nix/store/n9y1n1w3cwwlivnqhv98axp155wv1b76-sed-4.2.tar.gz.drv
+  /nix/store/xqxb9q4f0izf8s15d3wqlg06vajd2i8y-tinycc-musl-unstable-2025-12-03-compiler.drv
+  /nix/store/pip5q1b15n46rw6cbmz3jjk8mngqp7aw-gnused-4.2.drv
+  /nix/store/s3jjrqw6ay6nllpng4f1m1cffa11bhsb-tar-1.12.tar.gz.drv
+  /nix/store/rk3s60afwm2lzcsjpsbpdyaa90c21q4z-gnutar-musl-1.12.drv
+  /nix/store/aw4a7hi7q0mb2ljazxq0in9f5v4905a5-gnumake-musl-4.4.1.drv
+  /nix/store/hvr090gmzxh1fmghy3crdsdhv0z2p3dp-gawk-5.4.1.tar.gz.drv
+  /nix/store/8xy9yi1vwp0mc32lz37jgva7hck5j9by-gawk-5.4.1.drv
+  /nix/store/p93ssgf0b6f5bnzlsmb8zqfizhh9jfmr-xz-5.8.3.tar.gz.drv
+  /nix/store/0dpycpy1hz7sccz9w6a9vc22zfzc17hd-xz-5.8.3.drv
+  /nix/store/yglzrih7p6n7myi80gidsxv1v8f4v1ka-diffutils-3.8.tar.xz.drv
+  /nix/store/0brypcsmz7160dyfdfnnnqbfmp8lvfy4-diffutils-3.8.drv
+  /nix/store/4m76wqg80yx0yg0wv4z6kqc1y78yd58p-tar-1.35.tar.gz.drv
+  /nix/store/kxh2m956988rmzxrm8kcgddd8l1l755c-binutils-2.47.tar.xz.drv
+  /nix/store/dlh50j2sbcgfdllzb7grqmswrzmazdmj-coreutils-9.11.tar.gz.drv
+  /nix/store/x2k1rx0682qi8q01svmay16q1c4glss2-bootstrap-coreutils-musl-9.11.drv
+  /nix/store/wcy0xsar1c27zdiz6mb6nwgiygar2k6h-bash-5.3.drv
+  /nix/store/6v8bjfwdcw75b9hv7gzl0jyfljdlc3vw-binutils-2.47.drv
+  /nix/store/37zapxlhmx12r050xsjw39n4vw3nck3a-mpc-1.0.3.tar.gz.drv
+  /nix/store/afsh8mqgrc9krjcm1lfgd8jwa24mnh3y-findutils-4.11.0.tar.xz.drv
+  /nix/store/bjfpxb6q4p4dxn2r8h5p337hn1vf444n-findutils-4.11.0.drv
+  /nix/store/cxpi1vdfflr3zh9xhgsqz44vqjk0jfk8-mpfr-2.4.2.tar.gz.drv
+  /nix/store/ia4sjsi3cl16751r14yfv92603830nnn-gmp-4.3.2.tar.gz.drv
+  /nix/store/l3c18sdal1zr6930p31awpmz1ncs68wy-gcc-core-4.6.4.tar.gz.drv
+  /nix/store/yp4zsyn8fp1v5y8zpvp430lv339lvr7p-gcc-g++-4.6.4.tar.gz.drv
+  /nix/store/iznl7h2nv8rfmq9m6wwfxicgr3c42vk0-gcc-4.6.4.drv
+  /nix/store/rbcc9rrdysybx79iq9flxa6gqixg1ima-musl-1.2.6.drv
+  /nix/store/5qsfr7wfv9fnbk79s85v1gs759r2rw78-gnutar-1.35.drv
+  /nix/store/hi93kfb0mz4b8b5mk060cl972p05bplr-mpc-1.4.1.tar.xz.drv
+  /nix/store/ma479p2ss57bs6afjmhhi1xg27vin41s-gcc-10.4.0.tar.xz.drv
+  /nix/store/q3px40945ahyqcfk1jd5i0ysarphz9dv-mpfr-4.2.2.tar.xz.drv
+  /nix/store/19vlv640sa5fr6cpnr14s166v9vd2p9m-bzip2-1.0.8.tar.gz.drv
+  /nix/store/qjffi07dx2sbh63l939n8j0h8swnar6s-bzip2-1.0.8.drv
+  /nix/store/r1rf2p01za5ckcbz87fjvdnz2mpvy3bz-gmp-6.2.1.tar.xz.drv
+  /nix/store/sslzl85hvjgqrfr9gg4y2nrsvan01lx1-gcc-cxx-4.6.4.drv
+  /nix/store/5gazmz3bchrwqf184r8jjq726v542csp-gcc-10.4.0.drv
+  /nix/store/4gmgn8jwh044yvr7yvk1axwj2kw0jfjw-gcc-wrapper-10.4.0.drv
+  /nix/store/1hgh3ynq1lsicaxr0r5pdbvkbbhb0vrr-gmp-6.3.0.tar.xz.drv
+  /nix/store/zvylwgjv6zz3irjk50val1g8l5yki69i-gmp-6.3.0.drv
+  /nix/store/fjq8rqpnghnycknww049ls6p5l1wzkjl-mpfr-4.2.2.drv
+  /nix/store/6xh4gnmais0bg7xaj5hl07wwmbpbz2zs-gcc-16.2.0.tar.xz.drv
+  /nix/store/a9lsg0400h2z7nwywn3bj4kb935w9kvz-regular-libdir-includedir.patch.drv
+  /nix/store/izv72j73jmqmnjcnvk11fb8xhdsjrsky-gcc-16.2.0-src.drv
+  /nix/store/zzgcx00wj6bml7sdl4zzg1yy5zvzddl0-mpc-1.3.1.tar.gz.drv
+  /nix/store/n655781g4wd5klgg5ifs3w48chldbap0-mpc-1.3.1.drv
+  /nix/store/qc0r09cxrav1j529k1rs36ym5562rnfj-libiberty-16.2.0.drv
+  /nix/store/vg8yd14a40x7lhgiww0y1rk1lq4hma3l-libbacktrace-16.2.0.drv
+  /nix/store/svccn6gjnnbs350bfhgmwhm5mvh6n3n3-gcc-16.2.0.drv
+  /nix/store/mlrsm8g11mq38im7kpxfnakkc916245b-libgcc-16.2.0.drv
+  /nix/store/zwqi7xy7cnmawbqx0gi0j7dfll8pq1d1-libstdcxx-16.2.0.drv
+  /nix/store/y2k52clja78ivjbsy5pjgskypmrjx9nz-gcc-wrapper-16.2.0.drv
+  /nix/store/00j8iv0g3w0jy2l2s164mr6agjgcinih-gnutar-static-1.35.drv
+  /nix/store/27dl169j2bhqc86myazfvzg44lcsd4qh-gnumake-static-4.4.1.drv
+  /nix/store/5dc6bryikj8w8v2m6814ik0pkkw50yj2-gawk-static-5.4.1.drv
+  /nix/store/5dwfkbrrbrh11fmpx592bkgsiyf0p7ik-findutils-static-4.11.0.drv
+  /nix/store/bamwxswxacs3cjdcydv0z7bj22d7g2kc-config.guess-948ae97.drv
+  /nix/store/nbsdqpfzh1jlpmh95s69b3iivfcvv3lh-config.sub-948ae97.drv
+  /nix/store/0rjn4fs706rp2zf5xfyycf1pfqnkjmgg-linux-6.5.6.tar.xz.drv
+  /nix/store/0k7lgk25a3cynnhf1dfbvg45lm5s0rpp-linux-headers-6.5.6.drv
+  /nix/store/9966b5gnsqdbn28bn2p15lzgqh34nh30-coreutils-static-9.11.drv
+  /nix/store/mag3pq29n9f6jw0rb17crny8ilm4kfjy-diffutils-3.12.tar.xz.drv
+  /nix/store/ajyg4mhpa9921p4mb28q6a3dj8h99ix5-diffutils-static-3.12.drv
+  /nix/store/h7ijrlrjxvy87frncwpqivqxn9zaqx5x-patch-2.8.tar.xz.drv
+  /nix/store/bk09idrscp43frdxzdlyhh187xgc6sml-gnupatch-static-2.8.drv
+  /nix/store/gnyyisjf0lszmkag237rirbnfhir3yx1-xz-5.8.3.drv
+  /nix/store/hwyiqdask11w1cwv47d4abrg1yjlafvs-bzip2-static-1.0.8.drv
+  /nix/store/vsbymyzgxr2pbsbdk5zfn74nb73njni5-grep-3.12.tar.xz.drv
+  /nix/store/p4w5ky05f1cs8panmca0mn1lki1pfnq6-gnugrep-static-3.12.drv
+  /nix/store/mbfqb9y6ryn2axyvg797s3lw1w49liz5-gzip-1.14.tar.xz.drv
+  /nix/store/p65vrb6v10r5zby3k4smyw0hrqrllzfr-gzip-static-1.14.drv
+  /nix/store/0c3bl4n1amq0g25af4ka4qzhacnxk4yi-patchelf-0.15.2.tar.gz.drv
+  /nix/store/p6w3v61l7ann4pa1ig5g310r6jn1ip16-patchelf-static-0.15.2.drv
+  /nix/store/94bm7xzyjwb2jr289cljc5wdjccxv1yk-glibc-2.44.tar.xz.drv
+  /nix/store/2s5wx49znk1dfrm4j3vi5hdwbibyqmb3-Python-3.14.6.tar.xz.drv
+  /nix/store/3ff9aq5jx5hs2fdl2yfqpl1nh7dfkh68-zlib-1.3.2.tar.xz.drv
+  /nix/store/b6qmkq7xqb15x6cdjp7qc427a3srbcv1-zlib-1.3.2.drv
+  /nix/store/v1azpm6hgdpy529809yf13xw9pf2773c-python-3.14.6.drv
+  /nix/store/gr7p5aghmkv93kv5vmq42nn0b3372k3c-m4-1.4.21.tar.xz.drv
+  /nix/store/09w0brx1rd8l5jccn5c78w3p06zaj2sk-gnum4-1.4.21.drv
+  /nix/store/0p6bbqs599hggq6xvxn67x91pxszgqil-bison-3.8.2.tar.xz.drv
+  /nix/store/zsz7l5fmhf12zl964fnbc15wawjvi70g-bison-3.8.2.drv
+  /nix/store/mpszfi2pvmjza7pgynydkc2inlsgkh6b-glibc-2.44.drv
+  /nix/store/cblshqv4b81g5gxis3zpb4inagkaffi1-binutils-2.46.0.tar.xz.drv
+  /nix/store/zpxndzgxc7v013wy30ag8wwc0a4b13sw-binutils-static-2.46.drv
+  /nix/store/80x13gb8k372w58f6jbvnapri9w79cxh-gcc-16.2.0.drv
+  /nix/store/ps802jf3339mv5x35mp3crvmcm08mnwj-gcc-wrapper-16.2.0.drv
+  /nix/store/0g2j9g6hzn3nx6b5wq0pxbyjg19p60lr-sed-4.10.tar.xz.drv
+  /nix/store/vmlbn9yfjy64vn4vlp0a9h4z5wla8hyn-gnused-static-4.10.drv
+  /nix/store/wnlqpnnck30k4vv0zam6hcz5yz96gy8q-bootstrap-stage0-stdenv-linux.drv
+  /nix/store/6f90vk0ag8bk5phkn8k2phalwlybm57q-gnu-config-2024-01-01.drv
+  /nix/store/qbv58hj3lr963pb1m7xjbwdwyg51rwq3-bootstrap-stage0-stdenv-linux-no-cc.drv
+  /nix/store/8c56h72799zzpk5mz0r51kcnxa04x8ir-update-autotools-gnu-config-scripts-hook.drv
+  /nix/store/kslhi711wzysjzfd1q2i5mcm77vbhv49-bootstrap-stage0-glibc-minimal-bootstrap.drv
+  /nix/store/irbsazj08bvi6vhc3bx47920r40czq1y-bootstrap-stage0-binutils-wrapper-2.46.drv
+  /nix/store/8wnah74m4b8jmag4ybrlnx95nc17izgm-bootstrap-stage1-gcc-wrapper-16.2.0.drv
+  /nix/store/02z5vmsnlysvv0bz8a6wm9j59wk2frja-bootstrap-stage1-stdenv-linux.drv
+  /nix/store/09j3q6r4n42c63d87bi1dr87r7bdzwjg-bash53-020.drv
+  /nix/store/5m6vm7vkilsgas517yf8f321k5r3g1m3-bash53-003.drv
+  /nix/store/6s1mm4ahy4k9yfmlqpykmn0l68akv1s8-bash53-013.drv
+  /nix/store/5mqq379lrl4zgamzqgsmrdp0dn5mm84k-bootstrap-stage1-stdenv-linux-no-cc.drv
+  /nix/store/x5267r5p0rg1v8ax910gdrd07y0d1j2z-gnu-config-2024-01-01.drv
+  /nix/store/8skry76gy7rhv21samfvbqkjz417qb2b-update-autotools-gnu-config-scripts-hook.drv
+  /nix/store/avf6vbj4jmpnn5cdsjyj2693samnvqsa-bash53-001.drv
+  /nix/store/avmqlilnsjmv8lg7442mjb21qx981d2j-bash53-007.drv
+  /nix/store/blms51zrxh2kpwnq7cipavjyjnk29s2l-bash53-014.drv
+  /nix/store/g908mibpivcgjvswrlcdcrwsqc2sz9h9-bash53-011.drv
+  /nix/store/gz4h4m6qy9fydbc3hn9y9bi8z8k71sav-bash53-012.drv
+  /nix/store/gz9irkx06fl1lavrwxkghxnmlm4h5fgh-bash53-008.drv
+  /nix/store/ii3jsqp9rrwv0g21lwbvb94ddg8c5m7n-bash53-002.drv
+  /nix/store/lldpd05n50n2g1bh6f7pczgqcw23bbm1-bash53-017.drv
+  /nix/store/lw7n1gm9yimbrnr00h6l6pb4c9hkb6dc-bash53-009.drv
+  /nix/store/m1gq6x7srswfl66arij6spxqnrp7sdcl-bash53-006.drv
+  /nix/store/n9w1dvf9k6617mqdqj9vr74ajzpq2b3a-bash53-004.drv
+  /nix/store/p13khhb5h30l4dv1gg2zzd6i6mj3cari-bash53-016.drv
+  /nix/store/pp2iclfajlyyrq0fkka5caw9dsg7pcw6-bash53-015.drv
+  /nix/store/sd7fs8nwfvs2j30azfvf77rkx93zmvpm-bash53-019.drv
+  /nix/store/sf7cx6m8hjb2f8m0fhq0d2lwndq61xbg-bash53-005.drv
+  /nix/store/sxlbn3vjbnxp6nmbmlk2g36fsjywbbdz-bash53-010.drv
+  /nix/store/bkijx1mlrhppg2b1zandixpz9w2lxnvi-m4-1.4.21.tar.bz2.drv
+  /nix/store/h84wqsdwcgljjl2mgkm1ryq8zfzzmfab-gnum4-1.4.21.drv
+  /nix/store/akag406i2x9yrv04yz1ydq9hnh63pkks-zlib-1.3.2.tar.gz.drv
+  /nix/store/akcbg2nnq80vilxbrgq2f9pwx0c477br-zlib-1.3.2.drv
+  /nix/store/p0yc9xjrmp4xyhlghyc1y6w02wy7jlx0-perl-5.42.3.tar.gz.drv
+  /nix/store/nxrdw711ki0pfwd9jlpmqq0bg6s9k4aj-perl-5.42.3.drv
+  /nix/store/z4yavhnimf9vic30xmpsx4pmd1jlqzzn-bison-3.8.2.tar.gz.drv
+  /nix/store/vj2hry9hn5kdwmk3qx3bd48yg6hxg4s7-bison-3.8.2.drv
+  /nix/store/zryw5q50ksk9462jzx0saw0hq53zznk6-bash53-018.drv
+  /nix/store/827pdxk94rmjsmrifkxc5ghs7v1h1j3q-bash-5.3p20.drv
+  /nix/store/ak11f7jm5mvxdpvqyl61sppkjnxgm2rd-texinfo-7.3.tar.xz.drv
+  /nix/store/0877flfwaiz0v9wndc057vf0d2sw59ln-texinfo-7.3.drv
+  /nix/store/c7v973kcvhyl92kmmhsi27b63iyh4myv-krb5-1.22.2.tar.gz.drv
+  /nix/store/1c0za6f5rxl66ch0lgihniwgipfnvfm6-byacc-20260126.tgz.drv
+  /nix/store/ia3zlkpsi0amlvas1wgv5nxjhmb9zci0-byacc-20260126.drv
+  /nix/store/1nagwiygmm9qc6dym6rvyryn8vb27y6f-musl-1.2.6.drv
+  /nix/store/0ibwnm5f9q4r7j2d6v3239wgk59yn0xx-heirloom-devtools-070527.tar.bz2.drv
+  /nix/store/6c9czp98fd8gahfd13lkqhpq30ygckqm-lex_remove_wchar.patch.drv
+  /nix/store/m7qhh4k03ymh4myrj8nnanzgr2pcx5pp-yacc_remove_wchar.patch.drv
+  /nix/store/ryavgxr0jzp6fi7qp174zm46zhiig1g4-heirloom-devtools-070527-builder.drv
+  /nix/store/7lglqy7mxi4kiifwnvx7wkc2c59hc41g-heirloom-devtools-070527.drv
+  /nix/store/5d5m9686ygbq1k9831jzm3bz02khjsd2-gawk-static-get-version-5.4.1.drv
+  /nix/store/5ww1np49kjn7n5j69dxdbx5m0n0x1fpc-bzip2-static-get-version-1.0.8.drv
+  /nix/store/9j4v6b9bdsgcdfpszkivsw262g5fym3d-findutils-static-get-version-4.11.0.drv
+  /nix/store/9zyb1lvlbi6wk4i8xwzdr8f3ya60h8hi-gnupatch-static-get-version-2.8.drv
+  /nix/store/chh4xf0cp16w37rlh979vqpwql52xa4b-xz-get-version-5.8.3.drv
+  /nix/store/cxpm261pf6kp6w9dp70xx5h1f7r0wadf-gnutar-static-get-version-1.35.drv
+  /nix/store/d9r5jlaw11ijm9b2qpmvbra7n4znfams-gnumake-static-get-version-4.4.1.drv
+  /nix/store/g86p5wkdka3xknglhii14gs8gfp0ghpj-coreutils-static-get-version-9.11.drv
+  /nix/store/gj26iaiiqp37f8npsij7sc6z3z813qg9-gzip-static-get-version-1.14.drv
+  /nix/store/jpa23byag9ppmcd7m8qv6zhh8fw7pywm-gnugrep-static-get-version-3.12.drv
+  /nix/store/k4z8sin17q3985wv3091yy3yx635xjvx-gnused-static-get-version-4.10.drv
+  /nix/store/kkc5sqdbsqi3hyfia3rhm2mfzysygna9-bzip2-static-compress-1.0.8.drv
+  /nix/store/kw7dd35kllyc7fqkdzmgnwh7wq8j3gpx-binutils-static-get-version-2.46.drv
+  /nix/store/xb8wysd68na7g6fl2ir39yr6sfn0pnrp-diffutils-static-get-version-3.12.drv
+  /nix/store/y8hv31xzf3d1agm3p6rb6nr2nf40p67f-patchelf-static-get-version-0.15.2.drv
+  /nix/store/yiwpfqnlsxmm91sjh5lnqa6zvq75s3hy-bash-static-get-version-5.3.drv
+  /nix/store/ydmfmvjlq6vpvg6xf8yxlx7bg9zy2dkz-minimal-bootstrap-static-tools-test-builder.drv
+  /nix/store/4jix56wzgfpm5hfs58kq6fqsdh3g5ilg-minimal-bootstrap-static-tools-test.drv
+  /nix/store/0m73wyrh0yalanxsj5ff0a8mcf4kscgn-bootstrap-coreutils-musl-get-version-9.11.drv
+  /nix/store/wvf5rk8d8vqvwb267vm5zgw4111jy7vd-tinycc-boot-mes-get-version-unstable-2024-07-07-builder.drv
+  /nix/store/6w4n0m8zxqm57drc99dqs1bpq6sab0fl-tinycc-boot-mes-get-version-unstable-2024-07-07.drv
+  /nix/store/jf532ikv74lfhjza8md778aaq2kvp49b-tinycc-boot0-chain-unstable-2024-07-07-builder.drv
+  /nix/store/8mr8fh9jjmdhaf64mfmngkdr65gr69hh-tinycc-boot0-chain-unstable-2024-07-07.drv
+  /nix/store/w06cl4z067828f4wg00sn36mppfbcara-tinycc-boot1-chain-unstable-2024-07-07-builder.drv
+  /nix/store/ry7vw9dj4pp91xj533lsxagh8qwj1sm4-tinycc-boot1-chain-unstable-2024-07-07.drv
+  /nix/store/dgdrp6w0pckdn7cmr16z591c5jpm33ph-tinycc-boot2-chain-unstable-2024-07-07-builder.drv
+  /nix/store/pyb87pfgk2qpd1agajyw4hjvvr0g0ndv-tinycc-boot2-chain-unstable-2024-07-07.drv
+  /nix/store/v1vz4grb27h2ckmzfjacp4wpjqg7fs2h-tinycc-boot3-chain-unstable-2024-07-07-builder.drv
+  /nix/store/2ad873mx82dskmgh0jdlcdff0h60lq6l-tinycc-boot3-chain-unstable-2024-07-07.drv
+  /nix/store/5nplayq4f31y18xr7626xly0j7nzlq5k-tinycc-bootstrappable-chain-unstable-2024-07-07-builder.drv
+  /nix/store/sl45q3babcz2q18ab855p5k1h9wr0gwd-tinycc-bootstrappable-chain-unstable-2024-07-07.drv
+  /nix/store/0p1md4mw700wbkbhrabkzn10v3ai8ff7-tinycc-mes-boot-chain-unstable-2025-12-03-builder.drv
+  /nix/store/2s4s5c1471wm0vdbycvfljwiqgfq0fys-tinycc-mes-boot-chain-unstable-2025-12-03.drv
+  /nix/store/7s718y34w2zc554qmj9aq1g427ln9nps-tinycc-mes-chain-unstable-2025-12-03-builder.drv
+  /nix/store/19k3cjk973lmqfb66sbgc8q4px01nxxb-tinycc-mes-chain-unstable-2025-12-03.drv
+  /nix/store/6b25sncgdina2ymi4ymm6d2skvciw573-gawk-get-version-5.4.1.drv
+  /nix/store/6lsxx9m0cr8695n24g84lymy3m3pmbaq-tinycc-musl-simple-program-unstable-2025-12-03.drv
+  /nix/store/8418ljpbna9hwpwwnx7zdij07g6fkba6-python-get-version-3.14.6.drv
+  /nix/store/c24blv1gyzp506hb7160y5x2cvdg3cm5-gzip-get-version-1.2.4.drv
+  /nix/store/cn6lq6bh4wszxv5nl00fnxh1blygxln8-findutils-get-version-4.11.0.drv
+  /nix/store/b9bd2bl75650mdckkiqshw1bld86vn0r-heirloom-070715.tar.bz2.drv
+  /nix/store/kq2n8nnrj5qrrygdgky09hr2ywxphi81-heirloom-070715.drv
+  /nix/store/dxvxr1vinlf31dd1g667iq2r0qy183w3-heirloom-get-version-070715.drv
+  /nix/store/f86h9ylhq16kszsla5namxl3ni5nssz8-binutils-get-version-2.47.drv
+  /nix/store/g7d3ccsqxxg8sw3x9l563v6asb6h4rlv-xz-get-version-5.8.3.drv
+  /nix/store/l0rq88l43hfrdaywci9zzjglkw56gwc0-mes-get-version-0.27.1-builder.drv
+  /nix/store/h284fqqiy6psckskgzjbbsidi2054msg-mes-get-version-0.27.1.drv
+  /nix/store/hk58a4fggz3k6mpvg1n0c9ibgd1r95wc-gnugrep-get-version-2.4.drv
+  /nix/store/hw1wgvrcz2j7cnxd56bi34xr6p7pc171-diffutils-get-version-3.8.drv
+  /nix/store/idnzzjip41rz4qssfwslbnz42g9p06yk-gnumake-musl-get-version-4.4.1.drv
+  /nix/store/ipf22b982hddz53qk6wyzvdjzb83dki1-gawk-mes-get-version-3.0.6.drv
+  /nix/store/k2bkajadiy13j7mp2bg92j43vmdmndfs-bash-get-version-5.3.drv
+  /nix/store/lprf8vca79g16xjpdsy6l6riqx7dx3dg-gnused-get-version-4.2.drv
+  /nix/store/p06ml5icvyhkyg7335ggb9rwpii58rna-gnum4-get-version-1.4.21.drv
+  /nix/store/p6jpwc2h20nrhrygif0jarxfh2a8fwyg-musl-simple-program-1.2.6.drv
+  /nix/store/pv25rpfhw2qly7k5092x1fsyq06zhagg-gnused-mes-get-version-4.0.9.drv
+  /nix/store/pv8qyvza45pklmsv6xily5v8v6qiliql-gnutar-get-version-1.12.drv
+  /nix/store/qazn3jz431j8aqw3g6fnwlcq5h42ygxh-gnutar-get-version-1.35.drv
+  /nix/store/3ar6wwzw4qambgz9hiahh36h0fwldyky-bash-get-version-2.05b-builder.drv
+  /nix/store/qdd29l3wwmxnagyvbncivw5ncrx2xri6-bash-get-version-2.05b.drv
+  /nix/store/r4y22m195ynrgiavf6iw87byblqb3i5k-gnutar-musl-get-version-1.12.drv
+  /nix/store/spknrnskprlbmh93xf66ky04znb73ajg-bzip2-get-version-1.0.8.drv
+  /nix/store/zk99pvmmlb3bwkxs42p9h3c8l6mzkj7x-bison-get-version-3.8.2.drv
+  /nix/store/chqkinahlbi4ay2h6gvazkv3ymrbayvg-minimal-bootstrap-bootstrap-chain-test-builder.drv
+  /nix/store/5bnx45gjyq8ad42c2n0vvyvkwc4xsw7b-minimal-bootstrap-bootstrap-chain-test.drv
+  /nix/store/gf0n7a2fwl2mdjcrwmq0fa5m9a654kv2-gcc-cxx-simple-program-4.6.4.drv
+  /nix/store/m53m3m4w72gmf7wz30ljn1cnnr73d8j6-gcc-wrapper-simple-program-16.2.0.drv
+  /nix/store/sq3fqfbyipwqls5pai6382kdjg6i5ljv-gcc-get-version-4.6.4.drv
+  /nix/store/vjzd7i38s0crxnlaa9c8fhw71vxwn1wg-gcc-wrapper-simple-program-10.4.0.drv
+  /nix/store/ydr3rsh98pj3jxr4qdpr94gxvmi0m9cq-gcc-wrapper-simple-program-16.2.0.drv
+  /nix/store/sa7qal8r37n38nx8748jpjjfg53sq30l-minimal-bootstrap-compiler-test-builder.drv
+  /nix/store/wl6bvldch5m2g8gi99pp3in52pq6nyy4-minimal-bootstrap-compiler-test.drv
+  /nix/store/2by8a3h8brjbyzl45z845ad88j8alllj-minimal-bootstrap-test-builder.drv
+  /nix/store/bwv7ji0i5k4kcfpxpc9ldajjnf3g701v-minimal-bootstrap-test.drv
+  /nix/store/mgpyc54xhd23fx5mdzdi3lpijs810kwa-musl-1.2.6.drv
+  /nix/store/sb52aj2gjfpbzrcgi54lc3j1m7zyfr5d-expand-response-params.drv
+  /nix/store/b5q8ih19zgsh9fqa6pi36z5x9j1jiqgj-bootstrap-stage-xgcc-gcc-wrapper-16.2.0.drv
+  /nix/store/wncbwk88vm7z7srmaj2aiyp88n5k3qax-bootstrap-stage-xgcc-stdenv-linux.drv
+  /nix/store/3xhrn77b6xai3870ckb1287wm73rd82w-expand-response-params.drv
+  /nix/store/f2qrnc49fh32x6xmqy96jrvi1hzqcn5j-gnu-config-2024-01-01.drv
+  /nix/store/k477nxa7446f5slsymz06nan1h53rnvp-bootstrap-stage-xgcc-stdenv-linux-no-cc.drv
+  /nix/store/1x9y0yv4zvj8ni13qmk9pxh202aza12h-update-autotools-gnu-config-scripts-hook.drv
+  /nix/store/3ci752liyam9hf1mflp3x1by74v8mygb-bootstrap-stage2-stdenv-linux-no-cc.drv
+  /nix/store/zdbga6f8g5jysvhngmnjlwmj674bzds2-gettext-1.0.tar.gz.drv
+  /nix/store/bnj19c1xgs1949w4fsxbdvnf9hy7jwll-gettext-1.0.drv
+  /nix/store/vr93scipsw4jv37apjfhxy5nspn09y8i-binutils-with-gold-2.46.tar.bz2.drv
+  /nix/store/z7a4vwhr03zi9jwbidhni4an86z4fmxm-binutils-2.46.drv
+  /nix/store/fp05wrqx1qzywbxdzcfk8406whpq3c8p-binutils-patchelfed-ld-2.46.drv
+  /nix/store/387nb1yii77kzdl4vj2jarcqaafmqnf1-binutils-patchelfed-ld-wrapper-2.46.drv
+  /nix/store/5q6wx7hlyjh7qiyxvdkril97nr6479za-binutils-wrapper-2.46.drv
+  /nix/store/z4x4wa4ahsc6xn40j847dsrnagxd41w0-gmp-6.3.0.tar.bz2.drv
+  /nix/store/188f78i2a73hzb254nlh4ihbf59i379q-gmp-6.3.0.drv
+  /nix/store/qxz8v1gxrrw9j138k2ajl36vcajra8mb-isl-0.20.tar.xz.drv
+  /nix/store/0qab7rpag3sd466jfjp3bcmdpzxrwpj0-isl-0.20.drv
+  /nix/store/ixwy12didmgk7j4z7ghlirpw46ahmhbd-mpfr-4.2.2.tar.xz.drv
+  /nix/store/s6yc3sch4d78f7jcz2l2v3yj2v21bfrx-mpfr-4.2.2.drv
+  /nix/store/2pcm2w9nyg9dqmzb3107apwyhwn9fwy9-libmpc-1.4.1.drv
+  /nix/store/42ij1imxlz49rxyq81ikysbb56gagylk-bash-5.3p20.drv
+  /nix/store/g4c78gj44xccrmrsvjhw42akbwl1bfgq-patchelf-0.19.2.tar.bz2.drv
+  /nix/store/4lcs9a8b0laz5hymzmlwi296jkhjp96s-patchelf-0.19.2.drv
+  /nix/store/84nzjl8vrwij69lijzkyrh5ingh1wi70-nuke-refs.drv
+  /nix/store/xxhiqr9dpspczv04sx2n7g2lsqf0x8d2-which-2.25.tar.gz.drv
+  /nix/store/86bxcnjglx6mgyqqqai758pfz41254a8-which-2.25.drv
+  /nix/store/k4nw7k8a93b04zkxyl039y26yscl56d0-gcc-16.2.0.tar.xz.drv
+  /nix/store/55d91flpk4776srkw66wdx69wll7b5zr-libxcrypt-4.5.2.tar.xz.drv
+  /nix/store/xkh9xp6dxaw0i301cmx56p83i1cbvdv3-libxcrypt-4.5.2.drv
+  /nix/store/hcrp1v3m55a73xvxg9lgj7c62w88zjx6-autoconf-2.69.tar.xz.drv
+  /nix/store/yq88jwxa6cbxqig929ccyc02nbgyx1yj-autoconf-2.69.drv
+  /nix/store/yajpbk8q2hdvf7b8zkcz4vzk5fzn732b-xgcc-16.2.0.drv
+  /nix/store/p73ii2x5i75a6migvs0frg5xrgcypiv2-bootstrap-stage2-gcc-wrapper-16.2.0.drv
+  /nix/store/54f6yzqw6xpbkdw51i0yx5461lxcjlmv-bootstrap-stage2-stdenv-linux.drv
+  /nix/store/wzml5n35342i7khacfx755g84x7a57bv-expand-response-params.drv
+  /nix/store/igj3fh23nyxal216xwbhj0hsgcz31sxk-bootstrap-stage3-gcc-wrapper-16.2.0.drv
+  /nix/store/6dkvyr59p068v3zn8mlky0h6rhwf3g0j-gnu-config-2024-01-01.drv
+  /nix/store/l2j5ic7idhrm06w9xf9bb6rsc5xrfgmp-update-autotools-gnu-config-scripts-hook.drv
+  /nix/store/nkf14w0w2bk0mibh94qxkfv76k2q3fzg-patchelf-0.19.2.drv
+  /nix/store/rczfsgn0f14v509c3pnrr1yczs8cmf1d-bootstrap-stage3-stdenv-linux.drv
+  /nix/store/qjc4zrx1dl75axg20mqg7fz6anc1npg9-gmp-6.3.0.drv
+  /nix/store/qlzl9ln7a4frb4z8zjkq10dxcv5vvz1h-glibc-headers-2.44.drv
+  /nix/store/vvpr99sq55csykmgpsihqczi68q4g2xc-zlib-1.3.2.drv
+  /nix/store/b4ha4ngqpf6jwdxzcpwpbc7528ra0sdb-gnu-config-2024-01-01.drv
+  /nix/store/hh7mzrx3qnbglqmyjrqwdywjx6pk0zlf-bootstrap-stage3-stdenv-linux-no-cc.drv
+  /nix/store/6j82vw2qvaqkyg2q1rv9840x18361xfi-update-autotools-gnu-config-scripts-hook.drv
+  /nix/store/yqrqb20pzyrxyc952zyn4h3ancfbzm88-mpfr-4.2.2.drv
+  /nix/store/hgp66qvx5ahdc9ss59j9b491jp8vcd17-bash-5.3p20.drv
+  /nix/store/kxpc7i6cvgf7z4mz0synw96k5sz7x4my-texinfo-7.3.drv
+  /nix/store/zjjjxy6c4kkiaby9g8gq28dmlqzf5fx4-gettext-1.0.drv
+  /nix/store/zwiwmjr7hfk6vh8lhyg01g5mdyk2wl9i-gcc-16.2.0.drv
+  /nix/store/jrjq3n2gpgq6sn07iiymh8ivf19ahncm-stdenv-linux-no-cc.drv
+  /nix/store/11y0cvyql3dvh9p9vfx9rmxlgwh8f1sv-add-flags.sh.drv
+  /nix/store/4afhhcsywh89hqvwxzhcnpg2rpfzbrzy-pkgs-config-setup-hook.drv
+  /nix/store/2x4aa8vfj3fl1frwxrlsi5jjf0c6xq2f-glibc-iconv-2.44.drv
+  /nix/store/6b29gjz7rj4mw0ch0vy2m6qrqipz2bbb-pkg-config-0.29.2.tar.gz.drv
+  /nix/store/4g2fy4w8qmgyav1rkw1hs43nzbik9851-pkg-config-0.29.2.drv
+  /nix/store/gvyn6gs5f81h4fvf7ffjxgz0751pcz7v-expand-response-params.drv
+  /nix/store/5ifjvl339v99fmg9bs75c20m4sha965c-utils.bash.drv
+  /nix/store/vcs2fww8llbbdgjq0m8sbzzkv18zzbq3-pkg-config-role-hook.drv
+  /nix/store/k9aksxjgnqvaj3bhsbdszcakrh94x2gf-pkg-config-wrapper-0.29.2.drv
+  /nix/store/ckg9rqwz2nc3lg09y5m583rzn0izphg2-keyutils-1.6.3.tar.gz.drv
+  /nix/store/dhjhlihqj08f3fs1cvsja0fims0dqnlw-raw.drv
+  /nix/store/m1k9avd8mzah6hxkqa9c2y188yv7jrj2-keyutils-1.6.3.drv
+  /nix/store/29d9dpi20ybsh2f575cxjc5427llx7x0-xz-5.8.4.tar.xz.drv
+  /nix/store/6bfh3gzlilb7wkgs41adqmsdpnidwvla-xz-5.8.4.drv
+  /nix/store/xgiqkxkxvz7hzv7cna4m9jb7blzarqsr-bootstrap-stage4-gcc-wrapper-16.2.0.drv
+  /nix/store/db28d9xz3si3j1c64xj7mcklfgg4z2jv-bootstrap-stage4-stdenv-linux.drv
+  /nix/store/fyj9g78q68hsvmz6prmifspqf74fplbn-coreutils-9.12.tar.xz.drv
+  /nix/store/8ix529crgmjc84hwr161fv06k1hv1bag-coreutils-9.12.drv
+  /nix/store/ljkz7314ds39jd5xpsav5z7l4ivm462q-openssl-3.5.9.tar.gz.drv
+  /nix/store/88y262qf1nk185gxqy6wcxdmsi0ywp1r-die-hook.drv
+  /nix/store/vg2yqik90dgl8dvyx73c07bi5pf9kz0r-make-binary-wrapper-hook.drv
+  /nix/store/mflvd0aal135x2bf2ddnvd4v2j1rp6ay-openssl-3.5.9.drv
+  /nix/store/0fibbm1c9k86d3j64xx1fwlykn399szc-krb5-1.22.2.drv
+  /nix/store/0i3qixpwn0qsbpmz6p415lk2qq6s639l-CVE-2026-55200.patch.drv
+  /nix/store/1j374gfxc0lslhnzzfaqpgf2i797ny9g-CVE-2026-66032.patch.drv
+  /nix/store/3im1j8lp9aqr9p2gx1y13wam9vjcv6qf-CVE-2026-66035.patch.drv
+  /nix/store/5drjfmp7pvlwfjn14kplw0nm0bwrl0m1-CVE-2026-66033.patch.drv
+  /nix/store/5v3vah4fpxm2jsyg3m93361s7m4y6c3s-CVE-2026-66034.patch.drv
+  /nix/store/aiqx6v0q66r8c6z138a62si4az8dd3nd-CVE-2026-58050.patch.drv
+  /nix/store/kadl3n1d1bx6dbdwh04r0x2lhn2w3d13-libssh-unconst-backport.patch.drv
+  /nix/store/l4q7jsk9n0ys3qb31zafgzwakpwq0360-libssh2-1.11.1.tar.gz.drv
+  /nix/store/my92mgwgr8dsjnawgb0xrw6zfpsh5yc3-CVE-2026-58051.patch.drv
+  /nix/store/r4y38sp3418wjshi369yqb4vsaligr35-CVE-2025-15661.patch.drv
+  /nix/store/zkahlx2yk2sdlfmcf3pjn62vzw91zy3b-CVE-2026-55199.patch.drv
+  /nix/store/b7qgbvq9wnwgb2yyv1sqypl7md2gy99s-libssh2-1.11.1.drv
+  /nix/store/h6xri8klv1r71p2a5ycd3xn0xvmx9pxl-nghttp2-1.70.0.tar.bz2.drv
+  /nix/store/gbdp4s3s27lb2yjlps7a2g0816zhp6z8-nghttp2-1.70.0.drv
+  /nix/store/r1rqs4aiyjmf29w7d6nqpc7a2d4il2c0-curl-8.22.0.tar.xz.drv
+  /nix/store/4aindnhiwrbms5xnslk5gaagp047xpy0-curl-8.22.0.drv
+  /nix/store/32xjpr1v9z3w1mdlm7qfmmqs6l3j1q22-config.guess-948ae97.drv
+  /nix/store/ri1nchc97cxgdpss4fym5pw4qsax9xi2-config.sub-948ae97.drv
+  /nix/store/3ags5hg3sq832870m2f2kqr9lv0jbrd1-gnu-config-2024-01-01.drv
+  /nix/store/115s3aa76a4j1k2kfqb21vwyri4s0fdr-update-autotools-gnu-config-scripts-hook.drv
+  /nix/store/nqr7ad9b4kbgmn5g1jyp88l86lpyk4dl-lndir-1.0.6.tar.xz.drv
+  /nix/store/xv4p4fplqzfppacl331jl2sv41q8945j-lndir-1.0.6.drv
+  /nix/store/vfz0cq6lqj3cgw3rypb3m2d7zanzbgpv-arkhe-0.1.0.drv
+building '/nix/store/2s5wx49znk1dfrm4j3vi5hdwbibyqmb3-Python-3.14.6.tar.xz.drv'...
+building '/nix/store/r4y38sp3418wjshi369yqb4vsaligr35-CVE-2025-15661.patch.drv'...
+building '/nix/store/zkahlx2yk2sdlfmcf3pjn62vzw91zy3b-CVE-2026-55199.patch.drv'...
+building '/nix/store/0i3qixpwn0qsbpmz6p415lk2qq6s639l-CVE-2026-55200.patch.drv'...
+building '/nix/store/aiqx6v0q66r8c6z138a62si4az8dd3nd-CVE-2026-58050.patch.drv'...
+building '/nix/store/my92mgwgr8dsjnawgb0xrw6zfpsh5yc3-CVE-2026-58051.patch.drv'...
+building '/nix/store/1j374gfxc0lslhnzzfaqpgf2i797ny9g-CVE-2026-66032.patch.drv'...
+building '/nix/store/5drjfmp7pvlwfjn14kplw0nm0bwrl0m1-CVE-2026-66033.patch.drv'...
+building '/nix/store/5v3vah4fpxm2jsyg3m93361s7m4y6c3s-CVE-2026-66034.patch.drv'...
+building '/nix/store/3im1j8lp9aqr9p2gx1y13wam9vjcv6qf-CVE-2026-66035.patch.drv'...
+building '/nix/store/hcrp1v3m55a73xvxg9lgj7c62w88zjx6-autoconf-2.69.tar.xz.drv'...
+building '/nix/store/rivkjf3vnb267xl9xpjwj8wyzis4y0hs-bash-2.05b.tar.gz.drv'...
+building '/nix/store/avf6vbj4jmpnn5cdsjyj2693samnvqsa-bash53-001.drv'...
+building '/nix/store/ii3jsqp9rrwv0g21lwbvb94ddg8c5m7n-bash53-002.drv'...
+building '/nix/store/5m6vm7vkilsgas517yf8f321k5r3g1m3-bash53-003.drv'...
+building '/nix/store/n9w1dvf9k6617mqdqj9vr74ajzpq2b3a-bash53-004.drv'...
+building '/nix/store/sf7cx6m8hjb2f8m0fhq0d2lwndq61xbg-bash53-005.drv'...
+building '/nix/store/m1gq6x7srswfl66arij6spxqnrp7sdcl-bash53-006.drv'...
+building '/nix/store/avmqlilnsjmv8lg7442mjb21qx981d2j-bash53-007.drv'...
+building '/nix/store/gz9irkx06fl1lavrwxkghxnmlm4h5fgh-bash53-008.drv'...
+building '/nix/store/lw7n1gm9yimbrnr00h6l6pb4c9hkb6dc-bash53-009.drv'...
+building '/nix/store/sxlbn3vjbnxp6nmbmlk2g36fsjywbbdz-bash53-010.drv'...
+building '/nix/store/g908mibpivcgjvswrlcdcrwsqc2sz9h9-bash53-011.drv'...
+building '/nix/store/gz4h4m6qy9fydbc3hn9y9bi8z8k71sav-bash53-012.drv'...
+building '/nix/store/6s1mm4ahy4k9yfmlqpykmn0l68akv1s8-bash53-013.drv'...
+building '/nix/store/blms51zrxh2kpwnq7cipavjyjnk29s2l-bash53-014.drv'...
+building '/nix/store/pp2iclfajlyyrq0fkka5caw9dsg7pcw6-bash53-015.drv'...
+building '/nix/store/p13khhb5h30l4dv1gg2zzd6i6mj3cari-bash53-016.drv'...
+building '/nix/store/lldpd05n50n2g1bh6f7pczgqcw23bbm1-bash53-017.drv'...
+building '/nix/store/zryw5q50ksk9462jzx0saw0hq53zznk6-bash53-018.drv'...
+building '/nix/store/sd7fs8nwfvs2j30azfvf77rkx93zmvpm-bash53-019.drv'...
+building '/nix/store/09j3q6r4n42c63d87bi1dr87r7bdzwjg-bash53-020.drv'...
+building '/nix/store/cblshqv4b81g5gxis3zpb4inagkaffi1-binutils-2.46.0.tar.xz.drv'...
+building '/nix/store/kxh2m956988rmzxrm8kcgddd8l1l755c-binutils-2.47.tar.xz.drv'...
+building '/nix/store/vr93scipsw4jv37apjfhxy5nspn09y8i-binutils-with-gold-2.46.tar.bz2.drv'...
+building '/nix/store/z4yavhnimf9vic30xmpsx4pmd1jlqzzn-bison-3.8.2.tar.gz.drv'...
+building '/nix/store/0p6bbqs599hggq6xvxn67x91pxszgqil-bison-3.8.2.tar.xz.drv'...
+building '/nix/store/gfjavirn9zvghj3r86wbbpkhw9xpipzi-builtins.mk.drv'...
+building '/nix/store/1c0za6f5rxl66ch0lgihniwgipfnvfm6-byacc-20260126.tgz.drv'...
+building '/nix/store/19vlv640sa5fr6cpnr14s166v9vd2p9m-bzip2-1.0.8.tar.gz.drv'...
+building '/nix/store/ia3zlkpsi0amlvas1wgv5nxjhmb9zci0-byacc-20260126.drv'...
+byacc> structuredAttrs is enabled
+byacc> Running phase: unpackPhase
+byacc> unpacking source archive /nix/store/rjf7864yrw8d9csm3kvfzxgc0ccl8c9j-byacc-20260126.tgz
+byacc> source root is byacc-20260126
+byacc> setting SOURCE_DATE_EPOCH to timestamp 1769277216 of file "byacc-20260126/test/expr.oxout.h"
+byacc> Running phase: patchPhase
+byacc> Running phase: updateAutotoolsGnuConfigScriptsPhase
+byacc> Updating Autotools / GNU config script to a newer upstream version: ./config.sub
+byacc> Updating Autotools / GNU config script to a newer upstream version: ./config.guess
+byacc> Running phase: configurePhase
+byacc> patching script interpreter paths in ./configure
+byacc> ./configure: interpreter directive changed from "#! /bin/sh" to "/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20/bin/sh"
+byacc> configure flags: --prefix=/nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126 --program-transform-name=\'s\,\^\,b\,\'
+byacc> checking build system type... x86_64-pc-linux-gnu
+byacc> checking host system type... x86_64-pc-linux-gnu
+byacc> checking target system type... x86_64-pc-linux-gnu
+byacc> Configuring for linux-gnu
+byacc> checking for gcc... gcc
+byacc> checking for C compiler default output... a.out
+byacc> checking whether the C compiler works... yes
+byacc> checking whether we are cross compiling... no
+byacc> checking for executable suffix...
+byacc> checking for object suffix... o
+byacc> checking whether we are using the GNU C compiler... yes
+byacc> checking whether gcc accepts -g... yes
+byacc> checking version of gcc... 16.2.0
+byacc> checking if this is really Intel C compiler... no
+byacc> checking if this is really Clang C compiler... no
+byacc> checking for gcc option to accept ANSI C... none needed
+byacc> checking $CFLAGS variable... ok
+byacc> checking $CC variable... ok
+byacc> checking whether make sets ${MAKE}... yes
+byacc> (cached) Configuring for linux-gnu
+byacc> checking for a BSD compatible install... /nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin/install -c
+byacc> checking if filesystem supports mixed-case filenames... yes
+byacc> checking for exctags... no
+byacc> checking for ctags... no
+byacc> checking for exetags... no
+byacc> checking for etags... no
+byacc> checking for ctags... no
+byacc> checking for etags... no
+byacc> checking for mawk... no
+byacc> checking for gawk... gawk
+byacc> checking for lint... no
+byacc> checking for cppcheck... no
+byacc> checking for splint... no
+byacc> checking if the POSIX test-macros are already defined... no
+byacc> checking if this is the GNU C library... yes
+byacc> checking if _DEFAULT_SOURCE can be used as a basis... yes
+byacc> checking if _XOPEN_SOURCE=500 works with _DEFAULT_SOURCE... yes
+byacc> checking if _XOPEN_SOURCE really is set... yes
+byacc> checking for ggrep... no
+byacc> checking for grep... grep
+byacc> checking for egrep... grep -E
+byacc> checking how to run the C preprocessor... gcc -E
+byacc> checking for ANSI C header files... yes
+byacc> checking for sys/types.h... yes
+byacc> checking for sys/stat.h... yes
+byacc> checking for stdlib.h... yes
+byacc> checking for string.h... yes
+byacc> checking for memory.h... yes
+byacc> checking for strings.h... yes
+byacc> checking for inttypes.h... yes
+byacc> checking for stdint.h... yes
+byacc> checking for unistd.h... yes
+byacc> checking whether exit is declared... yes
+byacc> checking for fcntl.h... yes
+byacc> checking for unistd.h... (cached) yes
+byacc> checking for working mkstemp... yes
+byacc> checking for getopt.h... yes
+byacc> checking for header declaring getopt variables... unistd.h
+byacc> checking for getopt... yes
+byacc> checking for vsnprintf... yes
+byacc> checking for maximum table size... default
+byacc> checking if backtracking extension is wanted... yes
+byacc> checking for fgrep... grep -F
+byacc> checking if you want to use C11 _Noreturn feature... no
+byacc> checking if you want to turn on gcc warnings... no
+byacc> checking for gcc __attribute__ directives...
+byacc> ... scanf
+byacc> ... printf
+byacc> ... unused
+byacc> ... noreturn
+byacc> checking if you want to see long compiling messages... yes
+byacc> checking if you want to use dmalloc for testing... no
+byacc> checking if you want to use dbmalloc for testing... no
+byacc> checking if you want to use valgrind for testing... no
+byacc> checking if you want to perform memory-leak testing... no
+byacc> checking for PATH separator... :
+byacc> checking format of man pages... normal
+byacc> checking whether ln -s works... yes
+byacc> configure: creating install-man.in
+byacc> checking for groff... no
+byacc> checking for nroff... no
+byacc> checking for mandoc... no
+byacc> checking for tbl... cat
+byacc> checking for man2html... no
+byacc> checking for program to convert manpage to html... no
+byacc> checking for mode_t... yes
+byacc> configure: creating ./config.status
+byacc> config.status: creating install-man
+byacc> config.status: creating makefile
+byacc> config.status: creating config.h
+byacc> Running phase: buildPhase
+byacc> build flags: SHELL=/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20/bin/bash
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  closure.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  error.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  graph.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  lalr.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  lr0.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  main.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  mkpar.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  mstring.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  output.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  reader.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  btyaccpar.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  symtab.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  verbose.c
+byacc> gcc -c -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  warshall.c
+byacc> gcc  -g -O2 -I. -I.  -DHAVE_CONFIG_H -DYYPATCH=`cat ./VERSION` -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=500  -o yacc closure.o error.o graph.o lalr.o lr0.o main.o mkpar.o mstring.o output.o reader.o btyaccpar.o symtab.o verbose.o warshall.o
+byacc> Running phase: checkPhase
+byacc> check flags: SHELL=/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20/bin/bash VERBOSE=y check
+byacc> ** making check
+byacc> ** Thu Oct 29 16:15:19 UTC 2026
+byacc> ** testing flags help -z
+byacc> ...ok ./test/btyacc/help.output
+byacc> ...ok ./test/btyacc/help.error
+byacc> ** testing flags big_b -B
+byacc> ...ok ./test/btyacc/big_b.output
+byacc> ...ok ./test/btyacc/big_b.error
+byacc> ** testing flags big_l -L
+byacc> ...ok ./test/btyacc/big_l.output
+byacc> ...ok ./test/btyacc/big_l.error
+byacc> ** testing flags nostdin - nosuchfile.y
+byacc> ...ok ./test/btyacc/nostdin.output
+byacc> ...ok ./test/btyacc/nostdin.error
+byacc> ** testing flags no_opts -- nosuchfile.y
+byacc> ...ok ./test/btyacc/no_opts.output
+byacc> ...ok ./test/btyacc/no_opts.error
+byacc> ** testing flags no_b_opt -b
+byacc> ...ok ./test/btyacc/no_b_opt.output
+byacc> ...ok ./test/btyacc/no_b_opt.error
+byacc> ** testing flags no_b_opt1 -bBASE -o nosuchfile.c nosuchfile.y
+byacc> ...ok ./test/btyacc/no_b_opt1.output
+byacc> ...ok ./test/btyacc/no_b_opt1.error
+byacc> ** testing flags no_p_opt -p
+byacc> ...ok ./test/btyacc/no_p_opt.output
+byacc> ...ok ./test/btyacc/no_p_opt.error
+byacc> ** testing flags no_p_opt1 -pBASE -o nosuchfile.c nosuchfile.y
+byacc> ...ok ./test/btyacc/no_p_opt1.output
+byacc> ...ok ./test/btyacc/no_p_opt1.error
+byacc> ** testing flags no_graph -g -o nosuchfile.c nosuchfile.y
+byacc> ...ok ./test/btyacc/no_graph.output
+byacc> ...ok ./test/btyacc/no_graph.error
+byacc> ** testing flags no_verbose -v -o nosuchfile.c nosuchfile.y
+byacc> ...ok ./test/btyacc/no_verbose.output
+byacc> ...ok ./test/btyacc/no_verbose.error
+byacc> ** testing flags no_output -o nosuchfile.output nosuchfile.y
+byacc> ...ok ./test/btyacc/no_output.output
+byacc> ...ok ./test/btyacc/no_output.error
+byacc> ** testing flags no_output1 -onosuchfile.output nosuchfile.y
+byacc> ...ok ./test/btyacc/no_output1.output
+byacc> ...ok ./test/btyacc/no_output1.error
+byacc> ** testing flags no_output2 -o
+byacc> ...ok ./test/btyacc/no_output2.output
+byacc> ...ok ./test/btyacc/no_output2.error
+byacc> ** testing flags no_defines -d -o nosuchfile.c nosuchfile.y
+byacc> ...ok ./test/btyacc/no_defines.output
+byacc> ...ok ./test/btyacc/no_defines.error
+byacc> ** testing flags no_include -i -o nosuchfile.c nosuchfile.y
+byacc> ...ok ./test/btyacc/no_include.output
+byacc> ...ok ./test/btyacc/no_include.error
+byacc> ** testing flags no_code_c -r -o nosuchfile.c nosuchfile.y
+byacc> ...ok ./test/btyacc/no_code_c.output
+byacc> ...ok ./test/btyacc/no_code_c.error
+byacc> ** testing stdin stdin1 - ./test/calc.y
+byacc> ...ok ./test/btyacc/stdin1.output
+byacc> ...ok ./test/btyacc/stdin1.error
+byacc> ...ok ./test/btyacc/stdin1.calc.c
+byacc> ** testing stdin stdin2 -- ./test/calc.y
+byacc> ...ok ./test/btyacc/stdin2.output
+byacc> ...ok ./test/btyacc/stdin2.error
+byacc> ...ok ./test/btyacc/stdin2.calc.c
+byacc> ** testing defines defines1 ./test/calc.y
+byacc> ...ok ./test/btyacc/defines1.output
+byacc> ...ok ./test/btyacc/defines1.error
+byacc> ...ok ./test/btyacc/defines1.calc.h
+byacc> ...ok ./test/btyacc/defines1.calc.c
+byacc> ** testing defines defines2 -d ./test/calc.y
+byacc> ...ok ./test/btyacc/defines2.output
+byacc> ...ok ./test/btyacc/defines2.error
+byacc> ...ok ./test/btyacc/defines2.calc.h
+byacc> ...ok ./test/btyacc/defines2.calc.c
+byacc> ** testing defines defines3 -b prefix ./test/calc.y
+byacc> ...ok ./test/btyacc/defines3.output
+byacc> ...ok ./test/btyacc/defines3.error
+byacc> ...ok ./test/btyacc/defines3.calc.h
+byacc> ...ok ./test/btyacc/defines3.calc.c
+byacc> ** testing ./test/btyacc_calc1.y
+byacc> ...ok ./test/btyacc/btyacc_calc1.error
+byacc> ...ok ./test/btyacc/btyacc_calc1.output
+byacc> ...ok ./test/btyacc/btyacc_calc1.tab.c
+byacc> ...ok ./test/btyacc/btyacc_calc1.tab.h
+byacc> ** testing ./test/btyacc_demo.y
+byacc> ...ok ./test/btyacc/btyacc_demo.error
+byacc> ...ok ./test/btyacc/btyacc_demo.output
+byacc> ...ok ./test/btyacc/btyacc_demo.tab.c
+byacc> ...ok ./test/btyacc/btyacc_demo.tab.h
+byacc> ** testing ./test/btyacc_destroy1.y
+byacc> ...ok ./test/btyacc/btyacc_destroy1.error
+byacc> ...ok ./test/btyacc/btyacc_destroy1.output
+byacc> ...ok ./test/btyacc/btyacc_destroy1.tab.c
+byacc> ...ok ./test/btyacc/btyacc_destroy1.tab.h
+byacc> ** testing ./test/btyacc_destroy2.y
+byacc> ...ok ./test/btyacc/btyacc_destroy2.error
+byacc> ...ok ./test/btyacc/btyacc_destroy2.output
+byacc> ...ok ./test/btyacc/btyacc_destroy2.tab.c
+byacc> ...ok ./test/btyacc/btyacc_destroy2.tab.h
+byacc> ** testing ./test/btyacc_destroy3.y
+byacc> ...ok ./test/btyacc/btyacc_destroy3.error
+byacc> ...ok ./test/btyacc/btyacc_destroy3.output
+byacc> ...ok ./test/btyacc/btyacc_destroy3.tab.c
+byacc> ...ok ./test/btyacc/btyacc_destroy3.tab.h
+byacc> ** testing ./test/calc.y
+byacc> ...ok ./test/btyacc/calc.error
+byacc> ...ok ./test/btyacc/calc.output
+byacc> ...ok ./test/btyacc/calc.tab.c
+byacc> ...ok ./test/btyacc/calc.tab.h
+byacc> ** testing ./test/calc1.y
+byacc> ...ok ./test/btyacc/calc1.error
+byacc> ...ok ./test/btyacc/calc1.output
+byacc> ...ok ./test/btyacc/calc1.tab.c
+byacc> ...ok ./test/btyacc/calc1.tab.h
+byacc> ** testing ./test/calc2.y
+byacc> ...ok ./test/btyacc/calc2.error
+byacc> ...ok ./test/btyacc/calc2.output
+byacc> ...ok ./test/btyacc/calc2.tab.c
+byacc> ...ok ./test/btyacc/calc2.tab.h
+byacc> ** testing ./test/calc3.y
+byacc> ...ok ./test/btyacc/calc3.error
+byacc> ...ok ./test/btyacc/calc3.output
+byacc> ...ok ./test/btyacc/calc3.tab.c
+byacc> ...ok ./test/btyacc/calc3.tab.h
+byacc> ** testing ./test/calc_code_all.y
+byacc> ...ok ./test/btyacc/calc_code_all.error
+byacc> ...ok ./test/btyacc/calc_code_all.output
+byacc> ...ok ./test/btyacc/calc_code_all.tab.c
+byacc> ...ok ./test/btyacc/calc_code_all.tab.h
+byacc> ** testing ./test/calc_code_default.y
+byacc> ...ok ./test/btyacc/calc_code_default.error
+byacc> ...ok ./test/btyacc/calc_code_default.output
+byacc> ...ok ./test/btyacc/calc_code_default.tab.c
+byacc> ...ok ./test/btyacc/calc_code_default.tab.h
+byacc> ** testing ./test/calc_code_imports.y
+byacc> ...ok ./test/btyacc/calc_code_imports.error
+byacc> ...ok ./test/btyacc/calc_code_imports.output
+byacc> ...ok ./test/btyacc/calc_code_imports.tab.c
+byacc> ...ok ./test/btyacc/calc_code_imports.tab.h
+byacc> ** testing ./test/calc_code_provides.y
+byacc> ...ok ./test/btyacc/calc_code_provides.error
+byacc> ...ok ./test/btyacc/calc_code_provides.output
+byacc> ...ok ./test/btyacc/calc_code_provides.tab.c
+byacc> ...ok ./test/btyacc/calc_code_provides.tab.h
+byacc> ** testing ./test/calc_code_requires.y
+byacc> ...ok ./test/btyacc/calc_code_requires.error
+byacc> ...ok ./test/btyacc/calc_code_requires.output
+byacc> ...ok ./test/btyacc/calc_code_requires.tab.c
+byacc> ...ok ./test/btyacc/calc_code_requires.tab.h
+byacc> ** testing ./test/calc_code_top.y
+byacc> ...ok ./test/btyacc/calc_code_top.error
+byacc> ...ok ./test/btyacc/calc_code_top.output
+byacc> ...ok ./test/btyacc/calc_code_top.tab.c
+byacc> ...ok ./test/btyacc/calc_code_top.tab.h
+byacc> ** testing ./test/code_calc.y
+byacc> ...ok ./test/btyacc/code_calc.error
+byacc> ...ok ./test/btyacc/code_calc.output
+byacc> ...ok ./test/btyacc/code_calc.tab.c
+byacc> ...ok ./test/btyacc/code_calc.tab.h
+byacc> ...ok ./test/btyacc/code_calc.code.c
+byacc> ** testing ./test/code_debug.y
+byacc> ...ok ./test/btyacc/rename_debug.error
+byacc> ...ok ./test/btyacc/rename_debug.output
+byacc> ...ok ./test/btyacc/rename_debug.c
+byacc> ...ok ./test/btyacc/rename_debug.h
+byacc> ...ok ./test/btyacc/rename_debug.i
+byacc> ** testing ./test/code_error.y
+byacc> ...ok ./test/btyacc/code_error.error
+byacc> ...ok ./test/btyacc/code_error.output
+byacc> ...ok ./test/btyacc/code_error.tab.c
+byacc> ...ok ./test/btyacc/code_error.tab.h
+byacc> ...ok ./test/btyacc/code_error.code.c
+byacc> ** testing ./test/empty.y
+byacc> ...ok ./test/btyacc/empty.error
+byacc> ...ok ./test/btyacc/empty.output
+byacc> ...ok ./test/btyacc/empty.tab.c
+byacc> ...ok ./test/btyacc/empty.tab.h
+byacc> ** testing ./test/err_inherit1.y
+byacc> ...ok ./test/btyacc/err_inherit1.error
+byacc> ...ok ./test/btyacc/err_inherit1.output
+byacc> ...ok ./test/btyacc/err_inherit1.tab.c
+byacc> ...ok ./test/btyacc/err_inherit1.tab.h
+byacc> ** testing ./test/err_inherit2.y
+byacc> ...ok ./test/btyacc/err_inherit2.error
+byacc> ...ok ./test/btyacc/err_inherit2.output
+byacc> ...ok ./test/btyacc/err_inherit2.tab.c
+byacc> ...ok ./test/btyacc/err_inherit2.tab.h
+byacc> ** testing ./test/err_inherit3.y
+byacc> ...ok ./test/btyacc/err_inherit3.error
+byacc> ...ok ./test/btyacc/err_inherit3.output
+byacc> ...ok ./test/btyacc/err_inherit3.tab.c
+byacc> ...ok ./test/btyacc/err_inherit3.tab.h
+byacc> ** testing ./test/err_inherit4.y
+byacc> ...ok ./test/btyacc/err_inherit4.error
+byacc> ...ok ./test/btyacc/err_inherit4.output
+byacc> ...ok ./test/btyacc/err_inherit4.tab.c
+byacc> ...ok ./test/btyacc/err_inherit4.tab.h
+byacc> ** testing ./test/err_inherit5.y
+byacc> ...ok ./test/btyacc/err_inherit5.error
+byacc> ...ok ./test/btyacc/err_inherit5.output
+byacc> ...ok ./test/btyacc/err_inherit5.tab.c
+byacc> ...ok ./test/btyacc/err_inherit5.tab.h
+byacc> ** testing ./test/err_syntax1.y
+byacc> ...ok ./test/btyacc/err_syntax1.error
+byacc> ...ok ./test/btyacc/err_syntax1.output
+byacc> ...ok ./test/btyacc/err_syntax1.tab.c
+byacc> ...ok ./test/btyacc/err_syntax1.tab.h
+byacc> ** testing ./test/err_syntax10.y
+byacc> ...ok ./test/btyacc/err_syntax10.error
+byacc> ...ok ./test/btyacc/err_syntax10.output
+byacc> ...ok ./test/btyacc/err_syntax10.tab.c
+byacc> ...ok ./test/btyacc/err_syntax10.tab.h
+byacc> ** testing ./test/err_syntax11.y
+byacc> ...ok ./test/btyacc/err_syntax11.error
+byacc> ...ok ./test/btyacc/err_syntax11.output
+byacc> ...ok ./test/btyacc/err_syntax11.tab.c
+byacc> ...ok ./test/btyacc/err_syntax11.tab.h
+byacc> ** testing ./test/err_syntax12.y
+byacc> ...ok ./test/btyacc/err_syntax12.error
+byacc> ...ok ./test/btyacc/err_syntax12.output
+byacc> ...ok ./test/btyacc/err_syntax12.tab.c
+byacc> ...ok ./test/btyacc/err_syntax12.tab.h
+byacc> ** testing ./test/err_syntax13.y
+byacc> ...ok ./test/btyacc/err_syntax13.error
+byacc> ...ok ./test/btyacc/err_syntax13.output
+byacc> ...ok ./test/btyacc/err_syntax13.tab.c
+byacc> ...ok ./test/btyacc/err_syntax13.tab.h
+byacc> ** testing ./test/err_syntax14.y
+byacc> ...ok ./test/btyacc/err_syntax14.error
+byacc> ...ok ./test/btyacc/err_syntax14.output
+byacc> ...ok ./test/btyacc/err_syntax14.tab.c
+byacc> ...ok ./test/btyacc/err_syntax14.tab.h
+byacc> ** testing ./test/err_syntax15.y
+byacc> ...ok ./test/btyacc/err_syntax15.error
+byacc> ...ok ./test/btyacc/err_syntax15.output
+byacc> ...ok ./test/btyacc/err_syntax15.tab.c
+byacc> ...ok ./test/btyacc/err_syntax15.tab.h
+byacc> ** testing ./test/err_syntax16.y
+byacc> ...ok ./test/btyacc/err_syntax16.error
+byacc> ...ok ./test/btyacc/err_syntax16.output
+byacc> ...ok ./test/btyacc/err_syntax16.tab.c
+byacc> ...ok ./test/btyacc/err_syntax16.tab.h
+byacc> ** testing ./test/err_syntax17.y
+byacc> ...ok ./test/btyacc/err_syntax17.error
+byacc> ...ok ./test/btyacc/err_syntax17.output
+byacc> ...ok ./test/btyacc/err_syntax17.tab.c
+byacc> ...ok ./test/btyacc/err_syntax17.tab.h
+byacc> ** testing ./test/err_syntax18.y
+byacc> ...ok ./test/btyacc/err_syntax18.error
+byacc> ...ok ./test/btyacc/err_syntax18.output
+byacc> ...ok ./test/btyacc/err_syntax18.tab.c
+byacc> ...ok ./test/btyacc/err_syntax18.tab.h
+byacc> ** testing ./test/err_syntax19.y
+byacc> ...ok ./test/btyacc/err_syntax19.error
+byacc> ...ok ./test/btyacc/err_syntax19.output
+byacc> ...ok ./test/btyacc/err_syntax19.tab.c
+byacc> ...ok ./test/btyacc/err_syntax19.tab.h
+byacc> ** testing ./test/err_syntax2.y
+byacc> ...ok ./test/btyacc/err_syntax2.error
+byacc> ...ok ./test/btyacc/err_syntax2.output
+byacc> ...ok ./test/btyacc/err_syntax2.tab.c
+byacc> ...ok ./test/btyacc/err_syntax2.tab.h
+byacc> ** testing ./test/err_syntax20.y
+byacc> ...ok ./test/btyacc/err_syntax20.error
+byacc> ...ok ./test/btyacc/err_syntax20.output
+byacc> ...ok ./test/btyacc/err_syntax20.tab.c
+byacc> ...ok ./test/btyacc/err_syntax20.tab.h
+byacc> ** testing ./test/err_syntax21.y
+byacc> ...ok ./test/btyacc/err_syntax21.error
+byacc> ...ok ./test/btyacc/err_syntax21.output
+byacc> ...ok ./test/btyacc/err_syntax21.tab.c
+byacc> ...ok ./test/btyacc/err_syntax21.tab.h
+byacc> ** testing ./test/err_syntax22.y
+byacc> ...ok ./test/btyacc/err_syntax22.error
+byacc> ...ok ./test/btyacc/err_syntax22.output
+byacc> ...ok ./test/btyacc/err_syntax22.tab.c
+byacc> ...ok ./test/btyacc/err_syntax22.tab.h
+byacc> ** testing ./test/err_syntax23.y
+byacc> ...ok ./test/btyacc/err_syntax23.error
+byacc> ...ok ./test/btyacc/err_syntax23.output
+byacc> ...ok ./test/btyacc/err_syntax23.tab.c
+byacc> ...ok ./test/btyacc/err_syntax23.tab.h
+byacc> ** testing ./test/err_syntax24.y
+byacc> ...ok ./test/btyacc/err_syntax24.error
+byacc> ...ok ./test/btyacc/err_syntax24.output
+byacc> ...ok ./test/btyacc/err_syntax24.tab.c
+byacc> ...ok ./test/btyacc/err_syntax24.tab.h
+byacc> ** testing ./test/err_syntax25.y
+byacc> ...ok ./test/btyacc/err_syntax25.error
+byacc> ...ok ./test/btyacc/err_syntax25.output
+byacc> ...ok ./test/btyacc/err_syntax25.tab.c
+byacc> ...ok ./test/btyacc/err_syntax25.tab.h
+byacc> ** testing ./test/err_syntax26.y
+byacc> ...ok ./test/btyacc/err_syntax26.error
+byacc> ...ok ./test/btyacc/err_syntax26.output
+byacc> ...ok ./test/btyacc/err_syntax26.tab.c
+byacc> ...ok ./test/btyacc/err_syntax26.tab.h
+byacc> ** testing ./test/err_syntax27.y
+byacc> ...ok ./test/btyacc/err_syntax27.error
+byacc> ...ok ./test/btyacc/err_syntax27.output
+byacc> ...ok ./test/btyacc/err_syntax27.tab.c
+byacc> ...ok ./test/btyacc/err_syntax27.tab.h
+byacc> ** testing ./test/err_syntax3.y
+byacc> ...ok ./test/btyacc/err_syntax3.error
+byacc> ...ok ./test/btyacc/err_syntax3.output
+byacc> ...ok ./test/btyacc/err_syntax3.tab.c
+byacc> ...ok ./test/btyacc/err_syntax3.tab.h
+byacc> ** testing ./test/err_syntax4.y
+byacc> ...ok ./test/btyacc/err_syntax4.error
+byacc> ...ok ./test/btyacc/err_syntax4.output
+byacc> ...ok ./test/btyacc/err_syntax4.tab.c
+byacc> ...ok ./test/btyacc/err_syntax4.tab.h
+byacc> ** testing ./test/err_syntax5.y
+byacc> ...ok ./test/btyacc/err_syntax5.error
+byacc> ...ok ./test/btyacc/err_syntax5.output
+byacc> ...ok ./test/btyacc/err_syntax5.tab.c
+byacc> ...ok ./test/btyacc/err_syntax5.tab.h
+byacc> ** testing ./test/err_syntax6.y
+byacc> ...ok ./test/btyacc/err_syntax6.error
+byacc> ...ok ./test/btyacc/err_syntax6.output
+byacc> ...ok ./test/btyacc/err_syntax6.tab.c
+byacc> ...ok ./test/btyacc/err_syntax6.tab.h
+byacc> ** testing ./test/err_syntax7.y
+byacc> ...ok ./test/btyacc/err_syntax7.error
+byacc> ...ok ./test/btyacc/err_syntax7.output
+byacc> ...ok ./test/btyacc/err_syntax7.tab.c
+byacc> ...ok ./test/btyacc/err_syntax7.tab.h
+byacc> ** testing ./test/err_syntax7a.y
+byacc> ...ok ./test/btyacc/err_syntax7a.error
+byacc> ...ok ./test/btyacc/err_syntax7a.output
+byacc> ...ok ./test/btyacc/err_syntax7a.tab.c
+byacc> ...ok ./test/btyacc/err_syntax7a.tab.h
+byacc> ** testing ./test/err_syntax7b.y
+byacc> ...ok ./test/btyacc/err_syntax7b.error
+byacc> ...ok ./test/btyacc/err_syntax7b.output
+byacc> ...ok ./test/btyacc/err_syntax7b.tab.c
+byacc> ...ok ./test/btyacc/err_syntax7b.tab.h
+byacc> ** testing ./test/err_syntax8.y
+byacc> ...ok ./test/btyacc/err_syntax8.error
+byacc> ...ok ./test/btyacc/err_syntax8.output
+byacc> ...ok ./test/btyacc/err_syntax8.tab.c
+byacc> ...ok ./test/btyacc/err_syntax8.tab.h
+byacc> ** testing ./test/err_syntax8a.y
+byacc> ...ok ./test/btyacc/err_syntax8a.error
+byacc> ...ok ./test/btyacc/err_syntax8a.output
+byacc> ...ok ./test/btyacc/err_syntax8a.tab.c
+byacc> ...ok ./test/btyacc/err_syntax8a.tab.h
+byacc> ** testing ./test/err_syntax9.y
+byacc> ...ok ./test/btyacc/err_syntax9.error
+byacc> ...ok ./test/btyacc/err_syntax9.output
+byacc> ...ok ./test/btyacc/err_syntax9.tab.c
+byacc> ...ok ./test/btyacc/err_syntax9.tab.h
+byacc> ** testing ./test/error.y
+byacc> ...ok ./test/btyacc/error.error
+byacc> ...ok ./test/btyacc/error.output
+byacc> ...ok ./test/btyacc/error.tab.c
+byacc> ...ok ./test/btyacc/error.tab.h
+byacc> ** testing ./test/expr.oxout.y
+byacc> ...ok ./test/btyacc/expr.oxout.error
+byacc> ...ok ./test/btyacc/expr.oxout.output
+byacc> ...ok ./test/btyacc/expr.oxout.tab.c
+byacc> ...ok ./test/btyacc/expr.oxout.tab.h
+byacc> ** testing ./test/grammar.y
+byacc> ...ok ./test/btyacc/grammar.error
+byacc> ...ok ./test/btyacc/grammar.output
+byacc> ...ok ./test/btyacc/grammar.tab.c
+byacc> ...ok ./test/btyacc/grammar.tab.h
+byacc> ...ok ./test/btyacc/grammar.dot
+byacc> ** testing ./test/inherit0.y
+byacc> ...ok ./test/btyacc/inherit0.error
+byacc> ...ok ./test/btyacc/inherit0.output
+byacc> ...ok ./test/btyacc/inherit0.tab.c
+byacc> ...ok ./test/btyacc/inherit0.tab.h
+byacc> ** testing ./test/inherit1.y
+byacc> ...ok ./test/btyacc/inherit1.error
+byacc> ...ok ./test/btyacc/inherit1.output
+byacc> ...ok ./test/btyacc/inherit1.tab.c
+byacc> ...ok ./test/btyacc/inherit1.tab.h
+byacc> ** testing ./test/inherit2.y
+byacc> ...ok ./test/btyacc/inherit2.error
+byacc> ...ok ./test/btyacc/inherit2.output
+byacc> ...ok ./test/btyacc/inherit2.tab.c
+byacc> ...ok ./test/btyacc/inherit2.tab.h
+byacc> ** testing ./test/ok_syntax1.y
+byacc> ...ok ./test/btyacc/ok_syntax1.error
+byacc> ...ok ./test/btyacc/ok_syntax1.output
+byacc> ...ok ./test/btyacc/ok_syntax1.tab.c
+byacc> ...ok ./test/btyacc/ok_syntax1.tab.h
+byacc> ** testing ./test/pure_calc.y
+byacc> ...ok ./test/btyacc/pure_calc.error
+byacc> ...ok ./test/btyacc/pure_calc.output
+byacc> ...ok ./test/btyacc/pure_calc.tab.c
+byacc> ...ok ./test/btyacc/pure_calc.tab.h
+byacc> ** testing ./test/pure_error.y
+byacc> ...ok ./test/btyacc/pure_error.error
+byacc> ...ok ./test/btyacc/pure_error.output
+byacc> ...ok ./test/btyacc/pure_error.tab.c
+byacc> ...ok ./test/btyacc/pure_error.tab.h
+byacc> ** testing ./test/quote_calc.y
+byacc> ...ok ./test/btyacc/quote_calc.error
+byacc> ...ok ./test/btyacc/quote_calc.output
+byacc> ...ok ./test/btyacc/quote_calc.tab.c
+byacc> ...ok ./test/btyacc/quote_calc.tab.h
+byacc> ...ok ./test/btyacc/quote_calc-s.error
+byacc> ...ok ./test/btyacc/quote_calc-s.output
+byacc> ...ok ./test/btyacc/quote_calc-s.tab.c
+byacc> ...ok ./test/btyacc/quote_calc-s.tab.h
+byacc> ** testing ./test/quote_calc2.y
+byacc> ...ok ./test/btyacc/quote_calc2.error
+byacc> ...ok ./test/btyacc/quote_calc2.output
+byacc> ...ok ./test/btyacc/quote_calc2.tab.c
+byacc> ...ok ./test/btyacc/quote_calc2.tab.h
+byacc> ...ok ./test/btyacc/quote_calc2-s.error
+byacc> ...ok ./test/btyacc/quote_calc2-s.output
+byacc> ...ok ./test/btyacc/quote_calc2-s.tab.c
+byacc> ...ok ./test/btyacc/quote_calc2-s.tab.h
+byacc> ** testing ./test/quote_calc3.y
+byacc> ...ok ./test/btyacc/quote_calc3.error
+byacc> ...ok ./test/btyacc/quote_calc3.output
+byacc> ...ok ./test/btyacc/quote_calc3.tab.c
+byacc> ...ok ./test/btyacc/quote_calc3.tab.h
+byacc> ...ok ./test/btyacc/quote_calc3-s.error
+byacc> ...ok ./test/btyacc/quote_calc3-s.output
+byacc> ...ok ./test/btyacc/quote_calc3-s.tab.c
+byacc> ...ok ./test/btyacc/quote_calc3-s.tab.h
+byacc> ** testing ./test/quote_calc4.y
+byacc> ...ok ./test/btyacc/quote_calc4.error
+byacc> ...ok ./test/btyacc/quote_calc4.output
+byacc> ...ok ./test/btyacc/quote_calc4.tab.c
+byacc> ...ok ./test/btyacc/quote_calc4.tab.h
+byacc> ...ok ./test/btyacc/quote_calc4-s.error
+byacc> ...ok ./test/btyacc/quote_calc4-s.output
+byacc> ...ok ./test/btyacc/quote_calc4-s.tab.c
+byacc> ...ok ./test/btyacc/quote_calc4-s.tab.h
+byacc> ** testing ./test/varsyntax_calc1.y
+byacc> ...ok ./test/btyacc/varsyntax_calc1.error
+byacc> ...ok ./test/btyacc/varsyntax_calc1.output
+byacc> ...ok ./test/btyacc/varsyntax_calc1.tab.c
+byacc> ...ok ./test/btyacc/varsyntax_calc1.tab.h
+byacc> Running phase: installPhase
+byacc> install flags: SHELL=/nix/store/nnm9gdr70ihc6zc9298mzz8jpcgaciql-bash-5.3p20/bin/bash install
+byacc> mkdir -p /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/bin
+byacc> mkdir -p /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/share/man/man1
+byacc> /nix/store/cb987zkxvsv0490753ilrvn5yk7ylgxi-coreutils-9.12/bin/install -c yacc /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/bin/`echo yacc        | sed 's/$//'       |sed ''s,^,b,''|sed 's/$//'`
+byacc> ** installing ./yacc.1 to /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/share/man/man1/byacc.1
+byacc> *** ./yacc.1     Tue Dec 31 15:46:49 2024
+byacc> --- /build/tmp.QQRzmWSLOd/yacc.1 Thu Oct 29 16:15:23 2026
+byacc> ***************
+byacc> *** 1,9 ****
+byacc>   .\" $Id: yacc.1,v 1.44 2024/12/31 15:46:49 tom Exp $
+byacc>   .\"
+byacc> ! .TH YACC 1 2024-12-31 "Berkeley Yacc" "User Commands"
+byacc>   .
+byacc> ! .ds N Yacc
+byacc> ! .ds n yacc
+byacc>   .
+byacc>   .ie n .ds CW R
+byacc>   .el   \{
+byacc> --- 1,9 ----
+byacc>   .\" $Id: yacc.1,v 1.44 2024/12/31 15:46:49 tom Exp $
+byacc>   .\"
+byacc> ! .TH BYACC 1 2024-12-31 "Berkeley Yacc" "User Commands"
+byacc>   .
+byacc> ! .ds N Byacc
+byacc> ! .ds n byacc
+byacc>   .
+byacc>   .ie n .ds CW R
+byacc>   .el   \{
+byacc> ***************
+byacc> *** 42,48 ****
+byacc>   .el    .IP \(bu 2
+byacc>   ..
+byacc>   .SH NAME
+byacc> ! \*N \-
+byacc>   an LALR(1) parser generator
+byacc>   .SH SYNOPSIS
+byacc>   .B \*n [ \-BdghilLPrtvVy ] [ \-b
+byacc> --- 42,48 ----
+byacc>   .el    .IP \(bu 2
+byacc>   ..
+byacc>   .SH NAME
+byacc> ! byacc \-
+byacc>   an LALR(1) parser generator
+byacc>   .SH SYNOPSIS
+byacc>   .B \*n [ \-BdghilLPrtvVy ] [ \-b
+byacc> ...installed /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/share/man/man1/byacc.1
+byacc> Running phase: fixupPhase
+byacc> shrinking RPATHs of ELF executables and libraries in /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126
+byacc> shrinking /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/bin/byacc
+byacc> checking for references to /build/ in /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126...
+byacc> gzipping man pages under /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/share/man/
+byacc> patching script interpreter paths in /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126
+byacc> stripping (with command strip and flags -S -p) in /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/bin
+byacc> making symlink relative: /nix/store/pb4i1plpf83aynrlfyih1niljrrcyfjf-byacc-20260126/bin/yacc
+building '/nix/store/d1simrxi41d15h88m043y00yd400fpd4-cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341.tar.gz.drv'...
+error: hash mismatch in fixed-output derivation '/nix/store/d1simrxi41d15h88m043y00yd400fpd4-cb41cbfe717e4c00d7bb70035cda5ee5f0ff9341.tar.gz.drv':
+         specified: sha256-MRuqq3TKcfIahtUWdhAcYhqDiGPkAjS8UTMsDE+/jGU=
+            got:    sha256-2s+ggD1835iMGA5KzcIWrhd73GVOk4biXZbeLssFNgs=
+building '/nix/store/wa6xxcihyrcglxac311wc59lxsfssh9x-common.mk.drv'...
+error: Cannot build '/nix/store/jmgi0aram7my7q2fzdbk4jjf24wygl3b-tinycc-musl-unstable-2025-12-03.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/dc4vnj9nypgrbn6v0wkp22ns8wcyssgx-tinycc-musl-unstable-2025-12-03
+error: Cannot build '/nix/store/s2hjwqhh6xz3h8dwl73r97g7191nm5pr-tinycc-musl-unstable-2025-12-03.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/yr2zlb7xa6mjiyfl44aai4632cm8a8pp-tinycc-musl-unstable-2025-12-03
+error: Cannot build '/nix/store/5qbjq17pking8vfi5n2d1vsm6hknwdgs-tinycc-unstable-2025-12-03-source-builder.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/630c9i2r20vxsscii93gj5mg7qc8vq3p-tinycc-unstable-2025-12-03-source-builder
+error: Cannot build '/nix/store/lgd7h63qh3mjndrhj3q41h8g2xn1bar9-tinycc-musl-unstable-2025-12-03-compiler.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/whsh3m5f892b10k5xg3j5x2vfplakwpw-tinycc-musl-unstable-2025-12-03-compiler
+error: Cannot build '/nix/store/xqxb9q4f0izf8s15d3wqlg06vajd2i8y-tinycc-musl-unstable-2025-12-03-compiler.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/wrnygg9i9i9p48viq3zkvs0dlnzh8iyx-tinycc-musl-unstable-2025-12-03-compiler
+error: Cannot build '/nix/store/w5008ccs8cadyjvgpx3bzk9d387ml2dw-tinycc-unstable-2025-12-03-source.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/krrasl3572k1g9rimm1pdxpz2mcj8grd-tinycc-unstable-2025-12-03-source
+error: Cannot build '/nix/store/wcy0xsar1c27zdiz6mb6nwgiygar2k6h-bash-5.3.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/2lgm4lkhnszawf9p3z1hpzzayczhv0ns-bash-5.3
+error: Cannot build '/nix/store/x2k1rx0682qi8q01svmay16q1c4glss2-bootstrap-coreutils-musl-9.11.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/rfv4gzzcgz85wlha9k4s850c9l3k46m2-bootstrap-coreutils-musl-9.11
+error: Cannot build '/nix/store/0brypcsmz7160dyfdfnnnqbfmp8lvfy4-diffutils-3.8.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/8sn2nxrzlp4y2bn0s55pjlrdjmapyzkl-diffutils-3.8
+error: Cannot build '/nix/store/8xy9yi1vwp0mc32lz37jgva7hck5j9by-gawk-5.4.1.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/nsxim2jqwz8s411zrljn11f64cmz9928-gawk-5.4.1
+error: Cannot build '/nix/store/aw4a7hi7q0mb2ljazxq0in9f5v4905a5-gnumake-musl-4.4.1.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/06gvqpadb2w24pazjb87m2jd2j24h0v2-gnumake-musl-4.4.1
+error: Cannot build '/nix/store/pip5q1b15n46rw6cbmz3jjk8mngqp7aw-gnused-4.2.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/2afl43wwm3bp41aqr9d6233zghmqwahm-gnused-4.2
+error: Cannot build '/nix/store/rk3s60afwm2lzcsjpsbpdyaa90c21q4z-gnutar-musl-1.12.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/2n23dg82y5pgblnnd8nk45bbjhlxfbm8-gnutar-musl-1.12
+error: Cannot build '/nix/store/vqjfb7g1xij1hi8b8ak63grkwkkaf3s3-libtcc1.a-builder.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/ykwgs53i1x74bbwlcsqb7aa35vflhzyf-libtcc1.a-builder
+error: Cannot build '/nix/store/8hvca5zvj9yc33mf32qfngnwly35l7rv-tinycc-mes-boot-unstable-2025-12-03-builder.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/k2xdqfvqdjswlw97apfkvxpvadvc04bk-tinycc-mes-boot-unstable-2025-12-03-builder
+error: Cannot build '/nix/store/v3s7w0xs9ivj38ng1cq0xx1hc49szlr1-tinycc-mes-unstable-2025-12-03-builder.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/l5xj812i742qb68k2qkqrvn88lvqq63x-tinycc-mes-unstable-2025-12-03-builder
+error: Cannot build '/nix/store/6lsxx9m0cr8695n24g84lymy3m3pmbaq-tinycc-musl-simple-program-unstable-2025-12-03.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/9hwlrj3hr2n5n9gciycy6xgjb4wipj7v-tinycc-musl-simple-program-unstable-2025-12-03
+error: Cannot build '/nix/store/0dpycpy1hz7sccz9w6a9vc22zfzc17hd-xz-5.8.3.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/fjy092g1x515rnpv33bjx00hxfbp67h9-xz-5.8.3
+error: Cannot build '/nix/store/zpxndzgxc7v013wy30ag8wwc0a4b13sw-binutils-static-2.46.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/v8dwavr772bsx4z6hz925739p3v9215h-binutils-static-2.46
+error: Cannot build '/nix/store/irbsazj08bvi6vhc3bx47920r40czq1y-bootstrap-stage0-binutils-wrapper-2.46.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/q9k1jfyiixd7p3f5zvqp4z99mg8z2qhn-bootstrap-stage0-binutils-wrapper-2.46
+error: Cannot build '/nix/store/9966b5gnsqdbn28bn2p15lzgqh34nh30-coreutils-static-9.11.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/jl7jc14lkjfbmik1rdsi1pgqggsg93qg-coreutils-static-9.11
+error: Cannot build '/nix/store/ps802jf3339mv5x35mp3crvmcm08mnwj-gcc-wrapper-16.2.0.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/9jrxxxs25nkqcr0qjrn8z5la4cdnzm41-gcc-wrapper-16.2.0
+error: Cannot build '/nix/store/mpszfi2pvmjza7pgynydkc2inlsgkh6b-glibc-2.44.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/9nhrjcichkgxyb5d0sg3ikvxh7aad4ay-glibc-2.44
+error: Cannot build '/nix/store/jrjq3n2gpgq6sn07iiymh8ivf19ahncm-stdenv-linux-no-cc.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/c3k15jk20fccs90qgffdwzhxy15b5fdj-stdenv-linux-no-cc
+building '/nix/store/bamwxswxacs3cjdcydv0z7bj22d7g2kc-config.guess-948ae97.drv'...
+error: Cannot build '/nix/store/vfz0cq6lqj3cgw3rypb3m2d7zanzbgpv-arkhe-0.1.0.drv'.
+       Reason: 1 dependency failed.
+       Output paths:
+         /nix/store/25by62nasrgrvypk4xhzyn8ffbgyjqsx-arkhe-0.1.0

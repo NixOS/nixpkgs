@@ -1,0 +1,112 @@
+this derivation will be built:
+  /nix/store/8i5jc7g8kjpk37ywxz1nf0v4j2spjagx-arkhe-crm-bridge-0.1.0.drv
+building '/nix/store/8i5jc7g8kjpk37ywxz1nf0v4j2spjagx-arkhe-crm-bridge-0.1.0.drv'...
+arkhe-crm-bridge> Running phase: unpackPhase
+arkhe-crm-bridge> unpacking source archive /nix/store/5klza853s3gbrz33schywb49ckkak725-source
+arkhe-crm-bridge> source root is source
+arkhe-crm-bridge> Executing cargoSetupPostUnpackHook
+arkhe-crm-bridge> Finished cargoSetupPostUnpackHook
+arkhe-crm-bridge> Running phase: patchPhase
+arkhe-crm-bridge> Executing cargoSetupPostPatchHook
+arkhe-crm-bridge> Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+arkhe-crm-bridge> Finished cargoSetupPostPatchHook
+arkhe-crm-bridge> Running phase: updateAutotoolsGnuConfigScriptsPhase
+arkhe-crm-bridge> Running phase: configurePhase
+arkhe-crm-bridge> Running phase: buildPhase
+arkhe-crm-bridge> Executing cargoBuildHook
+arkhe-crm-bridge> cargoBuildHook flags: -j 4 --target x86_64-unknown-linux-gnu --offline --profile release --locked -p arkhe-crm-bridge-cli --bin arkhe-crm-bridge-cli
+arkhe-crm-bridge>    Compiling proc-macro2 v1.0.107
+arkhe-crm-bridge>    Compiling version_check v0.9.5
+arkhe-crm-bridge>    Compiling quote v1.0.47
+arkhe-crm-bridge>    Compiling unicode-ident v1.0.27
+arkhe-crm-bridge>    Compiling cfg-if v1.0.5
+arkhe-crm-bridge>    Compiling find-msvc-tools v0.1.14
+arkhe-crm-bridge>    Compiling generic-array v0.14.9
+arkhe-crm-bridge>    Compiling shlex v2.0.1
+arkhe-crm-bridge>    Compiling typenum v1.20.1
+arkhe-crm-bridge>    Compiling cc v1.8.0
+arkhe-crm-bridge>    Compiling serde_core v1.0.229
+arkhe-crm-bridge>    Compiling zerocopy v0.8.57
+arkhe-crm-bridge>    Compiling semver v1.0.28
+arkhe-crm-bridge>    Compiling syn v3.0.9
+arkhe-crm-bridge>    Compiling rustc_version v0.4.1
+arkhe-crm-bridge>    Compiling block-buffer v0.10.4
+arkhe-crm-bridge>    Compiling crypto-common v0.1.6
+arkhe-crm-bridge>    Compiling digest v0.10.7
+arkhe-crm-bridge>    Compiling ahash v0.8.12
+arkhe-crm-bridge>    Compiling zmij v1.0.23
+arkhe-crm-bridge>    Compiling serde v1.0.229
+arkhe-crm-bridge>    Compiling blake3 v1.8.7
+arkhe-crm-bridge>    Compiling curve25519-dalek v4.1.3
+arkhe-crm-bridge>    Compiling syn v2.0.119
+arkhe-crm-bridge>    Compiling pkg-config v0.3.34
+arkhe-crm-bridge>    Compiling once_cell v1.21.4
+arkhe-crm-bridge>    Compiling cpufeatures v0.2.17
+arkhe-crm-bridge>    Compiling autocfg v1.5.1
+arkhe-crm-bridge>    Compiling serde_json v1.0.154
+arkhe-crm-bridge>    Compiling vcpkg v0.2.15
+arkhe-crm-bridge>    Compiling serde_derive v1.0.229
+arkhe-crm-bridge>    Compiling thiserror v2.0.21
+arkhe-crm-bridge>    Compiling utf8parse v0.2.2
+arkhe-crm-bridge>    Compiling anstyle-parse v1.0.0
+arkhe-crm-bridge>    Compiling libsqlite3-sys v0.30.1
+arkhe-crm-bridge>    Compiling thiserror-impl v2.0.21
+arkhe-crm-bridge>    Compiling curve25519-dalek-derive v0.1.1
+arkhe-crm-bridge>    Compiling num-traits v0.2.19
+arkhe-crm-bridge>    Compiling anstyle v1.0.14
+arkhe-crm-bridge>    Compiling arrayvec v0.7.8
+arkhe-crm-bridge>    Compiling zeroize v1.9.0
+arkhe-crm-bridge>    Compiling itoa v1.0.18
+arkhe-crm-bridge>    Compiling subtle v2.6.1
+arkhe-crm-bridge>    Compiling is_terminal_polyfill v1.70.2
+arkhe-crm-bridge>    Compiling colorchoice v1.0.5
+arkhe-crm-bridge>    Compiling constant_time_eq v0.4.2
+arkhe-crm-bridge>    Compiling anstyle-query v1.1.5
+arkhe-crm-bridge>    Compiling signature v2.2.0
+arkhe-crm-bridge>    Compiling smallvec v1.16.2
+arkhe-crm-bridge>    Compiling cpufeatures v0.3.1
+arkhe-crm-bridge>    Compiling memchr v2.8.3
+arkhe-crm-bridge>    Compiling libc v0.2.189
+arkhe-crm-bridge>    Compiling ed25519 v2.2.3
+arkhe-crm-bridge>    Compiling anstream v1.0.0
+arkhe-crm-bridge>    Compiling hashbrown v0.14.5
+arkhe-crm-bridge>    Compiling async-trait v0.1.92
+arkhe-crm-bridge>    Compiling sha2 v0.10.9
+arkhe-crm-bridge>    Compiling heck v0.5.0
+arkhe-crm-bridge>    Compiling keccak v0.1.6
+arkhe-crm-bridge>    Compiling strsim v0.11.1
+arkhe-crm-bridge>    Compiling clap_lex v1.1.1
+arkhe-crm-bridge>    Compiling anyhow v1.0.104
+arkhe-crm-bridge>    Compiling clap_builder v4.6.7
+arkhe-crm-bridge>    Compiling sha3 v0.10.8
+arkhe-crm-bridge>    Compiling clap_derive v4.6.7
+arkhe-crm-bridge>    Compiling ed25519-dalek v2.2.0
+arkhe-crm-bridge>    Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+arkhe-crm-bridge>    Compiling hashlink v0.9.1
+arkhe-crm-bridge>    Compiling spdx v0.13.5
+arkhe-crm-bridge>    Compiling bitflags v2.13.2
+arkhe-crm-bridge>    Compiling fallible-streaming-iterator v0.1.9
+arkhe-crm-bridge>    Compiling fallible-iterator v0.3.0
+arkhe-crm-bridge>    Compiling hex v0.4.3
+arkhe-crm-bridge>    Compiling iana-time-zone v0.1.65
+arkhe-crm-bridge>    Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+arkhe-crm-bridge>    Compiling chrono v0.4.45
+arkhe-crm-bridge>    Compiling getrandom v0.2.17
+arkhe-crm-bridge>    Compiling clap v4.6.7
+arkhe-crm-bridge>    Compiling rusqlite v0.32.1
+arkhe-crm-bridge>    Compiling arkhe-crm-bridge-cli v0.1.0 (/build/source/integration/arkhe-crm-bridge)
+arkhe-crm-bridge>     Finished `release` profile [optimized] target(s) in 2m 31s
+arkhe-crm-bridge> Executing cargoInstallPostBuildHook
+arkhe-crm-bridge> Finished cargoInstallPostBuildHook
+arkhe-crm-bridge> Finished cargoBuildHook
+arkhe-crm-bridge> buildPhase completed in 2 minutes 38 seconds
+arkhe-crm-bridge> Running phase: installPhase
+arkhe-crm-bridge> Executing cargoInstallHook
+arkhe-crm-bridge> Finished cargoInstallHook
+arkhe-crm-bridge> Running phase: fixupPhase
+arkhe-crm-bridge> shrinking RPATHs of ELF executables and libraries in /nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0
+arkhe-crm-bridge> shrinking /nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0/bin/arkhe-crm-bridge-cli
+arkhe-crm-bridge> checking for references to /build/ in /nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0...
+arkhe-crm-bridge> patching script interpreter paths in /nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0
+arkhe-crm-bridge> stripping (with command strip and flags -S -p) in /nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0/bin
+/nix/store/zby7aq36zs2yg517flcdj43sk619j0ra-arkhe-crm-bridge-0.1.0

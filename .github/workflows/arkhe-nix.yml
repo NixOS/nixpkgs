@@ -48,9 +48,9 @@ jobs:
         working-directory: arkhe
         run: chmod +x scripts/*.sh
 
-      - name: Build dos pacotes leves
+      - name: Build de todos os pacotes e checks nativos/WASM
         working-directory: arkhe
-        run: nix build .#arkhe-verify .#arkhe-sql-migrate --print-build-logs
+        run: nix flake check --no-update-lock-file --print-build-logs
 
       - name: Reprodutibilidade de arkhe-verify
         working-directory: arkhe

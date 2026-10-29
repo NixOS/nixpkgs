@@ -1,0 +1,182 @@
+this derivation will be built:
+  /nix/store/q0px2c5yf1khkgzw5vsh8g4f58raiq9p-arkhe-sql-migrate-0.1.0.drv
+building '/nix/store/q0px2c5yf1khkgzw5vsh8g4f58raiq9p-arkhe-sql-migrate-0.1.0.drv'...
+arkhe-sql-migrate> Running phase: unpackPhase
+arkhe-sql-migrate> unpacking source archive /nix/store/5klza853s3gbrz33schywb49ckkak725-source
+arkhe-sql-migrate> source root is source
+arkhe-sql-migrate> Executing cargoSetupPostUnpackHook
+arkhe-sql-migrate> Finished cargoSetupPostUnpackHook
+arkhe-sql-migrate> Running phase: patchPhase
+arkhe-sql-migrate> Executing cargoSetupPostPatchHook
+arkhe-sql-migrate> Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+arkhe-sql-migrate> Finished cargoSetupPostPatchHook
+arkhe-sql-migrate> Running phase: updateAutotoolsGnuConfigScriptsPhase
+arkhe-sql-migrate> Running phase: configurePhase
+arkhe-sql-migrate> Running phase: buildPhase
+arkhe-sql-migrate> Executing cargoBuildHook
+arkhe-sql-migrate> cargoBuildHook flags: -j 3 --target x86_64-unknown-linux-gnu --offline --profile release --locked -p arkhe-sql-migrate --bin arkhe-sql-migrate
+arkhe-sql-migrate>    Compiling proc-macro2 v1.0.107
+arkhe-sql-migrate>    Compiling unicode-ident v1.0.27
+arkhe-sql-migrate>    Compiling quote v1.0.47
+arkhe-sql-migrate>    Compiling libc v0.2.189
+arkhe-sql-migrate>    Compiling serde_core v1.0.229
+arkhe-sql-migrate>    Compiling serde v1.0.229
+arkhe-sql-migrate>    Compiling version_check v0.9.5
+arkhe-sql-migrate>    Compiling generic-array v0.14.9
+arkhe-sql-migrate>    Compiling icu_properties_data v2.3.0
+arkhe-sql-migrate>    Compiling find-msvc-tools v0.1.14
+arkhe-sql-migrate>    Compiling syn v3.0.9
+arkhe-sql-migrate>    Compiling syn v2.0.119
+arkhe-sql-migrate>    Compiling icu_normalizer_data v2.3.0
+arkhe-sql-migrate>    Compiling shlex v2.0.1
+arkhe-sql-migrate>    Compiling cc v1.8.0
+arkhe-sql-migrate>    Compiling stable_deref_trait v1.2.1
+arkhe-sql-migrate>    Compiling ring v0.17.14
+arkhe-sql-migrate>    Compiling synstructure v0.14.0
+arkhe-sql-migrate>    Compiling synstructure v0.13.2
+arkhe-sql-migrate>    Compiling cfg-if v1.0.5
+arkhe-sql-migrate>    Compiling zerofrom-derive v0.1.8
+arkhe-sql-migrate>    Compiling yoke-derive v0.8.2
+arkhe-sql-migrate>    Compiling zerovec-derive v0.11.6
+arkhe-sql-migrate>    Compiling serde_derive v1.0.229
+arkhe-sql-migrate>    Compiling displaydoc v0.2.7
+arkhe-sql-migrate>    Compiling zerofrom v0.1.8
+arkhe-sql-migrate>    Compiling yoke v0.8.3
+arkhe-sql-migrate>    Compiling autocfg v1.5.1
+arkhe-sql-migrate>    Compiling num-traits v0.2.19
+arkhe-sql-migrate>    Compiling zerovec v0.11.8
+arkhe-sql-migrate>    Compiling parking_lot_core v0.9.12
+arkhe-sql-migrate>    Compiling zerocopy v0.8.57
+arkhe-sql-migrate>    Compiling crossbeam-utils v0.8.23
+arkhe-sql-migrate>    Compiling zmij v1.0.23
+arkhe-sql-migrate>    Compiling typenum v1.20.1
+arkhe-sql-migrate>    Compiling smallvec v1.16.2
+arkhe-sql-migrate>    Compiling tinystr v0.8.4
+arkhe-sql-migrate>    Compiling writeable v0.6.4
+arkhe-sql-migrate>    Compiling litemap v0.8.3
+arkhe-sql-migrate>    Compiling icu_locale_core v2.3.0
+arkhe-sql-migrate>    Compiling potential_utf v0.1.6
+arkhe-sql-migrate>    Compiling zerotrie v0.2.5
+arkhe-sql-migrate>    Compiling getrandom v0.2.17
+arkhe-sql-migrate>    Compiling utf8_iter v1.0.4
+arkhe-sql-migrate>    Compiling subtle v2.6.1
+arkhe-sql-migrate>    Compiling thiserror v2.0.21
+arkhe-sql-migrate>    Compiling rustls v0.23.45
+arkhe-sql-migrate>    Compiling serde_json v1.0.154
+arkhe-sql-migrate>    Compiling icu_collections v2.3.0
+arkhe-sql-migrate>    Compiling icu_provider v2.3.1
+arkhe-sql-migrate>    Compiling block-buffer v0.10.4
+arkhe-sql-migrate>    Compiling crypto-common v0.1.6
+arkhe-sql-migrate>    Compiling pin-project-lite v0.2.17
+arkhe-sql-migrate>    Compiling zeroize v1.9.0
+arkhe-sql-migrate>    Compiling rustls-pki-types v1.15.1
+arkhe-sql-migrate>    Compiling digest v0.10.7
+arkhe-sql-migrate>    Compiling tracing-attributes v0.1.31
+arkhe-sql-migrate>    Compiling thiserror-impl v2.0.21
+arkhe-sql-migrate>    Compiling futures-core v0.3.34
+arkhe-sql-migrate>    Compiling icu_normalizer v2.3.0
+arkhe-sql-migrate>    Compiling icu_properties v2.3.0
+arkhe-sql-migrate>    Compiling once_cell v1.21.4
+arkhe-sql-migrate>    Compiling untrusted v0.9.0
+arkhe-sql-migrate>    Compiling scopeguard v1.2.0
+arkhe-sql-migrate>    Compiling equivalent v1.0.2
+arkhe-sql-migrate>    Compiling lock_api v0.4.14
+arkhe-sql-migrate>    Compiling idna_adapter v1.2.2
+arkhe-sql-migrate>    Compiling mio v1.2.3
+arkhe-sql-migrate>    Compiling socket2 v0.6.5
+arkhe-sql-migrate>    Compiling percent-encoding v2.3.2
+arkhe-sql-migrate>    Compiling bytes v1.12.1
+arkhe-sql-migrate>    Compiling allocator-api2 v0.2.21
+arkhe-sql-migrate>    Compiling futures-sink v0.3.34
+arkhe-sql-migrate>    Compiling foldhash v0.1.5
+arkhe-sql-migrate>    Compiling memchr v2.8.3
+arkhe-sql-migrate>    Compiling hashbrown v0.15.5
+arkhe-sql-migrate>    Compiling tokio v1.53.3
+arkhe-sql-migrate>    Compiling ppv-lite86 v0.2.21
+arkhe-sql-migrate>    Compiling form_urlencoded v1.2.2
+arkhe-sql-migrate>    Compiling parking_lot v0.12.5
+arkhe-sql-migrate>    Compiling rustls-webpki v0.103.15
+arkhe-sql-migrate>    Compiling idna v1.1.0
+arkhe-sql-migrate>    Compiling tracing-core v0.1.36
+arkhe-sql-migrate>    Compiling webpki-roots v1.0.9
+arkhe-sql-migrate>    Compiling rand_core v0.6.4
+arkhe-sql-migrate>    Compiling slab v0.4.12
+arkhe-sql-migrate>    Compiling iana-time-zone v0.1.65
+arkhe-sql-migrate>    Compiling futures-task v0.3.34
+arkhe-sql-migrate>    Compiling cpufeatures v0.2.17
+arkhe-sql-migrate>    Compiling tinyvec v1.13.3
+arkhe-sql-migrate>    Compiling futures-io v0.3.34
+arkhe-sql-migrate>    Compiling crc-catalog v2.5.0
+arkhe-sql-migrate>    Compiling itoa v1.0.18
+arkhe-sql-migrate>    Compiling parking v2.2.1
+arkhe-sql-migrate>    Compiling log v0.4.34
+arkhe-sql-migrate>    Compiling hashbrown v0.17.1
+arkhe-sql-migrate>    Compiling unicode-normalization v0.1.25
+arkhe-sql-migrate>    Compiling indexmap v2.14.2
+arkhe-sql-migrate>    Compiling tracing v0.1.44
+arkhe-sql-migrate>    Compiling event-listener v5.4.2
+arkhe-sql-migrate>    Compiling crc v3.4.0
+arkhe-sql-migrate>    Compiling futures-util v0.3.34
+arkhe-sql-migrate>    Compiling sha2 v0.10.9
+arkhe-sql-migrate>    Compiling chrono v0.4.45
+arkhe-sql-migrate>    Compiling rand_chacha v0.3.1
+arkhe-sql-migrate>    Compiling webpki-roots v0.26.11
+arkhe-sql-migrate>    Compiling tokio-stream v0.1.19
+arkhe-sql-migrate>    Compiling url v2.5.8
+arkhe-sql-migrate>    Compiling futures-intrusive v0.5.0
+arkhe-sql-migrate>    Compiling crossbeam-queue v0.3.12
+arkhe-sql-migrate>    Compiling hashlink v0.10.0
+arkhe-sql-migrate>    Compiling hmac v0.12.1
+arkhe-sql-migrate>    Compiling either v1.18.0
+arkhe-sql-migrate>    Compiling tokio-macros v2.7.2
+arkhe-sql-migrate>    Compiling unicode-bidi v0.3.18
+arkhe-sql-migrate>    Compiling base64 v0.22.1
+arkhe-sql-migrate>    Compiling unicode-properties v0.1.4
+arkhe-sql-migrate>    Compiling heck v0.5.0
+arkhe-sql-migrate>    Compiling uuid v1.28.0
+arkhe-sql-migrate>    Compiling sqlx-core v0.8.6
+arkhe-sql-migrate>    Compiling stringprep v0.1.5
+arkhe-sql-migrate>    Compiling hkdf v0.12.4
+arkhe-sql-migrate>    Compiling rand v0.8.8
+arkhe-sql-migrate>    Compiling futures-channel v0.3.34
+arkhe-sql-migrate>    Compiling atoi v2.0.0
+arkhe-sql-migrate>    Compiling md-5 v0.10.6
+arkhe-sql-migrate>    Compiling home v0.5.12
+arkhe-sql-migrate>    Compiling dotenvy v0.15.7
+arkhe-sql-migrate>    Compiling whoami v1.6.1
+arkhe-sql-migrate>    Compiling utf8parse v0.2.2
+arkhe-sql-migrate>    Compiling byteorder v1.5.0
+arkhe-sql-migrate>    Compiling hex v0.4.3
+arkhe-sql-migrate>    Compiling bitflags v2.13.2
+arkhe-sql-migrate>    Compiling sqlx-postgres v0.8.6
+arkhe-sql-migrate>    Compiling anstyle-parse v1.0.0
+arkhe-sql-migrate>    Compiling colorchoice v1.0.5
+arkhe-sql-migrate>    Compiling anstyle v1.0.14
+arkhe-sql-migrate>    Compiling anstyle-query v1.1.5
+arkhe-sql-migrate>    Compiling is_terminal_polyfill v1.70.2
+arkhe-sql-migrate>    Compiling anstream v1.0.0
+arkhe-sql-migrate>    Compiling sqlx-macros-core v0.8.6
+arkhe-sql-migrate>    Compiling strsim v0.11.1
+arkhe-sql-migrate>    Compiling clap_lex v1.1.1
+arkhe-sql-migrate>    Compiling anyhow v1.0.104
+arkhe-sql-migrate>    Compiling clap_builder v4.6.7
+arkhe-sql-migrate>    Compiling sqlx-macros v0.8.6
+arkhe-sql-migrate>    Compiling clap_derive v4.6.7
+arkhe-sql-migrate>    Compiling arkhe-sql-migrate v0.1.0 (/build/source/storage/sql/crates/arkhe-sql-migrate)
+arkhe-sql-migrate>    Compiling sqlx v0.8.6
+arkhe-sql-migrate>    Compiling clap v4.6.7
+arkhe-sql-migrate>     Finished `release` profile [optimized] target(s) in 3m 17s
+arkhe-sql-migrate> Executing cargoInstallPostBuildHook
+arkhe-sql-migrate> Finished cargoInstallPostBuildHook
+arkhe-sql-migrate> Finished cargoBuildHook
+arkhe-sql-migrate> buildPhase completed in 3 minutes 18 seconds
+arkhe-sql-migrate> Running phase: installPhase
+arkhe-sql-migrate> Executing cargoInstallHook
+arkhe-sql-migrate> Finished cargoInstallHook
+arkhe-sql-migrate> Running phase: fixupPhase
+arkhe-sql-migrate> shrinking RPATHs of ELF executables and libraries in /nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0
+arkhe-sql-migrate> shrinking /nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0/bin/arkhe-sql-migrate
+arkhe-sql-migrate> checking for references to /build/ in /nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0...
+arkhe-sql-migrate> patching script interpreter paths in /nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0
+arkhe-sql-migrate> stripping (with command strip and flags -S -p) in /nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0/bin
+/nix/store/nlx816z5yc4vvjysjmm5bwz0m0v5hckg-arkhe-sql-migrate-0.1.0
