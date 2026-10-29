@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z-lua";
-  version = "1.8.26";
+  version = "1.8.27";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
     tag = finalAttrs.version;
-    hash = "sha256-ohcBKf/m8vnypXVFm+09YbwAgA6BQkPB/Objnt/tZpw=";
+    hash = "sha256-ix5SsU4Tn8A60WSgv99mbCz1Xon5ogFaqdHwaEVlHwc=";
   };
 
   dontBuild = true;
