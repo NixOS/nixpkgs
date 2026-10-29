@@ -5401,8 +5401,8 @@ let
         mktplcRef = {
           name = "change-case";
           publisher = "wmaurer";
-          version = "1.0.0";
-          hash = "sha256-tN/jlG2PzuiCeERpgQvdqDoa3UgrUaM7fKHv6KFqujc=";
+          version = "2.1.1";
+          hash = "sha256-OzdBIR3bchZWMXrNJfhaNhVgoTzpTPZT2HV6Jjyn1m0=";
         };
         meta = {
           description = "VSCode extension for quickly changing the case (camelCase, CONSTANT_CASE, snake_case, etc) of the current selection or current word";
