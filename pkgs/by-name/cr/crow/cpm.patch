@@ -1,30 +1,32 @@
-From 0cfacb99db5940dabc385e7bc4534dfefa60fcfd Mon Sep 17 00:00:00 2001
+From 6aa529673a8ad2053e9d3e6c8e04853b27ad817a Mon Sep 17 00:00:00 2001
 From: fliiiix <hi@l33t.name>
-Date: Thu, 25 Jun 2026 10:46:35 +0200
-Subject: [PATCH] cpm
+Date: Sun, 25 Oct 2026 11:00:16 +0100
+Subject: [PATCH] Remove CPM for nix build
 
 ---
- CMakeLists.txt       |  4 ----
+ CMakeLists.txt       |  6 +++---
  tests/CMakeLists.txt | 11 +----------
- 2 files changed, 1 insertion(+), 14 deletions(-)
+ 2 files changed, 4 insertions(+), 13 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 51fade9b4..1b93bffd2 100644
+index 3ed5bf0da..2dcdcb5cc 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -60,10 +60,6 @@ option(CROW_ENABLE_SSL "Enable Crow's SSL feature for supporting https" OFF)
+@@ -60,9 +60,9 @@ option(CROW_ENABLE_SSL "Enable Crow's SSL feature for supporting https" OFF)
  option(CROW_ENABLE_COMPRESSION "Enable Crow's Compression feature for supporting compressed http content" OFF)
  option(CROW_ENABLE_TSAN "Enable ThreadSanitizer" OFF)
  
 -if(CROW_GENERATE_SBOM OR CROW_BUILD_TESTS)
 -	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
 -endif ()
--
++#if(CROW_GENERATE_SBOM OR CROW_BUILD_TESTS)
++#	include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
++#endif ()
+ 
  if(CROW_GENERATE_SBOM)
    CPMAddPackage(
-     NAME cmake-sbom
 diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
-index 80f6dd364..e01adeb2f 100644
+index 4777ed0c7..afd5de653 100644
 --- a/tests/CMakeLists.txt
 +++ b/tests/CMakeLists.txt
 @@ -5,18 +5,9 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 new)
@@ -36,7 +38,7 @@ index 80f6dd364..e01adeb2f 100644
 +find_package(Catch2 REQUIRED)
  
 -CPMAddPackage(Catch2
--  VERSION 3.12.0
+-  VERSION 3.15.1
 -  GITHUB_REPOSITORY catchorg/Catch2
 -  OPTIONS
 -  "CATCH_INSTALL_DOCS Off"
@@ -48,5 +50,5 @@ index 80f6dd364..e01adeb2f 100644
  
  # list the test sources
 -- 
-2.43.0
+2.56.0
 

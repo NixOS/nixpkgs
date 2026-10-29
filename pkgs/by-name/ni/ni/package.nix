@@ -24,6 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yeaE2c/B9u1dCcbZt1Ap2slypI/mfBAPgILoLF4ndqg=";
   };
 
+  postPatch = ''
+    substituteInPlace package.json \
+      --replace-fail "prepare" "dont-prepare"
+  '';
+
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
@@ -45,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     find dist -type f \( -name '*.cjs' -or -name '*.cts' -or -name '*.ts' \) -delete
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
   '';
 
   dontNpmPrune = true;
