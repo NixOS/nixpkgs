@@ -14,14 +14,15 @@
   glslang,
   hyprcursor,
   hyprgraphics,
+  hyprland-guiutils,
   hyprland-protocols,
-  hyprland-qtutils,
   hyprlang,
   hyprutils,
   hyprwire,
   hyprwayland-scanner,
   lcms2,
   libGL,
+  libcanberra,
   libdrm,
   libei,
   libexecinfo,
@@ -37,6 +38,7 @@
   python3,
   re2,
   readline,
+  sdbus-cpp_2,
   systemdLibs,
   tomlplusplus,
   udis86,
@@ -89,19 +91,19 @@ let
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.56.2";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IptZjFf/bE9lv8SQLef4Wmn3KOs3BwchYr6aFcCJ9NI=";
+    hash = "sha256-MMn1clKPz3FyrFEq39OqXZ2SO3QBaOOFtAFVIcO+VvU=";
   };
 
   postPatch = ''
     # Relax glaze dependency
     # FIXME: this shouldn't be needed once the upstream code will adopt it
-    substituteInPlace CMakeLists.txt start/CMakeLists.txt hyprpm/CMakeLists.txt \
+    substituteInPlace start/CMakeLists.txt hyprpm/CMakeLists.txt \
       --replace-fail "glaze 7...<8" "glaze"
 
     # Fix hardcoded paths to /usr installation
@@ -158,15 +160,20 @@ customStdenv.mkDerivation (finalAttrs: {
     [
       aquamarine
       cairo
-      glaze
+      (glaze.override {
+        enableSSL = false;
+        enableInterop = false;
+      })
       glslang
       hyprcursor.dev
       hyprgraphics
       hyprland-protocols
       hyprlang
       hyprutils
+      hyprwire
       lcms2
       libGL
+      libcanberra
       libdrm
       libei
       libgbm
@@ -180,6 +187,7 @@ customStdenv.mkDerivation (finalAttrs: {
       pciutils
       re2
       readline
+      sdbus-cpp_2
       tomlplusplus
       udis86
       wayland
@@ -218,7 +226,7 @@ customStdenv.mkDerivation (finalAttrs: {
         --suffix PATH : ${
           makeBinPath [
             binutils
-            hyprland-qtutils
+            hyprland-guiutils
             pciutils
             pkgconf
           ]
