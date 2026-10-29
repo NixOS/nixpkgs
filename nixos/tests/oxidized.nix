@@ -28,46 +28,54 @@ makeTest {
           routerDB = pkgs.writeText "oxidized-router.db" ''
             localhost:linuxgeneric:root
           '';
-          configFile = pkgs.writeText "oxidized-config.yml" ''
-            # vi: ft=yaml
-            ---
-            extensions:
-              oxidized-web:
-                load: true
-                listen: 127.0.0.1
-                port: 8888
-                vhosts:
-                  - localhost
-                  - 127.0.0.1
-                  - oxidized
-                  - oxidized.example.com
-            interval: 3600
-            retries: 3
-            model: linuxgeneric
-            username: root
-            source:
-              default: csv
-              csv:
-                file: "/var/lib/oxidized/.config/oxidized/router.db"
-                delimiter: !ruby/regexp /:/
-                map:
-                  name: 0
-                  model: 1
-                  username: 2
-                  password: 3
-                vars_map:
-                  enable: 4
-            input:
-              default: ssh
-              utf8_encoded: true
-            output:
-              default: git
-              git:
-                single_repo:  true
-                user: oxidized
-                email: oxidized@example.com
-                repo: /var/lib/oxidized/git
-          '';
+          settings = {
+            interval = 3600;
+            retries = 3;
+            model = "linuxgeneric";
+            username = "root";
+            source = {
+              default = "csv";
+              csv = {
+                file = "/var/lib/oxidized/.config/oxidized/router.db";
+                delimiter = "!ruby/regexp /:/";
+                map = {
+                  name = 0;
+                  model = 1;
+                  username = 2;
+                  password = 3;
+                };
+                vars_map = {
+                  enable = 4;
+                };
+              };
+            };
+            input = {
+              default = "ssh";
+              utf8_encoded = true;
+            };
+            output = {
+              default = "git";
+              git = {
+                single_repo = true;
+                user = "oxidized";
+                email = "oxidized@example.com";
+                repo = "/var/lib/oxidized/git";
+              };
+            };
+            extensions = {
+              oxidized-web = {
+                load = true;
+                listen = "127.0.0.1";
+                port = 8888;
+                vhosts = [
+                  "localhost"
+                  "127.0.0.1"
+                  "oxidized"
+                  "oxidized.example.com"
+                ];
+              };
+            };
+          };
         };
       };
       systemd.services.oxidized = {
@@ -84,7 +92,6 @@ makeTest {
 
         path = [ config.programs.ssh.package ];
       };
-
     };
 
   testScript =
