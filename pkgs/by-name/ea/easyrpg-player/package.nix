@@ -2,11 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  _experimental-update-script-combinators,
+  alsa-lib,
   asciidoctor,
   cmake,
-  doxygen,
-  pkg-config,
-  alsa-lib,
   flac,
   fluidsynth,
   fmt,
@@ -14,49 +13,43 @@
   glib,
   harfbuzz,
   lhasa,
-  libdecor,
   liblcf,
   libpng,
   libsndfile,
   libsysprof-capture,
   libvorbis,
-  libxcursor,
-  libxext,
-  libxi,
-  libxinerama,
   libxmp,
-  libxrandr,
-  libxscrnsaver,
-  libxxf86vm,
   mpg123,
+  nix-update-script,
   nlohmann_json,
   opusfile,
   pcre2,
   pixman,
+  pkg-config,
   sdl3,
   speexdsp,
+  versionCheckHook,
   wildmidi,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyrpg-player";
-  # liblcf needs to be updated before this.
   version = "0.8.1.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-fYSpFhqETkQhRK1/Uws0fWWdCr35+1J4vCPX9ZiQ3ZA=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     asciidoctor
     cmake
-    doxygen
     pkg-config
   ];
 
@@ -84,48 +77,40 @@ stdenv.mkDerivation rec {
     wildmidi
     zlib
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libxcursor
-    libxext
-    libxi
-    libxinerama
-    libxrandr
-    libxscrnsaver
-    libxxf86vm
-    libdecor
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   cmakeFlags = [
-    "-DPLAYER_ENABLE_TESTS=${lib.boolToString doCheck}"
+    (lib.cmakeBool "PLAYER_ENABLE_TESTS" finalAttrs.doCheck)
     # TODO: remove the below once SDL3 becomes default next major release
-    "-DPLAYER_TARGET_PLATFORM=SDL3"
+    (lib.cmakeFeature "PLAYER_TARGET_PLATFORM" "SDL3")
+    # Defaults to the build date, which is always 1980-01-01 in the sandbox
+    (lib.cmakeFeature "PLAYER_VERSION_APPEND" "")
   ];
 
-  makeFlags = [
-    "all"
-    "man"
-  ];
-
-  buildFlags = lib.optionals doCheck [
-    "test_runner_player"
-  ];
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/bin
     mv Package $out/Applications
-    ln -s $out/{Applications/EasyRPG\ Player.app/Contents/MacOS,bin}/EasyRPG\ Player
+    ln -s "$out/Applications/EasyRPG Player.app/Contents/MacOS/EasyRPG Player" $out/bin/easyrpg-player
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
   enableParallelChecking = true;
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { attrPath = "liblcf"; })
+    (nix-update-script { })
+  ];
 
   meta = {
     description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
     homepage = "https://easyrpg.org/";
+    changelog = "https://github.com/EasyRPG/Player/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ keenanweaver ];
     platforms = lib.platforms.all;
-    mainProgram = if stdenv.hostPlatform.isDarwin then "EasyRPG Player" else "easyrpg-player";
+    mainProgram = "easyrpg-player";
   };
-}
+})
