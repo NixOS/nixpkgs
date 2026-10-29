@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -48,6 +48,8 @@
+ 		EXPORT libevents
+ 		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+ 		PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libevents)
++install(FILES generated/events_generated.h
++		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/libevents/generated)
+ install(EXPORT libevents
+ 		FILE libevents.cmake
+ 		DESTINATION lib/cmake/libevents
