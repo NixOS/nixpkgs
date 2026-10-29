@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cracklib";
-  version = "2.10.3";
+  version = "2.10.4-gpg";
 
   src = fetchFromGitHub {
     owner = "cracklib";
     repo = "cracklib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ORpJje4TGw1STtvRiNEwUwSDbLXdS+WgXGlc1Wtf/gw=";
+    hash = "sha256-WGyO4X9Yj32MS0jGtASFfaMsMXeDAOPlER51wnmz61k=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
