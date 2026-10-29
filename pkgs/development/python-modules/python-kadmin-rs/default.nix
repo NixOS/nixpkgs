@@ -9,19 +9,19 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "python-kadmin-rs";
-  version = "0.7.4";
+  version = "0.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authentik-community";
     repo = "kadmin-rs";
     tag = "kadmin/version/${finalAttrs.version}";
-    hash = "sha256-IEQ7j3GoSMUD1ySaGTLmznN+5BttOzm0+VwYHuwdayQ=";
+    hash = "sha256-+PHTtVWN7tU1VnInXl7sMEy/Bpd+pTZU+rIKZssxiPk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ZVJrPb6iH5KhS7jD8QLSD4iibUKjyhc8oD6ogi3F+rk=";
+    hash = "sha256-EkzG7Y+BZUjil/kMTGnCtCesySxGtCfRjLLuGUqEN8s=";
   };
 
   # The include directories of krb5 and heimdal contain overlapping paths.
