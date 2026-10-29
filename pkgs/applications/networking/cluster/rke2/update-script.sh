@@ -33,8 +33,6 @@ set +u
 source scripts/version.sh
 set -u
 
-ETCD_BUILD=$(grep "images.DefaultEtcdImage" scripts/build-binary | sed 's/.*-\(build[0-9]*\)$/\1/')
-ETCD_VERSION="${ETCD_VERSION}-${ETCD_BUILD}"
 cd ${WORKDIR}
 
 FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
@@ -67,7 +65,7 @@ cat << EOF > "${WORKDIR}/1_${MINOR_VERSION}/versions.nix"
   rke2TarballHash = "${STORE_HASH}";
   rke2VendorHash = "${FAKE_HASH}";
   k8sImageTag = "${KUBERNETES_IMAGE_TAG}";
-  etcdVersion = "${ETCD_VERSION}";
+  etcdVersion = "${ETCD_IMAGE_TAG}";
   pauseVersion = "${PAUSE_VERSION}";
   ccmVersion = "${CCM_VERSION}";
   dockerizedVersion = "${DOCKERIZED_VERSION}";
