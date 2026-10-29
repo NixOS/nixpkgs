@@ -10,7 +10,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "gomodel";
-  version = "0.1.107";
+  version = "0.1.109";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ buildGo127Module (finalAttrs: {
     owner = "ENTERPILOT";
     repo = "GoModel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l1LX6YZWOsIDHiqqcVY6gJ+iRaXHxPUO4movK+L2ad4=";
+    hash = "sha256-LMjMDm6dWfaCPCSZ7oM0ApOxG7KzWSH+Pnqqwmtu000=";
   };
 
-  vendorHash = "sha256-miLdqw7XJEgX23cZPwL6C09cYXZfVM5uzJhYIJRKC/Y=";
+  vendorHash = "sha256-KtkO4tElOfeGbaF7NCMB3BZd1Dmo1s1XMh1w+gm+/y0=";
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web/dashboard";
     hash = "sha256-w/Q0PQeX3HmbRRZi3uT5slPVmY/H5Y1nVOeYtgCpRVE=";
