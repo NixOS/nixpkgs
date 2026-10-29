@@ -15,6 +15,8 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
+  aws-lc,
+  sqlite,
 }:
 
 let
@@ -62,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libopus
     libxkbcommon
     wayland
+    aws-lc
+    sqlite
   ];
 
   # Patch build.rs from inputtino-sys with the C++ inputtino sources.
