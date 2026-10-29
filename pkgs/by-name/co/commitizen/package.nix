@@ -55,7 +55,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     gitMinimal
-    versionCheckHook
     writableTmpDirAsHomeHook
   ]
   ++ (with python3Packages; [
@@ -67,8 +66,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-xdist
     pytestCheckHook
   ]);
-
-  versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "commitizen" ];
 
@@ -98,6 +95,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
         --zsh <(${register-python-argcomplete} --shell zsh $out/bin/cz) \
         --fish <(${register-python-argcomplete} --shell fish $out/bin/cz)
     '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   passthru = {
     updateScript = nix-update-script { };
