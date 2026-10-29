@@ -21,8 +21,19 @@ builds reprodutíveis e suporte opt-in a derivações endereçadas por conteúdo
 | `arkhe-verify-wasm` | `sha256-UQi2HohdpttuenoFcZ22EZVw8FW+GaN3aYFNRngIgn4=` |
 | `arkhe-sdd-parser` | `sha256-MG84KZNsiV1eEVbbwiit4dWBlrM2EO7e3R5xwzyvChU=` |
 
+Os mesmos três `narHash` saíram de um clone limpo do commit em ext4,
+construído do zero: conteúdo idêntico entre checkouts diferentes.
+
+**Caminho de store depende do sistema de arquivos do checkout.** No WSL,
+arquivos em `/mnt/<drive>` aparecem como `rwxrwxrwx`; o bit executável entra
+no hash da fonte, então o `.drv` e o caminho de saída diferem de um checkout
+em ext4, embora o `narHash` da saída seja o mesmo (observado acima). Para
+caminhos comparáveis entre máquinas, construa a partir de um checkout em
+sistema de arquivos Linux, ou compare `narHash`/use as variantes CA.
+
 Num checkout git, arquivos novos só entram no flake depois de `git add`;
-para testar antes disso use `nix flake check path:$PWD`.
+para testar antes disso use `nix flake check path:$PWD`. O `.gitignore`
+global desta máquina ignora `lib/`: adicione `arkhe/lib` com `git add -f`.
 | `arkhe-mmrd`, `arkhe-journald`, `arkhe-gate`, `arkhe-anchor`, `arkhe-prove` | **não existem como crates** neste monorepo; não há pacote para eles |
 
 O workflow em `../.github/workflows/arkhe-nix.yml` repete os checks de build. As execuções locais no host e na VM, com seus hashes e logs, estão registradas em [docs/INTEGRATION-REVIEW.md](docs/INTEGRATION-REVIEW.md).
