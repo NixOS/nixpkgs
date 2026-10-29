@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chalice";
-  version = "1.33.0";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "chalice";
     tag = finalAttrs.version;
-    hash = "sha256-c5xzgrxRFRlvgMnf/L8rhG7rYJLtuMvDZHYsPaHkdRs=";
+    hash = "sha256-ymE42aUjECzBvIHPexLW9vvAvqlbtdzxkQVRWIkniGk=";
   };
 
   pythonRelaxDeps = [ "pip" ];
