@@ -27,7 +27,7 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-magnumclient";
   version = "4.10.0";
   pyproject = true;
@@ -35,11 +35,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-magnumclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kOnx2Fsx6WK7Z3z7O6so1LOjjyPiEB0jDFzOl7WlMS0=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     openstackdocstheme
@@ -47,6 +48,11 @@ buildPythonPackage rec {
   ];
 
   sphinxBuilders = [ "man" ];
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include magnumclient *" > MANIFEST.in
+  '';
 
   build-system = [
     pbr
@@ -78,7 +84,11 @@ buildPythonPackage rec {
     testtools
   ];
 
-  pythonImportsCheck = [ "magnumclient" ];
+  pythonImportsCheck = [
+    "magnumclient"
+    "magnumclient.common"
+    "magnumclient.v1"
+  ];
 
   meta = {
     homepage = "https://github.com/openstack/python-magnumclient";
@@ -87,4 +97,4 @@ buildPythonPackage rec {
     mainProgram = "magnum";
     teams = [ lib.teams.openstack ];
   };
-}
+})
