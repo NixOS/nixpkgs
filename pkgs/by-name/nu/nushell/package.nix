@@ -11,6 +11,7 @@
   libx11,
   nghttp2,
   libgit2,
+  sqlite,
   withDefaultFeatures ? true,
   additionalFeatures ? (p: p),
   nix-update-script,
@@ -55,13 +56,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     zstd
+    libgit2
+    sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
   ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ libx11 ]
-  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-    nghttp2
-    libgit2
-  ];
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [ nghttp2 ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
