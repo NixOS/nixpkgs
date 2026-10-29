@@ -28,6 +28,26 @@
 
   # coupled downstream dependencies
   pip-tools,
+
+  # dependencies
+  cachecontrol,
+  certifi,
+  distlib,
+  distro,
+  idna,
+  msgpack,
+  packaging,
+  setuptools,
+  standard-pkg-resources,
+  platformdirs,
+  pygments,
+  pyproject-hooks,
+  requests,
+  resolvelib,
+  rich,
+  tomli,
+  truststore,
+  urllib3,
 }:
 
 let
@@ -50,7 +70,36 @@ let
       # Remove vendored Windows PE binaries
       # Note: These are unused but make the package unreproducible.
       find -type f -name '*.exe' -delete
+
+      find src/pip/_vendor -mindepth 1 -maxdepth 1 -type d -exec rm -r "{}" ";"
+      substituteInPlace src/pip/_vendor/__init__.py \
+        --replace-fail "DEBUNDLED = False" "DEBUNDLED = True"
+      substituteInPlace pyproject.toml \
+        --replace-fail '"src/pip/_vendor/**/*COPYING*",' "" \
+        --replace-fail '"src/pip/_vendor/**/*LICENSE*",' ""
     '';
+
+    dependencies = [
+      cachecontrol
+      certifi
+      distlib
+      distro
+      idna
+      msgpack
+      packaging
+      setuptools
+      standard-pkg-resources
+      platformdirs
+      pygments
+      pyproject-hooks
+      requests
+      resolvelib
+      rich
+      tomli
+      tomli-w
+      truststore
+      urllib3
+    ];
 
     nativeBuildInputs = [
       flit-core
