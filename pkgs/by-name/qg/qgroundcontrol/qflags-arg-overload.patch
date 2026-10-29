@@ -1,0 +1,13 @@
+diff --git a/src/ADSB/ADSBVehicle.cc b/src/ADSB/ADSBVehicle.cc
+index 1111111..2222222 100644
+--- a/src/ADSB/ADSBVehicle.cc
++++ b/src/ADSB/ADSBVehicle.cc
+@@ -36,7 +36,7 @@
+         return;
+     }
+ 
+-    qCDebug(ADSBVehicleLog) << "Updating" << QStringLiteral("%1 Flags: %2").arg(vehicleInfo.icaoAddress, 0, 16).arg(vehicleInfo.availableFlags, 0, 2);
++    qCDebug(ADSBVehicleLog) << "Updating" << QStringLiteral("%1 Flags: %2").arg(vehicleInfo.icaoAddress, 0, 16).arg(vehicleInfo.availableFlags.toInt(), 0, 2);
+ 
+     if (vehicleInfo.availableFlags & ADSB::LocationAvailable) {
+         if (!QGC::fuzzyCompare(vehicleInfo.location.latitude(), coordinate().latitude()) || !QGC::fuzzyCompare(vehicleInfo.location.longitude(), coordinate().longitude())) {

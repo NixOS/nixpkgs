@@ -81,6 +81,28 @@ stdenv.mkDerivation (finalAttrs: {
     # (another case of relying on transitive inclusion that doesn't hold
     # here). TODO: Upstream.
     ./missing-unistd-include.patch
+    # Newer Qt6 (6.9+; we're on 6.12, past QGC_QT_MAXIMUM_VERSION's 6.8.3
+    # cap, which we override) made QFlags's implicit int conversion
+    # explicit-only, breaking this QString::arg() overload resolution. A
+    # real forward-compat gap, not Nix-specific. TODO: Upstream.
+    ./qflags-arg-overload.patch
+    # libevents' ReceiveProtocol::Callbacks::send_request_event_message grew
+    # a target_system_id parameter (to support wide, >255 system IDs via
+    # MAVLink's extended header) since QGC v5.0.2's release; update the one
+    # callback that implements it to match, using the wide-target-aware
+    # pack_chan function libevents' own doc comment says to use.
+    ./libevents-wide-target-system.patch
+    # mavlink's (unstable, "development"-dialect) CONTROL_STATUS message had
+    # its sysid_in_control field renamed to gcs_main (plus new flags/
+    # gcs_secondary fields) since QGC v5.0.2's release. development-dialect
+    # messages are explicitly unstable upstream (see src/MAVLink/
+    # CMakeLists.txt's own comment); not Nix-specific.
+    ./mavlink-control-status-field-rename.patch
+    # Same QString::arg() overload-resolution issue as
+    # qflags-arg-overload.patch, here for a QByteArray-indexed char (newer
+    # Qt6 is stricter about implicit char->integer promotion in arg()'s
+    # overload set). TODO: Upstream.
+    ./qbytearray-char-arg-overload.patch
   ];
 
   # Never let a vendored copy of a dependency's sources (checked into QGC's
