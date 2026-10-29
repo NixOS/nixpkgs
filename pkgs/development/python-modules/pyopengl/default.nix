@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru.runtimeLibs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    "/run/opengl-driver/lib"
+    "/run/opengl-driver"
     pkgs.libglvnd
     pkgs.libGLU
     pkgs.libglut
