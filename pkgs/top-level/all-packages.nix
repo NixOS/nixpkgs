@@ -2268,8 +2268,8 @@ with pkgs;
       ;
   };
 
-  nodejs = nodejs_24;
-  nodejs-slim = nodejs-slim_24;
+  nodejs = nodejs_26;
+  nodejs-slim = nodejs-slim_26;
 
   nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { };
   nodejs_22 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_22; };
