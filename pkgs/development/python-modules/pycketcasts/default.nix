@@ -4,12 +4,13 @@
   fetchFromCodeberg,
   python-magic,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "pycketcasts";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "nwithan8";
@@ -18,7 +19,9 @@ buildPythonPackage {
     hash = "sha256-O4j89fE7fYPthhCH8b2gGskkelEA4mU6GvSbKIl+4Mk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-magic
     requests
   ];
