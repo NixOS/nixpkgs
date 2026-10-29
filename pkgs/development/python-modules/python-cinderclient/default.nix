@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   ddt,
   keystoneauth1,
   openstackdocstheme,
@@ -20,16 +20,20 @@
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-cinderclient";
   version = "9.10.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_cinderclient";
-    inherit version;
-    hash = "sha256-+4Vub0OCpMhNgvAEFePGZRS3PhLZRnmTUYK6T4ZRCRY=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-cinderclient";
+    tag = finalAttrs.version;
+    hash = "sha256-TbGDp/N8+Ro5ShSgPfSIA9a0k8Zf2l3E74EWLG1Ko9Q=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     openstackdocstheme
@@ -38,6 +42,11 @@ buildPythonPackage rec {
   ];
 
   sphinxBuilders = [ "man" ];
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include cinderclient *" > MANIFEST.in
+  '';
 
   build-system = [ setuptools ];
 
@@ -59,7 +68,10 @@ buildPythonPackage rec {
     stestrCheckHook
   ];
 
-  pythonImportsCheck = [ "cinderclient" ];
+  pythonImportsCheck = [
+    "cinderclient"
+    "cinderclient.apiclient"
+  ];
 
   meta = {
     description = "OpenStack Block Storage API Client Library";
@@ -68,4 +80,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
