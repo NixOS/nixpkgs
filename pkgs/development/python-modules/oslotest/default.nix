@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fixtures,
   pbr,
   six,
@@ -9,15 +9,25 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslotest";
   version = "6.1.1";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XOlzR3NPCMpia7SWliqLx6266Wk3MPWFnZxSk9Si/YA=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslotest";
+    tag = finalAttrs.version;
+    hash = "sha256-r66NyNazyLkqzlORleWgHuJkotBt37cXcnZJBUjaEAo=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslotest *" > MANIFEST.in
+  '';
 
   nativeBuildInputs = [ pbr ];
 
@@ -34,7 +44,10 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [ "oslotest" ];
+  pythonImportsCheck = [
+    "oslotest"
+    "oslotest.tools"
+  ];
 
   meta = {
     description = "Oslo test framework";
@@ -42,4 +55,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
