@@ -26,6 +26,7 @@ let
       gnugrep,
       gnused,
       systemdMinimal,
+      systemdLibs,
       smartmontools,
       enableMail ? false,
       sysstat,
@@ -189,6 +190,7 @@ let
           zlib
           libuuid
           attr
+          systemdLibs
           libtirpc
           pam
           bashNonInteractive
