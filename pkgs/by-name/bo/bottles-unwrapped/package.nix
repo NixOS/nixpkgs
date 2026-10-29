@@ -34,6 +34,7 @@
   nix-update-script,
   removeWarningPopup ? false,
   withObsVkCapture ? false,
+  withLsfgVk ? false,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
