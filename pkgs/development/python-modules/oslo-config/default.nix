@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   netaddr,
   oslo-i18n,
   pbr,
@@ -18,13 +18,20 @@ buildPythonPackage (finalAttrs: {
   version = "10.7.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "oslo_config";
-    inherit (finalAttrs) version;
-    hash = "sha256-Tw/Uyn7P5RH7wOAS08Y/zlcAnzYBmenpzCMp7VXskR4=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.config";
+    tag = finalAttrs.version;
+    hash = "sha256-5LSJGmEaKG6FV8NHUd6UpfijtzBp4CuvPHbFa73WXpQ=";
   };
 
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
+
   postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslo_config *" > MANIFEST.in
+
     # only a small portion of the listed packages are actually needed for running the tests
     # so instead of removing them one by one remove everything
     rm test-requirements.txt
@@ -49,7 +56,10 @@ buildPythonPackage (finalAttrs: {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [ "oslo_config" ];
+  pythonImportsCheck = [
+    "oslo_config"
+    "oslo_config.sources"
+  ];
 
   meta = {
     description = "Oslo Configuration API";
