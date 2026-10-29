@@ -12228,6 +12228,8 @@ self: super: with self; {
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel { inherit (pkgs) nix; };
 
+  nix-manipulator = callPackage ../development/python-modules/nix-manipulator { };
+
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
   nixl = callPackage ../development/python-modules/nixl {
