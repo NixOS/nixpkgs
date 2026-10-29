@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manimpango";
     tag = "v${version}";
-    hash = "sha256-AGqFMJ6WiUNBq/b/JvnA3RgpHF7quoZTSp+v4WJ89A4=";
+    hash = "sha256-oZBrDAnI53Q51WMkfCr+zABilbhSgO34GAUD5arpx+o=";
   };
 
   postPatch = ''
