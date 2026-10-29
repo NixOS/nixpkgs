@@ -155,7 +155,10 @@ stdenv.mkDerivation (finalAttrs: {
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.markuskowa ];
+    maintainers = with lib.maintainers; [
+      markuskowa
+      doronbehar
+    ];
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
   };
