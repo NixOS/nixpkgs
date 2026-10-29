@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "katex";
     repo = "katex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3ymbUOq7rGXbUG5qE5FXwm2erxAF7eHusND6kKNtfpY=";
+    hash = "sha256-Pp+2YTmIZX39Qiu0bLKAxhFiybnwkHP5qJMACISg6tA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
