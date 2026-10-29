@@ -16001,6 +16001,8 @@ self: super: with self; {
 
   pyroma = callPackage ../development/python-modules/pyroma { };
 
+  pyroscope-io = callPackage ../development/python-modules/pyroscope-io { };
+
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyrsistent = callPackage ../development/python-modules/pyrsistent { };
