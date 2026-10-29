@@ -28,11 +28,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aspell";
-  version = "0.60.8.2";
+  version = "0.60.8.3";
 
   src = fetchurl {
     url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
-    hash = "sha256-V/5IY+rmBI9yJFqFdbRLcY+4XKFLn4wK/EGyVN/XaRk=";
+    hash = "sha256-BTTq4REyQFEg0R5Gv1lb1d0Ym8Ekunel3WquhhtIoWI=";
   };
 
   patches = lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
