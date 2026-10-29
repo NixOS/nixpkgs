@@ -1,0 +1,109 @@
+diff --git a/server/binaries/ffmpeg.ts b/server/binaries/ffmpeg.ts
+index abb4de4f..cdcc0a02 100644
+--- a/server/binaries/ffmpeg.ts
++++ b/server/binaries/ffmpeg.ts
+@@ -8,6 +8,7 @@ import { getConfig } from "../config";
+ import { mkdirpAsync, rimrafAsync, statAsync } from "../utils/fs/async";
+ import { formatMessage, handleError, logger } from "../utils/logger";
+ import { generateTimestampsAtIntervals } from "../utils/misc";
++import { tempPath } from "server/utils/path";
+ 
+ export async function takeScreenshot(
+   inPath: string,
+@@ -112,7 +113,7 @@ export async function generatePreview(
+ ): Promise<void> {
+   logger.debug(`Creating 100 small previews for ${sceneId}.`);
+ 
+-  const tmpFolder = resolve("tmp", "preview", sceneId);
++  const tmpFolder = resolve(tempPath, "preview", sceneId);
+ 
+   const timestamps = generateTimestampsAtIntervals(PREVIEW_COUNT, durationSecs * 1000, {
+     startPercentage: 2,
+diff --git a/server/database/index.ts b/server/database/index.ts
+index 80ff6432..c6feb11d 100755
+--- a/server/database/index.ts
++++ b/server/database/index.ts
+@@ -15,7 +15,7 @@ import Studio from "../types/studio";
+ import SceneView from "../types/watch";
+ import { mkdirpSync } from "../utils/fs/async";
+ import { logger } from "../utils/logger";
+-import { libraryPath } from "../utils/path";
++import { libraryPath, tempPath } from "../utils/path";
+ import { Izzy } from "./internal";
+ 
+ export function formatCollectionName(name: string) {
+@@ -261,11 +261,11 @@ export async function loadStore<T extends { _id: string }>(
+ }
+ 
+ export async function loadStores(): Promise<void> {
+-  if (!existsSync("tmp")) {
+-    logger.info("Creating temporary directory 'tmp'");
+-    mkdirpSync("tmp/");
++  if (!existsSync(tempPath)) {
++    logger.info(`Creating temporary directory '${tempPath}'`);
++    mkdirpSync(tempPath);
+   } else {
+-    logger.debug("Temporary directory 'tmp' already exists");
++    logger.debug(`Temporary directory '${tempPath}' already exists`);
+   }
+ 
+   const crossReferencePath = libraryPath("cross_references.db");
+diff --git a/server/graphql/mutations/image.ts b/server/graphql/mutations/image.ts
+index 6554f145..a7853eea 100644
+--- a/server/graphql/mutations/image.ts
++++ b/server/graphql/mutations/image.ts
+@@ -20,7 +20,7 @@ import Studio from "../../types/studio";
+ import { mapAsync } from "../../utils/async";
+ import { copyFileAsync, statAsync, unlinkAsync } from "../../utils/fs/async";
+ import { logger } from "../../utils/logger";
+-import { getFolderPartition, libraryPath } from "../../utils/path";
++import { getFolderPartition, libraryPath, tempPath } from "../../utils/path";
+ import { getExtension, normalizeName } from "../../utils/string";
+ import { Dictionary, isBoolean, isNumber, isString } from "../../utils/types";
+ import { clearCaches } from "../datasources";
+@@ -110,7 +110,7 @@ export default {
+ 
+     const image = new Image(imageName);
+ 
+-    const outPath = `tmp/${image._id}${ext}`;
++    const outPath = resolve(tempPath, `${image._id}${ext}`);
+ 
+     logger.debug(`Getting file...`);
+ 
+diff --git a/server/routes/scene.ts b/server/routes/scene.ts
+index 601de160..fe8b8de5 100644
+--- a/server/routes/scene.ts
++++ b/server/routes/scene.ts
+@@ -16,7 +16,7 @@ import Scene from "../types/scene";
+ import { mkdirpAsync, readFileAsync, rimrafAsync } from "../utils/fs/async";
+ import { handleError, logger } from "../utils/logger";
+ import { generateTimestampsAtIntervals } from "../utils/misc";
+-import { getFolderPartition, libraryPath } from "../utils/path";
++import { getFolderPartition, libraryPath, tempPath } from "../utils/path";
+ import { IMAGE_CACHE_CONTROL } from "./media";
+ 
+ /* function streamTranscode(
+@@ -94,7 +94,7 @@ export async function attachScenePreviewGrid(scene: Scene): Promise<string | nul
+     return null;
+   }
+ 
+-  const gridFolder = path.resolve("tmp", "grid");
++  const gridFolder = path.resolve(tempPath, "grid");
+   const tmpFolder = path.resolve(gridFolder, "thumbs", randomUUID());
+   await mkdirpAsync(tmpFolder);
+ 
+diff --git a/server/utils/path.ts b/server/utils/path.ts
+index 05619e93..64964de8 100644
+--- a/server/utils/path.ts
++++ b/server/utils/path.ts
+@@ -5,6 +5,7 @@ import { getConfig } from "../config";
+ import { mkdirpSync } from "./fs/async";
+ 
+ const configFolder = process.env.PV_CONFIG_FOLDER || process.cwd();
++export const tempPath = process.env.CACHE_DIRECTORY ?? "tmp";
+ 
+ export function libraryPath(str: string): string {
+   return resolve(getConfig().persistence.libraryPath, "library", str);
+-- 
+2.47.0
+

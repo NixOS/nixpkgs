@@ -1,0 +1,15 @@
+diff -ur a/Makefile b/Makefile
+--- a/Makefile	2026-02-14 15:58:16.624434564 -0500
++++ b/Makefile	2026-02-14 15:59:25.701016105 -0500
+@@ -4059,9 +4059,9 @@
+ contrib/libgit-sys/libgitpub.a: $(LIBGIT_HIDDEN_EXPORT)
+ 	$(AR) $(ARFLAGS) $@ $^
+ 
+-contrib/credential/osxkeychain/git-credential-osxkeychain: contrib/credential/osxkeychain/git-credential-osxkeychain.o $(LIB_FILE) GIT-LDFLAGS
++contrib/credential/osxkeychain/git-credential-osxkeychain: contrib/credential/osxkeychain/git-credential-osxkeychain.o $(LIB_FILE) $(RUST_LIB) GIT-LDFLAGS
+ 	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) \
+-		$(filter %.o,$^) $(LIB_FILE) $(EXTLIBS) -framework Security -framework CoreFoundation
++		$(filter %.o,$^) $(LIB_FILE) $(RUST_LIB) $(EXTLIBS) -framework Security -framework CoreFoundation
+ 
+ contrib/credential/osxkeychain/git-credential-osxkeychain.o: contrib/credential/osxkeychain/git-credential-osxkeychain.c GIT-CFLAGS
+ 	$(QUIET_LINK)$(CC) -o $@ -c $(dep_args) $(compdb_args) $(ALL_CFLAGS) $(EXTRA_CPPFLAGS) $<

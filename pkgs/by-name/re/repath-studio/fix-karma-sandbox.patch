@@ -1,0 +1,30 @@
+--- a/karma.conf.js
++++ b/karma.conf.js
+@@ -2,13 +2,14 @@
+   var junitOutputDir = process.env.CIRCLE_TEST_REPORTS || "target/junit"
+ 
+   config.set({
+-    browserDisconnectTimeout: 10000,
++    browserDisconnectTimeout: 300000,
+     customLaunchers: {
+       ChromeHeadlessNoSandbox: {
+         base: 'ChromeHeadless',
+         flags: [
+           '--disable-gpu',
+-          '--no-sandbox'
++          '--no-sandbox',
++          '--disable-dev-shm-usage'
+         ]
+       },
+       CustomElectron: {
+@@ -44,6 +45,9 @@
+       outputDir: junitOutputDir + '/karma', // results will be saved as outputDir/browserName.xml
+       outputFile: undefined, // if included, results will be saved as outputDir/browserName/outputFile
+       suite: '' // suite will become the package name attribute in xml testsuite element
+-    }
++    },
++
++    browserNoActivityTimeout: 300000,
++    pingTimeout: 300000
+   })
+ }

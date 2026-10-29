@@ -1,0 +1,162 @@
+diff -rc checkinstall-orig/installwatch/installwatch.c checkinstall/installwatch/installwatch.c
+*** checkinstall-orig/installwatch/installwatch.c	2009-03-12 13:40:24.000000000 +0100
+--- checkinstall/installwatch/installwatch.c	2009-03-27 22:42:19.000000000 +0100
+***************
+*** 110,115 ****
+--- 110,117 ----
+  static int (*true_setxattr)(const char *,const char *,const void *,
+                              size_t, int);
+  static int (*true_removexattr)(const char *,const char *);
++ static ssize_t (*true_getxattr)(const char *,const char *,const void *,size_t);
++ static ssize_t (*true_lgetxattr)(const char *,const char *,const void *,size_t);
+  
+  #if(GLIBC_MINOR >= 1)
+  
+***************
+*** 369,374 ****
+--- 371,378 ----
+  	true_unlink      = dlsym(libc_handle, "unlink");
+  	true_utime       = dlsym(libc_handle, "utime");
+  	true_setxattr    = dlsym(libc_handle, "setxattr");
++ 	true_getxattr    = dlsym(libc_handle, "getxattr");
++ 	true_lgetxattr   = dlsym(libc_handle, "lgetxattr");
+          true_utimes      = dlsym(libc_handle, "utimes");
+          true_access      = dlsym(libc_handle, "access");
+  
+***************
+*** 3494,3499 ****
+--- 3498,3587 ----
+          return result;
+  }
+  
++ int getxattr (const char *pathname, const char *name,
++               const void *value, size_t size)
++ {
++         int result;
++         instw_t instw;
++ 	int status;
++ 
++         REFCOUNT;
++ 
++         if (!libc_handle)
++                initialize();
++ 
++ #if DEBUG
++         debug(2,"getxattr(%s,%s)\n",pathname,name);
++ #endif
++ 
++          /* We were asked to work in "real" mode */
++         if( !(__instw.gstatus & INSTW_INITIALIZED) ||
++            !(__instw.gstatus & INSTW_OKWRAP) ) {
++                result=true_getxattr(pathname,name,value,size);
++                return result;
++         }
++ 
++         instw_new(&instw);
++         instw_setpath(&instw,pathname);
++ 	instw_getstatus(&instw,&status);
++ 
++ #if DEBUG
++         instw_print(&instw);
++ #endif
++ 
++ 	if(status&INSTW_TRANSLATED) {
++             result=true_getxattr(instw.translpath,name,value,size);
++         } else {
++             result=true_getxattr(instw.path,name,value,size);
++         }
++ 
++         instw_delete(&instw);
++ 
++         return result;
++ }
++ 
++ int lgetxattr (const char *pathname, const char *name,
++               const void *value, size_t size)
++ {
++         int result;
++         instw_t instw;
++ 	int status;
++ 
++         REFCOUNT;
++ 
++         if (!libc_handle)
++                initialize();
++ 
++ #if DEBUG
++         debug(2,"lgetxattr(%s,%s)\n",pathname,name);
++ #endif
++ 
++          /* We were asked to work in "real" mode */
++         if( !(__instw.gstatus & INSTW_INITIALIZED) ||
++            !(__instw.gstatus & INSTW_OKWRAP) ) {
++                result=true_lgetxattr(pathname,name,value,size);
++                return result;
++         }
++ 
++         instw_new(&instw);
++         instw_setpath(&instw,pathname);
++ 	instw_getstatus(&instw,&status);
++ 
++ #if DEBUG
++         instw_print(&instw);
++ #endif
++ 
++ 	if(status&INSTW_TRANSLATED) {
++             result=true_lgetxattr(instw.translpath,name,value,size);
++         } else {
++             result=true_lgetxattr(instw.path,name,value,size);
++         }
++ 
++         instw_delete(&instw);
++ 
++         return result;
++ }
++ 
+  #if(GLIBC_MINOR >= 1)
+  
+  int creat64(const char *pathname, __mode_t mode) {
+***************
+*** 3663,3668 ****
+--- 3751,3791 ----
+  	return result;
+  }
+  
++ int __open_2(const char *pathname, int flags, ...) {
++ 	va_list ap;
++ 	mode_t mode;
++         
++ #if DEBUG
++ 	debug(2,"__open_2(%s,%d,mode)\n",pathname,flags);
++ #endif
++ 
++ 	va_start(ap, flags);
++ 	mode = va_arg(ap, mode_t);
++ 	va_end(ap);
++         
++         /* The open() function in Glibc 2.9 is an always-inline
++            function that may call __open_2(), so it's important that
++            we handle it.  I don't know what __open_2() is supposed to
++            do, but redirecting it to open() seems to work fine.  */
++         
++         return open(pathname,flags,mode);
++ }
++ 
++ int __open64_2(const char *pathname, int flags, ...) {
++ 	va_list ap;
++ 	mode_t mode;
++         
++ #if DEBUG
++ 	debug(2,"__open64_2(%s,%d,mode)\n",pathname,flags);
++ #endif
++ 
++ 	va_start(ap, flags);
++ 	mode = va_arg(ap, mode_t);
++ 	va_end(ap);
++         
++         return open64(pathname,flags,mode);
++ }
++ 
+  struct dirent64 *readdir64(DIR *dir) {
+  	struct dirent64 *result;
+  

@@ -1,0 +1,38 @@
+From efdbecaf721ccb217ece34a5105eaac68e27aa51 Mon Sep 17 00:00:00 2001
+From: Max Karou <maxkarou@protonmail.com>
+Date: Sun, 4 Jan 2026 01:47:51 +0100
+Subject: [PATCH] sed_version: remove word boundary assertions
+
+Word boundary assertions (\b) are GNU regex extensions that may fail
+on systems using non-glibc C libraries (e.g., musl, macOS).
+
+This was previously fixed in replace_regex() via NixOS/nixpkgs#388412,
+which was subsequently upstreamed in amber-lang/amber#686.
+
+Changes in amber-lang/amber#717 reintroduced the same portability issue.
+---
+ src/std/text.ab | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/std/text.ab b/src/std/text.ab
+index 5f2d935..a5dac3f 100644
+--- a/src/std/text.ab
++++ b/src/std/text.ab
+@@ -51,12 +51,12 @@ const SED_VERSION_BUSYBOX = 2
+ fun sed_version(): Int {
+     // We can't match against a word "GNU" because
+     // alpine's busybox sed returns "This is not GNU sed version"
+-    trust $ re='\bCopyright\b.+\bFree Software Foundation\b'; [[ \$(sed --version 2>/dev/null) =~ \$re ]] $
++    trust $ re='Copyright.+Free Software Foundation'; [[ \$(sed --version 2>/dev/null) =~ \$re ]] $
+     if status == 0 {
+         return SED_VERSION_GNU
+     }
+     // On BSD single `sed` waits for stdin. We must use `sed --help` to avoid this.
+-    trust $ re='\bBusyBox\b'; [[ \$(sed --help 2>&1) =~ \$re ]] $
++    trust $ re='BusyBox'; [[ \$(sed --help 2>&1) =~ \$re ]] $
+     if status == 0 {
+         return SED_VERSION_BUSYBOX
+     }
+-- 
+2.51.2
+

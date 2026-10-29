@@ -1,0 +1,28 @@
+diff --git a/numba/__init__.py b/numba/__init__.py
+index 33f752018..7d3b3ae8d 100644
+--- a/numba/__init__.py
++++ b/numba/__init__.py
+@@ -39,8 +39,8 @@ def _ensure_critical_deps():
+                f"{numpy_version[0]}.{numpy_version[1]}.")
+         raise ImportError(msg)
+ 
+-    if numpy_version > (2, 3):
+-        msg = (f"Numba needs NumPy 2.3 or less. Got NumPy "
++    if numpy_version > (2, 4):
++        msg = (f"Numba needs NumPy 2.4 or less. Got NumPy "
+                 f"{numpy_version[0]}.{numpy_version[1]}.")
+         raise ImportError(msg)
+
+diff --git a/setup.py b/setup.py
+index 9eaa191cb..a5febef1e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,7 +23,7 @@ min_python_version = "3.10"
+ max_python_version = "3.15"  # exclusive
+ min_numpy_build_version = "2.0.0rc1"
+ min_numpy_run_version = "1.22"
+-max_numpy_run_version = "2.4"
++max_numpy_run_version = "2.5"
+ min_llvmlite_version = "0.46.0dev0"
+ max_llvmlite_version = "0.47"
+

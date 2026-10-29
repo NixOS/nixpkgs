@@ -1,0 +1,26 @@
+From 98fd6e87243c6d5992429a9b90426af73dbcc3ff Mon Sep 17 00:00:00 2001
+From: Bart Oostveen <bart@bartoostveen.nl>
+Date: Fri, 10 Jul 2026 13:59:21 +0200
+Subject: [PATCH] fix: create new event loop if not exists
+
+---
+ lib/sqlalchemy/util/_concurrency_py3k.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/lib/sqlalchemy/util/_concurrency_py3k.py b/lib/sqlalchemy/util/_concurrency_py3k.py
+index 1e4ffef..5aaf12c 100644
+--- a/lib/sqlalchemy/util/_concurrency_py3k.py
++++ b/lib/sqlalchemy/util/_concurrency_py3k.py
+@@ -190,6 +190,8 @@ def get_event_loop():
+         try:
+             return asyncio.get_running_loop()
+         except RuntimeError:
+-            return asyncio.get_event_loop_policy().get_event_loop()
++            loop = asyncio.new_event_loop()
++            asyncio.set_event_loop(loop)
++            return loop
+     else:
+         return asyncio.get_event_loop()
+-- 
+2.54.0
+

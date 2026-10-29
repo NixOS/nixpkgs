@@ -1,0 +1,14 @@
+diff --git a/src/helper/CMakeLists.txt b/src/helper/CMakeLists.txt
+index 38deb12..7bbaa81 100644
+--- a/src/helper/CMakeLists.txt
++++ b/src/helper/CMakeLists.txt
+@@ -27,8 +27,8 @@ message("D-Bus files will be installed into ${DBUS_DATADIR_PREFIX_DIR}/dbus-1")
+ option(POLKIT_POLICY_INSTALL_DIR "Polkit policy files installation directory" OFF)
+ 
+ # Find polkit
++pkg_check_modules(POLKIT REQUIRED polkit-gobject-1)
+ if(NOT POLKIT_POLICY_INSTALL_DIR)
+-  pkg_check_modules(POLKIT REQUIRED polkit-gobject-1)
+   execute_process(
+     COMMAND pkg-config --variable=policydir polkit-gobject-1
+     RESULT_VARIABLE POLKIT_POLICY_INSTALL_DIR_RESULT

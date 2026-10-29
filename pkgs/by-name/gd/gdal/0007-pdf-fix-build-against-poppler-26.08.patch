@@ -1,0 +1,129 @@
+From ef0530dcfd752ea4e8ce12e9c80c5d0677e100de Mon Sep 17 00:00:00 2001
+From: Even Rouault <even.rouault@spatialys.com>
+Date: Thu, 16 Jul 2026 01:13:21 +0200
+Subject: [PATCH] Fix build against Poppler 26.08dev
+
+---
+ frmts/pdf/pdfobject.cpp | 77 ++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 72 insertions(+), 5 deletions(-)
+
+diff --git a/frmts/pdf/pdfobject.cpp b/frmts/pdf/pdfobject.cpp
+index fd734ac010..da86d0db3f 100644
+--- a/frmts/pdf/pdfobject.cpp
++++ b/frmts/pdf/pdfobject.cpp
+@@ -1450,6 +1450,34 @@ int64_t GDALPDFStreamPoppler::GetLength(int64_t nMaxSize)
+     return m_nLength;
+ }
+
++#if (POPPLER_MAJOR_VERSION > 26 ||                                             \
++     (POPPLER_MAJOR_VERSION == 26 && POPPLER_MINOR_VERSION > 7) ||             \
++     (POPPLER_MAJOR_VERSION == 26 && POPPLER_MINOR_VERSION == 7 &&             \
++      POPPLER_MICRO_VERSION > 0))
++
++/************************************************************************/
++/*                          StringToCharStar()                          */
++/************************************************************************/
++
++static char *StringToCharStar(const std::string &str)
++{
++    const auto nLength = str.size();
++    if (nLength)
++    {
++        char *pszContent = static_cast<char *>(VSI_MALLOC_VERBOSE(nLength + 1));
++        if (pszContent)
++        {
++            const char *srcStr = str.c_str();
++            memcpy(pszContent, srcStr, nLength);
++            pszContent[nLength] = '\0';
++        }
++        return pszContent;
++    }
++    return nullptr;
++}
++
++#else
++
+ /************************************************************************/
+ /*                         GooStringToCharStart()                       */
+ /************************************************************************/
+@@ -1475,6 +1503,7 @@ static char *GooStringToCharStart(GooString &gstr)
+     }
+     return nullptr;
+ }
++#endif
+
+ /************************************************************************/
+ /*                               GetBytes()                             */
+@@ -1482,6 +1511,24 @@ static char *GooStringToCharStart(GooString &gstr)
+
+ char *GDALPDFStreamPoppler::GetBytes()
+ {
++#if POPPLER_MAJOR_VERSION > 26 ||                                              \
++    (POPPLER_MAJOR_VERSION == 26 && POPPLER_MINOR_VERSION > 7) ||              \
++    (POPPLER_MAJOR_VERSION == 26 && POPPLER_MINOR_VERSION == 7 &&              \
++     POPPLER_MICRO_VERSION > 0)
++    std::string str;
++    try
++    {
++        m_poStream->fillString(str);
++    }
++    catch (const std::exception &e)
++    {
++        CPLError(CE_Failure, CPLE_OutOfMemory,
++                 "GDALPDFStreamPoppler::GetBytes(): %s", e.what());
++        return nullptr;
++    }
++    m_nLength = static_cast<int64_t>(str.size());
++    return StringToCharStar(str);
++#else
+     GooString gstr;
+     try
+     {
+@@ -1494,7 +1541,8 @@ char *GDALPDFStreamPoppler::GetBytes()
+         return nullptr;
+     }
+     m_nLength = static_cast<int64_t>(gstr.toStr().size());
+-    return GooStringToCharStart(gstr);
++    return GooStringToCharStar(gstr);
++#endif
+ }
+
+ /************************************************************************/
+@@ -1528,8 +1576,26 @@ int64_t GDALPDFStreamPoppler::GetRawLength()
+
+ char *GDALPDFStreamPoppler::GetRawBytes()
+ {
+-    GooString gstr;
+     auto undecodeStream = m_poStream->getUndecodedStream();
++#if POPPLER_MAJOR_VERSION > 26 ||                                              \
++    (POPPLER_MAJOR_VERSION == 26 && POPPLER_MINOR_VERSION > 7) ||              \
++    (POPPLER_MAJOR_VERSION == 26 && POPPLER_MINOR_VERSION == 7 &&              \
++     POPPLER_MICRO_VERSION > 0)
++    std::string str;
++    try
++    {
++        undecodeStream->fillString(str);
++    }
++    catch (const std::exception &e)
++    {
++        CPLError(CE_Failure, CPLE_OutOfMemory,
++                 "GDALPDFStreamPoppler::GetRawBytes(): %s", e.what());
++        return nullptr;
++    }
++    m_nRawLength = str.size();
++    return StringToCharStar(str);
++#else
++    GooString gstr;
+     try
+     {
+         undecodeStream->fillGooString(&gstr);
+@@ -1546,7 +1612,8 @@ char *GDALPDFStreamPoppler::GetRawBytes()
+ #else
+     m_nRawLength = gstr.getLength();
+ #endif
+-    return GooStringToCharStart(gstr);
++    return GooStringToCharStar(gstr);
++#endif
+ }
+
+ #endif  // HAVE_POPPLER

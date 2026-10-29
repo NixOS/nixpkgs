@@ -1,0 +1,26 @@
+From 5f13afa1cecfae398ff7d84ed89fc45b14b71c61 Mon Sep 17 00:00:00 2001
+From: Shadowghost <Ghost_of_Stone@web.de>
+Date: Thu, 4 Jun 2026 19:00:03 +0200
+Subject: [PATCH] Fix playlist visibility
+
+---
+ MediaBrowser.Controller/Entities/Folder.cs | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/MediaBrowser.Controller/Entities/Folder.cs b/MediaBrowser.Controller/Entities/Folder.cs
+--- a/MediaBrowser.Controller/Entities/Folder.cs
++++ b/MediaBrowser.Controller/Entities/Folder.cs
+@@ -811,7 +811,10 @@ namespace MediaBrowser.Controller.Entities
+ 
+         private bool RequiresPostFiltering2(InternalItemsQuery query)
+         {
+-            if (query.IncludeItemTypes.Length == 1 && query.IncludeItemTypes[0] == BaseItemKind.BoxSet)
++            // BoxSets and Playlists can have per-user visibility (shares/open access) that is stored in the
++            // serialized item data and cannot be evaluated by the database query, so filter them in memory.
++            if (query.IncludeItemTypes.Length > 0
++                && query.IncludeItemTypes.All(t => t == BaseItemKind.BoxSet || t == BaseItemKind.Playlist))
+             {
+                 Logger.LogDebug("Query requires post-filtering due to BoxSet query");
+                 return true;
+-- 
+2.51.0

@@ -1,0 +1,7 @@
+--- a/deps/histogram/src/hdr_histogram.c
++++ b/deps/histogram/src/hdr_histogram.c
+@@ -40,4 +40,2 @@
+     && (defined(__GNUC__) || defined(__clang__)) && !defined(__INTEL_COMPILER) && !defined(_MSC_VER)
+-#  define HDR_HAS_AVX2_DISPATCH 1
+-#  include <immintrin.h>
+ #endif

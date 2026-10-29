@@ -1,0 +1,117 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+  pkg-config,
+  bzip2,
+  zstd,
+  stdenv,
+  rocksdb,
+  nix-update-script,
+  testers,
+  matrix-continuwuity,
+  rust-jemalloc-sys-unprefixed,
+  liburing,
+  nixosTests,
+}:
+let
+  rocksdb' =
+    (rocksdb.override {
+      # rocksdb does not support prefixed jemalloc, which is required on darwin
+      enableJemalloc = !stdenv.hostPlatform.isDarwin;
+      jemalloc = rust-jemalloc-sys-unprefixed;
+    }).overrideAttrs
+      (
+        final: old: {
+          version = "10.10.1";
+          src = fetchFromGitea {
+            domain = "forgejo.ellis.link";
+            owner = "continuwuation";
+            repo = "rocksdb";
+            rev = "10.10.fb";
+            hash = "sha256-1ef75IDMs5Hba4VWEyXPJb02JyShy5k4gJfzGDhopRk=";
+          };
+
+          patches = [ ];
+        }
+      );
+in
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "matrix-continuwuity";
+  version = "0.5.10";
+
+  src = fetchFromGitea {
+    domain = "forgejo.ellis.link";
+    owner = "continuwuation";
+    repo = "continuwuity";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oevEGYlAK/rMJhm200CkwerT5oVak8sJj0Fa6r6+J/Q=";
+  };
+
+  cargoHash = "sha256-uvMiFURXxkLbbbwq4pG5hevsLZHQ1wVfTNvzQRTQWxE=";
+
+  patches = [
+    ./0001-fix-backport-SEC10.patch
+    ./0002-fix-backport-SEC28.patch
+    ./0003-fix-backport-SEC26.patch
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    bzip2
+    zstd
+    rust-jemalloc-sys-unprefixed
+    liburing
+  ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+    ROCKSDB_INCLUDE_DIR = "${rocksdb'}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb'}/lib";
+  };
+
+  passthru = {
+    rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion {
+        inherit (finalAttrs) version;
+        package = matrix-continuwuity;
+      };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) matrix-continuwuity;
+    };
+  };
+
+  meta = {
+    description = "Matrix homeserver written in Rust, forked from conduwuit";
+    homepage = "https://continuwuity.org/";
+    changelog = "https://forgejo.ellis.link/continuwuation/continuwuity/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      bartoostveen
+      nyabinary
+      snaki
+    ];
+    # Not a typo, continuwuity is a drop-in replacement for conduwuit.
+    mainProgram = "conduwuit";
+    knownVulnerabilities = [
+      ''
+        Continuwuity 0.5.10 can no longer be securely ran, as it contains a critical security-related bug that is currently embargoed at the time of writing.
+        Continuwuity internally tracks this as SEC8, see also: https://forgejo.ellis.link/continuwuation/continuwuity/releases/tag/v26.9.1
+
+        The latest version of Continuwuity has been moved to `matrix-continuwuity_latest` as to not introduce breaking changes.
+        It is highly advisable to upgrade to this version as fast as possible. When deploying Continuwuity using the NixOS module, you may do so using:
+
+        `services.matrix-continuwuity.package = pkgs.matrix-continuwuity_latest`.
+
+        The most notable breaking change of the 26.x release is the removal of LDAP.
+      ''
+    ];
+  };
+})

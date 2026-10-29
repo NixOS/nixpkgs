@@ -1,0 +1,14 @@
+--- a/bridge/bridge.go
++++ b/bridge/bridge.go
+@@ -93,7 +93,10 @@
+ 
+ func (a *App) RestartApp() FlagResult {
+ 	log.Printf("RestartApp")
+-	exePath := Env.BasePath + "/" + Env.AppName
++	exePath, err := os.Executable()
++	if err != nil {
++		exePath = filepath.Join(Env.BasePath, Env.AppName)
++	}
+ 
+ 	cmd := exec.Command(exePath)
+ 	SetCmdWindowHidden(cmd)

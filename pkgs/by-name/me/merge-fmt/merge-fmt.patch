@@ -1,0 +1,248 @@
+diff --git a/.ocamlformat b/.ocamlformat
+index fe6ed57..3532006 100644
+--- a/.ocamlformat
++++ b/.ocamlformat
+@@ -3,4 +3,4 @@ type-decl=sparse
+ break-separators=before
+ if-then-else=keyword-first
+ dock-collection-brackets=false
+-version=0.24.1
+\ No newline at end of file
++version=0.26.1
+\ No newline at end of file
+diff --git a/dune b/dune
+index 61ec19c..9446de9 100644
+--- a/dune
++++ b/dune
+@@ -2,22 +2,34 @@
+  (targets merge-fmt-help.txt)
+  (deps ./src/merge_fmt.exe)
+  (mode promote)
+- (action (with-stdout-to %{targets} (run ./src/merge_fmt.exe --help=plain))))
++ (action
++  (with-stdout-to
++   %{targets}
++   (run ./src/merge_fmt.exe --help=plain))))
+ 
+ (rule
+  (targets merge-fmt-mergetool-help.txt)
+  (deps ./src/merge_fmt.exe)
+  (mode promote)
+- (action (with-stdout-to %{targets} (run ./src/merge_fmt.exe mergetool --help=plain))))
++ (action
++  (with-stdout-to
++   %{targets}
++   (run ./src/merge_fmt.exe mergetool --help=plain))))
+ 
+ (rule
+  (targets merge-fmt-setup-mergetool-help.txt)
+  (deps ./src/merge_fmt.exe)
+  (mode promote)
+- (action (with-stdout-to %{targets} (run ./src/merge_fmt.exe setup-mergetool --help=plain))))
++ (action
++  (with-stdout-to
++   %{targets}
++   (run ./src/merge_fmt.exe setup-mergetool --help=plain))))
+ 
+ (rule
+  (targets merge-fmt-setup-merge-help.txt)
+  (deps ./src/merge_fmt.exe)
+  (mode promote)
+- (action (with-stdout-to %{targets} (run ./src/merge_fmt.exe setup-merge --help=plain))))
++ (action
++  (with-stdout-to
++   %{targets}
++   (run ./src/merge_fmt.exe setup-merge --help=plain))))
+diff --git a/dune-project b/dune-project
+index 4b39e3f..2bc4ec2 100644
+--- a/dune-project
++++ b/dune-project
+@@ -1,3 +1,2 @@
+-(lang dune 1.6)
+-(using fmt 1.0)
++(lang dune 3.0)
+ (name merge-fmt)
+diff --git a/merge-fmt.opam b/merge-fmt.opam
+index 6827173..579f6a1 100644
+--- a/merge-fmt.opam
++++ b/merge-fmt.opam
+@@ -11,7 +11,7 @@ build: [["dune" "build" "-p" name "-j" jobs]]
+ 
+ depends: [
+   "ocaml" {>= "4.06.1"}
+-  "dune" {>= "1.6"}
++  "dune" {>= "3.0"}
+   "cmdliner" {>= "1.1.0"}
+   "base"
+   "stdio"
+diff --git a/src/common.ml b/src/common.ml
+index 3ca6809..f88bbd9 100644
+--- a/src/common.ml
++++ b/src/common.ml
+@@ -18,8 +18,8 @@ let open_process_in_respect_exit ~echo fmt =
+       let contents = In_channel.input_all ic in
+       match Unix.close_process_in ic with
+       | WEXITED 0 -> contents
+-      | WEXITED n -> Caml.exit n
+-      | WSIGNALED _ | WSTOPPED _ -> Caml.exit 1)
++      | WEXITED n -> Stdlib.exit n
++      | WSIGNALED _ | WSTOPPED _ -> Stdlib.exit 1)
+     fmt
+ 
+ let system ~echo fmt =
+@@ -35,8 +35,8 @@ let system_respect_exit ~echo fmt =
+       if echo then eprintf "+ %s\n%!" s;
+       match Unix.system s with
+       | WEXITED 0 -> ()
+-      | WEXITED n -> Caml.exit n
+-      | WSIGNALED _ | WSTOPPED _ -> Caml.exit 1)
++      | WEXITED n -> Stdlib.exit n
++      | WSIGNALED _ | WSTOPPED _ -> Stdlib.exit 1)
+     fmt
+ 
+ module Flags = struct
+diff --git a/src/dune b/src/dune
+index 1ae55ce..1cfd576 100644
+--- a/src/dune
++++ b/src/dune
+@@ -1,5 +1,4 @@
+ (executables
+-  (names merge_fmt)
+-  (public_names merge-fmt)
+-  (libraries base stdio unix cmdliner)
+-)
+\ No newline at end of file
++ (names merge_fmt)
++ (public_names merge-fmt)
++ (libraries base stdio unix cmdliner))
+diff --git a/src/fmters.ml b/src/fmters.ml
+index e190f4b..43616ab 100644
+--- a/src/fmters.ml
++++ b/src/fmters.ml
+@@ -36,7 +36,7 @@ let dune ~bin =
+ 
+ let find ~config ~filename ~name =
+   let filename = Option.value ~default:filename name in
+-  match (filename, Caml.Filename.extension filename, config) with
++  match (filename, Stdlib.Filename.extension filename, config) with
+   | _, (".ml" | ".mli"), { ocamlformat_path; _ } ->
+       Some (ocamlformat ~bin:ocamlformat_path ~name)
+   | _, (".re" | ".rei"), { refmt_path; _ } -> Some (refmt ~bin:refmt_path)
+diff --git a/src/merge_cmd.ml b/src/merge_cmd.ml
+index a0fa68f..6cd5377 100644
+--- a/src/merge_cmd.ml
++++ b/src/merge_cmd.ml
+@@ -2,7 +2,12 @@ open Base
+ open Stdio
+ open Common
+ 
+-let debug_oc = lazy (Out_channel.create ~append:true "/tmp/merge-fmt.log")
++let debug_oc =
++  lazy
++    (Out_channel.create ~append:true
++       (Stdlib.Filename.concat
++          (Stdlib.Filename.get_temp_dir_name ())
++          "merge-fmt.log"))
+ 
+ let debug fmt =
+   if true
+@@ -12,7 +17,7 @@ let debug fmt =
+ let merge config echo current base other output name =
+   match (current, base, other) with
+   | (None | Some ""), _, _ | _, (None | Some ""), _ | _, _, (None | Some "") ->
+-      Caml.exit 1
++      Stdlib.exit 1
+   | Some current, Some base, Some other -> (
+       match Fmters.find ~config ~filename:current ~name with
+       | None ->
+@@ -30,7 +35,7 @@ let merge config echo current base other output name =
+             |> Result.map_error ~f:(Fn.const "base")
+           in
+           match Result.combine_errors [ x; y; z ] with
+-          | Error _ -> Caml.exit 1
++          | Error _ -> Stdlib.exit 1
+           | Ok (_ : unit list) ->
+               debug "process all three revision successfully\n%!";
+               debug "running git merge-file\n%!";
+@@ -41,7 +46,7 @@ let merge config echo current base other output name =
+               (match output with
+               | None -> Out_channel.output_string stdout result
+               | Some o -> Out_channel.write_all o ~data:result);
+-              Caml.exit 0))
++              Stdlib.exit 0))
+ 
+ open Cmdliner
+ 
+diff --git a/src/resolve_cmd.ml b/src/resolve_cmd.ml
+index bd7f5e3..60a36a4 100644
+--- a/src/resolve_cmd.ml
++++ b/src/resolve_cmd.ml
+@@ -67,9 +67,9 @@ let show ~echo version versions =
+ 
+ let create_tmp ~echo fn version versions =
+   let content = show ~echo version versions in
+-  let ext = Caml.Filename.extension fn in
++  let ext = Stdlib.Filename.extension fn in
+   let base =
+-    if String.equal ext "" then fn else Caml.Filename.chop_extension fn
++    if String.equal ext "" then fn else Stdlib.Filename.chop_extension fn
+   in
+   let fn' = sprintf "%s.%s%s" base (string_of_version version) ext in
+   let oc = Out_channel.create fn' in
+@@ -114,7 +114,7 @@ let resolve config echo () =
+   if Map.is_empty all
+   then (
+     eprintf "Nothing to resolve\n%!";
+-    Caml.exit 1);
++    Stdlib.exit 1);
+   Map.iteri all ~f:(fun ~key:filename ~data:versions ->
+       match versions with
+       | Ok versions -> (
+@@ -131,7 +131,7 @@ let resolve config echo () =
+           | None -> eprintf "Ignore %s (no formatter register)\n%!" filename)
+       | Error reason -> eprintf "Ignore %s (%s)\n%!" filename reason);
+   let all = ls ~echo () in
+-  if Map.is_empty all then Caml.exit 0 else Caml.exit 1
++  if Map.is_empty all then Stdlib.exit 0 else Stdlib.exit 1
+ 
+ open Cmdliner
+ 
+diff --git a/test/dune b/test/dune
+index c0e4f3a..2fde0ee 100644
+--- a/test/dune
++++ b/test/dune
+@@ -1,17 +1,22 @@
+ (library
+-  (name merge_fmt_test)
+-  (libraries base stdio unix core_unix core_unix.filename_unix)
+-  (inline_tests)
+-  (preprocessor_deps ../src/merge_fmt.exe)
+-  (preprocess (pps ppx_expect)))
+-
++ (name merge_fmt_test)
++ (libraries base stdio unix core_unix core_unix.filename_unix)
++ (inline_tests)
++ (preprocessor_deps ../src/merge_fmt.exe)
++ (preprocess
++  (pps ppx_expect)))
+ 
+ ;; [rebase_a.ml] and [rebase_b.ml] should be the same expect that
+ ;; [rebase_b.ml] does rebase in an intermediate revision.
++
+ (rule
+-  (targets rebase.diff.gen)
+-  (action (with-stdout-to %{targets} (bash "diff %{dep:rebase_a.ml} %{dep:rebase_b.ml} || true"))))
++ (targets rebase.diff.gen)
++ (action
++  (with-stdout-to
++   %{targets}
++   (bash "diff %{dep:rebase_a.ml} %{dep:rebase_b.ml} || true"))))
+ 
+-(alias
+-  (name runtest)
+-  (action (diff rebase.diff rebase.diff.gen)))
+\ No newline at end of file
++(rule
++ (alias runtest)
++ (action
++  (diff rebase.diff rebase.diff.gen)))

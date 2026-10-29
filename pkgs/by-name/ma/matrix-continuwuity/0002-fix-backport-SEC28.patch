@@ -1,0 +1,37 @@
+From dcb079931a929880518015794d709f93651154ca Mon Sep 17 00:00:00 2001
+From: Ginger <ginger@gingershaped.computer>
+Date: Tue, 11 Aug 2026 15:59:26 -0400
+Subject: [PATCH 1/2] fix(backport): SEC28
+
+(cherry picked from commit 49a8f6f53b6f86ed6abb8952843cb3a38c530ada)
+---
+ src/service/threepid/mod.rs | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/service/threepid/mod.rs b/src/service/threepid/mod.rs
+index dcc0b58ab..bda80f82e 100644
+--- a/src/service/threepid/mod.rs
++++ b/src/service/threepid/mod.rs
+@@ -112,6 +112,10 @@ pub async fn send_validation_email<Template: MessageTemplate>(
+ 			// If a validation session already exists for this client secret, we can either
+ 			// reuse it with a new token or return early because it's already valid.
+ 			| Some(session) => {
++				if session.email != recipient.email {
++					return Err!(Request(InvalidParam("Wrong email for session.")));
++				}
++
+ 				match session.validation_state {
+ 					| ValidationState::Validated => {
+ 						// If the existing session is already valid, don't send an email.
+@@ -119,7 +123,7 @@ pub async fn send_validation_email<Template: MessageTemplate>(
+ 					},
+ 					| ValidationState::Pending(ref mut token) => {
+ 						// Check ratelimiting for the target address.
+-						if self.ratelimiter.check_key(&recipient.email).is_err() {
++						if self.ratelimiter.check_key(&session.email).is_err() {
+ 							return Err(Error::BadRequest(
+ 								ErrorKind::LimitExceeded { retry_after: None },
+ 								"You're sending emails too fast, try again in a few minutes.",
+-- 
+2.55.0
+

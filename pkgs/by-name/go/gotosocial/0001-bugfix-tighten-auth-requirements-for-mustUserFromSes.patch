@@ -1,0 +1,139 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: kipvandenbos <tobi.smethurst@protonmail.com>
+Date: Fri, 9 Oct 2026 16:33:46 +0200
+Subject: [PATCH] [bugfix] tighten auth requirements for `mustUserFromSession`
+
+Signed-off-by: Luke Granger-Brown <git@lukegb.com>
+---
+ internal/api/auth/authorize.go | 18 +++++++++++-------
+ internal/api/auth/oob.go       |  3 ++-
+ internal/api/auth/signin.go    |  6 ++++--
+ internal/api/auth/util.go      | 22 +++++-----------------
+ 4 files changed, 22 insertions(+), 27 deletions(-)
+
+diff --git a/internal/api/auth/authorize.go b/internal/api/auth/authorize.go
+index f6d7134a9623e3c9a5f2c893304b5667cd784104..54814faf69e17823b486acc9b9f17ada269ebd60 100644
+--- a/internal/api/auth/authorize.go
++++ b/internal/api/auth/authorize.go
+@@ -53,15 +53,18 @@ func (m *Module) AuthorizeGETHandler(c *gin.Context) {
+ 	// If it's not set, then we don't yet know
+ 	// yet who the user is, so send them to the
+ 	// sign in page first.
+-	if userID, ok := s.Get(sessionUserID).(string); !ok || userID == "" {
++	userID, ok := s.Get(sessionUserID).(string)
++	if !ok || userID == "" {
+ 		m.redirectAuthFormToSignIn(c)
+ 		return
+ 	}
+ 
+-	user := m.mustUserFromSession(c, s)
+-	if user == nil {
+-		// Error already
+-		// written.
++	// Get user for given userID.
++	ctx := c.Request.Context()
++	user, err := m.state.DB.GetUserByID(ctx, userID)
++	if err != nil {
++		safe := "db error getting user " + userID
++		m.clearSessionWithInternalError(c, s, err, safe, oauth.HelpfulAdvice)
+ 		return
+ 	}
+ 
+@@ -75,7 +78,7 @@ func (m *Module) AuthorizeGETHandler(c *gin.Context) {
+ 
+ 	// Everything looks OK.
+ 	// Start preparing to render the html template.
+-	instance, errWithCode := m.processor.InstanceGetV1(c.Request.Context())
++	instance, errWithCode := m.processor.InstanceGetV1(ctx)
+ 	if errWithCode != nil {
+ 		apiutil.ErrorHandler(c, errWithCode, m.processor.InstanceGetV1)
+ 		return
+@@ -164,7 +167,8 @@ func (m *Module) AuthorizePOSTHandler(c *gin.Context) {
+ 		return
+ 	}
+ 
+-	user := m.mustUserFromSession(c, s)
++	// User must be fully authed.
++	user := m.mustUserFromSession(c, s, sessionUserID)
+ 	if user == nil {
+ 		// Error already
+ 		// written.
+diff --git a/internal/api/auth/oob.go b/internal/api/auth/oob.go
+index 49027940a186d7b6d39f9032bbf47bc8baa578ec..e7fa2a8a5d9c98939dc4219aa5c51e25f8f7816e 100644
+--- a/internal/api/auth/oob.go
++++ b/internal/api/auth/oob.go
+@@ -37,7 +37,8 @@ func (m *Module) OOBTokenGETHandler(c *gin.Context) {
+ 		return
+ 	}
+ 
+-	user := m.mustUserFromSession(c, s)
++	// User must be fully authed.
++	user := m.mustUserFromSession(c, s, sessionUserID)
+ 	if user == nil {
+ 		// Error already
+ 		// written.
+diff --git a/internal/api/auth/signin.go b/internal/api/auth/signin.go
+index 4188459ba779c661a148243533c486cd7b4d3d9c..9e6a6a7d9bd068953bdb3c1498c47343f2397ee2 100644
+--- a/internal/api/auth/signin.go
++++ b/internal/api/auth/signin.go
+@@ -195,7 +195,8 @@ func incorrectPassword(err error) (*gtsmodel.User, gtserror.WithCode) {
+ func (m *Module) TwoFactorCodeGETHandler(c *gin.Context) {
+ 	s := sessions.Default(c)
+ 
+-	user := m.mustUserFromSession(c, s)
++	// User must be awaiting 2fa.
++	user := m.mustUserFromSession(c, s, sessionUserIDAwaiting2FA)
+ 	if user == nil {
+ 		// Error already
+ 		// written.
+@@ -226,7 +227,8 @@ func (m *Module) TwoFactorCodeGETHandler(c *gin.Context) {
+ func (m *Module) TwoFactorCodePOSTHandler(c *gin.Context) {
+ 	s := sessions.Default(c)
+ 
+-	user := m.mustUserFromSession(c, s)
++	// User must be awaiting 2fa.
++	user := m.mustUserFromSession(c, s, sessionUserIDAwaiting2FA)
+ 	if user == nil {
+ 		// Error already
+ 		// written.
+diff --git a/internal/api/auth/util.go b/internal/api/auth/util.go
+index 937de3d85f8405478bf9de5983f7e682a25c5ee2..2de3e52471d04969d9ab45ed1860664cf2151f35 100644
+--- a/internal/api/auth/util.go
++++ b/internal/api/auth/util.go
+@@ -39,8 +39,9 @@ func (m *Module) mustSaveSession(s sessions.Session) {
+ 	}
+ }
+ 
+-// mustUserFromSession returns a *gtsmodel.User by checking the
+-// session for a user id and fetching the user from the database.
++// mustUserFromSession returns a *gtsmodel.User by checking
++// the session for a user id stored under the given key,
++// and fetching the user from the database.
+ //
+ // On failure, the function clears session state, writes an internal
+ // error to the response writer, and returns nil. Callers should always
+@@ -48,22 +49,9 @@ func (m *Module) mustSaveSession(s sessions.Session) {
+ func (m *Module) mustUserFromSession(
+ 	c *gin.Context,
+ 	s sessions.Session,
++	key string,
+ ) *gtsmodel.User {
+-	// Try "userid" key first, fall
+-	// back to "userid_awaiting_2fa".
+-	var userID string
+-	for _, key := range [2]string{
+-		sessionUserID,
+-		sessionUserIDAwaiting2FA,
+-	} {
+-		var ok bool
+-		userID, ok = s.Get(key).(string)
+-		if ok && userID != "" {
+-			// Got it.
+-			break
+-		}
+-	}
+-
++	userID, _ := s.Get(key).(string)
+ 	if userID == "" {
+ 		const safe = "neither userid nor userid_awaiting_2fa keys found in session"
+ 		m.clearSessionWithInternalError(c, s, errors.New(safe), safe, oauth.HelpfulAdvice)

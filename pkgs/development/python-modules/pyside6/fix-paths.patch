@@ -1,0 +1,13 @@
+--- a/libpyside/CMakeLists.txt
++++ b/libpyside/CMakeLists.txt
+@@ -162,8 +162,8 @@ configure_package_config_file(
+ 
+ # Install-tree / wheel configuration
+ set(PYSIDE_PYTHONPATH "")
+-set(PYSIDE_TYPESYSTEMS "typesystems")
+-set(PYSIDE_GLUE "glue")
++set(PYSIDE_TYPESYSTEMS "share/PySide6${pyside6_SUFFIX}/typesystems")
++set(PYSIDE_GLUE "share/PySide6${pyside6_SUFFIX}/glue")
+ set(PYSIDE_SOVERSION "${pyside6_library_so_version}")
+ 
+ configure_package_config_file(

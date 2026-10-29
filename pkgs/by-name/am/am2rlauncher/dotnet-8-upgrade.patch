@@ -1,0 +1,52 @@
+diff --git a/AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj b/AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj
+index e5e6191..ab9f228 100644
+--- a/AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj
++++ b/AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj
+@@ -2,7 +2,7 @@
+ 	
+   <PropertyGroup>
+     <OutputType>WinExe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ApplicationIcon>icon64.ico</ApplicationIcon>
+     <RollForward>LatestMajor</RollForward>
+     <LangVersion>latest</LangVersion>
+diff --git a/AM2RLauncher/AM2RLauncher.Mac/AM2RLauncher.Mac.csproj b/AM2RLauncher/AM2RLauncher.Mac/AM2RLauncher.Mac.csproj
+index 2af5688..a91bb25 100644
+--- a/AM2RLauncher/AM2RLauncher.Mac/AM2RLauncher.Mac.csproj
++++ b/AM2RLauncher/AM2RLauncher.Mac/AM2RLauncher.Mac.csproj
+@@ -2,7 +2,7 @@
+ 	
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0-macos</TargetFramework>
++    <TargetFramework>net8.0-macos</TargetFramework>
+     <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
+     <SupportedOSPlatformVersion>10.14</SupportedOSPlatformVersion>
+     <RollForward>LatestMajor</RollForward>
+diff --git a/AM2RLauncher/AM2RLauncher/AM2RLauncher.csproj b/AM2RLauncher/AM2RLauncher/AM2RLauncher.csproj
+index be49446..34a842f 100644
+--- a/AM2RLauncher/AM2RLauncher/AM2RLauncher.csproj
++++ b/AM2RLauncher/AM2RLauncher/AM2RLauncher.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 	
+   <PropertyGroup>
+-    <TargetFramework>netstandard2.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+ 	<LangVersion>latest</LangVersion>
+     <ApplicationIcon>Resources\LauncherIcon.ico</ApplicationIcon>
+     <Authors>Lojemiru, Miepee</Authors>
+diff --git a/AM2RLauncher/AM2RLauncherLib/AM2RLauncherLib.csproj b/AM2RLauncher/AM2RLauncherLib/AM2RLauncherLib.csproj
+index 673ab7a..da3a019 100644
+--- a/AM2RLauncher/AM2RLauncherLib/AM2RLauncherLib.csproj
++++ b/AM2RLauncher/AM2RLauncherLib/AM2RLauncherLib.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>netstandard2.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <LangVersion>default</LangVersion>
+     <Configurations>Debug;Release</Configurations>
+     <Platforms>AnyCPU</Platforms>

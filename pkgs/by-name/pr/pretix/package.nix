@@ -1,0 +1,362 @@
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  fetchpatch,
+  libredirect,
+  nodejs,
+  python3,
+  gettext,
+  nixosTests,
+  pretix,
+  plugins ? [ ],
+}:
+
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      django = super.django_5;
+
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+        };
+        disabledTests = [
+          # error message mismatch
+          "test_validation_failed_message"
+          # fails dns resolution
+          "test_response_when_auth_server_response_return_404"
+        ];
+      });
+
+      stripe = super.stripe.overridePythonAttrs rec {
+        version = "7.9.0";
+
+        src = fetchPypi {
+          pname = "stripe";
+          inherit version;
+          hash = "sha256-hOXkMINaSwzU/SpXzjhTJp0ds0OREc2mtu11LjSc9KE=";
+        };
+
+        build-system = with self; [ setuptools ];
+      };
+
+      pretix = self.toPythonModule pretix;
+      pretix-plugin-build = self.callPackage ./plugin-build.nix { };
+    };
+  };
+
+  pname = "pretix";
+  version = "2026.4.6";
+
+  src = fetchFromGitHub {
+    owner = "pretix";
+    repo = "pretix";
+    tag = "v${version}";
+    hash = "sha256-mCA8YeaCdbMoanHFVq4fEBTdK1IzKiYh6o2j2ANwwjs=";
+  };
+
+  npmDeps = buildNpmPackage {
+    pname = "pretix-node-modules";
+    inherit version src;
+
+    sourceRoot = "${src.name}/src/pretix/static/npm_dir";
+    npmDepsHash = "sha256-U4oXGir53h7R3z4p371PJGm2EU+arsqe/abn6GvSGXs=";
+
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp -R node_modules $out/
+
+      runHook postInstall
+    '';
+  };
+in
+python.pkgs.buildPythonApplication rec {
+  inherit pname version src;
+  pyproject = true;
+
+  patches = [
+    # Discover pretix.plugin entrypoints during build and add them into
+    # INSTALLED_APPS, so that their static files are collected.
+    ./plugin-build.patch
+
+    (fetchpatch {
+      name = "CVE-2026-101266.patch";
+      url = "https://github.com/pretix/pretix/commit/a86f6f295d1e02f8f228f00e0892b5c8d56c481e.patch";
+      hash = "sha256-bbQ/+Xq43nDABEuRy0RQojCS96l3+qjNdVeoD3c9+wc=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-101267.patch";
+      url = "https://github.com/pretix/pretix/commit/afe87dcda1a25a8bded9e21dc55e817d6f23ad24.patch";
+      hash = "sha256-6rMJ4uEca0yHbxk5l0Zs//try4b9TOYc+ge++baJnoA=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-101268.patch";
+      url = "https://github.com/pretix/pretix/commit/1b69eebbaa4cce7102c5e220fb1df47db34fa38b.patch";
+      hash = "sha256-f3KuKbGn236bli6Xli2c+EAqvx2eENknzDiZupbokIg=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-101270.patch";
+      url = "https://github.com/pretix/pretix/commit/9a989f2eefccf97bb894469dbbc1d5b0a64331b8.patch";
+      hash = "sha256-uDTvZ3i2l7agEgBv30KlkDUxPApgy9L/o21RoSUDfhA=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-101271.patch";
+      url = "https://github.com/pretix/pretix/commit/d5fe5b49df5ee08196be750467deda21917e2b50.patch";
+      hash = "sha256-2SwL3Ev+mznI7gl2WBdGs3CjUCcShc+yEPiUwxlKUYo=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-101269.patch";
+      url = "https://github.com/pretix/pretix/commit/abeb615d3d093093668ebaaa0966301640b3a88e.patch";
+      hash = "sha256-glYhBPL6pVKYlFDmEoPQrrO2L2SxMQOZ3A1Q20uFiew=";
+    })
+  ];
+
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "bleach"
+    "celery"
+    "css-inline"
+    "cryptography"
+    "django-bootstrap3"
+    "django-compressor"
+    "django-filter"
+    "django-formset-js-improved"
+    "django-formtools"
+    "django-i18nfield"
+    "django-localflavor"
+    "django-phonenumber-field"
+    "dnspython"
+    "drf_ujson2"
+    "importlib_metadata"
+    "kombu"
+    "markdown"
+    "oauthlib"
+    "phonenumberslite"
+    "pillow"
+    "protobuf"
+    "pycparser"
+    "pycryptodome"
+    "pyjwt"
+    "pypdf"
+    "python-bidi"
+    "qrcode"
+    "redis"
+    "reportlab"
+    "requests"
+    "sentry-sdk"
+    "sepaxml"
+    "ua-parser"
+    "webauthn"
+  ];
+
+  pythonRemoveDeps = [
+    "vat_moss_forked" # we provide a patched vat-moss package
+  ];
+
+  postPatch = ''
+    NODE_PREFIX=src/pretix/static.dist/node_prefix
+    mkdir -p $NODE_PREFIX
+    cp -R ${npmDeps}/node_modules $NODE_PREFIX/
+    chmod -R u+w $NODE_PREFIX/
+
+    # unused
+    sed -i "/setuptools-rust/d" pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace-fail '"backend"' '"setuptools.build_meta"' \
+      --replace-fail 'backend-path = ["_build"]' ""
+
+    # npm ci would remove and try to reinstall node_modules
+    substituteInPlace src/pretix/_build.py \
+      --replace-fail "npm ci" "npm install"
+  '';
+
+  build-system = with python.pkgs; [
+    gettext
+    nodejs
+    setuptools
+    tomli
+  ];
+
+  dependencies =
+    with python.pkgs;
+    [
+      arabic-reshaper
+      babel
+      beautifulsoup4
+      bleach
+      celery
+      chardet
+      cryptography
+      css-inline
+      defusedcsv
+      django
+      django-bootstrap3
+      django-compressor
+      django-countries
+      django-filter
+      django-formset-js-improved
+      django-formtools
+      django-hierarkey
+      django-hijack
+      django-i18nfield
+      django-libsass
+      django-localflavor
+      django-markup
+      django-oauth-toolkit
+      django-otp
+      django-phonenumber-field
+      django-redis
+      django-scopes
+      django-statici18n
+      djangorestframework
+      dnspython
+      drf-ujson2
+      geoip2
+      importlib-metadata
+      isoweek
+      jsonschema
+      kombu
+      libsass
+      lxml
+      markdown
+      mt-940
+      oauthlib
+      openpyxl
+      packaging
+      paypalrestsdk
+      paypal-checkout-serversdk
+      pyjwt
+      phonenumberslite
+      pillow
+      pretix-plugin-build
+      protobuf
+      psycopg2-binary
+      pycountry
+      pycparser
+      pycryptodome
+      pypdf
+      python-bidi
+      python-dateutil
+      pytz
+      pytz-deprecation-shim
+      pyuca
+      qrcode
+      redis
+      reportlab
+      requests
+      sentry-sdk
+      sepaxml
+      stripe
+      text-unidecode
+      tlds
+      tqdm
+      ua-parser
+      vat-moss
+      vobject
+      webauthn
+      zeep
+    ]
+    ++ django.optional-dependencies.argon2
+    ++ plugins;
+
+  optional-dependencies = with python.pkgs; {
+    memcached = [
+      pylibmc
+    ];
+  };
+
+  postInstall = ''
+    mkdir -p $out/bin
+    cp ./src/manage.py $out/${python.sitePackages}/pretix/manage.py
+    makeWrapper $out/${python.sitePackages}/pretix/manage.py $out/bin/pretix-manage \
+      --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # Trim packages size
+    rm -rfv $out/${python.sitePackages}/pretix/static.dist/node_prefix
+  '';
+
+  dontStrip = true; # no binaries
+
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      libredirect.hook
+      pytestCheckHook
+      pytest-xdist
+      pytest-mock
+      pytest-django
+      pytest-asyncio
+      pytest-rerunfailures
+      freezegun
+      fakeredis
+      responses
+    ]
+    ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    "--reruns=3"
+  ];
+
+  disabledTests = [
+    # unreliable around day changes
+    "test_order_create_invoice"
+  ];
+
+  preCheck = ''
+    export PYTHONPATH=$(pwd)/src:$PYTHONPATH
+    export DJANGO_SETTINGS_MODULE=tests.settings
+
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
+
+  postCheck = ''
+    unset NIX_REDIRECTS
+  '';
+
+  passthru = {
+    inherit
+      npmDeps
+      python
+      ;
+    plugins = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
+        inherit (python.pkgs) callPackage;
+        directory = ./plugins;
+      }
+    );
+    tests = {
+      inherit (nixosTests) pretix;
+    };
+  };
+
+  meta = {
+    description = "Ticketing software that cares about your event—all the way";
+    homepage = "https://github.com/pretix/pretix";
+    license = with lib.licenses; [
+      agpl3Only
+      # 3rd party components below src/pretix/static
+      bsd2
+      isc
+      mit
+      ofl # fontawesome
+      unlicense
+      # all other files below src/pretix/static and src/pretix/locale and aux scripts
+      asl20
+    ];
+    maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "pretix-manage";
+    platforms = lib.platforms.linux;
+  };
+}

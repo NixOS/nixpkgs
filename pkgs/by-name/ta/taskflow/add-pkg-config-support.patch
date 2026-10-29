@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 063fd793..99998a6b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -377,3 +377,13 @@ install(
+   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+ )
+ 
++
++# -----------------------------------------------------------------------------
++# pkg-config
++# -----------------------------------------------------------------------------
++
++configure_file(taskflow.pc.in taskflow.pc @ONLY)
++install(
++  FILES ${CMAKE_CURRENT_BINARY_DIR}/taskflow.pc
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++)
+diff --git a/taskflow.pc.in b/taskflow.pc.in
+new file mode 100644
+index 00000000..fc649288
+--- /dev/null
++++ b/taskflow.pc.in
+@@ -0,0 +1,7 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++
++Name: Taskflow
++Description: A General-purpose Task-parallel Programming System
++Version: @PROJECT_VERSION@
++Cflags: -I${includedir}

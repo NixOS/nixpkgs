@@ -1,0 +1,13 @@
+diff --git a/admin/Makefile.def b/admin/Makefile.def
+index 27a1c02..43ef322 100644
+--- a/admin/Makefile.def
++++ b/admin/Makefile.def
+@@ -228,7 +228,7 @@ GLOBAL_DIRTY = $(builddir) *~ TAGS ChangeLog* Makefile.bak
+ # Fortran preprocessing
+ 
+ # Preprocessor command
+-CPP = cpp
++CPP = $(GAG_CPP)
+ 
+ # Preprocessor generic flags
+ GLOBAL_CPPFLAGS += -P -traditional -C

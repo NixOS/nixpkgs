@@ -1,0 +1,39 @@
+diff --git a/config/intlmacosx.m4 b/config/intlmacosx.m4
+index 3141bf8c5..7a31862b9 100644
+--- a/config/intlmacosx.m4
++++ b/config/intlmacosx.m4
+@@ -63,7 +63,7 @@ AC_DEFUN([gt_INTL_MACOSX],
+     dnl and we have to link it in explicitly, otherwise an exception
+     dnl NSInvalidArgumentException "unrecognized selector sent to instance"
+     dnl occurs.
+-    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation -Wl,-framework -Wl,CoreServices"
++    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
+   fi
+   AC_SUBST([INTL_MACOSX_LIBS])
+ ])
+diff --git a/gcc/configure b/gcc/configure
+index 23da7d55d..8bd09364d 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -13932,7 +13932,7 @@ $as_echo "#define HAVE_CFLOCALECOPYPREFERREDLANGUAGES 1" >>confdefs.h
+   INTL_MACOSX_LIBS=
+   if test $gt_cv_func_CFPreferencesCopyAppValue = yes \
+      || test $gt_cv_func_CFLocaleCopyPreferredLanguages = yes; then
+-                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation -Wl,-framework -Wl,CoreServices"
++                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
+   fi
+ 
+ 
+diff --git a/libcpp/configure b/libcpp/configure
+index 32d6aaa30..592c33881 100755
+--- a/libcpp/configure
++++ b/libcpp/configure
+@@ -7570,7 +7570,7 @@ $as_echo "#define HAVE_CFLOCALECOPYPREFERREDLANGUAGES 1" >>confdefs.h
+   INTL_MACOSX_LIBS=
+   if test $gt_cv_func_CFPreferencesCopyAppValue = yes \
+      || test $gt_cv_func_CFLocaleCopyPreferredLanguages = yes; then
+-                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation -Wl,-framework -Wl,CoreServices"
++                    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
+   fi
+ 
+ 

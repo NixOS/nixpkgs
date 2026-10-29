@@ -1,0 +1,35 @@
+From 3a0181ab0fb6c40f613894e65009e148c6e652c9 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Mon, 16 Sep 2024 10:24:08 +0200
+Subject: [PATCH] Remove outdated musl hack in rlimit_nofile_safe
+
+This was incorrect, because RLIM_FMT is not the format specifier for uintmax_t.
+
+Since 53e84063a ("Change RLIM_FMT to '%llu' for non-glibc builds (#269)"),
+RLIM_FMT is correct for musl, so there's no longer any need for this casting
+version.
+
+Link: https://github.com/elogind/elogind/pull/288
+---
+ src/basic/rlimit-util.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/src/basic/rlimit-util.c b/src/basic/rlimit-util.c
+index 091c111df..59bdc35a0 100644
+--- a/src/basic/rlimit-util.c
++++ b/src/basic/rlimit-util.c
+@@ -428,11 +428,7 @@ int rlimit_nofile_safe(void) {
+         rl.rlim_max = MIN(rl.rlim_max, (rlim_t) read_nr_open());
+         rl.rlim_cur = MIN((rlim_t) FD_SETSIZE, rl.rlim_max);
+         if (setrlimit(RLIMIT_NOFILE, &rl) < 0)
+-#ifdef __GLIBC__ /// To be compatible with musl-libc, elogind uses an (uintmax_t) cast.
+                 return log_debug_errno(errno, "Failed to lower RLIMIT_NOFILE's soft limit to " RLIM_FMT ": %m", rl.rlim_cur);
+-#else // __GLIBC__
+-                return log_debug_errno(errno, "Failed to lower RLIMIT_NOFILE's soft limit to " RLIM_FMT ": %m", (uintmax_t)rl.rlim_cur);
+-#endif // __GLIBC__
+ 
+         return 1;
+ }
+-- 
+2.45.2
+

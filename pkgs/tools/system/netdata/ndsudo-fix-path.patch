@@ -1,0 +1,18 @@
+# See https://github.com/netdata/netdata/pull/17377#issuecomment-2183017868
+#     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
+
+diff --git a/src/collectors/utils/ndsudo.c b/src/collectors/utils/ndsudo.c
+index d53ca9f28..b42a121bf 100644
+--- a/src/collectors/utils/ndsudo.c
++++ b/src/collectors/utils/ndsudo.c
+@@ -357,9 +357,9 @@ int main(int argc, char *argv[]) {
+         return 3;
+     }
+
+-    char new_path[] = "PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
++    char new_path[] = "PATH=/var/lib/netdata/ndsudo/runtime-dependencies";
+     putenv(new_path);
+
+     setuid(0);
+     setgid(0);
+     setegid(0);

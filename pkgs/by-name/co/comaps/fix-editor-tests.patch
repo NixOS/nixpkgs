@@ -1,0 +1,16 @@
+diff --git a/libs/editor/CMakeLists.txt b/libs/editor/CMakeLists.txt
+index c96cf4c6..9fc2a210 100644
+--- a/libs/editor/CMakeLists.txt
++++ b/libs/editor/CMakeLists.txt
+@@ -35,6 +35,11 @@ set(SRC
+   yes_no_unknown.hpp
+ )
+
++if (NOT (SKIP_TOOLS AND SKIP_TESTS))
++  # Used in both tests and some tools.
++  add_subdirectory(editor_tests_support)
++endif()
++
+ omim_add_library(${PROJECT_NAME} ${SRC})
+
+ target_link_libraries(${PROJECT_NAME}

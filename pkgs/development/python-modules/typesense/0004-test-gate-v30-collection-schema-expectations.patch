@@ -1,0 +1,256 @@
+diff --git a/tests/collection_test.py b/tests/collection_test.py
+index 56c4429..1f795d2 100644
+--- a/tests/collection_test.py
++++ b/tests/collection_test.py
+@@ -11,12 +11,24 @@ from tests.utils.object_assertions import (
+     assert_object_lists_match,
+     assert_to_contain_object,
+ )
++from tests.utils.version import is_v30_or_above
+ from typesense.api_call import ApiCall
++from typesense.client import Client
+ from typesense.collection import Collection
+ from typesense.collections import Collections
+ from typesense.types.collection import CollectionSchema
+ 
+ 
++is_v30_or_above_server = is_v30_or_above(
++    Client(
++        {
++            "api_key": "xyz",
++            "nodes": [{"host": "localhost", "port": 8108, "protocol": "http"}],
++        }
++    )
++)
++
++
+ def test_init(fake_api_call: ApiCall) -> None:
+     """Test that the Collection object is initialized correctly."""
+     collection = Collection(fake_api_call, "companies")
+@@ -204,7 +216,6 @@ def test_actual_retrieve(
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+             {
+@@ -218,7 +229,6 @@ def test_actual_retrieve(
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+         ],
+@@ -226,9 +236,12 @@ def test_actual_retrieve(
+         "num_documents": 0,
+         "symbols_to_index": [],
+         "token_separators": [],
+-        "synonym_sets": [],
+-        "curation_sets": [],
+     }
++    if is_v30_or_above_server:
++        expected["synonym_sets"] = []
++        expected["curation_sets"] = []
++        expected["fields"][0]["truncate_len"] = 100
++        expected["fields"][1]["truncate_len"] = 100
+ 
+     response.pop("created_at")
+ 
+@@ -245,10 +258,8 @@ def test_actual_update(
+         {"fields": [{"name": "num_locations", "type": "int32"}]},
+     )
+ 
+-    expected: CollectionSchema = {
+-        "fields": [
+-            {"name": "num_locations", "truncate_len": 100, "type": "int32"},
+-        ],
+-    }
++    expected_field = {"name": "num_locations", "type": "int32"}
++    if is_v30_or_above_server:
++        expected_field["truncate_len"] = 100
+ 
+-    assert_to_contain_object(response.get("fields")[0], expected.get("fields")[0])
++    assert_to_contain_object(response.get("fields")[0], expected_field)
+diff --git a/tests/collections_test.py b/tests/collections_test.py
+index d742652..1021e8e 100644
+--- a/tests/collections_test.py
++++ b/tests/collections_test.py
+@@ -13,10 +13,66 @@ else:
+ 
+ from tests.utils.object_assertions import assert_match_object, assert_object_lists_match
+ from typesense.api_call import ApiCall
++from tests.utils.version import is_v30_or_above
+ from typesense.collections import Collections
++from typesense.client import Client
+ from typesense.types.collection import CollectionSchema
+ 
+ 
++IS_V30_OR_ABOVE = is_v30_or_above(
++    Client(
++        {
++            "api_key": "xyz",
++            "nodes": [{"host": "localhost", "port": 8108, "protocol": "http"}],
++        }
++    )
++)
++
++def expected_collection_field(
++    name: str,
++    type_: str,
++    *,
++    sort: bool,
++) -> dict[str, typing.Any]:
++    field: dict[str, typing.Any] = {
++        "name": name,
++        "type": type_,
++        "facet": False,
++        "index": True,
++        "optional": False,
++        "locale": "",
++        "sort": sort,
++        "infix": False,
++        "stem": False,
++        "stem_dictionary": "",
++        "store": True,
++    }
++    if IS_V30_OR_ABOVE:
++        field["truncate_len"] = 100
++    return field
++
++
++def expected_collection_schema(
++    *,
++    default_sorting_field: str,
++    fields: typing.List[dict[str, typing.Any]],
++    name: str,
++) -> CollectionSchema:
++    expected: CollectionSchema = {
++        "default_sorting_field": default_sorting_field,
++        "enable_nested_fields": False,
++        "fields": fields,
++        "name": name,
++        "num_documents": 0,
++        "symbols_to_index": [],
++        "token_separators": [],
++    }
++    if IS_V30_OR_ABOVE:
++        expected["synonym_sets"] = []
++        expected["curation_sets"] = []
++    return expected
++
++
+ def test_init(fake_api_call: ApiCall) -> None:
+     """Test that the Collections object is initialized correctly."""
+     collections = Collections(fake_api_call)
+@@ -188,46 +244,14 @@ def test_create(fake_collections: Collections) -> None:
+ 
+ def test_actual_create(actual_collections: Collections, delete_all: None) -> None:
+     """Test that the Collections object can create a collection on Typesense Server."""
+-    expected: CollectionSchema = {
+-        "default_sorting_field": "",
+-        "enable_nested_fields": False,
+-        "fields": [
+-            {
+-                "name": "company_name",
+-                "type": "string",
+-                "facet": False,
+-                "index": True,
+-                "optional": False,
+-                "locale": "",
+-                "sort": False,
+-                "infix": False,
+-                "stem": False,
+-                "stem_dictionary": "",
+-                "truncate_len": 100,
+-                "store": True,
+-            },
+-            {
+-                "name": "num_employees",
+-                "type": "int32",
+-                "facet": False,
+-                "index": True,
+-                "optional": False,
+-                "locale": "",
+-                "sort": False,
+-                "infix": False,
+-                "stem": False,
+-                "stem_dictionary": "",
+-                "truncate_len": 100,
+-                "store": True,
+-            },
+-        ],
+-        "name": "companies",
+-        "num_documents": 0,
+-        "symbols_to_index": [],
+-        "token_separators": [],
+-        "synonym_sets": [],
+-        "curation_sets": [],
+-    }
++    expected = expected_collection_schema(
++        default_sorting_field="",
++        fields=[
++            expected_collection_field("company_name", "string", sort=False),
++            expected_collection_field("num_employees", "int32", sort=False),
++         ],
++        name="companies",
++    )
+ 
+     response = actual_collections.create(
+         {
+@@ -260,46 +284,14 @@ def test_actual_retrieve(
+     response = actual_collections.retrieve()
+ 
+     expected: typing.List[CollectionSchema] = [
+-        {
+-            "default_sorting_field": "num_employees",
+-            "enable_nested_fields": False,
+-            "fields": [
+-                {
+-                    "name": "company_name",
+-                    "type": "string",
+-                    "facet": False,
+-                    "index": True,
+-                    "optional": False,
+-                    "locale": "",
+-                    "sort": False,
+-                    "infix": False,
+-                    "stem": False,
+-                    "stem_dictionary": "",
+-                    "truncate_len": 100,
+-                    "store": True,
+-                },
+-                {
+-                    "name": "num_employees",
+-                    "type": "int32",
+-                    "facet": False,
+-                    "index": True,
+-                    "optional": False,
+-                    "locale": "",
+-                    "sort": True,
+-                    "infix": False,
+-                    "stem": False,
+-                    "stem_dictionary": "",
+-                    "truncate_len": 100,
+-                    "store": True,
+-                },
+-            ],
+-            "name": "companies",
+-            "num_documents": 0,
+-            "symbols_to_index": [],
+-            "token_separators": [],
+-            "synonym_sets": [],
+-            "curation_sets": [],
+-        },
++        expected_collection_schema(
++            default_sorting_field="num_employees",
++            fields=[
++                expected_collection_field("company_name", "string", sort=False),
++                expected_collection_field("num_employees", "int32", sort=True),
++             ],
++            name="companies",
++        ),
+     ]
+ 
+     response[0].pop("created_at")

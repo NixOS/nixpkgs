@@ -1,0 +1,46 @@
+{
+  lib,
+  stdenv,
+  fetchFromCodeberg,
+  autoreconfHook,
+  atf,
+  pkg-config,
+  kyua,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "mlmmj";
+  version = "1.5.0";
+
+  src = fetchFromCodeberg {
+    owner = "mlmmj";
+    repo = "mlmmj";
+    tag = "RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
+    hash = "sha256-kAo04onxVve3kCaM4h1APsjs3C4iePabkBFJeqvnPxo=";
+  };
+
+  nativeBuildInputs = [
+    autoreconfHook
+    atf
+    pkg-config
+    kyua
+  ];
+
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # AC_FUNC_MALLOC is broken on cross builds.
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
+  postInstall = ''
+    # grab all documentation files
+    docfiles=$(find -maxdepth 1 -name "[[:upper:]][[:upper:]]*")
+    install -vDm 644 -t $out/share/doc/mlmmj/ $docfiles
+  '';
+
+  meta = {
+    homepage = "http://mlmmj.org";
+    description = "Mailing List Management Made Joyful";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+  };
+})

@@ -1,0 +1,288 @@
+From 834f253240fa334f8a73b717c86231a9684ddd07 Mon Sep 17 00:00:00 2001
+From: Andrew Rogl <arogl1@gmail.com>
+Date: Fri, 17 Jul 2026 18:43:23 +1000
+Subject: [PATCH 1/3] Fix for issue #350
+
+---
+ beetsplug/path_utils.py       |  7 ++++++-
+ tests/unit/test_path_utils.py | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/beetsplug/path_utils.py b/beetsplug/path_utils.py
+index 6fadc55f..bb16dd7e 100644
+--- a/beetsplug/path_utils.py
++++ b/beetsplug/path_utils.py
+@@ -51,7 +51,12 @@ def discover_artifacts(
+     """Walks a directory and returns a list of all non-beets-handled files."""
+     artifacts: list[Path] = []
+ 
+-    for root, _dirs, files in util.sorted_walk(source_path, ignore=ignore):
++    source_path_for_walk = util.bytestring_path(source_path)
++    ignore_for_walk = [util.bytestring_path(pattern) for pattern in ignore]
++
++    for root, _dirs, files in util.sorted_walk(
++        source_path_for_walk, ignore=ignore_for_walk
++    ):
+         for filename in files:
+             full_path_bytes = root + PATH_SEP_BYTES + filename
+ 
+diff --git a/tests/unit/test_path_utils.py b/tests/unit/test_path_utils.py
+index 579794f9..46940044 100644
+--- a/tests/unit/test_path_utils.py
++++ b/tests/unit/test_path_utils.py
+@@ -39,6 +39,37 @@ def test_is_beets_file_type(self, extension: str, expected: bool) -> None:
+         types = {"mp3": "MPEG", "flac": "FLAC"}
+         assert path_utils.is_beets_file_type(extension, types) is expected
+ 
++    def test_discover_artifacts_converts_pathlib_source_to_beets_path(
++        self, monkeypatch: pytest.MonkeyPatch
++    ) -> None:
++        """Test that artifact discovery converts pathlib input before calling
++        beets' walk helper, which expects bytes/str paths.
++        """
++        seen_paths: list[object] = []
++
++        def mock_sorted_walk(
++            path: object,
++            ignore: list[object] | None = None,
++            *_args: object,
++            **_kwargs: object,
++        ) -> Iterator[tuple[bytes, list[bytes], list[bytes]]]:
++            seen_paths.append((path, ignore))
++            assert not isinstance(path, Path)
++            assert ignore is not None
++            assert all(not isinstance(item, Path) for item in ignore)
++            yield (b"/music/album", [], [b"cover.jpg"])
++
++        monkeypatch.setattr(path_utils.util, "sorted_walk", mock_sorted_walk)
++
++        path_utils.discover_artifacts(
++            Path("/music/album"),
++            ignore=[],
++            beets_file_types={},
++        )
++
++        assert seen_paths
++        assert not isinstance(seen_paths[0][0], Path)
++
+     def test_discover_artifacts(self, monkeypatch: pytest.MonkeyPatch) -> None:
+         """Test artifact discovery and ignoring of beets-handled files. Mock
+         `sorted_walk` to control the filesystem structure.
+
+From 3ec73e639b8cd03fcaf55d194e09dfcd30d77de3 Mon Sep 17 00:00:00 2001
+From: Andrew Rogl <arogl1@gmail.com>
+Date: Fri, 17 Jul 2026 20:52:18 +1000
+Subject: [PATCH 2/3] More updates to work with latest beets
+
+---
+ beetsplug/filetote.py             | 25 +++++++++++++++++++++----
+ beetsplug/filetote_dataclasses.py |  3 ++-
+ 2 files changed, 23 insertions(+), 5 deletions(-)
+
+diff --git a/beetsplug/filetote.py b/beetsplug/filetote.py
+index d70fe7c7..5c6dc607 100644
+--- a/beetsplug/filetote.py
++++ b/beetsplug/filetote.py
+@@ -485,6 +485,7 @@ def _get_artifact_destination(
+         mapping: FiletoteMappingModel,
+         paired: bool = False,
+         pattern_category: str | None = None,
++        beets_item: Item | None = None,
+     ) -> Path:
+         """Returns a destination path an artifact/file should be moved to. The
+         artifact filename is unique to ensure files aren't overwritten. This also
+@@ -513,7 +514,14 @@ def _get_artifact_destination(
+             )
+ 
+         # Get template functions and evaluate against mapping
+-        template_functions = DefaultTemplateFunctions().functions()
++        # DefaultTemplateFunctions requires both item and lib
++        if beets_item is None:
++            raise ValueError(
++                "beets_item is required to initialize DefaultTemplateFunctions"
++            )
++        template_functions = DefaultTemplateFunctions(
++            beets_item, self.filetote_config.session.beets_lib
++        ).functions()
+         artifact_path = Path(
+             selected_path_template.substitute(mapping_formatted, template_functions)
+             + artifact_ext
+@@ -614,6 +622,7 @@ def _collect_paired_artifacts(
+                     mapping=self._generate_mapping(beets_item, item_destination_path),
+                     source_path=source_path,
+                     item_dest=item_destination_path,
++                    beets_item=beets_item,
+                 )
+             )
+ 
+@@ -637,6 +646,7 @@ def _update_multimove_artifacts(
+                     mapping=self._generate_mapping(beets_item, destination),
+                     source_path=artifact_collection.source_path,
+                     item_dest=destination,
++                    beets_item=beets_item,
+                 )
+                 break
+ 
+@@ -794,6 +804,7 @@ def _queue_artifacts(
+                 mapping=self._generate_mapping(beets_item, item_destination_path),
+                 source_path=source_path,
+                 item_dest=item_destination_path,
++                beets_item=beets_item,
+             )
+         )
+ 
+@@ -841,6 +852,7 @@ def process_events(self, lib: Library) -> None:
+                     source_path=artifact_collection.source_path,
+                     source_artifacts=artifact_collection.artifacts,
+                     mapping=artifact_collection.mapping,
++                    beets_item=artifact_collection.beets_item,
+                 )
+ 
+         # Handle all shared artifacts for each source directory
+@@ -852,10 +864,12 @@ def process_events(self, lib: Library) -> None:
+                 if not shared_artifacts.artifacts:
+                     continue
+ 
+-                # Mapping derives from the first Item that found this source path
+-                album_level_mapping = self._run_state.process_queue[
++                # Get mapping and item from the first collection
++                album_level_collection = self._run_state.process_queue[
+                     shared_artifacts.mapping_index
+-                ].mapping
++                ]
++                album_level_mapping = album_level_collection.mapping
++                album_level_item = album_level_collection.beets_item
+ 
+                 artifacts_to_process = [
+                     FiletoteArtifact(path=shared_artifact, paired=False)
+@@ -866,6 +880,7 @@ def process_events(self, lib: Library) -> None:
+                     source_path=source_path,
+                     source_artifacts=artifacts_to_process,
+                     mapping=album_level_mapping,
++                    beets_item=album_level_item,
+                 )
+ 
+     def _should_process_artifact(
+@@ -932,6 +947,7 @@ def process_artifacts(
+         source_path: Path,
+         source_artifacts: list[FiletoteArtifact],
+         mapping: FiletoteMappingModel,
++        beets_item: Item | None = None,
+     ) -> None:
+         """Processes and prepares extra files and artifacts for subsequent
+         manipulation.
+@@ -974,6 +990,7 @@ def process_artifacts(
+                 mapping,
+                 artifact.paired,
+                 pattern_category,
++                beets_item,
+             )
+ 
+             if artifact_source == artifact_dest:
+diff --git a/beetsplug/filetote_dataclasses.py b/beetsplug/filetote_dataclasses.py
+index 80648f95..c7d36b30 100644
+--- a/beetsplug/filetote_dataclasses.py
++++ b/beetsplug/filetote_dataclasses.py
+@@ -17,7 +17,7 @@
+     from collections.abc import Callable
+     from pathlib import Path
+ 
+-    from beets.library import Library
++    from beets.library import Item, Library
+     from beets.util import MoveOperation
+ 
+     from .mapping_model import FiletoteMappingModel
+@@ -46,6 +46,7 @@ class FiletoteArtifactCollection:
+     mapping: FiletoteMappingModel
+     source_path: Path
+     item_dest: Path
++    beets_item: Item | None = None
+ 
+ 
+ @dataclass
+
+From c9617c91c56bb5e3640c3a08ac11fdd79b0a0f7c Mon Sep 17 00:00:00 2001
+From: Andrew Rogl <arogl1@gmail.com>
+Date: Sat, 18 Jul 2026 09:45:51 +1000
+Subject: [PATCH 3/3] All local tests passing, but not elegant solution
+
+---
+ beetsplug/path_utils.py                     |  2 +-
+ tests/pytest_beets_plugin/plugin_fixture.py | 22 +++++++++++++++++----
+ tests/pytest_beets_plugin/utils.py          |  7 ++++++-
+ 3 files changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/beetsplug/path_utils.py b/beetsplug/path_utils.py
+index bb16dd7e..88efe35b 100644
+--- a/beetsplug/path_utils.py
++++ b/beetsplug/path_utils.py
+@@ -155,7 +155,7 @@ def is_multidisc(path_name: Path) -> bool:
+     """Checks if a directory name matches the multi-disc pattern by replicating the
+     beets importer's pattern matching for disc folders.
+     """
+-    path_name_bytes = util.bytestring_path(path_name.name)
++    path_name_bytes = util.displayable_path(path_name.name)
+ 
+     return any(pat.match(path_name_bytes) for pat in MULTIDISC_PATTERNS)
+ 
+diff --git a/tests/pytest_beets_plugin/plugin_fixture.py b/tests/pytest_beets_plugin/plugin_fixture.py
+index 04d541b9..44665f7a 100644
+--- a/tests/pytest_beets_plugin/plugin_fixture.py
++++ b/tests/pytest_beets_plugin/plugin_fixture.py
+@@ -10,6 +10,7 @@
+ 
+ from beets import config, library, plugins, util
+ from beets.importer import ImportSession
++from beets.ui.commands.modify import ModifyOperation
+ from mediafile import MediaFile
+ 
+ from ._item_model import MediaMeta
+@@ -450,13 +451,26 @@ def _run_cli_modify(  # noqa: PLR0913
+         album: str | None = None,
+     ) -> None:
+         """Run the `modify` CLI command."""
+-        mods = mods or {}
+-        dels = dels or {}
++        if mods:
++            wrapped_mods = {
++                field: ModifyOperation(operator=None, value=val)
++                for field, val in mods.items()
++            }
++        else:
++            wrapped_mods = {}
++
++        if dels:
++            wrapped_dels = {
++                field: ModifyOperation(operator=None, value=val)
++                for field, val in dels.items()
++            }
++        else:
++            wrapped_dels = {}
+ 
+         modify_items(
+             lib=self.lib,
+-            mods=mods,
+-            dels=dels,
++            mods=wrapped_mods,
++            dels=wrapped_dels,
+             query=query,
+             write=write,
+             move=move,
+diff --git a/tests/pytest_beets_plugin/utils.py b/tests/pytest_beets_plugin/utils.py
+index 476ca033..5182d7e4 100644
+--- a/tests/pytest_beets_plugin/utils.py
++++ b/tests/pytest_beets_plugin/utils.py
+@@ -53,7 +53,12 @@ def list_files(self, startpath: Path) -> None:
+             log.debug("{} does not exist", startpath)
+             return
+ 
+-        for root, _dirs, files in util.sorted_walk(startpath):
++        source_path_for_walk = util.bytestring_path(startpath)
++        ignore_for_walk = [util.bytestring_path("")]
++
++        for root, _dirs, files in util.sorted_walk(
++            source_path_for_walk, ignore_for_walk
++        ):
+             root_path = Path(util.displayable_path(root))
+ 
+             try:

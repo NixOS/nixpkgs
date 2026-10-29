@@ -1,0 +1,75 @@
+From 5fbcd63a4fb8baca13184a2cc718ebf3ebbef245 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sun, 28 Dec 2025 00:24:11 +0800
+Subject: [PATCH] fix build with c23
+
+---
+ emxdoc/input.c | 10 +++++-----
+ system/types.h |  5 +----
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/emxdoc/input.c b/emxdoc/input.c
+index 50fd7a0..7d9ad4a 100644
+--- a/emxdoc/input.c
++++ b/emxdoc/input.c
+@@ -31,7 +31,7 @@ Boston, MA 02111-1307, USA.  */
+ struct cond
+ {
+   int start_line;
+-  int true;
++  int is_true;
+   int else_seen;
+ };
+ 
+@@ -225,7 +225,7 @@ redo:
+           if (cond_sp + 1 >= COND_STACK_SIZE)
+             fatal ("%s:%d: Conditional stack overflow", input_fname, line_no);
+           ++cond_sp;
+-          cond_stack[cond_sp].true = c1;
++          cond_stack[cond_sp].is_true = c1;
+           cond_stack[cond_sp].start_line = line_no;
+           cond_stack[cond_sp].else_seen = FALSE;
+           goto redo;
+@@ -240,7 +240,7 @@ redo:
+                    input_fname, line_no, escape, escape,
+                    cond_stack[cond_sp].start_line);
+           cond_stack[cond_sp].else_seen = TRUE;
+-          cond_stack[cond_sp].true = !cond_stack[cond_sp].true;
++          cond_stack[cond_sp].is_true = !cond_stack[cond_sp].is_true;
+           goto redo;
+         }
+       else if (strcmp (p, "endif") == 0)
+@@ -254,12 +254,12 @@ redo:
+       else if (p[0] == 'h' && p[1] >= '1' && p[1] <= '0' + SECTION_LEVELS)
+         {
+           /* Support h1 inside if */
+-          if (cond_sp >= 0 && !cond_stack[cond_sp].true)
++          if (cond_sp >= 0 && !cond_stack[cond_sp].is_true)
+             ++ref_no;
+         }
+     }
+ 
+-  if (cond_sp >= 0 && !cond_stack[cond_sp].true)
++  if (cond_sp >= 0 && !cond_stack[cond_sp].is_true)
+     goto redo;
+ 
+   p = input;
+diff --git a/system/types.h b/system/types.h
+index 48b8013..327833f 100644
+--- a/system/types.h
++++ b/system/types.h
+@@ -21,10 +21,7 @@
+ #define _TYPES_H
+ 
+ #include "config.h"
+-
+-
+-/* Booleans (C++/C99) style. */
+-typedef int bool;
++#include <stdbool.h>
+ 
+ #ifndef true
+ #define true 1
+-- 
+2.51.2
+

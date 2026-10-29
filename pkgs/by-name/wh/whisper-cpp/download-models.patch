@@ -1,0 +1,57 @@
+diff --git a/models/download-ggml-model.sh b/models/download-ggml-model.sh
+index ef9c90da..a7e2a17c 100755
+--- a/models/download-ggml-model.sh
++++ b/models/download-ggml-model.sh
+@@ -12,15 +12,6 @@ pfx="resolve/main/ggml"
+ BOLD="\033[1m"
+ RESET='\033[0m'
+ 
+-# get the path of this script
+-get_script_path() {
+-    if [ -x "$(command -v realpath)" ]; then
+-        dirname "$(realpath "$0")"
+-    else
+-        _ret="$(cd -- "$(dirname "$0")" >/dev/null 2>&1 || exit ; pwd -P)"
+-        echo "$_ret"
+-    fi
+-}
+ 
+ script_path="$(get_script_path)"
+ 
+@@ -30,7 +21,6 @@ case "$script_path" in
+     *) default_download_path="$script_path" ;;  # Otherwise, use script directory
+ esac
+ 
+-models_path="${2:-$default_download_path}"
+ 
+ # Whisper models
+ models="tiny
+@@ -80,8 +70,8 @@ list_models() {
+     printf "\n\n"
+ }
+ 
+-if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+-    printf "Usage: %s <model> [models_path]\n" "$0"
++if [ "$#" -lt 1 ]; then
++    printf "Usage: %s <model>\n" "$0"
+     list_models
+     printf "___________________________________________________________\n"
+     printf "${BOLD}.en${RESET} = english-only ${BOLD}-q5_[01]${RESET} = quantized ${BOLD}-tdrz${RESET} = tinydiarize\n"
+@@ -110,7 +100,6 @@ echo "$model" | grep -q '^"tdrz"*$'
+ 
+ printf "Downloading ggml model %s from '%s' ...\n" "$model" "$src"
+ 
+-cd "$models_path" || exit
+ 
+ if [ -f "ggml-$model.bin" ]; then
+     printf "Model %s already exists. Skipping download.\n" "$model"
+@@ -143,7 +132,7 @@ else
+     whisper_cmd="./build/bin/whisper-cli"
+ fi
+ 
+-printf "Done! Model '%s' saved in '%s/ggml-%s.bin'\n" "$model" "$models_path" "$model"
++printf "Done! Model '%s' saved in 'ggml-%s.bin'\n" "$model" "$model"
+ printf "You can now use it like this:\n\n"
+-printf "  $ %s -m %s/ggml-%s.bin -f samples/jfk.wav\n" "$whisper_cmd" "$models_path" "$model"
++printf "  $ %s -m /ggml-%s.bin -f samples/jfk.wav\n" "$whisper_cmd" "$model"
+ printf "\n"

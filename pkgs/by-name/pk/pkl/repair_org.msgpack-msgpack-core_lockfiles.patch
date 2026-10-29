@@ -1,0 +1,52 @@
+From daede858a1568224b06033b256300c8f86db973e Mon Sep 17 00:00:00 2001
+From: Matei Dibu <contact@mateidibu.dev>
+Date: Fri, 27 Feb 2026 14:13:40 +0200
+Subject: [PATCH] fix: repair org.msgpack:msgpack-core lockfiles
+
+---
+ pkl-commons-test/gradle.lockfile  | 2 +-
+ pkl-config-java/gradle.lockfile   | 2 +-
+ pkl-config-kotlin/gradle.lockfile | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pkl-commons-test/gradle.lockfile b/pkl-commons-test/gradle.lockfile
+index a1c9514e..a9021ca2 100644
+--- a/pkl-commons-test/gradle.lockfile
++++ b/pkl-commons-test/gradle.lockfile
+@@ -47,6 +47,6 @@ org.junit.platform:junit-platform-commons:1.14.0=apiDependenciesMetadata,compile
+ org.junit.platform:junit-platform-engine:1.14.0=apiDependenciesMetadata,compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+ org.junit.platform:junit-platform-launcher:1.14.0=testRuntimeClasspath
+ org.junit:junit-bom:5.14.0=apiDependenciesMetadata,compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+-org.msgpack:msgpack-core:0.9.8=compileClasspath
++org.msgpack:msgpack-core:0.9.8=compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+ org.opentest4j:opentest4j:1.3.0=apiDependenciesMetadata,compileClasspath,implementationDependenciesMetadata,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+ empty=annotationProcessor,compileOnlyDependenciesMetadata,intransitiveDependenciesMetadata,kotlinCompilerPluginClasspath,kotlinNativeCompilerPluginClasspath,kotlinScriptDefExtensions,sourcesJar,testAnnotationProcessor,testApiDependenciesMetadata,testCompileOnlyDependenciesMetadata,testIntransitiveDependenciesMetadata,testKotlinScriptDefExtensions
+diff --git a/pkl-config-java/gradle.lockfile b/pkl-config-java/gradle.lockfile
+index fa2fbd37..ebf64def 100644
+--- a/pkl-config-java/gradle.lockfile
++++ b/pkl-config-java/gradle.lockfile
+@@ -79,7 +79,7 @@ org.junit.platform:junit-platform-commons:1.14.0=testCompileClasspath,testImplem
+ org.junit.platform:junit-platform-engine:1.14.0=testRuntimeClasspath
+ org.junit.platform:junit-platform-launcher:1.14.0=testRuntimeClasspath
+ org.junit:junit-bom:5.14.0=testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+-org.msgpack:msgpack-core:0.9.8=compileClasspath,pklCodegenJava,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
++org.msgpack:msgpack-core:0.9.8=compileClasspath,implementationDependenciesMetadata,pklCodegenJava,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+ org.opentest4j:opentest4j:1.3.0=testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+ org.organicdesign:Paguro:3.10.3=pklCodegenJava,runtimeClasspath,testRuntimeClasspath
+ org.snakeyaml:snakeyaml-engine:2.10=pklCodegenJava,runtimeClasspath,testRuntimeClasspath
+diff --git a/pkl-config-kotlin/gradle.lockfile b/pkl-config-kotlin/gradle.lockfile
+index 2bdeb136..0fd4d516 100644
+--- a/pkl-config-kotlin/gradle.lockfile
++++ b/pkl-config-kotlin/gradle.lockfile
+@@ -78,7 +78,7 @@ org.junit.platform:junit-platform-commons:1.14.0=testCompileClasspath,testImplem
+ org.junit.platform:junit-platform-engine:1.14.0=testRuntimeClasspath
+ org.junit.platform:junit-platform-launcher:1.14.0=testRuntimeClasspath
+ org.junit:junit-bom:5.14.0=testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+-org.msgpack:msgpack-core:0.9.8=compileClasspath,pklCodegenKotlin,pklConfigJava,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
++org.msgpack:msgpack-core:0.9.8=compileClasspath,implementationDependenciesMetadata,pklCodegenKotlin,runtimeClasspath,testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+ org.opentest4j:opentest4j:1.3.0=testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
+ org.organicdesign:Paguro:3.10.3=pklCodegenKotlin,testRuntimeClasspath
+ org.snakeyaml:snakeyaml-engine:2.10=pklCodegenKotlin,testRuntimeClasspath
+-- 
+2.53.0
+

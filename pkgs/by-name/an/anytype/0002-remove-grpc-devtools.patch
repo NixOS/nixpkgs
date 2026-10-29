@@ -1,0 +1,12 @@
+diff --git a/electron/ts/main.ts b/electron/ts/main.ts
+index 373518ee2d..8eefcd58be 100644
+--- a/electron/ts/main.ts
++++ b/electron/ts/main.ts
+@@ -15,7 +15,6 @@ import storage from 'electron-json-storage';
+ import * as remote from '@electron/remote/main';
+ import { installNativeMessagingHost } from './lib/installNativeMessagingHost';
+ import { getSafeStorage } from './safeStorage';
+-import { installExtension } from '@tomjs/electron-devtools-installer';
+ import Api from './api';
+ import ConfigManager from './config';
+ import UpdateManager from './update';

@@ -1,0 +1,121 @@
+From b8dc3f753bd2aefb192f95688dc12797bc041627 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Tue, 19 May 2026 20:16:28 -0700
+Subject: [PATCH] Emit compare.fatbin and make -arch=compute_X conditional
+
+cuModuleLoad accepts cubin/fatbin/PTX interchangeably, so the C++ side
+just needs the filename swap.  The benefit is that callers wanting to
+target multiple architectures (or to opt into architecture-conditional
+sm_90a / family-specific compute_100f features) can now append -gencode
+flags via NVCCFLAGS; -ptx output is a single-arch text format with no
+way to multiplex more than one architecture into one file.
+
+To let those callers fully control which architectures end up in the
+fatbin, guard the default -arch=compute_$(COMPUTE) entry behind a non-
+empty check.  'make COMPUTE=' now skips it; default 'make' and
+'make COMPUTE=86' behave exactly as before.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+---
+ Dockerfile       |  2 +-
+ Makefile         | 10 ++++++----
+ README.md        |  8 ++++++++
+ gpu-burn.8       |  2 +-
+ gpu_burn-drv.cpp |  2 +-
+ 5 files changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/Dockerfile b/Dockerfile
+index 08e5202..1c46976 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -12,7 +12,7 @@ RUN make
+ FROM nvidia/cuda:${CUDA_VERSION}-runtime-${IMAGE_DISTRO}
+ 
+ COPY --from=builder /build/gpu_burn /app/
+-COPY --from=builder /build/compare.ptx /app/
++COPY --from=builder /build/compare.fatbin /app/
+ 
+ WORKDIR /app
+ 
+diff --git a/Makefile b/Makefile
+index ec54a19..d23425a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -32,23 +32,25 @@ IMAGE_DISTRO ?= ubi8
+ 
+ override NVCCFLAGS ?=
+ override NVCCFLAGS += -I${CUDAPATH}/include
++ifneq ($(strip $(COMPUTE)),)
+ override NVCCFLAGS += -arch=compute_$(subst .,,${COMPUTE})
++endif
+ 
+ IMAGE_NAME ?= gpu-burn
+ 
+ .PHONY: clean
+ 
+-gpu_burn: gpu_burn-drv.o compare.ptx
++gpu_burn: gpu_burn-drv.o compare.fatbin
+ 	g++ -o $@ $< -O3 ${LDFLAGS}
+ 
+ %.o: %.cpp
+ 	g++ ${CFLAGS} -c $<
+ 
+-%.ptx: %.cu
+-	PATH="${PATH}:${CCPATH}:." ${NVCC} ${NVCCFLAGS} -ptx $< -o $@
++%.fatbin: %.cu
++	PATH="${PATH}:${CCPATH}:." ${NVCC} ${NVCCFLAGS} -fatbin $< -o $@
+ 
+ clean:
+-	$(RM) *.ptx *.o gpu_burn
++	$(RM) *.fatbin *.o gpu_burn
+ 
+ image:
+ 	docker build --build-arg CUDA_VERSION=${CUDA_VERSION} --build-arg IMAGE_DISTRO=${IMAGE_DISTRO} -t ${IMAGE_NAME} .
+diff --git a/README.md b/README.md
+index ca95342..1b050bf 100644
+--- a/README.md
++++ b/README.md
+@@ -37,6 +37,14 @@ To override this with a different value:
+ 
+ `make COMPUTE=<compute capability value>`
+ 
++`COMPUTE` selects a single virtual architecture for the default `-arch`
++flag.  For a fat binary targeting multiple architectures, or to opt into
++architecture-conditional (`sm_90a`) or family-specific (`compute_100f`)
++features, set `COMPUTE=` to suppress the default and drive the build
++entirely from `-gencode` flags via `NVCCFLAGS`:
++
++`make COMPUTE= NVCCFLAGS='-gencode=arch=compute_86,code=sm_86 -gencode=arch=compute_90,code=sm_90'`
++
+ CFLAGS can be added when invoking make to add to the default
+ list of compiler flags:
+ 
+diff --git a/gpu-burn.8 b/gpu-burn.8
+index bf071a4..b1c46c4 100644
+--- a/gpu-burn.8
++++ b/gpu-burn.8
+@@ -19,7 +19,7 @@ GPU Burn
+ .br
+ \fB\-i\fR N    Execute only on GPU N
+ .br
+-\fB\-c\fR FILE Use FILE as compare kernel.  Default is compare.ptx
++\fB\-c\fR FILE Use FILE as compare kernel.  Default is compare.fatbin
+ .br
+ \fB\-stts\fR T Set timeout threshold to T seconds for using SIGTERM to abort child processes before using SIGKILL.  Default is 30
+ .br
+diff --git a/gpu_burn-drv.cpp b/gpu_burn-drv.cpp
+index eae3532..a66ec9a 100644
+--- a/gpu_burn-drv.cpp
++++ b/gpu_burn-drv.cpp
+@@ -30,7 +30,7 @@
+ // Matrices are SIZE*SIZE..  POT should be efficiently implemented in CUBLAS
+ #define SIZE 8192ul
+ #define USEMEM 0.9 // Try to allocate 90% of memory
+-#define COMPARE_KERNEL "compare.ptx"
++#define COMPARE_KERNEL "compare.fatbin"
+ 
+ // Used to report op/s, measured through Visual Profiler, CUBLAS from CUDA 7.5
+ // (Seems that they indeed take the naive dim^3 approach)
+-- 
+2.43.0
+

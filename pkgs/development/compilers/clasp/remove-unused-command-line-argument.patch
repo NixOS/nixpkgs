@@ -1,0 +1,13 @@
+diff --git a/src/koga/units.lisp b/src/koga/units.lisp
+index 808cebd17..2bbf965fd 100644
+--- a/src/koga/units.lisp
++++ b/src/koga/units.lisp
+@@ -197,7 +197,7 @@
+                                :type :cxxflags)
+   #+darwin (append-cflags configuration "-stdlib=libc++" :type :cxxflags)
+   #+darwin (append-cflags configuration "-I/usr/local/include")
+-  #+linux (append-cflags configuration "-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fno-stack-protector -stdlib=libstdc++"
++  #+linux (append-cflags configuration "-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fno-stack-protector"
+                                        :type :cxxflags)
+   #+linux (append-cflags configuration "-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fno-stack-protector"
+                                        :type :cflags)

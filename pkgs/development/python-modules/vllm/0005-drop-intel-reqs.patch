@@ -1,0 +1,13 @@
+diff --git a/requirements/cpu.txt b/requirements/cpu.txt
+index 21571be47..e91b378e2 100644
+--- a/requirements/cpu.txt
++++ b/requirements/cpu.txt
+@@ -14,8 +14,5 @@ torchaudio; platform_machine != "s390x"
+ # required for the image processor of phi3v, this must be updated alongside torch
+ torchvision; platform_machine != "s390x"
+ 
+-# Intel Extension for PyTorch, only for x86_64 CPUs
+-intel-openmp==2024.2.1; platform_machine == "x86_64"
+-
+ # Use this to gather CPU info and optimize based on ARM Neoverse cores
+ py-cpuinfo; platform_machine == "aarch64"

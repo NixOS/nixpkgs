@@ -1,0 +1,25 @@
+diff --git a/src/PopoverWidget.vala b/src/PopoverWidget.vala
+index 9dd331c..438fbe0 100644
+--- a/src/PopoverWidget.vala
++++ b/src/PopoverWidget.vala
+@@ -123,7 +123,6 @@ public class QuickSettings.PopoverWidget : Gtk.Box {
+ 
+         if (server_type == GREETER || glib_settings.get_boolean ("show-a11y")) {
+             toggle_box.add (screen_reader);
+-            toggle_box.add (onscreen_keyboard);
+ 
+             scale_box.add (text_scale);
+         }
+@@ -131,12 +130,10 @@ public class QuickSettings.PopoverWidget : Gtk.Box {
+         glib_settings.changed["show-a11y"].connect (() => {
+             if (glib_settings.get_boolean ("show-a11y") && screen_reader.parent == null) {
+                 toggle_box.add (screen_reader);
+-                toggle_box.add (onscreen_keyboard);
+ 
+                 scale_box.add (text_scale);
+             } else {
+                 toggle_box.remove (screen_reader);
+-                toggle_box.remove (onscreen_keyboard);
+ 
+                 scale_box.remove (text_scale);
+             }
