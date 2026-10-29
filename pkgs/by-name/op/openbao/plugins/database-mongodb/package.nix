@@ -8,16 +8,16 @@ mkOpenbaoPlugin (finalAttrs: {
   plugin = "database-mongodb";
   pluginType = "database";
   pluginName = "mongodb-database-plugin";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao-plugins";
     tag = "database-mongodb-v${finalAttrs.version}";
-    hash = "sha256-vsYNbdw5NI5upYjEomFwPyVyk8GkPY6aTxdjL3/AGD4=";
+    hash = "sha256-LlwGH3C4eG3dkTb0yWaD6scmJ9OprCULvTmvU7CMvkQ=";
   };
 
-  vendorHash = "sha256-VzYdX3uV884+q+QpS6O3GIh8DhplF787RE2+2KWsOCs=";
+  vendorHash = "sha256-fY20ZgdqLkA+myIDTHKvaBzTqfu2jwu4+FJR0/yNtKU=";
 
   meta = {
     description = "OpenBao database plugin to generate MongoDB database credentials";

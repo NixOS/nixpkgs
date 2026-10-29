@@ -8,14 +8,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lulu";
-  version = "4.5.1";
+  version = "4.5.4";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://github.com/objective-see/LuLu/releases/download/v${finalAttrs.version}/LuLu_${finalAttrs.version}.dmg";
-    hash = "sha256-mPTTQn9Mb8z5aA/tIoeb6Qpa6B6A64YWwddYdVtrtiQ=";
+    hash = "sha256-jhkYA/YcVkuHgP8QDbM0aff4lP4cvPoduL704BfFIQ8=";
   };
 
   nativeBuildInputs = [ undmg ];
