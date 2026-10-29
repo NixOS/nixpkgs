@@ -8,12 +8,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "b4";
-  version = "0.15.2";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-uBXyrtIohxjP4qFMdkIaALxPCRjqMrRd0WRcmZ/dpp0=";
+    hash = "sha256-BxgjoekEUIpv2ar4zC+akml+HfonAAC00RMAFbVvQTc=";
   };
 
   # tests make dns requests and fails
@@ -30,6 +30,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patatt
     git-filter-repo
     textual
+    pygit2
+    ezgb
+    liblore
   ];
 
   passthru = {
