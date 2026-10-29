@@ -22,6 +22,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "asciitree" ];
+
   meta = {
     description = "Draws ASCII trees";
     homepage = "https://github.com/mbr/asciitree";
