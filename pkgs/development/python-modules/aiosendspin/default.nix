@@ -99,11 +99,11 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
+  disabledTestPaths = [
     # This test fails due to our ffmpeg/pyav being build with libsoxr and it automatically being chosen.
     # When forcefully disabling libsoxr, the test passes, but Music Assistant, the primary consumer of this library,
     # builds a custom ffmpeg with libsoxr and then links their PyAV against it, so it cannot be that bad, right?
-    "test_format_change_during_inflight_commit_aborts_old_format_delivery"
+    "tests/server/test_push_stream_behavior.py::test_format_change_during_inflight_commit_aborts_old_format_delivery"
   ];
 
   passthru = {
