@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  SDL,
+  SDL2,
   autoreconfHook,
   fetchFromGitHub,
   libGL,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL
+    SDL2
     libGL
     libGLU
     libx11
@@ -41,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature true "opengl")
     (lib.withFeature true "readline")
     (lib.withFeature true "x")
-    (lib.withFeatureAs true "sound" "sdl")
-    (lib.withFeatureAs true "video" "sdl")
+    (lib.withFeatureAs true "sound" "sdl2")
+    (lib.withFeatureAs true "video" "sdl2")
   ];
 
   meta = {
