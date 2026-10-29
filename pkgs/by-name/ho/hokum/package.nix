@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   desktopItems = [ "packaging/hokum.desktop" ];
 
-  postInstall = ''
+  postPatch = ''
     # Use store paths for D-Bus and systemd activation, including the shell condition.
     substituteInPlace packaging/hokum.service \
       --replace-fail /bin/sh ${runtimeShell} \
@@ -60,17 +60,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace packaging/app.hokum.Notifications.service \
       --replace-fail /usr/bin/hokum $out/bin/hokum
 
+    substituteInPlace src/main.rs src/update.rs \
+      --replace-fail 'Command::new("systemctl")' 'Command::new("${lib.getExe' systemd "systemctl"}")'
+  '';
+
+  postInstall = ''
     install -Dm644 packaging/hokum.service $out/lib/systemd/user/hokum.service
     install -Dm644 packaging/app.hokum.Notifications.service \
       $out/share/dbus-1/services/app.hokum.Notifications.service
 
     wrapProgram $out/bin/hokum \
-      --suffix PATH : ${
-        lib.makeBinPath [
-          systemd
-          xdg-utils
-        ]
-      }
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
   passthru.updateScript = nix-update-script {
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Freedesktop notification daemon for Wayland, drawn with Rune";
     homepage = "https://hokum.app";
-    changelog = "https://github.com/anomalyco/hokum/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/anomalyco/hokum/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dtvillafana ];
     mainProgram = "hokum";
