@@ -15,7 +15,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "visidata";
-  version = "3.4";
+  version = "3.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "saulpw";
     repo = "visidata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h5utXfafQP6uZ7vXQAYXfV26y0qHbk6vulPl6DXbVX4=";
+    hash = "sha256-Lvs8BFgHdr51MCFtTbQVK4iFUwn5b5o/L6rmMGwA5To=";
   };
 
   build-system = with python3Packages; [
