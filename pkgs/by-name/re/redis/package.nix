@@ -47,13 +47,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A9qp+PWQRuNy/xmv9KLM7/XAyL7Tzkyn0scpVCGngcc=";
   });
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # The path `/Library/...` isn't available in the build sandbox. The package `apple-sdk`
-    # can provide that functionality for us.
-    substituteInPlace src/modules/Makefile modules/vector-sets/Makefile tests/modules/Makefile \
-      --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib' \
-        '${apple-sdk.sdkroot}/usr/lib'
-  '';
+  postPatch =
+    # tests/modules/Makefile hardcodes CC=gcc and LD=gcc on Linux, which breaks cross-compilation
+    # Use ?= so the environment CC is respected
+    # see https://github.com/redis/redis/issues/15395
+    ''
+      substituteInPlace tests/modules/Makefile \
+        --replace-fail 'CC = gcc' 'CC ?= gcc' \
+        --replace-fail 'LD = gcc' 'LD ?= gcc'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # The path `/Library/...` isn't available in the build sandbox. The package `apple-sdk`
+      # can provide that functionality for us.
+      substituteInPlace src/modules/Makefile modules/vector-sets/Makefile tests/modules/Makefile \
+        --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib' \
+          '${apple-sdk.sdkroot}/usr/lib'
+    '';
 
   nativeBuildInputs = [
     pkg-config
