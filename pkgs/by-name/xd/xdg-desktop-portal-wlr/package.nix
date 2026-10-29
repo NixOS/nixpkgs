@@ -18,6 +18,7 @@
   slurp,
   systemdLibs,
   wayland,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/emersion/xdg-desktop-portal-wlr";
