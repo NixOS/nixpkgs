@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "oslo-config";
-  version = "10.7.0";
+  version = "10.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.config";
     tag = finalAttrs.version;
-    hash = "sha256-5LSJGmEaKG6FV8NHUd6UpfijtzBp4CuvPHbFa73WXpQ=";
+    hash = "sha256-D4QmMDen9RHWUEFMlZ6kZF+DZSslptE0aLRv2A6afkI=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)
