@@ -48,6 +48,5 @@ stdenv.mkDerivation (finalAttrs: {
       pSub
     ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
