@@ -102,8 +102,13 @@ buildPythonPackage rec {
 
   disabledTestMarks = [ "needs_internet" ];
 
-  # These tests require the old and vulnerable freeimage binaries; skip.
-  disabledTestPaths = [ "tests/test_freeimage.py" ];
+  disabledTestPaths = [
+    # These tests require the old and vulnerable freeimage binaries; skip.
+    "tests/test_freeimage.py"
+    # These tests require an older version of pillow
+    "tests/test_pillow.py::test_png_16bit"
+    "tests/test_pillow_legacy.py::test_png"
+  ];
 
   preCheck = ''
     export IMAGEIO_USERDIR=$(mktemp -d)
