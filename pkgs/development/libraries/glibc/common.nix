@@ -218,6 +218,9 @@ stdenv.mkDerivation (
       ++ lib.optionals (stdenv.cc.libc != null) [
         "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
         "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isMicroBlaze [
+        "no-pie-ldflag=-no-pie"
       ];
 
     postInstall = (args.postInstall or "") + ''
