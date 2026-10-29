@@ -10,6 +10,8 @@
   openssl,
   onnxruntime,
   webkitgtk_4_1,
+  aws-lc,
+  oniguruma,
   gtk3,
   glib,
   gdk-pixbuf,
@@ -72,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
+    oniguruma
     nodejs_24
     glib-networking
     openssl
