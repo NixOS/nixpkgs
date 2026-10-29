@@ -100,7 +100,7 @@ let
   '';
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rstudio";
+  pname = "rstudio" + lib.optionalString server "-server";
   version = "2026.10.1+239";
 
   src = fetchFromGitHub {
