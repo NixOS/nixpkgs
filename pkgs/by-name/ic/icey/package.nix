@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "nilstate";
+    owner = "auscaster";
     repo = "icey";
     tag = finalAttrs.version;
     hash = "sha256-vgbKU3z719WXxQcPorF3ts706GhGhmKdGi2MueUW8Og=";
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++20 real-time media stack and libwebrtc alternative";
-    homepage = "https://0state.com/icey/";
+    homepage = "https://auscaster.com/icey/";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ auscaster ];
     platforms = lib.platforms.linux;
