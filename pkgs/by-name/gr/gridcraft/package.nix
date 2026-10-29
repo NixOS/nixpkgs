@@ -2,13 +2,10 @@
   lib,
   stdenv,
   rustPlatform,
-  rustc,
   fetchFromGitHub,
   pkg-config,
-  patchelf,
-  copyDesktopItems,
-  makeDesktopItem,
   desktopToDarwinBundle,
+  craft-fonts,
   versionCheckHook,
   vulkan-loader,
   libxkbcommon,
@@ -38,23 +35,31 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gridcraft";
-  version = "0.8.0";
+  version = "0.17.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "gridcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G0xsNWRoNMtA5lTKSZgLCHP6gcq+zOaOPdcColuFr0A=";
+    hash = "sha256-95YijEgD9A5DJpBTuPWpM8q3PasnLFChJOSICmtpRC4=";
   };
 
-  cargoHash = "sha256-EY/41uMNm9hG7LhynI4d/7RSj5tGXsT8/s+Al8mr7pk=";
+  cargoHash = "sha256-Mb3HBd3fquTqMYkJ6m+j/+V7Yx5zg2a2LU3b98QEab4=";
 
+  env = {
+    CRAFT_FONTS_DIR = craft-fonts;
+    CRAFT_FONTS_REQUIRED = "1";
+  };
+
+  # [[patch.unused]] egui fork entries break cargo --offline.
   # The mac_menu_appkit test starts a real NSApplication, and AppKit aborts in the build
   # sandbox ("required built-in appearance SystemAppearance not found").
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm apps/gridcraft/tests/mac_menu_appkit.rs
     substituteInPlace apps/gridcraft/Cargo.toml \
       --replace-fail $'[[test]]\nname = "mac_menu_appkit"\nharness = false' ""
@@ -65,63 +70,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=gridcraft-cli"
   ];
 
-  # The gridcraft-mcp tests talk to a fake app over a loopback TCP socket.
+  # The gridcraft crate runs live GPU tests. MCP tests talk over loopback.
+  cargoTestFlags = [
+    "--package=gridcraft-cli"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     pkg-config
-    patchelf
-    copyDesktopItems
   ]
   # Turns the desktop item into Applications/GridCraft.app.
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ai.storyteller.gridcraft";
-      desktopName = "GridCraft";
-      genericName = "Spreadsheet";
-      comment = "Calculate, analyse and chart data in workbooks";
-      exec = "gridcraft %F";
-      tryExec = "gridcraft";
-      icon = "ai.storyteller.gridcraft";
-      terminal = false;
-      startupNotify = true;
-      startupWMClass = "ai.storyteller.gridcraft";
-      categories = [
-        "Office"
-        "Spreadsheet"
-      ];
-      keywords = [
-        "spreadsheet"
-        "workbook"
-        "sheet"
-        "table"
-        "formula"
-        "chart"
-        "pivot"
-        "xlsx"
-        "xlsb"
-        "ods"
-        "csv"
-        "tsv"
-        "excel"
-      ];
-      mimeTypes = [
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        "application/vnd.ms-excel.sheet.macroEnabled.12"
-        "application/vnd.ms-excel.sheet.binary.macroEnabled.12"
-        "application/vnd.oasis.opendocument.spreadsheet"
-        "text/csv"
-        "text/tab-separated-values"
-      ];
-    })
-  ];
 
   # On darwin, desktopToDarwinBundle builds the app icon from these.
   postInstall = ''
     mkdir -p $out/share/icons
     cp -R assets/app-icon/hicolor $out/share/icons/
+    install -Dm644 packaging/linux/ai.storyteller.gridcraft.desktop \
+      $out/share/applications/ai.storyteller.gridcraft.desktop
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 packaging/linux/ai.storyteller.gridcraft.mime.xml $out/share/mime/packages/ai.storyteller.gridcraft.xml
@@ -146,6 +113,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ sophronesis ];
     mainProgram = "gridcraft";
-    platforms = rustc.meta.platforms;
   };
 })
