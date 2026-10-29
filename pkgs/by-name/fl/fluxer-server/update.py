@@ -56,6 +56,13 @@ class Pin:
             json.dump(pin, fd, indent=2)
             fd.write("\n")
 
+    def print(self):
+        pin = dataclasses.asdict(self)
+        del pin["filename"]
+        del pin["owner"]
+        del pin["repo"]
+        json.dump(pin, sys.stdout, indent=2)
+
     def get_fod_hash_from_expr(self, expr):
         """
         Builds `expr` and scans the output for the fod hash mismatch,
@@ -232,4 +239,7 @@ if __name__ == "__main__":
 
     pin.rebar = pin.get_fod_hash_rebar("fluxer_gateway")
 
-    pin.write()
+    if results.stdout:
+        pin.print()
+    else:
+        pin.write()
