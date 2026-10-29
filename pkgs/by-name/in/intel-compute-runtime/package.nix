@@ -65,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     } \
       $out/lib/intel-opencl/libigdrcl.so \
-      $out/lib/libze_intel_gpu.so.1
+      $out/lib/libze_intel_gpu.so.1 \
+      $out/lib/libocloc.so
   '';
 
   passthru = {
