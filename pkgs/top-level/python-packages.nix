@@ -19179,6 +19179,8 @@ self: super: with self; {
 
   shodan = callPackage ../development/python-modules/shodan { };
 
+  shopify-spy = callPackage ../development/python-modules/shopify-spy { };
+
   shortuuid = callPackage ../development/python-modules/shortuuid { };
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
