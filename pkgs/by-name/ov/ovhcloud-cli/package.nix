@@ -4,12 +4,14 @@
   buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
-  testers,
+  versionCheckHook,
 }:
 
 buildGo127Module (finalAttrs: {
   pname = "ovhcloud-cli";
   version = "0.16.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ovh";
@@ -39,14 +41,13 @@ buildGo127Module (finalAttrs: {
       --zsh <($out/bin/ovhcloud completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "ovhcloud version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/ovh/ovhcloud-cli";
-    changelog = "https://github.com/ovh/ovhcloud-cli/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/ovh/ovhcloud-cli/releases/tag/${finalAttrs.src.tag}";
     description = "Command Line Interface to manage your OVHcloud services";
     mainProgram = "ovhcloud";
     license = lib.licenses.asl20;
