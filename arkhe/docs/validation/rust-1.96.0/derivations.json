@@ -1,0 +1,174 @@
+{
+  "checks": {
+    "arkhe": {
+      "drv": "/nix/store/ywa5rqz21454xhzr42azqiisjv6m1g4c-arkhe-0.1.0.drv",
+      "out": "/nix/store/k8011lzr8gk2v67bpvhffy94zcn000pk-arkhe-0.1.0"
+    },
+    "arkhe-ask": {
+      "drv": "/nix/store/n56xdy46k849cq81746a5ggmlw2spzc9-arkhe-ask-0.1.0.drv",
+      "out": "/nix/store/bd6sf96d6snn73i9lgbz3cmlxx58dnmc-arkhe-ask-0.1.0"
+    },
+    "arkhe-crm-bridge": {
+      "drv": "/nix/store/nvbc0889nv2finh984438y2nchqbf05r-arkhe-crm-bridge-0.1.0.drv",
+      "out": "/nix/store/wm8ak3vyp1g8vc80nhdgp931am0lnr6g-arkhe-crm-bridge-0.1.0"
+    },
+    "arkhe-ollama": {
+      "drv": "/nix/store/dqg62ac8ag0i381isc9bklhddbzcfndv-arkhe-ollama-0.1.0.drv",
+      "out": "/nix/store/08wcw9hfw0ifkjq0njn1crabn4snkfdf-arkhe-ollama-0.1.0"
+    },
+    "arkhe-python-gate": {
+      "drv": "/nix/store/ybq9a069k6y5lbyfwchiimlw0k10hgss-arkhe-python-gate-0.1.0.drv",
+      "out": "/nix/store/fmhd8jzz46d0m1m8mw1pbhwh9haqqh7v-arkhe-python-gate-0.1.0"
+    },
+    "arkhe-runtime": {
+      "drv": "/nix/store/cdnymwg57qyksfq59965yjaxs4amkcfv-arkhe-runtime-0.1.0.drv",
+      "out": "/nix/store/3wpw98705pjhkp4vbw2mnr9rvmbkvr89-arkhe-runtime-0.1.0"
+    },
+    "arkhe-sdd-parser": {
+      "drv": "/nix/store/kx3z9yqdygjmlakzq0n23cd6dlx2yhjr-arkhe-sdd-parser-0.1.0.drv",
+      "out": "/nix/store/6dg870pqnby6hv7xdh6y4bjr7jqvbkdi-arkhe-sdd-parser-0.1.0"
+    },
+    "arkhe-sql-migrate": {
+      "drv": "/nix/store/awbfrxps9ycr058f1793dbxf5bk3wj2p-arkhe-sql-migrate-0.1.0.drv",
+      "out": "/nix/store/130sc4wkayb32k9arvdaq8kxc0fdizdg-arkhe-sql-migrate-0.1.0"
+    },
+    "arkhe-twin": {
+      "drv": "/nix/store/8dri0c98jill66d3qdhd8p7c7gb5kz4s-arkhe-twin-0.1.0.drv",
+      "out": "/nix/store/rz1m20aqjfb31sh2j9hzsd8ji8g0xjsa-arkhe-twin-0.1.0"
+    },
+    "arkhe-verify": {
+      "drv": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv",
+      "out": "/nix/store/nyc4i7vdxj2vy0vipcz55izyadkvpxvw-arkhe-verify-0.1.0"
+    },
+    "arkhe-verify-wasm": {
+      "drv": "/nix/store/s9mfy25h9xgk90c89ygsxz8g9smgxi33-arkhe-verify-wasm-0.1.0.drv",
+      "out": "/nix/store/rj1iiaisbr9c7xy8q7qxx1g3iyvf0add-arkhe-verify-wasm-0.1.0"
+    },
+    "modules": {
+      "drv": "/nix/store/d3i69hr3lclj6mla3fk2c0a7yxla742i-arkhe-modules-eval.drv",
+      "out": "/nix/store/xz5440n38h8niwzgxj0zhwywwlp4031h-arkhe-modules-eval"
+    },
+    "reproducible-arkhe-sdd-parser": {
+      "drv": "/nix/store/lhz8k6mgvpvlpnbk4h8s7sq2m11h95vf-arkhe-reproducible-arkhe-sdd-parser.drv",
+      "out": "/nix/store/rq6i147wb5yn5d5xh8ns651gbjhsvjmr-arkhe-reproducible-arkhe-sdd-parser"
+    },
+    "reproducible-arkhe-verify": {
+      "drv": "/nix/store/b9h5xrmf60y0pc0yf1djnc3v79nnzg6w-arkhe-reproducible-arkhe-verify.drv",
+      "out": "/nix/store/ly62vziyg6r1pzfpa2r1zbwya5445mzm-arkhe-reproducible-arkhe-verify"
+    },
+    "reproducible-arkhe-verify-wasm": {
+      "drv": "/nix/store/8qcq4s5a8c1zgq3is3j1hs225lanqvr5-arkhe-reproducible-arkhe-verify-wasm.drv",
+      "out": "/nix/store/vga8v3jvp4npl3kafshmf5wwva2i0vvw-arkhe-reproducible-arkhe-verify-wasm"
+    },
+    "sdd-parser-smoke": {
+      "drv": "/nix/store/7kwwkmqda8gpg34f69qwaknj2pv8cqs6-arkhe-sdd-parser-smoke.drv",
+      "out": "/nix/store/cvh5a67s5vr4lg4mw5av87yp2zbmq77b-arkhe-sdd-parser-smoke",
+      "valid": true
+    },
+    "smoke": {
+      "drv": "/nix/store/kn64pnn0b8shfxhwrji6fflaln2ab4k8-arkhe-verify-smoke.drv",
+      "out": "/nix/store/hl18rbzgilaqvz7ils2cnyl6qh54azp8-arkhe-verify-smoke"
+    },
+    "source-manifest": {
+      "drv": "/nix/store/n0nzygq3ahr0p2rqm1q9bfrh0r2p8w88-arkhe-source-manifest.drv",
+      "out": "/nix/store/zdj4i0949k0bjl957f31r5zvhmjifdvy-arkhe-source-manifest"
+    },
+    "tests-arkhe-core": {
+      "drv": "/nix/store/xlc7zl7qf5i854jiq27pjwfihr1ghmbs-arkhe-core-tests-0.1.0.drv",
+      "out": "/nix/store/f851llcgy0qmhr9q6kb5jhab8gfskfgz-arkhe-core-tests-0.1.0",
+      "valid": true
+    },
+    "tests-arkhe-governance": {
+      "drv": "/nix/store/mcljw92bl2hkh4fwsv22z9xncmhvl5gv-arkhe-governance-tests-0.1.0.drv",
+      "out": "/nix/store/a3jlk080vkxv0wxj3r802d9csx8ibbjn-arkhe-governance-tests-0.1.0",
+      "valid": true
+    },
+    "tests-arkhe-kernel": {
+      "drv": "/nix/store/b734l891391wk9hqfydifd8zsnc1glfk-arkhe-kernel-tests-0.1.0.drv",
+      "out": "/nix/store/abg7i8zrc99k2wi7jca18kd2x7cn048s-arkhe-kernel-tests-0.1.0",
+      "valid": true
+    },
+    "tests-clippy": {
+      "drv": "/nix/store/yii9y70wswacgwfaaakp8yrx06anq1lb-arkhe-clippy-0.1.0.drv",
+      "out": "/nix/store/ndkn6d0laazmzi61k1596bcbzm0w62ml-arkhe-clippy-0.1.0",
+      "valid": true
+    },
+    "toolchain-version": {
+      "drv": "/nix/store/6g5ij4krdp4fz26bfyazbgpcp6aj5lp2-arkhe-toolchain-version.drv",
+      "out": "/nix/store/64m3kmgjsa0004jipwcmip58rg20pi5n-arkhe-toolchain-version",
+      "valid": true
+    },
+    "wasm-smoke": {
+      "drv": "/nix/store/fla27g1zyma39kgri9zqdgc59byqwmky-arkhe-wasm-smoke.drv",
+      "out": "/nix/store/wqv5ip3lln6xi4jlbnvp5nwfd8lq0m6m-arkhe-wasm-smoke",
+      "valid": true
+    }
+  },
+  "packages": {
+    "arkhe": {
+      "drv": "/nix/store/ywa5rqz21454xhzr42azqiisjv6m1g4c-arkhe-0.1.0.drv",
+      "out": "/nix/store/k8011lzr8gk2v67bpvhffy94zcn000pk-arkhe-0.1.0",
+      "src": null
+    },
+    "arkhe-ask": {
+      "drv": "/nix/store/n56xdy46k849cq81746a5ggmlw2spzc9-arkhe-ask-0.1.0.drv",
+      "out": "/nix/store/bd6sf96d6snn73i9lgbz3cmlxx58dnmc-arkhe-ask-0.1.0",
+      "src": "/nix/store/gafnid6n52vjwkb3rgx3fzfpn8qnaj9b-source"
+    },
+    "arkhe-crm-bridge": {
+      "drv": "/nix/store/nvbc0889nv2finh984438y2nchqbf05r-arkhe-crm-bridge-0.1.0.drv",
+      "out": "/nix/store/wm8ak3vyp1g8vc80nhdgp931am0lnr6g-arkhe-crm-bridge-0.1.0",
+      "src": "/nix/store/n4axfyl3amjdwzfn844z5glw279iwggc-source"
+    },
+    "arkhe-ollama": {
+      "drv": "/nix/store/dqg62ac8ag0i381isc9bklhddbzcfndv-arkhe-ollama-0.1.0.drv",
+      "out": "/nix/store/08wcw9hfw0ifkjq0njn1crabn4snkfdf-arkhe-ollama-0.1.0",
+      "src": "/nix/store/49z22z90kz5kxszsw9q820l8hb271kxh-source"
+    },
+    "arkhe-python-gate": {
+      "drv": "/nix/store/ybq9a069k6y5lbyfwchiimlw0k10hgss-arkhe-python-gate-0.1.0.drv",
+      "out": "/nix/store/fmhd8jzz46d0m1m8mw1pbhwh9haqqh7v-arkhe-python-gate-0.1.0",
+      "src": "/nix/store/58kq4iysanpkfkmdwxypgv2ixh6xid7y-source"
+    },
+    "arkhe-runtime": {
+      "drv": "/nix/store/cdnymwg57qyksfq59965yjaxs4amkcfv-arkhe-runtime-0.1.0.drv",
+      "out": "/nix/store/3wpw98705pjhkp4vbw2mnr9rvmbkvr89-arkhe-runtime-0.1.0",
+      "src": "/nix/store/cj75n2i0x5ybriby132lgisva96nnaqc-source"
+    },
+    "arkhe-sdd-parser": {
+      "drv": "/nix/store/kx3z9yqdygjmlakzq0n23cd6dlx2yhjr-arkhe-sdd-parser-0.1.0.drv",
+      "out": "/nix/store/6dg870pqnby6hv7xdh6y4bjr7jqvbkdi-arkhe-sdd-parser-0.1.0",
+      "src": "/nix/store/8mg36x2mw8jxf1pcyrz681bafl6jqbk8-source"
+    },
+    "arkhe-sql-migrate": {
+      "drv": "/nix/store/awbfrxps9ycr058f1793dbxf5bk3wj2p-arkhe-sql-migrate-0.1.0.drv",
+      "out": "/nix/store/130sc4wkayb32k9arvdaq8kxc0fdizdg-arkhe-sql-migrate-0.1.0",
+      "src": "/nix/store/600hwn7m504g8qq69s87f2sw9qwbbdbg-source"
+    },
+    "arkhe-twin": {
+      "drv": "/nix/store/8dri0c98jill66d3qdhd8p7c7gb5kz4s-arkhe-twin-0.1.0.drv",
+      "out": "/nix/store/rz1m20aqjfb31sh2j9hzsd8ji8g0xjsa-arkhe-twin-0.1.0",
+      "src": "/nix/store/v5vrx63qqa32hzshzcydkbsddy5hw0dy-source"
+    },
+    "arkhe-verify": {
+      "drv": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv",
+      "out": "/nix/store/nyc4i7vdxj2vy0vipcz55izyadkvpxvw-arkhe-verify-0.1.0",
+      "src": "/nix/store/axw7gxnaip6hvfbw8cpgalzhipmwdcy2-source"
+    },
+    "arkhe-verify-cli": {
+      "drv": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv",
+      "out": "/nix/store/nyc4i7vdxj2vy0vipcz55izyadkvpxvw-arkhe-verify-0.1.0",
+      "src": "/nix/store/axw7gxnaip6hvfbw8cpgalzhipmwdcy2-source"
+    },
+    "arkhe-verify-wasm": {
+      "drv": "/nix/store/s9mfy25h9xgk90c89ygsxz8g9smgxi33-arkhe-verify-wasm-0.1.0.drv",
+      "out": "/nix/store/rj1iiaisbr9c7xy8q7qxx1g3iyvf0add-arkhe-verify-wasm-0.1.0",
+      "src": "/nix/store/xvbbx06b2jfpxw5kyskx7v8hlghkvdax-source"
+    },
+    "default": {
+      "drv": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv",
+      "out": "/nix/store/nyc4i7vdxj2vy0vipcz55izyadkvpxvw-arkhe-verify-0.1.0",
+      "src": "/nix/store/axw7gxnaip6hvfbw8cpgalzhipmwdcy2-source"
+    }
+  }
+}

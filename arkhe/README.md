@@ -12,6 +12,7 @@ builds reprodutíveis e suporte opt-in a derivações endereçadas por conteúdo
 | Reprodutibilidade bit-a-bit | `arkhe-verify`, `arkhe-verify-wasm`, `arkhe-sdd-parser`: `--rebuild` e `reproducible-*` idênticos na mesma máquina (hashes abaixo). A comparação host × VM registrada em [docs/INTEGRATION-REVIEW.md](docs/INTEGRATION-REVIEW.md) é da versão anterior (rustc do nixpkgs) e **não foi repetida** com a toolchain 1.96.0 |
 | Derivações CA | `arkhe-verify`: build CA com `ca=fixed:r:sha256:…`; mesmo `narHash` do build normal |
 | `flake.lock` | versionado; `nixpkgs` 31ecbac…, `rust-overlay` afcefd0…; conferir com `nix flake metadata` |
+| `arkhe-mmrd`, `arkhe-journald`, `arkhe-gate`, `arkhe-anchor`, `arkhe-prove` | **não existem como crates** neste monorepo; não há pacote para eles |
 
 `narHash` observados (x86_64-linux, 2026-10-29):
 
@@ -34,9 +35,8 @@ sistema de arquivos Linux, ou compare `narHash`/use as variantes CA.
 Num checkout git, arquivos novos só entram no flake depois de `git add`;
 para testar antes disso use `nix flake check path:$PWD`. O `.gitignore`
 global desta máquina ignora `lib/`: adicione `arkhe/lib` com `git add -f`.
-| `arkhe-mmrd`, `arkhe-journald`, `arkhe-gate`, `arkhe-anchor`, `arkhe-prove` | **não existem como crates** neste monorepo; não há pacote para eles |
 
-O workflow em `../.github/workflows/arkhe-nix.yml` repete os checks de build. As execuções locais no host e na VM, com seus hashes e logs, estão registradas em [docs/INTEGRATION-REVIEW.md](docs/INTEGRATION-REVIEW.md).
+O workflow em `../.github/workflows/arkhe-nix.yml` repete os checks de build. A rodada atual Rust 1.96.0 está registrada em [docs/validation/rust-1.96.0/results.json](docs/validation/rust-1.96.0/results.json). A rodada anterior com Rust 1.99.0 e VM está preservada em [docs/INTEGRATION-REVIEW.md](docs/INTEGRATION-REVIEW.md).
 
 ## O que este repositório entrega
 
@@ -142,9 +142,11 @@ cd arkhe
 
 # 1. Snapshot confere com o manifesto SHA-256
 python3 scripts/validate-source.py
+python3 scripts/check-source-filter.py
 
 # 2. Todos os pacotes, suítes de teste, clippy e as segundas construções
-nix flake check -L
+nix build .#arkhe-verify-cli .#arkhe-verify-wasm .#arkhe-sdd-parser
+nix flake check --no-update-lock-file -L
 
 # 3. Rebuild contra a saída já registrada no store (bit a bit)
 ./scripts/check-reproducibility.sh arkhe-verify arkhe-verify-wasm arkhe-sdd-parser
@@ -274,3 +276,5 @@ Apache-2.0. Ver [LICENSE](LICENSE).
 Veja [docs/INTEGRATION-REVIEW.md](docs/INTEGRATION-REVIEW.md). A raiz do fork Nixpkgs permanece independente.
 
 O pacote WASM usa `lld` e `wasm-bindgen-cli` do mesmo nixpkgs fixado. Inclui o módulo bruto `lib/arkhe-verify.wasm` e bindings Node.js `lib/arkhe_verify.js`. A nomenclatura não implica habilitação da camada PQC.
+
+A verificação do overlay consumidor e o teste de isolamento de fontes estão registrados em `docs/validation/rust-1.96.0/`. O probe altera apenas uma cópia temporária do snapshot; o checkout original permanece intacto. Também cobre projetos Cargo não declarados e arquivos gerados de wasm-bindgen.

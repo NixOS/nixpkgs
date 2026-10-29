@@ -11,6 +11,16 @@ Todos os pacotes usam `lib/mk-arkhe-package.nix`, que fixa `--locked`,
 - É o pacote mais leve e o único com smoke test (`--help`) em `checks`.
 - Candidato natural à submissão no nixpkgs (`nixpkgs/by-name/ar/arkhe-verify`).
 
+## `arkhe-sdd-parser`
+
+- Crate: `governance/arkhe-sdd-parser`; binário: `arkhe-sdd-parser`.
+- Testes próprios em `checkPhase` e smoke test SDD para dois outputs CBOR idênticos.
+- Mesma toolchain Rust 1.96.0 fixada dos demais pacotes.
+
+## Bibliotecas como checks
+
+`tests-arkhe-core`, `tests-arkhe-kernel` e `tests-arkhe-governance` executam suas suítes com a toolchain fixada. O check de core exige execução não vazia de `golden_vectors`. `arkhe-verify-cli` é alias do pacote `arkhe-verify`.
+
 ## `arkhe-runtime`
 
 - Crate: `orchestration/arkhe-runtime`
@@ -75,7 +85,7 @@ Todos os pacotes usam `lib/mk-arkhe-package.nix`, que fixa `--locked`,
 
 ## `arkhe`
 
-- Metapacote `symlinkJoin` com os oito CLIs.
+- Metapacote `symlinkJoin` com os nove CLIs.
 - Não inclui o artefato WASM.
 
 ## O que não está aqui

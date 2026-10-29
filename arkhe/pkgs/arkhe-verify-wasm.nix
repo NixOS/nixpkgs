@@ -57,7 +57,7 @@ mkArkhePackage {
     description = "Verificador Arkhe compilado para WebAssembly";
     longDescription = ''
       Mesmo crate de verificação usado pelo RBB, exportado como
-      `arkhe-verify-pqc.wasm` para uso em portais e kiosks.
+      `arkhe-verify.wasm` para uso em portais e kiosks.
     '';
   };
 }

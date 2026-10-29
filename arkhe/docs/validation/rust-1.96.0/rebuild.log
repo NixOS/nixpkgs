@@ -1,0 +1,14 @@
+wsl: Failed to start the systemd user session for 'arkhen'. See journalctl for more details.
+== path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe#arkhe-verify-cli: build inicial
+waiting for another Nix process to finish fetching input 'github:oxalica/rust-overlay/afcefd09c71e63663a46e4ce5e09968584f2c709?narHash=sha256-fAvtOccUXHVAH5wXK%2BABYUUC47W2qTb9T9EefLcS9ME%3D'...
+== path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe#arkhe-verify-cli: --rebuild
+checking outputs of '/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv'...
+REPRODUZIVEL arkhe-verify-cli sha256-+vmDoCqrEz9UPSLIPhB8oI6wXUCSB6tg3U5OUkQXAS0= /nix/store/nyc4i7vdxj2vy0vipcz55izyadkvpxvw-arkhe-verify-0.1.0
+== path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe#arkhe-verify-wasm: build inicial
+== path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe#arkhe-verify-wasm: --rebuild
+checking outputs of '/nix/store/xywk38zryzy51vlijrzyc4npkhqqa2r9-arkhe-verify-wasm-0.1.0.drv'...
+REPRODUZIVEL arkhe-verify-wasm sha256-UQi2HohdpttuenoFcZ22EZVw8FW+GaN3aYFNRngIgn4= /nix/store/pfzb0rk8zhdpffjnb2sbbsbjf3b470zz-arkhe-verify-wasm-0.1.0
+== path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe#arkhe-sdd-parser: build inicial
+== path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe#arkhe-sdd-parser: --rebuild
+checking outputs of '/nix/store/kx3z9yqdygjmlakzq0n23cd6dlx2yhjr-arkhe-sdd-parser-0.1.0.drv'...
+REPRODUZIVEL arkhe-sdd-parser sha256-MG84KZNsiV1eEVbbwiit4dWBlrM2EO7e3R5xwzyvChU= /nix/store/6dg870pqnby6hv7xdh6y4bjr7jqvbkdi-arkhe-sdd-parser-0.1.0

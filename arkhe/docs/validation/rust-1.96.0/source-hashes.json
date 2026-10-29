@@ -1,0 +1,14 @@
+{
+  "arkhe-verify-cli": {
+    "path": "/nix/store/axw7gxnaip6hvfbw8cpgalzhipmwdcy2-source",
+    "narHash": "sha256-QA/dwdFAIF7++E/OMlk3TWhPeALbm03+d2ZVQKqwPco="
+  },
+  "arkhe-verify-wasm": {
+    "path": "/nix/store/xvbbx06b2jfpxw5kyskx7v8hlghkvdax-source",
+    "narHash": "sha256-dWtyo5x9k1Q7enDxV1v9R9eIoqMu9WWZFhY1FYQHLJg="
+  },
+  "arkhe-sdd-parser": {
+    "path": "/nix/store/8mg36x2mw8jxf1pcyrz681bafl6jqbk8-source",
+    "narHash": "sha256-Db3+aPmpPxP4fdwvl0l2w/5gi/+dh/iM1dVSfgpIwyo="
+  }
+}

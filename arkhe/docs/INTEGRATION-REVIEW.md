@@ -1,4 +1,6 @@
-# Revisão e integração — 2026-10-29
+# Revisão histórica: Rust 1.99.0 — 2026-10-29
+
+Esta rodada corresponde ao commit `c52d666f1`, anterior à pinagem Rust 1.96.0 e ao parser SDD. Os resultados de VM abaixo são históricos. Para a configuração atual, veja [resultados Rust 1.96.0](validation/rust-1.96.0/results.json) e [como verificar](reproducibility.md). A reprodução em VM não foi repetida com Rust 1.96.0.
 
 A camada Arkhe reside em `arkhe/`, preservando o flake e os pacotes Nixpkgs na raiz. Use `nix build ./arkhe#arkhe-verify` ou `github:rafael-arkhe/nixpkgs-arkhe?dir=arkhe` após integrar a branch.
 

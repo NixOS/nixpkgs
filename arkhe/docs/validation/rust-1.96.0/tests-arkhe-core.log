@@ -1,0 +1,96 @@
+Running phase: unpackPhase
+@nix { "action": "setPhase", "phase": "unpackPhase" }
+unpacking source archive /nix/store/fchdjfjkfy9wqw50qlm5csn9qx75p582-source
+source root is source
+Executing cargoSetupPostUnpackHook
+Finished cargoSetupPostUnpackHook
+unpackPhase completed in 1 minutes 36 seconds
+Running phase: patchPhase
+@nix { "action": "setPhase", "phase": "patchPhase" }
+Executing cargoSetupPostPatchHook
+Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+Finished cargoSetupPostPatchHook
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+@nix { "action": "setPhase", "phase": "updateAutotoolsGnuConfigScriptsPhase" }
+Running phase: configurePhase
+@nix { "action": "setPhase", "phase": "configurePhase" }
+Running phase: buildPhase
+@nix { "action": "setPhase", "phase": "buildPhase" }
+no Makefile or custom buildPhase, doing nothing
+Running phase: checkPhase
+@nix { "action": "setPhase", "phase": "checkPhase" }
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling serde_core v1.0.229
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.14
+   Compiling zmij v1.0.23
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling thiserror v2.0.21
+   Compiling memchr v2.8.3
+   Compiling constant_time_eq v0.4.2
+   Compiling cfg-if v1.0.5
+   Compiling cpufeatures v0.3.1
+   Compiling cc v1.8.0
+   Compiling arrayvec v0.7.8
+   Compiling itoa v1.0.18
+   Compiling syn v3.0.9
+   Compiling blake3 v1.8.7
+   Compiling thiserror-impl v2.0.21
+   Compiling serde_derive v1.0.229
+   Compiling async-trait v0.1.92
+   Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 46.08s
+     Running unittests src/lib.rs (target/debug/deps/arkhe_core-60399d95b3c9fcbe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/canonical_bytes.rs (target/debug/deps/canonical_bytes-77b68afde476fee5)
+
+running 3 tests
+test byte_string_length_headers_use_shortest_encoding ... ok
+test duplicate_keys_cannot_create_ambiguous_cbor ... ok
+test typed_bytes_match_literal_cbor_and_maps_ignore_insertion_order ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/golden_vectors.rs (target/debug/deps/golden_vectors-4d95939f77f7e654)
+
+running 4 tests
+test optional_classification_matches_independent_python_vectors ... ok
+test canonical_booleans_for_opt_in_formal_predicates ... ok
+test worker_unsigned_fields_and_reference_order_are_digest_bound ... ok
+test independent_python_vectors ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+   Doc-tests arkhe_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+== teste obrigatório: arkhe-core --test golden_vectors
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.33s
+     Running tests/golden_vectors.rs (target/debug/deps/golden_vectors-4d95939f77f7e654)
+
+running 4 tests
+test optional_classification_matches_independent_python_vectors ... ok
+test worker_unsigned_fields_and_reference_order_are_digest_bound ... ok
+test canonical_booleans_for_opt_in_formal_predicates ... ok
+test independent_python_vectors ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+checkPhase completed in 51 seconds
+Running phase: installPhase
+@nix { "action": "setPhase", "phase": "installPhase" }
+Running phase: fixupPhase
+@nix { "action": "setPhase", "phase": "fixupPhase" }
+shrinking RPATHs of ELF executables and libraries in /nix/store/f851llcgy0qmhr9q6kb5jhab8gfskfgz-arkhe-core-tests-0.1.0
+checking for references to /build/ in /nix/store/f851llcgy0qmhr9q6kb5jhab8gfskfgz-arkhe-core-tests-0.1.0...
+patching script interpreter paths in /nix/store/f851llcgy0qmhr9q6kb5jhab8gfskfgz-arkhe-core-tests-0.1.0

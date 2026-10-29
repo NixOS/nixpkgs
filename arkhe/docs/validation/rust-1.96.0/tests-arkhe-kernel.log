@@ -1,0 +1,179 @@
+Running phase: unpackPhase
+@nix { "action": "setPhase", "phase": "unpackPhase" }
+unpacking source archive /nix/store/gpkd04c3xxq8dl3m70rq837x1sdg7cpd-source
+source root is source
+Executing cargoSetupPostUnpackHook
+Finished cargoSetupPostUnpackHook
+unpackPhase completed in 2 minutes 48 seconds
+Running phase: patchPhase
+@nix { "action": "setPhase", "phase": "patchPhase" }
+Executing cargoSetupPostPatchHook
+Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+Finished cargoSetupPostPatchHook
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+@nix { "action": "setPhase", "phase": "updateAutotoolsGnuConfigScriptsPhase" }
+Running phase: configurePhase
+@nix { "action": "setPhase", "phase": "configurePhase" }
+Running phase: buildPhase
+@nix { "action": "setPhase", "phase": "buildPhase" }
+no Makefile or custom buildPhase, doing nothing
+Running phase: checkPhase
+@nix { "action": "setPhase", "phase": "checkPhase" }
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling shlex v2.0.1
+   Compiling serde_core v1.0.229
+   Compiling find-msvc-tools v0.1.14
+   Compiling cfg-if v1.0.5
+   Compiling zmij v1.0.23
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling semver v1.0.28
+   Compiling thiserror v2.0.21
+   Compiling cc v1.8.0
+   Compiling memchr v2.8.3
+   Compiling generic-array v0.14.9
+   Compiling constant_time_eq v0.4.2
+   Compiling itoa v1.0.18
+   Compiling arrayvec v0.7.8
+   Compiling cpufeatures v0.3.1
+   Compiling rustc_version v0.4.1
+   Compiling cpufeatures v0.2.17
+   Compiling zeroize v1.9.0
+   Compiling signature v2.2.0
+   Compiling subtle v2.6.1
+   Compiling smallvec v1.16.2
+   Compiling ed25519 v2.2.3
+   Compiling keccak v0.1.6
+   Compiling spdx v0.13.5
+   Compiling hex v0.4.3
+   Compiling curve25519-dalek v4.1.3
+   Compiling pin-project-lite v0.2.17
+   Compiling base64 v0.22.1
+   Compiling blake3 v1.8.7
+   Compiling syn v3.0.9
+   Compiling syn v2.0.119
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.6
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling sha3 v0.10.8
+   Compiling curve25519-dalek-derive v0.1.1
+   Compiling thiserror-impl v2.0.21
+   Compiling serde_derive v1.0.229
+   Compiling async-trait v0.1.92
+   Compiling tokio-macros v2.7.2
+   Compiling tokio v1.53.3
+   Compiling ed25519-dalek v2.2.0
+   Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+   Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+   Compiling arkhe-cognition-sdk v0.1.0 (/build/source/cognition/arkhe-cognition-sdk)
+   Compiling arkhe-agent v0.1.0 (/build/source/cognition/arkhe-agent)
+   Compiling arkhe-governance v0.1.0 (/build/source/governance/arkhe-governance)
+   Compiling arkhe-kernel v0.1.0 (/build/source/kernel/arkhe-kernel)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5m 19s
+     Running unittests src/lib.rs (target/debug/deps/arkhe_kernel-ad057df97737871f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/action_broker.rs (target/debug/deps/action_broker-f123c2b7e6c6fffc)
+
+running 3 tests
+test checkpoint_is_independently_trusted_and_strictly_before_dispatch ... ok
+test broker_requires_admission_and_never_redispatches_success_or_uncertainty ... ok
+test mandate_rejects_tampering_in_every_signed_field_and_signature ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/authenticated_dispatch.rs (target/debug/deps/authenticated_dispatch-0700234bcbfd8934)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/broker_durable.rs (target/debug/deps/broker_durable-9dc2c4ad1be8a7bf)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/budget_pco.rs (target/debug/deps/budget_pco-9ed10879381a5505)
+
+running 9 tests
+test checker_rejects_false_arithmetic_and_over_budget_conclusion_without_producer ... ok
+test producer_has_bounded_fail_closed_domain ... ok
+test specification_change_during_evidence_lookup_rejects_old_certificate ... ok
+test valid_human_review_and_budget_proof_are_both_required ... ok
+test all_gate_entry_points_reject_proof_bypass_and_review_still_applies ... ok
+test missing_offline_or_wrong_proof_provenance_fails_closed ... ok
+test proof_cannot_override_denial_stop_or_transfer_between_requests ... ok
+test malicious_certificates_are_rejected_even_when_admitted ... ok
+test generated_certificate_roundtrips_and_authorizes_only_after_admission ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/formal_predicates.rs (target/debug/deps/formal_predicates-9b1b85dd40753aa6)
+
+running 7 tests
+test zk_requirement_and_governance_denial_cannot_be_bypassed ... ok
+test absent_unadmitted_or_wrong_kind_formal_proof_never_authorizes ... ok
+test license_tampering_policy_swap_and_replay_are_rejected ... ok
+test spdx_obligations_support_and_or_and_reject_unknown_or_disallowed_terms ... ok
+test ap2_retained_checkpoint_time_and_kind_are_enforced ... ok
+test ap2_direct_and_autonomous_role_results_bind_exact_execution ... ok
+test ap2_tampering_and_false_role_results_fail_closed ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
+
+     Running tests/gravit_translation_contract.rs (target/debug/deps/gravit_translation_contract-6457ea20924456e7)
+
+running 16 tests
+test reproduced_success_with_invalid_hash_is_not_admitted_and_gate_rejects ... ok
+test exact_bytes_and_domain_bind_inputs_even_when_external_id_is_unchanged ... ok
+test admitted_translation_cannot_be_replayed_with_changed_parameters ... ok
+test matching_digest_control_passes_only_with_explicit_test_governance ... ok
+test projection_uses_byte_strings_for_captured_bytes_without_normalizing_numbers ... ok
+test signatures::malformed_preimages_and_noncanonical_base64_fail ... ok
+test well_formed_wrong_hash_and_changed_artifact_fail_closed ... ok
+test substitution_of_captured_bytes_cannot_reuse_the_worker_commitment ... ok
+test success_alone_and_a_different_subject_are_not_accepted ... ok
+test signatures::python_preimages_and_both_signature_layers_verify_in_rust ... ok
+test signatures::valid_signatures_do_not_make_a_wrong_content_hash_admissible ... ok
+test signatures::identity_comes_from_registered_key_not_the_unsigned_verifier_label ... ok
+test signatures::signed_content_and_registry_pass_the_real_gate_under_test_policy_only ... ok
+test signatures::record_signatures_do_not_authenticate_a_tampered_decision ... ok
+test signatures::changed_registry_missing_quorum_repeated_signer_and_root_swap_fail ... ok
+test signatures::tampering_each_signed_field_or_signature_fails ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.34s
+
+     Running tests/rejection_gates.rs (target/debug/deps/rejection_gates-80bcf8681ab8d053)
+
+running 5 tests
+test emergency_stop_rejects_before_policy ... ok
+test no_evidence_missing_wer_rejects_before_policy ... ok
+test unprotected_intents_still_follow_governance_without_worker_evidence ... ok
+test policy_denied_rejects_even_with_worker_evidence ... ok
+test every_protected_intent_requires_admitted_evidence_before_policy ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests arkhe_kernel
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+checkPhase completed in 5 minutes 40 seconds
+Running phase: installPhase
+@nix { "action": "setPhase", "phase": "installPhase" }
+Running phase: fixupPhase
+@nix { "action": "setPhase", "phase": "fixupPhase" }
+shrinking RPATHs of ELF executables and libraries in /nix/store/abg7i8zrc99k2wi7jca18kd2x7cn048s-arkhe-kernel-tests-0.1.0
+checking for references to /build/ in /nix/store/abg7i8zrc99k2wi7jca18kd2x7cn048s-arkhe-kernel-tests-0.1.0...
+patching script interpreter paths in /nix/store/abg7i8zrc99k2wi7jca18kd2x7cn048s-arkhe-kernel-tests-0.1.0

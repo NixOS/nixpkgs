@@ -1,0 +1,5 @@
+== build CA: path:/mnt/d/arkhe/work/nixpkgs-arkhe-integration/arkhe#legacyPackages.x86_64-linux.ca.arkhe-verify-cli
+waiting for another Nix process to finish fetching input 'github:oxalica/rust-overlay/afcefd09c71e63663a46e4ce5e09968584f2c709?narHash=sha256-fAvtOccUXHVAH5wXK%2BABYUUC47W2qTb9T9EefLcS9ME%3D'...
+this derivation will be built:
+  /nix/store/ln74l6nnpfxnmi3gy5f30x1q17h9zksn-arkhe-verify-0.1.0.drv
+CONTEUDO ENDERECADO: arkhe-verify-cli ca=fixed:r:sha256:0b812x254kjfvmhan1wj81fv13m0gh83xj127ma3y4xb5ah87ygs path=/nix/store/3p3haixpcli6z2f8wavrvbfghwrdpkha-arkhe-verify-0.1.0

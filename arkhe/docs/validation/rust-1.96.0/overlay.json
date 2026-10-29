@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "packages": {
+    "arkhe-sdd-parser": {
+      "flake": "/nix/store/kx3z9yqdygjmlakzq0n23cd6dlx2yhjr-arkhe-sdd-parser-0.1.0.drv",
+      "overlay": "/nix/store/kx3z9yqdygjmlakzq0n23cd6dlx2yhjr-arkhe-sdd-parser-0.1.0.drv"
+    },
+    "arkhe-verify-cli": {
+      "flake": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv",
+      "overlay": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv"
+    },
+    "arkhe-verify-wasm": {
+      "flake": "/nix/store/xywk38zryzy51vlijrzyc4npkhqqa2r9-arkhe-verify-wasm-0.1.0.drv",
+      "overlay": "/nix/store/xywk38zryzy51vlijrzyc4npkhqqa2r9-arkhe-verify-wasm-0.1.0.drv"
+    }
+  }
+}

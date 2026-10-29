@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-29",
+  "host": "Ubuntu WSL x86_64-linux",
+  "nix": "2.35.4",
+  "rust": "1.96.0 (ac68faa20 2026-05-25)",
+  "nixpkgs_rev": "31ecbaca1bdefa45dffc409f0250bd8039ea0010",
+  "rust_overlay_rev": "afcefd09c71e63663a46e4ce5e09968584f2c709",
+  "snapshot_files": 598,
+  "snapshot_matches_workspace": true,
+  "flake_check": "PASS",
+  "flake_check_count": 24,
+  "checks_use_cached_valid_outputs": true,
+  "fresh_rebuild": {
+    "status": "PASS",
+    "packages": {
+      "arkhe-verify-cli": "sha256-+vmDoCqrEz9UPSLIPhB8oI6wXUCSB6tg3U5OUkQXAS0=",
+      "arkhe-verify-wasm": "sha256-UQi2HohdpttuenoFcZ22EZVw8FW+GaN3aYFNRngIgn4=",
+      "arkhe-sdd-parser": "sha256-MG84KZNsiV1eEVbbwiit4dWBlrM2EO7e3R5xwzyvChU="
+    }
+  },
+  "source_isolation": "PASS: unrelated crate edits, undeclared Cargo projects and generated WASM pkg files do not affect priority src/drv hashes",
+  "host_path_scan": "PASS for /mnt/d/arkhe, /home/arkhen and D:\\arkhe",
+  "content_addressing": "PASS: verifier variant has a fixed recursive SHA-256 content address",
+  "rust_196_vm_reproduction": "NOT_RUN",
+  "aarch64_builds": "NOT_RUN",
+  "consumer_overlay": "PASS: same pinned derivations as flake packages",
+  "local_entrypoint_builds": {
+    "D:/arkhe/nixpkgs-arkhe": "PASS",
+    "D:/arkhe/work/nixpkgs-arkhe-integration/arkhe": "PASS"
+  },
+  "source_manifest_sha256": "055e776d1e29789c3d4269796f0db4046ddedc9b4316a6e14fc6702b1bd7dda4",
+  "sandbox": true,
+  "rebuild_log_map": {
+    "arkhe-verify-cli": "rebuild.log",
+    "arkhe-sdd-parser": "rebuild.log",
+    "arkhe-verify-wasm": "rebuild-filtered-wasm.log"
+  },
+  "loose_copy_backup": "D:/arkhe/work/nixpkgs-arkhe-before-196-refresh-20261029-173030",
+  "local_entrypoint_checks": {
+    "D:/arkhe/nixpkgs-arkhe": "PASS",
+    "integration/arkhe": "PASS"
+  },
+  "fixed_source_hashes": "source-hashes.json"
+}

@@ -1,0 +1,164 @@
+Running phase: unpackPhase
+@nix { "action": "setPhase", "phase": "unpackPhase" }
+unpacking source archive /nix/store/3qn6ap9aci9vsr1ydyixg7h9r58sw1w9-source
+source root is source
+Executing cargoSetupPostUnpackHook
+Finished cargoSetupPostUnpackHook
+unpackPhase completed in 2 minutes 42 seconds
+Running phase: patchPhase
+@nix { "action": "setPhase", "phase": "patchPhase" }
+Executing cargoSetupPostPatchHook
+Validating consistency between /build/source/Cargo.lock and /build/cargo-vendor-dir/Cargo.lock
+Finished cargoSetupPostPatchHook
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+@nix { "action": "setPhase", "phase": "updateAutotoolsGnuConfigScriptsPhase" }
+Running phase: configurePhase
+@nix { "action": "setPhase", "phase": "configurePhase" }
+Running phase: buildPhase
+@nix { "action": "setPhase", "phase": "buildPhase" }
+no Makefile or custom buildPhase, doing nothing
+Running phase: checkPhase
+@nix { "action": "setPhase", "phase": "checkPhase" }
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling find-msvc-tools v0.1.14
+   Compiling semver v1.0.28
+   Compiling shlex v2.0.1
+   Compiling serde_core v1.0.229
+   Compiling cfg-if v1.0.5
+   Compiling zmij v1.0.23
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling cpufeatures v0.2.17
+   Compiling thiserror v2.0.21
+   Compiling zeroize v1.9.0
+   Compiling rustc_version v0.4.1
+   Compiling cc v1.8.0
+   Compiling constant_time_eq v0.4.2
+   Compiling generic-array v0.14.9
+   Compiling arrayvec v0.7.8
+   Compiling subtle v2.6.1
+   Compiling itoa v1.0.18
+   Compiling signature v2.2.0
+   Compiling cpufeatures v0.3.1
+   Compiling memchr v2.8.3
+   Compiling keccak v0.1.6
+   Compiling smallvec v1.16.2
+   Compiling hex v0.4.3
+   Compiling curve25519-dalek v4.1.3
+   Compiling ed25519 v2.2.3
+   Compiling spdx v0.13.5
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.6
+   Compiling digest v0.10.7
+   Compiling syn v3.0.9
+   Compiling syn v2.0.119
+   Compiling sha2 v0.10.9
+   Compiling sha3 v0.10.8
+   Compiling blake3 v1.8.7
+   Compiling curve25519-dalek-derive v0.1.1
+   Compiling thiserror-impl v2.0.21
+   Compiling serde_derive v1.0.229
+   Compiling async-trait v0.1.92
+   Compiling ed25519-dalek v2.2.0
+   Compiling arkhe-core v0.1.0 (/build/source/kernel/arkhe-core)
+   Compiling arkhe-verify-core v0.1.0 (/build/source/verification/crates/arkhe-verify-core)
+   Compiling arkhe-governance v0.1.0 (/build/source/governance/arkhe-governance)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3m 08s
+     Running unittests src/lib.rs (target/debug/deps/arkhe_governance-201b00414257e18c)
+
+running 15 tests
+test fellegi_sunter::tests::default_probability_and_empty_training ... ok
+test invariant_resolver::tests::model_cache_includes_em_configuration_and_comparisons ... ok
+test fellegi_sunter::tests::smoothing_keeps_degenerate_corpora_finite ... ok
+test policy_bundle::tests::tampered_signature_is_rejected ... ok
+test policy_bundle::tests::required_without_trust_store_is_rejected ... ok
+test policy_bundle::tests::malformed_versions_and_windows_are_refused ... ok
+test policy_bundle::tests::torsion_anchor_never_verifies ... ok
+test policy_bundle::tests::trust_store_admission_is_strict ... ok
+test policy_bundle::tests::unknown_key_is_rejected ... ok
+test policy_bundle::tests::unsigned_bundle_is_dev_only ... ok
+test policy_bundle::tests::tampered_payload_is_rejected ... ok
+test policy_bundle::tests::expired_and_not_yet_valid_are_rejected ... ok
+test policy_bundle::tests::rollback_is_rejected ... ok
+test policy_bundle::tests::valid_bundle_verifies_and_binds ... ok
+test policy_bundle::tests::corrupted_bundles_are_refused ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.86s
+
+     Running tests/invariant_resolver.rs (target/debug/deps/invariant_resolver-309d3ca59f73ce49)
+
+running 20 tests
+test cold_start_single_existing_same_action_is_novel ... ok
+test candidate_and_other_actions_never_enter_training ... ok
+test different_action_same_condition_modality_not_duplicate_with_variance ... ok
+test cold_start_does_not_score_even_at_zero_thresholds ... ok
+test duplicate_is_detected_and_anchored ... ok
+test cold_start_and_conflict_never_invoke_comparisons ... ok
+test conflict_detected_even_with_single_existing_same_action ... ok
+test different_action_is_novel ... ok
+test opposite_modality_is_conflict ... ok
+test no_cross_action_matches_even_for_homogeneous_corpus ... ok
+test existing_refines_candidate_when_less_specific ... ok
+test invalid_parameters_and_repeated_ids_fail_before_logging ... ok
+test multiple_conflicts_report_one_stable_witness_without_semantic_priority ... ok
+test all_weak_permission_combinations ... ok
+test candidate_refines_existing_when_more_specific ... ok
+test specification_small_corpora_do_not_prove_a_match ... ok
+test refinement_band_does_not_duplicate_equal_specificity ... ok
+test optional_impermissible_is_conflict ... ok
+test blocking_cache_survives_reorder_and_invalidates_on_membership_change ... ok
+test log_failures_hide_every_computed_verdict_and_keep_record_digest ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/ontology_snapshot.rs (target/debug/deps/ontology_snapshot-4701e335c103a1d0)
+
+running 8 tests
+test permutation_preserves_snapshot_identity_and_canonical_corpus ... ok
+test snapshot_owns_its_content_and_canonicalization_preserves_text ... ok
+test independent_cbor_vectors_fix_profile_text_byte_ids_and_integer_widths ... ok
+test duplicate_identity_is_rejected_even_for_identical_records ... ok
+test verified_loading_rejects_tampering_and_accepts_reordered_content ... ok
+test every_stored_invariant_field_is_bound_to_both_digests ... ok
+test corpus_digest_binds_selected_content_not_candidate_scoring_fields ... ok
+test snapshot_adapter_preserves_scoring_and_records_under_permutation ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/resolution_binding.rs (target/debug/deps/resolution_binding-47aff82d5508174d)
+
+running 11 tests
+test params_are_validated_and_each_exact_setting_changes_the_digest ... ok
+test algorithm_descriptor_matches_current_model_initialization ... ok
+test preflight_checks_actual_inputs_configuration_and_attached_payload ... ok
+test parameter_cbor_matches_independent_python_ieee754_vector ... ok
+test each_binding_mismatch_is_rejected_without_blocking_scoring_or_logging ... ok
+test zero_tolerance_is_invalid_regardless_of_sign ... ok
+test unknown_backend_versions_fail_closed_without_fabricating_metadata ... ok
+test negative_zero_thresholds_share_parameters_records_and_preflight ... ok
+test slice_and_snapshot_entries_produce_identical_record_identity ... ok
+test all_decision_paths_preserve_the_six_bindings_and_parameter_payload ... ok
+test v2_record_digest_binds_each_input_and_output_field ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+   Doc-tests arkhe_governance
+
+running 2 tests
+test governance/arkhe-governance/src/invariant_resolver.rs - invariant_resolver::ComputedVerdict (line 47) - compile fail ... ok
+test governance/arkhe-governance/src/ontology_snapshot.rs - ontology_snapshot::OntologySnapshot (line 53) - compile fail ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.81s
+
+checkPhase completed in 3 minutes 38 seconds
+Running phase: installPhase
+@nix { "action": "setPhase", "phase": "installPhase" }
+Running phase: fixupPhase
+@nix { "action": "setPhase", "phase": "fixupPhase" }
+shrinking RPATHs of ELF executables and libraries in /nix/store/a3jlk080vkxv0wxj3r802d9csx8ibbjn-arkhe-governance-tests-0.1.0
+checking for references to /build/ in /nix/store/a3jlk080vkxv0wxj3r802d9csx8ibbjn-arkhe-governance-tests-0.1.0...
+patching script interpreter paths in /nix/store/a3jlk080vkxv0wxj3r802d9csx8ibbjn-arkhe-governance-tests-0.1.0

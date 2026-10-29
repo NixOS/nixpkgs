@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "mutation": "apps/arkhe-ask/src/main.rs comment",
+  "unaffected": [
+    "arkhe-verify-cli",
+    "arkhe-verify-wasm",
+    "arkhe-sdd-parser"
+  ],
+  "ignored_undeclared_project": true,
+  "ignored_wasm_pkg_output": true,
+  "positive_control_changed": "arkhe-ask",
+  "before": {
+    "arkhe-ask": {
+      "drv": "/nix/store/n56xdy46k849cq81746a5ggmlw2spzc9-arkhe-ask-0.1.0.drv",
+      "src": "/nix/store/gafnid6n52vjwkb3rgx3fzfpn8qnaj9b-source"
+    },
+    "arkhe-sdd-parser": {
+      "drv": "/nix/store/kx3z9yqdygjmlakzq0n23cd6dlx2yhjr-arkhe-sdd-parser-0.1.0.drv",
+      "src": "/nix/store/8mg36x2mw8jxf1pcyrz681bafl6jqbk8-source"
+    },
+    "arkhe-verify-cli": {
+      "drv": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv",
+      "src": "/nix/store/axw7gxnaip6hvfbw8cpgalzhipmwdcy2-source"
+    },
+    "arkhe-verify-wasm": {
+      "drv": "/nix/store/s9mfy25h9xgk90c89ygsxz8g9smgxi33-arkhe-verify-wasm-0.1.0.drv",
+      "src": "/nix/store/xvbbx06b2jfpxw5kyskx7v8hlghkvdax-source"
+    }
+  },
+  "after": {
+    "arkhe-ask": {
+      "drv": "/nix/store/2n8xnaml6vxln8kw1dajv8fwvx4gw8mc-arkhe-ask-0.1.0.drv",
+      "src": "/nix/store/2h22a16chdabsr9q6v8r8p5qf91r9wbi-source"
+    },
+    "arkhe-sdd-parser": {
+      "drv": "/nix/store/kx3z9yqdygjmlakzq0n23cd6dlx2yhjr-arkhe-sdd-parser-0.1.0.drv",
+      "src": "/nix/store/8mg36x2mw8jxf1pcyrz681bafl6jqbk8-source"
+    },
+    "arkhe-verify-cli": {
+      "drv": "/nix/store/bdsa06s2q4mr3m5y18ys2s1lafab4z68-arkhe-verify-0.1.0.drv",
+      "src": "/nix/store/axw7gxnaip6hvfbw8cpgalzhipmwdcy2-source"
+    },
+    "arkhe-verify-wasm": {
+      "drv": "/nix/store/s9mfy25h9xgk90c89ygsxz8g9smgxi33-arkhe-verify-wasm-0.1.0.drv",
+      "src": "/nix/store/xvbbx06b2jfpxw5kyskx7v8hlghkvdax-source"
+    }
+  }
+}

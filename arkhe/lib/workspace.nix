@@ -21,7 +21,6 @@
 let
   fs = lib.fileset;
 
-  rootStr = toString root;
   rootManifest = lib.importTOML (root + "/Cargo.toml");
   workspaceDeps = rootManifest.workspace.dependencies or { };
 
@@ -40,13 +39,27 @@ let
       ) [ ] (lib.splitString "/" path)
     );
 
-  manifestFiles = fs.fileFilter (file: file.name == "Cargo.toml") root;
+  # Only declared workspace members and their path dependencies belong here.
+  # Scanning every Cargo.toml below root would also discover unrelated copies
+  # in work/, node_modules/, or another packaging snapshot.
+  members = map (
+    member:
+    if lib.any (token: lib.hasInfix token member) [ "*" "?" "[" ] then
+      throw "nixpkgs-arkhe: expand workspace member glob `${member}` into explicit paths"
+    else
+      normalize member
+  ) rootManifest.workspace.members;
 
-  crateDirs = lib.filter (dir: dir != "") (
-    map (file: lib.removePrefix "/" (lib.removePrefix rootStr (toString (dirOf file)))) (
-      fs.toList manifestFiles
+  crateDirs = lib.sort builtins.lessThan (
+    map (item: item.key) (
+      builtins.genericClosure {
+        startSet = map (dir: { key = dir; }) members;
+        operator = item: map (dir: { key = dir; }) (pathDepsOf true item.key);
+      }
     )
   );
+
+  manifestFiles = fs.unions (map (dir: root + "/${dir}/Cargo.toml") crateDirs);
 
   manifestOf = dir: lib.importTOML (root + "/${dir}/Cargo.toml");
 
@@ -155,7 +168,7 @@ in
 
       src = fs.toSource {
         inherit root;
-        fileset = fs.unions (
+        fileset = fs.difference (fs.unions (
           [
             (root + "/Cargo.toml")
             (root + "/Cargo.lock")
@@ -163,7 +176,13 @@ in
           ]
           ++ map (dir: root + "/${dir}") closure
           ++ map (path: root + "/${path}") extras
-        );
+        )) (fs.unions (lib.concatMap (
+          dir:
+          map (name: fs.maybeMissing (root + "/${dir}/${name}")) (
+            [ "target" "node_modules" ".git" ".venv" "__pycache__" ]
+            ++ lib.optional (nameOf dir == "arkhe-verify-wasm") "pkg"
+          )
+        ) closure));
       };
 
       postPatch = lib.concatMapStrings (stub: ''

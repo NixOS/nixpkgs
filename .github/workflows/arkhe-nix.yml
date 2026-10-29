@@ -25,6 +25,10 @@ jobs:
       - name: Verificar snapshot
         run: python3 arkhe/scripts/validate-source.py
 
+      - name: Verificar isolamento das fontes
+        working-directory: arkhe
+        run: python3 scripts/check-source-filter.py
+
       - name: Avaliar sem construir
         working-directory: arkhe
         run: nix flake check --no-build --all-systems --no-update-lock-file -L
@@ -52,9 +56,9 @@ jobs:
         working-directory: arkhe
         run: nix flake check --no-update-lock-file --print-build-logs
 
-      - name: Reprodutibilidade de arkhe-verify
+      - name: Reprodutibilidade dos pacotes prioritários
         working-directory: arkhe
-        run: bash ./scripts/check-reproducibility.sh arkhe-verify
+        run: bash ./scripts/check-reproducibility.sh arkhe-verify-cli arkhe-verify-wasm arkhe-sdd-parser
 
   ca:
     name: conteúdo endereçado

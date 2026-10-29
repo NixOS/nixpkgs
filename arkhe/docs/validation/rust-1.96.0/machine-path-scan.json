@@ -1,0 +1,29 @@
+{
+  "arkhe-verify-cli": {
+    "status": "PASS",
+    "file": "/nix/store/nyc4i7vdxj2vy0vipcz55izyadkvpxvw-arkhe-verify-0.1.0/bin/arkhe-verify",
+    "excluded_prefixes": [
+      "/mnt/d/arkhe",
+      "/home/arkhen",
+      "D:\\arkhe"
+    ]
+  },
+  "arkhe-verify-wasm": {
+    "status": "PASS",
+    "file": "/nix/store/rj1iiaisbr9c7xy8q7qxx1g3iyvf0add-arkhe-verify-wasm-0.1.0/lib/arkhe-verify.wasm",
+    "excluded_prefixes": [
+      "/mnt/d/arkhe",
+      "/home/arkhen",
+      "D:\\arkhe"
+    ]
+  },
+  "arkhe-sdd-parser": {
+    "status": "PASS",
+    "file": "/nix/store/6dg870pqnby6hv7xdh6y4bjr7jqvbkdi-arkhe-sdd-parser-0.1.0/bin/arkhe-sdd-parser",
+    "excluded_prefixes": [
+      "/mnt/d/arkhe",
+      "/home/arkhen",
+      "D:\\arkhe"
+    ]
+  }
+}
