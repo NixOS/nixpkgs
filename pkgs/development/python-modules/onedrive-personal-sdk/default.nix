@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onedrive-personal-sdk";
   version = "0.2.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "onedrive-personal-sdk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fWD0GxGSNQZyVZoQRDP3KD3VS716BnptYmDxkmNw0Bs=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/zweckj/onedrive-personal-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/zweckj/onedrive-personal-sdk/releases/tag/${finalAttrs.src.tag}";
     description = "Package to interact with the Microsoft Graph API for personal OneDrives";
     homepage = "https://github.com/zweckj/onedrive-personal-sdk";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})
