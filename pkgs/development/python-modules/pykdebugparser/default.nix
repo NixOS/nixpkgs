@@ -1,33 +1,35 @@
 {
   buildPythonPackage,
+  bytestruct,
   click,
-  construct,
   fetchFromGitHub,
   lib,
-  pygments,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   termcolor,
 }:
 
 buildPythonPackage rec {
   pname = "pykdebugparser";
-  version = "1.2.7";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matan1008";
     repo = "pykdebugparser";
     tag = "v${version}";
-    hash = "sha256-V6WyFsPcjiBUJ+Amc3xk0GwdHzwakRizB/dPnSXT6vo=";
+    hash = "sha256-yu0QOZVwRnY/aA4Q6eWqgr1y3QuIRuUEfjXLC7jIKPk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
+    bytestruct
     click
-    construct
-    pygments
     termcolor
   ];
 
