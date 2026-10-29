@@ -1,7 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  bpftools,
+  bpftool,
   lib,
   nspr,
   libpcap,
@@ -38,7 +38,7 @@ buildGoModule rec {
     llvmPackages.libllvm
     clang
     fd
-    bpftools
+    bpftool
     go-bindata
   ];
 

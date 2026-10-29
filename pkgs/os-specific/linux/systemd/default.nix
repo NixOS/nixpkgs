@@ -76,7 +76,7 @@
   # `buildPackages.targetPackages.stdenv.cc == stdenv.cc` relative to
   # us. Working around this is important, because systemd is in the dependency
   # closure of GHC via emscripten and jdk.
-  bpftools,
+  bpftool,
   libbpf,
 
   # vmlinux.h (kernel BTF) for the systemd BPF programs.
@@ -318,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ]
   ++ lib.optionals withLibBPF [
-    bpftools
+    bpftool
     buildPackages.llvmPackages.clang
     buildPackages.llvmPackages.libllvm
   ];

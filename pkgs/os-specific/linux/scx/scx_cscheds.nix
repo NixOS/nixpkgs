@@ -4,7 +4,7 @@
   llvmPackages,
   libbpf,
   pkg-config,
-  bpftools,
+  bpftool,
   elfutils,
   zlib,
   zstd,
@@ -31,7 +31,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     zstd
-    bpftools
+    bpftool
     libbpf
   ];
 

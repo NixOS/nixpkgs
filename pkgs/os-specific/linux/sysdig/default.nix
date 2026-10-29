@@ -25,7 +25,7 @@
   uthash,
   clang,
   libbpf,
-  bpftools,
+  bpftool,
 }:
 
 let
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     uthash
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    bpftools
+    bpftool
     elfutils
     libbpf
     clang

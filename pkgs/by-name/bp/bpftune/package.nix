@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   clang,
-  bpftools,
+  bpftool,
   docutils,
   libbpf,
   libcap,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     clang
-    bpftools
+    bpftool
     docutils # rst2man
   ];
 
