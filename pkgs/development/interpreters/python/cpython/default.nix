@@ -749,6 +749,31 @@ stdenv.mkDerivation (finalAttrs: {
 
       echo linking DLLs for python’s compiled librairies
       linkDLLsInfolder $out/lib/python*/lib-dynload/
+    ''
+    + optionalString (!withMinimalDeps) ''
+      mkdir pip-patch
+      cd pip-patch
+
+      ${pythonOnBuildForHostInterpreter} -m zipfile -e $out/lib/${libPrefix}/ensurepip/_bundled/pip-*.whl .
+
+      substituteInPlace pip/_vendor/certifi/core.py \
+        --replace-fail '"pip._vendor.certifi"' '"certifi"'
+      patch pip/_vendor/certifi/core.py ${../../../python-modules/certifi/env.patch}
+      substituteInPlace pip/_vendor/certifi/core.py \
+        --replace-fail '"certifi"' '"pip._vendor.certifi"'
+
+      # remove cacert.pem since we cannot replace it with packaged alternative
+      # cacert depends on python
+      rm pip/_vendor/certifi/cacert.pem
+
+      ${pythonOnBuildForHostInterpreter} -m zipfile -c $out/lib/${libPrefix}/ensurepip/_bundled/pip-*.whl *
+
+      cd ..
+    ''
+    + optionalString withMinimalDeps ''
+      # ensurepip won't work because zlib is not linked
+      # this ensures we do not put a foreign ca store in our system
+      rm -r $out/lib/${libPrefix}/ensurepip
     '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
