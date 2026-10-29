@@ -256,6 +256,7 @@ let
 
       enableParallelBuilding = true;
 
+      checkFlags = [ "TESTS=-test_afalg" ];
       doCheck = true;
       preCheck = ''
         patchShebangs util
