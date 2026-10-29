@@ -126,6 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
       "--disable-policy"
       # uses fallocate
       "--disable-tcti-libtpms"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "--enable-nodl"
     ];
 
   postInstall = ''
