@@ -7325,12 +7325,6 @@
     githubId = 2032823;
     name = "Daniel Gollings";
   };
-  dgonyeo = {
-    email = "derek@gonyeo.com";
-    github = "cgonyeo";
-    githubId = 2439413;
-    name = "Derek Gonyeo";
-  };
   dguenther = {
     email = "dguenther9@gmail.com";
     github = "dguenther";
