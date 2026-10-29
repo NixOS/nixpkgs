@@ -1,0 +1,10 @@
+diff --git a/app/common/build.gradle b/app/common/build.gradle
+index 8ac1dfe0a964..0204ab2c1f70 100644
+--- a/app/common/build.gradle
++++ b/app/common/build.gradle
+@@ -44 +44,4 @@ dependencies {
+-    api "com.stirling:jpdfium:${jpdfiumVersion}"
++    api ("com.stirling:jpdfium:${jpdfiumVersion}") {
++        // The published runtime metadata adds linux-x64 on every host.
++        exclude group: 'com.stirling', module: 'jpdfium-natives-linux-x64'
++    }

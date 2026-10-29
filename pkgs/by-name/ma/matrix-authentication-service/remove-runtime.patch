@@ -1,0 +1,25 @@
+diff --git a/package.json b/package.json
+--- a/package.json
++++ b/package.json
+@@ -5,8 +5 @@
+-  "devEngines": {
+-    "runtime": {
+-      "name": "node",
+-      "version": "24.15.0",
+-      "onFail": "download"
+-    }
+-  },
+   "devDependencies": {
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -14,9 +14,6 @@ importers:
+       '@localazy/cli':
+         specifier: ^2.0.11
+         version: 2.0.11
+-      node:
+-        specifier: runtime:24.15.0
+-        version: runtime:24.15.0
+       semver:
+         specifier: ^7.8.5
+         version: 7.8.5

@@ -1,0 +1,16 @@
+diff --git a/UI/UI.csproj b/UI/UI.csproj
+index 7721884..3011ae8 100644
+--- a/UI/UI.csproj
++++ b/UI/UI.csproj
+@@ -90,11 +90,6 @@
+ 	  <None Remove="Styles\StartupStyles.xaml" />
+ 	  <None Remove="Utilities\DipSwitchDefinitions.xml" />
+ 	</ItemGroup>
+-	<PropertyGroup>
+-		<RestoreSources>
+-			https://nuget-feed-nightly.avaloniaui.net/v3/index.json;https://api.nuget.org/v3/index.json
+-		</RestoreSources>
+-	</PropertyGroup>
+ 	<ItemGroup>
+ 		<TrimmerRootAssembly Include="Mesen" />
+ 		<TrimmerRootAssembly Include="AvaloniaEdit" />

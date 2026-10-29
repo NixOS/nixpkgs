@@ -1,0 +1,214 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 21a3181a..250918de 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -210,7 +210,7 @@ target_link_libraries(
+           lodepng
+           qhullstatic_r
+           tinyobjloader
+-          tinyxml2
++          tinyxml2::tinyxml2
+ )
+ 
+ if(NOT EMSCRIPTEN)
+diff --git a/cmake/FindOrFetch.cmake b/cmake/FindOrFetch.cmake
+index 12ace957..c41c6776 100644
+--- a/cmake/FindOrFetch.cmake
++++ b/cmake/FindOrFetch.cmake
+@@ -138,13 +138,6 @@ if(NOT COMMAND FindOrFetch)
+           message(STATUS "mujoco::FindOrFetch: Using FetchContent for ${_ARGS_LIBRARY_NAME}: ${_ARGS_GIT_REPO}")
+           FetchContent_Declare(
+             ${_ARGS_LIBRARY_NAME}
+-            DOWNLOAD_COMMAND
+-              ${CMAKE_COMMAND} -E rm -rf <SOURCE_DIR>
+-              COMMAND ${GIT_EXECUTABLE} init <SOURCE_DIR>
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> remote add origin ${_ARGS_GIT_REPO}
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> fetch --depth 1 origin ${_ARGS_GIT_TAG}
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> -c advice.detachedHead=false checkout FETCH_HEAD
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> submodule update --init --recursive --depth 1
+             PATCH_COMMAND ${_WRAPPED_PATCH_COMMAND}
+             UPDATE_DISCONNECTED TRUE
+           )
+diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
+index cc602ace..2760cb23 100644
+--- a/cmake/MujocoDependencies.cmake
++++ b/cmake/MujocoDependencies.cmake
+@@ -88,8 +88,6 @@ include(third_party_deps/lodepng)
+ if(NOT TARGET marchingcubecpp)
+   FetchContent_Declare(
+     marchingcubecpp
+-    GIT_REPOSITORY https://github.com/aparis69/MarchingCubeCpp.git
+-    GIT_TAG ${MUJOCO_DEP_VERSION_MarchingCubeCpp}
+   )
+ 
+   FetchContent_GetProperties(marchingcubecpp)
+@@ -112,10 +110,6 @@ findorfetch(
+   qhull
+   LIBRARY_NAME
+   qhull
+-  GIT_REPO
+-  https://github.com/qhull/qhull.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_qhull}
+   TARGETS
+   qhull
+   EXCLUDE_FROM_ALL
+@@ -137,10 +131,6 @@ findorfetch(
+   tinyxml2
+   LIBRARY_NAME
+   tinyxml2
+-  GIT_REPO
+-  https://github.com/leethomason/tinyxml2.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyxml2}
+   TARGETS
+   tinyxml2
+   EXCLUDE_FROM_ALL
+@@ -160,10 +150,6 @@ findorfetch(
+   tinyobjloader
+   LIBRARY_NAME
+   tinyobjloader
+-  GIT_REPO
+-  https://github.com/tinyobjloader/tinyobjloader.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyobjloader}
+   TARGETS
+   tinyobjloader
+   EXCLUDE_FROM_ALL
+@@ -198,10 +184,6 @@ findorfetch(
+   ccd
+   LIBRARY_NAME
+   ccd
+-  GIT_REPO
+-  https://github.com/danfis/libccd.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_ccd}
+   TARGETS
+   ccd
+   EXCLUDE_FROM_ALL
+@@ -234,8 +216,6 @@ endif()
+ set(BUILD_TESTS OFF)
+ fetchpackage(
+   PACKAGE_NAME  miniz
+-  GIT_REPO      https://github.com/richgel999/miniz.git
+-  GIT_TAG       ${MUJOCO_DEP_VERSION_miniz}
+   TARGETS       miniz
+ )
+ if(_BUILD_TESTS_WAS_DEFINED)
+@@ -267,10 +247,6 @@ if(MUJOCO_BUILD_TESTS OR MUJOCO_BUILD_STUDIO OR MUJOCO_USE_FILAMENT)
+     absl
+     LIBRARY_NAME
+     abseil-cpp
+-    GIT_REPO
+-    https://github.com/abseil/abseil-cpp.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_abseil}
+     TARGETS
+     absl::core_headers
+     EXCLUDE_FROM_ALL
+@@ -299,10 +275,6 @@ if(MUJOCO_BUILD_TESTS)
+     GTest
+     LIBRARY_NAME
+     googletest
+-    GIT_REPO
+-    https://github.com/google/googletest.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_gtest}
+     TARGETS
+     gtest
+     gmock
+@@ -331,10 +303,6 @@ if(MUJOCO_BUILD_TESTS)
+     benchmark
+     LIBRARY_NAME
+     benchmark
+-    GIT_REPO
+-    https://github.com/google/benchmark.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_benchmark}
+     TARGETS
+     benchmark::benchmark
+     benchmark::benchmark_main
+@@ -351,8 +319,6 @@ if(MUJOCO_TEST_PYTHON_UTIL)
+ 
+     FetchContent_Declare(
+       Eigen3
+-      GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+-      GIT_TAG ${MUJOCO_DEP_VERSION_Eigen3}
+     )
+ 
+     FetchContent_GetProperties(Eigen3)
+diff --git a/cmake/third_party_deps/lodepng.cmake b/cmake/third_party_deps/lodepng.cmake
+index c6e4c384..a6c6331b 100644
+--- a/cmake/third_party_deps/lodepng.cmake
++++ b/cmake/third_party_deps/lodepng.cmake
+@@ -22,7 +22,5 @@ include(FindOrFetch)
+ 
+ fetchpackage(
+     PACKAGE_NAME  lodepng
+-    GIT_REPO      https://github.com/lvandeve/lodepng.git
+-    GIT_TAG       ${MUJOCO_DEP_VERSION_lodepng}
+     CUSTOM_CMAKE  "${CMAKE_CURRENT_LIST_DIR}/lodepng/CMakeLists.txt"
+ )
+diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
+index 666a3725..d89bb499 100644
+--- a/python/mujoco/util/CMakeLists.txt
++++ b/python/mujoco/util/CMakeLists.txt
+@@ -63,8 +63,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     array_traits_test
+     array_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET array_traits_test SOURCES array_traits_test.cc)
+ 
+@@ -72,8 +72,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_traits_test
+     func_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_traits_test SOURCES func_traits_test.cc)
+ 
+@@ -81,8 +81,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_wrap_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_wrap_test SOURCES func_wrap_test.cc)
+ 
+@@ -90,8 +90,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     tuple_tools_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET tuple_tools_test SOURCES tuple_tools_test.cc)
+ endif()
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index df7974a1..dcbe56bb 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -105,8 +105,8 @@ target_link_libraries(
+          absl::synchronization
+          absl::flat_hash_map
+          absl::flat_hash_set
+-         gtest
+-         gmock
++         GTest::gmock
++         GTest::gtest_main
+          mujoco::mujoco
+ )
+ target_include_directories(fixture PRIVATE ${mujoco_SOURCE_DIR}/include gmock)

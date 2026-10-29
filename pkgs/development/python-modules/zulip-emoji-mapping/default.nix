@@ -1,0 +1,45 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "zulip-emoji-mapping";
+  version = "1.0.1";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "GearKite";
+    repo = "zulip-emoji-mapping";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-logm5uAnLAcFqI7mUxKEO9ZmHqRkd6CFiCW4B5tqZzg=";
+  };
+
+  postPatch = ''
+    cat >> pyproject.toml <<EOF
+
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    EOF
+  '';
+
+  build-system = [
+    poetry-core
+  ];
+
+  pythonImportsCheck = [
+    "zulip_emoji_mapping"
+  ];
+
+  meta = {
+    description = "Get emojis by Zulip names";
+    homepage = "https://github.com/GearKite/zulip-emoji-mapping";
+    changelog = "https://github.com/GearKite/zulip-emoji-mapping/releases";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ robertrichter ];
+  };
+})

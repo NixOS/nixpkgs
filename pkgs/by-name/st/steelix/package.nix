@@ -1,0 +1,117 @@
+{
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  helix,
+  helix-unwrapped,
+  grammarsOverlay ? [
+    (
+      final: prev:
+      lib.attrsets.filterAttrs (k: _: k == "tree-sitter-haskell" || k == "tree-sitter-perl") (
+        helix.defaultGrammarsOverlay final prev
+      )
+    )
+    (final: prev: {
+      tree-sitter-beancount = prev.tree-sitter-beancount.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-qmljs = prev.tree-sitter-qmljs.overrideAttrs {
+        dontCheckForBrokenSymlinks = true;
+      };
+      tree-sitter-strace = prev.tree-sitter-strace.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tact = prev.tree-sitter-tact.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-tlaplus = prev.tree-sitter-tlaplus.override {
+        dontPatch = true;
+      };
+      tree-sitter-vue = prev.tree-sitter-vue.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+      tree-sitter-wit = prev.tree-sitter-wit.override {
+        excludeBrokenTreeSitterJson = false;
+      };
+    })
+  ],
+}:
+let
+  steelix-unwrapped = helix-unwrapped.overrideAttrs (
+    finalAttrs: _: {
+      pname = "steelix-unwrapped";
+      version = "0-unstable-2026-10-18";
+
+      src = fetchFromGitHub {
+        owner = "mattwparas";
+        repo = "helix";
+        rev = "16a26934f39152b5cd81bf2f6944e18e680314d0";
+        hash = "sha256-FU4WIMHhIyvEMxHeN8+Qgb3VHsU6DP74ylsyZACLzM8=";
+      };
+
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) src pname version;
+        hash = "sha256-h4HkOppmseHzX1gHUGO1XSwrg4uCJ4PjmI/3WsYp2C4=";
+      };
+
+      cargoBuildFlags = [
+        "--package"
+        "helix-term"
+        "--features"
+        "steel,git"
+      ];
+
+      # This fork is built from Helix master, whose loader expects tree-sitter
+      # grammars with the platform-native extension (`.dylib` on Darwin) since
+      # helix-editor/helix#14982. We reuse the grammars from `helix.runtime`, built
+      # from the last Helix *release*, which still names them `.so` on Darwin, so
+      # revert that commit to make the loader look for `.so`. Remove once a Helix
+      # release ships #14982 and nixpkgs' grammars switch to `.dylib`.
+      patches = [
+        (fetchpatch {
+          name = "revert-dylib-grammar-extension.patch";
+          url = "https://github.com/helix-editor/helix/commit/430914b298a32653ab1847fdfdf2177a002be04c.patch";
+          revert = true;
+          hash = "sha256-4KUFppkso4/XwNU+mGIgLvl+mJXHZWkmaguYMy8oTyI=";
+        })
+      ];
+
+      doInstallCheck = false;
+    }
+  );
+in
+(helix.override {
+  helix-unwrapped = steelix-unwrapped;
+  lockedGrammars = lib.importJSON ./grammars.json;
+  inherit grammarsOverlay;
+}).overrideAttrs
+  (
+    _: previousAttrs: {
+      pname = "steelix";
+      strictDeps = true;
+
+      meta = previousAttrs.meta // {
+        description = "Helix editor with Steel (Scheme) scripting support";
+        longDescription = ''
+          Steelix is a fork of the Helix editor with Steel (Scheme) scripting support.
+        '';
+        homepage = "https://github.com/mattwparas/helix";
+        changelog = "https://github.com/mattwparas/helix/blob/${steelix-unwrapped.src.rev}/CHANGELOG.md";
+        license = lib.licenses.mpl20;
+        mainProgram = "hx";
+        maintainers = with lib.maintainers; [
+          aciceri
+          Ra77a3l3-jar
+        ];
+      };
+
+      passthru = previousAttrs.passthru // {
+        updateScript = [
+          previousAttrs.passthru.updateSh
+          "steelix"
+        ];
+        unwrapped = steelix-unwrapped;
+      };
+    }
+  )

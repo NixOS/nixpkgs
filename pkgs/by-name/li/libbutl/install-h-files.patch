@@ -1,0 +1,22 @@
+diff --git a/libbutl/buildfile b/libbutl/buildfile
+index ba4ad96..f5356a1 100644
+--- a/libbutl/buildfile
++++ b/libbutl/buildfile
+@@ -1,7 +1,7 @@
+ # file      : libbutl/buildfile
+ # license   : MIT; see accompanying LICENSE file
+ 
+-lib{butl}: {hxx ixx txx cxx}{** -uuid-* +uuid-io         \
++lib{butl}: {h hxx ixx txx cxx}{** -uuid-* +uuid-io       \
+                                 -win32-utility           \
+                                 -mingw-*                 \
+                                 -version                 \
+@@ -154,7 +154,7 @@ else
+ # Install into the libbutl/ subdirectory of, say, /usr/include/
+ # recreating subdirectories.
+ #
+-{hxx ixx txx}{*}:
++{h hxx ixx txx}{*}:
+ {
+   install         = include/libbutl/
+   install.subdirs = true

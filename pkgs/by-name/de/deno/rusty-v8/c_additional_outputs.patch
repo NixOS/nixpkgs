@@ -1,0 +1,16 @@
+Submodule build contains modified content
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 11ddb4916..0bd001600 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -2827,10 +2827,6 @@ config("split_dwarf") {
+   # thinlto requires -gsplit-dwarf in ldflags.
+   if (use_thin_lto && !is_apple) {
+     ldflags = split_dwarf_flags
+-  } else {
+-    # .dwo files are generated when ThinLTO is not used.
+-    c_additional_outputs =
+-        [ "{{target_out_dir}}/{{label_name}}/{{source_name_part}}.dwo" ]
+   }
+ }
+ 

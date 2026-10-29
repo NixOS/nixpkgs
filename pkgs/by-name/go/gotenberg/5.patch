@@ -1,0 +1,41 @@
+From 4d74bc8e315c92cd6b2d51b246e37ed07fb92f69 Mon Sep 17 00:00:00 2001
+From: Sandro <sandro.jaeckel@gmail.com>
+Date: Mon, 31 Aug 2026 01:20:37 +0200
+Subject: [PATCH] Remove compatibility fixes for very old LO/OO.
+
+Based on https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/un/unoconv/0001-Remove-compatibility-fixes-for-very-old-LO-OO.patch
+---
+ unoconv | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/unoconv b/unoconv
+index 40fb840..b95137a 100644
+--- a/unoconv
++++ b/unoconv
+@@ -16,7 +16,6 @@
+ 
+ from __future__ import print_function
+ 
+-from distutils.version import LooseVersion
+ import getopt
+ import glob
+ import os
+@@ -873,10 +872,7 @@ class Convertor:
+             info(3, "Launching our own listener using %s." % office.binary)
+             try:
+                 product = self.svcmgr.createInstance("com.sun.star.configuration.ConfigurationProvider").createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", UnoProps(nodepath="/org.openoffice.Setup/Product"))
+-                if product.ooName not in ('LibreOffice', 'LOdev') or LooseVersion(product.ooSetupVersion) <= LooseVersion('3.3'):
+-                    args = [office.binary, "-headless", "-invisible", "-nocrashreport", "-nodefault", "-nofirststartwizard", "-nologo", "-norestore", "-accept=%s" % op.connection]
+-                else:
+-                    args = [office.binary, "--headless", "--invisible", "--nocrashreport", "--nodefault", "--nofirststartwizard", "--nologo", "--norestore", "--accept=%s" % op.connection]
++                args = [office.binary, "--headless", "--invisible", "--nocrashreport", "--nodefault", "--nofirststartwizard", "--nologo", "--norestore", "--accept=%s" % op.connection]
+                 if op.userProfile:
+                     args.append("-env:UserInstallation=file://" + realpath(op.userProfile))
+                 info(2, '%s listener arguments are %s.' % (product.ooName, args))
+@@ -1489,4 +1485,4 @@ if __name__ == '__main__':
+         main()
+     except KeyboardInterrupt:
+         die(6, 'Exiting on user request')
+-    die(exitcode)
+\ No newline at end of file
++    die(exitcode)

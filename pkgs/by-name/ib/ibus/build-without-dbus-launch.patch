@@ -1,0 +1,26 @@
+diff --git a/data/dconf/make-dconf-override-db.sh b/data/dconf/make-dconf-override-db.sh
+index 32cb1530..375baa41 100755
+--- a/data/dconf/make-dconf-override-db.sh
++++ b/data/dconf/make-dconf-override-db.sh
+@@ -12,15 +12,6 @@ export XDG_CACHE_HOME="$TMPDIR/cache"
+ export GSETTINGS_SCHEMA_DIR="$TMPDIR/schemas"
+ mkdir -p $XDG_CONFIG_HOME $XDG_CACHE_HOME $GSETTINGS_SCHEMA_DIR
+ 
+-eval `dbus-launch --sh-syntax`
+-
+-trap cleanup EXIT
+-
+-cleanup() {
+-  test $? -eq 0 && exit
+-  rm -rf $TMPDIR; kill $DBUS_SESSION_BUS_PID
+-}
+-
+ # in case that schema is not installed on the system
+ glib-compile-schemas --targetdir "$GSETTINGS_SCHEMA_DIR" "$PWD"
+ 
+@@ -57,5 +48,3 @@ if [ -d $TMPDIR/cache/gvfs ] ; then
+     umount $TMPDIR/cache/gvfs
+ fi
+ rm -rf $TMPDIR
+-
+-kill $DBUS_SESSION_BUS_PID

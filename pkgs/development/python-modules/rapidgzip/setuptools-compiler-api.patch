@@ -1,0 +1,13 @@
+diff --git a/nasm_extension/nasmcompiler.py b/nasm_extension/nasmcompiler.py
+--- a/nasm_extension/nasmcompiler.py
++++ b/nasm_extension/nasmcompiler.py
+@@ -30,7 +30,8 @@ class NasmCompiler(UnixCCompiler):
+ 
+     def __init__(self, verbose=0, dry_run=0, force=0):
+ 
+-        UnixCCompiler.__init__(self, verbose, dry_run, force)
++        UnixCCompiler.__init__(self, verbose=verbose, force=force)
++        self.dry_run = dry_run
+         self.set_executable("compiler", "nasm")
+ 
+     def _is_gcc(self, compiler_name):

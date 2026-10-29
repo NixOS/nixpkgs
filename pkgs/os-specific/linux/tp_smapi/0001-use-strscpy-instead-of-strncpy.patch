@@ -1,0 +1,23 @@
+From 0483993a64f6d922d71dddd8f7f353d8bc22d1bf Mon Sep 17 00:00:00 2001
+From: Evgeni Golov <evgeni@golov.de>
+Date: Sat, 29 Aug 2026 19:30:32 +0200
+Subject: [PATCH] use strscpy instead of strncpy
+
+strncpy was removed in Linux 7.2
+---
+ tp_smapi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tp_smapi.c b/tp_smapi.c
+index 39ac601..cb01212 100644
+--- a/tp_smapi.c
++++ b/tp_smapi.c
+@@ -669,7 +669,7 @@ static ssize_t show_tp_ec_bat_str(u8 arg0, int offset, int maxlen,
+ 	ret = read_tp_ec_row(arg0, bat, 0, row);
+ 	if (ret)
+ 		return ret;
+-	strncpy(buf, (char *)row+offset, maxlen);
++	strscpy(buf, (char *)row+offset, maxlen);
+ 	buf[maxlen] = 0;
+ 	strcat(buf, "\n");
+ 	return strlen(buf);

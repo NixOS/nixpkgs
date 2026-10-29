@@ -1,0 +1,252 @@
+From dc1b837925f7c2ee6663cf34bbd982e0b368d811 Mon Sep 17 00:00:00 2001
+From: hustlerone <nine-ball@tutanota.com>
+Date: Sun, 18 Jan 2026 11:57:36 +0100
+Subject: [PATCH] Add hidden menu entries
+
+Merge conflicts manually resolved.
+
+https://lists.gnu.org/archive/html/grub-devel/2016-04/msg00089.html
+https://marc.info/?l=grub-devel&m=146193404929072&w=2
+
+Vendored in:
+https://build.opensuse.org/projects/openSUSE:Factory/packages/grub2/files/grub2-Add-hidden-menu-entries.patch?expand=1
+---
+ grub-core/commands/blsuki.c    |  4 ++--
+ grub-core/commands/legacycfg.c |  4 ++--
+ grub-core/commands/menuentry.c | 22 +++++++++++++++++-----
+ grub-core/normal/menu.c        | 30 ++++++++++++++++++++++++++----
+ grub-core/normal/menu_text.c   |  6 +++++-
+ include/grub/menu.h            |  2 ++
+ include/grub/normal.h          |  2 +-
+ 7 files changed, 55 insertions(+), 15 deletions(-)
+
+diff --git a/grub-core/commands/blsuki.c b/grub-core/commands/blsuki.c
+index 4133d3111..26055f91f 100644
+--- a/grub-core/commands/blsuki.c
++++ b/grub-core/commands/blsuki.c
+@@ -1022,7 +1022,7 @@ bls_create_entry (grub_blsuki_entry_t *entry)
+ 			linux_cmd, initrd_cmd ? initrd_cmd : "",
+ 			dt_cmd ? dt_cmd : "");
+ 
+-  grub_normal_add_menu_entry (argc, argv, classes, id, users, hotkey, NULL, src, 0, entry);
++  grub_normal_add_menu_entry (argc, argv, classes, id, users, hotkey, NULL, src, 0, entry, 0);
+ 
+  finish:
+   grub_free (linux_cmd);
+@@ -1088,7 +1088,7 @@ uki_create_entry (grub_blsuki_entry_t *entry)
+ 			(options != NULL) ? " " : "",
+ 			(options != NULL) ? options : "");
+ 
+-  grub_normal_add_menu_entry (1, argv, NULL, id, NULL, NULL, NULL, src, 0, entry);
++  grub_normal_add_menu_entry (1, argv, NULL, id, NULL, NULL, NULL, src, 0, entry, 0);
+ 
+  finish:
+   grub_free (argv);
+diff --git a/grub-core/commands/legacycfg.c b/grub-core/commands/legacycfg.c
+index 7d9f9eb3c..bb5b7b3ad 100644
+--- a/grub-core/commands/legacycfg.c
++++ b/grub-core/commands/legacycfg.c
+@@ -143,7 +143,7 @@ legacy_file (const char *filename)
+ 	    args[0] = oldname;
+ 	    grub_normal_add_menu_entry (1, args, NULL, NULL, "legacy",
+ 					NULL, NULL,
+-					entrysrc, 0, NULL);
++					entrysrc, 0, NULL, 0);
+ 	    grub_free (args);
+ 	    entrysrc[0] = 0;
+ 	    grub_free (oldname);
+@@ -204,7 +204,7 @@ legacy_file (const char *filename)
+ 	}
+       args[0] = entryname;
+       grub_normal_add_menu_entry (1, args, NULL, NULL, NULL,
+-				  NULL, NULL, entrysrc, 0, NULL);
++				  NULL, NULL, entrysrc, 0, NULL, 0);
+       grub_free (args);
+     }
+ 
+diff --git a/grub-core/commands/menuentry.c b/grub-core/commands/menuentry.c
+index 5e1318f17..288189b8d 100644
+--- a/grub-core/commands/menuentry.c
++++ b/grub-core/commands/menuentry.c
+@@ -78,7 +78,7 @@ grub_normal_add_menu_entry (int argc, const char **args,
+ 			    char **classes, const char *id,
+ 			    const char *users, const char *hotkey,
+ 			    const char *prefix, const char *sourcecode,
+-			    int submenu, grub_blsuki_entry_t *blsuki)
++			    int submenu, grub_blsuki_entry_t *blsuki, int hidden)
+ {
+   int menu_hotkey = 0;
+   char **menu_args = NULL;
+@@ -189,8 +189,11 @@ grub_normal_add_menu_entry (int argc, const char **args,
+   (*last)->sourcecode = menu_sourcecode;
+   (*last)->submenu = submenu;
+   (*last)->blsuki = blsuki;
++  (*last)->hidden = hidden;
++
++  if (!hidden)
++    menu->size++;
+ 
+-  menu->size++;
+   return GRUB_ERR_NONE;
+ 
+  fail:
+@@ -291,7 +294,8 @@ grub_cmd_menuentry (grub_extcmd_context_t ctxt, int argc, char **args)
+ 				       ctxt->state[2].arg, 0,
+ 				       ctxt->state[3].arg,
+ 				       ctxt->extcmd->cmd->name[0] == 's',
+-				       NULL);
++				       NULL,
++               ctxt->extcmd->cmd->name[0] == 'h');
+ 
+   src = args[argc - 1];
+   args[argc - 1] = NULL;
+@@ -308,7 +312,9 @@ grub_cmd_menuentry (grub_extcmd_context_t ctxt, int argc, char **args)
+ 				  ctxt->state[0].args, ctxt->state[4].arg,
+ 				  users,
+ 				  ctxt->state[2].arg, prefix, src + 1,
+-				  ctxt->extcmd->cmd->name[0] == 's', NULL);
++				  ctxt->extcmd->cmd->name[0] == 's',
++          NULL,
++          ctxt->extcmd->cmd->name[0] == 'h');
+ 
+   src[len - 1] = ch;
+   args[argc - 1] = src;
+@@ -316,7 +322,7 @@ grub_cmd_menuentry (grub_extcmd_context_t ctxt, int argc, char **args)
+   return r;
+ }
+ 
+-static grub_extcmd_t cmd, cmd_sub;
++static grub_extcmd_t cmd, cmd_sub, cmd_hidden;
+ 
+ void
+ grub_menu_init (void)
+@@ -332,6 +338,12 @@ grub_menu_init (void)
+ 				  | GRUB_COMMAND_FLAG_EXTRACTOR,
+ 				  N_("BLOCK"), N_("Define a submenu."),
+ 				  options);
++  cmd_hidden = grub_register_extcmd ("hiddenentry", grub_cmd_menuentry,
++                  GRUB_COMMAND_FLAG_BLOCKS
++                  | GRUB_COMMAND_ACCEPT_DASH
++                  | GRUB_COMMAND_FLAG_EXTRACTOR,
++                  N_("BLOCK"), N_("Define a hidden menu entry."),
++                  options);
+ }
+ 
+ void
+diff --git a/grub-core/normal/menu.c b/grub-core/normal/menu.c
+index b946c834d..483a3505c 100644
+--- a/grub-core/normal/menu.c
++++ b/grub-core/normal/menu.c
+@@ -38,6 +38,8 @@
+    entry failing to boot.  */
+ #define DEFAULT_ENTRY_ERROR_DELAY_MS  2500
+ 
++#define MENU_INCLUDE_HIDDEN 0x10000
++
+ grub_err_t (*grub_gfxmenu_try_hook) (int entry, grub_menu_t menu,
+ 				     int nested) = NULL;
+ 
+@@ -81,8 +83,20 @@ grub_menu_get_entry (grub_menu_t menu, int no)
+ {
+   grub_menu_entry_t e;
+ 
+-  for (e = menu->entry_list; e && no > 0; e = e->next, no--)
+-    ;
++  if (no & MENU_INCLUDE_HIDDEN) {
++    no &= ~MENU_INCLUDE_HIDDEN;
++
++    for (e = menu->entry_list; e && no > 0; e = e->next, no--)
++      ;
++  } else {
++    for (e = menu->entry_list; e && no > 0; e = e->next, no--) {
++      /* Skip hidden entries */
++      while (e && e->hidden)
++        e = e->next;
++    }
++    while (e && e->hidden)
++      e = e->next;
++  }
+ 
+   return e;
+ }
+@@ -94,10 +108,10 @@ get_entry_index_by_hotkey (grub_menu_t menu, int hotkey)
+   grub_menu_entry_t entry;
+   int i;
+ 
+-  for (i = 0, entry = menu->entry_list; i < menu->size;
++  for (i = 0, entry = menu->entry_list; entry;
+        i++, entry = entry->next)
+     if (entry->hotkey == hotkey)
+-      return i;
++      return i | MENU_INCLUDE_HIDDEN;
+ 
+   return -1;
+ }
+@@ -510,6 +524,10 @@ get_entry_number (grub_menu_t menu, const char *name)
+       grub_menu_entry_t e = menu->entry_list;
+       int i;
+ 
++       /* Skip hidden entries */
++      while (e && e->hidden)
++        e = e->next;
++
+       grub_errno = GRUB_ERR_NONE;
+ 
+       for (i = 0; e; i++)
+@@ -521,6 +539,10 @@ get_entry_number (grub_menu_t menu, const char *name)
+ 	      break;
+ 	    }
+ 	  e = e->next;
++
++    /* Skip hidden entries */
++    while (e && e->hidden)
++      e = e->next;
+ 	}
+ 
+       if (! e)
+diff --git a/grub-core/normal/menu_text.c b/grub-core/normal/menu_text.c
+index 9c383e64a..e55bafa6c 100644
+--- a/grub-core/normal/menu_text.c
++++ b/grub-core/normal/menu_text.c
+@@ -292,7 +292,11 @@ print_entries (grub_menu_t menu, const struct menu_viewer_data *data)
+       print_entry (data->geo.first_entry_y + i, data->offset == i,
+ 		   e, data);
+       if (e)
+-	e = e->next;
++	      e = e->next;
++
++      /* Skip hidden entries */
++      while (e && e->hidden)
++        e = e->next;
+     }
+ 
+   grub_term_gotoxy (data->term,
+diff --git a/include/grub/menu.h b/include/grub/menu.h
+index 8d06e8400..f7a302081 100644
+--- a/include/grub/menu.h
++++ b/include/grub/menu.h
+@@ -72,6 +72,8 @@ struct grub_menu_entry
+ 
+   int submenu;
+ 
++  int hidden;
++
+   /* The next element.  */
+   struct grub_menu_entry *next;
+ 
+diff --git a/include/grub/normal.h b/include/grub/normal.h
+index d0150e3c2..4c1fe8ec1 100644
+--- a/include/grub/normal.h
++++ b/include/grub/normal.h
+@@ -145,7 +145,7 @@ grub_normal_add_menu_entry (int argc, const char **args, char **classes,
+ 			    const char *id,
+ 			    const char *users, const char *hotkey,
+ 			    const char *prefix, const char *sourcecode,
+-			    int submenu, grub_blsuki_entry_t *blsuki);
++			    int submenu, grub_blsuki_entry_t *blsuki, int hidden);
+ 
+ grub_err_t
+ grub_normal_set_password (const char *user, const char *password);
+-- 
+2.51.2
+

@@ -1,0 +1,36 @@
+From 73a01e5e0091f5fbf452fd85ac3632f8c0171e65 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jaroslav=20=C5=A0karvada?= <jskarvad@redhat.com>
+Date: Thu, 7 Aug 2025 17:50:48 +0200
+Subject: [PATCH] Allocate hex map with the trailing NULL
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Compilers usually warns or errors on such allocations. This would require
+special compiler parameter or attribute to silence it. Unfortunately, it is
+compiler specific, e.g. with gcc one could use "__attribute__ ((nonstring))"
+or with C23 just "[[nonstring]]" or gcc parameter
+"-Wno-error=unterminated-string-initialization". With other compilers
+it's different. So do not over-complicate things and allocate it just one
+more byte longer with the dummy NULL which should silence most of the
+compilers. It's static allocation, just one byte, the overhead should be
+negligible.
+
+Signed-off-by: Jaroslav Škarvada <jskarvad@redhat.com>
+---
+ lib/util/hex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/util/hex.c b/lib/util/hex.c
+index 653e733..2292bd7 100644
+--- a/lib/util/hex.c
++++ b/lib/util/hex.c
+@@ -84,7 +84,7 @@ hidrd_hex_buf_from_str(void        *buf,
+ char *
+ hidrd_hex_buf_to_str(const void *buf, size_t size)
+ {
+-    static const char   map[16] = "0123456789ABCDEF";
++    static const char   map[17] = "0123456789ABCDEF";
+     const uint8_t      *bbuf    = (const uint8_t *)buf;
+     char               *str;
+     char               *p;

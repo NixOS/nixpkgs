@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 13 Dec 2025 22:58:44 -0500
+Subject: [PATCH 06/11] nix-build-caches
+
+---
+ Sources/Basics/FileSystem/FileSystem+Extensions.swift | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Sources/Basics/FileSystem/FileSystem+Extensions.swift b/Sources/Basics/FileSystem/FileSystem+Extensions.swift
+index 5f9674b2e..49f83e175 100644
+--- a/Sources/Basics/FileSystem/FileSystem+Extensions.swift
++++ b/Sources/Basics/FileSystem/FileSystem+Extensions.swift
+@@ -12,6 +12,7 @@
+ 
+ import struct Foundation.Data
+ import class Foundation.FileManager
++import class Foundation.ProcessInfo
+ import struct Foundation.UUID
+ 
+ import struct TSCBasic.ByteString
+@@ -245,6 +246,11 @@ extension FileSystem {
+     /// SwiftPM cache directory under user's caches directory (if exists)
+     public var swiftPMCacheDirectory: AbsolutePath {
+         get throws {
++            let env = ProcessInfo.processInfo.environment
++            // Set up the caches in the build environment for Nix-managed builds
++            if let nixBuildTop = env["NIX_BUILD_TOP"] {
++                return try! AbsolutePath(validating: nixBuildTop).appending("swiftpm-cache")
++            }
+             if let path = self.idiomaticUserCacheDirectory {
+                 return path.appending("org.swift.swiftpm")
+             } else {
+-- 
+2.54.0
+

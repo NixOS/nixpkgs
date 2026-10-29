@@ -1,0 +1,50 @@
+From 776f707b5bb67d4c0c15f981b5a1b6d7f3a9cebc Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Sat, 22 Mar 2025 14:24:57 -0700
+Subject: [PATCH 4/5] Fix signatures for getenv/getopt
+
+GCC-15 complains about missing parameters, this gets found
+out when using non-glibc ( e.g. musl ) C library
+
+Fixes
+lib/fnmatch.c:124:14: error: conflicting types for 'getenv'; have 'char *(void)'
+|   124 | extern char *getenv ();
+|       |              ^~~~~~
+
+src/getopt.c: Define parameters of getenv() and getopt().
+src/getopt.h: Ditto.
+---
+Link: https://lists.gnu.org/archive/html/bug-make/2025-03/msg00032.html
+ src/getopt.c | 2 +-
+ src/getopt.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/getopt.c b/src/getopt.c
+index 7a792de8..76251ccb 100644
+--- a/src/getopt.c
++++ b/src/getopt.c
+@@ -202,7 +202,7 @@ static char *posixly_correct;
+    whose names are inconsistent.  */
+ 
+ #ifndef getenv
+-extern char *getenv ();
++extern char *getenv (const char *);
+ #endif
+ 
+ static char *
+diff --git a/src/getopt.h b/src/getopt.h
+index df18ceeb..d8bb2263 100644
+--- a/src/getopt.h
++++ b/src/getopt.h
+@@ -102,7 +102,7 @@ struct option
+    errors, only prototype getopt for the GNU C library.  */
+ extern int getopt (int argc, char *const *argv, const char *shortopts);
+ #else /* not __GNU_LIBRARY__ */
+-extern int getopt ();
++extern int getopt (int,  char * const*, const char *);
+ #endif /* __GNU_LIBRARY__ */
+ extern int getopt_long (int argc, char *const *argv, const char *shortopts,
+ 		        const struct option *longopts, int *longind);
+-- 
+2.51.2
+

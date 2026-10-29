@@ -1,0 +1,12 @@
+diff --git a/service/core/update_config.go b/service/core/update_config.go
+--- a/service/core/update_config.go
++++ b/service/core/update_config.go
+@@ -86 +86 @@ func registerUpdateConfig() error {
+-		DefaultValue:    true,
++		DefaultValue:    false,
+@@ -119 +119 @@ func initUpdateConfig() {
+-	enableSoftwareUpdates = config.Concurrent.GetAsBool(enableSoftwareUpdatesKey, true)
++	enableSoftwareUpdates = config.Concurrent.GetAsBool(enableSoftwareUpdatesKey, false)
+@@ -132 +132 @@ func configureUpdates() {
+-	module.instance.BinaryUpdates().Configure(enableSoftwareUpdates(), configure.GetBinaryUpdateURLs(releaseChannel()))
++	module.instance.BinaryUpdates().Configure(false, configure.GetBinaryUpdateURLs(releaseChannel()))
