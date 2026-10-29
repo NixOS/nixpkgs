@@ -19,7 +19,7 @@
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-zaqarclient";
   version = "4.4.0";
   pyproject = true;
@@ -27,11 +27,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-zaqarclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bxB6f3HgTPeMkMYg+yEzkgHBkXPb6UMuKBo9XC74O/U=";
   };
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -70,4 +71,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
