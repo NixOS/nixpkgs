@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sprite";
-  version = "2026-10-20";
+  version = "2026-10-20-hotfix.1";
 
   src = fetchurl {
     url = "https://sprites.dev/dl/client/${finalAttrs.version}/sprite-${
@@ -17,9 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
     }-${if stdenv.hostPlatform.isx86_64 then "x86_64" else "aarch64"}";
     hash =
       {
-        aarch64-darwin = "sha256-K1BuaGDZM2VKF26rU1WlYV8gi7lAh8RLbk/Nfw4trEU=";
-        aarch64-linux = "sha256-wklCt9euTfY0Iu/RHU3/7rw3Fuk5FpGL6KJa0IiE3Fw=";
-        x86_64-linux = "sha256-0SSkCc/bcyHvswm5flFZkftbDn5fEZ5jYdf94qLUCC8=";
+        aarch64-darwin = "sha256-PwqCYRBuq9BHaHsqELdeTrFIsMF3ONgqHRur2G7d9mg=";
+        aarch64-linux = "sha256-QPaJYk09BLcWC+6fSjVjgYvvqShmyfRmytr/vRxdDyI=";
+        x86_64-linux = "sha256-c0j1RlL7zK6nnX60tXJC5h89ZXOSfeqqFCfbRGHQorI=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
