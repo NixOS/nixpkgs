@@ -370,11 +370,6 @@ with pkgs;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
 
-  ollama-cpu = callPackage ../by-name/ol/ollama/package.nix { acceleration = false; };
-  ollama-rocm = callPackage ../by-name/ol/ollama/package.nix { acceleration = "rocm"; };
-  ollama-cuda = callPackage ../by-name/ol/ollama/package.nix { acceleration = "cuda"; };
-  ollama-vulkan = callPackage ../by-name/ol/ollama/package.nix { acceleration = "vulkan"; };
-
   diffPlugins = (callPackage ../build-support/plugins.nix { }).diffPlugins;
 
   devShellTools = callPackage ../build-support/dev-shell-tools { };
