@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.23.4";
+  version = "0.23.5";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-EUamQWH0ATc/6ofQHuFX3V2aXzU85nXcYQO+iZR9+Ys=";
+    hash = "sha256-PnoFdkZbVW9inpD9ZIqmPWzcW4kMWWkAUTn1/yXF/JQ=";
   };
 
   nativeBuildInputs = [
