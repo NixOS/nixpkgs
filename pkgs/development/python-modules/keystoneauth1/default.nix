@@ -56,6 +56,8 @@ buildPythonPackage rec {
     saml2 = [ lxml ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     fixtures
     hacking

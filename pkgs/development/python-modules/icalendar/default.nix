@@ -62,6 +62,6 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ olcai ];
+    maintainers = [ ];
   };
 })

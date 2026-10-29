@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
     description = "Lovelace Flower Card to match the custom plant integration";
     homepage = "https://github.com/Olen/lovelace-flower-card";
     changelog = "https://github.com/Olen/lovelace-flower-card/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.all;
   };

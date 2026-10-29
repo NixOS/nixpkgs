@@ -88,6 +88,8 @@ flutter341.buildFlutterApplication (finalAttrs: {
   targetFlutterPlatform = "linux";
 
   customSourceBuilders = {
+    # fixme: once commet-chat updates to flutter_webrtc >= 1.5 (in the next releases),
+    #        this can be removed, tho you'll need to update the libwebrtc-info.json file
     flutter_webrtc =
       { version, src, ... }:
       stdenv.mkDerivation {

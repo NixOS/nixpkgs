@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-az/mbrflILDWSu3kIA280dJWqTlImh1s7FvHeu/DKe4=";
   };
 
+  postPatch = ''
+    # Fails when deps are pruned in `preInstall`.
+    substituteInPlace package.json \
+      --replace-fail "prepack" "dont-prepack"
+  '';
+
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
@@ -47,6 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm run build
 
     runHook postBuild
+  '';
+
+  preInstall = ''
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
   '';
 
   dontNpmPrune = true;
