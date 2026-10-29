@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
-    repo = "trealla";
+    repo = "trealla-prolog";
     rev = "v${finalAttrs.version}";
     hash = "sha256-/Jxz4vDidfctu5c+GWFZUcWDiKfG5iYsOaZ1djOpp4c=";
   };
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       (where it doesn't seem to mean anything) and also a reference to the
       Trealla region of Western Australia.
     '';
-    changelog = "https://github.com/trealla-prolog/trealla/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/trealla-prolog/trealla-prolog/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       siraben

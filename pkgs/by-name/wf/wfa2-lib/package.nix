@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.3.5";
 
   src = fetchFromGitHub {
-    owner = "smarco";
+    owner = "Marco-Sola-Lab";
     repo = "WFA2-lib";
     rev = "v${finalAttrs.version}";
     hash = "sha256-vTeSvhSt3PQ/BID6uM1CuXkQipgG7VViDexvAwV4nW8=";
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Wavefront alignment algorithm library v2";
-    homepage = "https://github.com/smarco/WFA2-lib";
+    homepage = "https://github.com/Marco-Sola-Lab/WFA2-lib";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;

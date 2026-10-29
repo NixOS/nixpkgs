@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "meta";
     repo = "folly";
     tag = "v${finalAttrs.version}";
     hash = "sha256-xxS1FU3thl8UA1DzumVEazelISayLioabFjKlXX67Yk=";
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  # https://github.com/facebook/folly/blob/main/folly/DiscriminatedPtr.h
+  # https://github.com/meta/folly/blob/main/folly/DiscriminatedPtr.h
   # error: #error "DiscriminatedPtr is x64, arm64, ppc64 and riscv64 specific code."
   doCheck =
     stdenv.hostPlatform.isx86_64
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     # `dev` output’s CMake files.
     ./install-test-certs.patch
 
-    # https://github.com/facebook/folly/pull/2561
+    # https://github.com/meta/folly/pull/2561
     ./memset-memcpy-aarch64.patch
 
     # https://github.com/Homebrew/homebrew-core/blob/1bebfe2c3e393a65c27f3e74f254770219b126f3/Formula/f/folly.rb#L83
@@ -212,9 +212,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open-source C++ library developed and used at Facebook";
-    homepage = "https://github.com/facebook/folly";
+    homepage = "https://github.com/meta/folly";
     license = lib.licenses.asl20;
-    # 32bit is not supported: https://github.com/facebook/folly/issues/103
+    # 32bit is not supported: https://github.com/meta/folly/issues/103
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     maintainers = with lib.maintainers; [

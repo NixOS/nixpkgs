@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "KapJI";
+    owner = "cgt-calc";
     repo = "capital-gains-calculator";
     tag = "v${finalAttrs.version}";
     hash = "sha256-KPzADW+n82X08IMfSIl5JyYPm8fxbbowud8sBdUxRgA=";
@@ -20,9 +20,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      # https://github.com/KapJI/capital-gains-calculator/pull/781
+      # https://github.com/cgt-calc/capital-gains-calculator/pull/781
       name = "update uv-build requirement.patch";
-      url = "https://github.com/KapJI/capital-gains-calculator/commit/0222eafdcf1911f3e2fd781697dc53311f529f62.patch";
+      url = "https://github.com/cgt-calc/capital-gains-calculator/commit/0222eafdcf1911f3e2fd781697dc53311f529f62.patch";
       hash = "sha256-L8jgrdA9t3x8mdaLmAuW6vFhHCLGA+0gQ/8j9EcYKhE=";
     })
   ];
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "UK capital gains tax calculator";
-    homepage = "https://github.com/KapJI/capital-gains-calculator";
+    homepage = "https://github.com/cgt-calc/capital-gains-calculator";
     license = lib.licenses.mit;
     mainProgram = "cgt-calc";
     maintainers = with lib.maintainers; [ ambroisie ];
