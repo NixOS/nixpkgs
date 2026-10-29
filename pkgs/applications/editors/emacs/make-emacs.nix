@@ -165,7 +165,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ [
       ./load-the-early-default-library-after-early-init.el.patch
     ]
-    ++ lib.optionals withNativeCompilation [
+    # Elsewhere libgccjit's embedded driver already knows where binutils and
+    # libc are (see jitDriverFlags in
+    # pkgs/development/compilers/gcc/common/configure-flags.nix).
+    ++ lib.optionals (withNativeCompilation && stdenv.hostPlatform.isDarwin) [
       (replaceVars ./native-comp-driver-options-30.patch {
         backendPath = (
           lib.concatStringsSep " " (
@@ -416,6 +419,8 @@ stdenv.mkDerivation (finalAttrs: {
   env =
     lib.optionalAttrs withNativeCompilation {
       NATIVE_FULL_AOT = "1";
+    }
+    // lib.optionalAttrs (withNativeCompilation && stdenv.hostPlatform.isDarwin) {
       LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
     }
     // lib.optionalAttrs (variant == "macport") {
