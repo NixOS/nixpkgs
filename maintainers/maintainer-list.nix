@@ -3701,6 +3701,12 @@
     githubId = 410028;
     name = "Tobias Bergkvist";
   };
+  bernelius = {
+    name = "Bob Hegdal";
+    matrix = "@bernelius:matrix.org";
+    github = "bernelius";
+    githubId = 54585616;
+  };
   berquist = {
     name = "Eric Berquist";
     email = "eric.berquist@gmail.com";
