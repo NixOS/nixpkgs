@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-vet";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cargo-vet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sdjvCMLM8ThWXbotjRIsbLYucDzGvFOktqo6OKB//RI=";
+    hash = "sha256-/c5Eo21vNrG0Mu2vZCpSUWuJ/Mf+WbvW1NzG+y0xnGU=";
   };
 
-  cargoHash = "sha256-3pfOq2VfHbtohdgv73TT480bjCjdNKPJE+m4SHeXfGA=";
+  cargoHash = "sha256-NAgoq1XKCyu54w6Oh4nzj/DsinaMbe16jxdbns2UqlY=";
 
   # the test_project tests require internet access
   checkFlags = [ "--skip=test_project" ];
