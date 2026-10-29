@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitLab,
   installShellFiles,
   makeBinaryWrapper,
@@ -11,15 +11,17 @@
   gitMinimal,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "glab";
-  version = "1.114.0";
+  version = "1.126.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V396Fo7YSd5TL/EO82WoF3b+mWlBtrT2kTVCysm5sGs=";
+    hash = "sha256-Lzp0up2KJTrBQTMuEl3neV+ty1RM5ZGgLgPAfIl16C0=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -28,7 +30,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-UvdML7WKMFJwRqscXhladUDxVXwAWaisWc8c6B1wJNg=";
+  vendorHash = "sha256-8JesLR9Wg2uMDfdhw6FhvGgoJQ7oMCCDzb6Paag2qjs=";
 
   ldflags = [
     "-s"
@@ -65,6 +67,17 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     git init
   '';
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "Test_addTelemetryHook"
+        "Test_buildTelemetryEvent"
+        "Test_sendTelemetryData"
+      ];
+    in
+    [ "-skip=^(${lib.concatStringsSep "|" skippedTests})" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
