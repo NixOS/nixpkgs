@@ -8,16 +8,16 @@ mkOpenbaoPlugin (finalAttrs: {
   plugin = "kms-tcloudpublic";
   pluginType = "kms";
   pluginName = "tcloudpublic";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao-plugins";
     tag = "kms-tcloudpublic-v${finalAttrs.version}";
-    hash = "sha256-TD2xQQEOOLS9yUtoRyVt61auOpNh+zUv/CrRRplYTB4=";
+    hash = "sha256-LlwGH3C4eG3dkTb0yWaD6scmJ9OprCULvTmvU7CMvkQ=";
   };
 
-  vendorHash = "sha256-bgFfpT1CElxt3FyZoMRYc1M2UAXa/4iow42DUrP7x2E=";
+  vendorHash = "sha256-fY20ZgdqLkA+myIDTHKvaBzTqfu2jwu4+FJR0/yNtKU=";
 
   meta = {
     description = "OpenBao KMS plugin for Auto Unseal via T Cloud Public";

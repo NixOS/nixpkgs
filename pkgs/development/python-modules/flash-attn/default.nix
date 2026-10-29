@@ -39,11 +39,20 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     hash = "sha256-bMFvcVpOMSM0YrU7pmtwNWDubhdbWVqiu9DsPF3J1Hg=";
   };
 
-  # Avoid that MAX_JOBS could be ignored with future updates
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '"psutil",' ""
-  '';
+  postPatch =
+    # Avoid that MAX_JOBS could be ignored with future updates
+    ''
+      substituteInPlace setup.py \
+        --replace-fail '"psutil",' ""
+    ''
+    # torch>=2.13 headers require C++20
+    # https://github.com/Dao-AILab/flash-attention/pull/2899
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          '"-std=c++17"' \
+          '"-std=c++20"'
+    '';
 
   preConfigure = ''
     export MAX_JOBS="$NIX_BUILD_CORES"
