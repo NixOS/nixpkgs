@@ -45,8 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Disable update check (both the configuration option and execution)
-    ./disable-update-check.patch
     # LosslessCut will retrieve a URL from mifi.no (the author's domain) and directly embed the HTML in the app.
     # This was previously used to show a Ukraine flag, which I don't have strong opinions on.
     # However, this effectively allows arbitrary code execution, which could be IP-gated. I can't allow that.
@@ -81,6 +79,26 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = ''
+    # Disable update check by making enableUpdateCheck configuration always false
+    # * Changge the configuration access.
+    #   * Replace default value.
+    #   * Monkey patch the config getter (whose generic return type is `Config[T]`).
+    substituteInPlace src/main/configStore.ts \
+      --replace-fail "enableUpdateCheck: true," "enableUpdateCheck: false," \
+      --replace-fail \
+        "return store.get(key);" \
+        "return key === 'enableUpdateCheck' ? (false as Config[T]) : store.get(key);"
+    # * Change the "File > Settings" UI.
+    #   * Make the enableUpdateCheck switch non-interactive and keep it unchecked.
+    #   * Change the label to inform users about the option being disabled in Nixpkgs.
+    substituteInPlace src/renderer/src/components/Settings.tsx \
+      --replace-fail \
+        "<KeyCell>{t('Check for updates on startup?')}</KeyCell>" \
+        "<KeyCell>{t('Check for updates on startup? (disabled in Nixpkgs)')}</KeyCell>" \
+      --replace-fail \
+        "<Switch checked={enableUpdateCheck} onCheckedChange={setEnableUpdateCheck} />" \
+        "<Switch checked={false} disabled />"
+
     # Hard-code app.isPackaged as true
     for f in src/main/ffmpeg.ts src/main/i18nCommon.ts src/main/logger.ts; do
       substituteInPlace "$f" \
