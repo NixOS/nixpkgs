@@ -43,7 +43,7 @@ in
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.37.2";
+  version = "2.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -99,6 +99,12 @@ buildPythonPackage rec {
   pytestFlags = [ "--test-images=file://${test_images}" ];
 
   disabledTestMarks = [ "needs_internet" ];
+
+  # These tests requiren an older version of pillow
+  disabledTests = [
+    "test_png_16bit"
+    "test_png"
+  ];
 
   # These tests require the old and vulnerable freeimage binaries; skip.
   disabledTestPaths = [ "tests/test_freeimage.py" ];
