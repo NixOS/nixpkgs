@@ -180,7 +180,7 @@ let
     merve = if majorVersion == "24" then (merve.override { simdutf = null; }) else merve;
   })
   // (lib.optionalAttrs useSharedZstd {
-    inherit zstd;
+    zstd = zstd.out;
   });
 
   sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
