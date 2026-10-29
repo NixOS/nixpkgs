@@ -75,7 +75,7 @@ Running fixup scripts:
 Note that this will do nothing on further re-runs (the secrets already exist, after all!). To force a secret to be re-generated, one can use the `--generate` flag:
 
 ```
-$ nixos-secrets generate --file /path/to/config --generate user
+$ nixos-secrets generate --file /path/to/config.nix --generate user
 Updating 'user' (forced)
 Generating 'user'
 Successfully updated 1 secret(s)
@@ -112,7 +112,7 @@ Secrets can depend on other secrets. The inputs for a given secret are available
 Note that we did not manually specify a backend this time! In such scenarios, the module automatically uses the `secrets.backends.defaults.store` backend. Running the CLI again will generate the new secret:
 
 ```
-$ nixos-secrets generate --file /path/to/config
+$ nixos-secrets generate --file /path/to/config.nix
 Skipping 'user'
 Updating 'derived' (missing metadata)
 Generating 'derived'
@@ -133,7 +133,7 @@ $ echo "Per aspera ad astra" > manual/greeting
 We can now use the `--set` flag to import the directory we've just created:
 
 ```
-$ nixos-secrets generate --file /path/to/config --set user=manual
+$ nixos-secrets generate --file /path/to/config.nix --set user=manual
 Updating 'user' (forced)
 Importing 'user' from disk
 Updating 'derived' (dependencies changed: user)
@@ -149,7 +149,7 @@ When a secret holds a single file, `--set` also accepts a direct path to said fi
 
 ```
 $ echo "Per aspera ad astra" > greeting
-$ nixos-secrets generate --file /path/to/config --set user=greeting
+$ nixos-secrets generate --file /path/to/config.nix --set user=greeting
 Updating 'user' (forced)
 Importing 'user' from disk
 ...
@@ -189,7 +189,7 @@ The `backend` field works similarly to the `backend` field used by secrets (alth
 Running the above through the CLI (with the `--generate` flag!) will ask the user to type in their name before generating the rest of the secrets:
 
 ```
-$ nixos-secrets generate --file /path/to/config --generate user
+$ nixos-secrets generate --file /path/to/config.nix --generate user
 Updating 'user' (forced)
 Evaluating prompts for 'user':
 - 'name'
