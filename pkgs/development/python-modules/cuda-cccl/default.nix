@@ -3,7 +3,6 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   cudaPackages,
   replaceVars,
 
@@ -31,7 +30,7 @@
 
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cuda-cccl";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,7 +38,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     owner = "NVIDIA";
     repo = "cccl";
     tag = "python-${finalAttrs.version}";
-    hash = "sha256-GyZD6YGqZNS3HDuhv0Y286LtisqqxHLr8SlGee5rXlw=";
+    hash = "sha256-3lPANIBPFP/U8S3sMiA9jPvHD3/k7kwEt8qkXd57Avw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/cuda_cccl";
@@ -50,21 +49,12 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
 
   patches = [
     (replaceVars ./patch-nvidia-libs-paths.patch {
-      libcudart = lib.getLib cudaPackages.cuda_cudart;
       libnvjitlink = lib.getLib cudaPackages.libnvjitlink;
       libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
     })
 
     # Disable all tests requiring unpackaged `numba-cuda-mlir` through `cuda.compute`
     ./skip-missing-jit-backend.patch
-
-    # Fix build with CUDA >= 13.4
-    # https://github.com/NVIDIA/cccl/pull/11823
-    (fetchpatch {
-      name = "c-parallel-allow-cuda-13_4.patch";
-      url = "https://github.com/NVIDIA/cccl/commit/1504f9d7a6a8b15679c36df2f1ee11a413fdedc8.patch";
-      hash = "sha256-OPwoxwshkw+h4pD60/eCxUi8O1WM2WhNSchxkGdagU4=";
-    })
   ];
   # Apply patches from the repository root (parent of sourceRoot)
   patchFlags = [
