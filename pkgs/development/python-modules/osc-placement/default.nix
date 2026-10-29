@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "osc-placement";
-  version = "4.8.0";
+  version = "4.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";
     tag = finalAttrs.version;
-    hash = "sha256-txxLtg3fDrkPqU0k/PlwvpJJBzVLtJXz82mhPWo+rKc=";
+    hash = "sha256-rSabqfpLkNd/h3TepX5W5Sf0+RnVJri1VUiG6HzVkHE=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)
