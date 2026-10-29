@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "xdg-desktop-portal-wlr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Ohgkz13FcG8ddjjgreXkvFD2Q+zUDZnAM4Oh+C9P/s=";
+    hash = "sha256-4q3FdqNIh3f0rf+6JKl7NmFN8gMbPFL0U5jIwnvh1P0=";
   };
 
   strictDeps = true;
