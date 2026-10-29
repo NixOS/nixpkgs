@@ -206,16 +206,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --prefix LD_LIBRARY_PATH : "${lib.getLib onnxruntime}/lib"
       ''}
   ''
-  # Wrap the native on-screen display binary so it finds Wayland, Vulkan, and xkb at runtime.
-  # osdNativeSupport stays opt-in (no wrapper enables it by default); enable via override when needed.
+  # Wrap the native on-screen display binary so it finds Wayland and xkb at runtime,
+  # plus Vulkan when transcription GPU support is enabled.
+  # osdNativeSupport stays opt-in via dedicated wrappers; enable via override when needed.
   + lib.optionalString osdNativeSupport ''
     wrapProgram $out/bin/voxtype-osd-native \
       --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libxkbcommon
-          vulkan-loader
-          wayland
-        ]
+        lib.makeLibraryPath (
+          [
+            libxkbcommon
+            wayland
+          ]
+          ++ lib.optional vulkanSupport vulkan-loader
+        )
       }"
   ''
   + lib.optionalString installManPages ''
