@@ -14,6 +14,8 @@
   rustPlatform,
 
   ## parquet-rust-wrapper
+  pkg-config,
+  pkgsHostTarget,
   cacert,
 
   ## wandb
@@ -132,6 +134,12 @@ let
       # build a client at all without system CA certificates.
       # Its setup hook exports `SSL_CERT_FILE`.
       cacert
+      pkg-config
+    ];
+
+    buildInputs = [
+      pkgsHostTarget.aws-lc
+      pkgsHostTarget.zstd
     ];
 
     # The original build script renames the library:
