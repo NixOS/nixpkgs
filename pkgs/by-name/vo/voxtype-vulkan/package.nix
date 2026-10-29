@@ -3,4 +3,10 @@
   ...
 }@args:
 
-voxtype.override ({ vulkanSupport = true; } // removeAttrs args [ "voxtype" ])
+voxtype.override (
+  {
+    vulkanSupport = true;
+    osdGtk4Support = true;
+  }
+  // removeAttrs args [ "voxtype" ]
+)
