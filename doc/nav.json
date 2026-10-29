@@ -724,6 +724,10 @@
                   "file": "packages/packer.section.md"
                 },
                 {
+                  "id": "sddm",
+                  "file": "packages/sddm.section.md"
+                },
+                {
                   "id": "shell-helpers",
                   "file": "packages/shell-helpers.section.md"
                 },

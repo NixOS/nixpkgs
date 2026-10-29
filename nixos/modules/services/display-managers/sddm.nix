@@ -12,7 +12,9 @@ let
   cfg = config.services.displayManager.sddm;
   xEnv = config.systemd.services.display-manager.environment;
 
-  sddm = cfg.package.override (old: {
+  sddmWithThemeDeps = cfg.themePackage.sddmPackageWith cfg.package;
+
+  sddm = sddmWithThemeDeps.override (old: {
     extraPackages =
       old.extraPackages or [ ]
       ++ lib.optionals cfg.wayland.enable [ pkgs.qt6.qtwayland ]
@@ -72,13 +74,9 @@ let
     };
 
     Theme = {
-      Current = cfg.theme;
-      ThemeDir = "/run/current-system/sw/share/sddm/themes";
       FacesDir = "/run/current-system/sw/share/sddm/faces";
-    }
-    // optionalAttrs (cfg.theme == "breeze") {
-      CursorTheme = "breeze_cursors";
-      CursorSize = 24;
+      Current = ".";
+      ThemeDir = cfg.themePackage.sddmThemeDir;
     };
 
     Users = {
@@ -204,6 +202,26 @@ in
       "sddm"
       "themes"
     ] "Set the option `services.displayManager.sddm.package' instead.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "displayManager"
+        "sddm"
+        "theme"
+      ]
+      ''
+        Use `services.displayManager.sddm.themePackage` instead.
+
+        Its theme dependencies are added to the greeter automatically, so they no longer
+        need to be listed in `services.displayManager.sddm.extraPackages`.
+
+        To change a theme's settings, use `themePackage.withConfig { ... }`.
+        It overrides values in the `[General]` section of the theme's config.
+
+        New themes can be packaged with `pkgs.buildSddmThemePackage`.
+        See https://nixos.org/manual/nixpkgs/unstable/#sec-sddm-buildSddmThemePackage
+      ''
+    )
     (mkRenamedOptionModule
       [ "services" "displayManager" "sddm" "autoLogin" "enable" ]
       [ "services" "displayManager" "autoLogin" "enable" ]
@@ -255,12 +273,17 @@ in
         '';
       };
 
-      theme = mkOption {
-        type = types.str;
-        default = "";
-        example = lib.literalExpression "\"\${pkgs.where-is-my-sddm-theme.override { variants = [ \"qt5\" ]; }}/share/sddm/themes/where_is_my_sddm_theme_qt5\"";
+      themePackage = mkOption {
+        type = types.package;
+        default = cfg.package.themes.maui;
+        defaultText = lib.literalExpression "config.services.displayManager.sddm.package.themes.maui";
+
+        example = lib.literalExpression "pkgs.sddm-astronaut";
         description = ''
-          Greeter theme to use.
+          The sddm theme package to use.
+
+          The themes bundled with sddm are available as:
+          `config.services.displayManager.sddm.package.themes.<name>`: [`elarun`, `maldives`, `maui`, `maya`]
         '';
       };
 

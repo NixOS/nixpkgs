@@ -885,6 +885,27 @@
   "sec-problems": [
     "index.html#sec-problems"
   ],
+  "sec-sddm": [
+    "index.html#sec-sddm"
+  ],
+  "sec-sddm-buildSddmThemePackage": [
+    "index.html#sec-sddm-buildSddmThemePackage"
+  ],
+  "sec-sddm-buildSddmThemePackage-inputs": [
+    "index.html#sec-sddm-buildSddmThemePackage-inputs"
+  ],
+  "sec-sddm-buildSddmThemePackage-passthru": [
+    "index.html#sec-sddm-buildSddmThemePackage-passthru"
+  ],
+  "sec-sddm-buildSddmThemePackage-examples": [
+    "index.html#sec-sddm-buildSddmThemePackage-examples"
+  ],
+  "ex-buildSddmThemePackage-elegant": [
+    "index.html#ex-buildSddmThemePackage-elegant"
+  ],
+  "ex-buildSddmThemePackage-withConfig": [
+    "index.html#ex-buildSddmThemePackage-withConfig"
+  ],
   "sec-using-llvm": [
     "index.html#sec-using-llvm"
   ],

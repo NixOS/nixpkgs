@@ -90,6 +90,7 @@ let
         plasma-wayland-protocols = self.callPackage ./misc/plasma-wayland-protocols { };
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
+        sddm-theme-breeze = self.callPackage ./misc/sddm-theme-breeze { };
 
         applet-window-buttons6 = self.callPackage ./third-party/applet-window-buttons6 { };
         dynamic-workspaces = self.callPackage ./third-party/dynamic-workspaces { };

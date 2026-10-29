@@ -316,6 +316,8 @@ with pkgs;
 
   buildLakePackage = callPackage ../build-support/lake { };
 
+  buildSddmThemePackage = callPackage ../build-support/build-sddm-theme-package.nix { };
+
   cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
 
   cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
