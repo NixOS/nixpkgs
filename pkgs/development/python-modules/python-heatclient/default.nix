@@ -26,17 +26,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-heatclient";
-  version = "5.1.0";
+  version = "5.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-heatclient";
     tag = finalAttrs.version;
-    hash = "sha256-KUFpFqjFtuF9VFQ0Fn9oVQSpwsocZhKY6vWtqpefUJs=";
+    hash = "sha256-fqXauJ6sY6gsHa6zv0ukN5C70wo8OQCFI1SrbAQbcXQ=";
   };
 
   env.PBR_VERSION = finalAttrs.version;
+
+  postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include heatclient *" > MANIFEST.in
+  '';
 
   build-system = [
     openstackdocstheme
