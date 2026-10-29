@@ -4,6 +4,7 @@
   fetchurl,
   autoreconfHook,
   cppunit,
+  directoryListingUpdater,
   gettext,
   gnutls,
   nettle,
@@ -55,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # socket_test connects over loopback
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = {
     homepage = "https://lib.filezilla-project.org/";

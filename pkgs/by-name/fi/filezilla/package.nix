@@ -5,6 +5,7 @@
   autoreconfHook,
   cppunit,
   dbus,
+  directoryListingUpdater,
   fzssh,
   gettext,
   gnutls,
@@ -101,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
     )
   '';
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = {
     homepage = "https://filezilla-project.org/";

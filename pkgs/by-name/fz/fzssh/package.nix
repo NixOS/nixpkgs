@@ -1,4 +1,5 @@
 {
+  directoryListingUpdater,
   fetchurl,
   lib,
   libargon2,
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru.updateScript = directoryListingUpdater { };
 
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {
