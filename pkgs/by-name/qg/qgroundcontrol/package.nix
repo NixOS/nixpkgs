@@ -5,6 +5,7 @@
   cmake,
   cpm-cmake,
   geographiclib,
+  git,
   libevents,
   mavlink-c-library-v2,
   sdl_gamecontrollerdb,
@@ -60,6 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
     # See prePatch below, which removes the vendored copy outright.
     ./use-nixpkgs-gst-qt6-sources.patch
     ./no-static-qml6-plugin.patch
+    # cmake/Git.cmake assumes a .git checkout is always present to derive
+    # QGC_APP_VERSION etc.; our source tarball has none, which crashed a
+    # string(FIND) call downstream. Let these be pre-set via cache
+    # variables instead of just falling back to git when there's no .git.
+    ./no-git-info-crash.patch
+    # src/QtLocationPlugin links Qt6::LocationPrivate, but LocationPrivate
+    # was never added to the top-level find_package(Qt6 COMPONENTS ...)
+    # list, so the target doesn't exist. A real upstream oversight, not a
+    # Nix-specific issue - CMake's package resolution doesn't pull in
+    # private modules as a side effect of requesting the public one.
+    ./find-qt-location-private.patch
   ];
 
   # Never let a vendored copy of a dependency's sources (checked into QGC's
@@ -90,7 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
     cpm-cmake
     ninja
     pkg-config
-  ] ++ (with qt6; [
+    git # Needed for cmake/Git.cmake's version-string generation
+  ]
+  ++ (with qt6; [
     qttools
     wrapQtAppsHook
   ]);
@@ -98,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = with qt6; [
     qtbase
     qtcharts
+    qtconnectivity
     qtlocation
     qtserialport
     qtsvg
@@ -148,6 +163,17 @@ stdenv.mkDerivation (finalAttrs: {
     # targets are, e.g. GeographicLib::GeographicLib) since those have no
     # build step to depend on. AUTOGEN doesn't need this to work correctly.
     (lib.cmakeBool "CMAKE_AUTOGEN_ORIGIN_DEPENDS" false)
+    # See no-git-info-crash.patch: there's no .git directory in our source,
+    # so tell cmake/Git.cmake the real version instead of just falling back
+    # to "0.0.0".
+    (lib.cmakeFeature "QGC_APP_VERSION" finalAttrs.version)
+    (lib.cmakeFeature "QGC_APP_VERSION_STR" "v${finalAttrs.version}")
+    # src/QtLocationPlugin genuinely links Qt6::LocationPrivate (see
+    # find-qt-location-private.patch); this just silences Qt's standard
+    # "you're using private APIs, don't expect ABI stability" caution for
+    # that, which is already a known/accepted tradeoff upstream, not
+    # something to fix.
+    (lib.cmakeBool "QT_NO_PRIVATE_MODULE_WARNING" true)
   ];
 
   installPhase = ''

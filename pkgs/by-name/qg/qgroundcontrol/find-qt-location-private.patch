@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -190,6 +190,7 @@
+         Gui
+         LinguistTools
+         Location
++        LocationPrivate
+         Multimedia
+         Network
+         OpenGL

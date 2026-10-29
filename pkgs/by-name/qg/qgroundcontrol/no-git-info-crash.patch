@@ -1,0 +1,104 @@
+diff --git a/cmake/Git.cmake b/cmake/Git.cmake
+index 1111111..2222222 100644
+--- a/cmake/Git.cmake
++++ b/cmake/Git.cmake
+@@ -21,50 +21,66 @@
+ 
+ include(CMakePrintHelpers)
+ 
+-execute_process(
+-    COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref @
+-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-    OUTPUT_VARIABLE QGC_GIT_BRANCH
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
++# Building from a source tarball/export rather than a git checkout (no
++# .git directory) is a normal case upstream didn't handle: every git
++# command below would otherwise fail silently (empty OUTPUT_VARIABLE),
++# which then crashes the string(FIND) call just below. Guard each lookup,
++# and let any of these be pre-set (e.g. by a packager that already knows
++# the version) via a cache variable instead.
++if(NOT DEFINED QGC_GIT_BRANCH AND GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
++    execute_process(
++        COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref @
++        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
++        OUTPUT_VARIABLE QGC_GIT_BRANCH
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++    )
++endif()
+ # cmake_print_variables(QGC_GIT_BRANCH)
+ 
+-execute_process(
+-    COMMAND ${GIT_EXECUTABLE} rev-parse --short @
+-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-    OUTPUT_VARIABLE QGC_GIT_HASH
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
++if(NOT DEFINED QGC_GIT_HASH AND GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
++    execute_process(
++        COMMAND ${GIT_EXECUTABLE} rev-parse --short @
++        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
++        OUTPUT_VARIABLE QGC_GIT_HASH
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++    )
++endif()
+ # cmake_print_variables(QGC_GIT_HASH)
+ 
+-execute_process(
+-    COMMAND ${GIT_EXECUTABLE} describe --always --tags
+-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-    OUTPUT_VARIABLE QGC_APP_VERSION_STR
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
++if(NOT DEFINED QGC_APP_VERSION_STR AND GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
++    execute_process(
++        COMMAND ${GIT_EXECUTABLE} describe --always --tags
++        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
++        OUTPUT_VARIABLE QGC_APP_VERSION_STR
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++    )
++endif()
+ # cmake_print_variables(QGC_APP_VERSION_STR)
+ 
+-execute_process(
+-    COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=0
+-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-    OUTPUT_VARIABLE QGC_APP_VERSION
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
++if(NOT DEFINED QGC_APP_VERSION AND GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
++    execute_process(
++        COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=0
++        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
++        OUTPUT_VARIABLE QGC_APP_VERSION
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++    )
++endif()
+ # cmake_print_variables(QGC_APP_VERSION)
+ 
+-execute_process(
+-    COMMAND ${GIT_EXECUTABLE} log -1 --format=%aI ${QGC_APP_VERSION}
+-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-    OUTPUT_VARIABLE QGC_APP_DATE
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
++if(NOT DEFINED QGC_APP_DATE AND GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
++    execute_process(
++        COMMAND ${GIT_EXECUTABLE} log -1 --format=%aI ${QGC_APP_VERSION}
++        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
++        OUTPUT_VARIABLE QGC_APP_DATE
++        OUTPUT_STRIP_TRAILING_WHITESPACE
++    )
++endif()
+ # cmake_print_variables(QGC_APP_DATE)
+ 
+-string(FIND ${QGC_APP_VERSION} "v" QGC_APP_VERSION_VALID)
++string(FIND "${QGC_APP_VERSION}" "v" QGC_APP_VERSION_VALID)
+ if(QGC_APP_VERSION_VALID GREATER -1)
+-    string(REPLACE "v" "" QGC_APP_VERSION ${QGC_APP_VERSION})
+-else()
++    string(REPLACE "v" "" QGC_APP_VERSION "${QGC_APP_VERSION}")
++elseif(NOT QGC_APP_VERSION)
+     set(QGC_APP_VERSION "0.0.0")
+ endif()
+ string(REGEX MATCH "([0-9]+)\\.([0-9]+)\\.([0-9]+)" QGC_APP_VERSION_MATCH ${QGC_APP_VERSION})
