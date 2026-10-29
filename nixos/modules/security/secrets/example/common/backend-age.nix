@@ -51,7 +51,8 @@ let
   # Python writer directly. I guess this method shared the original Python
   # script derivation, but that might not be meaningful for such a small script.
   ageScript =
-    { pkgs, ... }: command:
+    { pkgs, ... }:
+    command:
     let
       ageJSONConfig = pkgs.writeText "age.json" (builtins.toJSON ageNixConfig);
       scriptSource = builtins.readFile ./backend-age.py;

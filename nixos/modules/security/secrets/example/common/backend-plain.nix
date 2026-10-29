@@ -8,7 +8,8 @@ let
   # Python writer directly. I guess this method shared the original Python
   # script derivation, but that might not be meaningful for such a small script.
   backendScript =
-    { pkgs, ... }: command:
+    { pkgs, ... }:
+    command:
     let
       backendJSONConfig = pkgs.writeText "plain.json" (
         builtins.toJSON {
