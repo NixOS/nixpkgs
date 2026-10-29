@@ -9777,6 +9777,8 @@ self: super: with self; {
     libloot-native = pkgs.libloot;
   };
 
+  liblore = callPackage ../development/python-modules/liblore { };
+
   liblp = callPackage ../development/python-modules/liblp { };
 
   liblzfse = callPackage ../development/python-modules/liblzfse { inherit (pkgs) lzfse; };
