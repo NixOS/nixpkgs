@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmodbus = "${modbus}/lib";
       netsnmp = "${net-snmp.lib}/lib";
     })
-    # Vendored until https://github.com/networkupstools/nut/pull/3499 merges upstream
+    # https://github.com/networkupstools/nut/pull/3499 , but does not apply cleanly 
     ./CVE-2026-54161.patch
   ];
 
