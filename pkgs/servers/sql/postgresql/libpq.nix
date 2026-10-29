@@ -42,12 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
   version = "18.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
     rev = "refs/tags/REL_18_6";
     hash = "sha256-ySffxlG7jlNyzx++BmIN+WuaQ9TMAJt/qER9wIjd6B8=";
+    # rev might be "refs/tags/REL_x_y" which is not a valid tag
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "postgres/postgres@${lib.removePrefix "refs/tags/" rev}";
+    };
   };
 
   __structuredAttrs = true;
