@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  cppunit,
   dbus,
   fzssh,
   gettext,
@@ -79,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   enableParallelBuilding = true;
+
+  doCheck = true;
+
+  checkInputs = [ cppunit ];
 
   # On macOS, FileZilla only looks for its resources inside the app bundle.
   # Upstream's bundle carries copies of all dylibs in Frameworks, which our

@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     nettle
   ];
 
+  doCheck = true;
+
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;

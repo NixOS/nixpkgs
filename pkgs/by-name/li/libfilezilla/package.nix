@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  cppunit,
   gettext,
   gnutls,
   nettle,
@@ -41,6 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   enableParallelBuilding = true;
+
+  doCheck = true;
+
+  checkInputs = [ cppunit ];
+
+  # string_test::test_conversion2 converts non-ASCII text through the
+  # locale charset and fails in the C locale
+  preCheck = ''
+    export LC_ALL=C.UTF-8
+  '';
+
+  # socket_test connects over loopback
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     homepage = "https://lib.filezilla-project.org/";
