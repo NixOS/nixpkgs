@@ -12,8 +12,8 @@ let
   src-cmake = fetchFromGitHub {
     owner = "zeek";
     repo = "cmake";
-    rev = "fd0696f9077933660f7da5f81978e86b3e967647";
-    hash = "sha256-21wZVwoOB05l/WX/VrVbSx+lFKFQ9MHWjQQD4weavFs=";
+    rev = "913c8a1a9cdece3461a39a07c330b89baa09be99";
+    hash = "sha256-AUPL6Q8tiS2gsgTBr7zT/xUprtboCHgPKs0vSJwuuAY=";
   };
   src-3rdparty = fetchFromGitHub {
     owner = "zeek";
@@ -21,13 +21,19 @@ let
     rev = "a6cc3c7603bb535cf3bec7442140e7126e0577a8";
     hash = "sha256-yzhuTam9zOQ3MP7fk+ACN5P5tHtHXWbyQP73DwISIv8=";
   };
+  prometheus-cpp' = prometheus-cpp.overrideAttrs (old: {
+    # Zeek expects Broker to include prometheus-cpp symbols rather than link them dynamically.
+    cmakeFlags = builtins.filter (flag: flag != "-DBUILD_SHARED_LIBS=ON") old.cmakeFlags ++ [
+      "-DBUILD_SHARED_LIBS=OFF"
+    ];
+  });
   caf' = caf.overrideAttrs (old: {
-    version = "unstable-2024-09-14-zeek";
+    version = "unstable-2025-07-23-zeek";
     src = fetchFromGitHub {
       owner = "zeek";
       repo = "actor-framework";
-      rev = "10afbbc5ee40263b258b7cf3f0e5abb436f79e89";
-      hash = "sha256-R22eKAFNP2VVA4eL6ycN6aHM0NgDHVll9aFNmOQ/pDc=";
+      rev = "4aa660d003d8bbb922a33fb7a31f80d9d3271262";
+      hash = "sha256-OlrW+gk/oLEEIWRSugI1DqRJ+KYF4ZJxHVWKXWllGjU=";
     };
     cmakeFlags = old.cmakeFlags ++ [
       "-DCAF_ENABLE_TESTING=OFF"
@@ -37,7 +43,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "zeek-broker";
-  version = "2.6.0-unstable-2025-04-23";
+  version = "2.8.0-unstable-2026-08-07";
   outputs = [
     "out"
     "py"
@@ -48,12 +54,13 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "broker";
-    rev = "5b6cbb8c2d9124aa1fb0bea5799433138dc64cf9";
-    hash = "sha256-L6Z+ltX3tJEwZ05zEftrJlOhwbhs06MY9cEJDM2kcck=";
+    rev = "d07d9f67f5b8795b5402ca4b6eb433bfb15dcedb";
+    hash = "sha256-P+i7Oq5Iv68vNsusPtxlrf09B4NVoRiJ/m9biCq5Ops=";
   };
   postUnpack = ''
-    rmdir $sourceRoot/cmake $sourceRoot/3rdparty
+    rmdir $sourceRoot/cmake $sourceRoot/caf $sourceRoot/3rdparty
     ln -s ${src-cmake} ''${sourceRoot}/cmake
+    ln -s ${caf'.src} ''${sourceRoot}/caf
     ln -s ${src-3rdparty} ''${sourceRoot}/3rdparty
 
     # Refuses to build the bindings unless this file is present, but never
@@ -71,7 +78,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     openssl
-    prometheus-cpp
+    prometheus-cpp'
     python3.pkgs.pybind11
   ];
   propagatedBuildInputs = [ caf' ];
@@ -80,12 +87,11 @@ stdenv.mkDerivation {
     "-DCAF_ROOT=${caf'}"
     "-DENABLE_STATIC_ONLY:BOOL=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
     "-DPY_MOD_INSTALL_DIR=${placeholder "py"}/${python3.sitePackages}/"
-    "-Dprometheus-cpp_ROOT=${lib.getDev prometheus-cpp}"
+    "-Dprometheus-cpp_ROOT=${lib.getDev prometheus-cpp'}"
   ];
 
   meta = {
     description = "Zeek's Messaging Library";
-    mainProgram = "broker-benchmark";
     homepage = "https://github.com/zeek/broker";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
