@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   writableTmpDirAsHomeHook,
 
   # build-system
@@ -64,6 +65,22 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-YfFAJvfKLOgfGFWyQmR4FGHrRc066Y0mAYhXJqJ9vyw=";
   };
+
+  patches = [
+    # Shield the stateful proxy disconnect during session teardown; without it
+    # anyio >= 4.14 aborts the teardown and the proxy tests fail.
+    (fetchpatch {
+      url = "https://github.com/PrefectHQ/fastmcp/commit/ddcdf648131b51d605f133d13e5c942ea008ab28.patch";
+      stripLen = 2;
+      extraPrefix = "src/";
+      hash = "sha256-A4dPqgneJRZ/TBbiZOzJTpmMFMQbS6HOaxgmtXkPJe0=";
+    })
+  ];
+
+  postPatch = ''
+    # The patch's `anyio.CancelScope` needs a name 3.2.3 does not import.
+    sed -i '/^import base64$/i import anyio' src/fastmcp/server/providers/proxy.py
+  '';
 
   build-system = [
     hatchling
