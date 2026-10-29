@@ -1,16 +1,15 @@
 {
   lib,
   stdenv,
+  testers,
   fetchurl,
   autoPatchelfHook,
   makeWrapper,
+  nodejs-slim,
   writeShellScript,
   curl,
   common-updater-scripts,
   gnused,
-  cctools,
-  darwin,
-  rcodesign,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,10 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-    rcodesign
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -55,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/codegraph
     cp -r lib $out/lib/codegraph/lib
-    cp node $out/lib/codegraph/node
+    ln -s ${lib.getExe nodejs-slim} $out/lib/codegraph/node
 
     install -Dm 755 bin/codegraph $out/lib/codegraph/bin/codegraph
 
@@ -65,13 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/lib/codegraph/node \
-      -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
-    '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/lib/codegraph/node
-  '';
-
   passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/colbymchenry/codegraph/releases/download/v${finalAttrs.version}/codegraph-darwin-arm64.tar.gz";
