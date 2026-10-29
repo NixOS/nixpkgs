@@ -11,6 +11,7 @@
   makeBinaryWrapper,
   versionCheckHook,
   librusty_v8 ? callPackage ./rusty-v8 { },
+  aws-lc,
   libffi,
   sqlite,
   pkg-config,
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libffi
     sqlite
     zstd
+    aws-lc
   ];
 
   nativeBuildInputs = [
