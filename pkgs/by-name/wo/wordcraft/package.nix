@@ -6,8 +6,6 @@
   fetchFromGitHub,
   pkg-config,
   patchelf,
-  copyDesktopItems,
-  makeDesktopItem,
   versionCheckHook,
   vulkan-loader,
   libxkbcommon,
@@ -18,6 +16,10 @@
   libxrandr,
   wayland,
   dbus,
+  aws-lc,
+  craft-fonts,
+  craft-i18n,
+
   nix-update-script,
 }:
 
@@ -37,22 +39,37 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wordcraft";
-  version = "0.6.1";
+  version = "0.18.0";
 
   __structuredAttrs = true;
   strictDeps = true;
+
+  env = {
+    CRAFT_FONTS_DIR = craft-fonts;
+    CRAFT_FONTS_REQUIRED = "1";
+    CRAFT_I18N_DIR = craft-i18n;
+    CRAFT_I18N_REQUIRED = "1";
+  };
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "wordcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-10djkguZ4kJBvZTH5Oni5D0XZrfe1gayy7WhsBlpd+0=";
+    hash = "sha256-yv+G72Ye/EU36/fQQ8yx5XKrl5yIjAKl3WZAqtIrrpI=";
   };
 
-  cargoHash = "sha256-L9NqKB/K/giJ4PmyevB389BHG2jEATHjWnGa15BVyUM=";
+  cargoHash = "sha256-L2ebd0JD+2QsQlCeVdzBSlklT4eNO8rbYUVIkHTI6HQ=";
+
+  postPatch = ''
+    sed -i -E '/^(egui_demo_lib|egui_inspection|egui_system_font_provider) = /d' Cargo.toml
+  '';
 
   cargoBuildFlags = [
     "--package=wordcraft"
+    "--package=wordcraft-cli"
+  ];
+
+  cargoTestFlags = [
     "--package=wordcraft-cli"
   ];
 
@@ -62,50 +79,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     patchelf
-    copyDesktopItems
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ai.storyteller.wordcraft";
-      desktopName = "WordCraft";
-      genericName = "Word Processor";
-      comment = "Write and design documents; open and save Word files";
-      exec = "wordcraft %F";
-      tryExec = "wordcraft";
-      icon = "ai.storyteller.wordcraft";
-      terminal = false;
-      startupNotify = true;
-      startupWMClass = "ai.storyteller.wordcraft";
-      categories = [
-        "Office"
-        "WordProcessor"
-      ];
-      keywords = [
-        "word"
-        "processor"
-        "document"
-        "docx"
-        "writer"
-        "text"
-        "letter"
-        "report"
-      ];
-      mimeTypes = [
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        "application/vnd.oasis.opendocument.text"
-        "application/rtf"
-        "text/markdown"
-        "text/x-tex"
-        "text/html"
-        "text/plain"
-      ];
-    })
-  ];
+  buildInputs = [ aws-lc ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/icons
     cp -R assets/app-icon/hicolor $out/share/icons/
+    install -Dm644 packaging/linux/ai.storyteller.wordcraft.desktop \
+      $out/share/applications/ai.storyteller.wordcraft.desktop
+    install -Dm644 packaging/linux/ai.storyteller.wordcraft.mime.xml \
+      $out/share/mime/packages/ai.storyteller.wordcraft.xml
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
