@@ -133,8 +133,7 @@ let
   # bintools-wrapper does for ld.  Invoking libgccjit doesn't mean starting an
   # executable so we can't do it with a shell script.  Without this, every
   # user of libgccjit would just have to pass in identical -B options
-  # themselves through gcc_jit_context_add_driver_option (cf. the
-  # native-comp-driver-options patch in pkgs/applications/editors/emacs).
+  # themselves through gcc_jit_context_add_driver_option.
   #
   # The driver also fails to find this derivation's own directories.
   # It locates its installation by relocating the configured prefix relative
