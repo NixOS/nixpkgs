@@ -942,8 +942,8 @@ in
       "sha256-igWmbkUqAiS+kCoH5DV72SaVD1eaX+70V1HcYnTGXfw=";
 
   mypy-boto3-neptunedata =
-    buildMypyBoto3Package "neptunedata" "1.43.0"
-      "sha256-rkVxsY4MQ+eB3uQhD3kI7bBpCHiDVcQDNUXA5zUyeok=";
+    buildMypyBoto3Package "neptunedata" "1.43.121"
+      "sha256-8SBHSeT7G+ClVImWjBMqy16cDOCY6N5FxXqCoUJTfwg=";
 
   mypy-boto3-network-firewall =
     buildMypyBoto3Package "network-firewall" "1.43.117"
