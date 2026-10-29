@@ -9,7 +9,6 @@
 
   # nativeBuildInputs
   installShellFiles,
-  makeBinaryWrapper,
 
   buildPackages,
   versionCheckHook,
@@ -35,10 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   cargoBuildFlags = [
     "--package"
@@ -48,22 +44,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Tests require python3
   doCheck = false;
 
-  postInstall =
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-      let
-        emulator = stdenv.hostPlatform.emulator buildPackages;
-      in
-      ''
-        installShellCompletion --cmd uv \
-          --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
-          --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
-          --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
-      ''
-    )
-    # uvx runs the uv next to it, so the wrapper also covers uvx.
-    + ''
-      wrapProgram $out/bin/uv --set-default UV_SYSTEM_CERTS 1
-    '';
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd uv \
+        --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+    ''
+  );
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
