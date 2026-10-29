@@ -8,7 +8,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-wdm";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jsenecal";
     repo = "netbox-wdm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wSW9nLqUIt+L4f8wlqX+Ox7rLnlqzRfQKpf44k+PhKE=";
+    hash = "sha256-3R0+cSL56W8tSC0w9pcVYwd1ODPlx4fFxxmCvi04o8A=";
   };
 
   build-system = [ setuptools ];
