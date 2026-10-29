@@ -72,6 +72,15 @@ stdenv.mkDerivation (finalAttrs: {
     # Nix-specific issue - CMake's package resolution doesn't pull in
     # private modules as a side effect of requesting the public one.
     ./find-qt-location-private.patch
+    # 5 files use QElapsedTimer without including it directly (it happens to
+    # come in transitively through some other Qt header on the Qt version
+    # upstream's CI uses, but not reliably - a real upstream bug, not
+    # Nix-specific). TODO: Upstream.
+    ./missing-qelapsedtimer-includes.patch
+    # getuid() is POSIX, declared in unistd.h, which main.cc never includes
+    # (another case of relying on transitive inclusion that doesn't hold
+    # here). TODO: Upstream.
+    ./missing-unistd-include.patch
   ];
 
   # Never let a vendored copy of a dependency's sources (checked into QGC's

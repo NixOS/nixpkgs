@@ -1,0 +1,15 @@
+diff --git a/src/main.cc b/src/main.cc
+index 1111111..2222222 100644
+--- a/src/main.cc
++++ b/src/main.cc
+@@ -14,6 +14,10 @@
+     #include <QtCore/QProcessEnvironment>
+ #endif
+ 
++#ifdef Q_OS_LINUX
++    #include <unistd.h>
++#endif
++
+ #include "QGCApplication.h"
+ #include "QGCLogging.h"
+ #include "CmdLineOptParser.h"
