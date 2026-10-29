@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   coreutils,
   setuptools,
   pbr,
@@ -19,19 +19,21 @@
   ddt,
   requests-mock,
 }:
-let
+
+buildPythonPackage (finalAttrs: {
   pname = "python-glanceclient";
   version = "4.13.0";
-in
-buildPythonPackage {
-  inherit pname version;
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "python_glanceclient";
-    inherit version;
-    hash = "sha256-+jNZvIvZPnrryjctr+yOGQA7TB9kSZ4uuCsncdqPpBw=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-glanceclient";
+    tag = finalAttrs.version;
+    hash = "sha256-5KwZ5XVosCUFObXaraVPWOO6ZdeMYWO+n2IsUwojFJg=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   postPatch = ''
     substituteInPlace glanceclient/tests/unit/v1/test_shell.py \
@@ -78,4 +80,4 @@ buildPythonPackage {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

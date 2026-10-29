@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cliff,
   fixtures,
   flit-core,
@@ -12,14 +12,16 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stestr";
   version = "4.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tgSVIl+ng0diUlcq3aKdM643BvlfwyVk94+058nl3yA=";
+  src = fetchFromGitHub {
+    owner = "mtreinish";
+    repo = "stestr";
+    tag = finalAttrs.version;
+    hash = "sha256-S3fsqVu+E6eEJT95Gwola1ArPyMw1eIQ7pFf1Vka5SE=";
   };
 
   build-system = [
@@ -51,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
