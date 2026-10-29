@@ -7,6 +7,7 @@
   stdenv,
   nixosTests,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -33,7 +34,10 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   # TestAuthSSOExchange
   __darwinAllowLocalNetworking = true;
