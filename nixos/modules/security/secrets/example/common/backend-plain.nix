@@ -8,7 +8,7 @@ let
   # Python writer directly. I guess this method shared the original Python
   # script derivation, but that might not be meaningful for such a small script.
   backendScript =
-    pkgs: command:
+    { pkgs, ... }: command:
     let
       backendJSONConfig = pkgs.writeText "plain.json" (
         builtins.toJSON {
@@ -60,11 +60,11 @@ in
   };
 
   config.secrets.backends.store.plain = {
-    get = pkgs: backendScript pkgs "get";
-    set = pkgs: backendScript pkgs "set";
-    list = pkgs: backendScript pkgs "list";
-    delete = pkgs: backendScript pkgs "delete";
-    deploy.local = pkgs: backendScript pkgs "deploy-local";
+    get = { pkgs, ... }: backendScript pkgs "get";
+    set = { pkgs, ... }: backendScript pkgs "set";
+    list = { pkgs, ... }: backendScript pkgs "list";
+    delete = { pkgs, ... }: backendScript pkgs "delete";
+    deploy.local = { pkgs, ... }: backendScript pkgs "deploy-local";
 
     fileModule =
       { secret, name, ... }:

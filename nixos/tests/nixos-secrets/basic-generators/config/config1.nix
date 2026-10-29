@@ -7,7 +7,7 @@
       prompts.name.description = "Your name";
       files.greeting = { };
       generate =
-        pkgs:
+        { pkgs, ... }:
         pkgs.writeShellScript "gen-greeting" ''
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
           echo "Hewwo $(cat "$prompts/name")!" > $out/greeting
@@ -18,7 +18,7 @@
       dependencies = [ "greeting" ];
       files.cow-greeting = { };
       generate =
-        pkgs:
+        { pkgs, ... }:
         pkgs.writeShellScript "gen-derived" ''
           export PATH="${
             lib.makeBinPath [

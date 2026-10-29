@@ -79,7 +79,7 @@ let
       null
     else
       let
-        forced = pkg pkgsHost';
+        forced = pkg { pkgs = pkgsHost'; };
         drv =
           if forced.type or null == "derivation" then
             forced

@@ -16,7 +16,7 @@ Unlike prompt backends, store backends must provide a number of different script
 ```nix
 {
   secrets.backends.store.plain.get =
-    pkgs:
+    { pkgs, ... }:
     pkgs.writeScript "secrets-plain-get" ''
       #!/bin/sh
       export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
@@ -32,7 +32,7 @@ The `set` script, on the other hand, is mandatory. As with the `get` script, the
 ```nix
 {
   secrets.backends.store.plain.set =
-    pkgs:
+    { pkgs, ... }:
     pkgs.writeScript "secrets-plain-set" ''
       #!/bin/sh
       export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"

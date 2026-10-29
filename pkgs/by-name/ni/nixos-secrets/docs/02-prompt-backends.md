@@ -15,7 +15,7 @@ A very simple prompt backend would look something like this:
 ```nix
 {
   secrets.backends.prompt.simple.ask =
-    pkgs:
+    { pkgs, ... }:
     pkgs.writeScript "simple-prompt" ''
       #!/bin/sh
       export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"

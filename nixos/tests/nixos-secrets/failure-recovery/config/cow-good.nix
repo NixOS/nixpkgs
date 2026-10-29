@@ -4,7 +4,7 @@
     dependencies = [ "greeting" ];
     files.cow-greeting = { };
     generate =
-      pkgs:
+      { pkgs, ... }:
       pkgs.writeShellScript "gen-derived" ''
         export PATH="${
           lib.makeBinPath [

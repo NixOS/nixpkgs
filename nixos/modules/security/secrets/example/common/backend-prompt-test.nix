@@ -17,7 +17,7 @@ in
   };
 
   config.secrets.backends.prompt.test.ask =
-    pkgs:
+    { pkgs, ... }:
     pkgs.writeShellScript "prompt-test" ''
       export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
       cp ${cfg.inputDirectory}/"$1"/"$2" "$out"

@@ -4,7 +4,7 @@
   nodes.machine =
     { pkgs, ... }:
     {
-      nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
+      nix.nix-path = [ "nixpkgs=${pkgs.path}" ];
       environment.etc."nixos".source = ./config;
 
       environment.systemPackages = [ pkgs.nixos-secrets ];

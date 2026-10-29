@@ -25,7 +25,7 @@ Here's how a basic secret declaration might look like:
     backend = "plain";
     files.greeting = { };
     generate =
-      pkgs:
+      { pkgs, ... }:
       pkgs.writeScript "gen-user" ''
         #!/bin/sh
         echo "Hewwo world!" > "$out/greeting"
@@ -50,7 +50,7 @@ When the secret at hand contains a single file, the generator script can also wr
     backend = "plain";
     files.greeting = { };
     generate =
-      pkgs:
+      { pkgs, ... }:
       pkgs.writeScript "gen-user" ''
         #!/bin/sh
         echo "Hewwo world!" > "$out"
@@ -93,7 +93,7 @@ Secrets can depend on other secrets. The inputs for a given secret are available
     dependencies = [ "user" ];
     files.cow-greeting = { };
     generate =
-      pkgs:
+      { pkgs, ... }:
       pkgs.writeScript "gen-derived" ''
         #!/bin/sh
         export PATH="${
@@ -172,7 +172,7 @@ It is often useful for generators to allow human (or otherwise external) input. 
     files.greeting = { };
 
     generate =
-      pkgs:
+      { pkgs, ... }:
       pkgs.writeScript "gen-user" ''
         #!/bin/sh
         export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"

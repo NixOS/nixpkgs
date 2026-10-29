@@ -2,7 +2,7 @@
 { lib, ... }:
 {
   secrets.backends.prompt.simple.ask =
-    pkgs:
+    { pkgs, ... }:
     pkgs.writeShellScript "prompt-simple" ''
       export PATH="${lib.makeBinPath [ pkgs.coreutils ]}:$PATH"
       out=''${out:?} # Make shellcheck happy

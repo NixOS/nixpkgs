@@ -51,7 +51,7 @@ let
   # Python writer directly. I guess this method shared the original Python
   # script derivation, but that might not be meaningful for such a small script.
   ageScript =
-    pkgs: command:
+    { pkgs, ... }: command:
     let
       ageJSONConfig = pkgs.writeText "age.json" (builtins.toJSON ageNixConfig);
       scriptSource = builtins.readFile ./backend-age.py;
@@ -80,7 +80,7 @@ in
   options.secrets.settings.store.age = {
     package = lib.mkOption {
       type = lib.types.functionTo lib.types.pathInStore;
-      default = pkgs: pkgs.age;
+      default = { pkgs, ... }: pkgs.age;
       description = "The package to use for the 'age' CLI";
     };
 
@@ -174,12 +174,12 @@ in
   };
 
   config.secrets.backends.store.age = {
-    get = pkgs: ageScript pkgs "get";
-    set = pkgs: ageScript pkgs "set";
-    list = pkgs: ageScript pkgs "list";
-    delete = pkgs: ageScript pkgs "delete";
-    fixup = pkgs: ageScript pkgs "fixup";
-    deploy.local = pkgs: ageScript pkgs "deploy-local";
+    get = { pkgs, ... }: ageScript pkgs "get";
+    set = { pkgs, ... }: ageScript pkgs "set";
+    list = { pkgs, ... }: ageScript pkgs "list";
+    delete = { pkgs, ... }: ageScript pkgs "delete";
+    fixup = { pkgs, ... }: ageScript pkgs "fixup";
+    deploy.local = { pkgs, ... }: ageScript pkgs "deploy-local";
 
     # Python is not guaranteed to be installed on the target system. We
     # therefore write the portion of the script that runs on said system as a
@@ -188,7 +188,7 @@ in
     # is a reasonable assumption to make (at least for an example
     # implementation).
     deploy.remote = lib.mkIf (cfg.ssh.target != null) (
-      pkgs:
+      { pkgs, ... }:
       pkgs.writeShellScript "deploy-remote" ''
         set -euo pipefail
         ${ageScript pkgs "deploy"} | ssh "${cfg.ssh.target}" -i "${cfg.ssh.identity}" '
