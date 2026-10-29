@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lcn-frontend";
   version = "0.2.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lcn_frontend";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-JQcnfBqwlDp31XRg2yBG9HZ8j4avxp57Qa3gBqT+67I=";
   };
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/alengwenus/lcn-frontend/releases/tag/${version}";
+    changelog = "https://github.com/alengwenus/lcn-frontend/releases/tag/${finalAttrs.version}";
     description = "LCN panel for Home Assistant";
     homepage = "https://github.com/alengwenus/lcn-frontend";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

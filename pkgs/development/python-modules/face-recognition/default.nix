@@ -16,14 +16,14 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "face-recognition";
   version = "1.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "face_recognition";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Xl790WhqpWavDTzBMTsTHksZdleo/9A2aebT+tknBew=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     description = "World's simplest facial recognition api for Python and the command line";
   };
-}
+})

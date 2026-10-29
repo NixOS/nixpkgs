@@ -22,7 +22,7 @@ let
     hash = "sha256-cg6Y3i2p9VQK3gDfNEyuvC8Ou01YuqItnu82V0+N2z4=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jpylyzer";
   version = "2.3.0b2";
   format = "setuptools";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openpreserve";
     repo = "jpylyzer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-FTkkti7NSw/pF9BH1sAKcwDbA5M8oX4Ii4+oFTUsQiE=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

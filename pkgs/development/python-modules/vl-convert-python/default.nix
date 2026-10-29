@@ -9,7 +9,7 @@
   librusty_v8 ? callPackage ./librusty_v8.nix { },
   nix-update-script,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vl-convert-python";
   version = "1.9.0";
   pyproject = true;
@@ -17,14 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vl-convert";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W23cau2VzpvfO6DRa/40UVv4j8AbsNLfAfDaMkTyj6w=";
   };
 
   patches = [ ./libffi-sys-system-feature.patch ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-P228JMS5K0TbZYyPgKhIbZ1NviwO1jHO5dClFYerNbI=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     description = "Utilities for converting Vega-Lite specs from the command line and Python";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/vega/vl-convert";
-    changelog = "https://github.com/vega/vl-convert/releases/tag/v${version}";
+    changelog = "https://github.com/vega/vl-convert/releases/tag/v${finalAttrs.version}";
     maintainers = [ ];
   };
-}
+})

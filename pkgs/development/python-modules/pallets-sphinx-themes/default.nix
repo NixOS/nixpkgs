@@ -8,7 +8,7 @@
   sphinx-notfound-page,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pallets-sphinx-themes";
   version = "2.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "pallets-sphinx-themes";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+etmWzjCiYbM8cHSnJr0tHs3DpvozNYShQ6x60UADS4=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

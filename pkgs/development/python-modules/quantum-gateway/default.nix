@@ -9,7 +9,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quantum-gateway";
   version = "0.0.8";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cisasteelersfan";
     repo = "quantum_gateway";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jwLfth+UaisPR0p+UHfm6qMXT2eSYWnsYEp0BqyeI9U=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

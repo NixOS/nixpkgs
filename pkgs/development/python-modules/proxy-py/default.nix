@@ -20,7 +20,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proxy-py";
   version = "2.4.10";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abhinavsingh";
     repo = "proxy.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-47Qt8J60QFfHUSquD17xMfl+wBTsSimaPSRvS/sSPMI=";
   };
 
@@ -85,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
-    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/${src.tag}";
+    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

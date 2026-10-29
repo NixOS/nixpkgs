@@ -6,14 +6,13 @@
   netpbm,
 }:
 
-buildPythonPackage rec {
-
+buildPythonPackage (finalAttrs: {
   pname = "pnglatex";
   version = "1.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CZUGDUkmttO0BzFYbGFSNMPkWzFC/BW4NmAeOwz4Y9M=";
   };
 
@@ -32,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

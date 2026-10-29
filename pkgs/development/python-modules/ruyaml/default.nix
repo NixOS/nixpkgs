@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruyaml";
   version = "0.91.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "ruyaml";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A37L/voBrn2aZ7xT8+bWdZJxbWRjnxbstQtSyUeN1sA=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "YAML 1.2 loader/dumper package for Python";
     homepage = "https://ruyaml.readthedocs.io/";
-    changelog = "https://github.com/pycontribs/ruyaml/releases/tag/v${version}";
+    changelog = "https://github.com/pycontribs/ruyaml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

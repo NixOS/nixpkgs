@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simplemma";
   version = "1.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "simplemma";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VT6+wjyrHLquccnZpDTow7omDqeqlfbrdW3fozo/biU=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

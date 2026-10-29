@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "md-tangle";
   version = "2.1.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joakimmj";
     repo = "md-tangle";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3lHPYfIXfS/iilY2ZW/EOKiI1hkRWaDoqbxSmntsZNo=";
   };
 
@@ -32,4 +32,4 @@ python3.pkgs.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

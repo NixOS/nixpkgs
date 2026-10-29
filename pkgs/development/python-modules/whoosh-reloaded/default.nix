@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whoosh-reloaded";
   version = "2.7.5";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Sygil-Dev";
     repo = "whoosh-reloaded";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-frM8tw298Yz3u3rLK4CxWUXL6ymCSwYyYhXP/EdyjtQ=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

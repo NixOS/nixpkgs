@@ -7,14 +7,14 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "twmn";
   version = "2025_10_23";
 
   src = fetchFromGitHub {
     owner = "sboli";
     repo = "twmn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/yQtwoolGhtn19I+vus27OjaZgXXfhnWKQi+rUMozCY=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.matejc ];
     license = lib.licenses.lgpl3;
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "gtop";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "aksakalli";
     repo = "gtop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FKbaUV28d0JH9tmTSJBFYQrM5iensnIpcXUFFvXDMe4=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ tfc ];
     mainProgram = "gtop";
   };
-}
+})

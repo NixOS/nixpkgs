@@ -5,14 +5,14 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bully";
   version = "1.4-00";
 
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "bully";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1n2754a5z44g414a0hj3cmi9q5lwnzyvmvzskrj2nci8c8m2kgnf";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   installPhase = ''
     install -Dm555 -t $out/bin bully
-    install -Dm444 -t $out/share/doc/${pname} ../*.md
+    install -Dm444 -t $out/share/doc/${finalAttrs.pname} ../*.md
   '';
 
   meta = {
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "bully";
   };
-}
+})

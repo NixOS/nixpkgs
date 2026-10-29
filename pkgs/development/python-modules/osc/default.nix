@@ -11,7 +11,7 @@
   ruamel-yaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osc";
   version = "1.28.0";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Ti+645MnUlfdBLNlwNzADkZKIgo25GaHfcK7oxN2z9w=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.gpl2;
   };
-}
+})

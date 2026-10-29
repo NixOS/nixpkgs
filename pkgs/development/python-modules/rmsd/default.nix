@@ -8,13 +8,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rmsd";
   version = "1.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VQz+mnootttCRJEcMA8Yx7VzmWCcdgHHSVkJ3JZXIX0=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
       markuskowa
     ];
   };
-}
+})

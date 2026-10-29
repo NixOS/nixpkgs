@@ -9,14 +9,14 @@
   aria2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kiwix";
   version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = "kiwix-desktop";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-oF2bXmb6oBXNUj91WtuDTWGrwB5JCuzBtuhfDBHIIKA=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ greg ];
   };
-}
+})

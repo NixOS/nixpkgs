@@ -16,7 +16,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiojellyfin";
   version = "0.14.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiojellyfin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C2jIP2q+1z6iQoK18jRVaFKXtxyF1RXZMtXWakx7qO0=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "";
     homepage = "https://github.com/Jc2k/aiojellyfin";
-    changelog = "https://github.com/Jc2k/aiojellyfin/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Jc2k/aiojellyfin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

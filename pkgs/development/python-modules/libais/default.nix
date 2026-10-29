@@ -7,13 +7,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libais";
   version = "0.17";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6yrqIpjF6XaSfXSOTA0B4f3aLcHXkgA/3WBZBBNQ018=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyspx";
   version = "0.5.2";
   pyproject = true;
@@ -15,14 +15,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphincs";
     repo = "pyspx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hMZ7JZoo5RdUwQYpGjtZznH/O6rBUXv+svfOAI0cjqs=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'version="0.5.0"' 'version="${version}"'
+      --replace-fail 'version="0.5.0"' 'version="${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for SPHINCS";
     homepage = "https://github.com/sphincs/pyspx";
-    changelog = "https://github.com/sphincs/pyspx/releases/tag/v${version}";
+    changelog = "https://github.com/sphincs/pyspx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

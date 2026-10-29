@@ -12,13 +12,13 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "towncrier";
   version = "26.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-rOkDFjHHGMwHCRB7h1Xm4xNQ64rNyHevQ98xd63bmlU=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
   meta = {
     description = "Utility to produce useful, summarised news files";
     homepage = "https://github.com/twisted/towncrier/";
-    changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/twisted/towncrier/blob/${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "towncrier";
   };
-}
+})

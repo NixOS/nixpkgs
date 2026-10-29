@@ -6,7 +6,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "open-garage";
   version = "0.3.1";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyOpenGarage";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-b+UHfVlamhRU2VIT7VT8nh+y6bQYowaTESXkHX414Fk=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

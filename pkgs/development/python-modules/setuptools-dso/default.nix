@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-dso";
   version = "2.12.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "epics-base";
     repo = "setuptools_dso";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-M2Gca1QA9fuSvnzKLqY/RaN+NBRAiThl0tkdMbrhGVo=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

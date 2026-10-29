@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "maizzle";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "maizzle";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Nzl4Pp1jY+LaQgLDJHjEdDA8b6MOfMXZNpvazPdmrTA=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     mainProgram = "maizzle";
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

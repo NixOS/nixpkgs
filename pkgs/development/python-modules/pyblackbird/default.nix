@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyblackbird";
   version = "0.10";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koolsb";
     repo = "pyblackbird";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0XkHSRLHKAaem9qMr4Qac1YA2txci/SDgA0kfXMeiM0=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation for Monoprice Blackbird units";
     homepage = "https://github.com/koolsb/pyblackbird";
-    changelog = "https://github.com/koolsb/pyblackbird/releases/tag/${version}";
+    changelog = "https://github.com/koolsb/pyblackbird/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

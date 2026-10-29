@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "apcupsd-exporter";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "apcupsd_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-c0LsUqpJbmWQmbmSGdEy7Bbk20my6iWNLeqtU5BjYlw=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
       mdlayher
     ];
   };
-}
+})

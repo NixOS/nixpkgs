@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "home-assistant-bluetooth";
   version = "2.0.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "home-assistant-bluetooth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A29Jezj9kQ/v4irvpcpCiZlrNQBQwByrSJOx4HaXTdc=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Basic bluetooth models used by Home Assistant";
-    changelog = "https://github.com/home-assistant-libs/home-assistant-bluetooth/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant-libs/home-assistant-bluetooth/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/home-assistant-libs/home-assistant-bluetooth";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

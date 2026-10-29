@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "oauth2-proxy";
   version = "7.15.5";
 
@@ -13,13 +13,15 @@ buildGoModule rec {
     repo = "oauth2-proxy";
     owner = "oauth2-proxy";
     sha256 = "sha256-X63Bea/0ZiyqbNt6B+3J//dGkAmbT1Qon9hCsGJEVqo=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
   };
 
   vendorHash = "sha256-tgSu/YWL+cvsTs9QUo157dfVIZkPoyux4rgvhMvflMY=";
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
-  ldflags = [ "-X github.com/oauth2-proxy/oauth2-proxy/v7/pkg/version.VERSION=v${version}" ];
+  ldflags = [
+    "-X github.com/oauth2-proxy/oauth2-proxy/v7/pkg/version.VERSION=v${finalAttrs.version}"
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -33,4 +35,4 @@ buildGoModule rec {
       swarsel
     ];
   };
-}
+})

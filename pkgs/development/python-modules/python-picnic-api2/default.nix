@@ -10,7 +10,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-picnic-api2";
   version = "2.0.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "codesalatdev";
     repo = "python-picnic-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ft/OEXkiXfsX1Kyi47PzycHk19jEIwYqyG+KP8q8x0I=";
   };
 
@@ -45,10 +45,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/codesalatdev/python-picnic-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/codesalatdev/python-picnic-api/releases/tag/${finalAttrs.src.tag}";
     description = "Fork of the Unofficial Python wrapper for the Picnic API";
     homepage = "https://github.com/codesalatdev/python-picnic-api";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

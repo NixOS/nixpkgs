@@ -3,14 +3,14 @@
   buildNpmPackage,
   fetchFromGitHub,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "mailsy";
   version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "BalliAsghar";
     repo = "Mailsy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-RnOWvu023SOcN83xEEkYFwgDasOmkMwSzJ/QYjvTBDo=";
   };
 
@@ -33,4 +33,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers._404wolf ];
   };
-}
+})

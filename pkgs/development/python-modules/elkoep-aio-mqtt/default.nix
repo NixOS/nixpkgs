@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elkoep-aio-mqtt";
   version = "0.1.0.beta.4";
   pyproject = true;
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for iNELS mqtt protocol";
     homepage = "https://github.com/epdevlab/elkoep-aio-mqtt";
-    changelog = "https://github.com/epdevlab/elkoep-aio-mqtt/releases/tag/${src.tag}";
+    changelog = "https://github.com/epdevlab/elkoep-aio-mqtt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

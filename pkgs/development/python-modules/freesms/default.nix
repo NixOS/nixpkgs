@@ -8,7 +8,7 @@
   httmock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "freesms";
   version = "0.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bfontaine";
     repo = "freesms";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5f5amXH6VVppX9/9DhILdBU8w/6n67EUgBy/zgTEUCM=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for Free Mobile SMS API";
     homepage = "https://github.com/bfontaine/freesms";
-    changelog = "https://github.com/bfontaine/freesms/releases/tag/v${version}";
+    changelog = "https://github.com/bfontaine/freesms/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

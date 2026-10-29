@@ -5,12 +5,12 @@
   protobuf,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protoc-gen-rust";
   version = "3.5.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "protobuf-codegen";
     hash = "sha256-yGZ4auZHGtcsN6n4/FEzabsSXproyhNTJHIwujt7ijg=";
   };
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--bin"
-    pname
+    finalAttrs.pname
   ];
 
   nativeBuildInputs = [ protobuf ];
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

@@ -6,13 +6,13 @@
   tls-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openaiauth";
   version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "OpenAIAuth";
     hash = "sha256-9SrptiheiM5s9YI6Ht68ahDGMFADWfBQgAWUBY3EEJ8=";
   };
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for authenticating with the OpenAI API";
     homepage = "https://github.com/acheong08/OpenAIAuth";
-    changelog = "https://github.com/acheong08/OpenAIAuth/releases/tag/${version}";
+    changelog = "https://github.com/acheong08/OpenAIAuth/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ logger ];
   };
-}
+})

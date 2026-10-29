@@ -8,14 +8,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openstep-plist";
   version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "openstep_plist";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Kg1w/3oDzOZKcnBitkuy9cmvn9SmNqqkM5tqqiz2UZU=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "openstep_plist" ];
 
   meta = {
-    changelog = "https://github.com/fonttools/openstep-plist/releases/tag/v${version}";
+    changelog = "https://github.com/fonttools/openstep-plist/releases/tag/v${finalAttrs.version}";
     description = "Parser for the 'old style' OpenStep property list format also known as ASCII plist";
     homepage = "https://github.com/fonttools/openstep-plist";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

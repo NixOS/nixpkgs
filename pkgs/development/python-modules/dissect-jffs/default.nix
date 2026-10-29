@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-jffs";
   version = "1.6";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.jffs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yzEaOVP4QOQD24cxy+GKS0mQRvYD4GcPwYydwrzFqXs=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for the JFFS2 file system";
     homepage = "https://github.com/fox-it/dissect.jffs";
-    changelog = "https://github.com/fox-it/dissect.jffs/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.jffs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

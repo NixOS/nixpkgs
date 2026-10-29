@@ -9,13 +9,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langcodes";
   version = "3.5.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-QL/zFeAbAdEcKuOSjdT1y9dN04+b2RLBK5o2BsFD9zE=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/georgkrause/langcodes";
     license = lib.licenses.mit;
   };
-}
+})

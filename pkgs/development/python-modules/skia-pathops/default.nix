@@ -15,14 +15,14 @@
   xcodebuild,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skia-pathops";
   version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "skia_pathops";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-S22EWfb0ppKCyyb8oMK7CzIcxYqb+cxleaUqOR7cAxk=";
   };
 
@@ -69,4 +69,4 @@ buildPythonPackage rec {
     # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.
     broken = isPyPy;
   };
-}
+})

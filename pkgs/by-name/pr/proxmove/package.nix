@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "proxmove";
   version = "1.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ossobv";
     repo = "proxmove";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8xzsmQsogoMrdpf8+mVZRWPGQt9BO0dBT0aKt7ygUe4=";
   };
 
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   checkPhase = ''
     runHook preCheck
 
-    $out/bin/${pname} --version
+    $out/bin/${finalAttrs.pname} --version
 
     runHook postCheck
   '';
@@ -45,4 +45,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ AngryAnt ];
   };
-}
+})

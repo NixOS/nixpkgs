@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot-dns-ovh";
   pyproject = true;
 
   inherit (certbot) src version;
 
-  sourceRoot = "${src.name}/certbot-dns-ovh";
+  sourceRoot = "${finalAttrs.src.name}/certbot-dns-ovh";
 
   build-system = [ setuptools ];
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
   meta = certbot.meta // {
     description = "OVH DNS Authenticator plugin for Certbot";
   };
-}
+})

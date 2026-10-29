@@ -14,7 +14,7 @@
   ruamel-yaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "construct-typing";
   version = "0.7.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timrid";
     repo = "construct-typing";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iiMnt/f1ppciL6AVq3q0wOtoARcNYJycQA5Ev+dIow8=";
   };
 
@@ -50,10 +50,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/timrid/construct-typing/releases/tag/v${version}";
+    changelog = "https://github.com/timrid/construct-typing/releases/tag/v${finalAttrs.version}";
     description = "Extension for the python package 'construct' that adds typing features";
     homepage = "https://github.com/timrid/construct-typing";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

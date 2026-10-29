@@ -9,7 +9,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-trio";
   version = "0.8.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "pytest-trio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gUH35Yk/pBD2EdCEt8D0XQKWU8BwmX5xtAW10qRhoYk=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

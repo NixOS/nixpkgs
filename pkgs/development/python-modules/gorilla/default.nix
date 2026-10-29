@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gorilla";
   version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AFq4hTsDcWKnx3u4JGBMbggYeO4DwJrQHvQXRIVgGdM=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Convenient approach to monkey patching";
     homepage = "https://github.com/christophercrouzet/gorilla";
-    changelog = "https://github.com/christophercrouzet/gorilla/releases/tag/v${version}";
+    changelog = "https://github.com/christophercrouzet/gorilla/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

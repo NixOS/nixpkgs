@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   # NOTE that this is not https://pypi.org/project/yakh/
   pname = "python-yakh";
   version = "0.4.2";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petereon";
     repo = "yakh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-r+vDwiFnMJ+C4DhsbVhcKzVhAbFqDkRaaLcmuyN2XBY=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

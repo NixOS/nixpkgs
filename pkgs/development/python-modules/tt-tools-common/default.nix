@@ -15,7 +15,7 @@
   pydantic,
   setuptools-scm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tt-tools-common";
   version = "1.6.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-tools-common";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xy1UxETmuuqDmZYf67+qx8Yr8tWQ6VKmjb3md8IaInE=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     license = lib.licenses.asl20;
   };
-}
+})

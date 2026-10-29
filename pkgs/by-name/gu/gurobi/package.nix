@@ -14,12 +14,12 @@ let
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gurobi";
   version = "13.0.3";
 
   src = fetchurl {
-    url = "https://packages.gurobi.com/${lib.versions.majorMinor version}/gurobi${version}_${platform}.tar.gz";
+    url = "https://packages.gurobi.com/${lib.versions.majorMinor finalAttrs.version}/gurobi${finalAttrs.version}_${platform}.tar.gz";
     hash =
       {
         aarch64-linux = "sha256-8Hlw047emSVkhHXat1K3qBwvIYVHknc0QLgfIZ0aMiQ=";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  sourceRoot = "gurobi${builtins.replaceStrings [ "." ] [ "" ] version}/${platform}";
+  sourceRoot = "gurobi${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}/${platform}";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.libSuffix = lib.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version);
+  passthru.libSuffix = lib.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor finalAttrs.version);
 
   meta = {
     description = "Optimization solver for mathematical programming";
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

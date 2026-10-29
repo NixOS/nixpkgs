@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numba-scipy";
   version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RDZF1mNcZnrcOzjQpjbZq8yXHnjeLAeAjYmvzXvFhEQ=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ Etjean ];
   };
-}
+})

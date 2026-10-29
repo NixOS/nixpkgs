@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "grunt-cli";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "gruntjs";
     repo = "grunt-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t1J6JLrY2H6ND/T2sl/3/6BZf4nFbUJs1dYvknRbs5s=";
   };
 
@@ -30,4 +30,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "grunt";
   };
-}
+})

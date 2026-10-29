@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fpdf";
   version = "1.7.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ElhAeDKJ59ElUrHoaraSw3Mi56ZblqmeDqhsygQbZ3k=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ ];
   };
-}
+})

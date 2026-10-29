@@ -7,18 +7,18 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdftoipe";
   version = "7.2.29.2";
 
   src = fetchFromGitHub {
     owner = "otfried";
     repo = "ipe-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BLZKOq7/3QSuwR0yjrDiiIh9N93qk8ihbEPIQ2h+Ffc=";
   };
 
-  sourceRoot = "${src.name}/pdftoipe";
+  sourceRoot = "${finalAttrs.src.name}/pdftoipe";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yrd ];
     mainProgram = "pdftoipe";
   };
-}
+})

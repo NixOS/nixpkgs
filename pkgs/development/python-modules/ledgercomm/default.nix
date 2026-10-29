@@ -6,13 +6,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ledgercomm";
   version = "1.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AVz8BfFrjFn4zB2fwLiTWSPx/MOAbTPutrDgVbRPWpE=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/LedgerHQ/ledgercomm";
     license = lib.licenses.mit;
   };
-}
+})

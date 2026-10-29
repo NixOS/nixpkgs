@@ -34,14 +34,14 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     pname = "tela-circle-icon-theme";
     version = "2026-07-07";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "tela-circle-icon-theme";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-0P4KLwrBPsLMaSdaq06dUe8E1qFoGLlMbWxZ89GebKE=";
     };
 
@@ -92,4 +92,4 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
       platforms = lib.platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
       maintainers = with lib.maintainers; [ romildo ];
     };
-  }
+  })

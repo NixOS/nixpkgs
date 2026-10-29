@@ -13,14 +13,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-bigquery-storage";
   version = "2.36.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_storage";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-08HOnS06TXEWJZiJ3L48fHBQb3H2zmu+VKoKaLu6j48=";
   };
 
@@ -64,9 +64,9 @@ buildPythonPackage rec {
   meta = {
     description = "BigQuery Storage API API client library";
     homepage = "https://docs.cloud.google.com/bigquery/docs/reference/storage";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-storage-v${version}/packages/google-cloud-bigquery-storage/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-storage-v${finalAttrs.version}/packages/google-cloud-bigquery-storage/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "fixup_bigquery_storage_v1_keywords.py";
   };
-}
+})

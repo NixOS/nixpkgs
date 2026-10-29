@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gdata";
   version = "2.0.18";
   format = "setuptools";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gdata-python-client/${pname}-${version}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gdata-python-client/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-VufSLegZwisTzrD+GGlym0KH+J671LtVOA17z2Gh/bY=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     description = "Python client library for Google data APIs";
     license = lib.licenses.asl20;
   };
-}
+})

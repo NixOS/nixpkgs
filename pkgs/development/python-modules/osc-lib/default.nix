@@ -16,7 +16,7 @@
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osc-lib";
   version = "4.7.0";
   pyproject = true;
@@ -24,11 +24,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GVjzDPmASEItGsZCjH+tjgP8bRf5WgEOoDr+uOhQtws=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -77,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

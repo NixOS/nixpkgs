@@ -10,14 +10,14 @@
   sip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqtchart";
   version = "5.15.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "PyQtChart";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-vJ8dJscl6CCw//jbbpBuiyhhKKFLOpjFmgzQw9mSQJU=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ panicgh ];
   };
-}
+})

@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymilter";
   version = "1.0.6";
   pyproject = true;
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdgathman";
     repo = "pymilter";
-    tag = "pymilter-${version}";
+    tag = "pymilter-${finalAttrs.version}";
     hash = "sha256-plaWXwDAIsVzEtrabZuZj7T4WNfz2ntQHgcMCVf5S70=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version = '1.0.5'" "version = '${version}'"
+      --replace-fail "version = '1.0.5'" "version = '${finalAttrs.version}'"
   '';
 
   build-system = [
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ yorickvp ];
     license = lib.licenses.gpl2;
   };
-}
+})

@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-shared-session-scope";
   version = "0.5.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StefanBRas";
     repo = "pytest-shared-session-scope";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IPTktwOJhzoC7/gPgMVwbLCkRuhbPf90m23yznqHha4=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_shared_session_scope" ];
 
   meta = {
-    changelog = "https://github.com/StefanBRas/pytest-shared-session-scope/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/StefanBRas/pytest-shared-session-scope/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Pytest session-scoped fixture that works with xdist";
     homepage = "https://pypi.org/project/pytest-shared-session-scope/";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

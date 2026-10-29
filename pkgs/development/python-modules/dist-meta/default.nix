@@ -8,14 +8,14 @@
   hatch-requirements-txt,
   packaging,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dist-meta";
   version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "dist_meta";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+hbr1VdHRKCVlqs0IIOhHXIJ2NBc8yiR0cmFvn7Ay9c=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };
-}
+})

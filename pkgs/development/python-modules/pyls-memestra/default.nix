@@ -9,7 +9,7 @@
   python-lsp-server,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyls-memestra";
   version = "0.0.16";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "pyls-memestra";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-C1d2BibjpoZCPSy39PkdcLiLIwZZG+XTDWXVjTT1Bws=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -34,7 +34,7 @@ let
     )
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ffado";
   version = "2.5.0";
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.ffado.org/files/libffado-${version}.tgz";
+    url = "https://www.ffado.org/files/libffado-${finalAttrs.version}.tgz";
     hash = "sha256-JcEtk9U5iPPK+ZZSNu03nxZ6vePqTMYzsTTuYlTYfKE=";
   };
 
@@ -131,4 +131,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

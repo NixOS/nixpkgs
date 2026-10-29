@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "symbex";
   version = "2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "symbex";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-swg98z4DpQJ5rq7tdsd3FofbYF7O5S+9ZR0weoM2DoI=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Find the Python code for specified symbols";
     homepage = "https://github.com/simonw/symbex";
-    changelog = "https://github.com/simonw/symbex/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/symbex/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

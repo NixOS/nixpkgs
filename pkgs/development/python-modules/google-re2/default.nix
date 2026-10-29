@@ -7,14 +7,14 @@
   re2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-re2";
   version = "1.1.20251105";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_re2";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-HbFKKS7oMDuR6R58N+BawX08Rn8pQWx5rHCni+PmW9o=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ alexbakker ];
   };
-}
+})

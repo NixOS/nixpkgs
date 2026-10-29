@@ -6,14 +6,14 @@
   botocore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aws-error-utils";
   version = "2.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aws_error_utils";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-BxB68qLCZwbNlSW3/77UPy0HtQ0n45+ekVbBGy6ZPJc=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cterence ];
   };
-}
+})

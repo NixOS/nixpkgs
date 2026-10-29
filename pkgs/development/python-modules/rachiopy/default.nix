@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rachiopy";
   version = "1.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rfverbruggen";
     repo = "rachiopy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PsdEXNy8vUxba/C00ARhLTQU9gMlChy9XdU20r+Maus=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for Rachio Irrigation controller";
     homepage = "https://github.com/rfverbruggen/rachiopy";
-    changelog = "https://github.com/rfverbruggen/rachiopy/releases/tag/${version}";
+    changelog = "https://github.com/rfverbruggen/rachiopy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

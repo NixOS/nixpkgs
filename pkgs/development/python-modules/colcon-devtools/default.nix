@@ -14,7 +14,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colcon-devtools";
   version = "0.3.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-devtools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QBkShQ58QHhYtlKtYaj9/Zs8KMy/Cw55lJHM16uNoxI=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

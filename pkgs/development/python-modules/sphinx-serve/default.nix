@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-serve";
   version = "1.0.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jZD2WVEUEIUAsfk10/TQe/UZJ4PGfOg/lE7yiQmWack=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ FlorianFranzen ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -6,14 +6,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scalingo";
   version = "1.51.0";
 
   src = fetchFromGitHub {
     owner = "scalingo";
     repo = "cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5E8ktzM2Bds+FHU6HNGcczC/Aefp7asPNBtxYQCiEIg=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ cimm ];
     platforms = with lib.platforms; unix;
   };
-}
+})

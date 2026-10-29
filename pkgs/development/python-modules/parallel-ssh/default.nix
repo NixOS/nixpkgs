@@ -9,7 +9,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parallel-ssh";
   version = "2.16.0.post1";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ParallelSSH";
     repo = "parallel-ssh";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jwigzgW94pYkSfYbmyIg776DcML6zH5nYKK1aFs68j8=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous parallel SSH client library";
     homepage = "https://github.com/ParallelSSH/parallel-ssh";
-    changelog = "https://github.com/ParallelSSH/parallel-ssh/blob/${src.tag}/Changelog.rst";
+    changelog = "https://github.com/ParallelSSH/parallel-ssh/blob/${finalAttrs.src.tag}/Changelog.rst";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ infinidoge ];
   };
-}
+})

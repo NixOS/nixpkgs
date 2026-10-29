@@ -16,7 +16,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-pydantic-field";
   version = "0.5.6";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "surenkov";
     repo = "django-pydantic-field";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GZ7yPUNSgvjxgyd77GSPLyeFzcSVIVUjyinabKoLsHw=";
   };
 
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/surenkov/django-pydantic-field/releases/tag/${src.tag}";
+    changelog = "https://github.com/surenkov/django-pydantic-field/releases/tag/${finalAttrs.src.tag}";
     description = "Django JSONField with Pydantic models as a Schema";
     homepage = "https://github.com/surenkov/django-pydantic-field";
     maintainers = with lib.maintainers; [ kiara ];
     license = lib.licenses.mit;
   };
-}
+})

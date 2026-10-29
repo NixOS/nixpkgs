@@ -13,13 +13,13 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rnginline";
   version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JWqzs+OqOynIAWYVgGrZiuiCqObAgGe6rBt0DcP3U6E=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library and command-line tool for loading multi-file RELAX NG schemas from arbitrary URLs, and flattening them into a single RELAX NG schema";
     homepage = "https://github.com/h4l/rnginline";
-    changelog = "https://github.com/h4l/rnginline/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/h4l/rnginline/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lesuisse ];
   };
-}
+})

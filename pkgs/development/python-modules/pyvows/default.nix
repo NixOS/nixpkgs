@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvows";
   version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyVows";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-2+4umWLNkbFlCpfFwX0FA2N0zOZhst/YM4ozBfXoaMI=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ joachimschmidt557 ];
   };
-}
+})

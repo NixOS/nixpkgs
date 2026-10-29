@@ -19,7 +19,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (catboost)
     pname
     version
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     ;
   pyproject = true;
 
-  sourceRoot = "${src.name}/catboost/python-package";
+  sourceRoot = "${finalAttrs.src.name}/catboost/python-package";
 
   build-system = [
     cmake
@@ -69,4 +69,4 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "catboost" ];
 
   meta = catboost.meta;
-}
+})

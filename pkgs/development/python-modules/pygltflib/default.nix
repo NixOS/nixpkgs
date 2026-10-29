@@ -18,7 +18,7 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygltflib";
   version = "1.16.5";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "dodgyville";
     repo = "pygltflib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3XfOlL+l0isMFv71+uY/PBHCwND54qACoCVYntfCot4=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for reading and writing basic glTF files";
     homepage = "https://gitlab.com/dodgyville/pygltflib";
-    changelog = "https://gitlab.com/dodgyville/pygltflib/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/dodgyville/pygltflib/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

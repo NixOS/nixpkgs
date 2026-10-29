@@ -8,7 +8,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytraccar";
   version = "3.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pytraccar";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DtxZCvLuvQpbu/1lIXz2BVbACt5Q1N2txVMyqwd4d9A=";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set version in the repo
     substituteInPlace pyproject.toml \
-      --replace 'version = "0"' 'version = "${version}"'
+      --replace 'version = "0"' 'version = "${finalAttrs.version}"'
   '';
 
   pythonImportsCheck = [ "pytraccar" ];
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to handle device information from Traccar";
     homepage = "https://github.com/ludeeus/pytraccar";
-    changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${src.tag}";
+    changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -11,13 +11,13 @@
   libtiff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pslib";
   version = "0.4.8";
 
   src = fetchurl {
-    name = "${pname}-snixource-${version}.tar.gz";
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    name = "${finalAttrs.pname}-snixource-${finalAttrs.version}.tar.gz";
+    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-gaWNvBLuUUy0o+HWCOyG6KmzxDrYCY6PV3WbA/jjH64=";
   };
 
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
     if test -d nix-support; then
       mv nix-support $dev
     fi
-    mkdir -p $doc/share/doc/${pname}
-    cp -r ../doc/. $doc/share/doc/${pname}
+    mkdir -p $doc/share/doc/${finalAttrs.pname}
+    cp -r ../doc/. $doc/share/doc/${finalAttrs.pname}
   '';
 
   meta = {
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ShamrockLee ];
     platforms = lib.platforms.unix;
   };
-}
+})

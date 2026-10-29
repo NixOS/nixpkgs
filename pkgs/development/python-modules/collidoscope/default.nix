@@ -11,7 +11,7 @@
   uharfbuzz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "collidoscope";
   version = "0.6.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "collidoscope";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1tKbv+i2gbUFJa94xSEj5BrEpZ0+ULgglkYvGMP4NXw=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
       jopejoe1
     ];
   };
-}
+})

@@ -11,7 +11,7 @@
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykeyatome";
   version = "2.1.2";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jugla";
     repo = "pyKeyAtome";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-zRXUjekawf2/zTSlXqHVB02dDkb6HbU4NN6UBgl2rtg=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
     description = "Python module to get data from Atome Key";
     mainProgram = "pykeyatome";
     homepage = "https://github.com/jugla/pyKeyAtome";
-    changelog = "https://github.com/jugla/pyKeyAtome/releases/tag/V${version}";
+    changelog = "https://github.com/jugla/pyKeyAtome/releases/tag/V${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

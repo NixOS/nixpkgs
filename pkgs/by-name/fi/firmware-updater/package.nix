@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-flutter335.buildFlutterApplication rec {
+flutter335.buildFlutterApplication (finalAttrs: {
   pname = "firmware-updater";
   version = "0-unstable-2025-09-09";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  sourceRoot = "${src.name}/apps/firmware_updater";
+  sourceRoot = "${finalAttrs.src.name}/apps/firmware_updater";
 
   gitHashes = {
     fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";
@@ -31,4 +31,4 @@ flutter335.buildFlutterApplication rec {
     maintainers = with lib.maintainers; [ mkg20001 ];
     platforms = lib.platforms.linux;
   };
-}
+})

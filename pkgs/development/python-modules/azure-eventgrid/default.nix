@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-eventgrid";
   version = "4.22.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_eventgrid";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-IHc4dE4B4HPgR1trO8EuMDfg5W2AaPQ+783tbeTeZ7U=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventgrid/azure-eventgrid";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-eventgrid_${version}/sdk/eventgrid/azure-eventgrid/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-eventgrid_${finalAttrs.version}/sdk/eventgrid/azure-eventgrid/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

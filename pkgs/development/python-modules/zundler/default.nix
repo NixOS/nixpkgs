@@ -14,7 +14,7 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zundler";
   version = "0.3.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdrianVollmer";
     repo = "Zundler";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RUzVeJLRB9y6lS0tCkseoFgND1MXT7s2o7vNuUpdRDE=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bundle assets of distributed HTML docs into one self-contained HTML file";
     homepage = "https://github.com/AdrianVollmer/Zundler";
-    changelog = "https://github.com/AdrianVollmer/Zundler/releases/tag/${src.tag}";
+    changelog = "https://github.com/AdrianVollmer/Zundler/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

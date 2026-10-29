@@ -17,7 +17,7 @@
   tables,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "h5io";
   version = "0.2.5";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "h5io";
     repo = "h5io";
-    tag = "h5io-${version}";
+    tag = "h5io-${finalAttrs.version}";
     hash = "sha256-ZkG9e7KtDvoRq9XCExYseE+Z7tMQTWcSiwsSrN5prdI=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Read and write simple Python objects using HDF5";
     homepage = "https://github.com/h5io/h5io";
-    changelog = "https://github.com/h5io/h5io/releases/tag/h5io-${version}";
+    changelog = "https://github.com/h5io/h5io/releases/tag/h5io-${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

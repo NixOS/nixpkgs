@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "us";
   version = "4.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-fdTE5gPJQnty1+B75wDY9kO9zX9RlaErxjnxt+OOdJY=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})

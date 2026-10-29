@@ -9,13 +9,13 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydyf";
   version = "0.12.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+9fnWVQaxyXCnFBmEgA945Mkm5QxDqeK5Eyx0EsiAJU=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
     homepage = "https://doc.courtbouillon.org/pydyf/stable/";
-    changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${version}";
+    changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rprecenth ];
   };
-}
+})

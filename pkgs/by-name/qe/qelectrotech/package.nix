@@ -16,14 +16,14 @@ let
     hash = "sha256-qjpPYPe1Oism6TetD/dMvTo1qyZKOsOPW+MzzNpJf3A=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qelectrotech";
   version = "0.100";
 
   src = fetchFromGitHub {
     owner = "qelectrotech";
     repo = "qelectrotech-source-mirror";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ElkqRiIHSXavXEw1ioFKL1cGnaBb2GXZuxgl98O4WuI=";
   };
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     platforms = libsForQt5.qtbase.meta.platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

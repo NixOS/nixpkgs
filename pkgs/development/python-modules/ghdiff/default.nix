@@ -7,13 +7,13 @@
   chardet,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ghdiff";
   version = "0.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-E89qT6bXtxN+BzTGntIv8cp2EINQzoywPQEkrEWErZ4=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     mainProgram = "ghdiff";
     maintainers = [ lib.maintainers.mic92 ];
   };
-}
+})

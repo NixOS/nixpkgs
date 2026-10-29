@@ -9,7 +9,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymeteireann";
   version = "2024.11.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DylanGore";
     repo = "PyMetEireann";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-b59I2h9A3QoXEBUYhbR0vsGGpQpOvFrqhHZnVCS8fLo=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -17,7 +17,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gexiv2";
   version = "0.14.6";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gexiv2/${lib.versions.majorMinor version}/gexiv2-${version}.tar.xz";
+    url = "mirror://gnome/sources/gexiv2/${lib.versions.majorMinor finalAttrs.version}/gexiv2-${finalAttrs.version}.tar.xz";
     sha256 = "YGwoqq57Hz71yOq+Xn3/18WhyGbSW3Zx+4R/4oenK4s=";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gexiv2_0_10";
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
       freeze = true;
     };
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
   };
-}
+})

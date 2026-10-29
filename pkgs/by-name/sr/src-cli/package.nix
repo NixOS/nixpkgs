@@ -7,14 +7,14 @@
   src-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "src-cli";
   version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-22UlYQxxtInPYgj4rsu07MvusjoW4BoqCW6fbgwQ9Lc=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/sourcegraph/src-cli/internal/version.BuildTag=${version}"
+    "-X=github.com/sourcegraph/src-cli/internal/version.BuildTag=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -40,7 +40,7 @@ buildGoModule rec {
   meta = {
     description = "Sourcegraph CLI";
     homepage = "https://github.com/sourcegraph/src-cli";
-    changelog = "https://github.com/sourcegraph/src-cli/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/sourcegraph/src-cli/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       keegancsmith
@@ -48,4 +48,4 @@ buildGoModule rec {
     ];
     mainProgram = "src";
   };
-}
+})

@@ -14,14 +14,14 @@
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-scm";
   version = "10.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-T6fdgs+MgA31nJoojJApmxZX/x7Pw/XMACh8Xb9eJ6k=";
   };
 
@@ -50,10 +50,10 @@ buildPythonPackage rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    changelog = "https://github.com/pypa/setuptools_scm/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pypa/setuptools_scm/blob/${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

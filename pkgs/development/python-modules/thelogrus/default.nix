@@ -7,7 +7,7 @@
   pyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thelogrus";
   version = "0.7.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "thelogrus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-96/EjDh5XcTsfUcTnsltsT6LMYbyKuM/eNyeq2Pukfo=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
     description = "Python 3 version of logrus";
     mainProgram = "human-time";
     homepage = "https://github.com/unixorn/thelogrus";
-    changelog = "https://github.com/unixorn/thelogrus/blob/${version}/ChangeLog.md";
+    changelog = "https://github.com/unixorn/thelogrus/blob/${finalAttrs.version}/ChangeLog.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

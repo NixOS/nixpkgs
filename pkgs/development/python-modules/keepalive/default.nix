@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keepalive";
   version = "0.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PGuW+QYqWnYCLwydQenvVVLYCxyt1PzMG/jxg7odHsE=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/wikier/keepalive";
     license = lib.licenses.lgpl21Plus;
   };
-}
+})

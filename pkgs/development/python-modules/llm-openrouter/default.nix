@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-openrouter";
   version = "0.6";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-openrouter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xlSeFWlamt3my20gANdZellaUHuDmjFClsQwrv/bq18=";
   };
 
@@ -49,11 +49,11 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin for models hosted by OpenRouter";
     homepage = "https://github.com/simonw/llm-openrouter";
-    changelog = "https://github.com/simonw/llm-openrouter/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-openrouter/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       arcuru
       philiptaron
     ];
   };
-}
+})

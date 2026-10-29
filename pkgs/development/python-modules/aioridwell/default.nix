@@ -16,7 +16,7 @@
   types-pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioridwell";
   version = "2025.09.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioridwell";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lZ4Hmf1OruKTUMkpPYhqkqj+j+yeckXynjxa1oOtXzc=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with Ridwell waste recycling";
     homepage = "https://github.com/bachya/aioridwell";
-    changelog = "https://github.com/bachya/aioridwell/releases/tag/${version}";
+    changelog = "https://github.com/bachya/aioridwell/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

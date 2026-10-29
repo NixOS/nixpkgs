@@ -15,7 +15,7 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymodbus-repl";
   version = "2.0.5";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "repl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jGoYp2nDWMWMX8n0aaG/YP+rQcj2npFbhdy7T1qxByc=";
   };
 
@@ -58,10 +58,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/pymodbus-dev/repl/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymodbus-dev/repl/releases/tag/${finalAttrs.src.tag}";
     description = "REPL client and server for pymodbus";
     homepage = "https://github.com/pymodbus-dev/repl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

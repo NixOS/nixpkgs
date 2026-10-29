@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gecode";
   version = "3.7.3";
 
   src = fetchurl {
-    url = "http://www.gecode.org/download/${pname}-${version}.tar.gz";
+    url = "http://www.gecode.org/download/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "0k45jas6p3cyldgyir1314ja3174sayn2h2ly3z9b4dl3368pk77";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     description = "Toolkit for developing constraint-based systems";
     platforms = lib.platforms.all;
   };
-}
+})

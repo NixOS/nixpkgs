@@ -6,7 +6,7 @@
   pyusb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygreat";
   version = "2026.0.0";
   pyproject = true;
@@ -14,16 +14,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "libgreat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m+s2TAJK7UhKWbuSd5ec1O40WeMXxJyTD9yqPOr0LEM=";
   };
 
-  sourceRoot = "${src.name}/host";
+  sourceRoot = "${finalAttrs.src.name}/host";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for talking with libGreat devices";
     homepage = "https://github.com/greatscottgadgets/libgreat/";
-    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/${src.tag}";
+    changelog = "https://github.com/greatscottgadgets/libgreat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ karstx ];
   };
-}
+})

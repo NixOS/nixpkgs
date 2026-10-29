@@ -14,20 +14,20 @@ let
   mainProgram = "EventStore.ClusterNode";
 in
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "EventStore";
   version = "24.10.6";
 
   src = fetchFromGitHub {
     owner = "kurrent-io";
     repo = "KurrentDB";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8/sagvMyJ1/onGMuJ28QLWI5M8dBDWyGOcZKUv3PJsQ=";
     leaveDotGit = true;
   };
 
   # Fixes application reporting 0.0.0.0 as its version.
-  env.MINVERVERSIONOVERRIDE = version;
+  env.MINVERVERSIONOVERRIDE = finalAttrs.version;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -85,4 +85,4 @@ buildDotnetModule rec {
     ];
     inherit mainProgram;
   };
-}
+})

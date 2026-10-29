@@ -6,13 +6,13 @@
   pygments,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colored-traceback";
   version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7LyOQfBxLqgZMdfNQ2uL658+/xWV0kmPGD4O9ptW/oQ=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ pamplemousse ];
   };
-}
+})

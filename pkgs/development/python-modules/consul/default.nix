@@ -12,7 +12,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-consul";
   version = "1.7.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "criteo";
     repo = "py-consul";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DpGSiwpxAF1kCraRFl6XPJ1eSzvR6Rdq8PkK30J/vA0=";
   };
 
@@ -123,4 +123,4 @@ buildPythonPackage rec {
       panicgh
     ];
   };
-}
+})

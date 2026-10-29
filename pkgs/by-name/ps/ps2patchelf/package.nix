@@ -5,14 +5,14 @@
   lib,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   version = "1.0.0";
   pname = "PS2PatchElf";
 
   src = fetchFromGitHub {
     owner = "CaptainSwag101";
     repo = "PS2PatchElf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iQL3tT71UOEFIYBdf9BNLUM4++Fm9qEhr77NkMCZdrU=";
   };
 
@@ -37,4 +37,4 @@ buildDotnetModule rec {
     mainProgram = "PS2PatchElf";
     license = lib.licenses.mit;
   };
-}
+})

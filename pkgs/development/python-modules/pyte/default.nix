@@ -6,7 +6,7 @@
   wcwidth,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyte";
   version = "0.8.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "selectel";
     repo = "pyte";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-u24ltX/LEteiZ2a/ioKqxV2AZgrFmKOHXmySmw21sLE=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

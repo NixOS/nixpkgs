@@ -15,7 +15,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qdrant-client";
   version = "1.19.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cC6VtfVlAkM619MBYSzq2RXnrVpiBcTwqoFwLW0fpCM=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for Qdrant vector search engine";
     homepage = "https://github.com/qdrant/qdrant-client";
-    changelog = "https://github.com/qdrant/qdrant-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/qdrant/qdrant-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

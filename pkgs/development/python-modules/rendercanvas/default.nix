@@ -16,7 +16,7 @@
   trio,
   wgpu,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rendercanvas";
   version = "2.7.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "rendercanvas";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ht9oFB1pQu+NGQ7CIE+5iWM6NSd8gpgrSgeclGDZJDs=";
   };
 
@@ -75,9 +75,9 @@ buildPythonPackage rec {
   meta = {
     description = "One canvas API, multiple backends";
     homepage = "https://github.com/pygfx/rendercanvas";
-    changelog = "https://github.com/pygfx/rendercanvas/releases/tag/${src.tag}";
+    changelog = "https://github.com/pygfx/rendercanvas/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];
   };
-}
+})

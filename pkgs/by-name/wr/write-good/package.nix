@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "write-good";
   version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "btford";
     repo = "write-good";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cq3cj2BwoQMKqo3iU2l+PR/2bJIFMSTRsDGQJ06GWXk=";
   };
 
@@ -31,4 +31,4 @@ buildNpmPackage rec {
     mainProgram = "write-good";
     maintainers = [ ];
   };
-}
+})

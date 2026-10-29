@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "hueadm";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "bahamas10";
     repo = "hueadm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QNjkfE8V/lUkYP8NAf11liKXILBk3wSNm3NSrgaH+nc=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "hueadm";
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigset";
   version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-E++YsFhIn/VytmZ8OJcKVEaZiVwIRMs6wklOOlmsUeY=";
   };
 
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ dzabraev ];
   };
-}
+})

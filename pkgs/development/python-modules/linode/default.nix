@@ -5,13 +5,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linode";
   version = "0.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2zwqf6uJZtkDpj8WxRW/8kFTPk7y10aqeq5KSbul5XM=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

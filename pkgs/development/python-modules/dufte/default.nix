@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dufte";
   version = "0.2.29";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "dufte";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256:0ccsmpj160xj6w503a948aw8icj55mw9414xnmijmmjvlwhm0p48";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

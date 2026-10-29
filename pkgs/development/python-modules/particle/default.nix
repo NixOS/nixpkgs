@@ -12,13 +12,13 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "particle";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Py7E27iVPJC6g7iR1lNM2C3Brs5BEbeZmP8oTON3qSI=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Package to deal with particles, the PDG particle data table and others";
     homepage = "https://github.com/scikit-hep/particle";
-    changelog = "https://github.com/scikit-hep/particle/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/particle/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

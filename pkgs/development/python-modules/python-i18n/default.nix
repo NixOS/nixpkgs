@@ -6,7 +6,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-i18n";
   version = "0.3.9";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danhper";
     repo = "python-i18n";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6FahoHZqaOWYGaT9RqLARCm2kLfUIlYuauB6+0eX7jA=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

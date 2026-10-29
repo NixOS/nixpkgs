@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "knot-exporter";
   version = "3.6.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "knot_exporter";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-zgct7LQeGpZBS3QZ2SouPVMcS061EZyuaHtuONMBuMY=";
   };
 
@@ -42,4 +42,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "knot-exporter";
   };
-}
+})

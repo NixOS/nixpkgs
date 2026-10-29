@@ -10,7 +10,7 @@
   libayatana-appindicator,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   # The last versioned release is 1.0.0.0 from 2020, since then there were updates but no versioned release.
   # This is not marked unstable because upstream encourages installation from source.
   pname = "headset-charge-indicator";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       $out/bin/headset-charge-indicator.py \
       --replace "default='headsetcontrol'" "default='${headsetcontrol}/bin/headsetcontrol'"
 
-    cat << EOF > ${pname}.desktop
+    cat << EOF > ${finalAttrs.pname}.desktop
     [Desktop Entry]
     Name=Wireless headset app-indicator
     Categories=Application;System
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/applications
     mkdir -p $out/etc/xdg/autostart
-    cp ${pname}.desktop $out/share/applications/${pname}.desktop
-    cp ${pname}.desktop $out/etc/xdg/autostart/${pname}.desktop
+    cp ${finalAttrs.pname}.desktop $out/share/applications/${finalAttrs.pname}.desktop
+    cp ${finalAttrs.pname}.desktop $out/etc/xdg/autostart/${finalAttrs.pname}.desktop
   '';
 
   meta = {
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     mainProgram = "headset-charge-indicator.py";
   };
-}
+})

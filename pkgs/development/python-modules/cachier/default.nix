@@ -20,7 +20,7 @@
   birch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cachier";
   version = "4.2.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-cachier";
     repo = "cachier";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hiyevLMtKV8M8znB2mznHLRM+pVN6uCxZZVf3H0gjTI=";
   };
 
@@ -103,10 +103,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/python-cachier/cachier";
-    changelog = "https://github.com/python-cachier/cachier/releases/tag/${src.tag}";
+    changelog = "https://github.com/python-cachier/cachier/releases/tag/${finalAttrs.src.tag}";
     description = "Persistent, stale-free, local and cross-machine caching for functions";
     mainProgram = "cachier";
     maintainers = with lib.maintainers; [ pbsds ];
     license = lib.licenses.mit;
   };
-}
+})

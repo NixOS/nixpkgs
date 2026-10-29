@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "json-merge-patch";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "json_merge_patch";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-SgItePwvCctJ2Wxkbvw4DTterStcfaviLDkowsLpxOA=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

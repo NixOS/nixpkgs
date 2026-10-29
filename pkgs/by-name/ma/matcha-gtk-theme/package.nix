@@ -21,14 +21,14 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2025-04-11";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "matcha-gtk-theme";
-      rev = version;
+      rev = finalAttrs.version;
       sha256 = "sha256-vPAGEa3anWAynEg2AYme4qpHJdLDKk2CmL5iQ1mBYgM=";
     };
 
@@ -72,4 +72,4 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
       platforms = lib.platforms.unix;
       maintainers = [ lib.maintainers.romildo ];
     };
-  }
+  })

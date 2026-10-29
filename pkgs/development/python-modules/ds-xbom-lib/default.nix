@@ -7,12 +7,12 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ds-xbom-lib";
   inherit (dep-scan) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/packages/xbom-lib";
+  sourceRoot = "${finalAttrs.src.name}/packages/xbom-lib";
 
   build-system = [
     setuptools
@@ -32,4 +32,4 @@ buildPythonPackage rec {
       teams
       ;
   };
-}
+})

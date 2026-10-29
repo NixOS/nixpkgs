@@ -9,7 +9,7 @@
   rapidfuzz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cleo";
   version = "2.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "cleo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+OvE09hbF6McdXpXdv5UBdZ0LiSOTL8xyE/+bBNIFNk=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/python-poetry/cleo";
-    changelog = "https://github.com/python-poetry/cleo/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/python-poetry/cleo/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Allows you to create beautiful and testable command-line interfaces";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
-}
+})

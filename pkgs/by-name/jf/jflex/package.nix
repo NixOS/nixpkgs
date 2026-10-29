@@ -5,16 +5,16 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jflex";
   version = "1.9.1";
 
   src = fetchurl {
-    url = "https://jflex.de/release/jflex-${version}.tar.gz";
+    url = "https://jflex.de/release/jflex-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-4MHp7vkf9t8E1z+l6v8T86ArZ5/uFHTlzK4AciTfbfY=";
   };
 
-  sourceRoot = "${pname}-${version}";
+  sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}";
 
   installPhase = ''
     runHook preInstall
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

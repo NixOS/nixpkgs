@@ -11,7 +11,7 @@
   yamllint,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ntc-templates";
   version = "9.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "ntc-templates";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iKG1+sc/J+PdFNNmmqCR9xmw7KVuP0P2mNPqHiZDe7M=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
-    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/${src.tag}";
+    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

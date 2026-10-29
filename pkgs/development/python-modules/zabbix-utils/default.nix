@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zabbix-utils";
   version = "2.0.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zabbix";
     repo = "python-zabbix-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/9OTehMGELU70Y3ZU1ZB4/ODkI3UbfIXNQ7H/vTz6JE=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for zabbix";
     homepage = "https://github.com/zabbix/python-zabbix-utils";
-    changelog = "https://github.com/zabbix/python-zabbix-utils/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/zabbix/python-zabbix-utils/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

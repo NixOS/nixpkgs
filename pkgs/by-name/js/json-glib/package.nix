@@ -21,7 +21,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "json-glib";
   version = "1.10.8";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/json-glib/${lib.versions.majorMinor version}/json-glib-${version}.tar.xz";
+    url = "mirror://gnome/sources/json-glib/${lib.versions.majorMinor finalAttrs.version}/json-glib-${finalAttrs.version}.tar.xz";
     hash = "sha256-VcXBQaVkJFuPj752mGY8h6RaczPCosVvBvgRq3OyEt0=";
   };
 
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     };
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -109,4 +109,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = with lib.platforms; unix;
   };
-}
+})

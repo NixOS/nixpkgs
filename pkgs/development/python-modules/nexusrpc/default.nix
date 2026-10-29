@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nexus-rpc";
   version = "1.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexus-rpc";
     repo = "sdk-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-il+zCyU0dOlqFHGedyeBKgwQlqx1FLNuriGIw3RV3Gs=";
     fetchSubmodules = true;
   };
@@ -52,10 +52,10 @@ buildPythonPackage rec {
   meta = {
     description = "Nexus Python SDK";
     homepage = "https://temporal.io/";
-    changelog = "https://github.com/nexus-rpc/sdk-python/releases/tag/${version}";
+    changelog = "https://github.com/nexus-rpc/sdk-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jpds
     ];
   };
-}
+})

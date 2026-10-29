@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "pupdate";
   version = "4.14.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "pupdate";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-0xjrw0ivSjQ7iQmDF9ZkDhYnbE34qW2uMD4DXvCfBZE=";
   };
 
@@ -60,4 +60,4 @@ buildDotnetModule rec {
     maintainers = [ ];
     mainProgram = "pupdate";
   };
-}
+})

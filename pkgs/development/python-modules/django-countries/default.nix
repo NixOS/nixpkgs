@@ -18,7 +18,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-countries";
   version = "9.1.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LR6mD3i/1e6c3DXqBgKqv2BhR0VbXzyskGHkPSXD3Gg=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
       forms, flag icons static files, and a country field for models.
     '';
     homepage = "https://github.com/SmileyChris/django-countries";
-    changelog = "https://github.com/SmileyChris/django-countries/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/SmileyChris/django-countries/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -17,12 +17,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msitools";
   version = "0.106";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/msitools/${lib.versions.majorMinor version}/msitools-${version}.tar.xz";
+    url = "mirror://gnome/sources/msitools/${lib.versions.majorMinor finalAttrs.version}/msitools-${finalAttrs.version}.tar.xz";
     hash = "sha256-HtNCec+AgPFPG48Q5klHQSVJKgiZEufKcOWd+i5aZZs=";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ PlushBeaver ];
     platforms = lib.platforms.unix;
   };
-}
+})

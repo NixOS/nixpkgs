@@ -7,14 +7,14 @@
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lcov-cobertura";
   version = "2.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lcov_cobertura";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-76jiZPK93rt/UCTkrOErYz2dWQSLxkdCfR4blojItY8=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     homepage = "https://eriwen.github.io/lcov-to-cobertura-xml/";
     license = lib.licenses.asl20;
   };
-}
+})

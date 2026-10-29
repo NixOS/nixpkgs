@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-snap7";
   version = "2.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gijzelaerr";
     repo = "python-snap7";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-l7nLW7qrIloa6JlQTubXnISljsC7jkdAjye9AAUTDrw=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

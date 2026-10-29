@@ -16,7 +16,7 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brian2";
   version = "2.10.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.12";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wdIdewkhkjYkGddvyHH+q5/wuz0A6SZdjNQIbMLhG08=";
   };
 
@@ -74,4 +74,4 @@ buildPythonPackage rec {
     license = lib.licenses.cecill21;
     maintainers = with lib.maintainers; [ jiegec ];
   };
-}
+})

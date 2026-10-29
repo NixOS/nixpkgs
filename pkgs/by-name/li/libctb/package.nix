@@ -3,17 +3,17 @@
   stdenv,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libctb";
   version = "0.16";
   src = fetchurl {
-    url = "https://iftools.com/download/files/legacy/${pname}-${version}.tar.gz";
+    url = "https://iftools.com/download/files/legacy/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "027wh89d0qyly3d9m6rg4x7x1gqz3y3cnxlgk0k8xgygcrm05c0w";
   };
   patches = [
     ./include-kbhit.patch
   ];
-  sourceRoot = "${pname}-${version}/build";
+  sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/build";
   makeFlags = [
     "prefix=$(out)"
   ];
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.misuzu ];
   };
-}
+})

@@ -13,13 +13,13 @@
   service-identity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioquic";
   version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KNBwshg+PnmvqdTnvVWJYNDVOuuYvAzwo1iyebp5fJI=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of QUIC and HTTP/3";
     homepage = "https://github.com/aiortc/aioquic";
-    changelog = "https://github.com/aiortc/aioquic/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/aiortc/aioquic/blob/${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

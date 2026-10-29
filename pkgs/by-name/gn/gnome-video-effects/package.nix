@@ -9,12 +9,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-video-effects";
   version = "0.6.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-video-effects/${lib.versions.majorMinor version}/gnome-video-effects-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-video-effects/${lib.versions.majorMinor finalAttrs.version}/gnome-video-effects-${finalAttrs.version}.tar.xz";
     sha256 = "166utGs/WoMvsuDZC0K/jGFgICylKsmt0Xr84ZLjyKg=";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
   };
-}
+})

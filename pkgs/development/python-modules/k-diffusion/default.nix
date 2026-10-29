@@ -22,7 +22,7 @@
   wandb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "k-diffusion";
   version = "0.1.1.post1";
   format = "setuptools";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crowsonkb";
     repo = "k-diffusion";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x/UHzobQv5ov0luUHqC8OA5YbtF+aWL39/SQtzTm0RM=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})

@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msmart-ng";
   version = "2026.9.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mill1000";
     repo = "midea-msmart";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pTL7Kn+m5HP1xJ2cvxWaj8700c7bGPonS4nku+SwsRI=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "msmart" ];
 
   meta = {
-    changelog = "https://github.com/mill1000/midea-msmart/releases/tag/${src.tag}";
+    changelog = "https://github.com/mill1000/midea-msmart/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for local control of Midea (and associated brands) smart air conditioners";
     homepage = "https://github.com/mill1000/midea-msmart";
     license = lib.licenses.mit;
@@ -53,4 +53,4 @@ buildPythonPackage rec {
       hexa
     ];
   };
-}
+})

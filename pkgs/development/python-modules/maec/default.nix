@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "maec";
   version = "4.1.0.17";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MAECProject";
     repo = "python-maec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I2Ov2AQiC9D8ivHqn7owcTsNS7Kw+CWVyijK3VO52Og=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for parsing, manipulating, and generating MAEC content";
     homepage = "https://github.com/MAECProject/python-maec/";
-    changelog = "https://github.com/MAECProject/python-maec/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/MAECProject/python-maec/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

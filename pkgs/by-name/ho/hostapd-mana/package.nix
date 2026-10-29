@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hostapd-mana";
   version = "2.6.5";
 
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "hostapd-mana";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-co5LMJAUYSdcvhLv1gfjDvdVqdSXgjtFoiQ7+KxR07M=";
   };
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bbjubjub ];
     platforms = lib.platforms.linux;
   };
-}
+})

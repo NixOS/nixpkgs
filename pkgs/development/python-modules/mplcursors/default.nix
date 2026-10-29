@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mplcursors";
   version = "0.7.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anntzer";
     repo = "mplcursors";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZHX//AUVSF91cHxyiL4klglJ2Ef3iSE6oOancL+gQbA=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interactive data selection cursors for Matplotlib";
     homepage = "https://github.com/anntzer/mplcursors";
-    changelog = "https://github.com/anntzer/mplcursors/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/anntzer/mplcursors/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

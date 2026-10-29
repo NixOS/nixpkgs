@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "imap-mailstat-exporter";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "bt909";
     repo = "imap-mailstat-exporter";
-    tag = "${version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-Q+Q7Q9zjJlp83FQ65yqi8eWO02+VkCXlYFRA66yptiE=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ raboof ];
     platforms = lib.platforms.linux;
   };
-}
+})

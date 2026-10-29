@@ -11,7 +11,7 @@
   typepy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dataproperty";
   version = "1.1.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "dataproperty";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PLXF9g0VIkmsRLl5+KvXcbbwVwaJSYjWB7l8xz1mPZM=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for extracting properties from data";
     homepage = "https://github.com/thombashi/DataProperty";
-    changelog = "https://github.com/thombashi/DataProperty/releases/tag/${src.tag}";
+    changelog = "https://github.com/thombashi/DataProperty/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,14 +6,14 @@
   lint-staged,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "lint-staged";
   version = "17.6.0";
 
   src = fetchFromGitHub {
     owner = "lint-staged";
     repo = "lint-staged";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dUZMViPdT0mjqAs5boofuJs8qSH0QPZVts7PRJrIa6k=";
   };
 
@@ -25,7 +25,7 @@ buildNpmPackage rec {
   postPatch = ''
     substituteInPlace package.json --replace \
       '"version": "0.0.0-development"' \
-      '"version": "${version}"'
+      '"version": "${finalAttrs.version}"'
   '';
 
   passthru.tests.version = testers.testVersion { package = lint-staged; };
@@ -35,9 +35,9 @@ buildNpmPackage rec {
     longDescription = ''
       Run linters against staged git files and don't let 💩 slip into your code base!
     '';
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DamienCassou ];
     mainProgram = "lint-staged";
   };
-}
+})

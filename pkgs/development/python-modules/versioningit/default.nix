@@ -14,13 +14,13 @@
   mercurial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "versioningit";
   version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uRrX1z5z0hIg5pVA8gIT8rcpofmzXATp4Tfq8o0iFNo=";
   };
 
@@ -69,4 +69,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DeeUnderscore ];
   };
-}
+})

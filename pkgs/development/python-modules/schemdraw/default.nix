@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "schemdraw";
   version = "0.23";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "schemdraw";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NAvJDrJKf4CYs9W4zdNAU8WnuXlCK6FU44+5flWzyAk=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sfrijters ];
   };
-}
+})

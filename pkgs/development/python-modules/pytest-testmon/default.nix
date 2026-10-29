@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-testmon";
   version = "2.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tarpas";
     repo = "pytest-testmon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BVQ7rEusbW0G1C6cUeHH7fZWndSErcBQfGNdw0/4eTg=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";
     homepage = "https://github.com/tarpas/pytest-testmon/";
-    changelog = "https://github.com/tarpas/pytest-testmon/releases/tag/${src.tag}";
+    changelog = "https://github.com/tarpas/pytest-testmon/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dmvianna ];
   };
-}
+})

@@ -16,7 +16,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycurl";
   version = "7.46.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycurl";
     repo = "pycurl";
-    tag = "REL_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "REL_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-F40bJ7TYFK2dVkDJGGxl7XV46fKmjwvUYYulcwGL6hk=";
   };
 
@@ -101,7 +101,7 @@ buildPythonPackage rec {
     homepage = "https://pycurl.github.io/";
     changelog =
       "https://github.com/pycurl/pycurl/blob/REL_"
-      + lib.replaceStrings [ "." ] [ "_" ] version
+      + lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       + "/ChangeLog";
     license = with lib.licenses; [
       lgpl2Only
@@ -109,4 +109,4 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

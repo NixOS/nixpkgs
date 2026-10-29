@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "addchain";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "mmcloughlin";
     repo = "addchain";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
     hash = "sha256-msuZgNYqN1QldrbXJJ4BFXYhUsllAPt8W0KRrr8p6TM=";
   };
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mmcloughlin/addchain/meta.buildversion=${version}"
+    "-X github.com/mmcloughlin/addchain/meta.buildversion=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -41,4 +41,4 @@ buildGoModule rec {
     ];
     mainProgram = "addchain";
   };
-}
+})

@@ -5,13 +5,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrabbit2";
   version = "1.0.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0nFgyzXAlvAHLfVzByM9AbEXpFEjbhNmBKjlG+bxBsA=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

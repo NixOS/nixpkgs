@@ -18,14 +18,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "guidance-stitch";
   version = "0.1.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "guidance_stitch";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Kg0O3oZds4eFfUlKe8sakDYhwT9XGGnN4RCcLFVpzZU=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

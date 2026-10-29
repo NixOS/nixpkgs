@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioapcaccess";
   version = "1.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yuxincs";
     repo = "aioapcaccess";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gCi0vo4w3jr4w5neQS9v821rdfE+SqnUkrOrEQUET7E=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for working with apcaccess";
     homepage = "https://github.com/yuxincs/aioapcaccess";
-    changelog = "https://github.com/yuxincs/aioapcaccess/releases/tag/${src.tag}";
+    changelog = "https://github.com/yuxincs/aioapcaccess/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

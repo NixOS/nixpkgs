@@ -20,7 +20,7 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wyoming-satellite";
   version = "1.4.1";
   pyproject = true;
@@ -28,7 +28,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-satellite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sAtyyS60Fr6iFE3tTxEgAjhmX6O5WjWwb9rk+phzrtM=";
   };
 
@@ -81,9 +81,9 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Remote voice satellite using Wyoming protocol";
     homepage = "https://github.com/rhasspy/wyoming-satellite";
-    changelog = "https://github.com/rhasspy/wyoming-satellite/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/wyoming-satellite/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "wyoming-satellite";
   };
-}
+})

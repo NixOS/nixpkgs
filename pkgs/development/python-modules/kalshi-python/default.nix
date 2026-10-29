@@ -14,13 +14,13 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kalshi-python";
   version = "2.1.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "kalshi_python";
     hash = "sha256-FsHRuqfmdF31l5E/L08/eVhWkN7JhgJkFSUzMrYNuOY=";
   };
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ robbiebuxton ];
   };
-}
+})

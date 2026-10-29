@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopen-wakeword";
   version = "1.1.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pyopen-wakeword";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-czFDuIZ10aetr6frkKSozPjS7zMeNJ5/WVLA7Ib1CaI=";
   };
 
@@ -55,10 +55,10 @@ buildPythonPackage rec {
         stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = "Alternative Python library for openWakeWord";
     homepage = "https://github.com/rhasspy/pyopen-wakeword";
-    changelog = "https://github.com/rhasspy/pyopen-wakeword/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/pyopen-wakeword/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
     # vendors prebuilt libtensorflowlite_c.{so,dll,dylib}
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

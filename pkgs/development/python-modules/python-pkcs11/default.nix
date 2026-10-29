@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-pkcs11";
   version = "0.9.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danni";
     repo = "python-pkcs11";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9RVUtUe+Af5nTDaMeipdijLK4Un/SGRAQIztVKQZZzQ=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pkcs11" ];
 
   meta = {
-    changelog = "https://github.com/pyauth/python-pkcs11/releases/tag/${src.tag}";
+    changelog = "https://github.com/pyauth/python-pkcs11/releases/tag/${finalAttrs.src.tag}";
     description = "PKCS#11/Cryptoki support for Python";
     homepage = "https://github.com/danni/python-pkcs11";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

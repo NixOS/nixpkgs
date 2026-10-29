@@ -6,13 +6,13 @@
   nix-update-script,
   versionCheckHook,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "undertalemodcli";
   version = "0.9.2.0";
   src = fetchFromGitHub {
     owner = "UnderminersTeam";
     repo = "UndertaleModTool";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-bNSIU5SdyvFqDt1a63NUIuBWRxzk4bNYALSrCku6Cvg=";
     fetchSubmodules = true;
   };
@@ -42,10 +42,10 @@ buildDotnetModule rec {
   meta = {
     homepage = "https://underminersteam.github.io/";
     description = "CLI tool for modding, decompiling and unpacking GameMaker games";
-    changelog = "https://github.com/UnderminersTeam/UndertaleModTool/releases/tag/${version}";
+    changelog = "https://github.com/UnderminersTeam/UndertaleModTool/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ skirlez ];
     platforms = with lib.platforms; (lib.intersectLists x86_64 (linux ++ windows)) ++ darwin;
     mainProgram = "UndertaleModCli";
   };
-}
+})

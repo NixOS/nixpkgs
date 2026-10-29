@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "auroranoaa";
   version = "0.0.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "aurora-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bQDFSbYFsGtvPuJNMykynOpBTIeloUoCVRtIuHXR4n0=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the Aurora API";
     homepage = "https://github.com/djtimca/aurora-api";
-    changelog = "https://github.com/djtimca/aurora-api/releases/tag/${version}";
+    changelog = "https://github.com/djtimca/aurora-api/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

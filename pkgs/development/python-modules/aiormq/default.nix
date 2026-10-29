@@ -8,7 +8,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiormq";
   version = "9.6.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiormq";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GFeOwjSQ1+nxP9hgNoELoEInTmhhO0JnNeoe2qfWNcg=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "AMQP 0.9.1 asynchronous client library";
     homepage = "https://github.com/mosquito/aiormq";
-    changelog = "https://github.com/mosquito/aiormq/releases/tag/${version}";
+    changelog = "https://github.com/mosquito/aiormq/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

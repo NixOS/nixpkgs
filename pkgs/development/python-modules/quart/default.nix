@@ -28,7 +28,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quart";
   version = "0.22.0";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1rwkrxxk79EB8gkeXNvT2hR37it4H6RqewPxYny/VIs=";
   };
 
@@ -75,9 +75,9 @@ buildPythonPackage rec {
   meta = {
     description = "Async Python micro framework for building web applications";
     homepage = "https://github.com/pallets/quart/";
-    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/pallets/quart/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "quart";
   };
-}
+})

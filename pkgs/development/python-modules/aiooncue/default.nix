@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiooncue";
   version = "0.3.9";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiooncue";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0Cdt/rUsl4OMLUTSC8WJXEiwzrhyn7JJIcVE/55LlgU=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with the Kohler Oncue API";
     homepage = "https://github.com/bdraco/aiooncue";
-    changelog = "https://github.com/bdraco/aiooncue/releases/tag/${version}";
+    changelog = "https://github.com/bdraco/aiooncue/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

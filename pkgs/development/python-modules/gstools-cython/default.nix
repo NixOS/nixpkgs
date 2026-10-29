@@ -11,7 +11,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gstools-cython";
   version = "1.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools-Cython";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D5oOSOVfmwAOF7MYpMmOMXIS82NJeztRJh4sDXS+Ouc=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cython backend for GSTools";
     homepage = "https://github.com/GeoStat-Framework/GSTools-Cython";
-    changelog = "https://github.com/GeoStat-Framework/GSTools-Cython/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/GeoStat-Framework/GSTools-Cython/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

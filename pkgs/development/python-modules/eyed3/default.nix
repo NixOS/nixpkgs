@@ -8,7 +8,7 @@
   deprecation,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.9.9";
   pname = "eyed3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nicfit";
     repo = "eyeD3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Brtxi0B52kvSU12va5X+KNtNV9cyK2TUefyZYZI87JQ=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
       and v2.3/v2.4.
     '';
   };
-}
+})

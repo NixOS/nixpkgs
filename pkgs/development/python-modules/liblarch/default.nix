@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "liblarch";
   version = "3.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "liblarch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ oyren ];
     platforms = lib.platforms.linux;
   };
-}
+})

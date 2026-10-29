@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dockmate";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "shubh-io";
     repo = "DockMate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kepv8jY/hddRpJMhwr55k0R8CPBKtifjrGiRxoIUDXw=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   doInstallCheck = true;
 
   meta = {
-    changelog = "https://github.com/shubh-io/DockMate/releases/tag/${src.tag}";
+    changelog = "https://github.com/shubh-io/DockMate/releases/tag/${finalAttrs.src.tag}";
     description = "Terminal-based Docker container manager that actually works";
     homepage = "https://github.com/shubh-io/DockMate";
     license = lib.licenses.mit;
@@ -41,4 +41,4 @@ buildGoModule rec {
     ];
     mainProgram = "dockmate";
   };
-}
+})

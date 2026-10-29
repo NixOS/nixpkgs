@@ -10,7 +10,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylddwrap";
   version = "1.2.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Parquery";
     repo = "pylddwrap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Gm82VRu8GP52BohQzpMUJfh6q2tiUA2GJWOcG7ymGgg=";
   };
 
@@ -55,11 +55,11 @@ buildPythonPackage rec {
     description = "Python wrapper around ldd *nix utility to determine shared libraries of a program";
     mainProgram = "pylddwrap";
     homepage = "https://github.com/Parquery/pylddwrap";
-    changelog = "https://github.com/Parquery/pylddwrap/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/Parquery/pylddwrap/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thiagokokada ];
     # should work in any Unix platform that uses glibc, except for darwin
     # since it has its own tool (`otool`)
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

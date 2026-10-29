@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-gccStdenv.mkDerivation rec {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "cc65";
   version = "2.19";
 
   src = fetchFromGitHub {
     owner = "cc65";
     repo = "cc65";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
   };
 
@@ -59,4 +59,4 @@ gccStdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

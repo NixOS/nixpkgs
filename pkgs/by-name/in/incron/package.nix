@@ -6,13 +6,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "incron";
   version = "0.5.12";
   src = fetchFromGitHub {
     owner = "ar-";
     repo = "incron";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     sha256 = "11d5f98cjafiv9h9zzzrw2s06s2fvdg8gp64km7mdprd2xmy6dih";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.aanderse ];
     platforms = lib.platforms.linux;
   };
-}
+})

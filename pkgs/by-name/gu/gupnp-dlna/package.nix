@@ -15,7 +15,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gupnp-dlna";
   version = "0.12.0";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-dlna/${lib.versions.majorMinor version}/gupnp-dlna-${version}.tar.xz";
+    url = "mirror://gnome/sources/gupnp-dlna/${lib.versions.majorMinor finalAttrs.version}/gupnp-dlna-${finalAttrs.version}.tar.xz";
     sha256 = "PVO5b4W8VijTPjZ+yb8q2zjvKzTXrQQ0proM9K2QSOY=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

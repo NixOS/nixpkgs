@@ -8,14 +8,14 @@
   boost,
   python3Packages,
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "nix-heuristic-gc";
   version = "0.7.5";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "risicle";
     repo = "nix-heuristic-gc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4w3qQIc/sJYAInwisyYVUERJ5o84qPeGQS1XRG6XYhk=";
   };
 
@@ -55,4 +55,4 @@ python3Packages.buildPythonPackage rec {
       me-and
     ];
   };
-}
+})

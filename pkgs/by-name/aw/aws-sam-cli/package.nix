@@ -10,7 +10,7 @@
   enableTelemetry ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "aws-sam-cli";
   version = "1.169.0";
   pyproject = true;
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9zTJ1oVOrFH9P3AUb6W6s39AMBpsN3bWrgNzKSZSB/U=";
   };
 
@@ -174,7 +174,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "CLI tool for local development and testing of Serverless applications";
     homepage = "https://github.com/aws/aws-sam-cli";
-    changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
+    changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "sam";
     maintainers = with lib.maintainers; [
@@ -182,4 +182,4 @@ python3.pkgs.buildPythonApplication rec {
       anthonyroussel
     ];
   };
-}
+})

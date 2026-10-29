@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "discid";
   version = "1.4.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DLtLlpScaMvGPJ/EWF75t+wrnTniO84LTbXWHG97geY=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     homepage = "https://python-discid.readthedocs.org/";
     license = lib.licenses.lgpl3Plus;
   };
-}
+})

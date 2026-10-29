@@ -9,7 +9,7 @@
   toml,
   pip,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "language-tool-python";
   version = "3.4.0";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jxmorris12";
     repo = "language_tool_python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EX6O9bYJgrgvKkFDjq3A144iFkcwNPIvTTEIC9D9J6M=";
   };
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ justdeeevin ];
     platforms = lib.platforms.all;
-    changelog = "https://github.com/jxmorris12/language_tool_python/releases/tag/${src.tag}";
+    changelog = "https://github.com/jxmorris12/language_tool_python/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

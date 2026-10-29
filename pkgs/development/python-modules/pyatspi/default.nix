@@ -11,14 +11,14 @@
   gnome,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyatspi";
   version = "2.58.1";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pyatspi/${lib.versions.majorMinor version}/pyatspi-${version}.tar.xz";
+    url = "mirror://gnome/sources/pyatspi/${lib.versions.majorMinor finalAttrs.version}/pyatspi-${finalAttrs.version}.tar.xz";
     hash = "sha256-Px8HmTX5JlhDMQJcdTGFjetCJFyZO2USH09LAeawRTY=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = with lib.platforms; unix;
   };
-}
+})

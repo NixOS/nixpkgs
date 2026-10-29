@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-index";
   version = "8.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.index";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dHapd/+pJh6qzVx9FGSMmPsGbz8NhAoPqufXm3FOuM8=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Full-text indexing and searching for Zope";
     homepage = "https://github.com/zopefoundation/zope.index";
-    changelog = "https://github.com/zopefoundation/zope.index/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.index/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

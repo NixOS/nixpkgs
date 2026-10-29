@@ -5,13 +5,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ed25519-blake2b";
   version = "1.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-cx6fk80awaZGSVdfNRmpn/4LseTPe/X18L5ROjnfc2M=";
   };
 
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     description = "Ed25519 public-key signatures (BLAKE2b fork)";
     mainProgram = "edsig";
     homepage = "https://github.com/Matoking/python-ed25519-blake2b";
-    changelog = "https://github.com/Matoking/python-ed25519-blake2b/releases/tag/${version}";
+    changelog = "https://github.com/Matoking/python-ed25519-blake2b/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       onny
       stargate01
     ];
   };
-}
+})

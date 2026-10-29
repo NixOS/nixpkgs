@@ -6,19 +6,19 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "test-results-parser";
   version = "0.6.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "test_results_parser";
     hash = "sha256-Xqktx66EvYnpw/w3UxfYXJgfnROcPMobCv4W2W405/Y=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-xnX9YwRHo5vFcF4HDj9K/hLV88ZB0UZdpx8RdA+EmrU=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.fsl11Asl20;
     maintainers = with lib.maintainers; [ veehaitch ];
   };
-}
+})

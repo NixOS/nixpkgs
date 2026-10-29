@@ -5,7 +5,7 @@
   pytestCheckHook,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pre-commit-po-hooks";
   version = "1.7.3";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mondeja";
     repo = "pre-commit-po-hooks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wTmcV8KkoQLuK4EWDt0pbp+EQJRatxnQYeBfikK+vlA=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

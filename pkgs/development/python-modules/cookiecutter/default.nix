@@ -21,7 +21,7 @@
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cookiecutter";
   version = "2.7.1";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ynu3vIxv9EH79TkhtVN2aAAOONVuKNdjobc5dcZsYTg=";
   };
 
@@ -76,10 +76,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/audreyr/cookiecutter";
-    changelog = "https://github.com/cookiecutter/cookiecutter/blob/${version}/HISTORY.md";
+    changelog = "https://github.com/cookiecutter/cookiecutter/blob/${finalAttrs.version}/HISTORY.md";
     description = "Command-line utility that creates projects from project templates";
     mainProgram = "cookiecutter";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kragniz ];
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypemicro";
   version = "0.1.11";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KE085u9yIPsuEr41GNWwHFm6KAHggvqGqP9ChGRoLE0=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     maintainers = [
     ];
   };
-}
+})

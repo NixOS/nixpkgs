@@ -6,13 +6,13 @@
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyW800rf32";
   version = "0.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-i0XXqohKY5pWIjcOCUxUQdx/FSSqgTnTaWcDxnIYjMk=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

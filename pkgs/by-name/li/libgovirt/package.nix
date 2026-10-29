@@ -11,7 +11,7 @@
   librest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgovirt";
   version = "0.3.9";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchzip {
-    url = "mirror://gnome/sources/libgovirt/${lib.versions.majorMinor version}/libgovirt-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgovirt/${lib.versions.majorMinor finalAttrs.version}/libgovirt-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-6RDuJTyaVYlO4Kq+niQyepom6xj1lqdBbyWL/VnZUdk=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.lgpl21Plus;
   };
-}
+})

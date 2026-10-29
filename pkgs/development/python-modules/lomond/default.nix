@@ -13,14 +13,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lomond";
   version = "0.3.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wildfoundry";
-    repo = "dataplicity-${pname}";
+    repo = "dataplicity-${finalAttrs.pname}";
     rev = "b30dad3cc38d5ff210c5dd01f8c3c76aa6c616d1";
     hash = "sha256-aD8yJZSdfQFDgiRARYTNjT2jMORRPN86R0BRVSPAzVM=";
   };
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

@@ -13,14 +13,14 @@
   pstoedit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autotrace";
   version = "0.31.10";
 
   src = fetchFromGitHub {
     owner = "autotrace";
     repo = "autotrace";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PbEK5+7jcYIwYmgxBIOpNyj2KJNPfqKBKb+wYwoLKSo=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     mainProgram = "autotrace";
   };
-}
+})

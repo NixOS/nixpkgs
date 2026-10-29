@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unidecode";
   version = "1.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "avian2";
     repo = "unidecode";
-    tag = "unidecode-${version}";
+    tag = "unidecode-${finalAttrs.version}";
     hash = "sha256-CPogyDw8B1Xd3Bt6W9OaImVt+hFQsir16mnSYk8hFWQ=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     description = "ASCII transliterations of Unicode text";
     mainProgram = "unidecode";
     homepage = "https://github.com/avian2/unidecode";
-    changelog = "https://github.com/avian2/unidecode/blob/unidecode-${version}/ChangeLog";
+    changelog = "https://github.com/avian2/unidecode/blob/unidecode-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

@@ -6,14 +6,14 @@
   paramiko,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysftp";
   version = "0.2.9";
   format = "setuptools";
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+/VagC501mNnNACs2S1Tc8HH7pTXZbQo2fl3VnrEhUo=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
       Book, in the docs, to see what pysftp can do for you.
     '';
   };
-}
+})

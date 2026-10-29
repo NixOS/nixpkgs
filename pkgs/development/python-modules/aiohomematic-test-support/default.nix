@@ -4,17 +4,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohomematic-test-support";
   inherit (aiohomematic) version src;
   pyproject = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
-  sourceRoot = "${src.name}/aiohomematic_test_support";
+  sourceRoot = "${finalAttrs.src.name}/aiohomematic_test_support";
 
   build-system = [ setuptools ];
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/SukramJ/aiohomematic/tree/devel/aiohomematic_test_support";
     inherit (aiohomematic.meta) license maintainers;
   };
-}
+})

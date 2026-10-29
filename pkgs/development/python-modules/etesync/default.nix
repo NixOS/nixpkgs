@@ -24,13 +24,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "etesync";
   version = "0.12.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8g9+mSLueJxLcTeWduv+ZWtnWRP+Uk8u5yLhue9OUZc=";
   };
 
@@ -69,4 +69,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ valodim ];
   };
-}
+})

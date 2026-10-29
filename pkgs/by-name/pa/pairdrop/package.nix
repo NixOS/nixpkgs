@@ -6,14 +6,14 @@
   nodejs,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "pairdrop";
   version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "schlagmichdoch";
     repo = "PairDrop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LvrBIdBjb4M2LidEJVCdK2uYydsJY+Cr5eXdfbS46dk=";
   };
 
@@ -56,4 +56,4 @@ buildNpmPackage rec {
       diogotcorreia
     ];
   };
-}
+})

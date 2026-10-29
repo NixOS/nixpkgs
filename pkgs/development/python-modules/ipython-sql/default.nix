@@ -10,13 +10,13 @@
   sqlalchemy,
   sqlparse,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipython-sql";
   version = "0.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PbPOf5qV369Dh2+oCxa9u5oE3guhIELKsT6fWW/P/b4=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

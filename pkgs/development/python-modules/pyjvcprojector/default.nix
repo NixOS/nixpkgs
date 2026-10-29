@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyjvcprojector";
   version = "2.0.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pyjvcprojector";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HFnaMIlF+C2fi8NlMtQKEMY35lAS15ij4QyFMFYhiU8=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/SteveEasley/pyjvcprojector/releases/tag/${src.tag}";
+    changelog = "https://github.com/SteveEasley/pyjvcprojector/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for controlling a JVC Projector over a network connection";
     homepage = "https://github.com/SteveEasley/pyjvcprojector";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

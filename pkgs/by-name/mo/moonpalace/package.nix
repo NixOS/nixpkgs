@@ -7,14 +7,14 @@
   nix-update-script,
   moonpalace,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "moonpalace";
   version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "MoonshotAI";
     repo = "moonpalace";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-30ibs49srFwTsnjbtvLUNQ79yA/vZJdlHQZ8ERi5lls=";
   };
   vendorHash = "sha256-e5G+28cgUJvUpS1CX/Tinn3gDK8fNEcJi8uv9xMR+5o=";
@@ -31,9 +31,9 @@ buildGoModule rec {
   meta = {
     description = "API debugging tool provided by Moonshot AI";
     homepage = "https://github.com/MoonshotAI/moonpalace";
-    changelog = "https://github.com/MoonshotAI/moonpalace/releases/tag/v${version}";
+    changelog = "https://github.com/MoonshotAI/moonpalace/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     mainProgram = "moonpalace";
   };
-}
+})

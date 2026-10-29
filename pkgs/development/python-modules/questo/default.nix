@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "questo";
   version = "0.4.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petereon";
     repo = "questo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1T8HRgIW9P5iX1a75Bn9XqiVMCPtL7tdQTpixPbTbv0=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

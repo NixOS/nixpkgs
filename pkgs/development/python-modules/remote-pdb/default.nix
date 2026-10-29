@@ -3,14 +3,14 @@
   fetchFromGitHub,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "remote-pdb";
   version = "2.1.0";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "python-remote-pdb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/7RysJOJigU4coC6d/Ob2lrtw8u8nLZI8wBk4oEEY3g=";
   };
   meta = {
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -18,7 +18,7 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-simple-captcha";
   version = "0.7.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbi";
     repo = "django-simple-captcha";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-httRO6OYKgo3/E2Z9EFdhuuLqcrcfB3EgxptZ7XDYlc=";
   };
 
@@ -56,10 +56,10 @@ buildPythonPackage rec {
   meta = {
     description = "Customizable Django application to add captcha images to any Django form";
     homepage = "https://github.com/mbi/django-simple-captcha";
-    changelog = "https://github.com/mbi/django-simple-captcha/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/mbi/django-simple-captcha/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mrmebelman
     ];
   };
-}
+})

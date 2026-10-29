@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "schemaspy";
   version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "schemaspy";
     repo = "schemaspy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X85Yv6yx1Hpl3vNDHtv6u38Err668dkAx1lqpoGnALg=";
   };
 
@@ -29,10 +29,10 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D target/${pname}-${version}-app.jar $out/share/java/${pname}-${version}.jar
+    install -D target/${finalAttrs.pname}-${finalAttrs.version}-app.jar $out/share/java/${finalAttrs.pname}-${finalAttrs.version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/schemaspy \
-      --add-flags "-jar $out/share/java/${pname}-${version}.jar" \
+      --add-flags "-jar $out/share/java/${finalAttrs.pname}-${finalAttrs.version}.jar" \
       --prefix PATH : ${lib.makeBinPath [ graphviz ]}
 
     runHook postInstall
@@ -50,4 +50,4 @@ maven.buildMavenPackage rec {
       anthonyroussel
     ];
   };
-}
+})

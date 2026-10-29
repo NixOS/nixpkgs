@@ -5,14 +5,14 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-devhelp";
   version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_devhelp";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-QR9dltRF0dc7tdUhMzd7QkjsedtceTzn2+WeB0tN0a0=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-devhelp";
     license = lib.licenses.bsd2;
   };
-}
+})

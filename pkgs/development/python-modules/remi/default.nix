@@ -11,7 +11,7 @@
   opencv4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "remi";
   version = "2022.7.27";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rawpython";
     repo = "remi";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VQn+Uzp6oGSit8ot0e8B0C2N41Q8+J+o91skyVN1gDA=";
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail \
         "'use_scm_version':{'version_scheme': 'post-release'},"\
-        "'use_scm_version':False, 'version': '${version}',"
+        "'use_scm_version':False, 'version': '${finalAttrs.version}',"
   '';
 
   preCheck = ''
@@ -83,4 +83,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

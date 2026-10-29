@@ -15,7 +15,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stack-data";
   version = "0.6.3";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "stack_data";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dmBhfCg60KX3gWp3k1CGRxW14z3BLlair0PjLW9HFYo=";
   };
 
@@ -60,9 +60,9 @@ buildPythonPackage rec {
   meta = {
     description = "Extract data from stack frames and tracebacks";
     homepage = "https://github.com/alexmojaki/stack_data/";
-    changelog = "https://github.com/alexmojaki/stack_data/releases/tag/v${version}";
+    changelog = "https://github.com/alexmojaki/stack_data/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
     mainProgram = "stack-data";
   };
-}
+})

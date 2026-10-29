@@ -23,7 +23,7 @@
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "exchangelib";
   version = "5.6.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = "exchangelib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tmJq0AZLuOic63ziIr173lbz6sDF/u75Y2ASYnHHDTM=";
   };
 
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client for Microsoft Exchange Web Services (EWS)";
     homepage = "https://github.com/ecederstrand/exchangelib";
-    changelog = "https://github.com/ecederstrand/exchangelib/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ecederstrand/exchangelib/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
   };
-}
+})

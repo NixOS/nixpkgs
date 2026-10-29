@@ -10,7 +10,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-mptt";
   version = "0.18";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-mptt";
     repo = "django-mptt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-UJQwjOde0DkG/Pa/pd2htnp4KEn5KwYAo8GP5A7/h+I=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ hexa ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -10,13 +10,13 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pipdate";
   version = "0.5.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-G2t+wsVGj7cDbsnWss7XqKU421WqygPzAZkhbTu9Jks=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

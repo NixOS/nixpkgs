@@ -9,13 +9,13 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybullet";
   version = "3.2.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BCh5240QGsdZDe5HX8at7VCLhf4Sc/27/eHYi9IA4U8=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ timokau ];
     platforms = lib.platforms.linux;
   };
-}
+})

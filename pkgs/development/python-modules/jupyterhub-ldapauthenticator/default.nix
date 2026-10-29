@@ -10,7 +10,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterhub-ldapauthenticator";
   version = "2.0.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "ldapauthenticator";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xixgry/++E6RimB8wo1NF8SsfzxKL1ZlNQVrlBhQ674=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple LDAP Authenticator Plugin for JupyterHub";
     homepage = "https://github.com/jupyterhub/ldapauthenticator";
-    changelog = "https://github.com/jupyterhub/ldapauthenticator/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterhub/ldapauthenticator/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
   };
-}
+})

@@ -6,13 +6,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apache-libcloud";
   version = "3.8.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-db9MCxI7wiXiTKlfyhw1vjCxnmu4X+6ngUBNQ8QnbJE=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Unified interface to many cloud providers";
     homepage = "https://libcloud.apache.org/";
-    changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/apache/libcloud/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

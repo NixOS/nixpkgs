@@ -7,14 +7,14 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seer";
   version = "2.6";
 
   src = fetchFromGitHub {
     owner = "epasveer";
     repo = "seer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-QXVsjTJYGE/7nTKldlOGN6AnW8OthrBJruVbb/HiPdg=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ foolnotion ];
   };
-}
+})

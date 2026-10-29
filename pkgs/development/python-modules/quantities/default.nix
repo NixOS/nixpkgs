@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quantities";
   version = "0.16.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-quantities";
     repo = "python-quantities";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a+UtNvcnQr4z87tpidx99u46M2H+EKtQ1EzIG5zQnmI=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Quantities is designed to handle arithmetic and conversions of physical quantities";
     homepage = "https://python-quantities.readthedocs.io/";
-    changelog = "https://github.com/python-quantities/python-quantities/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/python-quantities/python-quantities/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

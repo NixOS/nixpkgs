@@ -8,15 +8,15 @@
   mock,
   nix-update-script,
 }:
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "BottlecapDave";
   domain = "octopus_energy";
   version = "19.2.1";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "HomeAssistant-OctopusEnergy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KkQxLmp/5X/Z1WwklLzOCvL49Tn6ZinID2Rf2GZngXI=";
   };
 
@@ -53,11 +53,10 @@ buildHomeAssistantComponent rec {
   };
 
   meta = {
-    changelog = "https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy/releases/tag/v${version}";
+    changelog = "https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy/releases/tag/v${finalAttrs.version}";
     description = "Unofficial Home Assistant integration for interacting with Octopus Energy";
     homepage = "https://github.com/BottlecapDave/HomeAssistant-OctopusEnergy";
     maintainers = [ lib.maintainers.matteopacini ];
     license = lib.licenses.mit;
   };
-
-}
+})

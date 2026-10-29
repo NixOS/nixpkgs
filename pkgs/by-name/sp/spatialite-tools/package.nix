@@ -18,12 +18,12 @@
   spatialite-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spatialite-tools";
   version = "5.1.0a";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/spatialite-tools-sources/spatialite-tools-${version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/spatialite-tools-sources/spatialite-tools-${finalAttrs.version}.tar.gz";
     hash = "sha256-EZ40dY6AiM27Q+2BtKbq6ojHZLC32hkAGlUUslRVAc4=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.geospatial ];
     mainProgram = "spatialite_tool";
   };
-}
+})

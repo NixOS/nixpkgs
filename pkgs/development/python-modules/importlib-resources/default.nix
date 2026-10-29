@@ -19,14 +19,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "importlib-resources";
   version = "7.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "importlib_resources";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ByLUxiEkicUw8qFFo0wKejtHIbyWoV+tpZMOKgt2Bwg=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

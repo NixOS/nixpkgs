@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "helvum";
   version = "0.6.2";
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = "helvum";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fDsVYFJ2fm5dLpcCp7Pm4s3+jqTx4r9IQokoVQ0sM04=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-cpRPJap/U20vkfShuTav10IoPIxDKueviFKTDM4jrGs=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "helvum";
   };
-}
+})

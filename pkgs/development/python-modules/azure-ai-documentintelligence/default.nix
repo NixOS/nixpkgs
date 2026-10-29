@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-ai-documentintelligence";
   version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_ai_documentintelligence";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-TXWiUT8oOTZeurwODhdy9WAbOoyaceddoSRA2hO2NIQ=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

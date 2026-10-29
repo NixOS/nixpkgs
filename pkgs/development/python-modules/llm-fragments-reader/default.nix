@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-fragments-reader";
   version = "0.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-fragments-reader";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2xdvOpMGsTtnerrlGiVSHoJrM+GQ7Zgv+zn2SAwYAL4=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Run URLs through the Jina Reader API";
     homepage = "https://github.com/simonw/llm-fragments-reader";
-    changelog = "https://github.com/simonw/llm-fragments-reader/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-fragments-reader/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

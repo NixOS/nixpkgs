@@ -9,14 +9,14 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruida-pa";
   version = "0.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ruida_pa";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+O1lB9N5xPWU5EZRkj6Eo54Vvp6H4h/GdXUt1rWJesc=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     mainProgram = "rpa";
     maintainers = with lib.maintainers; [ kanagawamarcos ];
   };
-}
+})

@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyads";
   version = "3.6.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = "pyads";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-v36T8CEEgKvw5XRg0WPTUoGMa9uKDrea/9MJY3+WsP8=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for TwinCAT ADS library";
     homepage = "https://github.com/MrLeeh/pyads";
-    changelog = "https://github.com/stlehmann/pyads/releases/tag/${src.tag}";
+    changelog = "https://github.com/stlehmann/pyads/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

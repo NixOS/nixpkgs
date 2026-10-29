@@ -6,7 +6,7 @@
 }:
 
 let
-  package = buildGoModule rec {
+  package = buildGoModule (finalAttrs: {
     pname = "nomad-autoscaler";
     version = "0.3.6";
 
@@ -29,7 +29,7 @@ let
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "nomad-autoscaler";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       sha256 = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
     };
 
@@ -101,7 +101,7 @@ let
       license = lib.licenses.mpl20;
       maintainers = [ ];
     };
-  };
+  });
 
   plugins =
     let

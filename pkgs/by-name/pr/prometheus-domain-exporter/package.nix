@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "domain-exporter";
   version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "domain_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LZsw3k/4h6nOVoaGiOASWrvIQf4wI6nSNuAjXsWcnd8=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
       caarlos0
     ];
   };
-}
+})

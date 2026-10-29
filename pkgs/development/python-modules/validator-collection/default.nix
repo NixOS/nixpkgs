@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "validator-collection";
   version = "1.5.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "insightindustry";
     repo = "validator-collection";
-    tag = "v.${version}";
+    tag = "v.${finalAttrs.version}";
     hash = "sha256-CDPfIkZZRpl1rAzNpLKJfaBEGWUl71coic2jOHIgi6o=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library of 60+ commonly-used validator functions";
     homepage = "https://github.com/insightindustry/validator-collection/";
-    changelog = "https://github.com/insightindustry/validator-collection/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/insightindustry/validator-collection/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

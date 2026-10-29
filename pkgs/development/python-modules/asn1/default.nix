@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asn1";
   version = "3.3.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrivet";
     repo = "python-asn1";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gqFW+akhWwvtqJQb4LqcgjyJb6bcInl0gT6f2CMTtA0=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/andrivet/python-asn1";
-    changelog = "https://github.com/andrivet/python-asn1/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/andrivet/python-asn1/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

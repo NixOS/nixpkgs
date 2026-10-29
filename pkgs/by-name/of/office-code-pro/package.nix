@@ -4,21 +4,21 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "office-code-pro";
   version = "1.004";
 
   src = fetchFromGitHub {
     owner = "phooky";
     repo = "Office-Code-Pro";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-qzKTXYswkithZUJT0a3IifCq4RJFeKciZAPhYr2U1X4=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -m644 -Dt $out/share/doc/${pname}-${version} README.md
+    install -m644 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README.md
     install -m444 -Dt $out/share/fonts/opentype 'Fonts/Office Code Pro/OTF/'*.otf 'Fonts/Office Code Pro D/OTF/'*.otf
 
     runHook postInstall
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     maintainers = [ ];
   };
-}
+})

@@ -4,14 +4,14 @@
   lib,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nordzy-cursor-theme";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "guillaumeboehm";
     repo = "Nordzy-cursors";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pPcdlMa3H5RtbqIxvgxDkP4tw76H2UQujXbrINc3MxE=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
       alexnortung
     ];
   };
-}
+})

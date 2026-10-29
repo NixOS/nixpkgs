@@ -11,7 +11,7 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "measurement";
   version = "4.0a8";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coddingtonbear";
     repo = "python-measurement";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QxXxx9Jbx7ykQFaw/3S6ANPUmw3mhvSa4np6crsfVtE=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Use and manipulate unit-aware measurement objects in Python";
     homepage = "https://github.com/coddingtonbear/python-measurement";
-    changelog = "https://github.com/coddingtonbear/python-measurement/releases/tag/${version}";
+    changelog = "https://github.com/coddingtonbear/python-measurement/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
   };
-}
+})

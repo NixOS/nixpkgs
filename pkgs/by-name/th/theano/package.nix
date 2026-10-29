@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "theano";
   version = "2.0";
 
   src = fetchzip {
-    url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+    url = "https://github.com/akryukov/theano/releases/download/v${finalAttrs.version}/theano-${finalAttrs.version}.otf.zip";
     stripRoot = false;
     hash = "sha256-9wnwHcRHB+AToOvGwZSXvHkQ8hqMd7Sdl26Ty/IwbPw=";
   };
@@ -18,9 +18,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${pname}-${version}
+    mkdir -p $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
     cp *.otf $out/share/fonts/opentype
-    cp *.txt $out/share/doc/${pname}-${version}
+    cp *.txt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blockfrost-python";
   version = "0.6.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockfrost";
     repo = "blockfrost-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mN26QXxizDR+o2V5C2MlqVEbRns1BTmwZdUnnHNcFzw=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aciceri ];
   };
-}
+})

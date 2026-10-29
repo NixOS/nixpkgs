@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "noto-fonts-emoji-blob-bin";
   version = "15.0";
 
   src = fetchurl {
-    url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
+    url = "https://github.com/C1710/blobmoji/releases/download/v${finalAttrs.version}/Blobmoji.ttf";
     hash = "sha256-3MPWZ1A2ups171dNIiFTJ3C1vZiGy6I8ZF70aUfrePk=";
   };
 
@@ -33,4 +33,4 @@ stdenvNoCC.mkDerivation rec {
       jk
     ];
   };
-}
+})

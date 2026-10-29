@@ -7,13 +7,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py3exiv2";
   version = "0.12.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-crI+X3YMRzPPmpGNsI2U+9bZgwcR0qTowJuPNFY/Ooo=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ vinymeuh ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

@@ -5,14 +5,14 @@
   buildPythonPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "huepy";
   version = "1.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "huepy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Wym+73lzEvt2BhiLxc2Y94q49+AVdkJ6kxLxybILdZ0=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     platforms = lib.platforms.all;
   };
-}
+})

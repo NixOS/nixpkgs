@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zephyr-python-api";
   version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "zephyr_python_api";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YupGiybfhwb+I4ofr6RNBzS6LQfx5BQD/SU5nYrnqFk=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rapiteanu ];
   };
-}
+})

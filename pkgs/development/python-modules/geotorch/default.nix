@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geotorch";
   version = "0.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lezcano";
     repo = "geotorch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mMVgN8ZmedSz5VxAAE7vdvmZXiP5y3GkO60o5hCSHn8=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Constrained optimization toolkit for PyTorch";
     homepage = "https://github.com/lezcano/geotorch";
-    changelog = "https://github.com/lezcano/geotorch/releases/tag/${version}";
+    changelog = "https://github.com/lezcano/geotorch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-gssapi";
   version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "requests_gssapi";
     hash = "sha256-uifrMp9IQNllvI+l02DGJ8dDSe+mFWylAa2Jr8ahNPQ=";
   };
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "GSSAPI authentication handler for python-requests";
     homepage = "https://github.com/pythongssapi/requests-gssapi";
-    changelog = "https://github.com/pythongssapi/requests-gssapi/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/pythongssapi/requests-gssapi/blob/v${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ javimerino ];
   };
-}
+})

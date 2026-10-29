@@ -15,7 +15,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-postgresql-netfields";
   version = "1.5.0";
   format = "setuptools";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jimfunk";
     repo = "django-postgresql-netfields";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Lae7Ql+poy0IDdEsIG8o3SHgqiJ1U8VWCgrLWmLE7TU=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django PostgreSQL netfields implementation";
     homepage = "https://github.com/jimfunk/django-postgresql-netfields";
-    changelog = "https://github.com/jimfunk/django-postgresql-netfields/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/jimfunk/django-postgresql-netfields/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

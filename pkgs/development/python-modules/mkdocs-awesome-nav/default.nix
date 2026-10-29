@@ -14,7 +14,7 @@
   wcmatch,
 
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-awesome-nav";
   version = "3.3.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukasgeiter";
     repo = "mkdocs-awesome-nav";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-guv+c4QwaATYEZ6XcWVZaOcZ7U9oLsW+RdWBtB1Xrnc=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin for customizing the navigation structure of your MkDocs site";
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-nav";
-    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/releases/tag/v${version}";
+    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phaer ];
   };
-}
+})

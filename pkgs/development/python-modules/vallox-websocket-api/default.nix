@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vallox-websocket-api";
   version = "6.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tJuZl6sWOWpdfq5RJVCWehz6y0Du1VXz++aOWaf9WLY=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vallox_websocket_api" ];
 
   meta = {
-    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${src.tag}";
+    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${finalAttrs.src.tag}";
     description = "Async API for Vallox ventilation units";
     homepage = "https://github.com/yozik04/vallox_websocket_api";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -11,7 +11,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "salmon-mail";
   version = "3.3.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moggers87";
     repo = "salmon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ysBO/ridfy7YPoTsVwAxar9UvfM/qxrx2dp0EtDNLvE=";
   };
 
@@ -59,10 +59,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://salmon-mail.readthedocs.org/";
-    changelog = "https://github.com/moggers87/salmon/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/moggers87/salmon/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Pythonic mail application server";
     mainProgram = "salmon";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

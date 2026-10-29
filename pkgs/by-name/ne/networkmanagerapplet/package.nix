@@ -25,12 +25,12 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "network-manager-applet";
   version = "1.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/network-manager-applet/${lib.versions.majorMinor version}/network-manager-applet-${version}.tar.xz";
+    url = "mirror://gnome/sources/network-manager-applet/${lib.versions.majorMinor finalAttrs.version}/network-manager-applet-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-qEcESH6jr+FIXEf7KrWYuPd59UCuDcvwocX4XmSn4lM=";
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       attrPath = "networkmanagerapplet";
       versionPolicy = "odd-unstable";
     };
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nm-applet";
     platforms = lib.platforms.linux;
   };
-}
+})

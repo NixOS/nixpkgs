@@ -10,14 +10,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "structorizer";
   version = "3.32-35";
 
   src = fetchFromGitHub {
     owner = "fesch";
     repo = "Structorizer.Desktop";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ur00Vq+bl+R5MBpmGQO8nX9rEVNMgih1OzWlpY0RDIk=";
   };
 
@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
     cp freedesktop/mime/packages/structorizer.xml $out/share/mime/packages/
     cp freedesktop/applications/structorizer.desktop $out/share/applications/
 
-    cd src/lu/fisch/${pname}/gui
-    install -vD icons/000_${pname}.png $out/share/icons/hicolor/16x16/apps/${pname}.png
+    cd src/lu/fisch/${finalAttrs.pname}/gui
+    install -vD icons/000_${finalAttrs.pname}.png $out/share/icons/hicolor/16x16/apps/${finalAttrs.pname}.png
     for icon_width in 20 24 32 48 64 128 256; do
-      install -vD icons_"$icon_width"/000_${pname}.png $out/share/icons/hicolor/"$icon_width"x"$icon_width"/apps/${pname}.png
+      install -vD icons_"$icon_width"/000_${finalAttrs.pname}.png $out/share/icons/hicolor/"$icon_width"x"$icon_width"/apps/${finalAttrs.pname}.png
     done
 
     runHook postInstall
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "structorizer";
   };
-}
+})

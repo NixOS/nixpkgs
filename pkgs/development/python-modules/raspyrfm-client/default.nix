@@ -7,7 +7,7 @@
   xeger,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "raspyrfm-client";
   version = "1.2.9";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = "raspyrfm-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+TraMrVoR8GXrjfjJnu1uyyW6KTnu8KrRqAHYU8thFw=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Send rc signals with the RaspyRFM module";
     homepage = "https://github.com/markusressel/raspyrfm-client";
-    changelog = "https://github.com/markusressel/raspyrfm-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/markusressel/raspyrfm-client/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

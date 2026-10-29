@@ -9,13 +9,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zstandard";
   version = "0.25.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dxPhF50WLPXHkG2oduwsy5w6ncvf/vDMf3DDZnogXws=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simple-term-menu";
   version = "1.6.6";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IngoMeyer441";
     repo = "simple-term-menu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nfMqtyUalt/d/wTyRUlu5x4Q349ARY8hDMi8Ui4cTI4=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     mainProgram = "simple-term-menu";
     homepage = "https://github.com/IngoMeyer441/simple-term-menu";
     license = lib.licenses.mit;
-    changelog = "https://github.com/IngoMeyer441/simple-term-menu/releases/tag/v${version}";
+    changelog = "https://github.com/IngoMeyer441/simple-term-menu/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ smrehman ];
   };
-}
+})

@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cons";
   version = "0.4.7";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "python-cons";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BS7lThnv+dxtztvw2aRhQa8yx2cRfrZLiXjcwvZ8QR0=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of Lisp/Scheme-like cons in Python";
     homepage = "https://github.com/pythological/python-cons";
-    changelog = "https://github.com/pythological/python-cons/releases/tag/${src.tag}";
+    changelog = "https://github.com/pythological/python-cons/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ Etjean ];
   };
-}
+})

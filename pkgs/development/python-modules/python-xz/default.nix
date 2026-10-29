@@ -8,13 +8,13 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-xz";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python_xz";
     hash = "sha256-yNxRBweZ7p533dndIHoRzJFw6SmFQvgecYcHLg1UNHg=";
   };
@@ -34,9 +34,9 @@ buildPythonPackage rec {
   meta = {
     description = "Pure Python library for seeking within compressed xz files";
     homepage = "https://github.com/Rogdham/python-xz";
-    changelog = "https://github.com/Rogdham/python-xz/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Rogdham/python-xz/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -8,7 +8,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tatsu";
   version = "5.16.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YFNoA81J8x4OO7lLUjeN/NzQfCTEeosaWZg9UKy8C50=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://tatsu.readthedocs.io/";
-    changelog = "https://github.com/neogeny/TatSu/releases/tag/${src.tag}";
+    changelog = "https://github.com/neogeny/TatSu/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

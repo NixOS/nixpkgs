@@ -11,13 +11,13 @@
   freezegun,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "astral";
   version = "3.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-m3w7QS6eadFyz7JL4Oat3MnxvQGijbi+vmbXXMxTPYg=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Calculations for the position of the sun and the moon";
     homepage = "https://github.com/sffjunkie/astral/";
-    changelog = "https://github.com/sffjunkie/astral/releases/tag/${version}";
+    changelog = "https://github.com/sffjunkie/astral/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

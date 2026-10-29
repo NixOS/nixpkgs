@@ -6,7 +6,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "emulated-roku";
   version = "0.5.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mindigmarton";
     repo = "emulated_roku";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KwDEajkrEEgobORetM/rROMDLZvw9AJmmr1jmXAJJbk=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "emulated_roku" ];
 
   meta = {
-    changelog = "https://github.com/martonperei/emulated_roku/releases/tag/${src.tag}";
+    changelog = "https://github.com/martonperei/emulated_roku/releases/tag/${finalAttrs.src.tag}";
     description = "Library to emulate a roku server to serve as a proxy for remotes such as Harmony";
     homepage = "https://github.com/mindigmarton/emulated_roku";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

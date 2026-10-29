@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "terser";
   version = "5.51.2";
 
   src = fetchFromGitHub {
     owner = "terser";
     repo = "terser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6TLm5k5fXPokTCa9ZbXVtlGp12Xfg2eKsAMm2HLH7Qs=";
   };
 
@@ -24,4 +24,4 @@ buildNpmPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ talyz ];
   };
-}
+})

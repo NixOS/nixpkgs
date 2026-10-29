@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libre-bodoni";
   version = "2.000";
 
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -m444 -Dt $out/share/fonts/opentype */v2000\ -\ initial\ glyphs\ migration/OTF/*.otf
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README.md FONTLOG.txt
 
     runHook postInstall
   '';
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

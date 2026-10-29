@@ -5,12 +5,12 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbglib";
   version = "0.3.0";
   pyproject = true;
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-e0/VxJSa9DWnq1WPh7QGrNXd+dx/Afw7PpnrzsmkZ0w=";
   };
   propagatedBuildInputs = [ poetry-core ];
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jetpackjackson ];
   };
-}
+})

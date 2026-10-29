@@ -11,7 +11,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nuitka";
   version = "4.2.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7xiu5QRvk9UTqcYXvibD9AvfvxmkxzTN1F9vQWJaL7U=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     # never built on darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -11,12 +11,12 @@
   mfcl2740dwlpr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfcl2740dwcupswrapper";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf101726/${pname}-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf101726/${finalAttrs.pname}-${finalAttrs.version}.i386.deb";
     sha256 = "078453e19f20ab6c7fc4d63c3e09f162f3d1410c04c23a294b6ffbd720b35ffb";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ ];
   };
-}
+})

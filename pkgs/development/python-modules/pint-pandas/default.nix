@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pint-pandas";
   version = "0.7.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "pint-pandas";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-B8nxGetnYpA+Nuhe//D8n+5g7rPO90Mm1iWswJ0+mPc=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/hgrecco/pint-pandas";
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

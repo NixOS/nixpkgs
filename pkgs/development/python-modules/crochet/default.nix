@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crochet";
   version = "2.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "itamarst";
     repo = "crochet";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-grymhvCC9zDBKhNnQC0o07hdLPV5KMWb6HSz/ntSbq8=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library that makes it easier to use Twisted from regular blocking code";
     homepage = "https://github.com/itamarst/crochet";
-    changelog = "https://github.com/itamarst/crochet/blob/${src.tag}/docs/news.rst";
+    changelog = "https://github.com/itamarst/crochet/blob/${finalAttrs.src.tag}/docs/news.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

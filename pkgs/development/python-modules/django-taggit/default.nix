@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-taggit";
   version = "6.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-taggit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QLJhO517VONuf+8rrpZ6SXMP/WWymOIKfd4eyviwCsU=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple tagging for django";
     homepage = "https://github.com/jazzband/django-taggit";
-    changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/jazzband/django-taggit/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
   };
-}
+})

@@ -9,7 +9,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lhpapi";
   version = "1.0.11";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stephan192";
     repo = "lhpapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tz1/+NTg8wI0mWcPfM1zk7EheUwShv8eCoYA7wAb/lM=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _9R ];
   };
-}
+})

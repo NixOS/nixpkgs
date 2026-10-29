@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hexdump";
   version = "3.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-14GkOwwWrOP5Nmqt5z6K06e9UTfVjwtFqy0/VIdvINs=";
     extension = "zip";
   };
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     maintainers = [
     ];
   };
-}
+})

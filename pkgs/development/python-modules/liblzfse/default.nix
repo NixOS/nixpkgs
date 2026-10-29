@@ -4,13 +4,13 @@
   fetchPypi,
   lzfse,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyliblzfse";
   version = "0.4.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uwuJmzgwwC/fPb3kjqWWEYM/Nm/vg25cMs+BRRNLfT0=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

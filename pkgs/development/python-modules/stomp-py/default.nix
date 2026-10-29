@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stomp-py";
   version = "8.2.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jasonrbriggs";
     repo = "stomp.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UkNmE0+G9d3k1OhkNl98Jy5sP6MAywynzBmBtK9mZ90=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client library for accessing messaging servers (such as ActiveMQ or RabbitMQ) using the STOMP protocol";
     homepage = "https://github.com/jasonrbriggs/stomp.py";
-    changelog = "https://github.com/jasonrbriggs/stomp.py/releases/tag/${version}";
+    changelog = "https://github.com/jasonrbriggs/stomp.py/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

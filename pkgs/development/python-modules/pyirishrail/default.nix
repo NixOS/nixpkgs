@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyirishrail";
   version = "0.0.2";
   pyproject = true;
@@ -15,13 +15,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ttroy50";
     repo = "pyirishrail";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NgARqhcXP0lgGpgBRiNtQaSn9JcRNtCcZPljcL7t3Xc=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version='0.0.1'," "version='${version}',"
+      --replace-fail "version='0.0.1'," "version='${finalAttrs.version}',"
   '';
 
   build-system = [ setuptools ];
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to get the real-time transport information (RTPI) from Irish Rail";
     homepage = "https://github.com/ttroy50/pyirishrail";
-    changelog = "https://github.com/ttroy50/pyirishrail/releases/tag/${src.tag}";
+    changelog = "https://github.com/ttroy50/pyirishrail/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

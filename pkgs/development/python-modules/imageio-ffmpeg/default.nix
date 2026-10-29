@@ -14,7 +14,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imageio-ffmpeg";
   version = "0.6.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio-ffmpeg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Yy2PTNBGPP/BAR7CZck/9qr2g/s4ntiuydqXz77hR7E=";
   };
 
@@ -56,10 +56,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "imageio_ffmpeg" ];
 
   meta = {
-    changelog = "https://github.com/imageio/imageio-ffmpeg/releases/tag/${src.tag}";
+    changelog = "https://github.com/imageio/imageio-ffmpeg/releases/tag/${finalAttrs.src.tag}";
     description = "FFMPEG wrapper for Python";
     homepage = "https://github.com/imageio/imageio-ffmpeg";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.pmiddend ];
   };
-}
+})

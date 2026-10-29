@@ -9,7 +9,7 @@
   sphinx-rtd-theme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdfservices-sdk";
   version = "4.3.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adobe";
     repo = "pdfservices-python-sdk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JH4NWtF5YWEKJ56kcw3sx4hZFEcSMN+PXIsDmOkSYQ4=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ hhr2020 ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
-}
+})

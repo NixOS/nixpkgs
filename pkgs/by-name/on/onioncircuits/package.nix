@@ -8,7 +8,7 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "onioncircuits";
   version = "0.8.2";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.tails.boum.org";
     owner = "tails";
     repo = "onioncircuits";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hk4pwPTtj4wt58Wn3NbGc5yQt/FJGdcZC9BbNgvaMqY=";
   };
 
@@ -51,4 +51,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ wattmto ];
   };
-}
+})

@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-smtpd";
   version = "0.1.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bebleo";
     repo = "pytest-smtpd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Vu2D2hfxBYxgXQ4Gjr+jFpac9fjpLL2FftBhnqrcQaA=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

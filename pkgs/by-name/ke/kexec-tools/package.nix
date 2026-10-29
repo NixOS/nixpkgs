@@ -10,14 +10,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kexec-tools";
   version = "2.0.32";
 
   src = fetchurl {
     urls = [
-      "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
-      "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
+      "mirror://kernel/linux/utils/kernel/kexec/${finalAttrs.pname}-${finalAttrs.version}.tar.xz"
+      "http://horms.net/projects/kexec/kexec-tools/${finalAttrs.pname}-${finalAttrs.version}.tar.xz"
     ];
     sha256 = "sha256-j4FCKl/SNiz2ywAbUR5TVWXtDzLC9EUfteto/tZxCl0=";
   };
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     mainProgram = "kexec";
     maintainers = [ lib.maintainers.zowoq ];
   };
-}
+})

@@ -7,7 +7,7 @@
   gast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py2vega";
   version = "0.7.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "QuantStack";
     repo = "py2vega";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GU4mSOHsU/DPBdKFau6pOYQpaojXOfQIXrSG3skWr/I=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

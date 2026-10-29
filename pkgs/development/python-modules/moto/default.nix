@@ -35,7 +35,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moto";
   version = "5.2.3";
   pyproject = true;
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7wE44MYdRf9p3/ac2qOPpLaS0bkpoh84R+rdJp5oycU=";
   };
 
@@ -408,8 +408,8 @@ buildPythonPackage rec {
   meta = {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
-    changelog = "https://github.com/getmoto/moto/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/getmoto/moto/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

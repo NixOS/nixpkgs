@@ -8,7 +8,7 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycrashreport";
   version = "2.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pycrashreport";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-huiPTpcNwRY8IMHe4y4H/OBCdlDWhBiU9u1xTvLSDQk=";
   };
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/doronz88/pycrashreport/releases/tag/${src.tag}";
+    changelog = "https://github.com/doronz88/pycrashreport/releases/tag/${finalAttrs.src.tag}";
     description = "Python3 parser for Apple's crash reports";
     homepage = "https://github.com/doronz88/pycrashreport";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pycrashreport";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

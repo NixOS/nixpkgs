@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymarshal";
   version = "2.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stargateaudio";
     repo = "pymarshal";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-o+eWa3XFDFn+fyVxWOI9LbKqBUVsYR8O7J4sFbSGvEg=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.bsd2;
   };
-}
+})

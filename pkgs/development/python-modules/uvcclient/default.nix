@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uvcclient";
   version = "0.12.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "uvcclient";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-V7xIvZ9vIXHPpkEeJZ6QedWk+4ZVNwCzj5ffLyixFz4=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/uilibs/uvcclient/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/uilibs/uvcclient/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Client for Ubiquiti's Unifi Camera NVR";
     mainProgram = "uvc";
     homepage = "https://github.com/kk7ds/uvcclient";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -28,7 +28,7 @@
   pywavelets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tsfresh";
   version = "0.21.1";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blue-yonder";
     repo = "tsfresh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KwUI33t5KFcTUWdSDg81OPbNn5SYv4Gw/0dPjCB502w=";
   };
 
@@ -103,8 +103,8 @@ buildPythonPackage rec {
     description = "Automatic extraction of relevant features from time series";
     mainProgram = "run_tsfresh";
     homepage = "https://github.com/blue-yonder/tsfresh";
-    changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/blue-yonder/tsfresh/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

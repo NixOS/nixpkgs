@@ -11,13 +11,13 @@
   notebook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter";
   version = "1.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-1VRnvOq96knX42JK9+M9WcN//1PtOjUOGslXvtcx3no=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     priority = 100; # This is a metapackage which is unimportant
   };
-}
+})

@@ -9,7 +9,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylaunches";
   version = "2.0.0";
   pyproject = true;
@@ -17,14 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pylaunches";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NewzzZuiXwaWU59bu+M2QcSfydL1khvw/YJkbZ58W2Q=";
   };
 
   postPatch = ''
     # Upstream doesn't set version in the repo
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0"' 'version = "${version}"'
+      --replace-fail 'version = "0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to get information about upcoming space launches";
     homepage = "https://github.com/ludeeus/pylaunches";
-    changelog = "https://github.com/ludeeus/pylaunches/releases/tag/${version}";
+    changelog = "https://github.com/ludeeus/pylaunches/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

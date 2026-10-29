@@ -7,12 +7,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ec2-api-tools";
   version = "1.7.5.1";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
+    url = "https://s3.amazonaws.com/ec2-downloads/${finalAttrs.pname}-${finalAttrs.version}.zip";
     sha256 = "sha256-hRq+MEA+4chqPr3d9bS//X70tYcRBTD+rfAJVNmuLzo=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     description = "Command-line tools to create and manage Amazon EC2 virtual machines";
     license = lib.licenses.amazonsl;
   };
-}
+})

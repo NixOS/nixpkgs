@@ -7,14 +7,14 @@
   postgresql,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "pg_checksums";
   version = "1.4";
 
   src = fetchFromGitHub {
     owner = "credativ";
     repo = "pg_checksums";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CXWJroUkp6g1g0T5skx8P5rZyv1Pvzb/DQ7ezuDNi7s=";
   };
 
@@ -48,4 +48,4 @@ clangStdenv.mkDerivation rec {
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
   };
-}
+})

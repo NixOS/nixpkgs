@@ -19,7 +19,7 @@
   mesa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrender";
   version = "0.1.45";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mmatl";
     repo = "pyrender";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-V2G8QWXMxFDQpT4XDOJhIFI2V9VhDQCaXYBb/QVLxgM=";
   };
 
@@ -97,4 +97,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ pbsds ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

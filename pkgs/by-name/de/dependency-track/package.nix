@@ -39,14 +39,14 @@ let
   };
 in
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   inherit version;
   pname = "dependency-track";
 
   src = fetchFromGitHub {
     owner = "DependencyTrack";
     repo = "dependency-track";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1Ri1iEu6CSMFHFeZ7SNVtGWQk+bl6R40zTtTRGdR3jo=";
   };
 
@@ -106,7 +106,7 @@ maven.buildMavenPackage rec {
     "-P enhance"
     "-P embedded-jetty"
     "-Dservices.bom.merge.skip=false"
-    "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
+    "-Dlogback.configuration.file=${finalAttrs.src}/src/main/docker/logback.xml"
     "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
   ];
 
@@ -157,4 +157,4 @@ maven.buildMavenPackage rec {
     mainProgram = "dependency-track";
     inherit (jre_headless.meta) platforms;
   };
-}
+})

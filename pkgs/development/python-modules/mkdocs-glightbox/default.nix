@@ -10,7 +10,7 @@
   mkdocs-material,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-glightbox";
   version = "0.5.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blueswen";
     repo = "mkdocs-glightbox";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6HkBeZHBLR3HqWh3WjjCqxR85nQuQqq9+7UwbXOZHRk=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "MkDocs plugin supports image lightbox (zoom effect) with GLightbox";
     homepage = "https://github.com/blueswen/mkdocs-glightbox";
-    changelog = "https://github.com/blueswen/mkdocs-glightbox/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/blueswen/mkdocs-glightbox/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marcel ];
   };
-}
+})

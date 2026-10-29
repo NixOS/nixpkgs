@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "firefly";
   version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "Brum3ns";
     repo = "firefly";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hhZw7u4NX+BvapUZv0k2Xu/UOdL7Pt8Idjat4aJzvIk=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "firefly";
   };
-}
+})

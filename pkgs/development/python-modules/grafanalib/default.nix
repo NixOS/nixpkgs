@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grafanalib";
   version = "0.7.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "grafanalib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vXnyAfC9avKz8U4+MJVnu2zoPD0nR2qarWYidhEPW5s=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for building Grafana dashboards";
     homepage = "https://github.com/weaveworks/grafanalib/";
-    changelog = "https://github.com/weaveworks/grafanalib/releases/tag/v${version}";
+    changelog = "https://github.com/weaveworks/grafanalib/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ michaelgrahamevans ];
   };
-}
+})

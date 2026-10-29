@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-emoji";
   version = "0.2.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hackebrot";
     repo = "pytest-emoji";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GuKBbIIODDnMi9YMX3zR4Jc3cbK+Zibj1ZeWvYkUY24=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

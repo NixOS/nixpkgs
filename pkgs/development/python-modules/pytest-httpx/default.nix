@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-httpx";
   version = "0.36.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WuvfhLRKbfhVehyz/0PAUlIYbwfTYlQMRC8uTWD1T00=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Send responses to httpx";
     homepage = "https://github.com/Colin-b/pytest_httpx";
-    changelog = "https://github.com/Colin-b/pytest_httpx/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Colin-b/pytest_httpx/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -12,13 +12,13 @@
   pgadmin4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlparse";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ETw1x1Nlq5zJxyMdaMZCj7EcCF/I6esa1lm33b9s0rk=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
       Provides support for parsing, splitting and formatting SQL statements.
     '';
     homepage = "https://github.com/andialbrecht/sqlparse";
-    changelog = "https://github.com/andialbrecht/sqlparse/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/andialbrecht/sqlparse/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
     mainProgram = "sqlformat";
   };
-}
+})

@@ -31,7 +31,7 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-brother-hll2375dw";
   version = "4.0.0-1";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf103535//hll2375dwpdrv-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf103535//hll2375dwpdrv-${finalAttrs.version}.i386.deb";
     hash = "sha256-N5VCBZLFrfw29QjjzlSvQ12urvyaf7ez/RJ08UwqHdk=";
   };
 
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     platforms = map (arch: "${arch}-linux") arches;
     maintainers = [ lib.maintainers.gador ];
   };
-}
+})

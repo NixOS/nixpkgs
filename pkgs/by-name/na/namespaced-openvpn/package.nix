@@ -8,14 +8,14 @@
   util-linux,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "namespaced-openvpn";
   version = "0.6.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "slingamn";
-    repo = pname;
+    repo = finalAttrs.pname;
     rev = "a3fa42b2d8645272cbeb6856e26a7ea9547cb7d1";
     sha256 = "+Fdaw9EGyFGH9/DSeVJczS8gPzAOv+qn+1U20zQBBqQ=";
   };
@@ -54,4 +54,4 @@ python3Packages.buildPythonPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "namespaced-openvpn";
   };
-}
+})

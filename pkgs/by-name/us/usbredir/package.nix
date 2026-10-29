@@ -9,7 +9,7 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbredir";
   version = "0.15.0";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "spice";
     repo = "usbredir";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-a+RaJO70jxsrVwSG+PzDg2luvBHqBdNdRdLOGhdhjzY=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.freedesktop ];
   };
-}
+})

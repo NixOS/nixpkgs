@@ -15,7 +15,7 @@
   pytest-astropy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pvextractor";
   version = "0.4";
   format = "setuptools";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "radio-astro-tools";
     repo = "pvextractor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TjwoTtoGWU6C6HdFuS+gJj69PUnfchPHs7UjFqwftVQ=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ifurther ];
   };
-}
+})

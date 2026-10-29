@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meteoswiss-async";
   version = "0.1.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albertomontesg";
     repo = "meteoswiss-async";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xFvfyLZvBfnbzShKN+94piNUVjV1cfi4jWpc/Xw6XG4=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous client library for MeteoSwiss API";
     homepage = "https://github.com/albertomontesg/meteoswiss-async";
-    changelog = "https://github.com/albertomontesg/meteoswiss-async/releases/tag/${version}";
+    changelog = "https://github.com/albertomontesg/meteoswiss-async/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

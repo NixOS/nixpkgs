@@ -10,7 +10,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "changelog-chug";
   version = "0.0.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromSourcehut {
     owner = "~bignose";
     repo = "changelog-chug";
-    rev = "release/${version}";
+    rev = "release/${finalAttrs.version}";
     hash = "sha256-SPwFkmRQMpdsVmzZE4mB2J9wsfvE1K21QDkOQ2XPlow=";
     # HACK: sourcehut can't generate tarballs from tags with slashes properly,
     # so force using git clone.
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
   };
-}
+})

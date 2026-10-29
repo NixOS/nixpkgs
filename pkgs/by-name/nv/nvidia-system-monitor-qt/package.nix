@@ -23,14 +23,14 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-system-monitor-qt";
   version = "1.6-1";
 
   src = fetchFromGitHub {
     owner = "congard";
     repo = "nvidia-system-monitor-qt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JHK7idyk5UxgDyt+SzvYjTLmlNzx6+Z+OPYsRD4NWPg=";
   };
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
     description = "Task Manager for Linux for NVIDIA graphics cards";
     homepage = "https://github.com/congard/nvidia-system-monitor-qt";
     downloadPage = "${homepage}/releases";
-    changelog = "${downloadPage}/tag/v${version}";
+    changelog = "${downloadPage}/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hacker1024 ];
     mainProgram = "qnvsm";
     platforms = lib.platforms.linux;
   };
-}
+})

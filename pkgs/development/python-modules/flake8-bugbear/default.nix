@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flake8-bugbear";
   version = "26.9.30";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8-bugbear";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-urF+vc9sKW98AetQbskHnQq5f1GVzJP+a1wgd9FBTvU=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin for Flake8 to find bugs and design problems";
     homepage = "https://github.com/PyCQA/flake8-bugbear";
-    changelog = "https://github.com/PyCQA/flake8-bugbear/blob/${src.tag}/README.rst#change-log";
+    changelog = "https://github.com/PyCQA/flake8-bugbear/blob/${finalAttrs.src.tag}/README.rst#change-log";
     longDescription = ''
       A plugin for flake8 finding likely bugs and design problems in your
       program.
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ newam ];
   };
-}
+})

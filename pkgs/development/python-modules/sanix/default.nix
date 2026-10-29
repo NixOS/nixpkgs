@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sanix";
   version = "1.0.6";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomaszsluszniak";
     repo = "sanix_py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D2w3hmL8ym63liWOYdZS4ry3lJ0utbbYGagWoOTT1TQ=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

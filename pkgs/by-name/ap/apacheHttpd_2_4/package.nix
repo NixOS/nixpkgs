@@ -39,12 +39,12 @@ let
   lua5 = lua5_2_compat;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apache-httpd";
   version = "2.4.69";
 
   src = fetchurl {
-    url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
+    url = "mirror://apache/httpd/httpd-${finalAttrs.version}.tar.bz2";
     hash = "sha256-xebrxm40m4fX/GkWrnzCqAjtNIAD3hNM+enYnT4sxz0=";
   };
 
@@ -175,4 +175,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ arcayr ];
   };
-}
+})

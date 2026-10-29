@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "npm-check";
   version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "dylang";
     repo = "npm-check";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-F7bMvGqOxJzoaw25VR6D90UNwT8HxZ4PZhhQEvQFDn4=";
   };
 
@@ -25,8 +25,8 @@ buildNpmPackage rec {
     description = "Check for outdated, incorrect, and unused dependencies";
     mainProgram = "npm-check";
     homepage = "https://github.com/dylang/npm-check";
-    changelog = "https://github.com/dylang/npm-check/releases/tag/v${version}";
+    changelog = "https://github.com/dylang/npm-check/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.thomasjm ];
   };
-}
+})

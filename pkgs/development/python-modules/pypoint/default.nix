@@ -6,7 +6,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypoint";
   version = "3.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9z9VcY42uHIksIvDU1Vz+kvXNmrCu08fGB/waQahmyg=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

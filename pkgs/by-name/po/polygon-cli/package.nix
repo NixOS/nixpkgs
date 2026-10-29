@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "polygon-cli";
   version = "1.1.11";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gEz3kcXbXj9dXnMCx0Q8TjCQemXvJne9EwFsPt14xV4=";
   };
 
@@ -34,4 +34,4 @@ python3.pkgs.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaser ];
   };
-}
+})

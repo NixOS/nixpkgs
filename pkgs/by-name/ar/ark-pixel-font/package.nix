@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ark-pixel-font";
   version = "2025.08.24";
   pyproject = false;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "ark-pixel-font";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kxct994UmZhJBMlXZmayN24eiKqeG9T7GdyfsjBYpn0=";
   };
 
@@ -61,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ h7x4 ];
     platforms = lib.platforms.all;
   };
-}
+})

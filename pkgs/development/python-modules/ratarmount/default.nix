@@ -13,13 +13,13 @@
   setuptools_80,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ratarmount";
   version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-npbw+IfbZ6PqaMTsxiXAWjY2zY8p2ASR6xcNk008qgA=";
   };
 
@@ -49,9 +49,9 @@ buildPythonPackage rec {
   meta = {
     description = "Mounts archives as read-only file systems by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount";
-    changelog = "https://github.com/mxmlnkn/ratarmount/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mxmlnkn/ratarmount/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
     mainProgram = "ratarmount";
   };
-}
+})

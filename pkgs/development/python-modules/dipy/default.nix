@@ -13,7 +13,7 @@
   trx-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dipy";
   version = "1.11.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dipy";
     repo = "dipy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vqjd5gd9B630pv6H4MvXnlPwlEhm1o7MbwYD0J7D24o=";
   };
 
@@ -69,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://dipy.org/";
     description = "Diffusion imaging toolkit for Python";
-    changelog = "https://github.com/dipy/dipy/blob/${version}/Changelog";
+    changelog = "https://github.com/dipy/dipy/blob/${finalAttrs.version}/Changelog";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

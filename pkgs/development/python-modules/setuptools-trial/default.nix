@@ -6,14 +6,14 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-trial";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_trial";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-FCIPj3YcSLoeJSbwhxlQd89U+tcJizgs4iBCLw/1mxI=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ryansydnor ];
   };
-}
+})

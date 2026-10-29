@@ -7,13 +7,13 @@
   pillow,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "daltonlens";
   version = "0.1.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-T7fXlRdFtcVw5WURPqZhCmulUi1ZnCfCXgcLtTHeNas=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

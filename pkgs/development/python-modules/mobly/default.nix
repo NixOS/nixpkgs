@@ -20,7 +20,7 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mobly";
   version = "1.13.1";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "mobly";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-J0mP7l2JXZDSuQm5vsLB87zbFK7MmP5xc8T7qDS34M4=";
   };
 
@@ -58,10 +58,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/google/mobly/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/google/mobly/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Automation framework for special end-to-end test cases";
     homepage = "https://github.com/google/mobly";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

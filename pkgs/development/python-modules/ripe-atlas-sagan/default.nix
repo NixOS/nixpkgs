@@ -9,7 +9,7 @@
   ujson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ripe-atlas-sagan";
   version = "1.3.1";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-sagan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

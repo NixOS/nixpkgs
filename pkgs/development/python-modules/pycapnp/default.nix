@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycapnp";
   version = "2.2.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "pycapnp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WM0DR1lTlgsKpTU8QlquL0RhrqPU/cUQav6p8EP7x9o=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cython wrapping of the C++ Cap'n Proto library";
     homepage = "https://capnproto.github.io/pycapnp/";
-    changelog = "https://github.com/capnproto/pycapnp/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/capnproto/pycapnp/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ Liamolucko ];
   };
-}
+})

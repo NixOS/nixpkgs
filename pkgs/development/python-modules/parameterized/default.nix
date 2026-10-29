@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parameterized";
   version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-f8kFJyzvpPNkwaNCnLvpwPmLeTmI77W/kKrIDwjbCbE=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Parameterized testing with any Python test framework";
     homepage = "https://github.com/wolever/parameterized";
-    changelog = "https://github.com/wolever/parameterized/blob/v${version}/CHANGELOG.txt";
+    changelog = "https://github.com/wolever/parameterized/blob/v${finalAttrs.version}/CHANGELOG.txt";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

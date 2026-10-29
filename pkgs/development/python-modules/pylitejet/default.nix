@@ -6,7 +6,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylitejet";
   version = "0.6.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joncar";
     repo = "pylitejet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LHNMKU7aMDtSi4K+pZqRF9vAL3EKOFRFFNXKsQJVP2Y=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interfacing with the LiteJet lighting system";
     homepage = "https://github.com/joncar/pylitejet";
-    changelog = "https://github.com/joncar/pylitejet/releases/tag/v${version}";
+    changelog = "https://github.com/joncar/pylitejet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

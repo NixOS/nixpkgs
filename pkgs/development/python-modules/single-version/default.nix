@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "single-version";
   version = "1.6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "single-version";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dUmJhNCPuq/7WGzFQXLjb8JrQgQn7qyBqzPWaKzD9hc=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

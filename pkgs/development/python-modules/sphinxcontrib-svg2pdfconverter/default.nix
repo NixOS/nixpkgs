@@ -15,13 +15,13 @@
 
 assert (withCairosvg || withInkscape || withLibrsvg);
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-svg2pdfconverter";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinxcontrib_svg2pdfconverter";
     hash = "sha256-l1boLV878RYp/8uvsfihCS07tHieM0lAMs3OmpyEWdM=";
   };
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx SVG to PDF converter extension";
     homepage = "https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter";
-    changelog = "https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter/releases/tag/v${version}";
+    changelog = "https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dansbandit ];
   };
-}
+})

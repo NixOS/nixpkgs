@@ -36,7 +36,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fsspec";
   version = "2026.7.0";
   pyproject = true;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "filesystem_spec";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-05eJsPrb7MqcyK4NNfDB6tTBqH4Vo7gKk1mvcLRBZs8=";
   };
 
@@ -141,8 +141,8 @@ buildPythonPackage rec {
   meta = {
     description = "Specification that Python filesystems should adhere to";
     homepage = "https://github.com/fsspec/filesystem_spec";
-    changelog = "https://github.com/fsspec/filesystem_spec/raw/${src.tag}/docs/source/changelog.rst";
+    changelog = "https://github.com/fsspec/filesystem_spec/raw/${finalAttrs.src.tag}/docs/source/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

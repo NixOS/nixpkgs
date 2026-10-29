@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfma";
   version = "0.1.6";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "pyfma";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1qNa+FcIAP1IMzdNKrEbTVPo6gTOSCvhTRIHm6REJoo=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fused multiply-add for Python";
     homepage = "https://github.com/nschloe/pyfma";
-    changelog = "https://github.com/nschloe/pyfma/releases/tag/${version}";
+    changelog = "https://github.com/nschloe/pyfma/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

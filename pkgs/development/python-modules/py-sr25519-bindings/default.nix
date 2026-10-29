@@ -9,7 +9,7 @@
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-sr25519-bindings";
   version = "0.2.4";
   pyproject = true;
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JAMdotTech";
     repo = "py-sr25519";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kCOmmzCCR363J5pYJ99BDUhUWeYniMf+e+NJByRnl+c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-3snEx0rpMBRnuWt5WfTWrQkTC9fTsHh6zS4ChaRjVKg=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for sr25519 library";
     homepage = "https://github.com/JAMdotTech/py-sr25519";
-    changelog = "https://github.com/JAMdotTech/py-sr25519/releases/tag/${src.tag}";
+    changelog = "https://github.com/JAMdotTech/py-sr25519/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       onny
       stargate01
     ];
   };
-}
+})

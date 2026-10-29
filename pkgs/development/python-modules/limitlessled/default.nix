@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "limitlessled";
   version = "1.1.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-kpRDcW85C0EklWn+xdX5Cwgy/NNB6rxA6PZviTsPp10=";
   };
 
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephalon ];
   };
-}
+})

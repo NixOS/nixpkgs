@@ -4,12 +4,12 @@
   ocamlPackages,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "merge-fmt";
   version = "0.3";
 
   src = fetchurl {
-    url = "https://github.com/hhugo/merge-fmt/releases/download/${version}/merge-fmt-${version}.tbz";
+    url = "https://github.com/hhugo/merge-fmt/releases/download/${finalAttrs.version}/merge-fmt-${finalAttrs.version}.tbz";
     hash = "sha256-F+ds0ToWcKD4NJU3yYSVW4B3m2LBnhR+4QVTDO79q14=";
   };
 
@@ -36,4 +36,4 @@ ocamlPackages.buildDunePackage rec {
     maintainers = [ lib.maintainers.alizter ];
     mainProgram = "merge-fmt";
   };
-}
+})

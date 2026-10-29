@@ -7,13 +7,13 @@
   colorama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libkeepass";
   version = "0.3.1.post1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-US2zOqHwE/zGeQqz2uuAVIehC0TkmV9xUFEy3JM9j18=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jqueiroz ];
   };
-}
+})

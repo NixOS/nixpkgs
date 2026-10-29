@@ -6,7 +6,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "http-sfv";
   version = "0.9.9";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mnot";
     repo = "http_sfv";
-    rev = "http_sfv-${version}";
+    rev = "http_sfv-${finalAttrs.version}";
     hash = "sha256-xf9bGDfsEcQnFQ2b1bLRGYug+H4e5jeV/LJstQtp6Bw=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

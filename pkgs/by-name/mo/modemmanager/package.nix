@@ -30,7 +30,7 @@
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "modemmanager";
   version = "1.24.2";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "mobile-broadband";
     repo = "ModemManager";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-rBLOqpx7Y2BB6/xvhIw+rDEXsLtePhHLBvfpSuJzQik=";
   };
 
@@ -128,4 +128,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,7 +6,7 @@
   poetry-core,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bitvector-for-humans";
   version = "0.14.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "bitvector";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GVTRD83tq/Hea53US4drOD5ruoYCLTVd24aZOSdDsSo=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ helsinki-Jo ];
   };
-}
+})

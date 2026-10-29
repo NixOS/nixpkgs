@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xstatic-font-awesome";
   version = "6.2.1.2";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xstatic-py";
     repo = "xstatic-font-awesome";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-O70Io+9PCFDn+K9GqR/AeLSGzdRtu7cqn69dr4/QBSc=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ aither64 ];
   };
-}
+})

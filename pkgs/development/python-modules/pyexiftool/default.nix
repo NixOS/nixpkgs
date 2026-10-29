@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyexiftool";
   version = "0.5.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sylikc";
     repo = "pyexiftool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dgQkbpCbdq2JbupY0DyQbHPR9Bg+bwDo7yN03o3sX+A=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/sylikc/pyexiftool/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/sylikc/pyexiftool/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Python wrapper for exiftool";
     homepage = "https://github.com/sylikc/pyexiftool";
     license = with lib.licenses; [
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -5,13 +5,13 @@
   flit-core,
   typing-extensions,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "useful-types";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "useful_types";
     hash = "sha256-hwoLzI/LfQsvFAVUOMHKt+JI/e2UKwlDpNcBnn+72s0=";
   };
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Useful types for Python";
     homepage = "https://github.com/hauntsaninja/useful_types";
-    changelog = "https://github.com/hauntsaninja/useful_types/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hauntsaninja/useful_types/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ different-name ];
   };
-}
+})

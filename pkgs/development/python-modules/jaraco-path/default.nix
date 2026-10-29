@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-path";
   version = "3.7.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.path";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uLkNMhB7aeDJ3fF0Ynjd8MD6+CTKKH8vsB5cH9RPcok=";
   };
 
@@ -26,11 +26,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.path/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.path/blob/${finalAttrs.src.tag}/NEWS.rst";
     description = "Miscellaneous path functions";
     homepage = "https://github.com/jaraco/jaraco.path";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     broken = stdenv.hostPlatform.isDarwin; # pyobjc is missing
   };
-}
+})

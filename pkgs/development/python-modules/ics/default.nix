@@ -10,7 +10,7 @@
   tatsu,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ics";
   version = "0.7.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ics-py";
     repo = "ics-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hdtnET7YfSb85+TGwpwzoxOfxPT7VSj9eKSiV6AXUS8=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
       write ics data in a developer friendly way.
     '';
     homepage = "http://icspy.readthedocs.org/";
-    changelog = "https://github.com/ics-py/ics-py/releases/tag/v${version}";
+    changelog = "https://github.com/ics-py/ics-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "et-xmlfile";
   version = "2.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     domain = "foss.heptapod.net";
     owner = "openpyxl";
     repo = "et_xmlfile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JZ1fJ9o4/Z+9uSlaoq+pNpLSwl5Yv6BJCI1G7GOaQ1I=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

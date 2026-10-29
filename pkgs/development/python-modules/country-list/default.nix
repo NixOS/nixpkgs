@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "country-list";
   version = "1.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bulv1ne";
     repo = "country_list";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jG2AC8c6mgWjHVBX7XW021PLPliLTwEBkN6+HSecfL4=";
     fetchSubmodules = true;
   };
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "List of all countries with names and ISO 3166-1 codes in all languages";
     homepage = "https://github.com/bulv1ne/country_list";
-    changelog = "https://github.com/bulv1ne/country_list/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/bulv1ne/country_list/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
   };
-}
+})

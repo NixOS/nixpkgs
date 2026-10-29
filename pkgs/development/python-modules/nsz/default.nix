@@ -9,7 +9,7 @@
   kivy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nsz";
   version = "4.6.1";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nicoboss";
     repo = "nsz";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ch4HzQFa95o3HMsi7R0LpPWmhN/Z9EYfrmCdUZLwPSE=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/nicoboss/nsz";
     description = "Homebrew compatible NSP/XCI compressor/decompressor";
     mainProgram = "nsz";
-    changelog = "https://github.com/nicoboss/nsz/releases/tag/${version}";
+    changelog = "https://github.com/nicoboss/nsz/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
-}
+})

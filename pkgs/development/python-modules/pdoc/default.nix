@@ -14,7 +14,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdoc";
   version = "16.0.0";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9amp6CWYIcniVfdlmPKYuRFR7B5JJtuMlOoDxpfvvJA=";
   };
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/pdoc/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
     mainProgram = "pdoc";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

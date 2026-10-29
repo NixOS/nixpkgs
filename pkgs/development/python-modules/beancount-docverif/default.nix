@@ -8,14 +8,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beancount-docverif";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "beancount_docverif";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-CFBv1FZP5JO+1MPnD86ttrO42zZlvE157zqig7s4HOg=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
-}
+})

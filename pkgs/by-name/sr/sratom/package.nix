@@ -11,7 +11,7 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sratom";
   version = "0.6.22";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
+    url = "https://download.drobilla.net/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-Agm30PIslqu0FnIu1zWwkzvkeTHs/0qksm3td2C08lI=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       new_version="$(curl -s https://drobilla.net/category/sratom/ |
           pcre2grep -o1 'download.drobilla.net/sratom-([0-9.]+).tar.xz' |
           head -n1)"
-      update-source-version ${pname} "$new_version"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

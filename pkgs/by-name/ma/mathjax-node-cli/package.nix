@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "mathjax-node-cli";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mathjax";
     repo = "mathjax-node-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jFSn/Ftm1iNOAmMadHYfy2jm0H/+hP2XCyyNbJqfhkY=";
   };
 
@@ -35,4 +35,4 @@ buildNpmPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ colinsane ];
   };
-}
+})

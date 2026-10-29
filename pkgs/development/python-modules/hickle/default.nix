@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hickle";
   version = "5.0.3-unstable-2026-07-25";
   pyproject = true;
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
-    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
+    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

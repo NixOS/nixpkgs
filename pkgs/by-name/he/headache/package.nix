@@ -11,14 +11,14 @@ let
   inherit (ocamlPackages) buildDunePackage camomile;
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "headache";
   version = "1.08";
 
   src = fetchFromGitHub {
     owner = "frama-c";
     repo = "headache";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UXQIIsCyJZN4qos7Si7LLm9vQueOduUmLeYHuyT2GZo=";
   };
 
@@ -37,4 +37,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ niols ];
   };
-}
+})

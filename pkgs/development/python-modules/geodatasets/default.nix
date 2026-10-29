@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geodatasets";
   version = "2026.5.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geodatasets";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wKe5hDK0J3e+9PyMvH1dJWpNMC8Ct4u5ysJoi7/xw4k=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

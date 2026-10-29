@@ -7,13 +7,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-family-hub-local";
   version = "0.0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-bbOBlUJ4g+HOcJihEBAz3lsHR9Gn07z8st14FRFeJbc=";
   };
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

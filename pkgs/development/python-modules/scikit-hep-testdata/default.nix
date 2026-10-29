@@ -11,7 +11,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-hep-testdata";
   version = "0.6.9";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "scikit-hep-testdata";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HaHMpbWiiTnhg8ghxszjGzSMiv9F0y0d7Cu7xNAKg+A=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/scikit-hep/scikit-hep-testdata";
     description = "Common package to provide example files (e.g., ROOT) for testing and developing packages against";
-    changelog = "https://github.com/scikit-hep/scikit-hep-testdata/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-hep/scikit-hep-testdata/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

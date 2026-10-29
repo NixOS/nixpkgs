@@ -10,13 +10,13 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dmsuite";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IqLsHkGNgPz2yZm0QMyMMo6Mr2RsU2DPGxYpoNwC3fs=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Scientific library providing a collection of spectral collocation differentiation matrices";
     homepage = "https://github.com/labrosse/dmsuite";
-    changelog = "https://github.com/labrosse/dmsuite/releases/tag/v${version}";
+    changelog = "https://github.com/labrosse/dmsuite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ loicreynier ];
   };
-}
+})

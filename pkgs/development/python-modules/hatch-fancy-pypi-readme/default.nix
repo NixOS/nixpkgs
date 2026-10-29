@@ -7,14 +7,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-fancy-pypi-readme";
   version = "25.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hatch_fancy_pypi_readme";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-nFjtPf+Q1R9DQUzjcAmtHVsPCP/J/CFpmKBjgPAcAEU=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/hynek/hatch-fancy-pypi-readme";
     license = lib.licenses.mit;
   };
-}
+})

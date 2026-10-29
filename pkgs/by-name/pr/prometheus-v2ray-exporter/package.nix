@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "v2ray-exporter";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "wi1dcard";
     repo = "v2ray-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "12mzng3cw24fyyh8zjfi26gh853k5blzg3zbxcccnv5lryh2r0yi";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

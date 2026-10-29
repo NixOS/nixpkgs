@@ -5,13 +5,13 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "2.15.2";
   format = "setuptools";
   pname = "pypeg2";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ky1PgNjhqTcLKpH0ol9Kv39puFyNqEzSPsNkUZWKH20=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     homepage = "http://fdik.org/pyPEG";
     license = lib.licenses.gpl2;
   };
-}
+})

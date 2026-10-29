@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "epson-projector";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "epson_projector";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-/9Nc3xOxnXFfTsS8s83MXTkVAhqLwrKnmfR/E87s+Bk=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Epson projector support for Python";
     homepage = "https://github.com/pszafer/epson_projector";
-    changelog = "https://github.com/pszafer/epson_projector/releases/tag/v.${version}";
+    changelog = "https://github.com/pszafer/epson_projector/releases/tag/v.${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

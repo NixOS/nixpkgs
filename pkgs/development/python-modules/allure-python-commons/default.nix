@@ -9,14 +9,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "allure-python-commons";
   version = "2.16.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "allure_python_commons";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-7NySuv6gdLq5a18sTrMQCCU0AYj1rs5giugOztcJs28=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Common engine for all modules. It is useful for make integration with your homemade frameworks";
     homepage = "https://github.com/allure-framework/allure-python";
-    changelog = "https://github.com/allure-framework/allure-python/releases/tag/${version}";
+    changelog = "https://github.com/allure-framework/allure-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ evanjs ];
   };
-}
+})

@@ -16,7 +16,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magicgui";
   version = "0.10.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "magicgui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5etnug947C+Ewk1QLxsxEeaSa9djIlM/PGdNnJZiND8=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Build GUIs from python functions, using magic.  (napari/magicgui)";
     homepage = "https://github.com/pyapp-kit/magicgui";
-    changelog = "https://github.com/pyapp-kit/magicgui/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pyapp-kit/magicgui/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

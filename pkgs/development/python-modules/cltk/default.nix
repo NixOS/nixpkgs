@@ -28,7 +28,7 @@
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cltk";
   version = "2.0.4";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cltk";
     repo = "cltk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tAomXxI6XsIAxQzPiUsT5t1CHrFDPkwyWtVuHXQCz2A=";
   };
 
@@ -76,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "Natural language processing (NLP) framework for pre-modern languages";
     homepage = "https://cltk.org";
-    changelog = "https://github.com/cltk/cltk/releases/tag/v${version}";
+    changelog = "https://github.com/cltk/cltk/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kmein ];
   };
-}
+})

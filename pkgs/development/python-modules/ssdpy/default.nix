@@ -8,7 +8,7 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ssdpy";
   version = "0.4.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MoshiBin";
     repo = "ssdpy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-luOanw4aOepGxoGtmnWZosq9JyHLJb3E+25tPkkL1w0=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/MoshiBin/ssdpy/releases/tag/${version}";
+    changelog = "https://github.com/MoshiBin/ssdpy/releases/tag/${finalAttrs.version}";
     description = "Lightweight, compatible SSDP library for Python";
     homepage = "https://github.com/MoshiBin/ssdpy";
     license = lib.licenses.mit;
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     # Darwin's network interface names have changed since the package was last updated
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

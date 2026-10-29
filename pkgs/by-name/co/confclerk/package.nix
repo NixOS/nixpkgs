@@ -5,12 +5,12 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "confclerk";
   version = "0.7.2";
 
   src = fetchurl {
-    url = "https://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${version}.tar.gz";
+    url = "https://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-GgWvPHcQnQrK9SOC8U9F2P8kuPCn8I2EhoWEEMtKBww=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

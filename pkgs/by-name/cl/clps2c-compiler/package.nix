@@ -24,15 +24,15 @@ let
     src = keystone-src;
   });
 in
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   inherit version pname;
 
   srcs = [
     (fetchFromGitHub {
-      name = pname;
+      name = finalAttrs.pname;
       inherit owner;
       repo = "CLPS2C-Compiler";
-      rev = "CLPS2C-Compiler-${version}";
+      rev = "CLPS2C-Compiler-${finalAttrs.version}";
       sha256 = "sha256-4gLdrIxyw9BFSxF+EXZqTgUf9Kik6oK7eO9HBUzk4QM=";
     })
     keystone-src
@@ -72,4 +72,4 @@ buildDotnetModule rec {
     maintainers = [ lib.maintainers.gigahawk ];
     license = lib.licenses.gpl3Only;
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peppercorn";
   version = "0.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ltdoHXoEVFz7ryxvtm3meynPxCQhqiY+THjyy7hb5MY=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3Modification;
   };
-}
+})

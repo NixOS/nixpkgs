@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyprusalink";
   version = "3.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pyprusalink";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qgcwbpQxjaoG/XDRv0kjryT0MqswYb7s6lhWKGHQB/4=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to communicate with PrusaLink";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
-    changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

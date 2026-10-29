@@ -8,7 +8,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "methodtools";
   version = "0.4.7";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "youknowone";
     repo = "methodtools";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Y5VdYVSb3A+32waUUoIDDGW+AhRapN71pebTTlJC0es=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Expands the functools lru_cache to classes";
     homepage = "https://github.com/youknowone/methodtools";
-    changelog = "https://github.com/youknowone/methodtools/releases/tag/${version}";
+    changelog = "https://github.com/youknowone/methodtools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2WithViews;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

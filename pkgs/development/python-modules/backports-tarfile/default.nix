@@ -10,7 +10,7 @@
 }:
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "backports-tarfile";
     version = "1.2.0";
     pyproject = true;
@@ -18,7 +18,7 @@ let
     src = fetchFromGitHub {
       owner = "jaraco";
       repo = "backports.tarfile";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-X3rkL35aDG+DnIOq0fI7CFoWGNtgLkLjtT9y6+23oto=";
     };
 
@@ -62,6 +62,6 @@ let
       license = lib.licenses.mit;
       maintainers = [ ];
     };
-  };
+  });
 in
 self

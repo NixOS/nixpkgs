@@ -7,7 +7,7 @@
   zlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybigwig";
   version = "0.3.28";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "pyBigWig";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iVyr9rMpTHjumCjBsXWT7e5IkyJitKx4jD4dRJafRkw=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
       libBigWig for local and remote file access.
     '';
     homepage = "https://github.com/deeptools/pyBigWig";
-    changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${src.tag}";
+    changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
   };
-}
+})

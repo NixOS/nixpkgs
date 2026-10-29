@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pickpack";
   version = "2.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anafvana";
     repo = "pickpack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IUIs+Cgl2fvjSougyVSzhmY2SeEYL2T2ODrBWBg3zZM=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

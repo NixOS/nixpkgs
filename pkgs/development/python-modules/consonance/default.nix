@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "consonance";
   version = "0.1.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "consonance";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BhgxLxjKZ4dSL7DqkaoS+wBPCd1SYZomRKrtDLdGmYQ=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

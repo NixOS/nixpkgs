@@ -6,12 +6,12 @@
   autoreconfHook,
   pkg-config,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "m17n-lib";
   version = "1.8.6";
 
   src = fetchurl {
-    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/m17n/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-cSn+O3rVAPiLivhgXvB7lsh6deyYamlf/8CkCfRKfIY=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

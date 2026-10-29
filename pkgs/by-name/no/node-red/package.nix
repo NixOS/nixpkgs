@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "node-red";
   version = "5.0.8";
 
   src = fetchFromGitHub {
     owner = "node-red";
     repo = "node-red";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-G0ioaMyXuOUHci7MKW1/qX+sLYGinUvvYT4UDA8f75Q=";
   };
 
@@ -39,7 +39,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/node-red/node-red/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/node-red/node-red/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Low-code programming for event-driven applications";
     homepage = "https://nodered.org/";
     license = lib.licenses.asl20;
@@ -49,4 +49,4 @@ buildNpmPackage rec {
       matthewcroughan
     ];
   };
-}
+})

@@ -7,14 +7,14 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "heimer";
   version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "juzzlin";
     repo = "heimer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-eKnGCYxC3b7qd/g2IMDyZveBg+jvFA9s3tWEGeTPSkU=";
   };
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
     description = "Simple cross-platform mind map and note-taking tool written in Qt";
     mainProgram = "heimer";
     homepage = "https://github.com/juzzlin/Heimer";
-    changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/juzzlin/Heimer/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

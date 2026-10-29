@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-autopair";
   version = "1.0-unstable-2024-07-14";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    install -D autopair.zsh $out/share/zsh/${pname}/autopair.zsh
+    install -D autopair.zsh $out/share/zsh/${finalAttrs.pname}/autopair.zsh
   '';
 
   meta = {
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "speaklater";
   version = "1.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Wf6jNtDu04wfC/MYHuEiLQ70Xzqd006+Zea//91qZak=";
   };
 
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ matejc ];
   };
-}
+})

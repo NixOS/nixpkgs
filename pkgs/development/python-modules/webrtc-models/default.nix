@@ -12,7 +12,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webrtc-models";
   version = "0.3.0";
   pyproject = true;
@@ -22,13 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-webrtc-models";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WZPI7vYlfsihskRtrh4XJGx0JSDwn7JIJ8CL3jlryrA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   pythonRelaxDeps = [ "orjson" ];
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "WebRTC models as Python dataclasses with mashumaro";
     homepage = "https://github.com/home-assistant-libs/python-webrtc-models";
-    changelog = "https://github.com/home-assistant-libs/python-webrtc-models/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/python-webrtc-models/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

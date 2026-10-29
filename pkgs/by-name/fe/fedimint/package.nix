@@ -11,14 +11,14 @@
   cargoHash ? "sha256-4cFuasH2hvrnzTBTFifHEMtXZKsBv7OVpuwPlV19GGw=",
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedimint";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     inherit hash;
   };
 
@@ -83,4 +83,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "fedimint-cli";
   };
-}
+})

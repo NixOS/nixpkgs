@@ -5,7 +5,7 @@
   gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "changedetection-io";
   version = "0.53.6";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-j7Dw6PLGt955wfQNriRHGtsJzCd50xpHJK0fqVvzIY4=";
   };
 
@@ -92,7 +92,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
     homepage = "https://github.com/dgtlmoon/changedetection.io";
-    changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${src.tag}";
+    changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       mikaelfangel
@@ -100,4 +100,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "changedetection.io";
   };
-}
+})

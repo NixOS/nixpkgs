@@ -6,14 +6,14 @@
   streamlit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit-card";
   version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "streamlit_card";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-gAHNXt2Kbi2zbugfN9xkXwj3jCGiupaEAxdsaLTzPLE=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Streamlit component to make UI cards";
     homepage = "https://github.com/gamcoh/st-card";
-    changelog = "https://github.com/gamcoh/st-card/releases/tag/${version}";
+    changelog = "https://github.com/gamcoh/st-card/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

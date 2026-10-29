@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "here-transit";
   version = "1.2.1";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "here_transit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fORg1iqRcD75Is1EW9XeAu8astibypmnNXo3vHduQdk=";
   };
 
@@ -50,10 +50,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "here_transit" ];
 
   meta = {
-    changelog = "https://github.com/eifinger/here_transit/releases/tag/v${version}";
+    changelog = "https://github.com/eifinger/here_transit/releases/tag/v${finalAttrs.version}";
     description = "Asynchronous Python client for the HERE Routing V8 API";
     homepage = "https://github.com/eifinger/here_transit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -5,14 +5,14 @@
   libappindicator,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter329.buildFlutterApplication (finalAttrs: {
   pname = "libretrack";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "proninyaroslav";
     repo = "libretrack";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-USZ243M/0SOvlYns66zkhDQCuq+kgEWYdBZN3iBF9SA=";
   };
 
@@ -45,10 +45,10 @@ flutter329.buildFlutterApplication rec {
   meta = {
     description = "Private, cross-platform package tracking app";
     homepage = "https://github.com/proninyaroslav/libretrack";
-    changelog = "https://github.com/proninyaroslav/libretrack/releases/tag/${version}";
+    changelog = "https://github.com/proninyaroslav/libretrack/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "libretrack";
     platforms = lib.platforms.linux;
   };
-}
+})

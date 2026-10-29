@@ -10,14 +10,14 @@
   xsdata-pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "entsoe-apy";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "berrij";
     repo = "entsoe-apy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I4M5IwQ/5o+LnHNMjpEM2Cjh81sq8oudDS05CleQXG8=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ berrij ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -13,12 +13,12 @@
   pulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wonderdraft";
   version = "1.1.8.2b";
 
   src = requireFile {
-    name = "Wonderdraft-${version}-Linux64.deb";
+    name = "Wonderdraft-${finalAttrs.version}-Linux64.deb";
     url = "https://wonderdraft.net/";
     hash = "sha256-3eYnEH6P94z9axFsrkJA4QMcHyg/gNRczqL3h5Sc2Tg=";
   };
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jsusk ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

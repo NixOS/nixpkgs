@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cbrowser";
   version = "0.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1050mirjab23qsnq3lp3a9vwcbavmh9kznzjm7dr5vkx8b7ffcji";
   };
 
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ tk ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/${pname}-${version}
-    cp -R * $out/share/${pname}-${version}/
+    mkdir -p $out/bin $out/share/${finalAttrs.pname}-${finalAttrs.version}
+    cp -R * $out/share/${finalAttrs.pname}-${finalAttrs.version}/
 
-    makeWrapper $out/share/${pname}-${version}/cbrowser $out/bin/cbrowser \
+    makeWrapper $out/share/${finalAttrs.pname}-${finalAttrs.version}/cbrowser $out/bin/cbrowser \
       --prefix PATH : ${tk}/bin
   '';
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
 
     platforms = with lib.platforms; linux;
   };
-}
+})

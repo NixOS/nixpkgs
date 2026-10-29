@@ -19,13 +19,13 @@
   twine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omrdatasettools";
   version = "1.4.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-kUUcbti29uDnSEvCubMAUnptlaZGpEsW2IBGSAGnGyQ=";
   };
 
@@ -67,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of datasets used for Optical Music Recognition";
     homepage = "https://github.com/apacha/OMR-Datasets";
-    changelog = "https://github.com/apacha/OMR-Datasets/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/apacha/OMR-Datasets/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ piegames ];
   };
-}
+})

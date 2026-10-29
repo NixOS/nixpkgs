@@ -6,13 +6,13 @@
   whoosh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ponywhoosh";
   version = "1.7.8";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-aa9IMUzwmRHi16wUk45jgG5skFHU42M+URkWI1qS79U=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alexarice ];
   };
-}
+})

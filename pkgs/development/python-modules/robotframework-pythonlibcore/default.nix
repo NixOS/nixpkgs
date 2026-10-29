@@ -10,7 +10,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robotframework-pythonlibcore";
   version = "4.6.0";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "PythonLibCore";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H13b25M4vEymXZzhAm/EXMx7v5u/9rgkBXv7nBaxAvo=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "robotlibcore" ];
 
   meta = {
-    changelog = "https://github.com/robotframework/PythonLibCore/blob/${src.tag}/docs/PythonLibCore-${src.tag}.rst";
+    changelog = "https://github.com/robotframework/PythonLibCore/blob/${finalAttrs.src.tag}/docs/PythonLibCore-${finalAttrs.src.tag}.rst";
     description = "Tools to ease creating larger test libraries for Robot Framework using Python";
     homepage = "https://github.com/robotframework/PythonLibCore";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

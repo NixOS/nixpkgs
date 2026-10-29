@@ -9,14 +9,14 @@
   gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gede";
   version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "jhn98032";
     repo = "gede";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6YSrqLDuV4G/uvtYy4vzbwqrMFftMvZdp3kr3R436rs=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ juliendehos ];
   };
-}
+})

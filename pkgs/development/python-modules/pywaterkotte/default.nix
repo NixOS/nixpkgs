@@ -8,7 +8,7 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywaterkotte";
   version = "0.1.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chboland";
     repo = "pywaterkotte";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zK0x6LyXPPNPA20Zq+S1B1q7ZWGxQmWf4JxEfjNkPQw=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to communicate with Waterkotte heatpumps";
     homepage = "https://github.com/chboland/pywaterkotte";
-    changelog = "https://github.com/chboland/pywaterkotte/releases/tag/v${version}";
+    changelog = "https://github.com/chboland/pywaterkotte/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

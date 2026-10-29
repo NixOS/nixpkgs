@@ -14,13 +14,13 @@
   xxhash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pooch";
   version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3kZylXm5hX/9PnQZh6L21eDgMhmJLBZ8ZXjACR+1Ee0=";
   };
 
@@ -74,4 +74,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

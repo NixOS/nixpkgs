@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "random2";
   version = "1.0.1";
   format = "setuptools";
   doCheck = !isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-NK0wqsNBA5hyQBWV35qyydw20LfAd9sc6preQw7RwAc=";
   };
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     description = "Python 3 compatible Python 2 `random` Module";
     license = lib.licenses.psfl;
   };
-}
+})

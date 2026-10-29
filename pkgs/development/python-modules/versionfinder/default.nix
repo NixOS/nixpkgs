@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "versionfinder";
   version = "1.1.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jantman";
     repo = "versionfinder";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-aa2bRGn8Hn7gpEMUM7byh1qZVsqvJeMXomnwCj2Xu5o=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Find the version of another package, whether installed via pip, setuptools or git";
     homepage = "https://github.com/jantman/versionfinder";
-    changelog = "https://github.com/jantman/versionfinder/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/jantman/versionfinder/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.agpl3Plus;
   };
-}
+})

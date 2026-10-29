@@ -7,12 +7,12 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ds-reporting-lib";
   inherit (dep-scan) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/packages/reporting-lib";
+  sourceRoot = "${finalAttrs.src.name}/packages/reporting-lib";
 
   build-system = [
     setuptools
@@ -32,4 +32,4 @@ buildPythonPackage rec {
       teams
       ;
   };
-}
+})

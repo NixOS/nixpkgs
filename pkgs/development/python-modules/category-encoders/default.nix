@@ -19,7 +19,7 @@
   # test
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "category-encoders";
   version = "2.9.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "category_encoders";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OcQCEWxqH6b9adQk64fdnqFl5CGLb9Yyd7bSxSaGTvg=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for sklearn compatible categorical variable encoders";
     homepage = "https://github.com/scikit-learn-contrib/category_encoders";
-    changelog = "https://github.com/scikit-learn-contrib/category_encoders/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-learn-contrib/category_encoders/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

@@ -6,13 +6,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "latexcodec";
   version = "3.0.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-54ppEc1y+d7DUDHG7CNYTeaEK/vEYQqWeIaNFM37A1c=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     description = "Lexer and codec to work with LaTeX code in Python";
     license = lib.licenses.mit;
   };
-}
+})

@@ -5,17 +5,17 @@
   httpTwoLevelsUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfwm4-themes";
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/art/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/art/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-MhTV8A6XA7XoyefDKH1gbe3scoXOtNXbMy6TraZv1XU=";
   };
 
   passthru.updateScript = httpTwoLevelsUpdater {
-    url = "https://archive.xfce.org/src/art/${pname}";
+    url = "https://archive.xfce.org/src/art/${finalAttrs.pname}";
   };
 
   meta = {
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.xfce ];
   };
-}
+})

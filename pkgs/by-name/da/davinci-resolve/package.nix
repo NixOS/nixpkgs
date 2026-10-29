@@ -54,7 +54,7 @@
 
 let
   davinci = (
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
       version = "21.1.1";
 
@@ -72,7 +72,7 @@ let
       ];
 
       src =
-        runCommandLocal "${pname}-src.zip"
+        runCommandLocal "${finalAttrs.pname}-src.zip"
           rec {
             outputHashMode = "recursive";
             outputHashAlgo = "sha256";
@@ -97,7 +97,7 @@ let
             DOWNLOADSURL = "https://www.blackmagicdesign.com/api/support/us/downloads.json";
             SITEURL = "https://www.blackmagicdesign.com/api/register/us/download";
             PRODUCT = "DaVinci Resolve${lib.optionalString studioVariant " Studio"}";
-            VERSION = version;
+            VERSION = finalAttrs.version;
 
             USERAGENT = builtins.concatStringsSep " " [
               "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.hostPlatform.linuxArch})"
@@ -159,7 +159,7 @@ let
 
       installPhase =
         let
-          appimageName = "DaVinci_Resolve_${lib.optionalString studioVariant "Studio_"}${version}_Linux.run";
+          appimageName = "DaVinci_Resolve_${lib.optionalString studioVariant "Studio_"}${finalAttrs.version}_Linux.run";
         in
         ''
           runHook preInstall
@@ -278,7 +278,7 @@ let
           "Video"
         ];
       });
-    }
+    })
   );
 in
 buildFHSEnv {

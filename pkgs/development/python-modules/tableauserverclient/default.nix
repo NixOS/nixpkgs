@@ -12,13 +12,13 @@
   versioneer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tableauserverclient";
   version = "0.41";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5JGXW58OGUZ/tkI7gUURqfVJwivOeMhoB5ol++gaDpU=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for working with the Tableau Server REST API";
     homepage = "https://github.com/tableau/server-client-python";
-    changelog = "https://github.com/tableau/server-client-python/releases/tag/v${version}";
+    changelog = "https://github.com/tableau/server-client-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

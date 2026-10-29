@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-notifier";
   version = "0.5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "YuriyLisovskiy";
     repo = "pynotifier";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xS3hH3cyqgDD7uoWkIYXpQAh7SN7XJ/qMfB0Vq5bva0=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

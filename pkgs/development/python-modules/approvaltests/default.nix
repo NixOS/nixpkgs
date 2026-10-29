@@ -18,7 +18,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "approvaltests";
   version = "18.0.1";
   pyproject = true;
@@ -26,14 +26,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2lz3TMI4/QoNVfnZga5Ro9rheixFpVJfNbvVLy0lnLA=";
   };
 
   postPatch = ''
     test -f setup.py || mv setup/setup.approvaltests.py setup.py
 
-    python3 setup/set_version.py '${version}'
+    python3 setup/set_version.py '${finalAttrs.version}'
 
     patchShebangs internal_documentation/scripts
   '';
@@ -76,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "Assertion/verification library to aid testing";
     homepage = "https://github.com/approvals/ApprovalTests.Python";
-    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/${src.tag}";
+    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

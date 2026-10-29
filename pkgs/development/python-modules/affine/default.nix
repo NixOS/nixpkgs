@@ -6,14 +6,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "affine";
   version = "2.4.0";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ok2BjWqDbBMZdtIvjCe408oy0K9kwdjSnet7r6TaHuo=";
   };
 
@@ -22,10 +22,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/rasterio/affine/blob/${version}/CHANGES.txt";
+    changelog = "https://github.com/rasterio/affine/blob/${finalAttrs.version}/CHANGES.txt";
     description = "Matrices describing affine transformation of the plane";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/rasterio/affine";
     maintainers = [ ];
   };
-}
+})

@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vobject";
   version = "0.9.9";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-vobject";
     repo = "vobject";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OL0agVpV/kWph6KhpzDhfzayscs0OaJ2W9WIilXVaS0=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

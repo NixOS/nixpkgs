@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sn-pro";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "supernotes";
     repo = "sn-pro";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-H8YG7FMn03tiBxz5TZDzowicqtewfX6rYd03pdTPYSo=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -10,14 +10,14 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fast-colorthief";
   version = "0.0.5";
   pyproject = true;
 
   # No tags on github
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yUO1vnOt2NPyldPjFMn0jbhVX8zHcKsJ2IFVugYBZa4=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})

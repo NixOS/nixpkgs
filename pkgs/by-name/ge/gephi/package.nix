@@ -6,14 +6,14 @@
   jogl,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "gephi";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "gephi";
     repo = "gephi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZNSEaiD32zFfF2ISKa1CmcT9Nq6r5i2rNHooQAcVbn4=";
   };
 
@@ -48,4 +48,4 @@ maven.buildMavenPackage rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.taeer ];
   };
-}
+})

@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "precis-i18n";
   version = "1.1.2";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "byllyfish";
     repo = "precis_i18n";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZMj9KqiPVrpmq4/FweLMDxWQVQEtykimNhMTS9Mh5QY=";
   };
 
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   meta = {
     description = "Internationalized usernames and passwords";
     homepage = "https://github.com/byllyfish/precis_i18n";
-    changelog = "https://github.com/byllyfish/precis_i18n/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/byllyfish/precis_i18n/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

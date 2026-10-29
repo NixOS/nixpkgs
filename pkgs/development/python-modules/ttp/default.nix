@@ -18,7 +18,7 @@
   yangson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ttp";
   version = "0.10.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A0McQRpSjr0EYIrHQExtBqMe+AmL+IGWaRHeexyvtvg=";
   };
 
@@ -105,11 +105,11 @@ buildPythonPackage rec {
   enabledTestPaths = [ "test/pytest" ];
 
   meta = {
-    changelog = "https://github.com/dmulyalin/ttp/releases/tag/${version}";
+    changelog = "https://github.com/dmulyalin/ttp/releases/tag/${finalAttrs.version}";
     description = "Template Text Parser";
     mainProgram = "ttp";
     homepage = "https://github.com/dmulyalin/ttp";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

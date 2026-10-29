@@ -8,14 +8,14 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydoe";
   version = "0.3.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyDOE";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-y9bxSuJtPJ9zYBMgX1PqEZGt1FZwM8Pud7fdNWVmxLY=";
     extension = "zip";
   };
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

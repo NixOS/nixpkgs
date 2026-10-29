@@ -9,7 +9,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-markmap";
   version = "2.5.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markmap";
     repo = "mkdocs_markmap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jC0MgN0CM8VmUR9NYVM5P6J+f8Qplg1DDal7i246slM=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/markmap/mkdocs_markmap/releases/tag/v${version}";
+    changelog = "https://github.com/markmap/mkdocs_markmap/releases/tag/v${finalAttrs.version}";
     description = "MkDocs plugin and extension to create mindmaps from markdown using markmap";
     homepage = "https://github.com/markmap/mkdocs_markmap";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

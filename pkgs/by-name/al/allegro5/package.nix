@@ -44,14 +44,14 @@
 
 assert useSDL -> sdl2-compat != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "allegro";
   version = "5.2.11.3";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Nyab9ytqMZT9no2MT0vDe9tDVxXc6dwScHZ1uMVh+nE=";
   };
 
@@ -132,4 +132,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

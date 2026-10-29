@@ -18,13 +18,13 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pplpy";
   version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gonFDWgM4/nqysZmy0zbvYpxGVnnzHzwb3/bQDXQzF0=";
   };
 
@@ -92,4 +92,4 @@ buildPythonPackage rec {
     teams = [ lib.teams.sage ];
     license = lib.licenses.gpl3;
   };
-}
+})

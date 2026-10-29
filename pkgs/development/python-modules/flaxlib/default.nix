@@ -15,14 +15,14 @@
   pkg-config,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flaxlib";
   version = "0.0.1";
   pyproject = true;
 
   inherit (flax) src;
 
-  sourceRoot = "${src.name}/flaxlib_src";
+  sourceRoot = "${finalAttrs.src.name}/flaxlib_src";
 
   postPatch = ''
     expected_version="$version"
@@ -65,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -6,14 +6,14 @@
   lib,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "joularjx";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "joular";
     repo = "joularjx";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hr8a3Qr1LdFfGBLVJVkm6hhCW7knG4VpXj7nCtcptuU=";
   };
 
@@ -26,7 +26,7 @@ maven.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share
-    cp target/joularjx-${version}.jar $out/share/joularjx.jar
+    cp target/joularjx-${finalAttrs.version}.jar $out/share/joularjx.jar
     makeWrapper ${jre}/bin/java $out/bin/joularjx \
       --add-flags "-javaagent:$out/share/joularjx.jar"
     runHook postInstall
@@ -39,4 +39,4 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ julienmalka ];
     platforms = lib.platforms.linux;
   };
-}
+})

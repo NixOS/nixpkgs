@@ -8,12 +8,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.12";
   pname = "flrig";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/flrig-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/flrig-${finalAttrs.version}.tar.gz";
     hash = "sha256-wW3AB7aOe+Xas2M4EIXQvFyIQpBhFuzZ4W7nXJ1azL8=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "flrig";
   };
-}
+})

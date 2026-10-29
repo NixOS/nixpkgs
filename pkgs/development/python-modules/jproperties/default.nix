@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jproperties";
   version = "2.1.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tblue";
     repo = "python-jproperties";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wnhEcPWAFUXR741/LZT3TXqxrU70JZe+90AkVEA3A+k=";
   };
 
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "propconv";
   };
-}
+})

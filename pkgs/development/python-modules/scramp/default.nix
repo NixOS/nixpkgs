@@ -9,7 +9,7 @@
   versioningit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scramp";
   version = "1.4.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "tlocke";
     repo = "scramp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-KpododRJ+CYRGBR7Sr5cVBhJvUwh9YmPERd/DAJqEcY=";
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream uses versioningit to set the version
     sed -i "/versioningit >=/d" pyproject.toml
-    sed -i '/^name =.*/a version = "${version}"' pyproject.toml
+    sed -i '/^name =.*/a version = "${finalAttrs.version}"' pyproject.toml
     sed -i "/dynamic =/d" pyproject.toml
   '';
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

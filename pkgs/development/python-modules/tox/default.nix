@@ -17,7 +17,7 @@
   tox,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tox";
   version = "4.34.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pfftPTY7n47tCQFGCZRwsq0vCWZUeukFZO99gj5mTeo=";
   };
 
@@ -53,11 +53,11 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/tox-dev/tox/releases/tag/${src.tag}";
+    changelog = "https://github.com/tox-dev/tox/releases/tag/${finalAttrs.src.tag}";
     description = "Generic virtualenv management and test command line tool";
     mainProgram = "tox";
     homepage = "https://github.com/tox-dev/tox";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

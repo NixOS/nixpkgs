@@ -7,14 +7,14 @@
   php,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cloudlog";
   version = "2.8.20";
 
   src = fetchFromGitHub {
     owner = "magicbug";
     repo = "Cloudlog";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-kw5CL+5jBPJiwJ6jCV2LNAi0gYhx4paxCc7fUsJZDH0=";
   };
 
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = php.meta.platforms;
     maintainers = with lib.maintainers; [ haennetz ];
   };
-}
+})

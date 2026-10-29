@@ -26,7 +26,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proton-vpn-api-core";
   version = "5.2.5";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OGbms0FP0UjHjqvzlFpJIZo3bPFirVcwtVgvAvA9QZA=";
   };
 
@@ -124,4 +124,4 @@ buildPythonPackage rec {
       rapiteanu
     ];
   };
-}
+})

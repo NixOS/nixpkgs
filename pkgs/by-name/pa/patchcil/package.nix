@@ -8,14 +8,14 @@
   aot ? dotnetCorePackages.sdk_9_0.hasILCompiler && !stdenv.hostPlatform.isDarwin,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "patchcil";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "GGG-KILLER";
     repo = "patchcil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jqVXKp5ShWkIMAgmcwu9/QHy+Ey9d1Piv62wsO0Xm44=";
   };
 
@@ -72,4 +72,4 @@ buildDotnetModule rec {
       "i686-windows"
     ];
   };
-}
+})

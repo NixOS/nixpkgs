@@ -8,7 +8,7 @@
   ujson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "enterpriseattack";
   version = "1.0.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xakepnz";
     repo = "enterpriseattack";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OZ/nao2oiXzzWl/zQA5A3GpsRNobnHb4ubAsZvVITj0=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with the Mitre Att&ck Enterprise dataset";
     homepage = "https://github.com/xakepnz/enterpriseattack";
-    changelog = "https://github.com/xakepnz/enterpriseattack/releases/tag/v.${version}";
+    changelog = "https://github.com/xakepnz/enterpriseattack/releases/tag/v.${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

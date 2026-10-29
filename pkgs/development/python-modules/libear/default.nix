@@ -6,7 +6,7 @@
 let
   inherit (llvmPackages) clang-unwrapped;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libear";
   inherit (clang-unwrapped) version;
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "Hooks into build systems to listen to which files are opened";
-    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${version}/clang/tools/scan-build-py/lib/libear";
+    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${finalAttrs.version}/clang/tools/scan-build-py/lib/libear";
     license = with lib.licenses; [
       asl20
       llvm-exception
     ];
     maintainers = [ ];
   };
-}
+})

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.4.1";
   format = "setuptools";
   pname = "httpauth";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-C6rnFroAd5vOULBMwsLSyeSK5zPXOEgGHDSYt+Pm2dQ=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

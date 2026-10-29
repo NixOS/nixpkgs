@@ -6,7 +6,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netifaces-plus";
   version = "0.12.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tsukumijima";
     repo = "netifaces-plus";
-    tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-3CYAe0doWMagcUIN9+ikH9gEST9AqglSQDlZsKOMnC8=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "camingo-code";
   version = "1.0";
 
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 camingo-code/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 camingo-code/*.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 camingo-code/*.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.cc-by-nd-30;
   };
-}
+})

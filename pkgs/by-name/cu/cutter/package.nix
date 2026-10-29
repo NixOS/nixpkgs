@@ -16,14 +16,14 @@
 }:
 
 let
-  cutter = stdenv.mkDerivation rec {
+  cutter = stdenv.mkDerivation (finalAttrs: {
     pname = "cutter";
     version = "2.5.0";
 
     src = fetchFromGitHub {
       owner = "rizinorg";
       repo = "cutter";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-dnVbtAp7TorPQx4qdK43L2pXMcnWvOYjhRC3MJBrAmM=";
       fetchSubmodules = true;
     };
@@ -84,12 +84,12 @@ let
 
     meta = {
       description = "Free and Open Source Reverse Engineering Platform powered by rizin";
-      homepage = src.meta.homepage;
+      homepage = finalAttrs.src.meta.homepage;
       license = lib.licenses.gpl3;
       mainProgram = "cutter";
       maintainers = with lib.maintainers; [ mic92 ];
       inherit (rizin.meta) platforms;
     };
-  };
+  });
 in
 cutter

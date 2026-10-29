@@ -12,7 +12,7 @@
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-zigate";
   version = "0.14.0";
   pyproject = true;
@@ -20,14 +20,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kimlUwwlecXIBxKkBUJC8JqzMdt6Swf5SuOypOnXZCM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -49,9 +49,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library which communicates with ZiGate radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-zigate";
-    changelog = "https://github.com/zigpy/zigpy-zigate/releases/tag/${version}";
+    changelog = "https://github.com/zigpy/zigpy-zigate/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

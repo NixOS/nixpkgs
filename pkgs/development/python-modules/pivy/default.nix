@@ -11,7 +11,7 @@
   libGLU,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pivy";
   version = "0.6.11";
   pyproject = false;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jBc7+hoG1x7KDYPbexPRwnll9qz4qA3Y1w7A7DuES2Y=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

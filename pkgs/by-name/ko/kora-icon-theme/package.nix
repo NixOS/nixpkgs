@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kora-icon-theme";
   version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "bikass";
     repo = "kora";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Oralfx5MzCzkx+c+zwtFp8q83oKrNINd/PmVeugNKGo=";
   };
 
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

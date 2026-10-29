@@ -10,7 +10,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "marisa-trie";
   version = "1.4.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytries";
     repo = "marisa-trie";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-U3gntlvJ0IaWoK+2V0OQ/XoDLfQsSbrrsSj95VR1m+4=";
   };
 
@@ -62,7 +62,7 @@ buildPythonPackage rec {
       This package provides alternative Cython-based pip-installable Python bindings.
     '';
     homepage = "https://github.com/kmike/marisa-trie";
-    changelog = "https://github.com/pytries/marisa-trie/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pytries/marisa-trie/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
   };
-}
+})

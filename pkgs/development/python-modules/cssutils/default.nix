@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cssutils";
   version = "2.15.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "cssutils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K9jbuX7AueSB3AB7PAVjpQhzb3Umn9OoHaL4RrMzKEs=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
-    changelog = "https://github.com/jaraco/cssutils/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/jaraco/cssutils/blob/${finalAttrs.src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

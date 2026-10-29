@@ -6,14 +6,14 @@
   libnet,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcptraceroute";
   version = "1.5beta7";
 
   src = fetchFromGitHub {
     owner = "mct";
     repo = "tcptraceroute";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-KU4MLWtOFzzNr+I99fRbhBokhS1JUNL+OgVltkOGav4=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "tcptraceroute";
   };
-}
+})

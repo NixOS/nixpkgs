@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "boltons";
   version = "25.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kBOU17/jRRAGb4MGawY0PY31OJf5arVz+J7xGBoMBkg=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
       traces, in tbutils
     '';
     homepage = "https://github.com/mahmoud/boltons";
-    changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mahmoud/boltons/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ twey ];
   };
-}
+})

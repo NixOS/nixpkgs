@@ -5,14 +5,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "func-timeout";
   version = "4.3.5";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "func_timeout";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-dM08Qo7JT07fuoH5svFJBIRtX/zMJ8kkM7i1k5tVdd0=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
-}
+})

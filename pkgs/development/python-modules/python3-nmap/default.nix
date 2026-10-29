@@ -6,7 +6,7 @@
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python3-nmap";
   version = "1.9.2";
   pyproject = true;
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nmmapper";
     repo = "python3-nmap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-d/rH3aRNh9SDyVvbiTFCQyfZ6amtnH2iSwKqTOlVLNY=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'version="1.9.1"' 'version="${version}"'
+      --replace-fail 'version="1.9.1"' 'version="${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library which helps in using nmap port scanner";
     homepage = "https://github.com/nmmapper/python3-nmap";
-    changelog = "https://github.com/nmmapper/python3-nmap/releases/tag/${src.tag}";
+    changelog = "https://github.com/nmmapper/python3-nmap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

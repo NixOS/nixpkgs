@@ -6,20 +6,20 @@
   nixosTests,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "fluidd";
   version = "1.36.2";
 
   src = fetchFromGitHub {
     owner = "fluidd-core";
     repo = "fluidd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nf0H1yk+BczzvSMw5mcXz6LfcvyMF5q4teYBtwsrLOk=";
   };
 
   patches = [
     (replaceVars ./hardcode-version.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -38,4 +38,4 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
-}
+})

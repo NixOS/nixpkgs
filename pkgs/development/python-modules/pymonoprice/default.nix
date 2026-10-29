@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymonoprice";
   version = "0.6.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "etsinko";
     repo = "pymonoprice";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UwP2R3gpu2gNgIEzyA9QSvPx40HfPALXFwHy4aJS6XA=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python 3 interface implementation for Monoprice 6 zone amplifier";
     homepage = "https://github.com/etsinko/pymonoprice";
-    changelog = "https://github.com/etsinko/pymonoprice/releases/tag/${version}";
+    changelog = "https://github.com/etsinko/pymonoprice/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

@@ -13,7 +13,7 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-gateway-server";
   version = "2025.4.0";
   pyproject = true;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ezt5QkA21SDfuCMm+XY8d+xso8SDb4lmK/yd89Guu0Y=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   nativeBuildInputs = [ go ];
 
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

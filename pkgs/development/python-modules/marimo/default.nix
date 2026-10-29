@@ -30,14 +30,14 @@
   # tests
   versionCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "marimo";
   version = "0.25.1";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-k02yzrbCuMmuNRSnoi5rIuz1T6vqC2E4rtGYD48VNv8=";
   };
 
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
     homepage = "https://github.com/marimo-team/marimo";
-    changelog = "https://github.com/marimo-team/marimo/releases/tag/${version}";
+    changelog = "https://github.com/marimo-team/marimo/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "marimo";
     maintainers = with lib.maintainers; [
@@ -85,4 +85,4 @@ buildPythonPackage rec {
       dmadisetti
     ];
   };
-}
+})

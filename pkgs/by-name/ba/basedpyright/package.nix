@@ -16,14 +16,14 @@
   versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "basedpyright";
   version = "1.39.8";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8S83CTd/td7USKxfCI0cXd2gPBMivi4QMRQwVgxhs6w=";
   };
 
@@ -99,7 +99,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${src.tag}";
+    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${finalAttrs.src.tag}";
     description = "Type checker for the Python language";
     homepage = "https://github.com/detachhead/basedpyright";
     license = lib.licenses.mit;
@@ -109,4 +109,4 @@ buildNpmPackage rec {
       misilelab
     ];
   };
-}
+})

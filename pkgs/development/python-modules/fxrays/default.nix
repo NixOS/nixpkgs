@@ -7,7 +7,7 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fxrays";
   version = "1.3.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "FXrays";
-    tag = "${version}_as_released";
+    tag = "${finalAttrs.version}_as_released";
     hash = "sha256-IwEY54zDXqMci7WRvhueDJidTsbMwv6eqQSGZzFOtnQ";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Computes extremal rays of polyhedral cones with filtering";
-    changelog = "https://github.com/3-manifolds/FXrays/releases/tag/${src.tag}";
+    changelog = "https://github.com/3-manifolds/FXrays/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/3-manifolds/FXrays";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
@@ -42,4 +42,4 @@ buildPythonPackage rec {
       alejo7797
     ];
   };
-}
+})

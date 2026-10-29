@@ -24,13 +24,13 @@
 
 # this is a pythonPackage because of the ipython line magics in pgcli.magic
 # integrating with ipython-sql
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgcli";
   version = "4.7.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GV0ArplMidQ+2OVw3foKn7YQXmt4Pfwets6psybcM0Y=";
   };
 
@@ -77,10 +77,10 @@ buildPythonPackage rec {
       syntax highlighting.
     '';
     homepage = "https://pgcli.com";
-    changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
+    changelog = "https://github.com/dbcli/pgcli/raw/v${finalAttrs.version}/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       SuperSandro2000
     ];
   };
-}
+})

@@ -13,7 +13,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnomekbd";
   version = "3.28.1";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgnomekbd/${lib.versions.majorMinor version}/libgnomekbd-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgnomekbd/${lib.versions.majorMinor finalAttrs.version}/libgnomekbd-${finalAttrs.version}.tar.xz";
     sha256 = "ItxZVm1zwAZTUPWpc0DmLsx7CMTfGRg4BLuL4kyP6HA=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

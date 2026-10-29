@@ -21,7 +21,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "partd";
   version = "1.4.2";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "partd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GtIo6n87TmM5aRgtRyxhhXXAINpPCFbjZ/sQz/vkcoA=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     homepage = "https://github.com/dask/partd/";
   };
-}
+})

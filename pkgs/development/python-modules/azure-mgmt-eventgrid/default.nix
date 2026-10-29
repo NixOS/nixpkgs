@@ -10,14 +10,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-eventgrid";
   version = "10.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_eventgrid";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-MD5eJ89LteyDO6Tlqe9wtbxBDhkEEuxHzeWdguQT+34=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure EventGrid Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventgrid/azure-mgmt-eventgrid";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-eventgrid_${version}/sdk/eventgrid/azure-mgmt-eventgrid/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-eventgrid_${finalAttrs.version}/sdk/eventgrid/azure-mgmt-eventgrid/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

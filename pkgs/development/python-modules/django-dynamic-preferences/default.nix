@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-dynamic-preferences";
   version = "1.17.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agateblue";
     repo = "django-dynamic-preferences";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-irnwoWqQQxPueglI86ZIOt8wZcEHneY3eyATBXOuk9Y=";
   };
 
@@ -44,9 +44,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Dynamic global and instance settings for your django project";
-    changelog = "https://github.com/agateblue/django-dynamic-preferences/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/agateblue/django-dynamic-preferences/blob/${finalAttrs.version}/HISTORY.rst";
     homepage = "https://github.com/agateblue/django-dynamic-preferences";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -8,14 +8,14 @@
   jupyterlab,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-vim";
   version = "4.1.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_vim";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-q/KJGq+zLwy5StmDIa5+vL4Mq+Uj042A1WnApQuFIlo=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mart-mihkel ];
   };
-}
+})

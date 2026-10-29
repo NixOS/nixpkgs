@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "piccata";
   version = "2.0.3";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "piccata";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wdfujQ8QYHZGFsnI0fQRSEI6sOCsDXj2FX0ZII5zmtA=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

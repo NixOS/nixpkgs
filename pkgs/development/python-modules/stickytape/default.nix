@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stickytape";
   version = "0.2.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "stickytape";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KOZN9oxPb91l8QVU07I49UMNXqox8j+oekA1fMtj6l8=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "stickytape";
   };
-}
+})

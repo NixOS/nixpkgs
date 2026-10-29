@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "nodemon";
   version = "3.1.14";
 
   src = fetchFromGitHub {
     owner = "remy";
     repo = "nodemon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Kk42VjCmbkAfYzZEh4njyA4fodjmeCxIDraAZ8Hsd4g=";
   };
 
@@ -29,4 +29,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

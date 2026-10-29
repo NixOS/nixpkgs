@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyatag";
   version = "0.3.7.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatsNl";
     repo = "pyatag";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3h9mpopTbEULCx7rcEt/I/ZnUA0L/fJ7Y3L5h/6EuC4=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to talk to Atag One";
     homepage = "https://github.com/MatsNl/pyatag";
-    changelog = "https://github.com/MatsNl/pyatag/releases/tag/${version}";
+    changelog = "https://github.com/MatsNl/pyatag/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

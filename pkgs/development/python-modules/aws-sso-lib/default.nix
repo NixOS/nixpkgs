@@ -7,14 +7,14 @@
   boto3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aws-sso-lib";
   version = "1.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aws_sso_lib";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-sCA6ZMy2a6ePme89DrZpr/57wyP2q5yqyX81whoDzqU=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cterence ];
   };
-}
+})

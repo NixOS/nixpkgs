@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-datafiles";
   version = "3.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omarkohl";
     repo = "pytest-datafiles";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xB96JAUlEicIrTET1L363H8O2JwCTuUWr9jX/70uFvs=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

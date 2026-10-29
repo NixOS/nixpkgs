@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "wlc";
   version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8d5KOfHDY+4gUOc9lGNAayn8IBD5p706lGXpSuskKOU=";
   };
 
@@ -38,4 +38,4 @@ python3.pkgs.buildPythonPackage rec {
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "wlc";
   };
-}
+})

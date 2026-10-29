@@ -10,13 +10,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "natsort";
   version = "8.4.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RTEsSg5VB1k9oZPe3QSrsUaSU7YB7K9jRFrYDwoepYE=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
     description = "Natural sorting for Python";
     mainProgram = "natsort";
     homepage = "https://github.com/SethMMorton/natsort";
-    changelog = "https://github.com/SethMMorton/natsort/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/SethMMorton/natsort/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -9,14 +9,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pure-maps";
   version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "pure-maps";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-kPkkGoS/jikAQe6DYeWoEDmLU8iENXNDJwkY0f4UvO0=";
     fetchSubmodules = true;
   };
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     description = "Display vector and raster maps, places, routes, and provide navigation instructions with a flexible selection of data and service providers";
     mainProgram = "pure-maps";
     homepage = "https://github.com/rinigus/pure-maps";
-    changelog = "https://github.com/rinigus/pure-maps/blob/${src.rev}/NEWS.md";
+    changelog = "https://github.com/rinigus/pure-maps/blob/${finalAttrs.src.rev}/NEWS.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.Thra11 ];
     platforms = lib.platforms.linux;
   };
-}
+})

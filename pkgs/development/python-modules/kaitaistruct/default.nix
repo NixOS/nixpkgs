@@ -16,13 +16,13 @@ let
     hash = "sha256-l3rGbblUgxO6Y7grlsMEiT3nRIgUZV1VqTyjIgIDtyA=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kaitaistruct";
   version = "0.11";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BT7nZCiOeLjlOs90jpczJorL1Xm42CpCexgFRTYl10s=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

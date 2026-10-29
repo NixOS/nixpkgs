@@ -19,7 +19,7 @@ let
     hash = "sha256-LeAIXrPzp6rmmrz4ixehaD4/U1i15NDR0wvYyFOjw0U=";
   };
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twitter-color-emoji";
   inherit version;
 
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
         "s#Noto Color Emoji#Twitter Color Emoji#"
         "s#NotoColorEmoji#TwitterColorEmoji#"
         ''s#Copyright .* Google Inc\.#Twitter, Inc and other contributors.#''
-        "s# Version .*# ${version}#"
+        "s# Version .*# ${finalAttrs.version}#"
         "s#.*is a trademark.*##"
         ''s#Google, Inc\.#Twitter, Inc and other contributors#''
         "s#http://www.google.com/get/noto/#https://twemoji.twitter.com/#"
@@ -103,4 +103,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ emily ];
   };
-}
+})

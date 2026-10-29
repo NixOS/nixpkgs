@@ -8,13 +8,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-relaxed";
   version = "2.0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-lW6gKOww27+2gN2Oe0p/uPgKI5WV6Ius4Bi/LA1xgkg=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://pytest-relaxed.readthedocs.io/";
     description = "Relaxed test discovery/organization for pytest";
-    changelog = "https://github.com/bitprophet/pytest-relaxed/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/bitprophet/pytest-relaxed/blob/${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

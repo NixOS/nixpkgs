@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lib4vex";
   version = "0.2.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4vex";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XH3Y2kbsJFR202F8bmcd3IWpgHS36W+ylDObtBFNFFg=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to ingest and generate VEX documents";
     homepage = "https://github.com/anthonyharrison/lib4vex";
-    changelog = "https://github.com/anthonyharrison/lib4vex/releases/tag/${src.tag}";
+    changelog = "https://github.com/anthonyharrison/lib4vex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teatwig ];
   };
-}
+})

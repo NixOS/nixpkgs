@@ -17,13 +17,13 @@
   # Check
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libtfr";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+fq5cpBiY5AJYDoxEAoQG8iEoEDfhHqChBAky1jKD/g=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
       RossSmyth
     ];
   };
-}
+})

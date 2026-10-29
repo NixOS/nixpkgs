@@ -10,7 +10,7 @@
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyscard";
   version = "2.3.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pyscard";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MW/Cg7Ta/LdY/pOomsEecVIt62rc5qSAGjpJl4m+ruM=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Smartcard library for python";
     homepage = "https://pyscard.sourceforge.io/";
-    changelog = "https://github.com/LudovicRousseau/pyscard/releases/tag/${src.tag}";
+    changelog = "https://github.com/LudovicRousseau/pyscard/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ layus ];
   };
-}
+})

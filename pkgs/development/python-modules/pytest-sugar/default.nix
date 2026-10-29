@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-sugar";
   version = "1.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-c7i2UWPr8Q+fZx76ue7T1W8g0spovag/pkdAqSwI9l0=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin that changes the default look and feel of pytest";
     homepage = "https://github.com/Frozenball/pytest-sugar";
-    changelog = "https://github.com/Teemu/pytest-sugar/releases/tag/v${version}";
+    changelog = "https://github.com/Teemu/pytest-sugar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

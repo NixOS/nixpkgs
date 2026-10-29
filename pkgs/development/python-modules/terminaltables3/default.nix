@@ -11,7 +11,7 @@
   termcolor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "terminaltables3";
   version = "4.0.0-unstable-2024-07-21";
   pyproject = true;
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generate simple tables in terminals from a nested list of strings";
     homepage = "https://github.com/matthewdeanmartin/terminaltables3";
-    changelog = "https://github.com/matthewdeanmartin/terminaltables3/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/matthewdeanmartin/terminaltables3/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

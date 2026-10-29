@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libsoundtouch";
   version = "0.8.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CharlesBlonde";
     repo = "libsoundtouch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-am8nHPdtKMh8ZA/jKgz2jnltpvgEga8/BjvP5nrhgvI=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

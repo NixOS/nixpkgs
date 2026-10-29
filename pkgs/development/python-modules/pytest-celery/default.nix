@@ -19,7 +19,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-celery";
   version = "1.3.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "celery";
     repo = "pytest-celery";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8qDnyMv0NxMFWGRbJ63Ye/dSRr8A6Azh2J5gkiwYYzI=";
   };
 
@@ -82,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to enable celery.contrib.pytest";
     homepage = "https://github.com/celery/pytest-celery";
-    changelog = "https://github.com/celery/pytest-celery/blob/${src.tag}/Changelog.rst";
+    changelog = "https://github.com/celery/pytest-celery/blob/${finalAttrs.src.tag}/Changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

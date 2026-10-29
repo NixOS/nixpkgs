@@ -7,13 +7,13 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-jinjadomain";
   version = "0.5.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-frzcrUnJna8wmKbsC7wduazLSZ8lzOKOCf75Smk675E=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "sphinxcontrib-jinjadomain";
   };
-}
+})

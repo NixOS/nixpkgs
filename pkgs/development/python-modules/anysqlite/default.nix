@@ -9,7 +9,7 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anysqlite";
   version = "0.0.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "anysqlite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6kNN6kjkMHVNneMq/8zQxqMIXUxH/+eWLX8XhoHqFRU=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sqlite3 for asyncio and trio";
     homepage = "https://github.com/karpetrosyan/anysqlite";
-    changelog = "https://github.com/karpetrosyan/anysqlite/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/karpetrosyan/anysqlite/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

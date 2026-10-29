@@ -17,7 +17,7 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cpupower-gui";
   version = "1.0.0";
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "vagnum08";
     repo = "cpupower-gui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "05lvpi3wgyi741sd8lgcslj8i7yi3wz7jwl7ca3y539y50hwrdas";
   };
 
@@ -101,4 +101,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ unode ];
   };
-}
+})

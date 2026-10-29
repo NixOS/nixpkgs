@@ -8,14 +8,14 @@
   grpcio-tools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nominal-api-protos";
   version = "0.1073.0";
   pyproject = true;
 
   # nixpkgs-update: no auto update
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "nominal_api_protos";
     hash = "sha256-jI7V34IyfY6bwzUvcOi6tdQI+OkJRMdhmNq0rosMjR4=";
   };
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ alkasm ];
     license = lib.licenses.unfree;
   };
-}
+})

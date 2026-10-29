@@ -12,13 +12,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pudb";
   version = "2025.1.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5t7bgfw8jNzWbPYuhjN8uRNXDrssmUyatSAS0Fnghq0=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
     description = "Full-screen, console-based Python debugger";
     mainProgram = "pudb";
     homepage = "https://github.com/inducer/pudb";
-    changelog = "https://github.com/inducer/pudb/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/pudb/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

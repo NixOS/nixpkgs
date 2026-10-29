@@ -27,12 +27,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terra-station";
   version = "1.2.0";
 
   src = fetchurl {
-    url = "https://github.com/terra-money/station-desktop/releases/download/v${version}/Terra.Station_${version}_${arch}.deb";
+    url = "https://github.com/terra-money/station-desktop/releases/download/v${finalAttrs.version}/Terra.Station_${finalAttrs.version}_${arch}.deb";
     inherit sha256;
   };
 
@@ -48,27 +48,27 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
+    mkdir -p $out/bin $out/share/${finalAttrs.pname}
 
     cp -a usr/share/* $out/share
-    cp -a "opt/Terra Station/"{locales,resources} $out/share/${pname}
+    cp -a "opt/Terra Station/"{locales,resources} $out/share/${finalAttrs.pname}
 
     # patch pre-built node modules
-    asar e $out/share/${pname}/resources/app.asar asar-unpacked
+    asar e $out/share/${finalAttrs.pname}/resources/app.asar asar-unpacked
     find asar-unpacked -name '*.node' -exec patchelf \
       --add-rpath "${lib.makeLibraryPath [ stdenv.cc.cc ]}" \
       {} \;
-    asar p asar-unpacked $out/share/${pname}/resources/app.asar
+    asar p asar-unpacked $out/share/${finalAttrs.pname}/resources/app.asar
 
     substituteInPlace $out/share/applications/station-electron.desktop \
-      --replace "/opt/Terra Station/station-electron" ${pname}
+      --replace "/opt/Terra Station/station-electron" ${finalAttrs.pname}
 
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.aasar
+    makeWrapper ${electron}/bin/electron $out/bin/${finalAttrs.pname} \
+      --add-flags $out/share/${finalAttrs.pname}/resources/app.aasar
   '';
 
   meta = {
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "terra-station";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

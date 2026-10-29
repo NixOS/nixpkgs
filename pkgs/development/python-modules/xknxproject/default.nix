@@ -8,7 +8,7 @@
   striprtf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xknxproject";
   version = "3.10.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknxproject";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WVSJcgOtu8z39jY3KSsDgItlQPQKPfpptiIKO2UX8go=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to extract KNX projects and parses the underlying XML";
     homepage = "https://github.com/XKNX/xknxproject";
-    changelog = "https://github.com/XKNX/xknxproject/releases/tag/${version}";
+    changelog = "https://github.com/XKNX/xknxproject/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

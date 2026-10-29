@@ -5,14 +5,14 @@
   ply,
   isPy3k,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plyplus";
   version = "0.7.5";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PlyPlus";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-116oDNCsbOjo/kMzEDJu/RXF+KoY/LRRE+vKUd2jbjw=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ twey ];
     license = lib.licenses.mit;
   };
-}
+})

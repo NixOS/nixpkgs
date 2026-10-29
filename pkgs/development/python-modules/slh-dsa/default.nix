@@ -8,14 +8,14 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slh-dsa";
   version = "0.2.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "slh_dsa";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-3L6lv58nIrSencAQTroaYXrbvcpbLGS/ihkark+7CP0=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

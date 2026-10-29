@@ -19,12 +19,12 @@ let
       inherit sha256;
     };
 
-  libg15 = stdenv.mkDerivation rec {
+  libg15 = stdenv.mkDerivation (finalAttrs: {
     pname = "libg15";
     version = "1.2.7";
 
     src = g15src {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       sha256 = "1mkrf622n0cmz57lj8w9q82a9dcr1lmyyxbnrghrxzb6gvifnbqk";
     };
 
@@ -36,14 +36,14 @@ let
       description = "Provides low-level access to Logitech G11/G15 keyboards and Z10 speakers";
       inherit license maintainers;
     };
-  };
+  });
 
-  libg15render = stdenv.mkDerivation rec {
+  libg15render = stdenv.mkDerivation (finalAttrs: {
     pname = "libg15render";
     version = "1.2";
 
     src = g15src {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       sha256 = "03yjb78j1fnr2fwklxy54sdljwi0imvp29m8kmwl9v0pdapka8yj";
     };
 
@@ -59,14 +59,14 @@ let
       description = "Small graphics library optimised for drawing on an LCD";
       inherit license maintainers;
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "g15daemon";
   version = "1.9.5.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/G15Daemon%201.9x/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/${finalAttrs.pname}/G15Daemon%201.9x/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     sha256 = "1613gsp5dgilwbshqxxhiyw73ksngnam7n1iw6yxdjkp9fyd2a3d";
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       patch =
         fname: sha256:
         fetchurl {
-          url = "https://raw.githubusercontent.com/archlinux/svntogit-community/c0b0b6d4d6d7b79eca68123b20e0c9fb82e1c6e1/g15daemon/trunk/${pname}-${version}-${fname}.patch";
+          url = "https://raw.githubusercontent.com/archlinux/svntogit-community/c0b0b6d4d6d7b79eca68123b20e0c9fb82e1c6e1/g15daemon/trunk/${finalAttrs.pname}-${finalAttrs.version}-${fname}.patch";
           name = "${fname}.patch";
           inherit sha256;
         };
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     mainProgram = "g15daemon";
     inherit license maintainers;
   };
-}
+})

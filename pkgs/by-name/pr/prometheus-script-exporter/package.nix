@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   subPackages = [ "cmd" ];
   postInstall = ''
     mv $out/bin/cmd $out/bin/script_exporter
@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ricoberger";
     repo = "script_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8FEMa/fBZS69TE9An6RZq3AvETxvYEqDEIq3roQvgac=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ Flakebi ];
     platforms = lib.platforms.linux;
   };
-}
+})

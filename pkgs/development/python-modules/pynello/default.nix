@@ -7,7 +7,7 @@
   requests-oauthlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynello";
   version = "2.0.3";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "pynello";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sUy37sEPEMyFYFVBzFVdcg31nZAyC+Ricm4LqxmjuQQ=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docformatter";
   version = "1.7.8";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "docformatter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z1ZW5ljWRDnS2mlAmbQyAcE97nU+PrpKaP1aox3VQtQ=";
   };
 
@@ -49,11 +49,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "docformatter" ];
 
   meta = {
-    changelog = "https://github.com/PyCQA/docformatter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/PyCQA/docformatter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Formats docstrings to follow PEP 257";
     mainProgram = "docformatter";
     homepage = "https://github.com/myint/docformatter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

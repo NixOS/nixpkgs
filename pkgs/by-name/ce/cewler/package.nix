@@ -5,7 +5,7 @@
   gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cewler";
   version = "1.4.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "roys";
     repo = "cewler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9P8vFacbw0pgthYqJY/aPuV39VQuMAA8o7yJ8HkD7RQ=";
   };
 
@@ -43,4 +43,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.cc-by-nc-40;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

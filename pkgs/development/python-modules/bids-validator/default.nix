@@ -11,14 +11,14 @@
   bidsschematools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bids-validator";
   version = "1.14.7.post0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bids_validator";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-5gBaUAt1+KlhWT+2fUYIUQfa2xFvWaXDtSSqBpeUW2Y=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Validator for the Brain Imaging Data Structure";
     homepage = "https://github.com/bids-standard/bids-validator";
-    changelog = "https://github.com/bids-standard/bids-validator/releases/tag/v${version}";
+    changelog = "https://github.com/bids-standard/bids-validator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

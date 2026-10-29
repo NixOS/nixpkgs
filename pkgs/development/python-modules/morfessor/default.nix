@@ -6,14 +6,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "morfessor";
   version = "2.0.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Morfessor";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-uzvqwjQ0FyTF9kD2WAMHH2I3OlDbqFTVo5hWf5rvurI=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})

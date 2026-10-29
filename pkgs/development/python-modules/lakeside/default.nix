@@ -7,7 +7,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lakeside";
   version = "0.13";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nkgilley";
     repo = "python-lakeside";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Y5g78trkwOF3jsbgTv0uVkvfB1HZN+w1T6xIorxGAhg=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for controlling LED bulbs from Eufy";
     homepage = "https://github.com/nkgilley/python-lakeside";
-    changelog = "https://github.com/nkgilley/python-lakeside/releases/tag/${version}";
+    changelog = "https://github.com/nkgilley/python-lakeside/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

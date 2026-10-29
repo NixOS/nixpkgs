@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "remotezip2";
   version = "0.0.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "python-remotezip2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UyfAoe9pXCGLGPIE2LSLvnIaju+nXt3s7ddGlpmJGUg=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/doronz88/python-remotezip2/releases/tag/${src.tag}";
+    changelog = "https://github.com/doronz88/python-remotezip2/releases/tag/${finalAttrs.src.tag}";
     description = "Access zip file content hosted remotely without downloading the full file";
     homepage = "https://github.com/doronz88/python-remotezip2";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

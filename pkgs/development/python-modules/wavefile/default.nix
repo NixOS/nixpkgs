@@ -10,7 +10,7 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wavefile";
   version = "1.6.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vokimon";
     repo = "python-wavefile";
-    tag = "python-wavefile-${version}";
+    tag = "python-wavefile-${finalAttrs.version}";
     hash = "sha256-7pJcdp2abNurTl/pwAEW4QAalK7okMOCwlRPmKLWad4=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

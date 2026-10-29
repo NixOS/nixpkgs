@@ -7,13 +7,13 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xlsx2csv";
   version = "0.8.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YY/FAmEoYN6KuOPWGV6Z7zMv/8aDN/a4nllpCq0NILU=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jb55 ];
   };
-}
+})

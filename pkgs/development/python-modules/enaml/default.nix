@@ -14,7 +14,7 @@
   sip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "enaml";
   version = "0.19.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = "enaml";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gsNJSK9QcavsiRx2n/S2bbf9ZVsqJXxBiUyBWVIZzj8=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Declarative User Interfaces for Python";
     homepage = "https://github.com/nucleic/enaml";
-    changelog = "https://github.com/nucleic/enaml/releases/tag/${version}";
+    changelog = "https://github.com/nucleic/enaml/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ raboof ];
   };
-}
+})

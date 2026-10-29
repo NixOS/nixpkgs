@@ -9,7 +9,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiostream";
   version = "0.7.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aiostream";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YUIDB4FLcXjSGWqpiM2tn2l0DpSwAnlYvalIgIB7T44=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Generator-based operators for asynchronous iteration";
     homepage = "https://aiostream.readthedocs.io";
-    changelog = "https://github.com/vxgmichel/aiostream/releases/tag/${src.tag}";
+    changelog = "https://github.com/vxgmichel/aiostream/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ rmcgibbo ];
   };
-}
+})

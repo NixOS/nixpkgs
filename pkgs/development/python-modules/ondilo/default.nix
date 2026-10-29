@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ondilo";
   version = "0.5.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JeromeHXP";
     repo = "ondilo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-l9pmamJbB/FAqB49S4vQAan9Wgj3qu1J2pboQO1Hg/Q=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package to access Ondilo ICO APIs";
     homepage = "https://github.com/JeromeHXP/ondilo";
-    changelog = "https://github.com/JeromeHXP/ondilo/releases/tag/${version}";
+    changelog = "https://github.com/JeromeHXP/ondilo/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

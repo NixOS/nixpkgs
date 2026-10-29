@@ -13,7 +13,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiowaqi";
   version = "3.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-waqi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YWTGEOSSkZ0XbZUE3k+Dn9qg8Pmwip9wCp8e/j1D9io=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with the WAQI API";
     homepage = "https://github.com/joostlek/python-waqi";
-    changelog = "https://github.com/joostlek/python-waqi/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-waqi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

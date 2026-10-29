@@ -6,7 +6,7 @@
   async-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyevilgenius";
   version = "2.0.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pyevilgenius";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wjC32oq/lW3Z4XB+4SILRKIOuCgBKk1gruOo4uc/4/o=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python SDK to interact with Evil Genius Labs devices";
     homepage = "https://github.com/home-assistant-libs/pyevilgenius";
-    changelog = "https://github.com/home-assistant-libs/pyevilgenius/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/pyevilgenius/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

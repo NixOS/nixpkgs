@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hlk-sw16";
   version = "0.0.9";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jameshilliard";
     repo = "hlk-sw16";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vyH4Vkc3XXP2GAo7f8UOsJ2kxHlPte1RTMh2k21BGgQ=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

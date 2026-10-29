@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "btlewrap";
   version = "0.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ChristianKuehnel";
     repo = "btlewrap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cjPj+Uw/L9kq/BbxlnOCJtaBcnf9VOJKN2NJ3cmKe6U=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wrapper around different bluetooth low energy backends";
     homepage = "https://github.com/ChristianKuehnel/btlewrap";
-    changelog = "https://github.com/ChristianKuehnel/btlewrap/releases/tag/v${version}";
+    changelog = "https://github.com/ChristianKuehnel/btlewrap/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

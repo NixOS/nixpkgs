@@ -15,14 +15,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-about";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-about";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wJ4KJ+gSj0sdlO1l68RzAaOM8HxdPP6S1gWCoRfRZ3c=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

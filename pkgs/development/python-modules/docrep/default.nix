@@ -6,13 +6,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docrep";
   version = "0.3.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7YoX4gGr2CnvjaeKC29NUfuZpMvQVUrb7TMJKX+WQxQ=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2;
     maintainers = [ ];
   };
-}
+})

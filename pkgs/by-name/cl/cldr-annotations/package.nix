@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cldr-annotations";
   version = "49";
 
   src = fetchzip {
-    url = "https://unicode.org/Public/cldr/${version}/cldr-common-${version}.zip";
+    url = "https://unicode.org/Public/cldr/${finalAttrs.version}/cldr-common-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-s0nDPUMwP/DgeL7PdeKyFASAU8hTHw644qPWrl+F6zw=";
   };
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ DeeUnderscore ];
   };
-}
+})

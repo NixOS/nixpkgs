@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-jinja";
   version = "2.11.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niwinz";
     repo = "django-jinja";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0gkv9xinHux8TRiNBLl/JgcimXU3CzysxzGR2jn7OZ4=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple and nonobstructive jinja2 integration with Django";
     homepage = "https://github.com/niwinz/django-jinja";
-    changelog = "https://github.com/niwinz/django-jinja/blob/${src.rev}/CHANGES.adoc";
+    changelog = "https://github.com/niwinz/django-jinja/blob/${finalAttrs.src.rev}/CHANGES.adoc";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -6,7 +6,7 @@
   zope-interface,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-exceptions";
   version = "6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.exceptions";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LLKS/O1sfrHRfEgbb3GO+/hBtIC9CvfNjorqiKTgujo=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Exception interfaces and implementations";
     homepage = "https://pypi.org/project/zope.exceptions/";
-    changelog = "https://github.com/zopefoundation/zope.exceptions/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.exceptions/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

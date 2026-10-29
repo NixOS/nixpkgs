@@ -72,7 +72,7 @@ let
     hash = "sha256-lkyBzCj3+RpGhtPTGCxOvaMO+wnT+Wt/lerjFGSZwRA=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpaw";
   version = "25.1.0";
   format = "setuptools";
@@ -80,7 +80,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "gpaw";
     repo = "gpaw";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-tdS383qT6hBr5hOqjoFS36nRSS2vdVkUR7sExwjWhng=";
   };
 
@@ -143,4 +143,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

@@ -9,7 +9,7 @@
   python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beancount-periodic";
   version = "0.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dallaslu";
     repo = "beancount-periodic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XuBDKG/iOS0gyfiwEEPjIckAbnfOKHjYwXW4CmUy8eA=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ polyfloyd ];
   };
-}
+})

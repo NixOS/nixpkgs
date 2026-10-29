@@ -8,14 +8,14 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "partial-json-parser";
   version = "0.2.1.1.post7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "partial_json_parser";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hlkOG6a8tnOaLfwX0jI/Aoy1iE9MbOI9s3aZkTLJqSI=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

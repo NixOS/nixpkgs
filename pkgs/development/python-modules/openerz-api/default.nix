@@ -8,7 +8,7 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openerz-api";
   version = "0.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "misialq";
     repo = "openerz-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CwK61StspZJt0TALv76zfibUzlriwp9HRoYOtX9bU+c=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to interact with the OpenERZ API";
     homepage = "https://github.com/misialq/openerz-api";
-    changelog = "https://github.com/misialq/openerz-api/releases/tag/v${version}";
+    changelog = "https://github.com/misialq/openerz-api/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

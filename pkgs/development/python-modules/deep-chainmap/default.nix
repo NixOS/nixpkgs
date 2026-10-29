@@ -6,14 +6,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deep-chainmap";
   version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "deep_chainmap";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-lrCg6GGxjq/Y3t1c1HpJuaP+XVvVrOcB5aVaem5E/I8=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rehno-lindeque ];
   };
-}
+})

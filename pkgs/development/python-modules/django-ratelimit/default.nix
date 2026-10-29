@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-ratelimit";
   version = "4.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsocol";
     repo = "django-ratelimit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZMtZSKOIIRSqH6eyC7bBeua7YLKyWW6NOXN/MDv9fy4=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cache-based rate-limiting for Django";
     homepage = "https://github.com/jsocol/django-ratelimit";
-    changelog = "https://github.com/jsocol/django-ratelimit/releases/tag/v${version}";
+    changelog = "https://github.com/jsocol/django-ratelimit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

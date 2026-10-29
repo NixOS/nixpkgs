@@ -6,13 +6,13 @@
   imageio-ffmpeg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "handout";
   version = "1.1.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UtqvH5pMss64jB3t+F0i70SblCK0JKJTTSH5QeV7yRU=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
   };
-}
+})

@@ -10,14 +10,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "termplotlib";
   version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "termplotlib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QckMxvhVq6FgcLHyC3yeOA7BTsEO09K2XEusfbjY2eE=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

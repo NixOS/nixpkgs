@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unicode-rbnf";
   version = "2.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "unicode-rbnf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t5QHZVBIRVyhqmgVno3Nql6W0Q91DZ8sJA+nFBdKkj4=";
   };
 
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/rhasspy/unicode-rbnf/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/unicode-rbnf/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Pure Python implementation of ICU's rule-based number format engine";
     homepage = "https://github.com/rhasspy/unicode-rbnf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "broadlink";
   version = "0.19.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ID5YpUjio68xChs6ZhTQBW995kqbmwsASRJKQ1a5M2U=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for controlling Broadlink IR controllers";
     homepage = "https://github.com/mjg59/python-broadlink";
-    changelog = "https://github.com/mjg59/python-broadlink/releases/tag/${version}";
+    changelog = "https://github.com/mjg59/python-broadlink/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

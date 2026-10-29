@@ -15,12 +15,12 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wpebackend-fdo";
   version = "1.16.1";
 
   src = fetchurl {
-    url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
+    url = "https://wpewebkit.org/releases/wpebackend-fdo-${finalAttrs.version}.tar.xz";
     hash = "sha256-VErhQBL45+QmuMtSLrCqqsgxrXw1YB0c8x03Zw4Ouzs=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

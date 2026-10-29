@@ -6,7 +6,7 @@
   lib,
   manifestoo-core,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-odoo";
   version = "1.0.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "hatch-odoo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-I3jaiG0Xu8B34q30p7zTs+FeBXUQiPKTAJLSVxE9gYE=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

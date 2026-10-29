@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "somfy-mylink-synergy";
   version = "1.0.6";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bendews";
     repo = "somfy-mylink-synergy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+dWHtfDqi48Obknjdu5XbrY0/DRc6vOJcr91WhY6Qak=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

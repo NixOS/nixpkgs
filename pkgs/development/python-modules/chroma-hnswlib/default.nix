@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chroma-hnswlib";
   version = "0.8.2";
   pyproject = true;
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "hnswlib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Fs/BuocZblMSlmP6yp+aykbs0n1AdvL3AVAQI1AnZ9o=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail '__version__ = "0.7.6"' '__version__ = "${version}"'
+      --replace-fail '__version__ = "0.7.6"' '__version__ = "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

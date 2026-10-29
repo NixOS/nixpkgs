@@ -8,7 +8,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-fixture-config";
   version = "1.8.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "man-group";
     repo = "pytest-plugins";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fLctuuvHVk9GvQB5cTL4/T7GeWzJ2zLJpwZqq9/6C30=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/man-group/pytest-plugins/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/man-group/pytest-plugins/blob/${finalAttrs.src.tag}/CHANGES.md";
     description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set";
     homepage = "https://github.com/manahl/pytest-plugins";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryansydnor ];
   };
-}
+})

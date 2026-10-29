@@ -12,7 +12,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioimmich";
   version = "0.18.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8xqx5iC3IMW90bucKf2M1mEu3mephX0RjVujjvXBa2g=";
   };
 
@@ -47,10 +47,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mib1185/aioimmich/releases/tag/${src.tag}";
+    changelog = "https://github.com/mib1185/aioimmich/releases/tag/${finalAttrs.src.tag}";
     description = "Asynchronous library to fetch albums and assets from immich";
     homepage = "https://github.com/mib1185/aioimmich";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

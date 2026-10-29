@@ -8,14 +8,14 @@
   versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gi-docgen";
   version = "2026.1";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
+    url = "mirror://gnome/sources/gi-docgen/${lib.versions.major finalAttrs.version}/gi-docgen-${finalAttrs.version}.tar.xz";
     hash = "sha256-wxbWwEaZl2toI5Eqrh+ypqP/olU7Qivoj7VuuIGs9Hk=";
   };
 
@@ -63,4 +63,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20; # OR GPL-3.0-or-later
     teams = [ lib.teams.gnome ];
   };
-}
+})

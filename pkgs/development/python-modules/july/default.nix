@@ -10,14 +10,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "july";
   version = "0.1.3";
   pyproject = true;
 
   # No tags on GitHub
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0xXCSSEKf2COJ9IHfuy+vpC/Zieg+q6TTabEFmUspCM=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

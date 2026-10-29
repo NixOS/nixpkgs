@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-search";
   version = "9.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_search";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-oNoOwzLR9D0PastjuM/YAIWwdeka/PgS+MdprZ/crYQ=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Search Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-search_${version}/sdk/search/azure-mgmt-search/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-search_${finalAttrs.version}/sdk/search/azure-mgmt-search/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

@@ -8,7 +8,7 @@
 
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stackprinter";
   version = "0.2.13";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cknd";
     repo = "stackprinter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-R6s1YBbb52oK1zIQtRR80W+6Ca/gATtC6S3rUEC4Mes=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Debugging-friendly exceptions for Python";
     homepage = "https://github.com/cknd/stackprinter";
-    changelog = "https://github.com/cknd/stackprinter/releases/tag/${version}";
+    changelog = "https://github.com/cknd/stackprinter/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ryand56 ];
   };
-}
+})

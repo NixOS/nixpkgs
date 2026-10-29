@@ -17,7 +17,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eth-tester";
   version = "0.13.0-beta.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-tester";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ssPtsEQAyaJde/empEpGU1bf3s4yxwlEXqpacN5GWDw=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tool suite for testing ethereum applications";
     homepage = "https://github.com/ethereum/eth-tester";
-    changelog = "https://github.com/ethereum/eth-tester/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ethereum/eth-tester/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

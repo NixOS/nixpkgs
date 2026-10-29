@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "exrex";
   version = "0.12.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=about['__version__']," "version='${version}',"
+      --replace "version=about['__version__']," "version='${finalAttrs.version}',"
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

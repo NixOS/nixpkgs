@@ -19,14 +19,14 @@ let
   protobuf = protobuf_21;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nsjail";
   version = "3.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "nsjail";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-4fFXPwfPErve5CkVBtjPd1In8eEDby/RhuyW952YW7Y=";
   };
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
     homepage = "https://nsjail.dev/";
-    changelog = "https://github.com/google/nsjail/releases/tag/${version}";
+    changelog = "https://github.com/google/nsjail/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       arturcygan
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "nsjail";
   };
-}
+})

@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-tools-datasette";
   version = "0.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-tools-datasette";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Us9bPk2qpTlgJqQ0Cl9QdeqW+h8j+pmnkriM0WXEyyA=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Expose Datasette instances to LLM as a tool";
     homepage = "https://github.com/simonw/llm-tools-datasette";
-    changelog = "https://github.com/simonw/llm-tools-datasette/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-tools-datasette/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

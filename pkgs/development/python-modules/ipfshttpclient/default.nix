@@ -19,7 +19,7 @@
   httpcore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipfs-shipyard";
     repo = "py-ipfs-http-client";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
 
@@ -92,4 +92,4 @@ buildPythonPackage rec {
       Luflosi
     ];
   };
-}
+})

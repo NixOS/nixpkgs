@@ -10,7 +10,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "conda-inject";
   version = "1.3.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koesterlab";
     repo = "conda-inject";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M4+bz7ZuHlcF8tF5kSCUjjkIHG75eCCW1IJxcwxNL6o=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Helper functions for injecting a conda environment into the current python environment";
     homepage = "https://github.com/koesterlab/conda-inject";
-    changelog = "https://github.com/koesterlab/conda-inject/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/koesterlab/conda-inject/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "statsd_exporter";
   version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "statsd_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6t2j8jzvxhtSPzo0QBFqggMiZk/vcKRiWeRhV8jZqjk=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -35,10 +35,10 @@ buildGoModule rec {
     description = "Receives StatsD-style metrics and exports them to Prometheus";
     mainProgram = "statsd_exporter";
     homepage = "https://github.com/prometheus/statsd_exporter";
-    changelog = "https://github.com/prometheus/statsd_exporter/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/prometheus/statsd_exporter/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       benley
     ];
   };
-}
+})

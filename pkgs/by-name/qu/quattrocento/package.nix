@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "quattrocento";
   version = "1.1";
 
   src = fetchzip {
-    url = "https://web.archive.org/web/20170707001804/http://www.impallari.com/media/releases/quattrocento-v${version}.zip";
+    url = "https://web.archive.org/web/20170707001804/http://www.impallari.com/media/releases/quattrocento-v${finalAttrs.version}.zip";
     hash = "sha256-ntY6Wl6TI8F7SShMyD8mdOxVg4oz9kvJ7vKTyGdPLtE=";
   };
 
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 */*.otf     -t $out/share/fonts/opentype
-    install -Dm644 FONTLOG.txt -t $out/share/doc/${pname}-${version}
+    install -Dm644 FONTLOG.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

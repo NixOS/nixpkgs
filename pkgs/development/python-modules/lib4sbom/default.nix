@@ -12,7 +12,7 @@
   xmlschema,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lib4sbom";
   version = "0.9.4";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4sbom";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oH/mUN14s9c8n7yhHV0MMXpIZhaYSfdPsyxX1kjk0+Q=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to ingest and generate SBOMs";
     homepage = "https://github.com/anthonyharrison/lib4sbom";
-    changelog = "https://github.com/anthonyharrison/lib4sbom/releases/tag/${src.tag}";
+    changelog = "https://github.com/anthonyharrison/lib4sbom/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teatwig ];
   };
-}
+})

@@ -10,13 +10,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libpcap";
   version = "1.11.0b25";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GzrTqpkiKJjWBuZ7ez707BGZez9wXB96psygDQykO6c=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
       It is fully compliant implementation of the original C libpcap from 1.0.0 up to 1.9.0 API and the WinPcap’s 4.1.3 libpcap (1.0.0rel0b) API by implementing whole its functionality in a clean Python instead of C.
     '';
     homepage = "https://github.com/karpierz/libpcap/";
-    changelog = "https://github.com/karpierz/libpcap/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/karpierz/libpcap/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kip93 ];
   };
-}
+})

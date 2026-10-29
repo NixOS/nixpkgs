@@ -17,7 +17,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graphviz";
   version = "0.21";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-o6woY+UhbsJtUqIzYGXlC0Pw3su7WG4xlAKSslSADwI=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Python interface for Graphviz";
     homepage = "https://github.com/xflr6/graphviz";
-    changelog = "https://github.com/xflr6/graphviz/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/xflr6/graphviz/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

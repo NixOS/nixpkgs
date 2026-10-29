@@ -8,19 +8,19 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sway-launcher-desktop";
   version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Biont";
     repo = "sway-launcher-desktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lv1MLPJsJJjm6RLzZXWEz1JO/4EXTQ8wj225Di+98G4=";
   };
 
   postPatch = ''
-    patchShebangs ${pname}.sh
+    patchShebangs ${finalAttrs.pname}.sh
   '';
 
   buildInputs = [
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -d $out/bin
-    install ${pname}.sh $out/bin/${pname}
-    wrapProgram $out/bin/${pname} \
+    install ${finalAttrs.pname}.sh $out/bin/${finalAttrs.pname}
+    wrapProgram $out/bin/${finalAttrs.pname} \
       --prefix PATH : ${
         lib.makeBinPath [
           gawk
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       in any way and can be used with just about any WM.
     '';
     homepage = "https://github.com/Biont/sway-launcher-desktop";
-    changelog = "https://github.com/Biont/sway-launcher-desktop/releases/tag/v${version}";
+    changelog = "https://github.com/Biont/sway-launcher-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

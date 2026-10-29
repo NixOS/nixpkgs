@@ -12,7 +12,7 @@
   qdldl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qdldl";
   version = "0.1.7.post5";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "osqp";
     repo = "qdldl-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XHdvYWORHDYy/EIqmlmFQZwv+vK3I+rPIrvcEW1JyIw=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to the QDLDL";
     homepage = "https://github.com/osqp/qdldl-python";
-    changelog = "https://github.com/osqp/qdldl-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/osqp/qdldl-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

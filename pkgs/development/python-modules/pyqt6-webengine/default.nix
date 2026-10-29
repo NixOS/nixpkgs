@@ -12,14 +12,14 @@
   mesa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqt6-webengine";
   version = "6.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyqt6_webengine";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Fc9J77u9TGvIdlOyxK6A1gSfgA4xYgszZzSuLjfL7a4=";
   };
 
@@ -95,4 +95,4 @@ buildPythonPackage rec {
       LunNova
     ];
   };
-}
+})

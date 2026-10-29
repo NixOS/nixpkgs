@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypng";
   version = "0.20250521.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
-    tag = "pypng-${version}";
+    tag = "pypng-${finalAttrs.version}";
     hash = "sha256-Q1LXSHMM6pUKM0ZiuS1nYnlR4QKmXcN/K4raXTHr0Tg=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

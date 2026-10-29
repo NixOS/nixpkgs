@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "youless-api";
   version = "2.2.0";
   pyproject = true;
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gjong";
     repo = "youless-python-bridge";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BAIwShbIZaX5QOkxajwv6vtL8/EouHA3ELCLAm9ylKA=";
   };
 
-  env.PUBLISH_VERSION = version;
+  env.PUBLISH_VERSION = finalAttrs.version;
 
   build-system = [ setuptools ];
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for YouLess sensors";
     homepage = "https://github.com/gjong/youless-python-bridge";
-    changelog = "https://github.com/gjong/youless-python-bridge/releases/tag/${version}";
+    changelog = "https://github.com/gjong/youless-python-bridge/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

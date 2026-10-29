@@ -14,13 +14,13 @@ let
   owner = "scopatz";
   repo = "nanorc";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanorc";
   version = "2020-10-10";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev = builtins.replaceStrings [ "-" ] [ "." ] version;
+    rev = builtins.replaceStrings [ "-" ] [ "." ] finalAttrs.version;
     sha256 = "3B2nNFYkwYHCX6pQz/hMO/rnVqlCiw1BSNmGmJ6KCqE=";
   };
 
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
         nix
       ]
     }
-    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"' | sed 's|\\.|-|g')"
+    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${finalAttrs.pname}" | tr -d '"' | sed 's|\\.|-|g')"
     latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags git@github.com:${owner}/${repo} '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)"
     if [ "$oldVersion" != "$latestTag" ]; then
       newTag=$(echo $latestTag | sed 's|\.|-|g')
-      update-source-version ${pname} "$newTag" --version-key=version --print-changes
+      update-source-version ${finalAttrs.pname} "$newTag" --version-key=version --print-changes
     else
-      echo "${pname} is already up-to-date"
+      echo "${finalAttrs.pname} is already up-to-date"
     fi
   '';
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };
-}
+})

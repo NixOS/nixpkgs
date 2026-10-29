@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "embreex";
   version = "4.4.0.post1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trimesh";
     repo = "embreex";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9dq09EdJN5XKy1BdNSGk0ofDfmyqt50mo5i6mtwQtrE=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Maintained PyEmbree fork, bindings for Intel's Embree ray engine";
     homepage = "https://github.com/trimesh/embreex";
-    changelog = "https://github.com/trimesh/embreex/releases/tag/${src.tag}";
+    changelog = "https://github.com/trimesh/embreex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ pbsds ];
     inherit (embree.meta) platforms;
   };
-}
+})

@@ -8,7 +8,7 @@
   pip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argparse-manpage";
   version = "4.8";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praiskup";
     repo = "argparse-manpage";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lbxw9u5u1F8ppAz1iiBwQsu887BBWhhQaeb20mmX1aQ=";
   };
 
@@ -50,9 +50,9 @@ buildPythonPackage rec {
   meta = {
     description = "Automatically build man-pages for your Python project";
     homepage = "https://github.com/praiskup/argparse-manpage";
-    changelog = "https://github.com/praiskup/argparse-manpage/blob/${src.tag}/NEWS";
+    changelog = "https://github.com/praiskup/argparse-manpage/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "argparse-manpage";
   };
-}
+})

@@ -13,13 +13,13 @@
   trio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dnspython";
   version = "2.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GB08aZZFLLEYnEBGxhWZuEpahuCZVi/9530mmE/ybQ8=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
-    changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
+    changelog = "https://github.com/rthalley/dnspython/blob/v${finalAttrs.version}/doc/whatsnew.rst";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

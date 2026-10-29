@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosolaredge";
   version = "1.0.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiosolaredge";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1RdkYcdhhU+MaP91iJ1tSrL0OlUi6Il1XBXnmRYhC7g=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/bdraco/aiosolaredge/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/aiosolaredge/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Asyncio SolarEdge API client";
     homepage = "https://github.com/bdraco/aiosolaredge";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

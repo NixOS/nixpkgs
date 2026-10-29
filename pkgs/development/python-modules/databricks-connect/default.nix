@@ -8,13 +8,13 @@
   py4j,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "databricks-connect";
   version = "11.3.61";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-EUXLjd6XFfK+sldjfkPRe2Pryx5zrmx6HvaAu+/aN/A=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.databricks;
     maintainers = with lib.maintainers; [ kfollesdal ];
   };
-}
+})

@@ -27,7 +27,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "toggl-cli";
   version = "4.0.1";
   pyproject = true;
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AuHau";
     repo = "toggl-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f3s0XlhQZH9xC5xyM+e2VG9j1GK0qqWFm4Xy08Iwj/Q=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -89,9 +89,9 @@ buildPythonPackage rec {
   meta = {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     homepage = "https://toggl.uhlir.dev/";
-    changelog = "https://github.com/AuHau/toggl-cli/releases/tag/${src.tag}";
+    changelog = "https://github.com/AuHau/toggl-cli/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmahut ];
     mainProgram = "toggl";
   };
-}
+})

@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "authheaders";
   version = "0.16.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ValiMail";
     repo = "authentication-headers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BFMZpSJ4qCEL42xTiM/D5dkatxohiCrOWAkNZHFUhac=";
   };
 
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the generation of email authentication headers";
     homepage = "https://github.com/ValiMail/authentication-headers";
-    changelog = "https://github.com/ValiMail/authentication-headers/blob/${version}/CHANGES";
+    changelog = "https://github.com/ValiMail/authentication-headers/blob/${finalAttrs.version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "dmarc-policy-find";
   };
-}
+})

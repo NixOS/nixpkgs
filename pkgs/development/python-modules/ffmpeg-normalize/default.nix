@@ -12,7 +12,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ffmpeg-normalize";
   version = "1.37.3";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slhck";
     repo = "ffmpeg-normalize";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KhkGBsuLMNtbo51M1ljIjn6OWSGQasEg2XoS1f1xpoo=";
   };
 
@@ -58,9 +58,9 @@ buildPythonPackage rec {
   meta = {
     description = "Normalize audio via ffmpeg";
     homepage = "https://github.com/slhck/ffmpeg-normalize";
-    changelog = "https://github.com/slhck/ffmpeg-normalize/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/slhck/ffmpeg-normalize/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "ffmpeg-normalize";
     maintainers = with lib.maintainers; [ sophronesis ];
   };
-}
+})

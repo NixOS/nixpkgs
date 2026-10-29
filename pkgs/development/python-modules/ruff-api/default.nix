@@ -9,7 +9,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruff-api";
   version = "0.2.1";
   pyproject = true;
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amyreese";
     repo = "ruff-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4ekNPgOOqRIVjIR8LNSALE7fByjMEn8y25y9Rdvf+ms=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-SqouHcEDehxNnNPdrkDUYx8AieHiPMs04RgrkdqYcpU=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Experimental Python API for Ruff";
     homepage = "https://github.com/amyreese/ruff-api";
-    changelog = "https://github.com/amyreese/ruff-api/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/amyreese/ruff-api/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

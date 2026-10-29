@@ -7,7 +7,7 @@
   streamlit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit-kpi-card";
   version = "0.1.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pjoachims";
     repo = "streamlit-kpi-card";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-w2hUEad6sMFq/KbYnNX7E/vOkIqsLwJZmzdgQTSVMm4=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "KPI cards for Streamlit";
     homepage = "https://github.com/pjoachims/streamlit-kpi-card";
-    changelog = "https://github.com/pjoachims/streamlit-kpi-card/releases/tag/${src.tag}";
+    changelog = "https://github.com/pjoachims/streamlit-kpi-card/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,7 +8,7 @@
   skytemple-files,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skytemple-dtef";
   version = "1.8.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-dtef";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IsAHXl9HfjWDXi/n6Alndi+GnAr7pmbjz6wrBECra0Q=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

@@ -6,7 +6,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-filter";
   version = "1.0.12";
   pyproject = true;
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "magic-filter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MSYIZ/bzngRu6mG3EGblUotSCA+6bi+l3EymFA8NRZA=";
   };
 
   postPatch = ''
     substituteInPlace magic_filter/__init__.py \
-      --replace '"1"' '"${version}"'
+      --replace '"1"' '"${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [ hatchling ];
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Magic filter based on dynamic attribute getter";
     homepage = "https://github.com/aiogram/magic-filter";
-    changelog = "https://github.com/aiogram/magic-filter/releases/tag/v${version}";
+    changelog = "https://github.com/aiogram/magic-filter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "trojan-go";
   version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "p4gefau1t";
     repo = "trojan-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZzIEKyLhHwYEWBfi6fHlCbkEImetEaRewbsHQEduB5Y=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/p4gefau1t/trojan-go/constant.Version=v${version}"
-    "-X github.com/p4gefau1t/trojan-go/constant.Commit=v${version}"
+    "-X github.com/p4gefau1t/trojan-go/constant.Version=v${finalAttrs.version}"
+    "-X github.com/p4gefau1t/trojan-go/constant.Commit=v${finalAttrs.version}"
   ];
 
   tags = [
@@ -43,9 +43,9 @@ buildGoModule rec {
   meta = {
     description = "Proxy mechanism to bypass GFW";
     homepage = "https://p4gefau1t.github.io/trojan-go/";
-    changelog = "https://github.com/p4gefau1t/trojan-go/releases/tag/v${version}";
+    changelog = "https://github.com/p4gefau1t/trojan-go/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     license = lib.licenses.gpl3Only;
     mainProgram = "trojan-go";
   };
-}
+})

@@ -27,7 +27,7 @@
   apple-sdk,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "2.1.16";
   pname = "pyglet";
   pyproject = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyglet";
     repo = "pyglet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Wnpl2sqaK4AX6v70OjA10B9vMXQoC5QU1BP0UkYnJmU=";
   };
 
@@ -152,10 +152,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "http://www.pyglet.org/";
-    changelog = "https://github.com/pyglet/pyglet/blob/${src.tag}/RELEASE_NOTES";
+    changelog = "https://github.com/pyglet/pyglet/blob/${finalAttrs.src.tag}/RELEASE_NOTES";
     description = "Cross-platform windowing and multimedia library";
     license = lib.licenses.bsd3;
     # The patch needs adjusting for other platforms.
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

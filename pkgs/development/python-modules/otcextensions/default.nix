@@ -17,7 +17,7 @@
   stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "otcextensions";
   version = "0.34.8";
   pyproject = true;
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "opentelekomcloud";
     repo = "python-otcextensions";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dkAF0UXD0cpktSqDsYbpHO8IzKRdHx85MOp4aelbbgo=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -74,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "OpenStack SDK and client extensions for Open Telekom Cloud services";
     homepage = "https://github.com/opentelekomcloud/python-otcextensions";
-    changelog = "https://github.com/opentelekomcloud/python-otcextensions/releases/tag/${version}";
+    changelog = "https://github.com/opentelekomcloud/python-otcextensions/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

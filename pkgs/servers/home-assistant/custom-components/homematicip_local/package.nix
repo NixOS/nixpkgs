@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "SukramJ";
   domain = "homematicip_local";
   version = "2.12.1";
@@ -22,7 +22,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-28snV2U6y3XLIc8/Fr/6b0NNiBu006v2ugQK8YmihNs=";
   };
 
@@ -54,10 +54,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/SukramJ/custom_homematic/blob/${src.tag}/changelog.md";
+    changelog = "https://github.com/SukramJ/custom_homematic/blob/${finalAttrs.src.tag}/changelog.md";
     description = "Custom Home Assistant Component for HomeMatic";
     homepage = "https://github.com/SukramJ/custom_homematic";
     maintainers = with lib.maintainers; [ dotlambda ];
     license = lib.licenses.mit;
   };
-}
+})

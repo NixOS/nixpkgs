@@ -15,7 +15,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-payments";
   version = "4.1.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-payments";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vEmmX+IjE6HaIq/i1h2xc5ArkNlenVhD19mBgHvvmbM=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Universal payment handling for Django";
     homepage = "https://github.com/jazzband/django-payments/";
-    changelog = "https://github.com/jazzband/django-payments/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/jazzband/django-payments/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

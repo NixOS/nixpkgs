@@ -9,7 +9,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cantarell-fonts";
   version = "0.311";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "cantarell-fonts";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FR53OZxJ7WRUDqMB2GriQ3UOxozWwbFiz3/9VaUWYrc=";
   };
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://gitlab.gnome.org/GNOME/cantarell-fonts/-/blob/${src.tag}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/cantarell-fonts/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Default typeface used in the user interface of GNOME since version 3.0";
     homepage = "https://cantarell.gnome.org/";
     platforms = lib.platforms.all;
     license = lib.licenses.ofl;
     maintainers = [ ];
   };
-}
+})

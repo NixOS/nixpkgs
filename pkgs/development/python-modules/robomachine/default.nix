@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robomachine";
   version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "RoboMachine";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-XrxHaV9U7mZ2TvySHGm6qw1AsoukppzwPq4wufIjL+k=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

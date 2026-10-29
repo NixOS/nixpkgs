@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "allure-behave";
   version = "2.16.0";
   pyproject = true;
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allure-framework";
     repo = "allure-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IwkbrOEhPuScn/eTDevbgV3w/awPivvSauD1tmAH7Qk=";
   };
 
-  sourceRoot = "${src.name}/allure-behave";
+  sourceRoot = "${finalAttrs.src.name}/allure-behave";
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

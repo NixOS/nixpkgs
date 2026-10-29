@@ -13,7 +13,7 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gle";
   version = "3.1.2";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linas";
     repo = "glextrusion";
-    tag = "${pname}-${version}";
+    tag = "${finalAttrs.pname}-${finalAttrs.version}";
     sha256 = "sha256-yvCu0EOwxOMN6upeHX+C2sIz1YVjjB/320g+Mf24S6g=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

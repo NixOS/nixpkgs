@@ -13,14 +13,14 @@
   libtiff,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "naps2";
   version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oVgbz0MnvKpO59oVGxK2nKpJsWUbcN1rV4mqhawxIeg=";
   };
 
@@ -83,5 +83,4 @@ buildDotnetModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
   };
-
-}
+})

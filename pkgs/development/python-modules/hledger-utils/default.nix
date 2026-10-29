@@ -16,7 +16,7 @@
   asteval,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hledger-utils";
   version = "1.14.0";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "hledger-utils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qu4nUcAGTACmLhwc7fkLxITOyFnUHv85qMhtViFumVs=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ nobbz ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -5,14 +5,14 @@
   dotnetCorePackages,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "cyclonedx-cli";
   version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XP6Zz9JITIw6xUefOkLLjoHUDsnhsOKdtY5S5xbkejU=";
   };
 
@@ -27,7 +27,7 @@ buildDotnetModule rec {
   meta = {
     description = "CycloneDX CLI tool for SBOM analysis, merging, diffs and format conversions";
     homepage = "https://github.com/CycloneDX/cyclonedx-cli";
-    changelog = "https://github.com/CycloneDX/cyclonedx-cli/releases/tag/v${version}";
+    changelog = "https://github.com/CycloneDX/cyclonedx-cli/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       blitz
       thillux
@@ -36,4 +36,4 @@ buildDotnetModule rec {
     platforms = with lib.platforms; (linux ++ darwin);
     mainProgram = "cyclonedx";
   };
-}
+})

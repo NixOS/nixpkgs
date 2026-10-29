@@ -9,13 +9,13 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webssh";
   version = "1.6.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-K85buvIGrTRZEMfk3IAks8QY5oHJ9f8JjxgCvv924QA=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
     description = "Web based SSH client";
     mainProgram = "wssh";
     homepage = "https://github.com/huashengdun/webssh/";
-    changelog = "https://github.com/huashengdun/webssh/releases/tag/v${version}";
+    changelog = "https://github.com/huashengdun/webssh/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

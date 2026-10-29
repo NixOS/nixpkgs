@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdfrw";
   version = "0.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DcBJSg5lYbJoVCso7eIoA4fCcoEU8RfTu12OR4e5PvQ=";
   };
 
@@ -23,4 +23,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ teto ];
     license = lib.licenses.mit;
   };
-}
+})

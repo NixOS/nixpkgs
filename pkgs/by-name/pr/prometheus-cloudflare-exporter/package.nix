@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudflare-exporter";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "lablabs";
     repo = "cloudflare-exporter";
-    tag = "cloudflare-exporter-${version}";
+    tag = "cloudflare-exporter-${finalAttrs.version}";
     sha256 = "sha256-rfnAGBuY6HoWzZkYp9u+Ee3xhWb6Se2RkkSIWBvjUYY=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bbigras ];
     platforms = lib.platforms.linux;
   };
-}
+})

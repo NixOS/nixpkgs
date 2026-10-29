@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bless";
   version = "0.3.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevincar";
     repo = "bless";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ks7+OYSrPjXgpCrEEJayxp5Gn84SZbdbyc5c3ZMBEwI=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for creating a BLE Generic Attribute Profile (GATT) server";
     homepage = "https://github.com/kevincar/bless";
-    changelog = "https://github.com/kevincar/bless/releases/tag/${src.tag}";
+    changelog = "https://github.com/kevincar/bless/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

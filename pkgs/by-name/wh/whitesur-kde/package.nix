@@ -26,14 +26,14 @@
 #     ];
 # };
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whitesur-kde";
   version = "2024-11-18";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "whitesur-kde";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-052mKpf8e5pSecMzaWB3McOZ/uAqp/XGJjcVWnlKPLE=";
   };
 
@@ -75,4 +75,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

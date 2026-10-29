@@ -7,7 +7,7 @@
   udevCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py3buddy";
   version = "1.0";
   pyproject = false; # manually installed
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "armijnhemel";
     repo = "py3buddy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-KJ0xGEXHY6o2074WFZ0u7gATS+wrrjyzanYretckWYk=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

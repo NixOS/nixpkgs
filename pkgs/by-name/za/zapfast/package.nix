@@ -33,7 +33,7 @@ let
     libxrandr
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zapfast";
   version = "0.19.0";
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "crmne";
     repo = "zapfast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FDB9iAkDL2uaHKpSam1ehc8yGbrYbZy2A5NqE2oXs8Q=";
   };
 
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage rec {
       cp "$out/bin/zapfast" "$app/MacOS/zapfast"
       icnsify packaging/macos/icon-1024.png -o "$app/Resources/zapfast.icns"
       substitute packaging/macos/Info.plist "$app/Info.plist" \
-        --replace-fail __VERSION__ "${version}"
+        --replace-fail __VERSION__ "${finalAttrs.version}"
     '';
 
   passthru.updateScript = nix-update-script { };
@@ -109,10 +109,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast native WhatsApp client";
     homepage = "https://zapfast.rocks";
-    changelog = "https://github.com/crmne/zapfast/releases/tag/v${version}";
+    changelog = "https://github.com/crmne/zapfast/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "zapfast";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

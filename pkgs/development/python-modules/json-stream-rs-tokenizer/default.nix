@@ -14,7 +14,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "json-stream-rs-tokenizer";
   version = "0.5.1";
   pyproject = true;
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D18nMRyCDr2NGBkdo7Lq8gaaMiOXwZAob4DymZwFvW0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-IPQrqayhyQ/gmT6nK+TgDcUQ4mPrG9yiJJk6enBzybA=";
   };
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ winter ];
   };
-}
+})

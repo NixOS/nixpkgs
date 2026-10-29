@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "annexremote";
   version = "1.6.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lykos153";
     repo = "AnnexRemote";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RShDcqAjG+ujGzWu5S9za24WSsIWctqi3nWQ8EU4DTo=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Helper module to easily develop git-annex remotes";
     homepage = "https://github.com/Lykos153/AnnexRemote";
-    changelog = "https://github.com/Lykos153/AnnexRemote/releases/tag/v${version}";
+    changelog = "https://github.com/Lykos153/AnnexRemote/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ montag451 ];
   };
-}
+})

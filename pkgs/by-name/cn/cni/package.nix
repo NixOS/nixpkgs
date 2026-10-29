@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cni";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "cni";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FOUoW15aRzdwOnEfNf73tlpssJOoR+/DLOuzCTDGgpY=";
   };
 
@@ -39,4 +39,4 @@ buildGoModule rec {
       "aarch64-linux"
     ];
   };
-}
+})

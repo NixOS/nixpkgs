@@ -13,7 +13,7 @@
   util-linux,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coloredlogs";
   version = "15.0.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-coloredlogs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TodI2Wh8M0qMM2K5jzqlLmUKILa5+5qq4ByLttmAA7E=";
   };
 
@@ -69,4 +69,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
-}
+})

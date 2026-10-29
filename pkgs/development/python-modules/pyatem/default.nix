@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyatem";
   version = "0.13.0"; # check latest version in setup.py
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-eEn09e+ZED4DGEWTUou9CRgazngHIXZv51CLhX9YuBI=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

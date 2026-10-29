@@ -14,13 +14,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openwebifpy";
   version = "4.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FaynJT+bR63nIwLEwXjTjwPXZ3Q5/X+zpx0gTA3Pqo8=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
     description = "Provides a python interface to interact with a device running OpenWebIf";
     downloadPage = "https://github.com/autinerd/openwebifpy";
     homepage = "https://openwebifpy.readthedocs.io/";
-    changelog = "https://github.com/autinerd/openwebifpy/releases/tag/${version}";
+    changelog = "https://github.com/autinerd/openwebifpy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

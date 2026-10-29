@@ -19,7 +19,7 @@
   fetchpatch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mike";
   version = "2.2.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jimporter";
     repo = "mike";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+QFtInHma433XI4EcMTpFKZVdk+x2JREo73qM35G0pQ=";
   };
 
@@ -80,9 +80,9 @@ buildPythonPackage rec {
   meta = {
     description = "Manage multiple versions of your MkDocs-powered documentation via Git";
     homepage = "https://github.com/jimporter/mike";
-    changelog = "https://github.com/jimporter/mike/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/jimporter/mike/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ marcel ];
     mainProgram = "mike";
   };
-}
+})

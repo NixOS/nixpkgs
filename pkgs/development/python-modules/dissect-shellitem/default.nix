@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-shellitem";
   version = "3.13";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.shellitem";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2pgKfvlYt8eZh6YsTx6Gqd0XvvzJtaSh0tnhVF+Z/50=";
   };
 
@@ -41,9 +41,9 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for the Shellitem structures";
     homepage = "https://github.com/fox-it/dissect.shellitem";
-    changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "parse-lnk";
   };
-}
+})

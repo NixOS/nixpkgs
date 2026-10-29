@@ -9,14 +9,14 @@
   texliveSmall,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-pandoc";
   version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "max-heller";
     repo = "mdbook-pandoc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Br+rt8OrAvLIRKlNyKJd97wb0/ZlQoBRCfGU1haxNa4=";
   };
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/max-heller/mdbook-pandoc";
     description = "A mdbook backend powered by Pandoc";
-    changelog = "https://github.com/max-heller/mdbook-pandoc/releases/tag/${src.tag}";
+    changelog = "https://github.com/max-heller/mdbook-pandoc/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       asl20
       # or
@@ -47,4 +47,4 @@ rustPlatform.buildRustPackage rec {
       astro
     ];
   };
-}
+})

@@ -30,13 +30,13 @@
   tables,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stytra";
   version = "0.8.34";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qrnQdXXvWZqcCuUFZW48A+x1NGLfPBV0Lx92jytXjwo=";
   };
 
@@ -89,4 +89,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

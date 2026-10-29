@@ -5,14 +5,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   version = "2.0.1";
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "artifacts-credprovider";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rllLLSSebnnmsBtj+oj5FK6qyh4qPf0Zn7fKCnhrHpQ=";
   };
   pname = "azure-artifacts-credprovider";
@@ -31,4 +31,4 @@ buildDotnetModule rec {
     mainProgram = "CredentialProvider.Microsoft";
     platforms = lib.platforms.unix;
   };
-}
+})

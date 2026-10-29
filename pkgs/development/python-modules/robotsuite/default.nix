@@ -8,13 +8,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robotsuite";
   version = "3.0.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-3lKSPeZdq1z9umtiEAEQO7jVL6zRS/rCt76ildDe90U=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/collective/robotsuite/";
     license = lib.licenses.gpl3Only;
   };
-}
+})

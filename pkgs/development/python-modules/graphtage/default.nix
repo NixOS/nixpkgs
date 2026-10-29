@@ -15,7 +15,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graphtage";
   version = "0.3.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "graphtage";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Bz2T8tVdVOdXt23yPITkDNL46Y5LZPhY3SXZ5bF3CHw=";
   };
 
@@ -52,9 +52,9 @@ buildPythonPackage rec {
   meta = {
     description = "Utility to diff tree-like files such as JSON and XML";
     homepage = "https://github.com/trailofbits/graphtage";
-    changelog = "https://github.com/trailofbits/graphtage/releases/tag/v${version}";
+    changelog = "https://github.com/trailofbits/graphtage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ veehaitch ];
     mainProgram = "graphtage";
   };
-}
+})

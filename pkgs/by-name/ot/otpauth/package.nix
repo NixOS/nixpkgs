@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "otpauth";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "dim13";
     repo = "otpauth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9N13rXnUFimOTBEw2yDhbp2rUDt850SkVvVoOphhxbc=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ ereslibre ];
   };
-}
+})

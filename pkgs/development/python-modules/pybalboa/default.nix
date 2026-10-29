@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybalboa";
   version = "1.1.3";
   pyproject = true;
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to communicate with a Balboa spa wifi adapter";
     homepage = "https://github.com/garbled1/pybalboa";
-    changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
+    changelog = "https://github.com/garbled1/pybalboa/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

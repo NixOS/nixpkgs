@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "augmax";
   version = "0.3.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "khdlr";
     repo = "augmax";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FXgkhZEAR1Y2LvVvV+IWMSQDWrLulLDsSKKuw4ER5wg=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Efficiently Composable Data Augmentation on the GPU with Jax";
     homepage = "https://github.com/khdlr/augmax";
-    changelog = "https://github.com/khdlr/augmax/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/khdlr/augmax/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-isort";
   version = "4.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stephrdev";
     repo = "pytest-isort";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fMt2tYc+Ngb57T/VJYxI2UN25qvIrgIsEoImVIitDK4=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to perform isort checks (import ordering)";
     homepage = "https://github.com/moccu/pytest-isort/";
-    changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/stephrdev/pytest-isort/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -6,13 +6,13 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scp";
   version = "0.16.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PysmC/m9TCtoV/aXodfo7cJvpWkoK3cCfoSd/h5IWAo=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ xnaveira ];
   };
-}
+})

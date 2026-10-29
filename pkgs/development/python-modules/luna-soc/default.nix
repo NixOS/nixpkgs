@@ -10,7 +10,7 @@
   luna-usb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "luna-soc";
   version = "0.3.2";
   pyproject = true;
@@ -18,14 +18,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "luna-soc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Rks1wC0CR5FSu4TrE1thzolT3QBd0yh7q+SxZ1U+pB4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
 
     # Read CSR field annotations from the class, not the instance, so amaranth-soc
     # works on Python 3.14 (PEP 649). https://github.com/greatscottgadgets/luna-soc/issues/48
@@ -50,10 +50,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/luna-soc/releases/tag/${src.tag}";
+    changelog = "https://github.com/greatscottgadgets/luna-soc/releases/tag/${finalAttrs.src.tag}";
     description = "Amaranth HDL library for building USB-capable SoC designs";
     homepage = "https://github.com/greatscottgadgets/luna-soc";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ karstx ];
   };
-}
+})

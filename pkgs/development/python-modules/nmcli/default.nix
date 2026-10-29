@@ -8,7 +8,7 @@
   networkmanager,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nmcli";
   version = "1.8.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ushiboy";
     repo = "nmcli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x3P+bayBG8SKnMxacIE9UQSE6GFqCX47Z4xtrFJOoRg=";
   };
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ktechmidas ];
     inherit (networkmanager.meta) platforms;
-    changelog = "https://github.com/ushiboy/nmcli/releases/tag/v${version}";
+    changelog = "https://github.com/ushiboy/nmcli/releases/tag/v${finalAttrs.version}";
   };
-}
+})

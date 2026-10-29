@@ -8,7 +8,7 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykka";
   version = "4.4.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jodal";
     repo = "pykka";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ij5djc+6CjIC9HLxOJorMFdNRnxOoS37+oAmI8Lo5pc=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://pykka.readthedocs.io/";
     description = "Python implementation of the actor model";
-    changelog = "https://github.com/jodal/pykka/releases/tag/${src.tag}";
+    changelog = "https://github.com/jodal/pykka/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

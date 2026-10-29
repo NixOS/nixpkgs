@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autograd";
   version = "1.9.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HIPS";
     repo = "autograd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R9l+k4qkxlBW4z4ly0H5wfg4mX7kZv41hZlykMKKui0=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Compute derivatives of NumPy code efficiently";
     homepage = "https://github.com/HIPS/autograd";
-    changelog = "https://github.com/HIPS/autograd/releases/tag/v${version}";
+    changelog = "https://github.com/HIPS/autograd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

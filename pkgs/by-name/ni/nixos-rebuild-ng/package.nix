@@ -15,7 +15,7 @@
 let
   executable = "nixos-rebuild";
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nixos-rebuild-ng";
   version = lib.trivial.release;
   src = ./src;
@@ -97,11 +97,11 @@ python3Packages.buildPythonApplication rec {
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
-        linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
+        linters = runCommand "${finalAttrs.pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
           export MYPY_CACHE_DIR="$(mktemp -d)"
           export RUFF_CACHE_DIR="$(mktemp -d)"
 
-          pushd ${src}
+          pushd ${finalAttrs.src}
           echo -e "\x1b[32m## run mypy\x1b[0m"
           mypy .
           echo -e "\x1b[32m## run ruff\x1b[0m"
@@ -123,4 +123,4 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.nixos-rebuild ];
     mainProgram = executable;
   };
-}
+})

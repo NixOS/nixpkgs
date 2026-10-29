@@ -13,7 +13,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cffconvert";
   version = "2.0.0-unstable-2024-04-19";
   pyproject = true;
@@ -52,11 +52,11 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/citation-file-format/cffconvert/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/citation-file-format/cffconvert/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Command line program to validate and convert CITATION.cff files";
     homepage = "https://github.com/citation-file-format/cffconvert";
     license = lib.licenses.asl20;
     mainProgram = "cffconvert";
     maintainers = [ ];
   };
-}
+})

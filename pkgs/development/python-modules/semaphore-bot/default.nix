@@ -8,13 +8,13 @@
   anyio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "semaphore-bot";
   version = "0.17.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-3zb6+HdOB6+YrVRcmIHsokFKUOlFmKCoVNllvM+aOXQ=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

@@ -5,13 +5,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfttt";
   version = "0.3.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RVra0Lrc4BX1vQhr09XH29l/XBfG7dwF1VoMxBI7OII=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     license = lib.licenses.bsd2;
   };
-}
+})

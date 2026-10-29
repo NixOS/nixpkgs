@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "collections-extended";
   version = "2.0.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlenzen";
     repo = "collections-extended";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cK13+CQUELKSiLpG747+C+RB5b6luu0mWLLXTT+uGH4=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extra Python Collections - bags (multisets), setlists (unique list/indexed set), RangeMap and IndexedDict";
     homepage = "https://github.com/mlenzen/collections-extended";
-    changelog = "https://github.com/mlenzen/collections-extended/releases/tag/v${version}";
+    changelog = "https://github.com/mlenzen/collections-extended/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ exarkun ];
   };
-}
+})

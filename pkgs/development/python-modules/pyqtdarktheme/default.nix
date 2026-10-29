@@ -13,7 +13,7 @@
   qt5,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqtdarktheme";
   version = "2.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "5yutan5";
     repo = "PyQtDarkTheme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jK+wnIyPE8Bav0pzbvVisYYCzdRshYw1S2t0H3Pro5M=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

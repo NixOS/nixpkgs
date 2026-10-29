@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "objgraph";
   version = "3.6.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ALny9A90IuPH9FphxNr9r4HwP/BknW6uyGbwEDDlGtg=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Draws Python object reference graphs with graphviz";
     homepage = "https://mg.pov.lt/objgraph/";
-    changelog = "https://github.com/mgedmin/objgraph/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/mgedmin/objgraph/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tsplib95";
   version = "0.7.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhgrant10";
     repo = "tsplib95";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rDKnfuauA9+mlgL6Prfz0uRP2rWxiQruXBj422/6Eak=";
   };
 
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thattemperature ];
   };
-}
+})

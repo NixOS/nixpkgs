@@ -7,7 +7,7 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "minexr";
   version = "1.0.2";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cheind";
     repo = "py-minexr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-p42rlhaHq0A9+zk6c0evRDjNR1H/ruWJqPF5+nCTR8o=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

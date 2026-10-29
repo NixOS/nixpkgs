@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-minify-plugin";
   version = "0.8.0";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "byrnereese";
     repo = "mkdocs-minify-plugin";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Cp8eSEW7Yx7l1TcaS4ctOBLGYpAzapm2tkSbmzyb7rA=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tfc ];
   };
-}
+})

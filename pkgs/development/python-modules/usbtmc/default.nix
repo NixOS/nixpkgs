@@ -5,7 +5,7 @@
   pyusb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "usbtmc";
   version = "0.8";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-ivi";
     repo = "python-usbtmc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-69kqBTqnVqdWC2mqlXylzb9VkdhwTGZI0Ykf6lqbypI=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

@@ -10,7 +10,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asusrouter";
   version = "1.21.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Vaskivskyi";
     repo = "asusrouter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7OmuJ3VKBdg5hK8RAkA8DQGd4L+g9S17VT0B5JhNaSA=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "API wrapper for communication with ASUSWRT-powered routers using HTTP protocol";
     homepage = "https://github.com/Vaskivskyi/asusrouter";
-    changelog = "https://github.com/Vaskivskyi/asusrouter/releases/tag/${src.tag}";
+    changelog = "https://github.com/Vaskivskyi/asusrouter/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

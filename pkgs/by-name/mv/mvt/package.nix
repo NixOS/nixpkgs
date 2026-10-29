@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mvt";
   pyproject = true;
   version = "2.5.4";
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mvt-project";
     repo = "mvt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xDUjyvOsiweRqibTe7V8I/ABeaahCoR/d5w23qixp9A";
   };
 
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://docs.mvt.re/en/latest/";
     # https://github.com/mvt-project/mvt/blob/main/LICENSE
     license = lib.licenses.unfree;
-    changelog = "https://github.com/mvt-project/mvt/releases/tag/v${version}";
+    changelog = "https://github.com/mvt-project/mvt/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ PapayaJackal ];
   };
-}
+})

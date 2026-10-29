@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tzdata";
   version = "2026.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8bi9Nl2NIQxVNT9Nf41thWHAulDXBLcA0ZWpQku6DXk=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tzdata" ];
 
   meta = {
-    changelog = "https://github.com/python/tzdata/blob/${version}/NEWS.md";
+    changelog = "https://github.com/python/tzdata/blob/${finalAttrs.version}/NEWS.md";
     description = "Provider of IANA time zone data";
     homepage = "https://github.com/python/tzdata";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

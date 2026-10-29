@@ -37,11 +37,11 @@
 }:
 
 let
-  libccp4 = stdenv.mkDerivation rec {
+  libccp4 = stdenv.mkDerivation (finalAttrs: {
     pname = "libccp4";
     version = "8.0.0";
     src = fetchurl {
-      url = "https://ftp.ccp4.ac.uk/opensource/libccp4-${version}.tar.gz";
+      url = "https://ftp.ccp4.ac.uk/opensource/libccp4-${finalAttrs.version}.tar.gz";
       hash = "sha256-y4E66GYSoIZjKd6rfO6W6sVz2BvlskA0HUD5rVMi/y0=";
     };
     nativeBuildInputs = [
@@ -77,7 +77,7 @@ let
         substituteInPlace ccp4/library_utils.c \
           --replace-fail "  int putenv ();" "  int putenv (char *);"
       '';
-  };
+  });
   # This is the statically-linked, pre-built binary of mosflm. Compiling it ourselves turns out to be very difficult
   # since the build process is very hard-coded for a specific machine, architecture, and libraries.
   mosflm =
@@ -120,11 +120,11 @@ let
       '';
     };
 
-  xgandalf = stdenv.mkDerivation rec {
+  xgandalf = stdenv.mkDerivation (finalAttrs: {
     pname = "xgandalf";
     version = "8a63600ec778b155031adc3c151424aaced6a0cc";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/xgandalf/-/archive/${version}/xgandalf-${version}.tar.gz";
+      url = "https://gitlab.desy.de/thomas.white/xgandalf/-/archive/${finalAttrs.version}/xgandalf-${finalAttrs.version}.tar.gz";
       hash = "sha256-UhFbpv+4qMwxEQIJpVpMzSg46P0vm0dkEyJDzxVu6XY=";
     };
 
@@ -134,13 +134,13 @@ let
       ninja
     ];
     buildInputs = [ eigen ];
-  };
+  });
 
-  pinkIndexer = stdenv.mkDerivation rec {
+  pinkIndexer = stdenv.mkDerivation (finalAttrs: {
     pname = "pinkindexer";
     version = "85f3883f8c1fe98a03e5f3d371f2da4fee97894e";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/pinkindexer/-/archive/${version}/pinkindexer-${version}.tar.gz";
+      url = "https://gitlab.desy.de/thomas.white/pinkindexer/-/archive/${finalAttrs.version}/pinkindexer-${finalAttrs.version}.tar.gz";
       hash = "sha256-W4COYdeESP0S2KhB2UdaJSbxNiFm5yyapKkmICDtP0A=";
     };
 
@@ -150,13 +150,13 @@ let
       ninja
     ];
     buildInputs = [ eigen ];
-  };
+  });
 
-  fdip = stdenv.mkDerivation rec {
+  fdip = stdenv.mkDerivation (finalAttrs: {
     pname = "fdip";
     version = "631792e90ed2c3e226dce77bf97917305293ac66";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/fdip/-/archive/${version}/fdip-${version}.tar.gz";
+      url = "https://gitlab.desy.de/thomas.white/fdip/-/archive/${finalAttrs.version}/fdip-${finalAttrs.version}.tar.gz";
       hash = "sha256-nnvOPl35NgtJ13fgWWAuVhtWT/JOk2DyYmBgI0ojZ2o=";
     };
 
@@ -166,7 +166,7 @@ let
       pkg-config
     ];
     buildInputs = [ eigen ];
-  };
+  });
 
   hdf5-external-filter-plugins = stdenv.mkDerivation {
     pname = "HDF5-External-Filter-Plugins";
@@ -205,11 +205,11 @@ let
     ];
   };
 
-  millepede-ii = stdenv.mkDerivation rec {
+  millepede-ii = stdenv.mkDerivation (finalAttrs: {
     pname = "millepede-ii";
     version = "04-13-06";
     src = fetchurl {
-      url = "https://gitlab.desy.de/claus.kleinwort/millepede-ii/-/archive/V${version}/millepede-ii-V${version}.tar.gz";
+      url = "https://gitlab.desy.de/claus.kleinwort/millepede-ii/-/archive/V${finalAttrs.version}/millepede-ii-V${finalAttrs.version}.tar.gz";
       hash = "sha256-aFoo8AGBsUEN2u3AmnSpTqJ6JeNV6j9vkAFTZ34I+sI=";
     };
 
@@ -217,13 +217,13 @@ let
     buildInputs = [ zlib ];
 
     makeFlags = [ "PREFIX=$(out)" ];
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crystfel";
   version = "0.13.0";
   src = fetchurl {
-    url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
+    url = "https://www.desy.de/~twhite/crystfel/crystfel-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-6Fz7W8kRKlaTmnL+21t20UgkTjr3oC08IOzAGOseaQU=";
   };
   nativeBuildInputs = [
@@ -292,5 +292,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pmiddend ];
     platforms = lib.platforms.unix;
   };
-
-}
+})

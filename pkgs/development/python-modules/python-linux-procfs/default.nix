@@ -6,13 +6,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-linux-procfs";
   version = "0.7.3";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/snapshot/python-linux-procfs-v${version}.tar.gz";
+    url = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/snapshot/python-linux-procfs-v${finalAttrs.version}.tar.gz";
     hash = "sha256-6js8+PBqMwNYSe74zqZP8CZ5nt1ByjCWnex+wBY/LZU=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     homepage = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/";
     license = lib.licenses.gpl2Plus;
   };
-}
+})

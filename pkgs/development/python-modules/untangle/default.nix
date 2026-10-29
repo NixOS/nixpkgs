@@ -6,7 +6,7 @@
   defusedxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "untangle";
   version = "1.2.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "stchris";
     repo = "untangle";
     # 1.1.1 is not tagged on GitHub
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cJkN8vT5hW5hRuLxr/6udwMO4GVH1pJhAc6qmPO2EEI=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

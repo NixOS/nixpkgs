@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "discovery30303";
   version = "0.3.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "discovery30303";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QIGLRe+nUV3tUOs+pu6Qk/2Amh9IVcQq89o2JeKiTvM=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to discover devices that respond on port 30303";
     homepage = "https://github.com/bdraco/discovery30303";
-    changelog = "https://github.com/bdraco/discovery30303/releases/tag/${src.tag}";
+    changelog = "https://github.com/bdraco/discovery30303/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

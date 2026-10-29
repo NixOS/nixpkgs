@@ -9,7 +9,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blurhash-python";
   version = "1.2.2";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "woltapp";
     repo = "blurhash-python";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Cz+PkPp1knvT3U5ofyb1PstM9kzBOkgPbx03LgOLXgw=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

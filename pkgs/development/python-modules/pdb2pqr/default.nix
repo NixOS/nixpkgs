@@ -13,13 +13,13 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdb2pqr";
   version = "3.7.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BbXEZAIqOtEclZfG/H9wxWBhxGabFJelGVjakNlZFS8=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Software for determining titration states, adding missing atoms, and assigning charges/radii to biomolecules";
     homepage = "https://www.poissonboltzmann.org/";
-    changelog = "https://github.com/Electrostatics/pdb2pqr/releases/tag/v${version}";
+    changelog = "https://github.com/Electrostatics/pdb2pqr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

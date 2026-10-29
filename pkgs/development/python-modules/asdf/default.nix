@@ -22,7 +22,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asdf";
   version = "5.2.0";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asdf-format";
     repo = "asdf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-StudmLkXINe/lIJneid763jBdo6jAHlnjj4PHsGFxwM=";
   };
 
@@ -74,4 +74,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

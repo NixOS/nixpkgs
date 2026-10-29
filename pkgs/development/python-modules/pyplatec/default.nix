@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyplatec";
   version = "1.4.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PXQlJtC4Z0ifphqTelOuBQS5wubxCH/f0PSWnE7OeNg=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/Mindwerks/plate-tectonics";
     license = lib.licenses.lgpl3;
   };
-}
+})

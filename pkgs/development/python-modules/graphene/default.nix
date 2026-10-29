@@ -13,7 +13,7 @@
   python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graphene";
   version = "3.4.3";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K1IGKK3nTsRBe2D/cKJ/ahnAO5xxjf4gtollzTwt1zU=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "GraphQL Framework for Python";
     homepage = "https://github.com/graphql-python/graphene";
-    changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
+    changelog = "https://github.com/graphql-python/graphene/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

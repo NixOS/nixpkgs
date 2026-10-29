@@ -13,14 +13,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-secret-manager";
   version = "2.31.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_secret_manager";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-KbsztIw7l0SVpNAV4GsGsSbiMjK8zSI9Z42h4ahhtuY=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Secret Manager API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-secret-manager";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-secret-manager-v${version}/packages/google-cloud-secret-manager/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-secret-manager-v${finalAttrs.version}/packages/google-cloud-secret-manager/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siriobalmelli ];
   };
-}
+})

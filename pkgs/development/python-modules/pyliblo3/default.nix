@@ -9,7 +9,7 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyliblo3";
   version = "0.16.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gesellkammer";
     repo = "pyliblo3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QfwZXkUT4U2Gfbv3rk0F/bze9hwJGn7H8t0X1SWqIuc=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/gesellkammer/pyliblo3/";
     description = "Python wrapper for the liblo OSC library";
-    changelog = "https://github.com/gesellkammer/pyliblo3/blob/${src.tag}/NEWS";
+    changelog = "https://github.com/gesellkammer/pyliblo3/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.archercatneo ];
   };
-}
+})

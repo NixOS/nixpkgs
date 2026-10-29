@@ -57,7 +57,7 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit pname version src;
 
   pyproject = true;
@@ -98,8 +98,8 @@ buildPythonPackage rec {
   meta = {
     description = "Translation plugin for Wagtail CMS";
     homepage = "https://github.com/wagtail/wagtail-localize";
-    changelog = "https://github.com/wagtail/wagtail-localize/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/wagtail/wagtail-localize/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

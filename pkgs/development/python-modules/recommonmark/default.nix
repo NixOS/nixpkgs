@@ -9,7 +9,7 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "recommonmark";
   version = "0.7.1";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rtfd";
     repo = "recommonmark";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6Qw0fq1pTu9lIIEk3qpK+I3l8qPb9bk8YAC/1asmlU8=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/rtfd/recommonmark";
     license = lib.licenses.mit;
   };
-}
+})

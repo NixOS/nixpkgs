@@ -5,14 +5,14 @@
   nodejs_22,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "mainsail";
   version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Djw5wwVflhU9G99GLUNO0a6wDZTB4y/yBqRruUJZQis=";
   };
 
@@ -40,7 +40,7 @@ buildNpmPackage rec {
   meta = {
     description = "Web interface for managing and controlling 3D printers with Klipper";
     homepage = "https://docs.mainsail.xyz";
-    changelog = "https://github.com/mainsail-crew/mainsail/releases/tag/v${version}";
+    changelog = "https://github.com/mainsail-crew/mainsail/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -48,4 +48,4 @@ buildNpmPackage rec {
       wulfsta
     ];
   };
-}
+})

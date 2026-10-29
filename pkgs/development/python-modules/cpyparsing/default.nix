@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cpyparsing";
   version = "2.4.7.2.4.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5pSZ+fhMiUIe1kLAvlyyfmcKWxtO2m0h9kQY2LrxOjg=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cython PyParsing implementation";
     homepage = "https://github.com/evhub/cpyparsing";
-    changelog = "https://github.com/evhub/cpyparsing/releases/tag/v${version}";
+    changelog = "https://github.com/evhub/cpyparsing/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fabianhjr ];
   };
-}
+})

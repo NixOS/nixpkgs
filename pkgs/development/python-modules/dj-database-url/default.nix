@@ -6,7 +6,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dj-database-url";
   version = "3.1.2";
   pyproject = true;
@@ -14,14 +14,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "dj-database-url";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d9wkxe7xJSTufc2La4W/etPAaW6YF47y0IqPa5YWknY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.9.17,<0.10.0" uv_build \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ uv-build ];
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Use Database URLs in your Django Application";
     homepage = "https://github.com/jazzband/dj-database-url";
-    changelog = "https://github.com/jazzband/dj-database-url/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jazzband/dj-database-url/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

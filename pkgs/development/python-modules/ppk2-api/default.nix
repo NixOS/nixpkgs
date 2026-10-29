@@ -6,7 +6,7 @@
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ppk2-api";
   version = "0.9.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IRNAS";
     repo = "ppk2-api-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fubDFtOXiv2YFYUCOUbuyXs1sHgs0/6ZVK9sAwxQ+Pk=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Power Profiling Kit 2 unofficial Python API";
     homepage = "https://github.com/IRNAS/ppk2-api-python";
-    changelog = "https://github.com/IRNAS/ppk2-api-python/releases/tag/v${version}";
+    changelog = "https://github.com/IRNAS/ppk2-api-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

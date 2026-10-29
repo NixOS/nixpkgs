@@ -21,12 +21,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sound-juicer";
   version = "3.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sound-juicer/${lib.versions.majorMinor version}/sound-juicer-${version}.tar.xz";
+    url = "mirror://gnome/sources/sound-juicer/${lib.versions.majorMinor finalAttrs.version}/sound-juicer-${finalAttrs.version}.tar.xz";
     sha256 = "LuiCdEORvrTG1koPaCX7dlUQtwbsK3BL+0LkKvquHeY=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -12,14 +12,14 @@ let
   boost_static = boost183.override { enableStatic = true; };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "degate";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DegateCommunity";
     repo = "Degate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-INoA3Z6ya03ZMn6E+nOCkXZLoxoo2WgPDw9v5miI09A=";
   };
 
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

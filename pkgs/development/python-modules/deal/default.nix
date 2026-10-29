@@ -18,7 +18,7 @@
   vaa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deal";
   version = "4.24.6";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "life4";
     repo = "deal";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nLZ06Xfa9Q+Saf8qPXG1Xo6y6oO6kifhfK/gryZ6q90=";
   };
 
@@ -101,8 +101,8 @@ buildPythonPackage rec {
       and much more.
     '';
     homepage = "https://github.com/life4/deal";
-    changelog = "https://github.com/life4/deal/releases/tag/${version}";
+    changelog = "https://github.com/life4/deal/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

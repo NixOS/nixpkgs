@@ -5,19 +5,19 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goodhosts";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "goodhosts";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+KlAJV+CeycQHwxrRI9kMkKlDLs8bS+/QwaYv70LEfU=";
   };
 
   ldflags = [
-    "-s -w -X main.version=${version}"
+    "-s -w -X main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ schinmai-akamai ];
     mainProgram = "goodhosts";
   };
-}
+})

@@ -5,14 +5,14 @@
   nodejs_22,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "inshellisense";
   version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "inshellisense";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5gVFP1AFFP4o9MNUqkRtgrTkKuMb37CU/c8TcrwZkRY=";
   };
 
@@ -28,4 +28,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.malo ];
   };
-}
+})

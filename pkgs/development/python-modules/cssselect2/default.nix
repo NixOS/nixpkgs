@@ -7,13 +7,13 @@
   tinycss2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cssselect2";
   version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-dZqiLCFjJjVvZeYueR1mFgoPnJHRQk6NitxedN3fxvs=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "CSS selectors for Python ElementTree";
     homepage = "https://github.com/Kozea/cssselect2";
-    changelog = "https://github.com/Kozea/cssselect2/releases/tag/${version}";
+    changelog = "https://github.com/Kozea/cssselect2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

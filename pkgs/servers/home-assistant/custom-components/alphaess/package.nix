@@ -4,7 +4,7 @@
   lib,
   alphaessopenapi,
 }:
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "CharlesGillanders";
   domain = "alphaess";
   version = "0.8.5";
@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "CharlesGillanders";
     repo = "homeassistant-alphaESS";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7IswE+Eqdo+hXic4MQ+vx6lBAudoQPW80eT6AEPFDjQ=";
   };
 
@@ -26,4 +26,4 @@ buildHomeAssistantComponent rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benediktbroich ];
   };
-}
+})

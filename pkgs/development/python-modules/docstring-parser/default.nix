@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docstring-parser";
   version = "0.18.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "docstring_parser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6jkPo3GPV8lfkLayVb6l+kD5DV/rAmtmSyi3VV/FoFc=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Parse Python docstrings in various flavors";
     homepage = "https://github.com/rr-/docstring_parser";
-    changelog = "https://github.com/rr-/docstring_parser/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/rr-/docstring_parser/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

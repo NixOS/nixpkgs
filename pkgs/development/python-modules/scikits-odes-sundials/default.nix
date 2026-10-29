@@ -9,12 +9,12 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (scikits-odes-core) version src;
   pname = "scikits-odes-sundials";
   pyproject = true;
 
-  sourceRoot = "${src.name}/packages/scikits-odes-sundials";
+  sourceRoot = "${finalAttrs.src.name}/packages/scikits-odes-sundials";
 
   build-system = [
     cython
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     description = "Sundials wrapper module for scikits-odes";
     homepage = "https://github.com/bmcage/odes/blob/master/packages/scikits-odes-sundials";
   };
-}
+})

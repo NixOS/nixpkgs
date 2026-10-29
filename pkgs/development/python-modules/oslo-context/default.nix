@@ -9,13 +9,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-context";
   version = "6.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "oslo_context";
     hash = "sha256-fh+wPGqXFnlZ832TAwAVTg7oN+zbhXmMK76IeLVsqq8=";
   };
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

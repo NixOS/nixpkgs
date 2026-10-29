@@ -12,7 +12,7 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "statmake";
   version = "2.0.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "daltonmaag";
     repo = "statmake";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PlMbJuJUkUjKXhkcCfLO5G3R1z9Zwf9qKYj9olOANno=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
     description = "Applies STAT information from a Stylespace to a variable font";
     mainProgram = "statmake";
     homepage = "https://github.com/daltonmaag/statmake";
-    changelog = "https://github.com/daltonmaag/statmake/releases/tag/${src.tag}";
+    changelog = "https://github.com/daltonmaag/statmake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

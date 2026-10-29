@@ -35,12 +35,12 @@ let
 
 in
 
-mkPackage rec {
+mkPackage (finalAttrs: {
   pname = "msbuild";
   version = "16.10.1+xamarinxplat.2021.05.26.14.00";
 
   src = fetchurl {
-    url = "https://download.mono-project.com/sources/msbuild/msbuild-${version}.tar.xz";
+    url = "https://download.mono-project.com/sources/msbuild/msbuild-${finalAttrs.version}.tar.xz";
     sha256 = "05ghqqkdj4s3d0xkp7mkdzjig5zj3k6ajx71j0g2wv6rdbvg6899";
   };
 
@@ -162,4 +162,4 @@ mkPackage rec {
     maintainers = with lib.maintainers; [ jdanek ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -22,7 +22,7 @@
   pyarrow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tiledb";
   version = "0.36.1";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LzXj6bs+DuOMDhPeXAmBuarA+eEe67LWWnhpNhR660k=";
   };
 
@@ -80,4 +80,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/TileDB-Inc/TileDB-Py";
     license = lib.licenses.mit;
   };
-}
+})

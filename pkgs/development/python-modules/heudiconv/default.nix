@@ -18,13 +18,13 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "heudiconv";
   version = "1.5.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-EO3iKhFs7U/ekueeUK8PRif6NFcV6xoDIMC+9js0Q8o=";
   };
 
@@ -69,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Flexible DICOM converter for organizing imaging data";
     homepage = "https://heudiconv.readthedocs.io";
-    changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
+    changelog = "https://github.com/nipy/heudiconv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

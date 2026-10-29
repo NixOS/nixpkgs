@@ -15,7 +15,7 @@
   pandas,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timple";
   version = "0.1.8";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "theOehrly";
     repo = "timple";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tfw+m1ZrU5A9KbXmMS4c1AIP4f/9YT3/o7HRb/uxUSM";
   };
 
@@ -52,10 +52,10 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/theOehrly/timple/releases/tag/v${version}";
+    changelog = "https://github.com/theOehrly/timple/releases/tag/v${finalAttrs.version}";
     description = "Extended functionality for plotting timedelta-like values with Matplotlib";
     homepage = "https://github.com/theOehrly/timple";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vaisriv ];
   };
-}
+})

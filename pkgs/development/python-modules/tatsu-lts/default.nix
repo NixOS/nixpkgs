@@ -8,7 +8,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tatsu-lts";
   version = "5.16.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dnicolodi";
     repo = "TatSu-LTS";
-    tag = "v${version}-LTS";
+    tag = "v${finalAttrs.version}-LTS";
     hash = "sha256-2mMIFJ9baN6hmx2HPR3kKZHuhAWC30sTIIaRRuTc1Gg=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://tatsu.readthedocs.io/";
-    changelog = "https://github.com/dnicolodi/TatSu-LTS/releases/tag/${src.tag}";
+    changelog = "https://github.com/dnicolodi/TatSu-LTS/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ alapshin ];
   };
-}
+})

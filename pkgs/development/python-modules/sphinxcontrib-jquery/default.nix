@@ -9,7 +9,7 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-jquery";
   version = "4.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "jquery";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZQGQcVmhWREFa2KyaOKdTz5W2AS2ur7pFp8qZ2IkxSE=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
       in Sphinx themes or extensions
     '';
     homepage = "https://github.com/sphinx-contrib/jquery";
-    changelog = "https://github.com/sphinx-contrib/jquery/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/sphinx-contrib/jquery/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

@@ -13,7 +13,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysonos";
   version = "0.0.54";
   format = "setuptools";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amelchio";
     repo = "pysonos";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gBOknYHL5nQWFVhCbLN0Ah+1fovcNY4P2myryZnUadk=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ juaningan ];
   };
-}
+})

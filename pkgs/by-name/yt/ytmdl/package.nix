@@ -6,14 +6,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ytmdl";
   version = "2023.11.26";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname;
-    version = builtins.replaceStrings [ ".0" ] [ "." ] version;
+    inherit (finalAttrs) pname;
+    version = builtins.replaceStrings [ ".0" ] [ "." ] finalAttrs.version;
     hash = "sha256-Im3rQAs/TYookv6FeGpU6tJxUGBMb6/UW1ZMDg9FW4s=";
   };
 
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ j0hax ];
     mainProgram = "ytmdl";
   };
-}
+})

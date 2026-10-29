@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "ungit";
   version = "1.5.30";
 
   src = fetchFromGitHub {
     owner = "FredrikNoren";
     repo = "ungit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P1B+MuiqJ621My1teYMDUD7hID2BsHchb24DIsXB9gU=";
   };
 
@@ -23,11 +23,11 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/FredrikNoren/ungit/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/FredrikNoren/ungit/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Git made easy";
     homepage = "https://github.com/FredrikNoren/ungit";
     license = lib.licenses.mit;
     mainProgram = "ungit";
     maintainers = [ ];
   };
-}
+})

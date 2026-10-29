@@ -10,7 +10,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyytlounge";
   version = "3.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FabioGNR";
     repo = "pyytlounge";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-61RHCpkn5HLV3P5ZWQBXQOIsC3CdL33wHW1ga7WM4FI=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.lukegb ];
   };
-}
+})

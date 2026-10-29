@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dlinfo";
   version = "2.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fphammerle";
     repo = "python-dlinfo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W9WfXU5eIMQQImzRgTJS0KL4IZfRtLrK8TYmdEc0VLI=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
-    changelog = "https://github.com/fphammerle/python-dlinfo/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/fphammerle/python-dlinfo/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python wrapper for libc's dlinfo and dyld_find on Mac";
     homepage = "https://github.com/fphammerle/python-dlinfo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

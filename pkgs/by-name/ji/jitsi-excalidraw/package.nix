@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "jitsi-excalidraw-backend";
   version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "excalidraw-backend";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ji5qSnT/FNHEDm6v8Fw9SW3N9RzEr2AbeQq+PNehZGo=";
   };
 
@@ -42,4 +42,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ camillemndn ];
     mainProgram = "jitsi-excalidraw-backend";
   };
-}
+})

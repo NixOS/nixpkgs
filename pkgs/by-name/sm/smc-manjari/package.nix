@@ -8,7 +8,7 @@
   truetype ? false,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "smc-manjari";
   version = "2.200";
 
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
     group = "smc";
     owner = "fonts";
     repo = "manjari";
-    rev = "Version${version}";
+    rev = "Version${finalAttrs.version}";
     hash = "sha256-B3EI6rrZyhc3xJuVIDVIjLrjJmFoFzHIwVV/4EBQv1s=";
   };
 
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     install -Dm644 -t $out/etc/fonts/conf.d *.conf
-    install -Dm644 -t $out/share/doc/${pname}-${version} OFL.txt FONTLOG.md
+    install -Dm644 -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} OFL.txt FONTLOG.md
   '';
 
   meta = {
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

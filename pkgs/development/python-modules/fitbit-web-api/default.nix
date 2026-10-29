@@ -13,7 +13,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fitbit-web-api";
   version = "2.15.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "fitbit-web-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1XqUhQQRTlEOIbZGzRx9CvJVAE50Enu+4fQXpOgNPdA=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/allenporter/fitbit-web-api/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/allenporter/fitbit-web-api/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Access data from Fitbit activity trackers, Aria scale, and manually entered logs";
     homepage = "https://github.com/allenporter/fitbit-web-api";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

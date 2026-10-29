@@ -15,13 +15,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykdtree";
   version = "1.4.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2Rh5MP+4yCLFJZW2SUi0c0ZpTuKknicCQgtY90PXhvU=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

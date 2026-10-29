@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "espeak-phonemizer";
   version = "1.3.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "espeak-phonemizer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K0s24mzXUqG0Au40jjGbpKNAznBkMHQzfh2/CDBN0F8=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/rhasspy/espeak-phonemizer/releases/tag/v${version}";
+    changelog = "https://github.com/rhasspy/espeak-phonemizer/releases/tag/v${finalAttrs.version}";
     description = "Uses ctypes and libespeak-ng to transform test into IPA phonemes";
     mainProgram = "espeak-phonemizer";
     homepage = "https://github.com/rhasspy/espeak-phonemizer";
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,14 +5,14 @@
   lua52Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deps.fnl";
   version = "0.2.6";
 
   src = fetchFromGitLab {
     owner = "andreyorst";
     repo = "deps.fnl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FrFeRbfK4sHd3pjiVDMrE8IpDKptZuwkTLMQ9hppVRY=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ emily-lavender ];
     platforms = lib.platforms.all;
   };
-}
+})

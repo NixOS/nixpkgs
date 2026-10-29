@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "google-play";
   version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "UlyssesZh";
     repo = "google-play";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CmNBE3SJhDyY77mjC56pl0aiyt4ZW6pEYTtOK3FXGhE=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     mainProgram = "play";
     platforms = lib.platforms.unix;
   };
-}
+})

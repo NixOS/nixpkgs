@@ -7,7 +7,7 @@
   rsync,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "remote-exec";
   version = "1.13.3";
   format = "setuptools";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "remote-cli";
     repo = "remote";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rsboHJLOHXnpXtsVsvsfKsav8mSbloaq2lzZnU2pw6c=";
   };
 
@@ -61,8 +61,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Work with remote hosts seamlessly via rsync and ssh";
     homepage = "https://github.com/remote-cli/remote";
-    changelog = "https://github.com/remote-cli/remote/releases/tag/v${version}";
+    changelog = "https://github.com/remote-cli/remote/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

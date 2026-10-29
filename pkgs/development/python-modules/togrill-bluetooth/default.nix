@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "togrill-bluetooth";
   version = "0.9.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "togrill-bluetooth";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-78q/BDUj//8td/kFJyJgkwDylciQ3xeR9FeFN9clzk8=";
   };
 
@@ -47,11 +47,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/elupus/togrill-bluetooth/releases/tag/${src.tag}";
+    changelog = "https://github.com/elupus/togrill-bluetooth/releases/tag/${finalAttrs.src.tag}";
     description = "Module to handle communication with ToGrill compatible temperature probes";
     homepage = "https://github.com/elupus/togrill-bluetooth";
     license = lib.licenses.mit;
     mainProgram = "togrill-bluetooth";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

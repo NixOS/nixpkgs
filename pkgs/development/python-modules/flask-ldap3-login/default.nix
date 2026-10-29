@@ -12,7 +12,7 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-ldap3-login";
   version = "1.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nickw444";
     repo = "flask-ldap3-login";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NqMZC9JAUH6uheLEkcH+ZX3IV6gUEygrUdTIFVy+JUE=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "LDAP3 Logins for Flask/Flask-Login";
     homepage = "https://flask-ldap3-login.readthedocs.org";
-    changelog = "https://github.com/nickw444/flask-ldap3-login/releases/tag/v${version}";
+    changelog = "https://github.com/nickw444/flask-ldap3-login/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felbinger ];
   };
-}
+})

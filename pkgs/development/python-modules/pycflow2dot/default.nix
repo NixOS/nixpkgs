@@ -11,13 +11,13 @@
   which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycflow2dot";
   version = "0.2.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-pZgi6KGFMCdgRStRbLC0bvmNw0sPHu6A+t9g0K7oqP4=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "cflow2dot";
   };
-}
+})

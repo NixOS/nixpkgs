@@ -8,14 +8,14 @@
   simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-whois";
   version = "0.9.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_whois";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Lm3nttcOMFqF9IWc0XeB7j8No6AqjpTyPLTNzS5AC/o=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

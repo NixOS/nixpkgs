@@ -9,7 +9,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich-pixels";
   version = "3.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "rich-pixels";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Sqs0DOyxJBfZmm/SVSTMSmaaeRlusiSp6VBnJjKYjgQ=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Rich-compatible library for writing pixel images and ASCII art to the terminal";
     homepage = "https://github.com/darrenburns/rich-pixels";
-    changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${version}";
+    changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

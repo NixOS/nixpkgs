@@ -23,14 +23,14 @@ lib.checkListOfEnum "vimix-icon-theme: color variants"
   colorVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     pname = "vimix-icon-theme";
     version = "2025.02.10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "vimix-icon-theme";
-      rev = version;
+      rev = finalAttrs.version;
       hash = "sha256-HNwEqp6G9nZDIJo9b6FD4d5NSXUx523enENM0NVwviA=";
     };
 
@@ -75,4 +75,4 @@ lib.checkListOfEnum "vimix-icon-theme: color variants"
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ romildo ];
     };
-  }
+  })

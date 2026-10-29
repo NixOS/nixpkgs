@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tinycss2";
   version = "1.5.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kozea";
     repo = "tinycss2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # for tests
     fetchSubmodules = true;
     hash = "sha256-ZVmdHrqfF5fvBvHLaG2B4m1zek4wfEYArkntWzOqhfM=";
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

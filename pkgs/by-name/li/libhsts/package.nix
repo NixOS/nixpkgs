@@ -8,7 +8,7 @@
   pkg-config,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhsts";
   version = "0.1.0";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "rockdaboot";
     repo = "libhsts";
-    tag = "libhsts-${version}";
+    tag = "libhsts-${finalAttrs.version}";
     hash = "sha256-pM9ZFk8W73Sx3ru/mqN/rWYMyZnNFCa/Wb8TB9yHbD0=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

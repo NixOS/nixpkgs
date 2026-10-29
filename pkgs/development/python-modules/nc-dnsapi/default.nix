@@ -5,7 +5,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nc-dnsapi";
   version = "0.1.6";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nbuchwitz";
     repo = "nc_dnsapi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OE4+wJbJbUZ+YB5J5OyvytLFCcrnXCeZEqmphHKKprQ=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
       trundle
     ];
   };
-}
+})

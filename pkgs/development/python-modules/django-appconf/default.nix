@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-appconf";
   version = "1.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-compressor";
     repo = "django-appconf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kpytEpvibnumkQGfHBDKA0GzSB0R8o0g0f51Rv6KEhA=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Helper class for handling configuration defaults of packaged apps gracefully";
     homepage = "https://django-appconf.readthedocs.org/";
-    changelog = "https://github.com/django-compressor/django-appconf/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/django-compressor/django-appconf/blob/v${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.bsd2;
   };
-}
+})

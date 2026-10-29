@@ -9,7 +9,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tempora";
   version = "5.8.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "tempora";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1Zeo8bUCHKPZ6I0HGT7bIh7IgbRL4j9Cv3t9FFiZ72s=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
     description = "Objects and routines pertaining to date and time";
     mainProgram = "calc-prorate";
     homepage = "https://github.com/jaraco/tempora";
-    changelog = "https://github.com/jaraco/tempora/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/jaraco/tempora/blob/${finalAttrs.src.tag}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

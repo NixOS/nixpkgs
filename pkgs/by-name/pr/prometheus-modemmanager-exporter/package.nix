@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "modemmanager-exporter";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "modemmanager_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wQATmTjYsm1J2DicPryoa/jVpbLjXz+1TTQUH5yGV6w=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdlayher ];
   };
-}
+})

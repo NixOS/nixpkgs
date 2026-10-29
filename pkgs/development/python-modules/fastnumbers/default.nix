@@ -11,7 +11,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastnumbers";
   version = "5.1.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SethMMorton";
     repo = "fastnumbers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7UjUkZPGsrtdQhgisI5IA37WvgGGiEXsey9NhATy064=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for number conversion";
     homepage = "https://github.com/SethMMorton/fastnumbers";
-    changelog = "https://github.com/SethMMorton/fastnumbers/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/SethMMorton/fastnumbers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

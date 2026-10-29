@@ -8,13 +8,13 @@
   stdenv, # for meta.broken
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycoin";
   version = "0.92718.20260405";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XqVaoX8L4tS3i1WaiGeP9vSwB8JW4IpAEtjECQz3Evc=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

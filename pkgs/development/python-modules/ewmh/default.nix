@@ -5,13 +5,13 @@
   python-xlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ewmh";
   version = "0.1.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xWsJP31XUYHpebs6fRXDQGV1X4EcNR/wox/t4SsJND0=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ bandresen ];
   };
-}
+})

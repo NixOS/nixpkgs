@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastremap";
   version = "1.20.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seung-lab";
     repo = "fastremap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ULxjG61AE7BiBh3cMRmxsQZmY8nTEo/Rcq40zwKvNiU=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Remap, mask, renumber, unique, and in-place transposition of 3D labeled images and point clouds";
     homepage = "https://github.com/seung-lab/fastremap";
-    changelog = "https://github.com/seung-lab/fastremap/releases/tag/${src.tag}";
+    changelog = "https://github.com/seung-lab/fastremap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

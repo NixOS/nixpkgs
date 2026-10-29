@@ -20,13 +20,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twine";
   version = "6.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5e0NL9cMmVl3Dc5RyPOciUXFdOGBc6e4GALatRtLdc8=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/twine";
     license = lib.licenses.asl20;
   };
-}
+})

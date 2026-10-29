@@ -9,7 +9,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ffmpeg";
   version = "2.0.12";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jonghwanhyeon";
     repo = "python-ffmpeg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1dhkjrg7QUtYSyEV9c88HphdcFuSCSaGJqVAQmMF/5E=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ youhaveme9 ];
   };
-}
+})

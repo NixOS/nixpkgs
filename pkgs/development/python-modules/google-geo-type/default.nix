@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-geo-type";
   version = "0.7.1";
   pyproject = true;
@@ -19,11 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-geo-type-v${version}";
+    tag = "google-geo-type-v${finalAttrs.version}";
     hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
-  sourceRoot = "${src.name}/packages/google-geo-type";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-geo-type";
 
   build-system = [ setuptools ];
 
@@ -51,10 +51,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-geo-type/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-geo-type/CHANGELOG.md";
     description = "Google Geo Type API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-geo-type";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "securetar";
   version = "2026.4.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "securetar";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-y2Ow272094Qrn52LGYkuRcjaR6d0C6bF12g7W6AwSMI=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to handle tarfile backups";
     homepage = "https://github.com/home-assistant-libs/securetar";
-    changelog = "https://github.com/home-assistant-libs/securetar/releases/tag/${src.tag}";
+    changelog = "https://github.com/home-assistant-libs/securetar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

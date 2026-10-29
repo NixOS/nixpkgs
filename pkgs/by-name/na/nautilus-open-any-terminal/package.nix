@@ -14,7 +14,7 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "nautilus-open-any-terminal";
   version = "0.8.3";
   pyproject = true;
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = "nautilus-open-any-terminal";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8kruipqfNi1vACRY8njaNa5Us9ZiHPHHkdBUbk7Re/Q=";
   };
 
@@ -62,4 +62,4 @@ python3.pkgs.buildPythonPackage rec {
     homepage = "https://github.com/Stunkymonkey/nautilus-open-any-terminal";
     platforms = lib.platforms.linux;
   };
-}
+})

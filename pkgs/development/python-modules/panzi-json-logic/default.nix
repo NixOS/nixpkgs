@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "panzi-json-logic";
   version = "1.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "panzi";
     repo = "panzi-json-logic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-P34+7SckMtiCTZbdKsjztNam+/HWtcVQEnGPMoPBw3g=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thanegill ];
   };
-}
+})

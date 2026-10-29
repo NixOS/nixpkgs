@@ -8,14 +8,14 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deep-translator";
   version = "1.11.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "deep_translator";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-gBJgxpIxE4cH6oiglV5ITbfUDiEMngrg93Ny/9pfS/U=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python tool to translate between different languages by using multiple translators";
     homepage = "https://deep-translator.readthedocs.io";
-    changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v${version}";
+    changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -8,13 +8,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pixcat";
   version = "0.1.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ZXyP4EUTyuzM1ghrNHqkuF22tMD3YbFiy5zXiavnq7Y=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.tilcreator ];
   };
-}
+})

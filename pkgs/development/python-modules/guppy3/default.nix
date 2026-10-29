@@ -6,7 +6,7 @@
   tkinter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "guppy3";
   version = "3.1.7";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
     repo = "guppy3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/vu47Mzi4q1g6JOoM01j/V1SDNMSJlP/ohuip5t+GtE=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "guppy" ];
 
   meta = {
-    changelog = "https://github.com/zhuyifei1999/guppy3/blob/${src.tag}/ChangeLog";
+    changelog = "https://github.com/zhuyifei1999/guppy3/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Python Programming Environment & Heap analysis toolset";
     homepage = "https://zhuyifei1999.github.io/guppy3/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

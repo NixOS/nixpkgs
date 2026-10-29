@@ -12,7 +12,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "praat-parselmouth";
   version = "0.4.7";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "YannickJadoul";
     repo = "Parselmouth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-gogNiKZVQaAzu/VeP4+bg61GtdptZeNkQatcJ/cjXFI=";
   };
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Praat in Python, the Pythonic way";
     homepage = "https://github.com/YannickJadoul/Parselmouth";
-    changelog = "https://github.com/YannickJadoul/Parselmouth/releases/tag/${src.tag}";
+    changelog = "https://github.com/YannickJadoul/Parselmouth/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

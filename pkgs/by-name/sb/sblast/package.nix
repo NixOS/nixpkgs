@@ -9,14 +9,14 @@
   testers,
 }:
 let
-  self = buildGoModule rec {
+  self = buildGoModule (finalAttrs: {
     pname = "sblast";
     version = "0.7.2";
 
     src = fetchFromGitHub {
       owner = "ugjka";
       repo = "sblast";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-ICSnLfzBoaax3YKa4LiTBQ4zxgDxttxcN4YVLApFH24=";
     };
 
@@ -43,7 +43,7 @@ let
       updateScript = nix-update-script { };
       tests.version = testers.testVersion {
         package = self;
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
       };
     };
 
@@ -55,6 +55,6 @@ let
       maintainers = with lib.maintainers; [ colinsane ];
       platforms = lib.platforms.linux;
     };
-  };
+  });
 in
 self

@@ -11,7 +11,7 @@
   shiboken6-generator,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyside6-qtads";
   version = "5.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = "pyside6_qtads";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pSgDdfOuEnluiKKnCJjxVZbQwZld4tr7G2S8ZZXJkvo=";
     fetchSubmodules = true;
   };
@@ -77,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
-}
+})

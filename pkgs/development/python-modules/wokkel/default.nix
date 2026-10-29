@@ -9,7 +9,7 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wokkel";
   version = "18.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ralphm";
     repo = "wokkel";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vIs9Zo8o7TWUTIqJG9SEHQd63aJFCRhj6k45IuxoCes=";
   };
 
@@ -73,9 +73,9 @@ buildPythonPackage rec {
       Twisted Words, that are meant to eventually move there.
     '';
     homepage = "https://github.com/ralphm/wokkel"; # wokkel.ik.nu is dead
-    changelog = "https://github.com/ralphm/wokkel/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/ralphm/wokkel/blob/${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ethancedwards8 ];
     teams = [ lib.teams.ngi ];
   };
-}
+})

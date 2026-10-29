@@ -7,7 +7,7 @@
   llm-fragments-github,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-fragments-github";
   version = "0.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-fragments-github";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7i1WRix5AAEG5EXJqtaU+QY56aL0SePdqz84z+C+iYM=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Load GitHub repository contents as LLM fragments";
     homepage = "https://github.com/simonw/llm-fragments-github";
-    changelog = "https://github.com/simonw/llm-fragments-github/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-fragments-github/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

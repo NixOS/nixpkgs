@@ -10,7 +10,7 @@
   mpi4py,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-mpi";
   version = "0.6";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aragilar";
     repo = "pytest-mpi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-m3HTGLoPnYeg0oeIA1nzTzch7FtkuXTYpox4rRgo5MU=";
   };
 
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

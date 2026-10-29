@@ -12,7 +12,7 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-core";
   version = "5.9.1";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mAvfyiN8Fdm9U3Ar7xicwOinKfTqk9qrfq/SGiaxNvU=";
   };
 
@@ -66,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
-    changelog = "https://github.com/jupyter/jupyter_core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/jupyter_core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

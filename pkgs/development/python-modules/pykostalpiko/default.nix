@@ -6,7 +6,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykostalpiko";
   version = "1.1.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Florian7843";
     repo = "pykostalpiko";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kmzFsOgmMb8bOkulg7G6vXEPdb0xizh7u5LjnHfEWWQ=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

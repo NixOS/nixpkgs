@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "desktop-entry-lib";
   version = "3.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "JakobDev";
     repo = "desktop-entry-lib";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+c+FuLv88wc4yVw3iyFFtfbocnWzTCIe2DS0SWoj+VI=";
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Allows reading and writing .desktop files according to the Desktop Entry Specification";
     homepage = "https://codeberg.org/JakobDev/desktop-entry-lib";
-    changelog = "https://codeberg.org/JakobDev/desktop-entry-lib/releases/tag/${version}";
+    changelog = "https://codeberg.org/JakobDev/desktop-entry-lib/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
   };
-}
+})

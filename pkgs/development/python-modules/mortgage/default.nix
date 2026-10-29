@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mortgage";
   version = "1.0.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jlumbroso";
     repo = "mortgage";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UwSEKfMQqxpcF+7TF/+qD6l8gEO/qDCUklpZz1Nt/Ok=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

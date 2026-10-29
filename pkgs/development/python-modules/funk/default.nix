@@ -7,7 +7,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "funk";
   version = "0.5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "funk";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dEq3zyA8rtNt0sui2TfQ3OUSCZ0XDMOdthcqt/QrCsU=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Mocking framework for Python, influenced by JMock";
     homepage = "https://github.com/mwilliamson/funk";
-    changelog = "https://github.com/mwilliamson/funk/blob/${src.tag}/NEWS";
+    changelog = "https://github.com/mwilliamson/funk/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

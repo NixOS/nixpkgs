@@ -6,7 +6,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-socket";
   version = "0.8.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miketheman";
     repo = "pytest-socket";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Z8aCucbYR6kIgrtZlITPjElwBiIW7DhAk5oTnuiEwWQ=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest Plugin to disable socket calls during tests";
     homepage = "https://github.com/miketheman/pytest-socket";
-    changelog = "https://github.com/miketheman/pytest-socket/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/miketheman/pytest-socket/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,7 +6,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rendercv-fonts";
   version = "0.5.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rendercv";
     repo = "rendercv-fonts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rwMiDoa/93FY3DFDxzR3sPyB8tCJzOnNbMZq8mBcx7M=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package with some fonts for the rendercv package";
     homepage = "https://github.com/rendercv/rendercv-fonts";
-    changelog = "https://github.com/rendercv/rendercv-fonts/releases/tag/v${version}";
+    changelog = "https://github.com/rendercv/rendercv-fonts/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ theobori ];
   };
-}
+})

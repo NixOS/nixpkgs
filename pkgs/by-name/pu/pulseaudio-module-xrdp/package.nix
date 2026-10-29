@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pulseaudio-module-xrdp";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "neutrinolabs";
     repo = "pulseaudio-module-xrdp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-R1ZPifEjlueTJma6a0UiGdiNwTSa5+HnW4w9qGrauxE=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

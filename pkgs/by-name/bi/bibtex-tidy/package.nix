@@ -6,14 +6,14 @@
   bibtex-tidy,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "bibtex-tidy";
   version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "FlamingTempura";
     repo = "bibtex-tidy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sMgy29deEfc3DFSC0Z4JZCeNAFpBKNYj+mJnFI1pSY4=";
   };
 
@@ -26,16 +26,16 @@ buildNpmPackage rec {
   passthru.tests = {
     version = testers.testVersion {
       package = bibtex-tidy;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
-    changelog = "https://github.com/FlamingTempura/bibtex-tidy/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/FlamingTempura/bibtex-tidy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Cleaner and Formatter for BibTeX files";
     mainProgram = "bibtex-tidy";
     homepage = "https://github.com/FlamingTempura/bibtex-tidy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bertof ];
   };
-}
+})

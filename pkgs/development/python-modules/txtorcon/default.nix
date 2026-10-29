@@ -14,13 +14,13 @@
   zope-interface,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "txtorcon";
   version = "26.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BAjwY6n8uN9Snayle7c3PqD1tOuv/NUQN1S3xWF3P2g=";
   };
 
@@ -48,11 +48,11 @@ buildPythonPackage rec {
   meta = {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
     homepage = "https://github.com/meejah/txtorcon";
-    changelog = "https://github.com/meejah/txtorcon/releases/tag/v${version}";
+    changelog = "https://github.com/meejah/txtorcon/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       jluttine
       exarkun
     ];
     license = lib.licenses.mit;
   };
-}
+})

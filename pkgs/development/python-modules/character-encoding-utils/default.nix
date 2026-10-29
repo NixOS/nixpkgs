@@ -7,7 +7,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "character-encoding-utils";
   version = "0.0.13";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "character-encoding-utils";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JGgjOFzPA7IseeGyDNUX1QEtV5OT+ptwZDy/XkNN3rY=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
       h7x4
     ];
   };
-}
+})

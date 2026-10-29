@@ -9,14 +9,14 @@
   yq-go,
 }:
 
-buildDartApplication rec {
+buildDartApplication (finalAttrs: {
   pname = "protoc-gen-dart";
   version = "25.1.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "protobuf.dart";
-    tag = "protoc_plugin-v${version}";
+    tag = "protoc_plugin-v${finalAttrs.version}";
     hash = "sha256-2U7tFSTSlenq7SmAZlQX5ZCEDBUBM+yHI7r7hqFMk+k=";
   };
 
@@ -52,4 +52,4 @@ buildDartApplication rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lelgenio ];
   };
-}
+})

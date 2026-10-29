@@ -6,7 +6,7 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "icnsutil";
   version = "1.1.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "relikd";
     repo = "icnsutil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tiq8h6s2noWLBIOIWcj8jfSqJFN01ee2uoHN4aFwn7s=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Create and extract .icns files";
     homepage = "https://github.com/relikd/icnsutil";
-    changelog = "https://github.com/relikd/icnsutil/releases/tag/v${version}";
+    changelog = "https://github.com/relikd/icnsutil/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ reckenrode ];
   };
-}
+})

@@ -6,7 +6,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "krakenex";
   version = "2.2.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "veox";
     repo = "python3-krakenex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-htldEds3vf9bjFkJAew0e0fHDLD15OTcVYybSmIp3DI=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "krakenex" ];
 
   meta = {
-    changelog = "https://github.com/veox/python3-krakenex/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/veox/python3-krakenex/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Kraken.com cryptocurrency exchange API";
     homepage = "https://github.com/veox/python3-krakenex";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

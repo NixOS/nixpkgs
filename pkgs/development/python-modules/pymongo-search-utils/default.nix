@@ -6,7 +6,7 @@
   pymongo,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymongo-search-utils";
   version = "0.3.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mongodb-labs";
     repo = "pymongo-search-utils";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zD0eNWN6B02yJdLHpMYp0I0Vgp4o4ijeDBDl8a8LjQs=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Vector Search utilities for PyMongo";
     homepage = "https://github.com/mongodb-labs/pymongo-search-utils/";
-    changelog = "https://github.com/mongodb-labs/pymongo-search-utils/releases/tag/${src.tag}";
+    changelog = "https://github.com/mongodb-labs/pymongo-search-utils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

@@ -5,15 +5,15 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unpaddedbase64";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matrix-org";
-    repo = "python-${pname}";
-    tag = "v${version}";
+    repo = "python-${finalAttrs.pname}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v9p7SPrPhZXbOWlweYJS5rgeLozfKmrSwhXsflFW0Ng=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     description = "Unpadded Base64";
     license = lib.licenses.asl20;
   };
-}
+})

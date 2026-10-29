@@ -7,7 +7,7 @@
   packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requirements-parser";
   version = "0.13.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "madpah";
     repo = "requirements-parser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Hti1r/OLYHue+c7/TDDRzBgKxJazobZG+aFxK2ok70g=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pip requirements file parser";
     homepage = "https://github.com/davidfischer/requirements-parser";
-    changelog = "https://github.com/madpah/requirements-parser/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/madpah/requirements-parser/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

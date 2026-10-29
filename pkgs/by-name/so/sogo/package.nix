@@ -23,7 +23,7 @@
   libwbxml,
 }:
 
-clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "sogo";
   version = "5.12.12";
 
@@ -31,7 +31,7 @@ clangStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Alinto";
     repo = "sogo";
-    rev = "SOGo-${version}";
+    rev = "SOGo-${finalAttrs.version}";
     hash = "sha256-RsDjHRxfjBP4YCl8sVK/nJlio7N3tY8V9nwTRAFrCg8=";
   };
 
@@ -124,4 +124,4 @@ clangStdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jceb ];
   };
-}
+})

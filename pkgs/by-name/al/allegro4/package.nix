@@ -23,12 +23,12 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "allegro";
   version = "4.4.3.1";
 
   src = fetchurl {
-    url = "https://github.com/liballeg/allegro5/releases/download/${version}/allegro-${version}.tar.gz";
+    url = "https://github.com/liballeg/allegro5/releases/download/${finalAttrs.version}/allegro-${finalAttrs.version}.tar.gz";
     hash = "sha256-7BnbyaAhJEWCtIGbNYPuWUtQFB+fz2lEpO2Aacv41NQ=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

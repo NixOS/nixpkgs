@@ -14,13 +14,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "knack";
   version = "0.14.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ld0y/WND7Jtu0NpymyEjYtDmsSCMAWJjPJDLb5SgWHc=";
   };
 
@@ -49,9 +49,9 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/microsoft/knack";
     description = "Command-Line Interface framework";
-    changelog = "https://github.com/microsoft/knack/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/microsoft/knack/blob/v${finalAttrs.version}/HISTORY.rst";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

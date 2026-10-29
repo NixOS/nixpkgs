@@ -12,13 +12,13 @@
   subversion,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysvn";
   version = "1.9.25";
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
+    url = "mirror://sourceforge/project/pysvn/pysvn/V${finalAttrs.version}/pysvn-${finalAttrs.version}.tar.gz";
     hash = "sha256-M9LzUr/6FZSUWFQdGM6Ew1/ySE5C/Q7cNXi+jGa+JdY=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
     cp pysvn/__init__.py $dest/
     cp pysvn/_pysvn*.so $dest/
     mkdir -p $out/share/doc
-    mv -v ../Docs $out/share/doc/pysvn-${version}
-    rm -v $out/share/doc/pysvn-${version}/generate_cpp_docs_from_html_docs.py
+    mv -v ../Docs $out/share/doc/pysvn-${finalAttrs.version}
+    rm -v $out/share/doc/pysvn-${finalAttrs.version}/generate_cpp_docs_from_html_docs.py
   '';
 
   meta = {
@@ -76,4 +76,4 @@ buildPythonPackage rec {
     # g++: command not found
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

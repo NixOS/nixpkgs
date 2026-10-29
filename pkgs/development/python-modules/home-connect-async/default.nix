@@ -11,14 +11,14 @@
   oauth2-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "home-connect-async";
   version = "0.8.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "home_connect_async";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-4iF63TqmT47nHGJd9H4D6SnzclToj5S5Z/pm4YxbvQA=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };
-}
+})

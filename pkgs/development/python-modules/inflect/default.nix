@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inflect";
   version = "7.5.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "inflect";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JQn0JySzXFnqz/dPc7BGLzd23Bh72S+/aI40gxAgx8k=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Correctly generate plurals, singular nouns, ordinals, indefinite articles";
     homepage = "https://github.com/jaraco/inflect";
-    changelog = "https://github.com/jaraco/inflect/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/inflect/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})

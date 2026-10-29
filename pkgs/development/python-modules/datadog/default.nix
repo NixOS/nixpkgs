@@ -21,7 +21,7 @@
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datadog";
   version = "0.55.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "datadogpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o5Uw84YWYV8FRXwj7fOPm68/ICGjmS2ZL5Wa28/fv+U=";
   };
 
@@ -83,8 +83,8 @@ buildPythonPackage rec {
   meta = {
     description = "Datadog Python library";
     homepage = "https://github.com/DataDog/datadogpy";
-    changelog = "https://github.com/DataDog/datadogpy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/DataDog/datadogpy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

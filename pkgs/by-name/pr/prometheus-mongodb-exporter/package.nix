@@ -6,14 +6,14 @@
   withGssapi ? true,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mongodb_exporter";
   version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "mongodb_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JmUWxiLKRd7ogXduCAuHCq0QayQxeoYlWXrzS/ZxWeQ=";
   };
 
@@ -26,8 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
     "-X main.Branch=unknown"
     "-X main.buildDate=unknown"
   ];
@@ -45,4 +45,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ undefined-moe ];
     mainProgram = "mongodb_exporter";
   };
-}
+})

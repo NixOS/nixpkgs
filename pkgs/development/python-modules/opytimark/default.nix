@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opytimark";
   version = "1.0.8";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gugarosa";
     repo = "opytimark";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-T3OFm10gvGrUXAAHOnO0Zv1nWrXPBXSmEWnbJxrWYU0=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library consisting of optimization benchmarking functions";
     homepage = "https://github.com/gugarosa/opytimark";
-    changelog = "https://github.com/gugarosa/opytimark/releases/tag/v${version}";
+    changelog = "https://github.com/gugarosa/opytimark/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ firefly-cpp ];
   };
-}
+})

@@ -18,7 +18,7 @@
   pip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "invocations";
   version = "4.0.2";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyinvoke";
     repo = "invocations";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-G6EKypqP2/coPChLwwEKZ2WIEay0qfyM8M5jKb0oS2c=";
   };
 
@@ -74,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Common/best-practice Invoke tasks and collections";
     homepage = "https://invocations.readthedocs.io/";
-    changelog = "https://github.com/pyinvoke/invocations/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/pyinvoke/invocations/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

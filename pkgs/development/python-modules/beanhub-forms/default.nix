@@ -11,7 +11,7 @@
   wtforms,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beanhub-forms";
   version = "0.1.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-forms";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-313c+ENmTe1LyfEiMXNB9AUoGx3Yv/1D0T3HnAbd+Zw=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for generating and processing BeanHub's custom forms";
     homepage = "https://github.com/LaunchPlatform/beanhub-forms/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-forms/releases/tag/${version}";
+    changelog = "https://github.com/LaunchPlatform/beanhub-forms/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fangpen ];
   };
-}
+})

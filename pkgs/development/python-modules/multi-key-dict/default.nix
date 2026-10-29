@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "multi-key-dict";
   version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "multi_key_dict";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-3uvewXqjChxDLLP0N+gfhiHhwFQqDAYXp09x4jLpk54=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/formiaczek/multi_key_dict";
     license = lib.licenses.mit;
   };
-}
+})

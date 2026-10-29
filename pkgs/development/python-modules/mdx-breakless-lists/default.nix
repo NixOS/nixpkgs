@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdx-breakless-lists";
   version = "1.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamb70";
     repo = "mdx-breakless-lists";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-V0Bl1BCMXoQTeWC3WVzvfGY2RTirtCGqkGz8IGcuqRQ=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

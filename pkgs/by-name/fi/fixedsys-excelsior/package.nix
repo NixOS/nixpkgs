@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fixedsys-excelsior";
   version = "3.00";
 
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -m444 -D $src $out/share/fonts/truetype/${pname}-${version}.ttf
+    install -m444 -D $src $out/share/fonts/truetype/${finalAttrs.pname}-${finalAttrs.version}.ttf
 
     runHook postInstall
   '';
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.picnoir ];
   };
-}
+})

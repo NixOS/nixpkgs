@@ -7,13 +7,13 @@
   ditaa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-ditaa";
   version = "1.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinxcontrib_ditaa";
     hash = "sha256-8O74Gyb4KxER/VlFQWwHKQQjiYNU1ch5n6eLneVHTCg=";
   };
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ rconybea ];
     license = lib.licenses.bsd2;
   };
-}
+})

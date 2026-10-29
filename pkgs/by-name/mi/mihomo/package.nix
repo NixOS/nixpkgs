@@ -6,14 +6,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mihomo";
   version = "1.19.33";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "mihomo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-O2OJ0WFt0T32yOIT1El+ACJWVm2oAJOjU1JTDXb2IEo=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/metacubex/mihomo/constant.Version=${version}"
+    "-X github.com/metacubex/mihomo/constant.Version=${finalAttrs.version}"
   ];
 
   tags = [
@@ -48,4 +48,4 @@ buildGoModule rec {
     ];
     mainProgram = "mihomo";
   };
-}
+})

@@ -33,12 +33,12 @@
   totem-pl-parser,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grilo-plugins";
   version = "0.3.18";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/grilo-plugins/${lib.versions.majorMinor version}/grilo-plugins-${version}.tar.xz";
+    url = "mirror://gnome/sources/grilo-plugins/${lib.versions.majorMinor finalAttrs.version}/grilo-plugins-${finalAttrs.version}.tar.xz";
     sha256 = "jjznTucXw8Mi0MsPjfJrsJFAKKXQFuKAVf+0nMmkbF4=";
   };
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

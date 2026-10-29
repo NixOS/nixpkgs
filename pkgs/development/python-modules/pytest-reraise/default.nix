@@ -7,7 +7,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-reraise";
   version = "2.1.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bjoluc";
     repo = "pytest-reraise";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mgNKoZ+2sinArTZhSwhLxzBTb4QfiT1LWBs7w5MHXWA=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
       Make multi-threaded pytest test cases fail when they should
     '';
     homepage = "https://github.com/bjoluc/pytest-reraise";
-    changelog = "https://github.com/bjoluc/pytest-reraise/releases/tag/${src.tag}";
+    changelog = "https://github.com/bjoluc/pytest-reraise/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "archspec";
   version = "0.2.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "archspec";
     repo = "archspec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-BfjFNwfNyT/da0Z5/bBdbv+RT8lqM0s2q64cz79vuF0=";
   };
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for detecting, labeling, and reasoning about microarchitectures";
     homepage = "https://archspec.readthedocs.io/";
-    changelog = "https://github.com/archspec/archspec/releases/tag/${src.tag}";
+    changelog = "https://github.com/archspec/archspec/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       mit
       asl20
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "archspec";
   };
-}
+})

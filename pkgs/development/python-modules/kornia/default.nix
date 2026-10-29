@@ -8,7 +8,7 @@
   kornia-rs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kornia";
   version = "0.8.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kornia";
     repo = "kornia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jNwqWgmILbSrISepuGZZSUnB9GlgwU5J0zqYwN54ul0=";
   };
 
@@ -49,9 +49,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://kornia.readthedocs.io";
-    changelog = "https://github.com/kornia/kornia/releases/tag/${src.tag}";
+    changelog = "https://github.com/kornia/kornia/releases/tag/${finalAttrs.src.tag}";
     description = "Differentiable computer vision library";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

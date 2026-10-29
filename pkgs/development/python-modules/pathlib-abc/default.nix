@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pathlib-abc";
   version = "0.5.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "barneygale";
     repo = "pathlib-abc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Amr5yrdmS0jx1dnakstgE7JFs4QzNK150aG51GUrc2Y=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python base classes for rich path objects";
     homepage = "https://github.com/barneygale/pathlib-abc";
-    changelog = "https://github.com/barneygale/pathlib-abc/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/barneygale/pathlib-abc/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.psfl;
     maintainers = [ ];
   };
-}
+})

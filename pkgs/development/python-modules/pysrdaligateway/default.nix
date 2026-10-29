@@ -8,7 +8,7 @@
   psutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysrdaligateway";
   version = "0.21.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maginawin";
     repo = "PySrDaliGateway";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X9XLwlS4WAkNMghrs0AtHl2vwt/R2BEWPsqPY8gZNUs=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/maginawin/PySrDaliGateway/releases/tag/${src.tag}";
+    changelog = "https://github.com/maginawin/PySrDaliGateway/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for Sunricher DALI Gateway (EDA)";
     homepage = "https://github.com/maginawin/PySrDaliGateway";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

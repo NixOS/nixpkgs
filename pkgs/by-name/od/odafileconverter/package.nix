@@ -17,7 +17,7 @@ let
   }";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oda-file-converter";
   # To obtain the version you will need to run the following command:
   #
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin $out/lib
-    cp -vr usr/bin/ODAFileConverter_${version} $out/libexec
+    cp -vr usr/bin/ODAFileConverter_${finalAttrs.version} $out/libexec
     cp -vr usr/share $out/share
   '';
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "ODAFileConverter";
   };
-}
+})

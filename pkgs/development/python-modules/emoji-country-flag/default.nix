@@ -7,7 +7,7 @@
   emoji,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "emoji-country-flag";
   version = "2.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cvzi";
     repo = "flag";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Te3RJ+rHkr3q93C7hLE5xCZz91QC2IsFR0FluVEJOv4=";
   };
 
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   meta = {
     description = "Flag emoji from country codes for Python";
     homepage = "https://github.com/cvzi/flag";
-    changelog = "https://github.com/cvzi/flag/releases/tag/${src.tag}";
+    changelog = "https://github.com/cvzi/flag/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       skohtv
       aleksana
     ];
   };
-}
+})

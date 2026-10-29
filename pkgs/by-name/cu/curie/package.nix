@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "curie";
   version = "1.0";
 
   src = fetchurl {
-    url = "https://github.com/oppiliappan/curie/releases/download/v${version}/curie-v${version}.tar.gz";
+    url = "https://github.com/oppiliappan/curie/releases/download/v${finalAttrs.version}/curie-v${finalAttrs.version}.tar.gz";
     hash = "sha256-B89GNbOmm3lY/cRWQJEFu/5morCM/WrRQb/m6covbt8=";
   };
 
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moni ];
   };
-}
+})

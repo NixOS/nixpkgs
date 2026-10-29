@@ -15,13 +15,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ddt";
   version = "1.7.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0hXWsIOWMBPEoZseTc1qlugOQ6t3UZWXpqz88umj4Es=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/datadriventests/ddt/releases/tag/${version}";
+    changelog = "https://github.com/datadriventests/ddt/releases/tag/${finalAttrs.version}";
     description = "Data-Driven/Decorated Tests, a library to multiply test cases";
     homepage = "https://github.com/txels/ddt";
     maintainers = [ ];
     license = lib.licenses.mit;
   };
-}
+})

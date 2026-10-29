@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "starlette-wtf";
   version = "0.4.5";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "muicss";
     repo = "starlette-wtf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-88zU2NAsdty2OhHauwQ5+6LazuRDYPoqN9IIipI1t2Q=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Simple tool for integrating Starlette and WTForms";
-    changelog = "https://github.com/amorey/starlette-wtf/releases/tag/${version}";
+    changelog = "https://github.com/amorey/starlette-wtf/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/muicss/starlette-wtf";
     license = lib.licenses.mit;
   };
-}
+})

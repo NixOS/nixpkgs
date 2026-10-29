@@ -7,14 +7,14 @@
   textlint-rule-max-comma,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "textlint-plugin-org";
   version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "kijimaD";
     repo = "textlint-plugin-org";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BW+b09nv9Mzl3cUcOOpHoRz8tGLxuGGo4UCY6kdUlXA=";
   };
 
@@ -30,8 +30,8 @@ buildNpmPackage rec {
   meta = {
     description = "Org mode support for textlint";
     homepage = "https://github.com/kijimaD/textlint-plugin-org";
-    changelog = "https://github.com/kijimaD/textlint-plugin-org/releases/tag/v${version}";
+    changelog = "https://github.com/kijimaD/textlint-plugin-org/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

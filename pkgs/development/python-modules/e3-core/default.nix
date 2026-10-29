@@ -19,7 +19,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "e3-core";
   version = "22.10.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LHWtgIvbS1PaF85aOpdhR0rWQGRUtbY0Qg1SZxQOsSc=";
   };
 
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${src.tag}";
+    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/AdaCore/e3-core/";
     description = "Core framework for developing portable automated build systems";
     license = lib.licenses.gpl3Only;
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     # upstream, but not by this package.
     platforms = lib.platforms.linux;
   };
-}
+})

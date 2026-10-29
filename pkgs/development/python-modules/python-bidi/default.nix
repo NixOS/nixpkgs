@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-bidi";
   version = "0.6.11";
   pyproject = true;
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MeirKriheli";
     repo = "python-bidi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sDr/i7MC3aNAzl/+cDbstS5QBdQqVtaLlG09qsl7krU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-djfKvD7+JEV65xvk0AgRBUMBSWrEGcsgIh/vJh3+lJs=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
       lib.licenses.gpl3Only
     ];
   };
-}
+})

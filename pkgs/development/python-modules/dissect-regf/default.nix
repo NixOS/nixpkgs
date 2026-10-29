@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-regf";
   version = "3.14";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.regf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bzRx+GwmT+tqCIIu/cJkbnwvkiGbZrtoUFNiirZFp28=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for Windows registry file format";
     homepage = "https://github.com/fox-it/dissect.regf";
-    changelog = "https://github.com/fox-it/dissect.regf/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.regf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

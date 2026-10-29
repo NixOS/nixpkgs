@@ -16,14 +16,14 @@
   psycopg2cffi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-celery-results";
   version = "2.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_celery_results";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-mrzYNq5rYQY3eSRNiIeoj+gLv6uhQ98208sHA0ZxJ3w=";
   };
 
@@ -72,8 +72,8 @@ buildPythonPackage rec {
   meta = {
     description = "Celery result back end with django";
     homepage = "https://github.com/celery/django-celery-results";
-    changelog = "https://github.com/celery/django-celery-results/blob/v${version}/Changelog";
+    changelog = "https://github.com/celery/django-celery-results/blob/v${finalAttrs.version}/Changelog";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

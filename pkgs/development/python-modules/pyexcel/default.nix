@@ -9,13 +9,13 @@
   texttable,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyexcel";
   version = "0.7.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SJSD2MdnWk0E0KVaG13Qkldx4mYPpoEFyjQuSS9FnRs=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
     homepage = "http://docs.pyexcel.org/";
-    changelog = "https://github.com/pyexcel/pyexcel/releases/tag/v${version}";
+    changelog = "https://github.com/pyexcel/pyexcel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

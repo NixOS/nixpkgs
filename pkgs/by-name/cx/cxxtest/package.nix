@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cxxtest";
   version = "4.4";
   format = "setuptools";
@@ -12,11 +12,11 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CxxTest";
     repo = "cxxtest";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   nativeCheckInputs = [ python3Packages.ply ];
 
@@ -48,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ juliendehos ];
   };
-}
+})

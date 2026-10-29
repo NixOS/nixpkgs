@@ -6,7 +6,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-asciimagic";
   version = "1.2.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-asciimagic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sY5ik9efzLBa6Fbh17Vh4q7PlwOGYjuodU9yvp/8E3k=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
     description = "Decoders for ascii-encoded executables for the Karton framework";
     mainProgram = "karton-asciimagic";
     homepage = "https://github.com/CERT-Polska/karton-asciimagic";
-    changelog = "https://github.com/CERT-Polska/karton-asciimagic/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/karton-asciimagic/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

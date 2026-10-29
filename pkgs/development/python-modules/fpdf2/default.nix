@@ -15,7 +15,7 @@
   uharfbuzz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fpdf2";
   version = "2.8.9";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bMVi0ZNV9Al9dxH8t801y4zkJpNmQUVTeMoOh+DDzFA=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/py-pdf/fpdf2";
     description = "Simple PDF generation for Python";
-    changelog = "https://github.com/py-pdf/fpdf2/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/fpdf2/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jfvillablanca ];
   };
-}
+})

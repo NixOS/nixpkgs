@@ -15,7 +15,7 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "i-pi";
   version = "3.2.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PGWgeLmYsVftPhjGTMvAzmKMpZo18ssgXYqZ+l48tfs=";
   };
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

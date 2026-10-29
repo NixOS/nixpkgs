@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymodes";
   version = "2.21.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "junzis";
     repo = "pyModeS";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Tla5hJ7J/3R4r4fTQMUIpY+QGvLRuNMZfWU0RsAiuk0=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Mode-S and ADS-B Decoder";
     homepage = "https://github.com/junzis/pyModeS";
-    changelog = "https://github.com/junzis/pyModeS/releases/tag/${src.tag}";
+    changelog = "https://github.com/junzis/pyModeS/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ snicket2100 ];
   };
-}
+})

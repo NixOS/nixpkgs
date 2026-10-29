@@ -14,13 +14,13 @@
   widgetsnbextension,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipywidgets";
   version = "8.1.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-vMy6OKbsMlP3o5yUPOpbmtAZmc4HE5YXGtvFHGpqhhM=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
     license = lib.licenses.bsd3;
   };
-}
+})

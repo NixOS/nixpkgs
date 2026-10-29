@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-eventlog";
   version = "3.11";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.eventlog";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-q9pbNBtTnrq7E8faW0a9v63oh7/8r9njeZOZeUFpt2k=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing parsers for the Windows EVT, EVTX and WEVT log file formats";
     homepage = "https://github.com/fox-it/dissect.eventlog";
-    changelog = "https://github.com/fox-it/dissect.eventlog/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.eventlog/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

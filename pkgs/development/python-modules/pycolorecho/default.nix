@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycolorecho";
   version = "0.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coldsofttech";
     repo = "pycolorecho";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-h/7Wi0x8iLMZpPYekK6W9LTM+2nYJTaKClNtRTzbmdg=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Python package for colorized terminal output";
     homepage = "https://github.com/coldsofttech/pycolorecho";
-    changelog = "https://github.com/coldsofttech/pycolorecho/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/coldsofttech/pycolorecho/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

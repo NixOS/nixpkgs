@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-pycodestyle";
   version = "2.5.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "henry0312";
     repo = "pytest-pycodestyle";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X/vacxI0RFHIqlZ2omzvvFDePS/SZYSFQHEmfcbvf/4=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to run pycodestyle";
     homepage = "https://github.com/henry0312/pytest-pycodestyle";
-    changelog = "https://github.com/henry0312/pytest-pycodestyle/releases/tag/${src.tag}";
+    changelog = "https://github.com/henry0312/pytest-pycodestyle/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

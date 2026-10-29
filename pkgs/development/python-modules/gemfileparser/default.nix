@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gemfileparser";
   version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-g5WS5J6j/Zhc7AA+9Y+OdwCaae12RKDArMlM9t2bjW4=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "parsegemfile";
   };
-}
+})

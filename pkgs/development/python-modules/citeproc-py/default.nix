@@ -12,14 +12,14 @@
   versioneer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "citeproc-py";
   version = "0.11.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "citeproc_py";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-8vmmTNmAcGoMrF3rdXnm+KzIfOAUBSDMnzAmLSDDUwc=";
   };
 
@@ -49,9 +49,9 @@ buildPythonPackage rec {
   meta = {
     description = "Citation Style Language (CSL) parser for Python";
     homepage = "https://github.com/citeproc-py/citeproc-py";
-    changelog = "https://github.com/citeproc-py/citeproc-py/releases/tag/v${version}";
+    changelog = "https://github.com/citeproc-py/citeproc-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "csl_unsorted";
   };
-}
+})

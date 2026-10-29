@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsatrace";
   version = "0.0.5";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "hash" = "sha256-pn07qlrRaM153znEviziuKWrkX9cLsNFCujovmE4UUA=";
   };
 
-  installDir = "libexec/${pname}-${version}";
+  installDir = "libexec/${finalAttrs.pname}-${finalAttrs.version}";
 
   makeFlags = [ "INSTALLDIR=$(out)/$(installDir)" ];
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
   };
-}
+})

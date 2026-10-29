@@ -9,12 +9,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mobile-broadband-provider-info";
   version = "20240407";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-ib/v8hX0v/jpw/8uwlJQ/bCA0R6b+lnG/HGYKsAcgUo=";
   };
 
@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = pname; };
+    updateScript = gnome.updateScript { packageName = finalAttrs.pname; };
   };
 
   meta = {
     description = "Mobile broadband service provider database";
     homepage = "https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info";
-    changelog = "https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = lib.licenses.publicDomain;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

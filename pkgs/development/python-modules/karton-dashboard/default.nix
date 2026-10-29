@@ -9,7 +9,7 @@
   prometheus-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-dashboard";
   version = "1.7.0";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-dashboard";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DYfL//i1gJ0ci7jVPtrMKC8j+i5/L8rvmbs8zz6Eq2M=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
     description = "Web application that allows for Karton task and queue introspection";
     mainProgram = "karton-dashboard";
     homepage = "https://github.com/CERT-Polska/karton-dashboard";
-    changelog = "https://github.com/CERT-Polska/karton-dashboard/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/karton-dashboard/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

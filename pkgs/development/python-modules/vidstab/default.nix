@@ -9,13 +9,13 @@
   matplotlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "1.7.4";
   format = "setuptools";
   pname = "vidstab";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hlxKCX4qhSeqi/yWqwvMDSgKiMyT6rzDZTEmj100POE=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

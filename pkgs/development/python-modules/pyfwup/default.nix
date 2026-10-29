@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfwup";
   version = "0.5.3";
 
@@ -17,14 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "pyfwup";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Dy/mO5dWvuuzas9XPY8ibZCuPUP8NGaUVt0j2cvhZrM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   dependencies = [
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.msanft ];
   };
-}
+})

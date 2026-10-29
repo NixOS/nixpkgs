@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "influxdb2-token-manipulator";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "oddlama";
     repo = "influxdb2-token-manipulator";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9glz+TdqvGJgSsbLm4J/fn7kzMC75z74/jxZrEZiooc=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oddlama ];
     mainProgram = "influxdb2-token-manipulator";
   };
-}
+})

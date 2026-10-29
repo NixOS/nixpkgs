@@ -12,7 +12,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiooss2";
   version = "0.2.11";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karajan1001";
     repo = "aiooss2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6tkJG6Jjvo2OaN9cRbs/7ApcrKiZ5tGSPUfugAx7iJU=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for aliyun OSS (Object Storage Service)";
     homepage = "https://github.com/karajan1001/aiooss2";
-    changelog = "https://github.com/karajan1001/aiooss2/blob/${version}/CHANGES.txt";
+    changelog = "https://github.com/karajan1001/aiooss2/blob/${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

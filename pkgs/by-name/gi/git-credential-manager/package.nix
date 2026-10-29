@@ -13,14 +13,14 @@
   withGpgSupport ? true,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "git-credential-manager";
   version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jXBFnXBUQz53doOr9zcfUq3dguA85N7WL0KuFjSIjF8=";
   };
 
@@ -70,4 +70,4 @@ buildDotnetModule rec {
     '';
     mainProgram = "git-credential-manager";
   };
-}
+})

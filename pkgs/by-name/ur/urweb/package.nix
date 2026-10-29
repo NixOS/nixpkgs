@@ -13,12 +13,12 @@
   icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "urweb";
   version = "20200209";
 
   src = fetchurl {
-    url = "https://github.com/urweb/urweb/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/urweb/urweb/releases/download/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "0qh6wcxfk5kf735i5gqwnkdirnnmqhnnpkfz96gz144dgz2i0c5c";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
       lib.maintainers.sheganinans
     ];
   };
-}
+})

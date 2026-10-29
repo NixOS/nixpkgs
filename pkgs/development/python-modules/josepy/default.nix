@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "josepy";
   version = "2.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "josepy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3YzcXdzwf5elkEJeCn4wBb987HTrYM5tT2XfOQIpZ9Q=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "josepy" ];
 
   meta = {
-    changelog = "https://github.com/certbot/josepy/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/certbot/josepy/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "JOSE protocol implementation in Python";
     mainProgram = "jws";
     homepage = "https://github.com/certbot/josepy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

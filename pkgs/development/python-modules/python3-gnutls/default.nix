@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python3-gnutls";
   version = "3.1.10";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-gnutls";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-AdFRF3ZlkkAoSm5rvf/09FSYIo7SsZ38sD2joOLyukA=";
   };
 
@@ -65,4 +65,4 @@ buildPythonPackage rec {
 
     '';
   };
-}
+})

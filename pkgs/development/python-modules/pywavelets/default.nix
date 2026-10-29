@@ -8,7 +8,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywavelets";
   version = "1.10.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyWavelets";
     repo = "pywt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lzf/GVNJjPDd4r5KCddU3E7Ynn1UGrItf+eIt+xQmvo=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Wavelet transform module";
     homepage = "https://github.com/PyWavelets/pywt";
-    changelog = "https://github.com/PyWavelets/pywt/releases/tag/${src.tag}";
+    changelog = "https://github.com/PyWavelets/pywt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
   };
-}
+})

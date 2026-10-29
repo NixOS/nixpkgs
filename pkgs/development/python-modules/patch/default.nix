@@ -4,13 +4,13 @@
   fetchzip,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "1.16";
   format = "setuptools";
   pname = "patch";
 
   src = fetchzip {
-    url = "mirror://pypi/p/${pname}/${pname}-${version}.zip";
+    url = "mirror://pypi/p/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.zip";
     hash = "sha256-DxSmGOvyXRHkUfNcOPK3Kt6Q+HJ+7oM7JV397TcsRdo=";
     stripRoot = false;
   };
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.igsha ];
   };
-}
+})

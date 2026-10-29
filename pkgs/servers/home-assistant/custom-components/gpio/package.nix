@@ -5,7 +5,7 @@
   gpiod,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "raboof";
   domain = "gpio";
   version = "0.0.4";
@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromCodeberg {
     owner = "raboof";
     repo = "ha-gpio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JyyJPI0lbZLJj+016WgS1KXU5rnxUmRMafel4/wKsYk=";
   };
 
@@ -25,4 +25,4 @@ buildHomeAssistantComponent rec {
     maintainers = with lib.maintainers; [ raboof ];
     license = lib.licenses.asl20;
   };
-}
+})

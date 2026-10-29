@@ -11,7 +11,7 @@
   nbformat,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "livelossplot";
   version = "0.5.6";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stared";
     repo = "livelossplot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qC1FBFJyf2IlDIffJ5Xs89WcN/GFA/8maODhc1u2xhA=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

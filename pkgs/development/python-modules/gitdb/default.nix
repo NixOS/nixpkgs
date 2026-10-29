@@ -7,13 +7,13 @@
   smmap,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gitdb";
   version = "4.0.12";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XvcfhV0ZGjMm/PvA1dqDXyaxP7y6YMMsIQkcNJ/9tXE=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Git Object Database";
     homepage = "https://github.com/gitpython-developers/gitdb";
-    changelog = "https://github.com/gitpython-developers/gitdb/releases/tag/${version}";
+    changelog = "https://github.com/gitpython-developers/gitdb/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

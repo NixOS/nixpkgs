@@ -7,12 +7,12 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfcj880dw-cupswrapper";
   version = "1.0.0-0";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf102044/mfcj880dw_cupswrapper_GPL_source_${version}.tar.gz";
+    url = "https://download.brother.com/welcome/dlf102044/mfcj880dw_cupswrapper_GPL_source_${finalAttrs.version}.tar.gz";
     hash = "sha256-vykf4x1kr+rvtbDmBvS6+AxB2AAJ40syt31W91npz5Q=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj880dw_us_eu_as&os=128";
     maintainers = with lib.maintainers; [ _6543 ];
   };
-}
+})

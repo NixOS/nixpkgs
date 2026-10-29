@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clikit";
   version = "0.6.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdispater";
     repo = "clikit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xAsUNhVQBjtSFHyjjnicAKRC3+Tdn3AdGDUYhmOOIdA=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Group of utilities to build beautiful and testable command line interfaces";
     homepage = "https://github.com/sdispater/clikit";
-    changelog = "https://github.com/sdispater/clikit/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sdispater/clikit/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
-}
+})

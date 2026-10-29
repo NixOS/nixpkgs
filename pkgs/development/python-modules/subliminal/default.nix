@@ -38,7 +38,7 @@
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "subliminal";
   version = "2.8.0";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4pM9XHqz87yFeicB6IK7sNzXCdWGlLvT9Dm00e1fMXo=";
   };
 
@@ -104,8 +104,8 @@ buildPythonPackage rec {
     description = "Python library to search and download subtitles";
     mainProgram = "subliminal";
     homepage = "https://github.com/Diaoul/subliminal";
-    changelog = "https://github.com/Diaoul/subliminal/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/Diaoul/subliminal/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "appdaemon";
   version = "4.5.13";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "AppDaemon";
     repo = "appdaemon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uVlrLyj8GZo1T8AKBxpVTPPqUrwxmyMbgaopmEGZiR4=";
   };
 
@@ -44,15 +44,15 @@ python3Packages.buildPythonApplication rec {
 
   # no tests implemented
   checkPhase = ''
-    $out/bin/appdaemon -v | grep -q "${version}"
+    $out/bin/appdaemon -v | grep -q "${finalAttrs.version}"
   '';
 
   meta = {
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
     mainProgram = "appdaemon";
     homepage = "https://github.com/AppDaemon/appdaemon";
-    changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
+    changelog = "https://github.com/AppDaemon/appdaemon/blob/${finalAttrs.version}/docs/HISTORY.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

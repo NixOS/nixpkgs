@@ -11,7 +11,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "angrcli";
   version = "1.3.0";
   pyproject = true;
@@ -19,13 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fmagin";
     repo = "angr-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-egu7jlEk8/i36qQMHztGr959sBt9d5crW8mj6+sKaHI=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version='1.2.0'" "version='${version}'"
+      --replace-fail "version='1.2.0'" "version='${finalAttrs.version}'"
     substituteInPlace tests/test_derefs.py \
       --replace-fail "/bin/ls" "${coreutils}/bin/ls"
 
@@ -75,4 +75,4 @@ buildPythonPackage rec {
       fab
     ];
   };
-}
+})

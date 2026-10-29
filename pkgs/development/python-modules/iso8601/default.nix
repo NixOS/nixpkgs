@@ -8,13 +8,13 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iso8601";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ax04Ke6JIcQwGZjJCfeCn6ntPL2sDTsWry10Ou0bqN8=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple module to parse ISO 8601 dates";
     homepage = "https://pyiso8601.readthedocs.io/";
-    changelog = "https://github.com/micktwomey/pyiso8601/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/micktwomey/pyiso8601/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

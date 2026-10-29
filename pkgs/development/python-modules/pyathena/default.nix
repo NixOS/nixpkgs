@@ -15,13 +15,13 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyathena";
   version = "3.36.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AN2Y/6d/HKMLMLNVXru04vccVdMt2LJKCDioE1k/J94=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
     homepage = "https://github.com/laughingman7743/PyAthena/";
-    changelog = "https://github.com/laughingman7743/PyAthena/releases/tag/v${version}";
+    changelog = "https://github.com/laughingman7743/PyAthena/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

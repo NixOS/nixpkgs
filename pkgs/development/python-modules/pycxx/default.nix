@@ -6,13 +6,13 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycxx";
   version = "7.1.8";
   pyproject = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/cxx/CXX/PyCXX%20V${version}/pycxx-${version}.tar.gz";
+    url = "mirror://sourceforge/cxx/CXX/PyCXX%20V${finalAttrs.version}/pycxx-${finalAttrs.version}.tar.gz";
     hash = "sha256-S5Hh4RQcI/vVA532NcS7bnVjIWhUj1a4POF3GTwMmMY=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

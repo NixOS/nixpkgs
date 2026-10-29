@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urwid-readline";
   version = "0.15.1";
   pyproject = true;
@@ -15,13 +15,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "urwid_readline";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HiMMLzVE/Qw/PR7LXACyfzblxrGYrbMoi3/e/QzqF34=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'version="0.15"' 'version="${version}"'
+      --replace-fail 'version="0.15"' 'version="${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

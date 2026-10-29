@@ -7,7 +7,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typeshed-client";
   version = "2.13.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JelleZijlstra";
     repo = "typeshed_client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-n7iWe4zh2TqJD0Sv5L5BSHqxOcAmsZ8VLNfSOiPte4A=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Retrieve information from typeshed and other typing stubs";
     homepage = "https://github.com/JelleZijlstra/typeshed_client";
-    changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/${src.tag}";
+    changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

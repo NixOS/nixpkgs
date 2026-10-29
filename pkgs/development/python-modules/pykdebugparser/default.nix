@@ -10,7 +10,7 @@
   termcolor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykdebugparser";
   version = "1.2.7";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matan1008";
     repo = "pykdebugparser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-V6WyFsPcjiBUJ+Amc3xk0GwdHzwakRizB/dPnSXT6vo=";
   };
 
@@ -38,11 +38,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/matan1008/pykdebugparser/releases/tag/${src.tag}";
+    changelog = "https://github.com/matan1008/pykdebugparser/releases/tag/${finalAttrs.src.tag}";
     description = "Kdebug events and ktraces parser";
     homepage = "https://github.com/matan1008/pykdebugparser";
     license = lib.licenses.mit;
     mainProgram = "pykdebugparser";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

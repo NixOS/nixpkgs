@@ -17,13 +17,13 @@
   icu,
   zlib,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "undercut-f1";
   version = "4.0.89";
   src = fetchFromGitHub {
     owner = "JustAman62";
     repo = "undercut-f1";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JAyOSoiaV+US6liqfci0gIgULdgwd7o8VtlJZfGPHFc=";
   };
 
@@ -73,13 +73,13 @@ buildDotnetModule rec {
     "-p:DebugType=None"
     "-p:IncludeNativeLibrariesForSelfExtract=true"
     "-p:IncludeAllContentForSelfExtract=true"
-    "-p:OverridePackageVersion=${version}"
+    "-p:OverridePackageVersion=${finalAttrs.version}"
     "-p:PublicRelease=true"
   ];
 
   dotnetPublishFlags = [
     "-p:PublishTrimmed=false"
-    "-p:OverridePackageVersion=${version}"
+    "-p:OverridePackageVersion=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -87,7 +87,7 @@ buildDotnetModule rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   installCheckPhase = ''
-    $out/bin/undercutf1 --version | grep -q "${version}"
+    $out/bin/undercutf1 --version | grep -q "${finalAttrs.version}"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -95,10 +95,10 @@ buildDotnetModule rec {
   meta = {
     description = "Open-source F1 Live Timing TUI client with replay, driver tracker and team-radio transcription";
     homepage = "https://github.com/JustAman62/undercut-f1";
-    changelog = "https://github.com/JustAman62/undercut-f1/releases/tag/v${version}";
+    changelog = "https://github.com/JustAman62/undercut-f1/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ linuxmobile ];
     mainProgram = "undercutf1";
     platforms = lib.platforms.linux;
   };
-}
+})

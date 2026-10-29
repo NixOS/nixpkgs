@@ -9,7 +9,7 @@
   setuptools,
   setuptools-scm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geoarrow-c";
   version = "0.3.1";
   pyproject = true;
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "geoarrow-c";
     owner = "geoarrow";
-    tag = "geoarrow-c-python-${version}";
+    tag = "geoarrow-c-python-${finalAttrs.version}";
     hash = "sha256-cSvFCIMHuwDh83DT3R3V86S+RjPzhqcnTaFXqKL43Ns=";
   };
 
-  sourceRoot = "${src.name}/python/geoarrow-c";
+  sourceRoot = "${finalAttrs.src.name}/python/geoarrow-c";
 
   preConfigure = ''
     export CFLAGS="-I../../src/src/geoarrow"
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

@@ -10,13 +10,13 @@
   siphash24,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytools";
   version = "2026.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Jg4NiMmpA8Zc/jT76Bh2T0Sj+W5yLho2Rc5NWWrdIrE=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Miscellaneous Python lifesavers";
     homepage = "https://github.com/inducer/pytools/";
-    changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/pytools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

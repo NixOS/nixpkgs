@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uart-devices";
   version = "0.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "uart-devices";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vBwQXeXw9y7eETtlC4dcqGytIgrAm7iomnvoaxhl6JI=";
   };
 
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   meta = {
     description = "UART Devices for Linux";
     homepage = "https://github.com/bdraco/uart-devices";
-    changelog = "https://github.com/bdraco/uart-devices/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/uart-devices/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };
-}
+})

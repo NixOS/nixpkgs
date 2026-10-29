@@ -18,14 +18,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-powermanagement";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-powermanagement";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pHQp/bXeI+yGQJ2rgsP8H7ISpCqcGG+/F74Otz+vJpg=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

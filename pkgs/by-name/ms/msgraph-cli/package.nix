@@ -5,14 +5,14 @@
   fetchFromGitHub,
   libsecret,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "msgraph-cli";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bpdxzVlQWQLNYTZHN25S6qa3NKHhDc+xV6NvzSNMVnQ=";
   };
 
@@ -37,4 +37,4 @@ buildDotnetModule rec {
       "x86_64-linux"
     ];
   };
-}
+})

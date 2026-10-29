@@ -9,7 +9,7 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-httpserver";
   version = "1.1.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "csernazs";
     repo = "pytest-httpserver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6GU7LwCy5BacgdT1owrzN1NYazRE4zHSVl4hxPhrYSo=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "HTTP server for pytest to test HTTP clients";
     homepage = "https://www.github.com/csernazs/pytest-httpserver";
-    changelog = "https://github.com/csernazs/pytest-httpserver/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/csernazs/pytest-httpserver/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

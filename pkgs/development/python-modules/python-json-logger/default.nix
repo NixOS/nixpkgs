@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-json-logger";
   version = "4.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nhairs";
     repo = "python-json-logger";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YFtM+YWXDCaipqhQntdGeGbTmWO5XMGfpWhgQwicxFQ=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
-}
+})

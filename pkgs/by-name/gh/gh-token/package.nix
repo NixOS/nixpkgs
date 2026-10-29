@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-token";
   version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "Link-";
     repo = "gh-token";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pjOGEd2c2yRua3qOTEKuTg89YbVBTAIvvZ/Rd8NFesI=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ norbertwnuk ];
     mainProgram = "gh-token";
   };
-}
+})

@@ -7,14 +7,14 @@
   ipyvue,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipyvuetify";
   version = "1.11.3";
   pyproject = true;
 
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-NYCvp22a3UrgTMt/1X1KDPA6JhcFdC5xN97z67Zaxx0=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

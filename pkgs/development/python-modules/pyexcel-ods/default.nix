@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyexcel-ods";
   version = "0.6.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyexcel";
     repo = "pyexcel-ods";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wptjCSi56hotmiIE0TrLY7jsCHKwDR+a7d89sAQWBHg=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

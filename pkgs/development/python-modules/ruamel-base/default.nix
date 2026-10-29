@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruamel-base";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "ruamel.base";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-wEEzOg8PAM1lk+s2qoOrsannVE6DunpCqnrHR2zuXPM=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

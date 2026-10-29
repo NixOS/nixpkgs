@@ -6,7 +6,7 @@
   qt6,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "inkcut";
   version = "2.1.7";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "inkcut";
     repo = "inkcut";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-inB3yR4ykepN5rYzyPlXW/J/HuSxGs6EDhshpa7n7o8=";
   };
 
@@ -82,4 +82,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ raboof ];
   };
-}
+})

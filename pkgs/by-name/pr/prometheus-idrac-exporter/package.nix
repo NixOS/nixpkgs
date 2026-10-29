@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "idrac_exporter";
   version = "unstable-2023-06-29";
 
@@ -30,10 +30,10 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) idrac; };
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Simple iDRAC exporter for Prometheus";
     mainProgram = "idrac_exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ codec ];
   };
-}
+})

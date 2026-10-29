@@ -11,7 +11,7 @@
   zstd-c,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyzstd";
   version = "0.19.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rogdham";
     repo = "pyzstd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1oUqnZCBJYu8haFIQ+T2KaSQaa1xnZyJHLzOQg4Fdw8=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings to Zstandard (zstd) compression library";
     homepage = "https://pyzstd.readthedocs.io";
-    changelog = "https://github.com/Rogdham/pyzstd/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Rogdham/pyzstd/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       MattSturgeon
@@ -71,4 +71,4 @@ buildPythonPackage rec {
       PopeRigby
     ];
   };
-}
+})

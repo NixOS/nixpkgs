@@ -18,7 +18,7 @@
   trakit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgsrip";
   version = "0.1.12";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "pgsrip";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8UzElhMdhjZERdogtAbkcfw67blk9lOTQ09vjF5SXm4=";
   };
 
@@ -56,9 +56,9 @@ buildPythonPackage rec {
   meta = {
     description = "Rip your PGS subtitles";
     homepage = "https://github.com/ratoaq2/pgsrip";
-    changelog = "https://github.com/ratoaq2/pgsrip/releases/tag/${version}";
+    changelog = "https://github.com/ratoaq2/pgsrip/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "pgsrip";
     maintainers = with lib.maintainers; [ sophronesis ];
   };
-}
+})

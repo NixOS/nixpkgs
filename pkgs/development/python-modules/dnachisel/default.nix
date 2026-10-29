@@ -15,7 +15,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dnachisel";
   version = "3.2.16";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F+G7dwehUCHYKSGsLQR4OZg2NQ4677XMlN6jOcmz8No=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";
     description = "Optimize DNA sequences under constraints";
-    changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/${src.tag}";
+    changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

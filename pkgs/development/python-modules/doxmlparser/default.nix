@@ -5,12 +5,12 @@
   setuptools,
   six,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   format = "setuptools";
   inherit (doxygen) version src;
   pname = "doxmlparser";
 
-  sourceRoot = "${src.name}/addon/doxmlparser";
+  sourceRoot = "${finalAttrs.src.name}/addon/doxmlparser";
 
   build-system = [ setuptools ];
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
       ;
     description = "Library to parse the XML output produced by doxygen";
   };
-}
+})

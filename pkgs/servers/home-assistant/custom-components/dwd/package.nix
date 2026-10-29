@@ -5,7 +5,7 @@
   defusedxml,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "hg1337";
   domain = "dwd";
   version = "2026.10.0";
@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "hg1337";
     repo = "homeassistant-dwd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IvOPJ4K3KYwG1Apijj2LxU4zzYv1xE2M1KC0YOjdi1Y=";
   };
 
@@ -31,4 +31,4 @@ buildHomeAssistantComponent rec {
       emilylange
     ];
   };
-}
+})

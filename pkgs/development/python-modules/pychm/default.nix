@@ -5,13 +5,13 @@
   chmlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pychm";
   version = "0.8.6";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JmBv7B4wz3UGx6+pQ0YMMejayH81t/F49DdXTWVM9nI=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ alexshpilkin ];
   };
-}
+})

@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "annoy";
   version = "1.17.3";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spotify";
     repo = "annoy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oJHW4lULRun2in35pBGOKg44s5kgLH2BKiMOzVu4rf4=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Approximate Nearest Neighbors in C++/Python optimized for memory usage and loading/saving to disk";
     homepage = "https://github.com/spotify/annoy";
-    changelog = "https://github.com/spotify/annoy/releases/tag/v${version}";
+    changelog = "https://github.com/spotify/annoy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ timokau ];
     badPlatforms = [
@@ -62,4 +62,4 @@ buildPythonPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

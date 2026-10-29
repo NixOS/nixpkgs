@@ -8,7 +8,7 @@
   tesseract,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fastflix";
   version = "6.2.1";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "FastFlix";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vlMS3Grqp6Ys1++711lwRuFC4LhcyrHtU/S3MGB4riY=";
   };
 
@@ -115,10 +115,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Simple and friendly GUI for encoding videos";
     homepage = "https://github.com/cdgriffith/FastFlix";
-    changelog = "https://github.com/cdgriffith/FastFlix/releases/tag/${version}";
+    changelog = "https://github.com/cdgriffith/FastFlix/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sophronesis ];
     platforms = lib.platforms.linux;
     mainProgram = "fastflix";
   };
-}
+})

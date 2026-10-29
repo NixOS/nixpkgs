@@ -13,7 +13,7 @@
   asynctest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyps4-2ndscreen";
   version = "1.3.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ktnrg45";
     repo = "pyps4-2ndscreen";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AXU9WJ7kT/0ev1Cn+CYhEieR7IM5VXebxQYWUS8bdds=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "PS4 2nd Screen Python Library";
     homepage = "https://github.com/ktnrg45/pyps4-2ndscreen";
-    changelog = "https://github.com/ktnrg45/pyps4-2ndscreen/releases/tag/${version}";
+    changelog = "https://github.com/ktnrg45/pyps4-2ndscreen/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

@@ -9,7 +9,7 @@
   setuptools,
   unicodeit,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unicodeit";
   version = "0.7.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "svenkreiss";
     repo = "unicodeit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NeR3fGDbOzwyq85Sep9KuUiARCvefN6l5xcb8D/ntHE=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ nicoo ];
   };
-}
+})

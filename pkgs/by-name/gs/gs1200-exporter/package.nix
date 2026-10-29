@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gs1200-exporter";
   version = "2.11.15";
   __structuredAttrs = true;
@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "robinelfrink";
     repo = "gs1200-exporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ms4MtY9HzbtPgDtq2cEOsm9s4yrQT57H+/XtRM1fcKc=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ DerGrumpf ];
     mainProgram = "gs1200-exporter";
   };
-}
+})

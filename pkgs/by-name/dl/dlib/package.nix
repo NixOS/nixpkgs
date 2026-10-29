@@ -19,14 +19,14 @@
   cudaPackages,
   python3Packages,
 }@inputs:
-(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
+(if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation (finalAttrs: {
   pname = "dlib";
   version = "20.0.1";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Obu8054M28yoC800+p+O5sYQzm7dd2VfcRtHmitdDIk=";
   };
 
@@ -100,4 +100,4 @@
     maintainers = with lib.maintainers; [ christopherpoole ];
     platforms = lib.platforms.unix;
   };
-}
+})

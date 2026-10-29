@@ -6,14 +6,14 @@
   wokkel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sat-tmp";
   version = "0.8.0";
   pyproject = true;
 
   src = fetchhg {
     url = "https://repos.goffi.org/sat_tmp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CEy0/eaPK0nHzsiJq3m7edNyxzAhfwBaNhFhLS0azOw=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.ethancedwards8 ];
     teams = [ lib.teams.ngi ];
   };
-}
+})

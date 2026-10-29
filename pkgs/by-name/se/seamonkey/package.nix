@@ -23,7 +23,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seamonkey";
   version = "2.53.24";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   # Upstream requires highly deprecated build tools to compile from source
   src = fetchurl {
-    url = "https://archive.seamonkey-project.org/releases/${version}/linux-x86_64/en-US/seamonkey-${version}.en-US.linux-x86_64.tar.bz2";
+    url = "https://archive.seamonkey-project.org/releases/${finalAttrs.version}/linux-x86_64/en-US/seamonkey-${finalAttrs.version}.en-US.linux-x86_64.tar.bz2";
     sha256 = "sha256-Y/vh0PXKNbsijkfrWGqBxXh96/vCeiQhKeqeEzQp2Cw=";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.redhood ];
     mainProgram = "seamonkey";
   };
-}
+})

@@ -10,7 +10,7 @@
   bcrypt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pwdlib";
   version = "0.3.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "pwdlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4fqdgeDtPZztaR2SzwpYjv3WjXcf/9qHKzNwm/muXm8=";
   };
 
@@ -41,9 +41,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Modern password hashing for Python";
-    changelog = "https://github.com/frankie567/pwdlib/releases/tag/v${version}";
+    changelog = "https://github.com/frankie567/pwdlib/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/frankie567/pwdlib";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

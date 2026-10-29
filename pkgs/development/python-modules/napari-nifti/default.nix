@@ -6,7 +6,7 @@
   medvol,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "napari-nifti";
   version = "0.0.19";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "napari-nifti";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pj2olQ0znppG0xE/fpFNIGXx0nzN+lAgGdEOtrzS7Vc=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Napari plugin for reading and writing NIFTI files";
     homepage = "https://github.com/MIC-DKFZ/napari-nifti";
-    changelog = "https://github.com/MIC-DKFZ/napari-nifti/releases/tag/v${version}";
+    changelog = "https://github.com/MIC-DKFZ/napari-nifti/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

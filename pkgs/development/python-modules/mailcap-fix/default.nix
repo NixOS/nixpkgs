@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mailcap-fix";
   version = "1.0.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ETwLNgkawLgYHDPyzUkFKA4bsxY4PTw/yumMbfCUkQo=";
   };
 
@@ -19,4 +19,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/michael-lazar/mailcap_fix";
     license = lib.licenses.unlicense;
   };
-}
+})

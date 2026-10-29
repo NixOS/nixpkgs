@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGo127Module rec {
+buildGo127Module (finalAttrs: {
   pname = "omnictl";
   version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "omni";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SwjNnZx+RXRu3nwhg4Tv9yZwDnOrwc8c9bHSbgAGJgg=";
   };
 
@@ -46,4 +46,4 @@ buildGo127Module rec {
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [ raylas ];
   };
-}
+})

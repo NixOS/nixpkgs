@@ -11,14 +11,14 @@
   stdenv,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "pablodraw";
   version = "3.1.14-beta";
 
   src = fetchFromGitHub {
     owner = "cwensley";
     repo = "pablodraw";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-p2YeWC3ZZOI5zDpgDmEX3C5ByAAjLxJ0CqFAqKeoJ0Q=";
   };
 
@@ -75,4 +75,4 @@ buildDotnetModule rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Eto.Platform.Mac64 not found in nugetSource
   };
-}
+})

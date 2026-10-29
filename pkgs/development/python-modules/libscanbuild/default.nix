@@ -7,7 +7,7 @@
 let
   inherit (llvmPackages) clang-unwrapped;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libscanbuild";
   inherit (clang-unwrapped) version;
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "Captures all child process creation and log information about it";
-    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${version}/clang/tools/scan-build-py/lib/libscanbuild";
+    homepage = "https://github.com/llvm/llvm-project/tree/llvmorg-${finalAttrs.version}/clang/tools/scan-build-py/lib/libscanbuild";
     license = with lib.licenses; [
       asl20
       llvm-exception
     ];
     maintainers = [ ];
   };
-}
+})

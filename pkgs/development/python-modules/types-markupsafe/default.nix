@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-markupsafe";
   version = "1.1.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types-MarkupSafe";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hbOocmg9Aq6jpawqjvWQGTw0QJIDL1hFcof7+OBnEbE=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

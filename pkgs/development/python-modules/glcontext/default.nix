@@ -8,7 +8,7 @@
   libx11,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glcontext";
   version = "3.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "glcontext";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-9Tib0srQDm40ERDRGYFuaSEA9+sdUECWILtBWmZccOQ=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
-}
+})

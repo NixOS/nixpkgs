@@ -8,7 +8,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kajiki";
   version = "1.0.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = "kajiki";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bAgUMA9PlwsO7FRjwiKCsFffLWNU+Go1DToblmyWprk=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
     description = "Module provides fast well-formed XML templates";
     mainProgram = "kajiki";
     homepage = "https://github.com/nandoflorestan/kajiki";
-    changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/${src.tag}";
+    changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

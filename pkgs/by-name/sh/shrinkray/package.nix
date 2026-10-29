@@ -10,7 +10,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "shrinkray";
   version = "26.4.14.0";
   pyproject = true;
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "DRMacIver";
     repo = "shrinkray";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zNOWBpj39R9x/wQ3fAKMzHg61IFGh8aeHBeVsXxXDGM=";
   };
   postPatch = ''
@@ -92,4 +92,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ lib.maintainers.andersk ];
     mainProgram = "shrinkray";
   };
-}
+})

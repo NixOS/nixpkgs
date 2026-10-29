@@ -6,13 +6,13 @@
   unrar,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unrardll";
   version = "0.1.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-4QZ/4nu03iBO+PNpLyPZPF07QpL3iyksb8fcT3V0n3Y=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})

@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arcam-fmj";
   version = "3.0.1.post1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "arcam_fmj";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hq1+RRF7ZQndsFNw+A6gLpLS2OCuMmjnCoYopSk6XiM=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
     description = "Python library for speaking to Arcam receivers";
     mainProgram = "arcam-fmj";
     homepage = "https://github.com/elupus/arcam_fmj";
-    changelog = "https://github.com/elupus/arcam_fmj/releases/tag/${src.tag}";
+    changelog = "https://github.com/elupus/arcam_fmj/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

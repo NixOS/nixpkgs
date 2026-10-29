@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrfc3339";
   version = "2.1.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kurtraschke";
     repo = "pyRFC3339";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pNtv60ecJ7kceS+dDMuKVCQGARf0SbNVBLqqTIzHDj0=";
   };
 
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/kurtraschke/pyRFC3339/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/kurtraschke/pyRFC3339/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Generate and parse RFC 3339 timestamps";
     homepage = "https://github.com/kurtraschke/pyRFC3339";
     license = lib.licenses.mit;
   };
-}
+})

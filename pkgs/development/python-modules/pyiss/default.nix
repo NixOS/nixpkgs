@@ -9,7 +9,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyiss";
   version = "1.0.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HydrelioxGitHub";
     repo = "pyiss";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bhxeu/06B6ba9RB9p++tRWN/Dp3KUel9DN166HryP1E=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to access International Space Station location and data";
     homepage = "https://github.com/HydrelioxGitHub/pyiss";
-    changelog = "https://github.com/HydrelioxGitHub/pyiss/releases/tag/${version}";
+    changelog = "https://github.com/HydrelioxGitHub/pyiss/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

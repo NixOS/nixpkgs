@@ -14,7 +14,7 @@
   ffmpeg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "disnake";
   version = "2.11.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DisnakeDev";
     repo = "disnake";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pwhUX5lzqSPik/rPsT42M3AMjzWWeqFN+0mVHA84cCo=";
   };
 
@@ -70,8 +70,8 @@ buildPythonPackage rec {
   meta = {
     description = "API wrapper for Discord written in Python";
     homepage = "https://disnake.dev/";
-    changelog = "https://github.com/DisnakeDev/disnake/blob/${src.tag}/docs/whats_new.rst";
+    changelog = "https://github.com/DisnakeDev/disnake/blob/${finalAttrs.src.tag}/docs/whats_new.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ infinidoge ];
   };
-}
+})

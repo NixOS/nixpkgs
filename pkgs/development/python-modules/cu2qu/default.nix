@@ -20,12 +20,12 @@ let
   pname = "cu2qu";
   version = "1.6.7.post2";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit pname version;
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HfVi2ZvWBZImCI9ENwK/Uc/djMY2I/IxN0WaeNe/WAg=";
     extension = "zip";
   };
@@ -45,11 +45,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/googlefonts/cu2qu/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/cu2qu/releases/tag/v${finalAttrs.version}";
     description = "Cubic-to-quadratic bezier curve conversion";
     mainProgram = "cu2qu";
     homepage = "https://github.com/googlefonts/cu2qu";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

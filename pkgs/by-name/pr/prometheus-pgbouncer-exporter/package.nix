@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pgbouncer-exporter";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "pgbouncer_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-P82ek6+OcvRd1dIuqkfqU4DEmOtHVkSfN5atLansCK4=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ _1000101 ];
     platforms = lib.platforms.linux;
   };
-}
+})

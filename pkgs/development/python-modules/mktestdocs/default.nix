@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mktestdocs";
   version = "0.2.5";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koaning";
     repo = "mktestdocs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-OiOkU/qfxeLbCT1QywA1rGSwe9Ja8tENTmBo93vo0vc=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Run pytest against markdown files/docstrings";
     homepage = "https://github.com/koaning/mktestdocs";
-    changelog = "https://github.com/koaning/mktestdocs/releases/tag/${version}";
+    changelog = "https://github.com/koaning/mktestdocs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

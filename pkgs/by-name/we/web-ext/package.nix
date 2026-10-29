@@ -6,14 +6,14 @@
   web-ext,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "web-ext";
   version = "10.8.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "web-ext";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GtBl7LNg/f2vSLsVW8/eyvmktyCunt/xq/AIk69XOmw=";
   };
 
@@ -21,7 +21,7 @@ buildNpmPackage rec {
 
   npmBuildFlags = [ "--production" ];
 
-  passthru.tests.help = runCommand "${pname}-tests" { } ''
+  passthru.tests.help = runCommand "${finalAttrs.pname}-tests" { } ''
     ${web-ext}/bin/web-ext --help
     touch $out
   '';
@@ -33,4 +33,4 @@ buildNpmPackage rec {
     mainProgram = "web-ext";
     maintainers = [ ];
   };
-}
+})

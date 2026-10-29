@@ -11,11 +11,11 @@ let
   version = "6.4.1";
   tagVersion = lib.replaceStrings [ "." ] [ "_" ] version;
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iscc";
   inherit version;
   src = fetchurl {
-    url = "https://github.com/jrsoftware/issrc/releases/download/is-${tagVersion}/innosetup-${version}.exe";
+    url = "https://github.com/jrsoftware/issrc/releases/download/is-${tagVersion}/innosetup-${finalAttrs.version}.exe";
     hash = "sha256-9Bdg4fGuFdIIm7arFi4hcguSrnUG7XBmezkgAGPWjjQ=";
   };
   nativeBuildInputs = [
@@ -69,4 +69,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "iscc";
     platforms = wineWow64Packages.stable.meta.platforms;
   };
-}
+})

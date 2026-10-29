@@ -5,11 +5,11 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "antlr";
   version = "3.4";
   src = fetchurl {
-    url = "https://www.antlr3.org/download/antlr-${version}-complete.jar";
+    url = "https://www.antlr3.org/download/antlr-${finalAttrs.version}-complete.jar";
     sha256 = "1xqbam8vf04q5fasb0m2n1pn5dbp2yw763sj492ncq04c5mqcglx";
   };
 
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/{lib/antlr,bin}
-    cp "$src" "$out/lib/antlr/antlr-${version}-complete.jar"
+    cp "$src" "$out/lib/antlr/antlr-${finalAttrs.version}-complete.jar"
 
     echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
-    echo "'${jre}/bin/java' -cp '$out/lib/antlr/antlr-${version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
+    echo "'${jre}/bin/java' -cp '$out/lib/antlr/antlr-${finalAttrs.version}-complete.jar' -Xms200M -Xmx400M org.antlr.Tool \"\$@\"" >> "$out/bin/antlr"
 
     chmod a+x "$out/bin/antlr"
     ln -s "$out/bin/antlr"{,3}
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

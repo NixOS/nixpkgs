@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omemo-dr";
   version = "1.2.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "gajim";
     repo = "omemo-dr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8+uBO7Nl6YcEwthWmChqCTLvUelF8QJl+dHzkqbPVqM=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "OMEMO Double Ratchet";
     homepage = "https://gitlab.com/gajim/omemo-dr/";
-    changelog = "https://gitlab.com/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/gajim/omemo-dr/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ haansn08 ];
   };
-}
+})

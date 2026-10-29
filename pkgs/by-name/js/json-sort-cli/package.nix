@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "json-sort-cli";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "tillig";
     repo = "json-sort-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KQHKTDZJpOmD4PTWdeGUtLAqgDfRzFGBXMIgrCIaLSk=";
   };
 
@@ -37,4 +37,4 @@ buildNpmPackage rec {
     inherit (nodejs.meta) platforms;
     mainProgram = "json-sort";
   };
-}
+})

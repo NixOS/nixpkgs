@@ -14,7 +14,7 @@
   cachetools,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "steam";
   version = "1.4.4";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "steam";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OY04GsX3KMPvpsQl8sUurzFyJu+JKpES8B0iD6Z5uyw=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
       adda
     ];
   };
-}
+})

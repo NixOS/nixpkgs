@@ -8,7 +8,7 @@
   lxml-html-clean,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "justext";
   version = "3.0.2";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miso-belica";
     repo = "jusText";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/7wp41jz/5nUFqZNg4O7yF2+eE+awAEXp6dhD+Loc0U=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Heuristic based boilerplate removal tool";
     homepage = "https://github.com/miso-belica/jusText";
-    changelog = "https://github.com/miso-belica/jusText/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/miso-belica/jusText/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jokatzke ];
   };
-}
+})

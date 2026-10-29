@@ -5,14 +5,14 @@
   dotnetCorePackages,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "gh-gei";
   version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "gh-gei";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-63FgBr6eJCcyvzRIjT8Mzq9PdvlEYDyyehHWG80XxK8=";
   };
 
@@ -27,4 +27,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ lafrenierejm ];
     mainProgram = "gei";
   };
-}
+})

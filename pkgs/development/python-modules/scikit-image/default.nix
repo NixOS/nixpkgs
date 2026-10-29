@@ -29,7 +29,7 @@
 
 let
   installedPackageRoot = "${placeholder "out"}/${python.sitePackages}";
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "scikit-image";
     version = "0.26.0";
     pyproject = true;
@@ -37,7 +37,7 @@ let
     src = fetchFromGitHub {
       owner = "scikit-image";
       repo = "scikit-image";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-VpvlG2ECbq+FWLZ4RfdbbR3V6Fbw0RIvnVp+w0Rp+8o=";
     };
 
@@ -45,7 +45,7 @@ let
       patchShebangs src/skimage/_build_utils/{version,cythoner}.py
 
       substituteInPlace src/skimage/_build_utils/version.py \
-        --replace-fail "version = version_from_init()" "version = \"${version}\""
+        --replace-fail "version = version_from_init()" "version = \"${finalAttrs.version}\""
     '';
 
     build-system = [
@@ -156,10 +156,10 @@ let
     meta = {
       description = "Image processing routines for SciPy";
       homepage = "https://scikit-image.org";
-      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${src.tag}";
+      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ yl3dy ];
     };
-  };
+  });
 in
 self

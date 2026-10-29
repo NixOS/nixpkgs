@@ -25,7 +25,7 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reproject";
   version = "0.21.0";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "reproject";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IuGVipAb4x63U2k9tNHhps5Gbk+3Hi/1ZkeMTZ/vaiU=";
   };
 
@@ -84,8 +84,8 @@ buildPythonPackage rec {
     description = "Reproject astronomical images";
     downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
-    changelog = "https://github.com/astropy/reproject/releases/tag/${src.tag}";
+    changelog = "https://github.com/astropy/reproject/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

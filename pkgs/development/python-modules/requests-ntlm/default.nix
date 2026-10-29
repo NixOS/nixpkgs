@@ -8,7 +8,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-ntlm";
   version = "1.3.0";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "requests_ntlm";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-spzCRiYj3/35uIxD4YDMtzW0AHIopUIiDogsWK5Wxmg=";
   };
 
@@ -36,9 +36,9 @@ buildPythonPackage rec {
   meta = {
     description = "HTTP NTLM authentication support for python-requests";
     homepage = "https://github.com/requests/requests-ntlm";
-    changelog = "https://github.com/requests/requests-ntlm/releases/tag/v${version}";
+    changelog = "https://github.com/requests/requests-ntlm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

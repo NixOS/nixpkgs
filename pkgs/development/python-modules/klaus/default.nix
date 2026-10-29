@@ -15,7 +15,7 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "klaus";
   version = "3.0.1";
   format = "setuptools";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = "klaus";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GflSDhBmMsQ34o3ApraEJ6GmlXXP2kK6WW3lsfr6b7g=";
   };
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

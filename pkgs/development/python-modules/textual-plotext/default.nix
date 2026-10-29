@@ -7,7 +7,7 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-plotext";
   version = "1.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # GitHub is missing tags: https://github.com/Textualize/textual-plotext/issues/18
   src = fetchPypi {
     pname = "textual_plotext";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-g29TozFnVmCeGUEpo1wodWOOeVjCYfVB4KeU98mAEb4=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andersk ];
   };
-}
+})

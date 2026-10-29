@@ -10,7 +10,7 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyarr";
   version = "5.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "totaldebug";
     repo = "pyarr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yvlDnAjmwDNdU1SWHGVrmoD3WHwrNt7hXoNNPo1hm1w=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for Servarr API's (Sonarr, Radarr, Readarr, Lidarr)";
     homepage = "https://github.com/totaldebug/pyarr";
-    changelog = "https://github.com/totaldebug/pyarr/releases/tag/v${version}";
+    changelog = "https://github.com/totaldebug/pyarr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-scheduler";
   version = "7.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_scheduler";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hzabrRKnOzxk2e0/HlJvS7QvWnibgLfqn8EW+vsFH6U=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Scheduler Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-scheduler_7.0.0/sdk/scheduler/azure-mgmt-scheduler/CHANGELOG.md";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-scheduler_${version}/sdk/scheduler/azure-mgmt-scheduler/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-scheduler_${finalAttrs.version}/sdk/scheduler/azure-mgmt-scheduler/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

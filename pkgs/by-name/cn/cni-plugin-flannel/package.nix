@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cni-plugin-flannel";
   version = "1.9.1-flannel3";
 
   src = fetchFromGitHub {
     owner = "flannel-io";
     repo = "cni-plugin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-lYn9qDmUn8g3nnD4wQqyzKjd/lPXqoER5nZuY0sVK0s=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X main.Commit=${version}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X main.Commit=${finalAttrs.version}"
     "-X main.Program=flannel"
   ];
 
@@ -49,4 +49,4 @@ buildGoModule rec {
       antoineco
     ];
   };
-}
+})

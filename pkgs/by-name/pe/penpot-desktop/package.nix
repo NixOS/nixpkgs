@@ -17,14 +17,14 @@ let
   nodejs = nodejs_24;
   electron = electron_42;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "penpot-desktop";
   version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "author-more";
     repo = "penpot-desktop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-V/JqrEkag6tVcq46wqLdheJqSAFmfeEVxueIgeuyToA=";
   };
 
@@ -97,7 +97,7 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/author-more/penpot-desktop/releases/tag/v${version}";
+    changelog = "https://github.com/author-more/penpot-desktop/releases/tag/v${finalAttrs.version}";
     inherit description;
     homepage = "https://github.com/author-more/penpot-desktop";
     license = lib.licenses.agpl3Only;
@@ -106,4 +106,4 @@ buildNpmPackage rec {
     badPlatforms = lib.platforms.darwin;
     mainProgram = "penpot-desktop";
   };
-}
+})

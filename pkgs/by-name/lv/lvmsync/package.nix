@@ -7,9 +7,9 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lvmsync";
-  version = (import ./gemset.nix).${pname}.version;
+  version = (import ./gemset.nix).${finalAttrs.pname}.version;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       env = bundlerEnv {
-        name = "${pname}-${version}-gems";
+        name = "${finalAttrs.pname}-${finalAttrs.version}-gems";
         ruby = ruby;
         gemfile = ./Gemfile;
         lockfile = ./Gemfile.lock;
@@ -43,5 +43,4 @@ stdenv.mkDerivation rec {
       nicknovitski
     ];
   };
-
-}
+})

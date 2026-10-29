@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-freezegun";
   version = "0.4.2";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ktosiek";
     repo = "pytest-freezegun";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Wl2LxFdVY2xMSWK2+kGLyfntQKblNMkQDpqsAeC6hIE=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mic92 ];
   };
-}
+})

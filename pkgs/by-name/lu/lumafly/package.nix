@@ -11,14 +11,14 @@
   makeDesktopItem,
   nix-update-script,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "lumafly";
   version = "3.3.0.0";
 
   src = fetchFromGitHub {
     owner = "TheMulhima";
     repo = "lumafly";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GVPMAwxbq9XlKjMKd9G5yUol42f+6lSyHukN7NMCVDA=";
   };
 
@@ -75,4 +75,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ rohanssrao ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -14,7 +14,7 @@ let
   inherit (pkgs) bash git less;
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "icdiff";
   version = "2.0.10";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeffkaufman";
     repo = "icdiff";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-7/EvuHNWE9kdb35TFuqT8ShjyciodsRNkBMG0WvTy1c=";
   };
 
@@ -58,9 +58,9 @@ buildPythonPackage rec {
   meta = {
     description = "Improved colorized diff";
     homepage = "https://github.com/jeffkaufman/icdiff";
-    changelog = "https://github.com/jeffkaufman/icdiff/releases/tag/release-${version}/CHANGELOG.md";
+    changelog = "https://github.com/jeffkaufman/icdiff/releases/tag/release-${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.psfl;
     mainProgram = "icdiff";
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

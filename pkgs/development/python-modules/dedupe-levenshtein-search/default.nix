@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dedupe-levenshtein-search";
   version = "1.4.5";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "Levenshtein_search";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YhsZA28H4OUkQEBtJ+9OXJld4Z/PJbOPqAQQ9qaXSjk=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

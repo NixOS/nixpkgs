@@ -13,7 +13,7 @@
   pytest-timeout,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "dermotduffy";
   domain = "hass_web_proxy";
   version = "0.0.3";
@@ -21,7 +21,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = "hass-web-proxy-integration";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qtiea0L0Zw0CtrUpuPjS/DuBzlV61v6K4SARzHGGgUY=";
   };
 
@@ -52,10 +52,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/dermotduffy/hass-web-proxy-integration/releases/tag/${src.tag}";
+    changelog = "https://github.com/dermotduffy/hass-web-proxy-integration/releases/tag/${finalAttrs.src.tag}";
     description = "Home Assistant Web Proxy";
     homepage = "https://github.com/dermotduffy/hass-web-proxy-integration";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

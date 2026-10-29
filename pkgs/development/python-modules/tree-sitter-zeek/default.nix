@@ -6,7 +6,7 @@
   tree-sitter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tree-sitter-zeek";
   version = "0.2.16";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "tree-sitter-zeek";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-khode6gx0ZAOyD8Q3Rche9F1S2+0FGGNhos+rTiKQF0=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
       mdaniels5757
     ];
   };
-}
+})

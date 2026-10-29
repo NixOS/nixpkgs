@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onecache";
   version = "0.8.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "onecache";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jhyszGKzmMdtPfnjc3VllfF6Zd0MkV66CpL6HiAof/A=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "onecache" ];
 
   meta = {
-    changelog = "https://github.com/sonic182/onecache/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sonic182/onecache/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Python LRU and TTL cache for sync and async code";
     license = lib.licenses.mit;
     homepage = "https://github.com/sonic182/onecache";
     maintainers = with lib.maintainers; [ geraldog ];
   };
-}
+})

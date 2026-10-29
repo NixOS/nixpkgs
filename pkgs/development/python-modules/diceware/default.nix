@@ -7,13 +7,13 @@
   fetchpatch2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diceware";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-VLaQgJ8MVqswhaGOFaDDgE1KDRJ/OK7wtc9fhZ0PZjk=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
     description = "Generates passphrases by concatenating words randomly picked from wordlists";
     mainProgram = "diceware";
     homepage = "https://github.com/ulif/diceware";
-    changelog = "https://github.com/ulif/diceware/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/ulif/diceware/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ asymmetric ];
   };
-}
+})

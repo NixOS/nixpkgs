@@ -8,7 +8,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-pwa";
   version = "2.0.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "silviolleite";
     repo = "django-pwa";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EAjDK3rkjoPw8jyVVZdhMNHmTqr0/ERiMwGMxmVbsls=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django app to include a manifest.json and Service Worker instance to enable progressive web app behavior";
     homepage = "https://github.com/silviolleite/django-pwa";
-    changelog = "https://github.com/silviolleite/django-pwa/releases/tag/${src.tag}";
+    changelog = "https://github.com/silviolleite/django-pwa/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

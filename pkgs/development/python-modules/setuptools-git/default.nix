@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-git";
   version = "1.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "msabramo";
     repo = "setuptools-git";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dbQ15y62nanuWgh2puLYSio391Ja3SF+HrafvTBVNbk=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/msabramo/setuptools-git";
     license = lib.licenses.bsd3;
   };
-}
+})

@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "online-judge-tools";
   version = "12.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "oj";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m6V4Sq3yU/KPnbpA0oCLI/qaSrAPA6TutcBL5Crb/Cc=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sei40kr ];
   };
-}
+})

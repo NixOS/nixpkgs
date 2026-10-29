@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tendo";
   version = "0.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "tendo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZOozMGxAKcEtmUEzHCFSojKc+9Ha+T2MOTmMvdMqNuQ=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Adds basic functionality that is not provided by Python";
     homepage = "https://github.com/pycontribs/tendo";
-    changelog = "https://github.com/pycontribs/tendo/releases/tag/v${version}";
+    changelog = "https://github.com/pycontribs/tendo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

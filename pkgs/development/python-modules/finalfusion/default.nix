@@ -9,7 +9,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "finalfusion";
   version = "0.7.1";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "finalfusion";
     repo = "finalfusion-python";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-BGYPW5xssKjey0b9mlGwnShlGoTrg894oHfjXhV1n18=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     license = lib.licenses.blueOak100;
   };
-}
+})

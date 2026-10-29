@@ -5,7 +5,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "liblp";
   version = "1.0.2";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sebaubuntu-python";
     repo = "liblp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F30D2mYUYPupbr8OsrcrN6wQ639L5OlzQw/FrxPCsC4=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "lpunpack";
   };
-}
+})

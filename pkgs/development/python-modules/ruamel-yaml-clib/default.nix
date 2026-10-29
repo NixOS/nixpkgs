@@ -6,14 +6,14 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruamel-yaml-clib";
   version = "0.2.15";
   pyproject = true;
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/ruamel-yaml-clib/code";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-SnMELcG2L2ei3UjImljjG1sSCHHROhXYcLe5kAR6h8E=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

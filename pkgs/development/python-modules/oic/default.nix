@@ -23,7 +23,7 @@
   testfixtures,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oic";
   version = "1.7.0";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CZ-NIC";
     repo = "pyoidc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7qEK1HWLEGCKu+gDAfbyT1a+sM9fVOfjtkqZ33GWv6U=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "OpenID Connect implementation in Python";
     homepage = "https://github.com/CZ-NIC/pyoidc";
-    changelog = "https://github.com/CZ-NIC/pyoidc/releases/tag/${version}";
+    changelog = "https://github.com/CZ-NIC/pyoidc/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

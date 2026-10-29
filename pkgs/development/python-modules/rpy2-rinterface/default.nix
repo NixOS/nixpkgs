@@ -16,16 +16,16 @@
   cffi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.6.6";
   pyproject = true;
   pname = "rpy2-rinterface";
 
   disabled = isPyPy;
   src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
-      builtins.replaceStrings [ "-" ] [ "_" ] pname
-    }-${version}.tar.gz";
+    url = "mirror://pypi/${builtins.substring 0 1 finalAttrs.pname}/${finalAttrs.pname}/${
+      builtins.replaceStrings [ "-" ] [ "_" ] finalAttrs.pname
+    }-${finalAttrs.version}.tar.gz";
     hash = "sha256-qcwTQc5ctN8dxnxA3Dss4Mr6znIVvUJi/g7QEZWKM2k=";
   };
 
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     teams = with lib.teams; [ sage ];
   };
-}
+})

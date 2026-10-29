@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycognito";
   version = "2024.5.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "pycognito";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-U23fFLru4j6GnWMcYtsCW9BVJkVcCoefPH6oMijYGew=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python class to integrate Boto3's Cognito client so it is easy to login users. With SRP support";
     homepage = "https://github.com/pvizeli/pycognito";
-    changelog = "https://github.com/NabuCasa/pycognito/releases/tag/${version}";
+    changelog = "https://github.com/NabuCasa/pycognito/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mic92 ];
   };
-}
+})

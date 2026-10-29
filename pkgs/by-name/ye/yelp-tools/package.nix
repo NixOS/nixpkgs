@@ -12,14 +12,14 @@
   yelp-xsl,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "yelp-tools";
   version = "42.1";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/yelp-tools/${lib.versions.major version}/yelp-tools-${version}.tar.xz";
+    url = "mirror://gnome/sources/yelp-tools/${lib.versions.major finalAttrs.version}/yelp-tools-${finalAttrs.version}.tar.xz";
     sha256 = "PklqQCDUFFuZ/VCKJfoJM2pQOk6JAAKEIecsaksR+QU=";
   };
 
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -61,4 +61,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

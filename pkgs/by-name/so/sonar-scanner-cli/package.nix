@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "sonar-scanner-cli";
   version = "8.2.0.6438";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonar-scanner-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-la4I8YBKWXsiIXOUV0IIXBKeeeEEHNXe1RPap/wlZDA=";
   };
 
@@ -78,4 +78,4 @@ maven.buildMavenPackage rec {
     mainProgram = "sonar-scanner";
     platforms = lib.platforms.unix;
   };
-}
+})

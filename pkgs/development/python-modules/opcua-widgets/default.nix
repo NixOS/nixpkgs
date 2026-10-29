@@ -6,7 +6,7 @@
   asyncua,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opcua-widgets";
   version = "0.6.1";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-widgets";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ABJlKYN5H/1k8ynvSTSoJBX12vTTyavuNUAmTJ84mn0=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

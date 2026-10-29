@@ -17,7 +17,7 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pika";
   version = "1.3.2";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pika";
     repo = "pika";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-60Z+y3YXazUghfnOy4e7HzM18iju5m5OEt4I3Wg6ty4=";
   };
 
@@ -63,11 +63,11 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/pika/pika/releases/tag/${version}";
+    changelog = "https://github.com/pika/pika/releases/tag/${finalAttrs.version}";
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
     downloadPage = "https://github.com/pika/pika";
     homepage = "https://pika.readthedocs.org";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

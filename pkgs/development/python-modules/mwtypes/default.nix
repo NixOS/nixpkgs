@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mwtypes";
   version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-PgcGUk/27cAIvzfLvRoVX2vHOCab59m+4bciDPmtlW8=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

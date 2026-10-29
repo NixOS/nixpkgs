@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "strenum";
   version = "0.4.15";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irgeek";
     repo = "StrEnum";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LrDLIWiV/zIbl7CwKh7DAy4LoLyY7+hfUu8nqduclnA=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for enum that inherits from str";
     homepage = "https://github.com/irgeek/StrEnum";
-    changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${version}";
+    changelog = "https://github.com/irgeek/StrEnum/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,7 @@
   webob,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wsgiproxy2";
   version = "0.5.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gawel";
     repo = "WSGIProxy2";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ouofw3cBQzBwSh3Pdtdl7KI2pg/T/z3qoh8zoeiKiSs=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

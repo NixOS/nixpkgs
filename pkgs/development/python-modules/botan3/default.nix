@@ -11,7 +11,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "botan3";
 
   inherit (botan3) src version;
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Bindings for botan3 cryptography library";
     homepage = "https://github.com/randombit/botan";
-    changelog = "https://github.com/randombit/botan/blob/${version}/news.rst";
+    changelog = "https://github.com/randombit/botan/blob/${finalAttrs.version}/news.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ thillux ];
   };
-}
+})

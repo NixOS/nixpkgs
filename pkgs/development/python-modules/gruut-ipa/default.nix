@@ -8,7 +8,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gruut-ipa";
   version = "0.13.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "gruut-ipa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Q2UKELoG8OaAPxIrZNCpXgeWZ2fCzb3g3SOVzCm/gg0=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})

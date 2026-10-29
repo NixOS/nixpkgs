@@ -35,7 +35,7 @@ let
     python3 = python;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyotb";
   version = "2.2.1";
   pyproject = true;
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "pyotb";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TDBhMCdO3kGjbysYZN9un7Y8YY+dGlHw5Vj/ZJVPXdk=";
   };
 
@@ -95,9 +95,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python extension of Orfeo Toolbox";
     homepage = "https://github.com/orfeotoolbox/pyotb";
-    changelog = "https://github.com/orfeotoolbox/pyotb/releases/tag/${version}";
+    changelog = "https://github.com/orfeotoolbox/pyotb/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})

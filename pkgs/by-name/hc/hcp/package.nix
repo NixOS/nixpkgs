@@ -7,14 +7,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hcp";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-D9foh9WxnglW2Jw7Dg3aZhnQgHj0UpB4pPy87UAan/Y=";
   };
 
@@ -27,11 +27,11 @@ buildGoModule rec {
   meta = {
     description = "HashiCorp Cloud Platform CLI";
     homepage = "https://github.com/hashicorp/hcp";
-    changelog = "https://github.com/hashicorp/hcp/releases/tag/v${version}";
+    changelog = "https://github.com/hashicorp/hcp/releases/tag/v${finalAttrs.version}";
     mainProgram = "hcp";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       dbreyfogle
     ];
   };
-}
+})

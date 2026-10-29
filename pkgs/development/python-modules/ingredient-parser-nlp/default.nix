@@ -12,7 +12,7 @@
   pytestCheckHook,
   nltk-data,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ingredient-parser-nlp";
   version = "2.8.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strangetom";
     repo = "ingredient-parser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oIHuk3xU65kewoTdxdnaTFL0uJt2bDOyXn+nT7Jc60c=";
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "Parse structured information from recipe ingredient sentences";
     license = lib.licenses.mit;
     homepage = "https://github.com/strangetom/ingredient-parser/";
-    changelog = "https://github.com/strangetom/ingredient-parser/releases/tag/${src.tag}";
+    changelog = "https://github.com/strangetom/ingredient-parser/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ antonmosich ];
   };
-}
+})

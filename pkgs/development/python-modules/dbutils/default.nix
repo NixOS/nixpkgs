@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbutils";
   version = "3.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "WebwareForPython";
     repo = "DBUtils";
-    tag = "Release-${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "Release-${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-YyZKGN7oNuCR4lU7pxkY+vLOWGQzQjqvAIOZc7LlvUM=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

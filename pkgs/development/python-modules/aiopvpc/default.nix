@@ -12,7 +12,7 @@
   python-dotenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiopvpc";
   version = "4.3.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "azogue";
     repo = "aiopvpc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1xeXfhoXRfJ7vrpRPeYmwcAGjL09iNCOm/f4pPvuZLU=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to download Spanish electricity hourly prices (PVPC)";
     homepage = "https://github.com/azogue/aiopvpc";
-    changelog = "https://github.com/azogue/aiopvpc/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/azogue/aiopvpc/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,7 +7,7 @@
   pytest-homeassistant-custom-component,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "mill1000";
   domain = "midea_ac";
   version = "2026.10.0";
@@ -15,7 +15,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "mill1000";
     repo = "midea-ac-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ByN/ZIbPLr31TrVOEAKh4qNgX7ibc3Lrm//1sOb4Ecc=";
   };
 
@@ -27,7 +27,7 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mill1000/midea-ac-py/releases/tag/${src.tag}";
+    changelog = "https://github.com/mill1000/midea-ac-py/releases/tag/${finalAttrs.src.tag}";
     description = "Home Assistant custom integration to control Midea (and associated brands) air conditioners via LAN";
     homepage = "https://github.com/mill1000/midea-ac-py";
     license = lib.licenses.mit;
@@ -35,4 +35,4 @@ buildHomeAssistantComponent rec {
       hexa
     ];
   };
-}
+})

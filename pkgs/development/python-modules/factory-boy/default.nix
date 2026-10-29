@@ -14,14 +14,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "factory-boy";
   version = "3.3.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "factory_boy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hmhi0iYSjfrH8rQWAofomdr1TyYSd4Mn3QPQ4ssePQM=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package to create factories for complex objects";
     homepage = "https://github.com/rbarrois/factory_boy";
-    changelog = "https://github.com/FactoryBoy/factory_boy/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/FactoryBoy/factory_boy/blob/${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

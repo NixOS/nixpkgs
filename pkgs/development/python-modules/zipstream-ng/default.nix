@@ -6,7 +6,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zipstream-ng";
   version = "1.9.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "zipstream-ng";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YVF7uUOCYtQRtOUzS8/l9hIxp1nR0hoEJGpEw7HViwE=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
       and folders on the fly without needing temporary files or excessive memory
     '';
     homepage = "https://github.com/pR0Ps/zipstream-ng";
-    changelog = "https://github.com/pR0Ps/zipstream-ng/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pR0Ps/zipstream-ng/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

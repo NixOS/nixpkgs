@@ -9,7 +9,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yamllint";
   version = "1.37.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "yamllint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CohqiBoQcgvGVP0Bt6U768BY1aIwh59YRsgzJfaDmP0=";
   };
 
@@ -48,9 +48,9 @@ buildPythonPackage rec {
   meta = {
     description = "Linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
-    changelog = "https://github.com/adrienverge/yamllint/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/adrienverge/yamllint/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "yamllint";
   };
-}
+})

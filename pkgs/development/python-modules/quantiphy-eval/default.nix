@@ -7,7 +7,7 @@
   sly,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quantiphy-eval";
   version = "0.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "quantiphy_eval";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7VHcuINhe17lRNkHUnZkVOEtD6mVWk5gu0NbrLZwprg=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "QuantiPhy support for evals in-line";
     homepage = "https://github.com/KenKundert/quantiphy_eval/";
-    changelog = "https://github.com/KenKundert/quantiphy_eval/releases/tag/v${version}";
+    changelog = "https://github.com/KenKundert/quantiphy_eval/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

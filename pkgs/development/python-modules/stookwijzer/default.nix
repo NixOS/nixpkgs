@@ -7,7 +7,7 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stookwijzer";
   version = "1.6.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = "stookwijzer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-T4u3KuKWAXRkHbjPt4qkiisnLjx9JMD0DW6enOlu69g=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/fwestenberg/stookwijzer/releases/tag/${src.tag}";
+    changelog = "https://github.com/fwestenberg/stookwijzer/releases/tag/${finalAttrs.src.tag}";
     description = "Python package for the Stookwijzer API";
     homepage = "https://github.com/fwestenberg/stookwijzer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

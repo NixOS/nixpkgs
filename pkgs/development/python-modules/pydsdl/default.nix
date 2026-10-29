@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydsdl";
   version = "1.22.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pydsdl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JQE7e735arclu7avLu0Nf/ecULd0wuPmxyO3DtDsxLs=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wucke13 ];
   };
-}
+})

@@ -36,12 +36,12 @@
   buildPackages,
 }:
 let
-  d3-flame-graph-templates = stdenv.mkDerivation rec {
+  d3-flame-graph-templates = stdenv.mkDerivation (finalAttrs: {
     pname = "d3-flame-graph-templates";
     version = "4.1.3";
 
     src = fetchurl {
-      url = "https://registry.npmjs.org/d3-flame-graph/-/d3-flame-graph-${version}.tgz";
+      url = "https://registry.npmjs.org/d3-flame-graph/-/d3-flame-graph-${finalAttrs.version}.tgz";
       sha256 = "sha256-W5/Vh5jarXUV224aIiTB2TnBFYT3naEIcG2945QjY8Q=";
     };
 
@@ -50,7 +50,7 @@ let
     '';
 
     meta.license = lib.licenses.asl20;
-  };
+  });
 in
 
 stdenv.mkDerivation {

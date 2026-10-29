@@ -7,7 +7,7 @@
 }:
 
 let
-  p2 = buildGoModule rec {
+  p2 = buildGoModule (finalAttrs: {
     pname = "packr2";
     version = "2.8.0";
 
@@ -15,7 +15,7 @@ let
       fetchFromGitHub {
         owner = "gobuffalo";
         repo = "packr";
-        rev = "v${version}";
+        rev = "v${finalAttrs.version}";
         hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
       }
       + "/v2";
@@ -40,15 +40,15 @@ let
       #
       broken = stdenv.hostPlatform.isDarwin;
     };
-  };
-  p1 = buildGoModule rec {
+  });
+  p1 = buildGoModule (finalAttrs: {
     pname = "packr1";
     version = "2.8.0";
 
     src = fetchFromGitHub {
       owner = "gobuffalo";
       repo = "packr";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
     };
 
@@ -72,7 +72,7 @@ let
       #
       broken = stdenv.hostPlatform.isDarwin;
     };
-  };
+  });
 in
 symlinkJoin {
   name = "packr";

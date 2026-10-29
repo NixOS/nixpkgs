@@ -14,7 +14,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uvicorn";
   version = "0.51.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "uvicorn";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VX5X2BY8eZc93r3zfJFhtz1vuXHvaqWB5rTj7zddSzU=";
   };
 
@@ -63,10 +63,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://uvicorn.dev";
-    changelog = "https://github.com/Kludex/uvicorn/blob/${src.tag}/docs/release-notes.md";
+    changelog = "https://github.com/Kludex/uvicorn/blob/${finalAttrs.src.tag}/docs/release-notes.md";
     description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wd15 ];
   };
-}
+})

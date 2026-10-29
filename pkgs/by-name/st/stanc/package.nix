@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "stanc";
   version = "2.40.0";
 
@@ -14,14 +14,14 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "stanc3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Xr7ulBens9qTVvkHwmGu/dDgXGInp7BJN13BKi/adko=";
   };
 
   postPatch = ''
     substituteInPlace src/driver/Entry.ml src/stanc/CLI.ml src/stan_math_backend/Lower_program.ml \
       --replace-fail '%%NAME%%' 'stanc' \
-      --replace-fail '%%VERSION%%' 'v${version}'
+      --replace-fail '%%VERSION%%' 'v${finalAttrs.version}'
   '';
 
   nativeBuildInputs = with ocamlPackages; [
@@ -52,4 +52,4 @@ ocamlPackages.buildDunePackage rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
-}
+})

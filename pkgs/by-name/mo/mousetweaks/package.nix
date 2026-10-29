@@ -14,12 +14,12 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mousetweaks";
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mousetweaks/${lib.versions.majorMinor version}/mousetweaks-${version}.tar.xz";
+    url = "mirror://gnome/sources/mousetweaks/${lib.versions.majorMinor finalAttrs.version}/mousetweaks-${finalAttrs.version}.tar.xz";
     sha256 = "005fhmvb45sa9mq17dpa23n1xnspiissx5rnpiy7hiqmy3g5rg8f";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.johnazoidberg ];
     mainProgram = "mousetweaks";
   };
-}
+})

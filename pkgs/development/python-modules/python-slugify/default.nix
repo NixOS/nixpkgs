@@ -8,7 +8,7 @@
   unidecode,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-slugify";
   version = "8.0.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-slugify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zReUMIkItnDot3XyYCoPUNHrrAllbClWFYcxdTy3A30=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
     description = "Python Slugify application that handles Unicode";
     mainProgram = "slugify";
     homepage = "https://github.com/un33k/python-slugify";
-    changelog = "https://github.com/un33k/python-slugify/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/un33k/python-slugify/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

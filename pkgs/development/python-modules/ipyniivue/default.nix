@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipyniivue";
   version = "2.4.4";
   pyproject = true;
@@ -23,13 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niivue";
     repo = "ipyniivue";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jk8Os8g2W5IRqLQSLQeH59ffGgWK/gjuUZgUl+HflVA=";
   };
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    inherit src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
     hash = "sha256-6TbwAC175mkyR8EThMalWn7qEyaIFDxtKmC/RIuy1dk=";
     postPatch = ''
       cp ${./package-lock.json} ./package-lock.json
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "Show a nifti image in a webgl 2.0 canvas within a jupyter notebook cell";
     homepage = "https://github.com/niivue/ipyniivue";
-    changelog = "https://github.com/niivue/ipyniivue/releases/tag/${src.tag}";
+    changelog = "https://github.com/niivue/ipyniivue/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

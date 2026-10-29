@@ -7,7 +7,7 @@
   prettytable,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chispa";
   version = "0.12.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MrPowers";
     repo = "chispa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-G65+3GbIGNwZVSFc89tXlYgPimtJPFo9ZK23fZgrCF4=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ratsclub ];
   };
-}
+})

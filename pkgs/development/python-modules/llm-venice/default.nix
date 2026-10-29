@@ -7,7 +7,7 @@
   llm-venice,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-venice";
   version = "0.9.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ar-jan";
     repo = "llm-venice";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jshOfbZUccmK6sRCDTzkE7tOKX2ILue93Jp2GFoGTxY=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin to access models available via the Venice API";
     homepage = "https://github.com/ar-jan/llm-venice";
-    changelog = "https://github.com/ar-jan/llm-venice/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ar-jan/llm-venice/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

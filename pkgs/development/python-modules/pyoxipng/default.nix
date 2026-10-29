@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyoxipng";
   version = "9.1.1";
   pyproject = true;
@@ -14,12 +14,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nfrasser";
     repo = "pyoxipng";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aVya+0+X2p0VaWCZTxVlVUFFlqkqZ7A2lJjhxiXAgrE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit (finalAttrs) src;
     hash = "sha256-wMCx6cujqM4q96b1mg4eovKjWmsv0FcaDBCxy0OodmA=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for multithreaded PNG optimizer oxipng";
     homepage = "https://github.com/nfrasser/pyoxipng";
-    changelog = "https://github.com/nfrasser/pyoxipng/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/nfrasser/pyoxipng/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ undefined-landmark ];
   };
-}
+})

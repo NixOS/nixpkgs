@@ -18,12 +18,12 @@ let
   python3 = python312; # fails to build otherwise
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tulip";
   version = "5.7.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/tulip-${version}_src.tar.gz";
+    url = "mirror://sourceforge/auber/tulip-${finalAttrs.version}_src.tar.gz";
     hash = "sha256-7z21WkPi1v2AGishDmXZPAedMjgXPRnpUiHTzEnc5LY=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

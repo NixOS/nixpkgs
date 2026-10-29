@@ -6,13 +6,13 @@
   sabnzbd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sabctools";
   version = "9.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2EuCwjjLp5JPXgmJu8ElgWpq6rGp8cFRBzyAPuVntA0=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "C implementations of functions for use within SABnzbd";
     homepage = "https://github.com/sabnzbd/sabctools";
-    changelog = "https://github.com/sabnzbd/sabctools/releases/tag/v${version}";
+    changelog = "https://github.com/sabnzbd/sabctools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

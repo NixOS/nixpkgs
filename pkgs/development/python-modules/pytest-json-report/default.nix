@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-json-report";
   version = "1.5.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numirias";
     repo = "pytest-json-report";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hMB/atDuo7CjwhHFUOxVfgJ7Qp4AA9J428iv7hyQFcs=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to report test results as JSON";
     homepage = "https://github.com/numirias/pytest-json-report";
-    changelog = "https://github.com/numirias/pytest-json-report/releases/tag/v${version}";
+    changelog = "https://github.com/numirias/pytest-json-report/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

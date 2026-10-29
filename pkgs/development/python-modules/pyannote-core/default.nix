@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyannote-core";
   version = "6.0.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-core";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-r5NkOAzrQGcb6LPi4/DA0uT9R0ELiYuwQkbT1l6R8Mw=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Advanced data structures for handling temporal segments with attached labels";
     homepage = "https://github.com/pyannote/pyannote-core";
-    changelog = "https://github.com/pyannote/pyannote-core/releases/tag/${version}";
+    changelog = "https://github.com/pyannote/pyannote-core/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

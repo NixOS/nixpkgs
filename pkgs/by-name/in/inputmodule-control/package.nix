@@ -10,14 +10,14 @@
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inputmodule-control";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "inputmodule-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5sqTkaGqmKDDH7byDZ84rzB3FTu9AKsWxA6EIvUrLCU=";
   };
 
@@ -47,8 +47,8 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "inputmodule-control";
     homepage = "https://github.com/FrameworkComputer/inputmodule-rs";
-    downloadPage = "https://github.com/FrameworkComputer/inputmodule-rs/releases/tag/${src.rev}";
-    changelog = "https://github.com/FrameworkComputer/inputmodule-rs/releases/tag/${src.rev}";
+    downloadPage = "https://github.com/FrameworkComputer/inputmodule-rs/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/FrameworkComputer/inputmodule-rs/releases/tag/${finalAttrs.src.rev}";
     maintainers = with lib.maintainers; [ Kitt3120 ];
   };
-}
+})

@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meteo-lt-pkg";
   version = "0.7.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Brunas";
     repo = "meteo_lt-pkg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BOLmU4Hj/vL8HUrRJ0mC2s/rPOXI5kqPQPsL7a8rip8=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Brunas/meteo_lt-pkg/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Brunas/meteo_lt-pkg/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Meteo.Lt weather forecast package";
     homepage = "https://github.com/Brunas/meteo_lt-pkg";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

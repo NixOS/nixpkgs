@@ -5,7 +5,7 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "annextimelog";
   version = "0.15.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "annextimelog";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RfqBtbfArFva3TVJGF4STx0QTio62qxXaM23lsLYLUg=";
   };
 
@@ -39,4 +39,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

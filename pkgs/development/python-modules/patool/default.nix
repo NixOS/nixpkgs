@@ -39,7 +39,7 @@ let
     xz
   ];
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "patool";
   version = "4.0.5";
   format = "setuptools";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wummel";
     repo = "patool";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Vo13tbZpMg8tc9LNBqTE+ypEkobU90hbEVq1bI++pUw=";
   };
 
@@ -87,4 +87,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

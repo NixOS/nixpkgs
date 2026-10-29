@@ -10,14 +10,14 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-drawio-file";
   version = "1.5.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mkdocs_drawio_file";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-5OPaG98m7ycxtEUyAYWunomHwq+r10VBnzza3kYtHhE=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

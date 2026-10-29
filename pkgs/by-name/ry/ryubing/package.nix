@@ -30,7 +30,7 @@
   wrapGAppsHook3,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "ryubing";
   version = "1.3.3";
 
@@ -38,7 +38,7 @@ buildDotnetModule rec {
     domain = "git.ryujinx.app";
     owner = "projects";
     repo = "Ryubing";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
 
@@ -115,7 +115,7 @@ buildDotnetModule rec {
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,mime/packages}
 
-      pushd ${src}/distribution/linux
+      pushd ${finalAttrs.src}/distribution/linux
 
       install -D ./Ryujinx.desktop  $out/share/applications/Ryujinx.desktop
       install -D ./Ryujinx.sh       $out/bin/Ryujinx.sh
@@ -134,7 +134,7 @@ buildDotnetModule rec {
   meta = {
     homepage = "https://ryujinx.app";
     # historical changelog https://git.ryujinx.app/projects/Ryubing/wiki/Changelog
-    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${src.tag}";
+    changelog = "https://git.ryujinx.app/projects/Ryubing/releases/tag/${finalAttrs.src.tag}";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
     longDescription = ''
       Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,
@@ -157,4 +157,4 @@ buildDotnetModule rec {
     ];
     mainProgram = "Ryujinx";
   };
-}
+})

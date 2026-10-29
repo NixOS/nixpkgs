@@ -9,13 +9,13 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datrie";
   version = "0.8.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6gIa1MiovxTginHHhypiKqOZpRD5gSloJQkcfKBDboA=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ lewo ];
   };
-}
+})

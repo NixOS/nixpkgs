@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-seasurf";
   version = "2.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxcountryman";
     repo = "flask-seasurf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ajQiDizNaF0em9CVeaHEuJEeSaYraJh9YgvhvBPTIsk=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
-}
+})

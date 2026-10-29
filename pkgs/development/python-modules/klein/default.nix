@@ -21,7 +21,7 @@
   treq,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "klein";
   version = "24.8.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twisted";
     repo = "klein";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2/zl4fS9ZP73quPmGnz2+brEt84ODgVS89Om/cUsj0M=";
   };
 
@@ -62,10 +62,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "klein" ];
 
   meta = {
-    changelog = "https://github.com/twisted/klein/releases/tag/${version}";
+    changelog = "https://github.com/twisted/klein/releases/tag/${finalAttrs.version}";
     description = "Klein Web Micro-Framework";
     homepage = "https://github.com/twisted/klein";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ exarkun ];
   };
-}
+})

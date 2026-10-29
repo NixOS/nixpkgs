@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-scim2";
   version = "0.21.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "15five";
     repo = "django-scim2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8zPUlvVHVowzPU+sfQGoOrJ+Vdm8zVKI5V+wTJnIBZ0=";
   };
 
@@ -64,10 +64,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/15five/django-scim2/blob/${src.tag}/CHANGES.txt";
+    changelog = "https://github.com/15five/django-scim2/blob/${finalAttrs.src.tag}/CHANGES.txt";
     description = "SCIM 2.0 Service Provider Implementation (for Django)";
     homepage = "https://github.com/15five/django-scim2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ s1341 ];
   };
-}
+})

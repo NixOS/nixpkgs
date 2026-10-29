@@ -6,13 +6,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-tornado";
   version = "0.8.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ufoZMMMzud/im96Q+fQuZkMni10MlVKKgwKnRU/T8bE=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/eugeniy/pytest-tornado";
     license = lib.licenses.asl20;
   };
-}
+})

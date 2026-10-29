@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-melissa-climate";
   version = "3.0.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "py-melissa-climate";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-vKnIFrviCJLMqYUdKKJtqOmD1ZtgtMBMLApG+YiqZdY=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "melissa" ];
 
   meta = {
-    changelog = "https://github.com/kennedyshead/py-melissa-climate/releases/tag/${src.tag}";
+    changelog = "https://github.com/kennedyshead/py-melissa-climate/releases/tag/${finalAttrs.src.tag}";
     description = "API wrapper for Melissa Climate";
     homepage = "https://github.com/kennedyshead/py-melissa-climate";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-ole";
   version = "3.12";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ole";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ctPc9YLvu8IIEdgcSSYOvpQeqcrcLgTSZtzSiAvgCWk=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for the Object Linking & Embedding (OLE) format";
     homepage = "https://github.com/fox-it/dissect.ole";
-    changelog = "https://github.com/fox-it/dissect.ole/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.ole/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

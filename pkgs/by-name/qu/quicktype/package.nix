@@ -7,7 +7,7 @@
   testers,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "quicktype";
   version = "23.0.105"; # version from https://npm.im/quicktype
 
@@ -19,7 +19,7 @@ buildNpmPackage rec {
   };
 
   postPatch = ''
-    cat <<< $(${jq}/bin/jq '.version = "${version}"' package.json) > package.json
+    cat <<< $(${jq}/bin/jq '.version = "${finalAttrs.version}"' package.json) > package.json
   '';
 
   npmDepsHash = "sha256-RA4HVQfB/ge1aIKl9HiUT7vUM5n+Ro6N2D6xj1dgSu8=";
@@ -39,4 +39,4 @@ buildNpmPackage rec {
     maintainers = [ ];
     mainProgram = "quicktype";
   };
-}
+})

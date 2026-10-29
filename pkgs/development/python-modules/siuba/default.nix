@@ -15,7 +15,7 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "siuba";
   version = "0.4.4";
   format = "setuptools";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "machow";
     repo = "siuba";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rd/yQH3sbZqQAQ1AN44vChe30GMJuIlZj3Ccfv1m3lU=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Use dplyr-like syntax with pandas and SQL";
     homepage = "https://siuba.org";
-    changelog = "https://github.com/machow/siuba/releases/tag/v${version}";
+    changelog = "https://github.com/machow/siuba/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

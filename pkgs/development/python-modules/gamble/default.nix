@@ -6,7 +6,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gamble";
   version = "0.14.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpetrucciani";
     repo = "gamble";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vzaY5gJ0Ou2ArUJ0kuTWzTeLfiRDhUt/Hxpns9rFiDk=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of gambling classes/tools";
     homepage = "https://github.com/jpetrucciani/gamble";
-    changelog = "https://github.com/jpetrucciani/gamble/releases/tag/${version}";
+    changelog = "https://github.com/jpetrucciani/gamble/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

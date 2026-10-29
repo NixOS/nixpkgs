@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-odoo";
   version = "1.8.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "click-odoo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dUTAu02iSA0YvF/nQYOyb5gzbT8zMedXXwU7yONBrl4=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

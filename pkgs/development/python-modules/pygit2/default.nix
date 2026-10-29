@@ -13,13 +13,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygit2";
   version = "1.20.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Nt/4TSN/K48YsLFG1ufD+Zp7zi2pjMQQOhQ4f1Mxn5U=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Set of Python bindings to the libgit2 shared library";
     homepage = "https://github.com/libgit2/pygit2";
-    changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/libgit2/pygit2/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

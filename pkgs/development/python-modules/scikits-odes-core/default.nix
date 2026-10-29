@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikits-odes-core";
   version = "3.1.1";
   pyproject = true;
@@ -13,11 +13,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bmcage";
     repo = "odes";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lqkPCVMQIVpZrkNUhYhAlFU71eUAaWwN8v66L7Rz91U=";
   };
 
-  sourceRoot = "${src.name}/packages/scikits-odes-core";
+  sourceRoot = "${finalAttrs.src.name}/packages/scikits-odes-core";
 
   build-system = [ setuptools ];
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ idontgetoutmuch ];
   };
-}
+})

@@ -6,7 +6,7 @@
   matplotlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "SciencePlots";
   version = "2.2.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "garrettj403";
     repo = "SciencePlots";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Sj0SdTu0M0wgTiUuC9ad73W8olsnbjzJgkaIsYKPYvo=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kilimnik ];
   };
-}
+})

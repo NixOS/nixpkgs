@@ -13,7 +13,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jsonrpc-glib";
   version = "3.44.2";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/jsonrpc-glib/${lib.versions.majorMinor version}/jsonrpc-glib-${version}.tar.xz";
+    url = "mirror://gnome/sources/jsonrpc-glib/${lib.versions.majorMinor finalAttrs.version}/jsonrpc-glib-${finalAttrs.version}.tar.xz";
     sha256 = "llSWtuExTzRotIKl2ANA3DsDQKVALXeDytJBVK7nc5Y=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
   };
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

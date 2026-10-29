@@ -26,13 +26,13 @@
   threadpoolctl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "joblib";
   version = "1.5.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hWGjJp5oARBoY/0NbYS7c3vp52MeM6rtP7nOWVNojaM=";
   };
 
@@ -69,10 +69,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/joblib/joblib/releases/tag/${version}";
+    changelog = "https://github.com/joblib/joblib/releases/tag/${finalAttrs.version}";
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
     homepage = "https://joblib.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

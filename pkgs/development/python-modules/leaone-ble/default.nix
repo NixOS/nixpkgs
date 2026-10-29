@@ -11,7 +11,7 @@
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "leaone-ble";
   version = "1.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "leaone-ble";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WdsAqXv3U2E5x6Io4t3NNcioV6kwREDATe4hpojzUBo=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bluetooth parser for LeaOne devices";
     homepage = "https://github.com/bluetooth-devices/leaone-ble";
-    changelog = "https://github.com/bluetooth-devices/leaone-ble/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bluetooth-devices/leaone-ble/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

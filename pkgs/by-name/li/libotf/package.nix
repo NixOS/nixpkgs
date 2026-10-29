@@ -9,12 +9,12 @@
   freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libotf";
   version = "0.9.16";
 
   src = fetchurl {
-    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/m17n/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "0sq6g3xaxw388akws6qrllp3kp2sxgk2dv4j79k6mm52rnihrnv8";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-}
+})

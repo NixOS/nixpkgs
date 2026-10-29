@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wadler-lindig";
   version = "0.1.7";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "wadler_lindig";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qP826zdzR5BEQ8bGd45RFSLTH6Eal+b7UN+BW07/glo=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wadler--Lindig pretty printer for Python";
     homepage = "https://github.com/patrick-kidger/wadler_lindig";
-    changelog = "https://github.com/patrick-kidger/wadler_lindig/releases/tag/${src.tag}";
+    changelog = "https://github.com/patrick-kidger/wadler_lindig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

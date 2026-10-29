@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "range-typed-integers";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "theCapypara";
     repo = "range-typed-integers";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4+XdalHq6Q2cBbuYi4x7kmCNQh1MwYf+XlLP9FzzzgE=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

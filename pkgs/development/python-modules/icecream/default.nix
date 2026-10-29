@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "icecream";
   version = "2.2.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gruns";
     repo = "icecream";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8y109lTvZS50sBNzsgxxyIDf5w3gAou7RK1NxiGIziQ=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ renatoGarcia ];
   };
-}
+})

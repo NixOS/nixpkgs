@@ -36,14 +36,14 @@ let
     hash = "sha256-VNypeEz9AV0ts8X3vINwYMOgO8VpNmyUPC4iY3OOuZI=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monero-cli";
   version = "0.18.5.1";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RxuhR+GH4Y5kSzNxsqJklRWMbq1K82K3A2V+6JqYR98=";
   };
 
@@ -122,4 +122,4 @@ stdenv.mkDerivation rec {
     # internal build tool generate_translations_header is tricky to compile for the build platform
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-}
+})

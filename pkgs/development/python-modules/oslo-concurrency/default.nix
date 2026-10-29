@@ -21,7 +21,7 @@
   stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-concurrency";
   version = "7.4.1";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.concurrency";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NZ6OsaDwqEsW2FZEi8cjXkLa7EwVqt3mYPRkG/jGiFM=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
       --replace-fail '"oslo_concurrency"' '"oslo_concurrency", "oslo_concurrency.fixture", "oslo_concurrency.tests"'
   '';
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [ setuptools ];
 
@@ -97,4 +97,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

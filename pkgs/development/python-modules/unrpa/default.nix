@@ -5,13 +5,13 @@
   uncompyle6,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unrpa";
   version = "2.3.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RBxdEpwYpcdYOSe8QuP3UeTxcaMWo6QnOMHGcXnDhHo=";
   };
 
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/Lattyware/unrpa";
-    changelog = "https://github.com/Lattyware/unrpa/releases/tag/${version}";
+    changelog = "https://github.com/Lattyware/unrpa/releases/tag/${finalAttrs.version}";
     description = "Program to extract files from the RPA archive format";
     mainProgram = "unrpa";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ leo60228 ];
   };
-}
+})

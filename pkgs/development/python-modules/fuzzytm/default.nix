@@ -10,14 +10,14 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fuzzytm";
   version = "2.0.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "FuzzyTM";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-z0ESYtB7BqssxIHlrd0F+/qapOM1nrDi3Zih5SvgDGY=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,13 +5,13 @@
   pbr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requestsexceptions";
   version = "1.4.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-sJXLx3YY8GbUWaArE3sCDDfan0bZsFdwQBnJ9326MGU=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.all;
   };
-}
+})

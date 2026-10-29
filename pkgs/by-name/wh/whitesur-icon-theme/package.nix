@@ -29,14 +29,14 @@ lib.checkListOfEnum "${pname}: theme variants"
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2026-09-10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "WhiteSur-icon-theme";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-LeSXzFZK12Q0MVG7OxijRF3OJC6EsFx7ehg9iRp75ac=";
     };
 
@@ -82,5 +82,4 @@ lib.checkListOfEnum "${pname}: theme variants"
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ icy-thought ];
     };
-
-  }
+  })

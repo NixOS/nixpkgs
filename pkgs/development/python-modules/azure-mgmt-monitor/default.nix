@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-monitor";
   version = "7.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_monitor";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-t19TZEHUMPaf+HOhZG5fXbyzCAoQdopZ0K3AFUFiOBY=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

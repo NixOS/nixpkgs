@@ -13,7 +13,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-generativeai";
   version = "0.8.6";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "generative-ai-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zUNgQqpGgMyCBhW+Z9EiSJIyuIQh2XhwlCdgrTymCVk=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for Google's large language model PaLM API";
     homepage = "https://github.com/google/generative-ai-python";
-    changelog = "https://github.com/google/generative-ai-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/google/generative-ai-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,13 +6,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nested-lookup";
   version = "0.2.25";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-b6gydIyQOB8ikdhQgJ4ySSUZ7l8lPWpay8Kdk37KAug=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ tboerger ];
   };
-}
+})

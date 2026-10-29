@@ -11,14 +11,14 @@
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-sqlalchemy";
   version = "3.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_sqlalchemy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-5LaLuIGALdoafYeLL8hMBtHuV/tAuHTT3Jfav6NrgxI=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
-    changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gerschtli ];
   };
-}
+})

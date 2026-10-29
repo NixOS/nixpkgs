@@ -12,7 +12,7 @@
   pandas,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "biocframe";
   version = "0.7.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BiocPy";
     repo = "BiocFrame";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NycHzlOdDRyXvpZLWDr7mg5eXxrBjsSk16AUHpQrDN0=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b-rodrigues ];
   };
-}
+})

@@ -5,14 +5,14 @@
   makeWrapper,
   ffmpeg,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "torrserver";
   version = "147";
 
   src = fetchFromGitHub {
     owner = "YouROK";
     repo = "TorrServer";
-    tag = "MatriX.${version}";
+    tag = "MatriX.${finalAttrs.version}";
     sha256 = "sha256-SqSbiMQ0DlrdWMFe3em3FnypWEiatd9VK0pZdNYieXE=";
   };
   vendorHash = "sha256-TfsPJwjTbkicYrP3ovw1ISLlQBLCM4rjsQGHKuLEQPA=";
@@ -39,4 +39,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ r4v3n6101 ];
   };
-}
+})

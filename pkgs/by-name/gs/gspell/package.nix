@@ -17,7 +17,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gspell";
   version = "1.14.4";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gspell/${lib.versions.majorMinor version}/gspell-${version}.tar.xz";
+    url = "mirror://gnome/sources/gspell/${lib.versions.majorMinor finalAttrs.version}/gspell-${finalAttrs.version}.tar.xz";
     hash = "sha256-5zqJ1oxw+HSK77aw9c/f7D/xc89ESYN/1ssX0en89IY=";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

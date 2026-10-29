@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-canary";
   version = "0.5.4";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snjoetw";
     repo = "py-canary";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zylWkssU85eSfR+Di7vQGTr6hOQkqXCObv/PCDHoKHA=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

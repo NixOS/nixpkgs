@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protolint";
   version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "yoheimuta";
     repo = "protolint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4GqI9jDoNTLZCz6fZEm31jrhtehAKurj3ILyjKS9bjs=";
   };
 
@@ -26,12 +26,12 @@ buildGoModule rec {
 
   ldflags =
     let
-      rev = builtins.substring 0 7 src.rev;
+      rev = builtins.substring 0 7 finalAttrs.src.rev;
     in
     [
-      "-X github.com/yoheimuta/protolint/internal/cmd.version=${version}"
+      "-X github.com/yoheimuta/protolint/internal/cmd.version=${finalAttrs.version}"
       "-X github.com/yoheimuta/protolint/internal/cmd.revision=${rev}"
-      "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.version=${version}"
+      "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.version=${finalAttrs.version}"
       "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.revision=${rev}"
     ];
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "protolint";
   };
-}
+})

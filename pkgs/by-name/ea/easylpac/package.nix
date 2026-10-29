@@ -20,14 +20,14 @@
   lpac,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "easylpac";
   version = "0.8.1.1";
 
   src = fetchFromGitHub {
     owner = "creamlike1024";
     repo = "EasyLPAC";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xMXi+AJjbKX7RlcUAutbL/Gfg+DoltSldQza7YMgUWU=";
   };
 
@@ -88,4 +88,4 @@ buildGoModule rec {
     mainProgram = "EasyLPAC";
     platforms = lib.platforms.unix;
   };
-}
+})

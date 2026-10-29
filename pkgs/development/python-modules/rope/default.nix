@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rope";
   version = "1.15.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-rope";
     repo = "rope";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gKoLfEjYmXEWrST4PuzpTx5m63LJh49/OMoop6p3drk=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python refactoring library";
     homepage = "https://github.com/python-rope/rope";
-    changelog = "https://github.com/python-rope/rope/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-rope/rope/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

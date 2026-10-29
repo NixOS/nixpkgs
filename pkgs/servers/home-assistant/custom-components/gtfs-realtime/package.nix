@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "bcpearce";
   domain = "gtfs_realtime";
   version = "0.4.10";
@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "bcpearce";
     repo = "homeassistant-gtfs-realtime";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XKQsHN9gnVrRT+SFJMPU+qO2KCApgmkDB1PKW2PJeNg=";
   };
 
@@ -38,10 +38,10 @@ buildHomeAssistantComponent rec {
   ignoreVersionRequirement = [ "gtfs_station_stop" ];
 
   meta = {
-    changelog = "https://github.com/bcpearce/homeassistant-gtfs-realtime/releases/tag/${src.tag}";
+    changelog = "https://github.com/bcpearce/homeassistant-gtfs-realtime/releases/tag/${finalAttrs.src.tag}";
     description = "GTFS Realtime transit arrivals for Home Assistant";
     homepage = "https://github.com/bcpearce/homeassistant-gtfs-realtime";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.stepbrobd ];
   };
-}
+})

@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-air-control";
   version = "2.3.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rgerganov";
     repo = "py-air-control";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3Qk1cmF31vJhUEckjfbYM9IDgD+gVkZtQlXel8iP/b8=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
   };
-}
+})

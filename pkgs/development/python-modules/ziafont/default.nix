@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
   fetchurl,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ziafont";
   version = "0.11";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziafont";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KjJ+/Yo5mLV6m7Y0eIGHECH0RvdI+eaFTccDmytNTKI=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sfrijters ];
   };
-}
+})

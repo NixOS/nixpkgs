@@ -10,7 +10,7 @@
   setuptools,
   tatsu-lts,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beanquery";
   version = "0.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beanquery";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-O7+WCF7s50G14oNTvJAOTvgSoNR9fWcn/m1jv7RHmK8=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ alapshin ];
     mainProgram = "bean-query";
   };
-}
+})

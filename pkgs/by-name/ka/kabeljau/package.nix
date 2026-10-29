@@ -9,14 +9,14 @@
   dialog,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kabeljau";
   version = "2.1.0";
 
   src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "kabeljau";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yZHDnzNTdDXHR+Pi3NODqw4npzuthHgOJYnTmIvGyUE=";
   };
 
@@ -27,13 +27,13 @@ stdenvNoCC.mkDerivation rec {
     makeWrapper
   ];
   postPatch = ''
-    patchShebangs --host ${pname}
+    patchShebangs --host ${finalAttrs.pname}
   '';
   installPhase = ''
     runHook preInstall
 
     just --set bin-path $out/bin --set share-path $out/share linux-install
-    wrapProgram $out/bin/${pname} --suffix PATH : ${lib.makeBinPath [ dialog ]}
+    wrapProgram $out/bin/${finalAttrs.pname} --suffix PATH : ${lib.makeBinPath [ dialog ]}
 
     runHook postInstall
   '';
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ annaaurora ];
   };
-}
+})

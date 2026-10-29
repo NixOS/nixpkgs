@@ -10,14 +10,14 @@
   prometheus-php-fpm-exporter,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "php-fpm_exporter";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "hipages";
     repo = "php-fpm_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ggrFnyEdGBoZVh4dHMw+7RUm8nJ1hJXo/fownO3wvzE=";
   };
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   preFixup = ''
@@ -47,7 +47,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = prometheus-php-fpm-exporter;
       command = "php-fpm_exporter version";
     };
@@ -60,4 +60,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "php-fpm_exporter";
   };
-}
+})

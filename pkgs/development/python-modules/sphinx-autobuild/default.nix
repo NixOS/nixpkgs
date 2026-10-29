@@ -19,7 +19,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-autobuild";
   version = "2025.08.25";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-autobuild";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JfhLC1924bU1USvoYwluFGdxxahS+AfRSHnGlLfE0NY=";
   };
 
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ holgerpeters ];
   };
-}
+})

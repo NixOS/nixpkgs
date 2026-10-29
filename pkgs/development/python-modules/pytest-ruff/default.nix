@@ -16,7 +16,7 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-ruff";
   version = "0.5";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "businho";
     repo = "pytest-ruff";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fwtubbTRvPMSGhylP3H5zhIwHdeWeTbvxZY5doM+tvw=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to run ruff";
     homepage = "https://github.com/businho/pytest-ruff";
-    changelog = "https://github.com/businho/pytest-ruff/releases/tag/${src.tag}";
+    changelog = "https://github.com/businho/pytest-ruff/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ baloo ];
   };
-}
+})

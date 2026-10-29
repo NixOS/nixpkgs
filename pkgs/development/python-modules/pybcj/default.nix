@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybcj";
   version = "1.0.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "pybcj";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ExSt7E7ZaVEa0NwAQHU0fOaXJW9jYmEUUy/1iUilGz8=";
   };
 
@@ -37,11 +37,11 @@ buildPythonPackage rec {
   meta = {
     description = "BCJ (Branch-Call-Jump) filter for Python";
     homepage = "https://codeberg.org/miurahr/pybcj";
-    changelog = "https://codeberg.org/miurahr/pybcj/src/tag/v${version}/Changelog.rst#v${version}";
+    changelog = "https://codeberg.org/miurahr/pybcj/src/tag/v${finalAttrs.version}/Changelog.rst#v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       pitkling
       PopeRigby
     ];
   };
-}
+})

@@ -19,7 +19,7 @@
   blivet-gui,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "blivet-gui";
   version = "2.6.0";
   pyproject = true;
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet-gui";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-e9YdfFHmKXsbqkzs4++nNlvqm/p6lZmc01A+g+NtuDI=";
   };
 
@@ -76,4 +76,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ cybershadow ];
     platforms = lib.platforms.linux;
   };
-}
+})

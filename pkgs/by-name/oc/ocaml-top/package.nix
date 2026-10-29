@@ -8,14 +8,14 @@ let
   inherit (ocamlPackages) buildDunePackage lablgtk3-sourceview3 ocp-index;
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-top";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocaml-top";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xmPGGB/zUpfeAxUIhR1PhfoESAJq7sTpqHuf++EH3Lw=";
   };
 
@@ -31,4 +31,4 @@ buildDunePackage rec {
     mainProgram = "ocaml-top";
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

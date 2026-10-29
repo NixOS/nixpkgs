@@ -11,7 +11,7 @@
   sphinxHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynacl";
   version = "1.6.2";
   outputs = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "pynacl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EzzJVRDgYQO6T8YIQjad/Eb9O+BXT4IpOpa48fpBPnc=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

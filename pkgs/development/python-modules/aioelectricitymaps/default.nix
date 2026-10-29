@@ -13,7 +13,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioelectricitymaps";
   version = "1.1.1";
   pyproject = true;
@@ -21,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aioelectricitymaps";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6d9StqUMOGWyK5KAY+S0QE0c6Mi+XDUUAyzRt9RG52Q=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with Electricity maps";
     homepage = "https://github.com/jpbede/aioelectricitymaps";
-    changelog = "https://github.com/jpbede/aioelectricitymaps/releases/tag/v${version}";
+    changelog = "https://github.com/jpbede/aioelectricitymaps/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

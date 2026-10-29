@@ -8,14 +8,14 @@
   decorator,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonpath-rw";
   version = "1.4.0";
   format = "setuptools";
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BcRxKBxFrhE/YQPRJo7HpIMaLpaqgN5F7cibEfrE++w=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     mainProgram = "jsonpath.py";
     license = lib.licenses.asl20;
   };
-}
+})

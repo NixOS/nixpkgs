@@ -17,14 +17,14 @@
   shapely,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aplpy";
   version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aplpy";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-P7PVueaMYXgVwXW+ema2ofP9QiBtaN/gQXZq0yIFJhA=";
   };
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

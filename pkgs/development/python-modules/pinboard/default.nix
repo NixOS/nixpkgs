@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pinboard";
   version = "2.1.9";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lionheart";
     repo = "pinboard.py";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+JWr2QmdqASK/X10U0ZOZ95K2ctWceSW167raxZjIW4=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     homepage = "https://github.com/lionheart/pinboard.py";
   };
-}
+})

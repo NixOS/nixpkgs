@@ -5,13 +5,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dronecan";
   version = "1.0.27";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-m6xfk/2pKfzbr0fu2GUjJnRcicoZDWzhrGJ6DDs2rBw=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kip93 ];
   };
-}
+})

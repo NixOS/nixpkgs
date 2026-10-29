@@ -8,7 +8,7 @@
   borgbackup,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msgpack";
   version = "1.2.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-L8nU+n0M3NJvQzjRlWESXvzP6CxR5CTSu7UkeGfHHUs=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "MessagePack serializer implementation";
     homepage = "https://github.com/msgpack/msgpack-python";
-    changelog = "https://github.com/msgpack/msgpack-python/blob/${src.tag}/ChangeLog.rst";
+    changelog = "https://github.com/msgpack/msgpack-python/blob/${finalAttrs.src.tag}/ChangeLog.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

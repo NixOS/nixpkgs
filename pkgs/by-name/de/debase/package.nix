@@ -5,7 +5,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "debase";
   # NOTE: When updating version, also update commit hash in prePatch.
   version = "3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "toasterllc";
     repo = "debase";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IOh5TlFHFhIaP5bpQHYzY4wwmQUdwKePmSzEM2qx8oE=";
     fetchSubmodules = true;
   };
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})

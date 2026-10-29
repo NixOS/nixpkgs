@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pystac";
   version = "1.14.3";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-O17KG8DRr7KpFpZYsl7zHBKDs5Ad0vigaThBnNP17rs=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

@@ -10,14 +10,14 @@
   fcitx5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-table-other";
   version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = pname;
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     hash = "sha256-WkofkNwT4qtcztspLXY/ysC03Y4PltoNpvvoYtuC2E4=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
   };
-}
+})

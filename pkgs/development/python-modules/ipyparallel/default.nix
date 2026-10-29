@@ -15,13 +15,13 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipyparallel";
   version = "9.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KzG7TpRwjn/7TuZQHX9fZk334cTFcukeng0SSExqaRA=";
   };
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interactive Parallel Computing with IPython";
     homepage = "https://ipyparallel.readthedocs.io/";
-    changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
+    changelog = "https://github.com/ipython/ipyparallel/blob/${finalAttrs.version}/docs/source/changelog.md";
     license = lib.licenses.bsd3;
   };
-}
+})

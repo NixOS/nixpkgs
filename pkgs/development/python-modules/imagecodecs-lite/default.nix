@@ -7,13 +7,13 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imagecodecs-lite";
   version = "2019.12.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ldGKoTzrGximEJQztC0FThO5opXLqWwIq3Gfhk9YnWg=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.bsd3;
   };
-}
+})

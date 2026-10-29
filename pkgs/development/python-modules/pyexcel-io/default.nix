@@ -6,7 +6,7 @@
   lml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyexcel-io";
   version = "0.6.7.1";
   pyproject = true;
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyexcel";
     repo = "pyexcel-io";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DBiHHiKXR26/WPJDmEZpRgjvJitFaidbV41Tvn0etLY=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'VERSION = "0.6.7"' 'VERSION = "${version}"'
+      --replace-fail 'VERSION = "0.6.7"' 'VERSION = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

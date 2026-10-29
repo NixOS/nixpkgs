@@ -11,7 +11,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosignal";
   version = "1.4.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiosignal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b46/LGoCeL4mhbBPAiPir7otzKKrlKcEFzn8pG/foh0=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python list of registered asynchronous callbacks";
     homepage = "https://github.com/aio-libs/aiosignal";
-    changelog = "https://github.com/aio-libs/aiosignal/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/aiosignal/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

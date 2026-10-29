@@ -16,7 +16,7 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "psd-tools";
   version = "1.12.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "psd-tools";
     repo = "psd-tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YasCeRl9oF0ES1E9D7WXCOFTGKhQZltu7EPu6llndrM=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
     description = "Python package for reading Adobe Photoshop PSD files";
     mainProgram = "psd-tools";
     homepage = "https://github.com/kmike/psd-tools";
-    changelog = "https://github.com/psd-tools/psd-tools/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/psd-tools/psd-tools/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

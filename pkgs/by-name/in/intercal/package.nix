@@ -10,13 +10,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "intercal";
   version = "0.35";
 
   src = fetchurl {
-    url = "http://catb.org/esr/intercal/intercal-${version}.tar.gz";
+    url = "http://catb.org/esr/intercal/intercal-${finalAttrs.version}.tar.gz";
     hash = "sha256-tV6O3GjiUXoGepAnZuL1e5e1AlU/3LritaskY7pY8OE=";
   };
 
@@ -54,5 +53,5 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
 # TODO: investigate if LD_LIBRARY_PATH needs to be set

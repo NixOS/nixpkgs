@@ -6,7 +6,7 @@
   urwid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pijuice";
   version = "1.8";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "PiJuice";
     # Latest commit that fixes using the library against python 3.9 by renaming
     # isAlive() to is_alive(). The former function was removed in python 3.9.
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-tPYuI+VzbxmTeY/L3s0oDoydRDXJ6t76KmLUyJzxUvU=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   env = {
     PIJUICE_BUILD_BASE = 1;
-    PIJUICE_VERSION = version;
+    PIJUICE_VERSION = finalAttrs.version;
   };
 
   preBuild = ''
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hexagonal-sun ];
   };
-}
+})

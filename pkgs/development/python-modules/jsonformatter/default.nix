@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonformatter";
   version = "0.3.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MyColorfulDays";
     repo = "jsonformatter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A+lsSBrm/64w7yMabmuAbRCLwUUdulGH3jB/DbYJ2QY=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Formatter to output JSON log, e.g. output LogStash needed log";
     homepage = "https://github.com/MyColorfulDays/jsonformatter";
-    changelog = "https://github.com/MyColorfulDays/jsonformatter/releases/tag/v${version}";
+    changelog = "https://github.com/MyColorfulDays/jsonformatter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

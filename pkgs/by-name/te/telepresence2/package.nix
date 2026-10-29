@@ -20,14 +20,14 @@ let
     hash = "sha256-qemM3GqwmYDyO16Yel8R0OwfyDgYfvuS80fM847Y/WU=";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "telepresence2";
   version = "2.31.2";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7COG0LwInqoX9a1SwJyXcF+ptGCKTYJz6wP9uN/CKZo=";
   };
 
@@ -63,7 +63,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
+    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${finalAttrs.src.rev}"
   ];
 
   preConfigure = ''
@@ -94,7 +94,7 @@ buildGoModule rec {
         }
         ''
           # ref: https://github.com/telepresenceio/telepresence/blob/7a2b9f553fb51ef252df957916c7b831bd65c1ce/build-aux/main.mk#L545
-          actual_version=$(grep 'k8s.io/client-go' ${src}/go.mod | awk '{print $2}' | sed -e 's/v0\./v1./')
+          actual_version=$(grep 'k8s.io/client-go' ${finalAttrs.src}/go.mod | awk '{print $2}' | sed -e 's/v0\./v1./')
           expected_version="${k8sVersion}"
 
           if [ "$actual_version" != "$expected_version" ]; then
@@ -123,4 +123,4 @@ buildGoModule rec {
     ];
     mainProgram = "telepresence";
   };
-}
+})

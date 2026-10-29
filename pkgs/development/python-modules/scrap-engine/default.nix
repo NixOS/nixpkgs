@@ -6,14 +6,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scrap-engine";
   version = "1.5.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scrap_engine";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-vw3nCxU6KTGR1qCB2TZTT4Y40q2++orp2tKsJkSWpAA=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/lxgr-linux/scrap_engine";
     license = lib.licenses.gpl3Only;
   };
-}
+})

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "class-registry";
   version = "5.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "todofixthis";
     repo = "class-registry";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MI63b77ydmhQSbtKovla7BCEUjLF43DW80VABjAVEI0=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

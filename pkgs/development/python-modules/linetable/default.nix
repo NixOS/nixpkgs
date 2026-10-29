@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linetable";
   version = "0.0.3";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "linetable";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nVZVxK6uB5TP0pReaEya3/lFXFkiqpnnaWqYzxzO6bM=";
   };
 
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to parse and generate co_linetable attributes in Python code objects";
     homepage = "https://github.com/amol-/linetable";
-    changelog = "https://github.com/amol-/linetable/releases/tag/${version}";
+    changelog = "https://github.com/amol-/linetable/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

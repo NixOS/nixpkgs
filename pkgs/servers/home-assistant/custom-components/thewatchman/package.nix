@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "dummylabs";
   domain = "watchman";
   version = "0.8.6";
@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "dummylabs";
     repo = "thewatchman";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y9Qug+ftJDZXUHCsmx+/KqauczoHPPHiCtnnngdJBu8=";
   };
 
@@ -49,4 +49,4 @@ buildHomeAssistantComponent rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.mit;
   };
-}
+})

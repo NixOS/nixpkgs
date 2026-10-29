@@ -13,14 +13,14 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-restful";
   version = "0.3.10";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-RESTful";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-/kry7wAn34+bT3l6uiDFVmgBtq3plaxjtYir8aWc7Dc=";
   };
 
@@ -73,4 +73,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

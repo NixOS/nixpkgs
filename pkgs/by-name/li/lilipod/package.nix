@@ -8,14 +8,14 @@
   util-linux,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lilipod";
   version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "lilipod";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PqeYNLr4uXe+H+DLENlUpl1H2wV6VJvDoA+MVP3SRqY=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
 
-    RELEASE_VERSION=${version} make all
+    RELEASE_VERSION=${finalAttrs.version} make all
 
     runHook postBuild
   '';
@@ -61,4 +61,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

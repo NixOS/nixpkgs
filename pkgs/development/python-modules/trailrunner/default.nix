@@ -7,7 +7,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trailrunner";
   version = "1.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "trailrunner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qtEBr22yyj6WcSfyYr/4r0IuuMJ6chFFqnmb+uMfQPA=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to walk paths and run things";
     homepage = "https://github.com/omnilib/trailrunner";
-    changelog = "https://github.com/omnilib/trailrunner/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/omnilib/trailrunner/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

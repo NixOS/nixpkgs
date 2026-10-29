@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mypaint-brushes";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint-brushes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1c95l1vfz7sbrdlzrbz7h1p6s1k113kyjfd9wfnxlm0p6562cz3j";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
   };
-}
+})

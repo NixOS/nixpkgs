@@ -10,7 +10,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eth-typing";
   version = "6.0.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-typing";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bdZrrglsJGNsqD6ShsqPO6ljViZr9Ms9A8Km45pnEYA=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Common type annotations for Ethereum Python packages";
     homepage = "https://github.com/ethereum/eth-typing";
-    changelog = "https://github.com/ethereum/eth-typing/blob/v${version}/docs/release_notes.rst";
+    changelog = "https://github.com/ethereum/eth-typing/blob/v${finalAttrs.version}/docs/release_notes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
   };
-}
+})

@@ -24,7 +24,7 @@ let
     ];
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dataprep-ml";
   version = "25.2.3.0";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   # using PyPI as github repo does not contain tags or release branches
   src = fetchPypi {
     pname = "dataprep_ml";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-pULqrPTxGtBLRsKCpSsP3a/QA0O5eXOP6BSI5TbCQWY=";
   };
 
@@ -80,4 +80,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

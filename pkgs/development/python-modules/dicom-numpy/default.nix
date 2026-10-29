@@ -8,7 +8,7 @@
   pydicom,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dicom-numpy";
   version = "0.6.5";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "innolitics";
     repo = "dicom-numpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

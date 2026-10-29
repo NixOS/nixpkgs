@@ -7,7 +7,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastuuid";
   version = "0.14.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fastuuid";
     repo = "fastuuid";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EXyd94NR4P+FLPxDCa3LmwfpIHwGduoaPL0qULqcj00=";
   };
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/fastuuid/fastuuid/releases/tag/${src.tag}";
+    changelog = "https://github.com/fastuuid/fastuuid/releases/tag/${finalAttrs.src.tag}";
     description = "CPython bindings to Rust's UUID library";
     homepage = "https://github.com/fastuuid/fastuuid";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

@@ -10,13 +10,13 @@
   sqlparse,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clickhouse-cli";
   version = "0.3.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gkgLAedUtzGv/4P+D56M2Pb5YecyqyVYp06ST62sjdY=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ivan-babrou ];
   };
-}
+})

@@ -5,7 +5,7 @@
   dateutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytimeparse2";
   version = "1.7.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "onegreyonewhite";
     repo = "pytimeparse2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zWRbSohTvbVd3GcRRoxH/UReVGYHC0YmbNgbt8N0X48=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrail";
   version = "0.4.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tjorim";
     repo = "pyrail";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MFsFtspL9cmhwu2oo8wx0Sjx2VpQe92JP9e0M7U8CL8=";
   };
 
@@ -51,10 +51,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/tjorim/pyrail/releases/tag/${src.tag}";
+    changelog = "https://github.com/tjorim/pyrail/releases/tag/${finalAttrs.src.tag}";
     description = "Async Python wrapper for the iRail API";
     homepage = "https://github.com/tjorim/pyrail";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

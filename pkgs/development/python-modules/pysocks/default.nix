@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysocks";
   version = "1.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PySocks";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-P4gEVx6+FZw4CsbeN2Q7tGhZcGVdO7okNTDWVYt5mqA=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

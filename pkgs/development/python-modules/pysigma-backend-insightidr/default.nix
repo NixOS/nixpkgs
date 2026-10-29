@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-insightidr";
   version = "0.2.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-insightidr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dc25zDYQeU9W9qwrRz7zsM2wOl8kMapDvwFhB6VOwhY=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support the Rapid7 InsightIDR backend for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-insightidr";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-insightidr/releases/tag/${src.tag}";
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-insightidr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

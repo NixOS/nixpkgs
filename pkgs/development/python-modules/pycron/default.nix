@@ -11,7 +11,7 @@
   udatetime,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycron";
   version = "3.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kipe";
     repo = "pycron";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AuDqElqu/cbTASHQfWM85JHu8DvkwArZ2leMZSB+XVM=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/kipe/pycron";
     maintainers = [ ];
   };
-}
+})

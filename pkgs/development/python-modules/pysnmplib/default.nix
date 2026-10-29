@@ -8,7 +8,7 @@
   pysnmp-pysmi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysnmplib";
   version = "5.0.24";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysnmp";
     repo = "pysnmp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AtQqXiy943cYhHDsyz9Yk5uA4xK7Q4p21CT3X3zYzrQ=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of v1/v2c/v3 SNMP engine";
     homepage = "https://github.com/pysnmp/pysnmp";
-    changelog = "https://github.com/pysnmp/pysnmp/releases/tag/v${version}";
+    changelog = "https://github.com/pysnmp/pysnmp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

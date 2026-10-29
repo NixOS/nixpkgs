@@ -12,7 +12,7 @@
   oldest-supported-numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bx-python";
   version = "0.14.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WZjCPggAlC+L/SagC4TXJXNrFG85BmjO7FaV2GxrYYA=";
   };
 
@@ -64,9 +64,9 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for manipulating biological data, particularly multiple sequence alignments";
     homepage = "https://github.com/bxlab/bx-python";
-    changelog = "https://github.com/bxlab/bx-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/bxlab/bx-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

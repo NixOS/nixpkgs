@@ -12,13 +12,13 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbsphinx";
   version = "0.9.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0HZZCDmajuK1e+euiBzy6ljWbbOve78z5utI+DvqVJU=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Jupyter Notebook Tools for Sphinx";
     homepage = "https://nbsphinx.readthedocs.io/";
-    changelog = "https://github.com/spatialaudio/nbsphinx/blob/${version}/NEWS.rst";
+    changelog = "https://github.com/spatialaudio/nbsphinx/blob/${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

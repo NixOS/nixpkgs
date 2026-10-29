@@ -14,14 +14,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qterminal";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qterminal";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8Bp4ZZ/oi4p6pAo/vRAmeSu0tfWZBvTBZTrm4ppJwFU=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

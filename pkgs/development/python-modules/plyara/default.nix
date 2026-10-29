@@ -12,7 +12,7 @@
   coverage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plyara";
   version = "2.2.8";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plyara";
     repo = "plyara";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WaQgqx003it+D0AGDxV6aSKO89F2iR9d8L4zvHyd0iQ=";
   };
 
@@ -52,11 +52,11 @@ buildPythonPackage rec {
   meta = {
     description = "Parse YARA rules";
     homepage = "https://github.com/plyara/plyara";
-    changelog = "https://github.com/plyara/plyara/releases/tag/v${version}";
+    changelog = "https://github.com/plyara/plyara/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _13621
       ivyfanchiang
     ];
   };
-}
+})

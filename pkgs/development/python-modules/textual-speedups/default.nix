@@ -5,7 +5,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-speedups";
   version = "0.2.1";
   pyproject = true;
@@ -13,12 +13,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "willmcgugan";
     repo = "textual-speedups";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zsDA8qPpeiOlmL18p4pItEgXQjgrQEBVRJazrGJT9Bw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-Bz4ocEziOlOX4z5F9EDry99YofeGyxL/6OTIf/WEgK4=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

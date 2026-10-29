@@ -8,7 +8,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-unmagic";
   version = "1.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dimagi";
     repo = "pytest-unmagic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M7eTZmLkSm1XGgF3ijzenkXcy8zBawauM9+AUxA9RDg=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

@@ -21,7 +21,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynput";
   version = "1.8.2";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pynput";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LoolcMYzurJrR7HR1qDO+dvLwP1l9P3+QOzI7uwLdso=";
   };
   passthru.updateScript = gitUpdater {
@@ -71,4 +71,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ nickhu ];
   };
-}
+})

@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mockito";
   version = "1.5.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SYJuOQHcgm0CBOk7Ftzhxh3enTqU6tycIJqw4TAoM5M=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Spying framework";
     homepage = "https://github.com/kaste/mockito-python";
-    changelog = "https://github.com/kaste/mockito-python/blob/${version}/CHANGES.txt";
+    changelog = "https://github.com/kaste/mockito-python/blob/${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "x690";
   version = "1.0.0post1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exhuma";
     repo = "x690";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HNKZq6VfqYAih2SrhGChC2jaQ76dhzKM/Mcr6pVYFE4=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -9,7 +9,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xdis";
   version = "6.3.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-k1SawlgbItbWe8J2pAxYOku/4CHyzWH3UR1j3kBZy1Q=";
   };
 
@@ -74,11 +74,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
-    changelog = "https://github.com/rocky/python-xdis/releases/tag/${src.tag}";
+    changelog = "https://github.com/rocky/python-xdis/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       onny
       melvyn2
     ];
   };
-}
+})

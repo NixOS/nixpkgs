@@ -22,12 +22,12 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ds-analysis-lib";
   inherit (dep-scan) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/packages/analysis-lib";
+  sourceRoot = "${finalAttrs.src.name}/packages/analysis-lib";
 
   build-system = [
     setuptools
@@ -61,4 +61,4 @@ buildPythonPackage rec {
       teams
       ;
   };
-}
+})

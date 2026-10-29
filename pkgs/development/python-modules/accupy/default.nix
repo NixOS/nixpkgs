@@ -15,7 +15,7 @@
   perfplot,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "accupy";
   version = "0.3.6";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "accupy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-xxwLmL/rFgDFQNr8mRBFG1/NArQk9wanelL4Lu7ls2s=";
   };
 
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

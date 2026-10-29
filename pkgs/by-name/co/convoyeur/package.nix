@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "convoyeur";
   version = "0.1.2";
 
   src = fetchFromCodeberg {
     owner = "classabbyamp";
     repo = "convoyeur";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-l4QAZJX9ht10cwqk/yckmrfdu46vYQlOeT1UtsT+SRY=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.liliq-p-11;
     maintainers = with lib.maintainers; [ lenny ];
   };
-}
+})

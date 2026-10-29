@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libusb1";
   version = "3.4.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vpelletier";
     repo = "python-libusb1";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-w+Q00GWNobqQlvqryZlJl7SZPEMYgMtbuKpUSLneqNw=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
       rnhmjoj
     ];
   };
-}
+})

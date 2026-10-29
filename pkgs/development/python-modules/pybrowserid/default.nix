@@ -8,14 +8,14 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybrowserid";
   version = "0.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "PyBrowserID";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-bCJ2aeh8wleWrnb2oO9lAlUoyK2C01Jnn6mj5WY6ceM=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = [ ];
   };
-}
+})

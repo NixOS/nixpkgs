@@ -10,14 +10,14 @@
   fetchpatch2,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "antares";
   version = "0.7.35";
 
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A/ievIKXfFGu90aijxhmEWvfg2RqDtd7AtU+iyma3lU=";
   };
 
@@ -66,13 +66,13 @@ buildNpmPackage rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = finalAttrs.pname;
       desktopName = "Antares SQL";
-      exec = pname;
-      icon = pname;
+      exec = finalAttrs.pname;
+      icon = finalAttrs.pname;
       terminal = false;
       type = "Application";
-      startupWMClass = pname;
+      startupWMClass = finalAttrs.pname;
       comment = "A modern, fast and productivity driven SQL client with a focus in UX";
       categories = [ "Development" ];
     })
@@ -81,8 +81,8 @@ buildNpmPackage rec {
   meta = {
     description = "Modern, fast and productivity driven SQL client with a focus in UX";
     homepage = "https://github.com/antares-sql/antares";
-    changelog = "https://github.com/antares-sql/antares/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/antares-sql/antares/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eymeric ];
   };
-}
+})

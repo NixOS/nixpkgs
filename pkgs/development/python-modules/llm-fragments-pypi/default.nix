@@ -8,7 +8,7 @@
   httpx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-fragments-pypi";
   version = "0.1.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samueldg";
     repo = "llm-fragments-pypi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6gG7oPughxbpG0ZgKGniTfS9pJAcmXL7unru5kE2bEY=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM fragments plugin for PyPI packages metadata";
     homepage = "https://github.com/samueldg/llm-fragments-pypi";
-    changelog = "https://github.com/samueldg/llm-fragments-pypi/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/samueldg/llm-fragments-pypi/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

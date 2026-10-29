@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "selenium-manager";
   version = "4.40.0";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
-    tag = "selenium-${version}";
+    tag = "selenium-${finalAttrs.version}";
     hash = "sha256-Yfm2kpAmmEUP+m48PQf09UvFPeGBxd0ukqTtVah5h+E=";
   };
 
-  sourceRoot = "${src.name}/rust";
+  sourceRoot = "${finalAttrs.src.name}/rust";
 
   patches = [
     ./disable-telemetry.patch
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "selenium-manager";
     platforms = lib.platforms.all;
   };
-}
+})

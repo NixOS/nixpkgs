@@ -7,14 +7,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pkcs11-helper";
   version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "pkcs11-helper";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-0U3HK/6JmdNwus9fs6g86YrTAFVjgK/o7dQb69A5zlU=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     description = "Library that simplifies the interaction with PKCS#11 providers";
     platforms = lib.platforms.unix;
   };
-}
+})

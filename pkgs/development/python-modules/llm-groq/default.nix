@@ -8,7 +8,7 @@
   groq,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-groq";
   version = "0.9";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angerman";
     repo = "llm-groq";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9obDB5xz/YFKdnqM/70SC4Ud1t62AsGzAkbGsZTL5Nc=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin providing access to Groqcloud models.";
     homepage = "https://github.com/angerman/llm-groq";
-    changelog = "https://github.com/angerman/llm-groq/releases/tag/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/angerman/llm-groq/releases/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

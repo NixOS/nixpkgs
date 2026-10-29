@@ -23,7 +23,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgweather";
   version = "4.6.0";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgweather/${lib.versions.majorMinor version}/libgweather-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgweather/${lib.versions.majorMinor finalAttrs.version}/libgweather-${finalAttrs.version}.tar.xz";
     hash = "sha256-f10OjJaF7y/0bC86V8rkjXvzVAstg5IfiJ7yjmqHZ4g=";
   };
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
       # Version 40.alpha preceded version 4.0.
       freeze = "40.alpha";
@@ -120,4 +120,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

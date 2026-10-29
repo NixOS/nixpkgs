@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "single-source";
   version = "0.4.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rabbit72";
     repo = "single-source";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4l9ochlscQoWJVkYN8Iq2DsiU7qoOf7nUFYgBOebK/g=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Access to the project version in Python code for PEP 621-style projects";
     homepage = "https://github.com/rabbit72/single-source";
-    changelog = "https://github.com/rabbit72/single-source/releases/tag/v${version}";
+    changelog = "https://github.com/rabbit72/single-source/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

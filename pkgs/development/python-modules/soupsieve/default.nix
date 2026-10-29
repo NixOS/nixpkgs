@@ -5,13 +5,13 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "soupsieve";
   version = "2.10";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Sek4DX0pBUY1g7r+KF6BjHNmqe17Ou4iHBrHnJBdi8A=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/facelessuser/soupsieve";
     maintainers = [ ];
   };
-}
+})

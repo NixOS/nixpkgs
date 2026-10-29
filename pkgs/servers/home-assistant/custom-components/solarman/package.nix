@@ -8,7 +8,7 @@
   pyyaml,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "davidrapan";
   domain = "solarman";
   version = "26.01.31";
@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "davidrapan";
     repo = "ha-solarman";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FgxSS0PEgBoSbEFbHo2VTHT55tzkBKzfhuiniQFP4hs=";
   };
 
@@ -29,7 +29,7 @@ buildHomeAssistantComponent rec {
 
   meta = {
     description = "Home Assistant component for Solarman Stick Loggers";
-    changelog = "https://github.com/davidrapan/ha-solarman/releases/tag/${version}";
+    changelog = "https://github.com/davidrapan/ha-solarman/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/davidrapan/ha-solarman";
     maintainers = with lib.maintainers; [ Scrumplex ];
     # `license` and `custom_components/solarman/pysolarman/license` are MIT
@@ -39,4 +39,4 @@ buildHomeAssistantComponent rec {
       mpl20
     ];
   };
-}
+})

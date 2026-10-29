@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylru";
   version = "1.3.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jlhutch";
     repo = "pylru";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3qycUYmnLGiuNsrBOCL/QiRkrPVikaRqVBmQFURDGKs=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crcelk";
   version = "1.3";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zeroSteiner";
     repo = "crcelk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eJt0qcG0ejTQJyjOSi6Au2jH801KOMnk7f6cLbd7ADw=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

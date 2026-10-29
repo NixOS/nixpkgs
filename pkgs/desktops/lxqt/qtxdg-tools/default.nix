@@ -11,14 +11,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtxdg-tools";
   version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qtxdg-tools";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pVFdodYoLQs8o8rF8etd7BKImgJRoDsckGg9DRrwVIY=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

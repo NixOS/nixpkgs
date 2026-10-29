@@ -6,14 +6,14 @@
   nix-update-script,
   flit-core,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pkgutil-resolve-name";
   version = "1.3.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pkgutil_resolve_name";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-NX1snmp1VlPP14iTgXwIU682XdUeyX89NYqBk3O70XQ=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})

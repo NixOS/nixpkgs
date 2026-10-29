@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tlsh";
   version = "5.0.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cYvXZrd+8ZC5LfucguFFNlEX8FR+AkchmCFButYoiMg=";
   };
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace py_ext/setup.py \
-      --replace-fail "4.5.0" "${version}"
+      --replace-fail "4.5.0" "${finalAttrs.version}"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Trend Micro Locality Sensitive Hash";
     homepage = "https://tlsh.org/";
-    changelog = "https://github.com/trendmicro/tlsh/releases/tag/${version}";
+    changelog = "https://github.com/trendmicro/tlsh/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
   };
-}
+})

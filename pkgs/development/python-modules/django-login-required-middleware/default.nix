@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-login-required-middleware";
   version = "0.9.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CleitonDeLima";
     repo = "django-login-required-middleware";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WFQ/JvKh6gkUxPV27QBd2TzwFS8hfQGmcTInTnmh6iA=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

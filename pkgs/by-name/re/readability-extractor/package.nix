@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "readability-extractor";
   version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "ArchiveBox";
     repo = "readability-extractor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QzxwPonPrCDdVYHZ9rEfw8ok56lVZE82VykrfkdFh5I=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "readability-extractor";
   };
-}
+})

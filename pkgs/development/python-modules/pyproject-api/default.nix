@@ -20,7 +20,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyproject-api";
   version = "1.10.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pyproject-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-fWlGGVjB43NPfBRFfOWqZUDQuqOdrFP7jsqq9xOfvaw=";
   };
 
@@ -59,10 +59,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyproject_api" ];
 
   meta = {
-    changelog = "https://github.com/tox-dev/pyproject-api/releases/tag/${version}";
+    changelog = "https://github.com/tox-dev/pyproject-api/releases/tag/${finalAttrs.version}";
     description = "API to interact with the python pyproject.toml based projects";
     homepage = "https://github.com/tox-dev/pyproject-api";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

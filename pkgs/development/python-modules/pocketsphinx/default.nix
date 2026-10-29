@@ -12,7 +12,7 @@
   sounddevice,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (pocketsphinx) version src;
   pname = "pocketsphinx";
   pyproject = true;
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = {
     description = "Small speech recognizer";
     homepage = "https://github.com/cmusphinx/pocketsphinx";
-    changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${version}/NEWS";
+    changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${finalAttrs.version}/NEWS";
     license =
       with lib.licenses;
       AND [
@@ -53,4 +53,4 @@ buildPythonPackage rec {
       ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
-}
+})

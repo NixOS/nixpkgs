@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-artifact-registry";
   version = "1.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_artifact_registry";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-DoFzqXrmld/PAsgyd6D9V04aOb5AnaY0W5Rb6+V3rZQ=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Artifact Registry API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-artifact-registry";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-artifact-registry-v${version}/packages/google-cloud-artifact-registry/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-artifact-registry-v${finalAttrs.version}/packages/google-cloud-artifact-registry/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

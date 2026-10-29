@@ -19,14 +19,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qlcplus";
   version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
-    rev = "QLC+_${version}";
+    rev = "QLC+_${finalAttrs.version}";
     hash = "sha256-55Jy4t60Lc6YOGko6fW/pUjS5uAiNhVDn4bm8LBWkzI=";
   };
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.qlcplus.org/";
     mainProgram = "qlcplus5";
   };
-}
+})

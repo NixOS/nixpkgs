@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "secure";
   version = "1.0.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "typeerror";
     repo = "secure.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lyosOejztFEINGKO0wAYv3PWBL7vpmAq+eQunwP9h5I=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Adds optional security headers and cookie attributes for Python web frameworks";
     homepage = "https://github.com/TypeError/secure.py";
-    changelog = "https://github.com/TypeError/secure/releases/tag/v${version}";
+    changelog = "https://github.com/TypeError/secure/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

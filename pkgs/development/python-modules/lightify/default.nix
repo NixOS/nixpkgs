@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lightify";
   version = "1.0.7.3";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tfriedel";
     repo = "python-lightify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zgDB1Tq4RYIeABZCjCcoB8NGt+ZhQFnFu655OghgpH0=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/tfriedel/python-lightify/releases/tag/${src.tag}";
+    changelog = "https://github.com/tfriedel/python-lightify/releases/tag/${finalAttrs.src.tag}";
     description = "Library to work with OSRAM Lightify";
     homepage = "https://github.com/tfriedel/python-lightify";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

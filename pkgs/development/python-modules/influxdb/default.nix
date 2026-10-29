@@ -14,13 +14,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "influxdb";
   version = "5.3.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-WMZH9gQ3Et2G6a7hLrTM+7tUFUZ7yZEKSKqMdMEQiXA=";
   };
 
@@ -101,8 +101,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for InfluxDB";
     homepage = "https://github.com/influxdb/influxdb-python";
-    changelog = "https://github.com/influxdata/influxdb-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/influxdata/influxdb-python/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

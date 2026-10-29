@@ -8,7 +8,7 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-favicon";
   version = "1.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tcmetzger";
     repo = "sphinx-favicon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8zKG145BttlE8HYJ0H8O762TYC9KeIO8L9UfgNDs+i8=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx extension to add custom favicons";
     homepage = "https://github.com/tcmetzger/sphinx-favicon";
-    changelog = "https://github.com/tcmetzger/sphinx-favicon/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/tcmetzger/sphinx-favicon/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.newam ];
   };
-}
+})

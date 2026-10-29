@@ -8,7 +8,7 @@
   coincurve,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bip32";
   version = "5.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "darosior";
     repo = "python-bip32";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-QO1gS9bx/eQPaLuB1ZNZuXj4DmeO4/La2hG9NCXjd+4=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Minimalistic implementation of the BIP32 key derivation scheme";
     homepage = "https://github.com/darosior/python-bip32";
-    changelog = "https://github.com/darosior/python-bip32/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/darosior/python-bip32/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ arcnmx ];
   };
-}
+})

@@ -3,13 +3,13 @@
   lib,
   fetchPypi,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "euclid3";
   version = "0.01";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JbgnpXrb/Zo/qGJeQ6vD6Qf2HeYiND5+U4SC75tG/Qs=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
       matusf
     ];
   };
-}
+})

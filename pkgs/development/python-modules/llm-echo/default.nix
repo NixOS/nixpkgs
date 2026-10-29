@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-echo";
   version = "0.4";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-echo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E0C/SZ+0t1iPWulr/xaQQPzRR7Qg7nF/X5/HX8QxkMw=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Debug plugin for LLM";
     homepage = "https://github.com/simonw/llm-echo";
-    changelog = "https://github.com/simonw/llm-echo/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-echo/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

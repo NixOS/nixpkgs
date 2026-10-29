@@ -11,7 +11,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gcp-storage-emulator";
   version = "2024.08.03";
   pyproject = true;
@@ -19,14 +19,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oittaa";
     repo = "gcp-storage-emulator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Lp9Wvod0wSE2+cnvLXguhagT30ax9TivyR8gC/kB7w0=";
   };
 
   # upstream only sets the real version from GITHUB_REF when its CI builds a tag
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail '"0.0.0.dev0"' '"${version}"'
+      --replace-fail '"0.0.0.dev0"' '"${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "gcp-storage-emulator";
   };
-}
+})

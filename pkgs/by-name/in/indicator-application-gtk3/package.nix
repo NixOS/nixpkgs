@@ -14,14 +14,14 @@
   libappindicator,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "indicator-application";
   version = "12.10.1";
 
-  name = "${pname}-gtk3-${version}";
+  name = "${finalAttrs.pname}-gtk3-${finalAttrs.version}";
 
   src = fetchbzr {
-    url = "https://code.launchpad.net/~indicator-applet-developers/${pname}/trunk.17.04";
+    url = "https://code.launchpad.net/~indicator-applet-developers/${finalAttrs.pname}/trunk.17.04";
     rev = "260";
     sha256 = "1f0jdyqqb5g86zdpbcyn16x94yjigsfiv2kf73dvni5rp1vafbq1";
   };
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.msteen ];
   };
-}
+})

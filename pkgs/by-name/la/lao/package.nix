@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lao";
   version = "0.0.20060226";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-lao/fonts-lao_${version}.orig.tar.xz";
+    url = "mirror://debian/pool/main/f/fonts-lao/fonts-lao_${finalAttrs.version}.orig.tar.xz";
     hash = "sha256-DlgdyfhxxzVkNIL+NGsQ+PRlNkCuG3v2OahkIEYx60o=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
   };
-}
+})

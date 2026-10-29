@@ -14,7 +14,7 @@
   webcolors,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blockdiag";
   version = "3.0.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "blockdiag";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
@@ -80,10 +80,10 @@ buildPythonPackage rec {
   meta = {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
-    changelog = "https://github.com/blockdiag/blockdiag/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/blockdiag/blockdiag/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "blockdiag";
     platforms = lib.platforms.unix;
   };
-}
+})

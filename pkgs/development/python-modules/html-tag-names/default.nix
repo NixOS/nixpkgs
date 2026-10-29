@@ -5,7 +5,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "html-tag-names";
   version = "0.1.2";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Riverside-Healthcare";
     repo = "html-tag-names";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2YywP4/0yocejuJwanC5g9BR7mcy5C+zMhCjNZ9FRH4=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

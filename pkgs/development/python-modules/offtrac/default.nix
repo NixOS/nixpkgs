@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "offtrac";
   version = "0.1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ptC9aW5nxqsTUEuLKeSfJDv3cQRD2SCdp+cHdUEAbRs=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     description = "Trac xmlrpc library";
     license = lib.licenses.gpl2;
   };
-}
+})

@@ -11,12 +11,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfcl8690cdwcupswrapper";
   version = "1.5.0-3";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf103250/mfcl8690cdwcupswrapper-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf103250/mfcl8690cdwcupswrapper-${finalAttrs.version}.i386.deb";
     hash = "sha256-CREQRr4nhw1pD+8AfD5p/EHpx3R6vQIO8h6VtnHxXls=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
       nick-linux
     ];
   };
-}
+})

@@ -34,7 +34,7 @@
   pyside6,
   docutils,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manim-slides";
   version = "5.6.0";
   pyproject = true;
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "manim-slides";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aAkKUa0oA2hGcd3PAda4pXPb9SoBVDfuHPplXk+6Vuo=";
   };
 
@@ -107,11 +107,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jeertmans/manim-slides/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jeertmans/manim-slides/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Tool for live presentations using manim";
     homepage = "https://github.com/jeertmans/manim-slides";
     license = lib.licenses.mit;
     mainProgram = "manim-slides";
     maintainers = [ lib.maintainers.bpeetz ];
   };
-}
+})

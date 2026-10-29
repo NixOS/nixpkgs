@@ -20,7 +20,7 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "img2pdf";
   version = "0.6.3";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "josch";
     repo = "img2pdf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uHcGCx5DdUxFnATG3T565R+NatLukPPpnRj0TZHToC0=";
   };
 
@@ -96,7 +96,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "img2pdf" ];
 
   meta = {
-    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${src.tag}/CHANGES.rst";
+    changelog = "https://gitlab.mister-muffin.de/josch/img2pdf/src/tag/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
     license = lib.licenses.lgpl3Plus;
@@ -106,4 +106,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})

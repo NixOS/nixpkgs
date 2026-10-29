@@ -6,7 +6,7 @@
   aiohttp,
   voluptuous,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alphaessopenapi";
   version = "0.0.19";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CharlesGillanders";
     repo = "alphaess-openAPI";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-wdwA1MIQrkZCT4zIf8WXyq0+F+peC/auVtjDJ8ZZyxE=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benediktbroich ];
   };
-}
+})

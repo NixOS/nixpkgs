@@ -6,7 +6,7 @@
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysaj";
   version = "0.0.16";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fredericvl";
     repo = "pysaj";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7mN6GPRbXfEUfCrCrCs71SSt4x2Ch2y3a5rfXnuwVA0=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

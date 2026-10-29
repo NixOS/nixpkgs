@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytubefix";
   version = "10.3.8";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XfcFpJRMcXGcGeo36QhBEi7iT6Lsf1yq2F1iz/jq7oQ=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytube fork with additional features and fixes";
     homepage = "https://github.com/JuanBindez/pytubefix";
-    changelog = "https://github.com/JuanBindez/pytubefix/releases/tag/${src.tag}";
+    changelog = "https://github.com/JuanBindez/pytubefix/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ youhaveme9 ];
   };
-}
+})

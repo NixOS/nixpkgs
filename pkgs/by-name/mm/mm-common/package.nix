@@ -9,12 +9,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mm-common";
   version = "1.0.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mm-common/${lib.versions.majorMinor version}/mm-common-${version}.tar.xz";
+    url = "mirror://gnome/sources/mm-common/${lib.versions.majorMinor finalAttrs.version}/mm-common-${finalAttrs.version}.tar.xz";
     sha256 = "sYnuY26DnRLADavvrgmf1IirI1jewk0mR2HAEZULAqk=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

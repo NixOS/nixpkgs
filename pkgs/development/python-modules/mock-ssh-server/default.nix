@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mock-ssh-server";
   version = "0.9.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "carletes";
     repo = "mock-ssh-server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yJd+WDidW5ouofytAKTlSiZhIQg2cLs8BvEp15qwtjo=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python mock SSH server for testing purposes";
     homepage = "https://github.com/carletes/mock-ssh-server";
-    changelog = "https://github.com/carletes/mock-ssh-server/releases/tag/${version}";
+    changelog = "https://github.com/carletes/mock-ssh-server/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

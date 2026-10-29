@@ -6,7 +6,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dllogger";
   version = "1.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "dllogger";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kT6FhAl4JZlFPdzKYopAJBurYVMaU5umn/qZADfPjkE=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Logging tool for deep learning";
     homepage = "https://github.com/NVIDIA/dllogger";
-    changelog = "https://github.com/NVIDIA/dllogger/releases/tag/${src.tag}";
+    changelog = "https://github.com/NVIDIA/dllogger/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

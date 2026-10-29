@@ -5,14 +5,14 @@
   gst_all_1,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter329.buildFlutterApplication (finalAttrs: {
   pname = "pied";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Elleo";
     repo = "pied";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-STeSpto70b4m03ExikUrIwsHCqj1QH2jvVZ8G/ybw28=";
   };
 
@@ -35,7 +35,7 @@ flutter329.buildFlutterApplication rec {
   meta = {
     description = "Piper text-to-speech voice manager for use with Speech Dispatcher";
     homepage = "https://github.com/Elleo/pied";
-    changelog = "https://github.com/Elleo/pied/releases/tag/${src.tag}";
+    changelog = "https://github.com/Elleo/pied/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "pied";
@@ -44,4 +44,4 @@ flutter329.buildFlutterApplication rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

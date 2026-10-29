@@ -5,14 +5,14 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lxgw-fusionkai";
   version = "24.134";
 
   src = fetchFromGitHub {
     owner = "lxgw";
     repo = "FusionKai";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pEISoFEsv8SJOGa2ud/nV1yvl8T9kakfKENu3mfYA5A=";
   };
 
@@ -25,4 +25,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ hellodword ];
   };
-}
+})

@@ -9,14 +9,14 @@
   runCommand,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rpm-sequoia";
   version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "rpm-sequoia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-16nCWSAubI65+sNiiujmnlpbXAta5ONDPU7c1YFUT9Y=";
   };
 
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
       ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install -d $out/lib
-      ln -s librpm_sequoia.dylib $out/lib/librpm_sequoia.${version}.dylib
+      ln -s librpm_sequoia.dylib $out/lib/librpm_sequoia.${finalAttrs.version}.dylib
     '';
 
   passthru.updateScript = nix-update-script { };
@@ -75,4 +75,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ baloo ];
   };
-}
+})

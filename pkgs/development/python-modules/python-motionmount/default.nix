@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-motionmount";
   version = "2.3.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vogelsproducts";
     repo = "python-MotionMount";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cXh+7DNbwYoKp76XmzPno6dcfujZT/QUO3Ns72M4gV0=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

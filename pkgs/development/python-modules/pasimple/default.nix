@@ -6,7 +6,7 @@
   pulseaudio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pasimple";
   version = "0.0.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "henrikschnor";
     repo = "pasimple";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Z271FdBCqPFcQzVqGidL74nO85rO9clNvP4czAHmdEw=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

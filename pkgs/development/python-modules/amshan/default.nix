@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "amshan";
   version = "2.1.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "toreamun";
     repo = "amshan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-aw0wTqb2s84STVUN55h6L926pXwaMSppBCfXZVb87w0=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

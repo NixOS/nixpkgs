@@ -7,7 +7,7 @@
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipyxact";
   version = "0.3.2";
   format = "setuptools";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "olofk";
     repo = "ipyxact";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-myD+NnqcxxaSAV7qZa8xqeciaiFqFePqIzd7sb/2GXA=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.mit;
   };
-}
+})

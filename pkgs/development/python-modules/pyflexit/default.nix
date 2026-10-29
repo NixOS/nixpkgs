@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyflexit";
   version = "0.3";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Sabesto";
     repo = "pyflexit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-L+I1yJUHg76BjN9+zUnqsiO4p7v8fky1d0R+80fGVKo=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,14 +7,14 @@
   makeWrapper,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "zap-chip";
   version = "2026.05.21";
 
   src = fetchFromGitHub {
     owner = "project-chip";
     repo = "zap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rX8WTaQQbVWlabMEvv5SCalxy0XmB5jFpCk1uQCbunM=";
   };
 
@@ -43,10 +43,10 @@ buildNpmPackage rec {
   postPatch =
     let
       versionJson = {
-        hash = version;
+        hash = finalAttrs.version;
         timestamp = 1;
-        date = version;
-        zapVersion = version;
+        date = finalAttrs.version;
+        zapVersion = finalAttrs.version;
       };
     in
     ''
@@ -65,11 +65,11 @@ buildNpmPackage rec {
 
   meta = {
     description = "Generic generation engine and user interface for applications and libraries based on Zigbee Cluster Library (ZCL)";
-    changelog = "https://github.com/project-chip/zap/releases/tag/v${version}";
+    changelog = "https://github.com/project-chip/zap/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/project-chip/zap";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ symphorien ];
     mainProgram = "zap-cli";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

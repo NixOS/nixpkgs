@@ -5,7 +5,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylev";
   version = "1.4.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "toastdriven";
     repo = "pylev";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gZUE2n3VFH9Z93wZocYLw4nsZaEOtN5rt1ttu22T/Tk=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
-}
+})

@@ -6,7 +6,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bytecode";
   version = "0.19.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthieuDartiailh";
     repo = "bytecode";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aO9SPn8PC9UMdaxsnOP0MUcxg5MWOl6jcYOBHWJU/z0=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raboof ];
   };
-}
+})

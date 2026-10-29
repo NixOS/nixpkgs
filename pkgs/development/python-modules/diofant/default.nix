@@ -15,7 +15,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diofant";
   version = "0.15.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "diofant";
     repo = "diofant";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uQvAYSURDhuAKcX0WVMk4y2ZXiiq0lPZct/7A5n5t34=";
   };
 
@@ -68,10 +68,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "diofant" ];
 
   meta = {
-    changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${src.tag}.html";
+    changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${finalAttrs.src.tag}.html";
     description = "Python CAS library";
     homepage = "https://github.com/diofant/diofant";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

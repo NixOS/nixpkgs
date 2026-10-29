@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simplecosine";
   version = "1.2";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "simplecosine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TNQnSbCh7o5JsxvfljRGSNwptwpLHmVw9gyk0TELDek=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

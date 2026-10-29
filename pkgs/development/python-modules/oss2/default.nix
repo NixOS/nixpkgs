@@ -13,13 +13,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oss2";
   version = "2.19.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qKue5+uZ6Ip+E4LtxupkHSGdWFp+B043duneyUc+WcE=";
   };
 
@@ -117,4 +117,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

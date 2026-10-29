@@ -11,14 +11,14 @@
 let
   defaultCfgPath = "${placeholder "out"}/etc/wildmidi/wildmidi.cfg";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wildmidi";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";
     repo = "wildmidi";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     sha256 = "sha256-KFJW2m7TJ0RExK/C0XHyOefKGFLUszl7Jh6l10NjeHM=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

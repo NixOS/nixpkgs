@@ -30,12 +30,12 @@ let
   url = "https://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/${lib.last (lib.splitVersion pkgVersion)}/wps-office_${pkgVersion}.XA_amd64.deb";
   hash = "sha256-o8njvwE/UsQpPuLyChxGAZ4euvwfuaHxs5pfUvcM7kI=";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wpsoffice";
   version = pkgVersion;
 
   src =
-    runCommandLocal "wps-office_${version}.XA_amd64.deb"
+    runCommandLocal "wps-office_${finalAttrs.version}.XA_amd64.deb"
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
@@ -142,4 +142,4 @@ stdenv.mkDerivation rec {
       pokon548
     ];
   };
-}
+})

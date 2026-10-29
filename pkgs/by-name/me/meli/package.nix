@@ -26,15 +26,15 @@
   notmuch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meli";
   version = "0.8.13";
 
   src = fetchzip {
     urls = [
-      "https://git.meli-email.org/meli/meli/archive/v${version}.tar.gz"
-      "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
-      "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
+      "https://git.meli-email.org/meli/meli/archive/v${finalAttrs.version}.tar.gz"
+      "https://codeberg.org/meli/meli/archive/v${finalAttrs.version}.tar.gz"
+      "https://github.com/meli/meli/archive/refs/tags/v${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-uyhxNEKoRKrqvU76SuTKl1wlwOdHIxMFLXB5LwsdvQE=";
   };
@@ -89,4 +89,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

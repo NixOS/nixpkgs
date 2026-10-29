@@ -11,14 +11,14 @@
   packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-builder";
   version = "3.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ansible_builder";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-nYi8FazH0xBW0MUZFKYQLayOWtc/ny01upg3jIlxTtI=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ melkor333 ];
   };
-}
+})

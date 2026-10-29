@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "ciderpress2";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "fadden";
     repo = "CiderPress2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nzCuKCntqYVhjSHljPkY5ziAjYH/qGUqukRPrHzhOzo=";
   };
 
@@ -35,10 +35,10 @@ buildDotnetModule rec {
       create new archives.
     '';
     homepage = "https://github.com/fadden/CiderPress2";
-    changelog = "https://github.com/fadden/CiderPress2/releases/tag/v${version}";
+    changelog = "https://github.com/fadden/CiderPress2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nulleric ];
     platforms = lib.platforms.unix;
     mainProgram = "cp2";
   };
-}
+})

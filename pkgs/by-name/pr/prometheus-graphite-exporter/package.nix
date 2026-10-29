@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "graphite-exporter";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "graphite_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Dr7I4+gQXZYKUMnf/P9DgLYRb4SRaDnvqvDwHfMpAn0=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.misterio77 ];
   };
-}
+})

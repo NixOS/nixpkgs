@@ -7,16 +7,16 @@
   enableUnfree ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glucose" + lib.optionalString enableUnfree "-syrup";
   version = "4.2.1";
 
   src = fetchurl {
-    url = "https://www.labri.fr/perso/lsimon/downloads/softwares/glucose-${version}.zip";
+    url = "https://www.labri.fr/perso/lsimon/downloads/softwares/glucose-${finalAttrs.version}.zip";
     hash = "sha256-J0J9EKC/4cCiZr/y4lz+Hm7OcmJmMIIWzQ+4c+KhqXg=";
   };
 
-  sourceRoot = "glucose-${version}/sources/${if enableUnfree then "parallel" else "simp"}";
+  sourceRoot = "glucose-${finalAttrs.version}/sources/${if enableUnfree then "parallel" else "simp"}";
 
   postPatch = ''
     substituteInPlace Main.cc \
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm0755 ${pname}_release $out/bin/${pname}
-    mkdir -p "$out/share/doc/${pname}-${version}/"
-    install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${pname}-${version}/"
+    install -Dm0755 ${finalAttrs.pname}_release $out/bin/${finalAttrs.pname}
+    mkdir -p "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/"
+    install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/"
 
     runHook postInstall
   '';
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

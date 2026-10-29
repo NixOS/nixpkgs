@@ -6,14 +6,14 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hydrus-api";
   version = "5.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hydrus_api";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Xq27pMVj2JkcHLvFzVDKL9KNOjTxZ3yH5+RVcVMzKJc=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

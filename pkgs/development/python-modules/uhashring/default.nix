@@ -6,7 +6,7 @@
   hatchling,
   python-memcached,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uhashring";
   version = "2.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ultrabug";
     repo = "uhashring";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rxYAqzyGqS+Pp70jD36bvXJHvMshUWbTvmqB+H+3BAM=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Full featured consistent hashing python library compatible with ketama";
     homepage = "https://github.com/ultrabug/uhashring";
-    changelog = "https://github.com/ultrabug/uhashring/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/ultrabug/uhashring/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ typedrat ];
   };
-}
+})

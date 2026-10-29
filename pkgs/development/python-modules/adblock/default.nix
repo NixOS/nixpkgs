@@ -13,7 +13,7 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "adblock";
   version = "0.6.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ArniDagur";
     repo = "python-adblock";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5g5xdUzH/RTVwu4Vfb5Cb1t0ruG0EXgiXjrogD/+JCU=";
   };
 
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}"
+      --replace "0.0.0" "${finalAttrs.version}"
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-fetJX6HQxRZ/Az7rJeU9S+s8ttgNPnJEvTLfzGt4xjk=";
   };
 
@@ -85,11 +85,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for Brave's adblocking library";
     homepage = "https://github.com/ArniDagur/python-adblock/";
-    changelog = "https://github.com/ArniDagur/python-adblock/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ArniDagur/python-adblock/blob/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ dotlambda ];
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
   };
-}
+})

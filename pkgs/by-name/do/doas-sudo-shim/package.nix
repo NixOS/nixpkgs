@@ -13,14 +13,14 @@
   doas-sudo-shim,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doas-sudo-shim";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "doas-sudo-shim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-USSakVUzCbUY1DJLmDCiwdq/xjOwwnm3VtXBBeXeV1A=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    helpTest = runCommand "${pname}-helpTest" { } ''
+    helpTest = runCommand "${finalAttrs.pname}-helpTest" { } ''
       ${doas-sudo-shim}/bin/sudo -h > $out
       grep -q "Execute a command as another user using doas(1)" $out
     '';
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dsuetin ];
     platforms = lib.platforms.linux;
   };
-}
+})

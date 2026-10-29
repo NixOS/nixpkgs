@@ -8,14 +8,14 @@
   installShellFiles,
   callPackage,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.6.2";
   pname = "pastebinit";
 
   src = fetchFromGitHub {
     owner = "pastebinit";
     repo = "pastebinit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vuAWkHlQM6QTWarThpSbY0qrxzej0GvLU0jT2JOS/qc=";
   };
 
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -9,7 +9,7 @@
   tdir,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "editor";
   version = "1.6.6";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rec";
     repo = "editor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FVtat3gUsK5Lv6XSkVXj0hY6NkMGw6LxRWMJrZ/cIis=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Open the default text editor";
     homepage = "https://github.com/rec/editor";
-    changelog = "https://github.com/rec/editor/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/rec/editor/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

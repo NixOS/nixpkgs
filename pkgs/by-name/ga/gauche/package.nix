@@ -14,14 +14,14 @@
   cacert,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gauche";
   version = "0.9.15";
 
   src = fetchFromGitHub {
     owner = "shirok";
     repo = "gauche";
-    rev = "release${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "release${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-M2vZqTMkob+WxUnCo4NDxS4pCVNleVBqkiiRp9nG/KA=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

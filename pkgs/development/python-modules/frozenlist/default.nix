@@ -10,7 +10,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "frozenlist";
   version = "1.8.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "frozenlist";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vkZ60qI0yQ82QSLQkBDzLnikTBQhUUuAzV+YsorrM2Q=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for list-like structure";
     homepage = "https://github.com/aio-libs/frozenlist";
-    changelog = "https://github.com/aio-libs/frozenlist/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/frozenlist/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

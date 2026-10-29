@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "online-judge-template-generator";
   version = "4.8.1";
   format = "setuptools";
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "template-generator";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cS1ED1a92fEFqy6ht8UFjxocWIm35IA/VuaPSLsdlqg=";
   };
 
@@ -39,4 +39,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sei40kr ];
   };
-}
+})

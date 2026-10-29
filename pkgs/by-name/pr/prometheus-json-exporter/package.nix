@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "prometheus-json-exporter";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "json_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-nmpErJCp31hxjVmVGaUiuKF/ya92vs+Cqw95EOFJ0BQ=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "json_exporter";
   };
-}
+})

@@ -5,11 +5,11 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lxgw-wenkai-tc";
   version = "1.530";
   src = fetchurl {
-    url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${version}/lxgw-wenkai-tc-v${version}.tar.gz";
+    url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${finalAttrs.version}/lxgw-wenkai-tc-v${finalAttrs.version}.tar.gz";
     hash = "sha256-omCpK9EfTQZvrNpPlGVPWbgCeHTPEKLRaMd5XW00u5k=";
   };
 
@@ -22,4 +22,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ lebensterben ];
   };
-}
+})

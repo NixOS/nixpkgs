@@ -18,17 +18,17 @@ let
 
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit version;
 
   pname = "browsh";
 
-  sourceRoot = "${src.name}/interfacer";
+  sourceRoot = "${finalAttrs.src.name}/interfacer";
 
   src = fetchFromGitHub {
     owner = "browsh-org";
     repo = "browsh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Abna1bAaqOT44zZJsObLMR5fTW2xlWBg1M0JYH0Yc6g=";
   };
 
@@ -52,4 +52,4 @@ buildGoModule rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

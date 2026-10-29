@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eradicate";
   version = "3.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "eradicate";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-D9V9PQ3HVmShmPgTInOJaVmujy1fQyQn6qYn/Pa0kMg=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
     description = "Library to remove commented-out code from Python files";
     mainProgram = "eradicate";
     homepage = "https://github.com/myint/eradicate";
-    changelog = "https://github.com/wemake-services/eradicate/releases/tag/${src.tag}";
+    changelog = "https://github.com/wemake-services/eradicate/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmlb ];
   };
-}
+})

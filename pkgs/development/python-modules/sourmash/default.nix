@@ -23,18 +23,18 @@
 let
   rocksdb = rocksdb_9_10;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sourmash";
   version = "4.9.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KIidEQQeOYgxh1x9F6Nn4+WTewldAGdS5Fx/IwL0Ym0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-/tVuR31T38/xx1+jglSGECAT1GmQEddQp9o6zAqlPyY=";
   };
 
@@ -91,8 +91,8 @@ buildPythonPackage rec {
     description = "Quickly search, compare, and analyze genomic and metagenomic data sets";
     mainProgram = "sourmash";
     homepage = "https://sourmash.bio";
-    changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${version}";
+    changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ luizirber ];
     license = lib.licenses.bsd3;
   };
-}
+})

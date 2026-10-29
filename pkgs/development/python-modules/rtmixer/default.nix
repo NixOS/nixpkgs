@@ -10,7 +10,7 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtmixer";
   version = "0.1.7";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spatialaudio";
     repo = "python-rtmixer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-K5w6XWnDdA5HrzDOMhqinlxrg/09AF6c5CWZEsfVHb4=";
     fetchSubmodules = true;
   };
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ laikq ];
     license = lib.licenses.mit;
   };
-}
+})

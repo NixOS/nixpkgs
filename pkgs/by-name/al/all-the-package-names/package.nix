@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "all-the-package-names";
   version = "2.0.2601";
 
   src = fetchFromGitHub {
     owner = "nice-registry";
     repo = "all-the-package-names";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-brw+U512bYLxAxLB5z2HjL+6MML3rMwtAZWvR0r8jVI=";
   };
 
@@ -27,4 +27,4 @@ buildNpmPackage rec {
     mainProgram = "all-the-package-names";
     maintainers = with lib.maintainers; [ donovanglover ];
   };
-}
+})

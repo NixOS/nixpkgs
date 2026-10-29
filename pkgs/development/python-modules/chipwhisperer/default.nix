@@ -34,14 +34,14 @@
 # users to get device access permission:
 #    services.udev.packages = [ pkgs.python3Packages.chipwhisperer ];
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chipwhisperer";
   version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "newaetech";
     repo = "chipwhisperer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/YqNpNccJo+AmRfU5LwkVxK9wIIAUrtwjOfzH83NadU=";
   };
 
@@ -111,8 +111,8 @@ buildPythonPackage rec {
   meta = {
     description = "Toolchain for side-channel power analysis and glitching attacks";
     homepage = "https://github.com/newaetech/chipwhisperer";
-    changelog = "https://github.com/newaetech/chipwhisperer/releases/tag/v${version}";
+    changelog = "https://github.com/newaetech/chipwhisperer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.krishnans2006 ];
   };
-}
+})

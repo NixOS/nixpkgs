@@ -7,14 +7,14 @@
   sphinxcontrib-serializinghtml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-websupport";
   version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_websupport";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-C3Nn07rGRUsfl+QqqMTU1KG3VtUl/HJuu+VXHgM+ec0=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     homepage = "http://sphinx-doc.org/";
     license = lib.licenses.bsd2;
   };
-}
+})

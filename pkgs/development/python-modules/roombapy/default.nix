@@ -12,7 +12,7 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roombapy";
   version = "1.9.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-63PqNmJC0IWPPMVyZdKoZikvBA4phMcYxlTBk/m1cq0=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     mainProgram = "roombapy";
     homepage = "https://github.com/pschmitt/roombapy";
-    changelog = "https://github.com/pschmitt/roombapy/releases/tag/${src.tag}";
+    changelog = "https://github.com/pschmitt/roombapy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

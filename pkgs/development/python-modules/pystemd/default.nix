@@ -11,7 +11,7 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pystemd";
   version = "0.15.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "pystemd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qFBa2hIcF0hyb+QyVpFG0qOpWsVVVTGCqgfChic6JCI=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
       dbus API via sd-bus in an automated and easy to consume way
     '';
     homepage = "https://github.com/facebookincubator/pystemd";
-    changelog = "https://github.com/systemd/pystemd/releases/tag/${src.tag}";
+    changelog = "https://github.com/systemd/pystemd/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

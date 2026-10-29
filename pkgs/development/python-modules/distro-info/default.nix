@@ -7,7 +7,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "distro-info";
   version = "1.20";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Not using fetchFromGitLab because it incorrectly sets
   # SOURCE_DATE_EPOCH=315619200 (1980-01-02) and breaks tests.
   src = fetchurl {
-    url = "https://salsa.debian.org/debian/distro-info/-/archive/debian/${version}/distro-info-debian-${version}.tar.gz";
+    url = "https://salsa.debian.org/debian/distro-info/-/archive/debian/${finalAttrs.version}/distro-info-debian-${finalAttrs.version}.tar.gz";
     hash = "sha256-b2vrarnSAiPCiKLymwPANpvldCHyWoh5LZJU3BzpQ60=";
   };
 
@@ -37,9 +37,9 @@ buildPythonPackage rec {
   meta = {
     description = "Information about Debian and Ubuntu releases";
     homepage = "https://salsa.debian.org/debian/distro-info";
-    changelog = "https://salsa.debian.org/debian/distro-info/-/blob/debian/${version}/debian/changelog";
+    changelog = "https://salsa.debian.org/debian/distro-info/-/blob/debian/${finalAttrs.version}/debian/changelog";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.all;
   };
-}
+})

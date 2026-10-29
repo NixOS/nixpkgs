@@ -4,14 +4,14 @@
   fetchFromGitHub,
   python3Packages,
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   version = "0.2.2";
   pname = "audiomatch";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "unmade";
     repo = "audiomatch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-I7gTP2lwg4EDNmI+tVmI721/nEDShb7q21tD9tRbskY=";
   };
 
@@ -36,10 +36,10 @@ python3Packages.buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/unmade/audiomatch";
     description = "A small command-line tool to find similar audio files";
-    changelog = "https://github.com/unmade/audiomatch/releases/tag/${version}";
+    changelog = "https://github.com/unmade/audiomatch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "audiomatch";
     maintainers = with lib.maintainers; [ leha44581 ];
   };
-}
+})

@@ -24,14 +24,14 @@ lib.checkListOfEnum "${pname}: theme variants" [ "Fuchsia" "Fuchsia-Pop" "Fuchsi
   platformVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2.0.0";
 
     src = fetchFromGitHub {
       owner = "ful1e5";
       repo = "fuchsia-cursor";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-WnDtUsjRXT7bMppgwU5BIDqphP69DmPzQM/0qXES5tM=";
     };
 
@@ -76,4 +76,4 @@ lib.checkListOfEnum "${pname}: theme variants" [ "Fuchsia" "Fuchsia-Pop" "Fuchsi
       platforms = lib.platforms.all;
       license = lib.licenses.gpl3Plus;
     };
-  }
+  })

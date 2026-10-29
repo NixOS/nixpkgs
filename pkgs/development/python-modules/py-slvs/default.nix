@@ -10,13 +10,13 @@
   scikit-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-slvs";
   version = "1.0.6";
 
   src = fetchPypi {
     pname = "py_slvs";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-U6T/aXy0JTC1ptL5oBmch0ytSPmIkRA8XOi31NpArnI=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
       traverseda
     ];
   };
-}
+})

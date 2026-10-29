@@ -10,7 +10,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "duo-client";
   version = "5.5.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5ZPs2099G9oBbDpComNDP3c4B0NjWirBMZY4orO9YfA=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with the Duo Auth, Admin, and Accounts APIs";
     homepage = "https://github.com/duosecurity/duo_client_python";
-    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${src.tag}";
+    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

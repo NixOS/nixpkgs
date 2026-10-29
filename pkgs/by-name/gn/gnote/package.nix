@@ -18,12 +18,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnote";
   version = "50.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnote/${lib.versions.major version}/gnote-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnote/${lib.versions.major finalAttrs.version}/gnote-${finalAttrs.version}.tar.xz";
     hash = "sha256-vtc0VUrPMXuSK3RiNprlLbzNzV9NInFMJnxeMFW9mLI=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
   };
-}
+})

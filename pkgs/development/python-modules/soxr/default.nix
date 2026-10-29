@@ -21,7 +21,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "soxr";
   version = "1.1.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dofuuz";
     repo = "python-soxr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XdSInR0ogbcku6yvMkGEEIxu2nlqa0mffBtd+ifvzoU=";
   };
 
@@ -62,10 +62,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${src.tag}";
+    changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${finalAttrs.src.tag}";
     description = "High quality, one-dimensional sample-rate conversion library";
     homepage = "https://github.com/dofuuz/python-soxr/tree/main";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

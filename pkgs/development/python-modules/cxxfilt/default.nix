@@ -5,13 +5,13 @@
   fetchPypi,
   gcc-unwrapped,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cxxfilt";
   version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ffZGS6Xo778NiXTAsseLMlRmdvBgWag1FdvfpVmzQhQ=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

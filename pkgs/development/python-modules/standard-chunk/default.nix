@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "standard-chunk";
   version = "3.13.0";
   pyproject = true;
@@ -13,11 +13,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "youknowone";
     repo = "python-deadlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vhGFTd1yXL4Frqli5D1GwOatwByDjvcP8sxgkdu6Jqg=";
   };
 
-  sourceRoot = "${src.name}/chunk";
+  sourceRoot = "${finalAttrs.src.name}/chunk";
 
   build-system = [ setuptools ];
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

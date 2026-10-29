@@ -5,7 +5,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "downloader-cli";
   version = "0.3.4";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = "downloader-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E2K3n9qCQofm4gXu1l7/0iMoJsniuzhsBUplr4aZ39s=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
     description = "Downloader with an awesome customizable progressbar";
     mainProgram = "dw";
     homepage = "https://github.com/deepjyoti30/downloader-cli";
-    changelog = "https://github.com/deepjyoti30/downloader-cli/releases/tag/${version}";
+    changelog = "https://github.com/deepjyoti30/downloader-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j0hax ];
   };
-}
+})

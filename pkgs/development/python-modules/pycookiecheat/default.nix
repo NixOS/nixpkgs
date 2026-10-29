@@ -11,7 +11,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycookiecheat";
   version = "0.8.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "n8henrie";
     repo = "pycookiecheat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jOyTfh2ZhKW/pMU7T5tfxaM0l/g59N+mirnbc0FLPbQ=";
   };
 
@@ -64,11 +64,11 @@ buildPythonPackage rec {
   meta = {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";
     homepage = "https://github.com/n8henrie/pycookiecheat";
-    changelog = "https://github.com/n8henrie/pycookiecheat/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/n8henrie/pycookiecheat/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
       n8henrie
     ];
   };
-}
+})

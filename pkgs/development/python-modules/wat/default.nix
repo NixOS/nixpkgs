@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wat";
   version = "0.7.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "igrek51";
     repo = "wat";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ns5eF5jsmwCvx9jnTLG9w0ujH3cPAjzy9bRMgQHVKj4=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ parras ];
   };
-}
+})

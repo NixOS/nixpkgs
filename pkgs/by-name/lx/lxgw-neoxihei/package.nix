@@ -4,12 +4,12 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lxgw-neoxihei";
   version = "1.306";
 
   src = fetchurl {
-    url = "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v${version}/LXGWNeoXiHei.ttf";
+    url = "https://github.com/lxgw/LxgwNeoXiHei/releases/download/v${finalAttrs.version}/LXGWNeoXiHei.ttf";
     hash = "sha256-vmicx0qKY+M5Nhtv08tG19SZ1aTGWaAioHUluUyXKMg=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

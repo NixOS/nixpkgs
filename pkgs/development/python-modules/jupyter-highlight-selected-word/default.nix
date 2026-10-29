@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-highlight-selected-word";
   version = "0.2.0";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcb91";
     repo = "jupyter_highlight_selected_word";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KgM//SIfES46uZySwNR4ZOcolnJORltvThsmEvxXoIs=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

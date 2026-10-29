@@ -24,7 +24,7 @@ let
     }
   '';
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "global-platform-pro";
   version = "25.10.20";
   env.GPPRO_VERSION = "v25.10.20-0-g72f85b9"; # git describe --tags --always --long --dirty
@@ -32,7 +32,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
   };
 
@@ -90,4 +90,4 @@ maven.buildMavenPackage rec {
     license = lib.licenses.lgpl3;
     mainProgram = "gp";
   };
-}
+})

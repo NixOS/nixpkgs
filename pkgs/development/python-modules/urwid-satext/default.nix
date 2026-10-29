@@ -6,7 +6,7 @@
   urwid,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urwid-satext";
   version = "0.8.0-unstable-2023-04-08";
   pyproject = true;
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   meta = {
     description = "SàT extension widgets for Urwid";
     homepage = "https://libervia.org";
-    changelog = "https://repos.goffi.org/urwid-satext/file/${src.rev}/CHANGELOG";
+    changelog = "https://repos.goffi.org/urwid-satext/file/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.lgpl3Plus;
     teams = with lib.teams; [ ngi ];
     maintainers = [ lib.maintainers.oluchitheanalyst ];
   };
-}
+})

@@ -15,13 +15,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysindy";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-NpZZ22MucuZwtkz9ef08C578jjo28MNfTxG4ROhjuwg=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     homepage = "https://pysindy.readthedocs.io/en/latest/";
     maintainers = with lib.maintainers; [ conny ];
   };
-}
+})

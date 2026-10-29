@@ -18,7 +18,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdfplumber";
   version = "0.11.10";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "pdfplumber";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0fdH8SKU8ude43x7tsWxeGFQeSCYrTGTELG6SimloLQ=";
   };
 
@@ -66,8 +66,8 @@ buildPythonPackage rec {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
-    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/${src.tag}";
+    changelog = "https://github.com/jsvine/pdfplumber/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

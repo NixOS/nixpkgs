@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyramid-multiauth";
   version = "1.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "pyramid_multiauth";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tDQENdM+eeAve3DoU3bXMP4k1hSIQ6FlFNlG+rVYhOc=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/mozilla-services/pyramid_multiauth/releases/tag/${version}";
+    changelog = "https://github.com/mozilla-services/pyramid_multiauth/releases/tag/${finalAttrs.version}";
     description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
     homepage = "https://github.com/mozilla-services/pyramid_multiauth";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})

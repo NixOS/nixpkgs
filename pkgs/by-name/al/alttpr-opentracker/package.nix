@@ -18,14 +18,14 @@
   libsm,
   libice,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "opentracker";
   version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "trippsc2";
     repo = "opentracker";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4EBn3BX5tX+yPUjoNFQSls9CwTCd6MpvcBoUKwRndRo=";
   };
 
@@ -80,4 +80,4 @@ buildDotnetModule rec {
     mainProgram = "OpenTracker";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

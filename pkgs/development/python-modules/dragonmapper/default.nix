@@ -8,7 +8,7 @@
   zhon,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dragonmapper";
   version = "0.3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tsroten";
     repo = "dragonmapper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3SRSu/9cpg2YcEuPFxBXg6KHgRSX5SiMAFbyE40m6ks=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Identification and conversion functions for Chinese text processing";
     homepage = "https://github.com/tsroten/dragonmapper";
-    changelog = "https://github.com/tsroten/dragonmapper/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/tsroten/dragonmapper/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

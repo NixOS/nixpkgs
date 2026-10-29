@@ -33,7 +33,7 @@ let
   };
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zincsearch";
   inherit src version;
 
@@ -47,7 +47,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zinclabs/zincsearch/pkg/meta.Version=${version}"
+    "-X github.com/zinclabs/zincsearch/pkg/meta.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -57,4 +57,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

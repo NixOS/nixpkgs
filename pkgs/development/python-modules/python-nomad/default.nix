@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-nomad";
   version = "2.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jrxfive";
     repo = "python-nomad";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tLS463sYVlOr2iZSgSkd4pHUVCtiIPJ3L8+9omlX4NY=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
-    changelog = "https://github.com/jrxFive/python-nomad/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jrxFive/python-nomad/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xbreak ];
   };
-}
+})

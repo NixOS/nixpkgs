@@ -7,7 +7,7 @@
   zope-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zc-lockfile";
   version = "4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zc.lockfile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-74FE2KEf4RpE8Kum1zW3M7f5/pZujaZFGo6TJjqfMyw=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Inter-process locks";
     homepage = "https://github.com/zopefoundation/zc.lockfile";
-    changelog = "https://github.com/zopefoundation/zc.lockfile/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zc.lockfile/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

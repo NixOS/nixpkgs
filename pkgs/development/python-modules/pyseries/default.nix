@@ -19,13 +19,13 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyseries";
   version = "1.0.26";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Cq+DXt0/6Ncae8OO+kaPuTCxouh0cFPHP+T8tGVXxXo=";
   };
 
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

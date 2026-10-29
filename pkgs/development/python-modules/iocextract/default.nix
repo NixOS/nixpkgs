@@ -7,7 +7,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iocextract";
   version = "1.16.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pedramamini";
     repo = "iocextract";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cCp9ug/TuVY1zL+kiDlFGBmfFJyAmVwxLD36WT0oRAE=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
     description = "Module to extract Indicator of Compromises (IOC)";
     mainProgram = "iocextract";
     homepage = "https://github.com/pedramamini/iocextract";
-    changelog = "https://github.com/pedramamini/iocextract/releases/tag/v${version}";
+    changelog = "https://github.com/pedramamini/iocextract/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

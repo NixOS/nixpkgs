@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "docker-compose-language-service";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "compose-language-service";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UBnABi7DMKrAFkRA8H6us/Oq4yM0mJ+kwOm0Rt8XnGw=";
   };
 
@@ -20,9 +20,9 @@ buildNpmPackage rec {
   meta = {
     description = "Language service for Docker Compose documents";
     homepage = "https://github.com/microsoft/compose-language-service";
-    changelog = "https://github.com/microsoft/compose-language-service/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/compose-language-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "docker-compose-langserver";
   };
-}
+})

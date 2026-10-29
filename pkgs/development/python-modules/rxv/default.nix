@@ -13,7 +13,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rxv";
   version = "0.7.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wuub";
     repo = "rxv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6PsUcGdB1kWxShIPK1xqXE/MNq0h7bdsqLI8tz61jUo=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/wuub/rxv";
     license = lib.licenses.mit;
   };
-}
+})

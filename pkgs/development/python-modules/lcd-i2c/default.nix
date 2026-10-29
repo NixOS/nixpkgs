@@ -6,13 +6,13 @@
   smbus2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lcd-i2c";
   version = "0.2.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-NYBaCXBmuTziT0WYEqrW10HRmRy3jpjH3YWQh5Y/TdQ=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ oliver-koss ];
     mainProgram = "lcd-i2c";
   };
-}
+})

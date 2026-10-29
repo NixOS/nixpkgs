@@ -11,7 +11,7 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typer-shell";
   version = "1.0.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FergusFettes";
     repo = "typer-shell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vjinzBCaEPWbroxT7OmUQIvtwlPivYO0soGqvyRXVc4=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

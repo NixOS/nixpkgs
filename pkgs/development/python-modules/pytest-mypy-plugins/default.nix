@@ -15,7 +15,7 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-mypy-plugins";
   version = "4.0.3";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "pytest-mypy-plugins";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RyHoZniVLtunqz42tuVeAoiUm/e5JvvwX2MMCAJBhy8=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";
     homepage = "https://github.com/TypedDjango/pytest-mypy-plugins";
-    changelog = "https://github.com/typeddjango/pytest-mypy-plugins/releases/tag/${version}";
+    changelog = "https://github.com/typeddjango/pytest-mypy-plugins/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

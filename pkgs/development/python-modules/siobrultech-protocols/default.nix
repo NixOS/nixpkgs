@@ -7,7 +7,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "siobrultech-protocols";
   version = "0.14.0";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdwilsh";
     repo = "siobrultech-protocols";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8tls2wlLA3wQ78gK4JvvhSWZS5oHRzzsKE73M4i1eyg=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sans-I/O Python client library for Brultech Devices";
     homepage = "https://github.com/sdwilsh/siobrultech-protocols";
-    changelog = "https://github.com/sdwilsh/siobrultech-protocols/releases/tag/v${version}";
+    changelog = "https://github.com/sdwilsh/siobrultech-protocols/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

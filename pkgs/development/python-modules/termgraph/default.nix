@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "termgraph";
   version = "0.7.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkaz";
     repo = "termgraph";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ruztSbouRpi88fMB6kijbHFZzS3ZvwqP/BBmTE3DlDs=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

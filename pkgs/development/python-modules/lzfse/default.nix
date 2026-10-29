@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lzfse";
   version = "0.4.2.post1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "m1stadev";
     repo = "lzfse";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-gJKO7Qtt/PhaIaSgrGYwXrOd4AjR89gi3cIV/95a4D8=";
   };
@@ -26,10 +26,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/m1stadev/lzfse/releases/tag/${src.tag}";
+    changelog = "https://github.com/m1stadev/lzfse/releases/tag/${finalAttrs.src.tag}";
     description = "Python bindings for the LZFSE reference implementation";
     homepage = "https://github.com/m1stadev/lzfse";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

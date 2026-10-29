@@ -16,7 +16,7 @@
   transitions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysnooz";
   version = "0.10.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
     repo = "pysnooz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jOXmaJprU35sdNRrBBx/YUyiDyyaE1qodWksXkTSEe0=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to control SNOOZ white noise machines";
     homepage = "https://github.com/AustinBrunkhorst/pysnooz";
-    changelog = "https://github.com/AustinBrunkhorst/pysnooz/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/AustinBrunkhorst/pysnooz/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

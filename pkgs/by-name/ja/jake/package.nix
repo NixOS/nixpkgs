@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "jake";
   version = "10.9.1";
 
   src = fetchFromGitHub {
     owner = "jakejs";
     repo = "jake";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rYWr/ACr14/WE88Gk6Kpyl2pq1XRHSfZGXHrwbGC8hQ=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     mainProgram = "jake";
     maintainers = with lib.maintainers; [ jasoncarr ];
   };
-}
+})

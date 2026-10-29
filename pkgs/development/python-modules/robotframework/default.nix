@@ -7,7 +7,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robotframework";
   version = "7.4.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "robotframework";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SSjVrbe3uBqCMEUYjrk2lxHpxzdU6QK2xvEFszhT6lc=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/robotframework/robotframework/blob/master/doc/releasenotes/rf-${version}.rst";
+    changelog = "https://github.com/robotframework/robotframework/blob/master/doc/releasenotes/rf-${finalAttrs.version}.rst";
     description = "Generic test automation framework";
     homepage = "https://robotframework.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

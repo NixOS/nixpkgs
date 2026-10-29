@@ -6,14 +6,14 @@
   types-markupsafe,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-jinja2";
   version = "2.11.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types-Jinja2";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-29x0pAq6eu1SC35Niejw/kKGUYSUIIs1EjvPCE1LjIE=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

@@ -10,7 +10,7 @@
   udevCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-compute-engine";
   version = "20190124";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lxM4geclHcwQqm1TO6lot5GrG3V2tMWheXYOQ5oEniE=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ zimbatm ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,7 +3,7 @@
 # This is a dummy package providing the drop-in replacement pycryptodome.
 # https://github.com/NixOS/nixpkgs/issues/21671
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycrypto";
   version = pycryptodome.version;
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   # We need to have a dist-info folder, so let's create one with setuptools
   unpackPhase = ''
-    echo "from setuptools import setup; setup(name='${pname}', version='${version}', install_requires=['pycryptodome'])" > setup.py
+    echo "from setuptools import setup; setup(name='${finalAttrs.pname}', version='${finalAttrs.version}', install_requires=['pycryptodome'])" > setup.py
   '';
 
   propagatedBuildInputs = [ pycryptodome ];
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     description = "Drop-in replacement for pycrypto using pycryptodome";
     platforms = pycryptodome.meta.platforms;
   };
-}
+})

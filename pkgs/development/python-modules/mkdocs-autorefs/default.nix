@@ -9,7 +9,7 @@
   markupsafe,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-autorefs";
   version = "1.4.4";
   pyproject = true;
@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "autorefs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kEDnCAqn9musqbY4efUrAHcKc/LAhH1zkLAI9fP/7eg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ pdm-backend ];
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Automatically link across pages in MkDocs";
     homepage = "https://github.com/mkdocstrings/autorefs/";
-    changelog = "https://github.com/mkdocstrings/autorefs/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mkdocstrings/autorefs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

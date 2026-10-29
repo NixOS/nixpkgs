@@ -17,7 +17,7 @@
   vfblib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "babelfont";
   version = "3.1.3";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simoncozens";
     repo = "babelfont";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wCJNJZqjMm0M00F9/kd/g97+DRdRPTn03Nk3rnh7me4=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

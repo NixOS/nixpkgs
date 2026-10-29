@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "html2text";
   version = "2025.4.15";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Alir3z4";
     repo = "html2text";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SMdILvCVXMe3Tlf3kK54VfEKsQ/KvpBZK3xZ4zVwcfo=";
   };
 
@@ -31,9 +31,9 @@ buildPythonPackage rec {
   meta = {
     description = "Turn HTML into equivalent Markdown-structured text";
     homepage = "https://github.com/Alir3z4/html2text/";
-    changelog = "https://github.com/Alir3z4/html2text/blob/${src.tag}/ChangeLog.rst";
+    changelog = "https://github.com/Alir3z4/html2text/blob/${finalAttrs.src.tag}/ChangeLog.rst";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "html2text";
   };
-}
+})

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "radiotherm";
   version = "2.1.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mhrivnak";
     repo = "radiotherm";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ei4T1SnyAhq7kAKqHKa+uBnlmMAE0jadrFRVQQ+7Z1w=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

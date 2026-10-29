@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jc";
   version = "1.26.0";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = "jc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y0N/8bX9huORpHmiQpOj73+UKyOE/irrVJstIodVVyU=";
   };
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ atemu ];
-    changelog = "https://github.com/kellyjonbrazil/jc/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/kellyjonbrazil/jc/blob/${finalAttrs.src.tag}/CHANGELOG";
     mainProgram = "jc";
   };
-}
+})

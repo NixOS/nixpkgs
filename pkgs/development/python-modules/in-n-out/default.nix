@@ -10,14 +10,14 @@
   toolz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "in-n-out";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "in_n_out";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Q83it96YHUGm1wYYore9mJSBCVkipT6tTcdfK71d/+o=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for dependency injection and result processing";
     homepage = "https://github.com/pyapp-kit/in-n-out";
-    changelog = "https://github.com/pyapp-kit/in-n-out/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pyapp-kit/in-n-out/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

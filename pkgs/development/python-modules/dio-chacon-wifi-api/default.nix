@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dio-chacon-wifi-api";
   version = "1.3.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cnico";
     repo = "dio-chacon-wifi-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c91xCrlNpCutZZYO6y0pOaqPCF4exbr7xVxfsf5LI0Q=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

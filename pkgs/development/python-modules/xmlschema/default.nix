@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xmlschema";
   version = "4.3.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-O34MHsP4BC5fALHDzXJBWGtcRifdL3dJNwW721QN4vA=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "XML Schema validator and data conversion library for Python";
     homepage = "https://github.com/sissaschool/xmlschema";
-    changelog = "https://github.com/sissaschool/xmlschema/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/sissaschool/xmlschema/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

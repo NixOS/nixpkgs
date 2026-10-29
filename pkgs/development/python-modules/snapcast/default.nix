@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snapcast";
   version = "2.3.8";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "happyleavesaoc";
     repo = "python-snapcast";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AWGpKtkki5I7VkKSSOBKUss2ULzOKVuKP/8mrU3VmqI=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

@@ -16,7 +16,7 @@ let
     withXorg = false;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyzbar";
   version = "0.1.9";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NaturalHistoryMuseum";
     repo = "pyzbar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8IZQY6qB4r1SUPItDlTDnVQuPs0I38K3yJ6LiPJuwbU=";
   };
 
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

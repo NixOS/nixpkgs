@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awsipranges";
   version = "0.3.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws-samples";
     repo = "awsipranges";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ve1+0zkDDUGswtQoXhfESMcBzoNgUutxEhz43HXL4H8=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to work with the AWS IP address ranges";
     homepage = "https://github.com/aws-samples/awsipranges";
-    changelog = "https://github.com/aws-samples/awsipranges/releases/tag/${version}";
+    changelog = "https://github.com/aws-samples/awsipranges/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

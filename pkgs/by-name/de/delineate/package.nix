@@ -19,14 +19,14 @@
   wrapGAppsHook4,
 }:
 let
-  d3-graphviz = buildNpmPackage rec {
+  d3-graphviz = buildNpmPackage (finalAttrs: {
     pname = "d3-graphviz";
     version = "5.6.0";
 
     src = fetchFromGitHub {
       owner = "magjac";
       repo = "d3-graphviz";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-MZhAzR6+GIBTsLPJq5NqaEPHjiBMgYBJ0hFbDPNPgFk=";
     };
 
@@ -35,7 +35,7 @@ let
     # keep the devDependencies, as Delineate imports d3 via node_modules
     # https://github.com/SeaDve/Delineate/blob/v0.1.0/data/graph_view/index.html#L10-L11
     npmPruneFlags = "--include=dev";
-  };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "delineate";

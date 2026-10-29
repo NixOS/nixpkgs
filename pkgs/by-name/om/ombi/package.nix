@@ -30,12 +30,12 @@ let
     ."${arch}-${os}_hash";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ombi";
   version = "4.47.1";
 
   src = fetchurl {
-    url = "https://github.com/Ombi-app/Ombi/releases/download/v${version}/${os}-${arch}.tar.gz";
+    url = "https://github.com/Ombi-app/Ombi/releases/download/v${finalAttrs.version}/${os}-${arch}.tar.gz";
     sha256 = hash;
   };
 
@@ -61,17 +61,17 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}
+    mkdir -p $out/{bin,share/${finalAttrs.pname}-${finalAttrs.version}}
+    cp -r * $out/share/${finalAttrs.pname}-${finalAttrs.version}
 
-    makeWrapper $out/share/${pname}-${version}/Ombi $out/bin/Ombi \
+    makeWrapper $out/share/${finalAttrs.pname}-${finalAttrs.version}/Ombi $out/bin/Ombi \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           openssl
           icu
         ]
       } \
-      --chdir "$out/share/${pname}-${version}"
+      --chdir "$out/share/${finalAttrs.pname}-${finalAttrs.version}"
   '';
 
   passthru = {
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "Ombi";
   };
-}
+})

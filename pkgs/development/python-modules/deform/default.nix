@@ -16,13 +16,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deform";
   version = "2.0.15";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HpEpN2UMHbuDAHndnAOZUHYqIwIjpWd0D78bI/EJA2c=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

@@ -6,7 +6,7 @@
   mwdblib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-mwdb-reporter";
   version = "1.3.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-mwdb-reporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KJh9uJzVGYEEk1ed56ynKA/+dK9ouDB7L06xERjfjdc=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
     description = "Karton service that uploads analyzed artifacts and metadata to MWDB Core";
     mainProgram = "karton-mwdb-reporter";
     homepage = "https://github.com/CERT-Polska/karton-mwdb-reporter";
-    changelog = "https://github.com/CERT-Polska/karton-mwdb-reporter/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/karton-mwdb-reporter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

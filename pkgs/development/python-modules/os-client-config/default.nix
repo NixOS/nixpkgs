@@ -16,14 +16,14 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "os-client-config";
   version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "os_client_config";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-4WomDy/VAK8U8Ve5t7fWkpLOg7D4pGHsaM5qikKWfL0=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

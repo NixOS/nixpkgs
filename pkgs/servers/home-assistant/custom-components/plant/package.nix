@@ -9,15 +9,15 @@
   pytestCheckHook,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "olen";
   domain = "plant";
   version = "2026.9.0";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "homeassistant-plant";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8V+90Onh3MLN8G4CjenzZWznwnGiWfhz17KZhGd1qYk=";
   };
 
@@ -42,8 +42,8 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Alternative Plant component of home assistant";
     homepage = "https://github.com/Olen/homeassistant-plant";
-    changelog = "https://github.com/Olen/homeassistant-plant/releases/tag/${src.tag}";
+    changelog = "https://github.com/Olen/homeassistant-plant/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.gpl3Only;
   };
-}
+})

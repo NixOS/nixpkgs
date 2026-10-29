@@ -11,13 +11,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyamg";
   version = "5.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UyPQ8aTNmZviRqkNWAyeHptYS5iIf2KY05dhEIfvhgs=";
   };
 
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   meta = {
     description = "Algebraic Multigrid Solvers in Python";
     homepage = "https://github.com/pyamg/pyamg";
-    changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
+    changelog = "https://github.com/pyamg/pyamg/blob/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stephen-huan ];
     # last successful hydra build on darwin was in 2025
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

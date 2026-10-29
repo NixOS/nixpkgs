@@ -6,13 +6,13 @@
   writers,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hledger-check-fancyassertions";
   inherit (haskellPackages.hledger-lib) version;
 
   src = fetchurl {
-    name = "hledger-check-fancyassertion-${version}.hs";
-    url = "https://raw.githubusercontent.com/simonmichael/hledger/hledger-lib-${version}/bin/hledger-check-fancyassertions.hs";
+    name = "hledger-check-fancyassertion-${finalAttrs.version}.hs";
+    url = "https://raw.githubusercontent.com/simonmichael/hledger/hledger-lib-${finalAttrs.version}/bin/hledger-check-fancyassertions.hs";
     hash = "sha256-ISA7ED0HgyWOxfaufaFpNb1dHfE+1+Xh4SRCZ64yM6E=";
   };
 
@@ -35,21 +35,21 @@ stdenvNoCC.mkDerivation rec {
       transformers
     ];
     inherit (haskellPackages) ghc;
-  } src;
+  } finalAttrs.src;
 
   installPhase = ''
     runHook preInstall
-    install -D $executable $out/bin/${pname}
+    install -D $executable $out/bin/${finalAttrs.pname}
     runHook postInstall
   '';
 
   meta = {
     description = "Complex account balance assertions for hledger journals";
     homepage = "https://hledger.org/";
-    changelog = "https://github.com/simonmichael/hledger/blob/${version}/hledger/CHANGES.md";
+    changelog = "https://github.com/simonmichael/hledger/blob/${finalAttrs.version}/hledger/CHANGES.md";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.DamienCassou ];
     platforms = lib.platforms.all; # GHC can cross-compile
     mainProgram = "hledger-check-fancyassertions";
   };
-}
+})

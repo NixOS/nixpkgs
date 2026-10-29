@@ -4,14 +4,14 @@
   ocamlPackages,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "beluga";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "Beluga-lang";
     repo = "Beluga";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bMaLjHq/3ZrST5E9lBSIX0T2cAhDin+lv1XwgUF4/7w=";
   };
 
@@ -37,9 +37,9 @@ ocamlPackages.buildDunePackage rec {
   meta = {
     description = "Functional language for reasoning about formal systems";
     homepage = "https://github.com/Beluga-lang/Beluga";
-    changelog = "https://github.com/Beluga-lang/Beluga/releases/tag/v${version}";
+    changelog = "https://github.com/Beluga-lang/Beluga/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.bcdarwin ];
     platforms = lib.platforms.unix;
   };
-}
+})

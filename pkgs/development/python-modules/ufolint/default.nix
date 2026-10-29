@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ufolint";
   version = "1.2.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "source-foundry";
     repo = "ufolint";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sv8WbnDd2LFHkwNsB9FO04OlLhemdzwjq0tC9+Fd6/M=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

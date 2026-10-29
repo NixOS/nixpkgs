@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyssim";
   version = "0.7.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jterrace";
     repo = "pyssim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6393EATaXg12pYXPaHty+8LepUM6kgtZ0zSjZ1Izytg=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
     description = "Module for computing Structured Similarity Image Metric (SSIM) in Python";
     mainProgram = "pyssim";
     homepage = "https://github.com/jterrace/pyssim";
-    changelog = "https://github.com/jterrace/pyssim/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/jterrace/pyssim/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

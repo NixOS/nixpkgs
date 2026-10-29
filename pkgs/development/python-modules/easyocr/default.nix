@@ -18,7 +18,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "easyocr";
   version = "1.7.2";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JaidedAI";
     repo = "EasyOCR";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9mrAxt2lphYtLW81lGO5SYHsnMnSA/VpHiY2NffD/Js=";
   };
 
@@ -77,8 +77,8 @@ buildPythonPackage rec {
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
     mainProgram = "easyocr";
     homepage = "https://github.com/JaidedAI/EasyOCR";
-    changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
+    changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

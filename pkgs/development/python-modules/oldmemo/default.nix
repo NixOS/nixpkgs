@@ -16,7 +16,7 @@
   xmlschema,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oldmemo";
   version = "2.1.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-oldmemo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-p2VgSNarmVSAj8cuvTKzlIQE0SRJ1BkV91DOv+2B7ek=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Backend implementation of the `eu.siacs.conversations.axolotl` namespace for python-omemo";
     homepage = "https://github.com/Syndace/python-oldmemo";
-    changelog = "https://github.com/Syndace/python-oldmemo/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Syndace/python-oldmemo/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ themadbit ];
   };
-}
+})

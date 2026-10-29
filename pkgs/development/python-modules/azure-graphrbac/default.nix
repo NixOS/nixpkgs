@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-graphrbac";
   version = "0.61.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_graphrbac";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+yWwMwfhf3Ocga1r0+m1fFeENoYDHw8hS2UVhEfHc90=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Graph RBAC Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/graphrbac/azure-graphrbac";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-graphrbac_${version}/sdk/graphrbac/azure-graphrbac/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-graphrbac_${finalAttrs.version}/sdk/graphrbac/azure-graphrbac/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

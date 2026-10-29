@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-cachedescriptors";
   version = "6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.cachedescriptors";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PlezUzuO4P/BOVT6Ll8dYIKssC/glmVd8SCM0afgNC0=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Method and property caching decorators";
     homepage = "https://github.com/zopefoundation/zope.cachedescriptors";
-    changelog = "https://github.com/zopefoundation/zope.cachedescriptors/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.cachedescriptors/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

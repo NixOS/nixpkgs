@@ -7,7 +7,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiocontextvars";
   version = "0.2.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fantix";
     repo = "aiocontextvars";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-s1YhpBLz+YNmUO+0BOltfjr3nz4m6mERszNqlmquTyg=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

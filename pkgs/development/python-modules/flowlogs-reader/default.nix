@@ -9,7 +9,7 @@
   python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flowlogs-reader";
   version = "5.0.1";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "obsrvbl";
     repo = "flowlogs-reader";
     # https://github.com/obsrvbl/flowlogs-reader/issues/57
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9UwCRLRKuIFRTh3ntAzlXCyN175J1wobT3GSLAhl+08=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cransom ];
   };
-}
+})

@@ -15,7 +15,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioambient";
   version = "2025.02.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioambient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-F1c2S0c/CWHeCd24Zc8ib3aPR7yj9gCPBJpmpgoddQY=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Ambient Weather API";
     homepage = "https://github.com/bachya/aioambient";
-    changelog = "https://github.com/bachya/aioambient/releases/tag/${version}";
+    changelog = "https://github.com/bachya/aioambient/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

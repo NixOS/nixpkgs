@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "doublemetaphone";
   version = "1.2i";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "doublemetaphone";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VPJqHxQHLiLSko+aJYTIgISluHPARgQN5pYWYxP9QKQ=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.artistic1;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

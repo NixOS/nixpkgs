@@ -6,13 +6,13 @@
   nodejs_22,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "ares-cli";
   version = "3.2.6";
   src = fetchFromGitHub {
     owner = "webos-tools";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ziOZb+kzsAge6OxB/Vsaj04duZfeuezZFet2HdXPA58=";
   };
 
@@ -35,4 +35,4 @@ buildNpmPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rucadi ];
   };
-}
+})

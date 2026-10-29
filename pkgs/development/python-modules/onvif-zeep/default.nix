@@ -6,14 +6,14 @@
   zeep,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onvif-zeep";
   version = "0.2.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "onvif_zeep";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-qou8Aqc+qlCJSwwY45+o0xilg6ZkxlvzWzyAKdHEC0k=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fleaz ];
   };
-}
+})

@@ -18,7 +18,7 @@
   textile,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-creole";
   version = "1.4.10";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jedie";
     repo = "python-creole";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8pXOnLNjhIv0d+BqjW8wlb6BT6CmFHSsxn5wLOv3LBQ=";
   };
 
@@ -95,8 +95,8 @@ buildPythonPackage rec {
   meta = {
     description = "Creole markup tools written in Python";
     homepage = "https://github.com/jedie/python-creole";
-    changelog = "https://github.com/jedie/python-creole/releases/tag/v${version}";
+    changelog = "https://github.com/jedie/python-creole/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

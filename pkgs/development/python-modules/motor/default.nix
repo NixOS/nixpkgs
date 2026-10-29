@@ -8,7 +8,7 @@
   pymongo,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "motor";
   version = "3.7.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "motor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ul2GKzSiAewwGEuCpQQ61h3cqrJikaJeKs5KlX+aAjo=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "Non-blocking MongoDB driver for Tornado or asyncio";
     license = lib.licenses.asl20;
     homepage = "https://github.com/mongodb/motor";
-    changelog = "https://github.com/mongodb/motor/releases/tag/${src.tag}";
+    changelog = "https://github.com/mongodb/motor/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
   };
-}
+})

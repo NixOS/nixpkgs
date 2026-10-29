@@ -3,7 +3,7 @@
   fetchFromGitHub,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gazelle-origin";
   version = "3.0.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     # Use the spinfast319 fork, since it seems that upstream
     # at <https://github.com/x1ppy/gazelle-origin> is inactive
     owner = "spinfast319";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+yMKnfG2f+A1/MxSBFLaHfpCgI2m968iXqt+2QanM/c=";
   };
 
@@ -33,4 +33,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ somasis ];
     mainProgram = "gazelle-origin";
   };
-}
+})

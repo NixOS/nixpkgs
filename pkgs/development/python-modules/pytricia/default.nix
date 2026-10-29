@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytricia";
   version = "1.3.0";
   pyproject = true;
 
   # no tags on git repo
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HDo9aQnhDUycLw/kVCokgeEJ0pqrmcwCfKf+k/jIhT8=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ mkg ];
   };
-}
+})

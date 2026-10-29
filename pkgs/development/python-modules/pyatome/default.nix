@@ -7,14 +7,14 @@
   fake-useragent,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyatome";
   version = "0.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "pyAtome";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-DGkgW6emh/esZa/alUjBbpLXlU4EVIPkysn9a0LgcJ4=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ uvnikita ];
   };
-}
+})

@@ -7,7 +7,7 @@
   pyprojectVersionPatchHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycfdns";
   version = "3.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pycfdns";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bLzDakxKq8fcjEKSxc6D5VN9gfAu1M3/zaAU2UYnwSs=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for updating Cloudflare DNS A records";
     homepage = "https://github.com/ludeeus/pycfdns";
-    changelog = "https://github.com/ludeeus/pycfdns/releases/tag/${version}";
+    changelog = "https://github.com/ludeeus/pycfdns/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

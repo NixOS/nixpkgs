@@ -16,7 +16,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-api-core";
   version = "2.29.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-api-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wqDGtCYAH2f+P3zUfXgiQTePLr7a0qzUTeEc6pdCGio=";
   };
 
@@ -89,10 +89,10 @@ buildPythonPackage rec {
       helpers used by all Google API clients.
     '';
     homepage = "https://github.com/googleapis/python-api-core";
-    changelog = "https://github.com/googleapis/python-api-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-api-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       sarahec
     ];
   };
-}
+})

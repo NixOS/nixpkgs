@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
   nix-update-script,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beets-ytimport";
   version = "1.13.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mgoltzsche";
     repo = "beets-ytimport";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EwSL1rBEPTcMfrlTkQcqRuhR8OtibBZqA0qQz4+qLEw=";
   };
 
@@ -41,11 +41,11 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/mgoltzsche/beets-ytimport/releases/tag/v${version}";
+    changelog = "https://github.com/mgoltzsche/beets-ytimport/releases/tag/v${finalAttrs.version}";
     description = "Beets plugin to import music from Youtube and SoundCloud";
     homepage = "https://github.com/mgoltzsche/beets-ytimport";
     maintainers = with lib.maintainers; [ pyrox0 ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

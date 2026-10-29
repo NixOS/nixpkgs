@@ -7,7 +7,7 @@
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "name-that-hash";
   version = "1.11.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bee-san";
     repo = "name-that-hash";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zOb4BS3zG1x8GLXAooqqvMOw0fNbw35JuRWOdGP26/8=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eyjhb ];
   };
-}
+})

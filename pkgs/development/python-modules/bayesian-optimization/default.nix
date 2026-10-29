@@ -22,7 +22,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bayesian-optimization";
   version = "3.4.0";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LaOTjVFWl5IbILBIT66+olzbiuqYeXd0zuHuezLnXoc=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/bayesian-optimization/BayesianOptimization";
-    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/${src.tag}";
+    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytap2";
   version = "2.3.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "johnthagen";
     repo = "pytap2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GN8yFnS7HVgIP73/nVtYnwwhCBI9doGHLGSOaFiWIdw=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
   };
-}
+})

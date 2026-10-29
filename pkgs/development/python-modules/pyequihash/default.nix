@@ -7,7 +7,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyequihash";
   pyproject = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     src
     ;
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   postPatch =
     let
@@ -50,4 +50,4 @@ buildPythonPackage rec {
       teams
       ;
   };
-}
+})

@@ -13,7 +13,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyiqvia";
   version = "2023.12.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pyiqvia";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qq6UQUz60WkmWqdmExlSQT3wapaHJr8DeH1eVrTOnpQ=";
   };
 
@@ -58,8 +58,8 @@ buildPythonPackage rec {
       https://flustar.com and more).
     '';
     homepage = "https://github.com/bachya/pyiqvia";
-    changelog = "https://github.com/bachya/pyiqvia/releases/tag/${version}";
+    changelog = "https://github.com/bachya/pyiqvia/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

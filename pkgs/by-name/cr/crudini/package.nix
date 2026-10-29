@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "crudini";
   version = "0.9.6";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = "crudini";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XW9pdP+aie6v9h35gLYM0wVrcsh+dcEB7EueATOV4w4=";
   };
 
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     # this just creates the man page
     make all
 
-    install -Dm444 -t $out/share/doc/${pname} README.md EXAMPLES
+    install -Dm444 -t $out/share/doc/${finalAttrs.pname} README.md EXAMPLES
     installManPage *.1
   '';
 
@@ -57,4 +57,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "crudini";
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uarray";
   version = "0.9.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "uarray";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Jut/V0/na+dcVpD7buW0DIS+KpA+dGRRb6QpPDt2/hY=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
-    changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
+    changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.pbsds ];
   };
-}
+})

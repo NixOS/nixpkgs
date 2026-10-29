@@ -12,17 +12,17 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bindep";
   version = "2.14.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DIBMfkjdF9skyzkSGt5xcfaE+0Y8iqAdAzjNEdJUNko=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     mainProgram = "bindep";
     teams = [ lib.teams.openstack ];
   };
-}
+})

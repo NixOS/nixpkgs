@@ -13,7 +13,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inequality";
   version = "1.1.2";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "inequality";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GMl/hHwaHPozdLhV9/CPYIMY5lFYeo0X0SPDg4RT1zo=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

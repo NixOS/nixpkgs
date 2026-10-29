@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "smdebug-rulesconfig";
   version = "1.0.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "smdebug_rulesconfig";
     hash = "sha256-ehnm6y5rz++8B+SobveojzJJUAGgOL8ox9jnereT/NY=";
   };
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/awslabs/sagemaker-debugger-rulesconfig";
     license = lib.licenses.asl20;
   };
-}
+})

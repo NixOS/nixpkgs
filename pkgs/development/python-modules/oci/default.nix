@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oci";
   version = "2.165.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pF3+0Hogk4FmPOp20ROVb3304+mGs0iUYeiNkszCGPY=";
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Oracle Cloud Infrastructure Python SDK";
     homepage = "https://github.com/oracle/oci-python-sdk";
-    changelog = "https://github.com/oracle/oci-python-sdk/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/oracle/oci-python-sdk/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = with lib.licenses; [
       asl20 # or
       upl
@@ -56,4 +56,4 @@ buildPythonPackage rec {
       ilian
     ];
   };
-}
+})

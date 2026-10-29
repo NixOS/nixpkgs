@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brevo-python";
   version = "1.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getbrevo";
     repo = "brevo-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VYj1r69pgKgNCXzxRqvwlj5w+y3IIu21bsZJAe/7zf8=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
   };
-}
+})

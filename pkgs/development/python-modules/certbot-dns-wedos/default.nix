@@ -9,13 +9,13 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot-dns-wedos";
   version = "2.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "certbot_dns_wedos";
     hash = "sha256-Sle3hoBLwVPF30caCyYtt3raY5Gs9ekg0DthvHxvB4E=";
   };
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.tsandrini ];
   };
-}
+})

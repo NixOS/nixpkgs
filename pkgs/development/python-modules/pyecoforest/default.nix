@@ -10,7 +10,7 @@
   respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyecoforest";
   version = "0.4.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pjanuario";
     repo = "pyecoforest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C8sFq0vsVsq6irWbRd0eq18tfKu0qRRBZHt23CiDTGU=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for interacting with Ecoforest devices";
     homepage = "https://github.com/pjanuario/pyecoforest";
-    changelog = "https://github.com/pjanuario/pyecoforest/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pjanuario/pyecoforest/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -9,7 +9,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roonapi";
   version = "0.1.6";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pavoni";
     repo = "pyroon";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6wQsaZ50J2xIPXzICglg5pf8U0r4tL8iqcbdwjZadwU=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to interface with the Roon API";
     homepage = "https://github.com/pavoni/pyroon";
-    changelog = "https://github.com/pavoni/pyroon/releases/tag/${version}";
+    changelog = "https://github.com/pavoni/pyroon/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

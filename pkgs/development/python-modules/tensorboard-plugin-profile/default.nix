@@ -8,13 +8,13 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorboard_plugin_profile";
   version = "2.11.1";
   format = "wheel";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     dist = "py3";
     python = "py3";
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

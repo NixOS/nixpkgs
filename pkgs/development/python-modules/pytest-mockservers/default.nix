@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-mockservers";
   version = "0.6.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Gr1N";
     repo = "pytest-mockservers";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Mb3wSbambC1h+lFI+fafwZzm78IvADNAsF/Uw60DFHc=";
   };
 
@@ -55,4 +55,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

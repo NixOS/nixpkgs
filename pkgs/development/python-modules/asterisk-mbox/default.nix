@@ -7,14 +7,14 @@
   packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asterisk-mbox";
   version = "0.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "asterisk_mbox";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-BiT5q4XOnE1DZV+GU+hTn6EMgbYP17lLGhXc4wbCCIg=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

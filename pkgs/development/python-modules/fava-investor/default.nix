@@ -15,7 +15,7 @@
   tabulate,
   yfinance,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fava-investor";
   version = "1.0.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "redstreet";
     repo = "fava_investor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WuXbZcia0n9SoiCSB2SkMUjBHsMOA0gCIf9ZEU9pTPA=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

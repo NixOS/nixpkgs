@@ -6,7 +6,7 @@
   httplib2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtmapi";
   version = "0.7.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromBitbucket {
     owner = "rtmapi";
     repo = "rtmapi";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-+aJ7T5bE+N9bINf6S3v48wUGXQ/ikz1Xb15xWbConT4=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

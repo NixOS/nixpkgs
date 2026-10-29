@@ -13,7 +13,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "staticmap3";
   version = "0.2.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "staticmap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SV9D8wYph82IaITXxraC+8YO+taeEc6g/CPjFITzV5Q=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Small, python-based library for creating map images with lines and markers";
     homepage = "https://github.com/SamR1/staticmap";
-    changelog = "https://github.com/SamR1/staticmap/releases/tag/v${version}";
+    changelog = "https://github.com/SamR1/staticmap/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tebriel ];
   };
-}
+})

@@ -6,14 +6,14 @@
   chez-srfi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chez-mit";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-mit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TmoLA0zLETKE+PsrGS5dce9xLQUIKwSNixRSVjbrOlk=";
   };
 
@@ -37,5 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin;
   };
-
-}
+})

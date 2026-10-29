@@ -11,7 +11,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ml-collections";
   version = "1.1.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "ml_collections";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-G9+UBqHalzI3quR8T5NEgJs+ep60ffFw9vyTTZDeZ9M=";
   };
 
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

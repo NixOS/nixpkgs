@@ -7,7 +7,7 @@
   pycolorecho,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyloggermanager";
   version = "0.1.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coldsofttech";
     repo = "pyloggermanager";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1hfcmMLH2d71EV71ExKqjZ7TMcqVd1AQrEwJhmEWOVU=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Logging framework for Python applications";
     homepage = "https://github.com/coldsofttech/pyloggermanager";
-    changelog = "https://github.com/coldsofttech/pyloggermanager/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/coldsofttech/pyloggermanager/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

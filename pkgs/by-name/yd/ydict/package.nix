@@ -6,14 +6,14 @@
   mpg123,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ydict";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "ydict";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-FcrkfWE1m5OveK4YPgVmUbL/jkh2NEs9bfeCHm2H9P8=";
   };
 
@@ -22,13 +22,13 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   preFixup = ''
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/${finalAttrs.pname} \
       --prefix PATH ":" "${lib.makeBinPath [ mpg123 ]}";
   '';
 
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

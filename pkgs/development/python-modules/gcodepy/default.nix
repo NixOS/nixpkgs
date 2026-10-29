@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gcodepy";
   version = "0.1.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rmeno12";
     repo = "gcodepy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+amBkwwISPyes8ABdqgCw50Zg5ioDa46WZgQsZZgl+8=";
   };
 
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   meta = {
     description = "G-code generator for 3D printers that use Marlin Firmware";
     homepage = "https://github.com/rmeno12/gcodepy";
-    changelog = "https://github.com/rmeno12/gcodepy/releases/tag/v${version}";
+    changelog = "https://github.com/rmeno12/gcodepy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ n00b0ss ];
   };
-}
+})

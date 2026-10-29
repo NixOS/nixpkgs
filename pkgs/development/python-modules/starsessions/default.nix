@@ -12,7 +12,7 @@
   httpx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "starsessions";
   version = "2.2.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alex-oleshkevich";
     repo = "starsessions";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JI044sn6LQI37PvSLdz2dooa3v5qdHmp6DZD0p7VzJU=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

@@ -14,14 +14,14 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping the sage team on upgrade
   version = "2.2.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+fDplKmgsGRhkyBBHh2cMDFYhH4FW1gILv2t5ayX9hM=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     teams = [ lib.teams.sage ];
     homepage = "https://github.com/defeo/cypari2";
   };
-}
+})

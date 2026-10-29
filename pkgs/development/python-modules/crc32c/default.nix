@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crc32c";
   version = "2.8";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ICRAR";
     repo = "crc32c";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LPiKms0fVHmgIiwUNWGTAdGByV+Pmh9dRaF/tro2rKo=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

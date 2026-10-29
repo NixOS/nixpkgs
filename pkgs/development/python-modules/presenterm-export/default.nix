@@ -9,14 +9,14 @@
   dataclass-wizard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "presenterm-export";
   version = "0.2.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "presenterm_export";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-9TkZ52lA1l3PYs2DTgji0LDrG5kixnFffuMIfhILY1E=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "PDF exporter for presenterm";
     homepage = "https://github.com/mfontanini/presenterm-export";
-    changelog = "https://github.com/mfontanini/presenterm-export/releases/tag/v${version}";
+    changelog = "https://github.com/mfontanini/presenterm-export/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
-}
+})

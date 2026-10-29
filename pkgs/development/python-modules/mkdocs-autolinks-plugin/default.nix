@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-autolinks-plugin";
   version = "0.7.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "zachhannum";
     repo = "mkdocs-autolinks-plugin";
     # The tag for version 0.7.1 is v_071
-    tag = "v_${lib.replaceStrings [ "." ] [ "" ] version}";
+    tag = "v_${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
     hash = "sha256-mEbuB9VwK7po1TqtJfBSkItOVlI3/W3nD2LYRHgPpTA=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucas-deangelis ];
   };
-}
+})

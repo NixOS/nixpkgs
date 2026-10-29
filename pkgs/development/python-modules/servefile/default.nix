@@ -8,7 +8,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "servefile";
   version = "0.5.4";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sebageek";
     repo = "servefile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hIqXwhmvstCslsCO973oK5FF2c8gZJ0wNUI/z8W+OjU=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

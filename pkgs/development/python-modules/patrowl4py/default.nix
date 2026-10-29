@@ -20,7 +20,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "patrowl4py";
   version = "1.1.9";
   format = "setuptools";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Patrowl";
     repo = "Patrowl4py";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZGvntLbXIWmL0WoT+kQoNT6gDPgsSKwHQQjYlarvnKo=";
   };
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

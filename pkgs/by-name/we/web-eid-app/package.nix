@@ -9,14 +9,14 @@
   qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "web-eid-app";
   version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wLZ6BABiukujKRAgwc6kHKSdXSsxxR9cdW5zSiP5zAE=";
     fetchSubmodules = true;
   };
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
       mode.
     '';
     homepage = "https://github.com/web-eid/web-eid-app";
-    changelog = "https://github.com/web-eid/web-eid-app/releases/tag/${src.rev}";
+    changelog = "https://github.com/web-eid/web-eid-app/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.flokli ];
     platforms = lib.platforms.linux;
   };
-}
+})

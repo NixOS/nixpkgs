@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prettytable";
   version = "3.18.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "prettytable";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Wx3mt6b+tg3yz0f6r9NVFduLKWr8GBXXJI99RBc1VO4=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Display tabular data in a visually appealing ASCII table format";
     homepage = "https://github.com/jazzband/prettytable";
-    changelog = "https://github.com/jazzband/prettytable/releases/tag/${version}";
+    changelog = "https://github.com/jazzband/prettytable/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -10,12 +10,12 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slang";
   version = "2.3.3";
 
   src = fetchurl {
-    url = "https://www.jedsoft.org/releases/slang/${pname}-${version}.tar.bz2";
+    url = "https://www.jedsoft.org/releases/slang/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-+RRQVK4TGXPGEgjqgkhtXdEOPFza0jt8SgYXdDyPWhg=";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       # Expect the text in format of 'Version 2.3.3</td>'
       new_version="$(curl -s https://www.jedsoft.org/slang/ |
           pcre2grep -o1 'Version ([0-9.]+)</td>')"
-      update-source-version ${pname} "$new_version"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     mainProgram = "slsh";
     platforms = lib.platforms.unix;
   };
-}
+})

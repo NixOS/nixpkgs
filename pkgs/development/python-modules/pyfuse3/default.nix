@@ -14,7 +14,7 @@
   which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfuse3";
   version = "3.5.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HhEtWYWdxJZOMS3dqB2VdQS7aSdpkRhq7EZCJ55n2OE=";
   };
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
       nyanloutre
       dotlambda
     ];
-    changelog = "https://github.com/libfuse/pyfuse3/blob/${src.tag}/Changes.rst";
+    changelog = "https://github.com/libfuse/pyfuse3/blob/${finalAttrs.src.tag}/Changes.rst";
     platforms = lib.platforms.linux;
   };
-}
+})

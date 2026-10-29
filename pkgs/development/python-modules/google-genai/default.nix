@@ -20,7 +20,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-genai";
   version = "2.33.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-genai";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tu/RwGkneYEgXpcpC96YNKLRBadxhYh3dHvPNW4YEtM=";
   };
 
@@ -73,10 +73,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/googleapis/python-genai/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-genai/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Google Generative AI Python SDK";
     homepage = "https://github.com/googleapis/python-genai";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

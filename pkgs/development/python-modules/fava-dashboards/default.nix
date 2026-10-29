@@ -10,7 +10,7 @@
   hatchling,
   pyyaml,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fava-dashboards";
   version = "2.0.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andreasgerstmayr";
     repo = "fava-dashboards";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1NJBV12/OIbJau2Z4RAp+QgV0jVlkznyDI/tWlfw2Bk=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

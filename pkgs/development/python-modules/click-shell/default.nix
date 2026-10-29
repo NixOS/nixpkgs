@@ -9,7 +9,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-shell";
   version = "2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clarkperkins";
     repo = "click-shell";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4QpQzg0yFuOFymGiTI+A8o6LyX78iTJMqr0ernYbilI=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
       with command completion to any click app.
     '';
     homepage = "https://github.com/clarkperkins/click-shell";
-    changelog = "https://github.com/clarkperkins/click-shell/releases/tag/${src.tag}";
+    changelog = "https://github.com/clarkperkins/click-shell/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ binsky ];
   };
-}
+})

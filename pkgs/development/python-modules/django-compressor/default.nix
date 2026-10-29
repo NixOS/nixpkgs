@@ -23,7 +23,7 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-compressor";
   version = "4.6";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-compressor";
     repo = "django-compressor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ymht/nl3UUFXLc54aqDADXArVG6jUNQppBJCNKp2P68=";
   };
 
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   meta = {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";
     homepage = "https://django-compressor.readthedocs.org/";
-    changelog = "https://github.com/django-compressor/django-compressor/blob/${version}/docs/changelog.txt";
+    changelog = "https://github.com/django-compressor/django-compressor/blob/${finalAttrs.version}/docs/changelog.txt";
     license = lib.licenses.mit;
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tilt-pi";
   version = "0.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michaelheyman";
     repo = "tilt-pi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jGy7nwSblF486ldt4ShBEmmZtb0c4+7IuI10cN7Bw1A=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/michaelheyman/tilt-pi/releases/tag/${src.tag}";
+    changelog = "https://github.com/michaelheyman/tilt-pi/releases/tag/${finalAttrs.src.tag}";
     description = "Python client for interacting with the Tilt Pi API";
     homepage = "https://github.com/michaelheyman/tilt-pi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

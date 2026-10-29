@@ -11,14 +11,14 @@
 # This package should be updated together with the main grpc package and other
 # related python grpc packages.
 # nixpkgs-update: no auto update
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grpcio-tools";
   version = "1.84.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-IQrFrJgDVpSQ7DNXS36ZW8CHgVsA2bd34BNMq17Zo3k=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     homepage = "https://grpc.io/grpc/python/";
     maintainers = [ ];
   };
-}
+})

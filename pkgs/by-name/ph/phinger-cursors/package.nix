@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "phinger-cursors";
   version = "2.2";
 
   src = fetchurl {
-    url = "https://github.com/phisch/phinger-cursors/releases/download/v${version}/phinger-cursors-variants.tar.bz2";
+    url = "https://github.com/phisch/phinger-cursors/releases/download/v${finalAttrs.version}/phinger-cursors-variants.tar.bz2";
     sha256 = "sha256-RtTPwwo4wZytozOQJ7Wnj3sL908yIOunABxP3Z1ablY=";
   };
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.cc-by-sa-40;
     maintainers = with lib.maintainers; [ moni ];
   };
-}
+})

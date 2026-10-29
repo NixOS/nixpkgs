@@ -8,7 +8,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nsw-fuel-api-client";
   version = "1.1.3";
   pyproject = true;
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nickw444";
     repo = "nsw-fuel-api-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3nkBDLmFOfYLvG5fi2subA9zxb51c7zWlhT4GaCQo9I=";
   };
 
   postPatch = ''
     substituteInPlace nsw_fuel/__init__.py \
-      --replace-fail '__version__ = "0.0.0-dev"' '__version__ = "${version}"'
+      --replace-fail '__version__ = "0.0.0-dev"' '__version__ = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "API Client for NSW Government Fuel Check application";
     homepage = "https://github.com/nickw444/nsw-fuel-api-client";
-    changelog = "https://github.com/nickw444/nsw-fuel-api-client/releases/tag/${version}";
+    changelog = "https://github.com/nickw444/nsw-fuel-api-client/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

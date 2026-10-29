@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "patsy";
   version = "1.0.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "patsy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-queErA3RdYBxIgOh3f2EfKPixpNfmevxLfNtjzcCCaI=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "patsy" ];
 
   meta = {
-    changelog = "https://github.com/pydata/patsy/releases/tag/${src.tag}";
+    changelog = "https://github.com/pydata/patsy/releases/tag/${finalAttrs.src.tag}";
     description = "Python package for describing statistical models";
     homepage = "https://github.com/pydata/patsy";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };
-}
+})

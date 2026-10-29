@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-error-for-skips";
   version = "2.0.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jankatins";
     repo = "pytest-error-for-skips";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GY9L8sgmcWKWUbFZseUSK9E63m9AAeiksI+St0aTJBI=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

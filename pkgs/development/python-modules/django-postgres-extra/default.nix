@@ -15,7 +15,7 @@
   pytest-lazy-fixture,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-postgres-extra";
   version = "2.0.9";
   pyproject = true;
@@ -23,12 +23,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SectorLabs";
     repo = "django-postgres-extra";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/2qoXZ2f3un2cgJFAGMnQWBraJ7urkb0kHtcKKJsh6w=";
   };
 
   postPatch = ''
-    echo '__version__ = "${version}"' > psqlextra/_version.py
+    echo '__version__ = "${finalAttrs.version}"' > psqlextra/_version.py
   '';
 
   build-system = [ setuptools ];
@@ -90,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bringing all of PostgreSQL's awesomeness to Django";
     homepage = "https://github.com/SectorLabs/django-postgres-extra";
-    changelog = "https://github.com/SectorLabs/django-postgres-extra/releases/tag/v${version}";
+    changelog = "https://github.com/SectorLabs/django-postgres-extra/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b4dm4n ];
   };
-}
+})

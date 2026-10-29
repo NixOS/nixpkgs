@@ -13,7 +13,7 @@
   defcon,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vfblib";
   version = "0.11.7";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-q+k0C6bc81otH3PipbY3a54uZND9wuL5YBxbir3QszQ=";
   };
 
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
-}
+})

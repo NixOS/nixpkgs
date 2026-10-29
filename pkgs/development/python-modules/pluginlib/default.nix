@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pluginlib";
   version = "0.11.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rockhopper-Technologies";
     repo = "pluginlib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KaexWmRSipwX+tg4Fh03XqhWm2XtZnmy4IEscJDRY/E=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for creating and importing plugins in Python";
     homepage = "https://github.com/Rockhopper-Technologies/pluginlib";
-    changelog = "https://github.com/Rockhopper-Technologies/pluginlib/releases/tag/${version}";
+    changelog = "https://github.com/Rockhopper-Technologies/pluginlib/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       jpds
     ];
   };
-}
+})

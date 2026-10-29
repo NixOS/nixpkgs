@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylzss";
   version = "0.3.9";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "m1stadev";
     repo = "pylzss";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-10AVeYYTYmWjvsUDhnlHAmEsNIHXwyKDQGJmKAyX6cE=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/m1stadev/pylzss/releases/tag/${src.tag}";
+    changelog = "https://github.com/m1stadev/pylzss/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for decoding/encoding LZSS-compressed data";
     homepage = "https://github.com/m1stadev/pylzss";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

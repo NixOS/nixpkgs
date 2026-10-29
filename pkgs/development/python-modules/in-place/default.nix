@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "in-place";
   version = "1.0.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "inplace";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oko4yDqkxVWGri315HenqfLjoUqmauO1bSaDh8cBK4s=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "In-place file processing";
     homepage = "https://github.com/jwodder/inplace";
-    changelog = "https://github.com/jwodder/inplace/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jwodder/inplace/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

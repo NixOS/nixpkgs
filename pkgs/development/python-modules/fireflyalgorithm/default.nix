@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fireflyalgorithm";
   version = "0.4.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "FireflyAlgorithm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NMmwjKtIk8KR0YXXSXkJhiQsbjMusaLnstUWx0izCNA=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     description = "Implementation of the stochastic nature-inspired algorithm for optimization";
     mainProgram = "firefly-algorithm";
     homepage = "https://github.com/firefly-cpp/FireflyAlgorithm";
-    changelog = "https://github.com/firefly-cpp/FireflyAlgorithm/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/firefly-cpp/FireflyAlgorithm/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
   };
-}
+})

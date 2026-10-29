@@ -11,7 +11,7 @@
   umodbus,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "async-modbus";
   version = "0.2.3";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
     repo = "async_modbus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d4TTs3TtD/9eFdzXBaY+QeAMeRWTvsWeaxONeG0AXJU=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for Modbus communication";
     homepage = "https://github.com/tiagocoutinho/async_modbus";
-    changelog = "https://github.com/tiagocoutinho/async_modbus/releases/tag/${src.tag}";
+    changelog = "https://github.com/tiagocoutinho/async_modbus/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

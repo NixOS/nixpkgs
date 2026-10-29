@@ -16,7 +16,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aw-core";
   version = "0.5.17";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "aw-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bKxf+fqm+6V3JgDluKVpqq5hRL3Z+x8SHMRQmNe8vUA=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ huantian ];
     license = lib.licenses.mpl20;
   };
-}
+})

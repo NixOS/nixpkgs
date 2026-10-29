@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flexparser";
   version = "0.4";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "flexparser";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0Ocp4GsrnzkpSqnP+AK5OxJ3KyUf5Uc6CegDXpRYRqo=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Parsing made fun ... using typing";
     homepage = "https://github.com/hgrecco/flexparser";
-    changelog = "https://github.com/hgrecco/flexparser/blob/${src.rev}/CHANGES";
+    changelog = "https://github.com/hgrecco/flexparser/blob/${finalAttrs.src.rev}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

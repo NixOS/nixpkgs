@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ourgroceries";
   version = "1.6.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ljmerza";
     repo = "py-our-groceries";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-s6koCh6udktS/NTp67QpyYjzhSYAn874B8FxeBbp2og=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/ljmerza/py-our-groceries/releases/tag/${src.tag}";
+    changelog = "https://github.com/ljmerza/py-our-groceries/releases/tag/${finalAttrs.src.tag}";
     description = "Unofficial Python Wrapper for Our Groceries";
     homepage = "https://github.com/ljmerza/py-our-groceries";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

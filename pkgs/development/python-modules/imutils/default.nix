@@ -5,13 +5,13 @@
   opencv4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.5.4";
   format = "setuptools";
   pname = "imutils";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-A4J6n8qLXFQDBcCESmJZHPNaDK7BmcsPLwpKD7FdjyQ=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

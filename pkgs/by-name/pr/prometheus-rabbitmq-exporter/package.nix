@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rabbitmq_exporter";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "kbudde";
     repo = "rabbitmq_exporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A6pBhfH+BK+0QQUl7H1y7TLd5hSaSyGCvR4Br/3DaN4=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

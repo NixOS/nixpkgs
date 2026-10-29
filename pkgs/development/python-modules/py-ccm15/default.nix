@@ -9,7 +9,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-ccm15";
   version = "1.1.2";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     # Upstream does not have a tag for this release and this is the exact release commit
     # Therefore it should not be marked unstable
     # upstream issue: https://github.com/ocalvo/py-ccm15/issues/10
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qEowsu7ebnD5eCR7SiWEqLwR3yqoqOnuw4wSQm4rmHQ=";
   };
 
@@ -42,10 +42,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ccm15" ];
 
   meta = {
-    changelog = "https://github.com/ocalvo/py-ccm15/releases/tag/${src.tag}";
+    changelog = "https://github.com/ocalvo/py-ccm15/releases/tag/${finalAttrs.src.tag}";
     description = "Python Library to access a Midea CCM15 data converter";
     homepage = "https://github.com/ocalvo/py-ccm15";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

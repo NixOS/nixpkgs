@@ -10,7 +10,7 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stups-cli-support";
   version = "1.1.22";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zalando-stups";
     repo = "stups-cli-support";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-/UsQzV1Ljd+K8AIj55UmiVXAshX+rUbYxFeSK7YGgn8=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.mschuwalow ];
   };
-}
+})

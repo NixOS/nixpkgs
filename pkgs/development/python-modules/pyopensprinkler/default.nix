@@ -7,7 +7,7 @@
   backoff,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyopensprinkler";
   version = "0.7.22";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vinteo";
     repo = "py-opensprinkler";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jH/zZJxKdSFWlYDyLjI2UZFKx5WebNqWgnk2JeS1D0Y=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyopensprinkler" ];
 
   meta = {
-    changelog = "https://github.com/vinteo/py-opensprinkler/releases/tag/${version}";
+    changelog = "https://github.com/vinteo/py-opensprinkler/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/vinteo/py-opensprinkler";
     maintainers = with lib.maintainers; [ jfly ];
     license = lib.licenses.mit;
     description = "Python module for OpenSprinker API";
   };
-}
+})

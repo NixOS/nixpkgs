@@ -10,7 +10,7 @@
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ovoenergy";
   version = "3.0.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "ovoenergy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oWJxpiC83C/ghs/Ik8+DrPWtP/j5jWEZ3+9Nqg4ARKU=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for getting data from OVO's API";
     homepage = "https://github.com/timmo001/ovoenergy";
-    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${src.tag}";
+    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

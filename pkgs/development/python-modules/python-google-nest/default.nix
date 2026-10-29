@@ -5,13 +5,13 @@
   requests-oauthlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-google-nest";
   version = "5.2.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qL4Qk2NW41Sb9raF0vnEb04w3uyaWPauDnNY+DvnNgQ=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.cc-by-nc-sa-30;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

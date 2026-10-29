@@ -5,7 +5,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lion-pytorch";
   version = "0.2.3";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "lion-pytorch";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RHixPIZ1kCawWQiqYqLY+c3r6Rg86LKm3tQTyW2BNFU=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

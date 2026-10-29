@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "reveal-md";
   version = "6.1.4";
 
   src = fetchFromGitHub {
     owner = "webpro";
     repo = "reveal-md";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5lYC4v+Jvm1OdWrkU/cn1I1jd0B1C+AvACCiGUBv+h0=";
   };
 
@@ -40,4 +40,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sagikazarmark ];
   };
-}
+})

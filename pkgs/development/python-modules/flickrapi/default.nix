@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flickrapi";
   version = "2.4";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sybrenstuvel";
     repo = "flickrapi";
-    rev = "version-${version}";
+    rev = "version-${finalAttrs.version}";
     hash = "sha256-vRZrlXKI0UDdmDevh3XUngH4X8G3VlOCSP0z/rxhIgw=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to the Flickr API";
     homepage = "https://stuvel.eu/flickrapi";
-    changelog = "https://github.com/sybrenstuvel/flickrapi/blob/version-${version}/CHANGELOG.md";
+    changelog = "https://github.com/sybrenstuvel/flickrapi/blob/version-${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ obadz ];
   };
-}
+})

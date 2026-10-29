@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "art";
   version = "6.5";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = "art";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ub+hvxYRZznql/GZjA6QXrdHUbM+QCVEYiQfQ6IOJKE=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     description = "ASCII art library for Python";
     mainProgram = "art";
     homepage = "https://github.com/sepandhaghighi/art";
-    changelog = "https://github.com/sepandhaghighi/art/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sepandhaghighi/art/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

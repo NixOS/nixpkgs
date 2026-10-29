@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-codon-tables";
   version = "0.1.18";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_codon_tables";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-c/VSmArSkq+46LzW3r+CQEG1mwp87ACbZ7EWkMOGOQc=";
   };
 
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/codon-usage-tables";
     description = "Codon Usage Tables for Python, from kazusa.or.jp";
-    changelog = "https://github.com/Edinburgh-Genome-Foundry/python_codon_tables/releases/tag/${version}";
+    changelog = "https://github.com/Edinburgh-Genome-Foundry/python_codon_tables/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

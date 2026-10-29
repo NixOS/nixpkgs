@@ -31,12 +31,12 @@ let
       throw "erlang-language-platform does not support OTP major/minor version ${otp_version}";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "erlang-language-platform";
   version = "2026-08-10";
 
   src = fetchurl {
-    url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/${release_name}.tar.gz";
+    url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${finalAttrs.version}/${release_name}.tar.gz";
     hash = hashes.${release_name};
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ offsetcyan ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

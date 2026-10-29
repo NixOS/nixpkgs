@@ -7,7 +7,7 @@
   backports-tarfile,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-context";
   version = "6.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.context";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2UYG1xXnH1kjYNvB6EKJPRZJ1Zd0yYhTDBTdrNFN1p4=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for context management";
     homepage = "https://github.com/jaraco/jaraco.context";
-    changelog = "https://github.com/jaraco/jaraco.context/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/jaraco.context/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

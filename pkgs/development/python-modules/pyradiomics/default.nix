@@ -13,7 +13,7 @@
   versioneer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyradiomics";
   version = "3.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AIM-Harvard";
     repo = "pyradiomics";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/qFNN63Bbq4DUZDPmwUGj1z5pY3ujsbqFJpVXbO+b8E=";
     name = "pyradiomics";
   };
@@ -61,8 +61,8 @@ buildPythonPackage rec {
     homepage = "https://pyradiomics.readthedocs.io";
     description = "Extraction of Radiomics features from 2D and 3D images and binary masks";
     mainProgram = "pyradiomics";
-    changelog = "https://github.com/AIM-Harvard/pyradiomics/releases/tag/v${version}";
+    changelog = "https://github.com/AIM-Harvard/pyradiomics/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

@@ -18,14 +18,14 @@ let
 
   libPath = linkFarm "grammars" (map grammarToAttrSet tree-sitter-grammars.allGrammars);
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diffsitter";
   version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
     repo = "diffsitter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ta7JcSPEgpJwieYvtZnNMFvsYvz4FuxthhmKMYe2XUE=";
     fetchSubmodules = false;
   };
@@ -72,4 +72,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})

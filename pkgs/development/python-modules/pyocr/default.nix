@@ -15,7 +15,7 @@
   withCuneiformSupport ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyocr";
   version = "0.8.5";
   disabled = !isPy3k;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     group = "World";
     owner = "OpenPaperwork";
     repo = "pyocr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-gE0+qbHCwpDdxXFY+4rjVU2FbUSfSVrvrVMcWUk+9FU=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    inherit (src.meta) homepage;
-    changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${finalAttrs.version}/ChangeLog";
     description = "Python wrapper for Tesseract and Cuneiform";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -64,4 +64,4 @@ buildPythonPackage rec {
       tomodachi94
     ];
   };
-}
+})

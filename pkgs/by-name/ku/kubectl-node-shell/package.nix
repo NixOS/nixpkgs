@@ -5,14 +5,14 @@
   bash,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kubectl-node-shell";
   version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "kvaps";
     repo = "kubectl-node-shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jLwnWp/XS4SOyf5v46DPy2Nc6LatF6AzNvHiGVNpsto=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ jocelynthode ];
     platforms = lib.platforms.unix;
   };
-}
+})

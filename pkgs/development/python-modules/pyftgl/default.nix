@@ -15,7 +15,7 @@
 let
   pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyftgl";
   version = "0.4b";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "pyftgl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/umlaeute/pyftgl";
     license = lib.licenses.gpl2Plus;
   };
-}
+})

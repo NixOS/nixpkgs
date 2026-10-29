@@ -9,14 +9,14 @@
   waitress,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-unixsocket";
   version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "requests_unixsocket";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-sllhWMNW7O5o0nukaaUiESMKxvsM3otmr7GfDtR6GZU=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Use requests to talk HTTP via a UNIX domain socket";
     homepage = "https://github.com/msabramo/requests-unixsocket";
-    changelog = "https://github.com/msabramo/requests-unixsocket/releases/tag/v${version}";
+    changelog = "https://github.com/msabramo/requests-unixsocket/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
   };
-}
+})

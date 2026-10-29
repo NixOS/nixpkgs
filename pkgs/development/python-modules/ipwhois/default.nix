@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipwhois";
   version = "1.3.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secynic";
     repo = "ipwhois";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PY3SUPELcCvS/o5kfko4OD1BlTc9DnyqfkSFuzcAOSY=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to retrieve and parse whois data";
     homepage = "https://github.com/secynic/ipwhois";
-    changelog = "https://github.com/secynic/ipwhois/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/secynic/ipwhois/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

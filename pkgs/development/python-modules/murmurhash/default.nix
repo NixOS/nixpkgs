@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "murmurhash";
   version = "1.0.15";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-WOKye3hH+eKm7fELR6jI3XCkcF9F3Mt792rq2s9WugE=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cython bindings for MurmurHash2";
     homepage = "https://github.com/explosion/murmurhash";
-    changelog = "https://github.com/explosion/murmurhash/releases/tag/release-v${version}";
+    changelog = "https://github.com/explosion/murmurhash/releases/tag/release-v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

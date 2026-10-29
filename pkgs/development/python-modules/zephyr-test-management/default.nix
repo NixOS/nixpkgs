@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zephyr-test-management";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "zephyr_test_management";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-bzRtiDoNbMfUKeHgVVomcX+RHaY2D0gAsWFuGahykVE=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rapiteanu ];
   };
-}
+})

@@ -26,7 +26,7 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-notebook";
   version = "0.10.0";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrisjsewell";
     repo = "pytest-notebook";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LoK0wb7rAbVbgyURCbSfckWvJDef3tPY+7V4YU1IBRU=";
   };
 
@@ -99,10 +99,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/chrisjsewell/pytest-notebook/blob/${src.tag}/docs/source/changelog.md";
+    changelog = "https://github.com/chrisjsewell/pytest-notebook/blob/${finalAttrs.src.tag}/docs/source/changelog.md";
     description = "Pytest plugin for regression testing and regenerating Jupyter Notebooks";
     homepage = "https://github.com/chrisjsewell/pytest-notebook";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

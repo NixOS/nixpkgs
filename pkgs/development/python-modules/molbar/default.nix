@@ -19,13 +19,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "MolBar";
   version = "1.1.3";
 
   src = fetchgit {
     url = "https://git.rwth-aachen.de/bannwarthlab/molbar";
-    rev = "release_v${version}";
+    rev = "release_v${finalAttrs.version}";
     hash = "sha256-wHvsj1/BJpfbSKEB7Fk8PkH6laN/VMKoluZo+4bprlo=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

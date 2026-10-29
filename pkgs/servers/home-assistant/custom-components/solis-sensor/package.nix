@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "hultenvp";
   domain = "solis";
   version = "4.0.3";
@@ -14,7 +14,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "hultenvp";
     repo = "solis-sensor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0l7Kf4xS9LOUSVMsuaao8sgP7xbig9hmcmgDNh99Rj0=";
   };
 
@@ -26,9 +26,9 @@ buildHomeAssistantComponent rec {
 
   meta = {
     description = "Home Assistant integration for the SolisCloud PV Monitoring portal via SolisCloud API";
-    changelog = "https://github.com/hultenvp/solis-sensor/releases/tag/v${version}";
+    changelog = "https://github.com/hultenvp/solis-sensor/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/hultenvp/solis-sensor";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

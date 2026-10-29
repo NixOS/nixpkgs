@@ -20,7 +20,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "redis-om";
   version = "1.2.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-om-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hpDGF+9YiJSCOSUrulE5iCG/YL5xlAWNxZcadOp3XBM=";
   };
 
@@ -88,9 +88,9 @@ buildPythonPackage rec {
     description = "Object mapping, and more, for Redis and Python";
     mainProgram = "om";
     homepage = "https://github.com/redis/redis-om-python";
-    changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/redis/redis-om-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     teams = [ lib.teams.redis ];
   };
-}
+})

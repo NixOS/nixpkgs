@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-cramfs";
   version = "1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cramfs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hoH93iQwJ1m8RqrpSOtLCUCQOgT7llkAiqCsJUcNr84=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for the CRAMFS file system";
     homepage = "https://github.com/fox-it/dissect.cramfs";
-    changelog = "https://github.com/fox-it/dissect.crmfs/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.crmfs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

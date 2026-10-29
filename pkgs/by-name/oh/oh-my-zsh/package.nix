@@ -18,7 +18,7 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2026-08-16";
   pname = "oh-my-zsh";
 
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
         latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
         update-source-version oh-my-zsh "$latestDate" --rev="$latestSha"
       else
-        echo "${pname} is already up-to-date"
+        echo "${finalAttrs.pname} is already up-to-date"
       fi
     '';
   };
@@ -131,4 +131,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
-}
+})

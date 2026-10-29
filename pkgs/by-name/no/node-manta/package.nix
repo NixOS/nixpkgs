@@ -7,14 +7,14 @@
   node-manta,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "manta";
   version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "TritonDataCenter";
     repo = "node-manta";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Uj3fNzeERiO++sW2uyAbtfN/1Ed6uRVBBvCecncq/QY=";
   };
 
@@ -51,9 +51,9 @@ buildNpmPackage rec {
   meta = {
     description = "Manta Object-Storage Client CLIs and Node.js SDK";
     homepage = "https://github.com/TritonDataCenter/node-manta";
-    changelog = "https://github.com/TritonDataCenter/node-manta/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/TritonDataCenter/node-manta/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "mls";
   };
-}
+})

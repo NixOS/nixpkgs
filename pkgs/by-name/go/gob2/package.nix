@@ -9,12 +9,12 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gob2";
   version = "2.0.20";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gob2/${lib.versions.majorMinor version}/gob2-${version}.tar.xz";
+    url = "mirror://gnome/sources/gob2/${lib.versions.majorMinor finalAttrs.version}/gob2-${finalAttrs.version}.tar.xz";
     sha256 = "5fe5d7990fd65b0d4b617ba894408ebaa6df453f2781c15a1cfdf2956c0c5428";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

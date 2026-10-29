@@ -10,7 +10,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geocachingapi";
   version = "0.3.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Sholofly";
     repo = "geocachingapi-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zme1jqn3qtoo39zyj4dKxt9M7gypMqJu0bfgY1iYhjs=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API to control the Geocaching API";
     homepage = "https://github.com/Sholofly/geocachingapi-python";
-    changelog = "https://github.com/Sholofly/geocachingapi-python/releases/tag/${version}";
+    changelog = "https://github.com/Sholofly/geocachingapi-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

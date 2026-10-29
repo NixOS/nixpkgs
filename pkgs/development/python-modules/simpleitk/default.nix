@@ -9,7 +9,7 @@
   scikit-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (simpleitk)
     pname
     version
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     ;
   pyproject = true;
 
-  sourceRoot = "${src.name}/Wrapping/Python";
+  sourceRoot = "${finalAttrs.src.name}/Wrapping/Python";
   preBuild = ''
     make
   '';
@@ -41,4 +41,4 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "SimpleITK" ];
-}
+})

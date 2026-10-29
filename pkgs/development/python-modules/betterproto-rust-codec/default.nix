@@ -9,7 +9,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "betterproto-rust-codec";
   version = "0.1.1";
   pyproject = true;
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "124C41p";
     repo = "betterproto-rust-codec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Q8oCk/VVe4Dcw6Z5PBFJBKRlsHgi6Jn+FWDqLH8BgYc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-zYXE55o1/Tt6XJahV6WcGANPM/9xk6uYwQLazkIJj7A=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Converter between betterproto messages and the Protobuf wire format";
-    homepage = "https://github.com/124C41p/betterproto-rust-codec/releases/tag/${src.tag}";
+    homepage = "https://github.com/124C41p/betterproto-rust-codec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

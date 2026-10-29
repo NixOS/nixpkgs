@@ -30,7 +30,7 @@ let
     };
   });
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cgal";
   version = "6.0.1.post202410241521";
   pyproject = true;
@@ -38,11 +38,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CGAL";
     repo = "cgal-swig-bindings";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MnUsl4ozMamKcQ13TV6mtoG7VKq8BuiDSIVq1RPn2rs=";
   };
 
-  env.CGAL_PYTHON_MODULE_VERSION = version;
+  env.CGAL_PYTHON_MODULE_VERSION = finalAttrs.version;
 
   dontUseCmakeConfigure = true;
 
@@ -102,4 +102,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

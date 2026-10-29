@@ -8,13 +8,13 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openwrt-luci-rpc";
   version = "1.1.17";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RFZCnQTDs3vre0qbedIEnng7lGo3Ikp0Bw4+7sbPRJk=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matt-snider ];
   };
-}
+})

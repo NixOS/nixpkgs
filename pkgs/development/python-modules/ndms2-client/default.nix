@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ndms2-client";
   version = "0.1.3";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "foxel";
     repo = "python_ndms2_client";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-A19olC1rTHTy0xyeSP45fqvv9GUynQSrMgXBgW8ySOs=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

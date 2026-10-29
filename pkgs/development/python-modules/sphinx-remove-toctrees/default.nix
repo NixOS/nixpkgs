@@ -11,14 +11,14 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-remove-toctrees";
   version = "1.0.0.post1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_remove_toctrees";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-SAjR7fFRwG7/bSw5Iux+vJ/Tqhdi3hsuFnSjf1rJzi0=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

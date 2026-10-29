@@ -7,7 +7,7 @@
   qt6,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lenovo-legion-app";
   version = "0.1.4-unstable-2026-10-24";
   pyproject = true;
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-/BUYyWMlJAf2fuuDchyv4Y+Pf/s7XgBsVC64x9MN6SI=";
   };
 
-  sourceRoot = "${src.name}/python/legion_linux";
+  sourceRoot = "${finalAttrs.src.name}/python/legion_linux";
 
   build-system = with python3.pkgs; [
     setuptools
@@ -67,4 +67,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "legion_gui";
   };
-}
+})

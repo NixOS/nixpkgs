@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ttkbootstrap";
   version = "2.0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "israel-dryer";
     repo = "ttkbootstrap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SzPD8Z6J9sy7f2eB/mItf329/Wh+sESmhxDJ7v3CP1c=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ e1mo ];
     license = lib.licenses.mit;
   };
-}
+})

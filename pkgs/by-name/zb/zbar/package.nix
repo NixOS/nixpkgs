@@ -28,7 +28,7 @@
   argp-standalone,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zbar";
   version = "0.23.93";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
   };
 
@@ -180,4 +180,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mchehab/zbar";
     mainProgram = "zbarimg";
   };
-}
+})

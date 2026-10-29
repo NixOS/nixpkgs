@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msal-extensions";
   version = "1.3.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AzureAD";
     repo = "microsoft-authentication-extensions-for-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LRopszB8+8N9EajSmZvz0MTomp/qWZ5O3q00AHimZbY=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Authentication Library Extensions (MSAL-Extensions) for Python";
     homepage = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python";
-    changelog = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python/releases/tag/${version}";
+    changelog = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

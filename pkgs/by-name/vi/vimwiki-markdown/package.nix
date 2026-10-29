@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.4.1";
   format = "setuptools";
   pname = "vimwiki-markdown";
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-hJl0OTE6kHucVGOxgOZBG0noYRfxma3yZSrUWEssLN4=";
   };
 
@@ -26,4 +26,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ seqizz ];
     mainProgram = "vimwiki_markdown";
   };
-}
+})

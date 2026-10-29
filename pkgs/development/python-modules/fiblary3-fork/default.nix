@@ -14,13 +14,13 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fiblary3-fork";
   version = "0.1.12";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-4Ou62WKmMqnllwXczHFxCOX07126F3WcHruJ/g7EPAA=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ graham33 ];
   };
-}
+})

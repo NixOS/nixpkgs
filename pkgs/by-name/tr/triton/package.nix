@@ -7,14 +7,14 @@
   triton,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "triton";
   version = "7.18.1";
 
   src = fetchFromGitHub {
     owner = "TritonDataCenter";
     repo = "node-triton";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ODaeSTtBrGKhV28TstYaqdv7cC6OoJfZExQ/YFqBmD0=";
   };
 
@@ -43,4 +43,4 @@ buildNpmPackage rec {
     maintainers = [ ];
     mainProgram = "triton";
   };
-}
+})

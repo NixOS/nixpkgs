@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "markdown-link-check";
   version = "3.15.0";
 
   src = fetchFromGitHub {
     owner = "tcort";
     repo = "markdown-link-check";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lnyCpDtyXWzlLBDLIXEEQg/tMMs8jIeTJdW7I6LCg9w=";
   };
 
@@ -29,4 +29,4 @@ buildNpmPackage rec {
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-minify-html";
   version = "1.14.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-minify-html";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mTFHIZo1E9+d7bOfelFCUZRt5eEo6w+xKB5qf9jc8hY=";
   };
 
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Use minify-html, the extremely fast HTML + JS + CSS minifier, with Django";
     homepage = "https://github.com/adamchainz/django-minify-html";
-    changelog = "https://github.com/adamchainz/django-minify-html/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/adamchainz/django-minify-html/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

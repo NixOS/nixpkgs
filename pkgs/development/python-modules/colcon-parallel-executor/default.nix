@@ -9,7 +9,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colcon-parallel-executor";
   version = "0.4.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-parallel-executor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JjpVhBpkVNFOsTnY8vEqIre4Hzwg+eDYwrR2iaIC5TA=";
   };
   build-system = [ setuptools ];
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

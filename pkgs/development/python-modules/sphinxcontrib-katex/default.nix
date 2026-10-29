@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-katex";
   version = "0.9.11";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinxcontrib_katex";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-LTKyENILvuRRpR0ZZF9v719VaLmlTigTr/uW76ZhI4o=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx extension using KaTeX to render math in HTML";
     homepage = "https://github.com/hagenw/sphinxcontrib-katex";
-    changelog = "https://github.com/hagenw/sphinxcontrib-katex/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/hagenw/sphinxcontrib-katex/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

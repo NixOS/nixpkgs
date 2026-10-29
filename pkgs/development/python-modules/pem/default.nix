@@ -13,7 +13,7 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pem";
   version = "23.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "pem";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rVYlnvISGugh9qvf3mdrIyELmeOUU4g6291HeoMkoQc=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Easy PEM file parsing in Python";
     homepage = "https://pem.readthedocs.io/";
-    changelog = "https://github.com/hynek/pem/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/hynek/pem/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanotech ];
   };
-}
+})

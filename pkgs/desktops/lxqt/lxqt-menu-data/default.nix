@@ -9,14 +9,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-menu-data";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-menu-data";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Bu/M88VInCD6DzKFLjE3gZ5odJa0tvJ0EXHeLCBlgLw=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

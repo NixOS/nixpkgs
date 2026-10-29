@@ -10,14 +10,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-cases";
   version = "3.10.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_cases";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-RR+ePs1dLYGkNiwQxEESb1s9GuOn769Z9gsfuTDfLWk=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Separate test code from test cases in pytest";
     homepage = "https://github.com/smarie/python-pytest-cases";
-    changelog = "https://github.com/smarie/python-pytest-cases/releases/tag/${version}";
+    changelog = "https://github.com/smarie/python-pytest-cases/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

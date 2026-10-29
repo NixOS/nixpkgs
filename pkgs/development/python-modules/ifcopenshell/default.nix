@@ -50,7 +50,7 @@
 let
   opencascade-occt = opencascade-occt_7_6;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ifcopenshell";
   version = "0.8.0";
   pyproject = false;
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IfcOpenShell";
     repo = "IfcOpenShell";
-    tag = "ifcopenshell-python-${version}";
+    tag = "ifcopenshell-python-${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-tnj14lBEkUZNDM9J1sRhNA7OkWTWa5JPTSF8hui3q7k=";
   };
@@ -157,7 +157,7 @@ buildPythonPackage rec {
     pushd src/ifcopenshell-python
     # The build process is here: https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L131
     # NOTE: it has changed a *lot* between 0.7.0 and 0.8.0, it *may* change again (look for mathutils and basically all the things this Makefile does manually)
-    substituteInPlace pyproject.toml --replace-fail "0.0.0" "${version}"
+    substituteInPlace pyproject.toml --replace-fail "0.0.0" "${finalAttrs.version}"
     # NOTE: the following is directly inspired by https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L123
     cp ../../README.md README.md
     popd
@@ -213,4 +213,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

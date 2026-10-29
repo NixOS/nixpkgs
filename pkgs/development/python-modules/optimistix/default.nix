@@ -21,7 +21,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optimistix";
   version = "0.0.11";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "optimistix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tTE/f1dYDpTmrqL1D7h7UyqT2gN9+Y1mNJZcjmdHtno=";
   };
 
@@ -73,8 +73,8 @@ buildPythonPackage rec {
   meta = {
     description = "Nonlinear optimisation (root-finding, least squares, ...) in JAX+Equinox";
     homepage = "https://github.com/patrick-kidger/optimistix";
-    changelog = "https://github.com/patrick-kidger/optimistix/releases/tag/v${version}";
+    changelog = "https://github.com/patrick-kidger/optimistix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

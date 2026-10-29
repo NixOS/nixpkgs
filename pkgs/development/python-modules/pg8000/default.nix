@@ -9,13 +9,13 @@
   versioningit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pg8000";
   version = "1.31.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-RuuwO+UrenfAPHJcedosooHW6PWVd8pmsXyQCWGMrng=";
   };
 
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python driver for PostgreSQL";
     homepage = "https://codeberg.org/tlocke/pg8000";
-    changelog = "https://codeberg.org/tlocke/pg8000/src/tag/${version}#release-notes";
+    changelog = "https://codeberg.org/tlocke/pg8000/src/tag/${finalAttrs.version}#release-notes";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

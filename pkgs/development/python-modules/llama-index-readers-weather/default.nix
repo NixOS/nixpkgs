@@ -8,14 +8,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-readers-weather";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_weather";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YaE2uqNwfo2M0h32ZepOquWV87Q37HEO2/Mfndm8U9c=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

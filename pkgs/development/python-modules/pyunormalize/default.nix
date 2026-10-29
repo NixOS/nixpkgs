@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyunormalize";
   version = "17.0.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlodewijck";
     repo = "pyunormalize";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JDcMWaA6r8YRZYJseyKUyPAInrqHHYhQXYmw9rr3ls4=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Unicode normalization forms (NFC, NFKC, NFD, NFKD) independent of the Python core Unicode database";
     homepage = "https://github.com/mlodewijck/pyunormalize";
-    changelog = "https://github.com/mlodewijck/pyunormalize/releases/tag/${src.tag}";
+    changelog = "https://github.com/mlodewijck/pyunormalize/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

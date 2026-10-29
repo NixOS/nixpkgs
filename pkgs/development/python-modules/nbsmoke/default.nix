@@ -13,13 +13,13 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbsmoke";
   version = "0.6.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-i1UzPi+s4nvH/4DCZsRoylYzlHywaXcnNIAg3URbCHQ=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

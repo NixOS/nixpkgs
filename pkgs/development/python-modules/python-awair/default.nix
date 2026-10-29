@@ -11,7 +11,7 @@
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-awair";
   version = "0.2.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ahayworth";
     repo = "python_awair";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZET24T6MeCPPL1V84538U6Fb/ZVGv1hwcdTQi3Q+yMY=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "python_awair" ];
 
   meta = {
-    changelog = "https://github.com/ahayworth/python_awair/releases/tag/${src.tag}";
+    changelog = "https://github.com/ahayworth/python_awair/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for the Awair API";
     homepage = "https://github.com/ahayworth/python_awair";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

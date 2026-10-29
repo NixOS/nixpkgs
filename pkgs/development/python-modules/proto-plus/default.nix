@@ -9,7 +9,7 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proto-plus";
   version = "1.27.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "proto-plus-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-B+CkOLzbpu3XXnH7MND5GCljG/bUyPPU57zXIIXoRiU=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ruuda ];
   };
-}
+})

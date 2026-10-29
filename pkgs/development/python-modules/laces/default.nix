@@ -6,7 +6,7 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "laces";
   version = "0.1.2";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tbrlpld";
     repo = "laces";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ELpPq7pqcLfAqUuHh8NOAOOiGPDImTFsA7WUHvVfMiI=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django components that know how to render themselves";
     homepage = "https://github.com/tbrlpld/laces";
-    changelog = "https://github.com/tbrlpld/laces/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/tbrlpld/laces/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

@@ -5,13 +5,13 @@
   py4j,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ldap-test";
   version = "0.3.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jmdv8z96dVxWvyYvhf66SEMWvVr4PpcOt40qZunoCeI=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

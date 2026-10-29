@@ -7,13 +7,13 @@
   unidecode,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyaml";
   version = "26.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Ec2jp5bvxtvODVaDa+Vs/SYona0HvNeOmQQIZymSnJM=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.wtfpl;
     maintainers = [ ];
   };
-}
+})

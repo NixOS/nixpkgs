@@ -8,14 +8,14 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-black";
   version = "0.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "pytest_black";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-7Ld0VfN5gFy0vY9FqBOjdUw7vuMZmt8bNmXA39CGtRE=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

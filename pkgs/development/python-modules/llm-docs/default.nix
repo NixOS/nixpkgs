@@ -7,7 +7,7 @@
   llm-docs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-docs";
   version = "0.2.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-docs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+Ha6L2h8p/yA073MfO2Uvd6E4bKA2xAvaBWtvjqglOw=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Ask questions of LLM documentation using LLM";
     homepage = "https://github.com/simonw/llm-docs";
-    changelog = "https://github.com/simonw/llm-docs/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-docs/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

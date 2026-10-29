@@ -14,7 +14,7 @@
   util-linux,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-xlib";
   version = "0.33";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-u06OWlMIOUzHOVS4hvm72jGgTSXWUqMvEQd8bTpFog0=";
   };
 
@@ -50,10 +50,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
+    changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${finalAttrs.version}";
     description = "Fully functional X client library for Python programs";
     homepage = "https://github.com/python-xlib/python-xlib";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

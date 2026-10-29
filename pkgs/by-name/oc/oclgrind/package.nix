@@ -8,14 +8,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oclgrind";
   version = "26.03.1";
 
   src = fetchFromGitHub {
     owner = "jrprice";
     repo = "oclgrind";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-skly0JVwbqsC3YVwR+rUNlhNN2IdrcMsnTYh6HRE22s=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ athas ];
   };
-}
+})

@@ -12,7 +12,7 @@
   pytest-httpx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrmvtransport";
   version = "0.3.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cgtobi";
     repo = "pyrmvtransport";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nFxGEyO+wyRzPayjjv8WNIJ+XIWbVn0dyyjQKHiyr40=";
   };
 
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

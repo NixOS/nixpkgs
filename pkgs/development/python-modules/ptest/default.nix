@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ptest";
   version = "2.0.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KarlGong";
     repo = "ptest";
-    tag = "${version}-release";
+    tag = "${finalAttrs.version}-release";
     hash = "sha256-lmiBqFWGfYdsBXCh6dQ9xed+HhpP6PWa9Csr68GtLxs=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "ptest";
   };
-}
+})

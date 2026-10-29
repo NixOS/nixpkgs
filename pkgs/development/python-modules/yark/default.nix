@@ -11,13 +11,13 @@
   yt-dlp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yark";
   version = "1.2.12";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-K66LC/HhajAMCWU7PPfxkoaK84kLlAccYAH5FXoc+yE=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
     description = "Module for YouTube archiving";
     mainProgram = "yark";
     homepage = "https://github.com/Owez/yark";
-    changelog = "https://github.com/Owez/yark/releases/tag/v${lib.versions.majorMinor version}";
+    changelog = "https://github.com/Owez/yark/releases/tag/v${lib.versions.majorMinor finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

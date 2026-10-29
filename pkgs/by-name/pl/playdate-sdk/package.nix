@@ -12,12 +12,12 @@
   webkitgtk_4_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "playdate-sdk";
   version = "3.1.2";
 
   src = fetchurl {
-    url = "https://download.panic.com/playdate_sdk/Linux/PlaydateSDK-${version}.tar.gz";
+    url = "https://download.panic.com/playdate_sdk/Linux/PlaydateSDK-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-fj2RJhHoL3kAev0qOp5ooZyL/HAltfdhgF8hNoRw15M=";
   };
 
@@ -50,17 +50,17 @@ stdenv.mkDerivation rec {
 
     #### pdc
     makeWrapper $out/share/playdate-sdk/bin/pdc $out/bin/pdc \
-      --run 'export PLAYDATE_SDK_PATH="''${XDG_DATA_HOME:-''$HOME/.local/share}/playdate-sdk-${version}"'
+      --run 'export PLAYDATE_SDK_PATH="''${XDG_DATA_HOME:-''$HOME/.local/share}/playdate-sdk-${finalAttrs.version}"'
 
     #### pdutil
     makeWrapper $out/share/playdate-sdk/bin/pdutil $out/bin/pdutil \
-      --run 'export PLAYDATE_SDK_PATH="''${XDG_DATA_HOME:-''$HOME/.local/share}/playdate-sdk-${version}"'
+      --run 'export PLAYDATE_SDK_PATH="''${XDG_DATA_HOME:-''$HOME/.local/share}/playdate-sdk-${finalAttrs.version}"'
 
     #### PlaydateSimulator
     cp $srcScript $out/bin/PlaydateSimulator
     substituteInPlace $out/bin/PlaydateSimulator \
       --subst-var-by out "$out" \
-      --subst-var-by version "${version}" \
+      --subst-var-by version "${finalAttrs.version}" \
       --subst-var-by ldLibraryPath "${
         lib.makeLibraryPath [
           curl
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

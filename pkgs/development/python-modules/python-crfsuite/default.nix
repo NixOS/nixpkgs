@@ -6,13 +6,13 @@
   cython,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-crfsuite";
   version = "0.9.12";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python_crfsuite";
     hash = "sha256-2zf8zDvY8MScKKdpfKecidZ7P9W/EZEihmFpJArExIA=";
   };
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python binding for CRFsuite";
     homepage = "https://github.com/scrapinghub/python-crfsuite";
-    changelog = "https://github.com/scrapinghub/python-crfsuite/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/scrapinghub/python-crfsuite/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})

@@ -5,14 +5,14 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mullvad-api";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "mullvad_api";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YcfFR2FVdYo3E/8bqn6ArQniAT/Ddtw6FMXPbZpgEGQ=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

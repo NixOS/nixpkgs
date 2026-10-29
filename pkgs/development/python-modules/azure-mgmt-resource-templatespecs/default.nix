@@ -10,14 +10,14 @@
   azure-cli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-resource-templatespecs";
   version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_resource_templatespecs";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+ww/QaNXvQCuGtvKvudPzHqqKlcAMQttqe//1Z6U6Sc=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource-templatespecs";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource-templatespecs_${version}/sdk/resources/azure-mgmt-resource-templatespecs/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource-templatespecs_${finalAttrs.version}/sdk/resources/azure-mgmt-resource-templatespecs/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = azure-cli.meta.maintainers;
   };
-}
+})

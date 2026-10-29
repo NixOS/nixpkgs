@@ -9,14 +9,14 @@
   unicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unicorn";
   version = lib.getVersion unicorn;
   pyproject = true;
 
   src = unicorn.src;
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
   prePatch = ''
     ln -s ${unicorn}/lib/libunicorn.* prebuilt/
@@ -59,4 +59,4 @@ buildPythonPackage rec {
       ris
     ];
   };
-}
+})

@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "semantic-release";
   version = "25.0.9";
 
   src = fetchFromGitHub {
     owner = "semantic-release";
     repo = "semantic-release";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZDJ9yoZovMR+C9LJOqa4PhHG/TnUGfDv0stXmcm3wmc=";
   };
 
@@ -31,7 +31,7 @@ buildNpmPackage rec {
   postPatch = ''
     substituteInPlace package.json --replace \
       '"version": "0.0.0-development"' \
-      '"version": "${version}"'
+      '"version": "${finalAttrs.version}"'
   '';
 
   meta = {
@@ -43,4 +43,4 @@ buildNpmPackage rec {
     # https://hydra.nixos.org/job/nixpkgs/trunk/semantic-release.aarch64-linux
     badPlatforms = [ "aarch64-linux" ];
   };
-}
+})

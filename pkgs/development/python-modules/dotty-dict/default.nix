@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dotty-dict";
   version = "1.3.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pawelzny";
     repo = "dotty_dict";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kY7o9wgfsV7oc5twOeuhG47C0Js6JzCt02S9Sd8dSGc=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dictionary wrapper for quick access to deeply nested keys";
     homepage = "https://dotty-dict.readthedocs.io";
-    changelog = "https://github.com/pawelzny/dotty_dict/releases/tag/${src.tag}";
+    changelog = "https://github.com/pawelzny/dotty_dict/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -9,13 +9,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mwoauth";
   version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IuNAPnSOcBRvjszBQw/lQsn5xP9nfv9CSlLmRPbY98U=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/mediawiki-utilities/python-mwoauth";
     license = lib.licenses.mit;
   };
-}
+})

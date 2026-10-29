@@ -7,14 +7,14 @@
   testers,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "audiothekar";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "fxsth";
     repo = "audiothekar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-DZ4E8numXJdkvX5WYM6cioW5J89YuD9Hi8NfK+Z39cY=";
   };
 
@@ -33,7 +33,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   postInstall = ''
-    install -m 644 -D -t "$out/share/doc/${pname}" License.md
+    install -m 644 -D -t "$out/share/doc/${finalAttrs.pname}" License.md
   '';
 
   passthru = {
@@ -54,4 +54,4 @@ buildDotnetModule rec {
     platforms = [ "x86_64-linux" ]; # needs some work to enable dotnet-sdk.meta.platforms;
     mainProgram = "audiothekar-cli";
   };
-}
+})

@@ -15,7 +15,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "forecast-solar";
   version = "5.0.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fvmi5kwVAScVlGpxutjH8nl0lJx/VnQEVoj9a1UY7r4=";
   };
 
@@ -64,10 +64,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${version}";
+    changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${finalAttrs.version}";
     description = "Asynchronous Python client for getting forecast solar information";
     homepage = "https://github.com/home-assistant-libs/forecast_solar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

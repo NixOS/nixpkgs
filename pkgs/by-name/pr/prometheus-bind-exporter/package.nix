@@ -5,12 +5,12 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bind_exporter";
   version = "0.8.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "prometheus-community";
     repo = "bind_exporter";
     sha256 = "sha256-r1P+zy3iMgPmfvIBgycW8KS0gfNOxCT9YMmHdeY4uXA=";
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rtreffer ];
   };
-}
+})

@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uvloop";
   version = "0.22.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MagicStack";
     repo = "uvloop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9NJugzxFycr1LLZXiDKbpeVcIvlCPHHIcYMp8jmffuE=";
   };
 
@@ -108,10 +108,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/MagicStack/uvloop/releases/tag/${src.tag}";
+    changelog = "https://github.com/MagicStack/uvloop/releases/tag/${finalAttrs.src.tag}";
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

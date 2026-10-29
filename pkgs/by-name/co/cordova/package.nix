@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "cordova";
   version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "cordova-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GJTrFGrUzSQ/Hsphn0zkjFYQkFw5i7ntc8HqIYdOYL4=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     mainProgram = "cordova";
     maintainers = with lib.maintainers; [ flosse ];
   };
-}
+})

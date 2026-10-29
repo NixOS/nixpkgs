@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rencode";
   version = "1.0.8";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aresch";
     repo = "rencode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-k2b6DoKwNeQBkmqSRXqaRTjK7CVX6IKuXCLG9lBdLLY=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

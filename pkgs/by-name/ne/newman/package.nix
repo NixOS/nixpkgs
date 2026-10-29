@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "newman";
   version = "6.2.3";
 
   src = fetchFromGitHub {
     owner = "postmanlabs";
     repo = "newman";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NGeECEJTgWsBh1jGOS3kA+HGBB85Gt5oIIXOjWX8/yE=";
   };
 
@@ -23,8 +23,8 @@ buildNpmPackage rec {
     homepage = "https://www.getpostman.com";
     description = "Command-line collection runner for Postman";
     mainProgram = "newman";
-    changelog = "https://github.com/postmanlabs/newman/releases/tag/v${version}";
+    changelog = "https://github.com/postmanlabs/newman/releases/tag/v${finalAttrs.version}";
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

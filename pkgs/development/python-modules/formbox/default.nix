@@ -7,13 +7,13 @@
   nh3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "formbox";
   version = "1.0.0";
   pyproject = true;
 
   src = fetchzip {
-    url = "https://trong.loang.net/~cnx/formbox/snapshot/formbox-${version}.tar.gz";
+    url = "https://trong.loang.net/~cnx/formbox/snapshot/formbox-${finalAttrs.version}.tar.gz";
     hash = "sha256-YS0hkmEly7SXQvMIPLmqY89ux6E951twAy7iA3K+asA=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
   };
-}
+})

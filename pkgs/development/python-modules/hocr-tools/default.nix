@@ -6,7 +6,7 @@
   reportlab,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hocr-tools";
   version = "1.3.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ocropus";
     repo = "hocr-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-13DAbvp2gJVey0P6O/yXLCkKGm8xIl4QOMfke+6EyZE=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sftpgo";
   version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BuCKn6Y0ORBKPYPqf8gCOr9/i+f2wv0/SnnumP6XpBs=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/drakkan/sftpgo/v2/internal/version.commit=${src.rev}"
+    "-X github.com/drakkan/sftpgo/v2/internal/version.commit=${finalAttrs.src.rev}"
     "-X github.com/drakkan/sftpgo/v2/internal/version.date=1970-01-01T00:00:00Z"
   ];
 
@@ -50,7 +50,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/drakkan/sftpgo";
-    changelog = "https://github.com/drakkan/sftpgo/releases/tag/v${version}";
+    changelog = "https://github.com/drakkan/sftpgo/releases/tag/v${finalAttrs.version}";
     description = "Fully featured and highly configurable SFTP server";
     longDescription = ''
       Fully featured and highly configurable SFTP server
@@ -69,4 +69,4 @@ buildGoModule rec {
     ];
     mainProgram = "sftpgo";
   };
-}
+})

@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meteocalc";
   version = "1.1.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "malexer";
     repo = "meteocalc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WuIW6hROQkjMfbCLUouECIrp4s6oCd2/N79hsrTbVTk=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

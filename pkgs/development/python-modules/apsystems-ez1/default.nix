@@ -8,7 +8,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apsystems-ez1";
   version = "2.7.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SonnenladenGmbH";
     repo = "APsystems-EZ1-API";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ry3sQPkYnH0asmE41lEQA5G2tk07eTpsBiuJbVIjrXU=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/SonnenladenGmbH/APsystems-EZ1-API/releases/tag/${src.tag}";
+    changelog = "https://github.com/SonnenladenGmbH/APsystems-EZ1-API/releases/tag/${finalAttrs.src.tag}";
     description = "Streamlined interface for interacting with the local API of APsystems EZ1 Microinverters";
     homepage = "https://github.com/SonnenladenGmbH/APsystems-EZ1-API";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

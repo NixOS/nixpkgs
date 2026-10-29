@@ -9,13 +9,13 @@
   icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cfdg";
   version = "3.4.3";
   src = fetchFromGitHub {
     owner = "MtnViewJohn";
     repo = "context-free";
-    rev = "Version${version}";
+    rev = "Version${finalAttrs.version}";
     sha256 = "sha256-a/HmB2AkhcibCxzHfiNjnUiYmz5hrfZVs7aZZu5IBIw=";
   };
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp cfdg $out/bin/
 
-    mkdir -p $out/share/doc/${pname}-${version}
-    cp *.txt $out/share/doc/${pname}-${version}
+    mkdir -p $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
+    cp *.txt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     mainProgram = "cfdg";
   };
-}
+})

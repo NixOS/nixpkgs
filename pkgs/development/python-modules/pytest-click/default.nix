@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-click";
   version = "1.1.0";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "pytest-click";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A/RF+SgPu2yYF3eHEFiZwKJW2VwQ185Ln6S3wn2cS0k=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for click";
     homepage = "https://github.com/Stranger6667/pytest-click";
-    changelog = "https://github.com/Stranger6667/pytest-click/releases/tag/v${version}";
+    changelog = "https://github.com/Stranger6667/pytest-click/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

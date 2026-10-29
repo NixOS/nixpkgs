@@ -8,13 +8,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dogtag-pki";
   version = "11.2.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-rQSnQPNYr5SyeNbKoFAbnGb2X/8utrfWLa8gu93hy2w=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ s1341 ];
   };
-}
+})

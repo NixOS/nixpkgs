@@ -22,7 +22,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fpylll";
   version = "0.6.4";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vks4rTXk6fh8183PCxJzfTXQyo3scBH4afjbQAkT6Gw=";
   };
 
@@ -69,9 +69,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python interface for fplll";
-    changelog = "https://github.com/fplll/fpylll/releases/tag/${src.tag}";
+    changelog = "https://github.com/fplll/fpylll/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/fplll/fpylll";
     teams = [ lib.teams.sage ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

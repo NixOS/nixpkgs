@@ -7,7 +7,7 @@
   colorama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansimarkup";
   version = "2.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gvalkov";
     repo = "python-ansimarkup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+kZt8tv09RHrMRZtvJPBBiFaeCksXyrlHqIabPrXYDY=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

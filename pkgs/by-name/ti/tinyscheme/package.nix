@@ -7,12 +7,12 @@
   tinyscheme,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinyscheme";
   version = "1.42";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tinyscheme/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/tinyscheme/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-F7Cxv/0i89SdWDPiKhILM5A50s/aC0bW/FHdLwG0B60=";
   };
 
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     # Checks that the program can run and exit:
-    simple = runCommand "${pname}-simple-test" { } ''
+    simple = runCommand "${finalAttrs.pname}-simple-test" { } ''
       ${tinyscheme}/bin/tinyscheme <<<"(quit 0)"
       echo "success" > $out
     '';
-    fileIo = runCommand "${pname}-file-io-test" { } ''
+    fileIo = runCommand "${finalAttrs.pname}-file-io-test" { } ''
       ${tinyscheme}/bin/tinyscheme <<EOF
         (call-with-output-file "$out"
           (lambda (p)
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
             )))
       EOF
     '';
-    helpText = runCommand "${pname}-help-text-test" { } ''
+    helpText = runCommand "${finalAttrs.pname}-help-text-test" { } ''
       ${tinyscheme}/bin/tinyscheme '-?' | tee > $out || :
       [[ "$(cat $out)" =~ ^Usage: ]]
     '';
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tinyscheme";
     platforms = lib.platforms.unix;
   };
-}
+})

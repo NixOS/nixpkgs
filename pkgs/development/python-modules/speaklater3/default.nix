@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "speaklater3";
   version = "1.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ySYdS2taMEZyMS0esImb4Cj6yRdgGQqA/szTHTo7UEI=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ gador ];
   };
-}
+})

@@ -5,13 +5,13 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyalsaaudio";
   version = "0.11.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-p4qdyjNSSyyQZLNOIfWrh0JyMTzzJKmndZLzlqXg/dw=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "ALSA wrappers for Python";
     homepage = "https://github.com/larsimmisch/pyalsaaudio";
-    changelog = "https://github.com/larsimmisch/pyalsaaudio/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/larsimmisch/pyalsaaudio/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ timschumi ];
   };
-}
+})

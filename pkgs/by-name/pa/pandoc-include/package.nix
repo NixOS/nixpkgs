@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pandoc-include";
   version = "1.4.4";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "DCsunset";
     repo = "pandoc-include";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M0frQGg2nHbgY53ejMdbXKLJjXQgx8aNUVxeDDIHdp4=";
   };
 
@@ -41,4 +41,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "pandoc-include";
   };
-}
+})

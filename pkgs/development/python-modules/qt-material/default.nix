@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qt-material";
   version = "2.17";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dunderlab";
     repo = "qt-material";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ilrPA8SoVCo6FgwxWQ4sOjqURCFDQJLlTTkCZzTZQKI=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qt_material" ];
 
   meta = {
-    changelog = "https://github.com/dunderlab/qt-material/releases/tag/${src.tag}";
+    changelog = "https://github.com/dunderlab/qt-material/releases/tag/${finalAttrs.src.tag}";
     description = "Material inspired stylesheet for PySide2, PySide6, PyQt5 and PyQt6";
     homepage = "https://github.com/dunderlab/qt-material";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ _999eagle ];
   };
-}
+})

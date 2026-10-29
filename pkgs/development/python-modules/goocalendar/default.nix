@@ -9,14 +9,14 @@
   pygobject3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "goocalendar";
   version = "0.8.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "GooCalendar";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-LwL5TLRkD6ALucabLUeB0k4rIX+O/aW2ebS2rZPjIUs=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Calendar widget for GTK using PyGoocanvas";
     homepage = "https://goocalendar.tryton.org/";
-    changelog = "https://foss.heptapod.net/tryton/goocalendar/-/blob/${version}/CHANGELOG";
+    changelog = "https://foss.heptapod.net/tryton/goocalendar/-/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ udono ];
   };
-}
+})

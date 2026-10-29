@@ -7,7 +7,7 @@
   streamlit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamlit-echarts";
   version = "0.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andfanilo";
     repo = "streamlit-echarts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VNliCZPkAYUx+TacBc6PrS4C4bjM5fmVx/Sj6aSw2Yc=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Streamlit component to render ECharts";
     homepage = "https://github.com/andfanilo/streamlit-echarts";
-    changelog = "https://github.com/andfanilo/streamlit-echarts/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/andfanilo/streamlit-echarts/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

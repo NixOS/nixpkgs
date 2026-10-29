@@ -5,14 +5,14 @@
   keepalive,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sparqlwrapper";
   version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "SPARQLWrapper";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-P+0+vMd2F6SnTSZEuG/Yjg8y5/cAOseyszTAJiAXMfE=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     homepage = "http://rdflib.github.io/sparqlwrapper";
     license = lib.licenses.w3c;
   };
-}
+})

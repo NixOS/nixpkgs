@@ -14,13 +14,13 @@
   pyopencl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reikna";
   version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uzIoGCkIINgmO+r0vAzmihS14GWv5ygakMz3tKIG3zA=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/fjarri/reikna";
     license = lib.licenses.mit;
   };
-}
+})

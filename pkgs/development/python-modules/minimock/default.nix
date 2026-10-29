@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "minimock";
   version = "1.3.0";
   pyproject = true;
@@ -13,13 +13,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lowks";
     repo = "minimock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ut3iKc7Sr28uGgWCV3K3CS+gBta2icvbUPMjjo4fflU=";
   };
 
   postPatch = ''
     substituteInPlace minimock.py \
-      --replace-fail "__version__ = '1.2.10.dev0'" "__version__ = '${version}'"
+      --replace-fail "__version__ = '1.2.10.dev0'" "__version__ = '${finalAttrs.version}'"
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyxdg";
   version = "0.28";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "pyxdg";
-    rev = "rel-${version}";
+    rev = "rel-${finalAttrs.version}";
     hash = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2;
     maintainers = [ ];
   };
-}
+})

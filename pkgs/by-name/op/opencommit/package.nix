@@ -6,14 +6,14 @@
   npm-lockfile-fix,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "opencommit";
   version = "3.3.11";
 
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wYwZlqItbjNjdScvPIx8/8ND3FTRsXwwu6e2WI19HcU=";
     postFetch = ''
       cd $out
@@ -33,5 +33,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.matteopacini ];
     mainProgram = "oco";
   };
-
-}
+})

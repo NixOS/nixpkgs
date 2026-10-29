@@ -6,13 +6,13 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlgrabber";
   version = "4.1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-B1r4r6uuY2JILSVOWsP/pZXRdmEXtoTlPZwlwuk34Tk=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     mainProgram = "urlgrabber";
     maintainers = with lib.maintainers; [ qknight ];
   };
-}
+})

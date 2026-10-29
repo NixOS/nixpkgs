@@ -6,18 +6,18 @@
   cargo,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysequoia";
   version = "0.1.35";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-m2l7esurlIWnqM+hMPh/Y/jkodZU7ogwWxl+HLrhPco=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-dfmNYKWjfL6WbI8UFMCM7YE6Cy9oOusPNbZNCjD8o10=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

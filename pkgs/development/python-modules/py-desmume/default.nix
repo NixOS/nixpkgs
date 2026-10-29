@@ -15,7 +15,7 @@
   soundtouch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-desmume";
   version = "0.0.9";
   format = "setuptools";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "py-desmume";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AlejNgCgncZGCS/xOb3FZiLuEtMsMcprnhnM759aKgY=";
     fetchSubmodules = true;
   };
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

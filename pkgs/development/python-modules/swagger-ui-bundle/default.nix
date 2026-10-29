@@ -11,14 +11,14 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swagger-ui-bundle";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "swagger_ui_bundle";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-IGc8NDHIcz1dFhXs952azzDP91ICrK8hp9nH9IlxRSk=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = lib.licenses.asl20;
   };
-}
+})

@@ -6,7 +6,7 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xandikos";
   version = "0.4.9";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eZO0AFHJx+sdjWqQDvRNKxze74/y+x3Ox3xaNz7DbM8=";
   };
 
@@ -48,8 +48,8 @@ python3Packages.buildPythonApplication rec {
     description = "Lightweight CalDAV/CardDAV server";
     homepage = "https://github.com/jelmer/xandikos";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/jelmer/xandikos/blob/v${version}/NEWS";
+    changelog = "https://github.com/jelmer/xandikos/blob/v${finalAttrs.version}/NEWS";
     maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "xandikos";
   };
-}
+})

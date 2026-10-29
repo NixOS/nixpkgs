@@ -7,14 +7,14 @@
   graphqurl,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "graphqurl";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphqurl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-q46DX/luUwBoVskKy9+hXOkpGmlh+lNRvwfcTn6DPN8=";
   };
 
@@ -38,4 +38,4 @@ buildNpmPackage rec {
     mainProgram = "gq";
     maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})

@@ -6,13 +6,13 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timecop";
   version = "0.5.0dev";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jYcA3gByT5RydMU8eK+PUnWe9TrRQ/chw+F6wTUqcX0=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/bluekelp/pytimecop";
     license = lib.licenses.gpl3Plus;
   };
-}
+})

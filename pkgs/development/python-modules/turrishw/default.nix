@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "turrishw";
   version = "1.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "turris-cz";
     repo = "turrishw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LQ1ebcVQo7jixAKOPg/oNBnRU8AZebHANfDU4lamB8g=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library and program for Turris hardware listing";
     homepage = "https://github.com/turris-cz/turrishw";
-    changelog = "https://github.com/turris-cz/turrishw/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/turris-cz/turrishw/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

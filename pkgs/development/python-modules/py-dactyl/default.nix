@@ -9,7 +9,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-dactyl";
   version = "2.1.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iamkubi";
     repo = "pydactyl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WgsykxwcpUasbYJdhM2s/+a7SaORzA7mW+9AhORxcbA=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/iamkubi/pydactyl/releases/tag/${src.tag}";
+    changelog = "https://github.com/iamkubi/pydactyl/releases/tag/${finalAttrs.src.tag}";
     description = "Python wrapper for the Pterodactyl Panel API";
     homepage = "https://github.com/iamkubi/pydactyl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

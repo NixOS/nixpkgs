@@ -8,14 +8,14 @@
   testers,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "redocly";
   version = "2.46.0";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
-    rev = "@redocly/cli@${version}";
+    rev = "@redocly/cli@${finalAttrs.version}";
     hash = "sha256-IdMeWY3MXHHoejWh2ZcskdzhUn0Ez3S9oxRx1uTKAWc=";
   };
 
@@ -68,4 +68,4 @@ buildNpmPackage rec {
       tembleking
     ];
   };
-}
+})

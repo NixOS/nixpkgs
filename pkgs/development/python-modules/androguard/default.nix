@@ -30,7 +30,7 @@
 
 assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated" true;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "androguard";
   version = "4.1.4";
   pyproject = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "androguard";
     owner = "androguard";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WajRUquDEzs0NanOLpb0gxnreqM8Jm/SxI2LYEifWxg=";
   };
 
@@ -87,4 +87,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pmiddend ];
   };
-}
+})

@@ -5,12 +5,12 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nasin-nanpa-helvetica";
   version = "4.0.2";
 
   src = fetchurl {
-    url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${version}/nasin-nanpa-${version}-Helvetica.otf";
+    url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${finalAttrs.version}/nasin-nanpa-${finalAttrs.version}-Helvetica.otf";
     hash = "sha256-isteUDpgdHufXYkcbsC7wbT+e4LzArFe42Tw9wfj04E=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ feathecutie ];
   };
-}
+})

@@ -5,7 +5,7 @@
   pkg-config,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentencepiece";
   format = "setuptools";
   inherit (sentencepiece) version src;
@@ -13,10 +13,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ sentencepiece.dev ];
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   pythonImportsCheck = [ "sentencepiece" ];
 
   # sentencepiece installs 'bin' output.
   meta = removeAttrs sentencepiece.meta [ "outputsToInstall" ];
-}
+})

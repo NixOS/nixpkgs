@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-hpilo";
   version = "4.4.3";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seveas";
     repo = "python-hpilo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-O0WGJRxzT9R9abFOsXHSiv0aFOtBWQqTrfbw5rnuZbY=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to access the HP iLO XML interface";
     homepage = "https://seveas.github.io/python-hpilo/";
-    changelog = "https://github.com/seveas/python-hpilo/blob/${version}/CHANGES";
+    changelog = "https://github.com/seveas/python-hpilo/blob/${finalAttrs.version}/CHANGES";
     license = with lib.licenses; [
       asl20
       gpl3Plus
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hpilo_cli";
   };
-}
+})

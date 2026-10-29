@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hive-metastore-client";
   version = "1.0.9";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "quintoandar";
     repo = "hive-metastore-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IejsiC1eDNa6fjpQPhLNkMvZpyr9QsQdGBfhev1jEyg=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client for connecting and running DDLs on hive metastore";
     homepage = "https://github.com/quintoandar/hive-metastore-client";
-    changelog = "https://github.com/quintoandar/hive-metastore-client/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/quintoandar/hive-metastore-client/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

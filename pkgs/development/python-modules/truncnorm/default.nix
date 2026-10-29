@@ -8,7 +8,7 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "truncnorm";
   version = "0.0.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jluttine";
     repo = "truncnorm";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-F+RBXN/pjxmHf26/Vxptz1NbF58eqU018l3zmepSoJk=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

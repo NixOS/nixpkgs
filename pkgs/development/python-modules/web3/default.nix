@@ -38,7 +38,7 @@
   pyunormalize,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "web3";
   version = "7.16.0";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "web3.py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Dgkmmx4gmVJa4P26X1waaQaKc75COC17OSeJz43EZZ0=";
   };
 
@@ -135,4 +135,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

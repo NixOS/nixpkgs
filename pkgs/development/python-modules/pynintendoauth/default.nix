@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynintendoauth";
   version = "1.0.3";
   pyproject = true;
@@ -14,13 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pynintendoauth";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-g3uE+QrYottgNETHgRmtXaw+qWpG1c40GqCFRgRLDbQ=";
   };
 
   postPatch = ''
     substituteInPlace pynintendoauth/_version.py \
-      --replace-fail '__version__ = "1.0.0"' '__version__ = "${version}"'
+      --replace-fail '__version__ = "1.0.0"' '__version__ = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/pantherale0/pynintendoauth/releases/tag/${src.tag}";
+    changelog = "https://github.com/pantherale0/pynintendoauth/releases/tag/${finalAttrs.src.tag}";
     description = "Python module to provide APIs to authenticate with Nintendo services";
     homepage = "https://github.com/pantherale0/pynintendoauth";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

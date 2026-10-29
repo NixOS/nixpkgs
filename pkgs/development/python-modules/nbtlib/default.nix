@@ -6,7 +6,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbtlib";
   version = "2.0.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vberlier";
     repo = "nbtlib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L8eX6/0qiQ4UxbmDicLedzj+oBjYmlK96NpljE/A3eI=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
     description = "Python library to read and edit nbt data";
     mainProgram = "nbt";
     homepage = "https://github.com/vberlier/nbtlib";
-    changelog = "https://github.com/vberlier/nbtlib/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/vberlier/nbtlib/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdd ];
   };
-}
+})

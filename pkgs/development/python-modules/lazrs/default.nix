@@ -4,14 +4,14 @@
   fetchPypi,
   rustPlatform,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lazrs";
   version = "0.8.2";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gKMK0XmKn9WOhPI4yiP1ACVVuhZVPir+2vpr3klCKeI=";
   };
 
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    inherit pname version;
+    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FmNtH99Ky5ovusbzcvl68MyvtVGUG/pkjBYIVkz0VLc=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

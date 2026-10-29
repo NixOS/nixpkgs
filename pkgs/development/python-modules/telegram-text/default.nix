@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "telegram-text";
   version = "0.2.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SKY-ALIN";
     repo = "telegram-text";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eUy4kyCmM/5Ag/0s9hYW2IIg+OTX2L7EsoOYivhd0pU=";
   };
 
@@ -26,8 +26,8 @@ buildPythonPackage rec {
     description = "Python markup module for Telegram messenger";
     downloadPage = "https://github.com/SKY-ALIN/telegram-text";
     homepage = "https://github.com/SKY-ALIN/telegram-text";
-    changelog = "https://github.com/SKY-ALIN/telegram-text/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/SKY-ALIN/telegram-text/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

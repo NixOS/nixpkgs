@@ -7,7 +7,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-deps-selector";
   version = "0.1.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter-book";
     repo = "hatch-deps-selector";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AaHVBUDENF3d+yzDt5mvMnfqO+DSYQafMdHNDyEtz2s=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

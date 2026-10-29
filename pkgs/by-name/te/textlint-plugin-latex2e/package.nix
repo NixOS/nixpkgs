@@ -7,7 +7,7 @@
   textlint-rule-max-comma,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "textlint-plugin-latex2e";
   version = "1.2.1-unstable-2024-02-05";
 
@@ -30,8 +30,8 @@ buildNpmPackage rec {
   meta = {
     description = "Textlint Plugin LaTeX2ε";
     homepage = "https://github.com/textlint/textlint-plugin-latex2e";
-    changelog = "https://github.com/textlint/textlint-plugin-latex2e/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/textlint/textlint-plugin-latex2e/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

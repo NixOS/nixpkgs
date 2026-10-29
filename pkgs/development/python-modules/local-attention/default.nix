@@ -9,7 +9,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "local-attention";
   version = "1.11.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "local-attention";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2gBPALJAflLf7Y8L5wnNw4fHcvIOKjOncLsebkhrYkU=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for local windowed attention for language modeling";
     homepage = "https://github.com/lucidrains/local-attention";
-    changelog = "https://github.com/lucidrains/local-attention/releases/tag/${src.tag}";
+    changelog = "https://github.com/lucidrains/local-attention/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

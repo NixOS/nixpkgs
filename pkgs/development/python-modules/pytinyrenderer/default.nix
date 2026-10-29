@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytinyrenderer";
   version = "0.0.14";
   pyproject = true;
 
   # github has no tags
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-X+20eYUJy5EaA6O8no3o1NWqNrHeUuuHjv7xBLlaPRU=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

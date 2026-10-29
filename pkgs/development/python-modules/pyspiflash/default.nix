@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyspiflash";
   version = "0.6.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eblot";
     repo = "pyspiflash";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NXYXvGSRhsTHu10pDYaZF84+d4QyPKECpuKpmgFstg0=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "SPI data flash device drivers in Python";
     homepage = "https://github.com/eblot/pyspiflash";
-    changelog = "https://github.com/eblot/pyspiflash/releases/tag/${src.tag}";
+    changelog = "https://github.com/eblot/pyspiflash/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,14 +8,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ots-python";
   version = "9.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "opentype-sanitizer";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-1Zdd+eRECimZl8L8CCkm7pCjN0TafSsc5i2Y6/oH88I=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

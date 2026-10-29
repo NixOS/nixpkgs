@@ -52,14 +52,14 @@
       ];
 
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "cups-filters";
       version = "2.0.1";
 
       src = fetchFromGitHub {
         owner = "OpenPrinting";
         repo = "cups-filters";
-        rev = version;
+        rev = finalAttrs.version;
         hash = "sha256-bLOl64bdeZ10JLcQ7GbU+VffJu3Lzo0ves7O7GQIOWY=";
       };
 
@@ -137,5 +137,5 @@
         license = lib.licenses.gpl2Plus;
         platforms = lib.platforms.linux;
       };
-    }
+    })
   )

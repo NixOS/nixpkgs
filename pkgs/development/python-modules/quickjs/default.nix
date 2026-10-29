@@ -12,7 +12,7 @@ let
   inherit (pkgs) quickjs srcOnly;
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quickjs";
   version = "1.19.4";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PetterS";
     repo = "quickjs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nLloXJWOuaK/enZfwXJI94IcsAMYrkBtG4i3gmxuhfw=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail poetry>=1.5.0 poetry \
       --replace-fail poetry poetry-core \
-      --replace-fail 'version = "0"' 'version = "${version}"'
+      --replace-fail 'version = "0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -59,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

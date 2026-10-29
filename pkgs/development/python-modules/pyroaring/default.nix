@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyroaring";
   version = "1.2.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ezibenroc";
     repo = "PyRoaringBitMap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+nYeI791dQeHjalXv6cPyBZsAN4YJpaNbzcoh4fTVF4=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for handling efficiently sorted integer sets";
     homepage = "https://github.com/Ezibenroc/PyRoaringBitMap";
-    changelog = "https://github.com/Ezibenroc/PyRoaringBitMap/releases/tag/${src.tag}";
+    changelog = "https://github.com/Ezibenroc/PyRoaringBitMap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shymega ];
   };
-}
+})

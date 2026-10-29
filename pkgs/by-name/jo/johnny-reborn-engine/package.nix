@@ -5,14 +5,14 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "johnny-reborn-engine";
   version = "0.45";
 
   src = fetchFromGitHub {
     owner = "xesf";
     repo = "jc_reborn";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PDh2RKdvm4LkDKi963CB5RiraWcS3FED6ug8T1J65GM=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "jc_reborn";
     inherit (SDL2.meta) platforms;
   };
-}
+})

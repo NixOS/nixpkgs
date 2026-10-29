@@ -5,7 +5,7 @@
   glfw3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glfw";
   version = "2.10.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jZdM/rvPseQUsRv8+P3To2VCrQUiDHqr6XuXEBW0otM=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for GLFW";
     homepage = "https://github.com/FlorianRhiem/pyGLFW";
-    changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.McSinyx ];
   };
-}
+})

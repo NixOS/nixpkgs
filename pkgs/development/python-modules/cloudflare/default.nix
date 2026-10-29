@@ -12,13 +12,13 @@
   hatch-fancy-pypi-readme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cloudflare";
   version = "5.9.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HJueJDYCx1TgNjYgQnJCLcRXdvO6vcZ/g0HKTVWdSeg=";
   };
 
@@ -49,11 +49,11 @@ buildPythonPackage rec {
   meta = {
     description = "Official Python library for the Cloudflare API";
     homepage = "https://github.com/cloudflare/cloudflare-python";
-    changelog = "https://github.com/cloudflare/cloudflare-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/cloudflare/cloudflare-python/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       marie
       jemand771
     ];
     license = lib.licenses.asl20;
   };
-}
+})

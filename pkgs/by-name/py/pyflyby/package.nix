@@ -6,7 +6,7 @@
 let
   version = "1.9.11";
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   inherit version;
   pname = "pyflyby";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deshaw";
     repo = "pyflyby";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BBFLkojG0MeJ8Bj8cc10x/rUITqb4/UbLB+FQIVpYrw=";
   };
 
@@ -40,4 +40,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "py";
   };
-}
+})

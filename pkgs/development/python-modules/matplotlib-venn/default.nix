@@ -11,14 +11,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "matplotlib-venn";
   version = "1.1.2";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-bysHoD6btaYt4vMvllIWc54XUXb51lTdGeevLCLsNuM=";
   };
 
@@ -41,9 +41,9 @@ buildPythonPackage rec {
   meta = {
     description = "Functions for plotting area-proportional two- and three-way Venn diagrams in matplotlib";
     homepage = "https://github.com/konstantint/matplotlib-venn";
-    changelog = "https://github.com/konstantint/matplotlib-venn/releases/tag/${version}";
+    changelog = "https://github.com/konstantint/matplotlib-venn/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/konstantint/matplotlib-venn/issues/87
   };
-}
+})

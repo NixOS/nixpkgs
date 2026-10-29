@@ -20,7 +20,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykrige";
   version = "1.7.3";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "PyKrige";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zdszmT1LEfYBWzd+m2nITtl0lZHyU0fzszYxANQS6yU=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Kriging Toolkit for Python";
     homepage = "https://github.com/GeoStat-Framework/PyKrige";
-    changelog = "https://github.com/GeoStat-Framework/PyKrige/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/GeoStat-Framework/PyKrige/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

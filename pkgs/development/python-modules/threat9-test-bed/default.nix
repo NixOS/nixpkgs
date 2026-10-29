@@ -14,7 +14,7 @@
   standard-telnetlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "threat9-test-bed";
   version = "0.6.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "threat9";
     repo = "threat9-test-bed";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "test-bed";
   };
-}
+})

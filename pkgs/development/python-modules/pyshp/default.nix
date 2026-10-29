@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyshp";
   version = "3.0.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeospatialPython";
     repo = "pyshp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LsiTJpcO6KYZb3D6ysBWimFS1zEr0vQ9E9cOcC1jdLo=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -12,7 +12,7 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyLDAvis";
   version = "3.4.1";
   format = "setuptools";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bmabey";
     repo = "pyLDAvis";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WIQytds3PeU85l6ix2UUIwypjpM5rMZvQxiHx9BY91Y=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.all;
   };
-}
+})

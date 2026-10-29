@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgpdump";
   version = "1.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HEcAhXv3unNbCM/kEBqjpPX9g5ZXryScF7JpfCCClmg=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/toofishes/python-pgpdump";
     license = lib.licenses.bsd3;
   };
-}
+})

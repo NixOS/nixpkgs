@@ -17,7 +17,7 @@
   xxhash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cashews";
   version = "7.6.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Krukov";
     repo = "cashews";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-429OMa8t1voFH/ubNhpt/QVZXuo5aoWogcYyLP8DmKY=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cache tools with async power";
     homepage = "https://github.com/Krukov/cashews/";
-    changelog = "https://github.com/Krukov/cashews/releases/tag/${src.tag}";
+    changelog = "https://github.com/Krukov/cashews/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})

@@ -6,7 +6,7 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "romy";
   version = "0.0.10";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xeniter";
     repo = "romy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pQI+/1xt1YE+L5CHsurkBr2dKMGR/dV5vrGHYM8wNGs=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to control Wi-Fi enabled ROMY vacuum cleaners";
     homepage = "https://github.com/xeniter/romy";
-    changelog = "https://github.com/xeniter/romy/releases/tag/${version}";
+    changelog = "https://github.com/xeniter/romy/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

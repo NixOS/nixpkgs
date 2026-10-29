@@ -6,13 +6,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot-dns-rfc2136";
   format = "setuptools";
 
   inherit (certbot) src version;
 
-  sourceRoot = "${src.name}/certbot-dns-rfc2136";
+  sourceRoot = "${finalAttrs.src.name}/certbot-dns-rfc2136";
 
   propagatedBuildInputs = [
     acme
@@ -32,4 +32,4 @@ buildPythonPackage rec {
   meta = certbot.meta // {
     description = "RFC 2136 DNS Authenticator plugin for Certbot";
   };
-}
+})

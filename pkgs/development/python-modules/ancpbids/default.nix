@@ -8,7 +8,7 @@
   pandas,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ancpbids";
   version = "0.3.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ANCPLabOldenburg";
     repo = "ancp-bids";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-brkhXz2b1nR/tjkZQZY5S+P0+GbESvJsANQcVWRCa9k=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://ancpbids.readthedocs.io";
     description = "Read/write/validate/query BIDS datasets";
-    changelog = "https://github.com/ANCPLabOldenburg/ancp-bids/releases/tag/${src.tag}";
+    changelog = "https://github.com/ANCPLabOldenburg/ancp-bids/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

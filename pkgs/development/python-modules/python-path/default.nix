@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-path";
   version = "0.1.3";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # no tags on GitHub
   src = fetchPypi {
     pname = "python_path";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ti2arB2k2u4/A27QiFMs+LaGZtOqEDVn3CK2U5MWyLM=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

@@ -19,7 +19,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdazzle";
   version = "3.44.0";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libdazzle/${lib.versions.majorMinor version}/libdazzle-${version}.tar.xz";
+    url = "mirror://gnome/sources/libdazzle/${lib.versions.majorMinor finalAttrs.version}/libdazzle-${finalAttrs.version}.tar.xz";
     sha256 = "PNPkXrbiaAywXVLh6A3Y+dWdR2UhLw4o945sF4PRjq4=";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
     };
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

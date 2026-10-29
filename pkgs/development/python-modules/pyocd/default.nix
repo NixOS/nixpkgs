@@ -29,7 +29,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyocd";
   version = "0.42.0";
   pyproject = true;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "pyOCD";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VSEItt+mXiV3u3SAKQc8uGiJdT6b4nER/u6BwfaX2CM=";
   };
 
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/pyocd/pyOCD/releases/tag/${src.tag}";
+    changelog = "https://github.com/pyocd/pyOCD/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for programming and debugging Arm Cortex-M microcontrollers";
     downloadPage = "https://github.com/pyocd/pyOCD";
     homepage = "https://pyocd.io";
@@ -84,4 +84,4 @@ buildPythonPackage rec {
     maintainers = [
     ];
   };
-}
+})

@@ -6,13 +6,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "braceexpand";
   version = "0.1.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-5uU5vSDq6lNUdHL/lPT7XD07+dCok4jEtWZjq6dl9wU=";
   };
 
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   meta = {
     description = "Bash-style brace expansion for Python";
     homepage = "https://github.com/trendels/braceexpand";
-    changelog = "https://github.com/trendels/braceexpand/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/trendels/braceexpand/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       newam
       pbsds
     ];
   };
-}
+})

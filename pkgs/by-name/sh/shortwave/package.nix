@@ -29,7 +29,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shortwave";
   version = "5.1.0";
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Shortwave";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MiaozChp5QF/Q0fCTCgnyGJLyIftTkMAbmfRQ/73QP8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-v6aphHunZrXPiuKRFT+EcWJySmQOOT433ST+m8j1z4w=";
   };
 
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -16,7 +16,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "momepy";
   version = "0.11.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "momepy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Og7W+35k9HIIEFGcDmsxggb1BT5cwnaMIi3HO3VRAX0=";
   };
 
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

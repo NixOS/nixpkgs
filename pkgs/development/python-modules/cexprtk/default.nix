@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cexprtk";
   version = "0.4.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-sBLkHco0u2iEsdUxmPW2ONP/Fe08p0fOVJLmzz3t4os=";
   };
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   meta = {
     description = "Mathematical expression parser, cython wrapper";
     homepage = "https://github.com/mjdrushton/cexprtk";
-    changelog = "https://github.com/mjdrushton/cexprtk/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/mjdrushton/cexprtk/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.cpl10;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

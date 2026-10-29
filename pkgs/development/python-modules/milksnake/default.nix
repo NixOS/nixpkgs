@@ -6,13 +6,13 @@
   cffi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "milksnake";
   version = "0.1.5";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-381Dt4vPk4l6de6h2t9xyEgxnxlFHP9PPzpiilq+Fog=";
   };
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

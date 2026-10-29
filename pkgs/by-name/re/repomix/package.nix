@@ -6,14 +6,14 @@
   versionCheckHook,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "repomix";
   version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "yamadashy";
     repo = "repomix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ob+0hwAarqh+0ye027G0zQlIJ9Z+193HjYI2V87z5F0=";
   };
 
@@ -35,7 +35,7 @@ buildNpmPackage rec {
   meta = {
     description = "Tool to pack repository contents to single file for AI consumption";
     homepage = "https://github.com/yamadashy/repomix";
-    changelog = "https://github.com/yamadashy/repomix/releases/tag/v${version}";
+    changelog = "https://github.com/yamadashy/repomix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       boralg
@@ -43,4 +43,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "repomix";
   };
-}
+})

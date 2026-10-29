@@ -14,13 +14,13 @@
   sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbval";
   version = "0.11.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-d8lXl2B7CpaLq9JZfuNJQQLSXDrTdDXeu9rA5G43kJQ=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Py.test plugin to validate Jupyter notebooks";
     homepage = "https://github.com/computationalmodelling/nbval";
-    changelog = "https://github.com/computationalmodelling/nbval/releases/tag/${version}";
+    changelog = "https://github.com/computationalmodelling/nbval/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

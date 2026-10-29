@@ -9,13 +9,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-synapse";
   version = "2.1.0b5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
     extension = "zip";
   };
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure Synapse Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-mgmt-synapse";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-synapse_${version}/sdk/synapse/azure-mgmt-synapse/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-synapse_${finalAttrs.version}/sdk/synapse/azure-mgmt-synapse/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

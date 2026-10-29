@@ -46,7 +46,7 @@ let
     sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "tinyMediaManager";
   version = "5.3.4";
 
@@ -55,7 +55,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitLab {
     owner = "tinyMediaManager";
     repo = "tinyMediaManager";
-    tag = "tinyMediaManager-${version}";
+    tag = "tinyMediaManager-${finalAttrs.version}";
     hash = "sha256-zGR8iHs6zQNV0uwWD3/fFdplwwVrz828kg+w5Un2qVA=";
   };
 
@@ -65,8 +65,8 @@ maven.buildMavenPackage rec {
       --replace-fail "<descriptor>src/assembly/windows-x64.xml</descriptor>" ""
   '';
 
-  mvnDepsParameters = "-DskipTests -Pdist -DbuildNumber=${version} -Dmaven.buildNumber.skip=true";
-  mvnParameters = "-DskipTests -Pdist -DbuildNumber=${version} -Dmaven.buildNumber.skip=true";
+  mvnDepsParameters = "-DskipTests -Pdist -DbuildNumber=${finalAttrs.version} -Dmaven.buildNumber.skip=true";
+  mvnParameters = "-DskipTests -Pdist -DbuildNumber=${finalAttrs.version} -Dmaven.buildNumber.skip=true";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -113,7 +113,7 @@ maven.buildMavenPackage rec {
     # Create destination directory
     mkdir -p $out/opt/tinyMediaManager $out/bin
 
-    tar -xvf "dist/tinyMediaManager-${version}-GIT-linux-${sysSrc.arch}.tar.gz" -C $out/opt/tinyMediaManager --strip-components=1
+    tar -xvf "dist/tinyMediaManager-${finalAttrs.version}-GIT-linux-${sysSrc.arch}.tar.gz" -C $out/opt/tinyMediaManager --strip-components=1
 
     ${lib.optionalString (
       sysSrc.binaryname != "tinyMediaManager"
@@ -159,7 +159,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "Media management tool";
     homepage = "https://www.tinymediamanager.org/";
-    changelog = "https://gitlab.com/tinyMediaManager/tinyMediaManager/-/releases/tinyMediaManager-${version}#changelog";
+    changelog = "https://gitlab.com/tinyMediaManager/tinyMediaManager/-/releases/tinyMediaManager-${finalAttrs.version}#changelog";
     # the java code is open source but the binary which invokes the java code is unfree
     # maven downloads this unfree binary
     # the creator said that in the future it could be possible that building from source no longer works when he integrates stronger drm
@@ -177,4 +177,4 @@ maven.buildMavenPackage rec {
     ];
     mainProgram = "tinyMediaManager";
   };
-}
+})

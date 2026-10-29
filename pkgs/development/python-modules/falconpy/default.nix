@@ -6,7 +6,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "falconpy";
   version = "1.6.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CrowdStrike";
     repo = "falconpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tdok06CnjpzGrWOaNA0OrNFxWzlW23y/7Rg/LmZ93+k=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "CrowdStrike Falcon SDK for Python";
     homepage = "https://github.com/CrowdStrike/falconpy";
-    changelog = "https://github.com/CrowdStrike/falconpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/CrowdStrike/falconpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ levigross ];
   };
-}
+})

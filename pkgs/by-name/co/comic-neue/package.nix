@@ -5,7 +5,7 @@
   installFonts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "comic-neue";
   version = "2.51";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchzip {
-    url = "https://github.com/crozynski/comicneue/releases/download/${version}/comicneue-master.zip";
+    url = "https://github.com/crozynski/comicneue/releases/download/${finalAttrs.version}/comicneue-master.zip";
     hash = "sha256-Xkw+Yd36ffptKsS8RSEP9BPX6eQI7TZn2NgU49rdo80=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

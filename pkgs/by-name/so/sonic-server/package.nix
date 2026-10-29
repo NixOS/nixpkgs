@@ -8,14 +8,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sonic-server";
   version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nC0PoqaXRtQ59a9rnbP2cMrBtRxTsNTln+ljRyI3Lms=";
   };
 
@@ -53,10 +53,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast, lightweight and schema-less search backend";
     homepage = "https://github.com/valeriansaliou/sonic";
-    changelog = "https://github.com/valeriansaliou/sonic/releases/tag/v${version}";
+    changelog = "https://github.com/valeriansaliou/sonic/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     mainProgram = "sonic";
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

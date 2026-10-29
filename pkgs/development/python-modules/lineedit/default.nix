@@ -11,7 +11,7 @@
   pexpect,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lineedit";
   version = "0.1.6";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "lineedit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fq2NpjIQkIq1yzXEUxi6cz80kutVqcH6MqJXHtpTFsk=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ savyajha ];
   };
-}
+})

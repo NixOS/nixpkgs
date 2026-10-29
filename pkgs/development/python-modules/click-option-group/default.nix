@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-option-group";
   version = "0.5.9";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-option-group";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ASzX80aZB3SQqz8AgDTJTE1jgY+MgA0P5yTW9m6+Ovk=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
       for example). Moreover, argparse stdlib package contains this
       functionality out of the box.
     '';
-    homepage = "https://github.com/click-contrib/click-option-group/releases/tag/${src.tag}";
+    homepage = "https://github.com/click-contrib/click-option-group/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

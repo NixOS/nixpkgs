@@ -12,7 +12,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "htmldate";
   version = "1.11.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "htmldate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ehhhM3AmZq5CzNzSYDsuX2/0F3M4GzylYqxa+UZY5D4=";
   };
 
@@ -68,9 +68,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module for the extraction of original and updated publication dates from URLs and web pages";
     homepage = "https://htmldate.readthedocs.io";
-    changelog = "https://github.com/adbar/htmldate/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/adbar/htmldate/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "htmldate";
   };
-}
+})

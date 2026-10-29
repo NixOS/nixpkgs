@@ -8,14 +8,14 @@
   isodate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-keyvault";
   version = "14.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_keyvault";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-0n1BLm17W3a/x6gme449MIUsfG3FYGCex9k9SBa9Kfw=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Key Vault Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-keyvault_${version}/sdk/keyvault/azure-mgmt-keyvault/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-keyvault_${finalAttrs.version}/sdk/keyvault/azure-mgmt-keyvault/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

@@ -14,7 +14,7 @@
   readabilipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "readabilipy";
   version = "0.3.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "ReadabiliPy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FYdSbq3rm6fBHm5fDRAB0airX9fNcUGs1wHN4i6mnG0=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   javascript = buildNpmPackage {
     pname = "readabilipy-javascript";
-    inherit version;
+    inherit (finalAttrs) version;
 
-    src = src;
-    sourceRoot = "${src.name}/readabilipy/javascript";
+    src = finalAttrs.src;
+    sourceRoot = "${finalAttrs.src.name}/readabilipy/javascript";
     npmDepsHash = "sha256-1yp80TwRbE/NcMa0qrml0TlSZJ6zwSTmj+zDjBejko8=";
 
     postPatch = ''
@@ -94,16 +94,16 @@ buildPythonPackage rec {
     tests.version = testers.testVersion {
       package = readabilipy;
       command = "readabilipy --version";
-      version = "${version} (Readability.js supported: yes)";
+      version = "${finalAttrs.version} (Readability.js supported: yes)";
     };
   };
 
   meta = {
     description = "HTML content extractor";
     homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
-    changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "readabilipy";
   };
-}
+})

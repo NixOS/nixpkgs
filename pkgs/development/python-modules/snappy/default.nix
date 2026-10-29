@@ -39,7 +39,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snappy";
   version = "3.3.2";
   pyproject = true;
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "SnapPy";
-    tag = "${version}_as_released";
+    tag = "${finalAttrs.version}_as_released";
     hash = "sha256-Pl4Nl0LXNvdtQ/EFVQy0QdUA/Fqoz2QAFWW5nz0bv78=";
   };
 
@@ -164,4 +164,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

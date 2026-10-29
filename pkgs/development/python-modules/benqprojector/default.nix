@@ -9,7 +9,7 @@
   pyserial-asyncio-fast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "benqprojector";
   version = "0.1.9";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rrooggiieerr";
     repo = "benqprojector.py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oG6djfmBnZyb4YpB6zqzHlcmQx+l+LF5xwCdf/NOb1Q=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = rec {
     description = "Python library to control BenQ projectors";
     homepage = "https://github.com/rrooggiieerr/benqprojector.py";
-    changelog = "${homepage}/releases/tag/${src.tag}";
+    changelog = "${homepage}/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sephalon ];
   };
-}
+})

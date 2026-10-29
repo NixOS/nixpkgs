@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mechanicalsoup";
   version = "1.4.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fu3DGTsLrw+MHZCFF4WHMpyjqkexH/c8j9ko9ZAeAwU=";
   };
 
@@ -61,11 +61,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
-    changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
+    changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jgillich
       fab
     ];
   };
-}
+})

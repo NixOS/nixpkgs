@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py3langid";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CodaAxpYqvnb2nu4KF/XXoAae9J2IW/6vgN5AdS0Sew=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     description = "Fork of the language identification tool langid.py, featuring a modernized codebase and faster execution times";
     mainProgram = "langid";
     homepage = "https://github.com/adbar/py3langid";
-    changelog = "https://github.com/adbar/py3langid/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/adbar/py3langid/blob/v${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jokatzke ];
   };
-}
+})

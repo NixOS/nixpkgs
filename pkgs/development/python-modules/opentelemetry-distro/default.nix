@@ -14,12 +14,12 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opentelemetry-distro";
   inherit (opentelemetry-instrumentation) src version;
   pyproject = true;
 
-  sourceRoot = "${src.name}/opentelemetry-distro";
+  sourceRoot = "${finalAttrs.src.name}/opentelemetry-distro";
 
   build-system = [ hatchling ];
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     description = "OpenTelemetry Python Distro";
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-distro";
   };
-}
+})

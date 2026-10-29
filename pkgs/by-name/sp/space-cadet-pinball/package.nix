@@ -19,14 +19,14 @@ let
   assetsDest =
     if stdenv.hostPlatform.isDarwin then darwinApp + "/Resources" else "$out/share/SpaceCadetPinball";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SpaceCadetPinball";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "k4zmu2a";
     repo = "SpaceCadetPinball";
-    tag = "Release_${version}";
+    tag = "Release_${finalAttrs.version}";
     hash = "sha256-W2P7Txv3RtmKhQ5c0+b4ghf+OMsN+ydUZt+6tB+LClM=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     install -D ../bin/SpaceCadetPinball -t ${darwinApp}/MacOS
     install -Dm644 ../Platform/macOS/SpaceCadetPinball.icns -t ${darwinApp}/Resources
     substitute ../Platform/macOS/Info.plist ${darwinApp}/Info.plist \
-      --replace-fail CHANGEME_SW_VERSION ${version}
+      --replace-fail CHANGEME_SW_VERSION ${finalAttrs.version}
     echo -n "APPL????" > ${darwinApp}/PkgInfo
     runHook postInstall
   '';
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "SpaceCadetPinball";
   };
-}
+})

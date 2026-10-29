@@ -4,13 +4,13 @@
   lib,
   flit-core,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "handy-archives";
   version = "0.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "handy_archives";
     hash = "sha256-+6IRAf2eKdXjtygjJhqq4GuTUGhvDSBneG1k3Oc+s/Y=";
   };
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };
-}
+})

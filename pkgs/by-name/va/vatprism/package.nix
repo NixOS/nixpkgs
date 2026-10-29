@@ -33,13 +33,13 @@ let
   ];
   jdkWithFX = jdk.override { enableJavaFX = true; };
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "vatprism";
   version = "0.3.6";
   src = fetchFromGitHub {
     owner = "marvk";
     repo = "vatprism";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-A9HvO+tUrb/h9YZAKfTlgr+qxX7ucN/VJt4lRL94Ygg=";
   };
 
@@ -83,7 +83,7 @@ maven.buildMavenPackage rec {
     # copy out the JAR
     # Maven already setup the classpath to use m2 repository layout
     # with the prefix of lib/
-    cp target-fat-jar/vatsim-map-${version}-fat.jar $out/
+    cp target-fat-jar/vatsim-map-${finalAttrs.version}-fat.jar $out/
     cp src/main/resources/net/marvk/fs/vatsim/map/icon-256.png $out/share/icons/hicolor/256x256/apps/vatprism.png
 
     # create a wrapper that will automatically set the classpath
@@ -95,14 +95,14 @@ maven.buildMavenPackage rec {
         --add-flags --add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED \
         --add-flags --add-exports=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED \
         --add-flags --add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED \
-        --add-flags "-jar $out/vatsim-map-${version}-fat.jar" \
+        --add-flags "-jar $out/vatsim-map-${finalAttrs.version}-fat.jar" \
         --set JAVA_HOME ${jdkWithFX.home} \
         --suffix LD_LIBRARY_PATH : ${libPath}
     runHook postInstall
   '';
 
   meta = {
-    changelog = "https://github.com/marvk/vatprism/raw/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/marvk/vatprism/raw/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "VATSIM map and data explorer";
     longDescription = ''
       VATprism is a VATSIM Map and VATSIM Data Explorer, VATSIM being the
@@ -116,4 +116,4 @@ maven.buildMavenPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tahlonbrahic ];
   };
-}
+})

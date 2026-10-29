@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lightwalletd";
   version = "0.4.19";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo = "lightwalletd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-93zR2rVRrV09rflfJbT3JMYmqyx0Lp0Acbs2ohhUL8Y=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zcash/lightwalletd/common.Version=v${version}"
-    "-X github.com/zcash/lightwalletd/common.GitCommit=${src.rev}"
+    "-X github.com/zcash/lightwalletd/common.Version=v${finalAttrs.version}"
+    "-X github.com/zcash/lightwalletd/common.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/zcash/lightwalletd/common.BuildDate=1970-01-01"
     "-X github.com/zcash/lightwalletd/common.BuildUser=nixbld"
   ];
@@ -47,4 +47,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "lightwalletd";
   };
-}
+})

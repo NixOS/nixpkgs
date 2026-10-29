@@ -5,12 +5,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subsonic";
   version = "6.1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/subsonic/subsonic-${version}-standalone.tar.gz";
+    url = "mirror://sourceforge/subsonic/subsonic-${finalAttrs.version}-standalone.tar.gz";
     sha256 = "180qdk8mnc147az8v9rmc1kgf8b13mmq88l195gjdwiqpflqzdyz";
   };
 
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
   # for a directory to be created in the unpack phase.
   unpackPhase = ''
     runHook preUnpack
-    mkdir ${pname}-${version}
-    tar -C ${pname}-${version} -xzf $src
+    mkdir ${finalAttrs.pname}-${finalAttrs.version}
+    tar -C ${finalAttrs.pname}-${finalAttrs.version} -xzf $src
     runHook postUnpack
   '';
   installPhase = ''
     runHook preInstall
     mkdir $out
-    cp -r ${pname}-${version}/* $out
+    cp -r ${finalAttrs.pname}-${finalAttrs.version}/* $out
     runHook postInstall
   '';
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ telotortium ];
     platforms = lib.platforms.unix;
   };
-}
+})

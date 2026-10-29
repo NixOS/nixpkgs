@@ -11,13 +11,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "enlighten";
   version = "1.14.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hcNUEqmk84hrMzfUH4E0Qfq5ow2fW18MAVvQeKRBFHM=";
   };
 
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   meta = {
     description = "Enlighten Progress Bar for Python Console Apps";
     homepage = "https://github.com/Rockhopper-Technologies/enlighten";
-    changelog = "https://github.com/Rockhopper-Technologies/enlighten/releases/tag/${version}";
+    changelog = "https://github.com/Rockhopper-Technologies/enlighten/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       veprbl
       doronbehar
     ];
   };
-}
+})

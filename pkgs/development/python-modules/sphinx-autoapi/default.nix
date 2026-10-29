@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-autoapi";
   version = "3.8.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pEfyVwvAqIg/1F5kX7WLlhdD+5tq3422u8N6nBizRcA=";
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
-    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
     longDescription = ''
       Sphinx AutoAPI provides 'autodoc' style documentation for
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

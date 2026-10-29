@@ -11,7 +11,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-ecc";
   version = "8.0.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "py_ecc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-4nmmX4TuErHxIDrBi+Ppr+4vuE7dSeqf8OqOxtqb3sY=";
   };
 
@@ -52,10 +52,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "py_ecc" ];
 
   meta = {
-    changelog = "https://github.com/ethereum/py_ecc/blob/${src.rev}/docs/release_notes.rst";
+    changelog = "https://github.com/ethereum/py_ecc/blob/${finalAttrs.src.rev}/docs/release_notes.rst";
     description = "ECC pairing and bn_128 and bls12_381 curve operations";
     homepage = "https://github.com/ethereum/py_ecc";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

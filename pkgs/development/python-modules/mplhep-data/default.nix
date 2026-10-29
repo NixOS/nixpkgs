@@ -6,14 +6,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mplhep-data";
   version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mplhep_data";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-v5zcxlw6nOfY8OMHj/ZZ7z/P3hGeYloPcfIbBu2rxMk=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

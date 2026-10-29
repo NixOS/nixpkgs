@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdfrw2";
   version = "0.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5qnMq4Pnaaeov+Lb3fD0ndfr5SAy6SlXTwG7v6IZce0=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ loicreynier ];
     license = lib.licenses.mit;
   };
-}
+})

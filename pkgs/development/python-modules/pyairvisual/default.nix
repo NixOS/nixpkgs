@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyairvisual";
   version = "2023.12.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pyairvisual";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with AirVisual";
     homepage = "https://github.com/bachya/pyairvisual";
-    changelog = "https://github.com/bachya/pyairvisual/releases/tag/${version}";
+    changelog = "https://github.com/bachya/pyairvisual/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

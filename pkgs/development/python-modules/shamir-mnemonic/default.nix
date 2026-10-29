@@ -7,15 +7,15 @@
   colorama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shamir-mnemonic";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trezor";
-    repo = "python-${pname}";
-    tag = "v${version}";
+    repo = "python-${finalAttrs.pname}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KjZbxA92h25ghbItdmPvkSPvDZUSRWkl4vnJDBMN71s=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

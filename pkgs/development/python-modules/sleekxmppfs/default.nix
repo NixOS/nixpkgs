@@ -8,7 +8,7 @@
   pyasn1-modules,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sleekxmppfs";
   version = "1.4.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aszymanik";
     repo = "SleekXMPP";
-    tag = "sleek-${version}";
+    tag = "sleek-${finalAttrs.version}";
     hash = "sha256-E2S4fMk5dRr8g42iOYmKOknHX7NS6EZ/LAZKc1v3dPg=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/aszymanik/SleekXMPP";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

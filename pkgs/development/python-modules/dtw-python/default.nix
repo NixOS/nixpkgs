@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dtw-python";
   version = "1.9.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";
     repo = "dtw-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H0eYRS8cMz8pTRm4pmSX8RPkTxC7uMGArxTsmbSsL2E=";
   };
 
@@ -49,9 +49,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python port of R's Comprehensive Dynamic Time Warp algorithms package";
     homepage = "https://github.com/DynamicTimeWarping/dtw-python";
-    changelog = "https://github.com/DynamicTimeWarping/dtw-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/DynamicTimeWarping/dtw-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "dtw";
   };
-}
+})

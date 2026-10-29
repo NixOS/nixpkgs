@@ -8,7 +8,7 @@
   victron-ble,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "victron-ble-ha-parser";
   version = "0.8.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rajlaud";
     repo = "victron-ble-ha-parser";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aJvypVg6jHvv1U+soes92uFv5iVDPM13IlaGbUg3Fso=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Parser for Victron BLE messages suitable for use with Home Assistant";
     homepage = "https://github.com/rajlaud/victron-ble-ha-parser";
-    changelog = "https://github.com/rajlaud/victron-ble-ha-parser/releases/tag/${src.tag}";
+    changelog = "https://github.com/rajlaud/victron-ble-ha-parser/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

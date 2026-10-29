@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vat-moss";
   version = "0.11.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "vat_moss-python";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-c0lcyeW8IUhWKcfn3BmsbNmHyAzm8T0sdYp0Zp0FbFw=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for dealing with VAT MOSS and Norway VAT on digital services. Includes VAT ID validation, rate calculation based on place of supply, exchange rate and currency tools for invoices";
     homepage = "https://github.com/raphaelm/vat_moss-python";
-    changelog = "https://github.com/raphaelm/vat_moss-python/blob/${src.rev}/changelog.md";
+    changelog = "https://github.com/raphaelm/vat_moss-python/blob/${finalAttrs.src.rev}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

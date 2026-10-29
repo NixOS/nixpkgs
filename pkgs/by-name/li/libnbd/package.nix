@@ -16,12 +16,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnbd";
   version = "1.22.5";
 
   src = fetchurl {
-    url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/libnbd-${version}.tar.gz";
+    url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor finalAttrs.version}-stable/libnbd-${finalAttrs.version}.tar.gz";
     hash = "sha256-y/Ria/R8jC+Zu5bHnlqM7JozNzyt6i/Bu/4E5uFbbjw=";
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
   postInstall = lib.optionalString buildPythonBindings ''
-    LIBNBD_PYTHON_METADATA='${placeholder "out"}/${python3.sitePackages}/nbd-${version}.dist-info/METADATA'
+    LIBNBD_PYTHON_METADATA='${placeholder "out"}/${python3.sitePackages}/nbd-${finalAttrs.version}.dist-info/METADATA'
     install -Dm644 -T ${./libnbd-metadata} $LIBNBD_PYTHON_METADATA
     substituteAllInPlace $LIBNBD_PYTHON_METADATA
   '';
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     broken = buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.version "4.05";
   };
-}
+})
 # TODO: package the 1.6-stable version too
 # TODO: git version needs ocaml
 # TODO: bindings for go

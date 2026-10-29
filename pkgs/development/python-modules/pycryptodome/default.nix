@@ -10,7 +10,7 @@
 let
   test-vectors = callPackage ./vectors.nix { };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycryptodome";
   version = "3.23.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x8QkRBwM/H/n7yHGjE8UfBhOzkGr0PBixe9g4EuZLUg=";
   };
 
@@ -36,11 +36,11 @@ buildPythonPackage rec {
   meta = {
     description = "Self-contained cryptographic library";
     homepage = "https://github.com/Legrandin/pycryptodome";
-    changelog = "https://github.com/Legrandin/pycryptodome/blob/${src.tag}/Changelog.rst";
+    changelog = "https://github.com/Legrandin/pycryptodome/blob/${finalAttrs.src.tag}/Changelog.rst";
     license = with lib.licenses; [
       bsd2 # and
       asl20
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

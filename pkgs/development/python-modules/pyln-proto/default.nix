@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyln-proto";
   version = "26.06.9";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "lightning";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RhCe8m0/1ge0r6pNa3oQENg2wu8UvRtERqX5QJsHQjo=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

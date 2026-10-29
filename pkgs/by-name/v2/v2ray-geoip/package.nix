@@ -7,14 +7,14 @@
 }:
 
 let
-  generator = pkgsBuildBuild.buildGoModule rec {
+  generator = pkgsBuildBuild.buildGoModule (finalAttrs: {
     pname = "v2ray-geoip";
     version = "202501190004";
 
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "geoip";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-l5gz3w/80o2UwexzcJ1ALhQMcwqor9m/0RG3WOBeVAc=";
     };
 
@@ -26,7 +26,7 @@ let
       license = lib.licenses.cc-by-sa-40;
       maintainers = with lib.maintainers; [ nickcao ];
     };
-  };
+  });
 in
 
 stdenvNoCC.mkDerivation {

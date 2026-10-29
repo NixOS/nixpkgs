@@ -6,7 +6,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mplleaflet";
   version = "0.0.5";
   format = "setuptools";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BJ4LkXl85bRihTOVE4Fh/tno38H0cj9ILrsHOaC70ok=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jwass/mplleaflet";
     license = lib.licenses.bsd3;
   };
-}
+})

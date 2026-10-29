@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-extfs";
   version = "3.15";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.extfs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ffm4AT5PLqlIOq6kxPcwqzRHNXP0tQ5tvkMS7dv9fZ4=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for the ExtFS file system";
     homepage = "https://github.com/fox-it/dissect.extfs";
-    changelog = "https://github.com/fox-it/dissect.extfs/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.extfs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -13,7 +13,7 @@
   scikit-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quantile-forest";
   version = "1.4.2";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zillow";
     repo = "quantile-forest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K/8W/BkQVeFsJyQMdOHX997/yrhTcvHU9vuYmZ4W+Qo=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Quantile Regression Forests compatible with scikit-learn";
     homepage = "https://github.com/zillow/quantile-forest";
-    changelog = "https://github.com/zillow/quantile-forest/releases/tag/v${version}";
+    changelog = "https://github.com/zillow/quantile-forest/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

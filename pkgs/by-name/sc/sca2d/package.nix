@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitLab,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sca2d";
   version = "0.4.0";
   pyproject = true;
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "bath_open_instrumentation_group";
     repo = "sca2d";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fXZndNkG8JtPfK1smNoCjUdxLGYMuNpYUoyQOfLelrs=";
   };
 
@@ -38,8 +38,8 @@ python3Packages.buildPythonApplication rec {
     description = "Experimental static code analyser for OpenSCAD";
     mainProgram = "sca2d";
     homepage = "https://gitlab.com/bath_open_instrumentation_group/sca2d";
-    changelog = "https://gitlab.com/bath_open_instrumentation_group/sca2d/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/bath_open_instrumentation_group/sca2d/-/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

@@ -19,7 +19,7 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "morecantile";
   version = "7.1.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "morecantile";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RH8eO8KhxPtsD3ohOErwUpV9VFZUXlJ2fctQiUOc6L4=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
     description = "Construct and use map tile grids in different projection";
     homepage = "https://developmentseed.org/morecantile";
     downloadPage = "https://github.com/developmentseed/morecantile";
-    changelog = "https://github.com/developmentseed/morecantile/releases/tag/${src.tag}";
+    changelog = "https://github.com/developmentseed/morecantile/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];
     mainProgram = "morecantile";
   };
-}
+})

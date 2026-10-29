@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snappy-manifolds";
   version = "1.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "snappy_manifolds";
-    tag = "${version}_as_released";
+    tag = "${finalAttrs.version}_as_released";
     hash = "sha256-e+BoPvg0cuEqLq2f9ZPgqFMEYw7eeSEDkY42+l+kDCk=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Database of snappy manifolds";
-    changelog = "https://github.com/3-manifolds/snappy_manifolds/releases/tag/${src.tag}";
+    changelog = "https://github.com/3-manifolds/snappy_manifolds/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://snappy.computop.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
@@ -39,4 +39,4 @@ buildPythonPackage rec {
       alejo7797
     ];
   };
-}
+})

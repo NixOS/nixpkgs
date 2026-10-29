@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncinotify";
   version = "4.4.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "absperf";
     repo = "asyncinotify";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NncqHS6JK9OYv/155PXYi0Sg4oX7p0WAGZ9wnvoYlgE=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
     ];
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";
-    changelog = "https://github.com/absperf/asyncinotify/releases/tag/${src.tag}";
+    changelog = "https://github.com/absperf/asyncinotify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})

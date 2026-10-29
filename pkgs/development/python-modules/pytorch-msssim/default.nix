@@ -7,7 +7,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-msssim";
   version = "1.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VainF";
     repo = "pytorch-msssim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bghglwQhgByC7BqbDvImSvt6edKF55NLYEPjqmmSFH8=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -4,14 +4,14 @@
   lib,
   nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "stylelint";
   version = "17.14.1";
 
   src = fetchFromGitHub {
     owner = "stylelint";
     repo = "stylelint";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-r0a+Ls8Q0t7diKeUh3DNgXn5EaXGStyd4BMXIyu0Pv4=";
   };
 
@@ -28,4 +28,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

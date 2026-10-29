@@ -8,7 +8,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plexapi";
   version = "4.18.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mwmJUY2xdLe3NPdFkUZ3NmI71yuDMQ4oteR3rbrWc7g=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the Plex API";
     homepage = "https://github.com/pkkid/python-plexapi";
-    changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

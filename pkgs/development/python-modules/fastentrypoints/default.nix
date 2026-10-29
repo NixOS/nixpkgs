@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastentrypoints";
   version = "0.12";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/yhPFGm9ZUAFmYB9LGKE1bJROY5uKIEfX3f9JiKSQQs=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nixy ];
   };
-}
+})

@@ -10,13 +10,13 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moderngl";
   version = "5.12.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UpNqmMyy8uHW48sYUospGfaDHn4/kk54i1hzutzlEps=";
   };
 
@@ -43,9 +43,9 @@ buildPythonPackage rec {
   meta = {
     description = "High performance rendering for Python";
     homepage = "https://github.com/moderngl/moderngl";
-    changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
+    changelog = "https://github.com/moderngl/moderngl/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ c0deaddict ];
     inherit (pkgs.mesa.meta) platforms;
   };
-}
+})

@@ -5,7 +5,7 @@
   ocamlPackages,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   duneVersion = "3";
   pname = "tatl";
   version = "1.0";
@@ -13,7 +13,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "theoremprover-museum";
     repo = "TATL";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-leP02141kZSUmCDXOfV0TsEn+OQ6WoyM7+9NutLX1qk=";
   };
 
@@ -26,4 +26,4 @@ ocamlPackages.buildDunePackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.mgttlinger ];
   };
-}
+})

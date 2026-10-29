@@ -17,7 +17,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-q2";
   version = "1.10.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-q2";
     repo = "django-q2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VwB3pvDAGsMvcKblRnmCYHzvEBCz8E13Qov4LjWEqxc=";
   };
 
@@ -86,8 +86,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multiprocessing distributed task queue for Django based on Django-Q";
     homepage = "https://github.com/django-q2/django-q2";
-    changelog = "https://github.com/django-q2/django-q2/releases/tag/${src.tag}";
+    changelog = "https://github.com/django-q2/django-q2/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

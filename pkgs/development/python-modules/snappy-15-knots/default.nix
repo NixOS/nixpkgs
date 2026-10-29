@@ -6,7 +6,7 @@
   snappy-manifolds,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snappy-15-knots";
   version = "1.2.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "snappy_15_knots";
-    tag = "${version}_as_released";
+    tag = "${finalAttrs.version}_as_released";
     hash = "sha256-fhJhHZFf4XuW/0V6LOuV4qoFWke3oFP0KArDpXLWh9g=";
   };
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
   meta = {
     description = "Database of snappy manifolds";
     homepage = "https://snappy.computop.org";
-    changelog = "https://github.com/3-manifolds/snappy_15_knots/releases/tag/${src.tag}";
+    changelog = "https://github.com/3-manifolds/snappy_15_knots/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       noiioiu
       alejo7797
     ];
   };
-}
+})

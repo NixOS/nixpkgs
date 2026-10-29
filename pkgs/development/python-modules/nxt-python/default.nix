@@ -9,7 +9,7 @@
   pillow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nxt-python";
   version = "3.5.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "schodet";
     repo = "nxt-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ffJ7VhXT5I7i5JYfnjFBaud0CxoVBFWx6kRdAz+Ry00=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
     homepage = "https://github.com/schodet/nxt-python";
-    changelog = "https://github.com/schodet/nxt-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/schodet/nxt-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ibizaman ];
   };
-}
+})

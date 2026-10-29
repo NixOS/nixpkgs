@@ -27,7 +27,7 @@
   testtools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-magnumclient";
   version = "4.10.0";
   pyproject = true;
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-magnumclient";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kOnx2Fsx6WK7Z3z7O6so1LOjjyPiEB0jDFzOl7WlMS0=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     openstackdocstheme
@@ -87,4 +87,4 @@ buildPythonPackage rec {
     mainProgram = "magnum";
     teams = [ lib.teams.openstack ];
   };
-}
+})

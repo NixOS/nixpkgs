@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fiscalyear";
   version = "0.4.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamjstewart";
     repo = "fiscalyear";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2wejJRTmVHWiM8LoodyaOyMbMqCx5It6JHCQUWpGsxs=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/adamjstewart/fiscalyear/releases/tag/${src.tag}";
+    changelog = "https://github.com/adamjstewart/fiscalyear/releases/tag/${finalAttrs.src.tag}";
     description = "Utilities for managing the fiscal calendar";
     homepage = "https://github.com/adamjstewart/fiscalyear";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

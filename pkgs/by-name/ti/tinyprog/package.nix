@@ -5,10 +5,10 @@
 }:
 
 with python3Packages;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "tinyprog";
   # `python setup.py --version` from repo checkout
-  version = "1.0.24.dev114+g${lib.substring 0 7 src.rev}";
+  version = "1.0.24.dev114+g${lib.substring 0 7 finalAttrs.src.rev}";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonApplication rec {
     sha256 = "0zbrvvb957z2lwbfd39ixqdsnd2w4wfjirwkqdrqm27bjz308731";
   };
 
-  sourceRoot = "${src.name}/programmer";
+  sourceRoot = "${finalAttrs.src.name}/programmer";
 
   build-system = with python3Packages; [
     setuptools
@@ -43,4 +43,4 @@ buildPythonApplication rec {
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

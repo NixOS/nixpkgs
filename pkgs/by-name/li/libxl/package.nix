@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxl";
   version = "3.9.4.3";
 
   src = fetchurl {
-    url = "https://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
+    url = "https://www.libxl.com/download/${finalAttrs.pname}-lin-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-U8hXoqBzjSGigOXc29LZQk3KrGiYvBPBJPg5qihcAsY=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

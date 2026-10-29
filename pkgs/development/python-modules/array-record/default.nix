@@ -8,7 +8,7 @@
   etils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "array-record";
   version = "0.8.3";
   format = "wheel";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
     in
     fetchPypi {
-      inherit version;
+      inherit (finalAttrs) version;
       format = "wheel";
       pname = "array_record";
       dist = pyShortVersion;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
           cp313 = "sha256-E98a7Js4r+mJc79f489SP4PKkEsEI9hTGZMIdxRbjyg=";
           cp314 = "sha256-idLPX0cJvjxsKzDA02YAUiM3VjP/zmbcsT2SegvcUig=";
         }
-        .${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
+        .${pyShortVersion} or (throw "${finalAttrs.pname} is missing hash for ${pyShortVersion}");
     };
 
   dependencies = [
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

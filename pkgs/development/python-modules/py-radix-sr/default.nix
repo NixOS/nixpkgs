@@ -6,7 +6,7 @@
   pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-radix-sr";
   version = "1.0.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SEKOIA-IO";
     repo = "py-radix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HeXWHdPeW3m0FMtqyHhZGhgCc706Y2xiN8hn9MFt/RM=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
       bsdOriginal
     ];
   };
-}
+})

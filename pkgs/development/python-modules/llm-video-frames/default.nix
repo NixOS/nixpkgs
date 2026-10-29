@@ -7,7 +7,7 @@
   llm-video-frames,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-video-frames";
   version = "0.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-video-frames";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-brTyBymoFuvSQzsD/4aWzFGCrh3yEmWbpsUNGKT9dcU=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin to turn a video into individual frames";
     homepage = "https://github.com/simonw/llm-video-frames";
-    changelog = "https://github.com/simonw/llm-video-frames/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-video-frames/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

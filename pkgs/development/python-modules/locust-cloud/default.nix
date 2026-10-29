@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "locust-cloud";
   version = "1.30.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "locustcloud";
     repo = "locust-cloud";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GJS0+CUYMz3G98I7Edj2qEsIFTp5wzsuSMmN7DlZPjA=";
   };
 
@@ -74,8 +74,8 @@ buildPythonPackage rec {
   meta = {
     description = "Hosted version of Locust to run distributed load tests";
     homepage = "https://github.com/locustcloud/locust-cloud";
-    changelog = "https://github.com/locustcloud/locust-cloud/releases/tag/${src.tag}";
+    changelog = "https://github.com/locustcloud/locust-cloud/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ magicquark ];
   };
-}
+})

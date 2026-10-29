@@ -9,7 +9,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ircstates";
   version = "0.13.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = "ircstates";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Mq9aOj6PXzPjaz3ofoPcAbur59oUWffmEg8aHt0v+0Q=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jesopo/ircstates";
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

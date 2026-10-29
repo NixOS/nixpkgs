@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "serviio";
   version = "2.4";
 
   src = fetchurl {
-    url = "https://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
+    url = "https://download.serviio.org/releases/${finalAttrs.pname}-${finalAttrs.version}-linux.tar.gz";
     sha256 = "sha256-ssi2fKbAMizr5eLAMng+G25ui3v98zCNWzMg7uLgGas=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.thpham ];
     platforms = lib.platforms.linux;
   };
-}
+})

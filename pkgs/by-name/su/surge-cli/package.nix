@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "surge-cli";
   version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "sintaxi";
     repo = "surge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EpYww/YCQhPFmnOJ1zbigI2qyUrKN2TxKHEju/0Si3M=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MoritzBoehme ];
   };
-}
+})

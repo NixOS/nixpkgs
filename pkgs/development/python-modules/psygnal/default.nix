@@ -15,7 +15,7 @@
   attrs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "psygnal";
   version = "0.15.1";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "psygnal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7d9ejzdafoH14fKvYJd3OwYS0RGwDmMeLlj74qvsvjE=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of Qt Signals";
     homepage = "https://github.com/pyapp-kit/psygnal";
-    changelog = "https://github.com/pyapp-kit/psygnal/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pyapp-kit/psygnal/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

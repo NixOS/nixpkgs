@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "varscan";
   version = "2.4.6";
 
   src = fetchurl {
-    url = "https://github.com/dkoboldt/varscan/raw/master/VarScan.v${version}.jar";
+    url = "https://github.com/dkoboldt/varscan/raw/master/VarScan.v${finalAttrs.version}.jar";
     sha256 = "sha256-6CcjC0epbKsDXFxxeOUImSGh4cjR5INqawL/iOOkwqs=";
   };
 
@@ -40,5 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.all;
   };
-
-}
+})

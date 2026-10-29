@@ -15,7 +15,7 @@ let
     ;
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nitrokey-app2";
   version = "2.5.2";
   pyproject = true;
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HkGdu8A8xpZheO+2NcKkTPXZGln28CnhRQzdpwRUlRE=";
   };
 
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "This application allows to manage Nitrokey 3 devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
-    changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/${src.tag}";
+    changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _999eagle
@@ -78,4 +78,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "nitrokeyapp";
   };
-}
+})

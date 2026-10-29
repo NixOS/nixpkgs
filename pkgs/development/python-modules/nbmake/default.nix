@@ -18,7 +18,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbmake";
   version = "1.5.5";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "treebeardtech";
     repo = "nbmake";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Du2sxSl1a5ZVl7ueHWnkTTPtuMUlmALuOuSkoEFIQcE=";
   };
 
@@ -70,8 +70,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for testing notebooks";
     homepage = "https://github.com/treebeardtech/nbmake";
-    changelog = "https://github.com/treebeardtech/nbmake/releases/tag/${src.tag}";
+    changelog = "https://github.com/treebeardtech/nbmake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

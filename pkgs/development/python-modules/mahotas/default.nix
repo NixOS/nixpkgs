@@ -11,7 +11,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mahotas";
   version = "1.4.18";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "mahotas";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NZOas2fL01QZhi6ebIkW0/jfviwiUl+AqjC7XmC4xH4=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

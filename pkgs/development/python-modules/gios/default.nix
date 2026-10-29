@@ -14,7 +14,7 @@
   syrupy_5,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gios";
   version = "7.1.1";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "gios";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VWLdvk+PF/0BaPNIIJcb+rsW1MyNoHcQuVx1Kvx20jk=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for getting air quality data from GIOS";
     homepage = "https://github.com/bieniu/gios";
-    changelog = "https://github.com/bieniu/gios/releases/tag/${src.tag}";
+    changelog = "https://github.com/bieniu/gios/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

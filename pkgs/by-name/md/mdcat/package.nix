@@ -14,14 +14,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdcat";
   version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "BIRSAx2";
     repo = "mdcat";
-    rev = "mdcat-${version}";
+    rev = "mdcat-${finalAttrs.version}";
     hash = "sha256-DJa6NPO8P5AjtVh7AuEZSPFN5pGuis3SIZI7rX00Eik=";
   };
 
@@ -73,11 +73,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "cat for markdown";
     homepage = "https://github.com/BIRSAx2/mdcat";
-    changelog = "https://github.com/BIRSAx2/mdcat/releases/tag/mdcat-${version}";
+    changelog = "https://github.com/BIRSAx2/mdcat/releases/tag/mdcat-${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       SuperSandro2000
       giomf
     ];
   };
-}
+})

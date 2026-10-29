@@ -25,14 +25,14 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping the sage team on upgrade
   version = "3.6.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JrfDV6zMDIzeVYrUhig3KLZbapXYXuHNZrr6tMgWhQk=";
   };
 
@@ -68,10 +68,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/networkx/networkx/blob/networkx-${version}/doc/release/release_${version}.rst";
+    changelog = "https://github.com/networkx/networkx/blob/networkx-${finalAttrs.version}/doc/release/release_${finalAttrs.version}.rst";
     homepage = "https://networkx.github.io/";
     downloadPage = "https://github.com/networkx/networkx";
     description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
     license = lib.licenses.bsd3;
   };
-}
+})

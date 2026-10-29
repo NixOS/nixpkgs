@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tibetan-machine";
   version = "1.901b";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-tibetan-machine/fonts-tibetan-machine_${version}.orig.tar.bz2";
+    url = "mirror://debian/pool/main/f/fonts-tibetan-machine/fonts-tibetan-machine_${finalAttrs.version}.orig.tar.bz2";
     hash = "sha256-c/1Sgv7xKHpsJGjY9ZY2qOJHShGHL1robvphFNJOt5w=";
   };
 
@@ -28,4 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
   };
-}
+})

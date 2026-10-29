@@ -10,7 +10,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pystatgrab";
   version = "0.7.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libstatgrab";
     repo = "pystatgrab";
-    rev = "PYSTATGRAB_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "PYSTATGRAB_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-0FDhkIK8jy3/SFmCzrl9l4RTeIKDjO0o5UoODx6Wnfs=";
   };
 
@@ -39,9 +39,9 @@ buildPythonPackage rec {
     description = "Python bindings for libstatgrab";
     homepage = "https://github.com/libstatgrab/pystatgrab";
     changelog = "https://github.com/libstatgrab/pystatgrab/blob/PYSTATGRAB_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/NEWS";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

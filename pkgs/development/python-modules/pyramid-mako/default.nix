@@ -8,13 +8,13 @@
   mako,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyramid-mako";
   version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AGbIY0QfHD3epgzuHMxQ0AqRoxeoBSykQTHaGhKoQOI=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = [ ];
   };
-}
+})

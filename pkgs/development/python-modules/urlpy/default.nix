@@ -5,7 +5,7 @@
   publicsuffix2,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlpy";
   version = "0.5.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "urlpy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-962jLyx+/GS8wrDPzG2ONnHvtUG5Pqe6l1Z5ml63Cmg=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

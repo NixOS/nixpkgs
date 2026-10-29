@@ -18,7 +18,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "minigalaxy";
   version = "1.4.2";
   pyproject = true;
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qq5XLWmQ0x6/hK8beKxJDxHmbu//EuukuyOG+CpF9ug=";
   };
 
@@ -83,11 +83,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://sharkwouter.github.io/minigalaxy/";
-    changelog = "https://github.com/sharkwouter/minigalaxy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sharkwouter/minigalaxy/blob/${finalAttrs.version}/CHANGELOG.md";
     downloadPage = "https://github.com/sharkwouter/minigalaxy/releases";
     description = "Simple GOG client for Linux";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ RoGreat ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -22,14 +22,14 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tev";
   version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-WfpanCZ3U/2jGNrOM+1euzfGCqcoODBLYuRtcPcCc4Y=";
   };
@@ -85,10 +85,10 @@ stdenv.mkDerivation rec {
       - Accurate: understands color profiles and displays HDR.
       - Versatile: supports many formats, histograms, pixel peeping, tonemaps, etc.
     '';
-    changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
+    changelog = "https://github.com/Tom94/tev/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/Tom94/tev";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ tom94 ];
     platforms = lib.platforms.unix;
   };
-}
+})

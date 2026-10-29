@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autoit-ripper";
   version = "1.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+BHWDkeVewoRUgaHln5TyoajpCvJiowCiC2dFYyp1MA=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
     description = "Python module to extract AutoIt scripts embedded in PE binaries";
     mainProgram = "autoit-ripper";
     homepage = "https://github.com/nazywam/AutoIt-Ripper";
-    changelog = "https://github.com/nazywam/AutoIt-Ripper/releases/tag/v${version}";
+    changelog = "https://github.com/nazywam/AutoIt-Ripper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

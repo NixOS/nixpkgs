@@ -8,7 +8,7 @@
   argparse,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydateinfer";
   version = "0.3.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wdm0006";
     repo = "dateinfer";
-    rev = "${version},"; # yes the comma is required, this is correct name of git tag
+    rev = "${finalAttrs.version},"; # yes the comma is required, this is correct name of git tag
     hash = "sha256-0gy7wfT/uMTmpdIF2OPGVeUh+4yqJSI2Ebif0Lf/DLM=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -13,7 +13,7 @@
   nest-asyncio,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-gemini";
   version = "0.32";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-gemini";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-h8aZvkZNDj7Vcc1HZ7mHVYk99Upoeazp0ET6yeRiySo=";
   };
 
@@ -48,11 +48,11 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin to access Google's Gemini family of models";
     homepage = "https://github.com/simonw/llm-gemini";
-    changelog = "https://github.com/simonw/llm-gemini/releases/tag/${src.tag}";
+    changelog = "https://github.com/simonw/llm-gemini/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       josh
       philiptaron
     ];
   };
-}
+})

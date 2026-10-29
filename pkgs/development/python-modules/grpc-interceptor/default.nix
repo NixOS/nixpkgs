@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grpc-interceptor";
   version = "0.15.4";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "d5h-foss";
     repo = "grpc-interceptor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GJkVCslPXShJNDrqhFtCsAK5+VaG8qFJo0RQTsiMIFY=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simplified gRPC interceptors";
     homepage = "https://github.com/d5h-foss/grpc-interceptor";
-    changelog = "https://github.com/d5h-foss/grpc-interceptor/releases/tag/v${version}";
+    changelog = "https://github.com/d5h-foss/grpc-interceptor/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Simplified Python gRPC interceptors.
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomaskala ];
   };
-}
+})

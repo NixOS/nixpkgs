@@ -9,7 +9,7 @@
   vectorscan,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyperscan";
   version = "0.4.0";
   pyproject = true;
@@ -17,12 +17,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vlaci";
     repo = "pyperscan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8a7x6eF91grUNyZWBWsz/WL5WVrynElE5zLPHCaTp08=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-37EMRHp6X3CqZ/nIewUxWyJCSWXkT1lCyopzCn6M38w=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Hyperscan binding for Python, which supports vectorscan";
     homepage = "https://vlaci.github.io/pyperscan/";
-    changelog = "https://github.com/vlaci/pyperscan/releases/tag/${src.rev}";
+    changelog = "https://github.com/vlaci/pyperscan/releases/tag/${finalAttrs.src.rev}";
     platforms = lib.platforms.unix;
     license =
       with lib.licenses;
@@ -54,4 +54,4 @@ buildPythonPackage rec {
       vlaci
     ];
   };
-}
+})

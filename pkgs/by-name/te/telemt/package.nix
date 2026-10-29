@@ -3,14 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "telemt";
   version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "telemt";
     repo = "telemt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5oIJDwnCRiKQjUZ7jzeOXyiF/IZAVdetUhIwIPlI49A=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
       fullName = "Telemt Public License 3";
     };
   };
-}
+})

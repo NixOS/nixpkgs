@@ -7,7 +7,7 @@
   reprshed,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "macaddress";
   version = "2.0.2";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mentalisttraceur";
     repo = "python-macaddress";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2eD5Ui8kUduKLJ0mSiwaz7TQSeF1+2ASirp70V/8+EA=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ netali ];
   };
-}
+})

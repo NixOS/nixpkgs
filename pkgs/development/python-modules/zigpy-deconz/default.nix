@@ -9,7 +9,7 @@
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-deconz";
   version = "1.0.0";
   pyproject = true;
@@ -17,14 +17,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-deconz";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZV5X075WEg9FMAphMD9kxnNxJ6TDX7k1EUcDI01mYLw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library which communicates with Deconz radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-deconz";
-    changelog = "https://github.com/zigpy/zigpy-deconz/releases/tag/${src.tag}";
+    changelog = "https://github.com/zigpy/zigpy-deconz/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

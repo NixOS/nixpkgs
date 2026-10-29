@@ -8,7 +8,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rowan";
   version = "1.3.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "rowan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fcxVpzLhbLjPIifNBx0olq1dUTmNM9IH38MQybkWZSg=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for working with quaternions";
     homepage = "https://github.com/glotzerlab/rowan";
-    changelog = "https://github.com/glotzerlab/rowan/blob/${src.rev}/ChangeLog.rst";
+    changelog = "https://github.com/glotzerlab/rowan/blob/${finalAttrs.src.rev}/ChangeLog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

@@ -11,20 +11,20 @@
   pytest-benchmark,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ahocorasick-rs";
   version = "1.0.3";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "ahocorasick_rs";
     hash = "sha256-V503Bwp8Idqc2ZiLn7RxKXJztgy0EmWG1tzZn6r8XKU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-RfgjO0qffiAZynQ/xChd81L8S0sqTGdWvpHPrz3bKlQ=";
   };
 
@@ -49,9 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast Aho-Corasick algorithm for Python";
     homepage = "https://github.com/G-Research/ahocorasick_rs/";
-    changelog = "https://github.com/G-Research/ahocorasick_rs/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/G-Research/ahocorasick_rs/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-
-}
+})

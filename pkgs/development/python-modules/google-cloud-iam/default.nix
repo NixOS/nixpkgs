@@ -15,7 +15,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-iam";
   version = "2.24.0";
   pyproject = true;
@@ -23,11 +23,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-iam-v${version}";
+    tag = "google-cloud-iam-v${finalAttrs.version}";
     hash = "sha256-ywRS1BfK6s+gcU8QRem0cSnfZq4BUQ2ABNcgnOa01LI=";
   };
 
-  sourceRoot = "${src.name}/packages/google-cloud-iam";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-iam";
 
   build-system = [ setuptools ];
 
@@ -70,11 +70,11 @@ buildPythonPackage rec {
   meta = {
     description = "IAM Service Account Credentials API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-iam";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-iam/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-cloud-iam/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       austinbutler
       sarahec
     ];
   };
-}
+})

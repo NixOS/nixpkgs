@@ -14,7 +14,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-opensky";
   version = "1.0.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-opensky";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-V6iRwWzCnPCvu8eks2sHPYrX3OmaFnNj+i57kQJKYm0=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python client for the OpenSky API";
     homepage = "https://github.com/joostlek/python-opensky";
-    changelog = "https://github.com/joostlek/python-opensky/releases/tag/v${version}";
+    changelog = "https://github.com/joostlek/python-opensky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

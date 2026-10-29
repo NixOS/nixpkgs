@@ -4,7 +4,7 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotext";
   version = "5.3.2";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "piccolomo";
     repo = "plotext";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4cuStXnZFTlOoBp9w+LrTZavCWEaQdZMY4apGNKvBXE=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

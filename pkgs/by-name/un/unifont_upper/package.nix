@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unifont_upper";
   version = "16.0.03";
 
   src = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${version}/unifont_upper-${version}.otf";
+    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont_upper-${finalAttrs.version}.otf";
     hash = "sha256-ACW+6xiQAd9QMidqJ2MQGTkYbW9fvateIR2FyoM7rIs=";
   };
 
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.mathnerd314 ];
     platforms = lib.platforms.all;
   };
-}
+})

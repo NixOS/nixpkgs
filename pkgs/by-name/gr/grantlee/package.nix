@@ -7,15 +7,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grantlee";
   version = "5.3.1";
-  grantleePluginPrefix = "lib/grantlee/${lib.versions.majorMinor version}";
+  grantleePluginPrefix = "lib/grantlee/${lib.versions.majorMinor finalAttrs.version}";
 
   src = fetchFromGitHub {
     owner = "steveire";
     repo = "grantlee";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-enP7b6A7Ndew2LJH569fN3IgPu2/KL5rCmU/jmKb9sY=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     inherit (qt5.qtbase.meta) platforms;
   };
-}
+})

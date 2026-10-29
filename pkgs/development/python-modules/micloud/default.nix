@@ -8,7 +8,7 @@
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "micloud";
   version = "0.6";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Squachen";
     repo = "micloud";
-    rev = "v_${version}";
+    rev = "v_${finalAttrs.version}";
     hash = "sha256-IsNXFs1N+rKwqve2Pjp+wRTZCxHF4acEo6KyhsSKuqI=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -16,7 +16,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bork";
   version = "11.0.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = "bork";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VashMByAdoRa/uWBGgtsJtd4LcG8hwq/naDXxW+nSg8=";
   };
 
@@ -77,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicoo ];
   };
-}
+})

@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-idzip";
   version = "0.3.10";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bauman";
     repo = "python-idzip";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LAai0yRenGhBRdgTKA/T0bBrL0Aq+idFHt0NDMSLHMk=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
     description = "Seekable, gzip compatible, compression format";
     mainProgram = "idzip";
     homepage = "https://github.com/bauman/python-idzip";
-    changelog = "https://github.com/bauman/python-idzip/releases/tag/${src.tag}";
+    changelog = "https://github.com/bauman/python-idzip/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

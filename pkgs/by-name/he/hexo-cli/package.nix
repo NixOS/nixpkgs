@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "hexo-cli";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "hexojs";
     repo = "hexo-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mtbg9Fa9LBqG/aNfm4yEo4ymuaxuqhymkO1q6mYA2Fs=";
   };
 
@@ -32,4 +32,4 @@ buildNpmPackage rec {
     homepage = "https://hexo.io/";
     license = lib.licenses.mit;
   };
-}
+})

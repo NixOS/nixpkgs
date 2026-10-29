@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-grok";
   version = "1.4.2";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Hiepler";
     repo = "llm-grok";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bvJKQZka/2Vkk66gARIwv3XwIs+gb5KNyCHNWH9doXA=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin providing access to Grok models using the xAI API";
     homepage = "https://github.com/Hiepler/llm-grok";
-    changelog = "https://github.com/Hiepler/llm-grok/releases/tag/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Hiepler/llm-grok/releases/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

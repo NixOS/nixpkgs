@@ -12,7 +12,7 @@
 }:
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "constantly";
     version = "23.10.4";
     pyproject = true;
@@ -20,7 +20,7 @@ let
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-yXPHQP4B83PuRNvDBnRTx/MaPaQxCl1g5Xrle+N/d7I=";
     };
 
@@ -50,6 +50,6 @@ let
       license = lib.licenses.mit;
       maintainers = [ ];
     };
-  };
+  });
 in
 self

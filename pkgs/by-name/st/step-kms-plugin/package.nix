@@ -10,14 +10,14 @@
   yubihsm-shell,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "step-kms-plugin";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "step-kms-plugin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-c9QRyrohktS/ZjG6DOeNXaFRiqxDCdst00m0xjcg9SQ=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/smallstep/step-kms-plugin/cmd.Version=${version}"
+    "-X github.com/smallstep/step-kms-plugin/cmd.Version=${finalAttrs.version}"
   ];
 
   env.CGO_CFLAGS = "-I${lib.getDev pcsclite}/include/PCSC/";
@@ -51,4 +51,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "step-kms-plugin";
   };
-}
+})

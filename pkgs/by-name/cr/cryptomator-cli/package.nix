@@ -14,14 +14,14 @@
 let
   jdk = zulu25;
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "cryptomator-cli";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-rwARleKktGXmumIBmrPrfls4EywBqGBxOaB8/ka5ds0=";
   };
 
@@ -30,8 +30,8 @@ maven.buildMavenPackage rec {
   mvnHash = "sha256-AXAaicphTjw9oIcJOdw0HtfeKsiGMQ/UVckpgqAprfs=";
 
   env = {
-    APP_VERSION = version;
-    SEMVER_STR = version;
+    APP_VERSION = finalAttrs.version;
+    SEMVER_STR = finalAttrs.version;
   };
 
   nativeBuildInputs = [
@@ -69,7 +69,7 @@ maven.buildMavenPackage rec {
       --add-flags "--class-path '$out/share/cryptomator-cli/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator-cli/mods'" \
       --add-flags "-Dfile.encoding='utf-8'" \
-      --add-flags "-Dorg.cryptomator.cli.version='${version}'" \
+      --add-flags "-Dorg.cryptomator.cli.version='${finalAttrs.version}'" \
       --add-flags "-Xss5m" \
       --add-flags "-Xmx256m" \
       --add-flags "--module org.cryptomator.cli/org.cryptomator.cli.CryptomatorCli" \
@@ -90,7 +90,7 @@ maven.buildMavenPackage rec {
   meta = {
     description = "Command line program to access encrypted Cryptomator vaults";
     homepage = "https://github.com/cryptomator/cli";
-    changelog = "https://github.com/cryptomator/cli/releases/tag/${version}";
+    changelog = "https://github.com/cryptomator/cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     mainProgram = "cryptomator-cli";
     maintainers = with lib.maintainers; [
@@ -105,4 +105,4 @@ maven.buildMavenPackage rec {
       binaryBytecode # maven dependencies
     ];
   };
-}
+})

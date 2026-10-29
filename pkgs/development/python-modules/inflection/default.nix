@@ -5,13 +5,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inflection";
   version = "0.5.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GilzDTZumWqqz/svHxy5WT3Dji3dMMkSUMbd4J6ptBc=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
     license = lib.licenses.mit;
   };
-}
+})

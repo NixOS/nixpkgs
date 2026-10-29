@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansi";
   version = "0.3.7";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tehmaze";
     repo = "ansi";
-    tag = "ansi-${version}";
+    tag = "ansi-${finalAttrs.version}";
     hash = "sha256-PmgB1glksu4roQeZ1o7uilMJNm9xaYqw680N2z+tUUM=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tehmaze/ansi/";
     license = lib.licenses.mit;
   };
-}
+})

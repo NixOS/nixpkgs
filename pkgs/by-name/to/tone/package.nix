@@ -8,20 +8,20 @@
   nix-update-script,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "tone";
   version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "sandreas";
     repo = "tone";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yqcxqwlCfVDTv5jkcneimlS5EgnDlB7ZvxPt53t9jbQ=";
   };
 
   patchPhase = ''
     substituteInPlace tone/Program.cs \
-      --replace-fail "@package_version@" ${version}
+      --replace-fail "@package_version@" ${finalAttrs.version}
   '';
 
   projectFile = "tone/tone.csproj";
@@ -44,7 +44,7 @@ buildDotnetModule rec {
   meta = {
     homepage = "https://github.com/sandreas/tone";
     description = "Cross platform utility to dump and modify audio metadata for a wide variety of formats";
-    changelog = "https://github.com/sandreas/tone/releases/tag/v${version}";
+    changelog = "https://github.com/sandreas/tone/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jvanbruegge
@@ -53,4 +53,4 @@ buildDotnetModule rec {
     platforms = with lib.platforms; linux ++ darwin ++ windows;
     mainProgram = "tone";
   };
-}
+})

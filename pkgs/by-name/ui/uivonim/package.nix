@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "uivonim";
   version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "smolck";
     repo = "uivonim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TcsKjRwiCTRQLxolRuJ7nRTGxFC0V2Q8LQC5p9iXaaY=";
   };
 
@@ -42,4 +42,4 @@ buildNpmPackage rec {
     license = lib.licenses.agpl3Only;
     mainProgram = "uivonim";
   };
-}
+})

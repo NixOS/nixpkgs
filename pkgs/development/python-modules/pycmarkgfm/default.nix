@@ -6,13 +6,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycmarkgfm";
   version = "1.2.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oPklCB54aHn33ewTiSlXgx38T0RzLure5OzGuFwsLNo=";
   };
 
@@ -33,9 +33,9 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopieux/pycmarkgfm";
     description = "Bindings to GitHub's Flavored Markdown (cmark-gfm), with enhanced support for task lists";
-    changelog = "https://github.com/zopieux/pycmarkgfm/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/zopieux/pycmarkgfm/raw/v${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ zopieux ];
   };
-}
+})

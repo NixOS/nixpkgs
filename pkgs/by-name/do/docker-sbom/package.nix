@@ -5,14 +5,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "docker-sbom";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "sbom-cli-plugin";
-    rev = "tags/v${version}";
+    rev = "tags/v${finalAttrs.version}";
     hash = "sha256-aKEew/5T4cIc3KiWaBxqFqTki/QSnfSAroZ9iO+orUA=";
   };
 
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raboof ];
   };
-}
+})

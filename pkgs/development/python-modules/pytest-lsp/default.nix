@@ -9,13 +9,13 @@
   packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-lsp";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "pytest_lsp";
     hash = "sha256-zZlQ/sKZHmU2RDDdQZ2u7fVGkoeI9FfhEG1bdRrqC+g=";
   };
@@ -46,4 +46,4 @@ buildPythonPackage rec {
       fliegendewurst
     ];
   };
-}
+})

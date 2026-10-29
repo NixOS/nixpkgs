@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "collectd-exporter";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "collectd_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cKwyEWtnyXah5pKSY16Omba0MkkP/76xpfe43KAYrbc=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ benley ];
   };
-}
+})

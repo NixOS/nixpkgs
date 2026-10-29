@@ -29,12 +29,12 @@
 }:
 
 let
-  xercesc_3_2 = stdenv.mkDerivation rec {
+  xercesc_3_2 = stdenv.mkDerivation (finalAttrs: {
     pname = "xerces-c";
     version = "3.2.3";
 
     src = fetchurl {
-      url = "mirror://apache/xerces/c/3/sources/xerces-c-${version}.tar.gz";
+      url = "mirror://apache/xerces/c/3/sources/xerces-c-${finalAttrs.version}.tar.gz";
       hash = "sha256-+5b8SbH7iS0eZOU6atqKzPbw5tMM4JN5Vuxo05vXLH4=";
     };
 
@@ -47,7 +47,7 @@ let
       license = lib.licenses.asl20;
       platforms = lib.platforms.unix;
     };
-  };
+  });
 
 in
 stdenv.mkDerivation (finalAttrs: {

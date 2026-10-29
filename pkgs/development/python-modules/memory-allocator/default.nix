@@ -10,13 +10,13 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "memory-allocator";
   version = "0.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "memory_allocator";
     hash = "sha256-jBoEMsJom1K/P1y4nz2do8+l/fTNUNGMEjh0CGGtuLw=";
   };
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     teams = [ lib.teams.sage ];
     license = lib.licenses.lgpl3Plus;
   };
-}
+})

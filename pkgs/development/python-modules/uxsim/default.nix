@@ -16,7 +16,7 @@
   scipy,
   tqdm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uxsim";
   version = "1.13.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "toruseo";
     repo = "UXsim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TMu/KXj23Zr2mAEc8SIF/GpVd7sGgEXSY3nCdKeYdhs=";
   };
 
@@ -55,10 +55,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/toruseo/UXsim/releases/tag/${src.tag}";
+    changelog = "https://github.com/toruseo/UXsim/releases/tag/${finalAttrs.src.tag}";
     description = "Vehicular traffic flow simulator in road network, written in pure Python";
     homepage = "https://github.com/toruseo/UXsim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
   };
-}
+})

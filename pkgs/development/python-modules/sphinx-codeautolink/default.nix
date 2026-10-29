@@ -15,7 +15,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-codeautolink";
   version = "0.19.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "felix-hilden";
     repo = "sphinx-codeautolink";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bL0pxtYeu1ktC6K3K9uPBkJYR82C5q2kpZRoQiOKUJI=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx extension that makes code examples clickable";
     homepage = "https://github.com/felix-hilden/sphinx-codeautolink";
-    changelog = "https://github.com/felix-hilden/sphinx-codeautolink/releases/tag/${src.tag}";
+    changelog = "https://github.com/felix-hilden/sphinx-codeautolink/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

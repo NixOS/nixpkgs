@@ -15,7 +15,7 @@
   withOnnx ? false, # Enables the rivaGan en- and decoding method
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "invisible-watermark";
   version = "0.2.0";
   pyproject = true;
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   passthru.tests =
     let
-      image = "${src}/test_vectors/original.jpg";
+      image = "${finalAttrs.src}/test_vectors/original.jpg";
       methods = [
         "dwtDct"
         "dwtDctSvd"
@@ -100,4 +100,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

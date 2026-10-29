@@ -13,7 +13,7 @@
   openssl,
   v4l-utils,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "camera-streamer";
   version = "0.4.2";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ayufan";
     repo = "camera-streamer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-umU8Rp8+wUvQCNK8OpgND/6gPD013SB6sdXSLy5UGAQ=";
     fetchSubmodules = true;
   };
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   makeFlags = [
-    "GIT_VERSION=${src.tag}"
-    "GIT_REVISION=${src.rev}"
+    "GIT_VERSION=${finalAttrs.src.tag}"
+    "GIT_REVISION=${finalAttrs.src.rev}"
   ];
 
   installPhase = ''
@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/ayufan/camera-streamer";
-    changelog = "https://github.com/ayufan/camera-streamer/releases/tag/v${version}";
+    changelog = "https://github.com/ayufan/camera-streamer/releases/tag/v${finalAttrs.version}";
     description = "High-performance low-latency camera streamer for Raspberry PI's";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ _30350n ];
     platforms = lib.platforms.linux;
     mainProgram = "camera-streamer";
   };
-}
+})

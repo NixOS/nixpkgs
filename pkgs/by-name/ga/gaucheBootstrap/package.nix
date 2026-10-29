@@ -12,14 +12,14 @@
   cacert,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gauche-bootstrap";
   version = "0.9.15";
 
   src = fetchurl {
     url = "https://github.com/shirok/Gauche/releases/download/release${
-      lib.replaceStrings [ "." ] [ "_" ] version
-    }/Gauche-${version}.tgz";
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }/Gauche-${finalAttrs.version}.tgz";
     hash = "sha256-NkPie8fIgiz9b7KJLbGF9ljo42STi8LM/O2yOeNa94M=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

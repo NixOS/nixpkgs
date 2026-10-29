@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devialet";
   version = "1.5.7";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = "devialet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HmTiHa7DEmjARaYn7/OoGotnTirE7S7zXLK/TfHdEAg=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interact with the Devialet API";
     homepage = "https://github.com/fwestenberg/devialet";
-    changelog = "https://github.com/fwestenberg/devialet/releases/tag/${src.tag}";
+    changelog = "https://github.com/fwestenberg/devialet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

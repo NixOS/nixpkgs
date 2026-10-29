@@ -18,7 +18,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osmnx";
   version = "2.1.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gboeing";
     repo = "osmnx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PX4Vhf3R9UGKMYp636+tJ5NV/oURd3Zzxfvj7LLCaPM=";
   };
 
@@ -56,9 +56,9 @@ buildPythonPackage rec {
   meta = {
     description = "Package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX";
     homepage = "https://github.com/gboeing/osmnx";
-    changelog = "https://github.com/gboeing/osmnx/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/gboeing/osmnx/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

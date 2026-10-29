@@ -10,7 +10,7 @@
   vispy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "napari-svg";
   version = "0.2.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari-svg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m3lm+jXUuGr9WCxzo7VyZNcKadLPX2VrCC9obiSvreQ=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin for writing svg files from napari";
     homepage = "https://github.com/napari/napari-svg";
-    changelog = "https://github.com/napari/napari-svg/releases/tag/v${version}";
+    changelog = "https://github.com/napari/napari-svg/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
-}
+})

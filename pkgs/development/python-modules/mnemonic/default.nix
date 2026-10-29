@@ -6,7 +6,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mnemonic";
   version = "0.21";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "python-mnemonic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-D1mS/JQhefYmwrShfWR9SdiGsBUM+jmuCkfWix9tDOU=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
       prusnak
     ];
   };
-}
+})

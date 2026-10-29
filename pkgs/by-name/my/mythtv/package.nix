@@ -38,14 +38,14 @@
   libhdhomerun,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mythtv";
   version = "35.0";
 
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4mWtPJi2CBoek8LWEfdFxe1ybomAOCTWBTKExMm7nLU=";
   };
 
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

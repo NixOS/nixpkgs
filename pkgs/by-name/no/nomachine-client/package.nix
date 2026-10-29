@@ -14,19 +14,19 @@ let
   versionBuild_x86_64 = "1";
   versionBuild_i686 = "1";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nomachine-client";
   version = "${versionMajor}.${versionMinor}";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "https://web9001.nomachine.com/download/${versionMajor}/Linux/nomachine-player_${version}_${versionBuild_x86_64}_x86_64.tar.gz";
+        url = "https://web9001.nomachine.com/download/${versionMajor}/Linux/nomachine-player_${finalAttrs.version}_${versionBuild_x86_64}_x86_64.tar.gz";
         hash = "sha256-JOg97ElcbLM6uc6DCAwfGnoytsEgY/BSFmmdIE4oC1o=";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
-        url = "https://web9001.nomachine.com/download/${versionMajor}/Linux/nomachine-player_${version}_${versionBuild_i686}_i686.tar.gz";
+        url = "https://web9001.nomachine.com/download/${versionMajor}/Linux/nomachine-player_${finalAttrs.version}_${versionBuild_i686}_i686.tar.gz";
         hash = "sha256-Shq1vkmOIUwANRLizoUMQPz0ul6MOm+LQJTr+pOTJfU=";
       }
     else
@@ -110,4 +110,4 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
   };
-}
+})

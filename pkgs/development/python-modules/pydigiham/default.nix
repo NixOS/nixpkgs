@@ -8,7 +8,7 @@
   codecserver,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydigiham";
   version = "0.6.2";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "pydigiham";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-QenoMyVFs8MEDPoMV6TT6XfzktfN/gAMIHR0Scq11wk=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     description = "Bindings for the csdr library";
     license = lib.licenses.gpl3Only;
   };
-}
+})

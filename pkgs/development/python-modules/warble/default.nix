@@ -7,7 +7,7 @@
   bluez,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "warble";
   version = "1.2.9";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oezcRD1AddWmDYDxueE0EwK0+UN/EZ5GQxwkdCz4xoY=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

@@ -17,13 +17,13 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyscaffoldext-custom-extension";
   version = "0.6.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xHtKNqLSCTlbbXubADfLYjD3/53WfM65rRuh9RsyeN4=";
   };
 
@@ -61,4 +61,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
   };
-}
+})

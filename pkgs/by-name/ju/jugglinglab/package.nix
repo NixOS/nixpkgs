@@ -17,14 +17,14 @@ let
     }
     .${stdenv.system} or null;
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "jugglinglab";
   version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "jkboyce";
     repo = "jugglinglab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Y87uHFpVs4A/wErNO2ZF6Su0v4LEvaE9nIysrqFoY8w=";
   };
 
@@ -90,4 +90,4 @@ maven.buildMavenPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

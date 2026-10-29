@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-logstash";
   version = "0.4.8";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0E4c4R7MEH5KTzuAf8V9loEelkpVQIGzu7RHMvdO9fk=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/vklochan/python-logstash";
     license = lib.licenses.mit;
   };
-}
+})

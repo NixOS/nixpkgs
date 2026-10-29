@@ -7,7 +7,7 @@
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmsis-svd";
   version = "0.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cmsis-svd";
     repo = "cmsis-svd";
-    tag = "python-${version}";
+    tag = "python-${finalAttrs.version}";
     hash = "sha256-fx9eR9/Nw/oxPaP9rm1G6sjGI7iU4bhkmTS7f8i2RrQ=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "CMSIS SVD parser";
     homepage = "https://github.com/cmsis-svd/cmsis-svd";
-    changelog = "https://github.com/cmsis-svd/cmsis-svd/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/cmsis-svd/cmsis-svd/blob/${finalAttrs.src.rev}/CHANGELOG";
     maintainers = [ lib.maintainers.dump_stack ];
     license = lib.licenses.asl20;
   };
-}
+})

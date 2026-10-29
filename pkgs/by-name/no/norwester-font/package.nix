@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "norwester";
   version = "1.2";
 
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/fonts/opentype
-    cp ${pname}-v${version}/${pname}.otf $out/share/fonts/opentype/
+    cp ${finalAttrs.pname}-v${finalAttrs.version}/${finalAttrs.pname}.otf $out/share/fonts/opentype/
 
     runHook postInstall
   '';
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
   };
-}
+})

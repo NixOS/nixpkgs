@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gp2c";
   version = "0.0.15";
 
   src = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${pname}-${version}.tar.gz";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-Zav0CBYF2Rua780Nit0WGMeZvRH9ckB4DNBkLuwYnm0=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
       broken
       ;
   };
-}
+})

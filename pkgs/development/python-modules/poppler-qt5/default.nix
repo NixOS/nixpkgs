@@ -13,14 +13,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-poppler-qt5";
   version = "21.3.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tHfohB8OoOCf2rby8wXPON+XfZ4ULlaTo3RgXXXdb+A=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

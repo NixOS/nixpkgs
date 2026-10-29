@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-get-deps";
   version = "0.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "get-deps";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DahmSYWYhVch950InYBiCh6qz1pH2Kibf5ixwCNdsTg=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

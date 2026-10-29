@@ -25,13 +25,13 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mido";
   version = "1.3.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GuyzC38oJATxfkN2jL90pqMb8is7eDvdEXoc6dIst0w=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "MIDI Objects for Python";
     homepage = "https://mido.readthedocs.io";
-    changelog = "https://github.com/mido/mido/releases/tag/${version}";
+    changelog = "https://github.com/mido/mido/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

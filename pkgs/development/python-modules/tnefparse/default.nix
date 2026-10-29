@@ -11,7 +11,7 @@
   pytest-console-scripts,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tnefparse";
   version = "1.4.0";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koodaamo";
     repo = "tnefparse";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-t2ouuuy6fzwb6SZNpxeGSleL/11SgTT8Ce28/ST1glw=";
   };
 
@@ -47,10 +47,10 @@ buildPythonPackage rec {
   meta = {
     description = "TNEF decoding library written in python, without external dependencies";
     homepage = "https://github.com/koodaamo/tnefparse";
-    changelog = "https://github.com/koodaamo/tnefparse/releases/tag/${version}";
+    changelog = "https://github.com/koodaamo/tnefparse/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       flokli
     ];
   };
-}
+})

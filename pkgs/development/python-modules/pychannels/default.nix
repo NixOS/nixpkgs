@@ -5,7 +5,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pychannels";
   version = "1.2.3";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fancybits";
     repo = "pychannels";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-E+VL4mJ2KxS5bJZc3Va+wvyVjT55LJz+1wHkxDRa85s=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

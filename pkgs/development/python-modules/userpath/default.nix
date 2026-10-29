@@ -6,13 +6,13 @@
   click,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "userpath";
   version = "1.9.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-bFIojasGklfMgxhG0V1IEzUiRV1Gd+5pqXgfEdvv2BU=";
   };
 
@@ -29,11 +29,11 @@ buildPythonPackage rec {
     description = "Cross-platform tool for adding locations to the user PATH";
     mainProgram = "userpath";
     homepage = "https://github.com/ofek/userpath";
-    changelog = "https://github.com/ofek/userpath/releases/tag/v${version}";
+    changelog = "https://github.com/ofek/userpath/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ yshym ];
   };
-}
+})

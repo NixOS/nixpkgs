@@ -6,7 +6,7 @@
   pygobject3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydbus";
   version = "0.6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LEW21";
     repo = "pydbus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F1KKXG+7dWlEbToqtF3G7wU0Sco7zH5NqzlL58jyDGw=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
   };
-}
+})

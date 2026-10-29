@@ -38,7 +38,7 @@ let
   };
 
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit version;
   pname = "glasskube";
 
@@ -51,8 +51,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/glasskube/glasskube/internal/config.Version=${version}"
-    "-X github.com/glasskube/glasskube/internal/config.Commit=${src.rev}"
+    "-X github.com/glasskube/glasskube/internal/config.Version=${finalAttrs.version}"
+    "-X github.com/glasskube/glasskube/internal/config.Commit=${finalAttrs.src.rev}"
   ];
 
   subPackages = [
@@ -81,9 +81,9 @@ buildGoModule rec {
   meta = {
     description = "Missing Package Manager for Kubernetes featuring a GUI and a CLI";
     homepage = "https://github.com/glasskube/glasskube";
-    changelog = "https://github.com/glasskube/glasskube/releases/tag/v${version}";
+    changelog = "https://github.com/glasskube/glasskube/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ jakuzure ];
     license = lib.licenses.asl20;
     mainProgram = "glasskube";
   };
-}
+})

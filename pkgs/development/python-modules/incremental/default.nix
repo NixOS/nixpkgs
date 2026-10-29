@@ -8,7 +8,7 @@
 }:
 
 let
-  incremental = buildPythonPackage rec {
+  incremental = buildPythonPackage (finalAttrs: {
     pname = "incremental";
     version = "24.11.0";
     pyproject = true;
@@ -16,7 +16,7 @@ let
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "incremental";
-      tag = "incremental-${version}";
+      tag = "incremental-${finalAttrs.version}";
       hash = "sha256-GkTCQYGrgCUzizSgKhWeqJ25pfaYA7eUJIHt0q/iO0E=";
     };
 
@@ -42,13 +42,13 @@ let
     pythonImportsCheck = [ "incremental" ];
 
     meta = {
-      changelog = "https://github.com/twisted/incremental/blob/${src.tag}/NEWS.rst";
+      changelog = "https://github.com/twisted/incremental/blob/${finalAttrs.src.tag}/NEWS.rst";
       homepage = "https://github.com/twisted/incremental";
       description = "Small library that versions your Python projects";
       license = lib.licenses.mit;
       mainProgram = "incremental";
       maintainers = with lib.maintainers; [ dotlambda ];
     };
-  };
+  });
 in
 incremental

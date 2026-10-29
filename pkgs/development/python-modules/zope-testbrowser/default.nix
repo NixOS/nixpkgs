@@ -18,7 +18,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-testbrowser";
   version = "8.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.testbrowser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Hh4U3706ewuSywizxmZoZO+0EW7lGU7GXU6VZFqPwFY=";
   };
 
@@ -73,10 +73,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/zopefoundation/zope.testbrowser/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.testbrowser/blob/${finalAttrs.src.rev}/CHANGES.rst";
     description = "Programmable browser for functional black-box tests";
     homepage = "https://github.com/zopefoundation/zope.testbrowser";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

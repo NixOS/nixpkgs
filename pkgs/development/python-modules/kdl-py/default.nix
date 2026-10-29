@@ -5,13 +5,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kdl-py";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Y/P0bGJ33trc5E3PyUZyv25r8zMLkBIuATTCKFfimXM=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "kdlreformat";
   };
-}
+})

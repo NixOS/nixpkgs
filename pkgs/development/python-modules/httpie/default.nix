@@ -23,7 +23,7 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "httpie";
   version = "3.2.4";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uZKkUUrPPnLHPHL8YrZgfsyCsSOR0oZ2eFytiV0PIUY=";
   };
 
@@ -125,7 +125,7 @@ buildPythonPackage rec {
   meta = {
     description = "Command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
-    changelog = "https://github.com/httpie/cli/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/httpie/cli/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       antono
@@ -133,4 +133,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "http";
   };
-}
+})

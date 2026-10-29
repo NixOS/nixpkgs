@@ -13,7 +13,7 @@
   cogapp,
   writableTmpDirAsHomeHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-openai-plugin";
   version = "0.7";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-openai-plugin";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-f/0QvMi2ZF14GtyDIOc9TkHLfbSjjNMe+Wy+60jKO7E=";
   };
 
@@ -48,11 +48,11 @@ buildPythonPackage rec {
   meta = {
     description = "OpenAI plugin for LLM";
     homepage = "https://github.com/simonw/llm-openai-plugin";
-    changelog = "https://github.com/simonw/llm-openai-plugin/releases/tag/${src.tag}";
+    changelog = "https://github.com/simonw/llm-openai-plugin/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       josh
       philiptaron
     ];
   };
-}
+})

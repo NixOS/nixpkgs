@@ -18,7 +18,7 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "twinkle";
   version = "unstable-2024-20-11";
 
@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    changelog = "https://github.com/LubosD/twinkle/blob/${version}/NEWS";
+    changelog = "https://github.com/LubosD/twinkle/blob/${finalAttrs.version}/NEWS";
     description = "SIP-based VoIP client";
     homepage = "http://twinkle.dolezel.info/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.mkg20001 ];
     platforms = lib.platforms.linux;
   };
-}
+})

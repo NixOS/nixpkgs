@@ -7,7 +7,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyobihai";
   version = "1.4.2";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ejpenney";
     repo = "pyobihai";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tDPu/ceH7+7AnxokADDfl+G56B0+ri8RxXxXEyWa61Q=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Obihai devices";
     homepage = "https://github.com/ejpenney/pyobihai";
-    changelog = "https://github.com/ejpenney/pyobihai/releases/tag/${version}";
+    changelog = "https://github.com/ejpenney/pyobihai/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -12,7 +12,7 @@
   plantuml-markdown,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plantuml-markdown";
   version = "3.11.2";
   format = "setuptools";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mikitex70";
     repo = "plantuml-markdown";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GyV9EHEyW75OWj4iG4MsNV5wEvygaBz4GpyxOzIB8oY=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
       diagram which will be converted into an image and inserted in the document.
     '';
     homepage = "https://github.com/mikitex70/plantuml-markdown";
-    changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${src.tag}";
+    changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
   };
-}
+})

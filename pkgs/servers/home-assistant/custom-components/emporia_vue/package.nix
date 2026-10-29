@@ -5,7 +5,7 @@
   pyemvue,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "magico13";
   domain = "emporia_vue";
   version = "0.13.0";
@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "magico13";
     repo = "ha-emporia-vue";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hLQpqlAwBa2kYNL7pQtcqcIMD8IR0nAlRmWteeOEU5w=";
   };
 
@@ -29,8 +29,8 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Reads data from the Emporia Vue energy monitor into Home Assistant";
     homepage = "https://github.com/magico13/ha-emporia-vue";
-    changelog = "https://github.com/magico13/ha-emporia-vue/releases/tag/v${version}";
+    changelog = "https://github.com/magico13/ha-emporia-vue/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ presto8 ];
     license = lib.licenses.mit;
   };
-}
+})

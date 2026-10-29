@@ -8,7 +8,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pws";
   version = (import ./gemset.nix).pws.version;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       env = bundlerEnv {
-        name = "${pname}-gems";
+        name = "${finalAttrs.pname}-gems";
 
         inherit ruby;
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "pws";
   };
-}
+})

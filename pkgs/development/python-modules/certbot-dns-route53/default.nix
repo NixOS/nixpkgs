@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot-dns-route53";
   pyproject = true;
 
   inherit (certbot) src version;
 
-  sourceRoot = "${src.name}/certbot-dns-route53";
+  sourceRoot = "${finalAttrs.src.name}/certbot-dns-route53";
 
   build-system = [ setuptools ];
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
   meta = certbot.meta // {
     description = "Route53 DNS Authenticator plugin for Certbot";
   };
-}
+})

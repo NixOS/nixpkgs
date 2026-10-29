@@ -9,7 +9,7 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiozoneinfo";
   version = "0.2.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "aiozoneinfo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7qd6Yk/K4BLocu8eQK0hLaw2r1jhWIHBr9W4KsAvmx8=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools to fetch zoneinfo with asyncio";
     homepage = "https://github.com/bluetooth-devices/aiozoneinfo";
-    changelog = "https://github.com/bluetooth-devices/aiozoneinfo/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bluetooth-devices/aiozoneinfo/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

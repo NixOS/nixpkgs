@@ -10,14 +10,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-gitlab";
   version = "8.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_gitlab";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YoUp7Ezh+ae6LBRbLPXk7sowFUGOUEsub7pwFxtrG1k=";
   };
 
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   meta = {
     description = "Interact with GitLab API";
     homepage = "https://github.com/python-gitlab/python-gitlab";
-    changelog = "https://github.com/python-gitlab/python-gitlab/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/python-gitlab/python-gitlab/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nyanloutre ];
     mainProgram = "gitlab";
   };
-}
+})

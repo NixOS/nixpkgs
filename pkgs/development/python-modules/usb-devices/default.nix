@@ -7,7 +7,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "usb-devices";
   version = "0.5.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "usb-devices";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W6RWm9x/emb1F8Oox927SnH3v8HWCXIFYivVJJh6ves=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for mapping, describing, and resetting USB devices";
     homepage = "https://github.com/Bluetooth-Devices/usb-devices";
-    changelog = "https://github.com/Bluetooth-Devices/usb-devices/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/usb-devices/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -34,7 +34,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pelican";
   version = "4.12.0";
   pyproject = true;
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-g/wm4ZA4KBMnvpe58ZQ7lTUBF6PywC4IivmBBco4F00=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
@@ -119,10 +119,10 @@ buildPythonPackage rec {
   meta = {
     description = "Static site generator that requires no database or server-side logic";
     homepage = "https://getpelican.com/";
-    changelog = "https://github.com/getpelican/pelican/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/getpelican/pelican/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       prikhi
     ];
   };
-}
+})

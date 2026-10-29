@@ -16,7 +16,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rokuecp";
   version = "0.19.5";
   pyproject = true;
@@ -24,13 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-rokuecp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HPJORJQ/LqWCpywiZmwFXKKFRE8V9kG5iDrbzPX2YVg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python client for Roku (ECP)";
     homepage = "https://github.com/ctalkington/python-rokuecp";
-    changelog = "https://github.com/ctalkington/python-rokuecp/releases/tag/${version}";
+    changelog = "https://github.com/ctalkington/python-rokuecp/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

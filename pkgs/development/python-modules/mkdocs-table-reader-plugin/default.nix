@@ -12,7 +12,7 @@
   mkdocs-macros-plugin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-table-reader-plugin";
   version = "3.1.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-table-reader-plugin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XyMz0CeLQderzzz/Z3H6rja619wPzx42X3jz30wt6a8=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marcel ];
   };
-}
+})

@@ -11,7 +11,7 @@
   traittypes,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "ipydatawidgets";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-OU8kiVdlh8/XVTd6CaBn9GytIggZZQkgIf0avL54Uqg=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

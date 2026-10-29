@@ -13,7 +13,7 @@
   pytest-vcr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-lmstudio";
   version = "0.2.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agustif";
     repo = "llm-lmstudio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dPrkvoVLDIk/JxUhvUUyjMzovH+Q/O13eTdA6qvdKxY=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin to use local models via LM Studio API with https://llm.datasette.io";
     homepage = "https://github.com/agustif/llm-lmstudio";
-    changelog = "https://github.com/agustif/llm-lmstudio/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/agustif/llm-lmstudio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dwt ];
   };
-}
+})

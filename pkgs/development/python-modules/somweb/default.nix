@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "somweb";
   version = "1.2.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "taarskog";
     repo = "pySOMweb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cLKEKDCMK7lCtbmj2KbhgJUCZpPnPI5tZvO5L+ey8qI=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   doCheck = false; # no tests
 
   meta = {
-    changelog = "https://github.com/taarskog/pySOMweb/releases/tag/v${version}";
+    changelog = "https://github.com/taarskog/pySOMweb/releases/tag/v${finalAttrs.version}";
     description = "Client library to control garage door operators produced by SOMMER through their SOMweb device";
     homepage = "https://github.com/taarskog/pysomweb";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
     mainProgram = "somweb";
   };
-}
+})

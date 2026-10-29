@@ -17,7 +17,7 @@
 let
   llvmVersion = "17.0.6";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-graphics-compiler";
   version = "2.40.13";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       name = "igc";
       owner = "intel";
       repo = "intel-graphics-compiler";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-koc3ee6ItemDkNpWlBhJX8Dr8Wa4Zpvo08LxiR6BNLE=";
     })
     (fetchFromGitHub {
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
-    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/v${version}";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -163,4 +163,4 @@ stdenv.mkDerivation rec {
       recutita
     ];
   };
-}
+})

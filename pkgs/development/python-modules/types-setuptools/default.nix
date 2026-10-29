@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-setuptools";
   version = "84.0.0.20260812";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_setuptools";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Cb7cJI67t6IyyUGd/NyjKXBuYb8qpXQ+lCTQJ/HZVrQ=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

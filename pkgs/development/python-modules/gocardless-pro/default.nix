@@ -9,7 +9,7 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gocardless-pro";
   version = "3.3.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gocardless";
     repo = "gocardless-pro-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XD5GUiSHTq/DLrKo6FY4moNnbFpXkVJWM13Yu6c+tZw=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client library for the GoCardless Pro API";
     homepage = "https://github.com/gocardless/gocardless-pro-python";
-    changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

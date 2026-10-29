@@ -3,7 +3,7 @@
   buildDotnetGlobalTool,
   dotnetCorePackages,
 }:
-buildDotnetGlobalTool rec {
+buildDotnetGlobalTool (finalAttrs: {
   pname = "dotnet-outdated";
   nugetName = "dotnet-outdated-tool";
   version = "4.8.1";
@@ -16,9 +16,9 @@ buildDotnetGlobalTool rec {
     description = ".NET Core global tool to display and update outdated NuGet packages in a project";
     downloadPage = "https://www.nuget.org/packages/dotnet-outdated-tool";
     homepage = "https://github.com/dotnet-outdated/dotnet-outdated";
-    changelog = "https://github.com/dotnet-outdated/dotnet-outdated/releases/tag/v${version}";
+    changelog = "https://github.com/dotnet-outdated/dotnet-outdated/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilioziniades ];
     mainProgram = "dotnet-outdated";
   };
-}
+})

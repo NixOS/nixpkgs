@@ -10,7 +10,7 @@
   udevCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openant";
   version = "1.3.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tigge";
     repo = "openant";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wDtHlkVyD7mMDXZ4LGMgatr9sSlQKVbgkYsKvHGr9Pc=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     mainProgram = "openant";
     license = lib.licenses.mit;
   };
-}
+})

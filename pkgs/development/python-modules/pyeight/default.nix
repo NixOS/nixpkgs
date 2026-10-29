@@ -6,7 +6,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyeight";
   version = "0.3.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyEight";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-JYmhEZQw11qPNV2jZhP+0VFb387kNom70R3C13PM7kc=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

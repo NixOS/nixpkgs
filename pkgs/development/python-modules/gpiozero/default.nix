@@ -18,7 +18,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpiozero";
   version = "2.0.1.post3";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gpiozero";
     repo = "gpiozero";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8NSGR+GLnf+7F9iu0XVK/yVYVw8L9b73FIs07OSvMj4=";
   };
 
@@ -61,9 +61,9 @@ buildPythonPackage rec {
   meta = {
     description = "Simple interface to GPIO devices with Raspberry Pi";
     homepage = "https://github.com/gpiozero/gpiozero";
-    changelog = "https://github.com/gpiozero/gpiozero/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/gpiozero/gpiozero/blob/v${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

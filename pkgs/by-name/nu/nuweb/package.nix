@@ -5,12 +5,12 @@
   texliveMedium,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nuweb";
   version = "1.64";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/nuweb/nuweb-${version}.tar.gz";
+    url = "mirror://sourceforge/project/nuweb/nuweb-${finalAttrs.version}.tar.gz";
     hash = "sha256-DEi0cbcyO8qUDXbIRS3JtYixezaPX/vxDddbF7hbGeA=";
   };
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin $out/share/man/man1 $out/share/doc/nuweb-${version} $out/share/emacs/site-lisp
+    install -d $out/bin $out/share/man/man1 $out/share/doc/nuweb-${finalAttrs.version} $out/share/emacs/site-lisp
     cp nuweb $out/bin
     cp nuweb.el $out/share/emacs/site-lisp
     gzip -c nuweb.1 > $out/share/man/man1/nuweb.1.gz
-    cp htdocs/index.html nuweb.w nuweb.pdf nuwebdoc.pdf README $out/share/doc/nuweb-${version}
+    cp htdocs/index.html nuweb.w nuweb.pdf nuwebdoc.pdf README $out/share/doc/nuweb-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -54,5 +54,5 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
 # TODO: nuweb.el Emacs integration

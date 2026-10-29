@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lb-matching-tools";
   version = "2024.01.30.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "listenbrainz-matching-tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RQ4X6DKigQsNxaAWXB1meATKP+ddMUgkoAIyX8iIisU=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "ListenBrainz tools for matching metadata to and from MusicBrainz";
     homepage = "https://github.com/metabrainz/listenbrainz-matching-tools";
-    changelog = "https://github.com/metabrainz/listenbrainz-matching-tools/releases/tag/${src.tag}";
+    changelog = "https://github.com/metabrainz/listenbrainz-matching-tools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.ngi ];
   };
-}
+})

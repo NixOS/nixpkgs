@@ -8,7 +8,7 @@
   stdenv,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "essentials";
   version = "1.1.9";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kKAXCtcl6duVpuGDnSqVfJmfltv9ybU8Gmr3y32Dg9I=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/Neoteroi/essentials";
     description = "General purpose classes and functions";
-    changelog = "https://github.com/Neoteroi/essentials/releases/${src.tag}";
+    changelog = "https://github.com/Neoteroi/essentials/releases/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];
   };
-}
+})

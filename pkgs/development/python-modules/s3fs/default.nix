@@ -19,7 +19,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "s3fs";
   version = "2026.3.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "s3fs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CWZHu9PXW/YZosCVtnCJ4T6eQCmrdFcP0vkoGr+RAhM=";
   };
 
@@ -69,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
-    changelog = "https://github.com/fsspec/s3fs/blob/${src.tag}/docs/source/changelog.rst";
+    changelog = "https://github.com/fsspec/s3fs/blob/${finalAttrs.src.tag}/docs/source/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };
-}
+})

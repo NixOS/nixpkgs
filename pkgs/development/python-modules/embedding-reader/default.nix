@@ -10,7 +10,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "embedding-reader";
   version = "1.8.1";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = "embedding-reader";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-D7yrvV6hDqzHaIMhCQ16DhY/8FEr3P4gcT5vV371whs=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
   };
-}
+})

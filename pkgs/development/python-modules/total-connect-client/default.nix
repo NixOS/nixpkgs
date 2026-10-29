@@ -11,7 +11,7 @@
   zeep,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "total-connect-client";
   version = "2026.9";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MUJEpkbgsAVND13wL0/kOGZ+HfsWby4qSRNIIDCCFN8=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interact with Total Connect 2 alarm systems";
     homepage = "https://github.com/craigjmidwinter/total-connect-client";
-    changelog = "https://github.com/craigjmidwinter/total-connect-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/craigjmidwinter/total-connect-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -12,7 +12,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-stubs-ext";
   version = "5.2.9";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "django-stubs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-42FluS2fmfgj4qk2u+Z/7TGhXY4WKUc0cI00go6rnGc=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extensions and monkey-patching for django-stubs";
     homepage = "https://github.com/typeddjango/django-stubs";
-    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${src.tag}";
+    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -17,7 +17,7 @@
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "esp-idf-size";
   version = "2.2.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esp-idf-size";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kjGO9uLj7/k8WCH6mARFOI4r8IhH/urGKR/23waaOFo=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "";
     homepage = "https://github.com/espressif/esp-idf-size";
-    changelog = "https://github.com/espressif/esp-idf-size/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/espressif/esp-idf-size/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -6,12 +6,12 @@
   autoPatchelfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sslmate-agent";
   version = "1.99.11";
 
   src = fetchurl {
-    url = "https://packages.sslmate.com/debian/pool/sslmate2/s/sslmate-client/${pname}_${version}-1_amd64.deb";
+    url = "https://packages.sslmate.com/debian/pool/sslmate2/s/sslmate-client/${finalAttrs.pname}_${finalAttrs.version}-1_amd64.deb";
     sha256 = "sha256-LBiZI0pGAFWnvTigEhtkhHq4FGdbYiMzjLheMuP0YTU=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = [ ];
   };
-}
+})

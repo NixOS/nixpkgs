@@ -12,14 +12,14 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvisa-sim";
   version = "0.7.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyvisa_sim";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-EbEGWOIVJwjuraDIZifYlMTRFIQxLwLTzzhRlrS8hw8=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evilmav ];
   };
-}
+})

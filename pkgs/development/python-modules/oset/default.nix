@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oset";
   version = "0.1.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-TB/X3slu7/nTJgmVqON/n0FdC9t5l19Xgk5ocWrI+QQ=";
   };
 
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     description = "Ordered set";
     license = lib.licenses.psfl;
   };
-}
+})

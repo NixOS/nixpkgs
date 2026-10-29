@@ -18,14 +18,14 @@
   libgnome-keyring,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "retroshare";
   version = "0.6.7.2";
 
   src = fetchFromGitHub {
     owner = "RetroShare";
     repo = "RetroShare";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-1A1YvOWIiWlP1JPUTg5Z/lxVGCBv4tCPf5sZdPogitU=";
     fetchSubmodules = true;
   };
@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
     "RS_UPNP_LIB=miniupnpc"
 
     # These values are normally found from the .git folder
-    "RS_MAJOR_VERSION=${lib.versions.major version}"
-    "RS_MINOR_VERSION=${lib.versions.minor version}"
-    "RS_MINI_VERSION=${lib.versions.patch version}"
+    "RS_MAJOR_VERSION=${lib.versions.major finalAttrs.version}"
+    "RS_MINOR_VERSION=${lib.versions.minor finalAttrs.version}"
+    "RS_MINI_VERSION=${lib.versions.patch finalAttrs.version}"
     "RS_EXTRA_VERSION="
   ];
 
@@ -120,4 +120,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ StijnDW ];
   };
-}
+})

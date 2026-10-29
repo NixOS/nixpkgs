@@ -7,13 +7,13 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kurbopy";
   version = "0.13.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JiXNgUeY2booOp1zaWtCuEqdyp/CxXy4rUo5kKmq0eQ=";
   };
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-dWYOQk6kSGRL8nl3f89FWzdB17hgBALvsQkjeT9oKNc=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

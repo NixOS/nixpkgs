@@ -7,14 +7,14 @@
   flutter,
   dart,
 }:
-buildDartApplication rec {
+buildDartApplication (finalAttrs: {
   pname = "pana";
   version = "0.23.19";
 
   src = fetchFromGitHub {
     owner = "dart-lang";
     repo = "pana";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-J3c/aB2yRt4tRqKEaB8gMry7lSzF3R6M1kXZ10aFC3Q=";
   };
 
@@ -59,12 +59,14 @@ buildDartApplication rec {
     longDescription = ''
       Package ANAlyzer - produce a report summarizing the health and quality of a Dart package.
     '';
-    changelog = "https://pub.dev/packages/pana/changelog#${lib.replaceStrings [ "." ] [ "" ] version}";
+    changelog = "https://pub.dev/packages/pana/changelog#${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }";
     license = lib.licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     identifiers.cpeParts =
       let
-        versionSplit = lib.split "\\+" version;
+        versionSplit = lib.split "\\+" finalAttrs.version;
         versionPart = lib.elemAt versionSplit 0;
         updatePart =
           if lib.count (x: lib.isList x) versionSplit > 0 then lib.elemAt versionSplit 2 else "*";
@@ -77,4 +79,4 @@ buildDartApplication rec {
       };
     maintainers = with lib.maintainers; [ KristijanZic ];
   };
-}
+})

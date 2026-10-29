@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kthxbye";
   version = "0.16";
 
   src = fetchFromGitHub {
     owner = "prymitive";
     repo = "kthxbye";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B6AgD79q0kA67iC9pIfv8PH8xejx2srpRccdds1GsZo=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nukaduka ];
   };
-}
+})

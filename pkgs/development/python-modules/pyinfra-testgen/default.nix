@@ -6,7 +6,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyinfra-testgen";
   version = "0.1.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # no tags on GitHub
   src = fetchPypi {
     pname = "pyinfra_testgen";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-c5pZ0SfRXC50vJZfnnf0HQgImf7hi2oQ5/XKMVNzlpc=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

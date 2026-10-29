@@ -22,7 +22,7 @@
 let
   kaldi = callPackage ./fork.nix { };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kaldi-active-grammar";
   version = "3.2.0";
   format = "setuptools";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "daanzu";
     repo = "kaldi-active-grammar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VyVshIEVp/ep4Ih7Kj66GF02JEZ4nwgJOtgR2DarzdY=";
   };
 
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     # Other platforms are supported upstream.
     platforms = lib.platforms.linux;
   };
-}
+})

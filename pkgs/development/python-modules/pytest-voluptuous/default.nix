@@ -10,7 +10,7 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-voluptuous";
   version = "1.2.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "F-Secure";
     repo = "pytest-voluptuous";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xdj4qCSSJQI9Rb1WyUYrAg1I5wQ5o6IJyIjJAafP/LY=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for asserting data against voluptuous schema";
     homepage = "https://github.com/F-Secure/pytest-voluptuous";
-    changelog = "https://github.com/F-Secure/pytest-voluptuous/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/F-Secure/pytest-voluptuous/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

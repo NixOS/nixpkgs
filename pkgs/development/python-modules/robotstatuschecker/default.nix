@@ -7,7 +7,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robotstatuschecker";
   version = "4.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "statuschecker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YyiGd3XSIe+4PEL2l9LYDGH3lt1iRAAJflcBGYXaBzY=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

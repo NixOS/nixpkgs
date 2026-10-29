@@ -8,14 +8,14 @@
   ddcutil,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddcui";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "rockowitz";
     repo = "ddcui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KcivAoPV/4TihVkwYgq3bWWhG5E8enVSD3bhObl++I0=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = with lib.platforms; linux;
   };
-}
+})

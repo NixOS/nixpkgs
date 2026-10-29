@@ -8,7 +8,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "london-tube-status";
   version = "0.7";
   pyproject = true;
@@ -16,13 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robmarkcole";
     repo = "London-tube-status";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0uDCrF3abx94X47LQxgALirSF/spJPVD91G2WqXaDVs=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'VERSION = "0.6.1"' 'VERSION = "${version}"'
+      --replace-fail 'VERSION = "0.6.1"' 'VERSION = "${finalAttrs.version}"'
   '';
 
   build-system = [
@@ -52,4 +52,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

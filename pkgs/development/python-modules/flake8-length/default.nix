@@ -7,13 +7,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flake8-length";
   version = "0.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Dr1hTCU2G1STczXJsUPMGFYs1NpIAk1I95vxXsRTtRA=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Flake8 plugin for a smart line length validation";
     homepage = "https://github.com/orsinium-labs/flake8-length";
-    changelog = "https://github.com/orsinium-labs/flake8-length/releases/tag/${version}";
+    changelog = "https://github.com/orsinium-labs/flake8-length/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sauyon ];
   };
-}
+})

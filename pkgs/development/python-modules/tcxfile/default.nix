@@ -6,7 +6,7 @@
   python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tcxfile";
   version = "1.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tcgoetz";
     repo = "tcx";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-d1KSeLlaoyXFU8v+8cKu1+2dU2ywvpWqsHBddo/aBC4=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tcgoetz/tcx";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

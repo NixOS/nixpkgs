@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dissect-executable";
   version = "1.11";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.executable";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TbygZJjdTfNvwEHmquiXfalu73XgNPZpar50YpxP6NA=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dissect module implementing a parser for various executable formats such as PE, ELF and Macho-O";
     homepage = "https://github.com/fox-it/dissect.executable";
-    changelog = "https://github.com/fox-it/dissect.executable/releases/tag/${src.tag}";
+    changelog = "https://github.com/fox-it/dissect.executable/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

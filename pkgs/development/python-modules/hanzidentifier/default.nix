@@ -7,7 +7,7 @@
   zhon,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hanzidentifier";
   version = "1.3.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tsroten";
     repo = "hanzidentifier";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SXIMk5Pr2jqoWOjKfVVhe6fHdbh3j+5Lnlru7St8bgA=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module that identifies Chinese text as being Simplified or Traditional";
     homepage = "https://github.com/tsroten/hanzidentifier";
-    changelog = "https://github.com/tsroten/hanzidentifier/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/tsroten/hanzidentifier/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

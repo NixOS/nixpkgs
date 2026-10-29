@@ -14,7 +14,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ismartgate";
   version = "5.0.2";
   format = "setuptools";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "ismartgate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8c05zzDav87gTL2CI7Aoi6ALwLw76H9xj+90xH31hdE=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to work with the ismartgate and gogogate2 API";
     homepage = "https://github.com/bdraco/ismartgate";
-    changelog = "https://github.com/bdraco/ismartgate/releases/tag/v${version}";
+    changelog = "https://github.com/bdraco/ismartgate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

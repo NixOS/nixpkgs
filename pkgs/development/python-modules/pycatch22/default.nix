@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycatch22";
   version = "0.4.5";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DynamicsAndNeuralSystems";
     repo = "pycatch22";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NvZrjOdC6rV4hwCuGcc2Br/VDhLwZcYpfnNvQpqU134=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of catch22";
     homepage = "https://github.com/DynamicsAndNeuralSystems/pycatch22";
-    changelog = "https://github.com/DynamicsAndNeuralSystems/pycatch22/releases/tag/v${version}";
+    changelog = "https://github.com/DynamicsAndNeuralSystems/pycatch22/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

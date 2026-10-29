@@ -8,7 +8,7 @@
   django-jquery-js,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-formset-js-improved";
   version = "0.5.0.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "django-formset-js";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bOM24ldXk9WeV0jl6LIJB3BJ5hVWLA1PJTBBnJBoprU=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

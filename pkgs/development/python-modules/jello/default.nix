@@ -7,7 +7,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jello";
   version = "1.6.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = "jello";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RAQ04R1zDL9hk1q19GSFvdkxse5rJZXpboAondOoHEc=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
     description = "CLI tool to filter JSON and JSON Lines data with Python syntax";
     mainProgram = "jello";
     homepage = "https://github.com/kellyjonbrazil/jello";
-    changelog = "https://github.com/kellyjonbrazil/jello/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/kellyjonbrazil/jello/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

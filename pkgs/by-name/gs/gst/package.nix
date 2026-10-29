@@ -6,14 +6,14 @@
   ghq,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gst";
   version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "uetchy";
     repo = "gst";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NhbGHTYucfqCloVirkaDlAtQfhWP2cw4I+t/ysvvkR0=";
   };
 
@@ -29,12 +29,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
   installCheckPhase = ''
-    if [[ "$("$out/bin/${pname}" --version)" == "${pname} version ${version}" ]]; then
+    if [[ "$("$out/bin/${finalAttrs.pname}" --version)" == "${finalAttrs.pname} version ${finalAttrs.version}" ]]; then
       export HOME=$(mktemp -d)
       git config --global user.name "Test User"
       git config --global user.email "test@example.com"
@@ -42,10 +42,10 @@ buildGoModule rec {
       git config --global ghq.user "user"
       ghq create test > /dev/null 2>&1
       touch $HOME/ghq/github.com/user/test/SmokeTest
-      $out/bin/${pname} list | grep SmokeTest > /dev/null
-      echo '${pname} smoke check passed'
+      $out/bin/${finalAttrs.pname} list | grep SmokeTest > /dev/null
+      echo '${finalAttrs.pname} smoke check passed'
     else
-      echo '${pname} smoke check failed'
+      echo '${finalAttrs.pname} smoke check failed'
       return 1
     fi
   '';
@@ -57,4 +57,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "gst";
   };
-}
+})

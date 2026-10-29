@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meshlabxml";
   version = "2018.3";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "MeshLabXML";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-iIcErKStd3/5s26xsYoXJzffV8n9zill8QtDQ16lNO4=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ nh2 ];
   };
-}
+})

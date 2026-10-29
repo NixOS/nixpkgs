@@ -8,7 +8,7 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sysrsync";
   version = "1.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gchamon";
     repo = "sysrsync";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2Sz3JrNmIGOnad+qjRzbAgsFEzDtwBT0KLEFyQKZra4=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

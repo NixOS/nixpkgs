@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "catalogue";
   version = "2.0.10";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-T1baqUCRPT8J1YnBkcdOWm1Rdis6njfdU7dDev1s2hU=";
   };
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tiny library for adding function or object registries";
     homepage = "https://github.com/explosion/catalogue";
-    changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/catalogue/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

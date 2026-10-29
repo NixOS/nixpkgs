@@ -9,7 +9,7 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xarray-dataclasses";
   version = "1.9.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropenguin";
     repo = "xarray-dataclasses";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-p9xV9Mpk5fsWR8X6VWNaeRi66OqK4QQWA8pwD2aYqOU=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Xarray data creation made easy by dataclass";
     homepage = "https://github.com/astropenguin/xarray-dataclasses";
-    changelog = "https://github.com/astropenguin/xarray-dataclasses/releases/tag/v${version}";
+    changelog = "https://github.com/astropenguin/xarray-dataclasses/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

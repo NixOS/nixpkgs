@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spectral_derivatives";
   version = "0.10";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pavelkomarov";
     repo = "spectral-derivatives";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KSx3aW2DgVr1nhtGqIO85s6c5p+1rjnrpMY4e63LLiE=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     homepage = "https://pavelkomarov.com/spectral-derivatives/specderiv.html";
     maintainers = with lib.maintainers; [ conny ];
   };
-}
+})

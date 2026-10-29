@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-stream";
   version = "3.0.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco_stream";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-4rxQKOch7SzIUrluyaM/K3Zk6bLb+H7vvmF9EmZBk0s=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module with routines for handling streaming data";
     homepage = "https://github.com/jaraco/jaraco.stream";
-    changelog = "https://github.com/jaraco/jaraco.stream/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.stream/blob/v${finalAttrs.version}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

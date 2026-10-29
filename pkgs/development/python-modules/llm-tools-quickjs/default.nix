@@ -11,7 +11,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-tools-quickjs";
   version = "0.1";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-tools-quickjs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Si3VcHnRUj8Q/N8pRhltPOM6K64TX9DBH/u4WQxQJjQ=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "JavaScript execution as a tool for LLM";
     homepage = "https://github.com/simonw/llm-tools-quickjs";
-    changelog = "https://github.com/simonw/llm-tools-quickjs/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-tools-quickjs/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

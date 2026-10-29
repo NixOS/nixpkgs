@@ -9,7 +9,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "testrail-api";
   version = "1.13.6";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xCarEmJM+liyh8T8qG8sqSLXMnFN49yZapbktIElSF0=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper of the TestRail API";
     homepage = "https://github.com/tolstislon/testrail-api";
-    changelog = "https://github.com/tolstislon/testrail-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/tolstislon/testrail-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aanderse ];
   };
-}
+})

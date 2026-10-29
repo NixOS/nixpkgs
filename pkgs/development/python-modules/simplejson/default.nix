@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simplejson";
   version = "4.1.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simplejson";
     repo = "simplejson";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-t7DU6NquHUy6WntmburFcYckUFXPcL15wh49zLc4eXo=";
   };
 
@@ -30,11 +30,11 @@ buildPythonPackage rec {
       for unicode characters).
     '';
     homepage = "https://github.com/simplejson/simplejson";
-    changelog = "https://github.com/simplejson/simplejson/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/simplejson/simplejson/blob/v${finalAttrs.version}/CHANGES.txt";
     license = with lib.licenses; [
       mit
       afl21
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spidev";
   version = "3.8";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "doceme";
     repo = "py-spidev";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ysOLZWsMiHjPxQ7fMWsywp44vkNGFGH8n6X7zk7XQck=";
   };
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spidev" ];
 
   meta = {
-    changelog = "https://github.com/doceme/py-spidev/releases/tag/${src.tag}";
+    changelog = "https://github.com/doceme/py-spidev/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/doceme/py-spidev";
     description = "Python bindings for Linux SPI access through spidev";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -14,7 +14,7 @@
   sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onnxruntime-tools";
   version = "1.7.0";
   format = "wheel";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # The github source wasn't immediately obvious how to build for this subpackage.
   src = fetchPypi {
     pname = "onnxruntime_tools";
-    inherit version;
+    inherit (finalAttrs) version;
     format = "wheel";
     dist = "py3";
     python = "py3";
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

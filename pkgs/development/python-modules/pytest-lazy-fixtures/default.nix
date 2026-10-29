@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-lazy-fixtures";
   version = "1.4.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dev-petrov";
     repo = "pytest-lazy-fixtures";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-z4j9mITPUkug2/YaKwij5nlJYIoMpkDUPUmW/peNUXQ=";
   };
 
@@ -54,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

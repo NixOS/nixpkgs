@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fraunces";
   version = "1.000";
 
   src = fetchzip {
-    url = "https://github.com/undercasetype/Fraunces/releases/download/${version}/UnderCaseType_Fraunces_${version}.zip";
+    url = "https://github.com/undercasetype/Fraunces/releases/download/${finalAttrs.version}/UnderCaseType_Fraunces_${finalAttrs.version}.zip";
     hash = "sha256-hu2G4Fs2I3TMEy/EBFnc88Pv3c8Mpc5rm3OwVvol7gQ=";
   };
 
@@ -29,4 +29,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -9,7 +9,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywfa";
   version = "0.5.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kcleal";
     repo = "pywfa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TeJ7Jq4LR+I1+zeMeBtHZa9dR+CRJJG5sT99tB227P8=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for wavefront alignment using WFA2-lib";
     homepage = "https://github.com/kcleal/pywfa";
-    changelog = "https://github.com/kcleal/pywfa/releases/tag/v${version}";
+    changelog = "https://github.com/kcleal/pywfa/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

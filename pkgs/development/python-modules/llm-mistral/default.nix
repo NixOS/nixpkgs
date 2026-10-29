@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-mistral";
   version = "0.15";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-mistral";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4ajvsq0sm3/vdiHUuNxHsHKdX58VNNpHIwhWI0ws+08=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin providing access to Mistral models using the Mistral API";
     homepage = "https://github.com/simonw/llm-mistral";
-    changelog = "https://github.com/simonw/llm-mistral/releases/tag/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-mistral/releases/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };
-}
+})

@@ -5,14 +5,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "secrets-extractor";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Xenios91";
     repo = "Secrets-Extractor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xtxhatxNK9bRnT1R/5BJkTcubO58sg5ssrziLYvw6mQ=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

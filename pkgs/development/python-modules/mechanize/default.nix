@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mechanize";
   version = "0.4.10";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-HeqUf5vn6gq2EPe7xKTja0XWv9/O6imtPTiaiKGVfd8=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Stateful programmatic web browsing in Python";
     homepage = "https://github.com/python-mechanize/mechanize";
-    changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/python-mechanize/mechanize/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

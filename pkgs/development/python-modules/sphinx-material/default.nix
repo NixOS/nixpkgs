@@ -12,14 +12,14 @@
   versioneer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-material";
   version = "0.0.36";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_material";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-7v9ffT3AFq8yuv33DGbmcdFch1Tb4GE9+9Yp++2RKGk=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Material-based, responsive theme inspired by mkdocs-material";
     homepage = "https://bashtage.github.io/sphinx-material";
-    changelog = "https://github.com/bashtage/sphinx-material/releases/tag/v${version}";
+    changelog = "https://github.com/bashtage/sphinx-material/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
-}
+})

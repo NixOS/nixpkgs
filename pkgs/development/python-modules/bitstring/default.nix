@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bitstring";
   version = "4.3.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scott-griffiths";
     repo = "bitstring";
-    tag = "bitstring-${version}";
+    tag = "bitstring-${finalAttrs.version}";
     hash = "sha256-ZABAd42h+BqcpKTFV5PxcBN3F8FKV6Qw3rhP13eX57k=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module for binary data manipulation";
     homepage = "https://github.com/scott-griffiths/bitstring";
-    changelog = "https://github.com/scott-griffiths/bitstring/releases/tag/${src.tag}";
+    changelog = "https://github.com/scott-griffiths/bitstring/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

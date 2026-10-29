@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autopep8";
   version = "2.3.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hhatto";
     repo = "autopep8";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9OJ5XbzpHMHsFjf5oVyHjn5zqmAxRuSItWP4sQx8jD4=";
   };
 
@@ -32,11 +32,11 @@ buildPythonPackage rec {
   env.LC_ALL = "en_US.UTF-8";
 
   meta = {
-    changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
+    changelog = "https://github.com/hhatto/autopep8/releases/tag/v${finalAttrs.version}";
     description = "Tool that automatically formats Python code to conform to the PEP 8 style guide";
     homepage = "https://github.com/hhatto/autopep8";
     license = lib.licenses.mit;
     mainProgram = "autopep8";
     maintainers = with lib.maintainers; [ bjornfor ];
   };
-}
+})

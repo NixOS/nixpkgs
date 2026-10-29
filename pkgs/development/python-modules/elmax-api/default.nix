@@ -9,7 +9,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elmax-api";
   version = "0.0.6.4rc0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albertogeniola";
     repo = "elmax-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BYVfP8B+p4J4gW+64xh9bT9sDcu/lk0R+MvLsYLwRfQ=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with the Elmax cloud";
     homepage = "https://github.com/albertogeniola/elmax-api";
-    changelog = "https://github.com/albertogeniola/elmax-api/releases/tag/v${version}";
+    changelog = "https://github.com/albertogeniola/elmax-api/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

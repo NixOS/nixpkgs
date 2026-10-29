@@ -10,14 +10,14 @@
   mesa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqt6-charts";
   version = "6.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyqt6_charts";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-EJHNkZgGo84F0idnKfeb5Oy9CpOVAKiJkCbD71dpxlA=";
   };
 
@@ -73,4 +73,4 @@ buildPythonPackage rec {
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

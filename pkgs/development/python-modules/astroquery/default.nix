@@ -23,7 +23,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "astroquery";
   version = "0.4.11";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "astroquery";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BcdRBPnJfuW17p31xUhjBmP7Lv98CnmOTCO4aU0xpMM=";
   };
 
@@ -86,10 +86,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "astroquery" ];
 
   meta = {
-    changelog = "https://github.com/astropy/astroquery/releases/tag/${src.tag}";
+    changelog = "https://github.com/astropy/astroquery/releases/tag/${finalAttrs.src.tag}";
     description = "Functions and classes to access online data resources";
     homepage = "https://astroquery.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.smaret ];
   };
-}
+})

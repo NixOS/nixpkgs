@@ -9,14 +9,14 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simh";
   version = "3.11-1";
 
   src = fetchFromGitHub {
     owner = "simh";
     repo = "simh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-65+YfOWpVXPeT64TZcSaWJY+ODQ0q/pwF9jb8xGdpIs=";
   };
 
@@ -75,5 +75,5 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})
 # TODO: install documentation

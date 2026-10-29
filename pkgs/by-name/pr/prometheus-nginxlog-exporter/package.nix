@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nginxlog_exporter";
   version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "martin-helmich";
     repo = "prometheus-nginxlog-exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UkXrVHHHZ9mEgsMUcHu+wI6NZFw4h3X4atDBjpBcz8E=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mmahut ];
   };
-}
+})

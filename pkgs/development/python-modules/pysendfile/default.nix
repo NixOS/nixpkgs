@@ -5,13 +5,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysendfile";
   version = "2.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-UQpBSycJhvujx5y3bZCkyRDHAb+0P/mDpdTpKEYFDhc=";
   };
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface to sendfile(2)";
     homepage = "https://github.com/giampaolo/pysendfile";
-    changelog = "https://github.com/giampaolo/pysendfile/blob/release-${version}/HISTORY.rst";
+    changelog = "https://github.com/giampaolo/pysendfile/blob/release-${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

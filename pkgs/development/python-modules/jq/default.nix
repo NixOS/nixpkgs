@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jq";
   version = "1.12.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "jq.py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-glWEqoS+QaoIiBJu9DXd+VvhPnWOgRT4VaYfMpjbR5g=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for jq, the flexible JSON processor";
     homepage = "https://github.com/mwilliamson/jq.py";
-    changelog = "https://github.com/mwilliamson/jq.py/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/mwilliamson/jq.py/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ benley ];
   };
-}
+})

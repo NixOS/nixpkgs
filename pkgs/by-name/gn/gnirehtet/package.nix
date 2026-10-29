@@ -22,21 +22,21 @@ let
     '';
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gnirehtet";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "Genymobile";
     repo = "gnirehtet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ewLYCZgkjbh6lR9e4iTddCIrB+5dxyviIXhOqlZsLqc=";
   };
   passthru = {
     inherit apk;
   };
 
-  sourceRoot = "${src.name}/relay-rust";
+  sourceRoot = "${finalAttrs.src.name}/relay-rust";
 
   cargoHash = "sha256-xfRTGGlL1/Bq04aGWJSGgkoTGKYiiUAdkHu4zJS3x/U=";
 
@@ -65,4 +65,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ symphorien ];
     platforms = lib.platforms.unix;
   };
-}
+})

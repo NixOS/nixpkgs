@@ -4,16 +4,16 @@
   fetchzip,
   nix-update-script,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "0xproto";
   version = "2.502";
 
   src =
     let
-      underscoreVersion = builtins.replaceStrings [ "." ] [ "_" ] version;
+      underscoreVersion = builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchzip {
-      url = "https://github.com/0xType/0xProto/releases/download/${version}/0xProto_${underscoreVersion}.zip";
+      url = "https://github.com/0xType/0xProto/releases/download/${finalAttrs.version}/0xProto_${underscoreVersion}.zip";
       hash = "sha256-ffYvfEGMoIJKVEcs2XzhDrq++SkTbQOVvb6X9q+uyu8=";
       stripRoot = false;
     };
@@ -38,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ edswordsmith ];
     platforms = lib.platforms.all;
   };
-}
+})

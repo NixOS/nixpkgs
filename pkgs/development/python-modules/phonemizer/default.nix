@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "phonemizer";
   version = "3.4.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-4TIxmAxQvGcewEZjeboCcmCtnWGSmVLYrpZls9DyUes=";
   };
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/bootphon/phonemizer";
-    changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bootphon/phonemizer/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
     mainProgram = "phonemize";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})

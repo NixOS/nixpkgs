@@ -6,13 +6,13 @@
   rizin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rzpipe";
   version = "0.6.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KKqPFMGgsmiYZ0tXTIhhvhLDfm/iV8JcYeVc4akezYc=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for rizin";
     homepage = "https://rizin.re";
-    changelog = "https://github.com/rizinorg/rizin/releases/tag/v${version}";
+    changelog = "https://github.com/rizinorg/rizin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -10,13 +10,13 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plugincode";
   version = "32.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-QTLZOxdVJxxuImydouIET/YuvLhztelY1mqN3enzRfo=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library that provides plugin functionality for ScanCode toolkit";
     homepage = "https://github.com/nexB/plugincode";
-    changelog = "https://github.com/nexB/plugincode/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/nexB/plugincode/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

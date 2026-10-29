@@ -19,7 +19,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aws-xray-sdk";
   version = "2.15.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-xray-sdk-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Zu2+awB6Ynxp6hkY1bB1f6u+KpDvCcoGxDWanSH+yBY=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "AWS X-Ray SDK for the Python programming language";
     homepage = "https://github.com/aws/aws-xray-sdk-python";
-    changelog = "https://github.com/aws/aws-xray-sdk-python/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/aws/aws-xray-sdk-python/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

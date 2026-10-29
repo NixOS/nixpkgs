@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "affinegap";
   version = "1.12";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "affinegap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9eX41eoME5Vdtq+c04eQbMYnViy6QKOhKkafrkeMylI=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

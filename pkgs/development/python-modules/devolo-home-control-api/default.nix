@@ -16,7 +16,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devolo-home-control-api";
   version = "0.19.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_home_control_api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IvS3582CaFf+Nfbj0rHGn6OlQ04o9EBYW+7Umbc6rpg=";
   };
 
@@ -65,8 +65,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to work with devolo Home Control";
     homepage = "https://github.com/2Fake/devolo_home_control_api";
-    changelog = "https://github.com/2Fake/devolo_home_control_api/blob/${src.tag}/docs/CHANGELOG.md";
+    changelog = "https://github.com/2Fake/devolo_home_control_api/blob/${finalAttrs.src.tag}/docs/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

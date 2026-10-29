@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kneaddata";
   version = "0.12.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biobakery";
     repo = "kneaddata";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-biZ6lS0a81CBAAhTOb1Ol38/YagLqXA3AbMr2nBmSEw=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ pandapip1 ];
     mainProgram = "kneaddata";
   };
-}
+})

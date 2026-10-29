@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "castnow";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "xat";
     repo = "castnow";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vAjeDPH+Lu/vj3GhwytXqpbSkg5hKpXsMRNV+8TUeio=";
   };
 
@@ -26,4 +26,4 @@ buildNpmPackage rec {
     maintainers = [ ];
     mainProgram = "castnow";
   };
-}
+})

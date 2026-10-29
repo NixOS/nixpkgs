@@ -16,7 +16,7 @@
   pyocd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylink-square";
   version = "1.6.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rkkdnpkl9UHcBDjp6lsFXR1zNn7tH1KeTQ7wV+yJ3m0=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for the SEGGER J-Link";
     homepage = "https://github.com/square/pylink";
-    changelog = "https://github.com/square/pylink/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/square/pylink/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dump_stack ];
   };
-}
+})

@@ -7,13 +7,13 @@
   protobuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-axolotl";
   version = "0.2.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/g6BR0I/jcTsEHfqGMpaVAkTZtIvqpA6dy7m6oi4ja8=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.gpl3;
   };
-}
+})

@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mallard-ducktype";
   version = "1.0.2";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "projectmallard";
     repo = "mallard-ducktype";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jHjzTBBRBh//bOrdnyCRmZRmpupgDaDRuZGAd75baco=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

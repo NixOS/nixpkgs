@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nwdiag";
   version = "3.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "nwdiag";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   meta = {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
-    changelog = "https://github.com/blockdiag/nwdiag/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/blockdiag/nwdiag/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "rackdiag";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -10,13 +10,13 @@
   pytest-cov-stub,
   mock,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymaven-patch";
   version = "0.3.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-DPfJPonwHwQI62Vu7FjLSiKMleA7PUfLc9MfiZBVzVA=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

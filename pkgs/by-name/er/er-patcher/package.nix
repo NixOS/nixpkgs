@@ -5,14 +5,14 @@
   python3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "er-patcher";
   version = "1.12-3";
 
   src = fetchFromGitHub {
     owner = "gurrgur";
     repo = "er-patcher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-D+XYZI3kmK5sb+i8RxtODTvbTgzhpDzwB/JM61ddcTA=";
   };
 
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/gurrgur/er-patcher";
-    changelog = "https://github.com/gurrgur/er-patcher/releases/tag/v${version}";
+    changelog = "https://github.com/gurrgur/er-patcher/releases/tag/v${finalAttrs.version}";
     description = "Enhancement patches for Elden Ring adding ultrawide support, custom frame rate limits and more";
     longDescription = ''
       A tool aimed at enhancing the experience when playing the game on linux through proton or natively on windows.
@@ -39,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.sigmasquadron ];
     mainProgram = "er-patcher";
   };
-}
+})

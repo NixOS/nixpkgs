@@ -17,7 +17,7 @@
 }:
 
 let
-  pylama = buildPythonPackage rec {
+  pylama = buildPythonPackage (finalAttrs: {
     pname = "pylama";
     version = "8.4.1";
     pyproject = true;
@@ -25,7 +25,7 @@ let
     src = fetchFromGitHub {
       owner = "klen";
       repo = "pylama";
-      rev = version;
+      rev = finalAttrs.version;
       hash = "sha256-WOGtZ412tX3YH42JCd5HIngunluwtMmQrOSUZp23LPU=";
     };
 
@@ -78,10 +78,10 @@ let
       description = "Code audit tool for python";
       mainProgram = "pylama";
       homepage = "https://github.com/klen/pylama";
-      changelog = "https://github.com/klen/pylama/blob/${version}/Changelog";
+      changelog = "https://github.com/klen/pylama/blob/${finalAttrs.version}/Changelog";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ dotlambda ];
     };
-  };
+  });
 in
 pylama

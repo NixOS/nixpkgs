@@ -6,14 +6,14 @@
   linux-gpib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpib-ctypes";
   version = "0.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "gpib_ctypes";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-c9l6TNmM4PtbvopnnFi5R1dQ9o3MI39BHHHPSGqfjCY=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cross-platform Python bindings for the NI GPIB and linux-gpib C interfaces";
     homepage = "https://github.com/tivek/gpib_ctypes/";
-    changelog = "https://github.com/tivek/gpib_ctypes/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/tivek/gpib_ctypes/blob/${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fsagbuya ];
   };
-}
+})

@@ -10,7 +10,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycairo";
   version = "1.29.0";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pycairo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ErWxSQFYpqTZ9TPrcEUjVTa0LU619nm04TWTshGgttQ=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

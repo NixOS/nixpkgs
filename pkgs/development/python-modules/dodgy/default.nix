@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dodgy";
   version = "0.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "prospector-dev";
     repo = "dodgy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HUhwrOKTAH4QDJTe146ctGhDccqyWRouHJqaC/6VnHs=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

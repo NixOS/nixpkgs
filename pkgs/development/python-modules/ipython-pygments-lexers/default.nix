@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipython-pygments-lexers";
   version = "1.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "ipython-pygments-lexers";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-p2WrFvCzHOuxPec9Wc1/xT6+fEUdcdDC1HTNmu5dm5Q=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pygments lexers for syntax-highlighting IPython code & sessions";
     homepage = "https://github.com/ipython/ipython-pygments-lexers";
-    changelog = "https://github.com/ipython/ipython-pygments-lexers/releases/tag/${src.tag}";
+    changelog = "https://github.com/ipython/ipython-pygments-lexers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,7 +6,7 @@
   static3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dj-static";
   version = "0.0.6";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "heroku-python";
     repo = "dj-static";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B6TydlezbDkmfFgJjdFniZIYo/JjzPvFj43co+HYCdc=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

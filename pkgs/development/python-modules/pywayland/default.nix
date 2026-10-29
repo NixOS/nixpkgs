@@ -12,14 +12,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywayland";
   version = "0.4.19";
   pyproject = true;
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nYR49bDfNUAzPM+FpV/os0FQssKMaFgF3p/6hViYVJ4=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ chvp ];
   };
-}
+})

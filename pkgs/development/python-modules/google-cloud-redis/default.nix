@@ -10,14 +10,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-redis";
   version = "2.23.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_redis";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-V42uXYeLoLmOwuXU5SPSkXBq0yGNLAN3sRBPTWKh8CY=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Memorystore for Redis API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-redis";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-redis-v${version}/packages/google-cloud-redis/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-redis-v${finalAttrs.version}/packages/google-cloud-redis/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

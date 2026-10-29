@@ -8,7 +8,7 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pcodec";
   version = "1.0.2";
   pyproject = true;
@@ -16,12 +16,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pcodec";
     repo = "pcodec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fL+UCaQ8GdIe7e4Y7VeaWkjoNwuXXqaW2fHkaWs+1Lw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-4RRN4gyEQdnpiljxa1kPM2/naarpFrKMoTVLpXD3f4A=";
   };
 
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   meta = {
     description = "Lossless codec for numerical data";
     homepage = "https://github.com/pcodec/pcodec";
-    changelog = "https://github.com/pcodec/pcodec/releases/tag/v${version}";
+    changelog = "https://github.com/pcodec/pcodec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       flokli
     ];
   };
-}
+})

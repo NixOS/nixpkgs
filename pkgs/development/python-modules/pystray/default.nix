@@ -17,7 +17,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pystray";
   version = "0.19.5";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pystray";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CZhbaXwKFrRBEomzfFPMQdMkTOl5lbgI64etfDRiRu4=";
   };
 
@@ -77,4 +77,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})

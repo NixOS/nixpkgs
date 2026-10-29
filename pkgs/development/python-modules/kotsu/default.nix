@@ -10,7 +10,7 @@
   scikit-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kotsu";
   version = "0.4.0";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datavaluepeople";
     repo = "kotsu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7bRrHowRKq3xiBiAkfS4ZL9PXHIUmZc99q9pHex9BLg=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight framework for structured and repeatable model validation";
     homepage = "https://github.com/datavaluepeople/kotsu";
-    changelog = "https://github.com/datavaluepeople/kotsu/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/datavaluepeople/kotsu/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,12 +6,12 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.1.3";
   pname = "diffpdf";
 
   src = fetchurl {
-    url = "http://www.qtrac.eu/${pname}-${version}.tar.gz";
+    url = "http://www.qtrac.eu/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "0cr468fi0d512jjj23r5flfzx957vibc9c25gwwhi0d773h2w566";
   };
 
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
         install -Dpm755 -D diffpdf $out/bin/diffpdf
         install -Dpm644 -D diffpdf.1 $out/share/man/man1/diffpdf.1
 
-        install -dpm755 $out/share/doc/${pname}-${version} $out/share/licenses/${pname}-${version} $out/share/icons $out/share/applications
-        install -Dpm644 CHANGES README help.html $out/share/doc/${pname}-${version}/
-        install -Dpm644 gpl-2.0.txt $out/share/licenses/${pname}-${version}/
+        install -dpm755 $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} $out/share/licenses/${finalAttrs.pname}-${finalAttrs.version} $out/share/icons $out/share/applications
+        install -Dpm644 CHANGES README help.html $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/
+        install -Dpm644 gpl-2.0.txt $out/share/licenses/${finalAttrs.pname}-${finalAttrs.version}/
         install -Dpm644 images/icon.png $out/share/icons/hicolor/64x64/apps/diffpdf.png
 
         cat > $out/share/applications/diffpdf.desktop <<EOF
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

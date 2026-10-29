@@ -5,13 +5,13 @@
   sane-backends,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sane";
   version = "2.9.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "python-sane";
     hash = "sha256-JAmOuDxujhsBEm5q16WwR5wHsBPF0iBQm1VYkv5JJd4=";
   };
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

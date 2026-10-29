@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-mockito";
   version = "0.0.6.post1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kaste";
     repo = "pytest-mockito";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zlErrgVeeVNojZfYYACRx/4sDWaub7EN1bCr4IhtMPg=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

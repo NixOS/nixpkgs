@@ -10,7 +10,7 @@
   pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-nightscout";
   version = "1.3.3";
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marciogranzotto";
     repo = "py-nightscout";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-s5gOyTJSx/0gUOtRrGQ1PfiNIsJVVmwPGBX2zEetVE8=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

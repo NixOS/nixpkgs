@@ -23,14 +23,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-bigtable";
   version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-bigtable";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rvw7mHWifJ6+g89DXtV0pOFwbbGQNlK1J+IRhy/7W5o=";
   };
 
@@ -78,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/googleapis/python-bigtable";
-    changelog = "https://github.com/googleapis/python-bigtable/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-bigtable/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

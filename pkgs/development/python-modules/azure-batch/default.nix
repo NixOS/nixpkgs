@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-batch";
   version = "14.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-x5Jn1sPT/hShakIqtbv6vL1o7QtYtrvN+gyDRcTHhTI=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Batch Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/batch/azure-batch";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-batch_${version}/sdk/batch/azure-batch/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-batch_${finalAttrs.version}/sdk/batch/azure-batch/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

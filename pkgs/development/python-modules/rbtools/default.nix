@@ -23,7 +23,7 @@
   subversion,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rbtools";
   version = "5.2.1";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reviewboard";
     repo = "rbtools";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-Ci9lHlP2X95y7ldHBbqb5qWozPj3TJ0AxeVhqzVsdFA=";
   };
 
@@ -85,4 +85,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

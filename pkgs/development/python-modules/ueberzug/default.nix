@@ -15,13 +15,13 @@
   python-xlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ueberzug";
   version = "18.3.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CRDgXsCYzZX2o+0Spigjlo6B/5wVLDaZAe6TDQJ7L3Q=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Alternative for w3mimgdisplay";
     homepage = "https://github.com/ueber-devel/ueberzug";
-    changelog = "https://github.com/ueber-devel/ueberzug/releases/tag/${version}";
+    changelog = "https://github.com/ueber-devel/ueberzug/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "ueberzug";
     platforms = lib.platforms.linux;
   };
-}
+})

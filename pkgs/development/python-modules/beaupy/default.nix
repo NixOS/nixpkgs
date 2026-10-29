@@ -16,7 +16,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beaupy";
   version = "3.12.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petereon";
     repo = "beaupy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9iJZFOtQ6UTc8i4cN4soEG0SLcljenAQwq0wfK6r/Rw=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

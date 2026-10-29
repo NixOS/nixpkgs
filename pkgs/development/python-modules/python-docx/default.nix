@@ -11,7 +11,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-docx";
   version = "1.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-openxml";
     repo = "python-docx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5x2VmMiY5fZiXoswCDcs89olL0vbpGzmJZThrNS/SmI=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Create and update Microsoft Word .docx files";
     homepage = "https://python-docx.readthedocs.io/";
-    changelog = "https://github.com/python-openxml/python-docx/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/python-openxml/python-docx/blob/v${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alexchapman ];
   };
-}
+})

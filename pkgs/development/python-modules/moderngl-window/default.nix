@@ -27,7 +27,7 @@
   mesa,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "moderngl-window";
   version = "3.1.1";
   pyproject = true;
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "moderngl_window";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pElSwzNbZlZT8imK1UsLy2TyvS8TEM7hsVqLxEK1tbg=";
   };
 
@@ -73,9 +73,9 @@ buildPythonPackage rec {
   meta = {
     description = "Cross platform helper library for ModernGL making window creation and resource loading simple";
     homepage = "https://github.com/moderngl/moderngl-window";
-    changelog = "https://github.com/moderngl/moderngl-window/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/moderngl/moderngl-window/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ c0deaddict ];
     inherit (mesa.meta) platforms;
   };
-}
+})

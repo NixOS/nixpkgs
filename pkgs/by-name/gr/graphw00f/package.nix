@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "graphw00f";
   version = "1.2.1";
   pyproject = false;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dolevf";
     repo = "graphw00f";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8fOvcc//UdDawgGMAhbYQ/O5kd1l2skWGDlFNYocNY8=";
   };
 
@@ -35,4 +35,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "graphw00f";
   };
-}
+})

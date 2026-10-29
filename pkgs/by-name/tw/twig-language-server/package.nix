@@ -5,14 +5,14 @@
   nodejs,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "twig-language-server";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kaermorchen";
     repo = "twig-language-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GoLGlfvHQYD7fdE+kTobqxqtekrhmVD0Q560rVt/1MY=";
   };
 
@@ -31,9 +31,9 @@ buildNpmPackage rec {
   meta = {
     description = "Language server for Twig templates";
     homepage = "https://github.com/kaermorchen/twig-language-server";
-    changelog = "https://github.com/kaermorchen/twig-language-server/releases/tag/v${version}";
+    changelog = "https://github.com/kaermorchen/twig-language-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "twig-language-server";
   };
-}
+})

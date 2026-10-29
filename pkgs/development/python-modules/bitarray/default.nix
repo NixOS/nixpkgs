@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bitarray";
   version = "3.10.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wz5IkGQHqz0O25bMWrKlmb2l3QRwTrzZs+Du3OcxDgo=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient arrays of booleans";
     homepage = "https://github.com/ilanschnell/bitarray";
-    changelog = "https://github.com/ilanschnell/bitarray/raw/${version}/CHANGE_LOG";
+    changelog = "https://github.com/ilanschnell/bitarray/raw/${finalAttrs.version}/CHANGE_LOG";
     license = lib.licenses.psfl;
   };
-}
+})

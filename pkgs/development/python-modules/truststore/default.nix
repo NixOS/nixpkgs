@@ -10,7 +10,7 @@
   trustme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "truststore";
   version = "0.10.4";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = "truststore";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EbwD2YyVA9W9cWEjYvypBJxs6Hbkb/tF2qU/sUNCt5g=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Verify certificates using native system trust stores";
     homepage = "https://github.com/sethmlarson/truststore";
-    changelog = "https://github.com/sethmlarson/truststore/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sethmlarson/truststore/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

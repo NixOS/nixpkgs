@@ -6,7 +6,7 @@
   vcrpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-vcr";
   version = "1.0.2";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ktosiek";
     repo = "pytest-vcr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-0Win4yPz536CMkPeqgdxIdXg+OY6ui9RXJvOGpKNzsQ=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

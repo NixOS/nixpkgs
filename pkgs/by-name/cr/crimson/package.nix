@@ -5,7 +5,7 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "crimson";
   version = "2014.10";
 
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ installFonts ];
 
   postInstall = ''
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README.md
   '';
 
   meta = {
@@ -34,4 +34,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

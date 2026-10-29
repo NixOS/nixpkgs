@@ -10,14 +10,14 @@
 }:
 
 let
-  unwrapped = stdenv.mkDerivation rec {
+  unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "vapoursynth-editor";
     version = "R19-mod-6.8";
 
     src = fetchFromGitHub {
       owner = "YomikoR";
       repo = "vapoursynth-editor";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-eSdyhKRNsZeSRqkn5SzbB5YRuKehgCJD03PYiD5zQ/Y=";
     };
 
@@ -75,7 +75,7 @@ let
       maintainers = [ ];
       platforms = lib.platforms.all;
     };
-  };
+  });
 
   withPlugins =
     plugins:

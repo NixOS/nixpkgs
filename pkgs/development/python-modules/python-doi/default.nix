@@ -5,7 +5,7 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-doi";
   version = "0.2";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "papis";
     repo = "python-doi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-c5Wo/bJuHwAG7XOy4Re9joYw14jWZ6QaRB4Wsk8StL0=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ teto ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

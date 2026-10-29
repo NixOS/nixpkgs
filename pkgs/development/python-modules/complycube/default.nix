@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "complycube";
   version = "1.1.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "complycube";
     hash = "sha256-lN8J9QQ9YvclYzuXtck+lt1IgS5McOE1YU0NLl9rW0I=";
   };
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

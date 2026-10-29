@@ -13,7 +13,7 @@
   seaborn-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-posthocs";
   version = "0.17.1";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maximtrp";
     repo = "scikit-posthocs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ziBT0t+pLTLwwmjPyMKnxrT95YcPTSc93LZ9glA5OJA=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multiple Pairwise Comparisons (Post Hoc) Tests in Python";
     homepage = "https://github.com/maximtrp/scikit-posthocs";
-    changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/${src.tag}";
+    changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

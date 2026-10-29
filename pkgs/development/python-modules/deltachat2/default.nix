@@ -8,7 +8,7 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deltachat2";
   version = "2.58.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BpTrReKoPsfKzPtVXygapCwmAf+ou5XBz2yVqgs/Lq4=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     mainProgram = "deltachat2";
     inherit (deltachat-rpc-server.meta) maintainers;
   };
-}
+})

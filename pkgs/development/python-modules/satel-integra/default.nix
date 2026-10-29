@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "satel-integra";
   version = "1.6.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c-soft";
     repo = "satel_integra";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hJ20ZirZT2zA9iVe9UgdmS3mE5jFCiluzsvcYlSAmUM=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Communication library and basic testing tool for Satel Integra alarm system";
     homepage = "https://github.com/c-soft/satel_integra";
-    changelog = "https://github.com/c-soft/satel_integra/releases/tag/${version}";
+    changelog = "https://github.com/c-soft/satel_integra/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

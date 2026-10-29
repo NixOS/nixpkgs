@@ -10,7 +10,7 @@
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybreaker";
   version = "1.4.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danielfm";
     repo = "pybreaker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Cxer6EDfi4fvs7XENwpUUMcCiRX6eDNJz0s57l9U+zQ=";
   };
 
@@ -33,10 +33,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/danielfm/pybreaker/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/danielfm/pybreaker/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Python implementation of the Circuit Breaker pattern";
     homepage = "https://github.com/danielfm/pybreaker";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

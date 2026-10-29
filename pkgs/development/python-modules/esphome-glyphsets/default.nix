@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "esphome-glyphsets";
   version = "0.2.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome-glyphsets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nM8omtLIWwIY6AGVqVR2/4twmMlOj21+9cSuyXzAAXY=";
     fetchSubmodules = true;
   };
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight version of glyphsets for ESPHome";
     homepage = "https://github.com/esphome/esphome-glyphsets";
-    changelog = "https://github.com/esphome/esphome-glyphsets/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/esphome/esphome-glyphsets/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

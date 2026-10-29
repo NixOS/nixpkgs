@@ -12,7 +12,7 @@
   traitlets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pythreejs";
   version = "2.4.2";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # github sources need to invoke npm, but no package-lock.json present:
   # https://github.com/jupyter-widgets/pythreejs/issues/419
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-pWi/3Ew3l8TCM5FYko7cfc9vpKJnsI487FEh4geLW9Y=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interactive 3D graphics for the Jupyter Notebook and JupyterLab, using Three.js and Jupyter Widgets";
     homepage = "https://github.com/jupyter-widgets/pythreejs";
-    changelog = "https://github.com/jupyter-widgets/pythreejs/releases/tag/${version}";
+    changelog = "https://github.com/jupyter-widgets/pythreejs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

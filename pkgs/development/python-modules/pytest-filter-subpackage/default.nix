@@ -9,13 +9,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-filter-subpackage";
   version = "0.2.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-P0aPGzZRgSiGm5Xeq2YbpF7WKThUMp/vFNpMjKx4r1Y=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://github.com/astropy/pytest-filter-subpackage";
-    changelog = "https://github.com/astropy/pytest-filter-subpackage/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/astropy/pytest-filter-subpackage/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

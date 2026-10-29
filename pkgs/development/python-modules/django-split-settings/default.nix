@@ -8,7 +8,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-split-settings";
   version = "1.3.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "django-split-settings";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Bk2/DU+K524mCUvteWT0fIQH5ZgeMHiufMTF+dJYVtc=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sikmir ];
     license = lib.licenses.bsd3;
   };
-}
+})

@@ -13,7 +13,7 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prometheus-async";
   version = "26.1.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "prometheus-async";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wQ1RdJyD/M6VO1/6DSr9Pzd5FpB4zgNE/mIa7FH5gtk=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Async helpers for prometheus_client";
     homepage = "https://github.com/hynek/prometheus-async";
-    changelog = "https://github.com/hynek/prometheus-async/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/hynek/prometheus-async/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

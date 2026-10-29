@@ -5,13 +5,13 @@
   fetchPypi,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lottie";
   version = "0.7.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hTBKwVLNBCyf6YpSe10TajHG/iqs2FnOHFgYm7lG0Sc=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ Scrumplex ];
   };
-}
+})

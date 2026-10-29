@@ -13,7 +13,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-git-committers-plugin-2";
   version = "2.5.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ojacques";
     repo = "mkdocs-git-committers-plugin-2";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PpXgY5RlOeb0mB46gcNVWkSGMZa4WPkCwDUXMxCUjsI=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "MkDocs plugin for displaying a list of contributors on each page";
     homepage = "https://github.com/ojacques/mkdocs-git-committers-plugin-2";
-    changelog = "https://github.com/ojacques/mkdocs-git-committers-plugin-2/releases/tag/${src.tag}";
+    changelog = "https://github.com/ojacques/mkdocs-git-committers-plugin-2/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mahtaran ];
   };
-}
+})

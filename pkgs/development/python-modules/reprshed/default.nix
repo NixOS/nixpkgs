@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-reprshed";
   version = "1.0.6";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mentalisttraceur";
     repo = "python-reprshed";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XfmiewI74eDLKTAU6Ed76QXfJYMRb+idRACl6CW07ME=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ netali ];
   };
-}
+})

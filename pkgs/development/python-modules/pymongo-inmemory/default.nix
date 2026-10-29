@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymongo-inmemory";
   version = "0.5.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kaizendorks";
     repo = "pymongo_inmemory";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iYUU2XoTEfgUm+816wHveu6dPEo6nzhlZNXyuRw42T0=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ pbsds ];
     license = lib.licenses.mit;
   };
-}
+})

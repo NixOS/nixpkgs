@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-history-search-multi-word";
   version = "0-unstable-2021-11-13";
 
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    plugindir="$out/share/zsh/${pname}"
+    plugindir="$out/share/zsh/${finalAttrs.pname}"
 
     mkdir -p "$plugindir"
     cp -r -- history-* hsmw-* "$plugindir"/
@@ -35,4 +35,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,21 +6,21 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bore";
   version = "0.4.1";
 
   src = fetchFromBitbucket {
     owner = "delan";
     repo = "nonymous";
-    rev = "${pname}-${version}";
+    rev = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-qYFRUWSMy6xkBjHp+Y2hS+GWzsCGtbBnJvKh0E63trk=";
   };
 
   cargoHash = "sha256-6uIqvX50XoWCPQ8u38rUdi4LwtMTBcNuefNmzGY+vLU=";
   cargoBuildFlags = [
     "-p"
-    pname
+    finalAttrs.pname
   ];
 
   # error[E0793]: reference to packed field is unaligned
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bore";
     broken = stdenv.hostPlatform.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
   };
-}
+})

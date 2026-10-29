@@ -6,7 +6,7 @@
 let
   version = "0.1.3";
 in
-python312Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication (finalAttrs: {
   pname = "sl1-to-photon";
   inherit version;
 
@@ -28,7 +28,7 @@ python312Packages.buildPythonApplication rec {
   format = "setuptools";
 
   installPhase = ''
-    install -D -m 0755 SL1_to_Photon.py $out/bin/${pname}
+    install -D -m 0755 SL1_to_Photon.py $out/bin/${finalAttrs.pname}
   '';
 
   meta = {
@@ -38,5 +38,4 @@ python312Packages.buildPythonApplication rec {
     homepage = "https://github.com/cab404/SL1toPhoton";
     mainProgram = "sl1-to-photon";
   };
-
-}
+})

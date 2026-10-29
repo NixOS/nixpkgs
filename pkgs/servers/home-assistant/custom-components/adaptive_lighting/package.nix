@@ -5,7 +5,7 @@
   ulid-transform,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "basnijholt";
   domain = "adaptive_lighting";
   version = "1.32.0";
@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "basnijholt";
     repo = "adaptive-lighting";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+MO9wl4nu/yJ7Lyt1kf/thGcjNjR17cPkFAYZqfVzQ8=";
   };
 
@@ -22,10 +22,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/basnijholt/adaptive-lighting/releases/tag/${src.tag}";
+    changelog = "https://github.com/basnijholt/adaptive-lighting/releases/tag/${finalAttrs.src.tag}";
     description = "Home Assistant Adaptive Lighting Plugin - Sun Synchronized Lighting";
     homepage = "https://github.com/basnijholt/adaptive-lighting";
     maintainers = with lib.maintainers; [ mindstorms6 ];
     license = lib.licenses.asl20;
   };
-}
+})

@@ -8,7 +8,7 @@
   requests-toolbelt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streaming-form-data";
   version = "1.19.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "siddhantgoel";
     repo = "streaming-form-data";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3tK7dX5p1uH/azmFxzELM1bflGI/SHoLvsw+Ta+7rC4=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Streaming parser for multipart/form-data";
     homepage = "https://github.com/siddhantgoel/streaming-form-data";
-    changelog = "https://github.com/siddhantgoel/streaming-form-data/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/siddhantgoel/streaming-form-data/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
-}
+})

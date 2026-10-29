@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "copilot-node-server";
   version = "1.41.0";
 
   src = fetchFromGitHub {
     owner = "jfcherng";
     repo = "copilot-node-server";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-yOqA2Xo4c7u0g6RQYt9joQk8mI9KE0xTAnLjln9atmg=";
   };
 
@@ -34,9 +34,9 @@ buildNpmPackage rec {
 
   meta = {
     description = "Copilot Node.js server";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.unfree; # I don't know: https://github.com/jfcherng/copilot-node-server/blob/main/LICENSE.md
     maintainers = with lib.maintainers; [ DamienCassou ];
     mainProgram = "copilot-node-server";
   };
-}
+})

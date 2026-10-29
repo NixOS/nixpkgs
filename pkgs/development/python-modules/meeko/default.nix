@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meeko";
   version = "0.8.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "forlilab";
     repo = "Meeko";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gtYh61HLyaUdjaJPZ1GSA0uN6QoHOYa92m+NQKSF4ds=";
   };
 
@@ -82,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for preparing small molecule for docking";
     homepage = "https://github.com/forlilab/Meeko";
-    changelog = "https://github.com/forlilab/Meeko/releases/tag/${src.tag}";
+    changelog = "https://github.com/forlilab/Meeko/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

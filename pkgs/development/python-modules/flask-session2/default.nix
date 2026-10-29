@@ -22,7 +22,7 @@
   redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-session2";
   version = "1.3.1";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "christopherpickering";
     repo = "flask-session2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kxUuEirUG/jZlygKyQy2Sm7hmB331K2q8vBmcIbp7/s=";
   };
 
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "Flask extension that adds support for server-side sessions";
     homepage = "https://github.com/christopherpickering/flask-session2";
-    changelog = "https://github.com/christopherpickering/flask-session2/releases/tag/${version}";
+    changelog = "https://github.com/christopherpickering/flask-session2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

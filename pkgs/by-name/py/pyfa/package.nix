@@ -13,7 +13,7 @@
 let
   version = "2.69.3";
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   inherit version;
   pname = "pyfa";
   pyproject = false;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pyfa-org";
     repo = "Pyfa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HwxTAZd3R8SdnruE6Qq/dAzE7pQw6/Y0vXcFcVsJq7A=";
   };
 
@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
       from setuptools import setup
       setup(
         name = "pyfa",
-        version = "${version}",
+        version = "${finalAttrs.version}",
         scripts = ["pyfa.py"],
         packages = setuptools.find_packages(),
       )
@@ -145,4 +145,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "pyfa";
     platforms = lib.platforms.linux;
   };
-}
+})

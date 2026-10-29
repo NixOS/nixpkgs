@@ -10,14 +10,14 @@
 # This package should be updated together with the main grpc package and other
 # related python grpc packages.
 # nixpkgs-update: no auto update
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grpcio-channelz";
   version = "1.84.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_channelz";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hCIO8ufsCjeSoVG2/7xwaRvw8JzQCf5zTylGuRdWVpQ=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

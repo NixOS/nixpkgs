@@ -6,7 +6,7 @@
   python-lsp-server,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyls-flake8";
   version = "0.4.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emanspeaks";
     repo = "pyls-flake8";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dHTpMK+RaBzSyGrsZeufSnSbeYMb9t+2ESjjiiCvk5M=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

@@ -18,7 +18,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uv-dynamic-versioning";
   version = "0.14.1";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ninoseki";
     repo = "uv-dynamic-versioning";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # Tests perform mock operations on the local repo
     leaveDotGit = true;
     hash = "sha256-AezI7CL+YJik1WfLecvVI1w5fmAPAaoc0TWTwBWMfPg=";
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Dynamic versioning based on VCS tags for uv/hatch project";
     homepage = "https://github.com/ninoseki/uv-dynamic-versioning";
-    changelog = "https://github.com/ninoseki/uv-dynamic-versioning/releases/tag/${src.tag}";
+    changelog = "https://github.com/ninoseki/uv-dynamic-versioning/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

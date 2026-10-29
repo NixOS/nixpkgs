@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-mnist";
   version = "0.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oMztAeg7W4RM/4YQkoDfemcqjk44/Bn6aJmaF/ip+9g=";
   };
 
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
-}
+})

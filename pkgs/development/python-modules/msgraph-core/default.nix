@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "msgraph-core";
   version = "1.5.2";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0aTdmRAddiJy6z0+guG9e36qJ3cBdt5tD4B20oOhASE=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Core component of the Microsoft Graph Python SDK";
     homepage = "https://github.com/microsoftgraph/msgraph-sdk-python-core";
-    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

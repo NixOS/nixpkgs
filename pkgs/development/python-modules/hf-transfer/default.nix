@@ -15,7 +15,7 @@
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hf-transfer";
   version = "0.1.9";
   pyproject = true;
@@ -23,12 +23,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "hf_transfer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mcU3YuJVfuwBvtLfqceV3glcJcpjSX7M3VjvbvLCxZg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-O4aKqVSShFpt8mdZkY3WV55j9CIczRSRkIMC7dJoGv0=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "High speed download python library";
     homepage = "https://github.com/huggingface/hf_transfer";
-    changelog = "https://github.com/huggingface/hf_transfer/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/hf_transfer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

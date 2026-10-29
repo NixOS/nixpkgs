@@ -12,14 +12,14 @@
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lan-mouse";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "feschber";
     repo = "lan-mouse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6EqA9WfiukOymUT4FkNdMvzmFKByW0LLoI/9sv4TzBU=";
   };
 
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
     homepage = "https://github.com/feschber/lan-mouse";
-    changelog = "https://github.com/feschber/lan-mouse/releases/tag/v${version}";
+    changelog = "https://github.com/feschber/lan-mouse/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "lan-mouse";
     maintainers = with lib.maintainers; [ pedrohlc ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

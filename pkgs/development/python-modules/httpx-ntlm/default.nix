@@ -6,14 +6,14 @@
   pyspnego,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "httpx-ntlm";
   version = "1.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "httpx_ntlm";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Qb6KK6hRQ0hOYX3LkX1LGeOuEq/caIYipJAQNJk7U+Q=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "NTLM authentication support for HTTPX";
     homepage = "https://github.com/ulodciv/httpx-ntlm";
-    changelog = "https://github.com/ulodciv/httpx-ntlm/releases/tag/${version}";
+    changelog = "https://github.com/ulodciv/httpx-ntlm/releases/tag/${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

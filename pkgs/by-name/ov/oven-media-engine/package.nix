@@ -20,14 +20,14 @@
   ffmpeg_7,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oven-media-engine";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "OvenMediaLabs";
     repo = "OvenMediaEngine";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-T/ec3Ac9Kwu2GjdszfbXlGroSuDeOuiz/zxoPA3HBlo=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

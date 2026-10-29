@@ -9,7 +9,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tika-client";
   version = "1.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "tika-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZXtNHjdbAzur6lRZIom+wDMhXgpqQxvHPQMxjXJDwlw=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Modern Python REST client for Apache Tika server";
     homepage = "https://github.com/stumpylog/tika-client";
-    changelog = "https://github.com/stumpylog/tika-client/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/stumpylog/tika-client/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ e1mo ];
   };
-}
+})

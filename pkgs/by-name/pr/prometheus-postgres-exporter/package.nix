@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "postgres_exporter";
   version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "postgres_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-uTY26VyFjU7DLn/fseGG1jgIkUAO0cF4lyeFoZ+UC5o=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
@@ -37,7 +37,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postgres; };
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Prometheus exporter for PostgreSQL";
     mainProgram = "postgres_exporter";
     license = lib.licenses.asl20;
@@ -47,4 +47,4 @@ buildGoModule rec {
       ma27
     ];
   };
-}
+})

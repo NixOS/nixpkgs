@@ -6,13 +6,13 @@
   natsort,
   typing-extensions,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "domdf-python-tools";
   version = "3.10.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "domdf_python_tools";
     hash = "sha256-KuMI0vTx6RRfX0ulf4QPv9HCmD7ibkgkNHeJZJ064pg=";
   };
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };
-}
+})

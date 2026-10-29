@@ -9,7 +9,7 @@
   pycryptodome,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycarwings2";
   version = "2.14";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "filcole";
     repo = "pycarwings2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kqj/NZXqgPUsOnnzMPmIlICHek7RBxksmL3reNBK+bo=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with the NissanConnect EV";
     homepage = "https://github.com/filcole/pycarwings2";
-    changelog = "https://github.com/filcole/pycarwings2/releases/tag/v${version}";
+    changelog = "https://github.com/filcole/pycarwings2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

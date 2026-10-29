@@ -19,14 +19,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mailman3-exporter";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "rivimey";
     repo = "mailman3_exporter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-IupfZ3/MXBYpIyH8kJRc+WYabzSZyIu1WDITKTB5+Zc=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mailman3_exporter";
     platforms = lib.platforms.all;
   };
-}
+})

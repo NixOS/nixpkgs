@@ -36,13 +36,13 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pex";
   version = "2.38.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ejd9JWmDutYpwR+KPiS90Y3XKyyOwRAMpCEN013VMdI=";
   };
 
@@ -70,8 +70,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library and tool for generating .pex (Python EXecutable) files";
     homepage = "https://github.com/pantsbuild/pex";
-    changelog = "https://github.com/pantsbuild/pex/releases/tag/v${version}";
+    changelog = "https://github.com/pantsbuild/pex/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

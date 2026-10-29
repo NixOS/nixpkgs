@@ -16,7 +16,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "signalrcore";
   version = "1.0.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mandrewcito";
     repo = "signalrcore";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BLbD6IYo4YN1bvB33MIfHUVPEIm1DND5oh/k07e4odI=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
     mainProgram = "signalrcore";
     description = "Complete Python client for ASP.NET Core SignalR — supporting all transports, encodings, authentication, and reconnection strategies";
     homepage = "https://mandrewcito.github.io/signalrcore";
-    changelog = "https://github.com/mandrewcito/signalrcore/releases/tag/${version}";
+    changelog = "https://github.com/mandrewcito/signalrcore/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vaisriv ];
   };
-}
+})

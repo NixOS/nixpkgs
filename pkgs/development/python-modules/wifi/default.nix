@@ -7,7 +7,7 @@
   wirelesstools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wifi";
   version = "0.3.5";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rockymeza";
     repo = "wifi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ rhoriguchi ];
     license = lib.licenses.bsd2;
   };
-}
+})

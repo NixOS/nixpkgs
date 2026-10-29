@@ -12,13 +12,13 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imread";
   version = "0.7.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ULPXCJyGJQTCKyVu9R/kWFGzRhbbFMDr/FU2AByZYBU=";
   };
 
@@ -54,9 +54,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python package to load images as numpy arrays";
     homepage = "https://imread.readthedocs.io/";
-    changelog = "https://github.com/luispedro/imread/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/luispedro/imread/blob/v${finalAttrs.version}/ChangeLog";
     maintainers = with lib.maintainers; [ luispedro ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -3,7 +3,7 @@
   fetchFromGitHub,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitlab-art";
   version = "0.5.0";
   pyproject = true;
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kosma";
     repo = "gitlab-art";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j1MdkZUGMfrzowdhjJKhZqwN07JusaJsGkFu78IFdTY=";
   };
 
@@ -29,9 +29,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Pull cross-project Gitlab artifact dependencies";
     homepage = "https://github.com/kosma/gitlab-art";
-    changelog = "https://github.com/kosma/gitlab-art/releases/tag/${src.tag}";
+    changelog = "https://github.com/kosma/gitlab-art/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ tbaldwin ];
     mainProgram = "art";
   };
-}
+})

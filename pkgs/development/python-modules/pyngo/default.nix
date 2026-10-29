@@ -17,7 +17,7 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyngo";
   version = "2.5.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GThDsl1fnJ5oMvmJcJohs+H2GQxpacG1fp9C7JNmycs=";
   };
 
@@ -53,10 +53,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/yezz123/pyngo/releases/tag/${src.tag}";
+    changelog = "https://github.com/yezz123/pyngo/releases/tag/${finalAttrs.src.tag}";
     description = "Pydantic model support for Django & Django-Rest-Framework";
     homepage = "https://github.com/yezz123/pyngo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

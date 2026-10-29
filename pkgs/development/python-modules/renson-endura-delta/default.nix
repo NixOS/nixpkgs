@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "renson-endura-delta";
   version = "1.7.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # github repo is gone
   src = fetchPypi {
     pname = "renson_endura_delta";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-bL4faNFh+ocNNspZCXE6/UZ4nH3mKkHSAEvwtN0xfoE=";
   };
 
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

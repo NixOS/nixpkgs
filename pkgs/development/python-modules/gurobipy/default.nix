@@ -28,13 +28,13 @@ let
     hashes."${pyShortVersion}-${stdenv.system}"
       or (throw "Unsupported Python version: ${python.pythonVersion}");
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gurobipy";
   version = "13.0.3";
   inherit format;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     python = pyShortVersion;
     abi = pyShortVersion;
     dist = pyShortVersion;
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = builtins.attrNames platforms;
   };
-}
+})

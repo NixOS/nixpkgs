@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "1.5.1";
   format = "setuptools";
   pname = "pandocfilters";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-ACtKVV7k68A/i2Ywfih/pJLkp3tOoU0/k0MoKXu0k54=";
   };
 
@@ -22,4 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jgm/pandocfilters";
     license = lib.licenses.mit;
   };
-}
+})

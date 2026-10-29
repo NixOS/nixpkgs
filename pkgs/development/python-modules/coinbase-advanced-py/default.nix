@@ -13,7 +13,7 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coinbase-advanced-py";
   version = "1.8.4";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coinbase";
     repo = "coinbase-advanced-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kr2S6oB5H/SpmZgcK+dAJyMijp5OdxLszTbc6yAcX6I=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Coinbase Advanced API Python SDK";
     homepage = "https://github.com/coinbase/coinbase-advanced-py";
-    changelog = "https://github.com/coinbase/coinbase-advanced-py/releases/tag/v${version}";
+    changelog = "https://github.com/coinbase/coinbase-advanced-py/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

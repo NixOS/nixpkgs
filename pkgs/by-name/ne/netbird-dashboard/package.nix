@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "netbird-dashboard";
   version = "2.94.0";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "dashboard";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kcGGqCFZtGog4BaKLHTTxz+90JlqUx5zt0TolwInaAo=";
   };
 
@@ -24,7 +24,7 @@ buildNpmPackage rec {
 
   env = {
     CYPRESS_INSTALL_BINARY = 0;
-    NEXT_PUBLIC_DASHBOARD_VERSION = version;
+    NEXT_PUBLIC_DASHBOARD_VERSION = finalAttrs.version;
   };
 
   meta = {
@@ -34,4 +34,4 @@ buildNpmPackage rec {
     maintainers = [
     ];
   };
-}
+})

@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-python-dateutil";
   version = "2.9.0.20260807";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_python_dateutil";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-4LipDUZMhoTGa3uORVbZB0r93cxWykUyPwmHE0+ecDQ=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

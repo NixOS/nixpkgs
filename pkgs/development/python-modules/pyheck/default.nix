@@ -11,7 +11,7 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyheck";
   version = "0.1.5";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kevinheavey";
     repo = "pyheck";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mfXkrCbBaJ0da+taKJvfyU5NS43tYJWqtTUXiCLVoGQ=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for heck, the Rust case conversion library";
     homepage = "https://github.com/kevinheavey/pyheck";
-    changelog = "https://github.com/kevinheavey/pyheck/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/kevinheavey/pyheck/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

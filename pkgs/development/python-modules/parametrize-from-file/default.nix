@@ -13,13 +13,13 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parametrize-from-file";
   version = "0.21.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "parametrize_from_file";
     hash = "sha256-keKsnkMyk9du7TGvJhZXP2EpLqOKkz8vxrRzWXyGg0U=";
   };
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Read unit test parameters from config files";
     homepage = "https://github.com/kalekundert/parametrize_from_file";
-    changelog = "https://github.com/kalekundert/parametrize_from_file/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kalekundert/parametrize_from_file/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

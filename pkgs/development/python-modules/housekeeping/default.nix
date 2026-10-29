@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "housekeeping";
   version = "1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beanbaginc";
     repo = "housekeeping";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-hRWZSRoXscjkUm0NUpkM6pKEdoirN6ZmpjWlNgoyCVY=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

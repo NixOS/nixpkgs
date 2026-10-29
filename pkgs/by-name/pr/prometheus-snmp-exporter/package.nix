@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "snmp_exporter";
   version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "snmp_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-vLgqcqjnUvXYlxVyybDvra9YY5Im17L4I3LLf77tR8M=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
       Frostman
     ];
   };
-}
+})

@@ -16,14 +16,14 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-octaviaclient";
   version = "3.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_octaviaclient";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-sJkCRjQ4b6JDtFVP1ex5lssC3zN8bcQTpKP/hHWuqjs=";
   };
 
@@ -65,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

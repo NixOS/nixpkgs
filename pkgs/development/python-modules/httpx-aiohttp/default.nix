@@ -7,7 +7,7 @@
   httpx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "httpx-aiohttp";
   version = "0.1.12";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "httpx-aiohttp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5k/+oEsW2oPN2OM0jXU/+FcsWQLvSdYgM8AuzTU9XrI=";
     fetchSubmodules = true;
   };
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Transports for httpx to work atop aiohttp";
     homepage = "https://github.com/karpetrosyan/httpx-aiohttp/";
-    changelog = "https://github.com/karpetrosyan/httpx-aiohttp/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/karpetrosyan/httpx-aiohttp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

@@ -11,14 +11,14 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pc-ble-driver";
   version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-ble-driver";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-srH7Gdiy9Lsv68fst/9jhifx03R2e+4kMia6pU/oCZg=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DNRF_BLE_DRIVER_VERSION=${version}"
+    "-DNRF_BLE_DRIVER_VERSION=${finalAttrs.version}"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     "-DARCH=arm64"
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     platforms = lib.platforms.unix;
   };
-}
+})

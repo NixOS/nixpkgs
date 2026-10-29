@@ -6,13 +6,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "looseversion";
   version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-695l8/a7lTGoEBbG/vPrlaYRga3Ee3+UnpwOpHkRZp4=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Version numbering for anarchists and software realists";
     homepage = "https://github.com/effigies/looseversion";
-    changelog = "https://github.com/effigies/looseversion/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/effigies/looseversion/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ pelme ];
   };
-}
+})

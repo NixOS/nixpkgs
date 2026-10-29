@@ -5,14 +5,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yeetgif";
   version = "1.23.6";
 
   src = fetchFromGitHub {
     owner = "sgreben";
     repo = "yeetgif";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Z05GhtEPj3PLXpjF1wK8+pNUY3oDjbwZWQsYlTX14Rc=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ajs124 ];
     mainProgram = "gif";
   };
-}
+})

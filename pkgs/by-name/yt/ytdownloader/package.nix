@@ -12,14 +12,14 @@
 let
   electron = electron_43;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "ytDownloader";
   version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-chTaQ0nHTtdIhMo4GBSoQ6YbqDy8HNj190JNUt5nDiE=";
   };
 
@@ -85,4 +85,4 @@ buildNpmPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "ytdownloader";
   };
-}
+})

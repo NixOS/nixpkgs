@@ -5,13 +5,13 @@
   django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-tagging";
   version = "0.5.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-KNaPpIMXBeUa19HoRe1t2eNU+bb4pfY7ZVpDBkbvTo0=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
       lib.licenses.bsd3
     ];
   };
-}
+})

@@ -5,7 +5,7 @@
   dooit,
   nix-update-script,
 }:
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "dooit-extras";
   version = "0.2.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit-extras";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-h29lN32Qca8edF1aLhLxnV97MMEapX3Docc+CIEF6I4=";
   };
 
@@ -29,10 +29,10 @@ python3.pkgs.buildPythonPackage rec {
   meta = {
     description = "Extra Utilities for Dooit";
     homepage = "https://github.com/dooit-org/dooit-extras";
-    changelog = "https://github.com/dooit-org/dooit-extras/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/dooit-org/dooit-extras/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kraanzu
     ];
   };
-}
+})

@@ -5,13 +5,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devgoldyutils";
   version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2kGu9QPP5WqKv2gO9DAkE9SNDerzNaEDRt5DrrYD9nQ=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ youhaveme9 ];
   };
-}
+})

@@ -8,14 +8,14 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysychonaut";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "PySychonaut";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-8ESP20HG4CRq+zBbk504FqgZfPd2Y9RqPx3E+goh8/E=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

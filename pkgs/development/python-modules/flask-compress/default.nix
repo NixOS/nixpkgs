@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "1.25";
   pname = "flask-compress";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colour-science";
     repo = "flask-compress";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bzzXq6Lyckr2KfnyK2ZXe8BMWQtHkgtol+z0ek5Jdh8=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Compress responses in your Flask app with gzip, deflate or brotli";
     homepage = "https://github.com/colour-science/flask-compress";
-    changelog = "https://github.com/colour-science/flask-compress/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/colour-science/flask-compress/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

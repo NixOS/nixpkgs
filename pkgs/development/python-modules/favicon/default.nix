@@ -8,13 +8,13 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "favicon";
   version = "0.7.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-bWtaeN4qDQCEWJ9ofzhLLs1qZScJP+xWRAOxowYF16g=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Find a website's favicon";
     homepage = "https://github.com/scottwernervt/favicon";
-    changelog = "https://github.com/scottwernervt/favicon/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/scottwernervt/favicon/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
   };
-}
+})

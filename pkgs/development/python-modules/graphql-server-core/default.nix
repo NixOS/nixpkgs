@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graphql-server-core";
   version = "2.0.0";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphql-server-core";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2aUtiTiR6cypYe937n6oj6QqWCLgAy95XqEK9cWOa/A=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

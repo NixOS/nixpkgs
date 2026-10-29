@@ -12,7 +12,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brotlicffi";
   version = "1.2.0.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "brotlicffi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NRPjTtAlsDohdn5PQ6TOYCrm2xlU9mpfMIplNv4zVMk=";
   };
 
@@ -49,10 +49,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "brotlicffi" ];
 
   meta = {
-    changelog = "https://github.com/python-hyper/brotlicffi/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/python-hyper/brotlicffi/blob/${finalAttrs.src.tag}/HISTORY.rst";
     description = "Python CFFI bindings to the Brotli library";
     homepage = "https://github.com/python-hyper/brotlicffi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

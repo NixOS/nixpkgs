@@ -21,7 +21,7 @@
 }:
 
 let
-  self = python3.pkgs.buildPythonApplication rec {
+  self = python3.pkgs.buildPythonApplication (finalAttrs: {
     pname = "duplicity";
     version = "3.0.7";
     format = "setuptools";
@@ -29,7 +29,7 @@ let
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
-      rev = "rel.${version}";
+      rev = "rel.${finalAttrs.version}";
       hash = "sha256-t2YFp/AuQ9xKZSPmNA/IuQYNOcnPO0l8xhXyLBKSuqA=";
     };
 
@@ -162,14 +162,14 @@ let
     };
 
     meta = {
-      changelog = "https://gitlab.com/duplicity/duplicity/-/blob/${src.rev}/CHANGELOG.md";
+      changelog = "https://gitlab.com/duplicity/duplicity/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
       description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
       homepage = "https://duplicity.gitlab.io/duplicity-web/";
       license = lib.licenses.gpl2Plus;
       mainProgram = "duplicity";
       maintainers = with lib.maintainers; [ corngood ];
     };
-  };
+  });
 
 in
 self

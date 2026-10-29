@@ -4,12 +4,12 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moon-phases";
   version = "0.3.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8ZdtM246aqc49Q3ygMGk51LIzRA8RIdlaistbKUj3yY=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mirrorwitch ];
     mainProgram = "moon-phases";
   };
-}
+})

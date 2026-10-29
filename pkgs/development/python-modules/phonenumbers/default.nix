@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "phonenumbers";
   version = "9.0.37";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-iSOrQTxXWyfaKBXJvvSCkBgaq1ZTmLXn4jzHrOISopM=";
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for handling international phone numbers";
     homepage = "https://github.com/daviddrysdale/python-phonenumbers";
-    changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${version}/python/HISTORY.md";
+    changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${finalAttrs.version}/python/HISTORY.md";
     license = lib.licenses.asl20;
   };
-}
+})

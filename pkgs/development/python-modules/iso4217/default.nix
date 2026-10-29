@@ -14,7 +14,7 @@ let
     hash = "sha256-r1mRvI/qcOYOGKVzXHJGFdYxc+YlzpcdnWJExaF0Mp0=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iso4217";
   version = "1.16";
   pyproject = true;
@@ -22,14 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iso4217";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-C7TwGlbTwpcJ0rE7notWzZHthWzXKMPbHq00zMhfHeA=";
   };
 
   postPatch = ''
     # get_version() appends a date to the version prefix
     substituteInPlace setup.py \
-      --replace-fail 'version=get_version()' 'version="${version}"'
+      --replace-fail 'version=get_version()' 'version="${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-intellij-agent";
   version = "1.4.5.4049";
 
   src = fetchurl {
-    name = "${pname}-${version}-plugin.zip";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-plugin.zip";
     url = "https://plugins.jetbrains.com/plugin/download?updateId=454005";
     hash = "sha256-ibu3OcmtyLHuumhJQ6QipsNEIdEhvLUS7sb3xmnaR0U=";
   };
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

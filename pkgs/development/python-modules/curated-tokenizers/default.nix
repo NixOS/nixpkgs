@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "curated-tokenizers";
   version = "2.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "curated-tokenizers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VkDV/9c5b8TzYlthCZ38ufbrne4rihtkmkZ/gyAQXLE=";
     fetchSubmodules = true;
   };
@@ -54,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight piece tokenization library";
     homepage = "https://github.com/explosion/curated-tokenizers";
-    changelog = "https://github.com/explosion/curated-tokenizers/releases/tag/${src.tag}";
+    changelog = "https://github.com/explosion/curated-tokenizers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danieldk ];
   };
-}
+})

@@ -7,14 +7,14 @@
   sansio-multipart,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "overly";
   version = "0.1.85";
 
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IKmVJseFmsyFnoev2XtcSRZAXnR3g09ye0khDkeDcMs=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/theelous3/overly/issues/2
   };
-}
+})

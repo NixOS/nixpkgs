@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "drone-runner-docker";
   version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "drone-runners";
     repo = "drone-runner-docker";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-17i74U6PfOhvxdTeNrH0tQY/T46PMhRM/ggvE5BB0gY=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     description = "Drone pipeline runner that executes builds inside Docker containers";
     mainProgram = "drone-runner-docker";
   };
-}
+})

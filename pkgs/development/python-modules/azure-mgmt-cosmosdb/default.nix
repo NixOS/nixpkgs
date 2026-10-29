@@ -9,14 +9,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-cosmosdb";
   version = "9.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_cosmosdb";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Rni/BCvcIIqiT8pxdnrCm28qJyKseHJgg3Glki87bDc=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to work with the Microsoft Azure Cosmos DB Management";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-cosmosdb_${version}/sdk/cosmos/azure-mgmt-cosmosdb/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-cosmosdb_${finalAttrs.version}/sdk/cosmos/azure-mgmt-cosmosdb/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

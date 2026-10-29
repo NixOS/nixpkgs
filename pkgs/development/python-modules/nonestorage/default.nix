@@ -5,7 +5,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nonestorage";
   version = "0.1.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nonebot";
     repo = "nonestorage";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Y8Ywpp5/FRT8jIhSaMtuzMXs3UJROh5SrFdIZD7ysBA=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple library that provides local storage folder detect";
     homepage = "https://github.com/nonebot/nonestorage";
-    changelog = "https://github.com/nonebot/nonestorage/releases/tag/${src.tag}";
+    changelog = "https://github.com/nonebot/nonestorage/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})

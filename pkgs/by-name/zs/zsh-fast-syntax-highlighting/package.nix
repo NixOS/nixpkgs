@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-fast-syntax-highlighting";
   version = "1.56";
 
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
     repo = "fast-syntax-highlighting";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-caVMOdDJbAwo8dvKNgwwidmxOVst/YDda7lNx2GvOjY=";
   };
 
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

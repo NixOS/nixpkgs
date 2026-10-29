@@ -25,7 +25,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "experiment-utilities";
   version = "0.3.9";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ChrisReinke";
     repo = "exputils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LQ1RjDcOL1SroNzWSfSS2OUSqsGgWOly7bLcbZ7e8LY=";
   };
 
@@ -82,7 +82,7 @@ buildPythonPackage rec {
     description = "Various tools to run scientific computer experiments";
     homepage = "https://gitlab.inria.fr/creinke/exputils";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/ChrisReinke/exputils/releases/tag/v${version}";
+    changelog = "https://github.com/ChrisReinke/exputils/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

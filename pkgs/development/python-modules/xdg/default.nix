@@ -6,7 +6,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "6.0.0";
   pname = "xdg";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # there are actually breaking changes in xdg_base_dirs,
   # and libraries that want to support python 3.9 and below need to use xdg.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JCeAlPLUXoRtHrKKLruS17Z/wMq1JJ7jzojJX2SaHJI=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

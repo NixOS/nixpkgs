@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "Lash-L";
   domain = "roborock_custom_map";
   version = "0.1.6";
@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "Lash-L";
     repo = "RoborockCustomMap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zAKGlhil6UE9Wlz3KhUg2XFIGblj/2jGtxVXP/+ryvw=";
   };
 
@@ -22,4 +22,4 @@ buildHomeAssistantComponent rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };
-}
+})

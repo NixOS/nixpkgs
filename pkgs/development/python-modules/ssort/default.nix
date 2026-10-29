@@ -8,7 +8,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ssort";
   version = "0.16.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bwhmather";
     repo = "ssort";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-QVodBJsYryVue0QXaZbjo1JtwuCBUiuZ+XU+I7jJCq8=";
   };
 
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "ssort";
   };
-}
+})

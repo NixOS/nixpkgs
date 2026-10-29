@@ -54,12 +54,12 @@
 # NOTE: enableAllFeatures just purifies the expression, it doesn't actually
 # enable any extra features.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dblatex${lib.optionalString enableAllFeatures "-full"}";
   version = "0.3.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dblatex/${pname}3-${version}.tar.bz2";
+    url = "mirror://sourceforge/dblatex/${finalAttrs.pname}3-${finalAttrs.version}.tar.bz2";
     sha256 = "0yd09nypswy3q4scri1dg7dr99d7gd6r2dwx0xm81l9f4y32gs0n";
   };
 
@@ -131,4 +131,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "better-exceptions";
   version = "0.3.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "better_exceptions";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-5Oa8GERNXwTm6JSxA4Hl6SHT1UQkBBgWLH21fp6zRTs=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.alex-nt ];
   };
-}
+})

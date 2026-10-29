@@ -5,14 +5,14 @@
   lib,
   nix-update-script,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "antora-lunr-extension";
   version = "1.0.0-alpha.8";
 
   src = fetchFromGitLab {
     owner = "antora";
     repo = "antora-lunr-extension";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GplCwhUl8jurD4FfO6/T3Vo1WFjg+rtAjWeIh35unk4=";
   };
 
@@ -60,4 +60,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.noahbiewesch ];
     platforms = lib.platforms.all;
   };
-}
+})

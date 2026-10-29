@@ -6,14 +6,14 @@
   pytest7CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymeeus";
   version = "0.5.12";
   pyproject = true;
 
   src = fetchPypi {
     pname = "PyMeeus";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-VI9xhr2LlsvAac9kmo6ON33OSax0SGcJhJ/mOpnK1oQ=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

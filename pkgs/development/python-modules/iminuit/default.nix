@@ -18,13 +18,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iminuit";
   version = "2.32.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oys00YZllZvnWta9sd2ARZu5RGbGK0VWMcAFaKzN99I=";
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/scikit-hep/iminuit";
-    changelog = "https://github.com/scikit-hep/iminuit/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/iminuit/releases/tag/v${finalAttrs.version}";
     description = "Python interface for the Minuit2 C++ library";
     license = with lib.licenses; [
       mit
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

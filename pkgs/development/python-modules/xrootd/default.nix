@@ -6,13 +6,13 @@
   xrootd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xrootd";
   pyproject = true;
 
   inherit (xrootd) version src;
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   # The VERSION file exported from the upstream git repository contains an
   # unexpanded `$Format:%(describe)$` placeholder, and there is no git
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   env.CMAKE_ARGS = lib.toString [
-    (lib.cmakeFeature "XRootD_INCLUDE_DIR" "${lib.getDev xrootd}/include/xrootd;${src}/src")
+    (lib.cmakeFeature "XRootD_INCLUDE_DIR" "${lib.getDev xrootd}/include/xrootd;${finalAttrs.src}/src")
   ];
 
   build-system = [
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "XRootD central repository";
     homepage = "https://github.com/xrootd/xrootd";
-    changelog = "https://github.com/xrootd/xrootd/releases/tag/v${version}";
+    changelog = "https://github.com/xrootd/xrootd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

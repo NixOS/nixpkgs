@@ -9,13 +9,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stripe";
   version = "15.5.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7oe2lkGfTWWgY3wxWDk96KIgHegbWJYyQYUXcT5OyO0=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Stripe Python bindings";
     homepage = "https://github.com/stripe/stripe-python";
-    changelog = "https://github.com/stripe/stripe-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/stripe/stripe-python/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

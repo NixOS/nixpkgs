@@ -20,7 +20,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dicom2nifti";
   version = "2.6.2";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "icometrix";
     repo = "dicom2nifti";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VS1ad7sAgVWkFkTPLxzloj0dvweW5wqBlQpFqD9uZLs=";
   };
 
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

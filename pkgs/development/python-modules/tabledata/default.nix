@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tabledata";
   version = "1.3.5";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "tabledata";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yt71e2ZPJ5WpDLs6sU4kYQGR13IgJB7gMEzhaCHblos=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/thombashi/tabledata";
     description = "Library to represent tabular data";
-    changelog = "https://github.com/thombashi/tabledata/releases/tag/${src.tag}";
+    changelog = "https://github.com/thombashi/tabledata/releases/tag/${finalAttrs.src.tag}";
     maintainers = [ ];
     license = lib.licenses.mit;
   };
-}
+})

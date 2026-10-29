@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "owslib";
   version = "0.36.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Of/CSLcNnpTYHRm4toQK4/HXTWNcuEMkW6obWpg96Tc=";
   };
 
@@ -64,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
-    changelog = "https://github.com/geopython/OWSLib/releases/tag/${src.tag}";
+    changelog = "https://github.com/geopython/OWSLib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

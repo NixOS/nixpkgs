@@ -19,7 +19,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kubernetes-asyncio";
   version = "33.3.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomplus";
     repo = "kubernetes_asyncio";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ei5Y2IBBk8AoMQQBHOvKkJ1H+9dmnz22qrrZKrWazVE=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python asynchronous client library for Kubernetes http://kubernetes.io";
     homepage = "https://github.com/tomplus/kubernetes_asyncio";
-    changelog = "https://github.com/tomplus/kubernetes_asyncio/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/tomplus/kubernetes_asyncio/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

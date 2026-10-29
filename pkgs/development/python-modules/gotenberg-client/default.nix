@@ -8,7 +8,7 @@
   python-magic,
   requests,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gotenberg-client";
   version = "1.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "gotenberg-client";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NgfqUgtD70XvpFee8e32rTPe3TOS+JdmCnefzFY4gNY=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for interfacing with the Gotenberg API";
     homepage = "https://github.com/stumpylog/gotenberg-client";
-    changelog = "https://github.com/stumpylog/gotenberg-client/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/stumpylog/gotenberg-client/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ leona ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spaceship-prompt";
   version = "4.22.6";
 
   src = fetchFromGitHub {
     owner = "spaceship-prompt";
     repo = "spaceship-prompt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-j44aLORtyMx3uh2tEhnulksve/yaA1m5Zw/WWXuozrI=";
   };
 
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Zsh prompt for Astronauts";
     homepage = "https://github.com/spaceship-prompt/spaceship-prompt/";
-    changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${version}";
+    changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation rec {
       kyleondy
     ];
   };
-}
+})

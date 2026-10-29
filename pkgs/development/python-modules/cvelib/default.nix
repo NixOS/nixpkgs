@@ -11,7 +11,7 @@
   testers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvelib";
   version = "1.8.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
     repo = "cvelib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lbwrZSzJaP+nKFwt7xiq/LTzgOuf8aELxjrxEKkYpfc=";
   };
 
@@ -40,9 +40,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library and a command line interface for the CVE Services API";
     homepage = "https://github.com/RedHatProductSecurity/cvelib";
-    changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raboof ];
     mainProgram = "cve";
   };
-}
+})

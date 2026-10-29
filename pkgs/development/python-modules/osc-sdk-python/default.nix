@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osc-sdk-python";
   version = "0.38.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dS4vwBSvsjPu8JToXPww2tfN+zzCK/qzbxyZwA/n6js=";
     fetchSubmodules = true;
   };
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

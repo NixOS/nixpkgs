@@ -20,15 +20,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cyrus-sasl";
   version = "2.1.28";
 
   src = fetchurl {
     urls = [
-      "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
-      "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
-      "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
+      "https://github.com/cyrusimap/${finalAttrs.pname}/releases/download/${finalAttrs.pname}-${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
+      "http://www.cyrusimap.org/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
+      "http://www.cyrusimap.org/releases/old/${finalAttrs.pname}-${finalAttrs.version}.tar.gz"
     ];
     sha256 = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
   };
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsdOriginal;
   };
-}
+})

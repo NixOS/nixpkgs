@@ -10,14 +10,14 @@
   pufferpanel,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pufferpanel";
   version = "2.6.9";
 
   src = fetchFromGitHub {
     owner = "PufferPanel";
     repo = "PufferPanel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+ZZUoqCiSbrkaeYrm9X8SuX0INsGFegQNwa3WjBvgHQ=";
   };
 
@@ -41,14 +41,14 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X=github.com/pufferpanel/pufferpanel/v2.Hash=none"
-    "-X=github.com/pufferpanel/pufferpanel/v2.Version=${version}-nixpkgs"
+    "-X=github.com/pufferpanel/pufferpanel/v2.Version=${finalAttrs.version}-nixpkgs"
   ];
 
   frontend = buildNpmPackage {
     pname = "pufferpanel-frontend";
-    inherit version;
+    inherit (finalAttrs) version;
 
-    src = "${src}/client";
+    src = "${finalAttrs.src}/client";
 
     npmDepsHash = "sha256-oWFXtV/dxzHv3sfIi01l1lHE5tcJgpVq87XgS6Iy62g=";
 
@@ -100,7 +100,7 @@ buildGoModule rec {
     inherit (nixosTests) pufferpanel;
     version = testers.testVersion {
       package = pufferpanel;
-      command = "${pname} version";
+      command = "${finalAttrs.pname} version";
     };
   };
 
@@ -111,4 +111,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tie ];
     mainProgram = "pufferpanel";
   };
-}
+})

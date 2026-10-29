@@ -5,13 +5,13 @@
   pbr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "linecache2";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Syb/TnEQ23butvWntkqCYjg51ZXCA47tpmLyott46Xw=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/testing-cabal/linecache2";
     license = lib.licenses.psfl;
   };
-}
+})

@@ -21,13 +21,13 @@
   gurobiHome ? null,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mip";
   version = "1.17.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-nagHS4C9PveIUT1aIU74MpFtgqpmSH2hGknH2p+J0nA=";
   };
 
@@ -87,9 +87,9 @@ buildPythonPackage rec {
     homepage = "https://python-mip.com/";
     description = "Collection of Python tools for the modeling and solution of Mixed-Integer Linear programs (MIPs)";
     downloadPage = "https://github.com/coin-or/python-mip/releases";
-    changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";
+    changelog = "https://github.com/coin-or/python-mip/releases/tag/${finalAttrs.version}";
     license = lib.licenses.epl20;
     broken = stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ nessdoor ];
   };
-}
+})

@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyemoncms";
   version = "0.1.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Open-Building-Management";
     repo = "pyemoncms";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Bvcnl3av9SF0CNUjg/QDdvENIEgPg26fAJ522jBrL7Q=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Open-Building-Management/pyemoncms/releases/tag/${src.tag}";
+    changelog = "https://github.com/Open-Building-Management/pyemoncms/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for emoncms API";
     homepage = "https://github.com/Open-Building-Management/pyemoncms";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

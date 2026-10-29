@@ -9,7 +9,7 @@
   isPy3k,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stups-tokens";
   version = "1.1.19";
   pyproject = true;
@@ -18,13 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zalando-stups";
     repo = "python-tokens";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-NQKNZsrZoMF+QL4tLms5NbUPZpgvkBDXjpfT9vug4yc=";
   };
 
   postPatch = ''
     substituteInPlace tokens/__init__.py \
-      --replace-fail "__version__ = '0.8'" "__version__ = '${version}'"
+      --replace-fail "__version__ = '0.8'" "__version__ = '${finalAttrs.version}'"
   '';
 
   build-system = [ setuptools ];
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.mschuwalow ];
   };
-}
+})

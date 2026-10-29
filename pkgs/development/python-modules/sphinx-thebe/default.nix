@@ -7,13 +7,13 @@
   sphinx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-thebe";
   version = "0.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "sphinx_thebe";
     hash = "sha256-V2BH9FVg6C9kql8VIAsesJTc/hxbj1MaimW9II4lpJM=";
   };
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Integrate interactive code blocks into your documentation with Thebe and Binder";
     homepage = "https://github.com/executablebooks/sphinx-thebe";
-    changelog = "https://github.com/executablebooks/sphinx-thebe/releases/tag/v${version}";
+    changelog = "https://github.com/executablebooks/sphinx-thebe/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

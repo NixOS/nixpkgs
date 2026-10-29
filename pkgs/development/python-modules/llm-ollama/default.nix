@@ -20,7 +20,7 @@
   llm-ollama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llm-ollama";
   version = "0.16.2";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "taketwo";
     repo = "llm-ollama";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xQmUN1PKZofyy+Q4pWHl386gJg499GczDGc1SVsnWCg=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin providing access to Ollama models using HTTP API";
     homepage = "https://github.com/taketwo/llm-ollama";
-    changelog = "https://github.com/taketwo/llm-ollama/releases/tag/${version}";
+    changelog = "https://github.com/taketwo/llm-ollama/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erethon ];
   };
-}
+})

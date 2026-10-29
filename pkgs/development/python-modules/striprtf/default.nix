@@ -5,13 +5,13 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "striprtf";
   version = "0.0.33";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wtPZ/zEY322rVYZ18Qox/4u5mawfiSHwDG3J6hmWHxg=";
   };
 
@@ -20,11 +20,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "striprtf" ];
 
   meta = {
-    changelog = "https://github.com/joshy/striprtf/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/joshy/striprtf/blob/v${finalAttrs.version}/CHANGELOG.md";
     homepage = "https://github.com/joshy/striprtf";
     description = "Simple library to convert rtf to text";
     mainProgram = "striprtf";
     maintainers = with lib.maintainers; [ aanderse ];
     license = lib.licenses.bsd3;
   };
-}
+})

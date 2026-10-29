@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-musicpd";
   version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_musicpd";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-RFYIVDTy492sfp68sjO0MFKcHI9Gxt25Ixdu8iiOlTo=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
   };
-}
+})

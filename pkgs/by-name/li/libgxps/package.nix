@@ -16,7 +16,7 @@
   lcms2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgxps";
   version = "0.3.2";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgxps/${lib.versions.majorMinor version}/libgxps-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgxps/${lib.versions.majorMinor finalAttrs.version}/libgxps-${finalAttrs.version}.tar.xz";
     sha256 = "bSeGclajXM+baSU+sqiKMrrKO5fV9O9/guNmf6Q1JRw=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdx-truly-sane-lists";
   version = "1.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "radude";
     repo = "mdx_truly_sane_lists";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-hPnqF1UA4peW8hzeFiMlsBPfodC1qJXETGoq2yUm7d4=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

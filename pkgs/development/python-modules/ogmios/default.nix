@@ -13,14 +13,14 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ogmios";
   version = "1.4.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ogmios";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+edW34O+OF+JyCoZSjxRwKS6JeXfaZ38+ykUpXwBJ1Q=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aciceri ];
   };
-}
+})

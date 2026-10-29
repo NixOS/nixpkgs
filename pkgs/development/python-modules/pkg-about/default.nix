@@ -11,14 +11,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pkg-about";
   version = "2.4.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pkg_about";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-tURSRw79LnIOWij+JzDLLjKNPts9gcXdN4tQ9u/gbuQ=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python metadata sharing at runtime";
     homepage = "https://github.com/karpierz/pkg_about/";
-    changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/karpierz/pkg_about/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ kip93 ];
   };
-}
+})

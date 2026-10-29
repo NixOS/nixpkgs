@@ -11,7 +11,7 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pure-protobuf";
   version = "3.1.5";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Gr5fKpagSUzH34IKHb+pBta4q71AqYa/KG9XW2AxZqk=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";
     homepage = "https://github.com/eigenein/protobuf";
-    changelog = "https://github.com/eigenein/protobuf/releases/tag/${src.tag}";
+    changelog = "https://github.com/eigenein/protobuf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chuangzhu ];
   };
-}
+})

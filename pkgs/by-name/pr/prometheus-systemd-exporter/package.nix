@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "systemd_exporter";
   version = "0.7.0";
 
@@ -14,14 +14,14 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "systemd_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wWXtAyQ48fsh/9BBo2tHXf4QS3Pbsmj6rha28TdBRWI=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
     "-X github.com/prometheus/common/version.Revision=unknown"
     "-X github.com/prometheus/common/version.Branch=unknown"
     "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
@@ -37,4 +37,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ chkno ];
   };
-}
+})

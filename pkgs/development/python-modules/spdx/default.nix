@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spdx";
   version = "2.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbqsrc";
     repo = "spdx-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lfTgAX4Wl01xrvLA12ZUqjah7ZiLafMAU+yNNdVkRk0=";
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "SPDX license list database";
     homepage = "https://github.com/bbqsrc/spdx-python";
-    changelog = "https://github.com/bbqsrc/spdx-python/releases/tag/v${version}";
+    changelog = "https://github.com/bbqsrc/spdx-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       adhityaravi
@@ -38,4 +38,4 @@ buildPythonPackage rec {
       dstathis
     ];
   };
-}
+})

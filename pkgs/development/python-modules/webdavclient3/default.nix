@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webdavclient3";
   version = "3.14.7";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ezhov-evgeny";
     repo = "webdav-client-python-3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-On2vCV3iLxqLYKaiUkwry/lZFjhzlAlU2OYYq/7rrcE=";
   };
 
@@ -49,4 +49,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     mainProgram = "wdc";
   };
-}
+})

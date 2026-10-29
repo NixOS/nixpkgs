@@ -14,7 +14,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "descent3-unwrapped";
   # I’m using an unstable version here because we need to use -additionaldir in
   # the wrapped version of Descent 3. Once there’s a stable version of Descent
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru = {
     # The idea here is to make sure that we don’t forget to update meta.license
     # when reviewing a pull request from @r-ryantm.
-    tests.licenseInfoIsUpToDate = runCommand "${pname}-license-info-is-up-to-date" { } ''
+    tests.licenseInfoIsUpToDate = runCommand "${finalAttrs.pname}-license-info-is-up-to-date" { } ''
       function on_success {
         echo Test succeeded. > "$out"
       }
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
         return 1
       }
 
-      cd ${lib.strings.escapeShellArg src}
+      cd ${lib.strings.escapeShellArg finalAttrs.src}
       sha256sum --check << EOF && on_success || on_failure
         8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  LICENSE
         55d65dbf5d785111cf7029941cb7f72dbef084509e6126bcc58b6bb20203f8c6  THIRD_PARTY.md
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
       # [4]: <https://steamdb.info/depot/273592>
       # [5]: <https://steamdb.info/depot/273593>
       # [6]: <https://github.com/DescentDevelopers/Descent3/issues/240>
-      tagConverter = writeShellScript "${pname}-tag-converter.sh" ''
+      tagConverter = writeShellScript "${finalAttrs.pname}-tag-converter.sh" ''
         read -r input_tag
         if [ "$input_tag" = 0 ]
         then
@@ -155,4 +155,4 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.platforms.darwin;
   };
-}
+})

@@ -8,14 +8,14 @@
   humanity-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mint-x-icons";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-x-icons";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Euc/SEjKWh24vUFH3kXEXlF621n3G8YsE84hk2myOdo=";
   };
 
@@ -51,4 +51,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

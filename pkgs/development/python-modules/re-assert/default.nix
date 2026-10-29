@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "re-assert";
   version = "1.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "re-assert";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UTXFTD3QOKIzjq05J9Ontv5h9aClOwlPYKFXfDnBWuc=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/asottile/re-assert";
   };
-}
+})

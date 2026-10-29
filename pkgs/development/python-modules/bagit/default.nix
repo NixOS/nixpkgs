@@ -9,7 +9,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bagit";
   version = "1.9.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LibraryOfCongress";
     repo = "bagit-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gHilCG07BXL28vBOaqvKhEQw+9l/AkzZRQxucBTEDos=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

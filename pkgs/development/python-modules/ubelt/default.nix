@@ -13,7 +13,7 @@
   xdoctest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ubelt";
   version = "1.4.3";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Erotemic";
     repo = "ubelt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LCewB9K4nGw/uyGK35mcesJYXju2N0FsdLW1XkPLD+I=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
     homepage = "https://github.com/Erotemic/ubelt";
-    changelog = "https://github.com/Erotemic/ubelt/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Erotemic/ubelt/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

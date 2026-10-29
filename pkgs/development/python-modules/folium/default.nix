@@ -20,7 +20,7 @@
   xyzservices,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "folium";
   version = "0.20.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = "folium";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yLF4TdrMVEtWvGXZGbwa3OxCkdXMsN4m45rPrGDHlCU=";
   };
 
@@ -87,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
     homepage = "https://github.com/python-visualization/folium";
-    changelog = "https://github.com/python-visualization/folium/releases/tag/${src.tag}";
+    changelog = "https://github.com/python-visualization/folium/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

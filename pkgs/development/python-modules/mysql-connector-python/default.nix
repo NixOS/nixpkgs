@@ -9,7 +9,7 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mysql-connector-python";
   version = "26.7.0";
   format = "setuptools";
@@ -25,11 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-om4YSh4pHDjs7VrflkLq2+lY79F9uapJl1ktz40Hmrg=";
   };
 
-  sourceRoot = "${src.name}/mysql-connector-python";
+  sourceRoot = "${finalAttrs.src.name}/mysql-connector-python";
 
   patches = [
     # mysql-connector overrides MACOSX_DEPLOYMENT_TARGET to 11.
@@ -66,8 +66,8 @@ buildPythonPackage rec {
       implements the DB API v2.0 specification.
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
-    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${src.tag}/CHANGES.txt";
+    changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${finalAttrs.src.tag}/CHANGES.txt";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

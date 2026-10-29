@@ -9,7 +9,7 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python3-application";
   version = "3.0.12";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-application";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-MpOEV0ce7jSNUrFrN7tISp6R86aiaRLN7pLjG04zTPc=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
         8. version - manage version numbers for applications and packages.
     '';
   };
-}
+})

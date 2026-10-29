@@ -18,7 +18,7 @@
   optimum-onnx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optimum";
   version = "2.3.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NBMo0oTKRVkYZMJ0lfDiLiehMjvlthrQbmFHfX8fFJY=";
   };
 
@@ -88,8 +88,8 @@ buildPythonPackage rec {
     description = "Accelerate training and inference of Transformers and Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
-    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/optimum/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

@@ -5,15 +5,15 @@
   python-miio,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "ee02217";
   domain = "miheater";
   version = "2.1.2";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "homeassistant-mi-heater";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NyIToqXOUUG2aitAyz1Xbh1NQsoTRNK6OSw+i1Rwz1I=";
   };
 
@@ -24,7 +24,7 @@ buildHomeAssistantComponent rec {
   meta = {
     description = "Home Assistant integration for MiHeaters";
     homepage = "https://github.com/ee02217/homeassistant-mi-heater";
-    changelog = "https://github.com/ee02217/homeassistant-mi-heater/releases/tag/${version}";
+    changelog = "https://github.com/ee02217/homeassistant-mi-heater/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ baksa ];
   };
-}
+})

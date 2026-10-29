@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-cid";
   version = "0.5.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ipld";
     repo = "py-cid";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ufApwZW+MJHPiiEG/E221KTlOqwNN8icb9fcn/cX1AQ=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Self-describing content-addressed identifiers for distributed systems implementation in Python";
     homepage = "https://github.com/ipld/py-cid";
-    changelog = "https://github.com/ipld/py-cid/blob/${src.tag}/HISTORY.rst";
+    changelog = "https://github.com/ipld/py-cid/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

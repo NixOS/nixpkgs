@@ -7,13 +7,13 @@
   ciso8601,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dwdwfsapi";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7dIVD+4MiYtsjAM5j67MlbiUN2Q5DpK6bUU0ZuHN2rk=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client to retrieve data provided by DWD via their geoserver WFS API";
     homepage = "https://github.com/stephan192/dwdwfsapi";
-    changelog = "https://github.com/stephan192/dwdwfsapi/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/stephan192/dwdwfsapi/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
   };
-}
+})

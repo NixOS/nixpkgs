@@ -38,7 +38,7 @@
   wsproto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mitmproxy";
   version = "12.3.0";
   pyproject = true;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jaXvXM87H3p4OIxAX5DlQzMjNmL8Jd/hpqOhQFp/4Hk=";
   };
 
@@ -157,7 +157,7 @@ buildPythonPackage rec {
   meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       SuperSandro2000
@@ -165,4 +165,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "mitmproxy";
   };
-}
+})

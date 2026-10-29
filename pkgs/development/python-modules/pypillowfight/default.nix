@@ -7,7 +7,7 @@
   pytestCheckHook,
   setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypillowfight";
   version = "0.3.1";
   pyproject = true;
@@ -17,12 +17,12 @@ buildPythonPackage rec {
     group = "World";
     owner = "OpenPaperwork";
     repo = "libpillowfight";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZH1Eg8GLe3LZ7elohQCYCToEvx8bGaRSrcsT+qSY9s4=";
   };
 
   postPatch = ''
-    echo '#define INTERNAL_PILLOWFIGHT_VERSION "${version}"' > src/pillowfight/_version.h
+    echo '#define INTERNAL_PILLOWFIGHT_VERSION "${finalAttrs.version}"' > src/pillowfight/_version.h
   '';
 
   build-system = [ setuptools ];
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/pull/433141#issuecomment-3180885173
     broken = stdenv.hostPlatform.isDarwin;
     description = "Library containing various image processing algorithms";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
-}
+})

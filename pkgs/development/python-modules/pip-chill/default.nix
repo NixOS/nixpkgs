@@ -7,14 +7,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pip-chill";
   version = "1.0.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pip_chill";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-55vFFKv+FE8u9SKQ9ZZ30nnLBbQIT6n4FLvlzA6gTBw=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "pip-chill";
   };
-}
+})

@@ -7,7 +7,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qbusmqttapi";
   version = "1.5.1";
   pyproject = true;
@@ -15,14 +15,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qbus-iot";
     repo = "qbusmqttapi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dxrJzmDb+uClZYfIjhUStYcNOSm90pIZlNdxbbRl4N0=";
   };
 
   postPatch = ''
     # Upstream uses a placeholder version in pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"'
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
   '';
 
   build-system = [ hatchling ];
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "MQTT API for Qbus Home Automation";
     homepage = "https://github.com/Qbus-iot/qbusmqttapi";
-    changelog = "https://github.com/Qbus-iot/qbusmqttapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Qbus-iot/qbusmqttapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

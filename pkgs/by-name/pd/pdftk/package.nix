@@ -19,21 +19,21 @@ let
     jdk = jre_headless;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdftk";
   version = "3.3.3";
 
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ciKotTHSEcITfQYKFZ6sY2LZnXGChBJy0+eno8B3YHY=";
   };
 
   nativeBuildInputs = [ gradle ];
 
   mitmCache = gradle.fetchDeps {
-    inherit pname;
+    inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     EOF
     chmod a+x "$out/bin/pdftk"
 
-    cp ${src}/pdftk.1 $out/share/man/man1
+    cp ${finalAttrs.src}/pdftk.1 $out/share/man/man1
   '';
 
   meta = {
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "pdftk";
   };
-}
+})

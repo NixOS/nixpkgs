@@ -8,14 +8,14 @@
   pexpect,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cardano-tools";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "cardano_tools";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-RFyKXHafV+XgRJSsTjASCCw9DxvZqertf4NNN616Bp4=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aciceri ];
   };
-}
+})

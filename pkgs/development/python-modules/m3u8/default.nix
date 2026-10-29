@@ -8,7 +8,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "m3u8";
   version = "6.0.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "globocom";
     repo = "m3u8";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1SOuKKNBg67Yc0a6Iqb1goTE7sraptzpFIB2lvrbMQg=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python m3u8 parser";
     homepage = "https://github.com/globocom/m3u8";
-    changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
+    changelog = "https://github.com/globocom/m3u8/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
-}
+})

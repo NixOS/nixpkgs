@@ -7,14 +7,14 @@
   installShellFiles,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xmltoman";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "atsb";
     repo = "xmltoman";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-EmFdGIeBEcTY0Pqp7BJded9WB/DaXWcMNWh6aTsZlLg=";
   };
 
@@ -52,4 +52,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "xmltoman";
     platforms = lib.platforms.all;
   };
-}
+})

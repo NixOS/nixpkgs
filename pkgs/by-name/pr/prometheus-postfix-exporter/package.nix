@@ -8,14 +8,14 @@
   withSystemdSupport ? true,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "postfix_exporter";
   version = "0.20.4";
 
   src = fetchFromGitHub {
     owner = "Hsn723";
     repo = "postfix_exporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-LCjTw5nL8xP6ODwVJxj4Zg99CiFvqbzjb931fmhtk0M=";
   };
 
@@ -38,7 +38,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postfix; };
 
   meta = {
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     description = "Prometheus exporter for Postfix";
     mainProgram = "postfix_exporter";
     license = lib.licenses.asl20;
@@ -46,4 +46,4 @@ buildGoModule rec {
       globin
     ];
   };
-}
+})

@@ -11,14 +11,14 @@
   pyxdg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "show-in-file-manager";
   version = "1.1.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "show_in_file_manager";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-VZtZbj5WOADPadc0zSNoJCeanYINHYQWQMXxPgBY+bY=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

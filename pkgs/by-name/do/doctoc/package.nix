@@ -5,14 +5,14 @@
   callPackage,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "doctoc";
   version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "thlorenz";
     repo = "doctoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EmTZLy/eHtJ0Wi8EFP2lHdFKBut/8/aghRKZr1WHcNk=";
   };
 
@@ -36,4 +36,4 @@ buildNpmPackage rec {
     mainProgram = "doctoc";
     platforms = lib.platforms.all;
   };
-}
+})

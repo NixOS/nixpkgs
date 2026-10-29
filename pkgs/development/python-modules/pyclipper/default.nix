@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyclipper";
   version = "1.4.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "pyclipper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mh+F3iFCItmLbV6bF7Mi5IaWwjcKrE9Nk6lxglyFUg4=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthuszagh ];
   };
-}
+})

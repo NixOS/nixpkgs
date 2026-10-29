@@ -25,13 +25,13 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbdime";
   version = "4.0.4";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jNJez+61EF1WMjfX9k60dIBY+6m7qas4kqH/YeF3zhY=";
   };
 
@@ -87,9 +87,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jupyter/nbdime";
-    changelog = "https://github.com/jupyter/nbdime/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/nbdime/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Tools for diffing and merging of Jupyter notebooks";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

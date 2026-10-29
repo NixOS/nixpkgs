@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cns11643-kai";
   version = "0-unstable-2025-01-13";
 
   src = fetchFromGitHub {
     owner = "rypervenche";
     repo = "cns11643-fonts";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-A/4iwNvyzOYEpBzxKeq1xM/6aU6EOCATAr0lQlyckKQ=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.rypervenche ];
     platforms = lib.platforms.all;
   };
-}
+})

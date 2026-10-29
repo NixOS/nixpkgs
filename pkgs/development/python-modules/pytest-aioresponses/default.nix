@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-aioresponses";
   version = "0.3.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # no tags on GitHub
   src = fetchPypi {
     pname = "pytest_aioresponses";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-VnezLfoaNpCLNHUktYZ6qzWsHFzh1JcCRNb2YAm8p7Y=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

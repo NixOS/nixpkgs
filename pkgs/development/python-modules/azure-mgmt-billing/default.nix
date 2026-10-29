@@ -9,14 +9,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-billing";
   version = "7.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_billing";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-jgplxlEQtTpCk35b7WrgDvydYgaXLZa/1KdOgMhcLXs=";
   };
 
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "This is the Microsoft Azure Billing Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/billing/azure-mgmt-billing";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-billing_${version}/sdk/billing/azure-mgmt-billing/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-billing_${finalAttrs.version}/sdk/billing/azure-mgmt-billing/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

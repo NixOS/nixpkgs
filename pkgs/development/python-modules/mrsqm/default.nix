@@ -13,7 +13,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mrsqm";
   version = "4";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlgig";
     repo = "mrsqm";
-    tag = "r${version}";
+    tag = "r${finalAttrs.version}";
     hash = "sha256-59f18zItV3K6tXcg1v1q2Z8HYrQB8T0ntaaqjxeAEbM=";
   };
 
@@ -71,8 +71,8 @@ buildPythonPackage rec {
   meta = {
     description = "MrSQM (Multiple Representations Sequence Miner) is a time series classifier";
     homepage = "https://pypi.org/project/mrsqm";
-    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${src.tag}";
+    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

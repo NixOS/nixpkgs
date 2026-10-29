@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "orderly-set";
   version = "5.5.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "orderly-set";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xrxH/LB+cyZlVf+sVwOtAf9+DojYPDnudHpqlVuARLg=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multiple implementations of Ordered Set";
     homepage = "https://github.com/seperman/orderly-set";
-    changelog = "https://github.com/seperman/orderly-set/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/seperman/orderly-set/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

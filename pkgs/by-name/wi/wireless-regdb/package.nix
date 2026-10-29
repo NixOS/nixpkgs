@@ -5,12 +5,12 @@
   directoryListingUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wireless-regdb";
   version = "2026.09.03";
 
   src = fetchurl {
-    url = "https://www.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-${version}.tar.xz";
+    url = "https://www.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-${finalAttrs.version}.tar.xz";
     hash = "sha256-si4JASJ7ggzRwoCr5oGhW3c6UQOl4Q3EQulOuzTL9Y0=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

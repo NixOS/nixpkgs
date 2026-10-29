@@ -17,13 +17,13 @@
   gdk-pixbuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cairocffi";
   version = "1.7.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LkjuhkiE7Eo6NL+oyauZmfaIKG63FKFaQ+ydBow2VXs=";
   };
 
@@ -59,10 +59,10 @@ buildPythonPackage rec {
   __impureHostDeps = [ "/System/Library/Fonts" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/Kozea/cairocffi/blob/v${finalAttrs.version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
   };
-}
+})

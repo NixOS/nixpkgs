@@ -9,7 +9,7 @@
   freetype-py,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pcffont";
   version = "0.0.33";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pcffont";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-inK/+oQkWfhIwhUjN3TkKvyk0AAxoliSsUzR84tLt9U=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
       h7x4
     ];
   };
-}
+})

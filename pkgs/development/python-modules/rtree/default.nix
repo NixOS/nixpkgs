@@ -10,7 +10,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtree";
   version = "1.4.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Toblerity";
     repo = "rtree";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ilhHBAYa4GaKUt8CmmJRS569D9INHZmWS6lK/+AIiqY=";
   };
 
@@ -44,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "R-Tree spatial index for Python GIS";
     homepage = "https://github.com/Toblerity/rtree";
-    changelog = "https://github.com/Toblerity/rtree/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/Toblerity/rtree/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bgamari ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

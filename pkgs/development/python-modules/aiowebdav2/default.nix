@@ -15,7 +15,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiowebdav2";
   version = "0.6.2";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiowebdav2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W3TdumweNyGz2qDFgSGu+ZPnEpLvWQQ216jER6e4k18=";
   };
 
@@ -56,10 +56,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jpbede/aiowebdav2/releases/tag/${src.tag}";
+    changelog = "https://github.com/jpbede/aiowebdav2/releases/tag/${finalAttrs.src.tag}";
     description = "Async Python 3 client for WebDAV";
     homepage = "https://github.com/jpbede/aiowebdav2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

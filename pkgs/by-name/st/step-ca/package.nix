@@ -12,14 +12,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "step-ca";
   version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # Source uses git export-subst and isn't reproducible when fetching as git archive,
     # see https://github.com/smallstep/certificates/blob/6a1250131284dce4aa66c0e0e3f7a3202dd56ad0/.gitattributes.
     # Use forceFetchGit to fetch the source as git repo, as fetchGit isn't effected,
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   ldflags = [
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
@@ -66,7 +66,7 @@ buildGoModule rec {
   meta = {
     description = "Private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
-    changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
+    changelog = "https://github.com/smallstep/certificates/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "step-ca";
     maintainers = with lib.maintainers; [
@@ -74,4 +74,4 @@ buildGoModule rec {
       techknowlogick
     ];
   };
-}
+})

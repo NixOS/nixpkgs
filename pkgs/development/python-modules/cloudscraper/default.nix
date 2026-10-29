@@ -7,13 +7,13 @@
   pyparsing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cloudscraper";
   version = "1.2.71";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-QpxuiqaRbVutXIperFDz6lPJrCJhb2yyGxjcxxUX0NM=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to bypass Cloudflare's anti-bot page";
     homepage = "https://github.com/venomous/cloudscraper";
-    changelog = "https://github.com/VeNoMouS/cloudscraper/releases/tag/${version}";
+    changelog = "https://github.com/VeNoMouS/cloudscraper/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kini ];
   };
-}
+})

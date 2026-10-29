@@ -6,14 +6,14 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ps3netsrv";
   version = "20260913";
 
   src = fetchFromGitHub {
     owner = "aldostools";
-    repo = pname;
-    tag = version;
+    repo = finalAttrs.pname;
+    tag = finalAttrs.version;
     hash = "sha256-Lsazt178L6oP9AzpKs4MP6aMRFq7HydJ/uVZMYbOWGE=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Doff64_t=off_t";
 
   postInstall = ''
-    install -Dm644 $src/LICENSE.TXT $out/usr/share/licenses/${pname}/LICENSE.TXT
+    install -Dm644 $src/LICENSE.TXT $out/usr/share/licenses/${finalAttrs.pname}/LICENSE.TXT
   '';
 
   meta = {
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ makefu ];
     mainProgram = "ps3netsrv";
   };
-}
+})

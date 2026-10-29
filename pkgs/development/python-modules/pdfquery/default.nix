@@ -12,14 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdfquery";
   version = "0.4.3";
   pyproject = true;
 
   # The latest version is on PyPI but not tagged on GitHub
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oqKXTLMS/aT1aa3I1jN30l1cY2ckC0p7+xZTksc+Hc4=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.samasaur ];
   };
-}
+})

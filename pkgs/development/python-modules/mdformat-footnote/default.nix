@@ -7,7 +7,7 @@
   mdit-py-plugins,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-footnote";
   version = "0.1.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdformat-footnote";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KPxPDKG3aC5zLdrJRL3kzFMpLJ0Yk5UZXW4CamC1/NQ=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Footnote format addition for mdformat";
     homepage = "https://github.com/executablebooks/mdformat-footnote";
-    changelog = "https://github.com/executablebooks/mdformat-footnote/releases/tag/${src.tag}";
+    changelog = "https://github.com/executablebooks/mdformat-footnote/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

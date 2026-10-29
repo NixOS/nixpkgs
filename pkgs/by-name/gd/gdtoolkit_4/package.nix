@@ -25,7 +25,7 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gdtoolkit";
   version = "4.5.0";
   pyproject = true;
@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Jam7Txm+Fq5zEkJZMmbWW5Ok4ThsPyi6NIeawQot0RE=";
   };
 
@@ -82,4 +82,4 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ squarepear ];
   };
-}
+})

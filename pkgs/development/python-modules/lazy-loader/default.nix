@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lazy-loader";
   version = "0.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scientific-python";
     repo = "lazy_loader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4Kid6yhm9C2liPoW+NlCsOiBZvv6iYt7hDunARc4PRY=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Populate library namespace without incurring immediate import costs";
     homepage = "https://github.com/scientific-python/lazy_loader";
-    changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${version}";
+    changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

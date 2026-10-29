@@ -10,12 +10,12 @@
 let
   arch = if stdenv.hostPlatform.is64bit then "amd64" else "x86";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teamspeak-server";
   version = "3.13.7";
 
   src = fetchurl {
-    url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
+    url = "https://files.teamspeak-services.com/releases/server/${finalAttrs.version}/teamspeak3-server_linux_${arch}-${finalAttrs.version}.tar.bz2";
     sha256 =
       if stdenv.hostPlatform.is64bit then
         "sha256-d1pXMamAmAHkyPkGbNm8ViobNoVTE5wSSfKgdA1QBB4="
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
       gerschtli
     ];
   };
-}
+})

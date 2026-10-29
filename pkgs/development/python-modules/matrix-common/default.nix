@@ -7,14 +7,14 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "matrix-common";
   version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "matrix_common";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-YuEhzM2fJDQXtX7DenbcRK6xmKelxnr9a4J1mS/yq9E=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sumnerevans ];
   };
-}
+})

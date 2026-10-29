@@ -12,7 +12,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-libsass";
   version = "0.9";
   format = "setuptools";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-libsass";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-54AlRVmit0rtG1jx7O+XyA1vXLHCfoNPjHkHCQaaybA=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django-compressor filter to compile SASS files using libsass";
     homepage = "https://github.com/torchbox/django-libsass";
-    changelog = "https://github.com/torchbox/django-libsass/blob/${src.rev}/CHANGELOG.txt";
+    changelog = "https://github.com/torchbox/django-libsass/blob/${finalAttrs.src.rev}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

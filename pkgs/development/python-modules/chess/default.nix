@@ -6,15 +6,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chess";
   version = "1.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niklasf";
-    repo = "python-${pname}";
-    tag = "v${version}";
+    repo = "python-${finalAttrs.pname}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8LOp4HQI9UOdaj4/jwd79ftdnaO4HtzMVf1cwcYFCiA=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Chess library with move generation, move validation, and support for common formats";
     homepage = "https://github.com/niklasf/python-chess";
-    changelog = "https://github.com/niklasf/python-chess/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/niklasf/python-chess/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ smancill ];
   };
-}
+})

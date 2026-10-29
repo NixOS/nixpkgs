@@ -12,7 +12,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "colcon-recursive-crawl";
   version = "0.2.3";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colcon";
     repo = "colcon-recursive-crawl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-zmmEelMjsIbXy5LchZMtr2+x+Ne2c2PhexLjbkZJmm8=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

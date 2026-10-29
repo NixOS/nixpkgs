@@ -19,7 +19,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "minio";
   version = "7.2.20";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-k7bMXEwRNqx5a6qz4+Yxs/zMANReHFKU2Ks/GSD4JKo=";
   };
 
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
     homepage = "https://github.com/minio/minio-py";
-    changelog = "https://github.com/minio/minio-py/releases/tag/${src.tag}";
+    changelog = "https://github.com/minio/minio-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
   };
-}
+})

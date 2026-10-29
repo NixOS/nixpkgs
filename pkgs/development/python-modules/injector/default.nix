@@ -6,7 +6,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "injector";
   version = "0.24.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-injector";
     repo = "injector";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Pv+3D2eyZiposXMsfhVniGNvlNGb3xSZfjIQBLMcbLA=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.bsd3;
   };
-}
+})

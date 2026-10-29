@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-digitalocean";
   version = "1.17.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koalalorenzo";
     repo = "python-digitalocean";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CIYW6vl+IOO94VyfgTjJ3T13uGtz4BdKyVmE44maoLA=";
   };
 
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API to manage Digital Ocean Droplets and Images";
     homepage = "https://github.com/koalalorenzo/python-digitalocean";
-    changelog = "https://github.com/koalalorenzo/python-digitalocean/releases/tag/v${version}";
+    changelog = "https://github.com/koalalorenzo/python-digitalocean/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ teh ];
   };
-}
+})

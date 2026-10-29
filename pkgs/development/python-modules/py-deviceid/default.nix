@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-deviceid";
   version = "0.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "py_deviceid";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-w+dXetojZm5/OeaTcN/ap2/p3nnAJjU3bWqgIpv6MOM=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ katexochen ];
   };
-}
+})

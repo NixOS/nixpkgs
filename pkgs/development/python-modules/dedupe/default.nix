@@ -28,7 +28,7 @@
   runCommand,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dedupe";
   version = "3.0.3";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "dedupe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tfBJeaeZw5w5OwM+AOfy9H6P2zbShjN/kuzEbpxATHI=";
   };
 
@@ -80,7 +80,7 @@ buildPythonPackage rec {
       }
       ''
         # Copy benchmarks to writable location
-        cp -r ${src}/benchmarks benchmarks
+        cp -r ${finalAttrs.src}/benchmarks benchmarks
         chmod -R +w benchmarks
         cd benchmarks
 
@@ -99,8 +99,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for accurate and scalable fuzzy matching, deduplication and entity resolution";
     homepage = "https://github.com/dedupeio/dedupe";
-    changelog = "https://github.com/dedupeio/dedupe/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/dedupeio/dedupe/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "nixoscope";
   version = "0.2.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "giomf";
     repo = "nixoscope";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Q4WuRpI2CdZx/JLP9SbmI2mz71oU1Fcjw/czvXinH8c=";
   };
 
@@ -50,4 +50,4 @@ python3Packages.buildPythonPackage rec {
     ];
     mainProgram = "nixoscope";
   };
-}
+})

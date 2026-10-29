@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sarge";
   version = "0.1.7.post1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vsajip";
     repo = "sarge";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-bT1DbcQi+SbeRBsL7ILuQbSnAj3BBB4+FNl+Zek5xU4=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

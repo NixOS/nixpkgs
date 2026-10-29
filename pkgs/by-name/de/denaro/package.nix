@@ -13,14 +13,14 @@
   blueprint-compiler,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "denaro";
   version = "2024.2.0";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Denaro";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-fEhwup8SiYvKH2FtzruEFsj8axG5g3YJ917aqc8dn/8=";
   };
 
@@ -68,11 +68,11 @@ buildDotnetModule rec {
     homepage = "https://github.com/nlogozzo/NickvisionMoney";
     mainProgram = "NickvisionMoney.GNOME";
     license = lib.licenses.mit;
-    changelog = "https://github.com/nlogozzo/NickvisionMoney/releases/tag/${version}";
+    changelog = "https://github.com/nlogozzo/NickvisionMoney/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       chuangzhu
       kashw2
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

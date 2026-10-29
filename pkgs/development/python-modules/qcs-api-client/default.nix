@@ -21,7 +21,7 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcs-api-client";
   version = "0.26.5";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8ZD/vqWA1QnEQXz6P/+NIxe0go1Q/XQ3iRNL/TkoTmM=";
   };
 
@@ -80,8 +80,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for accessing the Rigetti QCS API";
     homepage = "https://qcs-api-client-python.readthedocs.io/";
-    changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -24,7 +24,7 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-extensions";
   version = "4.1";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-extensions";
     repo = "django-extensions";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
   };
 
@@ -71,9 +71,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/django-extensions/django-extensions/releases/tag/${src.tag}";
+    changelog = "https://github.com/django-extensions/django-extensions/releases/tag/${finalAttrs.src.tag}";
     description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = lib.licenses.mit;
   };
-}
+})

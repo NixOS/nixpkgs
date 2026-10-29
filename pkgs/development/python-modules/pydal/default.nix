@@ -8,13 +8,13 @@
   legacy-cgi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydal";
   version = "20260313.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LfjeQV3aiCHwopHNZkWfuImyhFjuZQF3j2guVVMIR+k=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    changelog = "https://github.com/web2py/pydal/commits/v${version}";
+    changelog = "https://github.com/web2py/pydal/commits/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wamserma ];
   };
-}
+})

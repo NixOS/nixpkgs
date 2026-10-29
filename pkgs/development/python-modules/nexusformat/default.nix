@@ -13,13 +13,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nexusformat";
   version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FeAM5iwTfC/EcVl/L/1l7NTuZcVnZISQppTKaRqWldA=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API to open, create, and manipulate NeXus data written in the HDF5 format";
     homepage = "https://github.com/nexpy/nexusformat";
-    changelog = "https://github.com/nexpy/nexusformat/releases/tag/v${version}";
+    changelog = "https://github.com/nexpy/nexusformat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ oberth-effect ];
   };
-}
+})

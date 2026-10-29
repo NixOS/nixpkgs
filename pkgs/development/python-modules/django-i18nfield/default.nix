@@ -15,7 +15,7 @@
   pyyaml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-i18nfield";
   version = "1.11.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-i18nfield";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0r4ICS8E0OFMrR7IoyiFyXBvAkQjSBb0HtEcb31f4Rw=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

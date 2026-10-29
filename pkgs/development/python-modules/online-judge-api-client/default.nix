@@ -26,7 +26,7 @@ let
     ]
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "online-judge-api-client";
   version = "10.10.1";
   format = "setuptools";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "api-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-P0pIjd/YS155dSDpY/ekMp8HnJcM35waV7aoTQiEWHo=";
   };
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sei40kr ];
   };
-}
+})

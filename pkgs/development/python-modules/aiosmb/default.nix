@@ -16,13 +16,13 @@
   winsspi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiosmb";
   version = "0.4.14";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-So6u+sX7EOEIjrYejfWK/z/mH9bxHOcu/YpjF1VfAsM=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python SMB library";
     homepage = "https://github.com/skelsec/aiosmb";
-    changelog = "https://github.com/skelsec/aiosmb/releases/tag/${version}";
+    changelog = "https://github.com/skelsec/aiosmb/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

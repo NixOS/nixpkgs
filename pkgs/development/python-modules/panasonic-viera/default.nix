@@ -8,7 +8,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "panasonic-viera";
   version = "0.4.6";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "florianholzapfel";
     repo = "panasonic-viera";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AJivKcZPe9kb8pZlb/c4u5406EbLkznQiEYu7C9Y37U=";
   };
 
@@ -34,10 +34,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "panasonic_viera" ];
 
   meta = {
-    changelog = "https://github.com/florianholzapfel/panasonic-viera/releases/tag/${src.tag}";
+    changelog = "https://github.com/florianholzapfel/panasonic-viera/releases/tag/${finalAttrs.src.tag}";
     description = "Library to control Panasonic Viera TVs";
     homepage = "https://github.com/florianholzapfel/panasonic-viera";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

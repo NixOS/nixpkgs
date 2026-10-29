@@ -11,13 +11,13 @@
   pyzbar,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reportlab-qrcode";
   version = "0.1.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-m/oeuA797MEBOJBIG157VIa7TbEbRRVK/O8Arz/oO/o=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xanderio ];
   };
-}
+})

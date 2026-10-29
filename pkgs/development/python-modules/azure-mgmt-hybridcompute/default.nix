@@ -9,14 +9,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-hybridcompute";
   version = "9.1.0b2";
   format = "wheel";
 
   src = fetchPypi {
     pname = "azure_mgmt_hybridcompute";
-    inherit version;
+    inherit (finalAttrs) version;
     format = "wheel";
     python = "py3";
     dist = "py3";
@@ -42,4 +42,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ techknowlogick ];
   };
-}
+})

@@ -7,7 +7,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynuki";
   version = "1.7.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "pynuki";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-oEdR4Ze11IfNzNup8oOECDTIWPjjAyE/KhGdgAQZHGE=";
   };
 
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for nuki.io bridges";
     homepage = "https://github.com/pschmitt/pynuki";
-    changelog = "https://github.com/pschmitt/pynuki/releases/tag/${version}";
+    changelog = "https://github.com/pschmitt/pynuki/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

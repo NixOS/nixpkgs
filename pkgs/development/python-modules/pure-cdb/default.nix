@@ -5,7 +5,7 @@
   flake8,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pure-cdb";
   version = "4.0.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbayles";
     repo = "python-pure-cdb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7zxQO+oTZJhXfM2yijGXchLixiQRuFTOSESVlEc+T0s=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
   };
-}
+})

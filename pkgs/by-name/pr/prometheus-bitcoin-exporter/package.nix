@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bitcoin-prometheus-exporter";
   version = "0.9.0";
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jvstein";
     repo = "bitcoin-prometheus-exporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-08QG/5Kj++rjWz7OciqKSJUk00lSJCbfB5XwwP+h4so=";
   };
 
@@ -43,4 +43,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ mmilata ];
     platforms = lib.platforms.all;
   };
-}
+})

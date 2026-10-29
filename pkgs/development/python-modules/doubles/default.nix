@@ -8,7 +8,7 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "doubles";
   version = "1.5.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uber";
     repo = "doubles";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7yygZ00H2eIGuI/E0dh0j30hicJKBhCqyagY6XAJTCA=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b-rodrigues ];
   };
-}
+})

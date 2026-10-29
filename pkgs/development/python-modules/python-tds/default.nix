@@ -12,7 +12,7 @@
   cryptography,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-tds";
   version = "1.17.1";
   pyproject = true;
@@ -20,13 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "denisenkom";
     repo = "pytds";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-W9Sk2X2bSMjtRu1XPnjWXOLjVVa+MYC7+ttrZc48c4I=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version.get_git_version()" '"${version}"'
+      --replace-fail "version.get_git_version()" '"${finalAttrs.version}"'
   '';
 
   preCheck = ''
@@ -84,4 +84,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

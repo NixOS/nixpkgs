@@ -33,14 +33,14 @@ let
   };
 in
 let
-  iscan-data = stdenv.mkDerivation rec {
+  iscan-data = stdenv.mkDerivation (finalAttrs: {
     pname = "iscan-data";
     version = "1.39.2-1";
 
     src = fetchurl {
       urls = [
-        "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
-        "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
+        "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${finalAttrs.version}.tar.gz"
+        "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${finalAttrs.version}.tar.gz"
       ];
       sha256 = "092qhlnjjgz11ifx6mng7mz20i44gc0nlccrbmw18xr5hipbqqka";
     };
@@ -50,16 +50,16 @@ let
     ];
 
     meta = common_meta;
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iscan";
   version = "2.30.4-2";
 
   src = fetchurl {
     urls = [
-      "http://support.epson.net/linux/src/scanner/iscan/iscan_${version}.tar.gz"
-      "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan_${version}.tar.gz"
+      "http://support.epson.net/linux/src/scanner/iscan/iscan_${finalAttrs.version}.tar.gz"
+      "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan_${finalAttrs.version}.tar.gz"
     ];
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
@@ -147,4 +147,4 @@ stdenv.mkDerivation rec {
       dominikh
     ];
   };
-}
+})

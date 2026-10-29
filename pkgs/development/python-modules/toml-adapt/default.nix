@@ -8,7 +8,7 @@
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "toml-adapt";
   version = "0.3.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "toml-adapt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GtwE8P4uP3F6wOrzv/vZ4CJR4tzF7CxpWV/8X/hBZhc=";
   };
 
@@ -34,9 +34,9 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Command-line interface for manipulating toml files";
     homepage = "https://github.com/firefly-cpp/toml-adapt";
-    changelog = "https://github.com/firefly-cpp/toml-adapt/releases/tag/${src.tag}";
+    changelog = "https://github.com/firefly-cpp/toml-adapt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
     mainProgram = "toml-adapt";
   };
-}
+})

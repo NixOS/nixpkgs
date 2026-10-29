@@ -22,7 +22,7 @@
   zopfli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nanoemoji";
   version = "0.16.0";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nanoemoji";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FysyKC01XBnRiur5RR9fcsTxQqE8x0JJHSoe3q6JtKc=";
   };
 
@@ -90,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wee tool to build color fonts";
     homepage = "https://github.com/googlefonts/nanoemoji";
-    changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/${src.tag}";
+    changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ _999eagle ];
   };
-}
+})

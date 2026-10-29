@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "param";
   version = "2.4.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "param";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7TbxpGDkDJqG7Ssoo96hemBWAq/iymzjrm7KO7+OXPU=";
   };
 
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Declarative Python programming using Parameters";
     homepage = "https://param.holoviz.org/";
-    changelog = "https://github.com/holoviz/param/releases/tag/${src.tag}";
+    changelog = "https://github.com/holoviz/param/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

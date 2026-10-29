@@ -6,7 +6,7 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxext-rediraffe";
   version = "0.3.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wpilibsuite";
     repo = "sphinxext-rediraffe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OW+MNQbPfJa8+jcpWZxTKD+EAv1gyo5tmcYAGba4u3c=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx extension to redirect files";
     homepage = "https://github.com/wpilibsuite/sphinxext-rediraffe";
-    changelog = "https://github.com/wpilibsuite/sphinxext-rediraffe/releases/tag/${src.tag}";
+    changelog = "https://github.com/wpilibsuite/sphinxext-rediraffe/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.newam ];
   };
-}
+})

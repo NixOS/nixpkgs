@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wapiti-swagger";
   version = "0.1.9";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti_swagger";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-On4R5+9+6w8CdZYQ8oxAfuxWTQZotkxjrIf497lETfw=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

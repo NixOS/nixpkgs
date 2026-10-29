@@ -9,7 +9,7 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.141.0";
   pname = "jbang";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   src = fetchzip {
-    url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
+    url = "https://github.com/jbangdev/jbang/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar";
     sha256 = "sha256-fw87WrmqdVH+NJ+rAnuMukz7qMTRg6CMgLVg/+JPahI=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   installCheckPhase = ''
-    $out/bin/jbang --version 2>&1 | grep -q "${version}"
+    $out/bin/jbang --version 2>&1 | grep -q "${finalAttrs.version}"
   '';
 
   meta = {
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moaxcp ];
   };
-}
+})

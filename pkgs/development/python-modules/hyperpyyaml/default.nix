@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyperpyyaml";
   version = "1.2.3";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "hyperpyyaml";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/7OrIR61zQYl2+RjiOOlaqUGWBieon5fe8sgmEvKowo=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extensions to YAML syntax for better python interaction";
     homepage = "https://github.com/speechbrain/HyperPyYAML";
-    changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/${src.tag}";
+    changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

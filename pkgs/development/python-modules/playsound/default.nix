@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "playsound";
   version = "1.3.0";
   format = "setuptools";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TaylorSMarks";
     repo = "playsound";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zXPTvbm5159/85sThn5+uGX0lP8iG+8IvgqsSgMxeEk=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

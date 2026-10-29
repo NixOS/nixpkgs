@@ -5,7 +5,7 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-material-extensions";
   version = "1.3.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "mkdocs-material-extensions";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/jU30Ol10/4haR3ZPJWZ3iWRfXG/RUOU1oclOYGjjAY=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

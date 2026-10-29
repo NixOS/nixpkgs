@@ -20,7 +20,7 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tabcmd";
   version = "2.0.20";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tableau";
     repo = "tabcmd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BviaCIav8rz37ac126KS4p54gbxzd6vs1p5kTy42bv4=";
   };
 
@@ -96,9 +96,9 @@ buildPythonPackage rec {
   meta = {
     description = "Command line client for working with Tableau Server";
     homepage = "https://github.com/tableau/tabcmd";
-    changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
+    changelog = "https://github.com/tableau/tabcmd/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "tabcmd";
   };
-}
+})

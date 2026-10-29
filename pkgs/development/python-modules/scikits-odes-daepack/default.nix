@@ -7,12 +7,12 @@
   scikits-odes-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   inherit (scikits-odes-core) version src;
   pname = "scikits-odes-daepack";
   pyproject = true;
 
-  sourceRoot = "${src.name}/packages/scikits-odes-daepack";
+  sourceRoot = "${finalAttrs.src.name}/packages/scikits-odes-daepack";
 
   build-system = [
     meson-python
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     description = "Wrapper around daepack";
     homepage = "https://github.com/bmcage/odes/blob/master/packages/scikits-odes-daepack";
   };
-}
+})

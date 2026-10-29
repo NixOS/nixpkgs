@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "carto";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "carto";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TylMgb2EI52uFmVeMJiQltgNCSh6MutFwUjsYC7gfEA=";
   };
 
@@ -25,11 +25,11 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/mapbox/carto/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/mapbox/carto/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Mapnik stylesheet compiler";
     homepage = "https://github.com/mapbox/carto";
     license = lib.licenses.asl20;
     mainProgram = "carto";
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

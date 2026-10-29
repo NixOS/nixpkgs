@@ -11,14 +11,14 @@
   gtk3, # utils
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtypec";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "libtypec";
     repo = "libtypec";
-    rev = "libtypec-${version}";
+    rev = "libtypec-${finalAttrs.version}";
     hash = "sha256-XkT0bgBjoJTAFa9NLZdzbJSpchiXxKjeu88PeT/AlPY=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ johnazoidberg ];
   };
-}
+})

@@ -7,13 +7,13 @@
   pykeepass,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bundlewrap-keepass";
   version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-P41VtI8VIqSp1IXe7fzKDBGmmXmDLRm7v1qV1g35IC4";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
   };
-}
+})

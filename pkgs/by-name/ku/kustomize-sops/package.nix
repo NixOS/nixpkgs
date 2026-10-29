@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kustomize-sops";
   version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "viaduct-ai";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OYn31OBnpZF1jCO7OgGCZig/7G+V6PlljINsA67z2XM=";
   };
 
@@ -39,4 +39,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ starcraft66 ];
   };
-}
+})

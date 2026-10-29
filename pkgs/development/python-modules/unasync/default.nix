@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unasync";
   version = "0.6.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "unasync";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZRvmX1fSfSJ1HNEymzhIuUi3tdjFmUoidfr0rN8c7tk=";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unasync" ];
 
   meta = {
-    changelog = "https://github.com/python-trio/unasync/releases/tag/v${version}";
+    changelog = "https://github.com/python-trio/unasync/releases/tag/v${finalAttrs.version}";
     description = "Project that can transform your asynchronous code into synchronous code";
     homepage = "https://github.com/python-trio/unasync";
     license = with lib.licenses; [
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

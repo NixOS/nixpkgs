@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "picobox";
   version = "4.0.0";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "picobox";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JtrwUVo3b4G34OUShX4eJS2IVubl4vBmEtB/Jhk4eJI=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

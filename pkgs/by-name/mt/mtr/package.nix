@@ -11,20 +11,20 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mtr${lib.optionalString withGtk "-gui"}";
   version = "0.96";
 
   src = fetchFromGitHub {
     owner = "traviscross";
     repo = "mtr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Oit0jEm1g+jYCIoTak/mcdlF14GDkDOAWKmX2mYw30M=";
   };
 
   # we need this before autoreconfHook does its thing
   postPatch = ''
-    echo ${version} > .tarball-version
+    echo ${finalAttrs.version} > .tarball-version
   '';
 
   # and this after autoreconfHook has generated Makefile.in
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mtr";
     platforms = lib.platforms.unix;
   };
-}
+})

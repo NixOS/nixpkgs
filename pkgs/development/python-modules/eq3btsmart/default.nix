@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eq3btsmart";
   version = "2.4.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "EuleMitKeule";
     repo = "eq3btsmart";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jIQWh7z2bDwWXfirtIThVYUDvgaEMLoMumR4u3rnZ/0=";
   };
 
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/EuleMitKeule/eq3btsmart/releases/tag/${src.tag}";
+    changelog = "https://github.com/EuleMitKeule/eq3btsmart/releases/tag/${finalAttrs.src.tag}";
     description = "Python library that allows interaction with eQ-3 Bluetooth smart thermostats";
     homepage = "https://github.com/EuleMitKeule/eq3btsmart";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

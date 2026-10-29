@@ -10,7 +10,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastbencode";
   version = "0.3.11";
   pyproject = true;
@@ -18,12 +18,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "fastbencode";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hQwu0VKJ6tp155meE5JXbk5xEmcfktBHgUqVJYs2exM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-QHu3ryg7beYVBSWFxkX7CaJLcsrmGpGAm9Ee9ZHKTgk=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast implementation of bencode";
     homepage = "https://github.com/breezy-team/fastbencode";
-    changelog = "https://github.com/breezy-team/fastbencode/releases/tag/v${version}";
+    changelog = "https://github.com/breezy-team/fastbencode/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

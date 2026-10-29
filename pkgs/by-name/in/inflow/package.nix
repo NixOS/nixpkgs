@@ -7,14 +7,14 @@
   diffutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inflow";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "stephen-huan";
     repo = "inflow";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xKUqkrPwITai8g6U1NiNieAip/AzISgFfFtvR30hLNk=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     reflowWithLineLength =
-      runCommand "${pname}-test"
+      runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [ inflow ];
           buildInputs = [ diffutils ];
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

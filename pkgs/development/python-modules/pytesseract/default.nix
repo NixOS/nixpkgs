@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytesseract";
   version = "0.3.13";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "madmaze";
     repo = "pytesseract";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-gQMeck6ojlIwyiOCBBhzHHrjQfBMelVksVGd+fyxWZk=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     mainProgram = "pytesseract";
     maintainers = [ ];
   };
-}
+})

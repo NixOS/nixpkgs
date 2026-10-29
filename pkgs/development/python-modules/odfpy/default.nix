@@ -6,13 +6,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "odfpy";
   version = "1.4.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-23ZqblnFEDIS88yS7I3VCg86AnkCM+0LUhSLcNPEOOw=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/eea/odfpy";
     license = lib.licenses.asl20;
   };
-}
+})

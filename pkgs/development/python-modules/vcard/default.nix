@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vcard";
   version = "1.0.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "engmark";
     repo = "vcard";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-c6lj4sCXlQd5Bh5RLuZUIaTirVHtkRfYUAUtZI+1MeI=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     mainProgram = "vcard";
     maintainers = with lib.maintainers; [ l0b0 ];
   };
-}
+})

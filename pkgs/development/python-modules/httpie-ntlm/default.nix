@@ -6,13 +6,13 @@
   requests-ntlm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "httpie-ntlm";
   version = "1.0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-sfdXGAwL1gdB6hbPkfxT1H30AqXCh8SmGhSzNeoFUrM=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ kfollesdal ];
   };
-}
+})

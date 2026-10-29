@@ -7,13 +7,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cssbeautifier";
   version = "2.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LC/RKTQlYQKd6GsXRO+iMcn6/iYCPbyYih3rDKD1yEU=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
     description = "CSS unobfuscator and beautifier";
     mainProgram = "css-beautify";
     homepage = "https://github.com/beautifier/js-beautify";
-    changelog = "https://github.com/beautifier/js-beautify/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/beautifier/js-beautify/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

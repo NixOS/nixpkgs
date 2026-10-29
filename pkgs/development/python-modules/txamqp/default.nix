@@ -5,14 +5,14 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "txamqp";
   version = "0.8.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "txAMQP";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-ZEeixSlIdutYwGX+iTQpgOCaJpWfxxunAUyzMYlBqUk=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

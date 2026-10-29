@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "legacy-cgi";
   version = "2.6.4";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jackrosenthal";
     repo = "legacy-cgi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2CCYRRWP8FP54AcLnehJ0Kj3F3U4cz8vnesSj5EakdA=";
   };
 
@@ -28,10 +28,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/jackrosenthal/legacy-cgi/releases/tag/${src.tag}";
+    changelog = "https://github.com/jackrosenthal/legacy-cgi/releases/tag/${finalAttrs.src.tag}";
     description = "Fork of the standard library cgi and cgitb modules, being deprecated in PEP-594";
     homepage = "https://github.com/jackrosenthal/legacy-cgi";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

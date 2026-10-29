@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uwsgi-chunked";
   version = "0.1.8";
   pyproject = true;
@@ -13,13 +13,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "btimby";
     repo = "uwsgi-chunked";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5TNCnQhnT1gAblgs+AAW62HoNDPM54hpxgCnYl07j3I=";
   };
 
   postPatch = ''
     substituteInPlace uwsgi_chunked/version.py \
-      --replace-fail "0.1" "${version}"
+      --replace-fail "0.1" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
   };
-}
+})

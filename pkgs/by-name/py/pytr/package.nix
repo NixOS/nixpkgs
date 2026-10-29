@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pytr";
   version = "0.4.10";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xo/J0POH21mLm//+gpfhuxIGdKGHJpFbpL82TIDufrM=";
   };
 
@@ -55,11 +55,11 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "pytr" ];
 
   meta = {
-    changelog = "https://github.com/pytr-org/pytr/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytr-org/pytr/releases/tag/${finalAttrs.src.tag}";
     description = "Use TradeRepublic in terminal and mass download all documents";
     homepage = "https://github.com/pytr-org/pytr";
     license = lib.licenses.mit;
     mainProgram = "pytr";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-plugins";
   version = "1.1.1.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "click_plugins";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-1685hKmdJDwTGqGoKDMedjD0qIqXQf0FySeyBLz5ImE=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

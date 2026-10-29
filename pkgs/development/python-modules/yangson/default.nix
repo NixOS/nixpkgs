@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yangson";
   version = "1.7.8";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CZ-NIC";
     repo = "yangson";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-otvKjMsH2A4Zxs1ZeafTSDNUroSmxzOhw8P+V13uN88=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

@@ -31,14 +31,14 @@ let
     installFlags = prevAttrs.installFlags or [ ] ++ [ "PREFIX=$(out)" ];
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zeroc-ice";
   version = "3.7.11";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mpPmrmzCNHccBcPCZtrYYURTIBLC9ppGp4pMc1RFrWo=";
   };
 
@@ -114,4 +114,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

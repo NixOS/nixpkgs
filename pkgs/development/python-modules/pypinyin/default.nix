@@ -6,7 +6,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypinyin";
   version = "0.55.0";
   format = "setuptools";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozillazg";
     repo = "python-pinyin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Xd5dxEiaByjtZmlORyK4cBPfNyIcZwbF40SvEKZ24Ks=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
     description = "Chinese Characters to Pinyin - 汉字转拼音";
     mainProgram = "pypinyin";
     homepage = "https://github.com/mozillazg/python-pinyin";
-    changelog = "https://github.com/mozillazg/python-pinyin/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/mozillazg/python-pinyin/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
   };
-}
+})

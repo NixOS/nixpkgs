@@ -5,7 +5,7 @@
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybox2d";
   version = "2.3.10";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pybox2d";
     repo = "pybox2d";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-yjLFvsg8GQLxjN1vtZM9zl+kAmD4+eS/vzRkpj0SCjY=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

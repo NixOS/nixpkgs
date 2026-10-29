@@ -12,7 +12,7 @@
   wtforms,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-mongoengine";
   version = "1.0.0-unstable-2022-08-16";
   pyproject = true;
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
-    changelog = "https://github.com/MongoEngine/flask-mongoengine/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/MongoEngine/flask-mongoengine/blob/${finalAttrs.src.rev}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

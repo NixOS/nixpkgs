@@ -10,7 +10,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmsdials";
   version = "1.5.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cms-DQM";
     repo = "dials-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bYFADE6Fi0hQ0IaaeN3RhtPPQwWqhhRbNyGOUPLksp4=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

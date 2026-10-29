@@ -7,7 +7,7 @@
   libuv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyuv";
   version = "1.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "saghul";
     repo = "pyuv";
-    rev = "pyuv-${version}";
+    rev = "pyuv-${finalAttrs.version}";
     hash = "sha256-mbuE3/jQ/ShtEUaMMSWHdn/o7tmRXAOldtSYT33jPPI=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

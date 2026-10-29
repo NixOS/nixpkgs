@@ -5,7 +5,7 @@
   matplotlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mpldatacursor";
   version = "0.7.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joferkington";
     repo = "mpldatacursor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qmXjnZmM1iLt/Zdjd22lJaGySUQjMM07wfJB0w3lNEQ=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bzizou ];
   };
-}
+})

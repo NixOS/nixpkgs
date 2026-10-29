@@ -21,14 +21,14 @@ let
   };
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fluxcd";
   inherit vendorHash version;
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = srcHash;
   };
 
@@ -44,7 +44,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.VERSION=${version}"
+    "-X main.VERSION=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/flux" ];
@@ -57,7 +57,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/flux --version | grep ${version} > /dev/null
+    $out/bin/flux --version | grep ${finalAttrs.version} > /dev/null
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -70,7 +70,7 @@ buildGoModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://github.com/fluxcd/flux2/releases/tag/v${version}";
+    changelog = "https://github.com/fluxcd/flux2/releases/tag/v${finalAttrs.version}";
     description = "Open and extensible continuous delivery solution for Kubernetes";
     downloadPage = "https://github.com/fluxcd/flux2/";
     longDescription = ''
@@ -88,4 +88,4 @@ buildGoModule rec {
     ];
     mainProgram = "flux";
   };
-}
+})

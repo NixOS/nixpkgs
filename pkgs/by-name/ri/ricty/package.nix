@@ -8,12 +8,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ricty";
   version = "4.1.1";
 
   src = fetchurl {
-    url = "https://rictyfonts.github.io/files/ricty_generator-${version}.sh";
+    url = "https://rictyfonts.github.io/files/ricty_generator-${finalAttrs.version}.sh";
     sha256 = "03fngb8f5hl7ifigdm5yljhs4z2x80cq8y8kna86d07ghknhzgw6";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.mikoim ];
   };
-}
+})

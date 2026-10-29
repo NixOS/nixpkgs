@@ -15,7 +15,7 @@
   systemd-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "proton-vpn-daemon";
   version = "0.13.6";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-daemon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HlRxTBLiuboKvMTL3NgX7i/fMBvJqIB4O12tJX1Lv9U=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

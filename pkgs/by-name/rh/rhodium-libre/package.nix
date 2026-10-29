@@ -5,14 +5,14 @@
   installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "RhodiumLibre";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "DunwichType";
     repo = "RhodiumLibre";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YCQvUdjEAj4G71WCRCM0+NwiqRqwt1Ggeg9jb/oWEsY=";
   };
 
@@ -25,4 +25,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

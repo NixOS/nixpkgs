@@ -5,7 +5,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ibis";
   version = "3.3.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dmulholl";
     repo = "ibis";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-9ELOAQhD6KXyTN2U0lGmNxxSzx9o2QIt+CNa6i8o5xs=";
   };
 
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = [ ];
   };
-}
+})

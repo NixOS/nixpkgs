@@ -10,7 +10,7 @@
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kegtron-ble";
   version = "1.0.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "kegtron-ble";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aPWf+EHr6Et4OHJ8ZN9M1NxKhaf7piEQilzAsBO3d5E=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for Kegtron BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/kegtron-ble";
-    changelog = "https://github.com/Bluetooth-Devices/kegtron-ble/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/kegtron-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -9,14 +9,14 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tela-icon-theme";
   version = "2026-07-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "tela-icon-theme";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-jadkfS39N51fYouxn7xFQ29BZOY0ccpKJY0Br4s/Guo=";
   };
 
@@ -53,10 +53,10 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
-    changelog = "https://github.com/vinceliuice/Tela-icon-theme/releases/tag/${src.rev}";
+    changelog = "https://github.com/vinceliuice/Tela-icon-theme/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     # darwin systems use case-insensitive filesystems that cause hash mismatches
     platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
     maintainers = [ lib.maintainers.novalkun ];
   };
-}
+})

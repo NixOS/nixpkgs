@@ -16,7 +16,7 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "staticjinja";
   version = "5.0.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "staticjinja";
     repo = "staticjinja";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-LfJTQhZtnTOm39EWF1m2MP5rxz/5reE0G1Uk9L7yx0w=";
   };
 
@@ -62,4 +62,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

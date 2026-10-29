@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "managesieve";
   version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LVwe0Pn6YPIAuoIaxXMfvCbOfS4NAjozkrdMNZDq+uU=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ dadada ];
     mainProgram = "sieveshell";
   };
-}
+})

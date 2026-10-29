@@ -12,7 +12,7 @@
   home-assistant-frontend,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "amitfin";
   domain = "oref_alert";
   version = "7.0.2";
@@ -20,7 +20,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "amitfin";
     repo = "oref_alert";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-k+E6nLsUkAp6bguJvgaG+rIAP4CtedDAwk3AImbWaEw=";
   };
 
@@ -53,10 +53,10 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/amitfin/oref_alert/releases/tag/v${version}";
+    changelog = "https://github.com/amitfin/oref_alert/releases/tag/v${finalAttrs.version}";
     description = "Israeli Oref Alerts";
     homepage = "https://github.com/amitfin/oref_alert";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };
-}
+})

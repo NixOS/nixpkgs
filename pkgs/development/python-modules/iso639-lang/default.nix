@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iso639-lang";
   version = "2.6.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LBeaudoux";
     repo = "iso639";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ORqSrf84b/ddpCUi9e43ur6C+XcJjQGM+fmJ8e/wFus=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast, comprehensive ISO 639 library for individual languages and language groups";
     homepage = "https://github.com/LBeaudoux/iso639";
-    changelog = "https://github.com/LBeaudoux/iso639/releases/tag/v${version}";
+    changelog = "https://github.com/LBeaudoux/iso639/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sophronesis ];
   };
-}
+})

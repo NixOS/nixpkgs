@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgpy-dtc";
   version = "0.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DigitalTrustCenter";
     repo = "PGPy_dtc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0zv2gtgp/iGDQescaDpng1gqbgjv7iXFvtwEt3YIPy4=";
   };
 
@@ -40,9 +40,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/DigitalTrustCenter/PGPy_dtc";
-    changelog = "https://github.com/DigitalTrustCenter/PGPy_dtc/releases/tag/${src.tag}";
+    changelog = "https://github.com/DigitalTrustCenter/PGPy_dtc/releases/tag/${finalAttrs.src.tag}";
     description = "Pretty Good Privacy for Python";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ networkexception ];
   };
-}
+})

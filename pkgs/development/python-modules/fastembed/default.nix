@@ -21,7 +21,7 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastembed";
   version = "0.8.0";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oHuu2hlEdmMjA6MDU4YQ5slu6NoYwQpsJI7mvFBSBhE=";
   };
 
@@ -64,10 +64,10 @@ buildPythonPackage rec {
   meta = {
     description = "Fast, Accurate, Lightweight Python library to make State of the Art Embedding";
     homepage = "https://github.com/qdrant/fastembed";
-    changelog = "https://github.com/qdrant/fastembed/releases/tag/${src.tag}";
+    changelog = "https://github.com/qdrant/fastembed/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
     badPlatforms = [ "aarch64-linux" ];
   };
-}
+})

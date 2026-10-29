@@ -5,14 +5,14 @@
   dotnetCorePackages,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "bicep";
   version = "0.47.16";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-V8YpTc7GqP42a+Z/cKW/R4WrwbCyPY0+kYuotA4ec4E=";
   };
 
@@ -45,9 +45,9 @@ buildDotnetModule rec {
   meta = {
     description = "Domain Specific Language (DSL) for deploying Azure resources declaratively";
     homepage = "https://github.com/Azure/bicep/";
-    changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
+    changelog = "https://github.com/Azure/bicep/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "bicep";
   };
-}
+})

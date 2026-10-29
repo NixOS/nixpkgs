@@ -9,13 +9,13 @@
   junit-xml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "refery";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha512-ju0lqCSg0zcZNqRXDmFX6X1ugBocpmHMBWJApO6Tzhm/tLMQTKy2RpB4C8fkKCEWA2mYX4w1dLdHe68hZixwkQ==";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ rostan-t ];
     license = lib.licenses.mit;
   };
-}
+})

@@ -8,13 +8,13 @@
   sseclient-py,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-nest";
   version = "4.2.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-01hoZbDssbJ10NA72gOtlzjZMGjsUBUoVDVM35uAOLU=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.cc-by-nc-sa-40;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

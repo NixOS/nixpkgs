@@ -11,7 +11,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opencamlib";
   version = "2023.01.11";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aewallin";
     repo = "opencamlib";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pUj71PdWo902dqF9O6SLnpvFooFU2OfLBv8hAVsH/iA=";
   };
 
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "2022.12.18"' 'version = "${version}"'
+      --replace-fail 'version = "2022.12.18"' 'version = "${finalAttrs.version}"'
   '';
 
   dontUseCmakeConfigure = true;
-  env.CMAKE_ARGS = "-DVERSION_STRING=${version} -DBoost_USE_STATIC_LIBS=OFF";
+  env.CMAKE_ARGS = "-DVERSION_STRING=${finalAttrs.version} -DBoost_USE_STATIC_LIBS=OFF";
 
   pythonImportsCheck = [ "opencamlib" ];
 
@@ -70,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ tomjnixon ];
   };
-}
+})

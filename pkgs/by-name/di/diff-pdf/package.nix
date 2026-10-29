@@ -10,14 +10,14 @@
   wxwidgets_3_2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diff-pdf";
   version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "diff-pdf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Cx1gp7wazaXB/LcUTe7Pas8iLl4TU1Jyt/1AeTu6YEA=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "diff-pdf";
   };
-}
+})

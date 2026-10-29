@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "matchpy";
   version = "0.5.5"; # Don't upgrade to 4.3.1, this tag is very old
   format = "setuptools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HPAC";
     repo = "matchpy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-n5rXIjqVQZzEbfIZVQiGLh2PR1DHAJ9gumcrbvwnasA=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

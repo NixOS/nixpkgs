@@ -11,7 +11,7 @@
   cacert,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-scim2-server";
   version = "0.1.6";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Pypi doesn't link a VCS repository
   src = fetchPypi {
     pname = "pytest_scim2_server";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Diu8TPPELQG30NZvafI/t7IR+HzkI0sPsjcUFxwVPLw=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

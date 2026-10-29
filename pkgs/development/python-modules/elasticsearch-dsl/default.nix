@@ -8,14 +8,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elasticsearch-dsl";
   version = "8.18.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "elasticsearch_dsl";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-djRl26nq4Wat0QVn6STGVzCqEigZsIv+mgd+kbE7MNE=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       the official low-level client (elasticsearch-py).
     '';
     homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
-    changelog = "https://github.com/elastic/elasticsearch-dsl-py/blob/v${version}/Changelog.rst";
+    changelog = "https://github.com/elastic/elasticsearch-dsl-py/blob/v${finalAttrs.version}/Changelog.rst";
     license = lib.licenses.asl20;
   };
-}
+})

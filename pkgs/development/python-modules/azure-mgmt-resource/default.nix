@@ -9,14 +9,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-resource";
   version = "24.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_resource";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-z2uJlfzdQHrJ/x3UdAhxKUKaHZDbsax3+XwZuWI3smU=";
   };
 
@@ -39,11 +39,11 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource_${version}/sdk/resources/azure-mgmt-resource/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource_${finalAttrs.version}/sdk/resources/azure-mgmt-resource/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       olcai
       maxwilson
     ];
   };
-}
+})

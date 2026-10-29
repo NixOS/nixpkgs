@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zfs_exporter";
   version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "pdf";
     repo = "zfs_exporter";
-    rev = "v" + version;
+    rev = "v" + finalAttrs.version;
     hash = "sha256-KG812Ta5FOsroMM4jHAnttHFY+7ifYCyTUWXKsaoMhY=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
     "-X github.com/prometheus/common/version.Revision=unknown"
     "-X github.com/prometheus/common/version.Branch=unknown"
     "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
@@ -38,4 +38,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

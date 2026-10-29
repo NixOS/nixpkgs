@@ -26,14 +26,14 @@
   withGTK2 ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-gtk";
   version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = pname;
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     hash = "sha256-ddXMkk1pQhFCOSzDbRWi/VDWtxqqKhMM4AnVFBGCOyA=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
   };
-}
+})

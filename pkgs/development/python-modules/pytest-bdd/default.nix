@@ -11,7 +11,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-bdd";
   version = "7.1.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-bdd";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PC4VSsUU5qEFp/C/7OTgHINo8wmOo0w2d1Hpe0EnFzE=";
   };
 
@@ -46,9 +46,9 @@ buildPythonPackage rec {
   meta = {
     description = "BDD library for the pytest";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
-    changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/pytest-dev/pytest-bdd/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jm2dev ];
     mainProgram = "pytest-bdd";
   };
-}
+})

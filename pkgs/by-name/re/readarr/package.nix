@@ -29,12 +29,12 @@ let
     }
     ."${arch}-${os}_hash";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "readarr";
   version = "0.4.18.2805";
 
   src = fetchurl {
-    url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";
+    url = "https://github.com/Readarr/Readarr/releases/download/v${finalAttrs.version}/Readarr.develop.${finalAttrs.version}.${os}-core-${arch}.tar.gz";
     sha256 = hash;
   };
 
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}/.
+    mkdir -p $out/{bin,share/${finalAttrs.pname}-${finalAttrs.version}}
+    cp -r * $out/share/${finalAttrs.pname}-${finalAttrs.version}/.
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Readarr \
-      --add-flags "$out/share/${pname}-${version}/Readarr.dll" \
+      --add-flags "$out/share/${finalAttrs.pname}-${finalAttrs.version}/Readarr.dll" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           curl
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

@@ -7,7 +7,7 @@
   tomli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tomli-w";
   version = "1.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "tomli-w";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Du37ySvAL9iwGec5wbWxwLTYm+kcDSOs5OJ5Sw7R87g=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Write-only counterpart to Tomli, which is a read-only TOML parser";
     homepage = "https://github.com/hukkin/tomli-w";
-    changelog = "https://github.com/hukkin/tomli-w/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/hukkin/tomli-w/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

@@ -5,12 +5,12 @@
   callPackage,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "junicode";
   version = "2.222";
 
   src = fetchzip {
-    url = "https://github.com/psb1558/Junicode-font/releases/download/v${version}/Junicode_${version}.zip";
+    url = "https://github.com/psb1558/Junicode-font/releases/download/v${finalAttrs.version}/Junicode_${finalAttrs.version}.zip";
     hash = "sha256-fAhK6IAw1UL0Q2CusNmN+LedySZnBrfUAHMQJoHTRl4=";
   };
 
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm 444 -t $out/share/fonts/opentype OTF/*.otf
     install -Dm 444 -t $out/share/fonts/woff2 WOFF2/*.woff2
 
-    install -Dm 444 -t $doc/share/doc/${pname}-${version} docs/*.pdf
+    install -Dm 444 -t $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version} docs/*.pdf
 
     install -Dm 444 -t $tex/tex/latex/junicode TeX/junicode.sty
     install -Dm 444 -t $tex/tex/latex/junicodevf TeX/junicodevf.{sty,lua}
@@ -60,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ ivan-timokhin ];
     license = lib.licenses.ofl;
   };
-}
+})

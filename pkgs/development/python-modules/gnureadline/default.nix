@@ -6,14 +6,14 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "8.3.3";
   format = "setuptools";
   pname = "gnureadline";
   disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CXI5K9LzEkTi2YEXgkb+i3Kch2ZFT9rrJ1lGrEe36f0=";
   };
 
@@ -27,4 +27,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/ludwigschwardt/python-gnureadline";
     license = lib.licenses.gpl3;
   };
-}
+})

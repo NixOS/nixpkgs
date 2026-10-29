@@ -61,7 +61,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xyce";
   inherit version;
 
@@ -173,7 +173,7 @@ stdenv.mkDerivation rec {
     pushd ../../${xyce_src.name}
     local docFiles=("doc/Users_Guide/Xyce_UG"
       "doc/Reference_Guide/Xyce_RG"
-      "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
+      "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor finalAttrs.version}/Release_Notes_${lib.versions.majorMinor finalAttrs.version}")
     # hotfix for: https://github.com/Xyce/Xyce/issues/177
     substituteInPlace doc/Reference_Guide/Xyce_RG_macros.tex \
       --replace-fail "\\def\\device{\\goodbreak" "\\def\\device{\\item[]\\goodbreak"
@@ -184,7 +184,7 @@ stdenv.mkDerivation rec {
       sed -i -E "s/\\includegraphics\[height=(0.[1-9]in)\]\{$img\}/\\mbox\{\\\\rule\{0mm\}\{\1\}\}/" ''${docFiles[2]}.tex
     done
 
-    install -d $doc/share/doc/${pname}-${version}/
+    install -d $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}/
     for d in ''${docFiles[@]}; do
       # Use a public document class
       sed -i -E 's/\\documentclass\[11pt,report\]\{SANDreport\}/\\documentclass\[11pt,letterpaper\]\{scrreprt\}/' $d.tex
@@ -192,7 +192,7 @@ stdenv.mkDerivation rec {
       sed -i -E 's/\\SANDauthor/\\author/' $d.tex
       pushd $(dirname $d)
       make
-      install -t $doc/share/doc/${pname}-${version}/ $(basename $d.pdf)
+      install -t $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}/ $(basename $d.pdf)
       popd
     done
     popd
@@ -212,4 +212,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fbeffa ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

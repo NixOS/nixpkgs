@@ -13,7 +13,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "regenmaschine";
   version = "2024.03.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "regenmaschine";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RdmK6oK92j4xqLoAjjqlONYu3IfNNWudo4v7jcc+VGU=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for interacting with RainMachine smart sprinkler controllers";
     homepage = "https://github.com/bachya/regenmaschine";
-    changelog = "https://github.com/bachya/regenmaschine/releases/tag/${version}";
+    changelog = "https://github.com/bachya/regenmaschine/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

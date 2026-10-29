@@ -9,7 +9,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-spelling";
   version = "8.0.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "spelling";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-f9n3hp+d3UvfVt2KmhxYm80XsEnIx3EVkdrQJxWDxks=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx spelling extension";
     homepage = "https://github.com/sphinx-contrib/spelling";
-    changelog = "https://github.com/sphinx-contrib/spelling/blob/${src.tag}/docs/source/history.rst";
+    changelog = "https://github.com/sphinx-contrib/spelling/blob/${finalAttrs.src.tag}/docs/source/history.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

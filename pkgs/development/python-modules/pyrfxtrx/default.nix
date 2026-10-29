@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrfxtrx";
   version = "0.32.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyRFXtrx";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6gD6ch7DyaD9nCY/VfyJHmV4gEDPsDfVKjNaNedmVVE=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to communicate with the RFXtrx family of devices";
     homepage = "https://github.com/Danielhiversen/pyRFXtrx";
-    changelog = "https://github.com/Danielhiversen/pyRFXtrx/releases/tag/${src.tag}";
+    changelog = "https://github.com/Danielhiversen/pyRFXtrx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

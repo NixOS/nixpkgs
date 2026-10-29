@@ -12,12 +12,12 @@
   pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mfc9140cdnlpr";
   version = "1.1.2-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf100405/${pname}-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf100405/${finalAttrs.pname}-${finalAttrs.version}.i386.deb";
     sha256 = "1wqx8njrv078fc3vlq90qyrfg3cw9kr9m6f3qvfnkhq1f95fbslh";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

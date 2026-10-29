@@ -8,7 +8,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tuya-iot-py-sdk";
   version = "0.6.6";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tuya";
     repo = "tuya-iot-python-sdk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KmSVa71CM/kNhzE4GznaxISGmIaV+UcTSn3v+fmxmrQ=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

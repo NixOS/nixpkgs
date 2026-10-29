@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dosis";
   version = "1.007";
 
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README.md FONTLOG.txt
 
     runHook postInstall
   '';
@@ -42,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

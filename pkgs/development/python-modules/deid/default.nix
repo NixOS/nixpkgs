@@ -35,7 +35,7 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deid";
   version = "0.4.6";
   pyproject = true;
@@ -68,9 +68,9 @@ buildPythonPackage rec {
   meta = {
     description = "Best-effort anonymization for medical images";
     mainProgram = "deid";
-    changelog = "https://github.com/pydicom/deid/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pydicom/deid/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     homepage = "https://pydicom.github.io/deid";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

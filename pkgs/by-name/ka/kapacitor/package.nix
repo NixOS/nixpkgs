@@ -11,7 +11,7 @@
 
 let
   libflux_version = "0.171.0";
-  flux = rustPlatform.buildRustPackage rec {
+  flux = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "libflux";
     version = "${libflux_version}";
     src = fetchFromGitHub {
@@ -42,7 +42,7 @@ let
         hash = "sha256-Fb4CuH9ZvrPha249dmLLI8MqSNQRKqKPxPbw2pjqwfY=";
       })
     ];
-    sourceRoot = "${src.name}/libflux";
+    sourceRoot = "${finalAttrs.src.name}/libflux";
 
     cargoHash = "sha256-kbI1uUDE8JyFFtwV5k0EeeNGCZFQLXLobW/MilHX2Sg=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -66,16 +66,16 @@ let
     '';
 
     __structuredAttrs = true;
-  };
+  });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kapacitor";
   version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "kapacitor";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vxaLfJq0NFAJst0/AEhNJUl9dAaZY3blZAFthseMSX0=";
   };
 
@@ -126,4 +126,4 @@ buildGoModule rec {
       totoroot
     ];
   };
-}
+})

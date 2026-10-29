@@ -22,14 +22,14 @@
   gsettings-desktop-schemas,
   gettext,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-pomodoro";
   version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "focustimerhq";
     repo = "FocusTimer";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1G0Sv6uR4rE+/TZqEM57mCdBaXoJNpC0cznY4pnPEa4=";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     # Our glib setup hooks moves GSettings schemas to a subdirectory to prevent conflicts.
     # We need to patch the build script so that the extension can find them.
     (replaceVars ./fix-schema-path.patch {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
     })
   ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # gnome.post_install(glib_compile_schemas) used by package tries to compile in
   # the wrong dir.
   preFixup = ''
-    glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    glib-compile-schemas ${glib.makeSchemaPath "$out" "${finalAttrs.pname}-${finalAttrs.version}"}
   '';
 
   nativeBuildInputs = [
@@ -89,4 +89,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

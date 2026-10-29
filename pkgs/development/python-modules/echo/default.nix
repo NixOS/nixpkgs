@@ -14,7 +14,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "echo";
   version = "0.12.1";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "glue-viz";
     repo = "echo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-36uT2FpOzwuNMM4GhlTuYCSo8j7waIQgWOCN6maKaiY=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ifurther ];
   };
-}
+})

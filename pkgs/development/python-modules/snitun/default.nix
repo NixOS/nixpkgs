@@ -12,7 +12,7 @@
   trustme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "snitun";
   version = "0.47.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "snitun";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-l7iXTXY6Dq1LV4ju6/WlipTSeybne33tiFYiwgy+DuM=";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -62,10 +62,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "SNI proxy with TCP multiplexer";
-    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${src.tag}";
+    changelog = "https://github.com/NabuCasa/snitun/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/nabucasa/snitun";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
     platforms = lib.platforms.linux;
   };
-}
+})

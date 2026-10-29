@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ds-store";
   version = "1.3.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "al45tair";
     repo = "ds_store";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UqBZ6w9y+eOQ+OdhXJReT4GwaxEbrGFvmUQMrNyBdjU=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "edk2-pytool-library";
   version = "0.23.17";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VQJ549UE0zhrSh6Xu/QjwHcK/xdT6wYDJ3o+5XH3DU8=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library package that supports UEFI development";
     homepage = "https://github.com/tianocore/edk2-pytool-library";
-    changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/${src.tag}";
+    changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2Patent;
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.linux;
   };
-}
+})

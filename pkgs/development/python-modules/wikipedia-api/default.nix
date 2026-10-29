@@ -12,7 +12,7 @@
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wikipedia-api";
   version = "0.16.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martin-majlis";
     repo = "Wikipedia-API";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UpRC/Itt//lFhXXtxAlzpqKwj54TZ8MSNm6pYnpyzzU=";
   };
 
@@ -57,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for Wikipedia";
     homepage = "https://github.com/martin-majlis/Wikipedia-API";
-    changelog = "https://github.com/martin-majlis/Wikipedia-API/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/martin-majlis/Wikipedia-API/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

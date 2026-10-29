@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ajsonrpc";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eRusGPC/De4QkZRkTxUc+Lf/UpxLjWI5rEgQSjJRoZ8=";
   };
 
@@ -25,9 +25,9 @@ buildPythonPackage rec {
   meta = {
     description = "Async JSON-RPC 2.0 protocol and asyncio server";
     homepage = "https://github.com/pavlov99/ajsonrpc";
-    changelog = "https://github.com/pavlov99/ajsonrpc/releases/tag/${version}";
+    changelog = "https://github.com/pavlov99/ajsonrpc/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "async-json-rpc-server";
   };
-}
+})

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cfgv";
   version = "3.5.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "cfgv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ccCalTNVEHvh1gKhQgceD/yAScIEQy3ZKqndoWs7FQQ=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

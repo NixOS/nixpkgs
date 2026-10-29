@@ -46,12 +46,12 @@ let
       }
       .${firewall};
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miniupnpd";
   version = "2.3.10";
 
   src = fetchurl {
-    url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
+    url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-+cNO02MvtgzSSN1Yl72YR5oQOnVoiwVsovBp5oqzKYc=";
   };
 
@@ -125,4 +125,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     mainProgram = "miniupnpd";
   };
-}
+})

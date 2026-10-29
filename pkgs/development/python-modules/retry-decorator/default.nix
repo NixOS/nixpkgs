@@ -5,7 +5,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "retry-decorator";
   version = "1.1.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pnpnpn";
     repo = "retry-decorator";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0dZq4YbPcH4ItyMnpF7B20YYLtzwniJClBK9gRndU1M=";
   };
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Decorator for retrying when exceptions occur";
     homepage = "https://github.com/pnpnpn/retry-decorator";
-    changelog = "https://github.com/pnpnpn/retry-decorator/releases/tag/v${version}";
+    changelog = "https://github.com/pnpnpn/retry-decorator/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
   };
-}
+})

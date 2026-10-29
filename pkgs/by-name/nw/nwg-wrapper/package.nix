@@ -9,7 +9,7 @@
   wlr-randr,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "nwg-wrapper";
   version = "0.1.3";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-wrapper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-GKDAdjO67aedCEFHKDukQ+oPMomTPwFE/CvJu112fus=";
   };
 
@@ -57,4 +57,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

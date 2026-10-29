@@ -11,12 +11,12 @@
   makeWrapper, # , mythes, boost
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.5.3";
   pname = "lyx";
 
   src = fetchurl {
-    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.5.x/lyx-${version}.tar.xz";
+    url = "ftp://ftp.lyx.org/pub/lyx/stable/2.5.x/lyx-${finalAttrs.version}.tar.xz";
     hash = "sha256-hfqrNZFZdL4XAcvMahhgajTmLMfIbgM28VKsvGFWqKY=";
   };
 
@@ -53,11 +53,11 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [ " --prefix PATH : ${python3}/bin" ];
 
   meta = {
-    changelog = "https://www.lyx.org/announce/${lib.replaceString "." "_" version}.txt";
+    changelog = "https://www.lyx.org/announce/${lib.replaceString "." "_" finalAttrs.version}.txt";
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "https://www.lyx.org";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.vcunat ];
     platforms = lib.platforms.linux;
   };
-}
+})

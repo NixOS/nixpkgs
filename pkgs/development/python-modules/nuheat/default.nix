@@ -9,7 +9,7 @@
   responses,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nuheat";
   version = "1.0.1";
   format = "setuptools";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "broox";
     repo = "python-nuheat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EsPuwILfKc1Bpvu0Qos7yooC3dBaqf46lWhiSZdu3sc=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interact with NuHeat Signature and Mapei Mapeheat radiant floor thermostats";
     homepage = "https://github.com/broox/python-nuheat";
-    changelog = "https://github.com/broox/python-nuheat/releases/tag/${version}";
+    changelog = "https://github.com/broox/python-nuheat/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ovh";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0xHwjsF7YsxhIWs9rPA+6J+VodqQNqWV2sKfydeYuCc=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Thin wrapper around OVH's APIs";
     homepage = "https://github.com/ovh/python-ovh";
-    changelog = "https://github.com/ovh/python-ovh/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ovh/python-ovh/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})

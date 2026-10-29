@@ -7,7 +7,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imgdiff";
   version = "1.8.0";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "imgdiff";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Ko2m6rLKUmRveHIeIylGWFXyDwlf3E7mkNHKxk7HBbA=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
     description = "Compare two images side-by-side";
     mainProgram = "imgdiff";
     homepage = "https://github.com/mgedmin/imgdiff";
-    changelog = "https://github.com/mgedmin/imgdiff/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/mgedmin/imgdiff/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "robotframework-databaselibrary";
   version = "2.4.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MarketSquare";
     repo = "Robotframework-Database-Library";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RGTx5Xn40MHr5M6DUb3dkR2OU7B0JKuFYP1o18o3Ct4=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/MarketSquare/Robotframework-Database-Library/releases/tag/${src.tag}";
+    changelog = "https://github.com/MarketSquare/Robotframework-Database-Library/releases/tag/${finalAttrs.src.tag}";
     description = "Database Library contains utilities meant for Robot Framework";
     homepage = "https://github.com/MarketSquare/Robotframework-Database-Library";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ talkara ];
   };
-}
+})

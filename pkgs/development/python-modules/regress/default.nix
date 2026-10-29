@@ -7,14 +7,14 @@
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "regress";
   version = "2026.9.1";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-57VHOGv5e4KiPmJHEnJ0JJLAst5izw7pgkf9N8xC8Wk=";
   };
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-ljDpS7DhMRxSzY4VVOEUYZfw3dmDO5JkmjD1BSZLBks=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
   };
-}
+})

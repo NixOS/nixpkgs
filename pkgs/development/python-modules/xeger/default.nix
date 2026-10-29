@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xeger";
   version = "0.3.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crdoconnor";
     repo = "xeger";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XujytGzBwJ59C5VihuFUJUxqhyjOIU4sI60hXUqLQvM=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

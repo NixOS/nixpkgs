@@ -19,7 +19,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "b2sdk";
   version = "2.12.0";
   pyproject = true;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JzJ83+W9k5ys8dj0Q3X4MY+GH4m8/crvKmeQKOttspM=";
   };
 
@@ -68,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
-    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Backblaze/b2-sdk-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pmw ];
   };
-}
+})

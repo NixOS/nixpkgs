@@ -9,14 +9,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-rtd-theme";
   version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_rtd_theme";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-tEJ28sJ26Qkjmk9slVqmZ6qv63hZeSOxxgurx223jkw=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Sphinx theme for readthedocs.org";
     homepage = "https://github.com/readthedocs/sphinx_rtd_theme";
-    changelog = "https://github.com/readthedocs/sphinx_rtd_theme/blob/${version}/docs/changelog.rst";
+    changelog = "https://github.com/readthedocs/sphinx_rtd_theme/blob/${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.mit;
   };
-}
+})

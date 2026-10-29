@@ -8,13 +8,13 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zstd";
   version = "1.5.7.3";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-QD5SBfSsBLkuawzaZUvi9R3iaCKKDbAGe8CH+qzy9JU=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     # Running tests via setup.py triggers an attempt to recompile with the vendored zstd
     ZSTD_EXTERNAL = 1;
     VERSION = zstd.version;
-    PKG_VERSION = version;
+    PKG_VERSION = finalAttrs.version;
   };
 
   nativeCheckInputs = [ pytest ];
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ eadwu ];
   };
-}
+})

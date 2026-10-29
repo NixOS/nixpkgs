@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "restrictedpython";
   version = "8.5";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "RestrictedPython";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SOvKMhpmA5PnuR01o6MfHApRmd0jJ/qjabPWptnByrU=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Restricted execution environment for Python to run untrusted code";
     homepage = "https://github.com/zopefoundation/RestrictedPython";
-    changelog = "https://github.com/zopefoundation/RestrictedPython/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/RestrictedPython/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ juaningan ];
   };
-}
+})

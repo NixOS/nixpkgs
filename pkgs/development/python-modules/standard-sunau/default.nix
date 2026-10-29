@@ -6,7 +6,7 @@
   audioop-lts,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "standard-sunau";
   version = "3.13.0";
   pyproject = true;
@@ -14,11 +14,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "youknowone";
     repo = "python-deadlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vhGFTd1yXL4Frqli5D1GwOatwByDjvcP8sxgkdu6Jqg=";
   };
 
-  sourceRoot = "${src.name}/sunau";
+  sourceRoot = "${finalAttrs.src.name}/sunau";
 
   build-system = [
     setuptools
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.psfl;
     maintainers = [ ];
   };
-}
+})

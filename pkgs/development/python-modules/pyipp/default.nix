@@ -15,7 +15,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyipp";
   version = "0.17.2";
   pyproject = true;
@@ -23,13 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-ipp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YlIc/FNM3SdYQj0DN0if3R7h0383V5CHGpD7FHErWhA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -55,10 +55,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyipp" ];
 
   meta = {
-    changelog = "https://github.com/ctalkington/python-ipp/releases/tag/${version}";
+    changelog = "https://github.com/ctalkington/python-ipp/releases/tag/${finalAttrs.version}";
     description = "Asynchronous Python client for Internet Printing Protocol (IPP)";
     homepage = "https://github.com/ctalkington/python-ipp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

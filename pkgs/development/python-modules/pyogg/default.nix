@@ -11,14 +11,14 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyogg";
   version = "0.6.14a1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyOgg";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-gpSzSqWckCAMRjDCzEpbhEByCRQejl0GnXpb41jpQmI=";
   };
 
@@ -63,4 +63,4 @@ buildPythonPackage rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ pmiddend ];
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiousbwatcher";
   version = "1.1.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "aiousbwatcher";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kCuY4+pdfnO8BuYSQjZEyGxSaCwVYXRHWYhnbzxlDzM=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Watch for USB devices to be plugged and unplugged";
     homepage = "https://github.com/Bluetooth-Devices/aiousbwatcher";
-    changelog = "https://github.com/Bluetooth-Devices/aiousbwatcher/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/aiousbwatcher/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

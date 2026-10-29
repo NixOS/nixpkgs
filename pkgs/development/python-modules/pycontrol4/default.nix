@@ -9,7 +9,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycontrol4";
   version = "2.0.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lawtancool";
     repo = "pyControl4";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4qgyn2ekxo0pjPixfNpRqHE+jgsNQGk9fbESbUTDxMg=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/lawtancool/pyControl4/releases/tag/v${version}";
+    changelog = "https://github.com/lawtancool/pyControl4/releases/tag/v${finalAttrs.version}";
     description = "Python 3 asyncio package for interacting with Control4 systems";
     homepage = "https://github.com/lawtancool/pyControl4";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

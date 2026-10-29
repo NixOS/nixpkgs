@@ -19,14 +19,14 @@
   onetbb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cortex-command-community-project";
   version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "cortex-command-community";
     repo = "Cortex-Command-Community-Project";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-srbV6Nh+ecyV0dkY835vhzpMSzmnvANym453L72cmGI=";
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       This is a community-driven effort to continue the development of Cortex Command.
     '';
     homepage = "https://cortex-command-community.github.io/";
-    changelog = "https://github.com/cortex-command-community/Cortex-Command-Community-Project/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/cortex-command-community/Cortex-Command-Community-Project/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       agpl3Only # Cortex Command Community Project
       unfreeRedistributable # fmod
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     mainProgram = "CortexCommand";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

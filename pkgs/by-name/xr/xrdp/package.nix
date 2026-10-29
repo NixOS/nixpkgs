@@ -31,14 +31,14 @@
 }:
 
 let
-  xorgxrdp = stdenv.mkDerivation rec {
+  xorgxrdp = stdenv.mkDerivation (finalAttrs: {
     pname = "xorgxrdp";
     version = "0.10.5";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-P7mgdHIq7/Vkk5CR4mUYtQ0xBjh3J2QrYAobKbw1KXM=";
     };
 
@@ -74,20 +74,20 @@ let
     enableParallelBuilding = true;
 
     passthru.updateScript = gitUpdater { rev-prefix = "v"; };
-  };
+  });
 
-  xrdp = stdenv.mkDerivation rec {
+  xrdp = stdenv.mkDerivation (finalAttrs: {
     pname = "xrdp";
     version = "0.10.6.1";
 
     src = applyPatches {
-      inherit version;
+      inherit (finalAttrs) version;
       patches = [ ./dynamic_config.patch ];
-      name = "xrdp-patched-${version}";
+      name = "xrdp-patched-${finalAttrs.version}";
       src = fetchFromGitHub {
         owner = "neutrinolabs";
         repo = "xrdp";
-        rev = "v${version}";
+        rev = "v${finalAttrs.version}";
         fetchSubmodules = true;
         hash = "sha256-yvPgIgM2NxAp9unlm+XVMGqpbHKsTKn33k6RvscdymU=";
       };
@@ -217,6 +217,6 @@ let
       ];
       platforms = lib.platforms.linux;
     };
-  };
+  });
 in
 xrdp

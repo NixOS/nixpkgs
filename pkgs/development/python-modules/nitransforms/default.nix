@@ -10,13 +10,13 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nitransforms";
   version = "25.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Wcs0iV/ENCLhsjH6hTDmxoAsNAN9qzd9n+wWbiA04aU=";
   };
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
     homepage = "https://nitransforms.readthedocs.io";
     description = "Geometric transformations for images and surfaces";
     mainProgram = "nb-transform";
-    changelog = "https://github.com/nipy/nitransforms/releases/tag/${version}";
+    changelog = "https://github.com/nipy/nitransforms/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

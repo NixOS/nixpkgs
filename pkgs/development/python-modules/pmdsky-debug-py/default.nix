@@ -6,7 +6,7 @@
 }:
 
 #This python library is auto-generated. It should be possible to rebuild it from upstream, but seems unnecessary
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pmdsky-debug-py";
   version = "10.2.26";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "pmdsky-debug-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-klgtuNjxNQcW01VkKCR69ahpno2XYoQy7MfZSOZ5H9Q=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marius851000 ];
   };
-}
+})

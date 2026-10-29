@@ -16,14 +16,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freedroid";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "ReinhardPrix";
     repo = "FreedroidClassic";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "027wns25nyyc8afyhyp5a8wn13x9nlzmnqzqyyma1055xjy5imis";
   };
 
@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      icon = finalAttrs.pname;
       desktopName = "Freedroid Classic";
       comment = "A clone of the classic game 'Paradroid' on Commodore 64";
       categories = [
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     # Builds but fails to render to the screen at runtime.
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-tree-queries";
   version = "0.27";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "feincms";
     repo = "django-tree-queries";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GyQFVwlG7P4fxD4QYtW9mHEwwhdv4i2lgp26XVDMa3g=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Adjacency-list trees for Django using recursive common table expressions. Supports PostgreSQL, sqlite, MySQL and MariaDB";
     homepage = "https://github.com/feincms/django-tree-queries";
-    changelog = "https://github.com/feincms/django-tree-queries/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/feincms/django-tree-queries/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

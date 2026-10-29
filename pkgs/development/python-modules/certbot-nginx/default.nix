@@ -5,13 +5,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot-nginx";
   pyproject = true;
 
   inherit (certbot) src version;
 
-  sourceRoot = "${src.name}/certbot-nginx";
+  sourceRoot = "${finalAttrs.src.name}/certbot-nginx";
 
   build-system = [ setuptools ];
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
   meta = certbot.meta // {
     description = "Nginx plugin for Certbot";
   };
-}
+})

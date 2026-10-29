@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioasuswrt";
   version = "1.5.4";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "aioasuswrt";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-tsvtOe3EX/Z7g6Z0MM2npYOTEJoKV9wUbhkhcROILxE=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for Asuswrt";
     homepage = "https://github.com/kennedyshead/aioasuswrt";
-    changelog = "https://github.com/kennedyshead/aioasuswrt/releases/tag/${src.tag}";
+    changelog = "https://github.com/kennedyshead/aioasuswrt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

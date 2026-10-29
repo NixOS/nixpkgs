@@ -6,13 +6,13 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynisher";
   version = "1.0.10";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JyK3ldIhKd3VJHA4u6cnrgbs2zpZQgcIF758jUpoDjE=";
   };
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module intended to limit a functions resources";
     homepage = "https://github.com/automl/pynisher";
-    changelog = "https://github.com/automl/pynisher/releases/tag/v${version}";
+    changelog = "https://github.com/automl/pynisher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

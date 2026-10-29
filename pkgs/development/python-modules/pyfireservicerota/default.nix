@@ -9,7 +9,7 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfireservicerota";
   version = "0.0.49";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-fireservicerota";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EVMxAOP6haS+jkLD6pOZnu0yhhNMR+gCud2qXsycNbc=";
   };
 
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyfireservicerota" ];
 
   meta = {
-    changelog = "https://github.com/cyberjunky/python-fireservicerota/releases/tag/${src.tag}";
+    changelog = "https://github.com/cyberjunky/python-fireservicerota/releases/tag/${finalAttrs.src.tag}";
     description = "Python 3 API wrapper for FireServiceRota/BrandweerRooster";
     homepage = "https://github.com/cyberjunky/python-fireservicerota";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

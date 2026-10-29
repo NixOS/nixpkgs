@@ -39,7 +39,7 @@
   zope-interface,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scrapy";
   version = "2.17.0";
   pyproject = true;
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = "scrapy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-4FAZJZc8qsMn93XPNYnnbqecA29DWwh5VNNlCsnib7A=";
   };
 
@@ -189,8 +189,8 @@ buildPythonPackage rec {
       range of purposes, from data mining to monitoring and automated testing.
     '';
     homepage = "https://scrapy.org/";
-    changelog = "https://github.com/scrapy/scrapy/raw/${src.tag}/docs/news.rst";
+    changelog = "https://github.com/scrapy/scrapy/raw/${finalAttrs.src.tag}/docs/news.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vinnymeller ];
   };
-}
+})

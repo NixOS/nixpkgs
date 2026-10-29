@@ -9,14 +9,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpy-stl";
   version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "numpy_stl";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-WiDD95zdqgq8akuZ9Uhqzu1PiBUvKbGaV6zIROGD/U0=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to make reading, writing and modifying both binary and ascii STL files easy";
     homepage = "https://github.com/WoLpH/numpy-stl/";
-    changelog = "https://github.com/wolph/numpy-stl/releases/tag/v${version}";
+    changelog = "https://github.com/wolph/numpy-stl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

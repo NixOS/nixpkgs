@@ -6,14 +6,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stop-words";
   version = "2025.11.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "stop_words";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-BFkHK1SxHkOm+0xbBb2ofSrM/E8UwWl5dPNzmvD3tD0=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lavafroth ];
   };
-}
+})

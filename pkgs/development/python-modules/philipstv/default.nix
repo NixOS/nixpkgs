@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "philipstv";
   version = "3.1.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = "philipstv";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AShWm9dsA9+HKuvQ7JzFjN9sn5V13MDyoxtufST4hJA=";
   };
 
@@ -62,9 +62,9 @@ buildPythonPackage rec {
   meta = {
     description = "CLI and library to control Philips Android-powered TVs";
     homepage = "https://github.com/bcyran/philipstv";
-    changelog = "https://github.com/bcyran/philipstv/releases/tag/${src.tag}";
+    changelog = "https://github.com/bcyran/philipstv/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "philipstv";
     maintainers = with lib.maintainers; [ bcyran ];
   };
-}
+})

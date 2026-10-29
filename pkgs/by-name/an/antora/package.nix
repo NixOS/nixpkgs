@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "antora";
   version = "3.1.15";
 
   src = fetchFromGitLab {
     owner = "antora";
     repo = "antora";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ok9KuDiyKEY8ggo1TnlME91zj4zvv4CWR1hldDheVgs=";
   };
 
@@ -51,4 +51,4 @@ buildNpmPackage rec {
 
     platforms = lib.platforms.all;
   };
-}
+})

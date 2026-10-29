@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyecowitt";
   version = "0.21";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "garbled1";
     repo = "pyecowitt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5VdVo6j2HZXSCWU4NvfWzyS/KJfVb7N1KSMeu8TvWaQ=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for the EcoWitt Protocol";
     homepage = "https://github.com/garbled1/pyecowitt";
-    changelog = "https://github.com/garbled1/pyecowitt/releases/tag/${version}";
+    changelog = "https://github.com/garbled1/pyecowitt/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

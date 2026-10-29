@@ -9,7 +9,7 @@
   django-crispy-forms,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crispy-bootstrap5";
   version = "2026.3";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "crispy-bootstrap5";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7XRb8KP0LSE78woqsU6mdbUAjxldWHY1vwfuBoLfsw0=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bootstrap 5 template pack for django-crispy-forms";
     homepage = "https://github.com/django-crispy-forms/crispy-bootstrap5";
-    changelog = "https://github.com/django-crispy-forms/crispy-bootstrap5/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/django-crispy-forms/crispy-bootstrap5/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

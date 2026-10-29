@@ -8,7 +8,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tami4edgeapi";
   version = "3.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Guy293";
     repo = "Tami4EdgeAPI";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rhJ8L6qLDnO50Xp2eqquRinDTQjMxWVSjNL5GQI1gvM=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API client for Tami4 Edge / Edge+ devices";
     homepage = "https://github.com/Guy293/Tami4EdgeAPI";
-    changelog = "https://github.com/Guy293/Tami4EdgeAPI/releases/tag/v${version}";
+    changelog = "https://github.com/Guy293/Tami4EdgeAPI/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

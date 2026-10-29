@@ -14,14 +14,14 @@
   static ? withEmscripten,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imtui";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "imtui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-eHQPDEfxKGLdiOi0lUUgqJcmme1XJLSPAafT223YK+U=";
   };
 
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
       ANSI colors and mouse/keyboard input.
     '';
     homepage = "https://imtui.ggerganov.com";
-    changelog = "https://github.com/ggerganov/imtui/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ggerganov/imtui/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

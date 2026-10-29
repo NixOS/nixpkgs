@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyedflib";
   version = "0.1.42";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "holgern";
     repo = "pyedflib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KbySCsDjiS94U012KASRgHR2fuX090HlKUuPgsLC+xQ=";
   };
 
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to read/write EDF+/BDF+ files based on EDFlib";
     homepage = "https://github.com/holgern/pyedflib";
-    changelog = "https://github.com/holgern/pyedflib/releases/tag/${src.tag}";
+    changelog = "https://github.com/holgern/pyedflib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

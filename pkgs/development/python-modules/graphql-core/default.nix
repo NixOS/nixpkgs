@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graphql-core";
   version = "3.2.7";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphql-core";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ag8yFf6254dX2xNZMKtVBW5QtI5JOZjzgcZveuoeAss=";
   };
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "graphql" ];
 
   meta = {
-    changelog = "https://github.com/graphql-python/graphql-core/releases/tag/${src.tag}";
+    changelog = "https://github.com/graphql-python/graphql-core/releases/tag/${finalAttrs.src.tag}";
     description = "Port of graphql-js to Python";
     homepage = "https://github.com/graphql-python/graphql-core";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
   unzip,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "poppins";
   version = "4.003";
 
   src = fetchFromGitHub {
     owner = "itfoundry";
     repo = "poppins";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7+RQHYxNFqOw2EeS2hgrbK/VbUAiPorUtkyRb5MFh5w=";
   };
 
@@ -32,4 +32,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ nyawox ];
     platforms = lib.platforms.all;
   };
-}
+})

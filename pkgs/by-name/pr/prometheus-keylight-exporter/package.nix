@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "keylight-exporter";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "keylight_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-yI1mmEb5SP2lbP37CpPxYITJL/nvd/mIwxB0RIQRe4I=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdlayher ];
   };
-}
+})

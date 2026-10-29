@@ -6,12 +6,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cbftp";
   version = "1173";
 
   src = fetchurl {
-    url = "https://cbftp.eu/cbftp-r${version}.tar.gz";
+    url = "https://cbftp.eu/cbftp-r${finalAttrs.version}.tar.gz";
     hash = "sha256-DE6fnLzWsx6Skz2LRJAaijjIqrYFB8/HPp45P5CcEc8=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -D bin/* -t $out/bin/
-    install -D API README -t $out/share/doc/${pname}/
+    install -D API README -t $out/share/doc/${finalAttrs.pname}/
 
     runHook postInstall
   '';
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

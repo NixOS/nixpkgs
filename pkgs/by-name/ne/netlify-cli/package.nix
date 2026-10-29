@@ -9,14 +9,14 @@
   vips,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "netlify-cli";
   version = "23.15.0";
 
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y81VmYt5NDXNcipPY4DIWDICF3a0eETJVQRFRATi1Dk=";
   };
 
@@ -42,9 +42,9 @@ buildNpmPackage rec {
   meta = {
     description = "Netlify command line tool";
     homepage = "https://github.com/netlify/cli";
-    changelog = "https://github.com/netlify/cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/netlify/cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ roberth ];
     mainProgram = "netlify";
   };
-}
+})

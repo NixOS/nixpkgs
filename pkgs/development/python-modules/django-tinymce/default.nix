@@ -8,13 +8,13 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-tinymce";
   version = "5.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "django_tinymce";
     hash = "sha256-YldmntWWrM9fqWf/MGEnayxTUrqsG7xlj82CUrEso4o=";
   };
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django application that contains a widget to render a form field as a TinyMCE editor";
     homepage = "https://github.com/jazzband/django-tinymce";
-    changelog = "https://github.com/jazzband/django-tinymce/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/jazzband/django-tinymce/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})

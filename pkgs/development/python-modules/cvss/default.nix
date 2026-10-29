@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvss";
   version = "3.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
     repo = "cvss";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-udUs76wfvC9LfjlKyWmuPV0RT2P/COTwYw3hgDt3tPs=";
   };
 
@@ -35,9 +35,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library for CVSS2/3/4";
     homepage = "https://github.com/RedHatProductSecurity/cvss";
-    changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/${src.tag}";
+    changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "cvss_calculator";
   };
-}
+})

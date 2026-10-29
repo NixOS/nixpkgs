@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cloudpickle";
   version = "3.1.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudpipe";
     repo = "cloudpickle";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BsCOEpNCNqq8PS+SdbzF1wq0LXEmtcHJs0pdt2qFw/w=";
   };
 
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/cloudpipe/cloudpickle/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/cloudpipe/cloudpickle/blob/${finalAttrs.src.tag}/CHANGES.md";
     description = "Extended pickling support for Python objects";
     homepage = "https://github.com/cloudpipe/cloudpickle";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

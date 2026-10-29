@@ -73,14 +73,14 @@ let
     util-linux
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.1.3";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Ya7AagLwupKmkeOWPbsQB/lWyl/7egTGbcxXqM5yY54=";
   };
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "sabnzbd";
   };
-}
+})

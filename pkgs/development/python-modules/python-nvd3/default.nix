@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-nvd3";
   version = "0.16.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "areski";
     repo = "python-nvd3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+J0lHAOjX3hbymjESQ6WpEnly+1Lv9o0ucIpBxTuS6s=";
   };
 
@@ -34,9 +34,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python Wrapper for NVD3";
     homepage = "https://github.com/areski/python-nvd3";
-    changelog = "https://github.com/areski/python-nvd3/releases/tag/${src.tag}";
+    changelog = "https://github.com/areski/python-nvd3/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "nvd3";
   };
-}
+})

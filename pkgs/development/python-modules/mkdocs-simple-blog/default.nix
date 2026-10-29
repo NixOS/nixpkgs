@@ -7,7 +7,7 @@
   pytestCheckHook,
   pytest-cov-stub,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-simple-blog";
   version = "0.4.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
     repo = "mkdocs-simple-blog";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lp0+mJYyP7Qz/gJCI7+tKh9fZArWs2u1ZusnVUax7A4=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple blog generator plugin for MkDocs";
     homepage = "https://fernandocelmer.github.io/mkdocs-simple-blog/";
-    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/${src.tag}";
+    changelog = "https://github.com/FernandoCelmer/mkdocs-simple-blog/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

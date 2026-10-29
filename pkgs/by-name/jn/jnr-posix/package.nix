@@ -50,7 +50,7 @@ let
     doCheck = false;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version pname src;
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D target/jnr-posix-${version}.jar $out/share/java/jnr-posix-${version}.jar
+    install -D target/jnr-posix-${finalAttrs.version}.jar $out/share/java/jnr-posix-${finalAttrs.version}.jar
 
     runHook postInstall
   '';
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };
-}
+})

@@ -6,14 +6,14 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-trovo";
   version = "0.1.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_trovo";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-3EVSF4+nLvvM2RocNM2xz9Us5VrRRTCu/MWCcqwwikw=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

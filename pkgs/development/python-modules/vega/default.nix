@@ -13,13 +13,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vega";
   version = "4.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8lrmhCvwczqBpiQRCkPjmiYsJPHEFnZab/Azkh+i7ls=";
   };
 
@@ -65,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
   };
-}
+})

@@ -10,7 +10,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "watergate-local-api";
   version = "2026.2.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "watergate-ai";
     repo = "watergate-local-api-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0iAxK2l9zNiVTn1FlYSq7EY9Ak2AImeYqtslrfu8qOc=";
   };
 
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/watergate-ai/watergate-local-api-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/watergate-ai/watergate-local-api-python/releases/tag/${finalAttrs.src.tag}";
     description = "Python package to interact with the Watergate Local API";
     homepage = "https://github.com/watergate-ai/watergate-local-api-python";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

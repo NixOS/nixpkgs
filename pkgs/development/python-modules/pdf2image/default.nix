@@ -6,13 +6,13 @@
   poppler-utils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pdf2image";
   version = "1.17.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6qlZvBFrQg3X7EFfyuSbmBAN2j3RjNL9+obQnxEvbVc=";
   };
 
@@ -32,9 +32,9 @@ buildPythonPackage rec {
   meta = {
     description = "Module that wraps the pdftoppm utility to convert PDF to PIL Image object";
     homepage = "https://github.com/Belval/pdf2image";
-    changelog = "https://github.com/Belval/pdf2image/releases/tag/v${version}";
+    changelog = "https://github.com/Belval/pdf2image/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gerschtli ];
     platforms = lib.platforms.all;
   };
-}
+})

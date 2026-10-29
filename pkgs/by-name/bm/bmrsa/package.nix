@@ -5,12 +5,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bmrsa";
   version = "11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bmrsa/bmrsa${version}.zip";
+    url = "mirror://sourceforge/bmrsa/bmrsa${finalAttrs.version}.zip";
     sha256 = "0ksd9xkvm9lkvj4yl5sl0zmydp1wn3xhc55b28gj70gi4k75kcl4";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     mkdir bmrsa
     cd bmrsa
-    unzip ${src}
+    unzip ${finalAttrs.src}
     sed -e 's/gcc/g++/' -i Makefile
     mkdir -p $out/bin
     echo -e 'install:\n\tcp bmrsa '$out'/bin' >> Makefile
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

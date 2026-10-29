@@ -32,14 +32,14 @@ let
     exec kpsetool -v
   '';
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "advi";
   version = "2.0.0";
 
   minimalOCamlVersion = "4.11";
 
   src = fetchurl {
-    url = "http://advi.inria.fr/advi-${version}.tar.gz";
+    url = "http://advi.inria.fr/advi-${finalAttrs.version}.tar.gz";
     hash = "sha256-c0DQHlvdekJyXCxmR4+Ut/njtoCzmqX6hNazNv8PpBQ=";
   };
 
@@ -80,4 +80,4 @@ ocamlPackages.buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.xworld21 ];
   };
-}
+})

@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "psudohash";
   version = "1.1.0";
   pyproject = false;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "t3l3machus";
     repo = "psudohash";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-I/vHQraGmIWmx/v+szL5ZQJpjkSBaCpEx0r4Mc6FgKA=";
   };
 
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     install -Dm444 common_padding_values.txt $out/share/psudohash/common_padding_values.txt
 
     substituteInPlace $out/bin/psudohash \
-      --replace "common_padding_values.txt" "$out/share/${pname}/common_padding_values.txt"
+      --replace "common_padding_values.txt" "$out/share/${finalAttrs.pname}/common_padding_values.txt"
 
     runHook postInstall
   '';
@@ -36,9 +36,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Password list generator for orchestrating brute force attacks and cracking hashes";
     homepage = "https://github.com/t3l3machus/psudohash";
-    changelog = "https://github.com/t3l3machus/psudohash/releases/tag/v${version}";
+    changelog = "https://github.com/t3l3machus/psudohash/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ exploitoverload ];
     mainProgram = "psudohash";
   };
-}
+})

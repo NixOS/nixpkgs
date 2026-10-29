@@ -6,7 +6,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fuzzyfinder";
   version = "2.3.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amjith";
     repo = "fuzzyfinder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Zqh2H2d2TCxErmEE9gQwdpzZBGsjeQIo3AxBsc+C5u0=";
   };
 
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fuzzyfinder" ];
 
   meta = {
-    changelog = "https://github.com/amjith/fuzzyfinder/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/amjith/fuzzyfinder/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Fuzzy Finder implemented in Python";
     homepage = "https://github.com/amjith/fuzzyfinder";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

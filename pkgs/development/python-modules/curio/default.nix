@@ -9,7 +9,7 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "curio";
   version = "1.6-unstable-2024-04-11";
   pyproject = true;
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for performing concurrent I/O with coroutines in Python";
     homepage = "https://github.com/dabeaz/curio";
-    changelog = "https://github.com/dabeaz/curio/raw/${src.rev}/CHANGES";
+    changelog = "https://github.com/dabeaz/curio/raw/${finalAttrs.src.rev}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.pbsds ];
   };
-}
+})

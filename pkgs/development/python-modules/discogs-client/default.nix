@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "discogs-client";
   version = "2.9";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joalla";
     repo = "discogs_client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UWiop9hg6KSpSq4SnTtvFbRHYTnLe/Ed/o65sf78MYo=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Unofficial Python API client for Discogs";
     homepage = "https://github.com/joalla/discogs_client";
-    changelog = "https://github.com/joalla/discogs_client/releases/tag/v${version}";
+    changelog = "https://github.com/joalla/discogs_client/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

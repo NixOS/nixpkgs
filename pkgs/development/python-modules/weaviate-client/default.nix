@@ -28,7 +28,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weaviate-client";
   version = "4.23.1";
   pyproject = true;
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "weaviate";
     repo = "weaviate-python-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9vnGApuYJTzTeOufB0/3ONPaMMfgq2t4NxpmqyYDIhg=";
   };
 
@@ -114,8 +114,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python native client for easy interaction with a Weaviate instance";
     homepage = "https://github.com/weaviate/weaviate-python-client";
-    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${src.tag}";
+    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

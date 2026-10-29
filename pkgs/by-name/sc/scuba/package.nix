@@ -16,16 +16,16 @@ let
   };
 
   # This must be built statically because scuba will execute unknown docker environments
-  scubainit = pkgsStatic.rustPlatform.buildRustPackage rec {
+  scubainit = pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     pname = "scubainit";
     inherit src version;
 
-    sourceRoot = "${src.name}/scubainit";
+    sourceRoot = "${finalAttrs.src.name}/scubainit";
 
     cargoHash = "sha256-YUYo2B5hzzmDeNiWUC+198Qbz+JPgUJfpAqyPWAXTRA=";
-  };
+  });
 in
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "scuba";
   inherit src version;
   pyproject = true;
@@ -43,7 +43,7 @@ python3Packages.buildPythonPackage rec {
     # Version detection fails
     # Patch in the version instead
     substituteInPlace scuba/version.py \
-      --replace-fail "__version__ = get_version()" "__version__ = \"${version}\""
+      --replace-fail "__version__ = get_version()" "__version__ = \"${finalAttrs.version}\""
 
     # Disable calling cargo through the make file
     # scubainit has already been built
@@ -59,10 +59,10 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Simple Container-Utilizing Build Apparatus";
     homepage = "https://github.com/JonathonReinhart/scuba";
-    changelog = "https://github.com/JonathonReinhart/scuba/releases/tag/${src.tag}";
+    changelog = "https://github.com/JonathonReinhart/scuba/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tbaldwin ];
     mainProgram = "scuba";
   };
-}
+})

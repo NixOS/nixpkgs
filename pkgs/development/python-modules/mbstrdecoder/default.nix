@@ -9,7 +9,7 @@
   faker,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mbstrdecoder";
   version = "1.1.5";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = "mbstrdecoder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RPtxoI4fFiBHBOWOdGueVjPPOAUjDThawS80SIoTQ78=";
   };
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.mit;
   };
-}
+})

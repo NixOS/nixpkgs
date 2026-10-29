@@ -10,7 +10,7 @@
   python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobiketrax";
   version = "1.3.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "basilfx";
     repo = "aiobiketrax";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-N0v5SCTf3NkW/TCSTQL9VkrDj7/GXEejJGFCvJY4pIc=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interacting with the PowUnity BikeTrax GPS tracker";
     homepage = "https://github.com/basilfx/aiobiketrax";
-    changelog = "https://github.com/basilfx/aiobiketrax/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/basilfx/aiobiketrax/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

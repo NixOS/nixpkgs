@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylbfgs";
   version = "0.2.0.16";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dedupeio";
     repo = "pylbfgs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-H416dgZQxyqsnhmlK5keW8cJWY6gea4mebVuP0IEVOU=";
   };
 
@@ -60,4 +60,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daniel-fahey ];
   };
-}
+})

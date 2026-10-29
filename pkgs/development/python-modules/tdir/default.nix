@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tdir";
   version = "1.8.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rec";
     repo = "tdir";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YYQ33Blhqk/CbocqkB9Nh6qbzMjQT07fmzx+fDTvdw8=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Create, fill a temporary directory";
     homepage = "https://github.com/rec/tdir";
-    changelog = "https://github.com/rec/tdir/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/rec/tdir/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

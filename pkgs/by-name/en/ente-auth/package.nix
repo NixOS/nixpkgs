@@ -15,7 +15,7 @@ let
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
   desktopId = "io.ente.auth";
 in
-flutter338.buildFlutterApplication rec {
+flutter338.buildFlutterApplication (finalAttrs: {
   pname = "ente-auth";
   version = "4.4.25";
 
@@ -23,11 +23,11 @@ flutter338.buildFlutterApplication rec {
     owner = "ente";
     repo = "ente";
     sparseCheckout = [ "mobile" ];
-    tag = "auth-v${version}";
+    tag = "auth-v${finalAttrs.version}";
     hash = "sha256-zOZg4RW7T3v/QS075KWEEdmT2+2xcMa1BlSM4In75uM=";
   };
 
-  sourceRoot = "${src.name}/mobile";
+  sourceRoot = "${finalAttrs.src.name}/mobile";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
@@ -126,7 +126,7 @@ flutter338.buildFlutterApplication rec {
       Ente's 2FA app. An end-to-end encrypted, cross platform and free app for storing your 2FA codes with cloud backups. Works offline. You can even use it without signing up for an account if you don't want the cloud backups or multi-device sync.
     '';
     homepage = "https://ente.io/auth/";
-    changelog = "https://github.com/ente/ente/releases/tag/auth-v${version}";
+    changelog = "https://github.com/ente/ente/releases/tag/auth-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       niklaskorz
@@ -140,4 +140,4 @@ flutter338.buildFlutterApplication rec {
       "aarch64-linux"
     ];
   };
-}
+})

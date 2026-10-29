@@ -6,20 +6,20 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyasn";
   version = "1.6.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-otVfs+5HlHYJ9QIRylsLrEEahvPJNfuSyksLirfGaP8=";
   };
 
   datasrc = fetchFromGitHub {
     owner = "hadiasghari";
     repo = "pyasn";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-7zpaxDe5qHUy/ekOJLxKawjaPQnByrOVj+m2bsUqfdg=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

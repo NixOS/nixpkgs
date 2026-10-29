@@ -11,13 +11,13 @@
   warble,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "metawear";
   version = "1.0.8";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gNEI6P6GslNd1DzFwCFndVIfUvSTPYollGdqkZhQ4Y8=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = lib.platforms.linux;
   };
-}
+})

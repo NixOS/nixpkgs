@@ -8,7 +8,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyixapi";
   version = "0.2.7";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "pyixapi";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-pKIm9YCWf5HCwJ76NLm6AmcJWGVErZu9dwl23p8maXs=";
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python API client library for IX-API";
     homepage = "https://github.com/peering-manager/pyixapi/";
-    changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
   };
-}
+})

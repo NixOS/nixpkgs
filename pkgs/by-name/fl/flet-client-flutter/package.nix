@@ -18,18 +18,18 @@
   fletTarget ? "linux",
 }:
 
-flutter338.buildFlutterApplication rec {
+flutter338.buildFlutterApplication (finalAttrs: {
   pname = "flet-client-flutter";
   version = "0.80.0";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PxSFDWo5qN9RB/E+vLu1xYttJ8CQdy86OStyLMRn6Lo=";
   };
 
-  sourceRoot = "${src.name}/client";
+  sourceRoot = "${finalAttrs.src.name}/client";
 
   gitHashes = lib.importJSON ./git_hashes.json;
 
@@ -88,11 +88,11 @@ flutter338.buildFlutterApplication rec {
   meta = {
     description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python. The frontend part";
     homepage = "https://flet.dev/";
-    changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
+    changelog = "https://github.com/flet-dev/flet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       heyimnova
     ];
     mainProgram = "flet";
   };
-}
+})

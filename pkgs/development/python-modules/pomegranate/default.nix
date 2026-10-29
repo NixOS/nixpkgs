@@ -14,7 +14,7 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pomegranate";
   version = "1.1.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pomegranate";
     owner = "jmschrei";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-p2Gn0FXnsAHvRUeAqx4M1KH0+XvDl3fmUZZ7MiMvPSs=";
   };
 
@@ -67,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
     homepage = "https://github.com/jmschrei/pomegranate";
-    changelog = "https://github.com/jmschrei/pomegranate/releases/tag/v${version}";
+    changelog = "https://github.com/jmschrei/pomegranate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rybern ];
   };
-}
+})

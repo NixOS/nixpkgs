@@ -11,14 +11,14 @@
   templ,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gowebly";
   version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "gowebly";
     repo = "gowebly";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/MB8YuqeZUb9P6RPO2sgwtYShaNkEFckiVBtnHRPkc4=";
   };
 
@@ -61,9 +61,9 @@ buildGoModule rec {
       and the most popular CSS frameworks on the frontend.
     '';
     homepage = "https://github.com/gowebly/gowebly";
-    changelog = "https://github.com/gowebly/gowebly/releases/tag/v${version}";
+    changelog = "https://github.com/gowebly/gowebly/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "gowebly";
     maintainers = with lib.maintainers; [ cterence ];
   };
-}
+})

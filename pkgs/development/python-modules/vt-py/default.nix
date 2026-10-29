@@ -11,7 +11,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vt-py";
   version = "0.22.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "vt-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CReFwX/7UCyFWVG/3hXwTVt92x+n+eu3FhvrKtDrgNU=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for VirusTotal";
     homepage = "https://virustotal.github.io/vt-py/";
-    changelog = "https://github.com/VirusTotal/vt-py/releases/tag//${version}";
+    changelog = "https://github.com/VirusTotal/vt-py/releases/tag//${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylgnetcast";
   version = "0.3.9";
   format = "setuptools";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Drafteed";
     repo = "python-lgnetcast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5lzLknuGLQryLCc4YQJn8AGuWTiSM90+8UTQ/WYfASM=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API client for the LG Smart TV running NetCast 3 or 4";
     homepage = "https://github.com/Drafteed/python-lgnetcast";
-    changelog = "https://github.com/Drafteed/python-lgnetcast/releases/tag/v${version}";
+    changelog = "https://github.com/Drafteed/python-lgnetcast/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,14 +7,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mecab-python3";
   version = "1.0.12";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "mecab_python3";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-mroeVu+A3ZcUfcv441CBR68Sn7Rs7A5DK4X5apvapLk=";
   };
 
@@ -33,11 +33,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for mecab: Morphological Analysis engine";
     homepage = "https://github.com/SamuraiT/mecab-python3";
-    changelog = "https://github.com/SamuraiT/mecab-python3/releases/tag/v${version}";
+    changelog = "https://github.com/SamuraiT/mecab-python3/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       gpl2
       lgpl21
       bsd3
     ]; # any of the three
   };
-}
+})

@@ -6,16 +6,16 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qctools";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "https://mediaarea.net/download/source/${pname}/${version}/${pname}_${version}.tar.xz";
+    url = "https://mediaarea.net/download/source/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}_${finalAttrs.version}.tar.xz";
     hash = "sha256-4HuNBCvN1BDjIsEyo8Lo/H1rNgCFygkXqo6yD3oDf18=";
   };
 
-  sourceRoot = "${pname}/Project/QtCreator";
+  sourceRoot = "${finalAttrs.pname}/Project/QtCreator";
 
   nativeBuildInputs = [
     libsForQt5.qmake
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

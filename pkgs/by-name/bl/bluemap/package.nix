@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bluemap";
   version = "5.16";
 
   src = fetchurl {
-    url = "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v${version}/BlueMap-${version}-cli.jar";
+    url = "https://github.com/BlueMap-Minecraft/BlueMap/releases/download/v${finalAttrs.version}/BlueMap-${finalAttrs.version}-cli.jar";
     hash = "sha256-eUDVYYkDc4l/j2vpGlLnZUYfQOW+ThxEAQBAc+4NJYA=";
   };
 
@@ -36,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     ];
     mainProgram = "bluemap";
   };
-}
+})

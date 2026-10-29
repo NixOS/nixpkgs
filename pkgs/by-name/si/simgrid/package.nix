@@ -29,7 +29,7 @@
   withoutBin ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simgrid";
   version = "4.1";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     domain = "framagit.org";
     owner = "simgrid";
     repo = "simgrid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-d5yzlR2uo//EcFtqhNUU2q/RCwBiXrRNUAMkEbA49ZQ=";
   };
 
@@ -155,4 +155,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

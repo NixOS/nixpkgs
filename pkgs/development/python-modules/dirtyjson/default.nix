@@ -6,13 +6,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dirtyjson";
   version = "1.0.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-kMpKGPP/MM6EnRANz0oAOVPHnTojSO8Fbx2cIiMaJf0=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

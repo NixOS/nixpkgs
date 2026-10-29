@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pre-commit-hooks";
   version = "6.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit-hooks";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pxtsnRryTguNGYbdiQ55UhuRyJTQvFfaqVOTcCz2jgk=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Some out-of-the-box hooks for pre-commit";
     homepage = "https://github.com/pre-commit/pre-commit-hooks";
-    changelog = "https://github.com/pre-commit/pre-commit-hooks/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/pre-commit/pre-commit-hooks/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
   };
-}
+})

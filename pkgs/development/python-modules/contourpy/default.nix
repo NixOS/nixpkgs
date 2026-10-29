@@ -29,7 +29,7 @@
 }:
 
 let
-  contourpy = buildPythonPackage rec {
+  contourpy = buildPythonPackage (finalAttrs: {
     pname = "contourpy";
     version = "1.3.3";
     pyproject = true;
@@ -37,7 +37,7 @@ let
     src = fetchFromGitHub {
       owner = "contourpy";
       repo = "contourpy";
-      tag = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-/tE+F1wH7YkqfgenXwtcfkjxUR5FwfgoS4NYC6n+/2M=";
     };
 
@@ -94,12 +94,12 @@ let
     '';
 
     meta = {
-      changelog = "https://github.com/contourpy/contourpy/releases/tag/${src.tag}";
+      changelog = "https://github.com/contourpy/contourpy/releases/tag/${finalAttrs.src.tag}";
       description = "Python library for calculating contours in 2D quadrilateral grids";
       homepage = "https://github.com/contourpy/contourpy";
       license = lib.licenses.bsd3;
       maintainers = [ ];
     };
-  };
+  });
 in
 contourpy

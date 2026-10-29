@@ -15,7 +15,7 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyproj";
   version = "3.8.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+2wUMbswg2yltNMLPc9U8MbEFx2xKVWxGjP/TBfCjto=";
   };
 
@@ -98,11 +98,11 @@ buildPythonPackage rec {
     description = "Python interface to PROJ library";
     mainProgram = "pyproj";
     homepage = "https://github.com/pyproj4/pyproj";
-    changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
+    changelog = "https://github.com/pyproj4/pyproj/blob/${finalAttrs.src.rev}/docs/history.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dotlambda
     ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

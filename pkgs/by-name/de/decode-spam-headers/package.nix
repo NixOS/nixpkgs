@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "decode-spam-headers";
   version = "2022-09-22-unreleased";
 
@@ -26,11 +26,11 @@ python3Packages.buildPythonApplication rec {
   installPhase = ''
     install -D decode-spam-headers.py $out/bin/decode-spam-headers
 
-    mkdir -p $doc/share/doc/${pname}
+    mkdir -p $doc/share/doc/${finalAttrs.pname}
     mv \
       README.md \
       img/ \
-      $doc/share/doc/${pname}
+      $doc/share/doc/${finalAttrs.pname}
   '';
 
   propagatedBuildInputs = [
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

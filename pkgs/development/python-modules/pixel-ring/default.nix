@@ -8,7 +8,7 @@
   spidev,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pixel-ring";
   version = "0.1.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "respeaker";
     repo = "pixel_ring";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-J9kScjD6Xon0YWGxFU881bIbjmDpY7cnWzJ8G0SOKaw=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

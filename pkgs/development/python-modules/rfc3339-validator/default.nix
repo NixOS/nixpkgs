@@ -8,14 +8,14 @@
   strict-rfc3339,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rfc3339-validator";
   version = "0.1.4";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "rfc3339_validator";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-E4oqvfkzBK1gUwFn5R0t+5VJUhqDaHG4jX9GldACL2s=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -15,16 +15,16 @@
   pytest9_0CheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "3.6.5";
   pyproject = true;
   pname = "rpy2-robjects";
 
   disabled = isPyPy;
   src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
-      builtins.replaceStrings [ "-" ] [ "_" ] pname
-    }-${version}.tar.gz";
+    url = "mirror://pypi/${builtins.substring 0 1 finalAttrs.pname}/${finalAttrs.pname}/${
+      builtins.replaceStrings [ "-" ] [ "_" ] finalAttrs.pname
+    }-${finalAttrs.version}.tar.gz";
     hash = "sha256-A9CZ9DagGotR+4+L9gJCCpnHzdqMP84OOg9TLja0r+Q=";
   };
 
@@ -72,4 +72,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ joelmo ];
   };
-}
+})

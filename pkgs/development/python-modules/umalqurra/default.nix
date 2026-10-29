@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "umalqurra";
   version = "0.2";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-cZ9qNvkIraHCna4Nk03Q8eH24zBXhO2+wjrXGTl95ng=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/tytkal/python-hijiri-ummalqura";
     license = lib.licenses.publicDomain;
   };
-}
+})

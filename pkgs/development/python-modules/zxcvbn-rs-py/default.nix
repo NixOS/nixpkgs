@@ -5,7 +5,7 @@
   rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zxcvbn-rs-py";
   version = "0.3.0";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "zxcvbn_rs_py";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-0nQmgII6F0gj8HCnNAdLvowWBPExPAgXCxWAJuNsc6A=";
   };
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-S6K6ZzW24V2yFV89B+gN+Odc4h3R45lF+emZs69dzYg=";
   };
 
@@ -35,5 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-
-}
+})

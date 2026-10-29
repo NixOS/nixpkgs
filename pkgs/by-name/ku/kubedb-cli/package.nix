@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubedb-cli";
   version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "kubedb";
     repo = "cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2JS+wvS+EBNrH+VGmfRp39sZjSBkTLX2iLuZuUQ3MZw=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.starcraft66 ];
   };
-}
+})

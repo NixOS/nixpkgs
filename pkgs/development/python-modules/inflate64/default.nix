@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inflate64";
   version = "1.0.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "inflate64";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qYTkL37IzvrhYYwj6i6X8WRSQxprNKgBnQEYRnztzjA=";
   };
 
@@ -38,12 +38,11 @@ buildPythonPackage rec {
   meta = {
     description = "Compress and decompress with Enhanced Deflate compression algorithm";
     homepage = "https://codeberg.org/miurahr/inflate64";
-    changelog = "https://codeberg.org/miurahr/inflate64/src/tag/v${version}/docs/Changelog.rst#v${version}";
+    changelog = "https://codeberg.org/miurahr/inflate64/src/tag/v${finalAttrs.version}/docs/Changelog.rst#v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       pitkling
       PopeRigby
     ];
   };
-
-}
+})

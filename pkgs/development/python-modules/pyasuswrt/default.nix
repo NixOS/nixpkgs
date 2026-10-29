@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyasuswrt";
   version = "0.1.21";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ollo69";
     repo = "pyasuswrt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kg475AWmc0i/W4dBg8jFmNyz3V67xjvzPkSlS09/9Oc=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for communication with ASUSWRT routers via HTTP";
     homepage = "https://github.com/ollo69/pyasuswrt";
-    changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${version}";
+    changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

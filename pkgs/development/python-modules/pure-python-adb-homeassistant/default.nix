@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchPypi,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pure-python-adb-homeassistant";
   version = "0.1.7.dev0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xXXEp8oYGcJLTfoBDUSZrIHSgDvB2EHbVMHoG4Hk+t8=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.makefu ];
   };
-}
+})

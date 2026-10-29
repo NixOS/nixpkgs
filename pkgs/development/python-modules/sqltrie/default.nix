@@ -8,7 +8,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqltrie";
   version = "0.11.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "sqltrie";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-D1vYXyh/i0wy7sttW117vsMbUlQJ/mq7rlxLMJWoki0=";
   };
 
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "DVC's data management subsystem";
     homepage = "https://github.com/iterative/sqltrie";
-    changelog = "https://github.com/iterative/sqltrie/releases/tag/${version}";
+    changelog = "https://github.com/iterative/sqltrie/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

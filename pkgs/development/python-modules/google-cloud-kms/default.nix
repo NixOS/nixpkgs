@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-kms";
   version = "3.14.0";
   pyproject = true;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-kms-v${version}";
+    tag = "google-cloud-kms-v${finalAttrs.version}";
     hash = "sha256-ywRS1BfK6s+gcU8QRem0cSnfZq4BUQ2ABNcgnOa01LI=";
   };
 
-  sourceRoot = "${src.name}/packages/google-cloud-kms";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-kms";
 
   build-system = [ setuptools ];
 
@@ -67,8 +67,8 @@ buildPythonPackage rec {
   meta = {
     description = "Cloud Key Management Service (KMS) API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-kms";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-kms/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-cloud-kms/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})

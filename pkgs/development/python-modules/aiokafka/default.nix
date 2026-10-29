@@ -12,7 +12,7 @@
   zlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiokafka";
   version = "0.13.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiokafka";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xmrNhtyFY+3CJhECIVZRMVx0sZbZ00RLiyZzOdPNNIs=";
   };
 
@@ -56,8 +56,8 @@ buildPythonPackage rec {
   meta = {
     description = "Kafka integration with asyncio";
     homepage = "https://aiokafka.readthedocs.org";
-    changelog = "https://github.com/aio-libs/aiokafka/releases/tag/${src.tag}";
+    changelog = "https://github.com/aio-libs/aiokafka/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

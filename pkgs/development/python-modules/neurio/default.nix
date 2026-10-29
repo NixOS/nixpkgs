@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "neurio";
   version = "0.3.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jordanh";
     repo = "neurio-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Kyjx+76OR3fpA9p/Zg7S4/vuGuNU2kb022BijoNMSUI=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

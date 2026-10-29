@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-oauth2";
   version = "1.1.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-16hUSSesGCFbpTF+3Y9kCl8fBZOSG8886GIXgxLIyaQ=";
   };
   # attempts to run mysql
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/wndhydrnt/python-oauth2";
     license = lib.licenses.mit;
   };
-}
+})

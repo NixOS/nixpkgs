@@ -11,7 +11,7 @@
   ray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swifter";
   version = "1.4.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmcarpenter2";
     repo = "swifter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lgdf8E9GGjeLY4ERzxqtjQuYVtdtIZt2HFLSiNBbtX4=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

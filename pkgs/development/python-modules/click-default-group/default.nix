@@ -7,7 +7,7 @@
   flit-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-default-group";
   version = "1.2.4";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-default-group";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9Vk4LdgLDAWG2YCQPLKR6PIVnULmpOoe7RtS8DgWARo=";
   };
 
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
-}
+})

@@ -11,14 +11,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-md-report";
   version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_md_report";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-yOO38fkaDo59G5RuGyJPTzkYfaDfL4EnMTYaQ2oX9HI=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin to make a test results report with Markdown table format";
     homepage = "https://github.com/thombashi/pytest-md-report";
-    changelog = "https://github.com/thombashi/pytest-md-report/releases/tag/v${version}";
+    changelog = "https://github.com/thombashi/pytest-md-report/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rrbutani ];
   };
-}
+})

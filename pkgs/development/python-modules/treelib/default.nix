@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "treelib";
   version = "1.8.0";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "caesar0301";
     repo = "treelib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jvaZVy+FUcCcIdvWK6zFL8IBVH+hMiPMmv5shFXLo0k=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient implementation of tree data structure in python 2/3";
     homepage = "https://github.com/caesar0301/treelib";
-    changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.tag}";
+    changelog = "https://github.com/caesar0301/treelib/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

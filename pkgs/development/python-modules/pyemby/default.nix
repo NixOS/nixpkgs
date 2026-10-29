@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyemby";
   version = "1.10";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mezz64";
     repo = "pyemby";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+A/SNMCUqo9TwWsQXwOKJCqmYhbilIdHYazLNQY+NkU=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

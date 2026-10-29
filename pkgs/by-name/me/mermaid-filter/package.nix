@@ -6,14 +6,14 @@
   chromium,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "mermaid-filter";
   version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "raghur";
     repo = "mermaid-filter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GG2RWr5nVe6PCcTEJLmPyKL2j7ggSyNnHZAffNvPukg=";
   };
 
@@ -38,4 +38,4 @@ buildNpmPackage rec {
     platforms = chromium.meta.platforms;
     mainProgram = "mermaid-filter";
   };
-}
+})

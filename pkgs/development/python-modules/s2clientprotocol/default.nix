@@ -5,13 +5,13 @@
   protobuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "s2clientprotocol";
   version = "3.19.1.58600.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-jhz6PirxGpxTaPk5j1LF+kxe8QEHOFsYeer+Il3jWAo=";
   };
 
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

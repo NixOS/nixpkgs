@@ -8,7 +8,7 @@
   python-socketio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioaudiobookshelf";
   version = "0.1.25";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "aioaudiobookshelf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-i5S9rrC4Ap4RG7PEfqCiS3wNw7drlI0cvbWwm8Lx1hA=";
   };
 
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

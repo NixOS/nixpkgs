@@ -8,14 +8,14 @@
   isPyPy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ruamel-yaml";
   version = "0.19.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ruamel_yaml";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-U+tmzSeEnv+Wjr+PC/YfRs2sLaHR81dt1MzumyXDGZM=";
   };
 
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

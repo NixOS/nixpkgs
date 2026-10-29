@@ -10,14 +10,14 @@
   stevedore,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dogpile-cache";
   version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "dogpile_cache";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-hJxVc8mjjxVc1BcxA8cCtjft4DYcEuhkh2h30M0SXuw=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

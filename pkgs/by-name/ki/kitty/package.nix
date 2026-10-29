@@ -50,7 +50,7 @@
 }:
 
 with python3Packages;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "kitty";
   version = "0.49.2";
   pyproject = false;
@@ -58,14 +58,14 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FstfBzwdh1z7Qy9zWDY7L7mpd5bxnypgqEzqeLe16fY=";
   };
 
   goModules =
     (buildGo126Module {
       pname = "kitty-go-modules";
-      inherit src version;
+      inherit (finalAttrs) src version;
       vendorHash = "sha256-iSPPwwu9jllnIxkQeOlJFdDL4xLUGRP2RMW9DPRY6FQ=";
     }).goModules;
 
@@ -346,7 +346,7 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     changelog = [
       "https://sw.kovidgoyal.net/kitty/changelog/"
-      "https://github.com/kovidgoyal/kitty/blob/v${version}/docs/changelog.rst"
+      "https://github.com/kovidgoyal/kitty/blob/v${finalAttrs.version}/docs/changelog.rst"
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "kitty";
@@ -357,4 +357,4 @@ buildPythonApplication rec {
       leiserfg
     ];
   };
-}
+})

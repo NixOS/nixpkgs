@@ -17,14 +17,14 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peacasso";
   version = "0.0.19a0";
   pyproject = true;
 
   # No releases or tags are available in https://github.com/victordibia/peacasso
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-qBoG9FAJs0oZrQ0jShtPZfZPmyUZD30MGXDUfMl5bQk=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "peacasso";
   };
-}
+})

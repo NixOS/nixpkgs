@@ -5,15 +5,15 @@
   requests,
 }:
 
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "hbrennhaeuser";
   domain = "ntfy";
   version = "1.2.1";
 
   src = fetchFromGitHub {
-    inherit owner;
+    inherit (finalAttrs) owner;
     repo = "homeassistant_integration_ntfy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2GPAOJKsxjTXfE1ZmV+d3p9qmEOKOPJElGvM0gY6tow=";
   };
 
@@ -30,4 +30,4 @@ buildHomeAssistantComponent rec {
     ];
     license = lib.licenses.gpl3;
   };
-}
+})

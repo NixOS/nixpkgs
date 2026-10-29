@@ -11,7 +11,7 @@
   flask-sqlalchemy-lite,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-alembic";
   version = "3.3.0";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-alembic";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ljhIUfdkouheKqRW6SCuqiUBN6cGdVrcpaaeRBOUJQk=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pallets-eco/flask-alembic";
-    changelog = "https://github.com/pallets-eco/flask-alembic/blob/${src.tag}/CHANGES.md";
+    changelog = "https://github.com/pallets-eco/flask-alembic/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

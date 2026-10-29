@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-apimanagement";
   version = "5.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_apimanagement";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Crf+F+cP4xVM2ED/R9GdekYQIXAD6qfCGs81EableZk=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Microsoft Azure API Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/apimanagement/azure-mgmt-apimanagement";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-apimanagement_${version}/sdk/apimanagement/azure-mgmt-apimanagement/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-apimanagement_${finalAttrs.version}/sdk/apimanagement/azure-mgmt-apimanagement/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

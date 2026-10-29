@@ -12,7 +12,7 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyecotrend-ista";
   version = "3.5.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ludy87";
     repo = "pyecotrend-ista";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-O5HU0U19E+cS1/UVYouxbyTBNjenJw9kkH80GCZ04cw=";
   };
 
@@ -52,10 +52,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyecotrend_ista" ];
 
   meta = {
-    changelog = "https://github.com/Ludy87/pyecotrend-ista/releases/tag/${version}";
+    changelog = "https://github.com/Ludy87/pyecotrend-ista/releases/tag/${finalAttrs.version}";
     description = "Unofficial python library for the pyecotrend-ista API";
     homepage = "https://github.com/Ludy87/pyecotrend-ista";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oynqr ];
   };
-}
+})

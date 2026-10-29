@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rpi-gpio";
   version = "0.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "RPi.GPIO";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-zWHEsDw3tiu6SlrP6phidJwzxhjgKV5+kKpHE/s3O3A=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

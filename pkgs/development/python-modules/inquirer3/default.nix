@@ -10,7 +10,7 @@
   readchar,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inquirer3";
   version = "0.6.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "guysalt";
     repo = "python-inquirer3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IReJlwVgjTlTlD0xTVWrzQ0ITvCQvPJ86zCmffaoPk4=";
   };
 
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/guysalt/python-inquirer3/releases/tag/${src.tag}";
+    changelog = "https://github.com/guysalt/python-inquirer3/releases/tag/${finalAttrs.src.tag}";
     description = "Collection of common interactive command line user interfaces, based on Inquirer.js";
     homepage = "https://github.com/guysalt/python-inquirer3";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

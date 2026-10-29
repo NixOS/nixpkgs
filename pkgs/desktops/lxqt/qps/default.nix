@@ -15,14 +15,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qps";
   version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qps";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-KH92JZkVLxz2iECF5z39yzAwt7TU2/WnJomPoAn8iDI=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux; # does not build on darwin
     teams = [ lib.teams.lxqt ];
   };
-}
+})

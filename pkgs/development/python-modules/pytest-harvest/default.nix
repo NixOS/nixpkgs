@@ -14,7 +14,7 @@
   pytest-cases,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-harvest";
   version = "1.10.5";
   pyproject = true;
@@ -22,14 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smarie";
     repo = "python-pytest-harvest";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-s8QiuUFRTTRhSpLa0DHScKFC9xdu+w2rssWCg8sIjsg=";
   };
 
   # create file, that is created by setuptools_scm
   # we disable this file creation as it touches internet
   postPatch = ''
-    echo "version = '${version}'" > pytest_harvest/_version.py
+    echo "version = '${finalAttrs.version}'" > pytest_harvest/_version.py
 
     substituteInPlace pytest_harvest/tests/test_lazy_and_harvest.py \
       --replace-fail "from distutils.version import LooseVersion" "from packaging.version import parse" \
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Store data created during your `pytest` tests execution, and retrieve it at the end of the session, e.g. for applicative benchmarking purposes";
     homepage = "https://github.com/smarie/python-pytest-harvest";
-    changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${version}";
+    changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

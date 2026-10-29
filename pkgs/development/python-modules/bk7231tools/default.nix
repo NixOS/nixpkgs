@@ -8,7 +8,7 @@
   pyserial,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bk7231tools";
   version = "2.1.2";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tuya-cloudcutter";
     repo = "bk7231tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-CXX4BcdlUQHPtZYggCn0LaqqEDCWXI7LRZnCWsja+SY=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ mevatron ];
     mainProgram = "bk7231tools";
   };
-}
+})

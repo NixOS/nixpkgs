@@ -12,7 +12,7 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotille";
   version = "5.0.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tammoippen";
     repo = "plotille";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-P2qwd935aaYgwLAKpTA2OAuohxVVzKwzYqjsuPSOSHs=";
   };
 
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/tammoippen/plotille/releases/tag/v${version}";
+    changelog = "https://github.com/tammoippen/plotille/releases/tag/v${finalAttrs.version}";
     description = "Plot in the terminal using braille dots";
     homepage = "https://github.com/tammoippen/plotille";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

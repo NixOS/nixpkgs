@@ -19,14 +19,14 @@
   moreutils,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "bruno";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M4oNx3nSe8hSAtZMVyXIW0qQIQkaOeQgpPsfjmmJ30E=";
 
     postFetch = ''
@@ -75,8 +75,8 @@ buildNpmPackage rec {
       --replace-fail "useTelemetry({ version });" ""
 
     # fix version reported in sidebar and about page
-    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-electron/package.json | ${moreutils}/bin/sponge packages/bruno-electron/package.json
-    ${jq}/bin/jq '.version |= "${version}"' packages/bruno-app/package.json | ${moreutils}/bin/sponge packages/bruno-app/package.json
+    ${jq}/bin/jq '.version |= "${finalAttrs.version}"' packages/bruno-electron/package.json | ${moreutils}/bin/sponge packages/bruno-electron/package.json
+    ${jq}/bin/jq '.version |= "${finalAttrs.version}"' packages/bruno-app/package.json | ${moreutils}/bin/sponge packages/bruno-app/package.json
 
     # disable remote image download to prevent network calls to comply with build sandboxing
     substituteInPlace packages/bruno-app/plugins/remote-images/loader.cjs \
@@ -206,4 +206,4 @@ buildNpmPackage rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

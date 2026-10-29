@@ -8,7 +8,7 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "justbytes";
   version = "0.15.3";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mulkieran";
     repo = "justbytes";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ardkinh5l0ud57MWLc+ii0xPwo1MgXIioYDrr8jC0ds=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

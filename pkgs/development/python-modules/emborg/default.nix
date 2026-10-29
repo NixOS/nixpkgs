@@ -17,7 +17,7 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "emborg";
   version = "1.43";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "emborg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b/nzAkWFOGPqr/cMX38WIQaOz7n+9d6gtMIgtFAd+yY=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interactive command line interface to Borg Backup";
     homepage = "https://github.com/KenKundert/emborg";
-    changelog = "https://github.com/KenKundert/emborg/releases/tag/${src.tag}";
+    changelog = "https://github.com/KenKundert/emborg/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

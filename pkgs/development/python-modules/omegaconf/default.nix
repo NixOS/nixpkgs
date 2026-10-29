@@ -15,7 +15,7 @@
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "omegaconf";
   version = "2.3.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omry";
     repo = "omegaconf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qxa4uIiX5TAyQ5rFkizdev60S4iVAJ08ES6FpNqf8zI=";
   };
 
@@ -81,8 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for configuring complex applications";
     homepage = "https://github.com/omry/omegaconf";
-    changelog = "https://github.com/omry/omegaconf/blob/v${version}/NEWS.md";
+    changelog = "https://github.com/omry/omegaconf/blob/v${finalAttrs.version}/NEWS.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

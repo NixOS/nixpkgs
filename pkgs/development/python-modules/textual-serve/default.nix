@@ -14,7 +14,7 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-serve";
   version = "1.1.3";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # No tags on GitHub
   src = fetchPypi {
     pname = "textual_serve";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-+PY2ri9f1lG3nZZUc8PpOD01Ic34lvm8KJcJGF2j9oM=";
   };
 
@@ -51,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

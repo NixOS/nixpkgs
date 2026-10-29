@@ -9,7 +9,7 @@
   cached-property,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-datauri";
   version = "3.0.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WrOQPUZ9vaLSR0hxIvCK8kBnARiOLh6qqWBw/h6XpaY=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
-    changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
+    changelog = "https://github.com/fcurella/python-datauri/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unlicense;
     maintainers = [ ];
   };
-}
+})

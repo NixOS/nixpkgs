@@ -14,7 +14,7 @@
   uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openai-harmony";
   version = "0.0.8";
   pyproject = true;
@@ -22,12 +22,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openai";
     repo = "harmony";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CaEldCrjBkjwsVeTzpiAFl/llAnUwJGTlU8Pt8YTV1E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-HeUK/S9nUDRTVkLf8CPrHfjBbyGZezZGu5P8XkfStVQ=";
   };
 
@@ -58,4 +58,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

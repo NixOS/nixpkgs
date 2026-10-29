@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-redoc-tag";
   version = "0.2.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Blueswen";
     repo = "mkdocs-redoc-tag";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pgJMcK8LZOj0niyRcbHi8Szsro2iNTj6hz6r24jrtVw=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "MkDocs plugin supports for add Redoc UI in page";
     homepage = "https://github.com/blueswen/mkdocs-redoc-tag";
-    changelog = "https://github.com/blueswen/mkdocs-redoc-tag/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/blueswen/mkdocs-redoc-tag/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benhiemer ];
   };
-}
+})

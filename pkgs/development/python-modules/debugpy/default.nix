@@ -23,7 +23,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "debugpy";
   version = "1.8.22";
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
 
     # Upstream uses .gitattributes to inject information about the revision
     # hash and the refname into `src/debugpy/_version.py`, see:
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     # - https://git-scm.com/docs/gitattributes#_export_subst and
     # - https://github.com/microsoft/debugpy/blob/v1.8.17/src/debugpy/_version.py#L24-L30
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' "$out/src/debugpy/_version.py"
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' "$out/src/debugpy/_version.py"
     '';
 
     hash = "sha256-gH+MDKiPQpZm32wF48toJEI8804xYqSdTera8SheuOU=";
@@ -148,7 +148,7 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
-    changelog = "https://github.com/microsoft/debugpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/microsoft/debugpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [
@@ -159,4 +159,4 @@ buildPythonPackage rec {
       "riscv64-linux"
     ];
   };
-}
+})

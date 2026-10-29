@@ -25,7 +25,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "falcon";
   version = "4.3.1";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "falconry";
     repo = "falcon";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-f+UoGYyrg8OZow4qONqzXuDVnrZalqUNDyavDoQ7QHE=";
   };
 
@@ -84,9 +84,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://falcon.readthedocs.io/en/stable/changes/${src.tag}.html";
+    changelog = "https://falcon.readthedocs.io/en/stable/changes/${finalAttrs.src.tag}.html";
     description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
     license = lib.licenses.asl20;
   };
-}
+})

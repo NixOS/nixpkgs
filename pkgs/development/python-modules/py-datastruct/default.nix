@@ -5,7 +5,7 @@
   poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-datastruct";
   version = "2.0.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kuba2k2";
     repo = "datastruct";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oGgvEYfDVxSTrq5ymWyZx6WiTKsofNzQqUr6YBtfV2I=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mevatron ];
   };
-}
+})

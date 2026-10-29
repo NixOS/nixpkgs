@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "zwave-js-ui";
   version = "11.25.1";
 
   src = fetchFromGitHub {
     owner = "zwave-js";
     repo = "zwave-js-ui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-E+EqbaznNUxmntrbdLNfZZUbunyCP/XA/T8Rpz1hg78=";
   };
   npmDepsHash = "sha256-QErifbWxobLCVyAr9PbOkGXCJD7NC8etnOmjji+L2Mg=";
@@ -24,8 +24,8 @@ buildNpmPackage rec {
     homepage = "https://zwave-js.github.io/zwave-js-ui/";
     license = lib.licenses.mit;
     downloadPage = "https://github.com/zwave-js/zwave-js-ui/releases";
-    changelog = "https://github.com/zwave-js/zwave-js-ui/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/zwave-js/zwave-js-ui/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "zwave-js-ui";
     maintainers = with lib.maintainers; [ cdombroski ];
   };
-}
+})

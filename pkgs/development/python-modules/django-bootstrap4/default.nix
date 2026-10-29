@@ -17,7 +17,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-bootstrap4";
   version = "26.3";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+Kp0vuJ+36kF3FvBHyyNpgQpsCEQPnyvBjITeP+Dc6M=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bootstrap 4 integration with Django";
     homepage = "https://github.com/zostera/django-bootstrap4";
-    changelog = "https://github.com/zostera/django-bootstrap4/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/zostera/django-bootstrap4/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

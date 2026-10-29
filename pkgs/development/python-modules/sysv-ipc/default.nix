@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sysv-ipc";
   version = "1.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "sysv_ipc";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-75arM7ti5NFBQvC+BSTcwMPHDJZELfL8dzxnt8dRQZk=";
   };
 
@@ -21,4 +21,4 @@ buildPythonPackage rec {
     homepage = "http://semanchuk.com/philip/sysv_ipc/";
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

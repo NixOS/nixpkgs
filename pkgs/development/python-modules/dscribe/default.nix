@@ -22,7 +22,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dscribe";
   version = "2.1.1";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "singroup";
     repo = "dscribe";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # Bundles a specific version of Eigen
     hash = "sha256-2JY24cR2ie4+4svVWC4rm3Iy6Wfg0n2vkINz032kPWc=";
   };
@@ -111,4 +111,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

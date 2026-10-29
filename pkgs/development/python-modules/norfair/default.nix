@@ -13,7 +13,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "norfair";
   version = "2.3.0";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tryolabs";
     repo = "norfair";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3a9Z4mbmqmSnOD69RAcKSX6N7vdDU5F/xgsEURnzIR0=";
   };
 
@@ -52,9 +52,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Lightweight Python library for adding real-time multi-object tracking to any detector";
-    changelog = "https://github.com/tryolabs/norfair/releases/tag/${src.tag}";
+    changelog = "https://github.com/tryolabs/norfair/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/tryolabs/norfair";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fleaz ];
   };
-}
+})

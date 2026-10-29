@@ -7,7 +7,7 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tempman";
   version = "0.1.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "python-tempman";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EHTnlT3vcmyjyyS3QCJXjAuZqOEc0i11rEb6zfX6rDY=";
   };
 
@@ -39,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

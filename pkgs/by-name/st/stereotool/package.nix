@@ -17,13 +17,13 @@
   makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stereotool";
   version = "10.71";
 
   srcs =
     let
-      versionNoPoint = lib.replaceStrings [ "." ] [ "" ] version;
+      versionNoPoint = lib.replaceStrings [ "." ] [ "" ] finalAttrs.version;
     in
     [
       (fetchurl {
@@ -188,5 +188,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ RudiOnTheAir ];
   };
-
-}
+})

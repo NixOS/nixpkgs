@@ -15,14 +15,14 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-rtmidi";
   version = "1.5.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_rtmidi";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-f5reaLBorgkADstWKulSHaOiNDYa1USeg/xzRUTQBPo=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python binding for the RtMidi C++ library implemented using Cython";
     homepage = "https://github.com/SpotlightKid/python-rtmidi";
-    changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

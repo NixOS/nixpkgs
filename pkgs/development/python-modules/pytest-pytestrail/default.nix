@@ -7,7 +7,7 @@
   testrail-api,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-pytestrail";
   version = "0.10.5";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "pytest-pytestrail";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-y34aRxQ8mu6b6GBRMFVzn1shMVc7TumdjRS3daMEZJM=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for interaction with TestRail";
     homepage = "https://github.com/tolstislon/pytest-pytestrail";
-    changelog = "https://github.com/tolstislon/pytest-pytestrail/releases/tag/${version}";
+    changelog = "https://github.com/tolstislon/pytest-pytestrail/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aanderse ];
   };
-}
+})

@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "algebraic-data-types";
   version = "0.2.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jspahrsummers";
     repo = "adt";
-    rev = "v" + version;
+    rev = "v" + finalAttrs.version;
     hash = "sha256-RHLI5rmFxklzG9dyYgYfSS/srCjcxNpzNcK/RPNJBPE=";
   };
 
@@ -37,4 +37,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jspahrsummers/adt";
     license = lib.licenses.mit;
   };
-}
+})

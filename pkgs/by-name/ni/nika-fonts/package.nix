@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nika-fonts";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "font-store";
     repo = "NikaFont";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jDemm8IyjhoCOg4Bfsp0tzUR7m+JaswL5d7Kug+asJk=";
   };
 
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

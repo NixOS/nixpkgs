@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openstep-parser";
   version = "2.0.3";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kronenthaler";
     repo = "openstep-parser";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ivPvkvVWXw5ftaGvwBR+JxBIlisI0p6k3i/8V2HlaqQ=";
   };
 
@@ -30,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ilaumjd ];
   };
-}
+})

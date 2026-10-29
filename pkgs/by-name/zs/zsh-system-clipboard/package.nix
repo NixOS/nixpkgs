@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-system-clipboard";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kutsan";
     repo = "zsh-system-clipboard";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VWTEJGudlQlNwLOUfpo0fvh0MyA2DqV+aieNPx/WzSI=";
   };
 
   strictDeps = true;
   installPhase = ''
-    install -D zsh-system-clipboard.zsh $out/share/zsh/${pname}/zsh-system-clipboard.zsh
+    install -D zsh-system-clipboard.zsh $out/share/zsh/${finalAttrs.pname}/zsh-system-clipboard.zsh
   '';
 
   meta = {
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -15,7 +15,7 @@
   scikit-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wktutils";
   version = "2.0.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-WKTUtils";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mB+joEZq/aFPcRqFAzPgwG26Wi7WiRCeQeFottk+4Ho=";
   };
 
@@ -60,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of tools for handling WKTs";
     homepage = "https://github.com/asfadmin/Discovery-WKTUtils";
-    changelog = "https://github.com/asfadmin/Discovery-WKTUtils/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/asfadmin/Discovery-WKTUtils/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

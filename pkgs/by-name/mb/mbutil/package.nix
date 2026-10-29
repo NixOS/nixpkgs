@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mbutil";
   version = "0.3.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "mbutil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vxAF49NluEI/cZMUv1dlQBpUh1jfZ6KUVkYAmFAWphk=";
   };
 
@@ -35,4 +35,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

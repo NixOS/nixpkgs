@@ -7,13 +7,13 @@
   pydantic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peco";
   version = "0.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-xW65tEL86ecOfGIbnGiSnKtq7SmKQxW2eMTVrs/nxNc=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interacting with the PECO outage map";
     homepage = "https://github.com/IceBotYT/peco-outage-api";
-    changelog = "https://github.com/IceBotYT/peco-outage-api/releases/tag/${version}";
+    changelog = "https://github.com/IceBotYT/peco-outage-api/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

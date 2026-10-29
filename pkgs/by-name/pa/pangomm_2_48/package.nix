@@ -12,7 +12,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pangomm";
   version = "2.56.2";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
+    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor finalAttrs.version}/pangomm-${finalAttrs.version}.tar.xz";
     hash = "sha256-8emEyFqFtqDmFhY2ZSH1HdgoKgcrtF0VtQhHYrYvTA4=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

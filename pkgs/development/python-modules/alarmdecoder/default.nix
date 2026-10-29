@@ -11,7 +11,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alarmdecoder";
   version = "1.13.14";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nutechsoftware";
     repo = "alarmdecoder";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-qjn6OY8N1Miuou2aCHGhAQJtOEH1kE6XM8k1TPAibGU=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for the Alarm Decoder (AD2USB, AD2SERIAL and AD2PI) devices";
     homepage = "https://github.com/nutechsoftware/alarmdecoder";
-    changelog = "https://github.com/nutechsoftware/alarmdecoder/releases/tag/${src.rev}";
+    changelog = "https://github.com/nutechsoftware/alarmdecoder/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

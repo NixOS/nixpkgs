@@ -12,7 +12,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyzx";
   version = "0.10.7";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxcalc";
     repo = "pyzx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AHAZfap++J1n3450i7QVd24AFFzmz0R4IhO8QXuuqD0=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for quantum circuit rewriting and optimisation using the ZX-calculus";
     homepage = "https://github.com/zxcalc/pyzx";
-    changelog = "https://github.com/zxcalc/pyzx/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/zxcalc/pyzx/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

@@ -11,13 +11,13 @@
   unicode-character-database,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "youseedee";
   version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-b5gxBIr/mowzlG4/N0C22S1XTq0NAGTq1/+iMUfxD18=";
   };
 
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

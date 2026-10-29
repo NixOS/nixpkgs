@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sockio";
   version = "0.15.0";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
     repo = "sockio";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NSGd7/k1Yr408dipMNBSPRSwQ+wId7VLxgqMM/UmN/Q=";
   };
 
@@ -75,4 +75,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

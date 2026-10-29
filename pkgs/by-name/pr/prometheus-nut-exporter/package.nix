@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nut-exporter";
   version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "DRuggeri";
     repo = "nut_exporter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-et1XCKpjyhr7yY24t8xBSRzh9nAmIG6bdjgbI1LuJaE=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jhh ];
   };
-}
+})

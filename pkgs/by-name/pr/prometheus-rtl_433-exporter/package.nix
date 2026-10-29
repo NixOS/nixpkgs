@@ -6,14 +6,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rtl_433-exporter";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "mhansen";
     repo = "rtl_433_prometheus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ggtGi1gnpTLGvZnfAW9vyYyU7ELbTRNhXyCMotx+KKU=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zopieux ];
   };
-}
+})

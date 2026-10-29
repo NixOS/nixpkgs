@@ -6,14 +6,14 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ufal-chu-liu-edmonds";
   version = "1.0.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ufal.chu_liu_edmonds";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-v3tv6cYWoFPPgaO6KXR2uUk3MsZ458Tz5wKeFW8fzNE=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})

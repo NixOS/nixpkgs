@@ -10,7 +10,7 @@
   python-memcached,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiomcache";
   version = "0.8.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiomcache";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+rlKHDop0kNxJ0HoXROs/oyI4zE3MDyxXXhWZtVDMj4=";
   };
 
@@ -31,10 +31,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiomcache" ];
 
   meta = {
-    changelog = "https://github.com/aio-libs/aiomcache/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/aiomcache/blob/${finalAttrs.src.rev}/CHANGES.rst";
     description = "Minimal asyncio memcached client";
     homepage = "https://github.com/aio-libs/aiomcache/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

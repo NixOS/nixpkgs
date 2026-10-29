@@ -16,7 +16,7 @@
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apscheduler";
   version = "3.11.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "apscheduler";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AhVlACRg0Xwy9XmFRl29of5uM2aJa5Gv2SzFuJXVCpE=";
   };
 
@@ -67,10 +67,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "apscheduler" ];
 
   meta = {
-    changelog = "https://github.com/agronholm/apscheduler/releases/tag/${src.tag}";
+    changelog = "https://github.com/agronholm/apscheduler/releases/tag/${finalAttrs.src.tag}";
     description = "Library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

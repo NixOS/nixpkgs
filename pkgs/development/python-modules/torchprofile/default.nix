@@ -8,7 +8,7 @@
   torchvision,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchprofile";
   version = "0.0.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zhijian-liu";
     repo = "torchprofile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ynRrGHzroyv8T8fggJAag7u6XBOx+uN49HSIe46Bcek=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/zhijian-liu/torchprofile/releases/tag/${src.tag}";
+    changelog = "https://github.com/zhijian-liu/torchprofile/releases/tag/${finalAttrs.src.tag}";
     description = "General and accurate MACs / FLOPs profiler for PyTorch models";
     homepage = "https://github.com/zhijian-liu/torchprofile";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

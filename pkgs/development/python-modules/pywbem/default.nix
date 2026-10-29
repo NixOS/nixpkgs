@@ -24,13 +24,13 @@
   yamlloader,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywbem";
   version = "1.9.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tTfr6DfE/W8ifHXdGWF14QW5X66a3PGfeQRXujV1M0M=";
   };
 
@@ -78,8 +78,8 @@ buildPythonPackage rec {
   meta = {
     description = "Support for the WBEM standard for systems management";
     homepage = "https://pywbem.github.io";
-    changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
+    changelog = "https://github.com/pywbem/pywbem/blob/${finalAttrs.version}/docs/changes.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

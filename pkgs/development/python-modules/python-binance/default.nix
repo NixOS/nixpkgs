@@ -16,7 +16,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-binance";
   version = "1.0.34";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sammchardy";
     repo = "python-binance";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-afgEr82emFIiJGNrjGoU8MdiNKhZdn5B/LutmohE48M=";
   };
 
@@ -90,4 +90,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/sammchardy/python-binance";
     license = lib.licenses.mit;
   };
-}
+})

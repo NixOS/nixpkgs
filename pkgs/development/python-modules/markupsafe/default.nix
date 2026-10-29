@@ -16,7 +16,7 @@
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "markupsafe";
   version = "3.0.4";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "markupsafe";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RDjYVW0YlYVlha5cBcB7zjNN3zO3xS92DUhYJsNusfk=";
   };
 
@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://markupsafe.palletsprojects.com/page/changes/#version-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "https://palletsprojects.com/p/markupsafe/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

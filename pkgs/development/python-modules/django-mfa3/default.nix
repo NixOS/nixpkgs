@@ -10,7 +10,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-mfa3";
   version = "1.1.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xi";
     repo = "django-mfa3";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uVlDEfkM2+XYHL6hjA/ieuls12fZKzh9ZMSMPZ5O3aY=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi factor authentication for Django";
     homepage = "https://github.com/xi/django-mfa3";
-    changelog = "https://github.com/xi/django-mfa3/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/xi/django-mfa3/blob/${finalAttrs.src.rev}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})

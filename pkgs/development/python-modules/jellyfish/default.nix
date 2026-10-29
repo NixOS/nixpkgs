@@ -9,7 +9,7 @@
   unicodecsv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jellyfish";
   version = "1.2.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jamesturk";
     repo = "jellyfish";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jKz7FYzV66TUkJZfWDTy8GXmTZ6SU5jEdtkjYLDfS/8=";
   };
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for doing approximate and phonetic matching of strings";
     homepage = "https://github.com/jamesturk/jellyfish";
-    changelog = "https://github.com/jamesturk/jellyfish/releases/tag/v${version}";
+    changelog = "https://github.com/jamesturk/jellyfish/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})

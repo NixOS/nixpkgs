@@ -11,7 +11,7 @@
   termcolor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "barectf";
   version = "3.1.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "efficios";
     repo = "barectf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JelFfd3WS012dveNlIljhLdyPmgE9VEOXoZE3MBA/Gw=";
   };
 
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/efficios/barectf";
     license = lib.licenses.mit;
   };
-}
+})

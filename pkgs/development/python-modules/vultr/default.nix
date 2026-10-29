@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vultr";
   version = "1.0.1";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spry-group";
     repo = "python-vultr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ByPtIU6Yro28nH2cIzxqgZR0VwpggCsOAXVDBhssjAI=";
   };
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Vultr.com API Client";
     homepage = "https://github.com/spry-group/python-vultr";
-    changelog = "https://github.com/spry-group/python-vultr/releases/tag/${src.tag}";
+    changelog = "https://github.com/spry-group/python-vultr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lihop ];
   };
-}
+})

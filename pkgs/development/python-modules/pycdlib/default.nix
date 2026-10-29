@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pycdlib";
   version = "1.22.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clalancette";
     repo = "pycdlib";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YZ1o6wVvSF3Kvm1NvJ9FomAObLwwiaxLa1Xj9CuyeQc=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ Enzime ];
     platforms = lib.platforms.all;
   };
-}
+})

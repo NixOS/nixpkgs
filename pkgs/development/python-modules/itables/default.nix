@@ -29,7 +29,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "itables";
   version = "2.9.1";
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   # Our fetchNpmDeps tooling in nixpkgs doesn't support this yet, so we fetch
   # the source tarball from pypi, which includes the javascript bundle already.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tUfwiCtW5eN+1qiEULPjRJKqA/WqpM8P4AtUkzuet+k=";
   };
 
@@ -114,8 +114,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pandas and Polar DataFrames as interactive DataTables";
     homepage = "https://github.com/mwouts/itables";
-    changelog = "https://github.com/mwouts/itables/releases/tag/v${version}";
+    changelog = "https://github.com/mwouts/itables/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

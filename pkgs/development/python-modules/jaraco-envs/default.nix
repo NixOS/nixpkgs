@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaraco-envs";
   version = "2.6.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.envs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yRMX0H6yWN8TiO/LGAr4HyrVS8ZhBjuR885/+UQscP0=";
   };
 
@@ -39,10 +39,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jaraco/jaraco.envs/blob/${src.rev}/NEWS.rst";
+    changelog = "https://github.com/jaraco/jaraco.envs/blob/${finalAttrs.src.rev}/NEWS.rst";
     description = "Classes for orchestrating Python (virtual) environments";
     homepage = "https://github.com/jaraco/jaraco.envs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

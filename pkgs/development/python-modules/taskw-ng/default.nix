@@ -11,7 +11,7 @@
   taskwarrior2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "taskw-ng";
   version = "0.2.7";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bergercookie";
     repo = "taskw-ng";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KxXLSDvUclQlNbMR+Zzl6tgBrH2QxqjLVoyBK3OiKVU=";
   };
 
@@ -49,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with the Taskwarrior API";
     homepage = "https://github.com/bergercookie/taskw-ng";
-    changelog = "https://github.com/bergercookie/taskw-ng/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/bergercookie/taskw-ng/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

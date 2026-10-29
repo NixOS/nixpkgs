@@ -8,14 +8,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdbusmenu-lxqt";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libdbusmenu-lxqt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-5X73kRUtOYeqBEIw2ctUnwXnWKPHDaoT489yT5nugZw=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
   };
-}
+})

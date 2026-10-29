@@ -10,7 +10,7 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyezvizapi";
   version = "1.0.5.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RenierM26";
     repo = "pyEzvizApi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m3rj8ELu8/X/3TPtC1wfN8VOs7eHKb4DNvb7JAoKXfE=";
   };
 
@@ -40,9 +40,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for Ezviz cameras";
     homepage = "https://github.com/RenierM26/pyEzvizApi";
-    changelog = "https://github.com/RenierM26/pyEzvizApi/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/RenierM26/pyEzvizApi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "pyezviz";
   };
-}
+})

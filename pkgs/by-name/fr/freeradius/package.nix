@@ -37,14 +37,14 @@
 
 assert withRest -> withJson;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeradius";
   version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
-    tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-+pFV6dDnL7T5G309cLACa+/0vGppCEdk3ghOQhgSjTs=";
   };
 
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})
 ## TODO: include windbind optionally (via samba?)
 ## TODO: include oracle optionally
 ## TODO: include ykclient optionally

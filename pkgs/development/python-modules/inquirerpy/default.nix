@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inquirerpy";
   version = "0.3.4";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kazhala";
     repo = "InquirerPy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ap0xZHEU458tjm6oEN5EtDoSRlnpZ7jvDq1L7fTlQQc=";
   };
 
@@ -42,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python port of Inquirer.js";
     homepage = "https://github.com/kazhala/InquirerPy";
-    changelog = "https://github.com/kazhala/InquirerPy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/kazhala/InquirerPy/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -12,13 +12,13 @@
   udev,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hidapi";
   version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7LwmXL6Le4h1X0IeC6JfCECR7FUMK5D/no3dT81UAxE=";
   };
 
@@ -56,4 +56,4 @@ buildPythonPackage rec {
       prusnak
     ];
   };
-}
+})

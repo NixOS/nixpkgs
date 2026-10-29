@@ -8,7 +8,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ctypesgen";
   version = "1.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctypesgen";
     repo = "ctypesgen";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-TwIWPellmjMpTGQ+adJBLNMdAqB0kLOMl4YAubvXKqo=";
   };
 
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pure-python wrapper generator for ctypes";
     homepage = "https://github.com/ctypesgen/ctypesgen";
-    changelog = "https://github.com/ctypesgen/ctypesgen/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ctypesgen/ctypesgen/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

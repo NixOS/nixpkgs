@@ -13,13 +13,13 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-cache";
   version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "jupyter_cache";
     hash = "sha256-FugI6xnj+2eiI9uQbhMepuAfA6on9JpyFM5qX+wYb7k=";
   };
@@ -43,8 +43,8 @@ buildPythonPackage rec {
     description = "Defined interface for working with a cache of jupyter notebooks";
     mainProgram = "jcache";
     homepage = "https://github.com/executablebooks/jupyter-cache";
-    changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

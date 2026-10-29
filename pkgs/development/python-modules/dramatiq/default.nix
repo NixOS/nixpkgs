@@ -16,7 +16,7 @@
   watchdog-gevent,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dramatiq";
   version = "2.2.0";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0nCTcFKtKkSyuUQelIkXDAemqK+FQh2dTzgIeOEYZo0=";
   };
 
@@ -101,7 +101,7 @@ buildPythonPackage rec {
     description = "Background Processing for Python 3";
     homepage = "https://github.com/Bogdanp/dramatiq";
     license = lib.licenses.lgpl3Plus;
-    changelog = "https://github.com/Bogdanp/dramatiq/releases/tag/v${version}";
+    changelog = "https://github.com/Bogdanp/dramatiq/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ traxys ];
   };
-}
+})

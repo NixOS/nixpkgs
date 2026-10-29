@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "psycopg2";
   version = "2.9.12";
   pyproject = true;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-He2xx6HYVSxKYETGscQaUuao4tFEr4PsysdYB2sbfBU=";
   };
 
@@ -82,4 +82,4 @@ buildPythonPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

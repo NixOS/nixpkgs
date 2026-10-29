@@ -9,7 +9,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "screenlogicpy";
   version = "0.10.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dieselrabbit";
     repo = "screenlogicpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o/NcLassEaucnWqu5fnYA19wFwCPCT9nYKBeHzFZTKo=";
   };
 
@@ -53,8 +53,8 @@ buildPythonPackage rec {
     description = "Python interface for Pentair Screenlogic devices";
     mainProgram = "screenlogicpy";
     homepage = "https://github.com/dieselrabbit/screenlogicpy";
-    changelog = "https://github.com/dieselrabbit/screenlogicpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/dieselrabbit/screenlogicpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

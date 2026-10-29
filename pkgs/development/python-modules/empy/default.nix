@@ -4,12 +4,12 @@
   buildPythonPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "empy";
   version = "4.2.1";
   format = "setuptools";
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uDHWQvypVQeCC1N3TAUYAxQrhEG4xCv4AAEdoGukJBs=";
   };
   pythonImportsCheck = [ "em" ];
@@ -20,4 +20,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ nkalupahana ];
     license = lib.licenses.bsd3;
   };
-}
+})

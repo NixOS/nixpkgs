@@ -14,7 +14,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-sphinx";
   version = "0.0.5";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "llimeht";
     repo = "hatch-sphinx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8yImNwcuLFXQtXFCe6BMH4P6SH8GVS/U44vqN/XUjRU=";
   };
 
@@ -57,4 +57,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

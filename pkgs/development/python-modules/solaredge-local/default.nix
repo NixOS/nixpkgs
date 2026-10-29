@@ -7,14 +7,14 @@
   uplink-protobuf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "solaredge-local";
   version = "0.2.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "solaredge_local";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-tGUr4zlMdyJqRyFAs7INiH5rJYPmu7qoaImg4dzW5rk=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

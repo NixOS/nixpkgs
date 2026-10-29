@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyephember2";
   version = "2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "roberty99";
     repo = "pyephember2";
-    tag = "Release${version}";
+    tag = "Release${finalAttrs.version}";
     hash = "sha256-BxDXjrXPx6UNWo7mGLzbIGtenE0B10x39iCUCzGFAr0=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/roberty99/pyephember2/releases/tag/${src.tag}";
+    changelog = "https://github.com/roberty99/pyephember2/releases/tag/${finalAttrs.src.tag}";
     description = "Python library to work with ember from EPH Controls";
     homepage = "https://github.com/ttroy50/pyephember";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

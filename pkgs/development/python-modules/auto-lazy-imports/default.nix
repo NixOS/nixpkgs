@@ -9,7 +9,7 @@
   runCommand,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "auto-lazy-imports"; # matches pypi
   version = "0.4.2";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hmiladhia";
     repo = "lazyimports";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DPk/fupBuYmm7Xy5+qFkqeRoglflECuX8A0C2ncARhI=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   # check if NIX_PYTHONPATH is properly set in downstream environments
   passthru.tests = {
     check-autorun-pyenv =
-      runCommand "${pname}-check-autorun-pyenv"
+      runCommand "${finalAttrs.pname}-check-autorun-pyenv"
         {
           nativeBuildInputs = [
             (python.withPackages (ps: [
@@ -61,7 +61,7 @@ buildPythonPackage rec {
           ];
         }
         ''
-          pytest ${src}/tests && touch $out
+          pytest ${finalAttrs.src}/tests && touch $out
         '';
 
     # TODO: this requires user to set NIX_PYTHONPATH
@@ -85,4 +85,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

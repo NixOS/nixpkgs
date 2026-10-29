@@ -14,7 +14,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyfirefly";
   version = "0.1.16";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyfirefly";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RrVjXhV42DBvmTcZMowmHXN5K4nZfKPT/CDbvf1tOAQ=";
   };
 
@@ -47,10 +47,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/erwindouna/pyfirefly/releases/tag/${src.tag}";
+    changelog = "https://github.com/erwindouna/pyfirefly/releases/tag/${finalAttrs.src.tag}";
     description = "Asynchronous Python client for the Firefly III API";
     homepage = "https://github.com/erwindouna/pyfirefly";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

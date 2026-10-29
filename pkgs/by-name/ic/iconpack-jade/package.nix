@@ -6,14 +6,14 @@
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iconpack-jade";
   version = "1.25";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = "iconpack-jade";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0pwz3l5i93s84iwkn1jq8a150ma96788a0n41xq2cgy00j8h8xh0";
   };
 
@@ -44,4 +44,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

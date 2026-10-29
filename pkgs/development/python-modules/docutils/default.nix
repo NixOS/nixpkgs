@@ -11,13 +11,13 @@
 # It cannot use `fetchgit` because that would pull curl into the bootstrap, which is disallowed.
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "docutils";
     version = "0.23";
     pyproject = true;
 
     src = fetchurl {
-      url = "mirror://sourceforge/docutils/docutils-${version}.tar.gz";
+      url = "mirror://sourceforge/docutils/docutils-${finalAttrs.version}.tar.gz";
       hash = "sha256-dG9QYDIlESgKHlDrdoRu1r8jQphLKsBNxCyqGo14eZ4=";
     };
 
@@ -47,7 +47,7 @@ let
     meta = {
       description = "Python Documentation Utilities";
       homepage = "http://docutils.sourceforge.net/";
-      changelog = "https://sourceforge.net/projects/docutils/files/docutils/${version}";
+      changelog = "https://sourceforge.net/projects/docutils/files/docutils/${finalAttrs.version}";
       license = with lib.licenses; [
         publicDomain
         bsd2
@@ -57,6 +57,6 @@ let
       maintainers = with lib.maintainers; [ jherland ];
       mainProgram = "docutils";
     };
-  };
+  });
 in
 self

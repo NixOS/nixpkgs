@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysolarmanv5";
   version = "3.0.6";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jmccrohan";
     repo = "pysolarmanv5";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ENEXuMQGQ1Jwgpfp2v0T2dveTJoIaVu+DfefQZy8ntE=";
   };
 
@@ -33,9 +33,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python module to interact with Solarman Data Logging Sticks";
-    changelog = "https://github.com/jmccrohan/pysolarmanv5/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jmccrohan/pysolarmanv5/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/jmccrohan/pysolarmanv5";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
   };
-}
+})

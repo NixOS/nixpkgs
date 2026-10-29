@@ -7,7 +7,7 @@
   nixosTests,
   stdenv, # for meta.broken
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "db-rest";
   version = "6.1.0";
 
@@ -16,7 +16,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "derhuerst";
     repo = "db-rest";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-1iJ26l6C6GevNkoDVMztPHiH3YsutJa3xWAsfYvgR9U=";
   };
 
@@ -40,4 +40,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ marie ];
     mainProgram = "db-rest";
   };
-}
+})

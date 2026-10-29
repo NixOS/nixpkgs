@@ -22,14 +22,14 @@
   libraspberrypi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyperion.ng";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "hyperion-project";
     repo = "hyperion.ng";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lKLXgOrXp8DLmlpQe/33A30l4K9VX8P0q2LUA+lLYws=";
     # needed for `dependencies/external/`:
     # * rpi_ws281x` - not possible to use as a "system" lib
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

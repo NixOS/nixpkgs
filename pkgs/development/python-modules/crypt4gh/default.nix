@@ -15,14 +15,14 @@
   pynacl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crypt4gh";
   version = "1.7";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "EGA-archive";
     repo = "crypt4gh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kPXD/SityWscHuRn068E6fFxUjt67cC5VEe5o8wtxwk=";
   };
 
@@ -64,4 +64,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.richardjacton ];
   };
-}
+})

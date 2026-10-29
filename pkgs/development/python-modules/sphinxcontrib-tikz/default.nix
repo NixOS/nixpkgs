@@ -7,13 +7,13 @@
   texliveSmall,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-tikz";
   version = "0.4.20";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-LuO9H5yi80nAgjpPNQfZHEEOf5a+IPBR/vevFmXzQco=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     license = lib.licenses.bsd3;
   };
-}
+})

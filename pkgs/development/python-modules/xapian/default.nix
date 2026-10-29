@@ -10,13 +10,13 @@
 let
   pythonSuffix = lib.optionalString python.isPy3k "3";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xapian";
   inherit (xapian) version;
   pyproject = false;
 
   src = fetchurl {
-    url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
+    url = "https://oligarchy.co.uk/xapian/${finalAttrs.version}/xapian-bindings-${finalAttrs.version}.tar.xz";
     hash = "sha256-o4zHukGIzAvSfcc2nwOQZ3IEcIehxU8bkzVdXpEDwwQ=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Bindings for Xapian";
     homepage = "https://xapian.org/";
-    changelog = "https://xapian.org/docs/xapian-bindings-${version}/NEWS";
+    changelog = "https://xapian.org/docs/xapian-bindings-${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

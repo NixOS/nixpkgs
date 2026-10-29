@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pprintpp";
   version = "0.4.0-unstable-2022-05-31";
   pyproject = true;
@@ -37,9 +37,9 @@ buildPythonPackage rec {
   meta = {
     description = "Drop-in replacement for pprint that's actually pretty";
     homepage = "https://github.com/wolever/pprintpp";
-    changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
+    changelog = "https://github.com/wolever/pprintpp/blob/${finalAttrs.version}/CHANGELOG.txt";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
     mainProgram = "pypprint";
   };
-}
+})

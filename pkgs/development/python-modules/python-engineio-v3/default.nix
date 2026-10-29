@@ -9,13 +9,13 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-engineio-v3";
   version = "3.14.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-tYri/+OKIJAWWzeijFwgY9PK66lH584dvZnoBWyzaFw=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     longDescription = "This is a release of 3.14.2 under the “engineio_v3” namespace for old systems.";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

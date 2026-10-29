@@ -8,7 +8,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zope-filerepresentation";
   version = "7.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.filerepresentation";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VWi00b7m+aKwkg/Gfzo5fJWMqdMqgowBpkqsYcEO2gY=";
   };
 
@@ -43,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/zopefoundation/zope.filerepresentation";
     description = "File-system Representation Interfaces";
-    changelog = "https://github.com/zopefoundation/zope.filerepresentation/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/zopefoundation/zope.filerepresentation/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
   };
-}
+})

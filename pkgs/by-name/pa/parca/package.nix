@@ -55,7 +55,7 @@ let
   });
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit version;
 
   pname = "parca";
@@ -64,8 +64,8 @@ buildGoModule rec {
   vendorHash = "sha256-eZPAgxOi1jgTHmisFG/Sz2y3vhxUu/L3Iodb5mrKnVs=";
 
   ldflags = [
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
@@ -82,7 +82,7 @@ buildGoModule rec {
     mainProgram = "parca";
     description = "Continuous profiling for analysis of CPU and memory usage";
     homepage = "https://github.com/parca-dev/parca";
-    changelog = "https://github.com/parca-dev/parca/releases/tag/v${version}";
+    changelog = "https://github.com/parca-dev/parca/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -90,4 +90,4 @@ buildGoModule rec {
       metalmatze
     ];
   };
-}
+})

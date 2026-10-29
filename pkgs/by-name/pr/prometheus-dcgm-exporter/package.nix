@@ -5,7 +5,7 @@
   autoAddDriverRunpath,
   dcgm,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dcgm-exporter";
 
   # The first portion of this version string corresponds to a compatible DCGM
@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "dcgm-exporter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NafQWP1NxHTwmOND8ovy3oVia7qq0rCwZYE3VNlMBKQ=";
   };
 
@@ -53,4 +53,4 @@ buildGoModule rec {
     mainProgram = "dcgm-exporter";
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -11,7 +11,7 @@
   python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyduke-energy";
   version = "1.0.6";
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjmeli";
     repo = "pyduke-energy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7KkUpsHg3P2cF0bVl3FzyAQwzeaCmg+vzRHlM/TIcNA=";
   };
 
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for the Duke Energy API";
     homepage = "https://github.com/mjmeli/pyduke-energy";
-    changelog = "https://github.com/mjmeli/pyduke-energy/releases/tag/v${version}";
+    changelog = "https://github.com/mjmeli/pyduke-energy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

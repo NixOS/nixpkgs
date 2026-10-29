@@ -11,14 +11,14 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-postgresqlflexibleservers";
   version = "3.0.0b1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_postgresqlflexibleservers";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-Vo1/vuxAAgVznCppDZCTygNFAMl5uopc3QbiEeFbLv8=";
   };
 
@@ -45,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

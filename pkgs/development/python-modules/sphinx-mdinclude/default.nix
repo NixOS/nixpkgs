@@ -16,14 +16,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinx-mdinclude";
   version = "0.6.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_mdinclude";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-RHRi6Cy4vmFASiIEIn+SB2nrkj0vV2COMyXzu4goa0w=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/omnilib/sphinx-mdinclude";
-    changelog = "https://github.com/omnilib/sphinx-mdinclude/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/omnilib/sphinx-mdinclude/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Sphinx extension for including or writing pages in Markdown format";
     longDescription = ''
       A simple Sphinx extension that enables including Markdown documents from within
@@ -56,4 +56,4 @@ buildPythonPackage rec {
       JulianFP
     ];
   };
-}
+})

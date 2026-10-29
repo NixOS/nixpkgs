@@ -7,20 +7,20 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "attrs";
   version = "26.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0DzricsyKo/XBtT7kZQHN7ZkKqNpmP4TCpvJbJhe/zI=";
   };
 
   patches = [
     (replaceVars ./remove-hatch-plugins.patch {
       # hatch-vcs and hatch-fancy-pypi-readme depend on pytest, which depends on attrs
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/python-attrs/attrs";
-    changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
+    changelog = "https://github.com/python-attrs/attrs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

@@ -14,7 +14,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peewee";
   version = "4.4.0";
   pyproject = true;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "peewee";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1wUnxZCN1SKwH32iFU7JKaFtXukMuP3u9jg9dOjy0aM=";
   };
 
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python ORM with support for various database implementation";
     homepage = "http://peewee-orm.com";
-    changelog = "https://github.com/coleifer/peewee/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/coleifer/peewee/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pwiz.py";
   };
-}
+})

@@ -13,7 +13,7 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "osmpythontools";
   version = "0.3.6";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ajZJSuMbku08vHvn4fqsLqCS/E2XR3uVqiH7R1GHH5o=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mocnik-science/osm-python-tools";
     license = lib.licenses.gpl3Only;
-    changelog = "https://raw.githubusercontent.com/mocnik-science/osm-python-tools/v${version}/version-history.md";
+    changelog = "https://raw.githubusercontent.com/mocnik-science/osm-python-tools/v${finalAttrs.version}/version-history.md";
     maintainers = with lib.maintainers; [ das-g ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

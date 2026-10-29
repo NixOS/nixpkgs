@@ -30,14 +30,14 @@
   geopy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lida";
   version = "0.0.14";
   pyproject = true;
 
   # No releases or tags are available in https://github.com/microsoft/lida
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-/az6hS8rNPxb8cDiz9SOyUBi/X48r9prJNFUnx1wPHM=";
   };
 
@@ -105,4 +105,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "lida";
   };
-}
+})

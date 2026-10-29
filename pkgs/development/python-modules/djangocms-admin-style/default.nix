@@ -10,7 +10,7 @@
   djangocms-admin-style,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djangocms-admin-style";
   version = "3.3.1";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "djangocms-admin-style";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cDbmC7IJTT3NuVXBnbUVqC7dUfusMdntDGu2tSvxIdQ=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django Theme tailored to the needs of django CMS";
     homepage = "https://django-cms.org";
-    changelog = "https://github.com/django-cms/djangocms-admin-style/releases/tag/${version}";
+    changelog = "https://github.com/django-cms/djangocms-admin-style/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.onny ];
   };
-}
+})

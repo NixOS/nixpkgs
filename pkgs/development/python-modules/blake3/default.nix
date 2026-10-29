@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blake3";
   version = "1.0.8";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "blake3-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gwPGSah9qzApDwsBNABRLPZGrpaO3WArHoK6Jj6WJzo=";
   };
 
@@ -55,11 +55,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the BLAKE3 cryptographic hash function";
     homepage = "https://github.com/oconnor663/blake3-py";
-    changelog = "https://github.com/oconnor663/blake3-py/releases/tag/${version}";
+    changelog = "https://github.com/oconnor663/blake3-py/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       cc0
       asl20
     ];
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

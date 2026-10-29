@@ -9,14 +9,14 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hypothesis-auto";
   version = "1.1.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "hypothesis_auto";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-U0vcOB9jXmUV5v2IwybVu2arY1FpPnKkP7m2kbD1kRw=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

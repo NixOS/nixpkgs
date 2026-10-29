@@ -10,13 +10,13 @@
   xvfb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xcffib";
   version = "1.12.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Q0Ut5QnBJk1bzqS8Alyhv2gnLSQO8m0zQLRuEfY9PUo=";
   };
 
@@ -51,9 +51,9 @@ buildPythonPackage rec {
   meta = {
     description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
-    changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
+    changelog = "https://github.com/tych0/xcffib/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ kamilchm ];
   };
-}
+})

@@ -12,7 +12,7 @@
   fetchpatch2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rlcard";
   version = "1.0.7";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datamllab";
     repo = "rlcard";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-SWj6DBItQzSM+nioV54a350Li7tbBaVXsQxNAqVgB0k=";
   };
 
@@ -87,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Reinforcement Learning / AI Bots in Card (Poker) Games - Blackjack, Leduc, Texas, DouDizhu, Mahjong, UNO";
     homepage = "https://github.com/datamllab/rlcard";
-    changelog = "https://github.com/datamllab/rlcard/releases/tag/${version}";
+    changelog = "https://github.com/datamllab/rlcard/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

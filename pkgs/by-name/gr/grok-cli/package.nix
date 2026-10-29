@@ -7,14 +7,14 @@
   grok-cli,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "grok-cli";
   version = "0.0.33";
 
   src = fetchFromGitHub {
     owner = "superagent-ai";
     repo = "grok-cli";
-    tag = "@vibe-kit/grok-cli@${version}";
+    tag = "@vibe-kit/grok-cli@${finalAttrs.version}";
     hash = "sha256-4+be/H/LEMNxNTYHW7L4wDIKPm09yuYo4r08ZeBiJ4w=";
   };
 
@@ -39,4 +39,4 @@ buildNpmPackage rec {
     mainProgram = "grok";
     platforms = lib.platforms.all;
   };
-}
+})

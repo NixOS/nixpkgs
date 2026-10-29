@@ -9,12 +9,12 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "socat";
   version = "1.8.1.3";
 
   src = fetchurl {
-    url = "http://www.dest-unreach.org/socat/download/socat-${version}.tar.bz2";
+    url = "http://www.dest-unreach.org/socat/download/socat-${finalAttrs.version}.tar.bz2";
     hash = "sha256-JbxkdikrLmFCIJicd7C2/Kh7slJdl0ezGmY5sftgJBg=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ryan4yin ];
     mainProgram = "socat";
   };
-}
+})

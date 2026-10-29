@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-edit";
   version = "0-unstable-2022-05-05";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    outdir=$out/share/zsh/${pname}
+    outdir=$out/share/zsh/${finalAttrs.pname}
     install -D zsh-edit.plugin.zsh $outdir/zsh-edit.plugin.zsh
     install -D _bind $outdir/_bind
     install -d $outdir/functions
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ deejayem ];
     platforms = lib.platforms.all;
   };
-}
+})

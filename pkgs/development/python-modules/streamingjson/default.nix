@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "streamingjson";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karminski";
     repo = "streaming-json-py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XKqW5gbK55OKoAWftoh5CmGc0Sn5FOvGKmrAbsEvIMo=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethanthoma ];
   };
-}
+})

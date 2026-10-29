@@ -14,12 +14,12 @@
   libarchive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgepub";
   version = "0.7.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgepub/${lib.versions.majorMinor version}/libgepub-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgepub/${lib.versions.majorMinor finalAttrs.version}/libgepub-${finalAttrs.version}.tar.xz";
     sha256 = "WlZpWqipEy1nwHkqQPJSzgpI2dAytOGops6YrxT9Xhs=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "none";
     };
   };
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
   };
-}
+})

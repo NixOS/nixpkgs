@@ -21,7 +21,7 @@
   httpx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scalar-fastapi";
   version = "1.8.2";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     rev = "0f4bd9da2706be09a8afba017465f55a62dc0975";
     hash = "sha256-FvbRsLEfdG2fqg14xXG0K1nn8+qX/Co9Sy2EOM0DTlg=";
   };
-  sourceRoot = "${src.name}/integrations/fastapi";
+  sourceRoot = "${finalAttrs.src.name}/integrations/fastapi";
 
   build-system = [
     setuptools
@@ -66,4 +66,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ codgician ];
   };
-}
+})
