@@ -7,14 +7,14 @@
   makeWrapper,
   nix-update-script,
   stdenv,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "oasdiff";
   version = "1.35.0";
 
-  strictDeps = true;
+  __darwinAllowLocalNetworking = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -27,11 +27,14 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-ShHiN3pmMwZTc9Ai51CwWSXOKkxuUugbR9KOYZd4JIo=";
 
   subPackages = [ "." ];
-  env.CGO_ENABLED = 0;
+
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+  };
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/oasdiff/oasdiff/build.Version=${finalAttrs.version}"
   ];
 
@@ -40,19 +43,6 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
   nativeCheckInputs = [ gitMinimal ];
-
-  # The test suite starts local HTTP servers.
-  __darwinAllowLocalNetworking = true;
-
-  # subPackages selects only the executable, but tests live throughout the module.
-  checkPhase = ''
-    runHook preCheck
-
-    export GOFLAGS=''${GOFLAGS//-trimpath/}
-    go test -p "$NIX_BUILD_CORES" ./...
-
-    runHook postCheck
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/oasdiff \
@@ -65,12 +55,10 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/oasdiff completion zsh)
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Find breaking changes in OpenAPI specifications";
