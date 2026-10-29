@@ -1,28 +1,32 @@
 {
-  lib,
   argcomplete,
   buildPythonPackage,
+  docstring-parser,
   fetchFromGitHub,
+  lib,
+  poetry-core,
   pudb,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "recline";
-  version = "2025.12";
+  version = "2026.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
-    tag = "v${version}";
-    hash = "sha256-xEH6fEq84nD3X6bPj1Yw36mjwHKlFKsVaMh4Iogzl18=";
+    tag = "v${finalAttrs.version}.1";
+    hash = "sha256-DQSLsMGS/YxchR4OfZGX2iPg7cqIJEoAScxYjKxOTFI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
-  dependencies = [ argcomplete ];
+  dependencies = [
+    argcomplete
+    docstring-parser
+  ];
 
   nativeCheckInputs = [
     pudb
@@ -37,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
