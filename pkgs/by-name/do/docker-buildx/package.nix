@@ -8,6 +8,8 @@ buildGoModule rec {
   pname = "docker-buildx";
   version = "0.35.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
