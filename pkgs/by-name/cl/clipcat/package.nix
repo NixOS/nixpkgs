@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   protobuf,
   installShellFiles,
@@ -20,6 +21,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-M7B6QLyABsGoy6dbKsCx1AKEfEoDhkY/cbzGbk59TiU=";
   };
+
+  patches = [
+    # Remove lints that were removed in rustc 1.99,
+    # which fails the build with `renamed_and_removed_lints = "deny"`
+    (fetchpatch {
+      name = "drop-removed-lint.patch";
+      url = "https://github.com/xrelkd/clipcat/commit/9761d95bfa267cb1c5b28ac27c4b63572b915f04.patch";
+      hash = "sha256-ODpwBAtSCDM6M9WCxWvpl/P2DyJPNQnPj8MNEXJbbCQ=";
+    })
+    (fetchpatch {
+      name = "remove-deprecated-linter-options.patch";
+      url = "https://github.com/xrelkd/clipcat/commit/424fcef2d4e98a256d2897a2e901a9f7d28f0fd6.patch";
+      hash = "sha256-YiH0oHiEhJvfzeS6FOC+2rpCHpPXVIY0dE6vkpwicSw=";
+    })
+  ];
 
   cargoHash = "sha256-YYlNH95A2aGVWd0vw2vmTMXTA3ornCBHbcFrg59uh3I=";
 
