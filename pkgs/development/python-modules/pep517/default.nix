@@ -8,7 +8,6 @@
   setuptools,
   testpath,
   mock,
-  pip,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     setuptools
     testpath
     mock
-    pip
   ];
 
   disabledTests = [
