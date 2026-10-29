@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "OPENMP" true)
     (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" "${placeholder "out"}/lib")
   ];
 
   meta = {
