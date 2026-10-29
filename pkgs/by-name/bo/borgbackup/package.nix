@@ -33,6 +33,13 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   postPatch = ''
+    # Upstream is very sensible about msgpack versions, but the updates to here did not change any relevant code,
+    # so basically backport the essential changes from the bump commits, instead of relaxing the version freely.
+    substituteInPlace src/borg/helpers/msgpack.py \
+      --replace-fail "(1, 2, 1)" "(1, 2, 4)"
+    substituteInPlace pyproject.toml \
+      --replace-fail "<=1.2.1" "<=1.2.4"
+
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
       --replace-fail "0o4755" "0o0755"
