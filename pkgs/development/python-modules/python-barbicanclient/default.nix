@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-barbicanclient";
-  version = "7.3.0";
+  version = "7.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-barbicanclient";
     tag = finalAttrs.version;
-    hash = "sha256-SFAldyA/M0rkKb2o6ePp+9ITWrUszyTz5jvCnUadufo=";
+    hash = "sha256-hRzzByFJxYbFxGtP/0/Rko/zgGtgXzyIS6dny+ZaTMQ=";
   };
 
   # Manually set version since pbr wants to get it from git (not in a tarball)
