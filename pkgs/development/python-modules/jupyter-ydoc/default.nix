@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-ydoc";
-  version = "4.1.1";
+  version = "4.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8hGe8a4kA8fAqsR9hN5NK7BKhtw0HnsN14uWcc1239M=";
+    hash = "sha256-DQrNJjjxeljhn8QvCTqQ0VQkbMBqb9W+znkWg0imRc8=";
   };
 
   build-system = [
