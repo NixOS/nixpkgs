@@ -2,6 +2,8 @@
   fetchFromGitHub,
   lib,
   openssl,
+  zstd,
+  sqlite,
   pkg-config,
   rustPlatform,
 }:
@@ -27,7 +29,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+    sqlite
+  ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}
