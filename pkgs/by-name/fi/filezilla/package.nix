@@ -9,6 +9,7 @@
   gnutls,
   libfilezilla,
   libidn,
+  makeBinaryWrapper,
   nettle,
   pkg-config,
   pugixml,
@@ -32,6 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Pfm5s+Wyw33G2ey4g1VKuhQKAuxHw9a1IzO/FzOvTaQ=";
   };
 
+  # The engine library uses pugixml but doesn't link it, which only works
+  # where the linker allows undefined symbols in shared libraries
+  postPatch = ''
+    substituteInPlace src/engine/Makefile.am \
+      --replace-fail '$(LIBFZSSH_LIBS) $(LIBFILEZILLA_LIBS)' '$(LIBFZSSH_LIBS) $(LIBFILEZILLA_LIBS) $(PUGIXML_LIBS)'
+  '';
+
   configureFlags = [
     "--disable-manualupdatecheck"
     "--disable-autoupdatecheck"
@@ -41,13 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook3
     xdg-utils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
   ];
 
   buildInputs = [
     boost
-    dbus
     fzssh
     gettext
     gnutls
@@ -57,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     sqlite
     tinyxml
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
     gtk3
   ];
 
@@ -64,7 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preFixup = ''
+  # On macOS, FileZilla only looks for its resources inside the app bundle.
+  # Upstream's bundle carries copies of all dylibs in Frameworks, which our
+  # installed binary doesn't use.
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r FileZilla.app $out/Applications/
+    rm -r $out/Applications/FileZilla.app/Contents/Frameworks
+    mv $out/bin/filezilla $out/Applications/FileZilla.app/Contents/MacOS/filezilla
+    makeWrapper $out/Applications/FileZilla.app/Contents/MacOS/filezilla $out/bin/filezilla
+  '';
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
     )
@@ -80,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       provided.
     '';
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       iedame
       pSub
