@@ -136,7 +136,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       loguru
       lxml
       markdown
-      mcp_1
+      mcp
       msoffcrypto-tool
       nltk
       onnxruntime
