@@ -55,6 +55,7 @@ buildPythonPackage rec {
     "test_page_background" # tries to download file
     "test_twitter_emoji_shaping" # hash mismatch
     "test_twitter_emoji_text" # hash mismatch
+    "test_image_with_explicit_dimensions" # hash mismatch with Pillow 13, fixed upstream in 2.9.0
   ];
 
   meta = {
