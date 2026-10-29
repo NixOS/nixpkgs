@@ -53,7 +53,6 @@ buildPythonPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       connornelson
-      feyorsh
     ];
   };
 })
