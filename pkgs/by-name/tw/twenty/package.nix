@@ -3,18 +3,19 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
-  nodejs,
   nixosTests,
+  nodejs_26,
   postgresql,
   stdenv,
   yarn-berry_4,
 }:
 let
-  yarn-berry = yarn-berry_4;
+  nodejs = nodejs_26;
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "twenty";
-  version = "2.51.0";
+  version = "2.53.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "twentyhq";
     repo = "twenty";
     tag = "twenty/v${finalAttrs.version}";
-    hash = "sha256-VWWB4Yl1QKb01nD08GnnDZLhd3fMIfCtXeI0er7Lm3U=";
+    hash = "sha256-oKb5Ax0/fRicXcceEJPOp8EM6ZLxWL6qJS/A6AMleF8=";
   };
 
   postPatch = ''
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-gCs518EcAqNgmhxuM6L+zwlSxtThX+xVSIL/Z1EH9Xo=";
+    hash = "sha256-G6XP/ByEDQ+6fBEEbAgVx8DWvhxqfanW02p9xIRnako=";
   };
 
   preBuild = ''
