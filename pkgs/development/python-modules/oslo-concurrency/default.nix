@@ -21,7 +21,7 @@
   stestrCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-concurrency";
   version = "7.4.1";
   pyproject = true;
@@ -29,11 +29,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.concurrency";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NZ6OsaDwqEsW2FZEi8cjXkLa7EwVqt3mYPRkG/jGiFM=";
   };
 
   postPatch = ''
+    # pbr needs git to ship subpackages and package data
+    echo "recursive-include oslo_concurrency *" > MANIFEST.in
+
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
       --replace-fail "/usr" "" \
       --replace-fail "/bin/bash" "${bash}/bin/bash" \
@@ -44,7 +47,8 @@ buildPythonPackage rec {
       --replace-fail '"oslo_concurrency"' '"oslo_concurrency", "oslo_concurrency.fixture", "oslo_concurrency.tests"'
   '';
 
-  env.PBR_VERSION = version;
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [ setuptools ];
 
@@ -88,7 +92,10 @@ buildPythonPackage rec {
     "oslo_concurrency.tests.unit.test_lockutils"
   ];
 
-  pythonImportsCheck = [ "oslo_concurrency" ];
+  pythonImportsCheck = [
+    "oslo_concurrency"
+    "oslo_concurrency.fixture"
+  ];
 
   meta = {
     description = "Oslo Concurrency library";
@@ -97,4 +104,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})
