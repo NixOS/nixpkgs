@@ -16,6 +16,7 @@
   rustc,
   cargo,
   json-glib,
+  zstd,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     python3
     json-glib
+    zstd
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     apple-sdk_gstreamer
