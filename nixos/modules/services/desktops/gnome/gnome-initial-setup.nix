@@ -93,6 +93,13 @@ in
     ];
 
     users = {
+      users.gnome-initial-setup = {
+        isSystemUser = true;
+        group = "gnome-initial-setup";
+        home = "/run/gdm/home/gnome-initial-setup";
+        description = "GNOME Initial Setup user";
+      };
+
       # TODO: switch to using provided gnome-initial-setup sysusers.d
       groups.gnome-initial-setup = { };
     };
