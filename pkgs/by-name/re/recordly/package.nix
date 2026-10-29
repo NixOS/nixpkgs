@@ -32,6 +32,16 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-GvW+VOaRyWVd2MMu9VRVQIktswGgeFJFpQVM5U+2PCw=";
 
+  # Running the asar through nixpkgs' electron leaves app.isPackaged false, so
+  # point the asset lookups at the wallpapers electron-builder places next to it.
+  postPatch = ''
+    substituteInPlace electron/ipc/project/manager.ts \
+      --replace-fail 'path.join(app.getAppPath(), "public")' \
+                     'path.join(path.dirname(app.getAppPath()), "assets")'
+    substituteInPlace electron/ipc/register/assets.ts \
+      --replace-fail '!app.isPackaged' '!app.getAppPath().endsWith(".asar")'
+  '';
+
   # uiohook-napi ships N-API prebuilts that autoPatchelfHook fixes up, and the
   # remaining install scripts only fetch sources for platforms we do not build.
   npmRebuildFlags = [ "--ignore-scripts" ];
