@@ -128,7 +128,7 @@ let
   useSharedLief = lib.versionAtLeast version "25.6";
   useSharedMerve = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.6.1");
   useSharedSQLite = lib.versionAtLeast version "22.5";
-  useSharedTemporal = majorVersion == "26";
+  useSharedTemporal = lib.versionAtLeast version "26";
   useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps = {
