@@ -16611,6 +16611,12 @@
     githubId = 1572058;
     name = "Leonardo Cecchi";
   };
+  leonardpahlke = {
+    email = "leonard.pahlke@googlemail.com";
+    github = "leonardpahlke";
+    githubId = 58054077;
+    name = "Leonard Pahlke";
+  };
   leonid = {
     email = "belyaev.l@northeastern.edu";
     github = "aeblyve";

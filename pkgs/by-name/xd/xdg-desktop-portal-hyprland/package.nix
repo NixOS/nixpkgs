@@ -10,7 +10,6 @@
   cairo,
   grim,
   hyprgraphics,
-  hyprland,
   hyprland-protocols,
   hyprlang,
   hyprtoolkit,
@@ -83,7 +82,6 @@ gcc16Stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           (placeholder "out")
           grim
-          hyprland
           slurp
         ]
       }
