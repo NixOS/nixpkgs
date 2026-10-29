@@ -78,7 +78,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.81.5";
+  version = "0.82.0";
 
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ buildGoModule (finalAttrs: {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ma5ngsTqcblG6uLCn7IcSvI9vUhbIs4gr2nD4ZBdTAo=";
+    hash = "sha256-NIYOIc0Q7FLLKZCKVhCfGSojbS3Rux8dxPg6Mq0A/cs=";
   };
 
   overrideModAttrs = final: prev: {
@@ -100,7 +100,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-TlW+Y4n3sImdBQ6qXQgfKndNftQDLwu8YsqucVCIfyY=";
+  vendorHash = "sha256-rzHnfPjjv4fNHSE2qk6/5wCZ3BH0LrFvDDmNNU5Di0s=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -127,7 +127,7 @@ buildGoModule (finalAttrs: {
 
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-T4E4GJgsoMZnLokJRuDm1L43OrYF99PLF4x/4HRIB4E=";
+    hash = "sha256-fcV0AeT1TZRtm/sTqZSYPE88Eh0tS/PHckN8Ef11RjM=";
   };
 
   preBuild = lib.optionalString (componentName == "ui") ''
