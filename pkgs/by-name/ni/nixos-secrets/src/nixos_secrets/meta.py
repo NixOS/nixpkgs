@@ -2,7 +2,7 @@ import json
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Self
+from typing import Any, Self
 
 from .args import SecretsArgs
 from .config import (
@@ -23,7 +23,8 @@ class SecretsMetadata:
     id: VersionID
     dependencies: dict[str, VersionID]
 
-    def from_json(json: any) -> Self:
+    @staticmethod
+    def from_json(json: Any) -> "SecretsMetadata":
         return SecretsMetadata(id=json["id"], dependencies=json["dependencies"])
 
     def to_json(self: Self):

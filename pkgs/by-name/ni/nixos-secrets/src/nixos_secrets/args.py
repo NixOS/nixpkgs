@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Self
+from typing import Any
 
 from .error import SecretsError
 
@@ -20,7 +20,8 @@ class SecretsArgs:
     command: str  # gotta figure out how to type this properly
     verbose: str
 
-    def from_dict(d: dict[str, any]) -> Self:
+    @staticmethod
+    def from_dict(d: dict[str, Any]) -> "SecretsArgs":
         # This one is only in the dict when the "generate" command is used.
         # I wish we had proper sum types...
         if "generators" not in d:
@@ -46,14 +47,13 @@ class SecretsArgs:
 
         args = SecretsArgs(**d)
 
-        configSources = []
-
+        configSources: list[str] = []
         if args.file is not None:
-            configSources.append(args.file)
+            configSources.append(str(args.file))
         if args.flake is not None:
             configSources.append(args.flake)
         if args.json is not None:
-            configSources.append(args.json)
+            configSources.append(str(args.json))
 
         if len(configSources) != 1:
             raise SecretsError(

@@ -13,7 +13,7 @@ def collect_garbage(args: SecretsArgs, config: SecretsConfig):
     unspecified = existing.entries - specified
 
     # The metadata file should only be removed if the secret is no longer part of the config.
-    meta_files = { e for e in unspecified if e.file == meta_file_name }
+    meta_files = {e for e in unspecified if e.file == meta_file_name}
     for meta_file in meta_files:
         if meta_file.secret in config.generators:
             unspecified.remove(meta_file)
@@ -23,7 +23,7 @@ def collect_garbage(args: SecretsArgs, config: SecretsConfig):
             print(f"Skipping '{backend.name}': missing 'delete' script")
             continue
 
-        to_remove = { e for e in unspecified if e.backend == backend.name }
+        to_remove = {e for e in unspecified if e.backend == backend.name}
         if not to_remove:
             print(f"Skipping '{backend.name}': nothing to collect")
             continue

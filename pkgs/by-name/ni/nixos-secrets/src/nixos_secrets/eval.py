@@ -2,6 +2,7 @@ import functools
 import json
 import subprocess
 from pathlib import Path
+from typing import Any
 
 from .args import SecretsArgs
 from .config import SecretsConfig
@@ -31,7 +32,7 @@ def evaluate_config(args: SecretsArgs) -> SecretsConfig:
     return SecretsConfig.from_json(json.loads(json_str))
 
 
-def evaluate_config_raw(args: SecretsArgs) -> any:
+def evaluate_config_raw(args: SecretsArgs) -> Any:
     if args.json is not None:
         try:
             with open(args.json) as f:

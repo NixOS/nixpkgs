@@ -5,6 +5,7 @@
   python3,
   python3Packages,
   ruff,
+  mypy,
   makeWrapper,
   bubblewrap,
   jsonschema,
@@ -15,11 +16,14 @@ python3Packages.buildPythonApplication {
 
   name = "nixos-secrets";
   format = "pyproject";
+  src = ./src;
+
   nativeBuildInputs = [
     python3Packages.setuptools
     makeWrapper
+    ruff
+    mypy
   ];
-  src = ./src;
 
   postFixup = ''
     wrapProgram $out/bin/nixos-secrets \
@@ -31,11 +35,17 @@ python3Packages.buildPythonApplication {
       }
   '';
 
+  checkPhase = ''
+    ruff check $src
+    mypy $src
+  '';
+
   passthru.devShell = mkShell {
     packages = [
       python3
       bubblewrap
       ruff
+      mypy
       jsonschema
     ];
   };

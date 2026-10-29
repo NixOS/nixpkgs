@@ -63,10 +63,10 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
 
     # NOTE: we are going to run the scripts inside bubblewrap, thus sharing a
     # single temporary directory is not a concern.
-    with tempfile.TemporaryDirectory() as temp:
-        temp = Path(temp)
+    with tempfile.TemporaryDirectory() as temp_str:
+        temp = Path(temp_str)
 
-        up_to_date_meta = {}
+        up_to_date_meta: dict[str, SecretsMetadata] = {}
         for entry in order:
             generator = config.generators[entry]
 
@@ -96,9 +96,9 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                     regen = True
                 else:
                     changed_deps = set()
-                    for dep, id in meta.dependencies.items():
-                        if id != up_to_date_meta[dep].id:
-                            changed_deps.add(dep)
+                    for dep_name, id in meta.dependencies.items():
+                        if id != up_to_date_meta[dep_name].id:
+                            changed_deps.add(dep_name)
                     if changed_deps:
                         dep_str = ", ".join(sorted(changed_deps))
                         print(f"Updating '{entry}' (dependencies changed: {dep_str})")
@@ -116,7 +116,8 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
 
             if not regen:
                 print(f"Skipping '{entry}'")
-                up_to_date_meta[entry] = meta
+                if meta is not None:
+                    up_to_date_meta[entry] = meta
                 continue
 
             in_dir = temp / "generators" / entry / "in"
@@ -174,9 +175,9 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
 
                 try:
                     env = os.environ.copy()
-                    env["in"] = in_dir
-                    env["out"] = out_dir
-                    env["prompts"] = prompt_in_dir
+                    env["in"] = str(in_dir)
+                    env["out"] = str(out_dir)
+                    env["prompts"] = str(prompt_in_dir)
 
                     if args.disable_sandbox:
                         subprocess.run(
@@ -266,13 +267,13 @@ def set_files_from_path(
 ):
     file_names = ", ".join(sorted(f"'{name}'" for name in generator.files))
     if source.is_file():
-        file_count = len(generator.files.values())
+        file_count = len(generator.files)
         if file_count != 1:
             raise SecretsError(
                 f"The secret '{generator.name}' requires {file_count} files, yet only one was provided. Arrange the files in a directory containing files named {file_names} and try again."
             )
 
-        file = next(generator.files.values())
+        file = next(iter(generator.files.values()))
         try:
             set_secret(args, config, generator, file, source)
             return

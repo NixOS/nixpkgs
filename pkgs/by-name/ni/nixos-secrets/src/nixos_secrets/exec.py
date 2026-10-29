@@ -33,7 +33,7 @@ def build_binary(path: Path) -> Path:
             check=True,
         )
 
-        return result.stdout.strip()
+        return Path(result.stdout.strip())
     except subprocess.CalledProcessError as e:
         raise SecretsError(f"Error building '{path}':\n{e.stderr}")
 
@@ -41,9 +41,9 @@ def build_binary(path: Path) -> Path:
 def backend_env_vars(args: SecretsArgs) -> dict[str, str]:
     out = {}
     if args.json:
-        out["NIXOS_SECRETS_CONFIG"] = args.json
+        out["NIXOS_SECRETS_CONFIG"] = str(args.json)
     elif args.file:
-        out["NIXOS_SECRETS_CONFIG"] = args.file
+        out["NIXOS_SECRETS_CONFIG"] = str(args.file)
     elif args.flake:
         out["NIXOS_SECRETS_FLAKE"] = args.flake
     return out
@@ -60,7 +60,7 @@ def get_secret(
     binary = build_binary(backend.get)
     try:
         env = os.environ.copy()
-        env["out"] = out
+        env["out"] = str(out)
         env.update(backend_env_vars(args))
         subprocess.run(
             [binary, generator.name, file.name],
@@ -88,7 +88,7 @@ def set_secret(
     binary = build_binary(backend.set)
     try:
         env = os.environ.copy()
-        env["in"] = at
+        env["in"] = str(at)
         env.update(backend_env_vars(args))
         subprocess.run(
             [binary, generator.name, file.name],
@@ -189,7 +189,7 @@ def deploy_secrets(
         env = os.environ.copy()
         env.update(backend_env_vars(args))
         subprocess.run(
-            [binary, args.local] if local else [binary],
+            [binary, args.local] if args.local is not None else [binary],
             input="\n".join(inputLines),
             capture_output=not args.verbose,
             env=env,
@@ -215,11 +215,20 @@ def run_prompt(
     binary = build_binary(backend.ask)
     try:
         env = os.environ.copy()
-        env["out"] = out
+        env["out"] = str(out)
         env.update(backend_env_vars(args))
-        command = [binary, secret.name, prompt.name, prompt.type, prompt.label]
+
+        command: list[str | Path] = [
+            binary,
+            secret.name,
+            prompt.name,
+            prompt.type,
+            prompt.label,
+        ]
+
         if prompt.description:
             command.append(prompt.description)
+
         subprocess.run(
             command,
             env=env,
@@ -234,7 +243,7 @@ def run_prompt(
 
 
 def execution_order(config: SecretsConfig) -> list[str]:
-    ts = graphlib.TopologicalSorter()
+    ts: graphlib.TopologicalSorter[str] = graphlib.TopologicalSorter()
 
     for name, gen in config.generators.items():
         ts.add(name, *gen.dependencies)

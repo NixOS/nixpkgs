@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Self
+from typing import Any, Self
 
 from .error import SecretsError
 
@@ -13,7 +13,8 @@ class SecretsPromptBackend:
     name: str
     ask: str
 
-    def from_json(name: str, json: any) -> Self:
+    @staticmethod
+    def from_json(name: str, json: Any) -> "SecretsPromptBackend":
         return SecretsPromptBackend(name=name, ask=json["ask"])
 
 
@@ -25,7 +26,8 @@ class SecretsPrompt:
     backend: str
     type: str  # There's probably a way to type this properly..
 
-    def from_json(name: str, json: any) -> Self:
+    @staticmethod
+    def from_json(name: str, json: Any) -> "SecretsPrompt":
         return SecretsPrompt(
             name=name,
             label=json["label"],
@@ -46,7 +48,8 @@ class SecretsStoreBackend:
     deployRemote: str | None
     deployLocal: str | None
 
-    def from_json(name: str, json: any) -> Self:
+    @staticmethod
+    def from_json(name: str, json: Any) -> "SecretsStoreBackend":
         return SecretsStoreBackend(
             name=name,
             get=json["get"],
@@ -64,7 +67,8 @@ class SecretsFile:
     name: str
     deploy: bool = False
 
-    def from_json(name: str, json: any) -> Self:
+    @staticmethod
+    def from_json(name: str, json: Any) -> "SecretsFile":
         if safe_name_regex.search(name) is None:
             raise SecretsError(
                 f"File '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
@@ -85,7 +89,8 @@ class SecretsSecret:
     prompts: dict[str, SecretsPrompt]
     files: dict[str, SecretsFile]
 
-    def from_json(name: str, json: any) -> Self:
+    @staticmethod
+    def from_json(name: str, json: Any) -> "SecretsSecret":
         if safe_name_regex.search(name) is None:
             raise SecretsError(
                 f"Secret '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
@@ -128,7 +133,8 @@ class SecretsConfig:
     storeBackends: dict[str, SecretsStoreBackend]
     promptBackends: dict[str, SecretsPromptBackend]
 
-    def from_json(json: any) -> Self:
+    @staticmethod
+    def from_json(json: Any) -> "SecretsConfig":
         result = SecretsConfig(generators={}, storeBackends={}, promptBackends={})
 
         for k, v in json["backends"]["prompt"].items():

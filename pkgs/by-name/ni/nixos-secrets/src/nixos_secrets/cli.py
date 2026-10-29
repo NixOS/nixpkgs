@@ -120,8 +120,8 @@ def main() -> None:
         help="Deploy to a locally attached filesystem",
     )
 
-    args = parser.parse_args()
-    args = SecretsArgs.from_dict(vars(args))
+    raw_args = parser.parse_args()
+    args = SecretsArgs.from_dict(vars(raw_args))
 
     try:
         config = evaluate_config(args)
