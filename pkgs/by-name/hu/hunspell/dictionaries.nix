@@ -809,12 +809,12 @@ rec {
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
     pname = "hunspell-dict-uk-ua";
-    version = "6.5.3";
-    _version = "1727974630";
+    version = "6.8.6";
+    _version = "1789839899";
 
     src = fetchurl {
       url = "https://extensions.libreoffice.org/assets/downloads/521/${_version}/dict-uk_UA-${version}.oxt";
-      hash = "sha256-c957WHJqaf/M2QrE2H3aIDAWGoQDnDl0na7sd+kUXNI=";
+      hash = "sha256-V6ACnfsQy4HfRuDe1XpuHfCywOvJBGjkH0vMW5/OEFM=";
     };
 
     dictFileName = "uk_UA";
