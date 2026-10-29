@@ -12,6 +12,8 @@
   click,
   cryptography,
   in-toto-attestation,
+  pyopenssl,
+  rfc3161-client,
   sigstore,
   sigstore-models,
   typing-extensions,
@@ -52,6 +54,8 @@ buildPythonPackage rec {
     click
     cryptography
     in-toto-attestation
+    pyopenssl
+    rfc3161-client
     sigstore
     sigstore-models
     typing-extensions

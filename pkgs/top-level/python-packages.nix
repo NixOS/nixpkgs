@@ -20533,8 +20533,6 @@ self: super: with self; {
 
   systembridgeconnector = callPackage ../development/python-modules/systembridgeconnector { };
 
-  systembridgemodels = callPackage ../development/python-modules/systembridgemodels { };
-
   systemd-python = callPackage ../development/python-modules/systemd-python {
     inherit (pkgs) systemd;
   };

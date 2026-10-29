@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "concurrent-log-handler";
-  version = "0.9.30";
+  version = "0.9.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Preston-Landers";
     repo = "concurrent-log-handler";
     tag = finalAttrs.version;
-    hash = "sha256-n/G5+KXVCIio9yjhV/bl9a/mDI+r1YVzC04m3fyC0wQ=";
+    hash = "sha256-Smka38ihmdaykmHCof1Ts2vgbg4R7kI18a/hpM9PZ4Q=";
   };
 
   build-system = [ hatchling ];

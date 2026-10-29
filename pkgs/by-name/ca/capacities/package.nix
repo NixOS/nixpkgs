@@ -7,25 +7,12 @@
 }:
 let
   inherit (lib.importJSON ./version.json) version url sha256;
-
+in
+appimageTools.wrapType2 (finalAttrs: {
   pname = "capacities";
+  inherit version;
 
   src = fetchurl { inherit url sha256; };
-
-  appimageContents = appimageTools.extract {
-    inherit
-      pname
-      src
-      version
-      ;
-  };
-in
-appimageTools.wrapType2 {
-  inherit
-    pname
-    src
-    version
-    ;
 
   extraInstallCommands = ''
     source "${makeWrapper}/nix-support/setup-hook"
@@ -33,23 +20,23 @@ appimageTools.wrapType2 {
       --add-flags "--ozone-platform-hint=auto"
 
     # Check for required desktop file
-    if [ ! -f ${appimageContents}/io.capacities.app.desktop ]; then
-      echo "Error: Missing .desktop file in ${appimageContents}"
+    if [ ! -f ${finalAttrs.contents}/io.capacities.app.desktop ]; then
+      echo "Error: Missing .desktop file in ${finalAttrs.contents}"
       exit 1
     else
       # Install and modify the desktop file
-      install -m 444 -D ${appimageContents}/io.capacities.app.desktop $out/share/applications/io.capacities.app.desktop
+      install -m 444 -D ${finalAttrs.contents}/io.capacities.app.desktop $out/share/applications/io.capacities.app.desktop
       substituteInPlace $out/share/applications/io.capacities.app.desktop \
         --replace-fail "Exec=AppRun" "Exec=capacities"
     fi
 
     # Check for required icon file
-    if [ ! -f ${appimageContents}/capacities.svg ]; then
-      echo "Error: Missing icon file in ${appimageContents}"
+    if [ ! -f ${finalAttrs.contents}/capacities.svg ]; then
+      echo "Error: Missing icon file in ${finalAttrs.contents}"
       exit 1
     else
       # Resize and install the icon
-      ${lib.getExe imagemagick} ${appimageContents}/capacities.svg -resize 512x512 capacities_512.png
+      ${lib.getExe imagemagick} ${finalAttrs.contents}/capacities.svg -resize 512x512 capacities_512.png
       install -m 444 -D capacities_512.png $out/share/icons/hicolor/512x512/apps/capacities.png
     fi
   '';
@@ -65,4 +52,4 @@ appimageTools.wrapType2 {
     mainProgram = "capacities";
     maintainers = [ lib.maintainers.keysmashes ];
   };
-}
+})
