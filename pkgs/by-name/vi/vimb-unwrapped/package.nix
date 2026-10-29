@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://fanglingsu.github.io/vimb/";
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ evanwporter ];
     platforms = lib.platforms.linux;
   };
 })
