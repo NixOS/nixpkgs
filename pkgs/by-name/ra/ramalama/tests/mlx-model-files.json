@@ -1,0 +1,22 @@
+{
+  "repo": "mlx-community/SmolLM2-135M-Instruct-8bit",
+  "revision": "0f0d9b8218915bc34d401e1a340b8c049d300d5e",
+  "files": [
+    {
+      "name": "config.json",
+      "hash": "sha256-XakZBe/f3pBfVm121AMebKfEyyoB3E44EqcLhVGI/HM="
+    },
+    {
+      "name": "model.safetensors",
+      "hash": "sha256-7Facdx5WQkY2vpliWrqQMavFJaaKX0qxbWeOypb+8Sw="
+    },
+    {
+      "name": "tokenizer.json",
+      "hash": "sha256-fSfEk8cppm7O/INygLBdlIse1Q0TDuvb+RGxs2zzjtc="
+    },
+    {
+      "name": "tokenizer_config.json",
+      "hash": "sha256-on9ji9KDH1w96mVKdYOJMPKxH75VDE1OHV170HFXsu4="
+    }
+  ]
+}

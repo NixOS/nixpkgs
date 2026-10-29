@@ -1,0 +1,21 @@
+--- a/flashinfer/aot.py
++++ b/flashinfer/aot.py
+@@ -1155,7 +1155,17 @@
+         if has_sm90 or has_sm100 or has_sm103 or has_sm107:
+             jit_specs.append(gen_trtllm_utils_module())
+         # FP4 KV cache quantization/dequantization
+-        jit_specs.append(gen_fp4_kv_dequantization_module())
++        if (
++            has_sm80
++            or has_sm90
++            or has_sm100
++            or has_sm103
++            or has_sm107
++            or has_sm110
++            or has_sm120
++            or has_sm121
++        ):
++            jit_specs.append(gen_fp4_kv_dequantization_module())
+         if has_sm100 or has_sm103 or has_sm110 or has_sm120 or has_sm121:
+             jit_specs.append(gen_fp4_kv_quantization_module())
+ 

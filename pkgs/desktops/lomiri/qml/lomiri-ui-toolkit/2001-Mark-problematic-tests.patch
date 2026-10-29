@@ -1,0 +1,92 @@
+From 6f7fa32c524b2ae7e86c13dd55760506b4cd547d Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sat, 25 Jan 2025 08:08:42 +0100
+Subject: [PATCH] Mark problematic tests
+
+- test_defaultLabelsQmlContext in tst_slotslayout.13.qml seems not properly written,
+  fails consistently on aarch64-linux Hydra:
+  https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/45
+- tst_textinput_touch.SEGFAULT.11.qml is flaky:
+  https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/43
+---
+ tests/checkresults.sh | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
+
+diff --git a/tests/checkresults.sh b/tests/checkresults.sh
+index fc498985e..86619937d 100755
+--- a/tests/checkresults.sh
++++ b/tests/checkresults.sh
+@@ -22,6 +22,7 @@ ERRORS_PATTERN='<failure'
+ 
+ FAILURES=0
+ FATAL_WARNINGS=0
++EXCEPTED_FAILURES=0
+ EXCEPTED=0
+ for _XML in $*; do
+     _TESTNAME=$(basename $_XML | sed -r 's@(.+)\.xml@\1@' -)
+@@ -31,7 +32,13 @@ for _XML in $*; do
+       exit 1
+     fi
+ 
+-    EXCEPTIONS='components_benchmark \
++    ERROR_EXCEPTIONS='\
++                tst_slotslayout.13.qml \
++                tst_textinput_touch.SEGFAULT.11.qml \
++                '
++
++    EXCEPTIONS='\
++                components_benchmark \
+                 tst_tabbar.11.qml \
+                 tst_datepicker.bug1567840.SEGFAULT.12.qml \
+                 tst_datepicker.bug1567840.SEGFAULT.13.qml \
+@@ -54,17 +61,22 @@ for _XML in $*; do
+     WARNINGS=$(grep -c -P "$WARNINGS_PATTERN" $_XML)
+     ERRORS=$(grep -c -P "$ERRORS_PATTERN" $_XML)
+     if [ $ERRORS -ne 0 ]; then
+-      FAILURES_FILES="${FAILURES_FILES}  ${_TESTNAME}\n"
+-      ((FAILURES+=$ERRORS))
++      if [[ " $ERROR_EXCEPTIONS " == *" $_TESTNAME "* ]]; then
++        EXCEPTED_FAILURES_FILES="${EXCEPTED_FAILURES_FILES}  ${_TESTNAME}\n"
++        ((EXCEPTED_FAILURES+=$ERRORS))
++      else
++        FAILURES_FILES="${FAILURES_FILES}  ${_TESTNAME}\n"
++        ((FAILURES+=$ERRORS))
++      fi
+     elif [ $WARNINGS -ne 0 ]; then
+-      if [[ $EXCEPTIONS == *$_TESTNAME* ]]; then
++      if [[ " $EXCEPTIONS " == *" $_TESTNAME "* ]]; then
+         EXCEPTED_FILES="${EXCEPTED_FILES}  ${_TESTNAME}\n"
+         ((EXCEPTED+=$WARNINGS))
+       else
+         FATAL_WARNINGS_FILES="${FATAL_WARNINGS_FILES}  ${_TESTNAME}\n"
+         ((FATAL_WARNINGS+=$WARNINGS))
+       fi
+-    elif [[ $EXCEPTIONS == *$_TESTNAME* ]]; then
++    elif [[ " $ERROR_EXCEPTIONS " == *" $_TESTNAME "* || " $EXCEPTIONS " == *" $_TESTNAME "* ]]; then
+       WOOT_FILES="${WOOT_FILES}  ${_TESTNAME}\n"
+     fi
+ done
+@@ -82,6 +94,11 @@ if [ -n "$FATAL_WARNINGS_FILES" ]; then
+     echo -e "$FATAL_WARNINGS_FILES"
+ fi
+ 
++if [ -n "$EXCEPTED_FAILURES_FILES" ]; then
++    echo The following tests issued $EXCEPTED_FAILURES expected failures:
++    echo -e "$EXCEPTED_FAILURES_FILES"
++fi
++
+ if [ -n "$EXCEPTED_FILES" ]; then
+     echo The following tests issued $EXCEPTED expected warnings:
+     echo -e "$EXCEPTED_FILES"
+@@ -89,7 +106,7 @@ fi
+ 
+ if [ -n "$WOOT_FILES" ]; then
+     echo Woot! Known problematic tests passed!
+-    echo Consider removing these from EXCEPTIONS in ${0#$(pwd)/}!
++    echo Consider removing these from ERROR_EXCEPTIONS/EXCEPTIONS in ${0#$(pwd)/}!
+     echo -e "$WOOT_FILES"
+ fi
+ 
+-- 
+2.47.1
+

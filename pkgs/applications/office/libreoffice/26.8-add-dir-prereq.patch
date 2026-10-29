@@ -1,0 +1,43 @@
+From 747a5383ea0a7bbd413ba38754094493d9dbad57 Mon Sep 17 00:00:00 2001
+From: Andras Timar <andras.timar@collabora.com>
+Date: Thu, 23 Apr 2026 23:10:21 +0200
+Subject: [PATCH] gbuild: add .dir order-only prereq to UnpackedTarball version target
+
+Follow-up to b15dd2d51de5 "gbuild: rebuild UnpackedTarget when
+tarball changes". That commit made the new .version target the
+earliest thing in the unpack dep chain (UnpackedTarget.target ->
+UnpackedTarball.preparation -> UnpackedTarball.version), but forgot
+to give it the same order-only .dir prereq that .preparation and
+.target already have. On a from-scratch build (e.g. the Flatpak
+sandbox that starts with an empty workdir/) the .version recipe
+runs first, and `printf \$(UNPACKED_TARBALL) > \$@` fails with
+ENOENT because workdir/UnpackedTarball/ does not exist yet:
+
+  /bin/sh: line 1: .../workdir/UnpackedTarball/boost.version:
+    No such file or directory
+  make[1]: *** [solenv/gbuild/UnpackedTarball.mk:169:
+    .../workdir/UnpackedTarball/boost.version] Error 1
+
+Signed-off-by: Andras Timar <andras.timar@collabora.com>
+Change-Id: Ia6a16650711e9894e0e03a687f16adc204506be3
+Reviewed-on: https://gerrit.collaboraoffice.com/c/online/+/1474
+Tested-by: Jenkins CPCI <releng@collaboraoffice.com>
+Reviewed-by: Miklos Vajna <vmiklos@collabora.com>
+(cherry picked from commit 73bf8e51886b86878db3ceb99833f84ad326f483)
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/207067
+Reviewed-by: Julien Nabet <serval2412@yahoo.fr>
+Tested-by: Jenkins
+---
+
+diff --git a/solenv/gbuild/UnpackedTarball.mk b/solenv/gbuild/UnpackedTarball.mk
+index bce659b..cfdb7686 100644
+--- a/solenv/gbuild/UnpackedTarball.mk
++++ b/solenv/gbuild/UnpackedTarball.mk
+@@ -209,6 +209,7 @@
+ 
+ $(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE) \
+ 	$(call gb_UnpackedTarball_get_version_target,$(1))
++$(call gb_UnpackedTarball_get_version_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
+ $(call gb_UnpackedTarball_get_preparation_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
+ $(call gb_UnpackedTarball_get_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
+ $(call gb_UnpackedTarball_get_final_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(1))

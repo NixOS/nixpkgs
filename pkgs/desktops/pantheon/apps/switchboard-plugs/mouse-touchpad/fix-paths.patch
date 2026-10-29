@@ -1,0 +1,13 @@
+diff --git a/src/Utils/ToucheggSettings.vala b/src/Utils/ToucheggSettings.vala
+index 1d621b9c..73c89714 100644
+--- a/src/Utils/ToucheggSettings.vala
++++ b/src/Utils/ToucheggSettings.vala
+@@ -36,7 +36,7 @@ public class MouseTouchpad.ToucheggSettings : GLib.Object {
+     private const string MAXIMIZE_4_XPATH = "//application[@name=\"All\"]/gesture[@fingers=\"4\"]/action[@type=\"MAXIMIZE_RESTORE_WINDOW\"]/..";
+ 
+     public ToucheggSettings () {
+-        system_config_path = Path.build_filename (GLib.Path.DIR_SEPARATOR_S, "usr", "share", "touchegg", "touchegg.conf");
++        system_config_path = Path.build_filename ("@touchegg@", "share", "touchegg", "touchegg.conf");
+         user_config_dir_path = Path.build_filename (GLib.Environment.get_home_dir (), ".config", "touchegg");
+         user_config_path = Path.build_filename (GLib.Environment.get_home_dir (), ".config", "touchegg", "touchegg.conf");
+     }

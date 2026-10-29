@@ -1,0 +1,13 @@
+diff --git a/package.json b/package.json
+index d838331..073dfff 100644
+--- a/package.json
++++ b/package.json
+@@ -25,7 +25,7 @@
+     "_NOT_NEEDED_electron-build_": "npm rebuild --runtime=electron --target=41.1.1 --disturl=https://electronjs.org/headers --build-from-source",
+     "_NOT_NEEDED_electron-build": "electron-rebuild --version=41.1.1 --disturl=https://electronjs.org/headers",
+     "_NOT_NEEDED_rmDupeReactReduxTypes": "rimraf \"./node_modules/@types/react-redux/node_modules/@types/react\"",
+-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js && ncp src/package.json dist/package.json && cd dist && rimraf node_modules && npm i --ignore-scripts --foreground-scripts && rimraf package-lock.json && cd ..",
++    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js && ncp src/package.json dist/package.json",
+     "build:prod": "npm run lint && npm run build",
+     "build:dev:main": "webpack --config webpack.config.main.js",
+     "_NOT_NEEDED_build:dev:renderer:library": "webpack --config webpack.config.renderer-library.js",

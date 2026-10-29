@@ -1,0 +1,69 @@
+diff --git a/backend/classes/backup.js b/backend/classes/backup.js
+--- a/backend/classes/backup.js
++++ b/backend/classes/backup.js
+@@ -19,1 +19,3 @@
+-const backupfolder = "backup-data";
++const backupfolder = process.env.JS_BACKUP_DIR
++  ? path.resolve(process.env.JS_BACKUP_DIR)
++  : path.join(__dirname, "..", "backup-data");
+@@ -84,1 +84,1 @@
+-    const backuppath = path.join(__dirname, "..", backupfolder);
++    const backuppath = backupfolder;
+@@ -111,1 +111,1 @@
+-    const directoryPath = path.join(__dirname, "..", backupfolder, `backup_${now.format("YYYY-MM-DD HH-mm-ss")}.jsonl`);
++    const directoryPath = path.join(backupfolder, `backup_${now.format("YYYY-MM-DD HH-mm-ss")}.jsonl`);
+@@ -157,1 +157,1 @@
+-    const directoryPathDelete = path.join(__dirname, "..", backupfolder);
++    const directoryPathDelete = backupfolder;
+@@ -184,1 +184,1 @@
+-      const oldBackupFile = path.join(__dirname, "..", backupfolder, oldBackup.name);
++      const oldBackupFile = path.join(backupfolder, oldBackup.name);
+diff --git a/backend/classes/env.js b/backend/classes/env.js
+--- a/backend/classes/env.js
++++ b/backend/classes/env.js
+@@ -19,1 +19,6 @@
+-  const outputPath = path.join(__dirname, "..", "..", "dist", "env.js");
++  const envDir = process.env.JS_ENV_DIR ? path.resolve(process.env.JS_ENV_DIR) : path.join(__dirname, "..", "..", "dist");
++  const outputPath = path.join(envDir, "env.js");
++
++  if (process.env.JS_ENV_DIR) {
++    fs.mkdirSync(envDir, { recursive: true });
++  }
+diff --git a/backend/routes/backup.js b/backend/routes/backup.js
+--- a/backend/routes/backup.js
++++ b/backend/routes/backup.js
+@@ -31,1 +31,3 @@
+-const backupfolder = "backup-data";
++const backupfolder = process.env.JS_BACKUP_DIR
++  ? path.resolve(process.env.JS_BACKUP_DIR)
++  : path.join(__dirname, "..", "backup-data");
+@@ -312,1 +312,1 @@
+-    const filePath = path.join(__dirname, "..", backupfolder, filename);
++    const filePath = path.join(backupfolder, filename);
+@@ -331,1 +331,1 @@
+-    const directoryPath = path.join(__dirname, "..", backupfolder);
++    const directoryPath = backupfolder;
+@@ -358,1 +358,1 @@
+-  const filePath = path.join(__dirname, "..", backupfolder, filename);
++  const filePath = path.join(backupfolder, filename);
+@@ -366,1 +366,1 @@
+-    const filePath = path.join(__dirname, "..", backupfolder, filename);
++    const filePath = path.join(backupfolder, filename);
+@@ -385,1 +385,1 @@
+-    cb(null, path.join(__dirname, "..", backupfolder)); // Set the destination folder for uploaded files
++    cb(null, backupfolder); // Set the destination folder for uploaded files
+diff --git a/backend/server.js b/backend/server.js
+--- a/backend/server.js
++++ b/backend/server.js
+@@ -107,0 +108,11 @@
++// When JS_ENV_DIR is set, env.js is written outside of `root` (e.g. because
++// `root` lives on a read-only filesystem), so serve it explicitly from
++// there instead of relying on the findFile() lookup below, which only
++// searches under `root`.
++if (process.env.JS_ENV_DIR) {
++  const envDir = path.resolve(process.env.JS_ENV_DIR);
++  app.get(/\/env\.js$/, (req, res) => {
++    res.sendFile(path.join(envDir, "env.js"));
++  });
++}
++

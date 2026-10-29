@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bigdecimal (4.1.2)
+    google-protobuf (4.35.0)
+      bigdecimal
+      rake (~> 13.3)
+    pg_query (6.2.2)
+      google-protobuf (>= 3.25.3)
+    rake (13.4.2)
+    sqlint (0.3.0)
+      pg_query (>= 1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  sqlint
+
+BUNDLED WITH
+   2.7.2

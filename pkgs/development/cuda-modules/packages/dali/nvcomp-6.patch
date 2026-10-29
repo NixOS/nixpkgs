@@ -1,0 +1,227 @@
+From ad607fa44f20392718258fc2a6a28ecf1b79590b Mon Sep 17 00:00:00 2001
+From: Janusz Lisiecki <jlisiecki@nvidia.com>
+Date: Mon, 19 Oct 2026 09:41:08 +0200
+Subject: [PATCH 1/2] Update nvCOMP to 6.0 for CUDA 12.9 and 13.4 builds
+
+Signed-off-by: Janusz Lisiecki <jlisiecki@nvidia.com>
+---
+ cmake/Dependencies.common.cmake               |  2 +-
+ dali/core/dynlink_nvcomp.cc                   |  4 +--
+ dali/operators/decoder/inflate/inflate_gpu.cc | 29 +++++++++++++++--
+ dali/test/python/operator_1/test_inflate.py   | 32 +++++++++++++++++++
+ docker/Dockerfile.cuda129.aarch64.deps        |  2 +-
+ docker/Dockerfile.cuda129.x86_64.deps         |  2 +-
+ docker/Dockerfile.cuda134.aarch64.deps        |  2 +-
+ docker/Dockerfile.cuda134.x86_64.deps         |  2 +-
+ internal_tools/stub_generator/nvcomp.json     |  2 +-
+ 9 files changed, 66 insertions(+), 11 deletions(-)
+
+diff --git a/cmake/Dependencies.common.cmake b/cmake/Dependencies.common.cmake
+index 80e073f9..78bfa6f7 100644
+--- a/cmake/Dependencies.common.cmake
++++ b/cmake/Dependencies.common.cmake
+@@ -167,7 +167,7 @@ if(BUILD_NVCOMP)
+     list(APPEND DALI_LIBS ${nvcomp_LIBS})
+   else()
+     message(STATUS "Found nvCOMP: ${nvcomp_INCLUDE_DIR}.")
+-    set(DALI_INSTALL_REQUIRES_NVCOMP "\'nvidia-libnvcomp-cu${CUDA_VERSION_MAJOR} == 5.3.0.16\',")
++    set(DALI_INSTALL_REQUIRES_NVCOMP "\'nvidia-libnvcomp-cu${CUDA_VERSION_MAJOR} == 6.0.0.12\',")
+     message(STATUS "Adding nvComp requirement as: ${DALI_INSTALL_REQUIRES_NVCOMP}")
+   endif()
+ endif()
+diff --git a/dali/core/dynlink_nvcomp.cc b/dali/core/dynlink_nvcomp.cc
+index ae9459d7..f64a1cfa 100644
+--- a/dali/core/dynlink_nvcomp.cc
++++ b/dali/core/dynlink_nvcomp.cc
+@@ -1,4 +1,4 @@
+-// Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++// Copyright (c) 2025-2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ //
+ // Licensed under the Apache License, Version 2.0 (the "License");
+ // you may not use this file except in compliance with the License.
+@@ -24,7 +24,7 @@ namespace {
+ typedef void* NVCOMP;
+ 
+ static const char __nvCompfileLibName[] = "libnvcomp.so";
+-static const char __nvCompfileLibName1[] = "libnvcomp.so.5";
++static const char __nvCompfileLibName1[] = "libnvcomp.so.6";
+ 
+ NVCOMP loadNvCompFileLibrary() {
+   NVCOMP ret = nullptr;
+diff --git a/dali/operators/decoder/inflate/inflate_gpu.cc b/dali/operators/decoder/inflate/inflate_gpu.cc
+index 2f0a929a..658f3922 100644
+--- a/dali/operators/decoder/inflate/inflate_gpu.cc
++++ b/dali/operators/decoder/inflate/inflate_gpu.cc
+@@ -12,6 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <vector>
+@@ -54,6 +55,22 @@ class InflateOpGpuLZ4Impl : public InflateOpImplBase<GPUBackend> {
+     auto stream = ws.stream();
+ 
+     kernels::DynamicScratchpad scratchpad(stream);
++    // Chunks can start at arbitrary byte offsets in DALI tensors. nvCOMP 6 requires
++    // aligned input and output buffers, so stage only the chunks that need it.
++    constexpr size_t alignment = nvcompLZ4RequiredDecompressionAlignment;
++    const auto &in_chunk_sizes = params_.GetInChunkSizes();
++    auto original_output_ptrs = inflated_ptrs_;
++    for (size_t i = 0; i < total_chunks_num; i++) {
++      if (reinterpret_cast<uintptr_t>(input_ptrs_[i]) % alignment != 0) {
++        auto *aligned_input = scratchpad.AllocateGPU<uint8_t>(in_chunk_sizes[i], alignment);
++        CUDA_CALL(cudaMemcpyAsync(aligned_input, input_ptrs_[i], in_chunk_sizes[i],
++                                  cudaMemcpyDeviceToDevice, stream));
++        input_ptrs_[i] = aligned_input;
++      }
++      if (reinterpret_cast<uintptr_t>(inflated_ptrs_[i]) % alignment != 0) {
++        inflated_ptrs_[i] = scratchpad.AllocateGPU<uint8_t>(inflated_sizes_[i], alignment);
++      }
++    }
+     size_t *actual_out_sizes = scratchpad.AllocateGPU<size_t>(total_chunks_num);
+ 
+     auto [in_sizes, in, out_sizes, out] = scratchpad.ToContiguousGPU(
+@@ -86,14 +103,14 @@ class InflateOpGpuLZ4Impl : public InflateOpImplBase<GPUBackend> {
+     }
+ 
+     size_t tempSize;
+-    CUDA_CALL(nvcompBatchedLZ4DecompressGetTempSizeAsync(
++    CUDA_CALL(nvcompBatchedLZ4DecompressGetTempSize(
+         total_chunks_num,
+         params_.GetMaxOutChunkVol() * element_type_.size(),
+         {},
+         &tempSize,
+-        params_.GetMaxOutVol() * element_type_.size()));
++        params_.GetMaxOutVol() * element_type_.size(), stream));
+ 
+-    void *temp = scratchpad.AllocateGPU<uint8_t>(tempSize);
++    void *temp = scratchpad.AllocateGPU<uint8_t>(tempSize, alignment);
+     nvcompStatus_t *device_statuses = scratchpad.AllocateGPU<nvcompStatus_t>(total_chunks_num);
+     CUDA_CALL(nvcompBatchedLZ4DecompressAsync(in, in_sizes, out_sizes, actual_out_sizes,
+                                                total_chunks_num, temp, tempSize, out, {},
+@@ -104,6 +121,12 @@ class InflateOpGpuLZ4Impl : public InflateOpImplBase<GPUBackend> {
+     // Here, we take care of the opposite case, when the allocations are bigger than really
+     // necessary and thus may contain some uninitialized memory.
+     FillTheTails(output.type(), total_chunks_num, out, actual_out_sizes, out_sizes, stream);
++    for (size_t i = 0; i < total_chunks_num; i++) {
++      if (inflated_ptrs_[i] != original_output_ptrs[i]) {
++        CUDA_CALL(cudaMemcpyAsync(original_output_ptrs[i], inflated_ptrs_[i], inflated_sizes_[i],
++                                  cudaMemcpyDeviceToDevice, stream));
++      }
++    }
+   }
+ 
+  protected:
+diff --git a/dali/test/python/operator_1/test_inflate.py b/dali/test/python/operator_1/test_inflate.py
+index fd34e694..2cb176c0 100644
+--- a/dali/test/python/operator_1/test_inflate.py
++++ b/dali/test/python/operator_1/test_inflate.py
+@@ -167,6 +167,38 @@ def test_checks_sufficient_output_buffer():
+     check_batch(inflated, [sample], batch_size=1)
+ 
+ 
++@has_operator("decoders.inflate")
++@restrict_platform(min_compute_cap=6.0)
++@params(
++    *[
++        (dtype, offset, oversized)
++        for dtype in [np.uint8, np.uint16]
++        for offset in range(4)
++        for oversized in [False, True]
++    ]
++)
++def test_unaligned_chunks(dtype, offset, oversized):
++    sample = np.arange(15, dtype=dtype).reshape(3, 5)
++    chunks = [sample_to_lz4(frame) for frame in sample]
++    sizes = np.array([len(chunk) for chunk in chunks], dtype=np.int32)
++    offsets = np.array(offset + np.cumsum([0] + list(sizes[:-1])), dtype=np.int32)
++    compressed = np.concatenate([np.zeros(offset, dtype=np.uint8), *chunks])
++
++    @pipeline_def(batch_size=1, num_threads=4, device_id=0)
++    def pipeline():
++        data = fn.external_source(source=lambda: compressed, batch=False)
++        return fn.decoders.inflate(
++            data.gpu(),
++            shape=[7 if oversized else 5],
++            dtype=np_type_to_dali(dtype),
++            chunk_offsets=offsets,
++            chunk_sizes=sizes,
++        )
++
++    (inflated,) = pipeline().run()
++    check_batch(inflated, [sample], batch_size=1, oversized_shape=oversized)
++
++
+ def _test_scalar_shape(dtype, shape, layout):
+     def sample_source(sample_info):
+         sample_size = np.prod(shape)
+diff --git a/docker/Dockerfile.cuda129.aarch64.deps b/docker/Dockerfile.cuda129.aarch64.deps
+index cf97e4cb..f3580637 100644
+--- a/docker/Dockerfile.cuda129.aarch64.deps
++++ b/docker/Dockerfile.cuda129.aarch64.deps
+@@ -12,7 +12,7 @@ RUN curl -LO https://developer.download.nvidia.com/compute/cuda/12.9.1/local_ins
+     rm -f cuda_*.run;
+ 
+ RUN CUFILE_VERSION=1.14.1.1-1 && \
+-    NVCOMP_VERSION=5.3.0.16 && \
++    NVCOMP_VERSION=6.0.0.12 && \
+     CUDA_VERSION_MAJOR=12 && \
+     CUDA_VERSION_MINOR=9 && \
+     apt-get update && \
+diff --git a/docker/Dockerfile.cuda129.x86_64.deps b/docker/Dockerfile.cuda129.x86_64.deps
+index 12e237d0..b962a838 100644
+--- a/docker/Dockerfile.cuda129.x86_64.deps
++++ b/docker/Dockerfile.cuda129.x86_64.deps
+@@ -12,7 +12,7 @@ RUN curl -LO https://developer.download.nvidia.com/compute/cuda/12.9.1/local_ins
+     rm -f cuda_*.run;
+ 
+ RUN CUFILE_VERSION=1.14.1.1-1 && \
+-    NVCOMP_VERSION=5.3.0.16 && \
++    NVCOMP_VERSION=6.0.0.12 && \
+     CUDA_VERSION_MAJOR=12 && \
+     CUDA_VERSION_MINOR=9 && \
+     apt-get update && \
+diff --git a/docker/Dockerfile.cuda134.aarch64.deps b/docker/Dockerfile.cuda134.aarch64.deps
+index 743bd52e..1548d3b8 100644
+--- a/docker/Dockerfile.cuda134.aarch64.deps
++++ b/docker/Dockerfile.cuda134.aarch64.deps
+@@ -7,7 +7,7 @@ RUN CUDA_SUBVERSION=13.4.2-1 && \
+     CUFILE_VERSION=1.19.1.55-1 && \
+     CUDA_VERSION_MAJOR=13 && \
+     CUDA_VERSION_MINOR=4 && \
+-    NVCOMP_VERSION=5.3.0.16 && \
++    NVCOMP_VERSION=6.0.0.12 && \
+     apt-get update && \
+     apt-get install wget software-properties-common -y && \
+     apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/sbsa/3bf863cc.pub && \
+diff --git a/docker/Dockerfile.cuda134.x86_64.deps b/docker/Dockerfile.cuda134.x86_64.deps
+index 2035d956..c61f1286 100644
+--- a/docker/Dockerfile.cuda134.x86_64.deps
++++ b/docker/Dockerfile.cuda134.x86_64.deps
+@@ -7,7 +7,7 @@ RUN CUDA_SUBVERSION=13.4.2-1 && \
+     CUFILE_VERSION=1.19.1.55-1 && \
+     CUDA_VERSION_MAJOR=13 && \
+     CUDA_VERSION_MINOR=4 && \
+-    NVCOMP_VERSION=5.3.0.16 && \
++    NVCOMP_VERSION=6.0.0.12 && \
+     apt-get update && \
+     apt-get install wget software-properties-common -y && \
+     apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub && \
+diff --git a/internal_tools/stub_generator/nvcomp.json b/internal_tools/stub_generator/nvcomp.json
+index 899e2ed5..656bc5fd 100644
+--- a/internal_tools/stub_generator/nvcomp.json
++++ b/internal_tools/stub_generator/nvcomp.json
+@@ -6,7 +6,7 @@
+    "calling_conv":"",
+    "not_found_error":"nvcompErrorNotSupported",
+    "functions": {
+-      "nvcompBatchedLZ4DecompressGetTempSizeAsync": {},
++      "nvcompBatchedLZ4DecompressGetTempSize": {},
+       "nvcompBatchedLZ4DecompressAsync": {},
+       "nvcompBatchedLZ4GetDecompressSizeAsync": {},
+       "nvcompGetStatusString": {
+-- 
+2.43.0
+

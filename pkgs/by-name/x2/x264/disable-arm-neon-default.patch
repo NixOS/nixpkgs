@@ -1,0 +1,13 @@
+diff -Naur x264-snapshot-20190517-2245-stable-orig/configure x264-snapshot-20190517-2245-stable/configure
+--- x264-snapshot-20190517-2245-stable-orig/configure	2020-01-03 19:51:03.041037657 -0500
++++ x264-snapshot-20190517-2245-stable/configure	2020-01-03 19:52:15.075034609 -0500
+@@ -930,9 +930,6 @@
+ fi
+ 
+ if [ $asm = auto -a $ARCH = ARM ] ; then
+-    # set flags so neon is built by default
+-    [ $compiler == CL ] || echo $CFLAGS | grep -Eq '(-mcpu|-march|-mfpu)' || CFLAGS="$CFLAGS -mcpu=cortex-a8 -mfpu=neon"
+-
+     cc_check '' '' '__asm__("add r0, r1, r2");' && define HAVE_ARM_INLINE_ASM
+     if [ $compiler = CL ] && cpp_check '' '' 'defined(_M_ARM) && _M_ARM >= 7' ; then
+         define HAVE_ARMV6

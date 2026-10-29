@@ -1,0 +1,13 @@
+--- a/mpy-cross/mpy_cross/__init__.py
++++ b/mpy-cross/mpy_cross/__init__.py
+@@ -61,6 +61,10 @@
+ def _find_mpy_cross_binary(mpy_cross):
+     if mpy_cross:
+         return mpy_cross
++    # Check for MPY_CROSS environment variable first (for cross-compilation)
++    env_mpy_cross = os.environ.get("MPY_CROSS")
++    if env_mpy_cross:
++        return env_mpy_cross
+     return os.path.abspath(os.path.join(os.path.dirname(__file__), "../build/mpy-cross"))
+ 
+ 

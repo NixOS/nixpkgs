@@ -1,0 +1,13 @@
+diff --git a/src/Platform_Posix.c b/src/Platform_Posix.c
+--- a/src/Platform_Posix.c
++++ b/src/Platform_Posix.c
+@@ -665,8 +665,7 @@
+ 	};
+ #else
+ 	static const cc_string dirs[] = {
+-		String_FromConst("/usr/share/fonts"),
+-		String_FromConst("/usr/local/share/fonts")
++		String_FromConst("%NIXPKGS_FONT_PATH%")
+ 	};
+ #endif
+ 	for (i = 0; i < Array_Elems(dirs); i++) 

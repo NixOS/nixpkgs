@@ -1,0 +1,49 @@
+From 17a1e09eaf8957174425d05200be9ee3e77229f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Thu, 21 Oct 2021 00:39:08 +0200
+Subject: [PATCH] Remove system-state changing code
+
+This is already done by the module on nixOS
+---
+ lxd_image_server/cli.py | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
+
+diff --git a/lxd_image_server/cli.py b/lxd_image_server/cli.py
+index d276e6d..f759bf2 100644
+--- a/lxd_image_server/cli.py
++++ b/lxd_image_server/cli.py
+@@ -140,30 +140,17 @@ def reload_config():
+ @cli.command()
+ @click.option('--root_dir', default='/var/www/simplestreams',
+               show_default=True)
+-@click.option('--ssl_dir', default='/etc/nginx/ssl', show_default=True,
+-              callback=lambda ctx, param, val: Path(val))
+ @click.pass_context
+-def init(ctx, root_dir, ssl_dir):
++def init(ctx, root_dir):
+     if not Path(root_dir).exists():
+         logger.error('Root directory does not exists')
+     else:
+-        if not ssl_dir.exists():
+-            os.makedirs(str(ssl_dir))
+-
+-        if not (ssl_dir / 'nginx.key').exists():
+-            generate_cert(str(ssl_dir))
+-
+         img_dir = str(Path(root_dir, 'images'))
+         streams_dir = str(Path(root_dir, 'streams/v1'))
+         if not Path(img_dir).exists():
+             os.makedirs(img_dir)
+         if not Path(streams_dir).exists():
+             os.makedirs(streams_dir)
+-        conf_path = Path('/etc/nginx/sites-enabled/simplestreams.conf')
+-        if not conf_path.exists():
+-            conf_path.symlink_to(
+-                '/etc/nginx/sites-available/simplestreams.conf')
+-            os.system('nginx -s reload')
+ 
+         if not Path(root_dir, 'streams', 'v1', 'images.json').exists():
+             ctx.invoke(update, img_dir=Path(root_dir, 'images'),
+-- 
+2.33.0
+

@@ -1,0 +1,30 @@
+diff --git a/pyautogui/__init__.py b/pyautogui/__init__.py
+index ec7d097..443b146 100644
+--- a/pyautogui/__init__.py
++++ b/pyautogui/__init__.py
+@@ -216,9 +216,9 @@ try:
+ 
+     @raisePyAutoGUIImageNotFoundException
+     def locateOnWindow(*args, **kwargs):
+-        return pyscreeze.locateOnWindow(*args, **kwargs)
++        return pyscreeze.locateOnScreen(*args, **kwargs)
+ 
+-    locateOnWindow.__doc__ = pyscreeze.locateOnWindow.__doc__
++    locateOnWindow.__doc__ = pyscreeze.locateOnScreen.__doc__
+ 
+ 
+ except ImportError:
+diff --git a/setup.py b/setup.py
+index 196394d..6d90a88 100644
+--- a/setup.py
++++ b/setup.py
+@@ -29,8 +29,7 @@ setup(
+     test_suite='tests',
+     install_requires=['pyobjc-core;platform_system=="Darwin"',
+                       'pyobjc;platform_system=="Darwin"',
+-                      'python3-Xlib;platform_system=="Linux" and python_version>="3.0"',
+-                      'python-xlib;platform_system=="Linux" and python_version<"3.0"',
++                      'python-xlib;platform_system=="Linux"',
+                       'pymsgbox',
+                       'PyTweening>=1.0.1',
+                       'pyscreeze>=0.1.21',

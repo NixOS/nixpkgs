@@ -1,0 +1,17 @@
+diff --git a/lib/theme/mono_theme.dart b/lib/theme/mono_theme.dart
+index f750336..7790e50 100644
+--- a/lib/theme/mono_theme.dart
++++ b/lib/theme/mono_theme.dart
+@@ -112,7 +112,11 @@ ThemeData _buildMonoTheme({required bool dark, required bool oled, required Targ
+       titleTextStyle: TextStyle(color: c.text, fontSize: 18, fontWeight: .w700, letterSpacing: -0.2),
+     ),
+     textTheme: Typography.englishLike2021
+-        .apply(bodyColor: c.text, displayColor: c.text)
++        .apply(
++          fontFamilyFallback: const ['Go Noto Current', 'Go Noto Current Hangul'],
++          bodyColor: c.text,
++          displayColor: c.text,
++        )
+         .copyWith(
+           displayLarge: const TextStyle(fontWeight: .w700, letterSpacing: -0.5),
+           titleMedium: const TextStyle(fontWeight: .w600),

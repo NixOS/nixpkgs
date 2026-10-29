@@ -1,0 +1,59 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  attrs,
+  funcsigs,
+  requests-mock,
+  pytestCheckHook,
+  setuptools_80,
+}:
+
+buildPythonPackage rec {
+  pname = "mock-services";
+  version = "0.3.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "peopledoc";
+    repo = "mock-services";
+    rev = version;
+    hash = "sha256-ycFbOhl+lhJhd9tha9wPctrIVJc5BqRS0z3EZ7nzHuc=";
+  };
+
+  patches = [
+    # Fix issues due to internal API breaking in latest versions of requests-mock
+    (fetchpatch {
+      url = "https://github.com/peopledoc/mock-services/commit/88d3a0c9ef4dd7d5e011068ed2fdbbecc4a1a03a.patch";
+      hash = "sha256-utpH4mp5mQepKGAoIWsoS9iRGVmVYHR1ESXPMXLnlyg=";
+    })
+  ];
+
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
+    attrs
+    funcsigs
+    requests-mock
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # require networking
+    "test_real_http_1"
+    "test_restart_http_mock"
+    "test_start_http_mock"
+    "test_stop_http_mock"
+  ];
+
+  pythonImportsCheck = [ "mock_services" ];
+
+  meta = {
+    description = "Mock an entire service API based on requests-mock";
+    homepage = "https://github.com/peopledoc/mock-services";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
+  };
+}

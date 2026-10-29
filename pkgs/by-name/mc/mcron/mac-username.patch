@@ -1,0 +1,11 @@
+--- a/src/mcron/vixie-specification.scm
++++ b/src/mcron/vixie-specification.scm
+@@ -67,7 +67,7 @@
+ 
+ (define parse-system-vixie-line-regexp
+   (make-regexp (string-append "^[[:space:]]*(([^[:space:]]+[[:space:]]+){5})"
+-                              "([[:alpha:]][[:alnum:]_]*)[[:space:]]+(.*)$")))
++                              "([[:alpha:]_][[:alnum:]_.-]*)[[:space:]]+(.*)$")))
+ 
+ (define (parse-system-vixie-line line)
+   (let ((match (regexp-exec parse-system-vixie-line-regexp line)))

@@ -1,0 +1,365 @@
+This patch is based on https://github.com/augustss/MicroHs/pull/429
+If you need to update it, rebase the above PR onto the new version's tag.
+
+diff --git a/hugs/Data/Semigroup.hs b/hugs/Data/Semigroup.hs
+index b7360013..eab8c48d 100644
+--- a/hugs/Data/Semigroup.hs
++++ b/hugs/Data/Semigroup.hs
+@@ -18,11 +18,11 @@ class Semigroup a where
+     | otherwise = f x0 y0
+     where
+       f x y
+-        | even y == 0 = f (x <> x) (y `quot` 2)
++        | even y = f (x <> x) (y `quot` 2)
+         | y == 1 = x
+         | otherwise = g (x <> x) (y `quot` 2) x
+       g x y z
+-        | even y == 0 = g (x <> x) (y `quot` 2) z
++        | even y = g (x <> x) (y `quot` 2) z
+         | y == 1 = x <> z
+         | otherwise = g (x <> x) (y `quot` 2) (x <> z)
+ 
+diff --git a/hugs/Data/String.hs b/hugs/Data/String.hs
+new file mode 100644
+index 00000000..1de782d3
+--- /dev/null
++++ b/hugs/Data/String.hs
+@@ -0,0 +1,17 @@
++module Data.String(
++  IsString(..),
++  String,
++  lines, unlines,
++  words, unwords,
++  ) where
++
++import qualified Data.ByteString.Char8 as BS8
++
++class IsString a where
++  fromString :: String -> a
++
++instance IsString [Char] where
++  fromString s = s
++
++instance IsString BS8.ByteString where
++  fromString = BS8.pack
+diff --git a/hugs/Data/Text.hs b/hugs/Data/Text.hs
+index fbd1c731..75f8e829 100644
+--- a/hugs/Data/Text.hs
++++ b/hugs/Data/Text.hs
+@@ -8,6 +8,7 @@ module Data.Text(
+   null,
+   head,
+   tail,
++  cons,
+   uncons,
+   ) where
+ import Prelude hiding(head, tail, null)
+@@ -64,6 +65,9 @@ head (T t) = Prelude.head t
+ tail :: Text -> Text
+ tail (T t) = T (Prelude.tail t)
+ 
++cons :: Char -> Text -> Text
++cons c (T t) = T (c : t)
++
+ uncons :: Text -> Maybe (Char, Text)
+ uncons t | null t    = Nothing
+          | otherwise = Just (head t, tail t)
+diff --git a/hugs/MHSPrelude.hs b/hugs/MHSPrelude.hs
+index cb6b36f6..cb47e041 100644
+--- a/hugs/MHSPrelude.hs
++++ b/hugs/MHSPrelude.hs
+@@ -4,10 +4,11 @@ module MHSPrelude(
+   module Prelude,
+   module MHSPrelude,
+ --  module Control.Monad.Fail,
+-  module Control.Arrow,
++  -- Exporting these with 'module Control.Arrow' does not work
++  first, second,
+   module Data.Monoid,
+   module Data.Semigroup,
+-  (<$>), Applicative(..), (*>),
++  (<$>), Applicative(..), (*>), (<*), (>=>), (<=<)
+   ) where
+ import Hugs.Prelude()
+ import Prelude hiding(fail)
+@@ -16,6 +17,7 @@ import Control.Arrow(first, second)
+ import Control.Applicative
+ import Control.Exception(Exception, try)
+ --import Control.Monad.Fail
++import Data.Int
+ import Data.List
+ import Data.Maybe
+ import Data.Monoid
+@@ -55,6 +57,12 @@ spanEnd p xs = (dropWhileEnd p xs, takeWhileEnd p xs)
+ breakEnd :: (a -> Bool) -> [a] -> ([a], [a])
+ breakEnd p = spanEnd (not . p)
+ 
++subsequences :: [a] -> [[a]]
++subsequences xs = [] : sub xs
++  where sub []     = []
++        sub (x:xs) = [x] : foldr f [] (sub xs)
++          where f ys r = ys : (x : ys) : r
++
+ ------- Version --------
+ 
+ makeVersion :: [Int] -> Version
+@@ -193,6 +201,7 @@ force :: (NFData a) => a -> a
+ force x = x `deepseq` x
+ 
+ instance NFData Int
++instance NFData Int64
+ instance NFData Word
+ instance NFData Float
+ instance NFData Double
+@@ -229,3 +238,11 @@ instance NFData MD5CheckSum
+ 
+ class HasCallStack
+ instance HasCallStack
++
++(<=<) :: forall m a b c . Monad m => (b -> m c) -> (a -> m b) -> (a -> m c)
++f <=< g = \ a -> do
++  b <- g a
++  f b
++
++(>=>) :: forall m a b c . Monad m => (a -> m b) -> (b -> m c) -> (a -> m c)
++(>=>) = flip (<=<)
+diff --git a/src/MicroHs/Compile.hs b/src/MicroHs/Compile.hs
+index ddec7993..643319aa 100644
+--- a/src/MicroHs/Compile.hs
++++ b/src/MicroHs/Compile.hs
+@@ -123,12 +123,17 @@ compile flags nm ach = do
+   return ((tModuleName cm, concatMap tBindingsOf $ cachedModules ch), syms, ch)
+ 
+ -- Compile a module for the interactive system
+-compileInteractive :: Flags -> EModule -> CM (TModule [LDef], Symbols, TCState)
+-compileInteractive flags mdl = do
+-  ((dmdl, syms, _, _, _), tcstate) <- compileModuleP flags ImpNormal mdl
++compileInteractive :: Flags -> EModule -> Maybe TCState -> CM (TModule [LDef], Symbols, TCState)
++compileInteractive flags mdl mtcstate = do
++  ((dmdl, syms, _, _, _), tcstate') <- compile
++    flags ImpNormal mdl
+   loadBoots flags
+   loadDependencies flags
+-  return (dmdl, syms, tcstate)
++  return (dmdl, syms, tcstate')
++  where
++    compile = case mtcstate of
++      Nothing -> compileModuleP
++      Just tcstate -> compileModuleP' (\flags _ impt aimps mdl -> typeCheck' flags impt (map filterImports aimps) mdl tcstate)
+ 
+ -- Compile a module with the given name.
+ -- If the module has already been compiled, return the cached result.
+@@ -233,7 +238,12 @@ compileModule flags impt mn pathfn file = do
+   return (cmdl, syms, tThis + tImp)
+ 
+ compileModuleP :: Flags -> ImpType -> EModule -> CM ((TModule [LDef], Symbols, [(ImpType, IdentModule)], Time, Time), TCState)
+-compileModuleP flags impt mdl@(EModule _ _ defs) = do
++compileModuleP = compileModuleP' typeCheck
++
++compileModuleP'
++  :: (Flags -> GlobTables -> ImpType -> [(ImportSpec, TModule [LDef])] -> EModule -> (TModule [EDef], GlobTables, Symbols, TCState))
++  -> Flags -> ImpType -> EModule -> CM ((TModule [LDef], Symbols, [(ImpType, IdentModule)], Time, Time), TCState)
++compileModuleP' tc flags impt mdl@(EModule _ _ defs) = do
+   -- liftIO $ putStrLn $ showEModule mdl
+   -- liftIO $ putStrLn $ showEDefs defs
+   let
+@@ -244,7 +254,7 @@ compileModuleP flags impt mdl@(EModule _ _ defs) = do
+   t3 <- liftIO getTimeMilli
+   glob <- gets getCacheTables
+   let
+-    (tmdl, glob', syms, tcstate) = typeCheck flags glob impt (zip specs impMdls) mdl
++    (tmdl, glob', syms, tcstate) = tc flags glob impt (zip specs impMdls) mdl
+   modify $ setCacheTables glob'
+   dumpIf flags Dtypecheck $
+     liftIO $ putStrLn $ "type checked:\n" ++ showTModule showEDefs tmdl ++ "-----\n"
+@@ -258,9 +268,9 @@ compileModuleP flags impt mdl@(EModule _ _ defs) = do
+   return ((dmdl, syms, imported, tThis, tImp), tcstate)
+ 
+ compileToCombinators :: TModule [LDef] -> TModule [LDef]
+-compileToCombinators dmdl = do
++compileToCombinators dmdl =
+   let cmdl = setBindings dmdl [ (i, compileOpt e) | (i, e) <- tBindingsOf dmdl ]
+-  seq (rnf cmdl) cmdl  -- This makes execution slower, but speeds up GC
++  in seq (rnf cmdl) cmdl  -- This makes execution slower, but speeds up GC
+ 
+ -- Add implicit imports:
+ --   import Prelude
+diff --git a/src/MicroHs/Expr.hs b/src/MicroHs/Expr.hs
+index 84578594..bd05f1bc 100644
+--- a/src/MicroHs/Expr.hs
++++ b/src/MicroHs/Expr.hs
+@@ -57,11 +57,11 @@ module MicroHs.Expr(
+   dropForallContext,
+   ) where
+ import qualified Prelude(); import MHSPrelude hiding ((<>))
++import Data.Int
+ import Data.List
+ import Data.Maybe
+ import MicroHs.Builtin
+ import MicroHs.Ident
+-import {-# SOURCE #-} MicroHs.TCMonad(TCState)
+ import Text.PrettyPrint.HughesPJLite
+ 
+ type IdentModule = Ident
+@@ -96,8 +96,6 @@ data EDef
+   | Pattern LHS EPat (Maybe [Eqn])
+   | StandDeriving DerStrategy Int EConstraint
+   | DfltSign Ident EType                      -- only in class declarations
+-  -- Only used by interactive system to load a cached TCState to avoid import processing
+-  | SetTCState TCState
+ --DEBUG  deriving (Show)
+ 
+ instance NFData EDef where
+@@ -118,7 +116,6 @@ instance NFData EDef where
+   rnf (Pattern a b c) = rnf a `seq` rnf b `seq` rnf c
+   rnf (StandDeriving a b c) = rnf a `seq` rnf b `seq` rnf c
+   rnf (DfltSign a b) = rnf a `seq` rnf b
+-  rnf (SetTCState a) = seq a ()
+ 
+ data ImpType = ImpNormal | ImpBoot
+   deriving (Eq)
+@@ -900,7 +897,6 @@ ppEDef def =
+     Pattern lhs@(i,_) p meqns -> text "pattern" <+> ppLHS lhs <+> text "=" <+> ppExpr p <+> maybe empty (ppWhere (text ";") . (:[]) . Fcn i) meqns
+     StandDeriving _s _narg ct -> text "deriving instance" <+> ppEType ct
+     DfltSign i t -> text "default" <+> ppIdent i <+> text "::" <+> ppEType t
+-    SetTCState _ -> text "SetTCState ..."
+ 
+ ppDerivings :: [Deriving] -> Doc
+ ppDerivings = sep . map ppDeriving
+diff --git a/src/MicroHs/Interactive.hs b/src/MicroHs/Interactive.hs
+index ebb33b43..7b70064a 100644
+--- a/src/MicroHs/Interactive.hs
++++ b/src/MicroHs/Interactive.hs
+@@ -295,11 +295,11 @@ compile file = do
+   let mdl@(EModule mn es _) = parseDie pTopModule "" file
+   defs <- updateTCStateCache mdl
+   (_, tcstate, _) <- gets isCComp
+-  let mdl' = EModule mn es (SetTCState tcstate : defs)
++  let mdl' = EModule mn es defs
+   flgs <- gets isFlags
+   cash <- gets isCache
+ --  putStrLnI $ " tryCompile compile " ++ show mdl'
+-  ((dmdl, _, tcstate'), _) <- liftIO $ runStateIO (compileInteractive flgs mdl') cash
++  ((dmdl, _, tcstate'), _) <- liftIO $ runStateIO (compileInteractive flgs mdl' $ Just tcstate) cash
+   cmdl <- liftIO $ evaluate $ compileToCombinators dmdl
+ --  putStrLnI $ " tryCompile dmdl = " ++ (show $ tBindingsOf dmdl)
+   return (tBindingsOf cmdl, tcstate')
+@@ -398,7 +398,7 @@ updateTCStateCache (EModule mn es ds) = do
+     cash <- gets isCache
+ --    putStrLnI "*** update tcstate"
+     let mdl' = addPreludeImport mdl
+-    ((_, syms, tcstate), ch) <- liftIO $ runStateIO (compileInteractive flgs mdl') cash
++    ((_, syms, tcstate), ch) <- liftIO $ runStateIO (compileInteractive flgs mdl' Nothing) cash
+     let idmap = translateMap $ concatMap tBindingsOf $ cachedModules ch
+ --    putStrLnI $ "*** update isFast " ++ show nImps
+     modify $ \ is -> is{ isCComp = (nImps, tcstate, idmap), isCache = ch, isSymbols = syms }
+diff --git a/src/MicroHs/Parse.hs b/src/MicroHs/Parse.hs
+index 821718a7..6a68a01a 100644
+--- a/src/MicroHs/Parse.hs
++++ b/src/MicroHs/Parse.hs
+@@ -791,7 +791,7 @@ pDo = do
+     case last ss of
+       SThen e ->
+         pure $ EDo q [SRec (init ss), SThen e]
+-      _ -> fail "mdo"
++      _ -> Control.Monad.Fail.fail "mdo"
+    else
+     pure (EDo q ss)
+ 
+diff --git a/src/MicroHs/TCMonad.hs-boot b/src/MicroHs/TCMonad.hs-boot
+deleted file mode 100644
+index f88ad533..00000000
+--- a/src/MicroHs/TCMonad.hs-boot
++++ /dev/null
+@@ -1,2 +0,0 @@
+-module MicroHs.TCMonad where
+-data TCState
+diff --git a/src/MicroHs/TypeCheck.hs b/src/MicroHs/TypeCheck.hs
+index 47f2b461..db7f3527 100644
+--- a/src/MicroHs/TypeCheck.hs
++++ b/src/MicroHs/TypeCheck.hs
+@@ -2,7 +2,7 @@
+ -- See LICENSE file for full license.
+ {-# OPTIONS_GHC -Wno-incomplete-uni-patterns -Wno-unused-imports -Wno-unused-do-bind #-}
+ module MicroHs.TypeCheck(
+-  typeCheck,
++  typeCheck, typeCheck', filterImports,
+   TModule(..), showTModule,
+   GlobTables, emptyGlobTables, mergeGlobTables,
+   impossible, impossibleShow,
+@@ -102,35 +102,34 @@ type Sigma = EType
+ type Rho   = EType
+ 
+ typeCheck :: Flags -> GlobTables -> ImpType -> [(ImportSpec, TModule a)] -> EModule -> (TModule [EDef], GlobTables, Symbols, TCState)
+-typeCheck flags globs impt aimps (EModule mn exps defs) =
++typeCheck flags globs impt aimps mdl@(EModule mn exps defs) =
+ --  trace (unlines $ map (showTModuleExps . snd) aimps) $
+-  let
+-    imps = map filterImports aimps
+-    tc =
+-      case defs of
+-        SetTCState tcs : _ -> tcs  -- hack to set the saved TCState
+-        _ -> mkTCState mn globs imps
+-  in case tcRun (tcDefs flags impt defs) tc of
+-       (tds, tcs) ->
+-         let
+-           thisMdl = (mn, mkTModule tds tcs)
+-           impMdls = [(fromMaybe m mm, tm) | (ImportSpec _ _ m mm _, tm) <- imps]
+-           allMdls = thisMdl : impMdls
+-           (texps, vexps) =
+-             unzip $ map (getTVExps impMap (typeTable tcs) (valueTable tcs) (assocTable tcs)) exps
+-             where impMap = M.fromListWith (++) [(i, [m]) | (i, m) <- allMdls]
+-           fexps = map (tFixDefs . snd) allMdls
+-           sexps = synTable tcs
+-           dexps = dataTable tcs
+-           iexps = instTable tcs
+-           ctbl  = classTable tcs
+-           dflts = M.fromList $ filter ((`elem` ds) . fst) $ M.toList $ defaults tcs
+-                 where ds = [ tyQIdent $ expLookup ti (typeTable tcs) | ExpDefault ti <- exps ]
+-         in  ( tModule mn (nubBy ((==) `on` fst) (concat fexps)) (concat texps) (concat vexps) dflts tds
+-             , GlobTables { gSynTable = sexps, gDataTable = dexps, gClassTable = ctbl, gInstInfo = iexps }
+-             , (typeTable tcs, valueTable tcs)
+-             , tcs
+-             )
++  let imps = map filterImports aimps
++  in typeCheck' flags impt imps mdl $ mkTCState mn globs imps
++
++typeCheck' :: Flags -> ImpType -> [(ImportSpec, TModule a)] -> EModule -> TCState -> (TModule [EDef], GlobTables, Symbols, TCState)
++typeCheck' flags impt imps (EModule mn exps defs) tc =
++  case tcRun (tcDefs flags impt defs) tc of
++    (tds, tcs) ->
++      let
++        thisMdl = (mn, mkTModule tds tcs)
++        impMdls = [(fromMaybe m mm, tm) | (ImportSpec _ _ m mm _, tm) <- imps]
++        allMdls = thisMdl : impMdls
++        (texps, vexps) =
++          unzip $ map (getTVExps impMap (typeTable tcs) (valueTable tcs) (assocTable tcs)) exps
++          where impMap = M.fromListWith (++) [(i, [m]) | (i, m) <- allMdls]
++        fexps = map (tFixDefs . snd) allMdls
++        sexps = synTable tcs
++        dexps = dataTable tcs
++        iexps = instTable tcs
++        ctbl  = classTable tcs
++        dflts = M.fromList $ filter ((`elem` ds) . fst) $ M.toList $ defaults tcs
++              where ds = [ tyQIdent $ expLookup ti (typeTable tcs) | ExpDefault ti <- exps ]
++      in  ( tModule mn (nubBy ((==) `on` fst) (concat fexps)) (concat texps) (concat vexps) dflts tds
++          , GlobTables { gSynTable = sexps, gDataTable = dexps, gClassTable = ctbl, gInstInfo = iexps }
++          , (typeTable tcs, valueTable tcs)
++          , tcs
++          )
+ 
+ -- A hack to force evaluation of errors.
+ -- This should be redone to all happen in the T monad.
+diff --git a/src/Text/ParserComb.hs b/src/Text/ParserComb.hs
+index 5b0e8753..6efd5a3f 100644
+--- a/src/Text/ParserComb.hs
++++ b/src/Text/ParserComb.hs
+@@ -115,7 +115,7 @@ instance TokenMachine tm t => Alternative (Prsr tm t) where
+       r -> r
+ 
+ instance TokenMachine tm t => MonadPlus (Prsr tm t) where
+-  mzero = fail "mzero"
++  mzero = F.fail "mzero"
+   mplus = (<|>)
+ 
+ satisfy :: forall tm t . TokenMachine tm t => String -> (t -> Bool) -> Prsr tm t t

@@ -1,0 +1,72 @@
+diff --git a/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java b/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java
+index 93a6827..3ea4a81 100644
+--- a/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java
++++ b/src/main/java/org/junit/internal/matchers/StacktracePrintingMatcher.java
+@@ -1,7 +1,6 @@
+ package org.junit.internal.matchers;
+ 
+ import org.hamcrest.Description;
+-import org.hamcrest.Factory;
+ import org.hamcrest.Matcher;
+ 
+ import org.junit.internal.Throwables;
+@@ -39,13 +38,11 @@ public class StacktracePrintingMatcher<T extends Throwable> extends
+         return Throwables.getStacktrace(throwable);
+     }
+ 
+-    @Factory
+     public static <T extends Throwable> Matcher<T> isThrowable(
+             Matcher<T> throwableMatcher) {
+         return new StacktracePrintingMatcher<T>(throwableMatcher);
+     }
+ 
+-    @Factory
+     public static <T extends Exception> Matcher<T> isException(
+             Matcher<T> exceptionMatcher) {
+         return new StacktracePrintingMatcher<T>(exceptionMatcher);
+diff --git a/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java b/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java
+index 6e2ff5e..932ebdd 100644
+--- a/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java
++++ b/src/main/java/org/junit/internal/matchers/ThrowableCauseMatcher.java
+@@ -1,7 +1,6 @@
+ package org.junit.internal.matchers;
+ 
+ import org.hamcrest.Description;
+-import org.hamcrest.Factory;
+ import org.hamcrest.Matcher;
+ import org.hamcrest.TypeSafeMatcher;
+ 
+@@ -43,8 +42,7 @@ public class ThrowableCauseMatcher<T extends Throwable> extends
+      * @param matcher to apply to the cause of the outer exception
+      * @param <T> type of the outer exception
+      */
+-    @Factory
+     public static <T extends Throwable> Matcher<T> hasCause(final Matcher<?> matcher) {
+         return new ThrowableCauseMatcher<T>(matcher);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java b/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java
+index 74386a8..b48e672 100644
+--- a/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java
++++ b/src/main/java/org/junit/internal/matchers/ThrowableMessageMatcher.java
+@@ -1,7 +1,6 @@
+ package org.junit.internal.matchers;
+ 
+ import org.hamcrest.Description;
+-import org.hamcrest.Factory;
+ import org.hamcrest.Matcher;
+ import org.hamcrest.TypeSafeMatcher;
+ 
+@@ -30,8 +29,7 @@ public class ThrowableMessageMatcher<T extends Throwable> extends
+         matcher.describeMismatch(item.getMessage(), description);
+     }
+ 
+-    @Factory
+     public static <T extends Throwable> Matcher<T> hasMessage(final Matcher<String> matcher) {
+         return new ThrowableMessageMatcher<T>(matcher);
+     }
+-}
+\ No newline at end of file
++}
