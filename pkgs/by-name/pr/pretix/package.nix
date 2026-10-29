@@ -119,6 +119,21 @@ python.pkgs.buildPythonApplication rec {
       url = "https://github.com/pretix/pretix/commit/abeb615d3d093093668ebaaa0966301640b3a88e.patch";
       hash = "sha256-glYhBPL6pVKYlFDmEoPQrrO2L2SxMQOZ3A1Q20uFiew=";
     })
+    (fetchpatch {
+      name = "CVE-2026-101273.patch";
+      url = "https://github.com/pretix/pretix/commit/122f04019e8fcb1eae94139f6eb21899a36fe313.patch";
+      hash = "sha256-oUCSxA4QaFGvz7HqIA36+a/A/o1uijhyc4Y1+2zG9Lo=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-101274.patch";
+      url = "https://github.com/pretix/pretix/commit/e7193f28845a9c624a9822edd2452f47ef028b10.patch";
+      hash = "sha256-rLZ+Nv6Myj/c/H3/PX2rQ6DMqmrA3r5C1Lz8In+maxo=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-101272.patch";
+      url = "https://github.com/pretix/pretix/commit/eabfe9c2fab6ad61a8325d6a766324830fce43b6.patch";
+      hash = "sha256-YXetX9/kwV6qEbRjwqz5VPPkZWPaWESwpXcrdRC6MhA=";
+    })
   ];
 
   pythonRelaxDeps = [
