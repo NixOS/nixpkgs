@@ -9,13 +9,13 @@
 
 buildPythonPackage {
   pname = "pycketcasts";
-  version = "1.0.1";
+  version = "0-unstable-2022-07-12";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "nwithan8";
     repo = "pycketcasts";
-    rev = "8211de74fada8854bb0775fac6780a2205bb7cf2";
+    rev = "b80cd20f8afd32c37c141829f878ae83324b3a1f";
     hash = "sha256-O4j89fE7fYPthhCH8b2gGskkelEA4mU6GvSbKIl+4Mk=";
   };
 
