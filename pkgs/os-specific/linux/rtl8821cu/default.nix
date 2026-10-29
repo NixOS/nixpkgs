@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   bc,
 }:
 
@@ -20,7 +21,10 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+    bc
+    kernelModuleInstallHook
+  ];
   makeFlags = kernelModuleMakeFlags;
 
   prePatch = ''
@@ -30,9 +34,7 @@ stdenv.mkDerivation {
       --replace-fail '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
+  kernelModuleInstallDir = "kernel/net/wireless";
 
   enableParallelBuilding = true;
 

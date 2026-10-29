@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
@@ -53,14 +54,11 @@ stdenv.mkDerivation {
   ];
   buildFlags = [ "modules" ];
 
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  installTargets = [ "modules_install" ];
-
   hardeningDisable = [
     "pic"
     "format"
   ];
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   meta = {
     description = "Coral Gasket Driver allows usage of the Coral EdgeTPU on Linux systems";

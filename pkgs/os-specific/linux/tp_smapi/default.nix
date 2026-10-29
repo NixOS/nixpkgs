@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-use-strscpy-instead-of-strncpy.patch
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   hardeningDisable = [ "pic" ];
 
@@ -38,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     "HDAPS=1"
   ];
 
-  installPhase = ''
-    runHook preInstall
+  kernelModuleInstallDir = "kernel/drivers/firmware";
 
-    install -v -D -m 644 thinkpad_ec.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/thinkpad_ec.ko"
-    install -v -D -m 644 tp_smapi.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/tp_smapi.ko"
-    install -v -D -m 644 hdaps.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/hdapsd.ko"
-
-    runHook postInstall
+  # The module file is renamed to avoid clashing with the in-tree hdaps
+  # driver of the same name. kbuild's modules_install installs the files
+  # listed in modules.order, so keep that in sync before installing.
+  preInstall = ''
+    mv hdaps.ko hdapsd.ko
+    sed -i 's/^hdaps\.o$/hdapsd.o/' modules.order
   '';
 
   dontStrip = true;

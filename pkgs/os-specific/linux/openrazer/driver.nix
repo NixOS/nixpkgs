@@ -2,6 +2,7 @@
   coreutils,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   stdenv,
   lib,
@@ -20,25 +21,19 @@ stdenv.mkDerivation (
     pname = "openrazer";
     version = "${common.version}-${kernel.version}";
 
-    nativeBuildInputs = [ udevCheckHook ] ++ kernel.moduleBuildDependencies;
+    nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+      kernelModuleInstallHook
+      udevCheckHook
+    ];
 
     makeFlags = kernelModuleMakeFlags ++ [
       "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-      "INSTALL_MOD_PATH=${placeholder "out"}"
-      "INSTALL_MOD_DIR=kernel/drivers/hid"
-      "INSTALL_MOD_STRIP=1"
-      "DEPMOD=true"
     ];
 
     doInstallCheck = true;
 
-    installTargets = [ "modules_install" ];
-
-    installFlags = [
-      "-C"
-      "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-      "M=$(PWD)/driver"
-    ];
+    kernelModuleDirs = [ "driver" ];
+    kernelModuleInstallDir = "kernel/drivers/hid";
 
     postInstall = ''
       RAZER_MOUNT_OUT="$out/bin/razer_mount"

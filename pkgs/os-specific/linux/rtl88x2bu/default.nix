@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   bc,
   nix-update-script,
 }:
@@ -22,10 +23,13 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags ++ [
-    "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+    bc
+    kernelModuleInstallHook
   ];
+  makeFlags = kernelModuleMakeFlags;
+
+  kernelModuleInstallDir = "kernel/net/wireless";
 
   prePatch = ''
     substituteInPlace ./Makefile \

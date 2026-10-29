@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   nix-update-script,
 }:
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
     export sourceRoot=$(pwd)/source
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "-C"
@@ -31,8 +32,6 @@ stdenv.mkDerivation {
   ];
 
   buildFlags = [ "modules" ];
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  installTargets = [ "modules_install" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch=main" ];

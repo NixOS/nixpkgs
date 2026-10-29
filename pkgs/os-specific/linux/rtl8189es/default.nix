@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   bc,
   nukeReferences,
 }:
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-cGPjA5Az0EEbPGG0KfgAqdhbLj54BxoIohWmcR10vPI=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
     bc
+    kernelModuleInstallHook
     nukeReferences
-  ]
-  ++ kernel.moduleBuildDependencies;
+  ];
 
   hardeningDisable = [
     "pic"
@@ -46,13 +47,7 @@ stdenv.mkDerivation rec {
     ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
   ];
 
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
-
-  postInstall = ''
-    nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
-  '';
+  kernelModuleInstallDir = "kernel/net/wireless";
 
   meta = {
     description = "Driver for Realtek rtl8189es";

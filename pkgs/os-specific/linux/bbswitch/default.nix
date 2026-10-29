@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   runtimeShell,
 }:
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   hardeningDisable = [ "pic" ];
 
@@ -37,12 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/lib/modules" "${kernel.dev}/lib/modules"
   '';
 
-  makeFlags = kernelModuleMakeFlags ++ [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=kernel/misc"
-    "INSTALL_MOD_STRIP=1"
-    "DEPMOD=true"
-  ];
+  makeFlags = kernelModuleMakeFlags;
+
+  kernelModuleInstallDir = "kernel/misc";
 
   postInstall = ''
     mkdir -p $out/bin
@@ -58,13 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
-
-  installFlags = [
-    "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)"
-  ];
-
-  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Module for powering off hybrid GPUs";

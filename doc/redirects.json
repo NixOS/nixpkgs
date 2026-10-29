@@ -4863,6 +4863,15 @@
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
   ],
+  "sec-linux-kernel-out-of-tree-modules": [
+    "index.html#sec-linux-kernel-out-of-tree-modules"
+  ],
+  "ex-out-of-tree-module-multiple-dirs": [
+    "index.html#ex-out-of-tree-module-multiple-dirs"
+  ],
+  "ex-out-of-tree-module-manual-call": [
+    "index.html#ex-out-of-tree-module-manual-call"
+  ],
   "sec-linux-new-kernels": [
     "index.html#sec-linux-new-kernels"
   ],

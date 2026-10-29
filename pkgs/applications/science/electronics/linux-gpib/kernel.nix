@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   kernel,
+  kernelModuleMakeFlags,
   pahole,
 }:
 
@@ -22,7 +23,8 @@ stdenv.mkDerivation (
     makeFlags = [
       "LINUX_SRCDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       "LINUX_SSRCDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-    ];
+    ]
+    ++ kernelModuleMakeFlags;
 
     installFlags = [
       "INSTALL_MOD_PATH=$(out)"

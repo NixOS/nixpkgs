@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
@@ -19,22 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./fix-6.12-build.patch ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   buildInputs = [ kernel ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "BUILD_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/veikk
-    install -Dm755 veikk.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/veikk
-
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "kernel/drivers/veikk";
 
   meta = {
     description = "Linux driver for VEIKK-brand digitizers";

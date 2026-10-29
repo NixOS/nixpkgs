@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   bashNonInteractive,
   linuxConsoleTools,
   nix-update-script,
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lJ+Pn1OLgZK+T1dsV1mwzAwJJgsouFFwDH7bFUD1SGI=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   postInstall = ''
     install -Dm644 fanatec.rules \
@@ -39,17 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = kernelModuleMakeFlags ++ [
     "KVERSION=${kernel.modDirVersion}"
     "KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=kernel/drivers/hid"
   ];
 
-  installTargets = [ "modules_install" ];
-
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)"
-  ];
+  kernelModuleInstallDir = "kernel/drivers/hid";
 
   passthru.updateScript = nix-update-script { };
 

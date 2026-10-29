@@ -1,6 +1,7 @@
 {
   stdenv,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   libajantv2,
 }:
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags;
 
@@ -33,10 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    install -D ajantv2.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajantv2.ko
-    install -D ajardma.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajardma.ko
-  '';
+  kernelModuleInstallDir = "misc";
 
   meta = {
     inherit (libajantv2.meta) license homepage maintainers;
