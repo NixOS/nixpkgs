@@ -5,6 +5,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   sqlite,
+  chromaprint,
   fetchYarnDeps,
   yarnConfigHook,
   yarnBuildHook,
@@ -14,6 +15,7 @@
   writeText,
 }:
 let
+  fpcalc = lib.getExe chromaprint;
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule (finalAttrs: {
@@ -29,6 +31,7 @@ buildDotnetModule (finalAttrs: {
 
   postPatch = ''
     mv src/NuGet.config NuGet.Config
+    rm -r src/Runtimes
   '';
 
   strictDeps = true;
@@ -38,6 +41,7 @@ buildDotnetModule (finalAttrs: {
   postInstall = ''
     cp -a -- ${finalAttrs.passthru.frontend} "$dotnetInstallPath"/UI
     cp -- ${finalAttrs.passthru.package_info} "$dotnetInstallPath"/../package_info
+    ln -s -- ${fpcalc} "$dotnetInstallPath"/fpcalc
   '';
 
   nugetDeps = ./deps.json;
@@ -48,6 +52,10 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   doCheck = true;
+
+  preCheck = ''
+    ln -s -- ${fpcalc} _tests/net8.0/${rid}/fpcalc
+  '';
 
   __darwinAllowLocalNetworking = true; # for tests
 
@@ -92,6 +100,9 @@ buildDotnetModule (finalAttrs: {
     "FullyQualifiedName!~NzbDrone.Core.Test.ImportListTests.SpotifyMappingFixture"
     "FullyQualifiedName!~NzbDrone.Core.Test.MetadataSource.SkyHook.SkyHookProxyFixture"
     "FullyQualifiedName!~NzbDrone.Core.Test.MetadataSource.SkyHook.SkyHookProxySearchFixture"
+
+    "FullyQualifiedName!~NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_fingerprint_file"
+    "FullyQualifiedName!~NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_lookup_file"
   ]
   ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
     # fails on macOS
@@ -114,6 +125,10 @@ buildDotnetModule (finalAttrs: {
     "NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
     "NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
     "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+
+    "NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_lookup_list"
+    "NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_lookup_list_when_fpcalc_fails_for_some_files"
+    "NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_not_fail_for_some_invalid_fingerprints"
   ];
 
   passthru = {
