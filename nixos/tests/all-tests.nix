@@ -1939,6 +1939,10 @@ in
   umami = runTest ./web-apps/umami.nix;
   umurmur = runTest ./umurmur.nix;
   unbound = runTest ./unbound.nix;
+  ungoogled-chromium = runTestOn [ "aarch64-linux" "x86_64-linux" ] {
+    imports = [ ./chromium.nix ];
+    _module.args.chromiumPackage = pkgs.ungoogled-chromium;
+  };
   unifi = runTest ./unifi.nix;
   unit-perl = runTest ./web-servers/unit-perl.nix;
   unpackerr = runTest ./unpackerr.nix;
