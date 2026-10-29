@@ -103,6 +103,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Qt6 is stricter about implicit char->integer promotion in arg()'s
     # overload set). TODO: Upstream.
     ./qbytearray-char-arg-overload.patch
+    # cmake/Install.cmake unconditionally does two things any plain `cmake
+    # --install .` on Linux would also hit, not just ours: (1) Qt's own QML
+    # deploy script tries to vendor-copy Qt's QML plugins into the install
+    # prefix and RPATH-patch them in place, which fails (and is pointless -
+    # Qt is already in the store and wrapQtAppsHook already wires up
+    # QML/plugin search paths); (2) the Linux branch unconditionally tries
+    # to build an AppImage, file(DOWNLOAD)'ing x86_64-only prebuilt tools.
+    # We don't want an AppImage anyway - nix distributes via the store, not
+    # bundled binaries. Keep the desktop/icon/metainfo install() rules,
+    # which are legitimate and correct.
+    ./no-appimage-in-install.patch
   ];
 
   # Never let a vendored copy of a dependency's sources (checked into QGC's
@@ -176,18 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ finalAttrs.propagatedBuildInputs;
 
   cmakeFlags = [
-    # TODO: This needs rationale.
-    (lib.cmakeBool "QGC_BUILD_STABLE" true)
     # Override maximum version to always accept the packaged qt6
     (lib.cmakeFeature "QGC_QT_MAXIMUM_VERSION" qt6.qtbase.version)
-    # Default install tries to copy Qt files into package
-    # TODO: Confirm this is still the case
-    (lib.cmakeBool "QGC_DISABLE_BUILD_SETUP" true)
-    # Disables an /etc/group check that has false positives on nixos
-    (lib.cmakeBool "QGC_DISABLE_ETC_GROUP_CHECKS" true)
-    # Tries to download x86_64-only prebuilt binaries
-    # TODO: Confirm this is still the case
-    (lib.cmakeBool "DISABLE_AIRMAP" true)
     # Qt's AUTOGEN machinery tries to add_dependencies() on every directly
     # linked library for its timestamp-tracking target, which fails for any
     # of them that's a plain IMPORTED target (as find_package Config-mode
@@ -207,24 +208,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "QT_NO_PRIVATE_MODULE_WARNING" true)
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/applications
-    sed 's/Exec=.*/Exec=QGroundControl/' --in-place deploy/qgroundcontrol.desktop
-    cp -v deploy/qgroundcontrol.desktop $out/share/applications
-
-    mkdir -p $out/bin
-    cp -v bin/QGroundControl $out/bin/
-
-    mkdir -p $out/share/qgroundcontrol
-    cp -rv resources/ $out/share/qgroundcontrol
-
-    install -D resources/icons/qgroundcontrol.png -t $out/share/icons/hicolor/128x128/apps
-
-    runHook postInstall
-  '';
-
+  # The desktop file, AppStream metainfo and icon are installed by QGC's own
+  # cmake/Install.cmake (see no-appimage-in-install.patch); no custom
+  # installPhase needed. CMAKE_INSTALL_PREFIX is already $out via the
+  # standard cmake setup hook.
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';

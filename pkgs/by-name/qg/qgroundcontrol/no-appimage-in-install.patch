@@ -1,0 +1,27 @@
+diff --git a/cmake/Install.cmake b/cmake/Install.cmake
+index 1111111..2222222 100644
+--- a/cmake/Install.cmake
++++ b/cmake/Install.cmake
+@@ -31,7 +31,9 @@
+     NO_UNSUPPORTED_PLATFORM_ERROR
+     DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+ )
+-install(SCRIPT ${deploy_script})
++if(NOT LINUX)
++    install(SCRIPT ${deploy_script})
++endif()
+ 
+ if(ANDROID)
+     # get_target_property(QGC_ANDROID_DEPLOY_FILE ${CMAKE_PROJECT_NAME} QT_ANDROID_DEPLOYMENT_SETTINGS_FILE)
+@@ -60,11 +62,6 @@
+         FILES ${CMAKE_BINARY_DIR}/metainfo/org.mavlink.qgroundcontrol.metainfo.xml
+         DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo/
+     )
+-    install(
+-        FILES ${CMAKE_SOURCE_DIR}/deploy/linux/AppRun
+-        DESTINATION ${CMAKE_BINARY_DIR}
+-    )
+-    install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/CreateAppImage.cmake")
+ elseif(WIN32)
+     install(CODE "set(CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME})")
+     install(CODE "set(QGC_ORG_NAME ${QGC_ORG_NAME})")
