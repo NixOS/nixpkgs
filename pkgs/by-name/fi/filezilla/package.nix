@@ -25,6 +25,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "filezilla";
   version = "3.71.1";
+  __structuredAttrs = true;
 
   src = fetchurl {
     # Upstream download link was made unstable on purpose

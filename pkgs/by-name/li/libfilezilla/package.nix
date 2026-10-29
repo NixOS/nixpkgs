@@ -14,6 +14,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfilezilla";
   version = "0.58.0";
+  __structuredAttrs = true;
 
   src = fetchurl {
     # Upstream download link was made unstable on purpose
@@ -36,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
