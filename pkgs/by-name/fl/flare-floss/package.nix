@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "3.1.1";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     tag = "v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-ciyF1Pt5KdUsmpTgvfgE81hhTHBM5zMBcZpom99R5GY=";
+    hash = "sha256-dALBRDstVqPZZK/TjDXO4w6q3E9EfCpSoTPes0don7s=";
   };
 
   postPatch = ''
