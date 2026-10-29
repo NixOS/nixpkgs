@@ -419,7 +419,7 @@ in
               args = lib.mkAfter [
                 "user"
                 "ingroup"
-                "gdm"
+                "gdm:gnome-initial-setup"
               ];
             }
             {
@@ -439,7 +439,7 @@ in
               args = lib.mkAfter [
                 "user"
                 "ingroup"
-                "gdm"
+                "gdm:gnome-initial-setup"
               ];
             }
             {
@@ -467,7 +467,7 @@ in
               args = lib.mkAfter [
                 "user"
                 "ingroup"
-                "gdm"
+                "gdm:gnome-initial-setup"
               ];
             }
             {
