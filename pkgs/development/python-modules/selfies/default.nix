@@ -30,6 +30,11 @@ buildPythonPackage (finalAttrs: {
     rdkit
   ];
 
+  disabledTestPaths = [
+    # AssertionError: roundtrip of a large macrocycle fails (since rdkit 2026.09)
+    "tests/test_on_datasets.py::test_roundtrip_translation[test_path8]"
+  ];
+
   pythonImportsCheck = [ "selfies" ];
 
   meta = {

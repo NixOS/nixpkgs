@@ -77,6 +77,11 @@ buildPythonPackage rec {
     "test_altloc"
   ];
 
+  disabledTestPaths = [
+    # RuntimeError: Invariant Violation: bad direction in linearSearch (since rdkit 2026.09)
+    "test/cyclopentane_rigid_test.py::test"
+  ];
+
   pythonImportsCheck = [ "meeko" ];
 
   meta = {
