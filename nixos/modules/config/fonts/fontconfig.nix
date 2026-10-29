@@ -30,7 +30,6 @@ let
   cfg = config.fonts.fontconfig;
 
   fcBool = x: "<bool>" + (lib.boolToString x) + "</bool>";
-  pkg = pkgs.fontconfig;
 
   # configuration file to read fontconfig cache
   # priority 0
@@ -49,7 +48,7 @@ let
           inherit fontconfig;
           fontDirectories = config.fonts.packages;
         };
-      cache = makeCache pkgs.fontconfig;
+      cache = makeCache cfg.package;
       cache32 = makeCache pkgs.pkgsi686Linux.fontconfig;
     in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
@@ -209,7 +208,7 @@ let
   # Replace default linked config with a different variant
   replaceDefaultConfig = defaultConfig: newConfig: ''
     rm $dst/${defaultConfig}
-    ln -s ${pkg.out}/share/fontconfig/conf.avail/${newConfig} \
+    ln -s ${cfg.package.out}/share/fontconfig/conf.avail/${newConfig} \
           $dst/
   '';
 
@@ -224,7 +223,7 @@ let
         mkdir -p $dst
 
         # fonts.conf
-        ln -s ${pkg.out}/etc/fonts/fonts.conf \
+        ln -s ${cfg.package.out}/etc/fonts/fonts.conf \
               $dst/../fonts.conf
         # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
         mkdir -p $out/etc/fonts/2.11
@@ -232,7 +231,7 @@ let
               $out/etc/fonts/2.11/fonts.conf
 
         # fontconfig default config files
-        ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
+        ln -s ${cfg.package.out}/etc/fonts/conf.d/*.conf \
               $dst/
 
         ${lib.optionalString (!cfg.antialias) (
@@ -351,6 +350,8 @@ in
             dependency on all those fonts.
           '';
         };
+
+        package = lib.mkPackageOption pkgs "fontconfig" { };
 
         confPackages = lib.mkOption {
           internal = true;
@@ -627,14 +628,14 @@ in
   };
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      environment.systemPackages = [ pkgs.fontconfig ];
+      environment.systemPackages = [ cfg.package ];
       environment.etc.fonts.source = "${fontconfigEtc}/etc/fonts/";
       security.apparmor.includes."abstractions/fonts" = ''
         # fonts.conf
-        r ${pkg.out}/etc/fonts/fonts.conf,
+        r ${cfg.package.out}/etc/fonts/fonts.conf,
 
         # fontconfig default config files
-        r ${pkg.out}/etc/fonts/conf.d/*.conf,
+        r ${cfg.package.out}/etc/fonts/conf.d/*.conf,
 
         # 00-nixos-cache.conf
         r ${cacheConf},
@@ -644,7 +645,7 @@ in
 
         # 50-user.conf
         ${lib.optionalString cfg.includeUserConf ''
-          r ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf,
+          r ${cfg.package.out}/etc/fonts/conf.d.bak/50-user.conf,
         ''}
 
         # local.conf (indirect priority 51)
