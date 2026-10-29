@@ -15,6 +15,8 @@ buildGoModule (finalAttrs: {
   pname = "artalk";
   version = "2.10.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
