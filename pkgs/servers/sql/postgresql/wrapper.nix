@@ -8,6 +8,7 @@
 f:
 let
   installedExtensions = f postgresql.pkgs;
+  args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
   recurse = import ./wrapper.nix {
     # explicitly listed in case they were overridden
     inherit
@@ -39,16 +40,13 @@ buildEnv (finalAttrs: {
 
   derivationArgs = {
     strictDeps = true;
-    nativeBuildInputs = [ makeBinaryWrapper ];
+    nativeBuildInputs = lib.optional (args != [ ]) makeBinaryWrapper;
   };
 
-  postBuild =
-    let
-      args = lib.concatMap (ext: ext.wrapperArgs or [ ]) installedExtensions;
-    in
-    ''
-      wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
-    '';
+  # only wrap when an extension needs it; otherwise the env is plain symlinks
+  postBuild = lib.optionalString (args != [ ]) ''
+    wrapProgram "$out/bin/postgres" ${lib.concatStringsSep " " args}
+  '';
 
   passthru = {
     inherit installedExtensions;
