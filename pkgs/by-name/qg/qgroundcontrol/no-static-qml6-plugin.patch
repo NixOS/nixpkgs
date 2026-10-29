@@ -1,0 +1,23 @@
+diff --git a/src/VideoManager/VideoReceiver/GStreamer/GStreamer.cc b/src/VideoManager/VideoReceiver/GStreamer/GStreamer.cc
+index 1111111..2222222 100644
+--- a/src/VideoManager/VideoReceiver/GStreamer/GStreamer.cc
++++ b/src/VideoManager/VideoReceiver/GStreamer/GStreamer.cc
+@@ -42,7 +42,6 @@
+ GST_PLUGIN_STATIC_DECLARE(opengl);
+ GST_PLUGIN_STATIC_DECLARE(openh264);
+ GST_PLUGIN_STATIC_DECLARE(playback);
+-GST_PLUGIN_STATIC_DECLARE(qml6);
+ GST_PLUGIN_STATIC_DECLARE(qsv);
+ GST_PLUGIN_STATIC_DECLARE(rtp);
+ GST_PLUGIN_STATIC_DECLARE(rtpmanager);
+@@ -120,10 +119,6 @@
+     #endif
+ #endif
+ 
+-// #if !defined(GST_PLUGIN_qml6_FOUND) && defined(QGC_GST_STATIC_BUILD)
+-    GST_PLUGIN_STATIC_REGISTER(qml6);
+-// #endif
+-
+     GST_PLUGIN_STATIC_REGISTER(qgc);
+ }
+ 

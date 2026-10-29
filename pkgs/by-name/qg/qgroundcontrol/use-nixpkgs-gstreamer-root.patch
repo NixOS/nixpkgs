@@ -1,0 +1,34 @@
+diff --git a/cmake/find-modules/FindGStreamer.cmake b/cmake/find-modules/FindGStreamer.cmake
+index 1111111..2222222 100644
+--- a/cmake/find-modules/FindGStreamer.cmake
++++ b/cmake/find-modules/FindGStreamer.cmake
+@@ -36,9 +36,28 @@
+ 
+ ################################################################################
+ 
++# Prefer plain pkg-config discovery - what GStreamer itself ships .pc files
++# for - over guessing a platform-specific installation root. This is how any
++# system with GStreamer's pkg-config files already on PKG_CONFIG_PATH (as
++# nixpkgs, and most Linux package managers, ensure for their dependencies)
++# actually finds it; the per-platform root-dir guessing below only runs as a
++# fallback for setups where that isn't the case (e.g. Windows, or the
++# prebuilt SDKs fetched for Android/iOS).
++find_package(PkgConfig QUIET)
++if(PKG_CONFIG_FOUND)
++    pkg_check_modules(QGC_GSTREAMER_PROBE QUIET gstreamer-1.0>=${GStreamer_FIND_VERSION})
++endif()
++
+ set(PKG_CONFIG_ARGN)
+ 
+-if(WIN32)
++if(QGC_GSTREAMER_PROBE_FOUND)
++    if(NOT DEFINED GStreamer_ROOT_DIR)
++        set(GStreamer_ROOT_DIR "${QGC_GSTREAMER_PROBE_PREFIX}")
++    endif()
++    set(GSTREAMER_LIB_PATH "${QGC_GSTREAMER_PROBE_LIBDIR}")
++    set(GSTREAMER_PLUGIN_PATH "${GSTREAMER_LIB_PATH}/gstreamer-1.0")
++    set(GSTREAMER_INCLUDE_PATH "${QGC_GSTREAMER_PROBE_INCLUDEDIR}")
++elseif(WIN32)
+     if(NOT DEFINED GStreamer_ROOT_DIR)
+         if(DEFINED ENV{GSTREAMER_1_0_ROOT_X86_64} AND EXISTS "$ENV{GSTREAMER_1_0_ROOT_X86_64}")
+             set(GStreamer_ROOT_DIR "$ENV{GSTREAMER_1_0_ROOT_X86_64}")

@@ -49,7 +49,25 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-nixpkgs-compression.patch
     ./use-nixpkgs-geographiclib.patch
     ./use-nixpkgs-shapelib.patch
+    # QGC's own FindGStreamer.cmake assumes a single FHS-style root
+    # (/usr/lib/gstreamer-1.0, /usr/include); nixpkgs splits each component
+    # into its own store path, so point it at the real ones directly.
+    ./use-nixpkgs-gstreamer-root.patch
+    # gstqml6gl vendors a copy of the ext/qt6 sources that gst-plugins-good's
+    # own meson build already compiles into libgstqml6.so when built with
+    # Qt6 support (which our gst-plugins-good buildInput is); rely on that
+    # real, dynamically-loaded plugin instead of recompiling a second copy.
+    # See prePatch below, which removes the vendored copy outright.
+    ./use-nixpkgs-gst-qt6-sources.patch
+    ./no-static-qml6-plugin.patch
   ];
+
+  # Never let a vendored copy of a dependency's sources (checked into QGC's
+  # own repo as a fallback) get built instead of the real nixpkgs package: it
+  # would silently stop tracking overlays/updates to that package.
+  prePatch = ''
+    rm -rf src/VideoManager/VideoReceiver/GStreamer/gstqml6gl/qt6
+  '';
 
   # Unvendor CPM. cpm-cmake's setup hook sets CPM_LOCAL_PACKAGES_ONLY, which
   # makes every remaining (unpatched) CPMAddPackage call resolve via
