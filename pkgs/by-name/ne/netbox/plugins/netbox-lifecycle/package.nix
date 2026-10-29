@@ -11,14 +11,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-lifecycle";
-  version = "1.1.10";
+  version = "1.1.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-lifecycle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XJRToa07iMVMg6AmA0v9OHsF75ZtS74OByKIKLzErBM=";
+    hash = "sha256-twTGoObMQuBqBsIih5ZCT0tlO2ucXMqT4fJrWQX8DhU=";
   };
 
   build-system = [ setuptools ];
