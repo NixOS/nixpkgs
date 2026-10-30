@@ -196,9 +196,9 @@ def resolve_package_attribute(package: str) -> str:
     return matches.pop()
 
 
-async def get_package_version(package: str) -> str:
-    version = cast(str, await Nix.eval(f"{PACKAGE_SET}.{package}.version"))
-    return version
+def get_package_version(package: str) -> str:
+    package_info = packageset_attributes()[f"{PACKAGE_SET}.{package}"]
+    return cast(str, package_info["version"])
 
 
 @dataclass
@@ -238,7 +238,7 @@ async def resolve_providers(manifests) -> tuple[set, set]:
                 provider.missing.append(requirement.name)
                 continue
 
-            version = await get_package_version(attr)
+            version = get_package_version(attr)
             if version not in requirement.specifier:
                 errors.append(f"{requirement} not satisfied by version {version}")
         if manifest.domain in EXTRA_DEPS:
