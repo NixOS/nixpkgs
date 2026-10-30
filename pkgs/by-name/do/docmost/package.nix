@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ agpl3Only ];
     maintainers = with lib.maintainers; [
       pluiedev
-      tgarea
+      thegrayarea
     ];
     inherit (nodejs_26.meta) platforms;
     mainProgram = "docmost";
