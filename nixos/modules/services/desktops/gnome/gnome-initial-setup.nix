@@ -72,6 +72,10 @@ in
     ]
     ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart;
 
+    services.displayManager.gdm.extraPackages = [
+      pkgs.gnome-initial-setup
+    ];
+
     systemd.packages = [
       pkgs.gnome-initial-setup
     ];
