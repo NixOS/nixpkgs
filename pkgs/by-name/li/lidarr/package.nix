@@ -15,7 +15,9 @@
   writeText,
 }:
 let
+  inherit (stdenvNoCC.hostPlatform.extensions) sharedLibrary;
   fpcalc = lib.getExe chromaprint;
+  libsqlite3 = "${lib.getLib sqlite}/lib/libsqlite3${sharedLibrary}";
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule (finalAttrs: {
@@ -41,12 +43,11 @@ buildDotnetModule (finalAttrs: {
   postInstall = ''
     cp -a -- ${finalAttrs.passthru.frontend} "$dotnetInstallPath"/UI
     cp -- ${finalAttrs.passthru.package_info} "$dotnetInstallPath"/../package_info
+    ln -sf -- ${libsqlite3} "$dotnetInstallPath"/libe_sqlite3${sharedLibrary}
     ln -s -- ${fpcalc} "$dotnetInstallPath"/fpcalc
   '';
 
   nugetDeps = ./deps.json;
-
-  runtimeDeps = [ sqlite ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -54,6 +55,7 @@ buildDotnetModule (finalAttrs: {
   doCheck = true;
 
   preCheck = ''
+    ln -sf -- ${libsqlite3} _tests/net8.0/${rid}/libe_sqlite3${sharedLibrary}
     ln -s -- ${fpcalc} _tests/net8.0/${rid}/fpcalc
   '';
 
