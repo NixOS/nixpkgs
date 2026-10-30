@@ -83,40 +83,48 @@ symlinkJoin {
 
   # Both desktop and CLI expose t3. Keep the desktop's t3 wrapper in
   # sync with the CLI's provider PATH and resource-monitor environment.
-  postBuild = lib.optionalString (configuredCli.wrapperArgs != [ ]) ''
-    wrapProgram "$out/bin/t3" ${lib.escapeShellArgs configuredCli.wrapperArgs}
-  ''
-  + ''
-    makeWrapper ${lib.getExe electron} "$out/bin/t3code-desktop" \
-      --add-flags "$out/libexec/t3code/apps/desktop" \
-      --set T3CODE_SERVER_ROOT "$out/libexec/t3code" \
-      --inherit-argv0 ${lib.escapeShellArgs configuredCli.wrapperArgs} \
-      ${lib.optionalString stdenv.hostPlatform.isLinux ''
-        --set T3CODE_DESKTOP_LAUNCHER_PATH "$out/bin/t3code-desktop" \
-        --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath [ desktop-file-utils xdg-utils ])}
-      ''}
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir --parents "$out/Applications/${appName}.app/Contents/"{MacOS,Resources}
-    png2icns \
-      "$out/Applications/${appName}.app/Contents/Resources/t3code.icns" \
-      ${desktopIcon}
+  postBuild =
+    lib.optionalString (configuredCli.wrapperArgs != [ ]) ''
+      wrapProgram "$out/bin/t3" ${lib.escapeShellArgs configuredCli.wrapperArgs}
+    ''
+    + ''
+      makeWrapper ${lib.getExe electron} "$out/bin/t3code-desktop" \
+        --add-flags "$out/libexec/t3code/apps/desktop" \
+        --set T3CODE_SERVER_ROOT "$out/libexec/t3code" \
+        --inherit-argv0 ${lib.escapeShellArgs configuredCli.wrapperArgs} \
+        ${lib.optionalString stdenv.hostPlatform.isLinux ''
+          --set T3CODE_DESKTOP_LAUNCHER_PATH "$out/bin/t3code-desktop" \
+          --prefix PATH : ${
+            lib.escapeShellArg (
+              lib.makeBinPath [
+                desktop-file-utils
+                xdg-utils
+              ]
+            )
+          }
+        ''}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir --parents "$out/Applications/${appName}.app/Contents/"{MacOS,Resources}
+      png2icns \
+        "$out/Applications/${appName}.app/Contents/Resources/t3code.icns" \
+        ${desktopIcon}
 
-    # writeDarwinBundle is a shebangless bash script; run it explicitly via
-    # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
-    # It links the bundle executable against $out/bin/t3code-desktop, which
-    # the wrapper above must have created first.
-    ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
-      "$out" "${appName}" t3code-desktop t3code
-  ''
-  + ''
-    mkdir --parents \
-      "$out"/share/icons/hicolor/{1024x1024,scalable}/apps
-    install --mode=444 ${t3code-unwrapped.src}/assets/prod/black-universal-1024.png \
-      "$out"/share/icons/hicolor/1024x1024/apps/t3code.png
-    install --mode=444 ${t3code-unwrapped.src}/assets/prod/logo.svg \
-      "$out"/share/icons/hicolor/scalable/apps/t3code.svg
-  '';
+      # writeDarwinBundle is a shebangless bash script; run it explicitly via
+      # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
+      # It links the bundle executable against $out/bin/t3code-desktop, which
+      # the wrapper above must have created first.
+      ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
+        "$out" "${appName}" t3code-desktop t3code
+    ''
+    + ''
+      mkdir --parents \
+        "$out"/share/icons/hicolor/{1024x1024,scalable}/apps
+      install --mode=444 ${t3code-unwrapped.src}/assets/prod/black-universal-1024.png \
+        "$out"/share/icons/hicolor/1024x1024/apps/t3code.png
+      install --mode=444 ${t3code-unwrapped.src}/assets/prod/logo.svg \
+        "$out"/share/icons/hicolor/scalable/apps/t3code.svg
+    '';
 
   passthru.unwrapped = t3code-unwrapped;
 
