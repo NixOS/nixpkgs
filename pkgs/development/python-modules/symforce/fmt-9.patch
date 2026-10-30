@@ -1,17 +1,23 @@
 diff --git a/gen/cpp/sym/util/type_ops.h b/gen/cpp/sym/util/type_ops.h
-index b681ab85..e78113e4 100644
+index b681ab8..e801e7b 100644
 --- a/gen/cpp/sym/util/type_ops.h
 +++ b/gen/cpp/sym/util/type_ops.h
-@@ -8,7 +8,6 @@
+@@ -30,6 +30,13 @@
+ #include <sym/util/typedefs.h>
+ #include <symforce/opt/assert.h>
  
- #include <Eigen/Core>
- #include <Eigen/SparseCore>
--#include <fmt/ostream.h>
++// fmt 9 only auto-formats a type via its `operator<<` when FMT_DEPRECATED_OSTREAM is defined
++// (which it isn't here), so `type_t` (a plain LCM-generated enum wrapper with its own
++// `operator<<`, no `fmt::formatter<type_t>` of its own) needs an explicit opt-in; see the big
++// comment in symforce/opt/internal/fmt_formatters.h for the full story.
++template <>
++struct fmt::formatter<sym::type_t> : fmt::ostream_formatter {};
++
+ namespace sym {
  
- // Import all the known types.
- #include <lcmtypes/sym/type_t.hpp>
+ template <typename T>
 diff --git a/symforce/opt/CMakeLists.txt b/symforce/opt/CMakeLists.txt
-index 3c3feff3..2a42dbb8 100644
+index 1c15557..5d4e1ad 100644
 --- a/symforce/opt/CMakeLists.txt
 +++ b/symforce/opt/CMakeLists.txt
 @@ -12,7 +12,7 @@ include(FetchContent)
@@ -23,35 +29,250 @@ index 3c3feff3..2a42dbb8 100644
  if (NOT fmt_FOUND)
    message(STATUS "fmt not found, adding with FetchContent")
    function(add_fmt)
-diff --git a/symforce/opt/factor.cc b/symforce/opt/factor.cc
-index b423249c..78db61ff 100644
---- a/symforce/opt/factor.cc
-+++ b/symforce/opt/factor.cc
-@@ -6,7 +6,6 @@
+diff --git a/symforce/opt/dump_graph.h b/symforce/opt/dump_graph.h
+index 420dcfa..ca95840 100644
+--- a/symforce/opt/dump_graph.h
++++ b/symforce/opt/dump_graph.h
+@@ -9,8 +9,10 @@
+ #include <vector>
+ 
+ #include <fmt/format.h>
++#include <fmt/ostream.h>
+ 
  #include "./factor.h"
- 
- #include <fmt/format.h>
--#include <fmt/ostream.h>
- #include <fmt/ranges.h>
- 
- #include "./assert.h"
-diff --git a/symforce/opt/internal/tic_toc.cc b/symforce/opt/internal/tic_toc.cc
-index a734695c..c84d42e7 100644
---- a/symforce/opt/internal/tic_toc.cc
-+++ b/symforce/opt/internal/tic_toc.cc
-@@ -8,7 +8,6 @@
- #include <algorithm>
- 
- #include <fmt/format.h>
--#include <fmt/ostream.h>
- #include <spdlog/spdlog.h>
++#include "./internal/fmt_formatters.h"
+ #include "./key.h"
  
  namespace sym {
+diff --git a/symforce/opt/factor.cc b/symforce/opt/factor.cc
+index c8b34b6..9cdf117 100644
+--- a/symforce/opt/factor.cc
++++ b/symforce/opt/factor.cc
+@@ -11,6 +11,7 @@
+ 
+ #include "./assert.h"
+ #include "./internal/factor_utils.h"
++#include "./internal/fmt_formatters.h"
+ 
+ namespace sym {
+ 
+diff --git a/symforce/opt/internal/derivative_checker.h b/symforce/opt/internal/derivative_checker.h
+index e071ed0..ea2cba0 100644
+--- a/symforce/opt/internal/derivative_checker.h
++++ b/symforce/opt/internal/derivative_checker.h
+@@ -65,7 +65,7 @@ bool CheckDerivatives(LinearizerType& linearizer, const Values<Scalar>& values,
+             "Numerical Jacobian:\n{}\n"
+             "Additive Difference:\n{}",
+             linearization.jacobian, numerical_jacobian,
+-            linearization.jacobian - numerical_jacobian);
++            MatrixX<Scalar>(linearization.jacobian - numerical_jacobian));
+       }
+ 
+       success = false;
+@@ -88,7 +88,8 @@ bool CheckDerivatives(LinearizerType& linearizer, const Values<Scalar>& values,
+             "Symbolic (sym::Linearizer) Hessian:\n{}\n"
+             "Numerical (J^T * J) Hessian:\n{}\n"
+             "Additive Difference:\n{}",
+-            full_hessian, numerical_hessian, full_hessian - numerical_hessian);
++            full_hessian, numerical_hessian,
++            MatrixX<Scalar>(full_hessian - numerical_hessian));
+       }
+ 
+       success = false;
+diff --git a/symforce/opt/internal/fmt_formatters.h b/symforce/opt/internal/fmt_formatters.h
+new file mode 100644
+index 0000000..e537d66
+--- /dev/null
++++ b/symforce/opt/internal/fmt_formatters.h
+@@ -0,0 +1,159 @@
++/* ----------------------------------------------------------------------------
++ * SymForce - Copyright 2022, Skydio, Inc.
++ * This source code is under the Apache 2.0 license found in the LICENSE file.
++ * ---------------------------------------------------------------------------- */
++
++#pragma once
++
++// fmt 9 stopped automatically formatting any type with an `operator<<` the moment
++// <fmt/ostream.h> is included -- that implicit behavior now lives behind the
++// (off-by-default) FMT_DEPRECATED_OSTREAM macro (see detail::has_fallback_formatter in
++// fmt/core.h). Without it, every type that should be formatted via its `operator<<` needs its
++// own explicit opt-in:
++//
++//   template <> struct fmt::formatter<T> : fmt::ostream_formatter {};
++//
++// This header provides that opt-in for every symforce type that gets passed directly to
++// fmt::format/fmt::print (as opposed to one of its fields/members) somewhere in symforce/opt or
++// symforce/pybind.
++//
++// Separately, fmt 9's <fmt/ranges.h> auto-detects "range-like" types by checking that
++// `.begin()`/`.end()` are callable (via decltype), and then separately computes a "range
++// reference type" as `decltype(*range_begin(...))` to decide how to format each element.
++// Eigen::DenseBase<Derived> unconditionally declares `begin()`/`end()` member functions for
++// every dense expression (see Eigen/src/Core/DenseBase.h), but their return type is aliased to
++// `void` for anything that isn't a compile-time vector (Eigen's STL-style iterators are only
++// supported for vectors; a dynamically-sized MxN matrix has `IsVectorAtCompileTime == false`).
++// `decltype(obj.begin())` is still perfectly well-formed when `begin()` returns `void`, so fmt's
++// range detection wrongly concludes these matrix types are ranges. It then hard-errors (this is
++// *not* a SFINAE-friendly failure -- it happens while computing a type alias, not while checking
++// an enable_if) trying to dereference that `void` result, which is exactly the "void value not
++// ignored as it ought to be" compile error.
++//
++// (Eigen types that genuinely are vector-shaped at compile time -- e.g. `VectorXd`, or the
++// `Eigen::Transpose<...>` of one -- really do have working begin()/end() iterators over their
++// scalar elements, and format fine as fmt ranges; they're deliberately left alone below.)
++//
++// For the (non-vector) Eigen matrix types, giving them an explicit `fmt::formatter<T>`
++// specialization backed by their `operator<<` also fixes this: an explicit (full) specialization
++// always wins over fmt/ranges.h's partial specialization regardless of whether the range
++// detection above would succeed or hard-error for T, so this sidesteps the broken detection
++// entirely for exactly these types instead of trying to suppress it more broadly. This only works
++// for a *full* specialization (concrete Scalar); see the note below about why these aren't
++// templated on Scalar like the others.
++//
++// All the other types forward-declared below are plain (non-range) classes with their own
++// `operator<<`, so a single specialization templated on Scalar covers both the double and float
++// instantiation without the ranges.h ambiguity concern above.
++
++#include <fmt/ostream.h>
++
++#include <Eigen/Core>
++#include <Eigen/SparseCore>
++
++// Forward declarations only -- every file that includes this header to format one of these
++// already includes the real definition first for other reasons.
++namespace eigen_lcm {
++class MatrixXd;
++class MatrixXf;
++}  // namespace eigen_lcm
++
++namespace sym {
++class Key;
++class key_t;
++class optimization_status_t;
++class levenberg_marquardt_solver_failure_reason_t;
++
++template <typename Scalar>
++class Factor;
++
++template <typename Scalar>
++class Values;
++
++template <typename ScalarType>
++class Rot2;
++template <typename ScalarType>
++class Rot3;
++template <typename ScalarType>
++class Pose2;
++template <typename ScalarType>
++class Pose3;
++template <typename ScalarType>
++class Unit3;
++template <typename ScalarType>
++class ATANCameraCal;
++template <typename ScalarType>
++class DoubleSphereCameraCal;
++template <typename ScalarType>
++class EquirectangularCameraCal;
++template <typename ScalarType>
++class LinearCameraCal;
++template <typename ScalarType>
++class PolynomialCameraCal;
++template <typename ScalarType>
++class SphericalCameraCal;
++template <typename ScalarType>
++class OrthographicCameraCal;
++}  // namespace sym
++
++// Non-vector Eigen matrix types that get formatted directly (see the big comment above for why
++// these need to be full specializations on a concrete Scalar rather than templated on Scalar).
++template <>
++struct fmt::formatter<Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>>
++    : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>>
++    : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<eigen_lcm::MatrixXd> : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<eigen_lcm::MatrixXf> : fmt::ostream_formatter {};
++
++// Eigen::SparseMatrix doesn't have the range-detection problem described above (it has no
++// begin()/end() members at all), but it still needs the explicit opt-in like every other
++// streamable type under fmt 9.
++template <>
++struct fmt::formatter<Eigen::SparseMatrix<double>> : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<Eigen::SparseMatrix<float>> : fmt::ostream_formatter {};
++
++// Plain (non-range) symforce types with their own `operator<<`.
++template <>
++struct fmt::formatter<sym::Key> : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<sym::key_t> : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<sym::optimization_status_t> : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<sym::levenberg_marquardt_solver_failure_reason_t> : fmt::ostream_formatter {
++};
++
++template <typename Scalar>
++struct fmt::formatter<sym::Factor<Scalar>> : fmt::ostream_formatter {};
++template <typename Scalar>
++struct fmt::formatter<sym::Values<Scalar>> : fmt::ostream_formatter {};
++
++template <typename ScalarType>
++struct fmt::formatter<sym::Rot2<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::Rot3<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::Pose2<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::Pose3<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::Unit3<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::ATANCameraCal<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::DoubleSphereCameraCal<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::EquirectangularCameraCal<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::LinearCameraCal<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::PolynomialCameraCal<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::SphericalCameraCal<ScalarType>> : fmt::ostream_formatter {};
++template <typename ScalarType>
++struct fmt::formatter<sym::OrthographicCameraCal<ScalarType>> : fmt::ostream_formatter {};
+diff --git a/symforce/opt/internal/linearizer_utils.h b/symforce/opt/internal/linearizer_utils.h
+index 4d4a919..e859447 100644
+--- a/symforce/opt/internal/linearizer_utils.h
++++ b/symforce/opt/internal/linearizer_utils.h
+@@ -17,6 +17,7 @@
+ #include <lcmtypes/sym/linearization_sparse_factor_helper_t.hpp>
+ 
+ #include "../factor.h"
++#include "./fmt_formatters.h"
+ #include "./hash_combine.h"
+ 
+ namespace sym {
+diff --git a/symforce/opt/internal/optimizer_utils.h b/symforce/opt/internal/optimizer_utils.h
+index 5a21524..8fa1d8e 100644
+--- a/symforce/opt/internal/optimizer_utils.h
++++ b/symforce/opt/internal/optimizer_utils.h
+@@ -9,6 +9,7 @@
+ 
+ #include "../optimization_stats.h"
+ #include "../tic_toc.h"
++#include "./fmt_formatters.h"
+ 
+ namespace sym {
+ 
 diff --git a/symforce/opt/tic_toc.h b/symforce/opt/tic_toc.h
-index ffeced74..1f87f201 100644
+index 477033b..7962500 100644
 --- a/symforce/opt/tic_toc.h
 +++ b/symforce/opt/tic_toc.h
-@@ -34,7 +34,6 @@
+@@ -38,7 +38,6 @@
  
  #else  // if !defined(SYMFORCE_TIC_TOC_HEADER)
  #include <fmt/format.h>
@@ -60,50 +281,50 @@ index ffeced74..1f87f201 100644
  #include "./internal/tic_toc.h"
  
 diff --git a/symforce/opt/values.cc b/symforce/opt/values.cc
-index 5f2a67f1..1cb663da 100644
+index 70885c8..0b82c20 100644
 --- a/symforce/opt/values.cc
 +++ b/symforce/opt/values.cc
-@@ -6,7 +6,6 @@
- #include "./values.h"
- 
- #include <fmt/format.h>
--#include <fmt/ostream.h>
+@@ -9,6 +9,7 @@
+ #include <fmt/ostream.h>
  
  #include "./assert.h"
++#include "./internal/fmt_formatters.h"
+ 
+ namespace sym {
  
 diff --git a/symforce/pybind/cc_factor.cc b/symforce/pybind/cc_factor.cc
-index 910649c3..2ea5dbf5 100644
+index 910649c..06ad270 100644
 --- a/symforce/pybind/cc_factor.cc
 +++ b/symforce/pybind/cc_factor.cc
-@@ -10,7 +10,6 @@
+@@ -17,6 +17,7 @@
+ #include <pybind11/stl.h>
  
- #include <Eigen/Core>
- #include <fmt/format.h>
--#include <fmt/ostream.h>
- #include <pybind11/eigen.h>
- #include <pybind11/functional.h>
- #include <pybind11/pybind11.h>
+ #include <symforce/opt/factor.h>
++#include <symforce/opt/internal/fmt_formatters.h>
+ #include <symforce/opt/key.h>
+ #include <symforce/opt/values.h>
+ 
 diff --git a/symforce/pybind/cc_key.cc b/symforce/pybind/cc_key.cc
-index d6ca564f..a3566194 100644
+index d6ca564..551de90 100644
 --- a/symforce/pybind/cc_key.cc
 +++ b/symforce/pybind/cc_key.cc
-@@ -6,7 +6,6 @@
- #include "./cc_key.h"
- 
+@@ -8,6 +8,7 @@
  #include <fmt/format.h>
--#include <fmt/ostream.h>
+ #include <fmt/ostream.h>
  
++#include <symforce/opt/internal/fmt_formatters.h>
  #include <symforce/opt/key.h>
  
+ #include "./lcm_type_casters.h"
 diff --git a/symforce/pybind/cc_values.cc b/symforce/pybind/cc_values.cc
-index 5258047f..151d7614 100644
+index 543049f..535ca75 100644
 --- a/symforce/pybind/cc_values.cc
 +++ b/symforce/pybind/cc_values.cc
-@@ -11,7 +11,6 @@
+@@ -24,6 +24,7 @@
+ #include <sym/all_cam_types.h>
+ #include <sym/all_geo_types.h>
+ #include <sym/util/type_ops.h>
++#include <symforce/opt/internal/fmt_formatters.h>
+ #include <symforce/opt/key.h>
+ #include <symforce/opt/values.h>
  
- #include <Eigen/Core>
- #include <fmt/format.h>
--#include <fmt/ostream.h>
- #include <pybind11/eigen.h>
- #include <pybind11/pybind11.h>
- #include <pybind11/stl.h>

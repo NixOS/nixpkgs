@@ -16,6 +16,10 @@
   spdlog,
   tl-optional,
   metis,
+  pybind11,
+  cython,
+  skymarshal,
+  gmp,
 }:
 
 # TODO: This is WIP
@@ -36,24 +40,48 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    # setup.py's own declared build-dependency bound ("cython>=3,<3.1.0")
+    # predates this nixpkgs' cython; use whatever's actually packaged instead
+    # of pinning backward to satisfy a stale upper bound.
+    substituteInPlace setup.py \
+      --replace-fail '"cython>=3,<3.1.0"' '"cython>=3"'
+
     substituteInPlace symforce/opt/CMakeLists.txt \
       --replace-fail 'function(add_metis)' \
       'function(add_metis)
         find_package(METIS REQUIRED)
-        target_link_libraries(''${TARGET} PRIVATE METIS::METIS)
+        # Downstream (e.g. symforce_cholesky below) links against a plain
+        # "metis" target, matching the name METIS'"'"'s own CMakeLists.txt
+        # gives it when built via the FetchContent path this replaces; alias
+        # that name to the METIS::METIS imported target find_package() gives
+        # us so the rest of this file does not need to change.
+        add_library(metis ALIAS METIS::METIS)
       endfunction()
       function(hacky_mchackface)'
   '';
 
   patches = [
     ./latest-cmake.patch
-    ./fix-pythonpath.patch
     ./fmt-9.patch
     ./spdlog-newer.patch
   ];
 
+  # setup.py drives its own cmake invocation internally (there's no
+  # pyproject.toml [build-system], so this is a plain legacy setup.py build);
+  # letting cmake's setup hook take over configurePhase instead just leaves
+  # the build stuck inside the throwaway build/ dir it cd's into, breaking
+  # the subsequent pypa build step.
+  dontUseCmakeConfigure = true;
+
   preConfigure = ''
     export CMAKE_LIBRARY_PATH="${fmt.dev}/:$CMAKE_LIBRARY_PATH"
+    # symforce/pybind/CMakeLists.txt does a bare find_package(pybind11 ...),
+    # falling back to FetchContent (blocked in the sandbox) if that fails.
+    # pybind11's own CMake config isn't under a standard find_package search
+    # path (it lives under the Python package's site-packages, not
+    # lib/cmake), so point at it directly the same way pybind11's own docs
+    # recommend doing via pybind11.get_cmake_dir().
+    export pybind11_DIR="${pybind11}/${pybind11.pythonModule.sitePackages}/pybind11/share/cmake/pybind11"
   '';
 
   build-system = [
@@ -62,6 +90,9 @@ buildPythonPackage rec {
     pip
     setuptools-scm
     git # TODO: Upstream patch that also catches FileNotFoundError when git not installed
+    pybind11
+    cython
+    skymarshal
   ];
   dependencies = [
     argh
@@ -72,6 +103,7 @@ buildPythonPackage rec {
     fmt
     spdlog
     tl-optional
+    gmp # linked by the vendored third_party/symengine subbuild
     metis
   ];
 
