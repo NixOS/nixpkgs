@@ -4,6 +4,7 @@
   fetchzip,
   autoPatchelfHook,
   cups,
+  cups-idprt-update-script,
   e2fsprogs,
   krb5,
   libxcrypt-legacy,
@@ -47,6 +48,11 @@ stdenvNoCC.mkDerivation {
       chmod +x $out/lib/cups/filter/*
       runHook postInstall
     '';
+
+  passthru.updateScript = [
+    (lib.getExe cups-idprt-update-script)
+    "SP410"
+  ];
 
   meta = {
     description = "CUPS drivers for TSPL-based iDPRT thermal label printers (SP210, SP310, SP320, SP320E, SP410, SP410BT, SP420, SP450, SP460BT)";
