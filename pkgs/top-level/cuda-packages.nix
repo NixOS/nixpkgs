@@ -62,7 +62,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt =
@@ -87,7 +87,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt =
@@ -112,7 +112,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt =
@@ -137,7 +137,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
@@ -155,7 +155,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
@@ -174,7 +174,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
@@ -193,7 +193,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
@@ -212,7 +212,7 @@ let
     cutensor = "2.8.1";
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
-    nvjpeg2000 = "0.11.0";
+    nvjpeg2000 = "0.12.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
     tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
