@@ -53,6 +53,6 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://wiki.hyperledger.org/display/fabric";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.johnrtitor ];
   };
 })
