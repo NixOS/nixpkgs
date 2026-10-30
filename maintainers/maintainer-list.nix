@@ -24673,12 +24673,6 @@
     githubId = 7775707;
     name = "RB";
   };
-  rbasso = {
-    email = "rbasso@sharpgeeks.net";
-    github = "rbasso";
-    githubId = 16487165;
-    name = "Rafael Basso";
-  };
   rbreslow = {
     name = "Rocky Breslow";
     github = "rbreslow";
