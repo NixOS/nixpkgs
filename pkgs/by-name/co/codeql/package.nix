@@ -11,22 +11,43 @@
   freetype,
   jdk21,
   curl,
+  autoPatchelfHook,
+  alsa-lib,
+  lttng-ust_2_12,
 }:
 
+let
+  platform =
+    if stdenv.hostPlatform.isDarwin then
+      "osx64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "linux-arm64"
+    else
+      "linux64";
+in
 stdenv.mkDerivation rec {
   pname = "codeql";
-  version = "2.27.2";
+  version = "2.27.3";
 
   dontConfigure = true;
   dontBuild = true;
   dontStrip = true;
 
   src = fetchzip {
-    url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql.zip";
-    hash = "sha256-ID/iVfTYwxFrPk3998gbq9lNRCDBNQIvT7WB1GAGKww=";
+    url = "https://github.com/github/codeql-cli-binaries/releases/download/v${version}/codeql-${platform}.zip";
+    hash =
+      {
+        x86_64-linux = "sha256-MefrnCcVjue8WJL+zoIewe/gV2mNWsV9KJWVwM2AlfM=";
+        aarch64-linux = "sha256-hv2m9F1Ex10hSXlNUGL/R4Xpfy/aKtg4mUIdazLl7c4=";
+        x86_64-darwin = "sha256-9DCBMMWDjNvPE5k4PFXPndMvsAONGvvSdLWkcVmHtUU=";
+        aarch64-darwin = "sha256-9DCBMMWDjNvPE5k4PFXPndMvsAONGvvSdLWkcVmHtUU=";
+      }
+      .${stdenv.hostPlatform.system};
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [
     zlib
     libx11
     libxext
@@ -37,6 +58,8 @@ stdenv.mkDerivation rec {
     jdk21
     (lib.getLib stdenv.cc.cc)
     curl
+    alsa-lib
+    lttng-ust_2_12
   ];
 
   installPhase = ''
@@ -58,6 +81,17 @@ stdenv.mkDerivation rec {
     ln -s $out/codeql/codeql $out/bin/
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    # Confirm that "codeql database create" runs successfully.
+    tmpdir=$(mktemp -d)
+    echo "int main() { return 0; }" > "$tmpdir/test.c"
+    $out/bin/codeql database create "$tmpdir/codeql-db" \
+      --language=cpp --source-root="$tmpdir" \
+      --command="cc $tmpdir/test.c"
+  '';
+
   meta = {
     description = "Semantic code analysis engine";
     homepage = "https://codeql.github.com";
@@ -65,7 +99,12 @@ stdenv.mkDerivation rec {
       dump_stack
       tree-sapii
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     license = lib.licenses.unfree;
   };
 }
