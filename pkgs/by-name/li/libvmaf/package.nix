@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvmaf";
-  version = "3.0.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "netflix";
     repo = "vmaf";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6mwU2so1YM2pyWkJbDHVl443GgWtQazbBv3gTMBq5NA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kypmbtIOHCu9Hd09TugPbbOA9O4LkBqzqRK9el1ncwo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libvmaf";
@@ -31,8 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     (buildPackages.callPackage ./xxd.nix { })
   ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-    substituteInPlace meson.build --replace-fail '_XOPEN_SOURCE=600' '_XOPEN_SOURCE=700'
+  # Upstream forgot to bump project version in the v3.2.1 tag
+  postPatch = lib.optionalString (finalAttrs.version == "3.2.1") ''
+    substituteInPlace meson.build --replace-fail "version : '3.2.0'" "version : '3.2.1'"
   '';
 
   env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
