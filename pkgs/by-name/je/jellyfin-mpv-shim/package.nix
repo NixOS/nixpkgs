@@ -1,10 +1,8 @@
 {
   lib,
   python3Packages,
-  copyDesktopItems,
   fetchPypi,
   gobject-introspection,
-  makeDesktopItem,
   wrapGAppsHook3,
 }:
 
@@ -21,7 +19,6 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    copyDesktopItems
     wrapGAppsHook3
     gobject-introspection
   ];
@@ -63,12 +60,12 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "mpv-jsonipc" "python_mpv_jsonipc"
   '';
 
-  # Install all the icons for the desktop item
   postInstall = ''
+    install -Dm644 -t "$out"/share/applications jellyfin_mpv_shim/integration/com.github.iwalton3.jellyfin-mpv-shim.desktop
+    install -Dm644 -t "$out"/share/metainfo jellyfin_mpv_shim/integration/com.github.iwalton3.jellyfin-mpv-shim.appdata.xml
     for s in 16 32 48 64 128 256; do
-      mkdir -p $out/share/icons/hicolor/''${s}x''${s}/apps
-      ln -s $out/${python3Packages.python.sitePackages}/jellyfin_mpv_shim/integration/jellyfin-''${s}.png \
-        $out/share/icons/hicolor/''${s}x''${s}/apps/jellyfin-mpv-shim.png
+      install -Dm644 jellyfin_mpv_shim/integration/jellyfin-"$s".png \
+        "$out"/share/icons/hicolor/"$s"x"$s"/apps/com.github.iwalton3.jellyfin-mpv-shim.png
     done
   '';
 
@@ -79,21 +76,6 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   pythonImportsCheck = [ "jellyfin_mpv_shim" ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "jellyfin-mpv-shim";
-      exec = "jellyfin-mpv-shim";
-      icon = "jellyfin-mpv-shim";
-      desktopName = "Jellyfin MPV Shim";
-      categories = [
-        "Video"
-        "AudioVideo"
-        "TV"
-        "Player"
-      ];
-    })
-  ];
 
   meta = {
     homepage = "https://github.com/jellyfin/jellyfin-mpv-shim";
