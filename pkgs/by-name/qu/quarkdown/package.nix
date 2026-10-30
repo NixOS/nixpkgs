@@ -7,6 +7,7 @@
   dart-sass,
   libarchive,
   makeWrapper,
+  nix-update-script,
 }:
 
 let
@@ -100,6 +101,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modern Markdown-based typesetting system";
