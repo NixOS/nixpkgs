@@ -4,6 +4,7 @@
   fetchzip,
   autoPatchelfHook,
   cups,
+  cups-idprt-update-script,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -39,6 +40,11 @@ stdenvNoCC.mkDerivation {
       chmod +x $out/lib/cups/filter/*
       runHook postInstall
     '';
+
+  passthru.updateScript = [
+    (lib.getExe cups-idprt-update-script)
+    "MT890"
+  ];
 
   meta = {
     description = "CUPS driver for the iDPRT MT890";
