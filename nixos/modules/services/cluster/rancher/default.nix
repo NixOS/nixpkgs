@@ -847,6 +847,12 @@ let
           ++ (lib.optional (duplicateCharts != [ ])
             "${name}: The following auto deploying charts are overriden by charts of the same name: ${toString duplicateCharts}."
           )
+          ++ (lib.optional (
+            cfg.containerdConfigTemplate != null && cfg.containerdConfigTemplateV3 != null
+          ) "${name}: containerdConfigTemplate is ignored because containerdConfigTemplateV3 is set.")
+          ++ (lib.optional (cfg.containerdConfigTemplate != null && cfg.containerdConfigTemplateV3 == null)
+            "${name}: containerdConfigTemplate renders containerd's legacy version 2 configuration, but the containerd 2 shipped with ${name} prefers version 3. Consider moving the template to containerdConfigTemplateV3."
+          )
           ++ (lib.optional (cfg.role != "server" && cfg.charts != { })
             "${name}: Helm charts are only made available to the cluster on server nodes (role == server), they will be ignored by this node."
           )
