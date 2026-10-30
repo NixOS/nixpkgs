@@ -23,7 +23,8 @@ in
   all = incusRunTest {
     name = "all";
     appArmor = true;
-    feature.user = true;
+    # https://github.com/lxc/incus/issues/4297
+    # feature.user = true;
 
     instances = {
       c1 = {
