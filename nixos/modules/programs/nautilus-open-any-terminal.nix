@@ -51,7 +51,7 @@ in
             })
             // {
               use-generic-terminal-name = cfg.useGenericTerminalName;
-            }
+            };
           lockAll = true;
         }
       ];
