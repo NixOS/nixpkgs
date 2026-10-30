@@ -57,15 +57,15 @@ index 9110ae31..aeb3b1e1 100644
              else if (isBareCommand(l, "update")) //if extra args are received, it'll be processed by executer
              {
                  string confirmationQuery("This might require restarting MEGAcmd. Are you sure to continue");
-@@ -4684,7 +4684,7 @@ void megacmd()
+@@ -5049,7 +5049,7 @@ void greetStateListener(int clientID)
  
-                 std::string s;
+     std::string s;
  
 -#if defined(_WIN32) || defined(__APPLE__)
 +#ifdef ENABLE_UPDATER
-                 ostringstream os;
-                 auto updatMsgOpt = lookForAvailableNewerVersions(api);
-                 //TODO: have this executed in worker thread instead (see MegaCmdExecuter::mayExecutePendingStuffInWorkerThread)
+     ostringstream os;
+     auto updatMsgOpt = lookForAvailableNewerVersions(api);
+     //TODO: have this executed in worker thread instead (see MegaCmdExecuter::mayExecutePendingStuffInWorkerThread)
 diff --git a/src/megacmdcommonutils.h b/src/megacmdcommonutils.h
 index 039d7b81..977dbb67 100644
 --- a/src/megacmdcommonutils.h
