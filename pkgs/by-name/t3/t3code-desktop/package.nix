@@ -4,6 +4,8 @@
   symlinkJoin,
   makeBinaryWrapper,
   makeDesktopItem,
+  desktop-file-utils,
+  xdg-utils,
   electron_44,
   libicns,
   writeDarwinBundle,
@@ -59,6 +61,7 @@ let
     icon = "t3code";
     startupWMClass = "t3code";
     categories = [ "Development" ];
+    mimeTypes = [ "x-scheme-handler/t3code" ];
   };
 
 in
@@ -87,7 +90,11 @@ symlinkJoin {
     makeWrapper ${lib.getExe electron} "$out/bin/t3code-desktop" \
       --add-flags "$out/libexec/t3code/apps/desktop" \
       --set T3CODE_SERVER_ROOT "$out/libexec/t3code" \
-      --inherit-argv0 ${lib.escapeShellArgs configuredCli.wrapperArgs}
+      --inherit-argv0 ${lib.escapeShellArgs configuredCli.wrapperArgs} \
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        --set T3CODE_DESKTOP_LAUNCHER_PATH "$out/bin/t3code-desktop" \
+        --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath [ desktop-file-utils xdg-utils ])}
+      ''}
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir --parents "$out/Applications/${appName}.app/Contents/"{MacOS,Resources}
