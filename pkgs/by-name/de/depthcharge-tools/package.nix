@@ -17,8 +17,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "depthcharge-tools";
   version = "0.7.1";
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "depthcharge-tools";
     tag = "v${finalAttrs.version}";
     hash = "sha256-kwtl/hUZ57quVQRSHLWHCzSuUmhH/uOfoGkcvqvF8rQ=";
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Tools to manage the Chrome OS bootloader";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/depthcharge-tools";
+    homepage = "https://gitlab.nura.eco/nura/depthcharge-tools";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ninelore ];

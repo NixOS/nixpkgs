@@ -3,6 +3,7 @@
   aiohttp,
   aiomqtt,
   buildPythonPackage,
+  certifi,
   fetchFromGitHub,
   openssl,
   orjson,
@@ -13,21 +14,33 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiovitesy";
-  version = "1.4.0";
+  version = "1.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovitesy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dbTgwtv+jxaYFgwEYUij0uANFyQ+J+G85b54ZPrSr9Y=";
+    hash = "sha256-3foOe9xv6quyGwWroeaebtHEDuGdS840U6VbJZku/+8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=84.2.1" "setuptools"
+  '';
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "certifi"
+    "orjson"
+  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     aiomqtt
+    certifi
     orjson
   ];
 

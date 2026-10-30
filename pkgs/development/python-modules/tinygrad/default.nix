@@ -128,6 +128,8 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "z3-solver" ];
+
   optional-dependencies = lib.fix (self: {
     testing_minimal = [
       hypothesis

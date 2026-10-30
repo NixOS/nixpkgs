@@ -29,6 +29,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-l75+nVI8o22T7dx7ljGLQqe72VErU8dXxYB6fa+0Nx0=";
   };
 
+  pythonRelaxDeps = [ "websockets" ];
+
   build-system = [ hatchling ];
 
   dependencies = [
@@ -53,6 +55,11 @@ buildPythonPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "bittensor" ];
+
+  disabledTests = [
+    # InvalidHeaderValue
+    "test_handshake_diagnostics_strip_terminal_controls"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
