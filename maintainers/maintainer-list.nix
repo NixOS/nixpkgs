@@ -26194,6 +26194,12 @@
     githubId = 171470;
     name = "Sam Hug";
   };
+  samirbgno = {
+    email = "samirbgno@gmail.com";
+    github = "samirbgno";
+    githubId = 96266166;
+    name = "Samir Bugueño";
+  };
   SamirTalwar = {
     email = "lazy.git@functional.computer";
     github = "SamirTalwar";

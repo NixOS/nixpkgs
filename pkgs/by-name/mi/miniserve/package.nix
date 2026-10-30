@@ -5,6 +5,7 @@
   pkg-config,
   installShellFiles,
   openssl,
+  zstd,
   cacert,
   stdenv,
   curl,
@@ -34,7 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ];
 
   nativeCheckInputs = [
     curl

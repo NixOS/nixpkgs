@@ -75,8 +75,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   sphinxBuilders = [
-    "html"
-    "man"
+    # HACK: sphinxBuilders is currently broken with __structuredAttrs = true,
+    # and ignores all but the first array item. for now, pass them as a single
+    # space-separated entry. fixed on staging-next, but requires a mass-rebuild.
+    # TODO: revert to [ "html" "man" ] on staging-next.
+    "html man"
   ];
   sphinxRoot = "docs";
 
