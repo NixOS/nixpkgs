@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "go-avahi-cname";
-  version = "2.6.1";
+  version = "2.7.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "grishy";
     repo = "go-avahi-cname";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MeEytTRZF5zpfWYNzvqiMdjvf6IJpS1t5V7+D08GjAY=";
+    hash = "sha256-X3v+7ymiYENfsFJirVWtA8IETlT56ztPgEm7W2cPzLs=";
   };
 
-  vendorHash = "sha256-vbIHB9u9Ftwdw7rHnj6rkk/ABmESNvOgp0hixeWVnkI=";
+  vendorHash = "sha256-4ZHzgYjwg8ye94hoEMmQibEzbGQb/lilq2PbYPCHyhY=";
 
   ldflags = [
     "-w"

@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pycdio";
-  version = "2.1.1-unstable-2024-02-26";
+  version = "2.1.1-unstable-2026-10-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "pycdio";
-    rev = "806c6a2eeeeb546055ce2ac9a0ae6a14ea53ae35"; # no tag for this version (yet)
-    hash = "sha256-bOm82mBUIaw4BGHj3Y24Fv5+RfAew+Ma1u4QENXoRiU=";
+    rev = "4f681f1148885f4417abc3797772eed1ddb865ea"; # no tag for this version (yet)
+    hash = "sha256-GZRvP3UyT86WRrDdAXX0Vijk48hXI9N+vfjOEIpXN7g=";
   };
 
   preConfigure = ''

@@ -2,15 +2,15 @@
   lib,
   rustPlatform,
   fetchpatch,
-  fetchFromGitHub,
+  fetchFromCodeberg,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emplace";
   version = "1.6.0";
 
-  src = fetchFromGitHub {
-    owner = "tversteeg";
+  src = fetchFromCodeberg {
+    owner = "fosk";
     repo = "emplace";
     tag = "v${finalAttrs.version}";
     sha256 = "sha256-FZ+lvf5HRSruUdmkm/Hqz0aRa95SjfIa43WQczRCGNg=";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoPatches = [
     (fetchpatch {
-      url = "https://github.com/tversteeg/emplace/pull/397/commits/fe32ab280234b1fb1a81a22f78bbc8af188b5fa7.patch";
+      url = "https://codeberg.org/fosk/emplace/commit/ea39f5826f6d0501aa3073f620b8a764900d3dc5.patch";
       hash = "sha256-9O0J9cJlXUGdQ9fqWeW8OIFA48qlYxGl+2yHHt3MaMU=";
     })
   ];
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Mirror installed software on multiple machines";
-    homepage = "https://github.com/tversteeg/emplace";
+    homepage = "https://codeberg.org/fosk/emplace";
     license = lib.licenses.agpl3Plus;
     mainProgram = "emplace";
   };

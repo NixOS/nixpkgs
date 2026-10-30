@@ -6584,7 +6584,7 @@ self: super: with self; {
 
   fressnapftracker = callPackage ../development/python-modules/fressnapftracker { };
 
-  freud = callPackage ../development/python-modules/freud { };
+  freud-analysis = callPackage ../development/python-modules/freud-analysis { };
 
   frictionless = callPackage ../development/python-modules/frictionless { };
 
@@ -12340,6 +12340,8 @@ self: super: with self; {
 
   nrf-ota = callPackage ../development/python-modules/nrf-ota { };
 
+  nrf802154-sniffer = callPackage ../development/python-modules/nrf802154-sniffer { };
+
   nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
@@ -12594,6 +12596,8 @@ self: super: with self; {
   omorfi = callPackage ../development/python-modules/omorfi { };
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
+
+  omsdk = callPackage ../development/python-modules/omsdk { };
 
   oncalendar = callPackage ../development/python-modules/oncalendar { };
 
@@ -13341,7 +13345,7 @@ self: super: with self; {
 
   parsley = callPackage ../development/python-modules/parsley { };
 
-  parsnip = callPackage ../development/python-modules/parsnip { };
+  parsnip-cif = callPackage ../development/python-modules/parsnip-cif { };
 
   parso = callPackage ../development/python-modules/parso { };
 
@@ -20532,8 +20536,6 @@ self: super: with self; {
   sysrsync = callPackage ../development/python-modules/sysrsync { };
 
   systembridgeconnector = callPackage ../development/python-modules/systembridgeconnector { };
-
-  systembridgemodels = callPackage ../development/python-modules/systembridgemodels { };
 
   systemd-python = callPackage ../development/python-modules/systemd-python {
     inherit (pkgs) systemd;

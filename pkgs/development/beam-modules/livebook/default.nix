@@ -13,9 +13,9 @@
   nix-update-script,
 }:
 
-beamPackages.mixRelease rec {
+beamPackages.mixRelease (finalAttrs: {
   pname = "livebook";
-  version = "0.19.9";
+  version = "0.19.10";
 
   buildInputs = [ beamPackages.erlang ];
 
@@ -28,19 +28,19 @@ beamPackages.mixRelease rec {
   src = fetchFromGitHub {
     owner = "livebook-dev";
     repo = "livebook";
-    tag = "v${version}";
-    hash = "sha256-VpYxsbfQl5sS4G1iqD/gkEohqlwiFi/Wyj8kiG0Pc4I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-05h6LgVDXdWlxuJdLiKSYiY345qWyj4cLN0apU7Vbh0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version;
+    pname = "mix-deps-${finalAttrs.pname}";
+    inherit (finalAttrs) src version;
     hash = "sha256-T74RmUORPdNibxdl+bRGyYyOdnKs1TyjtdutLtfLNLM=";
   };
 
   node_modules = stdenv.mkDerivation {
-    pname = "${pname}-node_modules";
-    inherit src version;
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) src version;
     nativeBuildInputs = [
       bun
       writableTmpDirAsHomeHook
@@ -69,7 +69,7 @@ beamPackages.mixRelease rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-XtEkedj5QJh1tveKKd5sh4xcC6Gol1DUweQKEw1jLgU=";
+    outputHash = "sha256-EQ4Yzs82wJEaDHoC/LExqTe36VQ4OjtdleKe6WM1aFw=";
   };
 
   postPatch = ''
@@ -80,7 +80,7 @@ beamPackages.mixRelease rec {
   '';
 
   preBuild = ''
-    cp -r ${node_modules}/node_modules assets/node_modules
+    cp -r ${finalAttrs.node_modules}/node_modules assets/node_modules
     chmod -R +w assets/node_modules
     ln -sf ../../deps/phoenix assets/node_modules/phoenix
     ln -sf ../../deps/phoenix_html assets/node_modules/phoenix_html
@@ -115,7 +115,7 @@ beamPackages.mixRelease rec {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=node_modules" ]; };
     tests = {
       livebook-service = nixosTests.livebook-service;
     };
@@ -125,6 +125,7 @@ beamPackages.mixRelease rec {
     license = lib.licenses.asl20;
     homepage = "https://livebook.dev/";
     description = "Automate code & data workflows with interactive Elixir notebooks";
+    changelog = "https://github.com/livebook-dev/livebook/releases/tag/v${finalAttrs.version}";
     mainProgram = "livebook";
     maintainers = with lib.maintainers; [
       munksgaard
@@ -136,4 +137,4 @@ beamPackages.mixRelease rec {
       lib.teams.ngi
     ];
   };
-}
+})

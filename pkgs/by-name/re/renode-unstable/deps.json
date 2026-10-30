@@ -165,11 +165,6 @@
     "hash": "sha256-mGUKg+bmB5sE/DCwsTwCsbe00MCwpgxsVW3nCtQiSmo="
   },
   {
-    "pname": "Microsoft.WindowsDesktop.App.Ref",
-    "version": "10.0.12",
-    "hash": "sha256-omruH9MPqONFT43CGi3/ZDuw8UkqIp0kZhTfq/CMr4k="
-  },
-  {
     "pname": "Mono.Cecil",
     "version": "0.11.3",
     "hash": "sha256-QxJcRt3eYy7R0mc25F/hM5n4qVqBAlZChsEKn+Y9nXU="

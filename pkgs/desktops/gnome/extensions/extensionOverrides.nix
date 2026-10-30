@@ -90,12 +90,6 @@ lib.trivial.pipe super [
     '';
   }))
 
-  (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
-    meta = old.meta // {
-      maintainers = with lib.maintainers; [ rhoriguchi ];
-    };
-  }))
-
   (patchExtension "ddterm@amezin.github.com" (old: {
     nativeBuildInputs = [
       gobject-introspection

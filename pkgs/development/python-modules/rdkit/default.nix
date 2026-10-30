@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchzip,
-  applyPatches,
   replaceVars,
   cmake,
   comic-neue,
@@ -33,21 +32,11 @@ let
       tag = "v1.0.10";
       hash = "sha256-ee2Oxvo2d7Yb59lN0zkrbFqy/3rOvVLo6qdS+f23wVQ=";
     };
-    yaehmop = applyPatches {
-      src = fetchFromGitHub {
-        owner = "greglandrum";
-        repo = "yaehmop";
-        rev = "v2025.03.1";
-        hash = "sha256-rhR7Ev+9Fk/Ks7R2x2SjWu1L/48a4zHDHUBohx1Dw/M=";
-      };
-
-      # Compatibility with CMake < 3.5 has been removed from CMake.
-      postPatch = ''
-        substituteInPlace tightbind/CMakeLists.txt \
-          --replace-fail \
-            "cmake_minimum_required(VERSION 3.0)" \
-            "cmake_minimum_required(VERSION 3.5)"
-      '';
+    yaehmop = fetchFromGitHub {
+      owner = "greglandrum";
+      repo = "yaehmop";
+      tag = "v2025.03.1";
+      hash = "sha256-wJrF/7uWPdX3IKumP06ZPDlEICETj7UEqHE+5d4t01k=";
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";

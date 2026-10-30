@@ -17,7 +17,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.38.0";
+  version = "1.40.1";
 
   icon = fetchurl {
     url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
@@ -30,7 +30,7 @@ let
     src = fetchzip {
       # Download page: https://store.decentsamples.com/downloads/decent-sampler/versions
       url = "https://cdn.decentsamples.com/production/builds/ds/${version}/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
-      hash = "sha256-96VFC4ulD7auvX8vC202HrmZ5evXI7oOpJOG0ERUcXI=";
+      hash = "sha256-9cN5J9HXycZjyr+CNf5aeJu0iwPtxpIS4MAgvznWdVE=";
     };
 
     nativeBuildInputs = [
@@ -101,12 +101,14 @@ buildFHSEnv {
     homepage = "https://www.decentsamples.com/product/decent-sampler-plugin/";
     # It claims to be free but we currently cannot find any license
     # that it is released under.
+    changelog = "https://store.decentsamples.com/downloads/decent-sampler/versions";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       adam248
       kaptcha0
+      bernelius
     ];
   };
 }

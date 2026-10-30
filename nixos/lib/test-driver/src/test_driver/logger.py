@@ -234,13 +234,15 @@ class CompositeLogger(AbstractLogger):
 
 class TerminalLogger(AbstractLogger):
     def __init__(self) -> None:
+        self._start_time = time.monotonic()
         self._print_serial_logs = True
         self._log_level = LogLevel.INFO
 
     def maybe_prefix(self, message: str, attributes: dict[str, str]) -> str:
+        elapsed = time.monotonic() - self._start_time
         if "machine" in attributes:
-            return f"{attributes['machine']}: {message}"
-        return message
+            message = f"{attributes['machine']}: {message}"
+        return f"[{elapsed:.2f}s] {message}"
 
     @staticmethod
     def _eprint(*args: object, **kwargs: Any) -> None:
@@ -263,9 +265,9 @@ class TerminalLogger(AbstractLogger):
             )
         )
 
-        tic = time.time()
+        tic = time.monotonic()
         yield
-        toc = time.time()
+        toc = time.monotonic()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)", attributes)
 
     def debug(self, *args, **kwargs) -> None:
@@ -392,11 +394,11 @@ class XMLLogger(AbstractLogger):
         self.xml.characters(message)
         self.xml.endElement("head")
 
-        tic = time.time()
+        tic = time.monotonic()
         self.drain_log_queue()
         yield
         self.drain_log_queue()
-        toc = time.time()
+        toc = time.monotonic()
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
         self.xml.endElement("nest")

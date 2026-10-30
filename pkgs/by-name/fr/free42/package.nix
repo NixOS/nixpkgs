@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.3.12";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "https://thomasokken.com/free42/upstream/free42-nologo-${finalAttrs.version}.tgz";
-    hash = "sha256-Ybr5IwqYBIXGWcLBM2drKuN2NDBta299X/3hvzvGPeU=";
+    hash = "sha256-6ZAnqlJUGL9PW/Ng1eM3Y5LFxRmoSp+BWxXcagiFhvg=";
   };
 
   nativeBuildInputs = [

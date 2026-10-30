@@ -411,6 +411,30 @@ in
             ];
           };
 
+          appsecConfigs = lib.mkOption {
+            type = lib.types.listOf yaml.type;
+            default = [ ];
+            description = ''
+              A list of appsec configs specifications.
+
+              See <https://docs.crowdsec.net/docs/next/appsec/configuration/> for details.
+            '';
+            example = [
+              {
+                "name" = "crowdsecurity/my-appsec-config";
+                "default_remediation" = "ban";
+                "on_load" = [
+                  {
+                    apply = [
+                      "SetMaxBodySize(20971520)"
+                      "SetBodySizeExceededAction(\"partial\")"
+                    ];
+                  }
+                ];
+              }
+            ];
+          };
+
           parsers = lib.mkOption {
             type = lib.types.submodule {
               options = {
@@ -669,6 +693,7 @@ in
         config_paths.plugin_dir
         cfg.settings.config.crowdsec_service.acquisition_dir
         "${config_paths.config_dir}/console"
+        "${config_paths.config_dir}/appsec-configs"
         "${config_paths.config_dir}/scenarios"
         "${config_paths.config_dir}/parsers"
         "${config_paths.config_dir}/parsers/s00-raw"
@@ -967,6 +992,7 @@ in
             ];
 
             enumeratedFiles = lib.lists.flatten [
+              (createEnumeratedSymlinks "${config_paths.config_dir}/appsec-configs" cfg.settings.appsecConfigs)
               (createEnumeratedSymlinks "${config_paths.config_dir}/scenarios" cfg.settings.scenarios)
               (createEnumeratedSymlinks "${config_paths.config_dir}/parsers/s00-raw" cfg.settings.parsers.s00Raw)
               (createEnumeratedSymlinks "${config_paths.config_dir}/parsers/s01-parse" cfg.settings.parsers.s01Parse)

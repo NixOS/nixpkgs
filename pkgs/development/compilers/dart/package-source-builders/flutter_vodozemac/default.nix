@@ -21,6 +21,7 @@ let
         _0_4_1 = "sha256-eKKrcroV2yl/FV2WmgZWFPO5MPAGz0xCvpr0fgIuGZ4=";
         _0_5_0 = "sha256-eKKrcroV2yl/FV2WmgZWFPO5MPAGz0xCvpr0fgIuGZ4=";
         _0_7_1 = "sha256-KsOyQyz9TqcmkHwuf3iA0NQU+pOOtoBVKv1AxZCjxnw=";
+        _0_8_1 = "sha256-F2p3kD0MbBaT3Mc/aKoIYP1tfX/DxHuZSY3Z8EPco0k=";
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'flutter_vodozemac': '${version}'
@@ -36,19 +37,6 @@ let
       set("''${target}_cargokit_lib" ${rustDep}/${rustDep.passthru.libraryPath} PARENT_SCOPE)
     endfunction()
   '';
-
-  getLibraryPath = ''
-    String _getLibraryPath() {
-      if (kIsWeb) {
-        return './';
-      }
-      try {
-        return Platform.resolvedExecutable + '/../lib/libvodozemac_bindings_dart.so';
-      } catch (_) {
-        return './';
-      }
-    }
-  '';
 in
 stdenv.mkDerivation {
   pname = "flutter_vodozemac";
@@ -58,18 +46,19 @@ stdenv.mkDerivation {
     inherit (rustDep) cargoDeps;
   };
 
+  patches =
+    [ ]
+    ++ (lib.optional (lib.versionOlder version "0.8") ./nixed-lib-path_pre-0.8.patch)
+    ++ (lib.optional (lib.versionAtLeast version "0.8") ./nixed-lib-path_post-0.8.patch);
+
+  postPatch = ''
+    cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    cp -r "$src" "$out"
-    pushd $out
-      chmod +rwx cargokit/cmake/cargokit.cmake
-      cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
-      chmod +rw lib/flutter_vodozemac.dart
-      substituteInPlace lib/flutter_vodozemac.dart \
-        --replace-warn "libraryPath: './'" "libraryPath: _getLibraryPath()"
-      echo "${getLibraryPath}" >> lib/flutter_vodozemac.dart
-    popd
+    cp -r ./ "$out"
 
     runHook postInstall
   '';

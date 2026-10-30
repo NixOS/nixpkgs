@@ -8,16 +8,16 @@ php.buildComposerProject2 rec {
   __structuredAttrs = true;
 
   pname = "sculpin";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "sculpin";
     repo = "sculpin";
     tag = version;
-    hash = "sha256-WoLqLe6UGzlDTRNpB75O2CT31EZkpHQZ6vPQIK/K/8Q=";
+    hash = "sha256-r7dCw8C5ia5TzMajfdBQ15yBXh+jbBPViSQQknuH+Qs=";
   };
 
-  vendorHash = "sha256-y2W4GZNC7atxHkboNVWd2CWPDqWU2XIyWGC5Q47QqQs=";
+  vendorHash = "sha256-mUtZbSwqywbdIe2J3VksqV3az8WJSMDv2nMNZQL+y08=";
 
   meta = {
     description = "PHP static site generator";

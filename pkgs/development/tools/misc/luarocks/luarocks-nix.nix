@@ -8,13 +8,13 @@
 
 luarocks_bootstrap.overrideAttrs (old: {
   pname = "luarocks-nix";
-  version = "nix_v3.5.0-1-unstable-2026-03-31";
+  version = "0-unstable-2026-10-18";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "luarocks-nix";
-    rev = "3a9f4bff6cdda670f866fb9f755d548a714f680a";
-    hash = "sha256-6DLy1scf6K1fWDgrORcd1gtymgxtPwwAMIzMG2Bn1Pw=";
+    rev = "a3cb5421f9a107c0d24e0d62becef4c3494ad8e0";
+    hash = "sha256-1Nyzy5Z7WmIiaxaaUWWSnPPdvS4ghXU5wULguiOSlcs=";
   };
 
   propagatedNativeBuildInputs = old.propagatedNativeBuildInputs ++ [

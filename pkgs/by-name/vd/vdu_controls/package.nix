@@ -6,39 +6,34 @@
   qt6,
   copyDesktopItems,
   installShellFiles,
+  ddcutil,
+  brightnessctl,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vdu_controls";
-  version = "2.4.3";
+  version = "2.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitaltrails";
     repo = "vdu_controls";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aapODSWPB98I/ieUTXIO7nrd11VY9SmFpsVR1ketsZU=";
+    hash = "sha256-7ca7eNj67F9RCV99pZLxYD9J12zqzonw4t/Z8xUhvdw=";
   };
 
-  patches = [
-    # Standardize installation with pypa/build. See:
-    # https://github.com/digitaltrails/vdu_controls/pull/120
-    (fetchpatch {
-      url = "https://github.com/digitaltrails/vdu_controls/commit/ef2ed07398fc88ccc18a11da3cf5ea1500a03cb6.patch";
-      hash = "sha256-W0Iv3RXQFnHAzaXHh6ZvGARN4ShsNgOhg9FTpbvnfLo=";
-    })
+  build-system = [
+    python3.pkgs.wheel
+    python3.pkgs.setuptools
   ];
 
-  build-system = [
-    python3.pkgs.setuptools
-    python3.pkgs.sphinx
-  ];
-  # Replace FHS paths with out paths. Unfortunately it will be pretty hard to
-  # change this behavior upstream, as they barely use any packaging system
-  # whatsoever.
-  preBuild = ''
-    substituteInPlace vdu_controls.py \
-        --replace-fail /usr/share/vdu_controls $out/share/vdu_controls
+  postPatch = ''
+    substituteInPlace \
+      sample-scripts/vlux_meter.py \
+      src/vdu_controls/constants.py \
+      src/vdu_controls/app_locale.py \
+      packaging/vdu_controls.wrapper \
+      --replace-fail /usr/share $out/share
   '';
 
   nativeBuildInputs = [
@@ -46,28 +41,41 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     copyDesktopItems
     installShellFiles
   ];
+
   desktopItems = "vdu_controls.desktop";
+
   postInstall = ''
-    install -Dm066 vdu_controls.png $out/share/icons/hicolor/256x256/apps/vdu_controls.png
-    make -C docs man
+    install -Dm066 src/vdu_controls/resources/icons/app/vdu_controls.svg $out/share/icons/hicolor/scalable/apps/vdu_controls.svg
     installManPage docs/_build/man/vdu_controls.1
-    mkdir -p $out/share/vdu_controls
-    cp -r icons $out/share/vdu_controls
+    mkdir -p $out/${python3.sitePackages}/vdu_controls/resources
+    cp -r src/vdu_controls/resources $out/${python3.sitePackages}/vdu_controls
     cp -r sample-scripts $out/share/vdu_controls
     cp -r translations $out/share/vdu_controls
   '';
 
   dependencies = [
     python3.pkgs.pyqt6
+    python3.pkgs.pyudev
+    python3.pkgs.pyserial
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qtwayland
+    ddcutil
+    brightnessctl
   ];
 
   preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ddcutil
+          brightnessctl
+        ]
+      }
+    )
   '';
 
   meta = {

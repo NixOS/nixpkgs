@@ -56,12 +56,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   };
 
   postPatch =
-    # remove binary only packages from build-system.requires (pythonRelaxDeps
-    # doesn't work)
+    # Nix supplies these build dependencies; keep Z3's runtime dependency.
     ''
-      substituteInPlace pyproject.toml \
-        --replace-fail '"z3-solver' '# "z3-solver' \
-        --replace-fail '"patchelf' '# "patchelf'
+      sed -i '/^\[build-system\]/,/^\[/{ /"z3-solver/d; /"patchelf/d; }' pyproject.toml
     ''
     # don't call git
     + ''
@@ -97,6 +94,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     ninja
     scikit-build-core
   ];
+
+  pythonRelaxDeps = [ "z3-solver" ];
 
   env = {
     NO_GIT_VERSION = true;

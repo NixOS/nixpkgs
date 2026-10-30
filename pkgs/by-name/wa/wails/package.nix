@@ -16,18 +16,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "wails";
-  version = "2.16.0";
+  version = "2.17.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = "wails";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TackU0WXVP2yoVUVnXCnLiXfBjlqNUKzvwlkBDrCo5Y=";
+    hash = "sha256-gSrPSDb6yYNbOyN+RDJPx7a/RDAdu6oyuo+spyaXgD8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/v2";
 
-  vendorHash = "sha256-LjWvZwBYpjIxkZke7UJJGYut0rnVnui/qSsXTnPxhgA=";
+  vendorHash = "sha256-qFipvf5BTk+wxqZ7PHzzM/vyrx0NsJQLYn6wOXmeHQQ=";
 
   proxyVendor = true;
 

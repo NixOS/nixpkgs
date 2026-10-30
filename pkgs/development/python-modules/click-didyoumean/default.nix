@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Enable git-like did-you-mean feature in click";
     homepage = "https://github.com/click-contrib/click-didyoumean";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbode ];
+    maintainers = [ ];
   };
 }

@@ -18,6 +18,8 @@ buildGoModule (finalAttrs: {
   pname = "runc";
   version = "1.5.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";

@@ -288,8 +288,6 @@ with pkgs;
         ''
       );
 
-  alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound;
@@ -1268,6 +1266,8 @@ with pkgs;
       callPackage ../stdenv/freebsd/make-bootstrap-tools.nix { }
     else
       throw "freshBootstrapTools: unknown hostPlatform ${stdenv.hostPlatform.config}";
+
+  craftos-pc-accelerated = craftos-pc.override { enableLuaJIT = true; };
 
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
@@ -6268,7 +6268,6 @@ with pkgs;
         pkgsHostTarget
         kdePackages
         ;
-      inherit stdenv;
     }
   );
 
@@ -7039,10 +7038,6 @@ with pkgs;
     kanidmWithSecretProvisioning_1_10
     kanidmWithSecretProvisioning_1_11
     ;
-
-  lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix { };
-
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix { };
 
   mailmanPackages = recurseIntoAttrs (callPackage ../servers/mail/mailman { });
   inherit (mailmanPackages) mailman mailman-hyperkitty;
@@ -9194,18 +9189,6 @@ with pkgs;
         buildPackages.jdk17_headless;
     gbmSupport = true;
   };
-
-  xdg-desktop-portal-hyprland =
-    callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland
-      {
-        stdenv = gcc16Stdenv;
-        inherit (qt6)
-          qtbase
-          qttools
-          qtwayland
-          wrapQtAppsHook
-          ;
-      };
 
   xpdf = qt6.callPackage ../applications/misc/xpdf { };
 
