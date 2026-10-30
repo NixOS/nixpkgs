@@ -12,6 +12,7 @@
 
   # tests
   attrs,
+  cacert,
   pytestCheckHook,
 }:
 
@@ -34,6 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     attrs
+    cacert
     pytestCheckHook
   ];
 
