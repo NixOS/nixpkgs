@@ -39,6 +39,12 @@ stdenv.mkDerivation {
       url = "https://lore.kernel.org/kvm/20261030104018.71809-1-mikatammi@gmail.com/raw";
       hash = "sha256-uWSmpbKJ0pmh8kVsFcd06c+j2tppn0+RjP9TVbPHi0E=";
     })
+    # Fixes lkvm on x86 with musl, whose fortify-headers trapped on the BIOS copy; drop once kvmtool has it
+    (fetchpatch {
+      name = "x86-bios-rom-unsized.patch";
+      url = "https://lore.kernel.org/kvm/20261030142643.89313-1-mikatammi@gmail.com/raw";
+      hash = "sha256-yiKjAWQmTIPVJEmtWZrqjHsH0jLDcwvh/Qz6+/mBG5E=";
+    })
   ];
 
   buildInputs = lib.optionals withLibfdt [ dtc ];
