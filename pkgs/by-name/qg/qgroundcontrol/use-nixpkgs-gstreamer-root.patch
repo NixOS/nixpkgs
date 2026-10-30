@@ -1,34 +1,93 @@
-diff --git a/cmake/find-modules/FindGStreamer.cmake b/cmake/find-modules/FindGStreamer.cmake
+diff --git a/cmake/GStreamer/platform/Linux.cmake b/cmake/GStreamer/platform/Linux.cmake
 index 1111111..2222222 100644
---- a/cmake/find-modules/FindGStreamer.cmake
-+++ b/cmake/find-modules/FindGStreamer.cmake
-@@ -36,9 +36,28 @@
+--- a/cmake/GStreamer/platform/Linux.cmake
++++ b/cmake/GStreamer/platform/Linux.cmake
+@@ -1,59 +1,41 @@
+ # Linux GStreamer SDK discovery — invoked by Orchestrator.cmake.
  
- ################################################################################
+ macro(_qgc_discover_linux_sdk)
+-    if(NOT DEFINED GStreamer_ROOT_DIR)
+-        if(CMAKE_SYSROOT)
+-            set(GStreamer_ROOT_DIR "${CMAKE_SYSROOT}/usr")
+-        else()
+-            set(GStreamer_ROOT_DIR "/usr")
+-        endif()
+-    endif()
+-
+-    # Candidate multiarch triplets: explicit CMAKE_LIBRARY_ARCHITECTURE first, then
+-    # any lib/<triplet> that actually contains gstreamer-1.0 (handles musl,
+-    # arm-linux-gnueabihf, and non-Debian layouts where the triplet is unset).
+-    set(_gst_linux_triplet_candidates)
+-    if(CMAKE_LIBRARY_ARCHITECTURE)
+-        list(APPEND _gst_linux_triplet_candidates "${CMAKE_LIBRARY_ARCHITECTURE}")
+-    endif()
+-    list(APPEND _gst_linux_triplet_candidates "${CMAKE_SYSTEM_PROCESSOR}-linux-gnu")
+-    # musl sysroots use a -linux-musl triplet and often leave CMAKE_LIBRARY_ARCHITECTURE unset.
+-    list(APPEND _gst_linux_triplet_candidates "${CMAKE_SYSTEM_PROCESSOR}-linux-musl")
+-    file(GLOB _gst_linux_multiarch_dirs LIST_DIRECTORIES true "${GStreamer_ROOT_DIR}/lib/*-linux-*")
+-    foreach(_d IN LISTS _gst_linux_multiarch_dirs)
+-        cmake_path(GET _d FILENAME _d_name)
+-        list(APPEND _gst_linux_triplet_candidates "${_d_name}")
+-    endforeach()
+-    list(REMOVE_DUPLICATES _gst_linux_triplet_candidates)
++    # Nix (and most distro package managers) installs GStreamer's core,
++    # gst-plugins-*, gst-libav, etc. each into their own separate prefix, with
++    # no single /usr-style root containing a unified lib/<triplet>/gstreamer-1.0
++    # tree - so don't guess at a filesystem root at all. Ask pkg-config (already
++    # pointed at every installed component via PKG_CONFIG_PATH - that's how the
++    # per-component pkg_check_modules calls in FindGStreamer.cmake resolve
++    # gst-plugins-base/good/bad/libav et al. later) where the core module
++    # itself actually lives, and derive the root/lib/include paths from that.
++    find_package(PkgConfig REQUIRED QUIET)
++    pkg_check_modules(_qgc_gst_core_probe REQUIRED QUIET "gstreamer-1.0>=${GStreamer_FIND_VERSION}")
  
-+# Prefer plain pkg-config discovery - what GStreamer itself ships .pc files
-+# for - over guessing a platform-specific installation root. This is how any
-+# system with GStreamer's pkg-config files already on PKG_CONFIG_PATH (as
-+# nixpkgs, and most Linux package managers, ensure for their dependencies)
-+# actually finds it; the per-platform root-dir guessing below only runs as a
-+# fallback for setups where that isn't the case (e.g. Windows, or the
-+# prebuilt SDKs fetched for Android/iOS).
-+find_package(PkgConfig QUIET)
-+if(PKG_CONFIG_FOUND)
-+    pkg_check_modules(QGC_GSTREAMER_PROBE QUIET gstreamer-1.0>=${GStreamer_FIND_VERSION})
-+endif()
-+
- set(PKG_CONFIG_ARGN)
- 
--if(WIN32)
-+if(QGC_GSTREAMER_PROBE_FOUND)
+-    set(_gst_linux_lib "")
+-    foreach(_triplet IN LISTS _gst_linux_triplet_candidates)
+-        if(EXISTS "${GStreamer_ROOT_DIR}/lib/${_triplet}/gstreamer-1.0")
+-            set(_gst_linux_lib "${GStreamer_ROOT_DIR}/lib/${_triplet}")
+-            break()
+-        endif()
+-    endforeach()
+-    if(NOT _gst_linux_lib)
+-        if(EXISTS "${GStreamer_ROOT_DIR}/lib64/gstreamer-1.0")
+-            set(_gst_linux_lib "${GStreamer_ROOT_DIR}/lib64")
+-        elseif(EXISTS "${GStreamer_ROOT_DIR}/lib/gstreamer-1.0")
+-            set(_gst_linux_lib "${GStreamer_ROOT_DIR}/lib")
+-        else()
+-            message(FATAL_ERROR "Could not locate GStreamer libraries - check installation or set environment/cmake variables")
+-        endif()
 +    if(NOT DEFINED GStreamer_ROOT_DIR)
-+        set(GStreamer_ROOT_DIR "${QGC_GSTREAMER_PROBE_PREFIX}")
++        set(GStreamer_ROOT_DIR "${_qgc_gst_core_probe_PREFIX}")
+     endif()
+ 
+     gstreamer_create_layout_target(
+-        SDK_ROOT "${GStreamer_ROOT_DIR}"
+-        TYPE     FLAT
+-        LIB_PATH "${_gst_linux_lib}"
++        SDK_ROOT     "${GStreamer_ROOT_DIR}"
++        TYPE         FLAT
++        LIB_PATH     "${_qgc_gst_core_probe_LIBDIR}"
++        INCLUDE_PATH "${_qgc_gst_core_probe_INCLUDEDIR}"
+     )
+ 
+-    # Prepend SDK pkgconfig dir so system glib/gobject .pc files remain discoverable.
+-    gstreamer_apply_pkgconfig_env(
+-        MODE SYSTEM_AUGMENT
+-        LIBDIR "${GSTREAMER_LIB_PATH}/pkgconfig"
+-    )
++    # Prepend the core .pc file's own directory (not necessarily under
++    # GSTREAMER_LIB_PATH - e.g. nixpkgs ships .pc files in a separate "dev"
++    # output from the one holding the real .so's) so it - and any glib/gobject
++    # .pc files installed alongside it - stays discoverable even if a caller's
++    # environment later narrows PKG_CONFIG_PATH.
++    pkg_get_variable(_qgc_gst_core_pcdir gstreamer-1.0 pcfiledir)
++    if(_qgc_gst_core_pcdir)
++        gstreamer_apply_pkgconfig_env(
++            MODE SYSTEM_AUGMENT
++            LIBDIR "${_qgc_gst_core_pcdir}"
++        )
 +    endif()
-+    set(GSTREAMER_LIB_PATH "${QGC_GSTREAMER_PROBE_LIBDIR}")
-+    set(GSTREAMER_PLUGIN_PATH "${GSTREAMER_LIB_PATH}/gstreamer-1.0")
-+    set(GSTREAMER_INCLUDE_PATH "${QGC_GSTREAMER_PROBE_INCLUDEDIR}")
-+elseif(WIN32)
-     if(NOT DEFINED GStreamer_ROOT_DIR)
-         if(DEFINED ENV{GSTREAMER_1_0_ROOT_X86_64} AND EXISTS "$ENV{GSTREAMER_1_0_ROOT_X86_64}")
-             set(GStreamer_ROOT_DIR "$ENV{GSTREAMER_1_0_ROOT_X86_64}")
++    unset(_qgc_gst_core_pcdir)
+ endmacro()
+ 
+ # Zero-copy DMABuf GPU path probe. Sets QGC_GST_HAS_DMABUF; consumed by

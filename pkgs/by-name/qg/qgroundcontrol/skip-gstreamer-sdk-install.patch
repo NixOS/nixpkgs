@@ -1,0 +1,27 @@
+diff --git a/src/VideoManager/VideoReceiver/GStreamer/CMakeLists.txt b/src/VideoManager/VideoReceiver/GStreamer/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/VideoManager/VideoReceiver/GStreamer/CMakeLists.txt
++++ b/src/VideoManager/VideoReceiver/GStreamer/CMakeLists.txt
+@@ -193,4 +193,21 @@
+         BUILD_RPATH "${GSTREAMER_LIB_PATH}")
+ endif()
+ 
+-gstreamer_install_platform_sdk(${CMAKE_PROJECT_NAME})
++# This bundles the discovered GStreamer's plugins into the install prefix and
++# then verifies that bundle is complete enough to run any pipeline - a model
++# built for upstream's own self-contained AppImage packaging (see
++# no-appimage-in-install.patch for the same reasoning applied to
++# cmake/Install.cmake's Qt QML vendoring/AppImage steps). It assumes a single
++# GSTREAMER_PLUGIN_PATH directory holds every plugin QGC needs; nixpkgs splits
++# gstreamer/gst-plugins-base/gst-plugins-good/gst-plugins-bad/gst-libav into
++# separate store paths, so our discovery macro (platform/Linux.cmake) can only
++# point that variable at gstreamer core's own plugin dir, and this verifier
++# would then fail the build over plugins (isomp4, playback, rtp, ...) that are
++# real and loadable at runtime - just from a different buildInput's store
++# path, found via GST_PLUGIN_SYSTEM_PATH_1_0 (wired up in postInstall via
++# qtWrapperArgs), not this one directory. Nothing needs to be copied into
++# $out at all: that env var already makes every plugin in every gst_all_1
++# buildInput discoverable at runtime.
++if(NOT QGC_GST_SKIP_SDK_INSTALL)
++    gstreamer_install_platform_sdk(${CMAKE_PROJECT_NAME})
++endif()
