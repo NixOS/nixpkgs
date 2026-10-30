@@ -1,0 +1,16 @@
+diff --git a/libfakeroot.c b/libfakeroot.c
+index d99c385..6e9c87e 100644
+--- a/libfakeroot.c
++++ b/libfakeroot.c
+@@ -1773,8 +1773,10 @@ static int user_xattr_p(char const *name)
+ {
+   static char const USER_DOT[] = "user.";
+   static char const GNU_DOT[] = "gnu.";
++  static char const SELINUX_[] = "security.selinux";
+   return strncmp (name, USER_DOT, sizeof (USER_DOT) - 1) == 0
+-    || strncmp (name, GNU_DOT, sizeof (GNU_DOT) - 1) == 0;
++    || strncmp (name, GNU_DOT, sizeof (GNU_DOT) - 1) == 0
++    || strncmp (name, SELINUX_, sizeof (SELINUX_) - 1) == 0;
+ }
+ 
+ #if defined(HAVE_SETXATTR) || defined(HAVE_LSETXATTR) || defined(HAVE_FSETXATTR)
