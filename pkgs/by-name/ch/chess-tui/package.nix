@@ -13,6 +13,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chess-tui";
   version = "2.7.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "thomas-mauran";
     repo = "chess-tui";
@@ -37,14 +39,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Chess TUI implementation in rust";
     homepage = "https://github.com/thomas-mauran/chess-tui";
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    changelog = "https://github.com/thomas-mauran/chess-tui/releases/tag/${finalAttrs.src.tag}";
+    maintainers = with lib.maintainers; [
+      ByteSudoer
+      kybe236
+    ];
     license = lib.licenses.mit;
     mainProgram = "chess-tui";
   };
