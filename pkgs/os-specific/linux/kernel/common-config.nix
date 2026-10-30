@@ -710,7 +710,7 @@ let
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY = yes;
 
-      NTFS_FS = whenBetween "5.15" "6.5" no;
+      NTFS_FS = whenBetween "5.15" "6.0" no;
       NTFS_FS_POSIX_ACL = whenAtLeast "7.1" yes;
       NTFS_FS_WOF_COMPRESSION = whenAtLeast "7.3" yes;
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
