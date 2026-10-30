@@ -15037,6 +15037,12 @@
     githubId = 524492;
     name = "Sergey Kazenyuk";
   };
+  kazuya = {
+    email = "kazuyaroz@maxxspace.com";
+    github = "kazuyaroz";
+    githubId = 347767144;
+    name = "kazuya";
+  };
   kbdharun = {
     email = "kbdharunkrishna@gmail.com";
     matrix = "@kbdk:matrix.org";
