@@ -28,6 +28,9 @@
   openssl,
   pango,
 
+  # only for tests
+  cacert,
+
   jq,
   writeTextFile,
   validatePkgConfig,
@@ -211,7 +214,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.15.3";
+  version = "0.15.4";
 
   outputs = [
     "out"
@@ -222,14 +225,16 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "gstreamer";
     repo = "gst-plugins-rs";
-    rev = finalAttrs.version;
-    hash = "sha256-DO5Dk9xjqWTI4ORzlHYPc/O/tyHfSyh7+YCzES5ZiHs=";
+    # NOTE: upstream released a fixup version for 0.15.4 because the initial release had a broken Cargo.lock file
+    # revert to `tag = finalAttrs.version` in next release
+    tag = "${finalAttrs.version}+fixup";
+    hash = "sha256-VM0vlzv++n5UmoqB92Nh7026FqPP5XQ6BnoM0xRC75c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-EHikshVeaBzyx9+GBIkOPii63T12BobWdW6nTBLzwU8=";
+    hash = "sha256-umy9iC87uDSjPRqNtNfKbDii55ZihV0+HGZzdjYri3s=";
   };
 
   postConfigure = ''
@@ -305,6 +310,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  nativeCheckInputs = [
+    cacert
+  ];
+
   # csound lib dir must be manually specified for it to build
   preConfigure = lib.optionalString (lib.elem "csound" selectedPlugins) ''
     export CSOUND_LIB_DIR=${lib.getLib csound}/lib
@@ -322,6 +331,11 @@ stdenv.mkDerivation (finalAttrs: {
     export GST_PLUGIN_PATH="$(realpath "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType")"
     export GST_PLUGIN_SCANNER="${lib.getLib gstreamer}/libexec/gstreamer-1.0/gst-plugin-scanner"
   '';
+
+  disabledTests = [
+    # as of 0.15.4: Buffer 0 of payload buffer list 1 has unexpected PTS
+    "rtp"
+  ];
 
   postInstall = ''
     install -Dm444 -t ''${!outputDev}/lib/pkgconfig plugins/gst*.pc
