@@ -15,18 +15,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.47.0";
+  version = "0.67.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pabav4ehssc3oQFuF4MgnSG7Ql1r5Y6n+ZzYbgh5tz8=";
+    hash = "sha256-+jOoJvY3FwDLzCYJq/RD5X81VMecLfGOnw+EnGkZpoM=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-Df1EVzKYWo5o2cvP3kFGcNKEuDu3fZno4OTKBe37IK8=";
+  npmDepsHash = "sha256-5j6uv8lsEhFSYsa96cDIf3lgTxetoWHSUn85Y5zZrbU=";
 
   dontPatchElf = stdenv.hostPlatform.isDarwin;
 
@@ -53,6 +53,14 @@ buildNpmPackage (finalAttrs: {
 
     # Remove node-pty dependency from packages/core/package.json
     ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+
+    # package-lock.json installs versions that some exact workspace pins reject, so npm
+    # tries to fetch the pinned versions, which the offline cache lacks. Pin what the lock installs.
+    # https://github.com/google-gemini/gemini-cli/issues/29820
+    # node is absent in the npmDeps fetcher, which reads only the lockfile.
+    if command -v node > /dev/null; then
+      node ${./align-pins-to-lock.mjs}
+    fi
 
     # Prefer the Nix ripgrep binary by prepending it to candidate paths
     substituteInPlace packages/core/src/tools/ripGrep.ts \
