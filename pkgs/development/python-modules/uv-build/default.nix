@@ -28,8 +28,8 @@ buildPythonPackage (finalAttrs: {
   patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
     (fetchurl {
       name = "loongarch64-fiemap.patch";
-      url = "https://github.com/lcpu-club/loongarch-packages/raw/28165d5d4f00d1dfb6194c7d4f1f37e9c2ba56b2/uv/loongarch64-fiemap.patch";
-      hash = "sha256-owRf+JtH/4GKsUFB2UwKCvXhLUZJ3vI2Zeywhz4tgbE=";
+      url = "https://github.com/lcpu-club/loongarch-packages/raw/ebcc3b01e19f8c01eaaeae683b62ff1a3d607fff/uv/loongarch64-fiemap.patch";
+      hash = "sha256-QiLw6xFlDQgTP4eTbWmuZogFnSsVZK9jX+N1ueJC5DQ=";
     })
   ];
 
