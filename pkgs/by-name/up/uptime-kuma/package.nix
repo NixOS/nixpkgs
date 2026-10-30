@@ -5,6 +5,7 @@
   buildNpmPackage,
   nodejs,
   nixosTests,
+  srcOnly,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -21,6 +22,7 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-OY8lYz7VWY7ojN3a7vnj31c7G5+4cIJCwx2BPhImwaM=";
   };
 
+  inherit nodejs;
   npmDepsHash = "sha256-091cmEjC4ijREEO7S42ANWCbdFBNBJdLx6EyzTlWUNo=";
 
   patches = [
@@ -34,6 +36,11 @@ buildNpmPackage (finalAttrs: {
 
     # remove references to nodejs source
     rm -r $out/lib/node_modules/uptime-kuma/node_modules/@louislam/sqlite3/build-tmp-napi-v*
+    shopt -s globstar
+    rm -r $out/lib/node_modules/uptime-kuma/node_modules/**/{*.target.mk,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
+    # remove references to python
+    rm -r $out/lib/node_modules/uptime-kuma/node_modules/{node-gyp,.bin/node-gyp}
   '';
 
   postFixup = ''
@@ -42,13 +49,18 @@ buildNpmPackage (finalAttrs: {
       --chdir $out/lib/node_modules/uptime-kuma
   '';
 
+  disallowedReferences = [
+    (srcOnly nodejs)
+    nodejs.python
+  ];
+
   passthru.tests.uptime-kuma = nixosTests.uptime-kuma;
 
   meta = {
     description = "Fancy self-hosted monitoring tool";
     mainProgram = "uptime-kuma-server";
     homepage = "https://github.com/louislam/uptime-kuma";
-    changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       julienmalka
