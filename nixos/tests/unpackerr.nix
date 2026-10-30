@@ -2,7 +2,10 @@
 
 {
   name = "unpackerr";
-  meta.maintainers = with lib.maintainers; [ Wekuz ];
+  meta.maintainers = with lib.maintainers; [
+    connor-grady
+    Wekuz
+  ];
 
   nodes.machine =
     { pkgs, ... }:
