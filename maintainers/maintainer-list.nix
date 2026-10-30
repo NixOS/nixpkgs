@@ -6786,7 +6786,7 @@
     name = "Dawid Sowa";
   };
   dawoox = {
-    email = "contact@antoinebellanger.fr";
+    email = "me@dawoox.dev";
     github = "Dawoox";
     githubId = 48325941;
     name = "Dawoox";
