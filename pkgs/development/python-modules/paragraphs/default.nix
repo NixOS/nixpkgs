@@ -3,36 +3,36 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  setuptools-scm,
-  setuptools,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "paragraphs";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "paragraphs";
     tag = version;
-    hash = "sha256-u5/oNOCLdvfQVEIEpraeNLjTUoh3eJQ6qSExnkzTmNw=";
+    hash = "sha256-iRrHTqM7goJ1Ep1dbVo9PwDe0mXpnrj80UV6UDnws14=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.25,<0.12.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "paragraphs"
-  ];
+  pythonImportsCheck = [ "paragraphs" ];
 
   meta = {
     description = "Module to incorporate long strings";
     homepage = "https://github.com/ShayHill/paragraphs";
+    changelog = "https://github.com/ShayHill/paragraphs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
