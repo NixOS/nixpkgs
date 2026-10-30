@@ -98,19 +98,28 @@ index 5110764..f919aa9 100644
      satellite_info_s _satelliteInfo{};
  };
 diff --git a/src/GPS/Driver/GPSDriver.cc b/src/GPS/Driver/GPSDriver.cc
-index 130d1c7..87f9c2a 100644
+index 130d1c7..17fa991 100644
 --- a/src/GPS/Driver/GPSDriver.cc
 +++ b/src/GPS/Driver/GPSDriver.cc
 @@ -15,7 +15,8 @@
  #include <utility>
-
+ 
  QGC_LOGGING_CATEGORY(GPSDriverLog, "GPS.GPSDriver")
 -QGC_LOGGING_CATEGORY(GPSDriversLog, "GPS.Drivers") // backs the px4 GPS_INFO/WARN/ERR macros in definitions.h
 +// GPSDriversLog is gone: it backed GPS_INFO/WARN/ERR in QGC's own, now-deleted
 +// definitions.h - px4-gpsdrivers' own definitions.h defines those via fprintf.
-
+ 
  namespace {
  int callbackTrampoline(GPSCallbackType type, void *data1, int data2, void *user)
+@@ -52,7 +53,7 @@ bool GPSDriver::configure()
+             .min_cno = 0,
+             .min_elev = 0,
+             .output_rate = 0,
+-            .heading_offset = 0.0f,
++            .uart1_baudrate = 0,
+             .uart2_baudrate = 57600,
+             .ppk_output = false,
+             .jam_det_sensitivity_hi = false,
 diff --git a/src/GPS/GPSProvider.h b/src/GPS/GPSProvider.h
 index b5bc892..7d9b35c 100644
 --- a/src/GPS/GPSProvider.h
