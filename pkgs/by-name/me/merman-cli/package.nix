@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "merman-cli";
-  version = "0.9.0";
+  version = "0.9.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Latias94";
     repo = "merman";
-    rev = "f754a3c3077d35d2a372c2fec04f9e9b87db1c3f";
-    hash = "sha256-bms+/j/DIdwnsxK+UU+mPQTDeXopv865TmPIEpHaYGQ=";
+    rev = "3b915f69c02d55b873d252cf6c8a6048e7f3427d";
+    hash = "sha256-hkOC1Y+nVE35bY2issYNoAKTFESH59y6wSwuwd9IlKs=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installShellCompletion --cmd merman-cli \
-      --bash crates/merman-cli/assets/completions/merman-cli.bash \
+      --bash --name merman-cli crates/merman-cli/assets/completions/merman-cli.bash \
       --zsh crates/merman-cli/assets/completions/_merman-cli \
       --fish crates/merman-cli/assets/completions/merman-cli.fish
     install -Dm0644 crates/merman-cli/assets/completions/merman-cli.ps1 \
@@ -119,7 +119,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
   };
