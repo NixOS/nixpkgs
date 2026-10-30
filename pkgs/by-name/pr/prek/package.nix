@@ -4,6 +4,8 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  pkg-config,
+  aws-lc,
   versionCheckHook,
   nix-update-script,
 }:
@@ -24,6 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
   ];
 
   # many tests just do not work, as they require network access

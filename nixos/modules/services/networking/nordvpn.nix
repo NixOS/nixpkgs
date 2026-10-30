@@ -105,7 +105,11 @@ in
     ];
 
     systemd.services.nordvpnd = {
-      after = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+        "nordvpnd.socket"
+      ];
+      requires = [ "nordvpnd.socket" ];
       description = "NordVPN daemon.";
       path = (
         with pkgs;
@@ -138,7 +142,6 @@ in
         ProtectControlGroups = true;
         ProtectSystem = "strict";
         ReadWritePaths = "/tmp/";
-        Requires = "nordvpnd.socket";
         Restart = "on-failure";
         RestartSec = 5;
         RestrictAddressFamilies = [
