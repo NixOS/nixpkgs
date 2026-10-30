@@ -5,7 +5,7 @@
   setJavaClassPath,
   testers,
   enableJavaFX ? false,
-  dists,
+  featureVersion,
   # minimum dependencies
   unzip,
   autoPatchelfHook,
@@ -32,22 +32,9 @@
   ffmpeg,
 }:
 let
+  dists =
+    (lib.importJSON (./sources + "/${featureVersion}.json")).${if enableJavaFX then "fx" else "jdk"};
   dist = dists.${stdenv.hostPlatform.system} or (builtins.head (builtins.attrValues dists));
-
-  arch =
-    {
-      "aarch64" = "aarch64";
-      "x86_64" = "x64";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name} or "unsupported";
-
-  platform =
-    {
-      "darwin" = "macosx";
-      "linux" = "linux";
-    }
-    .${stdenv.hostPlatform.parsed.kernel.name}
-      or (throw "Unsupported platform: ${stdenv.hostPlatform.parsed.kernel.name}");
 
   runtimeDependencies = [
     cups
@@ -83,8 +70,7 @@ let
     strictDeps = true;
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-${platform}_${arch}.tar.gz";
-      inherit (dist) hash;
+      inherit (dist) url hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
@@ -186,6 +172,10 @@ let
       })
       // {
         home = jdk;
+        updateScript = [
+          ./update.py
+          featureVersion
+        ];
         tests.version = testers.testVersion {
           package = jdk;
           command = "java -version";
