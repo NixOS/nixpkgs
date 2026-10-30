@@ -68,7 +68,7 @@ rec {
     shortDescription = "English (United States)";
   };
 
-  en_GB = en-us;
+  en_GB = en-gb;
   en-gb = mkDictFromChromium {
     shortName = "en-gb";
     dictFileName = "en-GB-10-1.bdic";
