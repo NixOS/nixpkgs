@@ -24843,12 +24843,6 @@
       { fingerprint = "66A8 1706 2227 9BD9 586A  CEDD 5B29 A881 3F47 65C4"; }
     ];
   };
-  relrod = {
-    email = "ricky@elrod.me";
-    github = "relrod";
-    githubId = 43930;
-    name = "Ricky Elrod";
-  };
   rembo10 = {
     github = "rembo10";
     githubId = 801525;
