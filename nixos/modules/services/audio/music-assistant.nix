@@ -58,7 +58,7 @@ in
       default = false;
       description = ''
         Whether to open required ports for the configured providers.
-        Currently AirPlay, AriaCast Receiver, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
+        Currently AirPlay, AirPlay Receiver, AriaCast Receiver, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
 
         ::: {.note}
         AirPlay and Spotify Connect must open all random high UDP or TCP ports respectively to function.
@@ -128,9 +128,16 @@ in
           9090 # Slimproto CLI
         ];
       allowedTCPPortRanges =
+        # https://github.com/music-assistant/server/blob/2.11.0b7/music_assistant/providers/airplay_receiver/provider.py#L68-L75
+        lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
+          {
+            from = 7000;
+            to = 7999;
+          }
+        ]
         # Music Assistant does not configure the zeroconf_port, so all ephemeral ports are used
         # https://github.com/devgianlu/go-librespot#example-minimal-zeroconf-configuration
-        lib.optionals (lib.elem "spotify_connect" cfg.providers) [
+        ++ lib.optionals (lib.elem "spotify_connect" cfg.providers) [
           {
             from = 32768;
             to = 65535;
