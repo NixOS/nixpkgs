@@ -65,12 +65,19 @@ let
     }
   );
 
-  providersMeta = import ./providers.nix;
-  providerPackages = providersMeta.providers;
+  inherit (import ./providers.nix)
+    builtinProviders
+    providerDependencies
+    providerPackages
+    providersWithMissingDependencies
+    ;
   providerNames = lib.attrNames providerPackages;
-  providerDependencies = lib.concatMap (
+  providersWithDependencies = lib.unique (
+    providers ++ lib.concatMap (provider: providerDependencies.${provider} or [ ]) providers
+  );
+  providerPackageDependencies = lib.concatMap (
     provider: (providerPackages.${provider} pythonPackages)
-  ) providers;
+  ) providersWithDependencies;
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
@@ -323,13 +330,15 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   passthru = {
     inherit
-      pythonPackages
-      providerPackages
+      builtinProviders
       providerNames
+      providerDependencies
+      providerPackages
+      providersWithMissingDependencies
+      pythonPackages
       ;
-    providersBuiltins = providersMeta.builtins;
     pythonPath =
-      pythonPackages.makePythonPath providerDependencies
+      pythonPackages.makePythonPath providerPackageDependencies
       + ":${finalAttrs.finalPackage}/${pythonPackages.python.sitePackages}";
     tests = nixosTests.music-assistant;
   };
