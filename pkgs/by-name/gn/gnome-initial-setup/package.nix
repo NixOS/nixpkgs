@@ -85,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "--sysconfdir=/etc"
     "-Dibus=disabled"
     "-Dparental_controls=disabled"
-    "-Dvendor-conf-file=${./vendor.conf}"
   ];
 
   passthru = {
