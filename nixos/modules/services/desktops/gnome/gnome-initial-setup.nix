@@ -8,6 +8,7 @@
 }:
 
 let
+  cfg = config.services.gnome.gnome-initial-setup;
 
   # GNOME initial setup's run is conditioned on whether
   # the gnome-initial-setup-done file exists in XDG_CONFIG_HOME
@@ -43,6 +44,10 @@ let
     '';
   };
 
+  settingsFormat = pkgs.formats.ini {
+    listToValue = l: lib.concatStringsSep ";" (map (s: lib.generators.mkValueStringDefault { } s) l);
+  };
+  configFile = settingsFormat.generate "vendor.conf" cfg.settings;
 in
 
 {
@@ -59,18 +64,71 @@ in
 
       enable = lib.mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
 
+      settings = lib.mkOption {
+        type = settingsFormat.type;
+        default = { };
+        example = {
+          pages.skip = [
+            "welcome"
+            "language"
+            "keyboard"
+            "network"
+            "privacy"
+            "timezone"
+            "software"
+            "account"
+            "password"
+            "parental_controls"
+            "parent_password"
+            "summary"
+          ];
+        };
+        description = ''
+          Vendor configuration to customise the initial setup dialogue.
+          See [here](https://gitlab.gnome.org/GNOME/gnome-initial-setup#vendor-configuration) for supported options.
+        '';
+      };
+
     };
 
   };
 
   ###### implementation
 
-  config = lib.mkIf config.services.gnome.gnome-initial-setup.enable {
+  config = lib.mkIf cfg.enable {
+
+    services.gnome.gnome-initial-setup.settings = {
+      pages = {
+        skip = lib.mkBefore (
+          if lib.versionOlder config.system.stateVersion "26.11" then
+            [
+              "account"
+              "software"
+              "password"
+              "timezone"
+            ]
+          else
+            [
+              "software"
+            ]
+            ++ lib.optional (!config.i18n.imperativeLocale) "language"
+            ++ lib.optional (config.time.timeZone != null) "timezone"
+            ++ lib.optionals (!config.users.mutableUsers) [
+              "account"
+              "password"
+              "parental_controls"
+              "parent_password"
+            ]
+        );
+      };
+    };
 
     environment.systemPackages = [
       pkgs.gnome-initial-setup
     ]
     ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart;
+
+    environment.etc."gnome-initial-setup/vendor.conf".source = configFile;
 
     services.displayManager.gdm.extraPackages = [
       pkgs.gnome-initial-setup
