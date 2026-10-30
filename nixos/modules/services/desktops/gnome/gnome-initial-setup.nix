@@ -84,10 +84,6 @@ in
       "gnome-initial-setup-copy-worker.service"
     ];
 
-    systemd.user.targets."gnome-session@gnome-initial-setup".wants = [
-      "gnome-initial-setup.service"
-    ];
-
     programs.dconf.profiles.gnome-initial-setup.databases = [
       "${pkgs.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
     ];
