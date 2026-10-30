@@ -50,14 +50,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   # PX4's fork replaces upstream's plain POSIX clock_gettime() in time.c with
   # PX4-Autopilot's own hrt_absolute_time(), declared in PX4-Autopilot's own
-  # (unvendored, not part of this repo) <drivers/drv_hrt.h>. That coupling
-  # only works when this submodule is compiled from inside a PX4-Autopilot
-  # checkout (which forwards its own include dirs into this project's build)
-  # - restore the plain POSIX time source so this library can stand on its
-  # own as an independent, linkable package. TODO: Upstream to PX4's fork,
-  # or gate it behind a PX4-Autopilot-provided define instead of
-  # UCLIENT_PLATFORM_POSIX so out-of-tree consumers aren't affected.
-  patches = [ ./posix-use-clock_gettime.patch ];
+  # (unvendored, not part of this repo) <drivers/drv_hrt.h> - but gated on
+  # UCLIENT_PLATFORM_POSIX, this repo's own generic Linux/macOS/NuttX/Zephyr
+  # autodetect, not on anything that actually implies PX4-Autopilot's
+  # headers are available. __PX4_POSIX (left untouched by this patch) is
+  # the real signal for that: it's only ever injected by PX4-Autopilot's own
+  # in-tree build, never set by this repo's own CMakeLists.txt. Drop just
+  # UCLIENT_PLATFORM_POSIX from the two affected #if conditions so a
+  # standalone build takes the plain POSIX clock_gettime() path instead,
+  # with zero behavior change for an in-tree PX4-Autopilot build (which
+  # keeps setting __PX4_POSIX and keeps using hrt_absolute_time() exactly as
+  # before - important for SITL's lockstep-scheduler time consistency).
+  patches = [ ./standalone-build-no-hrt.patch ];
 
   # microxrcedds_clientConfig.cmake transitively find_package()s microcdr,
   # so anything that find_package(microxrcedds_client)s this package also
