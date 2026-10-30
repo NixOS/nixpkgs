@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.20";
+  version = "3.2.21";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7zigBXnHiUYL9matqT6da5c+cXwQH8CdqpSrsrOURYE=";
+    hash = "sha256-uWr/t8+Fo0fMIwbUUeZPmY7L1psqTjuf5bk2vnKxSs8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
