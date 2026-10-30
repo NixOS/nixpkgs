@@ -2,11 +2,12 @@
   python3Packages,
   fetchFromGitHub,
   lib,
+  pkg-config,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyflyby";
-  version = "1.9.11";
+  version = "1.11.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -14,20 +15,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "deshaw";
     repo = "pyflyby";
     tag = finalAttrs.version;
-    hash = "sha256-BBFLkojG0MeJ8Bj8cc10x/rUITqb4/UbLB+FQIVpYrw=";
+    hash = "sha256-Jv3QVLJV7Uio674DRcB1sbDHsUy0y/MG7dd+L1gmFSc=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   build-system = with python3Packages; [
-    setuptools
-    wheel
+    meson-python
+    pybind11
+    setuptools-scm
   ];
 
   dependencies = with python3Packages; [
     black
-    ipython
-    isort
-    six
-    toml
+    prompt-toolkit
+    platformdirs
   ];
 
   pythonImportsCheck = [ "pyflyby" ];
