@@ -2887,7 +2887,7 @@
         "version": "43.8.3"
     },
     "44": {
-        "chrome": "152.0.7977.167",
+        "chrome": "152.0.7977.169",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2896,15 +2896,15 @@
                     "version": "0-unstable-2026-07-23"
                 }
             },
-            "version": "152.0.7977.167"
+            "version": "152.0.7977.169"
         },
         "chromium_npm_hash": "sha256-pF0JtwFpPC4/fodbhSJnQKkczA9WlDg4VqEAy9aDVLg=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-DzIhUc7a9USmm8MCUgkDcLtb5GRs7eKzT4FlsZADmJU=",
+                    "hash": "sha256-7xHMDW7T9U1mxXzulkreT+nnYa/S6oR0DUCWWXd0iKE=",
                     "postFetch": "rm -rf $(find $out/third_party/blink/web_tests ! -name BUILD.gn -mindepth 1 -maxdepth 1); rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "tag": "152.0.7977.167",
+                    "tag": "152.0.7977.169",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2951,10 +2951,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-9FaI//rjfeUeVlcqTITMiHb4Cuk7npzEggrhoJhYTrs=",
+                    "hash": "sha256-bc8yW5+XhIlfY4vtpf+4ZcJ8NdWr+zsflZk6sFdgJcA=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.9.3"
+                    "tag": "v44.10.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -3304,10 +3304,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-055FP6A2CjODxhrh2R4csRsiTNOIsxnuC9zWjTP9U34=",
+                    "hash": "sha256-I+ArwuoobibS6JxQ1tTP63B8e7yrv6xqp+R+GXs7NOE=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.22.0"
+                    "tag": "v24.22.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4286,8 +4286,8 @@
             },
             "src/v8": {
                 "args": {
-                    "hash": "sha256-cv8pAZxlSuLLCQEfVc7+/mkco8PZQqS/smSpa8VAsMo=",
-                    "rev": "a11d960c1c22c067ff898ceb4a8e4e0687014d41",
+                    "hash": "sha256-H/77UeEg1VixvGec7uh2UZdThePcrrZP7t0cjz7cLO0=",
+                    "rev": "e51a6bf02e52f3dec9fee502db2594c0f5f51b37",
                     "url": "https://chromium.googlesource.com/v8/v8.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -4363,7 +4363,7 @@
             }
         },
         "modules": "149",
-        "node": "24.22.0",
-        "version": "44.9.3"
+        "node": "24.22.1",
+        "version": "44.10.0"
     }
 }
