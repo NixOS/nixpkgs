@@ -3,6 +3,7 @@
   python3Packages,
   fetchPypi,
   gobject-introspection,
+  mpv,
   wrapGAppsHook3,
 }:
 
@@ -30,7 +31,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     jellyfin-apiclient-python
-    mpv
+    python3Packages.mpv
     python-mpv-jsonipc
     requests
 
@@ -68,6 +69,13 @@ python3Packages.buildPythonApplication rec {
         "$out"/share/icons/hicolor/"$s"x"$s"/apps/com.github.iwalton3.jellyfin-mpv-shim.png
     done
   '';
+
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ mpv ])
+  ];
 
   # needed for pystray to access appindicator using GI
   preFixup = ''
