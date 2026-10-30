@@ -29,6 +29,11 @@ buildPythonPackage {
     hash = "sha256-fHztPeTbMp1aYsj+STYWzHgwdY0Q9078qXpXxtA8pPs=";
   };
 
+  postPatch = ''
+    substituteInPlace quantulum3/__init__.py \
+      --replace-fail 'VERSION = (0, 9, 0)' 'VERSION = (0, 10, 0)'
+  '';
+
   propagatedBuildInputs = [
     inflect
     num2words
