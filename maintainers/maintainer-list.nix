@@ -29290,6 +29290,12 @@
     githubId = 8860448;
     name = "Withee Poositasai";
   };
+  thalbedl = {
+    email = "halbedl@protonmail.com";
+    github = "thalbedl";
+    githubId = 46942764;
+    name = "Thomas Halbedl";
+  };
   thall = {
     email = "niclas.thall@gmail.com";
     github = "thall";
