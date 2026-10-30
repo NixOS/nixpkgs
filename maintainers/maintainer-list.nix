@@ -27406,6 +27406,12 @@
     github = "sinavir";
     githubId = 36380103;
   };
+  sincorchetes = {
+    name = "Álvaro Castillo";
+    email = "sincorchetes@gmail.com";
+    github = "sincorchetes";
+    githubId = 31448043;
+  };
   sinics = {
     name = "Zhifan";
     email = "nonno.felice69uwu@gmail.com";
