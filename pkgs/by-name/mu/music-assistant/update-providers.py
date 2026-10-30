@@ -24,14 +24,19 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
 
 {
   version = "{{ version }}";
-  builtins = [
+  builtinProviders = [
 {%- for builtin in builtins | sort %}
     "{{ builtin }}"
 {%- endfor %}
   ];
-  providers = {
+  providerDependencies = {
+{%- for provider in providers | sort(attribute='domain') if provider.depends_on %}
+    {{ provider.domain }} = [ "{{ provider.depends_on | sort | join('\", \"') }}" ];
+{%- endfor %}
+  };
+  providerPackages = {
 {%- for provider in providers | sort(attribute='domain') %}
-    {{ provider.domain }} = {% if provider.available %}ps: with ps;{% else %}ps:{% endif %} [
+    {{ provider.domain }} = {% if provider.available or provider.extra_list_deps %}ps: with ps;{% else %}_:{% endif %} [
 {%- for requirement in provider.available | sort %}
     {{ requirement }}
 {%- endfor %}
@@ -42,6 +47,11 @@ TEMPLATE = """# Do not edit manually, run ./update-providers.py
 ;{% if provider.missing %} # missing {{ ", ".join(provider.missing) }}{% endif %}
 {%- endfor %}
   };
+  providersWithMissingDependencies = [
+{%- for domain in providersWithMissingDependencies %}
+    "{{ domain }}"
+{%- endfor %}
+  ];
 }
 
 """
@@ -79,6 +89,11 @@ EXTRA_DEPS = {
 
 EXTRA_LIST_DEPS = {
     "sendspin": ["aiosendspin.optional-dependencies.server"],
+}
+
+EXTERNAL_REQUIREMENTS = {
+    # Added to PATH by the module
+    "ytmusic": ["deno"],
 }
 
 
@@ -207,6 +222,7 @@ class Provider:
     available: list[str] = field(default_factory=list)
     missing: list[str] = field(default_factory=list)
     extra_list_deps: list[str] = field(default_factory=list)
+    depends_on: list[str] = field(default_factory=list)
 
     def __eq__(self, other):
         return self.domain == other.domain
@@ -219,7 +235,10 @@ async def resolve_providers(manifests) -> tuple[set, set]:
     errors = []
     providers = set()
     for manifest in manifests:
-        provider = Provider(manifest.domain)
+        provider = Provider(
+            domain=manifest.domain,
+            depends_on=[manifest.depends_on] if manifest.depends_on else [],
+        )
         requirements = manifest.requirements
         for requirement in requirements:
             # allow substituting requirement specifications that packaging cannot parse
@@ -227,6 +246,8 @@ async def resolve_providers(manifests) -> tuple[set, set]:
                 requirement = PACKAGE_MAP[requirement]
 
             requirement = Requirement(requirement)
+            if requirement.name in EXTERNAL_REQUIREMENTS.get(manifest.domain, []):
+                continue
             try:
                 attr = resolve_package_attribute(requirement.name)
                 provider.available.append(attr)
@@ -260,9 +281,15 @@ async def resolve_providers(manifests) -> tuple[set, set]:
 def render(outpath: str, version: str, providers: set, builtins: set):
     env = Environment()
     template = env.from_string(TEMPLATE)
-    template.stream(version=version, providers=providers, builtins=builtins).dump(
-        outpath
+    providers_with_missing_dependencies = sorted(
+        provider.domain for provider in providers if provider.missing
     )
+    template.stream(
+        version=version,
+        providers=providers,
+        builtins=builtins,
+        providersWithMissingDependencies=providers_with_missing_dependencies,
+    ).dump(outpath)
 
 
 async def main():
