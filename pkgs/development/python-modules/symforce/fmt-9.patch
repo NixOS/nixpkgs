@@ -84,7 +84,7 @@ new file mode 100644
 index 0000000..e537d66
 --- /dev/null
 +++ b/symforce/opt/internal/fmt_formatters.h
-@@ -0,0 +1,159 @@
+@@ -0,0 +1,170 @@
 +/* ----------------------------------------------------------------------------
 + * SymForce - Copyright 2022, Skydio, Inc.
 + * This source code is under the Apache 2.0 license found in the LICENSE file.
@@ -203,6 +203,17 @@ index 0000000..e537d66
 +struct fmt::formatter<Eigen::SparseMatrix<double>> : fmt::ostream_formatter {};
 +template <>
 +struct fmt::formatter<Eigen::SparseMatrix<float>> : fmt::ostream_formatter {};
++
++// values.cc formats an Eigen::Map over a dynamic vector (values.cc's MatrixFormatHelper); unlike
++// a plain vector-shaped Eigen type, fmt's range detection doesn't pick this up as formattable
++// (its iterator type differs enough from a plain Eigen::Matrix's that whatever condition lets
++// VectorXd etc. format fine as ranges doesn't hold here), so it needs the same explicit opt-in.
++template <>
++struct fmt::formatter<Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, 1>>>
++    : fmt::ostream_formatter {};
++template <>
++struct fmt::formatter<Eigen::Map<const Eigen::Matrix<float, Eigen::Dynamic, 1>>>
++    : fmt::ostream_formatter {};
 +
 +// Plain (non-range) symforce types with their own `operator<<`.
 +template <>
@@ -328,3 +339,15 @@ index 543049f..535ca75 100644
  #include <symforce/opt/key.h>
  #include <symforce/opt/values.h>
  
+diff --git a/symforce/opt/values.tcc b/symforce/opt/values.tcc
+index 19a804e..21396fc 100644
+--- a/symforce/opt/values.tcc
++++ b/symforce/opt/values.tcc
+@@ -11,6 +11,7 @@
+ #include <fmt/ostream.h>
+ 
+ #include "./assert.h"
++#include "./internal/fmt_formatters.h"
+ #include "./values.h"
+ 
+ /**

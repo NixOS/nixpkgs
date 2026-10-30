@@ -19,7 +19,15 @@
   pybind11,
   cython,
   skymarshal,
-  gmp,
+  symengine,
+  symforce-sym,
+  jinja2,
+  graphviz,
+  ruff,
+  scipy,
+  sympy,
+  sortedcontainers,
+  llvmPackages,
 }:
 
 # TODO: This is WIP
@@ -46,6 +54,27 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail '"cython>=3,<3.1.0"' '"cython>=3"'
 
+    # third_party/symengine[py] gets vendor-built from scratch via
+    # ExternalProject_Add (network-dependent, and symenginepy's own vendored
+    # cmake/FindPython.cmake uses distutils.sysconfig, removed in Python
+    # 3.12+) even though nothing in the C++/pybind build actually links
+    # against it - it's purely there to also install a Python symengine
+    # package for symforce's own Python code to import. Use the real
+    # nixpkgs python3Packages.symengine instead.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'option(SYMFORCE_BUILD_SYMENGINE "Build symengine[py]" ON)' \
+        'option(SYMFORCE_BUILD_SYMENGINE "Build symengine[py]" OFF)'
+
+    # symforce/pybind (cc_sym) is a separate, optional C++ Python-extension
+    # acceleration layer gated behind its own option - not needed for
+    # symforce's core (pure-Python) symbolic/codegen functionality that
+    # px4-uorb-headers actually uses, and it has its own, separate set of
+    # fmt-9/pybind11-version compile issues (see setup-py-deps.patch below
+    # for the matching setup.py side of this).
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'option(SYMFORCE_BUILD_CC_SYM "Build cc_sym and related targets for python wrapping" ON)' \
+        'option(SYMFORCE_BUILD_CC_SYM "Build cc_sym and related targets for python wrapping" OFF)'
+
     substituteInPlace symforce/opt/CMakeLists.txt \
       --replace-fail 'function(add_metis)' \
       'function(add_metis)
@@ -64,6 +93,41 @@ buildPythonPackage rec {
     ./latest-cmake.patch
     ./fmt-9.patch
     ./spdlog-newer.patch
+    # setup.py unconditionally declares a "cc_sym" extension module and a
+    # custom install step that copies the vendored symenginepy's compiled
+    # symengine_wrapper.so and runs a second `cmake --install` for cc_sym's
+    # extra libraries - none of which get built now that
+    # SYMFORCE_BUILD_SYMENGINE/SYMFORCE_BUILD_CC_SYM are off above (real
+    # nixpkgs python3Packages.symengine is used instead, and cc_sym - a
+    # separate, optional C++ Python-extension acceleration layer with its
+    # own set of fmt-9/pybind11-version compile issues - isn't needed for
+    # symforce's core Python symbolic/codegen functionality). Also drops
+    # the "clang-format<21.1.3" upper bound from install_requires: no
+    # python3Packages.clang-format wrapper exists, and format_util.py's
+    # own clang_format import already falls back to a bare "clang-format"
+    # PATH lookup when that module isn't installed (see
+    # llvmPackages.clang-tools in propagatedBuildInputs below), so pinning
+    # a python-level version for it isn't meaningful here anyway.
+    ./setup-py-deps.patch
+    # symforce/internal/symbolic.py's `from symengine import Mod` was never
+    # a real symengine API: it's purely a long-standing symforce-internal
+    # patch to their own now-unused vendored symenginepy snapshot (see
+    # symforce-org/symforce@cd05477, "TODO(hayk): Actually put into C++"),
+    # reapplied across vendored-copy version bumps rather than ever having
+    # existed upstream. Define it locally with the identical formula
+    # instead, now that the real nixpkgs symengine is used.
+    ./symengine-mod-shim.patch
+    # Same situation as symengine-mod-shim.patch above, for SignNoZero/
+    # CopysignNoZero (symforce-org/symforce@d0203757, "Custom functions for
+    # (copy)sign_no_zero") - not real symengine APIs either. Defined here
+    # using the exact algebraic identities the sympy-backend classes
+    # already use for their own numeric fallback.
+    ./symengine-signnozero-shim.patch
+    # Same situation as symengine-mod-shim.patch above, for DataBuffer
+    # (symforce-org/symforce's own DataBuffer/DataBufferElement additions
+    # to their now-unused vendored symenginepy snapshot) - not a real
+    # symengine API.
+    ./symengine-databuffer-shim.patch
   ];
 
   # setup.py drives its own cmake invocation internally (there's no
@@ -103,9 +167,21 @@ buildPythonPackage rec {
     fmt
     spdlog
     tl-optional
-    gmp # linked by the vendored third_party/symengine subbuild
     metis
+    symengine
+    symforce-sym
+    jinja2
+    graphviz
+    ruff
+    scipy
+    sympy
+    sortedcontainers
   ];
+
+  # format_util.py's format_cpp() shells out to a bare "clang-format" on
+  # PATH when the (unpackaged) clang_format PyPI module isn't importable -
+  # see setup-py-deps.patch.
+  propagatedBuildInputs = [ llvmPackages.clang-tools ];
 
   meta = {
     description = "Fast symbolic computation, code generation, and nonlinear optimization for robotics";
