@@ -6,6 +6,7 @@
   rustPlatform,
   fetchFromGitHub,
   protobuf,
+  sqlite,
 
   meson,
   ninja,
@@ -51,6 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.PROTOC = "protoc";
 
   nativeBuildInputs = [ protobuf ];
+
+  buildInputs = [ sqlite ];
 
   passthru.dummy-service = stdenv.mkDerivation {
     pname = "galaxy-dummy-service";

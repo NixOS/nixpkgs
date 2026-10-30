@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   ddt,
-  fetchPypi,
+  fetchFromGitHub,
   flake8,
   pbr,
   setuptools,
@@ -10,15 +10,20 @@
   testscenarios,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hacking";
   version = "8.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PHjOx8Wkq7SQmlJS1mq5PpswayGthmV+LCA8eLUiQx8=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "hacking";
+    tag = finalAttrs.version;
+    hash = "sha256-C3MEVmGGi0yzsbpai9n8+TQGh3fozF4CfhOhwsTVYt0=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   postPatch = ''
     sed -i 's/flake8.*/flake8/' requirements.txt
@@ -45,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

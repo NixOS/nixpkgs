@@ -7,7 +7,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "werf-bin";
-  version = "3.11.0";
+  version = "3.12.1";
   __structuredAttrs = true;
 
   src =
@@ -18,15 +18,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     {
       aarch64-darwin = fetchurl {
         url = mkUrl "darwin-arm64";
-        hash = "sha256-/J5F4X2yYc/5yTnt5Q11gYuI1nd4aplNdAQpS0/FxiA=";
+        hash = "sha256-mOccviRNa7qXIyD7PtYVLeNlzuWARh7cTEyGaHdGDVY=";
       };
       aarch64-linux = fetchurl {
         url = mkUrl "linux-arm64";
-        hash = "sha256-srSS7d/9w68IGBR4XQ7ByY9AFktD+yT9h9O8dodWLCE=";
+        hash = "sha256-52jN0fAlFkgGTF7K7JKxM89ZCny9R8Ibc6S2kuYCuaA=";
       };
       x86_64-linux = fetchurl {
         url = mkUrl "linux-amd64";
-        hash = "sha256-wiyCR76ztRjE4dQXEtUt82x7XPrrrB+dlsez7D01j1o=";
+        hash = "sha256-yIvN9jIOc4iH/K++/gYO3C09tPtWYsdmilHTg47Wtvc=";
       };
     }
     .${system} or (throw "Unsupported system: ${system}");

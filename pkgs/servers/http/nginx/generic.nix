@@ -8,6 +8,7 @@ outer@{
   pcre2,
   libxml2,
   libxslt,
+  libxcrypt,
   nginx-doc,
 
   nixosTests,
@@ -115,13 +116,13 @@ mkDerivation {
     pcre2
     libxml2
     libxslt
+    libxcrypt
   ]
   ++ buildInputs
   ++ mapModules "buildInputs"
   ++ lib.optional withGeoIP geoip
   ++ lib.optional withImageFilter gd
   ++ lib.optional withPerl perl;
-
   dontAddStaticConfigureFlags = true;
 
   configureFlags = [

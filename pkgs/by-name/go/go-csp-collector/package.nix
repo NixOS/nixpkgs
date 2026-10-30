@@ -9,16 +9,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.24";
+  version = "0.0.27";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j5oYcH0u0/Et5235GVQVxor2HqUX3mfE0ALe2jn/OW0=";
+    hash = "sha256-h9CtMzHOQj2ev/9rx8DvdskH7SK31S7i43uezYoHZI8=";
   };
 
-  vendorHash = "sha256-IxUhINd7nRMppbGRaZuJi6SiOdeTOmkEIcBddY5s4Oc=";
+  vendorHash = "sha256-aIvIHFCucqJqGF0EcuJ9lJ2xUM/MvQs4UExSQvphCuE=";
 
   ldflags = [
     "-s"
@@ -32,6 +32,7 @@ buildGo127Module (finalAttrs: {
       --replace-fail "/usr/local/bin/go-csp-collector" "$out/bin/go-csp-collector"
   '';
 
+  __darwinAllowLocalNetworking = true;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";

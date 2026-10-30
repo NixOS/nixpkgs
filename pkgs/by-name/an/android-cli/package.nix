@@ -9,15 +9,19 @@
 }:
 
 let
-  version = "1.0.15498356";
+  version = "1.1.16717390";
   platformData = {
     x86_64-linux = fetchurl {
       url = "https://dl.google.com/android/cli/${version}/linux_x86_64/android-cli";
-      hash = "sha256-TmwLwLKqnMCxWwtX8m50KflmisfeG3PjZsBs7z9vccU=";
+      hash = "sha256-s07Quu7/oqruJyDYJJG5dYNWluLlaEBEkHi+yIVDZWQ=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://dl.google.com/android/cli/${version}/linux_arm64/android-cli";
+      hash = "sha256-QvH7k3OjmM5ytl+h1z3ctrekGavfRc8KKTtRvqEojqU=";
     };
     aarch64-darwin = fetchurl {
       url = "https://dl.google.com/android/cli/${version}/darwin_arm64/android-cli";
-      hash = "sha256-E3PC0Ivf6MoYRQu56dSD/49LI8DJZhXL27/o6daH0Sg=";
+      hash = "sha256-6cbhn17YFC4ol+C2i0duF2hjPldAqlS/wjR2fMJkAf4=";
     };
   };
 
@@ -37,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
+  ];
+
+  buildInputs = lib.optionals (with stdenv.hostPlatform; isLinux && isAarch64) [
+    stdenv.cc.cc.lib
   ];
 
   dontConfigure = true;
@@ -79,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = with teams; [ android ];
     platforms = [
       "x86_64-linux"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
     mainProgram = "android";

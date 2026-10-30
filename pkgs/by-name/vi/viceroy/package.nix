@@ -1,14 +1,16 @@
 {
   lib,
+  rustc,
   rustPlatform,
   fetchFromGitHub,
+  symlinkJoin,
   pkg-config,
   zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viceroy";
-  version = "0.21.1";
+  version = "0.22.0";
 
   __structuredAttrs = true;
 
@@ -16,19 +18,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "fastly";
     repo = "viceroy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vwoJ7PixrO68vUSo+u10wFdeD0TU2cISNWcNJ4qLTB8=";
+    hash = "sha256-OhYC0otFIuntokCfDjRlOKsiN5QUL/MdW/0thjDOWIQ=";
   };
 
-  cargoHash = "sha256-dkoKFEeM6DI6Iaypgexa18YjoLySnIX1YfUItySx1Q0=";
-
-  postPatch = ''
-    substituteInPlace src/lib.rs \
-      --replace-fail '#![cfg_attr(not(debug_assertions), deny(warnings))]' ""
-  '';
+  # build.rs compiles component adapter for wasm32-unknown-unknown from wasm_abi/adapter
+  # which is in a separate workspace with its own lockfile
+  cargoDeps = symlinkJoin {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-vendor";
+    paths = [
+      (rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = "sha256-/vaaIdIHby1QGEAyTRJ2a8s06lXrq7YdJO9rNhH5mco=";
+      })
+      (rustPlatform.fetchCargoVendor {
+        pname = "${finalAttrs.pname}-adapter";
+        inherit (finalAttrs) version src;
+        sourceRoot = "${finalAttrs.src.name}/wasm_abi/adapter";
+        hash = "sha256-aUSdL/dGaWu/kCKdE+6VdzEE10bxRZhzINuPi13COS4=";
+      })
+    ];
+  };
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    rustc.llvmPackages.lld
+  ];
 
   buildInputs = [ zstd ];
 

@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
                        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
     ''
     + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      substituteInPlace packages/desktop/scripts/utils.ts \
+      substituteInPlace packages/desktop/script/utils.ts \
         --replace-fail 'await $`codesign --force --sign - ''${dest}`' 'true'
     ''
     + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
@@ -114,11 +114,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p resources/icons
     cp -R icons/prod/* resources/icons/
 
-    export OPENCODE_CLI_DIST="$TMPDIR/desktop-cli"
-    cli_package=$(bun -e 'import { getCurrentCli } from "./scripts/utils.ts"; console.log(getCurrentCli().package.replace("@opencode/", ""))')
-    mkdir -p "$OPENCODE_CLI_DIST/$cli_package/bin"
-    cp ${lib.getExe opencode} "$OPENCODE_CLI_DIST/$cli_package/bin/opencode"
-    echo '{"version":"${opencode.version}"}' > "$OPENCODE_CLI_DIST/$cli_package/package.json"
+    cli_package=$(bun -e 'import { getCurrentCli } from "./script/utils.ts"; console.log(getCurrentCli().package.replace("@opencode/", ""))')
+    mkdir -p "../cli/dist/$cli_package/bin"
+    cp ${lib.getExe opencode} "../cli/dist/$cli_package/bin/opencode"
+    echo '{"version":"${opencode.version}"}' > "../cli/dist/$cli_package/package.json"
 
     # Build with electron-vite
     bun run build

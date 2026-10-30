@@ -51,14 +51,10 @@ python3Packages.buildPythonApplication {
       # used by policy.slice_randomize_psl()
       psl
     ];
-  makeWrapperArgs = [
-    "--set"
-    "LUA_PATH"
-    ''"$LUA_PATH"''
-    "--set"
-    "LUA_CPATH"
-    ''"$LUA_CPATH"''
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(--set LUA_PATH "$LUA_PATH")
+    makeWrapperArgs+=(--set LUA_CPATH "$LUA_CPATH")
+  '';
   # basic test that the wrapping works
   postCheck = lib.optionalString extraFeatures ''
     makeWrapper '${kresd}/bin/kresd' ./kresd \

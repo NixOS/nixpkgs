@@ -14,9 +14,9 @@
 }:
 let
   lib-deps = symlinkJoin {
-    name = "hyperscan-static-deps";
+    name = "vectorscan-static-deps";
     paths = [
-      (pkgs.hyperscan.override { withStatic = true; })
+      (pkgs.vectorscan.override { enableShared = false; })
       pcre2
     ];
   };
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   env.CMAKE_ARGS = lib.toString [
-    (lib.cmakeFeature "HS_SRC_ROOT" pkgs.hyperscan.src.outPath)
+    (lib.cmakeFeature "HS_SRC_ROOT" pkgs.vectorscan.src.outPath)
     (lib.cmakeFeature "HS_BUILD_LIB_ROOT" "${lib-deps}/lib")
   ];
 

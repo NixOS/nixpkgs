@@ -22,7 +22,7 @@
 }:
 
 let
-  version = "1.0.4";
+  version = "1.1.2";
   updateScript = gitUpdater {
     rev-prefix = "v";
     ignoredVersions = "rc";
@@ -47,7 +47,7 @@ if enableEnterprise then
 
     src = fetchurl {
       url = "https://downloads.openobserve.ai/releases/o2-enterprise/v${finalAttrs.version}/openobserve-ee-v${finalAttrs.version}-linux-amd64-musl.tar.gz";
-      hash = "sha256-vp/l/22a2bgN9pWJ9ZlLZFz+D6HMNCZGnWx/Q69KsM4=";
+      hash = "sha256-iorrMRPRRpsVKZ0iOUwdJGLQsA3/ZnOcKgBT2beCqgA=";
     };
 
     # The tarball is a single flat `openobserve` binary.
@@ -89,8 +89,8 @@ else
       o2Datasource = fetchFromGitHub {
         owner = "openobserve";
         repo = "o2-datasource";
-        rev = "7ea74ba2b8eabe5758c81b928a835144dc1f7f60";
-        hash = "sha256-vORes6FEbhijRLTWjEaB+KHOUls2CGBED6WzLF3stnM=";
+        rev = "700dcc51f6cb3aff32c5ef1733008456e14d0f38";
+        hash = "sha256-ABHaWgZeCbWH+NjQ2B4Z8VIcYl9UNTdGbwnna7QbY1w=";
       };
 
       web = buildNpmPackage {
@@ -99,7 +99,7 @@ else
 
         sourceRoot = "${finalAttrs.src.name}/web";
 
-        npmDepsHash = "sha256-BXImhtpBpLKresCWdhQIhVu80HmP0WfUcjTFaStkQ4A=";
+        npmDepsHash = "sha256-ASI9b7/rXxq2SO6QyxbXLmppiYJtXka7595Y5Y6YygY=";
 
         preBuild = ''
           mkdir -p src/assets/ai-datasource-content/generated
@@ -140,7 +140,7 @@ else
         owner = "openobserve";
         repo = "openobserve";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-wU0P53atAkehYkgn+wbrlbVbyMSPU0rVrJfYte4Sls8=";
+        hash = "sha256-9GKdLLm/LaOhCyMGs2ocGwr8ib1hf6g1uIGJ7l/pL68=";
       };
 
       patches = [
@@ -163,7 +163,7 @@ else
         cp -r ${web}/share/openobserve-ui web/dist
       '';
 
-      cargoHash = "sha256-CGFadBE3/ooT4lT+rMCb9Bm0Jk2fJOe+Oba3AYCJK30=";
+      cargoHash = "sha256-unWuuJv3XaDzgpDYt1CuNOGtxNJwQCxDO3UA6TE9/Zo=";
 
       nativeBuildInputs = [
         pkg-config
@@ -193,28 +193,7 @@ else
         GIT_BUILD_DATE = "1970-01-01T00:00:00Z";
 
         RUSTFLAGS = "-C target-feature=+aes,+sse2";
-
-        SWAGGER_UI_DOWNLOAD_URL =
-          # When updating:
-          # - Look for the version of `utoipa-swagger-ui` at:
-          #   https://github.com/StractOrg/stract/blob/<STRACT-REV>/Cargo.toml#L183
-          # - Look at the corresponding version of `swagger-ui` at:
-          #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
-          let
-            swaggerUiVersion = "5.17.14";
-            swaggerUi = fetchurl {
-              url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
-              hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
-            };
-          in
-          "file://${swaggerUi}";
       };
-
-      # swagger-ui will once more be copied in the target directory during the check phase
-      # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
-      preCheck = ''
-        rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
-      '';
 
       # Skip doctests: upstream release build for v0.50.3 runs cargo build only,
       # and the doctest examples currently fail due to async context.

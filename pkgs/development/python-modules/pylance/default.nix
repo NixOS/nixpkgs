@@ -37,7 +37,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "14.0.0";
+  version = "14.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-44R8EEeLD4L7HEr6elHbFAr0647oVpOy78O6TAYczmg=";
+    hash = "sha256-jq/IxDX/wCJJC8UGX8DRMhEqlDUzt1bsdYDUwaPzb5A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -57,7 +57,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-rkyD5Y0bFuwVcoey3mnAB3JGdIsVK8ENTqZH2EjwFZk=";
+    hash = "sha256-fKlCE50hAsMGB3v2tV+HOQ3BrDDBLALdDc5Ooj/BOqM=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /

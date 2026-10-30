@@ -15,14 +15,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-config-backup";
-  version = "2.2.2";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DanSheps";
     repo = "netbox-config-backup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PT7/RCpB7SAinQ8McQV59b9ouqqUSoEqEj0ultL37cs=";
+    hash = "sha256-ZIHNTkZQWZRcdknZ7l2ae98XCecwcKmZuAgvx3jEA50=";
   };
 
   build-system = [ setuptools ];

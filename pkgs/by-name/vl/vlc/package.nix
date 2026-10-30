@@ -9,7 +9,7 @@
   faad2,
   fetchFromGitLab,
   fetchpatch,
-  ffmpeg_7,
+  ffmpeg_8,
   flac,
   flex,
   fluidsynth,
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     dbus
     faad2
-    ffmpeg_7
+    ffmpeg_8
     flac
     fluidsynth
     fontconfig

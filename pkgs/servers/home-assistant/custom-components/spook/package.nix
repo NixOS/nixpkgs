@@ -3,6 +3,10 @@
   buildHomeAssistantComponent,
   cronsim,
   fetchFromGitHub,
+  pytest-cov-stub,
+  pytest-freezer,
+  pytest-homeassistant-custom-component,
+  pytestCheckHook,
 }:
 buildHomeAssistantComponent rec {
   owner = "frenck";
@@ -25,6 +29,23 @@ buildHomeAssistantComponent rec {
 
   dependencies = [
     cronsim
+  ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-freezer
+    pytest-homeassistant-custom-component
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # The sub-integration symlink hack is patched out by us
+    "test_remove_entry_unlinks_sub_integrations"
+    "test_setup_entry_loads_freshly_linked_sub_integration"
+    "test_setup_entry_restarts_for_helpers_left_without_their_link"
+
+    # snapshot is outdated
+    "test_automation_case[conversation-trigger-slots-and-response-template]"
   ];
 
   meta = {
