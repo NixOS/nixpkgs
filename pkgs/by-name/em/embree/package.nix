@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "embree";
     repo = "embree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
+    hash = "sha256-vgtN7bdFQShRcvuGyuf+gIu/vIEvayQCeXMqlejxi7M=";
   };
 
   postPatch = ''
