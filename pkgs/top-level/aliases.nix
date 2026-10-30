@@ -3276,6 +3276,7 @@ mapAliases {
   youtube-music = lib.warnOnInstantiate "'youtube-music' has been renamed to 'pear-desktop'" pear-desktop; # Added 2025-12-23
   yubikey-manager-qt = throw "'yubikey-manager-qt' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   yubikey-personalization-gui = throw "'yubikey-personalization-gui' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
+  z3-tptp = throw "z3-tptp has been removed because Z3 now has built-in TPTP support; use 'z3 -tptp' instead."; # Added 2026-10-29
   zabbix72 = throw "'zabbix72' was removed as it has reached its end of life"; # Added 2026-02-11
   zabbix-agent2-plugin-postgresql = throw "'zabbix-agent2-plugin-postgresql' is moved to 'zabbix74.plugins.postgresql'"; # Added 2026-09-27
   zandronum-alpha = throw "'zandronum-alpha' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
