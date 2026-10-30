@@ -38,7 +38,7 @@ let
   #   updating CUDA. libcublas uses it on every platform with a build: standalone releases have no linux-aarch64
   #   (pre-Thor Jetson) builds, so those use CUDA's. As of writing:
   #   - CUDA 12.8 (cuBLAS 12.8.5.5), 12.9 (12.9.2.10), 13.0 (13.1.1.3), 13.2 (13.4.1.3), 13.3 (13.6.0.2), and 13.4
-  #     (13.8.0.4): standalone 12.8.5.7, 12.9.3.13, 13.1.2.11, 13.4.3.11, 13.6.2.16, and 13.8.2.12.
+  #     (13.8.0.4): standalone 12.8.5.7, 12.9.3.13, 13.1.2.11, 13.4.3.11, 13.6.3.23, and 13.8.2.12.
   #   - CUDA 12.6 and 13.1: no newer standalone release (13.2.2.2 is the same as CUDA 13.1's).
   # - cublasdx (MathDx): 25.06.1 is the last release for CUDA 12, and 26.x requires CUDA 13.
   # - cudnn:
@@ -181,7 +181,7 @@ let
   };
 
   cudaPackages_13_3 = mkCudaPackages {
-    cublas = "13.6.2";
+    cublas = "13.6.3";
     cublasdx = "26.06.1";
     cublasmp = "0.10.0";
     cuda = "13.3.1";
