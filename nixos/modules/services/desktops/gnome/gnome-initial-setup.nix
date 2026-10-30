@@ -8,6 +8,7 @@
 }:
 
 let
+  cfg = config.services.gnome.gnome-initial-setup;
 
   # GNOME initial setup's run is conditioned on whether
   # the gnome-initial-setup-done file exists in XDG_CONFIG_HOME
@@ -43,6 +44,10 @@ let
     '';
   };
 
+  settingsFormat = pkgs.formats.ini {
+    listToValue = l: lib.concatStringsSep ";" (map (s: lib.generators.mkValueStringDefault { } s) l);
+  };
+  configFile = settingsFormat.generate "vendor.conf" cfg.settings;
 in
 
 {
@@ -59,18 +64,98 @@ in
 
       enable = lib.mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
 
+      settings = lib.mkOption {
+        type = settingsFormat.type;
+        default = { };
+        example = {
+          pages.skip = [
+            "language"
+            "keyboard"
+            "network"
+            "privacy"
+            "timezone"
+            "parental_controls"
+            "parent_password"
+          ];
+        };
+        description = ''
+          Vendor configuration to customise the initial setup dialogue.
+          See [here](https://gitlab.gnome.org/GNOME/gnome-initial-setup#vendor-configuration) for supported options.
+        '';
+      };
+
     };
 
   };
 
   ###### implementation
 
-  config = lib.mkIf config.services.gnome.gnome-initial-setup.enable {
+  config = lib.mkIf cfg.enable {
+
+    warnings =
+      lib.optional (builtins.elem "summary" cfg.settings.pages.skip) ''
+        Adding the "summary" page to `services.gnome.gnome-initial-setup.settings.pages.skip`
+        prevents the user from exiting the setup wizard and logging in. This
+        requires a forceful shutdown of the machine.
+      ''
+      ++
+        lib.optional
+          (
+            (lib.versionAtLeast config.system.stateVersion "26.11")
+            && (
+              builtins.elem "account" cfg.settings.pages.skip || builtins.elem "password" cfg.settings.pages.skip
+            )
+          )
+          ''
+            Adding the "account" or "password" page to
+            `services.gnome.gnome-initial-setup.settings.pages.skip` prevents GNOME
+            Initial Setup from properly creating a user account. Therefore, GNOME
+            Initial Setup does not exit cleanly, requiring a forceful shutdown of
+            the machine.
+          '';
+
+    assertions = [
+      {
+        # On systems before 26.11, GNOME Initial Setup is unable to start due to the existence of
+        # /run/gdm/gdm.ran-initial-setup. This module only provides configuration to preserve the
+        # previous behaviour of vendor.conf in case the user explicitly removes this file.
+        assertion = config.users.mutableUsers || (lib.versionOlder config.system.stateVersion "26.11");
+        message = ''
+          To function correctly, `services.gnome.gnome-initial-setup.enable`
+          requires `users.mutableUsers = true`. GNOME Initial Setup does not
+          exit cleanly when no user account is created, requiring a forceful
+          shutdown of the machine. Consider setting
+          `services.gnome.gnome-initial-setup.enable = false`.
+        '';
+      }
+    ];
+
+    services.gnome.gnome-initial-setup.settings = {
+      pages = {
+        skip = lib.mkBefore (
+          if lib.versionOlder config.system.stateVersion "26.11" then
+            [
+              "account"
+              "software"
+              "password"
+              "timezone"
+            ]
+          else
+            [
+              "software"
+            ]
+            ++ lib.optional (!config.i18n.imperativeLocale) "language"
+            ++ lib.optional (config.time.timeZone != null) "timezone"
+        );
+      };
+    };
 
     environment.systemPackages = [
       pkgs.gnome-initial-setup
     ]
     ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart;
+
+    environment.etc."gnome-initial-setup/vendor.conf".source = configFile;
 
     services.displayManager.gdm.extraPackages = [
       pkgs.gnome-initial-setup
