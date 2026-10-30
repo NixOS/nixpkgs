@@ -131,6 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Set up the environment properly when launching sessions
     # https://github.com/NixOS/nixpkgs/issues/48255
     ./reset-environment.patch
+
+    # Allow GDM to find the gnome-session files for gnome-initial-setup, so
+    # GDM will not fail to start it.
+    ./gdm-gnome-initial-setup-session-lookup.patch
   ];
 
   postPatch = ''
