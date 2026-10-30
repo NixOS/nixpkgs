@@ -875,13 +875,20 @@ stdenv.mkDerivation (finalAttrs: {
       lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
     mainProgram = executable;
     teams = [ lib.teams.python ];
-    # static build on aarch64-darwin breaks with:
-    # configure: error: C compiler cannot create executables
 
-    # mingw patches only apply to Python 3.11 currently
-    broken =
-      (lib.versions.minor version != "11" && stdenv.hostPlatform.isWindows)
-      || (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isDarwin);
+    problems =
+      lib.optionalAttrs (lib.versions.minor version != "11" && stdenv.hostPlatform.isWindows) {
+        broken-mingw-patches = {
+          kind = "broken";
+          message = "mingw patches currently only apply to Python 3.11, but this is Python ${lib.versions.majorMinor version}";
+        };
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isDarwin) {
+        broken-darwin-static = {
+          kind = "broken";
+          message = "static build on aarch64-darwin breaks with: configure: error: C compiler cannot create executables";
+        };
+      };
 
     identifiers.cpeParts = {
       vendor = "python";
