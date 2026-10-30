@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "microcdr";
-  version = "2.0.1";
+  version = "2.0.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "eProsima";
     repo = "Micro-CDR";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X5kE8dMpwXL2hzpT6vY+BHa70Fw21z++vs8nVARpxNk=";
+    hash = "sha256-OfxsJGD3nFb+92rYvZ/YF6Qj+3ZwDiSIvZaTq3flcJQ=";
   };
 
   # UCDR_SUPERBUILD defaults on and would otherwise just return() early and

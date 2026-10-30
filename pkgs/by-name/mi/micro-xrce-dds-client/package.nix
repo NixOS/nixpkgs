@@ -9,20 +9,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "micro-xrce-dds-client";
-  version = "0-unstable-2026-10-30";
+  version = "3.0.2";
 
   strictDeps = true;
   __structuredAttrs = true;
   separateDebugInfo = true;
 
-  # PX4's fork of eProsima's Micro XRCE-DDS Client. PX4-Autopilot pins this
-  # exact commit as a git submodule at
-  # src/modules/uxrce_dds_client/Micro-XRCE-DDS-Client.
+  # PX4-Autopilot vendors PX4/Micro-XRCE-DDS-Client as its
+  # src/modules/uxrce_dds_client/Micro-XRCE-DDS-Client submodule, but that
+  # fork's only real divergence from eProsima's own upstream is a 19-line
+  # addition to src/c/util/time.c coupling it to PX4-Autopilot's internal
+  # hrt_absolute_time() (drivers/drv_hrt.h, unavailable to a standalone
+  # build) - otherwise it just lags behind eProsima's own development.
+  # Nothing in px4-uorb-headers' consumption of this library depends on
+  # that PX4-specific timing behavior (it's not run inside PX4-Autopilot's
+  # lockstep-scheduled SITL simulation), so track eProsima's real upstream
+  # directly instead of the fork - it never had this problem to begin with.
   src = fetchFromGitHub {
-    owner = "PX4";
+    owner = "eProsima";
     repo = "Micro-XRCE-DDS-Client";
-    rev = "711aef423edd1820347b866d1e4164832df35d04";
-    hash = "sha256-ZnmhneL9Kgg+Tt6nBGveuBpowPYoTco6Leav/XxsEPY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vL2A2La1MdZfxO84BVVcSu31L74+PSmfk5fH5OcJtks=";
   };
 
   # UCLIENT_SUPERBUILD defaults on and would otherwise just return() early
@@ -32,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   # the sandboxed nix build. Skip straight to the real build and use our own
   # microcdr package instead. UCLIENT_ISOLATED_INSTALL defaults off already
   # (unlike microcdr's UCDR_ISOLATED_INSTALL) but is set explicitly here for
-  # clarity. The UCLIENT_PIC/UCLIENT_PROFILE_* flags mirror exactly what
+  # clarity. The UCLIENT_PIC/UCLIENT_PROFILE_* flags mirror what
   # PX4-Autopilot's src/modules/uxrce_dds_client/CMakeLists.txt passes to its
-  # own (now-replaced) ExternalProject_Add of this library.
+  # own (replaced) ExternalProject_Add of PX4's fork of this library.
   cmakeFlags = [
     (lib.cmakeBool "UCLIENT_SUPERBUILD" false)
     (lib.cmakeBool "UCLIENT_ISOLATED_INSTALL" false)
@@ -48,21 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "UCLIENT_PROFILE_SHARED_MEMORY" false)
   ];
 
-  # PX4's fork replaces upstream's plain POSIX clock_gettime() in time.c with
-  # PX4-Autopilot's own hrt_absolute_time(), declared in PX4-Autopilot's own
-  # (unvendored, not part of this repo) <drivers/drv_hrt.h> - but gated on
-  # UCLIENT_PLATFORM_POSIX, this repo's own generic Linux/macOS/NuttX/Zephyr
-  # autodetect, not on anything that actually implies PX4-Autopilot's
-  # headers are available. __PX4_POSIX (left untouched by this patch) is
-  # the real signal for that: it's only ever injected by PX4-Autopilot's own
-  # in-tree build, never set by this repo's own CMakeLists.txt. Drop just
-  # UCLIENT_PLATFORM_POSIX from the two affected #if conditions so a
-  # standalone build takes the plain POSIX clock_gettime() path instead,
-  # with zero behavior change for an in-tree PX4-Autopilot build (which
-  # keeps setting __PX4_POSIX and keeps using hrt_absolute_time() exactly as
-  # before - important for SITL's lockstep-scheduler time consistency).
-  patches = [ ./standalone-build-no-hrt.patch ];
-
   # microxrcedds_clientConfig.cmake transitively find_package()s microcdr,
   # so anything that find_package(microxrcedds_client)s this package also
   # needs microcdr on its own CMAKE_PREFIX_PATH - propagate it rather than
@@ -71,11 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "eProsima Micro XRCE-DDS Client (PX4 fork), bridging uORB topics to DDS/ROS 2 for PX4-Autopilot's uxrce_dds_client module";
-    homepage = "https://github.com/PX4/Micro-XRCE-DDS-Client";
+    description = "eProsima Micro XRCE-DDS Client, a C API for the eXtremely Resource Constrained Environments DDS protocol (used by PX4-Autopilot's uxrce_dds_client module)";
+    homepage = "https://github.com/eProsima/Micro-XRCE-DDS-Client";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pandapip1 ];
