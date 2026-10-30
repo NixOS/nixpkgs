@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) nginx-sso;
+    nginx-sso = nixosTests.nginx.mainline.sso;
   };
 
   meta = {
