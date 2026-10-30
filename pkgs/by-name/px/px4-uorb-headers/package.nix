@@ -2,15 +2,32 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchPypi,
 
   cmake,
-  empy ? python3Packages.empy,
+  # PX4-Autopilot's own Tools/setup/requirements.txt pins "empy>=3.3,<4":
+  # empy 4.0 removed the module-level em.RAW_OPT/em.BUFFERED_OPT API that
+  # PX4's msg generator actually uses, in favor of a new Interpreter-based
+  # API, so this is a real upstream constraint rather than a stale one to
+  # bump past - use the last 3.x release instead of the (incompatible)
+  # python3Packages.empy default.
+  empy ? python3Packages.empy.overridePythonAttrs (old: rec {
+    version = "3.3.4";
+    src = fetchPypi {
+      pname = "empy";
+      inherit version;
+      hash = "sha256-c6xJeFtgFHnfTqGKfHm8EwSop8NMArlHLPEgauiPAbM=";
+    };
+  }),
   heatshrink,
   jinja2 ? python3Packages.jinja2,
   kconfiglib ? python3Packages.kconfiglib,
   micro-xrce-dds-client,
   ninja,
   px4-gpsdrivers,
+  # Built against the same pinned empy as above, so only one em.py ends up
+  # on PYTHONPATH.
+  pyros-genmsg ? python3Packages.pyros-genmsg.override { inherit empy; },
   rsync,
   symforce ? python3Packages.symforce,
 
@@ -87,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     jinja2
     kconfiglib
     ninja
+    pyros-genmsg
     symforce
   ];
 
@@ -94,11 +112,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "PX4_CONFIG" "px4_sitl_default")
   ];
 
+  # cmakeConfigurePhase (from the cmake setup hook) cd's into $cmakeBuildDir
+  # ("build") and never cd's back out, so build/installPhase both continue
+  # to run from inside build/ rather than the source root.
   buildPhase = ''
     runHook preBuild
 
-    cmake -Bbuild -S. $CMAKE_FLAGS
-    cmake --build build --target uorb_headers
+    cmake --build . --target uorb_headers
 
     runHook postBuild
   '';
@@ -107,10 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/include/uORB/topics
-    cp -rv build/generated/uORB/topics/* $out/include/uORB/topics/
+    cp -rv uORB/topics/* $out/include/uORB/topics/
 
     mkdir -p $out/share/px4-uorb/msg
-    cp -rv msg/* $out/share/px4-uorb/msg/
+    cp -rv ../msg/* $out/share/px4-uorb/msg/
 
     runHook postInstall
   '';

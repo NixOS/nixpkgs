@@ -13,7 +13,7 @@
 +	# micro-xrce-dds-client/package.nix in nixpkgs). microxrcedds_clientConfig
 +	# transitively requires microcdr itself, so no separate find_package()
 +	# call for it is needed here.
-+	find_package(microxrcedds_client 2.4.0 REQUIRED)
++	find_package(microxrcedds_client 3.0.2 REQUIRED)
  
 -	px4_add_git_submodule(TARGET git_micro_xrce_dds_client PATH "${microxrceddsclient_src_dir}")
 -
