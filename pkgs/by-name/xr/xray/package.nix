@@ -69,6 +69,9 @@ buildGo127Module (finalAttrs: {
     mainProgram = "xray";
     homepage = "https://github.com/XTLS/Xray-core";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ iopq ];
+    maintainers = with lib.maintainers; [
+      iopq
+      nix-julia
+    ];
   };
 })
