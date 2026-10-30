@@ -19832,11 +19832,11 @@
     githubId = 46468162;
   };
   moni = {
-    email = "lythe1107@gmail.com";
+    email = "nix@4rsxyzt.fyi";
     matrix = "@fortuneteller2k:matrix.org";
     github = "moni-dz";
     githubId = 20619776;
-    name = "moni";
+    name = "Lythe Marvin L. Lacre";
   };
   monkieeboi = {
     name = "MonkieeBoi";
