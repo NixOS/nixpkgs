@@ -68,5 +68,6 @@ in
 // {
   passthru = {
     inherit sources;
+    updateScript = ./update.py;
   };
 }
