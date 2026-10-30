@@ -51,18 +51,16 @@ runCommand "dbus-config-test"
       exit 1
     }
 
-    # The system bus only reads explicit servicedirs, so only registered
-    # packages may provide system services.
-    dirs=$(grep --only-matching '<servicedir>[^<]*' $etc/system.conf)
-    if ! grep --quiet dbus-test-Registered <<<"$dirs"; then
-      fail "registered package missing in system.conf"
+    # The system bus only reads the merged directory of registered packages.
+    dirs=$(grep --only-matching --perl-regexp '<servicedir>\K[^<]*' $etc/system.conf)
+    if [[ $(wc --lines <<<"$dirs") -ne 1 ]]; then
+      fail "expected exactly one servicedir in system.conf, got: $dirs"
     fi
-    if grep --quiet dbus-test-Installed <<<"$dirs"; then
-      fail "unregistered package in system.conf"
+    if [[ ! -e $dirs/org.nixos.test.Registered.service ]]; then
+      fail "system service of the registered package missing in $dirs"
     fi
-    dups=$(sort <<<"$dirs" | uniq --repeated)
-    if [[ -n $dups ]]; then
-      fail "duplicate servicedirs in system.conf: $dups"
+    if [[ -e $dirs/org.nixos.test.Installed.service ]]; then
+      fail "system service of an unregistered package in $dirs"
     fi
 
     # The session bus finds services through XDG_DATA_DIRS only.
