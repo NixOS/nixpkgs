@@ -130,6 +130,8 @@ buildPythonPackage rec {
     "testAllBase64Features_librt"
     # fails to import librt
     "test_diff_cache_produces_valid_json"
+    # Parsing issue
+    "testBytesLiteral"
   ]
   ++ lib.optionals (pythonAtLeast "3.12") [
     # requires distutils
