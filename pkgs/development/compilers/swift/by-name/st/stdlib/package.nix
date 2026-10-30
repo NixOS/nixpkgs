@@ -13,8 +13,15 @@ let
   libraryExtension = stdenv.hostPlatform.extensions.library;
 
   enableLTO =
+    let
+      swiftLlvmMajor = lib.versions.major llvmPackages.release_version;
+      upstreamLlvmMajor = lib.versions.major llvmPackages_upstream.release_version;
+    in
+    # LTO requires using LLD from the Swift LLVM fork, but the fork’s LLVM version needs to be at least as new as the
+    # default LLVM version in Nixpkgs. Otherwise, Clang may generate bitcode it does not understand.
+    lib.versionAtLeast swiftLlvmMajor upstreamLlvmMajor
     # Swift 6.2 is used as a bootstrap compiler. Disable LTO for its stdlib to improve build time.
-    lib.versions.majorMinor swift_release != "6.2"
+    && lib.versions.majorMinor swift_release != "6.2"
     # Enabling LTO in the stdlib causes `swiftc` to crash in the `MandatoryAllocBoxToStack` pass on aarch64-linux
     && !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   toolLTO = lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin";
