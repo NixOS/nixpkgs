@@ -54,15 +54,16 @@ fi
 
 export NIX_BINTOOLS${role_post}=@out@
 
-for cmd in \
-    ar as ld nm objcopy objdump readelf ranlib strip strings size windres rc
+for tool in \
+    ar:AR as:AS ld:LD nm:NM objcopy:OBJCOPY objdump:OBJDUMP readelf:READELF \
+    ranlib:RANLIB strip:STRIP strings:STRINGS size:SIZE windres:WINDRES rc:RC
 do
-    if
-        PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
-    then
-        upper_case="$(echo "$cmd" | tr "a-z" "A-Z")"
-        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
+    cmd="${tool%:*}"
+    upper_case="${tool#*:}"
+    if PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null; then
+        export "${upper_case}${role_post}=@targetPrefix@${cmd}"
     fi
+
 done
 
 # If there is no `<prefix>rc`, but there is a `<prefix>windres`, define
@@ -80,4 +81,4 @@ fi
 export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
-unset -v role_post cmd upper_case
+unset -v role_post cmd upper_case tool
