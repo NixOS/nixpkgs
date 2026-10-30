@@ -275,6 +275,20 @@ stdenv.mkDerivation {
 
     # The install target needs to be in PYTHONPATH for "*.pth support" check to succeed
     export PYTHONPATH=$PYTHONPATH:$lib/$sitePackages:$out/$sitePackages
+
+    # qatlib's and qatzip's autogen.sh have their shebang below the license
+    # header. CMake (via libuv >= 1.53) spawns them with posix_spawn, which
+    # unlike execvp doesn't fall back to /bin/sh, so they fail with
+    # "exec format error". Fixed by newer qatlib and qatzip, which ceph is
+    # updating to in https://github.com/ceph/ceph/pull/73061.
+    # See: https://github.com/NixOS/nixpkgs/issues/576414
+    for f in src/{qatlib,qatzip}/autogen.sh; do
+      if head -n1 "$f" | grep -q '^#!'; then
+        echo "$f already starts with a shebang, remove this workaround"
+        exit 1
+      fi
+      sed -i '1i #!/bin/sh' "$f"
+    done
     patchShebangs src/
   '';
 
