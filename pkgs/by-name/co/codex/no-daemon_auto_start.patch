@@ -1,6 +1,6 @@
 --- a/features/src/lib.rs
 +++ b/features/src/lib.rs
-@@ -1055,7 +1055,7 @@
+@@ -1069,7 +1069,7 @@
          id: Feature::DaemonAutoStart,
          key: "daemon_auto_start",
          stage: Stage::Stable,
@@ -8,4 +8,15 @@
 +        default_enabled: false,
      },
      FeatureSpec {
-         id: Feature::AppServerWebSocketCompression,
+         id: Feature::TuiMultiBackend,
+--- a/cli/tests/daemon_startup.rs
++++ b/cli/tests/daemon_startup.rs
+@@ -187,7 +187,7 @@
+             if command == "discovered" {
+                 "tui.status_line=[\"model\",\"thread-id\",\"thread-name\"]\nfeatures.daemon_auto_start=false"
+             } else {
+-                ""
++                "features.daemon_auto_start=true"
+             },
+             serde_json::to_string(&workspace_path)?,
+             if command.starts_with("agents-untrusted") {
