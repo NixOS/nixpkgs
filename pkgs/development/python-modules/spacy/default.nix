@@ -139,6 +139,15 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert 'V' == 'N'
     "test_tok2vec_frozen_overfitting"
+    # AttributeError: Can't get local object 'test_doc_retokenize_merge_extension_attrs_invalid.<locals>.<lambda>'
+    # (Fails under multithreading in the sandbox)
+    "test_language_pipe"
+    "test_language_pipe_stream"
+    "test_language_pipe_error_handler"
+    "test_language_pipe_error_handler_custom"
+    "test_language_pipe_error_handler_input_as_tuples"
+    "test_language_pipe_error_handler_pipe"
+    "test_language_pipe_error_handler_make_doc_actual"
   ];
 
   pythonImportsCheck = [ "spacy" ];
