@@ -37,10 +37,10 @@ let
   #   with its CUDA release (same major and minor version); evaluation fails otherwise, so drop or update the pin when
   #   updating CUDA. libcublas uses it on every platform with a build: standalone releases have no linux-aarch64
   #   (pre-Thor Jetson) builds, so those use CUDA's. As of writing:
-  #   - CUDA 12.8 (cuBLAS 12.8.5.5), 13.2 (13.4.1.3), 13.3 (13.6.0.2), and 13.4 (13.8.0.4): standalone 12.8.5.7,
-  #     13.4.2.4, 13.6.2.16, and 13.8.2.12.
-  #   - CUDA 12.6, 12.9, 13.0, and 13.1: no newer standalone release (12.9.2.7 and 13.1.1.2 are older than CUDA's
-  #     12.9.2.10 and 13.1.1.3; 13.2.2.2 is the same as CUDA 13.1's).
+  #   - CUDA 12.8 (cuBLAS 12.8.5.5), 12.9 (12.9.2.10), 13.2 (13.4.1.3), 13.3 (13.6.0.2), and 13.4 (13.8.0.4): standalone
+  #     12.8.5.7, 12.9.3.13, 13.4.2.4, 13.6.2.16, and 13.8.2.12.
+  #   - CUDA 12.6, 13.0, and 13.1: no newer standalone release (13.1.1.2 is older than CUDA's 13.1.1.3; 13.2.2.2 is the
+  #     same as CUDA 13.1's).
   # - cublasdx (MathDx): 25.06.1 is the last release for CUDA 12, and 26.x requires CUDA 13.
   # - cudnn:
   #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 12 after 9.20.0, so we keep 9.20.0 for Jetson with
@@ -101,6 +101,7 @@ let
   };
 
   cudaPackages_12_9 = mkCudaPackages {
+    cublas = "12.9.3";
     cublasdx = "25.06.1";
     cublasmp = "0.10.0";
     cuda = "12.9.2";
