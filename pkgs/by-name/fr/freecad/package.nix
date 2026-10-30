@@ -8,8 +8,6 @@
   fetchFromGitHub,
   fetchpatch,
   fmt,
-  fontconfig,
-  freetype,
   graphviz,
   gts,
   hdf5,
@@ -143,9 +141,6 @@ freecad-utils.makeCustomizable (
       in
       [
         "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-        "--set COIN_GLU_LIBNAME ${lib.getLib libGLU}/lib/libGLU.so.1"
-        "--set COIN_FREETYPE2_LIBNAME ${lib.getLib freetype}/lib/libfreetype.so.6"
-        "--set COIN_FONTCONFIG_LIBNAME ${lib.getLib fontconfig}/lib/libfontconfig.so.1"
         "--prefix PATH : ${binPath}"
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
         "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}"

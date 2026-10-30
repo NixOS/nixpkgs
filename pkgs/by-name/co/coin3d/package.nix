@@ -4,10 +4,13 @@
   fetchFromGitHub,
   boost,
   cmake,
+  fontconfig,
+  freetype,
   libGL,
   libGLU,
   libx11,
   expat,
+  runCommandCC,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    fontconfig
+    freetype
     libGL
     libGLU
     expat
@@ -34,6 +39,31 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "USE_EXTERNAL_EXPAT" true)
   ];
+
+  # Coin dlopens these libraries, so add their paths after RPATH shrinking.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${
+      lib.makeLibraryPath [
+        libGLU
+        freetype
+        fontconfig
+      ]
+    } "$out/lib/libCoin.so"
+  '';
+
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    runtime-linking =
+      runCommandCC "coin-runtime-linking"
+        {
+          buildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          $CC ${./runtime-linking.c} -lCoin -o runtime-linking
+          unset LD_LIBRARY_PATH COIN_GLU_LIBNAME COIN_FREETYPE2_LIBNAME COIN_FONTCONFIG_LIBNAME
+          COIN_DEBUG_DL=1 ./runtime-linking
+          touch $out
+        '';
+  };
 
   meta = {
     homepage = "https://github.com/coin3d/coin";
