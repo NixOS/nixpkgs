@@ -567,7 +567,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # the bootstrap. Remove this once that’s fixed.
         meson = super.meson.overrideAttrs { doInstallCheck = false; };
 
-        ninja = super.ninja.override { buildDocs = false; };
+        ninja = super.ninja.override {
+          buildDocs = false;
+          re2c = null; # Not needed to build Ninja.
+        };
 
         # pkg-config builds glib, which checks for `arpa/nameser.h` and fails to build if it can’t find it.
         # libresolv is normally propagated by the SDK, but propagation is disabled early in the bootstrap.
@@ -592,8 +595,15 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         python3-bootstrap = super.python3.override {
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
-          zstd = null; # Avoid infinite recursion due to zstd depending on libiconv, which depends on Python via Meson.
           enableLTO = false;
+          # Avoid including deps that aren’t needed and aren’t already built in the bootstrap.
+          withExpat = false;
+          withGdbm = false;
+          withMpdecimal = false;
+          withZstd = false;
+          # These features aren’t needed. Omitting them further reduces the number of paths built in the bootstrap.
+          includeSiteCustomize = false;
+          mimetypesSupport = false;
         };
 
         scons = super.scons.override { python3Packages = self.python3.pkgs; };
