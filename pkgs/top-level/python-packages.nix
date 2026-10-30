@@ -17203,7 +17203,9 @@ self: super: with self; {
 
   python-mpd2 = callPackage ../development/python-modules/python-mpd2 { };
 
-  python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
+  python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc {
+    inherit (pkgs) mpv;
+  };
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
 
