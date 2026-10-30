@@ -60,7 +60,7 @@ in
           # Base ${rancherDistro} config
           {{ template "base" . }}
 
-          # MAGIC COMMENT V3
+          # MAGIC V3 COMMENT
         '';
       };
     };
