@@ -20,6 +20,7 @@
 let
   gradle = gradle_9;
   openjdk = openjdk25;
+  antlrReproducible = callPackage ./antlr-reproducible.nix { inherit openjdk; };
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
   version = "12.2";
@@ -32,17 +33,19 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-cShsTAyn96ChXr776ViQ8ij7ddx53F/YXuu4XVdbHW4=";
+    hash = "sha256-MDoae4arsR6CxE8h1k5tEFiSmQo8D/nOU80X/HxKGtw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
+      commitDate=$(git log -1 --pretty=%ct)
       git rev-parse HEAD > $out/COMMIT
+      printf '%s\n' "$commitDate" > $out/SOURCE_DATE_EPOCH
       # Git commit date, e.g. 2026-Sep-11
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/COMMIT_DATE
+      date -u -d "@$commitDate" "+%Y-%b-%d" > $out/COMMIT_DATE
       # Git commit date, e.g. 20260911
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/COMMIT_DATE_SHORT
+      date -u -d "@$commitDate" "+%Y%m%d" > $out/COMMIT_DATE_SHORT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
@@ -59,6 +62,12 @@ let
 
     # Remove timestamps from generated JavaHelp files
     ./0004-Remove-help-timestamps.patch
+
+    # Normalize archive timestamps
+    ./0005-Reproducible-archive-timestamps.patch
+
+    # Normalize PyGhidra source archives
+    ./0006-Reproducible-PyGhidra-sdist.patch
   ];
 
   postPatch = ''
@@ -78,6 +87,12 @@ let
       }
     }
     HERE
+
+    # Use the reproducible ANTLR tool JAR.
+    substituteInPlace Ghidra/Framework/SoftwareModeling/build.gradle \
+      --replace-fail \
+      'antlr "org.antlr:antlr:3.5.2"' \
+      "antlr files('${antlrReproducible}/share/java/antlr-3.5.2.jar')"
   '';
 
 in
@@ -150,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preBuild = ''
+    export SOURCE_DATE_EPOCH="$(cat SOURCE_DATE_EPOCH)"
     export LANG=C.UTF-8
     export LC_ALL=C.UTF-8
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
