@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "Whisparr";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ connor-grady ];
   };
 }
