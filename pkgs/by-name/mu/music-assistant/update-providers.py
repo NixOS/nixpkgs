@@ -70,7 +70,7 @@ EXTRA_DEPS = {
     "msx_bridge": ["pydantic"],
     "nicovideo": ["pydantic"],
     "ytmusic": [
-        # https://github.com/music-assistant/server/blob/2.5.8/music_assistant/providers/ytmusic/__init__.py#L120
+        # https://github.com/music-assistant/server/blob/2.11.0b7/music_assistant/providers/ytmusic/__init__.py#L158
         "bgutil-ytdlp-pot-provider",
         "yt-dlp",
     ],

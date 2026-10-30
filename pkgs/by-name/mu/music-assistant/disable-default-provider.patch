@@ -1,8 +1,8 @@
 diff --git a/music_assistant/mass.py b/music_assistant/mass.py
-index b14b22efc..77920f8b9 100644
+index 99f4e7d27..14ec50643 100644
 --- a/music_assistant/mass.py
 +++ b/music_assistant/mass.py
-@@ -1327,6 +1327,7 @@ async def _load_providers(self) -> None:
+@@ -1368,6 +1368,7 @@ async def _load_providers(self) -> None:
          changes_made = False
          newly_created_defaults: set[str] = set()
          for default_provider, require_mdns in DEFAULT_PROVIDERS:

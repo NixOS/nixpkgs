@@ -1,19 +1,16 @@
 diff --git a/music_assistant/providers/airplay/helpers.py b/music_assistant/providers/airplay/helpers.py
-index fcda7caca..40665446f 100644
+index 044fa52db..f08eaacde 100644
 --- a/music_assistant/providers/airplay/helpers.py
 +++ b/music_assistant/providers/airplay/helpers.py
-@@ -5,7 +5,6 @@
- import logging
--import os
--import platform
- import plistlib
+@@ -9,6 +9,7 @@
  import re
+ import time
  from fnmatch import fnmatchcase
 +from shutil import which
- from typing import TYPE_CHECKING, Any
+ from typing import TYPE_CHECKING, Any, Final
  
  from aiohttp import ClientError, ClientTimeout
-@@ -304,14 +305,7 @@ async def get_cli_binary() -> str:
+@@ -315,14 +316,11 @@
  
      :raises RuntimeError: If the binary cannot be found.
      """
@@ -22,27 +19,34 @@ index fcda7caca..40665446f 100644
 -    binary_name = _get_cli_binary_name(system, architecture)
 -    if binary_name is None:
 -        msg = f"Unsupported cliairplay platform: {system.lower()}/{architecture.lower()}"
--        raise RuntimeError(msg)
++    binary_name = "cliairplay"
++    binary_path = which(binary_name)
++    if binary_path is None:
++        msg = f"Unable to locate {binary_name}"
+         raise RuntimeError(msg)
 -    base_path = os.path.join(os.path.dirname(__file__), "bin")
 -    binary_path = os.path.join(base_path, binary_name)
-+    binary_path = which("cliairplay")
  
      try:
          returncode, output = await check_output(
-@@ -322,14 +316,14 @@ async def get_cli_binary() -> str:
-             return binary_path
-     except TimeoutError:
-         msg = (
--            f"{binary_name} did not respond to --check within "
-+            f"cliairplay did not respond to --check within "
-             f"{_CLI_BINARY_CHECK_TIMEOUT:.0f}s (first-run verification or a wedged binary)"
-         )
-         raise RuntimeError(msg) from None
+@@ -340,7 +338,7 @@
      except OSError:
          pass
  
 -    msg = f"Unable to locate {binary_name} for {system.lower()}/{architecture.lower()}"
-+    msg = "Unable to locate cliairplay"
++    msg = f"Unable to locate {binary_name}"
      raise RuntimeError(msg)
  
  
+diff --git a/tests/providers/airplay/test_helpers.py b/tests/providers/airplay/test_helpers.py
+index f0acb6227..8f5f5772e 100644
+--- a/tests/providers/airplay/test_helpers.py
++++ b/tests/providers/airplay/test_helpers.py
+@@ -151,6 +151,7 @@
+ async def test_get_cli_binary_raises_when_check_times_out(monkeypatch: pytest.MonkeyPatch) -> None:
+     """A binary that never answers --check surfaces as RuntimeError, not a hang."""
+     check_output = AsyncMock(side_effect=TimeoutError)
++    monkeypatch.setattr("music_assistant.providers.airplay.helpers.which", lambda _: "cliairplay")
+     monkeypatch.setattr(
+         "music_assistant.providers.airplay.helpers.platform.system", lambda: "Darwin"
+     )

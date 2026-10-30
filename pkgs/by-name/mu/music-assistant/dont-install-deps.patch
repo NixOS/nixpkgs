@@ -40,12 +40,12 @@ index fffd13139..3b66b1972 100644
  
  async def has_tmpfs_mount() -> bool:
 diff --git a/music_assistant/providers/ytmusic/__init__.py b/music_assistant/providers/ytmusic/__init__.py
-index ee5f9b9e6..21c5da433 100644
+index 6d6758b58..1b3710434 100644
 --- a/music_assistant/providers/ytmusic/__init__.py
 +++ b/music_assistant/providers/ytmusic/__init__.py
-@@ -67,9 +67,7 @@
- )
- from music_assistant.controllers.cache import use_cache
+@@ -72,9 +72,7 @@
+ from music_assistant.controllers.music.constants import CACHE_CATEGORY_SEARCH_RESULTS
+ from music_assistant.helpers.aiohttp_client import create_clientsession
  from music_assistant.helpers.util import (
 -    import_module_in_thread,
      infer_album_type,
@@ -53,7 +53,7 @@ index ee5f9b9e6..21c5da433 100644
      parse_title_and_version,
  )
  from music_assistant.models.music_provider import MusicProvider
-@@ -208,7 +206,6 @@ async def get_config_entries(self) -> tuple[ConfigEntry, ...]:
+@@ -228,7 +226,6 @@ async def get_config_entries(self) -> tuple[ConfigEntry, ...]:
      async def handle_async_init(self) -> None:
          """Set up the YTMusic provider."""
          logging.getLogger("yt_dlp").setLevel(self.logger.level + 10)
@@ -61,7 +61,7 @@ index ee5f9b9e6..21c5da433 100644
          self._cookie = str(self.get_setup_value(CONF_COOKIE))
          self._po_token_server_url = (
              self.get_setup_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL
-@@ -1405,19 +1402,6 @@ def _parse_thumbnails(self, thumbnails_obj: list[dict[str, Any]]) -> UniqueList[
+@@ -1540,19 +1537,6 @@ def _parse_thumbnails(self, thumbnails_obj: list[dict[str, Any]]) -> UniqueList[
              )
          return result
  
@@ -82,10 +82,10 @@ index ee5f9b9e6..21c5da433 100644
  def _favorite_from_like_status(item: dict[str, Any]) -> bool | None:
      """Translate the like status YouTube Music reports on an item to a favorite state."""
 diff --git a/tests/providers/ytmusic/test_ytmusic.py b/tests/providers/ytmusic/test_ytmusic.py
-index 1a0d64def..8a567ec2b 100644
+index 08dc7697e..078fcb445 100644
 --- a/tests/providers/ytmusic/test_ytmusic.py
 +++ b/tests/providers/ytmusic/test_ytmusic.py
-@@ -96,7 +96,6 @@ async def test_init_unreachable_po_token_server_is_a_retried_setup_failure(
+@@ -97,7 +97,6 @@ async def test_init_unreachable_po_token_server_is_a_retried_setup_failure(
          return_value=_ping_context_manager(exc=ClientError("connection refused"))
      )
      with (
@@ -93,11 +93,11 @@ index 1a0d64def..8a567ec2b 100644
          patch.object(provider, "get_setup_value", return_value=""),
          pytest.raises(SetupFailedError) as exc_info,
      ):
-@@ -153,7 +152,6 @@ def build_format_selector(self, spec: str) -> Any:
+@@ -155,7 +154,6 @@ def build_format_selector(self, spec: str) -> Any:
          CONF_PO_TOKEN_SERVER_URL: "",
      }
      with (
 -        patch.object(provider, "_install_packages", AsyncMock()),
          patch.object(provider, "_verify_po_token_url", AsyncMock(return_value=True)),
          patch.object(provider, "get_setup_value", side_effect=setup_values.get),
-         pytest.raises(LoginFailed) as exc_info,
+         patch.object(provider, "_rotate_cookies", AsyncMock()),

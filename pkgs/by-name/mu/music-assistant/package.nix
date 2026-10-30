@@ -21,10 +21,10 @@ let
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
       music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.223";
+        version = "1.1.227";
 
         src = oldAttrs.src.override {
-          hash = "sha256-mfIlsK4v9nKjl5zWJxndYAlq3XIZvV+M0ML1G10ys7o=";
+          hash = "sha256-nKKeU6w1Zb7Kc+gZIoYwcI15pEZMyaxRYEYP7s9VJak=";
         };
       });
     }
@@ -72,13 +72,9 @@ let
     provider: (providerPackages.${provider} pythonPackages)
   ) providers;
 in
-
-assert
-  (lib.elem "ariacast" providers) -> throw "music-assistant: ariacast has not been packaged, yet.";
-
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.11.0b5";
+  version = "2.11.0b7";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,7 +82,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-/PHqEJ9Wh2fckGAdgiTR1VUNSsK4VjYjyppKVAqy7To=";
+    hash = "sha256-YtZ1p1wXyORSkXiXguz5KnFZ/h2T5pv4IFgus303C/Y=";
   };
 
   patches = [
@@ -122,7 +118,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
     # As providers must be configured through the nixos module, there is no gain
     # if Music Assistant tries to enable some of them without the proper dependencies.
-    ./disable-default-provider.diff
+    ./disable-default-provider.patch
   ];
 
   postPatch = ''
@@ -152,9 +148,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "aiohttp"
     "aiosqlite"
+    "certifi"
     "cryptography"
-    "zeroconf"
+    "pillow"
   ];
 
   pythonRemoveDeps = [
@@ -253,12 +251,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "local_audio"
       "mpd"
       "msx_bridge"
+      "musiccast"
       "opensubsonic"
       "plex"
       "plex_connect"
       "profiler"
       "roku_media_assistant"
-      "sendspin"
       "sendspin"
       "smart_fades"
       "snapcast"

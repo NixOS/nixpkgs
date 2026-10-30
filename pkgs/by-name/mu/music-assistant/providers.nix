@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.11.0b5";
+  version = "2.11.0b7";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -63,6 +63,8 @@
       ps: with ps; [
         aioaudiobookshelf
       ];
+    audiomuse_ai = ps: [
+    ];
     bandcamp =
       ps: with ps; [
         bandcamp-async-api
@@ -264,8 +266,10 @@
     ];
     rain_mood = ps: [
     ];
-    raumfeld = ps: [
-    ]; # missing hassfeld
+    raumfeld =
+      ps: with ps; [
+        async-upnp-client
+      ]; # missing hassfeld
     recommendations = ps: [
     ];
     roku_media_assistant =
@@ -391,10 +395,8 @@
       ps: with ps; [
         segno
       ]; # missing ya-passport-auth
-    yandex_ynison =
-      ps: with ps; [
-        segno
-      ]; # missing ya-passport-auth
+    yandex_ynison = ps: [
+    ]; # missing ya-passport-auth
     yoto =
       ps: with ps; [
         yoto-api

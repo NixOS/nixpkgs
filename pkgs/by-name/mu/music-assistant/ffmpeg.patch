@@ -25,7 +25,7 @@ index ff8b90af9..3005d7854 100644
              "-loglevel",
              "error",
 diff --git a/music_assistant/helpers/audio.py b/music_assistant/helpers/audio.py
-index 630664b8a..4d4974085 100644
+index 7855989f8..15c3360e4 100644
 --- a/music_assistant/helpers/audio.py
 +++ b/music_assistant/helpers/audio.py
 @@ -167,7 +167,7 @@ async def strip_silence(
@@ -37,7 +37,7 @@ index 630664b8a..4d4974085 100644
      args += [
          "-acodec",
          pcm_format.content_type.name.lower(),
-@@ -520,7 +520,7 @@ async def get_silence(
+@@ -525,7 +525,7 @@ async def get_silence(
          return
      # use ffmpeg for all other encodings
      args = [
@@ -47,10 +47,10 @@ index 630664b8a..4d4974085 100644
          "-loglevel",
          "quiet",
 diff --git a/music_assistant/helpers/ffmpeg.py b/music_assistant/helpers/ffmpeg.py
-index b79061517..b39fbbca3 100644
+index e7c85738c..3287fee6e 100644
 --- a/music_assistant/helpers/ffmpeg.py
 +++ b/music_assistant/helpers/ffmpeg.py
-@@ -412,7 +412,7 @@ async def probe_audio_stream(
+@@ -427,7 +427,7 @@ async def probe_audio_stream(
      :returns: The detected stream details, or None if the source could not be probed.
      """
      args = [
@@ -59,7 +59,7 @@ index b79061517..b39fbbca3 100644
          "-hide_banner",
          "-loglevel",
          "error",
-@@ -606,7 +606,7 @@ def get_ffmpeg_args(
+@@ -628,7 +628,7 @@ def get_ffmpeg_args(
          extra_output_args = []
      # the binary plus the options that apply to the command as a whole
      global_args = [
@@ -68,7 +68,7 @@ index b79061517..b39fbbca3 100644
          "-hide_banner",
          "-loglevel",
          loglevel,
-@@ -807,7 +807,7 @@ async def check_ffmpeg_version() -> None:
+@@ -830,7 +830,7 @@ async def check_ffmpeg_version() -> None:
      """Check that ffmpeg is present and usable, and cache the capabilities it reports."""
      # check for FFmpeg presence
      try:
@@ -77,7 +77,7 @@ index b79061517..b39fbbca3 100644
      except FileNotFoundError:
          raise AudioError(
              "FFmpeg binary is missing from system. "
-@@ -835,7 +835,7 @@ async def check_ffmpeg_version() -> None:
+@@ -858,7 +858,7 @@ async def check_ffmpeg_version() -> None:
      # which builds from git report as e.g. "N-121037-g1234567". A probe that fails reads as
      # "not blocked", so the check stays in place. Drop this once every supported build
      # whitelists CMAF.
@@ -87,10 +87,10 @@ index b79061517..b39fbbca3 100644
          returncode == 0 and b"extension_picky" in hls_options and b"cmfa" not in hls_options
      )
 diff --git a/music_assistant/helpers/tags.py b/music_assistant/helpers/tags.py
-index c919db15f..d441458c1 100644
+index 83f352718..2a7d8f868 100644
 --- a/music_assistant/helpers/tags.py
 +++ b/music_assistant/helpers/tags.py
-@@ -786,7 +786,7 @@ def parse_tags(
+@@ -793,7 +793,7 @@ def parse_tags(
      source = input_file if fd is None else descriptor_path(fd)
      pass_fds = () if fd is None else (fd,)
      args = (
@@ -99,8 +99,8 @@ index c919db15f..d441458c1 100644
          "-hide_banner",
          "-loglevel",
          "error",
-@@ -864,7 +864,7 @@ def get_file_duration(input_file: str, pass_fds: tuple[int, ...] = ()) -> float:
-     :param pass_fds: Descriptors ffmpeg needs to open input_file.
+@@ -875,7 +875,7 @@ def get_file_duration(
+     :param verify_ssl: Whether the certificate of an https source must be verified.
      """
      args = (
 -        "ffmpeg",
@@ -108,7 +108,7 @@ index c919db15f..d441458c1 100644
          "-hide_banner",
          "-loglevel",
          "info",
-@@ -1753,7 +1753,7 @@ async def _get_embedded_image(
+@@ -1765,7 +1765,7 @@ async def _get_embedded_image(
  
      # Use FFmpeg for all other cases (URLs, ID3 tags, Vorbis comments, etc.)
      args = [
@@ -118,10 +118,10 @@ index c919db15f..d441458c1 100644
          "-loglevel",
          "error",
 diff --git a/music_assistant/providers/ai_radio/rendering.py b/music_assistant/providers/ai_radio/rendering.py
-index 54d088011..7c19e011e 100644
+index f7941c213..fdcb8babd 100644
 --- a/music_assistant/providers/ai_radio/rendering.py
 +++ b/music_assistant/providers/ai_radio/rendering.py
-@@ -460,7 +460,7 @@ async def _measure_loudness(self, path: str) -> float | None:
+@@ -579,7 +579,7 @@ async def _measure_loudness(self, path: str, verify_ssl: bool = True) -> float |
          """Return the integrated loudness of the given audio in LUFS, or None when it fails."""
          try:
              returncode, output = await check_output(
@@ -129,7 +129,7 @@ index 54d088011..7c19e011e 100644
 +                "@ffmpeg@",
                  "-hide_banner",
                  "-nostats",
-                 "-i",
+                 *tls_verify_args(path, verify_ssl),
 diff --git a/music_assistant/providers/ambient_sounds/__init__.py b/music_assistant/providers/ambient_sounds/__init__.py
 index 2332005d4..84d13d84f 100644
 --- a/music_assistant/providers/ambient_sounds/__init__.py
@@ -192,10 +192,10 @@ index 96e6fef4e..8009b13db 100644
              "error",
              "-show_streams",
 diff --git a/tests/helpers/test_ffmpeg.py b/tests/helpers/test_ffmpeg.py
-index ce7d5efa7..002f5496b 100644
+index 3bb97eb98..6fca32138 100644
 --- a/tests/helpers/test_ffmpeg.py
 +++ b/tests/helpers/test_ffmpeg.py
-@@ -208,7 +208,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
+@@ -237,7 +237,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
      # only the rear channels carry a tone: a downmix that drops them yields silence
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -204,7 +204,7 @@ index ce7d5efa7..002f5496b 100644
              "-y",
              "-f",
              "lavfi",
-@@ -244,7 +244,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
+@@ -273,7 +273,7 @@ def test_multichannel_pcm_folds_down_without_stretching(tmp_path: Path) -> None:
  
      duration = subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -213,7 +213,7 @@ index ce7d5efa7..002f5496b 100644
              "-v",
              "error",
              "-show_entries",
-@@ -615,7 +615,7 @@ def overlay_file(tmp_path: Path) -> Path:
+@@ -644,7 +644,7 @@ def overlay_file(tmp_path: Path) -> Path:
      """Generate a 1 second mono sine-tone wav file to use as overlay source."""
      overlay_path = tmp_path / "overlay.wav"
      subprocess.run(  # noqa: S603
@@ -222,7 +222,7 @@ index ce7d5efa7..002f5496b 100644
          check=True,
          capture_output=True,
      )
-@@ -628,7 +628,7 @@ def overlay_file_stereo(tmp_path: Path) -> Path:
+@@ -657,7 +657,7 @@ def overlay_file_stereo(tmp_path: Path) -> Path:
      overlay_path = tmp_path / "overlay_stereo.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -231,7 +231,7 @@ index ce7d5efa7..002f5496b 100644
              "-f",
              "lavfi",
              "-i",
-@@ -649,7 +649,7 @@ def overlay_file_wide_stereo(tmp_path: Path) -> Path:
+@@ -678,7 +678,7 @@ def overlay_file_wide_stereo(tmp_path: Path) -> Path:
      overlay_path = tmp_path / "overlay_wide.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -240,7 +240,7 @@ index ce7d5efa7..002f5496b 100644
              "-f",
              "lavfi",
              "-i",
-@@ -670,7 +670,7 @@ def overlay_file_with_silent_intro(tmp_path: Path) -> Path:
+@@ -699,7 +699,7 @@ def overlay_file_with_silent_intro(tmp_path: Path) -> Path:
      overlay_path = tmp_path / "overlay_silent_intro.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -249,7 +249,7 @@ index ce7d5efa7..002f5496b 100644
              "-f",
              "lavfi",
              "-i",
-@@ -1377,7 +1377,7 @@ def _rms_db(path: Path) -> float:
+@@ -1416,7 +1416,7 @@ def _rms_db(path: Path) -> float:
      """Return the overall RMS level of an audio file in dB via ffmpeg astats."""
      output = subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -258,7 +258,7 @@ index ce7d5efa7..002f5496b 100644
              "-hide_banner",
              "-nostats",
              "-i",
-@@ -1405,7 +1405,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
+@@ -1444,7 +1444,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
      out = tmp_path / "out.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -267,7 +267,7 @@ index ce7d5efa7..002f5496b 100644
              "-y",
              "-f",
              "lavfi",
-@@ -1421,7 +1421,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
+@@ -1460,7 +1460,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
      # a single-sample impulse is the identity IR: convolving with it returns the input
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -276,7 +276,7 @@ index ce7d5efa7..002f5496b 100644
              "-y",
              "-f",
              "lavfi",
-@@ -1437,7 +1437,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
+@@ -1476,7 +1476,7 @@ def test_filtergraph_complex_runs_in_ffmpeg(tmp_path: Path) -> None:
      )
      result = subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -285,7 +285,7 @@ index ce7d5efa7..002f5496b 100644
              "-hide_banner",
              "-loglevel",
              "error",
-@@ -1464,7 +1464,7 @@ def test_mono_source_keeps_its_level_when_widened_to_stereo(tmp_path: Path) -> N
+@@ -1503,7 +1503,7 @@ def test_mono_source_keeps_its_level_when_widened_to_stereo(tmp_path: Path) -> N
      out = tmp_path / "stereo.wav"
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -294,7 +294,7 @@ index ce7d5efa7..002f5496b 100644
              "-y",
              "-f",
              "lavfi",
-@@ -1703,7 +1703,7 @@ async def test_probe_audio_stream_opens_the_input_like_the_decoder(
+@@ -1742,7 +1742,7 @@ async def test_probe_audio_stream_opens_the_input_like_the_decoder(
      assert info == FFMpegStreamInfo(
          codec=ContentType.FLAC, sample_rate=96000, bit_depth=24, channels=2
      )
@@ -303,7 +303,7 @@ index ce7d5efa7..002f5496b 100644
      read_args_start = proc.args.index(_INPUT_READ_ARGS[0])
      assert proc.args[read_args_start : read_args_start + len(_INPUT_READ_ARGS)] == _INPUT_READ_ARGS
      assert proc.args.index("-user_agent") < proc.args.index("-i")
-@@ -1754,7 +1754,7 @@ def tagged_wav(tmp_path: Path) -> Path:
+@@ -1806,7 +1806,7 @@ def tagged_wav(tmp_path: Path) -> Path:
      # a title tag shifts the data chunk off a whole 24-bit stereo frame
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -326,7 +326,7 @@ index 09a0433e5..3d9f7db62 100644
              "-hide_banner",
              "-loglevel",
 diff --git a/tests/helpers/test_tags.py b/tests/helpers/test_tags.py
-index a293a1645..b65bff202 100644
+index a5321c6a2..1e7700e13 100644
 --- a/tests/helpers/test_tags.py
 +++ b/tests/helpers/test_tags.py
 @@ -61,7 +61,7 @@ def test_parse_tags_reports_actionable_ffprobe_error(
@@ -338,7 +338,7 @@ index a293a1645..b65bff202 100644
          output=b'{"error":{"code":-1,"string":"Unknown error occurred"}}',
          stderr=stderr,
      )
-@@ -1401,7 +1401,7 @@ async def test_get_embedded_image_refuses_non_file_input(input_file: str) -> Non
+@@ -1415,7 +1415,7 @@ async def test_get_embedded_image_refuses_non_file_input(input_file: str) -> Non
      mock_process.assert_not_called()
  
  
@@ -347,7 +347,7 @@ index a293a1645..b65bff202 100644
  @pytest.mark.parametrize("over_http", [False, True], ids=["local", "http"])
  async def test_get_embedded_image_extracts_cover_with_protocol_whitelist(
      tmp_path: pathlib.Path, over_http: bool
-@@ -1433,7 +1433,7 @@ def _create_mp3_with_cover(tmp_path: pathlib.Path, track_path: str) -> None:
+@@ -1447,7 +1447,7 @@ def _create_mp3_with_cover(tmp_path: pathlib.Path, track_path: str) -> None:
      Image.new("RGB", (32, 32), (255, 0, 0)).save(cover_path, "PNG")
      subprocess.run(  # noqa: S603
          [  # noqa: S607
@@ -357,7 +357,7 @@ index a293a1645..b65bff202 100644
              "-hide_banner",
              "-loglevel",
 diff --git a/tests/providers/filesystem_local/test_checked_playback.py b/tests/providers/filesystem_local/test_checked_playback.py
-index 8dc2151eb..7246e8f5b 100644
+index a8ad79fb5..78d39ff35 100644
 --- a/tests/providers/filesystem_local/test_checked_playback.py
 +++ b/tests/providers/filesystem_local/test_checked_playback.py
 @@ -34,7 +34,7 @@
