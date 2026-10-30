@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "patchedDependencies:" "patchedDependencies:"
   '';
 
-
   outputs = [
     "out"
     "client"
@@ -106,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/docmost/docmost";
     changelog = "https://github.com/docmost/docmost/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ agpl3Only ];
-    maintainers = with lib.maintainers; [ pluiedev tgarea ];
+    maintainers = with lib.maintainers; [
+      pluiedev
+      tgarea
+    ];
     inherit (nodejs_26.meta) platforms;
     mainProgram = "docmost";
   };
