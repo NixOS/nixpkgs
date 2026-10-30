@@ -4,13 +4,26 @@
   # This should only be used for special arguments that need to be evaluated when resolving module structure (like in imports).
   # For everything else, there's _module.args.
   specialArgs ? { },
+  nixosVersionSuffix ? null,
 }:
 
 let
 
   eval = import ./lib/eval-config.nix {
     inherit system specialArgs;
-    modules = [ configuration ];
+    modules = [
+      configuration
+    ]
+    ++ (
+      if nixosVersionSuffix == null then
+        [ ]
+      else
+        [
+          ({ lib, ... }: {
+            system.nixos.versionSuffix = lib.mkDefault nixosVersionSuffix;
+          })
+        ]
+    );
   };
 
 in
