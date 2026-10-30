@@ -34,6 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/Quake";
 
+  postPatch = ''
+    substituteInPlace sys_sdl_unix.c \
+      --replace-fail "host_parms->exedir = Sys_GetExeDir ();" \
+                     "host_parms->exedir = \"$out/share/ironwail\";"
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
