@@ -7,7 +7,7 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jellyfin-mpv-shim";
   version = "3.3.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   # contains shaderpacks
   src = fetchPypi {
     pname = "jellyfin_mpv_shim";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-GAdTaLM+Lb0RKcAzdlU3c9aEttv9533M7dyvQAbKezk=";
   };
 
@@ -32,33 +32,25 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     jellyfin-apiclient-python
     python3Packages.mpv
+    pillow
+    pygobject3
     python-mpv-jsonipc
     requests
 
-    # gui dependencies
-    pillow
+    # systray dependency
     pystray
 
     # discord rich presence dependency
     pypresence
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-
-    # remove jellyfin_mpv_shim/win_utils.py:
-    #   ModuleNotFoundError: No module named 'win32gui'
-    rm jellyfin_mpv_shim/win_utils.py
-  '';
-
   postPatch = ''
     substituteInPlace jellyfin_mpv_shim/conf.py \
       --replace-fail "check_updates: bool = True" "check_updates: bool = False" \
       --replace-fail 'notify_updates: str = "default"' 'notify_updates: str = "disabled"'
-    # python-mpv renamed to mpv with 1.0.4
+    # python-mpv renamed to mpv with 1.0.3
     substituteInPlace pyproject.toml \
-      --replace-fail "python-mpv" "mpv" \
-      --replace-fail "mpv-jsonipc" "python_mpv_jsonipc"
+      --replace-fail '"python-mpv>=' '"mpv>='
   '';
 
   postInstall = ''
@@ -95,7 +87,7 @@ python3Packages.buildPythonApplication rec {
       to prevent needless transcoding of your media files on the server. The player also has
       advanced features, such as bulk subtitle updates and launching commands on events.
     '';
-    changelog = "https://github.com/jellyfin/jellyfin-mpv-shim/releases/tag/v${version}";
+    changelog = "https://github.com/jellyfin/jellyfin-mpv-shim/releases/tag/v${finalAttrs.version}";
     license =
       with lib.licenses;
       AND [
@@ -115,4 +107,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "jellyfin-mpv-shim";
     platforms = lib.platforms.linux;
   };
-}
+})
