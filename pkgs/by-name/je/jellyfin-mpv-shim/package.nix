@@ -116,7 +116,10 @@ python3Packages.buildPythonApplication rec {
       # Static Grain
       unlicense
     ];
-    maintainers = with lib.maintainers; [ jojosch ];
+    maintainers = with lib.maintainers; [
+      connor-grady
+      jojosch
+    ];
     mainProgram = "jellyfin-mpv-shim";
     platforms = lib.platforms.linux;
   };

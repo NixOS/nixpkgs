@@ -28,6 +28,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/iwalton3/python-mpv-jsonipc";
     description = "Python API to MPV using JSON IPC";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ connor-grady ];
   };
 })
