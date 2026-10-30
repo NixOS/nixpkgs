@@ -14,7 +14,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kotonoha";
-  version = "0.2.3";
+  version = "0.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "locez";
     repo = "kotonoha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-17NDzRpLFV1P31Uk0DouhV5i9HdMoCQhsH4vD3MZJYc=";
+    hash = "sha256-4S1ervaJ1RJPN+on4RqEYAffkVVQng/cxCRWc+QRuDo=";
   };
 
   build-system = [ python3Packages.scikit-build-core ];

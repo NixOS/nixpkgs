@@ -137,7 +137,6 @@
   ./hardware/xpadneo.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx5.nix
-  ./i18n/input-method/hime.nix
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/kime.nix
   ./i18n/input-method/nabi.nix
@@ -369,6 +368,7 @@
   ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
+  ./programs/wayland/ironbar.nix
   ./programs/wayland/kanshi.nix
   ./programs/wayland/labwc.nix
   ./programs/wayland/mango.nix
@@ -714,6 +714,7 @@
   ./services/hardware/hddfancontrol.nix
   ./services/hardware/illum.nix
   ./services/hardware/inputplumber.nix
+  ./services/hardware/intel-lpmd.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/iptsd.nix
   ./services/hardware/irqbalance.nix

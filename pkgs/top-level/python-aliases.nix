@@ -290,6 +290,7 @@ mapAliases {
   flufl_i18n = throw "'flufl_i18n' has been renamed to/replaced by 'flufl-i18n'"; # Converted to throw 2025-10-29
   flufl_lock = throw "'flufl_lock' has been renamed to/replaced by 'flufl-lock'"; # Converted to throw 2025-10-29
   FormEncode = throw "'FormEncode' has been renamed to/replaced by 'formencode'"; # Converted to throw 2025-10-29
+  freud = freud-analysis; # Added 2026-10-26
   fuse = throw "'fuse-python' was removed, because it is stuck on the old, unmaintained fuse 2.x"; # Added 2026-05-30
   fvs = throw "'fvs' has been removed due to being unused"; # Added 2026-05-23
   garminconnect-ha = throw "'garminconnect-ha' has been renamed to/replaced by 'garminconnect'"; # Converted to throw 2025-10-29
@@ -497,6 +498,7 @@ mapAliases {
   paramz = throw "'paramz' has been removed as it is incompatible with Numpy 2"; # added 2025-11-10
   paranoid-crypto = throw "'paranoid-crypto' has been removed because Google archived the unmaintained project."; # Added 2026-09-02
   parselmouth = praat-parselmouth; # added 2026-07-26
+  parsnip = parsnip-cif; # Added 2026-10-26
   password-entropy = warnAlias "'password-entropy' has been renamed to 'data-password-entropy'" data-password-entropy; # Added 2026-07-26
   PasteDeploy = throw "'PasteDeploy' has been renamed to/replaced by 'pastedeploy'"; # Converted to throw 2025-10-29
   patator = throw "'patator' has been removed as it was dependant on removed packages and broken"; # Added 2025-12-30
@@ -767,6 +769,7 @@ mapAliases {
   synologydsm-api = throw "'synologydsm-api' has been renamed to/replaced by 'py-synologydsm-api'"; # Converted to throw 2025-10-29
   syrupy_6 = syrupy; # added 2026-10-16
   systembridge = throw "systembridge has been removed because it is unmaintained upstream"; # Added 2025-11-23
+  systembridgemodels = throw "'systembridgemodels' has been removed because 'systembridgeconnector' no longer depends on it"; # added 2026-10-27
   systemd = throw "systemd was removed because it was misnamed; use systemd-python instead"; # added 2025-11-09
   sysv_ipc = throw "'sysv_ipc' has been renamed to/replaced by 'sysv-ipc'"; # Converted to throw 2025-10-29
   tago = throw "'tago' has been removed because it was deprecated for tagoio-sdk"; # Added 2026-08-06

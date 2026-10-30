@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gilt-rs";
-  version = "0.3.7";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "simonhollingshead";
     repo = "gilt-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kGmHf+knEurVTz7K7MtDkDFWIDs8nIp4CrsBHwnjg6s=";
+    hash = "sha256-ulDP/av+WrAiJWs+DJWz3dEtSVeZBAEsJZ4Up0DbYmE=";
   };
 
-  cargoHash = "sha256-4YlfR2ft5D910IKSDx/3PxrwFLln2dqscdVg+OhnSYk=";
+  cargoHash = "sha256-jV4yeYnZW0qnw82PBChwarGxCpk7JzeH4ovPHFdBV7k=";
 
   __structuredAttrs = true;
 

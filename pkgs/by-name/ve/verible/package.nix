@@ -92,6 +92,10 @@ buildBazelPackage {
       verible/verilog/tools
   '';
 
+  preBuild = ''
+    patchShebangs $bazelOut/external/rules_cc*/cc/private/toolchain/generate_system_module_map.sh
+  '';
+
   removeRulesCC = false;
   bazelTargets = [ ":install-binaries" ];
   bazelBuildFlags = [ "-c opt" ];

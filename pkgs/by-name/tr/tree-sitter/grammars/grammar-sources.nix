@@ -1865,10 +1865,10 @@
   };
 
   matlab = {
-    version = "1.3.0-unstable-2026-03-04";
+    version = "1.3.1-unstable-2026-08-26";
     url = "github:acristoffers/tree-sitter-matlab";
-    rev = "c2390a59016f74e7d5f75ef09510768b4f30217e";
-    hash = "sha256-WgyWvItbysSqeD/LdBr233NYlKF1HaxIDtHIr6BQOjw=";
+    rev = "f03d0347acd8bb05d4edd8c845ac1718729e1fad";
+    hash = "sha256-WfBh8/wWfpUFjH/VdGuVqWDGrvmvmFRW7lTbMCjWJ6U=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

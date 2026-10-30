@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       getchoo
+      magicquark
       RossSmyth
     ];
     mainProgram = "hunspell";

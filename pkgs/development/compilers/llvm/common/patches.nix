@@ -126,6 +126,11 @@
   ];
   "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
     {
+      after = "24";
+      path = ../24;
+    }
+    {
+      before = "24";
       path = ../18;
     }
   ];

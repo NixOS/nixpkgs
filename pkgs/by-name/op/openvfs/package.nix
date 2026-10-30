@@ -2,6 +2,7 @@
   lib,
   stdenv,
   cmake,
+  ctestCheckHook,
   fetchFromGitHub,
   fuse3,
   kdePackages,
@@ -10,9 +11,9 @@
   qt6,
 }:
 #
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvfs";
-  version = "0.1.0-unstable-2026-09-09";
+  version = "0-unstable-2026-10-21";
 
   outputs = [
     "out"
@@ -23,8 +24,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "openvfs";
-    rev = "56fc0514d09875f0ab8c754d8242318ab47e584f";
-    hash = "sha256-NeIuatnvTCHakZU1JhwuX4euXevXNglmEdrH0QaYqYg=";
+    rev = "c20c0fe4925607cb835a2d98f29632e954c558dd";
+    hash = "sha256-e2r+L1jUV/iSVuVbf9bvgSCiyxbuUvNej+ynZre8+dM=";
   };
 
   __structuredAttrs = true;
@@ -33,6 +34,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [ ctestCheckHook ];
 
   buildInputs = [
     fuse3
@@ -60,4 +68,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.linux;
   };
-}
+})

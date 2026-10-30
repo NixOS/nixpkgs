@@ -72,7 +72,10 @@ let
           lgpl3
           mpl11
         ];
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [
@@ -168,7 +171,10 @@ let
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
         homepage = "https://www.dicollecte.org/home.php?prj=fr";
         license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
@@ -202,7 +208,10 @@ let
         description = "Hunspell dictionary for ${shortDescription} from Wordlist";
         homepage = "http://wordlist.aspell.net/";
         license = lib.licenses.bsd3;
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
@@ -233,7 +242,10 @@ let
         description = "Hunspell dictionary for ${shortDescription}";
         homepage = "https://sourceforge.net/projects/linguistico/";
         license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
@@ -797,12 +809,12 @@ rec {
   uk_UA = uk-ua;
   uk-ua = mkDict rec {
     pname = "hunspell-dict-uk-ua";
-    version = "6.5.3";
-    _version = "1727974630";
+    version = "6.8.6";
+    _version = "1789839899";
 
     src = fetchurl {
       url = "https://extensions.libreoffice.org/assets/downloads/521/${_version}/dict-uk_UA-${version}.oxt";
-      hash = "sha256-c957WHJqaf/M2QrE2H3aIDAWGoQDnDl0na7sd+kUXNI=";
+      hash = "sha256-V6ACnfsQy4HfRuDe1XpuHfCywOvJBGjkH0vMW5/OEFM=";
     };
 
     dictFileName = "uk_UA";

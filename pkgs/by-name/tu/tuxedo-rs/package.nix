@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       mserajnik
-      xaverdh
     ];
     platforms = lib.platforms.linux;
     mainProgram = "tailor";

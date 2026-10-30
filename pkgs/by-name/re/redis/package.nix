@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
-  apple-sdk,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -26,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.10.2";
+  version = "8.10.3";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-lje8tQPxIgOt8xOlSySmD2ZNcLOvIGIQMbdmQiFrj1k=";
+    hash = "sha256-ftzedXSe3QwEe3ZWaLJTpeO1PY2OP++7SuurJjY4OyM=";
   };
 
   patches = [
@@ -46,14 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://gitlab.archlinux.org/archlinux/packaging/packages/redis/-/raw/102cc861713c796756abd541bf341a4512eb06e6/redis-5.0-use-system-jemalloc.patch";
     hash = "sha256-A9qp+PWQRuNy/xmv9KLM7/XAyL7Tzkyn0scpVCGngcc=";
   });
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # The path `/Library/...` isn't available in the build sandbox. The package `apple-sdk`
-    # can provide that functionality for us.
-    substituteInPlace src/modules/Makefile modules/vector-sets/Makefile tests/modules/Makefile \
-      --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib' \
-        '${apple-sdk.sdkroot}/usr/lib'
-  '';
 
   nativeBuildInputs = [
     pkg-config

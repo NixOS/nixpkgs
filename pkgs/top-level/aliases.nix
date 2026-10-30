@@ -1227,6 +1227,7 @@ mapAliases {
   hiddify-app = throw "hiddify-app has been removed, since it is unmaintained"; # Added 2025-08-20
   hifiscan = throw "'hifiscan' has been removed due to being archived upstream."; # Added 2026-08-22
   highlight-assertions = throw "'highlight-assertions' has been removed due to lack of upstream maintenance."; # Added 2026-10-15
+  hime = throw "hime has been removed because no active release after November 2020, please use `fcitx5` instead."; # Added 2026-10-28
   himitsu-firefox = throw "himitsu-firefox has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   hiPrio = warnAlias "'hiPrio' has been removed from pkgs, use `lib.hiPrio` instead" lib.hiPrio; # Added 2025-10-30
   hiraeth = throw "hiraeth has been removed due to being unmaintained upstream";
@@ -1249,7 +1250,9 @@ mapAliases {
   hydra_unstable = throw "'hydra_unstable' has been renamed to/replaced by 'hydra'"; # Converted to throw 2025-10-27
   hydraAntLogger = warnAlias "'hydraAntLogger' has been renamed to 'hydra-ant-logger'" hydra-ant-logger; # Added 2026-02-08
   hyena = throw "'hyena' has been removed, as it is archived upstream and relies on gtk2"; # Added 2026-07-28
+  hyperscan = throw "'hyperscan' has been removed, as upstream moved to closed source and was broken after pcre removal. Consider using 'vectorscan' instead."; # Added 2026-10-28
   hyprfreeze = warnAlias "'hyprfreeze' has been renamed to 'wl-freeze'" wl-freeze; # Added 2026-04-10
+  hyprland-qtutils = throw "'hyprland-qtutils' has been removed, as it is archived upstream. Its successor 'hyprland-guiutils' is already on Hyprland's PATH"; # Added 2026-10-28
   hyprmagnifier = throw "'hyprmagnifier' has been removed as it was unmaintained, consider using 'hyprmag' instead"; # Added 2026-07-22
   hyprpanel = throw "'hyprpanel' has been archived, consider using 'wayle' instead"; # Added 2026-07-21
   i3-gaps = throw "'i3-gaps' has been renamed to/replaced by 'i3'"; # Converted to throw 2025-10-27
@@ -1356,6 +1359,7 @@ mapAliases {
   kgx = throw "'kgx' has been renamed to/replaced by 'gnome-console'"; # Converted to throw 2025-10-27
   khd = throw "'khd' has been removed as it has been pulled upstream"; # Added 2025-12-18
   khoj = throw "khoj has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
+  ki = warnAlias "'ki' has been renamed to/replaced by its maintained fork 'ki-ng'" ki-ng; # Added 2026-10-25
   kilocode-cli = warnAlias "'kilocode-cli' has been renamed to/replaced by 'kilo'" kilo; # Added 2026-04-30
   kind2 = throw "'kind2' has been removed since it is no longer maintained upstream. Consider using 'bend' instead"; # Added 2026-10-22
   kio-fuse = throw "'kio-fuse' has been removed, as Plasma 5 has reached end of life. Use 'kdePackages.kio-fuse' for Plasma 6."; # Added 2026-05-01
@@ -1702,6 +1706,7 @@ mapAliases {
   lounge-gtk-theme = throw "'lounge-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   lowPrio = warnAlias "'lowPrio' has been removed from pkgs, use `lib.lowPrio` instead" lib.lowPrio; # Added 2025-10-30
   LPCNet = throw "'LPCNet' has been renamed to/replaced by 'lpcnet'"; # Converted to throw 2025-10-27
+  ltex-ls = throw "'ltex-ls' has been removed because it was archived upstream on 2026-04-12. Consider using 'ltex-ls-plus' instead"; # Added 2026-10-28
   lttv = throw "'lttv' has been removed, as it is broken and unmaintained. Upstream suggests using 'tracecompass' or 'babeltrace2' instead"; # Added 2026-05-04
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
   lukesmithx-st = throw "'lukesmithxyz-st' has been removed, as it is unmaintained"; # Added 2026-08-31
@@ -2592,6 +2597,7 @@ mapAliases {
   superTux = warnAlias "'superTux' has been renamed to 'supertux'" supertux; # Added 2026-02-12
   superTuxKart = warnAlias "'superTuxKart' has been renamed to 'supertuxkart'" supertuxkart; # Added 2026-02-12
   surge-XT = warnAlias "'surge-XT' has been renamed to 'surge-xt'" surge-xt; # Added 2026-02-12
+  svg2pdf = throw "'svg2pdf' has been removed as it was unmaintained upstream. Consider using python3Packages.svglib instead."; # Added 2026-10-29
   svnfs = throw "'svnfs' has been removed as it was unmaintained upstream"; # Added 2026-06-01
   svox = warnAlias "'svox' has been renamed to/replaced by 'picotts'" picotts; # Added 2026-03-04
   svt-av1-psy = warnAlias "'svt-av1-psy' has been replaced by 'svt-av1-psyex'" svt-av1-psyex; # Added 2026-01-10
@@ -3277,6 +3283,7 @@ mapAliases {
   youtube-music = lib.warnOnInstantiate "'youtube-music' has been renamed to 'pear-desktop'" pear-desktop; # Added 2025-12-23
   yubikey-manager-qt = throw "'yubikey-manager-qt' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
   yubikey-personalization-gui = throw "'yubikey-personalization-gui' has been removed due to being archived upstream. Consider using 'yubioath-flutter' instead."; # Added 2025-06-07
+  z3-tptp = throw "z3-tptp has been removed because Z3 now has built-in TPTP support; use 'z3 -tptp' instead."; # Added 2026-10-29
   zabbix72 = throw "'zabbix72' was removed as it has reached its end of life"; # Added 2026-02-11
   zabbix-agent2-plugin-postgresql = throw "'zabbix-agent2-plugin-postgresql' is moved to 'zabbix74.plugins.postgresql'"; # Added 2026-09-27
   zandronum-alpha = throw "'zandronum-alpha' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19

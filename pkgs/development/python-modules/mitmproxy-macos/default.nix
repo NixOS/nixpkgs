@@ -17,7 +17,7 @@ buildPythonPackage rec {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-YzSdm0ZRTKZ5VHZR98BUj5IiiS7fvLoIe4KzJE+66Fk=";
+    hash = "sha256-7VaT+JsMvR0qjFoxuu0r16dLCq1oZy4IREwYaMOPSfg=";
   };
 
   # repo has no python tests

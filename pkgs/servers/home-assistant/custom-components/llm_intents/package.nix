@@ -2,7 +2,6 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  sympy,
   wikipedia-api,
   pytest-asyncio,
   pytest-cov-stub,
@@ -24,7 +23,6 @@ buildHomeAssistantComponent (finalAttrs: {
   };
 
   dependencies = [
-    sympy
     wikipedia-api
   ];
 

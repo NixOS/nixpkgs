@@ -100,7 +100,6 @@ buildPythonPackage {
     ];
     maintainers = with lib.maintainers; [
       connornelson
-      feyorsh
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };

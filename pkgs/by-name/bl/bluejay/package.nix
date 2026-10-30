@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   cmake,
   ninja,
   kdePackages,
@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "bluejay";
   version = "1.0.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "EbonJaeger";
     repo = "bluejay";
     tag = "v${finalAttrs.version}";
@@ -44,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "bluejay";
     description = "Bluetooth manager written in Qt";
-    homepage = "https://github.com/EbonJaeger/bluejay";
-    changelog = "https://github.com/EbonJaeger/bluejay/releases/tag/v${finalAttrs.version}";
+    homepage = "https://codeberg.org/EbonJaeger/bluejay";
+    changelog = "https://codeberg.org/EbonJaeger/bluejay/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
     maintainers = [ ];

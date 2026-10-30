@@ -5,7 +5,6 @@
   cmake,
   ctestCheckHook,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   stdenv,
 
@@ -57,8 +56,8 @@
 let
   # Upstream reads these from git, which the release tarball does not ship.
   # They are purely informational: `llama-server --version`, `/props`, and the web UI.
-  buildNumber = "11669";
-  buildCommit = "620d222";
+  buildNumber = "11960";
+  buildCommit = "8642541";
 
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
@@ -103,7 +102,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "0.7.0";
+  version = "0.8.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -117,11 +116,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pEDYgI3AMTU+cekvRX7NNt5wddznydQSNuerswvEpsA=";
+    hash = "sha256-WQAtD8Hos6fEtgPQId7nZiLGyP4asAMKJYEXZid1nqc=";
   };
-
-  patches = [
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -165,10 +161,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   npmRoot = "tools/ui";
-  npmDepsHash = "sha256-hqYzdp1FwPhYkBP278fQXgY9NCKB6Q3P6Gko7BfP0m0=";
+  npmDepsHash = "sha256-XLtEZsSFdk+2SyfXzBp8HQ2e27PQPpDCn1YjePU1/9w=";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src patches;
+    inherit (finalAttrs) src;
+    patches = finalAttrs.patches or [ ];
     preBuild = ''
       pushd ${finalAttrs.npmRoot}
     '';

@@ -29,14 +29,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "turbohtml";
-  version = "1.15.2";
+  version = "1.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "turbohtml";
     tag = finalAttrs.version;
-    hash = "sha256-SpmoeBmvIPt4FUCXSelv+0tmJt+RfmQuh3PQfU9ux9E=";
+    hash = "sha256-A8fo1gLxVFkbejn6zP5w8+2JG3+9zkHC0gk8Lp3/FdE=";
   };
 
   postPatch = ''
@@ -46,6 +46,7 @@ buildPythonPackage (finalAttrs: {
     patchShebangs tools
 
     substituteInPlace pyproject.toml \
+      --replace-fail "\"patchelf>=0.11; sys_platform=='linux'\"," "" \
       --replace-fail 'meson-python>=0.22.1' meson-python
   '';
 

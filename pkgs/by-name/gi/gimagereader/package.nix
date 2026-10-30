@@ -9,7 +9,7 @@
   podofo,
   libjpeg,
   djvulibre,
-  libxmlxx3,
+  libxmlxx5,
   libzip,
   tesseract,
   intltool,
@@ -19,6 +19,7 @@
   python3,
   doxygen,
   enchant,
+  writableTmpDirAsHomeHook,
 
   # Gtk deps
   # upstream gImagereader supports Qt too
@@ -40,13 +41,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimagereader";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "manisandro";
     repo = "gImageReader";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sNAQfTJYL5um65UmCyzIH/0qkF3lF7CnrVQ+dLfYf2Q=";
+    sha256 = "sha256-wSw7Y+JVFmDfqqUYO+gR76958Ij5BpKJxToVhCbJkME=";
   };
 
   nativeBuildInputs = [
@@ -58,11 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     enchant
     gobject-introspection
     wrapGAppsHook3
+    writableTmpDirAsHomeHook
   ]
   ++ lib.optionals withQt6 [ qt6Packages.wrapQtAppsHook ];
 
   buildInputs = [
-    libxmlxx3
+    libxmlxx5
     libzip
     libuuid
     sane-backends

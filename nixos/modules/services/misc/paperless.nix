@@ -294,23 +294,45 @@ in
         :::
       '';
     };
+    tesseractLanguages = lib.mkOption {
+      type = with lib.types; nullOr (listOf str);
+      default =
+        if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
+          lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+        else
+          null;
+      defaultText = lib.literalExpression ''
+        lib.splitString "+" config.services.paperless.settings.PAPERLESS_OCR_LANGUAGE
+        # or null if setting is unset
+      '';
+      example = [
+        "deu"
+        "eng"
+      ];
+      description = ''
+        Languages to build into Tesseract. `null` includes all languages and may use
+        binary-cached packages. Setting a smaller-than-default list reduces closure
+        size, but means tesseract, ocrmypdf and paperless-ngx cannot be fetched from
+        the cache and have to be built.
+
+        `eng`, `equ` and `osd` are always included.
+      '';
+    };
 
     package = lib.mkPackageOption pkgs "paperless-ngx" { } // {
       apply =
         pkg:
         pkg.override {
           tesseract5 = pkg.tesseract5.override {
-            # always enable detection modules
-            # tesseract fails to build when eng is not present
             enableLanguages =
-              if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
-                lib.lists.unique (
+              if cfg.tesseractLanguages != null then
+                lib.unique (
                   [
                     "equ"
                     "osd"
                     "eng"
                   ]
-                  ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
+                  ++ cfg.tesseractLanguages
                 )
               else
                 null;

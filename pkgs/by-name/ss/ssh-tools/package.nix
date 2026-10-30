@@ -25,6 +25,9 @@ buildGoModule (finalAttrs: {
     "cmd/go/ssh-sig"
   ];
 
+  # No Go test exist
+  doCheck = false;
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [

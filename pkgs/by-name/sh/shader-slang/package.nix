@@ -31,12 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    # Header location has moved in glslang 15+
-    substituteInPlace source/slang-glslang/slang-glslang.cpp \
-      --replace-fail '"SPIRV/GlslangToSpv.h"' '"glslang/SPIRV/GlslangToSpv.h"'
-  '';
-
   outputs = [
     "out"
     "dev"

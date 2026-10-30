@@ -13,7 +13,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.16.2";
+  version = "2.17.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y6cIKzq7zl+k2m/3FFkM5C9l19vzXglBmPvYOx2nXZM=";
+    hash = "sha256-NfjYY+wdFuPjq9I9c6735ENRWPqRSa+UtAKMvfr0OYk=";
   };
 
   postPatch =

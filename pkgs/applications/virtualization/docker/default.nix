@@ -171,6 +171,8 @@ let
           pname = "moby";
           inherit version;
 
+          __structuredAttrs = true;
+
           src = moby-src;
 
           vendorHash = null;
@@ -273,6 +275,8 @@ let
       {
         pname = "docker";
         inherit version;
+
+        __structuredAttrs = true;
 
         src = fetchFromGitHub {
           owner = "docker";
@@ -426,14 +430,14 @@ in
 
   docker_29 =
     let
-      version = "29.9.1";
+      version = "29.9.2";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-VPFDP86mR2hvGVyVN2jfcG1yQK1B9Rzagjbjp/eSZn8=";
+      cliHash = "sha256-4zkbutgBREYn90r5cxc/dH7VAKCway3VLtENXbRjvCw=";
       mobyRev = "docker-v${version}";
-      mobyHash = "sha256-HG4lS0ltOLQJJGbei2soA08sj+fG0zgZI8YBVocMb5s=";
+      mobyHash = "sha256-GZClQfJCONvkUUjX0rrTNWeSPgA8cmpDlAj5vDUtzL0=";
       runcRev = "v1.5.2";
       runcHash = "sha256-DOEnEK/1KlMCzJHW5bWCVChfBUzWOgbgPJn7GMatwAc=";
       containerdRev = "v2.4.2";

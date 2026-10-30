@@ -44,9 +44,11 @@ buildGoModule (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then (macfuse-stubs.override { isFuse3 = false; }) else fuse3
   );
 
-  tags =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse3" ]
-    ++ lib.optionals enableCmount [ "cmount" ];
+  tags = [
+    "noselfupdate"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse3" ]
+  ++ lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [
     "-s"

@@ -310,15 +310,19 @@ in
 
     services = {
       gradient = {
-        environmentVariables = lib.mapAttrs (_: lib.mkDefault) {
-          GRADIENT_LISTEN_ADDR = "127.0.0.1";
-          GRADIENT_PORT = 3000;
-          GRADIENT_USE_TLS = true;
-          GRADIENT_BASE_DIR = "/var/lib/gradient";
-          GRADIENT_SERVE_URL = "http${lib.optionalString (isTrue env.GRADIENT_USE_TLS) "s"}://${cfg.domain}";
-          GRADIENT_FRONTEND_URL = env.GRADIENT_SERVE_URL;
-          GRADIENT_DATABASE_URL = "postgresql://gradient@localhost/gradient?host=/run/postgresql";
-        };
+        environmentVariables = lib.mapAttrs (_: lib.mkDefault) (
+          {
+            GRADIENT_LISTEN_ADDR = "127.0.0.1";
+            GRADIENT_PORT = 3000;
+            GRADIENT_USE_TLS = true;
+            GRADIENT_BASE_DIR = "/var/lib/gradient";
+            GRADIENT_SERVE_URL = "http${lib.optionalString (isTrue env.GRADIENT_USE_TLS) "s"}://${cfg.domain}";
+            GRADIENT_FRONTEND_URL = env.GRADIENT_SERVE_URL;
+          }
+          // lib.optionalAttrs (cfg.postgres.enable) {
+            GRADIENT_DATABASE_URL = "postgresql://gradient@localhost/gradient?host=/run/postgresql";
+          }
+        );
 
         state = lib.mkIf localWorker {
           teams.server = {

@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint-mongodb";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langgraph-checkpoint-mongodb/v${finalAttrs.version}";
-    hash = "sha256-0cL28QpwcvjOQmaH1lpZZpqcThGN2fZVryWEzrN9Mrc=";
+    hash = "sha256-7yJR7ncaEQsy2shokdDHflFwKLISRG18EiQFQpVZqvI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langgraph-checkpoint-mongodb";

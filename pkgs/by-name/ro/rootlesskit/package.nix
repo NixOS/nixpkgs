@@ -10,6 +10,8 @@ buildGoModule (finalAttrs: {
   pname = "rootlesskit";
   version = "2.3.6";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "rootlesskit";

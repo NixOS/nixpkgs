@@ -4,7 +4,6 @@
   flutter341,
   fetchFromGitHub,
   alsa-lib,
-  mimalloc,
   mpv-unwrapped,
   libass,
   libnotify,
@@ -28,27 +27,6 @@ flutter341.buildFlutterApplication (finalAttrs: {
   };
 
   customSourceBuilders = {
-    # unofficial media_kit_libs_linux
-    media_kit_libs_linux =
-      { version, src, ... }:
-      stdenv.mkDerivation {
-        pname = "media_kit_libs_linux";
-        inherit version src;
-        inherit (src) passthru;
-
-        postPatch = ''
-          sed -i '/set(MIMALLOC "mimalloc-/,/add_custom_target/d' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-          sed -i '/set(PLUGIN_NAME "media_kit_libs_linux_plugin")/i add_custom_target("MIMALLOC_TARGET" ALL DEPENDS ${mimalloc}/lib/mimalloc.o)' libs/linux/media_kit_libs_linux/linux/CMakeLists.txt
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          cp --recursive . "$out"
-
-          runHook postInstall
-        '';
-      };
     # unofficial media_kit_video
     media_kit_video =
       { version, src, ... }:

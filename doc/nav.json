@@ -622,159 +622,159 @@
                   "file": "hooks/xfce4-dev-tools.section.md"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "id": "packages",
+          "label": "Packages",
+          "children": [
+            {
+              "id": "index",
+              "file": "packages/index.md"
             },
             {
-              "id": "packages",
-              "label": "Packages",
+              "id": "citrix",
+              "file": "packages/citrix.section.md"
+            },
+            {
+              "id": "darwin-builder",
+              "file": "packages/darwin-builder.section.md"
+            },
+            {
+              "id": "dlib",
+              "file": "packages/dlib.section.md"
+            },
+            {
+              "id": "eclipse",
+              "file": "packages/eclipse.section.md"
+            },
+            {
+              "id": "elm",
+              "file": "packages/elm.section.md"
+            },
+            {
+              "id": "emacs",
+              "file": "packages/emacs.section.md"
+            },
+            {
+              "id": "firefox",
+              "file": "packages/firefox.section.md"
+            },
+            {
+              "id": "friction-graphics",
+              "file": "packages/friction-graphics.section.md"
+            },
+            {
+              "id": "fish",
+              "file": "packages/fish.section.md"
+            },
+            {
+              "id": "fuse",
+              "file": "packages/fuse.section.md"
+            },
+            {
+              "id": "geant4",
+              "file": "packages/geant4.section.md"
+            },
+            {
+              "id": "ibus",
+              "file": "packages/ibus.section.md"
+            },
+            {
+              "id": "inkscape",
+              "file": "packages/inkscape.section.md"
+            },
+            {
+              "id": "kakoune",
+              "file": "packages/kakoune.section.md"
+            },
+            {
+              "id": "krita",
+              "file": "packages/krita.section.md"
+            },
+            {
+              "id": "linux",
+              "file": "packages/linux.section.md"
+            },
+            {
+              "id": "lhapdf",
+              "file": "packages/lhapdf.section.md"
+            },
+            {
+              "id": "locales",
+              "file": "packages/locales.section.md"
+            },
+            {
+              "id": "etc-files",
+              "file": "packages/etc-files.section.md"
+            },
+            {
+              "id": "nginx",
+              "file": "packages/nginx.section.md"
+            },
+            {
+              "id": "nrfutil",
+              "file": "packages/nrfutil.section.md"
+            },
+            {
+              "id": "opengl",
+              "file": "packages/opengl.section.md"
+            },
+            {
+              "id": "packer",
+              "file": "packages/packer.section.md"
+            },
+            {
+              "id": "shell-helpers",
+              "file": "packages/shell-helpers.section.md"
+            },
+            {
+              "id": "python-tree-sitter",
+              "file": "packages/python-tree-sitter.section.md"
+            },
+            {
+              "id": "treefmt",
+              "label": "treefmt",
               "children": [
                 {
                   "id": "index",
-                  "file": "packages/index.md"
+                  "file": "packages/treefmt.section.md"
                 },
                 {
-                  "id": "citrix",
-                  "file": "packages/citrix.section.md"
-                },
-                {
-                  "id": "darwin-builder",
-                  "file": "packages/darwin-builder.section.md"
-                },
-                {
-                  "id": "dlib",
-                  "file": "packages/dlib.section.md"
-                },
-                {
-                  "id": "eclipse",
-                  "file": "packages/eclipse.section.md"
-                },
-                {
-                  "id": "elm",
-                  "file": "packages/elm.section.md"
-                },
-                {
-                  "id": "emacs",
-                  "file": "packages/emacs.section.md"
-                },
-                {
-                  "id": "firefox",
-                  "file": "packages/firefox.section.md"
-                },
-                {
-                  "id": "friction-graphics",
-                  "file": "packages/friction-graphics.section.md"
-                },
-                {
-                  "id": "fish",
-                  "file": "packages/fish.section.md"
-                },
-                {
-                  "id": "fuse",
-                  "file": "packages/fuse.section.md"
-                },
-                {
-                  "id": "geant4",
-                  "file": "packages/geant4.section.md"
-                },
-                {
-                  "id": "ibus",
-                  "file": "packages/ibus.section.md"
-                },
-                {
-                  "id": "inkscape",
-                  "file": "packages/inkscape.section.md"
-                },
-                {
-                  "id": "kakoune",
-                  "file": "packages/kakoune.section.md"
-                },
-                {
-                  "id": "krita",
-                  "file": "packages/krita.section.md"
-                },
-                {
-                  "id": "linux",
-                  "file": "packages/linux.section.md"
-                },
-                {
-                  "id": "lhapdf",
-                  "file": "packages/lhapdf.section.md"
-                },
-                {
-                  "id": "locales",
-                  "file": "packages/locales.section.md"
-                },
-                {
-                  "id": "etc-files",
-                  "file": "packages/etc-files.section.md"
-                },
-                {
-                  "id": "nginx",
-                  "file": "packages/nginx.section.md"
-                },
-                {
-                  "id": "nrfutil",
-                  "file": "packages/nrfutil.section.md"
-                },
-                {
-                  "id": "opengl",
-                  "file": "packages/opengl.section.md"
-                },
-                {
-                  "id": "packer",
-                  "file": "packages/packer.section.md"
-                },
-                {
-                  "id": "shell-helpers",
-                  "file": "packages/shell-helpers.section.md"
-                },
-                {
-                  "id": "python-tree-sitter",
-                  "file": "packages/python-tree-sitter.section.md"
-                },
-                {
-                  "id": "treefmt",
-                  "label": "treefmt",
-                  "children": [
-                    {
-                      "id": "index",
-                      "file": "packages/treefmt.section.md"
-                    },
-                    {
-                      "id": "treefmt-functions",
-                      "id-prefix": "auto-generated-treefmt-functions",
-                      "file": "packages/treefmt-functions.section.md"
-                    }
-                  ]
-                },
-                {
-                  "id": "steam",
-                  "file": "packages/steam.section.md"
-                },
-                {
-                  "id": "cataclysm-dda",
-                  "file": "packages/cataclysm-dda.section.md"
-                },
-                {
-                  "id": "urxvt",
-                  "file": "packages/urxvt.section.md"
-                },
-                {
-                  "id": "vcpkg",
-                  "file": "packages/vcpkg.section.md"
-                },
-                {
-                  "id": "weechat",
-                  "file": "packages/weechat.section.md"
-                },
-                {
-                  "id": "uv",
-                  "file": "packages/uv.section.md"
-                },
-                {
-                  "id": "build-support",
-                  "file": "packages/build-support.md"
+                  "id": "treefmt-functions",
+                  "id-prefix": "auto-generated-treefmt-functions",
+                  "file": "packages/treefmt-functions.section.md"
                 }
               ]
+            },
+            {
+              "id": "steam",
+              "file": "packages/steam.section.md"
+            },
+            {
+              "id": "cataclysm-dda",
+              "file": "packages/cataclysm-dda.section.md"
+            },
+            {
+              "id": "urxvt",
+              "file": "packages/urxvt.section.md"
+            },
+            {
+              "id": "vcpkg",
+              "file": "packages/vcpkg.section.md"
+            },
+            {
+              "id": "weechat",
+              "file": "packages/weechat.section.md"
+            },
+            {
+              "id": "uv",
+              "file": "packages/uv.section.md"
+            },
+            {
+              "id": "build-support",
+              "file": "packages/build-support.md"
             }
           ]
         },

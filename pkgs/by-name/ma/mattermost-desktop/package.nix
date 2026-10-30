@@ -36,7 +36,7 @@ buildNpmPackage rec {
     autoPatchelfHook
   ];
 
-  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
 
   buildInputs = [
     stdenv.cc.cc

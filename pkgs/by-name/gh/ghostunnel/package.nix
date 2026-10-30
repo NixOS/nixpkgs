@@ -7,16 +7,16 @@
 
 buildGo127Module (finalAttrs: {
   pname = "ghostunnel";
-  version = "1.11.4";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ilfmFBvXDNQiynUOwI4+LUSsAnq7MvPv125rAdM+F8Y=";
+    hash = "sha256-nGnFuTZDCMAx4x0QPptYhv/UTO+opw97HIvaxqgQHPA=";
   };
 
-  vendorHash = "sha256-jFOxwk03FOX+nDkcU8CTj13+z6pl+A/VFf1wirGVY1w=";
+  vendorHash = null;
 
   deleteVendor = true;
 

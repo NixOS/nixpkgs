@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "reproxy";
-  version = "1.7.1";
+  version = "1.7.2";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "umputun";
     repo = "reproxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BTXe6xdEjeTQmKNcQ3g+bB7gU0tEvQQibLFBml4nBwg=";
+    hash = "sha256-GIvOiszOrdUCOWT6QZT7Dak5x0B84gaJtf9K/7CwxIo=";
   };
 
   vendorHash = null;

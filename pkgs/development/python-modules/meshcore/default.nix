@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "meshcore";
-  version = "2.3.16";
+  version = "2.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshcore-dev";
     repo = "meshcore_py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/xskGCBSw/AYOOnIKdRD/vpWNGJCzUfVpT1rqIpycs8=";
+    hash = "sha256-Hhl012J64WCSs2/rVI6vNwwQwj/+j5wudtzhKml7bHg=";
   };
 
   build-system = [ hatchling ];

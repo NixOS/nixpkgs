@@ -696,7 +696,6 @@ let
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY = yes;
 
-      NTFS_FS = whenOlder "6.5" no;
       NTFS_FS_POSIX_ACL = whenAtLeast "7.1" yes;
       NTFS_FS_WOF_COMPRESSION = whenAtLeast "7.3" yes;
       NTFS3_LZX_XPRESS = yes;
@@ -1471,6 +1470,9 @@ let
 
         # Set system time from RTC on startup and resume
         RTC_HCTOSYS = option yes;
+
+        # Emulate RTC update interrupts for RTCs without alarm/update interrupts
+        RTC_INTF_DEV_UIE_EMUL = option yes;
 
         # Expose watchdog information in sysfs
         WATCHDOG_SYSFS = yes;

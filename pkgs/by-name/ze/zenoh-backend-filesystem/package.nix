@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-backend-filesystem";
-  version = "1.10.1"; # nixpkgs-update: no auto update
+  version = "1.10.2"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-backend-filesystem";
     tag = finalAttrs.version;
-    hash = "sha256-NJ++v4i47nOAKZim1AYsiMCNHFW57o4tyalAjc7Eetg=";
+    hash = "sha256-sb97CTD6qEPFhx47qLv08vkQ5UY0aBRzZSQdwoRIU5w=";
   };
 
-  cargoHash = "sha256-ijjNptt8ybKlwsDOmcyLATtAE+czsjnBy/Q4NwvWoHE=";
+  cargoHash = "sha256-rXxdcNjGS5wRnnWXRHBvB/C+twRJZcT8k8DLeckbjr0=";
 
   nativeBuildInputs = [
     pkg-config

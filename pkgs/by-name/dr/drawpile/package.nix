@@ -8,7 +8,6 @@
   kdePackages,
   rustc,
   rustPlatform,
-  fetchpatch,
 
   # common deps
   libzip,
@@ -67,29 +66,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawpile";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
-    rev = finalAttrs.version;
-    sha256 = "sha256-0paLKxAEvlbExq426xTekBt+Dkphx7Wg/AtpYN3f/4w=";
+    tag = finalAttrs.version;
+    hash = "sha256-HkrtucOKOhfql7mvbZJ4NhyWto7EcOFClfLFSvgFA4o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-u9fRbxKeQSou9Umw4EaqzzzDiN4zhyfx9sWnlZpfpxU=";
+    hash = "sha256-y5XZYe5PM6dK2wtq9zVQkIRE1bZBZSJgJjngcSRr2/k=";
   };
-
-  patches = [
-    # Remove for 2.3.1
-    # QT updated and broke some functionality so we have to get the commit that fixes it from upstream
-    (fetchpatch {
-      name = "qt-6.10.1.patch";
-      url = "https://github.com/drawpile/Drawpile/commit/c4f69f79b1cb0d25e68b49e807ce6773ddb9dd3c.patch";
-      hash = "sha256-Z8mcPux8tvK5y1GirfKq1X9+kxHDIrnSLTd2MCSIxTg=";
-    })
-  ];
 
   nativeBuildInputs = [
     cargo

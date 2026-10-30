@@ -27,7 +27,7 @@ in
 
         See `unl0kr.conf(5)` for supported values.
 
-        Alternatively, visit `https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/3.2.0/unl0kr/unl0kr.conf`
+        Alternatively, visit `https://gitlab.nura.eco/nura/buffybox/-/blob/3.2.0/unl0kr/unl0kr.conf`
       '';
 
       example = lib.literalExpression ''
