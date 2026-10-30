@@ -42,12 +42,12 @@ in
       "/share/nautilus-python/extensions"
     ];
 
-    programs.dconf = lib.optionalAttrs (cfg.terminal != null or cfg.useGenericTerminalName) {
+    programs.dconf = lib.optionalAttrs (cfg.terminal != null || cfg.useGenericTerminalName) {
       enable = true;
       profiles.user.databases = [
         {
           settings."com/github/stunkymonkey/nautilus-open-any-terminal" = (lib.optionalAttrs (cfg.terminal != null) {
-              terminal = cfg.terminal
+              terminal = cfg.terminal;
             })
             // {
               use-generic-terminal-name = cfg.useGenericTerminalName;
