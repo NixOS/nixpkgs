@@ -485,6 +485,7 @@ mapAliases {
   openai-triton-no-cuda = throw "'openai-triton-no-cuda' has been renamed to/replaced by 'triton-no-cuda'"; # Converted to throw 2025-10-29
   openbabel-bindings = openbabel; # added 2025-09-17
   openccu-loom-types = throw "'openccu-loom-types' was removed because its content now ships inside 'openccu-loom-client'"; # added 2026-09-06
+  opencensus-ext-azure = throw "'opencensus-ext-azure' was removed because it was broken and archived upstream."; # added 2026-10-30
   opsdroid_get_image_size = throw "'opsdroid_get_image_size' has been renamed to/replaced by 'opsdroid-get-image-size'"; # Converted to throw 2025-10-29
   orange3 = throw "'orange3' has been removed as it was unmaintained and depended on qt5 webengine"; # Added 2026-02-10
   orange-canvas-core = throw "'orange-canvas-core' has been removed as it was unmaintained and unused outside orange3"; # Added 2026-02-10

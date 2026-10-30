@@ -12715,8 +12715,6 @@ self: super: with self; {
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
 
-  opencensus-ext-azure = callPackage ../development/python-modules/opencensus-ext-azure { };
-
   opencontainers = callPackage ../development/python-modules/opencontainers { };
 
   opencv-contrib-python = callPackage ../development/python-modules/opencv-contrib-python { };
