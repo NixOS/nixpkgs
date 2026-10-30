@@ -22,13 +22,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "lidarr";
-  version = "3.1.0.4875";
+  version = "3.1.6.5079";
 
   src = fetchFromGitHub {
     owner = "Lidarr";
     repo = "Lidarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RCJlToQw96U8seZaD/QCPL1Pn42yw5iXFWGJCHSHwQw=";
+    hash = "sha256-vazxW5aYlUjXo2SNSyspc+hk1HoLHI0brbm7e/qSrk0=";
   };
 
   postPatch = ''
@@ -88,7 +88,6 @@ buildDotnetModule (finalAttrs: {
   dotnetFlags = [
     "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
-    "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
     # Override defaults in src/Directory.Build.props that use current time.
     "--property:Copyright=Copyright lidarr.audio (${finalAttrs.meta.license.fullName})"
     "--property:AssemblyVersion=${finalAttrs.versionForDotnet}"
@@ -110,10 +109,6 @@ buildDotnetModule (finalAttrs: {
 
     "FullyQualifiedName!~NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_fingerprint_file"
     "FullyQualifiedName!~NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_lookup_file"
-  ]
-  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-    # fails on macOS
-    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
   ];
 
   disabledTests = [
