@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.24.2";
+  version = "18.24.4";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b6Uj3cPAu731lhrN8fOv4d0CpehT3bv7IOBmkbYrqfI=";
+    hash = "sha256-IyAR7TZqMrCuflkfs9Rgnfm5PrUDYVi0O8//WU8/KAI=";
   };
 
-  cargoHash = "sha256-HkYI2+Yvjnw9pKeRsteyZeLhHHErTa1mvJL16NQVF3g=";
+  cargoHash = "sha256-rwB3hdVygTRAxaSCIioFAjMWw9V5bkRUBXHyFrQ4MtI=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -81,6 +81,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=multi_user_test"
     # needs a running Postgres server
     "--skip=postgres_authenticates_with_the_password_file"
+    "--skip=deleting_an_account_needs_its_password"
+    "--skip=operator_creates_resets_and_deletes_a_user"
     # timing-dependent: fails when the index reload is too fast to measure
     "--skip=end_history_is_not_starved_by_an_index_reload"
     # timing sensitive
