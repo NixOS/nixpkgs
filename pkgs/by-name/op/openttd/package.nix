@@ -64,6 +64,7 @@ let
       install -Dm555 src/strgen/strgen -t $out/bin
       install -Dm555 src/settingsgen/settingsgen -t $out/bin
     '';
+    doInstallCheck = false;
   });
 in
 stdenv.mkDerivation (finalAttrs: {
