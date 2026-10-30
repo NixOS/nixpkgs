@@ -1,23 +1,21 @@
 {
   stdenvNoCC,
   lib,
-  fetchurl,
+  fetchzip,
   autoPatchelfHook,
   cups,
   e2fsprogs,
   krb5,
   libxcrypt-legacy,
-  unzip,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "cups-idprt-tspl";
-  version = "1.4.7";
+  version = "1.4.9";
 
-  src = fetchurl {
-    name = "idprt_tspl_printer_linux_driver.zip"; # This is not the original name, but there was debate about whether rec or finalAttrs should be used, so I just renamed it
-    url = "https://www.idprt.com/prt_v2/files/down_file/id/283/fid/668.html"; # NOTE: This is NOT an HTML page, but a ZIP file
-    hash = "sha256-P3AKSqCh5onOv0itJayEJ6P5pmlkOwOh1OtUjg40BRw=";
+  src = fetchzip {
+    url = "https://foreverfile.hprtcloud.com/hygj/annex_file/2026_09_21/34fU8Zn99OEzcQhg/idprt_tspl_printer_linux_driver_v1.4.9.zip";
+    hash = "sha256-OYwsXnJsDBlHUllDhqBMC9a8Q1uKeuWirlS+DJpPtM4=";
   };
 
   buildInputs = [
@@ -28,7 +26,6 @@ stdenvNoCC.mkDerivation {
   ];
   nativeBuildInputs = [
     autoPatchelfHook
-    unzip
   ];
 
   installPhase =
@@ -46,7 +43,7 @@ stdenvNoCC.mkDerivation {
       mkdir -p $out/share/cups/model $out/lib/cups/filter
       cp -r filter/${arch}/. $out/lib/cups/filter
       cp -r ppd/. $out/share/cups/model
-      rm $out/share/cups/model/*.ppd~
+      find $out/share/cups/model -name '*.ppd~' -delete
       chmod +x $out/lib/cups/filter/*
       runHook postInstall
     '';
