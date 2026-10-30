@@ -82,6 +82,7 @@ let
         kio-snapshot = self.callPackage ./misc/kio-snapshot { };
         klevernotes = self.callPackage ./misc/klevernotes { };
         ktextaddons = self.callPackage ./misc/ktextaddons { };
+        kwi = self.callPackage ./misc/kwi { };
         marknote = self.callPackage ./misc/marknote { };
         mpvqt = self.callPackage ./misc/mpvqt { };
         phonon = self.callPackage ./misc/phonon { };
