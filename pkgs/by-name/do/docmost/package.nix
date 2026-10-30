@@ -14,6 +14,7 @@
 let
   bcrypt-lib = callPackage ./bcrypt-lib.nix { };
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "docmost";
   version = "0.97.0";
@@ -33,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "client"
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     nodejs_26
