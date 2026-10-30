@@ -77,7 +77,7 @@ buildDotnetModule (finalAttrs: {
     "src/NzbDrone.Host.Test/Lidarr.Host.Test.csproj"
     "src/NzbDrone.Libraries.Test/Lidarr.Libraries.Test.csproj"
     "src/NzbDrone.Mono.Test/Lidarr.Mono.Test.csproj"
-    "src/NzbDrone.Test.Common/Lidarr.Test.Common.csproj"
+    "src/NzbDrone.Update.Test/Lidarr.Update.Test.csproj"
   ];
 
   # https://github.com/NixOS/nixpkgs/pull/491217
