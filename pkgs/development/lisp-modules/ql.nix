@@ -351,6 +351,15 @@ let
       cl-mixed-pulse = super.cl-mixed-pulse.overrideLispAttrs (o: {
         nativeLibs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libpulseaudio ];
       });
+      # Quicklisp only lists the Linux drains, and harmony needs OSS on :bsd, which includes macOS
+      harmony = super.harmony.overrideLispAttrs (o: {
+        lispLibs =
+          o.lispLibs
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            self.cl-mixed-coreaudio
+            self.cl-mixed-oss
+          ];
+      });
       _3d-math = super._3d-math.overrideLispAttrs (o: {
         flags = o.flags ++ (if o.program == "sbcl" then [ "--dynamic-space-size 4096" ] else [ ]);
       });
