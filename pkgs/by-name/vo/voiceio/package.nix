@@ -42,7 +42,7 @@ let
   # has PyGObject; voiceio finds it through VOICEIO_SYSTEM_PYTHON.
   systemPython = python3.withPackages (ps: runtimeDeps ++ [ ps.pygobject3 ]);
 in
-py.buildPythonApplication finalAttrs: {
+py.buildPythonApplication (finalAttrs: {
   pname = "voiceio";
   version = "1.15.1";
   pyproject = true;
@@ -135,4 +135,4 @@ py.buildPythonApplication finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.kazuya ];
   };
-}
+})
