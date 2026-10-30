@@ -21,7 +21,12 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    ./strlcpy-glibc-2.38-fix.patch
+    # Fixes the feature checks, which all failed as stdenv sets make's SHELL; drop once kvmtool has it
+    (fetchpatch {
+      name = "fix-feature-checks-with-shell-set.patch";
+      url = "https://lore.kernel.org/kvm/20261030004422.33732-1-mikatammi@gmail.com/raw";
+      hash = "sha256-46yK/TzPGvZFggvV3DEJ9CEPK5qgsD06yoUzoL+Zr0w=";
+    })
     # Fixes FDT_ERR_ALIGNMENT on riscv32; drop once kvmtool has it
     (fetchpatch {
       name = "align-fdt-staging-buffer.patch";
