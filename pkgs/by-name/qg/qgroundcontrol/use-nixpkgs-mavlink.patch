@@ -2,26 +2,86 @@ diff --git a/src/MAVLink/CMakeLists.txt b/src/MAVLink/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/MAVLink/CMakeLists.txt
 +++ b/src/MAVLink/CMakeLists.txt
-@@ -33,20 +33,10 @@
- #         "MAVLINK_VERSION 2.0"
- # )
+@@ -30,27 +30,13 @@
+ 
+ message(STATUS "QGC: Building MAVLink")
  
 -CPMAddPackage(
 -    NAME mavlink
 -    GIT_REPOSITORY ${QGC_MAVLINK_GIT_REPO}
 -    GIT_TAG ${QGC_MAVLINK_GIT_TAG}
+-    EXCLUDE_FROM_ALL YES
+-    OPTIONS
+-        "MAVLINK_DIALECT ${QGC_MAVLINK_DIALECT}"
+-        "MAVLINK_VERSION ${QGC_MAVLINK_VERSION}"
+-    # mavgen embeds Python's salted hash() in MAVLINK_*_XML_HASH, making the
+-    # generated headers differ on every run; pin PYTHONHASHSEED for
+-    # deterministic output (keeps moccache/ccache effective).
+-    PATCHES mavlink-deterministic-mavgen.patch
 -)
+-
+-qgc_require_cpm_added(mavlink)
++# The upstream CPMAddPackage here vendors the mavlink/mavlink *source* repo and
++# runs mavgen (Python code generation) against it at configure time; swap it for
++# the real nixpkgs mavlink-c-library-v2 package (mavgen's own pre-generated
++# output, same dialect/dialect.h layout) instead of recompiling/regenerating it.
 +find_package(mavlink-c-library-v2 REQUIRED)
  
- # For QGC all dialects means common and development. Though use of development mavlink code should be restricted to debug builds only.
+-add_dependencies(${CMAKE_PROJECT_NAME} mavlink)
 -target_include_directories(${CMAKE_PROJECT_NAME}
--    PRIVATE
--        ${mavlink_SOURCE_DIR}
--        ${mavlink_SOURCE_DIR}/all
--        ${mavlink_SOURCE_DIR}/common
--        ${mavlink_SOURCE_DIR}/development
+-                           PRIVATE ${mavlink_BINARY_DIR}/include/mavlink
+-                                   ${mavlink_BINARY_DIR}/include/mavlink/${QGC_MAVLINK_DIALECT}
 -)
 +target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE mavlink-c-library-v2::mavlink)
  
- # if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
- #   target_compile_options(comm PRIVATE -Wno-address-of-packed-member)
+ # Generate lightweight MAVLinkEnums.h (enum typedefs only, no message pack/unpack code)
+ # plus MAVLinkEnumsQml.{h,cc} exposing every enum via Q_NAMESPACE/Q_ENUM_NS for QML.
+@@ -58,11 +44,14 @@
+ set(MAVLINK_ENUMS_QML_H "${CMAKE_BINARY_DIR}/MAVLinkEnumsQml.h")
+ set(MAVLINK_ENUMS_QML_CC "${CMAKE_BINARY_DIR}/MAVLinkEnumsQml.cc")
+ set(MAVLINK_ENUMS_GENERATOR "${CMAKE_SOURCE_DIR}/tools/generators/mavlink_enums.py")
++# mavlink-c-library-v2 installs the same mavgen-generated dialect/dialect.h tree
++# the generator expects, just under its own include prefix rather than a CPM
++# build dir.
+ add_custom_command(
+     OUTPUT "${MAVLINK_ENUMS_H}" "${MAVLINK_ENUMS_QML_H}" "${MAVLINK_ENUMS_QML_CC}"
+-    COMMAND Python3::Interpreter "${MAVLINK_ENUMS_GENERATOR}" "${mavlink_BINARY_DIR}/include/mavlink"
++    COMMAND Python3::Interpreter "${MAVLINK_ENUMS_GENERATOR}" "@MAVLINK_C_LIBRARY_INCLUDE_DIR@"
+             "${MAVLINK_ENUMS_H}" "${MAVLINK_ENUMS_QML_H}" "${MAVLINK_ENUMS_QML_CC}"
+-    DEPENDS mavlink "${MAVLINK_ENUMS_GENERATOR}"
++    DEPENDS "${MAVLINK_ENUMS_GENERATOR}"
+     COMMENT "Generating MAVLinkEnums.h + MAVLinkEnumsQml.{h,cc}"
+     VERBATIM
+ )
+@@ -83,21 +72,26 @@
+ # Generate MAVLinkInstanceFields.h (message ID → instance field name mapping)
+ set(MAVLINK_INSTANCE_FIELDS_H "${CMAKE_BINARY_DIR}/MAVLinkInstanceFields.h")
+ set(MAVLINK_INSTANCE_FIELDS_GENERATOR "${CMAKE_SOURCE_DIR}/tools/generators/mavlink_instance_fields.py")
+-set(MAVLINK_XML_DIR "${mavlink_SOURCE_DIR}/message_definitions/v1.0")
++# message_definitions/v1.0 is XML data from the mavlink/mavlink *source* repo, not
++# part of any C library find_package could discover; our package.nix fetches just
++# that (plus component_metadata below) directly from the pinned QGC_MAVLINK_GIT_TAG
++# commit instead of letting CPM fetch the whole repo over the network at build time.
++set(MAVLINK_XML_DIR "@MAVLINK_XML_DIR@")
+ add_custom_command(
+     OUTPUT "${MAVLINK_INSTANCE_FIELDS_H}"
+     COMMAND Python3::Interpreter "${MAVLINK_INSTANCE_FIELDS_GENERATOR}"
+             "${MAVLINK_XML_DIR}" "${QGC_MAVLINK_DIALECT}" "${MAVLINK_INSTANCE_FIELDS_H}"
+-    DEPENDS mavlink "${MAVLINK_INSTANCE_FIELDS_GENERATOR}"
++    DEPENDS "${MAVLINK_INSTANCE_FIELDS_GENERATOR}"
+     COMMENT "Generating MAVLinkInstanceFields.h"
+     VERBATIM
+ )
+ add_custom_target(mavlink_instance_fields DEPENDS "${MAVLINK_INSTANCE_FIELDS_H}")
+ add_dependencies(${CMAKE_PROJECT_NAME} mavlink_instance_fields)
+ 
+-# Bundle the upstream component_metadata JSON schemas (referenced from the CPM dir, never
+-# vendored) so ComponentInformation validates metadata against the pinned QGC_MAVLINK_GIT_TAG.
+-set(MAVLINK_COMPONENT_METADATA_DIR "${mavlink_SOURCE_DIR}/component_metadata")
++# Bundle the upstream component_metadata JSON schemas so ComponentInformation
++# validates metadata against the pinned QGC_MAVLINK_GIT_TAG (see MAVLINK_XML_DIR
++# above - same reasoning, fetched directly rather than via CPM).
++set(MAVLINK_COMPONENT_METADATA_DIR "@MAVLINK_COMPONENT_METADATA_DIR@")
+ set(MAVLINK_SCHEMA_FILES
+     "${MAVLINK_COMPONENT_METADATA_DIR}/parameter.schema.json"
+     "${MAVLINK_COMPONENT_METADATA_DIR}/general.schema.json"

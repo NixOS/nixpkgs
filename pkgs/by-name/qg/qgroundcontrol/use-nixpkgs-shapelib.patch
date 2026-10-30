@@ -1,19 +1,33 @@
-diff --git a/src/Utilities/Shape/CMakeLists.txt b/src/Utilities/Shape/CMakeLists.txt
+diff --git a/src/Utilities/Geo/Formats/CMakeLists.txt b/src/Utilities/Geo/Formats/CMakeLists.txt
 index 1111111..2222222 100644
---- a/src/Utilities/Shape/CMakeLists.txt
-+++ b/src/Utilities/Shape/CMakeLists.txt
-@@ -14,14 +14,4 @@
- 
- #===========================================================================#
+--- a/src/Utilities/Geo/Formats/CMakeLists.txt
++++ b/src/Utilities/Geo/Formats/CMakeLists.txt
+@@ -25,21 +25,13 @@
+         ogckml22.xsd
+ )
  
 -CPMAddPackage(
 -    NAME Shapelib
--    VERSION 1.6.1
+-    VERSION 1.6.3
 -    GITHUB_REPOSITORY OSGeo/shapelib
+-    GIT_TAG v1.6.3
+-    EXCLUDE_FROM_ALL YES
 -    OPTIONS
 -        "BUILD_SHAPELIB_CONTRIB OFF"
 -        "BUILD_APPS OFF"
 -        "BUILD_TESTING OFF"
 -)
 -
- target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shp)
+-qgc_require_cpm_added(Shapelib)
+-
+-qgc_disable_dependency_warnings(shp)
++# Shapelib ships no CMake package config (just a shapelib.pc), so find_package
++# can't discover it directly; go through pkg-config instead (same approach
++# use-nixpkgs-gstreamer-root.patch uses) and alias the result onto the "shp"
++# target name QGC's own code below expects.
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(Shapelib REQUIRED IMPORTED_TARGET GLOBAL shapelib)
++add_library(shp ALIAS PkgConfig::Shapelib)
+ 
+ target_link_libraries(QGCGeoFormats
+     PUBLIC

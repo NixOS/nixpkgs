@@ -2,15 +2,17 @@ diff --git a/src/Utilities/Geo/CMakeLists.txt b/src/Utilities/Geo/CMakeLists.txt
 index 1111111..2222222 100644
 --- a/src/Utilities/Geo/CMakeLists.txt
 +++ b/src/Utilities/Geo/CMakeLists.txt
-@@ -8,30 +8,6 @@
- 
- #===========================================================================#
+@@ -3,35 +3,48 @@
+     QGCGeo.h
+ )
  
 -CPMAddPackage(
 -    NAME geographiclib
--    VERSION 2.5
+-    VERSION 2.7
 -    GITHUB_REPOSITORY geographiclib/geographiclib
--    GIT_TAG r2.5
+-    GIT_TAG r2.7
+-    # System package installs its config as `GeographicLib`, not `geographiclib`.
+-    FIND_PACKAGE_ARGUMENTS "NAMES GeographicLib"
 -    OPTIONS
 -        "BUILD_BOTH_LIBS OFF"
 -        "BUILD_DOCUMENTATION OFF"
@@ -20,7 +22,7 @@ index 1111111..2222222 100644
 -        "INCDIR OFF"
 -        "BINDIR OFF"
 -        "SBINDIR OFF"
--        "LIBDIR ${CMAKE_INSTALL_LIBDIR}"
+-        "LIBDIR OFF"
 -        "DLLDIR ${CMAKE_INSTALL_BINDIR}"
 -        "MANDIR OFF"
 -        "CMAKEDIR OFF"
@@ -29,8 +31,51 @@ index 1111111..2222222 100644
 -        "EXAMPLEDIR OFF"
 -    PATCHES geographiclib.patch
 -)
--
--target_compile_options(GeographicLib_STATIC PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/wd9025>)
-+find_package(GeographicLib REQUIRED)
++# Try the real package directly first: CPM's own NAMES override
++# (FIND_PACKAGE_ARGUMENTS below) finds GeographicLib's real config file, but
++# GeographicLib's own *-config-version.cmake defensively rejects any match
++# whose CMAKE_FIND_PACKAGE_NAME is not literally "GeographicLib" - which it
++# never is when found via CPM, since CPM's own NAME positional argument
++# (lowercase "geographiclib") is what actually sets that variable. Finding it
++# ourselves first means CPM_LOCAL_PACKAGES_ONLY never falls through to its
++# own (also broken for this exact case, and in the sandbox, fatal)
++# network-fetch fallback below.
++find_package(GeographicLib 2.7 QUIET)
++
++if(NOT GeographicLib_FOUND)
++    CPMAddPackage(
++        NAME geographiclib
++        VERSION 2.7
++        GITHUB_REPOSITORY geographiclib/geographiclib
++        GIT_TAG r2.7
++        # System package installs its config as `GeographicLib`, not `geographiclib`.
++        FIND_PACKAGE_ARGUMENTS "NAMES GeographicLib"
++        OPTIONS
++            "BUILD_BOTH_LIBS OFF"
++            "BUILD_DOCUMENTATION OFF"
++            "BUILD_MANPAGES OFF"
++            "PACKAGE_DEBUG_LIBS OFF"
++            "APPLE_MULTIPLE_ARCHITECTURES OFF"
++            "INCDIR OFF"
++            "BINDIR OFF"
++            "SBINDIR OFF"
++            "LIBDIR OFF"
++            "DLLDIR ${CMAKE_INSTALL_BINDIR}"
++            "MANDIR OFF"
++            "CMAKEDIR OFF"
++            "PKGDIR OFF"
++            "DOCDIR OFF"
++            "EXAMPLEDIR OFF"
++        PATCHES geographiclib.patch
++    )
++endif()
  
- target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE GeographicLib::GeographicLib)
+-# geographiclib_ADDED is set only when CPM downloads; geographiclib_FOUND when
+-# resolved via find_package (QGC_USE_SYSTEM_LIBS). Either is success.
+-if(NOT geographiclib_ADDED AND NOT geographiclib_FOUND)
++# geographiclib_ADDED is set only when CPM downloads; GeographicLib_FOUND when
++# resolved via find_package (either the direct attempt above or CPM's own).
++if(NOT geographiclib_ADDED AND NOT GeographicLib_FOUND)
+     message(FATAL_ERROR "QGC: geographiclib (required dependency) was not resolved")
+ endif()
+ 

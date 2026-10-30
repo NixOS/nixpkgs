@@ -1,0 +1,128 @@
+diff --git a/src/Utilities/SDL/CMakeLists.txt b/src/Utilities/SDL/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/Utilities/SDL/CMakeLists.txt
++++ b/src/Utilities/SDL/CMakeLists.txt
+@@ -8,99 +8,15 @@
+ # SDL3 Library Integration
+ # ============================================================================
+ 
+-set(SDL_EXTRA_OPTIONS "")
+-if(WIN32)
+-    set(SDL_EXTRA_OPTIONS
+-        ${SDL_EXTRA_OPTIONS}
+-        "SDL_DIRECTX OFF"
+-        "SDL_XINPUT ON"
+-    )
+-elseif(UNIX AND NOT ANDROID)
+-    set(SDL_EXTRA_OPTIONS
+-        ${SDL_EXTRA_OPTIONS}
+-        "SDL_UNIX_CONSOLE_BUILD ON"
+-    )
+-endif()
+-
+-if(MACOS OR IOS OR ANDROID)
+-    set(SDL_VIDEO_FLAG "ON")
+-else()
+-    set(SDL_VIDEO_FLAG "OFF")
+-endif()
+-
+-if(ANDROID)
+-    set(SDL_SHARED_FLAG "ON")
+-    set(SDL_STATIC_FLAG "OFF")
+-    set(SDL_EXTRA_OPTIONS
+-        ${SDL_EXTRA_OPTIONS}
+-        "SDL_ANDROID_JAR OFF"
+-        "SDL_HIDAPI_LIBUSB OFF"
+-    )
+-else()
+-    set(SDL_SHARED_FLAG "OFF")
+-    set(SDL_STATIC_FLAG "ON")
+-endif()
+-
+-# Pinned to 3.4.2: SDL 3.4.3+ changed the onNativePad{Down,Up} JNI signature, breaking the
+-# customized Java glue vendored in android/src/org/libsdl/app/ (NoSuchMethodError at runtime).
+-CPMAddPackage(
+-    NAME SDL3
+-    VERSION 3.4.2
+-    GITHUB_REPOSITORY libsdl-org/SDL
+-    GIT_TAG release-3.4.2
+-    OPTIONS
+-        "SDL_INSTALL OFF"
+-        "SDL_UNINSTALL OFF"
+-        "SDL_SHARED ${SDL_SHARED_FLAG}"
+-        "SDL_STATIC ${SDL_STATIC_FLAG}"
+-        "SDL_TEST_LIBRARY OFF"
+-        "SDL_EXAMPLES OFF"
+-        "SDL_AUDIO OFF"
+-        "SDL_VIDEO ${SDL_VIDEO_FLAG}"
+-        "SDL_GPU OFF"
+-        "SDL_RENDER OFF"
+-        "SDL_CAMERA OFF"
+-        "SDL_JOYSTICK ON"
+-        "SDL_HAPTIC ON"
+-        "SDL_HIDAPI ON"
+-        "SDL_POWER ON"
+-        "SDL_SENSOR ON"
+-        "SDL_DIALOG OFF"
+-        "SDL_CCACHE ON"
+-        "SDL_DBUS OFF"
+-        "SDL_IBUS OFF"
+-        "SDL_MMX OFF"
+-        "SDL_VIRTUAL_JOYSTICK ON"
+-        "${SDL_EXTRA_OPTIONS}"
+-)
+-
+-qgc_require_cpm_added(SDL3)
+-
+-if(ANDROID)
+-    set(_qgc_sdl3_target SDL3-shared)
+-else()
+-    set(_qgc_sdl3_target SDL3-static)
+-endif()
+-
+-qgc_disable_dependency_warnings(${_qgc_sdl3_target})
+-
+-set_target_properties(${_qgc_sdl3_target} PROPERTIES
+-    AUTOMOC OFF
+-    AUTOUIC OFF
+-    AUTORCC OFF
+-)
++# Swap the CPMAddPackage that vendors+recompiles SDL3's own sources for the
++# real nixpkgs sdl3 package, found via find_package. nixpkgs' sdl3 only builds
++# the shared target (no SDL3-static), so QGC_SDL3_TARGET is SDL3::SDL3-shared
++# unconditionally here; the ANDROID branch upstream distinguishes (its own
++# JNI glue, SDL_MAIN_NOIMPL handling, static-vs-shared choice) is dead code on
++# this Linux-only build.
++find_package(SDL3 REQUIRED)
+ 
+-# SDL3's subdir-scoped LibUSB::LibUSB target breaks qt_add_translations' top-level scan.
+-set_property(DIRECTORY "${SDL3_SOURCE_DIR}" PROPERTY QT_EXCLUDE_FROM_TRANSLATION ON)
+-
+-if(ANDROID)
+-    target_compile_definitions(SDL3-shared PRIVATE SDL_MAIN_NOIMPL SDL_MAIN_HANDLED)
+-    target_link_libraries(SDL3-shared PRIVATE log android)
+-    set(QGC_SDL3_TARGET SDL3::SDL3-shared)
+-else()
+-    target_compile_definitions(SDL3-static PRIVATE SDL_MAIN_NOIMPL SDL_MAIN_HANDLED)
+-    set(QGC_SDL3_TARGET SDL3::SDL3-static)
+-endif()
++set(QGC_SDL3_TARGET SDL3::SDL3-shared)
+ 
+ # ============================================================================
+ # QGCSDL static library
+@@ -128,14 +44,7 @@
+ # Loaded at runtime from the Qt resource system.
+ # ============================================================================
+ 
+-CPMAddPackage(
+-    NAME sdl_gamecontrollerdb
+-    GITHUB_REPOSITORY mdqinc/SDL_GameControllerDB
+-    GIT_TAG 513c72e34569e0f471dde7aa26eecb23946c3ef7
+-    DOWNLOAD_ONLY YES
+-)
+-
+-set(SDL_GAMECONTROLLERDB_PATH "${sdl_gamecontrollerdb_SOURCE_DIR}/gamecontrollerdb.txt")
++set(SDL_GAMECONTROLLERDB_PATH "@SDL_GAMECONTROLLERDB_FILE@")
+ qgc_set_qt_resource_alias("${SDL_GAMECONTROLLERDB_PATH}")
+ 
+ qt_add_resources(QGCSDL "qgcresources_sdl"
