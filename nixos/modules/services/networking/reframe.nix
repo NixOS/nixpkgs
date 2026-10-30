@@ -13,9 +13,11 @@ in
     enable = lib.mkEnableOption "DRM/KMS based remote desktop for Linux that supports Wayland/NVIDIA/headless/login…";
     package = lib.mkPackageOption pkgs "reframe" { };
     configs = lib.mkOption {
-      type = lib.types.submodule {
-        freeformType = settingsFormat.type;
-      };
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          freeformType = settingsFormat.type;
+        }
+      );
       default = { };
 
       description = "Configurations for ReFrame";
