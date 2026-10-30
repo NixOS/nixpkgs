@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastai";
-  version = "2.8.8";
+  version = "2.8.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "fastai";
     tag = finalAttrs.version;
-    hash = "sha256-VqcJ33gVv3Nvau88ow8hg468slnmhKCy5EV3X2aL5lM=";
+    hash = "sha256-VTyBBU3yCW08VxJbKASo0vwTudj/g81FwiOVqplaqqw=";
   };
 
   build-system = [
