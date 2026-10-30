@@ -126,7 +126,7 @@ let
 
   cudaPackages_13_0 = mkCudaPackages {
     cublas = "13.1.2";
-    cublasdx = "26.06.1";
+    cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.0.3";
     cudnn = "9.27.0";
@@ -144,7 +144,7 @@ let
   };
 
   cudaPackages_13_1 = mkCudaPackages {
-    cublasdx = "26.06.1";
+    cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.1.2";
     cudnn = "9.27.0";
@@ -163,7 +163,7 @@ let
 
   cudaPackages_13_2 = mkCudaPackages {
     cublas = "13.4.3";
-    cublasdx = "26.06.1";
+    cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.2.2";
     cudnn = "9.27.0";
@@ -182,7 +182,7 @@ let
 
   cudaPackages_13_3 = mkCudaPackages {
     cublas = "13.6.3";
-    cublasdx = "26.06.1";
+    cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.3.1";
     cudnn = "9.27.0";
@@ -201,7 +201,7 @@ let
 
   cudaPackages_13_4 = mkCudaPackages {
     cublas = "13.8.2";
-    cublasdx = "26.06.1";
+    cublasdx = "26.10.0";
     cublasmp = "0.11.0";
     cuda = "13.4.3";
     cudnn = "9.27.0";
