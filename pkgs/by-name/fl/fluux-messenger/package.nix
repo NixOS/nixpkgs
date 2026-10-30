@@ -15,6 +15,7 @@
   wrapGAppsHook3,
   autoPatchelfHook,
   nix-update-script,
+  swift,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,6 +45,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace ${finalAttrs.cargoRoot}/Cargo.toml \
       --replace-fail 'swift-rs = { git = ' '# swift-rs = { git = '
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ${finalAttrs.cargoRoot}/tauri.macos.conf.json \
+      --replace-fail 'node scripts/tauri-macos-share.mjs' 'node apps/fluux/scripts/tauri-macos-share.mjs'
+    substituteInPlace apps/fluux/scripts/tauri-macos-share.mjs \
+      --replace-fail "run('/usr/bin/xcrun', ['swiftc'," "run('swiftc', [" \
+      --replace-fail "run('/usr/bin/xcrun', ['lipo'," "run('lipo', ["
   '';
 
   cargoHash = "sha256-BEhToIykuf4ZMHlYETzZ3hdaVcjbp25FLSflLawcj6s=";
@@ -54,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npmHooks.npmConfigHook
     pkg-config
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ swift ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook3
     autoPatchelfHook
@@ -77,6 +86,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tauriInstallHook only works when we are in cargoRoot
   preInstall = "pushd $buildAndTestSubdir";
   postInstall = "popd";
+
+  # Stripping the Share Extension executable invalidates its bundle signature.
+  stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "FluuxShare" ];
 
   passthru.updateScript = nix-update-script { };
 
