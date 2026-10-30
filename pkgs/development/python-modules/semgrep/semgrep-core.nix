@@ -74,12 +74,19 @@ stdenv.mkDerivation (finalAttrs: {
   # stdenv's own `strip` and `patchelf --shrink-rpath`, and fix the interpreter and rpath in a
   # single patchelf call below. The bundled bin/libs reference each other via $ORIGIN, so only the
   # main binary needs it.
+  #
+  # Keep the replacement RUNPATH no longer than the one shipped in the wheel (104 bytes).
+  # A longer one forces patchelf to grow `.dynstr`, which brings back the bug above. That is
+  # why glibc is linked into `bin/libs` instead of being added as a second rpath entry.
   dontPatchELF = true;
   dontStrip = true;
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/bin/libs
+    cp -ns ${stdenv.cc.libc}/lib/*.so* $out/bin/libs/
+
     patchelf \
       --set-interpreter "$(cat ${stdenv.cc}/nix-support/dynamic-linker)" \
-      --set-rpath "$out/bin/libs:${lib.makeLibraryPath [ stdenv.cc.libc ]}" \
+      --set-rpath "$out/bin/libs" \
       $out/bin/semgrep-core
   '';
 
