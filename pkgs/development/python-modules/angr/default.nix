@@ -68,12 +68,12 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "cxxheaderparser"
     "lmdb"
+    "z3-solver"
   ];
 
-  # z3 does not provide a dist-info, so python-runtime-deps-check will fail
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"z3-solver==5.1.0.0",' ""
+    # Nix supplies the build dependency; keep the runtime requirement.
+    sed -i '/^\[build-system\]/,/^\[/{ /"z3-solver/d; }' pyproject.toml
 
     # cxxheaderparser 1.x represents member-function pointers using Pointer.
     substituteInPlace angr/sim_type.py \
