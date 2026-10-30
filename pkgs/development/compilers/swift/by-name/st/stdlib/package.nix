@@ -12,8 +12,11 @@ let
   swiftPlatform = stdenv.hostPlatform.swift.platform;
   libraryExtension = stdenv.hostPlatform.extensions.library;
 
-  # Swift 6.2 is used as a bootstrap compiler. Disable LTO for its stdlib to improve build time.
-  enableLTO = lib.versions.majorMinor swift_release != "6.2";
+  enableLTO =
+    # Swift 6.2 is used as a bootstrap compiler. Disable LTO for its stdlib to improve build time.
+    lib.versions.majorMinor swift_release != "6.2"
+    # Enabling LTO in the stdlib causes `swiftc` to crash in the `MandatoryAllocBoxToStack` pass on aarch64-linux
+    && !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   toolLTO = lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin";
 in
 (swiftc.override {
