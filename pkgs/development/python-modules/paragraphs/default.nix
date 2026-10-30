@@ -6,7 +6,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paragraphs";
   version = "1.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "paragraphs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iRrHTqM7goJ1Ep1dbVo9PwDe0mXpnrj80UV6UDnws14=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to incorporate long strings";
     homepage = "https://github.com/ShayHill/paragraphs";
-    changelog = "https://github.com/ShayHill/paragraphs/releases/tag/${src.tag}";
+    changelog = "https://github.com/ShayHill/paragraphs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
