@@ -12,6 +12,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "metis";
   version = "5.2.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+  separateDebugInfo = true;
+
   src = fetchFromGitHub {
     owner = "KarypisLab";
     repo = "METIS";
@@ -45,6 +49,31 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OPENMP" true)
     (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
   ];
+
+  # Upstream's own CMakeLists.txt never exports a CMake package-config file
+  # (just a bare `install(TARGETS metis ...)`, no `install(EXPORT ...)` and
+  # no Config.cmake of any kind), so `find_package(METIS)` can't find this
+  # package from any consumer. Write one by hand describing the library and
+  # headers this derivation already installs, as a `METIS::METIS` imported
+  # target (the name/case consumers like symforce look for).
+  postInstall =
+    let
+      libSuffix =
+        if !stdenv.hostPlatform.isStatic then
+          stdenv.hostPlatform.extensions.sharedLibrary
+        else
+          stdenv.hostPlatform.extensions.staticLibrary;
+    in
+    ''
+      mkdir -p $out/lib/cmake/metis
+
+      substitute ${./cmake/MetisConfig.cmake.in} $out/lib/cmake/metis/metis-config.cmake \
+        --subst-var out \
+        --subst-var-by libSuffix "${libSuffix}"
+
+      substitute ${./cmake/MetisConfigVersion.cmake.in} $out/lib/cmake/metis/metis-config-version.cmake \
+        --subst-var-by version "${finalAttrs.version}"
+    '';
 
   meta = {
     description = "Serial graph partitioning and fill-reducing matrix ordering";

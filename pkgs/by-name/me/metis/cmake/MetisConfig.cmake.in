@@ -1,0 +1,24 @@
+# METIS does not export any CMake package-config file on its own (its
+# CMakeLists.txt only does a bare `install(TARGETS metis ...)`, with no
+# `install(EXPORT ...)` and no generated/hand-written Config file at all), so
+# this is hand-written here to describe the library/headers this derivation
+# already installs, as an IMPORTED target consumers can `find_package(METIS)`
+# against. The paths below are substituted (by `substitute`, at build time)
+# with this derivation's own install prefix and the actual suffix of the
+# library that was built (shared vs. static), so this isn't relocatable, but
+# it doesn't need to be: it only ever describes this exact build's own
+# outputs.
+
+if(NOT TARGET METIS::METIS)
+  add_library(METIS::METIS UNKNOWN IMPORTED)
+  set_target_properties(METIS::METIS PROPERTIES
+    IMPORTED_LOCATION "@out@/lib/libmetis@libSuffix@"
+    INTERFACE_INCLUDE_DIRECTORIES "@out@/include"
+    # METIS' own programs/CMakeLists.txt links its executables against
+    # `metis GKlib m`, i.e. libmetis itself relies on its caller to also
+    # supply libm (it doesn't record that dependency on itself, e.g. via its
+    # own DT_NEEDED when built shared), so this exported target needs to
+    # carry that same transitive requirement for consumers to link cleanly.
+    INTERFACE_LINK_LIBRARIES "m"
+  )
+endif()
