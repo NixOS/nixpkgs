@@ -28,6 +28,9 @@ let
   finalPackage = cfg.package.override {
     inherit (cfg) providers;
   };
+  providersWithMissingDependencies = lib.filter (
+    provider: lib.elem provider cfg.package.providersWithMissingDependencies
+  ) cfg.providers;
 in
 
 {
@@ -106,6 +109,15 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = providersWithMissingDependencies == [ ];
+        message = ''
+          The following Music Assistant providers have missing dependencies and cannot be enabled: ${lib.concatStringsSep ", " providersWithMissingDependencies}.
+        '';
+      }
+    ];
+
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts =
         lib.optional cfg.enable 8097 # Music Assistant stream port
@@ -173,7 +185,7 @@ in
         };
       };
 
-      music-assistant.providers = cfg.package.providersBuiltins;
+      music-assistant.providers = cfg.package.builtinProviders;
     };
 
     systemd.services.music-assistant = {
