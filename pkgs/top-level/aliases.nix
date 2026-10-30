@@ -2838,6 +2838,7 @@ mapAliases {
   waitron = throw "'waitron' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
   wakatime = throw "'wakatime' has been renamed to/replaced by 'wakatime-cli'"; # Converted to throw 2025-10-27
   waon = throw "'waon' has been removed as it was unmaintained upstream and depended on the deprecated GTK 2 engine"; # Added 2026-08-13
+  wapm = throw "'wapm' has been removed as it was unmaintained upstream as wapm was integrated into wasmer. Consider using 'wasmer' instead."; # Added 2026-10-30
   wapp = throw "'wapp' has been renamed to/replaced by 'tclPackages.wapp'"; # Converted to throw 2025-10-27
   warmux = throw "'warmux' has been removed as it is unmaintained and broken"; # Added 2025-11-03
   warp-plus = throw "'warp-plus' has been removed as it is unmaintained and broken"; # Added 2026-07-05
