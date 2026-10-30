@@ -74,6 +74,34 @@ snapshotArchive() {
   echo "$snapshotUrl"
 }
 
+snapshotExists() {
+  local snapshotUrl="$1"
+  local timestamp="${snapshotUrl#https://web.archive.org/web/}"
+  local rollingUrl="${snapshotUrl#*id_/}"
+  local response
+
+  timestamp="${timestamp%%id_/*}"
+  response="$(curl --fail --silent --show-error --location \
+    --retry 3 --retry-delay 5 --retry-all-errors \
+    "https://web.archive.org/cdx/search/cdx?url=${rollingUrl}&output=json&fl=timestamp,statuscode&from=${timestamp}&to=${timestamp}")"
+  grep -q "\"${timestamp}\",\"200\"" <<<"$response"
+}
+
+waitForSnapshot() {
+  local snapshotUrl="$1"
+  local attempt
+
+  for attempt in {1..20}; do
+    if snapshotExists "$snapshotUrl"; then
+      return 0
+    fi
+    echo "Waiting for the Wayback Machine to persist the snapshot (attempt $attempt/20)..." >&2
+    sleep 30
+  done
+
+  return 1
+}
+
 fetchArchive x86_64-linux "https://soloist-builds.spotifycdn.com/${archives[x86_64-linux]}"
 
 version="${releases[x86_64-linux]}"
@@ -85,6 +113,10 @@ echo "Upstream release: $version" >&2
 
 for system in x86_64-linux aarch64-linux; do
   snapshots[$system]="$(snapshotArchive "https://soloist-builds.spotifycdn.com/${archives[$system]}")"
+  if ! waitForSnapshot "${snapshots[$system]}"; then
+    echo "update.sh: Wayback Machine did not persist the $system snapshot ${snapshots[$system]}; re-run to mint a new one" >&2
+    exit 1
+  fi
   fetchArchive "$system" "${snapshots[$system]}"
   if [[ "${releases[$system]}" != "$version" ]]; then
     echo "update.sh: $system snapshot is release ${releases[$system]}, expected $version; re-run once upstream is consistent" >&2

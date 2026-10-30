@@ -15,18 +15,18 @@ let
   # Machine snapshots; update.sh mints fresh ones on update.
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://web.archive.org/web/20261015152245id_/https://soloist-builds.spotifycdn.com/soloist_release_x86_64.tar.gz";
-      hash = "sha256-/4XIdw5zvoVjQ4pHkpNIAJvfDPxhdFhBJMFGSjljijU=";
+      url = "https://web.archive.org/web/20261028155813id_/https://soloist-builds.spotifycdn.com/soloist_release_x86_64.tar.gz";
+      hash = "sha256-aphaWtAfIGQNfrmbjZD8NcPiiPireQ9molDhX9JtuyQ=";
     };
     aarch64-linux = fetchurl {
-      url = "https://web.archive.org/web/20261015152256id_/https://soloist-builds.spotifycdn.com/soloist_release_arm64.tar.gz";
-      hash = "sha256-2r/48K1cH0MtYS4K2myKUBBFKt4MxhF4+1woTc64VAI=";
+      url = "https://web.archive.org/web/20261030080148id_/https://soloist-builds.spotifycdn.com/soloist_release_arm64.tar.gz";
+      hash = "sha256-tI89QyRZJVVgn5s9OR/rYcA7vp9kg9ItXd+9Zq7JIu4=";
     };
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "soloist";
-  version = "1.3.9";
+  version = "1.3.10";
 
   strictDeps = true;
   __structuredAttrs = true;
