@@ -15,18 +15,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.47.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pabav4ehssc3oQFuF4MgnSG7Ql1r5Y6n+ZzYbgh5tz8=";
+    hash = "sha256-oVxwZU5Kmb+9e0WSBouqSgNdCDyT9W7tT1XiaaA5zRg=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-Df1EVzKYWo5o2cvP3kFGcNKEuDu3fZno4OTKBe37IK8=";
+  npmDepsHash = "sha256-E5dN6qo3E4XI6hbmJ8+PHHnWLpBCZMr9Zv8g+N1ekCk=";
 
   dontPatchElf = stdenv.hostPlatform.isDarwin;
 
@@ -53,6 +53,25 @@ buildNpmPackage (finalAttrs: {
 
     # Remove node-pty dependency from packages/core/package.json
     ${jq}/bin/jq 'del(.optionalDependencies."node-pty")' packages/core/package.json > packages/core/package.json.tmp && mv packages/core/package.json.tmp packages/core/package.json
+
+    # package-lock.json installs versions that these exact pins reject, so npm tries to
+    # fetch the pinned versions, which the offline cache lacks. Pin what the lock installs.
+    # https://github.com/google-gemini/gemini-cli/issues/29820
+    for pin in \
+      cli:dependencies:tar:7.5.11 \
+      a2a-server:dependencies:tar:7.5.11 \
+      cli:dependencies:clipboardy:5.2.1 \
+      a2a-server:devDependencies:vitest:3.1.1 \
+      sdk:devDependencies:vitest:3.1.1 \
+      vscode-ide-companion:devDependencies:typescript:5.9.3; do
+      IFS=: read -r ws section name version <<< "$pin"
+      ${jq}/bin/jq --arg s "$section" --arg n "$name" --arg v "$version" \
+        '.[$s][$n] = $v' packages/$ws/package.json > package.json.tmp
+      mv package.json.tmp packages/$ws/package.json
+      ${jq}/bin/jq --arg w "packages/$ws" --arg s "$section" --arg n "$name" --arg v "$version" \
+        '.packages[$w][$s][$n] = $v' package-lock.json > package-lock.json.tmp
+      mv package-lock.json.tmp package-lock.json
+    done
 
     # Prefer the Nix ripgrep binary by prepending it to candidate paths
     substituteInPlace packages/core/src/tools/ripGrep.ts \
