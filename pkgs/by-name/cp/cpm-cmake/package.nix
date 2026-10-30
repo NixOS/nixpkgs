@@ -19,6 +19,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-ZmGM2UziK3zB4uszfJYhYvJGSDD7aF+F32yi+1ETebU=";
   };
 
+  patches = [
+    # When CPM_USE_LOCAL_PACKAGES/CPM_LOCAL_PACKAGES_ONLY resolves a
+    # CPMAddPackage call via find_package instead of fetching, it never
+    # forwards <name>_FOUND back to the calling scope (only
+    # _SOURCE_DIR/_BINARY_DIR/_ADDED) - so any project that itself checks
+    # <name>_FOUND after CPMAddPackage (a common, documented idiom for
+    # distinguishing "found on the system" from "built by CPM") sees it as
+    # unset even though CPM did find and use the real package. Confirmed
+    # against upstream's latest release (v0.43.2); not specific to this
+    # nixpkgs packaging. TODO: Upstream.
+    ./forward-found-variable.patch
+  ];
+
   postPatch = ''
     substituteInPlace cmake/CPM.cmake \
       --replace-fail "set(CURRENT_CPM_VERSION 1.0.0-development-version)" "set(CURRENT_CPM_VERSION ${finalAttrs.version})"
