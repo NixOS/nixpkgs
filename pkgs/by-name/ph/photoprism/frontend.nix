@@ -36,6 +36,7 @@ buildNpmPackage {
     homepage = "https://photoprism.app";
     description = "Photoprism's frontend";
     license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       ipetkov
     ];
