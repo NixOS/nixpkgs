@@ -1,20 +1,36 @@
 diff --git a/src/QGCApplication.cc b/src/QGCApplication.cc
-index dec93db903c..2d36f710cb0 100644
+index 1111111..2222222 100644
 --- a/src/QGCApplication.cc
 +++ b/src/QGCApplication.cc
-@@ -366,6 +366,7 @@ void QGCApplication::_initForNormalAppBoot()
-     #ifdef Q_OS_LINUX
-     #ifndef Q_OS_ANDROID
-     #ifndef QGC_NO_SERIAL_LINK
-+    #ifndef QGC_DISABLE_ETC_GROUP_CHECKS
-         if (!_runningUnitTests) {
-             // Determine if we have the correct permissions to access USB serial devices
-             QFile permFile("/etc/group");
-@@ -389,6 +390,7 @@ void QGCApplication::_initForNormalAppBoot()
-     #endif
-     #endif
-     #endif
-+    #endif
+@@ -322,6 +322,7 @@
+ #ifdef Q_OS_LINUX
+ #ifndef Q_OS_ANDROID
+ #ifndef QGC_NO_SERIAL_LINK
++#ifndef QGC_DISABLE_ETC_GROUP_CHECKS
+     if (!_runningUnitTests) {
+         // Determine if we have the correct permissions to access USB serial devices
+         QFile permFile("/etc/group");
+@@ -345,6 +346,7 @@
+ #endif
+ #endif
+ #endif
++#endif
  
      // Now that main window is up check for lost log files
      MAVLinkProtocol::instance()->checkForLostLogFiles();
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 1111111..2222222 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -28,6 +28,11 @@
+     set(QGC_NO_SERIAL_LINK ON CACHE BOOL "Disable serial port communication" FORCE)
+ endif()
+ 
++option(QGC_DISABLE_ETC_GROUP_CHECKS "Skip the /etc/group dialout permission check at startup" OFF)
++if(QGC_DISABLE_ETC_GROUP_CHECKS)
++    target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC QGC_DISABLE_ETC_GROUP_CHECKS)
++endif()
++
+ # ============================================================================
+ # Subdirectories
+ # ============================================================================
