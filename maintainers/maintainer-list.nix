@@ -18112,6 +18112,11 @@
     email = "marcin@serwin.dev";
     keys = [ { fingerprint = "F311 FA15 1A66 1875 0C4D  A88D 82F5 C70C DC49 FD1D"; } ];
   };
+  marcinrogacki = {
+    name = "Marcin Rogacki";
+    github = "marcinrogacki";
+    githubId = 715699;
+  };
   marcovergueira = {
     email = "vergueira.marco@gmail.com";
     github = "marcovergueira";
