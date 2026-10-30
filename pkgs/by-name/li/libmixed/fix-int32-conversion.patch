@@ -1,0 +1,28 @@
+Fix undefined behavior in mixed_to_int32 and mixed_to_uint32.
+
+Both conditional expressions mix integer and float operands, so they
+have type float.  INT32_MAX and UINT32_MAX are then rounded up to 2^31
+and 2^32, and converting them back is out of range, which is undefined
+behavior.  Clang folds it to garbage, and the int32 and uint32 encoding
+tests fail on aarch64-darwin.  Cast the in-range branch to the integer
+type instead.  For uint32, also add the offset in double, because in
+float the largest sample below 1 plus 1 rounds up to 2.
+
+--- a/src/mixed_encoding.h
++++ b/src/mixed_encoding.h
+@@ -127,13 +127,13 @@
+ __attribute__((always_inline))
+ MIXED_EXPORT inline int32_t mixed_to_int32(float sample){
+   return (1.0f<=sample)? INT32_MAX
+-    : (-1.0f<=sample)? sample*0x80000000L
++    : (-1.0f<=sample)? (int32_t)(sample*0x80000000L)
+     : INT32_MIN;
+ }
+ 
+ __attribute__((always_inline))
+ MIXED_EXPORT inline uint32_t mixed_to_uint32(float sample){
+   return (1.0f<=sample)? UINT32_MAX
+-    : (-1.0f<=sample)? (sample+1)*0x80000000L
++    : (-1.0f<=sample)? (uint32_t)((sample+1.0)*0x80000000L)
+     : 0;
+ }
