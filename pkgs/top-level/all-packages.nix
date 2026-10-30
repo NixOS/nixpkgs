@@ -288,8 +288,6 @@ with pkgs;
         ''
       );
 
-  alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound;

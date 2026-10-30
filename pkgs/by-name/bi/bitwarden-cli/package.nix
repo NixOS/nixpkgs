@@ -14,13 +14,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2026.10.0";
+  version = "2026.10.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-VCOX7j9XHxfYeKoIpRA9NCifm+PKfsnZzSpaA4F9bh4=";
+    hash = "sha256-bSkS7WNIpXaOwkgfld4CtQBKhz1vLeVlWbK6Qeb++T4=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
   nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-Ygom2n78W7voqar+i+l7dOjDIfrWMvR++oC8SiGOAS8=";
+  npmDepsHash = "sha256-6x1qc8cVuBdvZ2W133ajYOKpUz29qda5cECmNvlS9rg=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl

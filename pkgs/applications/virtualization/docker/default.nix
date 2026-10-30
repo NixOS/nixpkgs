@@ -169,6 +169,8 @@ let
           pname = "moby";
           inherit version;
 
+          __structuredAttrs = true;
+
           src = moby-src;
 
           vendorHash = null;
@@ -271,6 +273,8 @@ let
       {
         pname = "docker";
         inherit version;
+
+        __structuredAttrs = true;
 
         src = fetchFromGitHub {
           owner = "docker";

@@ -27,9 +27,9 @@
   # The list can be found at https://github.com/bitcoin-core/guix.sigs/tree/main/builder-keys
   builderKeys ? [
     "152812300785C96444D3334D17565732E08E5E41" # achow101.gpg
-    "9EDAFF80E080659604F4A76B2EBB056FD847F8A7" # Emzy.gpg
-    "D1DBF2C4B96F2DEBF4C16654410108112E7EA81F" # hebasto.gpg
-    # "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg (not signed 31.1)
+    # "9EDAFF80E080659604F4A76B2EBB056FD847F8A7" # Emzy.gpg (not signed 32.1)
+    # "D1DBF2C4B96F2DEBF4C16654410108112E7EA81F" # hebasto.gpg (not signed 32.1)
+    # "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg (not signed 32.1)
     "67AA5B46E7AF78053167FE343B8F814A784218F8" # willcl-ark.gpg
   ],
 }:
@@ -46,14 +46,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "31.1";
+  version = "32.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "50411d5b43c7e4c90099394759eb6c2add6e7c2dbe728840893d638b6fc6afc9";
+    sha256 = "a5f2f61e32cf7f790641c9ec306a3c88ca7b5a556946956b1f35ffd7e27813f9";
   };
 
   nativeBuildInputs = [
@@ -91,18 +91,18 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoin-core";
         repo = "guix.sigs";
-        rev = "8427342623f66a98e4b2503e5e15eb41485200d2";
-        sha256 = "sha256-X1mA1iPAb0OE9RNP9O5rFe9rzsui+BWQ2zMcV7SghXE=";
+        rev = "d48edd96db3740c2073545cfb4010d47c3df7f50";
+        sha256 = "sha256-uMxAatrLXezDkzsthLrrPlAy8Mx8lM7L477CbmEMUM8=";
       };
 
       checksums = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-5jAo0Lsz0iyEdHnXOGa+jBFCJGkRdlwAXvv2EbZF5wY=";
+        hash = "sha256-jv4kLpn+hdlvalZKFOQermq5A3NvBzKvTWwAvx2SU00=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-wi4TibZR36L3EDReI/OtxS1OOz2tjteXen4p1VxVmV8=";
+        hash = "sha256-pp0otABWlxt7TlqgKhUR7d4uEoh5YfAvhr0Zf1+ca68=";
       };
 
       verifyBuilderKeys =

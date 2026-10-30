@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   boto3,
   cryptography,
   eventlet,
@@ -24,13 +24,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "swift";
-  version = "2.38.2";
+  version = "2.38.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-DX1qmFYv127uUfKjUgBWVrf6mGQ8BB833xn+EUR9p0Q=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "swift";
+    tag = finalAttrs.version;
+    hash = "sha256-EzG3P6If2Rjj6ufEbOQFKe8LOterWef+C1xRJEwM4tg=";
   };
+
+  # Manually set version since pbr wants to get it from git (not in a tarball)
+  env.PBR_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [ installShellFiles ];
 

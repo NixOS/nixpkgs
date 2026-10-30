@@ -25,9 +25,6 @@ buildPythonPackage (finalAttrs: {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      olcai
-      maxwilson
-    ];
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 })

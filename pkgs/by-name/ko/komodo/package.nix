@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komodo";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "moghtech";
     repo = "komodo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AT3YIT/aB5ZqfWZqv2M6hDs7xPRBGlSsU/wI38ZttNw=";
+    hash = "sha256-HnxXeezxg6wC32i8VzR52CDXE9n2cPACXt1JaPDVHQc=";
   };
 
-  cargoHash = "sha256-btiCaK/Tw5shuRRzxqGSpNsqst+XQANNbSge702zSnY=";
+  cargoHash = "sha256-osXM1QQ4m8rF3MFgmM3IHUwS//r3GUeFi0xeziWGazg=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -3,30 +3,44 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  groff,
+  man-db,
 
   # dependencies
   xclip,
+  glibcLocales,
 
   # tests
   versionCheckHook,
 
   withPcap ? true,
+  # tabula-py pulls in openjdk
+  withTabula ? false,
   withXclip ? stdenv.hostPlatform.isLinux,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "visidata";
-  version = "3.4";
+  version = "3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h5utXfafQP6uZ7vXQAYXfV26y0qHbk6vulPl6DXbVX4=";
+    hash = "sha256-Lvs8BFgHdr51MCFtTbQVK4iFUwn5b5o/L6rmMGwA5To=";
   };
+
+  postPatch = ''
+    patchShebangs dev/mkman.sh visidata/man/parse_options.py
+  '';
 
   build-system = with python3Packages; [
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    groff
+    man-db
   ];
 
   dependencies =
@@ -60,7 +74,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       #namestand
       #datapackage
       pdfminer-six
-      #tabula
       vobject
       tabulate
       wcwidth
@@ -74,17 +87,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       psutil
       numpy
       shapely
+      duckdb
 
-      #requests_cache
+      requests-cache
       beautifulsoup4
 
       faker
       praw
       zulip
-      #pyairtable
-
-      setuptools
-      importlib-metadata
+      pyairtable
+      matrix-client
+      pyxlsb
     ]
     ++ lib.optionals withPcap (
       with python3Packages;
@@ -93,6 +106,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         dnslib
       ]
     )
+    ++ lib.optionals withTabula [ python3Packages.tabula-py ]
     ++ lib.optionals withXclip [
       xclip
     ];
@@ -100,6 +114,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     versionCheckHook
   ];
+
+  # tests/issue3195.vdx sets LC_NUMERIC=en_US.UTF-8
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   # check phase uses the output bin, which is not possible when cross-compiling
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -115,7 +134,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     patchShebangs tests/
     substituteInPlace tests/test-vdx.sh --replace-fail "bin/vd" "$out/bin/vd"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
     bash dev/test.sh
+    runHook postCheck
   '';
 
   postInstall = ''
@@ -128,12 +152,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Interactive terminal multitool for tabular data";
     mainProgram = "visidata";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       raskin
       markus1189
     ];
     homepage = "https://visidata.org/";
-    changelog = "https://github.com/saulpw/visidata/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/saulpw/visidata/blob/${finalAttrs.src.tag}/CHANGELOG.md";
   };
 })

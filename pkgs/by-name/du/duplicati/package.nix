@@ -7,18 +7,19 @@
   autoPatchelfHook,
   dotnetCorePackages,
   npm-lockfile-fix,
+  dart-sass,
   icu,
   openssl,
   krb5,
 }:
 
 let
-  version = "2.4.0.1";
+  version = "2.4.1.0";
   channel = "stable";
-  buildDate = "2026-10-07";
-  ngclientVersion = "0.0.238";
-  ngclientRev = "374ce0d56d519caa88999989e10dc16ef39c4536";
-  ngclientHash = "sha256-4EGtVo79p7P+L21vnVhl1ameFe1RL+7nsEmickONrYw=";
+  buildDate = "2026-10-29";
+  ngclientVersion = "0.0.244";
+  ngclientRev = "4c2cb9a067d41e86359e7dcbcb10d8768342dbb5";
+  ngclientHash = "sha256-aeQ6P/SLsQPu2VnIEyouzZa0DHBH91X6kftZ1J0/cDE=";
 
   # from Duplicati/Server/webroot/ngclient/package.json
   ngclient = buildNpmPackage {
@@ -46,7 +47,7 @@ let
                        '"gen:font": "node node_modules/.bin/ship-fg'
     '';
 
-    npmDepsHash = "sha256-jDHpuGm7juGjlRQ4Sq85lW6lcSwYSczryYxdL8uE9gg=";
+    npmDepsHash = "sha256-1Np60bym1z4yTRq/kBgVosqw74b9UFL3ikFqgvGyCWs=";
 
     npmBuildScript = "build:prod";
 
@@ -54,6 +55,14 @@ let
       NG_CLI_ANALYTICS = "false";
       CI = "true";
     };
+
+    nativeBuildInputs = [ dart-sass ];
+
+    preBuild = ''
+      # force our dart-sass executable
+      echo "export const compilerCommand = ['dart-sass'];" \
+        > node_modules/sass-embedded/dist/lib/src/compiler-path.js
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -79,7 +88,7 @@ buildDotnetModule {
     owner = "duplicati";
     repo = "duplicati";
     tag = "v${version}_${channel}_${buildDate}";
-    hash = "sha256-f/NOjUiePDt1kDxEEH0NSKlgIKuZmoFax2+wgjN5Sdk=";
+    hash = "sha256-Hl1NkYona6M3b24PA2C1W1fRgL6+ir5B1P09kgo0Qow=";
     stripRoot = true;
   };
 
