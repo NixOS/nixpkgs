@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   fetchPnpmDeps,
@@ -7,6 +8,7 @@
   protobuf,
   cmake,
   cacert,
+  python3,
   geos,
   nodejs,
   pnpm_11,
@@ -22,15 +24,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
-  version = "0.34.1";
+  version = "0.35.7";
 
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "trailbaseio";
     repo = "trailbase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qJm1vQYhE/kVZL4bUC2pMHGjw9h4E9QGZ00qwEi3los=";
+    hash = "sha256-LMTL1pdfJIZ8yVeI4B2xQEK+id5jYT9NkvLYv1K2MaM=";
     fetchSubmodules = true;
     fetchTags = true; # required for `git describe`. implies `leaveDotGit`
     postFetch = ''
@@ -49,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "Some(\"$(cat describe.txt)\".to_string())"
   '';
 
-  cargoHash = "sha256-6wKehsvQRt6bVO3lZ6ELKG0gjPGIY+2gic9ZMaaVlEo=";
+  cargoHash = "sha256-TbLbs/OLqy5lR0BowyKhRWoWIXCIXUw4nUf6oPF4OQc=";
 
   patches = [ ./skip-pnpm-install.patch ];
 
@@ -69,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-Au7sk21kljyzhIVGeUVjKX68CatQI5Zaflr/1KpR2SE=";
+    hash = "sha256-BYuL30m62vPoNdnJrsZxJK4G7+FlR/gsPSsxf9ZVsK8=";
   };
 
   # wasmtime's cargo-auditable build is broken:
@@ -98,13 +101,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # reqwest/rustls refuses to build a client without a CA bundle,
   # even for the local HTTP OAuth mock.
-  nativeCheckInputs = [ cacert ];
+  nativeCheckInputs = [
+    cacert
+    python3
+  ];
 
   # Full client e2e needs a seeded depot, WASM guests, and email.
   # The NixOS test covers login + record CRUD against the packaged server.
   checkFlags = [
     "--skip=login_anonymous_test" # fails with HttpStatus(500, None)
     "--skip=register_test" # fails with HttpStatus(424, None)
+    "--skip=postgres" # requires Docker/testcontainers
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=test_https_serving" # only runs on Linux
+    "--skip=subscription_performance_test" # fails with no buffer space available
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

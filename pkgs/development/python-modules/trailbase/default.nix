@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   poetry-core,
   httpx,
@@ -16,10 +17,25 @@ buildPythonPackage (finalAttrs: {
   version = "0.7.4";
   pyproject = true;
 
+  __darwinAllowLocalNetworking = true;
+
   src = trailbase.src;
   sourceRoot = "${finalAttrs.src.name}/client/python";
 
   patches = [ ./use-packaged-server.patch ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Python builds for different version (e.g. 3.13 and 3.14) run concurrently
+    # on Darwin with no network isolation, so they'd both bind the hardcoded
+    # test port 4007, which can lead to issues.
+    #
+    # To fix this, we offset the test port by the Python minor version so they
+    # don't conflict and mess with each other.
+    substituteInPlace tests/test_client.py \
+      --replace-fail \
+        'port = 4007' \
+        'port = 4007 + __import__("sys").version_info.minor'
+  '';
 
   build-system = [ poetry-core ];
 
