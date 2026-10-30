@@ -15,7 +15,7 @@
 
 beamPackages.mixRelease (finalAttrs: {
   pname = "livebook";
-  version = "0.19.9";
+  version = "0.19.10";
 
   buildInputs = [ beamPackages.erlang ];
 
@@ -29,7 +29,7 @@ beamPackages.mixRelease (finalAttrs: {
     owner = "livebook-dev";
     repo = "livebook";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VpYxsbfQl5sS4G1iqD/gkEohqlwiFi/Wyj8kiG0Pc4I=";
+    hash = "sha256-05h6LgVDXdWlxuJdLiKSYiY345qWyj4cLN0apU7Vbh0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -69,7 +69,7 @@ beamPackages.mixRelease (finalAttrs: {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-XtEkedj5QJh1tveKKd5sh4xcC6Gol1DUweQKEw1jLgU=";
+    outputHash = "sha256-EQ4Yzs82wJEaDHoC/LExqTe36VQ4OjtdleKe6WM1aFw=";
   };
 
   postPatch = ''
@@ -115,7 +115,7 @@ beamPackages.mixRelease (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=node_modules" ]; };
     tests = {
       livebook-service = nixosTests.livebook-service;
     };
