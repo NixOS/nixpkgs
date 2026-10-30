@@ -327,6 +327,11 @@ stdenv.mkDerivation (finalAttrs: {
       # dependent packages to require a linker plugin to read the LLVM bitcode.
       ++ lib.optionals (bootstrapStage == 2 && stdenv.hostPlatform.isElf) [ "-ffat-lto-objects" ]
     );
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Avoid the following error when running `install_name_tool`:
+    #    changing install names or rpaths can't be redone for: <some exe> (for architecture arm64) because larger updated load commands do not fit
+    NIX_LDFLAGS = "-headerpad_max_install_names";
   };
 
   preConfigure =
