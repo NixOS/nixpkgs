@@ -71,6 +71,15 @@ PATH
       thor (~> 1.3)
 
 PATH
+  remote: gems/gitlab-banzai
+  specs:
+    gitlab-banzai (0.1.0)
+      activesupport (>= 7.2)
+      html-pipeline (~> 2.14.3)
+      nokogiri (~> 1.18)
+      re2 (~> 2.15)
+
+PATH
   remote: gems/gitlab-bitbucket-server
   specs:
     gitlab-bitbucket-server (0.1.0)
@@ -141,10 +150,17 @@ PATH
       net-http (= 0.6.0)
 
 PATH
+  remote: gems/gitlab-mfe
+  specs:
+    gitlab-mfe (0.1.0)
+      activesupport (>= 7, < 9)
+      gitlab-utils (~> 0.1)
+
+PATH
   remote: gems/gitlab-policy-store
   specs:
     gitlab-policy-store (0.1.0)
-      gitlab-glaz (~> 1.2)
+      gitlab-glaz (~> 2.0)
 
 PATH
   remote: gems/gitlab-rspec_flaky
@@ -169,6 +185,11 @@ PATH
     gitlab-safe_request_store (0.1.0)
       rack (~> 2.2.8)
       request_store
+
+PATH
+  remote: gems/gitlab-safe_string_conversion
+  specs:
+    gitlab-safe_string_conversion (0.1.0)
 
 PATH
   remote: gems/gitlab-schema-validation
@@ -309,7 +330,7 @@ GEM
       nkf
       rexml
     RedCloth (4.3.4)
-    acme-client (2.0.34)
+    acme-client (2.0.35)
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.0.0)
       faraday-retry (>= 1.0, < 3.0.0)
@@ -575,22 +596,23 @@ GEM
     csv (3.3.0)
     cvss-suite (4.1.3)
       bigdecimal (~> 3.1)
-    danger (9.4.2)
+    danger (9.6.1)
+      base64 (~> 0.2)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
-      colored2 (~> 3.1)
+      colored2 (>= 3.1, < 5)
       cork (~> 0.1)
       faraday (>= 0.9.0, < 3.0)
       faraday-http-cache (~> 2.0)
-      git (~> 1.13)
-      kramdown (~> 2.3)
+      git (>= 1.13)
+      kramdown (>= 2.5.1, < 3.0)
       kramdown-parser-gfm (~> 1.0)
-      no_proxy_fix
       octokit (>= 4.0)
-      terminal-table (>= 1, < 4)
-    danger-gitlab (8.0.0)
+      pstore (~> 0.1)
+      terminal-table (>= 1, < 5)
+    danger-gitlab (10.0.0)
       danger
-      gitlab (~> 4.2, >= 4.2.0)
+      gitlab (~> 6.0)
     database_cleaner-active_record (2.2.2)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0)
@@ -602,7 +624,7 @@ GEM
       reline (>= 0.3.8)
     debug_inspector (1.1.0)
     declarative (0.0.20)
-    declarative_policy (2.1.0)
+    declarative_policy (2.2.0)
     derailed_benchmarks (2.2.1)
       base64
       benchmark-ips (~> 2)
@@ -621,10 +643,10 @@ GEM
       ruby-statistics (>= 4.0.1)
       ruby2_keywords
       thor (>= 0.19, < 2)
-    devfile (0.5.4)
-    devfile (0.5.4-aarch64-linux)
-    devfile (0.5.4-arm64-darwin)
-    devfile (0.5.4-x86_64-linux)
+    devfile (0.5.5)
+    devfile (0.5.5-aarch64-linux)
+    devfile (0.5.5-arm64-darwin)
+    devfile (0.5.5-x86_64-linux)
     device_detector (1.1.3)
     devise (4.9.4)
       bcrypt (~> 3.0)
@@ -632,7 +654,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise-two-factor (6.4.0)
+    devise-two-factor (6.4.1)
       activesupport (>= 7.2, < 8.2)
       devise (>= 4.0, < 6.0)
       railties (>= 7.2, < 8.2)
@@ -641,20 +663,22 @@ GEM
     diffy (3.4.4)
     digest-crc (0.6.5)
       rake (>= 12.0.0, < 14.0.0)
-    docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    doorkeeper (5.9.0)
+    doorkeeper (5.9.3)
       railties (>= 5)
     doorkeeper-device_authorization_grant (1.0.3)
       doorkeeper (~> 5.5)
-    doorkeeper-openid_connect (1.9.0)
+    doorkeeper-openid_connect (1.10.5)
       doorkeeper (>= 5.5, < 6.0)
       jwt (>= 2.5)
       ostruct (>= 0.5)
     dotenv (2.7.6)
     drb (2.2.3)
     dry-cli (1.0.0)
+    dry-configurable (1.4.0)
+      dry-core (~> 1.0)
+      zeitwerk (~> 2.6)
     dry-core (1.1.0)
       concurrent-ruby (~> 1.0)
       logger
@@ -718,7 +742,7 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faraday (2.14.3)
+    faraday (2.14.4)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -777,7 +801,7 @@ GEM
       fog-json
       ipaddress (~> 0.8)
       xml-simple (~> 1.1)
-    fog-aws (3.33.3)
+    fog-aws (3.33.4)
       base64 (>= 0.2, < 0.4)
       fog-core (~> 2.6)
       fog-json (~> 1.1)
@@ -843,14 +867,15 @@ GEM
     git (1.19.1)
       addressable (~> 2.8)
       rchardet (~> 1.8)
-    gitaly (19.2.0)
+    gitaly (19.4.0)
       grpc (~> 1.0)
-    gitlab (4.19.0)
+    gitlab (6.1.0)
+      base64
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
     gitlab-chronic (0.10.6)
       numerizer (~> 0.2)
-    gitlab-cloud-connector (1.53.0)
+    gitlab-cloud-connector (1.54.0)
       activesupport (>= 7.0)
       jwt (~> 2.10, >= 2.10.3)
     gitlab-crystalball (1.1.3)
@@ -873,46 +898,46 @@ GEM
       mime-types
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
-    gitlab-glaz (1.2.0)
+    gitlab-glaz (2.1.0)
       google-protobuf (~> 4.35)
       rb_sys (~> 0.9.128)
-    gitlab-glaz (1.2.0-aarch64-linux-gnu)
+    gitlab-glaz (2.1.0-aarch64-linux-gnu)
       google-protobuf (~> 4.35)
       rb_sys (~> 0.9.128)
-    gitlab-glaz (1.2.0-arm64-darwin)
+    gitlab-glaz (2.1.0-arm64-darwin)
       google-protobuf (~> 4.35)
       rb_sys (~> 0.9.128)
-    gitlab-glaz (1.2.0-x86_64-darwin)
+    gitlab-glaz (2.1.0-x86_64-darwin)
       google-protobuf (~> 4.35)
       rb_sys (~> 0.9.128)
-    gitlab-glaz (1.2.0-x86_64-linux-gnu)
+    gitlab-glaz (2.1.0-x86_64-linux-gnu)
       google-protobuf (~> 4.35)
       rb_sys (~> 0.9.128)
-    gitlab-glfm-markdown (0.0.43)
+    gitlab-glfm-markdown (0.0.45)
       rb_sys (~> 0.9.128)
-    gitlab-glfm-markdown (0.0.43-aarch64-linux-gnu)
+    gitlab-glfm-markdown (0.0.45-aarch64-linux-gnu)
       rb_sys (~> 0.9.128)
-    gitlab-glfm-markdown (0.0.43-arm64-darwin)
+    gitlab-glfm-markdown (0.0.45-arm64-darwin)
       rb_sys (~> 0.9.128)
-    gitlab-glfm-markdown (0.0.43-x86_64-darwin)
+    gitlab-glfm-markdown (0.0.45-x86_64-darwin)
       rb_sys (~> 0.9.128)
-    gitlab-glfm-markdown (0.0.43-x86_64-linux-gnu)
+    gitlab-glfm-markdown (0.0.45-x86_64-linux-gnu)
       rb_sys (~> 0.9.128)
-    gitlab-grape-openapi (0.5.0)
+    gitlab-grape-openapi (0.8.0)
       grape (>= 2.4, < 3.3)
       grape-entity (~> 1.0)
       js_regex (~> 3.8)
     gitlab-kas-grpc (19.4.0.pre.rc1)
       google-protobuf (>= 3.25, < 5.0)
       grpc (~> 1.81)
-    gitlab-labkit (5.0.1)
+    gitlab-labkit (5.5.0)
       actionpack (>= 5.0.0, < 8.2.0)
       activesupport (>= 5.0.0, < 8.2.0)
       google-protobuf (>= 3.25, < 5.0)
       grpc (>= 1.75)
       jaeger-client (~> 1.1.0)
       json_schemer (>= 2.3.0, < 3.0)
-      openssl (~> 3.3.2)
+      openssl (>= 3.3.2, < 5)
       opentelemetry-exporter-otlp (>= 0.31, < 1)
       opentelemetry-instrumentation-all (>= 0.89, < 1)
       opentelemetry-sdk (>= 1.10, < 2)
@@ -920,6 +945,7 @@ GEM
       pg_query (>= 6.1.0, < 7.0)
       prometheus-client-mmap (>= 1.2, < 2.0)
       redis (> 3.0.0, < 6.0.0)
+      thrift (< 0.25)
     gitlab-license (2.6.0)
     gitlab-mail_room (1.1.0)
       jwt (>= 2.0, < 4)
@@ -935,7 +961,7 @@ GEM
       wikicloth (= 0.8.1)
     gitlab-net-dns (0.15.0)
       logger
-    gitlab-orbit-proto (0.105.2)
+    gitlab-orbit-proto (0.137.0)
       grpc (~> 1.0)
     gitlab-rspec-metrics-exporter (0.2.0)
       logger (>= 1.4, < 2.0)
@@ -944,7 +970,7 @@ GEM
       activesupport (>= 5.2.0)
       rake (~> 13.0)
       snowplow-tracker (~> 0.8.0)
-    gitlab-secret_detection (0.45.0)
+    gitlab-secret_detection (0.46.0)
       grpc (>= 1.63.0, < 2)
       grpc_reflection (~> 0.1)
       parallel (~> 1)
@@ -972,9 +998,10 @@ GEM
       omniauth (>= 1.3, < 3)
       pyu-ruby-sasl (>= 0.0.3.3, < 0.1)
       rubyntlm (~> 0.5)
-    gitlab_quality-test_tooling (3.21.4)
+    gitlab_quality-test_tooling (3.22.1)
       activesupport (>= 7.0)
       amatch (~> 0.4.1)
+      csv (~> 3.0)
       fog-google (~> 1.25)
       gitlab (>= 4.19, < 7.0)
       http (~> 5.0)
@@ -985,15 +1012,15 @@ GEM
       rspec-parameterized (>= 1.0, < 3.0)
       table_print (= 1.5.7)
       zeitwerk (>= 2, < 3)
-    gitlab_query_language (0.35.0)
+    gitlab_query_language (0.41.0)
       rb_sys (~> 0.9.91)
-    gitlab_query_language (0.35.0-aarch64-linux-gnu)
+    gitlab_query_language (0.41.0-aarch64-linux-gnu)
       rb_sys (~> 0.9.91)
-    gitlab_query_language (0.35.0-arm64-darwin)
+    gitlab_query_language (0.41.0-arm64-darwin)
       rb_sys (~> 0.9.91)
-    gitlab_query_language (0.35.0-x86_64-darwin)
+    gitlab_query_language (0.41.0-x86_64-darwin)
       rb_sys (~> 0.9.91)
-    gitlab_query_language (0.35.0-x86_64-linux-gnu)
+    gitlab_query_language (0.41.0-x86_64-linux-gnu)
       rb_sys (~> 0.9.91)
     globalid (1.1.0)
       activesupport (>= 5.0)
@@ -1004,7 +1031,7 @@ GEM
       request_store (>= 1.0)
     google-apis-androidpublisher_v3 (0.107.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-cloudbilling_v1 (0.40.0)
+    google-apis-cloudbilling_v1 (0.41.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-cloudresourcemanager_v1 (0.45.0)
       google-apis-core (>= 0.15.0, < 2.a)
@@ -1012,7 +1039,7 @@ GEM
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-container_v1 (0.100.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-container_v1beta1 (0.91.0)
+    google-apis-container_v1beta1 (0.107.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-core (0.18.0)
       addressable (~> 2.5, >= 2.5.1)
@@ -1109,8 +1136,9 @@ GEM
       signet (>= 0.16, < 2.a)
     gpgme (2.0.26)
       mini_portile2 (~> 2.7)
-    grape (2.4.0)
-      activesupport (>= 6.1)
+    grape (3.2.1)
+      activesupport (>= 7.2)
+      dry-configurable
       dry-types (>= 1.1)
       mustermann-grape (~> 1.1.0)
       rack (>= 2)
@@ -1225,7 +1253,7 @@ GEM
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    httparty (0.24.2)
+    httparty (0.24.3)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -1256,7 +1284,7 @@ GEM
       opentracing (~> 0.3)
       thrift
     jaro_winkler (1.6.1)
-    jira-ruby (3.2.0)
+    jira-ruby (3.2.2)
       activesupport
       cgi
       jwt (>= 2.1)
@@ -1270,7 +1298,7 @@ GEM
       character_set (~> 1.4)
       regexp_parser (~> 2.11)
       regexp_property_values (~> 1.0)
-    json (2.19.2)
+    json (2.21.2)
     json-jwt (1.16.6)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -1303,7 +1331,7 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    keela (0.4.1)
+    keela (0.5.0)
       parallel (~> 1.20)
       rainbow (~> 3.0)
       ruby-progressbar (~> 1.11)
@@ -1444,7 +1472,6 @@ GEM
     netrc (0.11.0)
     nio4r (2.7.5)
     nkf (0.2.0)
-    no_proxy_fix (0.1.2)
     nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -1856,6 +1883,7 @@ GEM
       pry (>= 0.13.0)
       tty-markdown-meinac
       tty-prompt
+    pstore (0.2.1)
     public_suffix (6.0.1)
     puma (8.0.2)
       nio4r (~> 2.0)
@@ -2108,9 +2136,9 @@ GEM
     rugged (1.9.6)
     safety_net_attestation (0.5.0)
       jwt (>= 2.0, < 4.0)
-    sanitize (6.0.2)
+    sanitize (7.0.0)
       crass (~> 1.0.2)
-      nokogiri (>= 1.12.0)
+      nokogiri (>= 1.16.8)
     sass-embedded (1.77.5)
       google-protobuf (>= 3.25, < 5.0)
       rake (>= 13)
@@ -2155,7 +2183,7 @@ GEM
     shellany (0.0.1)
     shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
-    sidekiq-cron (2.3.1)
+    sidekiq-cron (2.4.0)
       cronex (>= 0.13.0)
       fugit (~> 1.8, >= 1.11.1)
       globalid (>= 1.0.1)
@@ -2167,14 +2195,10 @@ GEM
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
     simple_po_parser (1.1.6)
-    simplecov (0.22.0)
-      docile (~> 1.1)
-      simplecov-html (~> 0.11)
-      simplecov_json_formatter (~> 0.1)
-    simplecov-cobertura (3.1.0)
+    simplecov (1.3.0)
+    simplecov-cobertura (4.0.0)
       rexml
-      simplecov (~> 0.19)
-    simplecov-html (0.12.3)
+      simplecov (~> 1.0)
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.3)
@@ -2289,7 +2313,7 @@ GEM
     timfel-krb5-auth (0.8.3)
     tins (1.31.1)
       sync
-    toml-rb (4.1.0)
+    toml-rb (4.2.1)
       citrus (~> 3.0, > 3.0)
       racc (~> 1.7)
     tomlrb (1.3.0)
@@ -2492,11 +2516,13 @@ DEPENDENCIES
   cssbundling-rails (= 1.4.3)
   csv_builder!
   cvss-suite (~> 4.1.1)
+  danger (~> 9.6)
+  danger-gitlab (~> 10.0)
   database_cleaner-active_record (~> 2.2.0)
   debug (~> 1.11.0)
-  declarative_policy (~> 2.1.0)
+  declarative_policy (~> 2.2.0)
   derailed_benchmarks
-  devfile (~> 0.5.4)
+  devfile (~> 0.5.5)
   device_detector
   devise (~> 4.9.3)
   devise-pbkdf2-encryptable (~> 0.0.0)!
@@ -2505,7 +2531,7 @@ DEPENDENCIES
   diffy (~> 3.4)
   doorkeeper (~> 5.8, >= 5.8.1)
   doorkeeper-device_authorization_grant (~> 1.0.0)
-  doorkeeper-openid_connect (~> 1.9.0)
+  doorkeeper-openid_connect (~> 1.10.0)
   drb (~> 2.2)
   duo_api (~> 1.3)
   ed25519 (~> 1.4.0)
@@ -2537,15 +2563,16 @@ DEPENDENCIES
   gettext (~> 3.5, >= 3.5.1)
   gettext_i18n_rails (~> 1.13.0)
   git (~> 1.8)
-  gitaly (~> 19.2)
+  gitaly (~> 19.4.0)
   gitlab-active-context!
   gitlab-backup-cli!
+  gitlab-banzai!
   gitlab-bitbucket!
   gitlab-bitbucket-server!
   gitlab-cd-driver-orchestration!
   gitlab-cells-http_router!
   gitlab-chronic (~> 0.10.5)
-  gitlab-cloud-connector (~> 1.53)
+  gitlab-cloud-connector (~> 1.54)
   gitlab-configs!
   gitlab-crystalball (~> 1.1.3)
   gitlab-dangerfiles (~> 4.12.0)
@@ -2555,24 +2582,26 @@ DEPENDENCIES
   gitlab-email_handler!
   gitlab-experiment (~> 2.0.0)
   gitlab-fog-azure-rm (~> 2.5.0)
-  gitlab-glaz (~> 1.2.0)
-  gitlab-glfm-markdown (~> 0.0.42)
-  gitlab-grape-openapi (~> 0.5.0)
+  gitlab-glaz (~> 2.1.0)
+  gitlab-glfm-markdown (~> 0.0.45)
+  gitlab-grape-openapi (~> 0.8.0)
   gitlab-housekeeper!
   gitlab-http!
   gitlab-iam-grpc!
   gitlab-kas-grpc (~> 19.4.0.pre.rc1)
-  gitlab-labkit (~> 5.0.0)
+  gitlab-labkit (~> 5.5.0)
   gitlab-license (~> 2.6)
   gitlab-mail_room (~> 1.1.0)
   gitlab-markup (~> 2.2.0)
+  gitlab-mfe!
   gitlab-net-dns (~> 0.15.0)
-  gitlab-orbit-proto (~> 0.105.0)
+  gitlab-orbit-proto (~> 0.137.0)
   gitlab-policy-store!
   gitlab-rspec!
   gitlab-rspec-metrics-exporter (~> 0.2.0)
   gitlab-rspec_flaky!
   gitlab-safe_request_store!
+  gitlab-safe_string_conversion!
   gitlab-schema-validation!
   gitlab-sdk (~> 0.3.0)
   gitlab-secret_detection (< 1.0)
@@ -2584,15 +2613,15 @@ DEPENDENCIES
   gitlab-utils!
   gitlab_chronic_duration (~> 0.12)
   gitlab_omniauth-ldap (~> 2.3.0)
-  gitlab_quality-test_tooling (~> 3.21.4)
-  gitlab_query_language (~> 0.35.0)
+  gitlab_quality-test_tooling (~> 3.22.1)
+  gitlab_query_language (~> 0.41.0)
   gon (~> 6.6.0)
   google-apis-androidpublisher_v3 (~> 0.107.0)
-  google-apis-cloudbilling_v1 (~> 0.40.0)
+  google-apis-cloudbilling_v1 (~> 0.41.0)
   google-apis-cloudresourcemanager_v1 (~> 0.45.0)
   google-apis-compute_v1 (~> 0.154.0)
   google-apis-container_v1 (~> 0.100.0)
-  google-apis-container_v1beta1 (~> 0.91.0)
+  google-apis-container_v1beta1 (~> 0.107.0)
   google-apis-core (~> 0.18.0, >= 0.18.0)
   google-apis-iam_v1 (~> 0.79.0)
   google-apis-serviceusage_v1 (~> 0.28.0)
@@ -2604,7 +2633,7 @@ DEPENDENCIES
   google-protobuf (>= 3.25, < 5.0)
   googleauth (~> 1.14)
   gpgme (~> 2.0.24)
-  grape (~> 2.4)
+  grape (~> 3.2)
   grape-entity (~> 1.1.0)
   grape-path-helpers (~> 2.1)
   grape-swagger (~> 2.1.4)
@@ -2635,12 +2664,12 @@ DEPENDENCIES
   jira-ruby (~> 3.2.0)
   js-routes (~> 2.3)
   js_regex (~> 3.8)
-  json (~> 2.19.0)
+  json (~> 2.21.0)
   json_schemer (~> 2.4.0)
   jsonb_accessor (~> 1.4)
   jwt (~> 2.10.3)
   kaminari (~> 1.2.2)
-  keela (~> 0.4.1)
+  keela (~> 0.5.0)
   knapsack (~> 4.0.0)
   kramdown (~> 2.5.0)
   kubeclient (~> 4.12.0)
@@ -2772,7 +2801,7 @@ DEPENDENCIES
   ruby-saml (~> 1.18)
   rubyzip (~> 2.4.0)
   safe_zip!
-  sanitize (~> 6.0.2)
+  sanitize (~> 7.0.0)
   sd_notify (~> 0.1.0)
   seed-fu (~> 2.3.7)
   selenium-webdriver (~> 4.21, >= 4.21.1)
@@ -2782,11 +2811,11 @@ DEPENDENCIES
   sentry-sidekiq (~> 5.23.0)
   shoulda-matchers (~> 6.4.0)
   sidekiq!
-  sidekiq-cron (~> 2.3.0)
+  sidekiq-cron (~> 2.4.0)
   sigdump (~> 0.2.4)
   simple_po_parser (~> 1.1.6)
-  simplecov (~> 0.22)
-  simplecov-cobertura (~> 3.1.0)
+  simplecov (~> 1.3)
+  simplecov-cobertura (~> 4.0)
   simplecov-lcov (~> 0.8.0)
   slack-messenger (~> 2.3.5)
   snowplow-tracker (~> 0.8.0)
@@ -2838,7 +2867,7 @@ DEPENDENCIES
 CHECKSUMS
   CFPropertyList (3.0.7) sha256=c45721614aca8d5eb6fa216f2ec28ec38de1a94505e9766a20e98745492c3c4c
   RedCloth (4.3.4) sha256=5231b2fdd91a933915cba330e5fd1a74025e77b56f57b7404c7191ebf2812297
-  acme-client (2.0.34) sha256=3204a94addbdf82c06fe7a5d87a43c77ee135f0cbd05cb0ada18fffdf1935395
+  acme-client (2.0.35) sha256=b34fc70e119a128cf1d8b38218d4aa5e86fa3c09e76df18470359fd216ac9172
   action_dispatch-draw_all (0.1.0)
   actioncable (7.2.3.1) sha256=d3bf40a3f4fc79a09709878f0e5c43a5e2d8e6607089f6b38f9472b8715eb33c
   actionmailbox (7.2.3.1) sha256=a4e73480c97ab2fff5a416f92c54b065b1a6564ea4a807d42e0b83a94d4ec541
@@ -2944,8 +2973,8 @@ CHECKSUMS
   csv (3.3.0) sha256=0bbd1defdc31134abefed027a639b3723c2753862150f4c3ee61cab71b20d67d
   csv_builder (0.1.0)
   cvss-suite (4.1.3) sha256=625cdebdf2a1a940450d11bb8c8637b96c7004fb48559d59700079ca7a6f875c
-  danger (9.4.2) sha256=43e552c6731030235a30fdeafe703d2e2ab9c30917154489cb0ecd9ad3259d80
-  danger-gitlab (8.0.0) sha256=497dd7d0f6513913de651019223d8058cf494df10acbd17de92b175dfa04a3a8
+  danger (9.6.1) sha256=ca1b870fd8e9f27add22c5649e976efcfb3c76a57f5c7739bb3f1a72ce0506b7
+  danger-gitlab (10.0.0) sha256=a1ee7e778d634edcbf589adc6070a4ef14d398379d28e88a1bb76953733e7c0c
   database_cleaner-active_record (2.2.2) sha256=88296b9f3088c31f7c0d4fcec10f68e4b71c96698043916de59b04debec10388
   database_cleaner-core (2.0.1) sha256=8646574c32162e59ed7b5258a97a208d3c44551b854e510994f24683865d846c
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
@@ -2953,28 +2982,28 @@ CHECKSUMS
   debug (1.11.1) sha256=2e0b0ac6119f2207a6f8ac7d4a73ca8eb4e440f64da0a3136c30343146e952b6
   debug_inspector (1.1.0) sha256=eaa5a2d0195e1d65fb4164e8e7e466cca2e7eb53bc5e608cf12b8bf02c3a8606
   declarative (0.0.20) sha256=8021dd6cb17ab2b61233c56903d3f5a259c5cf43c80ff332d447d395b17d9ff9
-  declarative_policy (2.1.0) sha256=f9ab705da726174bde97785c319311a4abf6143c07862f882bd8bc1b69361eea
+  declarative_policy (2.2.0) sha256=add19e3704f28efb590f4983d212413cc3b8d4056ca475613f0ef234d890cd05
   derailed_benchmarks (2.2.1) sha256=654280664fded41c9cd8fc27fc0fcfaf096023afab90eb4ac1185ba70c5d4439
-  devfile (0.5.4) sha256=c559bbb23275b5cf1bb67bd49fc2810105a53cfbcd841b216d551a4fa7391862
-  devfile (0.5.4-aarch64-linux) sha256=264cf8d9762d78558c8c6136fb7ba0ffd147476e3eb4583e7e6327837da87314
-  devfile (0.5.4-arm64-darwin) sha256=c2e26e234e5bfddbd8cac4169faefb2401f7b2d2b5a976785e01afea6822a90f
-  devfile (0.5.4-x86_64-linux) sha256=3e86982457e90531539ec1f1bc477e8412b4ef838ee4251c398f48931afb11f3
+  devfile (0.5.5) sha256=b719be258d19919a696295178121d55b9724a7873f0f1162ace8f3b21a7bc993
+  devfile (0.5.5-aarch64-linux) sha256=c6c5800c852ad2f496aa313d921269995c5f2678dd452e0fceacfcc9315be6b2
+  devfile (0.5.5-arm64-darwin) sha256=72d3f593df22dbe8aba14f0928e8cf5ee8d856ee2b250e8b3273bf562a84048f
+  devfile (0.5.5-x86_64-linux) sha256=ca904f99decbfa045a4331d6daf22bc4a8310912bdee4475e1426c97c748bf3e
   device_detector (1.1.3) sha256=c5fe3fe42cab2e8aa01f193b2074b8bb1510373ce47127206f28c7dea75a9c79
   devise (4.9.4) sha256=920042fe5e704c548aa4eb65ebdd65980b83ffae67feb32c697206bfd975a7f8
   devise-pbkdf2-encryptable (0.0.0)
-  devise-two-factor (6.4.0) sha256=09e3a23b5b9ae7da78881d238a89860454d9e2ba0912e175576e9c028757adb4
+  devise-two-factor (6.4.1) sha256=82f70ebc1d0b2efa751da214bb9fc9ea1c6d506b35e8934396528b0f42322086
   diff-lcs (1.5.0) sha256=49b934001c8c6aedb37ba19daec5c634da27b318a7a3c654ae979d6ba1929b67
   diff_match_patch (0.1.0)
   diffy (3.4.4) sha256=79384ab5ca82d0e115b2771f0961e27c164c456074bd2ec46b637ebf7b6e47e3
   digest-crc (0.6.5) sha256=5ca456f3352dc5ff17eb95deb3dd5a79dc79f8bf751d8005abca5b7b9b252124
-  docile (1.4.0) sha256=5f1734bde23721245c20c3d723e76c104208e1aa01277a69901ce770f0ebb8d3
   domain_name (0.5.20190701) sha256=000a600454cb4a344769b2f10b531765ea7bd3a304fe47ed12e5ca1eab969851
-  doorkeeper (5.9.0) sha256=edad053b3dcb6bf51e3181fc423333e7fba28863beb2122379643ce6463b6336
+  doorkeeper (5.9.3) sha256=e6d120235bd134494bd02d08e8063c994fc1a58a681285077e671529bfc5d90b
   doorkeeper-device_authorization_grant (1.0.3) sha256=94c3ac12a0d50942850ecd58ed64298b397a5e903e8880cb68d4085600932679
-  doorkeeper-openid_connect (1.9.0) sha256=f689f727bbe60a0e7174b00ccd1e38c52a12c0c34dd096d49018b98cfaec7eb3
+  doorkeeper-openid_connect (1.10.5) sha256=1382e5573e2fdfef2b16ce9969af777e61496b8e9cff0197789d8bf9c12efb02
   dotenv (2.7.6) sha256=2451ed5e8e43776d7a787e51d6f8903b98e446146c7ad143d5678cc2c409d547
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   dry-cli (1.0.0) sha256=28ead169f872954dd08910eb8ead59cf86cd18b4aab321e8eeefe945749569f0
+  dry-configurable (1.4.0) sha256=e35d1b5f3c081753ef361f564919db79000f32cfa6f20ee3a3ba5921b41b73ce
   dry-core (1.1.0) sha256=0903821a9707649a7da545a2cd88e20f3a663ab1c5288abd7f914fa7751ab195
   dry-inflector (1.2.0) sha256=22f5d0b50fd57074ae57e2ca17e3b300e57564c218269dcf82ff3e42d3f38f2e
   dry-logic (1.6.0) sha256=da6fedbc0f90fc41f9b0cc7e6f05f5d529d1efaef6c8dcc8e0733f685745cea2
@@ -3004,7 +3033,7 @@ CHECKSUMS
   extended-markdown-filter (0.7.0) sha256=c8eeef7409fbae18c6b407cd3e4eeb5d25c35cb08fe1ac06f375df3db2d4f138
   factory_bot (6.5.0) sha256=6374b3a3593b8077ee9856d553d2e84d75b47b912cc24eafea4062f9363d2261
   factory_bot_rails (6.5.1) sha256=d3cc4851eae4dea8a665ec4a4516895045e710554d2b5ac9e68b94d351bc6d68
-  faraday (2.14.3) sha256=1882247e6766615c8220b4392bf1d27f6ebb63d8e28267587cef1fb0bf37f278
+  faraday (2.14.4) sha256=9bb4408c44621b0dbaaaa39e5dbfc4dbe58cc6751b6eb94d16ae9e1f2f2fab6e
   faraday-follow_redirects (0.5.0) sha256=5cde93c894b30943a5d2b93c2fe9284216a6b756f7af406a1e55f211d97d10ad
   faraday-http-cache (2.5.0) sha256=64b7366d66e508e1c3dd855ebb20ce9da429330e412a23d9ebbc0a7a7b227463
   faraday-multipart (1.2.0) sha256=7d89a949693714176f612323ca13746a2ded204031a6ba528adee788694ef757
@@ -3032,7 +3061,7 @@ CHECKSUMS
   flipper-active_record (1.3.6) sha256=0c172224e4024637abd47fbd1429ded2cd2042693757f3caa7b80f4bb06b2abe
   flipper-active_support_cache_store (1.3.6) sha256=c03c2d231e7f1f39b94b772fb856b4e5274697f87268497822cb117150cd1037
   fog-aliyun (0.4.1) sha256=88c8bf8dbf6c01ada34ec6241e44a18cd80696cdb455acf4618a17936313c803
-  fog-aws (3.33.3) sha256=7b13b0572f9388ebca3211b0fe56fc15bbb497f15d70978cb5e4b5cde70eecca
+  fog-aws (3.33.4) sha256=2177b4eff210644e64ba4c1934ed653c4cc920bad0c8e108a033f1776305ba80
   fog-core (2.6.0) sha256=3fe08aa83a23cddce42f4ba412040c08f890d7ff04c175c0ee59119371245be6
   fog-google (1.29.4) sha256=5185b727cedbdd7710d0703cd513b4b80c2aa356d3616839f6a2b841fd467ce3
   fog-json (1.2.0) sha256=dd4f5ab362dbc72b687240bba9d2dd841d5dfe888a285797533f85c03ea548fe
@@ -3050,16 +3079,17 @@ CHECKSUMS
   gettext (3.5.2) sha256=ada02c59aa7e9f56bd2522faedaed16421dd2f3ddb5fe28628c0be5abcbf3c74
   gettext_i18n_rails (1.13.0) sha256=d4a4739d928b6ce52a2d694d33a831dcb06c7c8e197b3172fc73dfaa20ac8ee6
   git (1.19.1) sha256=b0a422d9f6517353c48a330d6114de4db9e0c82dbe7202964a1d9f1fbc827d70
-  gitaly (19.2.0) sha256=5291ff0847f8f26cad65a6d14720d9d5296f44459876624ef2643813fc80ee61
-  gitlab (4.19.0) sha256=3f645e3e195dbc24f0834fbf83e8ccfb2056d8e9712b01a640aad418a6949679
+  gitaly (19.4.0) sha256=a1508179065f85251d204d3e37f14fe92b252fe42d3b4293856e1e727080af65
+  gitlab (6.1.0) sha256=4ae1f866a1f5ae07aa1125e86c0a656b2ad0fe1d78d5ad91b8bc3b67d66063a5
   gitlab-active-context (0.0.1)
   gitlab-backup-cli (0.0.1)
+  gitlab-banzai (0.1.0)
   gitlab-bitbucket (0.1.0)
   gitlab-bitbucket-server (0.1.0)
   gitlab-cd-driver-orchestration (0.7.0)
   gitlab-cells-http_router (0.1.0)
   gitlab-chronic (0.10.6) sha256=a244d11a1396d2aac6ae9b2f326adf1605ec1ad20c29f06e8b672047d415a9ac
-  gitlab-cloud-connector (1.53.0) sha256=cdacefc13725bbf65d8b932f41fca3b238d3cf330966a577450dd8c03ac1b67d
+  gitlab-cloud-connector (1.54.0) sha256=46c93e3ce7d26ba8df37d31ea068770e0c8b23cf0fd9375b48d27d301ec7571e
   gitlab-configs (0.1.0)
   gitlab-crystalball (1.1.3) sha256=ea9a90d659704a042d763ce6d343a9f664cd650e0787a19adec7036ea4390861
   gitlab-dangerfiles (4.12.0) sha256=0b8b7b00bf1ab155c3ab37cfc7c9815b5b82f403f85ddaf62aea137129403072
@@ -3069,35 +3099,37 @@ CHECKSUMS
   gitlab-email_handler (0.1.0)
   gitlab-experiment (2.0.0) sha256=05183dee7ddad1ef183de43c2c330e57a1457f679744c19c61f637e1135d3c76
   gitlab-fog-azure-rm (2.5.2) sha256=075f28509c83e717f39eaaea44c4c877ded5808e7b06150b37b99876ae50fbed
-  gitlab-glaz (1.2.0) sha256=6dc4376c86dd56f660d81bcf75266424949c5a524e462abac514c35e7f4be7f1
-  gitlab-glaz (1.2.0-aarch64-linux-gnu) sha256=3e2afad4dcedc1ca5c51afce5e7acaeca6262a92f7177e80333ceeb667faff85
-  gitlab-glaz (1.2.0-arm64-darwin) sha256=8bd4267d7c4475e111062297018a387ceb556d7b2dce2408efce697ef98c1810
-  gitlab-glaz (1.2.0-x86_64-darwin) sha256=ef05ccd79f862c3f2626ae297ab2b9d034035baa1ed2bfe6c42ba0ac2492c4a4
-  gitlab-glaz (1.2.0-x86_64-linux-gnu) sha256=11c45533a470a9d9a99c983aae4f59c7d5fd5c0153d000d0ea427109fb61c09a
-  gitlab-glfm-markdown (0.0.43) sha256=2c9625b0c42cbcf673a10a57639a2eb9de5d63a953a98460a00dfd400881b426
-  gitlab-glfm-markdown (0.0.43-aarch64-linux-gnu) sha256=2d63885cd9c2d3322edff99bc1f5c9fcd9ca790633e236dd32c4b46f7597c25b
-  gitlab-glfm-markdown (0.0.43-arm64-darwin) sha256=3082e78f2693ed8c4b47cc34953df0ca20f60ab389af285d225443b8ec005b14
-  gitlab-glfm-markdown (0.0.43-x86_64-darwin) sha256=1b57181174770b880726e3c6a27003de8486076c509960f405b5dae0112c5164
-  gitlab-glfm-markdown (0.0.43-x86_64-linux-gnu) sha256=9144e372fe2fab18bc1b42337c522991c1af5b94d655fba8f87927cdcaefb0c9
-  gitlab-grape-openapi (0.5.0) sha256=8085b08f11b567f2aed9431bb78c52eea7f63e09c44547eaba724253127896e8
+  gitlab-glaz (2.1.0) sha256=d6e9c22977cdcfc2216c58d883134367998110b6641c6ba42f0af6e4004aea58
+  gitlab-glaz (2.1.0-aarch64-linux-gnu) sha256=351a1fef8411701add9f18855ec29c846aafd67d136af29bb9bac5c06d66dfcf
+  gitlab-glaz (2.1.0-arm64-darwin) sha256=52e03d8c9290bd7883deb6f0ab139fc949f1f5b5ee46170c79372c5713ce3083
+  gitlab-glaz (2.1.0-x86_64-darwin) sha256=2e5f5531f98b0a81797013448fd2a9f5540ccb6bcc9565651332d8e9eff61844
+  gitlab-glaz (2.1.0-x86_64-linux-gnu) sha256=3fb2cc14cb6866e2e6abd5f933af7af961cbfb44866ffa9bb8f2668be55a3e87
+  gitlab-glfm-markdown (0.0.45) sha256=50853c490a934d6e608f89901448b326aef8e4a97b96bedde4cacc7c91e7ae46
+  gitlab-glfm-markdown (0.0.45-aarch64-linux-gnu) sha256=df74b5839389812583b31b355f2b77b45effd3fab9b61d01e23e974cf8af7d67
+  gitlab-glfm-markdown (0.0.45-arm64-darwin) sha256=2e972c5c20b51af15b458afa846b02024bcec6b1746cb07be333b97a629e1aa2
+  gitlab-glfm-markdown (0.0.45-x86_64-darwin) sha256=301d2d422449f82e35e0a0629e62a7494d72e59c088bc835665a049c0c65d09a
+  gitlab-glfm-markdown (0.0.45-x86_64-linux-gnu) sha256=20b0420a0340610956ed13da7c11abe451a8d575c1164e09987becfbf5c3c14e
+  gitlab-grape-openapi (0.8.0) sha256=ee5e324cea2f5ad4a83a9b60ad54c40943e0687059083f91b8bc70e81968eb00
   gitlab-housekeeper (0.1.0)
   gitlab-http (0.1.0)
   gitlab-iam-grpc (0.1.0)
   gitlab-kas-grpc (19.4.0.pre.rc1) sha256=ebe94f6a8611d43ab1f09967bb997185a1745716caa429a4f359387a79ec8a91
-  gitlab-labkit (5.0.1) sha256=c1c23a5a54b93a6911711f4c7e14cbbaf2d3abb16274aefa35e7864cc16c4b98
+  gitlab-labkit (5.5.0) sha256=148d96b89574c8dbed3bebdbc713b4b31b80aab9e77c90d701e2750f31ee7f0a
   gitlab-license (2.6.0) sha256=2c1f8ae73835640ec77bf758c1d0c9730635043c01cf77902f7976e826d7d016
   gitlab-mail_room (1.1.0) sha256=784847b914a6636b30264fd8a042c15e39f3473f3acd78ebd254ac0a885a5878
   gitlab-markup (2.2.0) sha256=a6f494202983262961e8a68f95018a8f971aaa60f396552337e0fb910f6e68d7
+  gitlab-mfe (0.1.0)
   gitlab-net-dns (0.15.0) sha256=d229aae205055b86b2ad166981257eb589ce6d6a146aa79b3ea2b1e5d9741f46
-  gitlab-orbit-proto (0.105.2) sha256=e926e9e8103e4e2498bdacd853a305300d49bb8cd20a5c2a407a6ee07c3c5aaf
+  gitlab-orbit-proto (0.137.0) sha256=3ac82777ee4915cb45eabf29fbe289d4f4b3d2e17c5e29f0018efa04059e60ba
   gitlab-policy-store (0.1.0)
   gitlab-rspec (0.1.0)
   gitlab-rspec-metrics-exporter (0.2.0) sha256=9d05ee0437d30cc59d78437e795916e13746f070ea2423e88e9325e96bd09c63
   gitlab-rspec_flaky (0.1.0)
   gitlab-safe_request_store (0.1.0)
+  gitlab-safe_string_conversion (0.1.0)
   gitlab-schema-validation (0.1.0)
   gitlab-sdk (0.3.1) sha256=48ba49084f4ab92df7c7ef9f347020d9dfdf6ed9c1e782b67264e98ffe6ea710
-  gitlab-secret_detection (0.45.0) sha256=61413bac4fb68085318d1ba0362f504a449d95886447be87eea90974b48159fc
+  gitlab-secret_detection (0.46.0) sha256=8e4d729b77b34b1925f39e08680defeb44be38a68df46d205f025893029db141
   gitlab-security_report_schemas (0.2.1.min15.0.0.max15.2.4) sha256=4a9fc031d6c5374ab2bc6a8ae82ca27659b55e5fd712b61993ae527361579d17
   gitlab-sidekiq-fetcher (0.12.1)
   gitlab-styles (14.1.0) sha256=f39bc5619636bad3690d574438d70b865f48e38d57a38d7823bdeff2a90d2d5a
@@ -3106,20 +3138,20 @@ CHECKSUMS
   gitlab-utils (0.2.0)
   gitlab_chronic_duration (0.12.0) sha256=0d766944d415b5c831f176871ee8625783fc0c5bfbef2d79a3a616f207ffc16d
   gitlab_omniauth-ldap (2.3.0) sha256=167036fe37c2711f2e1d2047260766e4c9b31ac37dfc873b101bcd4ea2a3a3b4
-  gitlab_quality-test_tooling (3.21.4) sha256=c94c2d57cf749846daf831e1541280d6a226507d9bc63a55224f7d37abf5dda5
-  gitlab_query_language (0.35.0) sha256=cec700ee09571bbe15f211a6166703746c63815ff9045d9ff6ce813d6c95af92
-  gitlab_query_language (0.35.0-aarch64-linux-gnu) sha256=756eb96cb69f8d896c617dde15508b6c595b3c2cf478f6423012c51dc71ccd88
-  gitlab_query_language (0.35.0-arm64-darwin) sha256=675a0de3a0eb3ac51483478597be32067f554f27b61a1a03c831e620dc1fd5b8
-  gitlab_query_language (0.35.0-x86_64-darwin) sha256=34688cdd220a2e0bac113bf5522bc88d5045063b78f457e1a3ba9760596d081c
-  gitlab_query_language (0.35.0-x86_64-linux-gnu) sha256=6c642690709747100783ccbcedb6811ca0e0416c30fcca04d3c360723d616093
+  gitlab_quality-test_tooling (3.22.1) sha256=8eaff0c94046d5de03a647c9baaf4ec8b34925642920d9a3aed467196c682456
+  gitlab_query_language (0.41.0) sha256=294fb98ab1dc9305b9779683c2d911901f85ce3d933c5b23564d317d56bb4d3b
+  gitlab_query_language (0.41.0-aarch64-linux-gnu) sha256=c084b8ada473652505b51706f7e3c38b3415d4b04bcf34edface7a472afcf824
+  gitlab_query_language (0.41.0-arm64-darwin) sha256=ea320b694745e9c4f71d9e81baf043226b0a032147d3302a534a2ef48596dc17
+  gitlab_query_language (0.41.0-x86_64-darwin) sha256=d3d043826165e0fa371493d04831fc450fec37ed154fbb3dde64e24b08b64a6a
+  gitlab_query_language (0.41.0-x86_64-linux-gnu) sha256=968ab88e5a82dde4522779f52df43e97451f4f3aa71c9caeb4f6f096c826842c
   globalid (1.1.0) sha256=b337e1746f0c8cb0a6c918234b03a1ddeb4966206ce288fbb57779f59b2d154f
   gon (6.6.0) sha256=4c0be4e4f05fc8eb5db5ac2f7d47ae28ee04826f2b153338f7fb03c0e8f6ecd1
   google-apis-androidpublisher_v3 (0.107.0) sha256=b8207eecc89e6a9f7ea11aa88a07bccdcae5ca90121330079db4ef4696a2f3ff
-  google-apis-cloudbilling_v1 (0.40.0) sha256=5b7b1e93946c7a4631f9eadb5ca79e1d7f760b2eaf718f069d778359bdf93268
+  google-apis-cloudbilling_v1 (0.41.0) sha256=5d82d6e8ef39023ea6e23cac66cb72a3d824517ac65be459817efb38853bfcfc
   google-apis-cloudresourcemanager_v1 (0.45.0) sha256=ea936d4d51dd0556fb93f4a78131c0441c308906bf076d543c8852dbeec27d45
   google-apis-compute_v1 (0.154.0) sha256=8209a6414ccdf0f59a13ae4d0c4cc3c021689d2839b3be086fdf2ebc357d2452
   google-apis-container_v1 (0.100.0) sha256=5a5ae56036e384830263de6d48ed9b9f9ef26818b28b6b027206432e718d1853
-  google-apis-container_v1beta1 (0.91.0) sha256=9639664bf4876059627b44e3feca67cf34bb48c3520d60fbdfc42f4f37f5c299
+  google-apis-container_v1beta1 (0.107.0) sha256=6f3c10d86b54106525cf91850fd7597b8b70852360edaab39f7a1af96c59691a
   google-apis-core (0.18.0) sha256=96b057816feeeab448139ed5b5c78eab7fc2a9d8958f0fbc8217dedffad054ee
   google-apis-dns_v1 (0.36.0) sha256=5dd273d78ab37d03d1bc07837186f79ad0399e9f2b8b1ec2629ed682ea347d47
   google-apis-iam_v1 (0.79.0) sha256=dc014a4cc18c964795f9423f13e032f30ae037ec3b4325d852dee5df67577ae8
@@ -3150,7 +3182,7 @@ CHECKSUMS
   googleapis-common-protos-types (1.23.0) sha256=992e740a523794d9fc5f29a504465d8fc737aaa16c930fe7228e3346860faf0a
   googleauth (1.14.0) sha256=62e7de11791890c3d3dc70582dfd9ab5516530e4e4f56d96451fd62c76475149
   gpgme (2.0.26) sha256=1aebfd2eb83b745341e6f416f318597568af5ad4d7d1f55bfab4f1078123abaa
-  grape (2.4.0) sha256=3d59673e80f11d49ba86270b78344e5348dc057b318c2bbc1c01f3532f9b6aec
+  grape (3.2.1) sha256=448072f55904e5a4dca2e3781f0a373942514be65402cafb6177f5bc73db1b94
   grape-entity (1.1.0) sha256=ab6a1004e57791834e8497d5e85a3c101b72144d8ca31462a26e6d0a380c3d89
   grape-path-helpers (2.1.0) sha256=908155cdc6e33fbca28bd44b4e1467d904fe36b45ef61bee62b7bfa28f5c7726
   grape-swagger (2.1.4) sha256=3279351bebafbca24e0331b9f7c6dbfefb262042a1f3d224ed41cf2be4aee35b
@@ -3191,7 +3223,7 @@ CHECKSUMS
   http-accept (1.7.0) sha256=c626860682bfbb3b46462f8c39cd470fd7b0584f61b3cc9df5b2e9eb9972a126
   http-cookie (1.0.5) sha256=73756d46c7dbdc7023deecdb8a171348ea95a1b99810b31cfe8b4fb4e9a6318f
   http-form_data (2.3.0) sha256=cc4eeb1361d9876821e31d7b1cf0b68f1cf874b201d27903480479d86448a5f3
-  httparty (0.24.2) sha256=8fca6a54aa0c4aa4303a0fd33e5e2156175d6a5334f714263b458abd7fda9c38
+  httparty (0.24.3) sha256=5c95cf29ca70d5bfd834e56140ddfca6e94166c3b870cde9c25d157cdb5a00d2
   httpclient (2.9.0) sha256=4b645958e494b2f86c2f8a2f304c959baa273a310e77a2931ddb986d83e498c8
   i18n (1.14.8) sha256=285778639134865c5e0f6269e0b818256017e8cde89993fdfcbfb64d088824a5
   i18n_data (0.13.1) sha256=e5aa99b09a69b463bb0443fc1f9540351a49f3d1541c5e91316bafa035c63f66
@@ -3206,11 +3238,11 @@ CHECKSUMS
   irb (1.18.0) sha256=de9454a0703a54704b9811a5ef31a60c86949fbf4013fcf244fabc7c775248e3
   jaeger-client (1.1.0) sha256=cb5e9b9bbee6ee8d6a82d03d947a5b04543d8c0a949c22e484254f18d8a458a8
   jaro_winkler (1.6.1) sha256=c056b61bbf7f1fc0151bde7c8f589a2d666d42d0cdb889395b9b73b328e1b393
-  jira-ruby (3.2.0) sha256=3da8fbb2e5ea9787a45bd8a27c455532a0371c808bc7ec1e5303ec3c1bf58ee9
+  jira-ruby (3.2.2) sha256=38c27ed40b75c12921f963f3614390559f8538185a00d489ba0aedde6bc3945f
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
   js-routes (2.3.7) sha256=56e97bb300f34f2c569268bf28358b7ed82f455a32975c7c7d38befa76b722ed
   js_regex (3.14.0) sha256=49547691c75cf201769f7e432fde3e2071cbd3e0c4ef42bd341e260b683350a3
-  json (2.19.2) sha256=e7e1bd318b2c37c4ceee2444841c86539bc462e81f40d134cf97826cb14e83cf
+  json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   json-jwt (1.16.6) sha256=ab451f9cd8743cecc4137f4170806046c1d8a6d4ee6e8570e0b5c958409b266c
   json_schemer (2.4.0) sha256=56cb6117bb5748d925b33ad3f415b513d41d25d0bbf57fe63c0a78ff05597c24
   jsonb_accessor (1.4.2) sha256=e0197ce6f13b2ef489a67aa1c63c634e8efe49553191b5e61e9e2628dd554013
@@ -3220,7 +3252,7 @@ CHECKSUMS
   kaminari-actionview (1.2.2) sha256=1330f6fc8b59a4a4ef6a549ff8a224797289ebf7a3a503e8c1652535287cc909
   kaminari-activerecord (1.2.2) sha256=0dd3a67bab356a356f36b3b7236bcb81cef313095365befe8e98057dd2472430
   kaminari-core (1.2.2) sha256=3bd26fec7370645af40ca73b9426a448d09b8a8ba7afa9ba3c3e0d39cdbb83ff
-  keela (0.4.1) sha256=bd78dc579704b2ec066de4f4f8efc9e659c0bf95fab470bf42d171bc5ee7d68b
+  keela (0.5.0) sha256=56553a9ea0fb3deddbea37ba5cd24a95ea7273ddb51ffa65cb924ff6796511a6
   knapsack (4.0.0) sha256=a9422688751989d09a40b4bf7f959a71a3bfe7bc49d3cd610c2fcfb6e45482b8
   kramdown (2.5.2) sha256=1ba542204c66b6f9111ff00dcc26075b95b220b07f2905d8261740c82f7f02fa
   kramdown-parser-gfm (1.1.0) sha256=fb39745516427d2988543bf01fc4cf0ab1149476382393e0e9c48592f6581729
@@ -3287,7 +3319,6 @@ CHECKSUMS
   netrc (0.11.0) sha256=de1ce33da8c99ab1d97871726cba75151113f117146becbe45aa85cb3dabee3f
   nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
   nkf (0.2.0) sha256=fbc151bda025451f627fafdfcb3f4f13d0b22ae11f58c6d3a2939c76c5f5f126
-  no_proxy_fix (0.1.2) sha256=4e9b4c31bb146de7fcf347dc1087bb13ac2039b56d50aa019e61036256abcd00
   nokogiri (1.19.4) sha256=50c951611c92bca05c51411aef45f1cbc50f2821c4802758c5c6d34696533ab5
   nokogiri (1.19.4-aarch64-linux-gnu) sha256=1269fb644a6de405057a53dd5c762b1209b43ca7424f839454d3dbc677c31a8f
   nokogiri (1.19.4-arm64-darwin) sha256=a46db9853286e6597b36ebc6953817d15acf3a299583eb3f89fdc6f91dd63527
@@ -3422,6 +3453,7 @@ CHECKSUMS
   pry-byebug (3.11.0) sha256=0b0abb7d309bc7f00044d512a3c8567274f7012b944b38becc8440439a1cea72
   pry-rails (0.3.11) sha256=a69e28e24a34d75d1f60bcf241192a54253f8f7ef8a62cba1e75750a9653593d
   pry-shell (0.7.0) sha256=a8927b2d9c3e2a7477cd9f00e2aaece0759545bcee5c07e5e56ea458ce3d36a0
+  pstore (0.2.1) sha256=03904d0f2c66579e96d1e6704cdabc0c88df7ea8ed8782d9f3569f6f6c702c1a
   public_suffix (6.0.1) sha256=61d44e1cab5cbbbe5b31068481cf16976dd0dc1b6b07bd95617ef8c5e3e00c6f
   puma (8.0.2) sha256=c8ed871dfbbe66448ea9ffd46692342d9804d4071522b52b5331b7b6e7b686fb
   pyu-ruby-sasl (0.0.3.3) sha256=5683a6bc5738db5a1bf5ceddeaf545405fb241b4184dd4f2587e679a7e9497e5
@@ -3522,7 +3554,7 @@ CHECKSUMS
   rugged (1.9.6) sha256=c6e45250e51cdf19f6130d050e280ba8d6af475d4c76580f91377a59fe23d3c7
   safe_zip (0.1.0)
   safety_net_attestation (0.5.0) sha256=c8cd01dd550dbe8553862918af6355a04672db11d218ec96104ce3955293f2aa
-  sanitize (6.0.2) sha256=48c4eb8e92bb1699056b6000986ac50fc9df82f458a941abf2c4d6759bccd5cf
+  sanitize (7.0.0) sha256=269d1b9d7326e69307723af5643ec032ff86ad616e72a3b36d301ac75a273984
   sass-embedded (1.77.5) sha256=a2a6adc4ce695ece780f40388d207de396e5091ddd28767440c7907a4501beda
   sass-embedded (1.77.5-aarch64-linux-gnu) sha256=c84eda6b86669a15695d9a7ddbc7a6e3cb706735d17fe37c5c4e1c584d467534
   sass-embedded (1.77.5-arm64-darwin) sha256=a6a524aefe8b181c55d5f11c26b2329a06e20de32180f18904fc8488b89bdb36
@@ -3541,13 +3573,12 @@ CHECKSUMS
   shellany (0.0.1) sha256=0e127a9132698766d7e752e82cdac8250b6adbd09e6c0a7fbbb6f61964fedee7
   shoulda-matchers (6.4.0) sha256=9055bb7f4bb342125fb860809798855c630e05ef5e75837b3168b8e6ee1608b0
   sidekiq (7.3.9)
-  sidekiq-cron (2.3.1) sha256=96ab3da372289a30dc744c1daa2ae2e85960b2444a6f6ed68df1ff7882c44aac
+  sidekiq-cron (2.4.0) sha256=25595c5aee0c16d13a89466e5108af047fa4cfbf388199b39e1a600ca39472d4
   sigdump (0.2.5) sha256=bb706c1cce70458b285d2c3a57121e801ccb79f68be7f7377692eb40b5437242
   signet (0.19.0) sha256=537f3939f57f141f691e6069a97ec40f34fadafc4c7e5ba94edb06cf4350dd31
   simple_po_parser (1.1.6) sha256=122687d44d3de516a0e69e2f383a4180f5015e8c5ed5a7f2258f2b376f64cbf3
-  simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
-  simplecov-cobertura (3.1.0) sha256=6d7f38aa32c965ca2174b2e5bd88cb17138eaf629518854976ac50e628925dc5
-  simplecov-html (0.12.3) sha256=4b1aad33259ffba8b29c6876c12db70e5750cb9df829486e4c6e5da4fa0aa07b
+  simplecov (1.3.0) sha256=d9886307863c1ead47657dcbed869bfffd82318808b09014d8f0ff77dcfe7492
+  simplecov-cobertura (4.0.0) sha256=e4fb3159b1ecea545b44f5452a8611305323e78ad23eae8aed35924d072e01ea
   simplecov-lcov (0.8.0) sha256=0115f31cb7ef5ec4334f5d9382c67fd43de2e5270e21b65bfc693da82dd713c1
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
   simpleidn (0.2.3) sha256=08ce96f03fa1605286be22651ba0fc9c0b2d6272c9b27a260bc88be05b0d2c29
@@ -3597,7 +3628,7 @@ CHECKSUMS
   timeout (0.6.1) sha256=78f57368a7e7bbadec56971f78a3f5ecbcfb59b7fcbb0a3ed6ddc08a5094accb
   timfel-krb5-auth (0.8.3) sha256=ab388c9d747fa3cd95baf2cc1c03253e372d8c680adcc543670f4f099854bb80
   tins (1.31.1) sha256=51c4a347c25c630d310cbc2c040ffb84e266c8227f2ade881f1130ee4f9fbecf
-  toml-rb (4.1.0) sha256=14456ec4549e4703881bf04b83a56f3264ef99884880092d83c98a2058d95846
+  toml-rb (4.2.1) sha256=e6c40e27905e86a7d38cc252eb4bc12d72c61576c826a358390c30f5de0b9dbb
   tomlrb (1.3.0) sha256=68666bf53fa70ba686a48a7435ce7e086f5227c58c4c993bd9792f4760f2a503
   toon-ruby (0.1.1) sha256=c0395be95161f3fe2487888b4172cc6ecafdbbbb9aa2a580a0dc2d7563458428
   tpm-key_attestation (0.14.1) sha256=7fd4e4653a7afd0a386632ddfb05d10ecfdd47678299c5e69165bc9ae111193f
