@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   iana-etc,
   libredirect,
@@ -9,9 +9,9 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "mark";
-  version = "16.12.0";
+  version = "16.24.0";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,10 @@ buildGoModule (finalAttrs: {
     owner = "kovetskiy";
     repo = "mark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KSxMcHizvTQh3AuJ0NV7GQhBgpBIZwrbeI945PFzQJE=";
+    hash = "sha256-RphGTDtXl5juBQpge7+64syFFXOTGb2SV+VoasOxYU4=";
   };
 
-  vendorHash = "sha256-EELqh6C8SZdyCJfHDqOEY5bhP5G6jlOUhpDaK93fmTA=";
+  vendorHash = "sha256-iSvyqZe/FMWZwJ8bdJMCnJWd5i2KM4pGFlIKsKoJyUA=";
 
   ldflags = [
     "-s"
@@ -48,6 +48,29 @@ buildGoModule (finalAttrs: {
         "TestAttachmentFilenameAttributeIsEscaped"
         "TestDiagramWithoutTitleHasNoCaption"
         "TestDiagramWithTitleKeepsCaption"
+        "TestContextReplacesADeadBrowser"
+        "TestContextReturnsTheSameLiveBrowser"
+        "TestProcessD2SVGAndPNGAreDifferentAttachments"
+        "TestMathPNGFormat"
+        "TestCompileMarkdownMath"
+        "TestCompileMarkdownMathPreservesEscapes"
+        "TestProcessPNG"
+        "TestProcessScaleChangesTheName"
+        "TestProcessFormats"
+        "TestProcessScaleZeroIsTheDefault"
+        "TestInvalidDiagramKeepsEngine"
+        "TestPNGBoundsMeasureWhatIsCaptured"
+        "TestOversizedPNGIsRefusedAndKeepsEngine"
+        "TestScaleZeroIsTheDefault"
+        "TestRenderTimeoutKeepsEngine"
+        "TestProcessMermaidSVG"
+        "TestProcessMermaidWithBundle"
+        "TestSVGChecksumsDifferByBundle"
+        "TestSVGStatesItsOwnSizeUncapped"
+        "TestSVGIsUncappedForEveryKindOfDiagram"
+        "TestSVGScaleMultipliesWhatThePageShowsAndNotTheFile"
+        "TestPNGIsUnaffectedByTheUncapping"
+        "TestProcessMermaidFlattensASlashInTheTitle"
       ];
     in
     [
