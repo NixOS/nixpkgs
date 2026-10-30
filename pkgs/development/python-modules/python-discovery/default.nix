@@ -12,6 +12,7 @@
   platformdirs,
 
   # tests
+  cacert,
   pytest-mock,
   pytestCheckHook,
 }:
@@ -42,6 +43,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "python_discovery" ];
 
   nativeCheckInputs = [
+    cacert
     pytest-mock
     pytestCheckHook
   ];
