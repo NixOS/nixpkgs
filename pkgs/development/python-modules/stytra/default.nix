@@ -18,6 +18,7 @@
   opencv4,
   pandas,
   pims,
+  pkg-resources-backport,
   pyqt5,
   pyqtgraph,
   pyserial,
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     imageio-ffmpeg
     arrayqueues
     av
+    pkg-resources-backport
   ];
 
   nativeCheckInputs = [
