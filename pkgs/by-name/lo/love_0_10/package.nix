@@ -7,6 +7,7 @@
   libGLU,
   libGL,
   openal,
+  lua5_1,
   luajit,
   freetype,
   physfs,
@@ -20,6 +21,7 @@
   automake,
   libtool,
   libx11,
+  withLuajit ? lib.meta.availableOn stdenv.hostPlatform luajit,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
     libGLU
     libGL
     openal
-    luajit
+    (if withLuajit then luajit else lua5_1)
     freetype
     physfs
     libmodplug
@@ -59,10 +61,10 @@ stdenv.mkDerivation rec {
   preConfigure = "$shell ./platform/unix/automagic";
 
   configureFlags = [
-    "--with-lua=luajit"
+    (lib.strings.withFeatureAs true "lua" (if withLuajit then "luajit" else "lua"))
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+  env.NIX_CFLAGS_COMPILE = lib.optionalString withLuajit "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   meta = {
     homepage = "https://love2d.org";
