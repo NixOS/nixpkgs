@@ -101,4 +101,20 @@ rec {
     dictFileName = "sv-SE-3-0.bdic";
     shortDescription = "Swedish (Sweden)";
   };
+
+  # PORTUGUESE
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromChromium {
+    shortName = "pt-pt";
+    dictFileName = "pt-PT-3-0.bdic";
+    shortDescription = "Portuguese (Portugal)";
+  };
+
+  pt_BR = pt-br;
+  pt-br = mkDictFromChromium {
+    shortName = "pt-br";
+    dictFileName = "pt-BR-3-0.bdic";
+    shortDescription = "Portuguese (Brazil)";
+  };
 }
