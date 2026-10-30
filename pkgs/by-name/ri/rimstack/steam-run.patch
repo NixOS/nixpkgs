@@ -1,0 +1,60 @@
+Run SteamCMD and RimWorld in steam-run's FHS environment.
+Include SteamCMD's stderr in download errors.
+
+diff --git a/crates/core/src/base/program.rs b/crates/core/src/base/program.rs
+--- a/crates/core/src/base/program.rs
++++ b/crates/core/src/base/program.rs
+@@ -20,2 +20,13 @@
+     command
++}
++
++/// Prefix the command with RIMSTACK_LAUNCHER if set.
++pub fn command_with_launcher(program: impl AsRef<OsStr>) -> Command {
++    if let Some(launcher) = std::env::var_os("RIMSTACK_LAUNCHER") {
++        let mut command = command(launcher);
++        command.arg(program);
++        command
++    } else {
++        command(program)
++    }
+ }
+diff --git a/crates/core/src/sources/maintenance.rs b/crates/core/src/sources/maintenance.rs
+--- a/crates/core/src/sources/maintenance.rs
++++ b/crates/core/src/sources/maintenance.rs
+@@ -184,7 +184,7 @@
+ pub fn start_game(game_dir: &Path, arguments: &str) -> Result<()> {
+     let program = game_program(game_dir)
+         .ok_or_else(|| Error::program(said!("the game's program was not found in its folder")))?;
+-    std::process::Command::new(&program)
++    crate::base::program::command_with_launcher(&program)
+         .args(self::arguments(arguments))
+         .current_dir(game_dir)
+         .spawn()
+diff --git a/crates/core/src/sources/redownload.rs b/crates/core/src/sources/redownload.rs
+--- a/crates/core/src/sources/redownload.rs
++++ b/crates/core/src/sources/redownload.rs
+@@ -221,7 +221,7 @@
+     // A home of its own: with the user's, SteamCMD writes over Steam's list of library folders.
+     let home = scratch.join("home");
+     let _ = std::fs::create_dir_all(&home);
+-    let mut command = crate::base::program::command(steamcmd);
++    let mut command = crate::base::program::command_with_launcher(steamcmd);
+     command
+         .env("HOME", &home)
+         .env_remove("XDG_DATA_HOME")
+@@ -233,7 +233,14 @@
+         command.args(["+workshop_download_item", GAME, id, "validate"]);
+     }
+     let ran = crate::base::program::run(command.arg("+quit"), crate::base::program::DOWNLOAD)
+-        .map(|out| plain(&out.stdout))
++        .map(|output| {
++            let mut text = plain(&output.stdout);
++            if !output.stderr.is_empty() {
++                text.push('\n');
++                text.push_str(&plain(&output.stderr));
++            }
++            text
++        })
+         .map_err(|e| Error::program(said!("SteamCMD could not be run: {}", e)));
+     let content = attempt.join("steamapps/workshop/content").join(GAME);
+     // SteamCMD exits with 0 when an item fails, and may run messages together on one line:
