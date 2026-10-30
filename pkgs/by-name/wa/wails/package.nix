@@ -18,6 +18,8 @@ buildGoModule (finalAttrs: {
   pname = "wails";
   version = "2.16.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = "wails";
