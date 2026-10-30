@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-hotspring";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "python-hotspring";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nxNoP14fb/kh9IysFUA9kJFLeeryQJiiivmzRezl01Q=";
+    hash = "sha256-otRrQbJXNggpiI2pAq3x+6LPjOaL28DmJIP6dirrcUI=";
   };
 
   build-system = [ poetry-core ];
