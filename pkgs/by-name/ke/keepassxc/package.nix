@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-821zL+xnCsHU8VvxsJh2a2LRGstSIq3tWQbWBk8g4hc=";
   };
 
+  __structuredAttrs = true;
+
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-old-style-cast"
