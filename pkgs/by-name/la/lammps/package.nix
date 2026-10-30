@@ -55,7 +55,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "22Jul2025_update5";
+  version = "30Sep2026";
   pname = "lammps";
 
   __structuredAttrs = true;
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lammps";
     repo = "lammps";
     tag = "stable_${finalAttrs.version}";
-    hash = "sha256-kI4CubDgXwnDDeXNan88RzG+iGMJMnsqfpfhWtJFhAI=";
+    hash = "sha256-R/kCvvnZpifkdkM01qiTPSZySqmC4VBQvqvLmXSxUfE=";
   };
   preConfigure = ''
     cd cmake
