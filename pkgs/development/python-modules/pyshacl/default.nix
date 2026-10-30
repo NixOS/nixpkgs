@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyshacl";
-  version = "0.40.1";
+  version = "0.40.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rdflib";
     repo = "pyshacl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wShpDfxHAW057NnWZSo74QjJh8xXEVgZxPqrdqoX08w=";
+    hash = "sha256-QR6BN8Z49qz03CV4luIwxph9u731Dg7JDvpjASr6MDg=";
   };
 
   build-system = [ poetry-core ];

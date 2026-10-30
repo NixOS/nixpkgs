@@ -5,6 +5,7 @@
   fetchFromGitHub,
   symlinkJoin,
   pkg-config,
+  aws-lc,
   zstd,
 }:
 
@@ -46,7 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustc.llvmPackages.lld
   ];
 
-  buildInputs = [ zstd ];
+  buildInputs = [
+    zstd
+    aws-lc
+  ];
 
   cargoTestFlags = [
     "--package"
