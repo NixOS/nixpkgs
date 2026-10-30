@@ -2,21 +2,18 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index ec078d6..ff06c08 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,30 +1,88 @@
+@@ -1,11 +1,87 @@
  cmake_minimum_required(VERSION 3.16)
--
+ 
 -project(gps-parser-test CXX)
 +project(px4-gpsdrivers VERSION 1.0 LANGUAGES CXX)
  
  set(CMAKE_CXX_STANDARD 17)
  set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
--add_executable(gps-parser-test
--    gps-parser-test.cpp
--    src/unicore.cpp
 +set(GPS_SOURCES
 +    src/ashtech.cpp
-     src/crc.cpp
++    src/crc.cpp
 +    src/emlid_reach.cpp
 +    src/femtomes.cpp
 +    src/gps_helper.cpp
@@ -26,25 +23,16 @@ index ec078d6..ff06c08 100644
 +    src/sbf.cpp
 +    src/ubx.cpp
 +    src/unicore.cpp
- )
- 
--target_compile_options(gps-parser-test
--    PRIVATE
--    -Wall
--    -Wextra
--    -Wconversion
--    -Wpedantic
++)
++
 +add_library(gps ${GPS_SOURCES})
 +
 +target_include_directories(gps
 +    PUBLIC
 +        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
 +        $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
- )
- 
--target_include_directories(gps-parser-test
--    PRIVATE
--    src/
++)
++
 +# Use our own definitions.h unless a consumer vendoring these sources directly
 +# (e.g. PX4-Autopilot) overrides GPS_DEFINITIONS_HEADER itself. PUBLIC: some
 +# consumers (e.g. QGroundControl) don't just link this library, they also
@@ -93,18 +81,16 @@ index ec078d6..ff06c08 100644
 +    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 +    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
 +    DESTINATION lib/cmake/${PROJECT_NAME}
- )
- 
++)
++
  include(CTest)
  enable_testing()
  
-+add_executable(gps-parser-test
-+    gps-parser-test.cpp
-+)
-+
-+target_link_libraries(gps-parser-test PRIVATE ${PROJECT_NAME}::gps)
-+target_compile_definitions(gps-parser-test PRIVATE GPS_DEFINITIONS_HEADER="definitions.h")
- add_test(NAME GPSParserTest COMMAND gps-parser-test)
++# Upstream's own tests/ subdirectory builds its own test executables
++# (gps-parser-test, gps-time-test, gps-ubx-test) against their own sources
++# and their own tests/definitions.h, entirely independently of the `gps`
++# library target above; nothing further is needed here to make them build.
+ add_subdirectory(tests)
 diff --git a/cmake/px4-gpsdriversConfig.cmake.in b/cmake/px4-gpsdriversConfig.cmake.in
 new file mode 100644
 index 0000000..1497c36
@@ -114,12 +100,12 @@ index 0000000..1497c36
 +@PACKAGE_INIT@
 +
 +include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
-diff --git a/src/sensor_gps.h b/src/sensor_gps.h
+diff --git a/src/sensor_gnss.h b/src/sensor_gnss.h
 new file mode 100644
 index 0000000..1111111
 --- /dev/null
-+++ b/src/sensor_gps.h
-@@ -0,0 +1,122 @@
++++ b/src/sensor_gnss.h
+@@ -0,0 +1,144 @@
 +/****************************************************************************
 + *
 + *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
@@ -154,10 +140,11 @@ index 0000000..1111111
 + ****************************************************************************/
 +
 +/**
-+ * @file sensor_gps.h
-+ * Platform-independent definition of the GPS position report, matching the
-+ * layout of PX4-Autopilot's generated uORB `sensor_gps_s` (msg/SensorGps.msg)
-+ * so that consumers of this library can reinterpret the two interchangeably.
++ * @file sensor_gnss.h
++ * Platform-independent definition of the GNSS position report, matching the
++ * layout of PX4-Autopilot's generated uORB `sensor_gnss_s` (msg/SensorGnss.msg,
++ * formerly msg/SensorGps.msg) so that consumers of this library can
++ * reinterpret the two interchangeably.
 + */
 +
 +#pragma once
@@ -169,19 +156,19 @@ index 0000000..1111111
 +// links against it.
 +#pragma pack(push, 1)
 +
-+struct sensor_gps_s {
++struct sensor_gnss_s {
 +	uint64_t timestamp;
 +	uint64_t timestamp_sample;
 +
 +	uint32_t device_id;
 +
-+	double latitude_deg;
-+	double longitude_deg;
-+	double altitude_msl_m;
-+	double altitude_ellipsoid_m;
++	double latitude;
++	double longitude;
++	double altitude_msl;
++	double altitude_ellipsoid;
 +
-+	float s_variance_m_s;
-+	float c_variance_rad;
++	float speed_accuracy;
++	float course_accuracy;
 +
 +	static constexpr uint8_t FIX_TYPE_NONE = 1;
 +	static constexpr uint8_t FIX_TYPE_2D = 2;
@@ -198,27 +185,34 @@ index 0000000..1111111
 +	float hdop;
 +	float vdop;
 +
-+	int32_t noise_per_ms;
++	int32_t noise;
 +	uint16_t automatic_gain_control;
 +
 +	static constexpr uint8_t JAMMING_STATE_UNKNOWN = 0;
 +	static constexpr uint8_t JAMMING_STATE_OK = 1;
-+	static constexpr uint8_t JAMMING_STATE_WARNING = 2;
-+	static constexpr uint8_t JAMMING_STATE_CRITICAL = 3;
++	static constexpr uint8_t JAMMING_STATE_MITIGATED = 2;
++	static constexpr uint8_t JAMMING_STATE_DETECTED = 3;
 +	uint8_t jamming_state;
 +	int32_t jamming_indicator;
 +
 +	static constexpr uint8_t SPOOFING_STATE_UNKNOWN = 0;
-+	static constexpr uint8_t SPOOFING_STATE_NONE = 1;
-+	static constexpr uint8_t SPOOFING_STATE_INDICATED = 2;
-+	static constexpr uint8_t SPOOFING_STATE_MULTIPLE = 3;
++	static constexpr uint8_t SPOOFING_STATE_OK = 1;
++	static constexpr uint8_t SPOOFING_STATE_MITIGATED = 2;
++	static constexpr uint8_t SPOOFING_STATE_DETECTED = 3;
 +	uint8_t spoofing_state;
 +
-+	float vel_m_s;
-+	float vel_n_m_s;
-+	float vel_e_m_s;
-+	float vel_d_m_s;
-+	float cog_rad;
++	static constexpr uint8_t AUTHENTICATION_STATE_UNKNOWN = 0;
++	static constexpr uint8_t AUTHENTICATION_STATE_INITIALIZING = 1;
++	static constexpr uint8_t AUTHENTICATION_STATE_ERROR = 2;
++	static constexpr uint8_t AUTHENTICATION_STATE_OK = 3;
++	static constexpr uint8_t AUTHENTICATION_STATE_DISABLED = 4;
++	uint8_t authentication_state;
++
++	float ground_speed;
++	float vel_north;
++	float vel_east;
++	float vel_down;
++	float course;
 +	bool vel_ned_valid;
 +
 +	int32_t timestamp_time_relative;
@@ -226,19 +220,33 @@ index 0000000..1111111
 +
 +	uint8_t satellites_used;
 +
-+	float heading;
-+	float heading_offset;
-+	float heading_accuracy;
++	static constexpr uint32_t SYSTEM_ERROR_OK = 0;
++	static constexpr uint32_t SYSTEM_ERROR_INCOMING_CORRECTIONS = 1;
++	static constexpr uint32_t SYSTEM_ERROR_CONFIGURATION = 2;
++	static constexpr uint32_t SYSTEM_ERROR_SOFTWARE = 4;
++	static constexpr uint32_t SYSTEM_ERROR_ANTENNA = 8;
++	static constexpr uint32_t SYSTEM_ERROR_EVENT_CONGESTION = 16;
++	static constexpr uint32_t SYSTEM_ERROR_CPU_OVERLOAD = 32;
++	static constexpr uint32_t SYSTEM_ERROR_OUTPUT_CONGESTION = 64;
++	uint32_t system_error;
 +
 +	float rtcm_injection_rate;
 +	uint8_t selected_rtcm_instance;
 +
-+	bool rtcm_crc_failed;
++	static constexpr uint8_t CORRECTIONS_PROTOCOL_UNKNOWN = 0;
++	static constexpr uint8_t CORRECTIONS_PROTOCOL_RTCM3 = 1;
++	static constexpr uint8_t CORRECTIONS_PROTOCOL_SPARTN = 2;
++	static constexpr uint8_t CORRECTIONS_PROTOCOL_HAS = 3;
++	static constexpr uint8_t CORRECTIONS_PROTOCOL_PMP = 4;
++	static constexpr uint8_t CORRECTIONS_PROTOCOL_QZSS_L6 = 5;
++	uint8_t corrections_protocol;
 +
-+	static constexpr uint8_t RTCM_MSG_USED_UNKNOWN = 0;
-+	static constexpr uint8_t RTCM_MSG_USED_NOT_USED = 1;
-+	static constexpr uint8_t RTCM_MSG_USED_USED = 2;
-+	uint8_t rtcm_msg_used;
++	bool corrections_crc_failed;
++
++	static constexpr uint8_t CORRECTIONS_MSG_USED_UNKNOWN = 0;
++	static constexpr uint8_t CORRECTIONS_MSG_USED_NOT_USED = 1;
++	static constexpr uint8_t CORRECTIONS_MSG_USED_USED = 2;
++	uint8_t corrections_msg_used;
 +};
 +
 +#pragma pack(pop)
@@ -298,7 +306,7 @@ index 0000000..1111111
 +
 +struct satellite_info_s {
 +	uint64_t timestamp;
-+	static constexpr uint8_t SAT_INFO_MAX_SATELLITES = 20;
++	static constexpr uint8_t SAT_INFO_MAX_SATELLITES = 40;
 +
 +	uint8_t count;
 +	uint8_t svid[SAT_INFO_MAX_SATELLITES];
@@ -396,12 +404,161 @@ index 0000000..1111111
 +};
 +
 +#pragma pack(pop)
+diff --git a/src/sensor_gnss_rf.h b/src/sensor_gnss_rf.h
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/sensor_gnss_rf.h
+@@ -0,0 +1,71 @@
++/****************************************************************************
++ *
++ *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ * 3. Neither the name PX4 nor the names of its contributors may be
++ *    used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
++ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ ****************************************************************************/
++
++/**
++ * @file sensor_gnss_rf.h
++ * Platform-independent definition matching the layout of PX4-Autopilot's
++ * generated uORB `sensor_gnss_rf_s` (msg/SensorGnssRf.msg). Reported
++ * unconditionally by GPSHelper::gotRFMessage(), independent of
++ * CONFIG_GPS_UBX_SPAN.
++ */
++
++#pragma once
++
++#include <cstdint>
++
++// Packing is pinned explicitly (rather than relying on the default ABI) since
++// this layout must match exactly between this library and any consumer that
++// links against it.
++#pragma pack(push, 1)
++
++struct sensor_gnss_rf_s {
++	uint64_t timestamp;
++	uint64_t timestamp_sample;
++	uint32_t device_id;
++	uint32_t post_status;
++	uint32_t center_frequency;
++	uint16_t noise_per_ms;
++	uint16_t automatic_gain_control;
++	uint8_t block_id;
++	uint8_t antenna_status;
++	uint8_t antenna_power;
++	uint8_t jamming_indicator;
++	uint8_t jamming_state;
++	int8_t i_offset;
++	uint8_t i_magnitude;
++	int8_t q_offset;
++	uint8_t q_magnitude;
++	uint8_t _padding0[7];
++};
++
++#pragma pack(pop)
+diff --git a/src/sensor_gnss_spectrum.h b/src/sensor_gnss_spectrum.h
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/sensor_gnss_spectrum.h
+@@ -0,0 +1,66 @@
++/****************************************************************************
++ *
++ *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ * 3. Neither the name PX4 nor the names of its contributors may be
++ *    used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
++ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
++ * POSSIBILITY OF SUCH DAMAGE.
++ *
++ ****************************************************************************/
++
++/**
++ * @file sensor_gnss_spectrum.h
++ * Platform-independent definition matching the layout of PX4-Autopilot's
++ * generated uORB `sensor_gnss_spectrum_s` (msg/SensorGnssSpectrum.msg).
++ * Only referenced by GPSHelper::gotSpectrumMessage() when built with
++ * CONFIG_GPS_UBX_SPAN defined; defined unconditionally here so that macro is
++ * free to be turned on by a consumer without also having to replace this
++ * header.
++ */
++
++#pragma once
++
++#include <cstdint>
++
++// Packing is pinned explicitly (rather than relying on the default ABI) since
++// this layout must match exactly between this library and any consumer that
++// links against it.
++#pragma pack(push, 1)
++
++struct sensor_gnss_spectrum_s {
++	uint64_t timestamp;
++	uint64_t timestamp_sample;
++	uint32_t device_id;
++	uint32_t spectrum_span;
++	uint32_t resolution;
++	uint32_t center_frequency;
++	uint8_t block_id;
++	uint8_t spectrum[256];
++	uint8_t programmable_gain_amplifier;
++	uint8_t _padding0[6];
++};
++
++#pragma pack(pop)
 diff --git a/src/definitions.h b/src/definitions.h
 new file mode 100644
 index 0000000..1111111
 --- /dev/null
 +++ b/src/definitions.h
-@@ -0,0 +1,88 @@
+@@ -0,0 +1,90 @@
 +/****************************************************************************
 + *
 + *   Copyright (c) 2024 PX4 Development Team. All rights reserved.
@@ -449,9 +606,11 @@ index 0000000..1111111
 +#include <cstdio>
 +#include <thread>
 +
-+#include "sensor_gps.h"
++#include "sensor_gnss.h"
 +#include "satellite_info.h"
 +#include "sensor_gnss_relative.h"
++#include "sensor_gnss_rf.h"
++#include "sensor_gnss_spectrum.h"
 +
 +#ifndef M_DEG_TO_RAD
 +#define M_DEG_TO_RAD (M_PI / 180.0)

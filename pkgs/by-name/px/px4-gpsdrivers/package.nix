@@ -24,7 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Adds a real CMake build (upstream is only consumable by vendoring its
   # sources directly into a consumer's own build, see gps-parser-test in the
   # original CMakeLists.txt) and a portable default `definitions.h`/struct
-  # trio (mirroring PX4-Autopilot's msg/{SensorGps,SatelliteInfo,SensorGnssRelative}.msg)
+  # set (mirroring PX4-Autopilot's
+  # msg/{SensorGnss,SatelliteInfo,SensorGnssRelative,SensorGnssRf,SensorGnssSpectrum}.msg)
   # so this can be a standalone, linkable library. TODO: Upstream.
   patches = [
     ./build-overhaul.patch
