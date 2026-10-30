@@ -19,6 +19,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "gslapper";
   version = "1.5.3";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Nomadcxx";
