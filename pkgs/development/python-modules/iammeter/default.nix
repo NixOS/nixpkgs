@@ -3,6 +3,8 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
   requests,
   setuptools,
   voluptuous,
@@ -28,6 +30,11 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     requests
     voluptuous
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "iammeter" ];
