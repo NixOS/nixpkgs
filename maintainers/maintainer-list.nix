@@ -22446,12 +22446,6 @@
     github = "ottoblep";
     githubId = 57066925;
   };
-  otwieracz = {
-    email = "slawek@otwiera.cz";
-    github = "otwieracz";
-    githubId = 108072;
-    name = "Slawomir Gonet";
-  };
   oughie = {
     name = "Oughie";
     email = "oughery@gmail.com";
