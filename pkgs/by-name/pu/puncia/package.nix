@@ -6,19 +6,25 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "puncia";
-  version = "0.30";
+  version = "0.42";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ARPSyndicate";
     repo = "puncia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-woy8JL+yFOYUsAhYWxyskUj/hT3JmwrhKHg3JHyWzNY=";
+    hash = "sha256-SxwMO8fKcM8ZROiOoDlpmLOF/3qd27iUCzMhxbRHTZc=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python3.pkgs; [ requests ];
+  dependencies = with python3.pkgs; [
+    aiofiles
+    aiohttp
+    multidict
+    requests
+    rich
+  ];
 
   # Project has no tests
   doCheck = false;
