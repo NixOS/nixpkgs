@@ -33,6 +33,12 @@ stdenv.mkDerivation {
       url = "https://lore.kernel.org/kvm/20261028190531.48302-1-mikatammi@gmail.com/raw";
       hash = "sha256-RO1Ael0mkxIMA4F2pGKkzhhMz3Bq9faL+VSII03S26Q=";
     })
+    # Fixes cross builds for x86_64, which ran the build platform's nm; drop once kvmtool has it
+    (fetchpatch {
+      name = "x86-cross-nm.patch";
+      url = "https://lore.kernel.org/kvm/20261030104018.71809-1-mikatammi@gmail.com/raw";
+      hash = "sha256-uWSmpbKJ0pmh8kVsFcd06c+j2tppn0+RjP9TVbPHi0E=";
+    })
   ];
 
   buildInputs = lib.optionals withLibfdt [ dtc ];
