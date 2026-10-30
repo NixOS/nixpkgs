@@ -1079,11 +1079,6 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS
 
-  _86box-with-roms = _86box.override {
-    unfreeEnableRoms = true;
-    unfreeEnableDiscord = true;
-  };
-
   box64 = callPackage ../applications/emulators/box64 {
     hello-x86_64 = if stdenv.hostPlatform.isx86_64 then hello else pkgsCross.gnu64.hello;
   };
