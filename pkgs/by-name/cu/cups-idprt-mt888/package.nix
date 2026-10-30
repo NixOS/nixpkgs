@@ -1,26 +1,23 @@
 {
   stdenvNoCC,
   lib,
-  fetchurl,
+  fetchzip,
   autoPatchelfHook,
   cups,
-  unzip,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "cups-idprt-mt888";
   version = "1.2.0";
 
-  src = fetchurl {
-    name = "idprt_mt888_printer_linux_driver.zip";
-    url = "https://www.idprt.com/prt_v2/files/down_file/id/324/fid/780.html"; # NOTE: This is NOT an HTML page, but a ZIP file
-    hash = "sha256-fmKDRa6NOXMM6IuxRK8sjToGhdPiHO6ZdfUVvR1KKb0=";
+  src = fetchzip {
+    url = "https://foreverfile.hprtcloud.com/hygj/annex_file/2025_11_05/nzItHOwRcu19AiAL/idprt_mt888_printer_linux_driver_v1.2.0.zip";
+    hash = "sha256-+5WGNG+lLnyizl+44CininMND4e01fEzVaqZEPwqcws=";
   };
 
   buildInputs = [ cups ];
   nativeBuildInputs = [
     autoPatchelfHook
-    unzip
   ];
 
   installPhase =
