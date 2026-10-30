@@ -23,6 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  # tests/github_fetch_test.rs binds to 127.0.0.1
+  __darwinAllowLocalNetworking = true;
+
   checkFlags = [
     # sends request to a github.com url
     "--skip=test_mcp_repo_info_on_actual_repo"
