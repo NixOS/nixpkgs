@@ -18,8 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   src = fetchFromGitLab {
-    domain = "gitlab.postmarketos.org";
-    owner = "postmarketOS";
+    domain = "gitlab.nura.eco";
+    owner = "nura";
     repo = "msm-modem";
     tag = finalAttrs.version;
     hash = "sha256-kKDqYrd7yI3beS7kMVN+xqTBfNC4NTUgch2t/rDM9LE=";
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Common support for Qualcomm MSM modems";
-    homepage = "https://gitlab.postmarketos.org/postmarketOS/msm-modem";
+    homepage = "https://gitlab.nura.eco/nura/msm-modem";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     platforms = lib.platforms.linux;
