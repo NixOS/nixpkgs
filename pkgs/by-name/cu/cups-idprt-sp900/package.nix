@@ -1,25 +1,22 @@
 {
   stdenvNoCC,
   lib,
-  fetchurl,
+  fetchzip,
   autoPatchelfHook,
   cups,
   e2fsprogs,
   krb5,
   libxcrypt-legacy,
-  unzip,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "cups-idprt-sp900";
   version = "1.4.0";
 
-  src = fetchurl {
-    name = "idprt_sp900_printer_linux_driver.zip";
-    url = "https://www.idprt.com/prt_v2/files/down_file/id/176/fid/498.html"; # NOTE: This is NOT an HTML page, but a ZIP file
-    hash = "sha256-+YVQTrqpi16xX+d/ulMtffpA9X7hwtWRiS/mIAw13n8=";
+  src = fetchzip {
+    url = "https://foreverfile.hprtcloud.com/hygj/annex_file/2025_11_05/ItLVsNAMOmZ33ZKy/idprt_sp900_printer_linux_driver_v1.4.0.tar.gz";
+    hash = "sha256-FcRjjtqEdbZeno7fjiY9XQhLJgOfHrwnXU1D+u28M4o=";
   };
-  sourceRoot = "idprt_sp900_printer_linux_driver_v${finalAttrs.version}/idprt_sp900_printer_linux_driver_v${finalAttrs.version}"; # >:|
 
   buildInputs = [
     cups
@@ -29,7 +26,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [
     autoPatchelfHook
-    unzip
   ];
 
   installPhase =
@@ -61,4 +57,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ pandapip1 ];
   };
-})
+}
