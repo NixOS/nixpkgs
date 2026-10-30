@@ -9,7 +9,7 @@
   libpng,
   libjpeg,
   curl,
-  SDL2,
+  sdl3,
   openal-soft,
   libGL,
   fmt,
@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "q2repro";
-  version = "0-unstable-2026-09-27";
+  version = "0-unstable-2026-10-07";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Paril";
     repo = "q2repro";
-    rev = "e6b9273672a1d6ea65038ce9033979b25f1b94be";
+    rev = "2f77156bc0a98e62a866043af7a3ee01a75b48af";
     fetchSubmodules = true;
-    hash = "sha256-PeA2EuA7XBH9fhorkPtMD6UvHgajYwMtf8MRBXnCr28=";
+    hash = "sha256-x4q5c2BJaY9+2ujEdQwpWe6KmdOk6fEt4Bm7Y0l+teg=";
   };
 
   # build date and rev number is displayed in the game's console
-  revCount = "4613"; # git rev-list --count ${src.rev}
-  env.SOURCE_DATE_EPOCH = "1790475158"; # git show -s --format=%ct ${src.rev}
+  revCount = "4621"; # git rev-list --count ${src.rev}
+  env.SOURCE_DATE_EPOCH = "1791403645"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs = [
     meson
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjpeg
     curl
-    SDL2
+    sdl3
     libGL
     ffmpeg
     openal-soft
