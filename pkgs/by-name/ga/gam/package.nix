@@ -10,23 +10,31 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gam";
-  version = "7.43.04";
+  version = "7.48.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "GAM";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-toAYDYkgBuhHaUbMnhSWPRDkhB5C/a0xQVMPTZj9xXM=";
+    hash = "sha256-/Em2XyYN/9e01SDvQrg5FnX0kd2lqChbO0n6d5MTpAM=";
   };
 
   build-system = [ python3.pkgs.hatchling ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling<1.30.0" "hatchling"
+  '';
+
+  # Upstream pins every dependency with ==.
+  pythonRelaxDeps = true;
 
   dependencies =
     with python3.pkgs;
     [
       arrow
-      chardet_5
+      chardet
       cryptography
       filelock
       google-api-python-client
