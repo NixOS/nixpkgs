@@ -16,6 +16,9 @@
 let
   pnpmLatest = pnpm;
 
+  # Pinned SQLite to keep hashes stable, see ./sqlite.nix
+  sqlite' = callPackage ./sqlite.nix { };
+
   supportedFetcherVersions = [
     1 # First version. Here to preserve backwards compatibility
     2 # Ensure consistent permissions. See https://github.com/NixOS/nixpkgs/pull/422975
@@ -87,7 +90,7 @@ in
               pnpm # from args
               pnpm.nodejs-slim
               pnpm-fixup-state-db'
-              sqlite
+              sqlite'
               writableTmpDirAsHomeHook
               yq
               zstd
