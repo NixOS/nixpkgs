@@ -22,21 +22,25 @@
   iana-etc,
   nix-update-script,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mod_tile";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zDe+pFzK16K+8I0v1Z7p83PIgQlVDbjcnD4vzwdB1Oo=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    apacheHttpd
+    curl
   ];
 
   buildInputs = [
@@ -62,7 +66,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
     (lib.cmakeFeature "CMAKE_INSTALL_MODULESDIR" "modules")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "")
-    (lib.cmakeBool "ENABLE_TESTS" doCheck)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # And use DESTDIR to define the install destination
@@ -87,7 +91,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/openstreetmap/mod_tile";
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ jglukasik ];
+    maintainers = with lib.maintainers; [
+      jglukasik
+      nivalux
+    ];
     platforms = lib.platforms.linux;
   };
-}
+})
