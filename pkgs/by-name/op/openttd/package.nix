@@ -2,29 +2,22 @@
   lib,
   stdenv,
   SDL2,
-  alsa-lib,
   buildPackages,
   cmake,
   curl,
-  expat,
   fetchzip,
-  flac,
   fluidsynth,
   fontconfig,
   freetype,
-  glib,
   harfbuzz,
   icu,
-  libjack2,
-  libmpg123,
+  libGL,
   libogg,
   libopus,
   libpng,
-  libsndfile,
-  libvorbis,
-  pcre2,
+  lzo,
+  opusfile,
   pkg-config,
-  pulseaudio,
   soundfont-fluid,
   versionCheckHook,
   xz,
@@ -78,30 +71,20 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
-    expat
     fontconfig
     freetype
-    glib
     harfbuzz
     icu
+    libGL
+    libogg
+    libopus
     libpng
-    pcre2
+    lzo
+    opusfile
     xz
     zlib
   ]
-  ++ lib.optionals withFluidSynth [
-    alsa-lib
-    flac
-    fluidsynth
-    libjack2
-    libmpg123
-    libogg
-    libopus
-    libsndfile
-    libvorbis
-    pulseaudio
-    soundfont-fluid
-  ];
+  ++ lib.optional withFluidSynth fluidsynth;
 
   postInstall =
     lib.optionalString withOpenGFX ''
