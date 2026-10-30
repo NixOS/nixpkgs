@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "3.1.0";
+  version = "3.3.0";
   pyproject = true;
 
   # contains shaderpacks
   src = fetchPypi {
     pname = "jellyfin_mpv_shim";
     inherit version;
-    hash = "sha256-ad6ZokTy8vxAVrgopK+DK9WQqOlEKssigA++68vuid4=";
+    hash = "sha256-GAdTaLM+Lb0RKcAzdlU3c9aEttv9533M7dyvQAbKezk=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   build-system = with python3Packages; [ setuptools ];
+
+  # only pinned for its CA bundle
+  pythonRemoveDeps = [ "certifi" ];
 
   dependencies = with python3Packages; [
     jellyfin-apiclient-python
