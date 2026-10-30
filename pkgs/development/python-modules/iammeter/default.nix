@@ -2,7 +2,7 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   requests,
   setuptools,
   voluptuous,
@@ -13,9 +13,11 @@ buildPythonPackage rec {
   version = "0.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-D6CIk0G5c8E7Fmiz/rb1blXh4Ryi3Ld6hF++14U1LyI=";
+  src = fetchFromGitHub {
+    owner = "lewei50";
+    repo = "iammeter_pip_lib";
+    tag = "v${version}";
+    hash = "sha256-DzqJ0F1KHu755IxcNW4GqhXg0CsfZEGJf34W3TbY5GA=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
@@ -35,7 +37,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Module to work with the IamMeter API";
-    homepage = "https://pypi.org/project/iammeter/";
+    homepage = "https://github.com/lewei50/iammeter_pip_lib";
+    changelog = "https://github.com/lewei50/iammeter_pip_lib/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
