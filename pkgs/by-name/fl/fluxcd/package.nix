@@ -85,6 +85,7 @@ buildGoModule rec {
       ryan4yin
       SchahinRohani
       stealthybox
+      videl
     ];
     mainProgram = "flux";
   };
