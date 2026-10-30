@@ -27406,6 +27406,11 @@
     github = "sinavir";
     githubId = 36380103;
   };
+  sinelaw = {
+    name = "Noam Lewis";
+    github = "sinelaw";
+    githubId = 84020;
+  };
   sinics = {
     name = "Zhifan";
     email = "nonno.felice69uwu@gmail.com";
