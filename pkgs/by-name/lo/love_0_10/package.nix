@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
     (lib.strings.withFeatureAs true "lua" (if withLuajit then "luajit" else "lua"))
   ];
 
+  enableParallelBuilding = true;
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString withLuajit "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   meta = {
