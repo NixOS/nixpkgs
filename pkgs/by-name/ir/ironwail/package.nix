@@ -1,23 +1,20 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   SDL2,
-  fetchurl,
-  gzip,
-  libvorbis,
-  libmad,
-  flac,
-  libopus,
-  opusfile,
-  libogg,
-  libGL,
-  curl,
-  libxmp,
-  mpg123,
-  vulkan-headers,
-  vulkan-loader,
   copyDesktopItems,
+  curl,
+  flac,
+  libGL,
+  libmad,
+  libogg,
+  libopus,
+  libvorbis,
+  libxmp,
   makeDesktopItem,
+  nix-update-script,
+  opusfile,
   pkg-config,
 }:
 
@@ -25,35 +22,40 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ironwail";
   version = "0.8.2";
 
-  src = fetchurl {
-    url = "https://github.com/andrei-drexler/ironwail/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-rt+u0oY2W7UzsIUs5Tvd3IcBXsM2Z0UEfXNVLejc06U=";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "andrei-drexler";
+    repo = "ironwail";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h/3jZ97tzCsy2E5/GCrxMWfVG/LeteEYhN2b7Q8V1/Y=";
   };
 
-  sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/Quake";
+  sourceRoot = "${finalAttrs.src.name}/Quake";
 
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
-    vulkan-headers
-    gzip
-    libGL
-    libvorbis
-    libmad
-    flac
-    curl
-    libopus
-    opusfile
-    libogg
-    libxmp
-    mpg123
-    vulkan-loader
-    SDL2
   ];
 
-  buildFlags = [
+  buildInputs = [
+    SDL2
+    curl
+    flac
+    libGL
+    libmad
+    libogg
+    libopus
+    libvorbis
+    libxmp
+    opusfile
+  ];
+
+  makeFlags = [
     "DO_USERDIRS=1"
-    # Makefile defaults, set here to enforce consistency on Darwin build
+    "USE_SDL2=1"
+    "SDL_CONFIG=${lib.getExe' (lib.getDev SDL2) "sdl2-config"}"
     "USE_CODEC_WAVE=1"
     "USE_CODEC_MP3=1"
     "USE_CODEC_VORBIS=1"
@@ -64,31 +66,39 @@ stdenv.mkDerivation (finalAttrs: {
     "USE_CODEC_XMP=1"
     "MP3LIB=mad"
     "VORBISLIB=vorbis"
-    "SDL_CONFIG=sdl2-config"
-    "USE_SDL2=1"
   ];
 
-  preInstall = ''
-    mkdir -p "$out/bin"
-    mkdir -p "$out/share/quake"
-    substituteInPlace Makefile --replace-fail "cp ironwail.pak /usr/local/games/quake" "cp ironwail.pak $out/share/quake/ironwail.pak"
-    substituteInPlace Makefile --replace-fail "/usr/local/games/quake" "$out/bin/ironwail"
-  '';
-
   enableParallelBuilding = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 ironwail -t $out/bin
+    install -Dm644 ironwail.pak -t $out/share/ironwail
+    install -Dm644 ../Misc/QuakeSpasm_512.png $out/share/icons/hicolor/512x512/apps/ironwail.png
+
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
       name = "ironwail";
-      exec = "ironwail";
+      categories = [
+        "Game"
+        "ActionGame"
+        "Shooter"
+      ];
+      comment = "High-performance QuakeSpasm fork";
       desktopName = "Ironwail";
-      categories = [ "Game" ];
+      exec = "ironwail";
+      icon = "ironwail";
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Fork of the QuakeSpasm engine for iD software's Quake";
-    homepage = "https://github.com/andrei-drexler/ironwail";
     longDescription = ''
       Ironwail is a fork of QuakeSpasm with focus on high performance instead of
       compatibility.
@@ -98,10 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
       It also include various visual features as well as improved limits for playing
       larger levels with less performance impacts.
     '';
-
+    homepage = "https://github.com/andrei-drexler/ironwail";
+    changelog = "https://github.com/andrei-drexler/ironwail/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.necrophcodr ];
+    platforms = lib.platforms.linux;
     mainProgram = "ironwail";
   };
 })
