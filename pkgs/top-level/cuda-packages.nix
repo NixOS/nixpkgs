@@ -63,7 +63,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt =
       if hasJetsonCudaCapability then
@@ -88,7 +88,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt =
       if hasJetsonCudaCapability then
@@ -113,7 +113,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt =
       if hasJetsonCudaCapability then
@@ -138,7 +138,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
   };
@@ -156,7 +156,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
   };
@@ -175,7 +175,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
   };
@@ -194,7 +194,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
   };
@@ -213,7 +213,7 @@ let
     nppplus = "0.10.0";
     nvcomp = "6.0.0";
     nvjpeg2000 = "0.12.0";
-    nvpl = "26.5";
+    nvpl = "26.10";
     nvtiff = "0.9.0";
     tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
   };
