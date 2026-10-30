@@ -12344,6 +12344,8 @@ self: super: with self; {
 
   nrf-ota = callPackage ../development/python-modules/nrf-ota { };
 
+  nrf802154-sniffer = callPackage ../development/python-modules/nrf802154-sniffer { };
+
   nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
@@ -22435,6 +22437,12 @@ self: super: with self; {
   verilogae = callPackage ../development/python-modules/verilogae { };
 
   verlib2 = callPackage ../development/python-modules/verlib2 { };
+
+  vermin = (toPythonModule (pkgs.vermin.override { python3Packages = self; })).overrideAttrs (old: {
+    # hack to not cause a rebuild of python3Packages.python-discovery
+    # FIXME remove on staging
+    nativeBuildInputs = lib.remove pythonMetadataCheckHook old.nativeBuildInputs;
+  });
 
   versioneer = callPackage ../development/python-modules/versioneer { };
 
