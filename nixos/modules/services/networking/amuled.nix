@@ -210,8 +210,7 @@ in
       default = null;
       description = ''
         File containing the admin password for amuleapi (REST API and Web UI).
-        It is set with `amuleapi --set-admin-pass` before amuled starts,
-        so it is briefly visible in the process list.
+        It is set with `amuleapi --set-admin-pass-stdin` before amuled starts.
       '';
     };
 
@@ -324,10 +323,9 @@ in
             "${toString cfg.settings.ExternalConnect.ECPort}"
         ''
         + optionalString (!isNull cfg.AmuleApiAdminPasswordFile) ''
-          AMULE_API_PASSWORD=$(cat -- ${lib.escapeShellArg cfg.AmuleApiAdminPasswordFile})
           ${getExe cfg.amuleApiPackage} \
             --config-dir=${lib.escapeShellArg cfg.dataDir} --no-log-file \
-            --set-admin-pass="$AMULE_API_PASSWORD"
+            --set-admin-pass-stdin < ${lib.escapeShellArg cfg.AmuleApiAdminPasswordFile}
         ''
       );
 
