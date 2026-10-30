@@ -24,6 +24,11 @@
                 configureNginx = true;
                 domain = "localhost";
                 passwordFile = builtins.toFile "password" "admin";
+                # Unquoted JSON is valid systemd EnvironmentFile syntax, but not
+                # valid shell: paperless-manage must parse it like the services.
+                environmentFile = builtins.toFile "paperless-env" ''
+                  PAPERLESS_SOCIALACCOUNT_PROVIDERS={"openid_connect": {"APPS": []}}
+                '';
 
                 exporter = {
                   enable = true;
@@ -70,6 +75,15 @@
       # Required for consuming documents via the web interface
       with subtest("Task-queue gets ready"):
         node.wait_for_unit("paperless-task-queue.service")
+
+      with subtest("paperless-manage sees the same environment as the services"):
+        node.succeed("paperless-manage check")
+        node.succeed(
+          "echo 'from django.conf import settings; "
+          "assert settings.SOCIALACCOUNT_PROVIDERS == {\"openid_connect\": {\"APPS\": []}}' "
+          "| paperless-manage shell"
+        )
+        node.fail("paperless-manage shell -c 'raise SystemExit(3)'")
 
       with subtest("Add a png document via the web interface"):
         node.succeed(
@@ -119,9 +133,9 @@
           assert "1 timers listed." in timers, "incorrect number of timers"
 
           # Double check that our attrset option override works as expected
-          cmdline = node.succeed("grep 'paperless-manage' $(systemctl cat paperless-exporter | grep ExecStart | cut -f 2 -d=)")
+          cmdline = node.succeed("grep 'document_exporter' $(systemctl cat paperless-exporter | grep ExecStart | cut -f 2 -d=)")
           print(f"Exporter command line {cmdline!r}")
-          assert cmdline.strip() == "paperless-manage document_exporter /var/lib/paperless/export --compare-checksums --delete --no-progress-bar --no-thumbnail", "Unexpected exporter command line"
+          assert cmdline.strip().endswith("/bin/paperless-ngx document_exporter /var/lib/paperless/export --compare-checksums --delete --no-progress-bar --no-thumbnail"), "Unexpected exporter command line"
 
     test_paperless(simple)
     simple.send_monitor_command("quit")
