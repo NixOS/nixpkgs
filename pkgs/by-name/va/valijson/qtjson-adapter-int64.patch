@@ -1,23 +1,32 @@
 diff --git a/include/valijson/adapters/qtjson_adapter.hpp b/include/valijson/adapters/qtjson_adapter.hpp
+index 86d6c1b..1c26fe4 100644
 --- a/include/valijson/adapters/qtjson_adapter.hpp
 +++ b/include/valijson/adapters/qtjson_adapter.hpp
-@@ -338,7 +338,7 @@
+@@ -25,6 +25,7 @@
+ 
+ #pragma once
+ 
++#include <cmath>
+ #include <optional>
+ #include <string>
+ #include <utility>
+@@ -338,7 +339,7 @@ public:
      bool getInteger(int64_t &result) const
      {
          if (m_value.isDouble()) {
 -            result = m_value.toInt();
-+            result = m_value.toInteger();
++            result = static_cast<int64_t>(m_value.toDouble());
              return true;
          }
  
-@@ -417,8 +417,8 @@
+@@ -417,8 +418,8 @@ public:
  
      bool isInteger() const
      {
 -        //toInt returns the default value (0, 1) if the value is not a whole number
 -        return m_value.isDouble() && (m_value.toInt(0) == m_value.toInt(1));
-+        //toInteger returns the default value (0, 1) if the value is not a whole number representable as qint64
-+        return m_value.isDouble() && (m_value.toInteger(0) == m_value.toInteger(1));
++        const double value = m_value.toDouble();
++        return m_value.isDouble() && (std::floor(value) == value);
      }
  
      bool isNull() const
