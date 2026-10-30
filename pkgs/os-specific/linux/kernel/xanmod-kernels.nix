@@ -11,7 +11,9 @@ let
   # These names are how they are designated in https://xanmod.org.
 
   # NOTE: When updating these, please also take a look at the changes done to
-  # kernel config in the xanmod version commit
+  # kernel config in the xanmod version commit at
+  # https://gitlab.com/xanmod/linux/-/blob/${version}/CONFIGS/x86_64/config
+  # where version is majorMinor, e.g. 6.18 or 7.2
   variants = {
     # ./update-xanmod.sh lts
     lts = {
