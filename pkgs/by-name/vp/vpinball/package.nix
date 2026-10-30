@@ -63,6 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xh8IQknCvZAta3Lv6yuwq7yxsbgOBjRgMduBNGxQdTM=";
   };
 
+  prePatch = ''
+    # The upstream source uses CRLF line endings; normalize only the file being patched.
+    sed -i 's/\r$//' src/renderer/RenderDevice.cpp
+  '';
+
+  patches = [ ./bgfx-waitable-swapchain-fallback.patch ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

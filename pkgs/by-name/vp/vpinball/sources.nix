@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchurl }:
 
 {
-  # Versions mirror the sources used by platforms/linux-x64/external.sh.
+  # Versions mirror the sources used by platforms/linux-x64/external.sh, except bgfx.
   sdl = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
@@ -35,11 +35,13 @@
     hash = "sha256-t4u6ZuH6soUc8HJr/AMQBHXLJQWOXpfwv6EAvPA2+y4=";
   };
 
+  # The upstream BGFX_PATCH_SHA is no longer available; use a fork revision
+  # compatible with the pinned bgfx.cmake bundle instead.
   bgfx = fetchFromGitHub {
     owner = "vbousquet";
     repo = "bgfx";
-    rev = "66fbca4dfe93da62b0f145bec872ee96df326afa";
-    hash = "sha256-2h7ZBO7rV/ra6fryqxEfrB3k/nWr6yu8wk+hPuKXxMk=";
+    rev = "6ca9bb94a50a154b2a8f06b35595eed7c5e04639";
+    hash = "sha256-a+BZSfiE6IMVP1OH/6DDGze0lFQEQN8VEpU10y+EwFQ=";
   };
 
   pinmame = fetchFromGitHub {
