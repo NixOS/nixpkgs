@@ -96,19 +96,18 @@ python3Packages.buildPythonApplication rec {
       advanced features, such as bulk subtitle updates and launching commands on events.
     '';
     changelog = "https://github.com/jellyfin/jellyfin-mpv-shim/releases/tag/v${version}";
-    license = with lib.licenses; [
-      # jellyfin-mpv-shim
-      gpl3Only
-      mit
-
-      # shader-pack licenses (github:iwalton3/default-shader-pack)
-      # KrigBilateral, SSimDownscaler, NNEDI3
-      gpl3Plus
-      # Anime4K, FSRCNNX
-      mit
-      # Static Grain
-      unlicense
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        # jellyfin-mpv-shim
+        gpl3Plus
+        # jellyfin-mpv-shim, and the Anime4K, NVIDIA Image Scaling, AMD FSR, AMD CAS and ArtCNN shaders
+        mit
+        # KrigBilateral, SSimDownscaler, NNEDI3 and FSRCNNX shaders
+        lgpl3Plus
+        # Static Grain and Anime4K AutoDownscalePre shaders
+        unlicense
+      ];
     maintainers = with lib.maintainers; [
       connor-grady
       jojosch
