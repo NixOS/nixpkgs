@@ -9,20 +9,18 @@
   protobuf,
   rustfmt,
   nixosTests,
+  nix-update-script,
 }:
-let
-  pinData = lib.importJSON ./pin.json;
-  version = pinData.serverVersion;
-in
+
 rustPlatform.buildRustPackage (finalAttrs: {
-  inherit version;
   pname = "lemmy-server";
+  version = "0.19.21";
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = "lemmy";
     tag = finalAttrs.version;
-    hash = pinData.serverHash;
+    hash = "sha256-8PB3/XoDqzaptwwzqZSZjPYIcEHoasXsKPn1wwIUsEw=";
     fetchSubmodules = true;
   };
 
@@ -30,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     echo 'pub const VERSION: &str = "${finalAttrs.version}";' > crates/utils/src/version.rs
   '';
 
-  cargoHash = pinData.serverCargoHash;
+  cargoHash = "sha256-GjuP5ci1f6xGGrDkS8KyfP15Owj42YNITfK3T4MuHp0=";
 
   buildInputs = [
     libpq
@@ -74,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = ./update.py;
+    updateScript = nix-update-script { };
     tests.lemmy-server = nixosTests.lemmy;
   };
 
