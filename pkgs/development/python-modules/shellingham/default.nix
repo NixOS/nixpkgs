@@ -41,6 +41,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/sarugaku/shellingham";
     changelog = "https://github.com/sarugaku/shellingham/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ mbode ];
+    maintainers = [ ];
   };
 })

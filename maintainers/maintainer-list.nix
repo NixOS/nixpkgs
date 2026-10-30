@@ -18720,12 +18720,6 @@
     githubId = 14008591;
     name = "Mack Binns";
   };
-  mbode = {
-    email = "maxbode@gmail.com";
-    github = "mbode";
-    githubId = 9051309;
-    name = "Maximilian Bode";
-  };
   mBornand = {
     email = "dev.mbornand@systemb.ch";
     github = "mBornand";
