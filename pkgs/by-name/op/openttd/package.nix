@@ -1,46 +1,44 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
-  cmake,
-  pkg-config,
   SDL2,
-  libpng,
-  zlib,
-  xz,
-  freetype,
-  fontconfig,
-  curl,
-  icu,
-  harfbuzz,
-  expat,
-  glib,
-  pcre2,
-  openttd-opengfx,
-  withOpenGFX ? true,
-  openttd-opensfx,
-  withOpenSFX ? true,
-  openttd-openmsx,
-  withOpenMSX ? true,
-  withFluidSynth ? true,
-  fluidsynth,
-  soundfont-fluid,
-  soundfont-name ? "FluidR3_GM2-2",
-  libsndfile,
-  flac,
-  libogg,
-  libvorbis,
-  libopus,
-  libmpg123,
-  pulseaudio,
-  alsa-lib,
-  libjack2,
-  makeWrapper,
-  buildPackages,
-  versionCheckHook,
-  nix-update-script,
   _experimental-update-script-combinators,
+  alsa-lib,
+  buildPackages,
+  cmake,
+  curl,
+  expat,
+  flac,
+  fluidsynth,
+  fontconfig,
+  freetype,
+  glib,
+  harfbuzz,
+  icu,
+  libjack2,
+  libmpg123,
+  libogg,
+  libopus,
+  libpng,
+  libsndfile,
+  libvorbis,
+  nix-update-script,
+  openttd-opengfx,
+  openttd-openmsx,
+  openttd-opensfx,
+  pcre2,
+  pkg-config,
+  pulseaudio,
+  soundfont-fluid,
+  versionCheckHook,
+  xz,
+  zlib,
+  soundfont-name ? "FluidR3_GM2-2",
+  withFluidSynth ? true,
+  withOpenGFX ? true,
+  withOpenMSX ? true,
+  withOpenSFX ? true,
 }:
 
 let
@@ -60,6 +58,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
   version = "15.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OpenTTD";
@@ -86,10 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch = lib.optionalString withFluidSynth ''
+    substituteInPlace src/music/fluidsynth.cpp \
+      --replace-fail "/usr/share/soundfonts/default.sf2" \
+                     "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     crossTools
@@ -97,42 +103,34 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
+    curl
+    expat
+    fontconfig
+    freetype
+    glib
+    harfbuzz
+    icu
     libpng
+    pcre2
     xz
     zlib
-    freetype
-    fontconfig
-    curl
-    icu
-    harfbuzz
-    expat
-    glib
-    pcre2
   ]
   ++ lib.optionals withFluidSynth [
-    fluidsynth
-    soundfont-fluid
-    libsndfile
-    flac
-    libogg
-    libvorbis
-    libopus
-    libmpg123
-    pulseaudio
     alsa-lib
+    flac
+    fluidsynth
     libjack2
+    libmpg123
+    libogg
+    libopus
+    libsndfile
+    libvorbis
+    pulseaudio
+    soundfont-fluid
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  strictDeps = true;
-
-  postPatch = ''
-    substituteInPlace src/music/fluidsynth.cpp \
-      --replace-fail "/usr/share/soundfonts/default.sf2" \
-                     "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postInstall =
     lib.optionalString withOpenGFX ''
@@ -163,7 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
-    mainProgram = "openttd";
     longDescription = ''
       OpenTTD is a transportation economics simulator. In single player mode,
       players control a transportation business, and use rail, road, sea, and air
@@ -177,11 +174,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.openttd.org/";
     changelog = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jcumming
       fpletz
       magicquark
     ];
+    platforms = lib.platforms.linux;
+    mainProgram = "openttd";
+    downloadPage = "https://www.openttd.org/downloads/openttd-releases/latest";
   };
 })
