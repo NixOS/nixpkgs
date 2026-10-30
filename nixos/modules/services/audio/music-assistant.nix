@@ -127,9 +127,16 @@ in
           9090 # Slimproto CLI
         ];
       allowedTCPPortRanges =
+        # https://github.com/music-assistant/server/blob/2.11.0b7/music_assistant/providers/airplay_receiver/provider.py#L68-L75
+        lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
+          {
+            from = 7000;
+            to = 7999;
+          }
+        ]
         # Music Assistant does not configure the zeroconf_port, so all ephemeral ports are used
         # https://github.com/devgianlu/go-librespot#example-minimal-zeroconf-configuration
-        lib.optionals (lib.elem "spotify_connect" cfg.providers) [
+        ++ lib.optionals (lib.elem "spotify_connect" cfg.providers) [
           {
             from = 32768;
             to = 65535;
