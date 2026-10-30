@@ -1,0 +1,21 @@
+diff --git a/cmake/CompilerWarnings.cmake b/cmake/CompilerWarnings.cmake
+index 1111111..2222222 100644
+--- a/cmake/CompilerWarnings.cmake
++++ b/cmake/CompilerWarnings.cmake
+@@ -119,6 +119,16 @@ function(qgc_disable_dependency_warnings target)
+         return()
+     endif()
+
++    get_target_property(_is_imported ${target} IMPORTED)
++    if(_is_imported)
++        # target_compile_options() only allows setting INTERFACE properties on
++        # IMPORTED targets - they're already built, so there are no compile
++        # flags left to change. CMake also already treats an IMPORTED
++        # target's own INTERFACE_INCLUDE_DIRECTORIES as SYSTEM for any
++        # consumer by default, so there's nothing left to do here either.
++        return()
++    endif()
++
+     set(_scope PRIVATE)
+
+     set_target_properties(${target} PROPERTIES SYSTEM TRUE)
