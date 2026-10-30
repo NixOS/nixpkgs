@@ -1,22 +1,22 @@
 {
   "jdk": {
     "x86_64-linux": {
-      "zuluVersion": "27.28.101",
-      "jdkVersion": "27.0.0",
-      "url": "https://cdn.azul.com/zulu/bin/zulu27.28.101-ca-jdk27.0.0-linux_x64.tar.gz",
-      "hash": "sha256-zLwVxO2+39zAPC0poqosba+eb/tM2n3V7OD8uzc1Amc="
+      "zuluVersion": "27.30.109",
+      "jdkVersion": "27.0.1.0.3",
+      "url": "https://cdn.azul.com/zulu/bin/zulu27.30.109-ca-jdk27.0.1.0.3-linux_x64.tar.gz",
+      "hash": "sha256-wSiBeSbk7rswhotroIICj0k6+nFuRZ40BJveCrSamCk="
     },
     "aarch64-linux": {
-      "zuluVersion": "27.28.101",
-      "jdkVersion": "27.0.0",
-      "url": "https://cdn.azul.com/zulu/bin/zulu27.28.101-ca-jdk27.0.0-linux_aarch64.tar.gz",
-      "hash": "sha256-n6W/hleDxDhAEB/Nw6UiK2Da9P4R8mgGJHv4B8CKujg="
+      "zuluVersion": "27.30.109",
+      "jdkVersion": "27.0.1.0.3",
+      "url": "https://cdn.azul.com/zulu/bin/zulu27.30.109-ca-jdk27.0.1.0.3-linux_aarch64.tar.gz",
+      "hash": "sha256-S00vtKa/9fpNOh8irFkzyH2D5B1feLzYjfh4MmNC1Qc="
     },
     "aarch64-darwin": {
-      "zuluVersion": "27.28.101",
-      "jdkVersion": "27.0.0",
-      "url": "https://cdn.azul.com/zulu/bin/zulu27.28.101-ca-jdk27.0.0-macosx_aarch64.tar.gz",
-      "hash": "sha256-DY8dGRL6k469lUmeseiiqYdyX+QqoN2YSXu2BHSKjQc="
+      "zuluVersion": "27.30.109",
+      "jdkVersion": "27.0.1.0.3",
+      "url": "https://cdn.azul.com/zulu/bin/zulu27.30.109-ca-jdk27.0.1.0.3-macosx_aarch64.tar.gz",
+      "hash": "sha256-iN7C+GCefEFid4y671Q38A/r08SYp8DncnfR9KyPg50="
     }
   },
   "fx": {
