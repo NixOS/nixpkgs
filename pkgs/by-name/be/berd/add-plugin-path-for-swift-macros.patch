@@ -1,0 +1,13 @@
+diff -ur a/berd-@berd-version@-vendor/source-registry-0/swift-rs-@swift-rs-version@/src-rs/build.rs b/berd-@berd-version@-vendor/source-registry-0/swift-rs-@swift-rs-version@/src-rs/build.rs
+--- a/berd-@berd-version@-vendor/source-registry-0/swift-rs-@swift-rs-version@/src-rs/build.rs	2026-11-19 09:21:14.735208832 -0500
++++ b/berd-@berd-version@-vendor/source-registry-0/swift-rs-@swift-rs-version@/src-rs/build.rs	2026-11-19 09:20:58.252592671 -0500
+@@ -270,6 +270,9 @@
+                 // Necessary for iOS compilation.
+                 .args(["-Xswiftc", "-sdk"])
+                 .args(["-Xswiftc", sdk_path.trim()])
++                .args(["-Xswiftc", "-external-plugin-path"])
++                .args(["-Xswiftc", "@open-apple-macros@/lib/swift/host/plugins#@open-apple-macros@/libexec/swift/plugins/OpenAppleMacrosServer"])
++                .args(["--disable-sandbox"]) // Because Nixpkgs builds already happen in a sandbox.
+                 // Override target triple for each swiftc instance.
+                 // Necessary for iOS compilation.
+                 .args(["-Xswiftc", "-target"])
