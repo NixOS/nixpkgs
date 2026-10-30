@@ -10,13 +10,13 @@ let
   platform = if stdenv.hostPlatform.isAarch64 then "aarch64" else "x64";
   hash =
     if stdenv.hostPlatform.isAarch64 then
-      "sha256-5T/Az7cuUFAx4G4TxlHBy3hCTznxXTBPR6PVuQe8+fI="
+      "sha256-xbizzKMfPWQ6OzE7j0Li0PFqT879As2jQ9l71TBq+qs="
     else
-      "sha256-oo19ZayvwG+w9BbLQJmYdz9TFMfuv3fK+QeBKDHN/Gc=";
+      "sha256-zFxyuvWuXII4poQfCJcie+LQKCa5z5jq8C/e+u6wOlc=";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "photoprism-onnxruntime";
-  version = "1.29.1";
+  version = "1.31.0";
 
   # photoprism uses yalue/onnxruntime_go which expressly requires finding a version
   # of onnxruntime whose API version matches exactly what was found at build time.
