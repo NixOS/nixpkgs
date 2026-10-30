@@ -57,7 +57,7 @@ in
       default = false;
       description = ''
         Whether to open required ports for the configured providers.
-        Currently AirPlay, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
+        Currently AirPlay, AriaCast Receiver, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
 
         ::: {.note}
         AirPlay and Spotify Connect must open all random high UDP or TCP ports respectively to function.
@@ -113,6 +113,8 @@ in
           5000 # AirPlay 1/RAOP
           7000 # AirPlay 2
         ]
+        # https://github.com/AriaCast/AriaCast-Protocol-Spec/blob/main/spec/discovery.md#ports
+        ++ lib.optional (lib.elem "ariacast_receiver" cfg.providers) 12889
         # https://www.music-assistant.io/player-support/sendspin/#connecting-external-sendspin-clients
         ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
         # https://www.music-assistant.io/player-support/snapcast/#known-issues--notes
@@ -133,10 +135,13 @@ in
             to = 65535;
           }
         ];
-      allowedUDPPorts = lib.optionals (lib.elem "squeezelite" cfg.providers) [
-        # https://lyrion.org/reference/slimproto-protocol/
-        3483 # Slimproto discovery
-      ];
+      allowedUDPPorts =
+        #  https://github.com/AriaCast/AriaCast-Protocol-Spec/blob/main/spec/discovery.md#ports
+        lib.optional (lib.elem "ariacast_receiver" cfg.providers) 12888
+        ++ lib.optionals (lib.elem "squeezelite" cfg.providers) [
+          # https://lyrion.org/reference/slimproto-protocol/
+          3483 # Slimproto discovery
+        ];
       # The information published by Apple 1 seem to not apply to libraop.
       # The closest we could find that represents the port range being used as observed by tcpdump is the ephemeral port range.
       # 1: https://support.apple.com/en-us/103229#:~:text=49152%E2%80%93-,65535,-TCP%2C%20UDP
