@@ -227,11 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/can1357/oh-my-pi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "omp";
-    maintainers = with lib.maintainers; [
-      malix
-      naxdy
-      adamcstephens
-    ];
+    maintainers = with lib.maintainers; [ adamcstephens ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
