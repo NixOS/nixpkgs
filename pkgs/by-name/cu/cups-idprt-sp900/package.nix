@@ -4,6 +4,7 @@
   fetchzip,
   autoPatchelfHook,
   cups,
+  cups-idprt-update-script,
   e2fsprogs,
   krb5,
   libxcrypt-legacy,
@@ -46,6 +47,11 @@ stdenvNoCC.mkDerivation {
       chmod +x $out/lib/cups/filter/*
       runHook postInstall
     '';
+
+  passthru.updateScript = [
+    (lib.getExe cups-idprt-update-script)
+    "SP900"
+  ];
 
   meta = {
     description = "CUPS driver for the iDPRT SP900";
