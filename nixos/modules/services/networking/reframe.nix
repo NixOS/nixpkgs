@@ -74,6 +74,7 @@ in
     systemd.services = lib.mapAttrs' (
       name: _:
       lib.nameValuePair "reframe-server@${name}" {
+        overrideStrategy = "asDropin";
         wantedBy = [ "multi-user.target" ];
       }
     ) cfg.configs;
