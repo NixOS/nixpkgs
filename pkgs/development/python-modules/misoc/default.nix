@@ -14,7 +14,7 @@
   numpy,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "misoc";
   version = "0.12-unstable-2025-10-03";
   format = "setuptools";
@@ -47,4 +47,4 @@ buildPythonPackage {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})
