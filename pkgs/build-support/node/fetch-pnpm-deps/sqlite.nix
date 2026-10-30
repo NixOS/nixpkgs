@@ -5,9 +5,10 @@
   sqlite,
 }:
 
-# SQLite 3.53.0 changed the `.dump` output, BLOBs are written as `x'...'` instead of `X'...'`.
-# This ends up in the output of `fetchPnpmDeps` with `fetcherVersion >= 4`,
-# so bumping SQLite on release-26.05 broke existing hashes.
+# SQLite 3.53.0 changed both the raw database written through `node:sqlite`
+# (used by pnpm 11 for the store index, archived as is with `fetcherVersion = 3`)
+# and the `.dump` output (BLOBs as `x'...'` instead of `X'...'`, used with `fetcherVersion >= 4`).
+# Both end up in the output of `fetchPnpmDeps`, so bumping SQLite on release-26.05 broke existing hashes.
 # Pin the version that was used when those hashes were generated.
 # This is only used to produce the fetcher output, never at runtime.
 let
