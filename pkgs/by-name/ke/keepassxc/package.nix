@@ -48,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   __structuredAttrs = true;
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = toString [
@@ -130,6 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.concatLines [
+    ''
+      mkdir -p $doc/share/doc
+      mv $out/share/keepassxc/docs/ $doc/share/doc/keepassxc
+    ''
+
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/bin"
       for program in keepassxc-cli keepassxc-proxy; do
