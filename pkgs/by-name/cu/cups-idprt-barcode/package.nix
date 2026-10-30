@@ -1,26 +1,23 @@
 {
   stdenvNoCC,
   lib,
-  fetchurl,
+  fetchzip,
   autoPatchelfHook,
   cups,
-  unzip,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "cups-idprt-barcode";
-  version = "1.2.1";
+  version = "1.2.21";
 
-  src = fetchurl {
-    name = "idprt_label_printer_linux_driver.zip"; # This is not the original name, but there was debate about whether rec or finalAttrs should be used, so I just renamed it
-    url = "https://www.idprt.com/prt_v2/files/down_file/id/265/fid/600.html"; # NOTE: This is NOT an HTML page, but a ZIP file
-    hash = "sha256-jp8DDaTmCgNrHCJSSz1K3xDcSB8dQm6i1pICaMrBFaQ=";
+  src = fetchzip {
+    url = "https://foreverfile.hprtcloud.com/hygj/annex_file/2026_08_03/vzMD7D5IeyIYh979/idprt_label_printer_linux_driver_v1.2.21.zip";
+    hash = "sha256-HFEbVvCOzTeDEeWiBJ6+rmchirHMFxgPOV7U0NSSVLI=";
   };
 
   buildInputs = [ cups ];
   nativeBuildInputs = [
     autoPatchelfHook
-    unzip
   ];
 
   installPhase =
