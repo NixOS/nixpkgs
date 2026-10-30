@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mailsuite";
-  version = "2.3.2";
+  version = "2.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seanthegeek";
     repo = "mailsuite";
     tag = finalAttrs.version;
-    hash = "sha256-idpgHGvUeg7QIrc9J6IHqcxvqLUcNQNLUSiixMovIbQ=";
+    hash = "sha256-qjpDBMZY0VJGUHTwfbn6MMZ5q82njHBqza2OkEEoDdY=";
   };
 
   build-system = [ hatchling ];
