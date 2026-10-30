@@ -13,25 +13,19 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xss-lock";
-  version = "0.3.0-unstable-2018-05-31";
+  version = "0.4.0";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "xdbob";
+    owner = "wavexx";
     repo = "xss-lock";
-    rev = "cd0b89df9bac1880ea6ea830251c6b4492d505a5";
-    hash = "sha256-B+aWFBBtp7bdlAHNP81vygM4+piqzjzxzo6YAt3DFhA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AtaNuEZhFpw9uimQkuMorBbTkE0J4h9fjV7ZEjz8mgg=";
   };
-
-  patches = [
-    # Update CMake minimum required version for CMake 4 compatibility
-    # https://github.com/xdbob/xss-lock/pull/3
-    ./cmake-3.10.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,7 +44,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Use external locker (such as i3lock) as X screen saver";
-    homepage = "https://github.com/xdbob/xss-lock";
+    homepage = "https://github.com/wavexx/xss-lock";
     license = lib.licenses.mit;
     mainProgram = "xss-lock";
     maintainers = with lib.maintainers; [
@@ -59,4 +53,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

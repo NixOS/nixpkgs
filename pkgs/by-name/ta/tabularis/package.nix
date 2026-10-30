@@ -12,6 +12,7 @@
   webkitgtk_4_1,
   pkg-config,
   openssl,
+  cacert,
   nix-update-script,
 }:
 let
@@ -19,26 +20,26 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabularis";
-  version = "0.28.0";
+  version = "0.29.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TabularisDB";
     repo = "tabularis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BOfkHOg9nb4ZlGeni838Ymd1mAW/EWROQgtvQN1vhtE=";
+    hash = "sha256-u/sNbmUXHE76aOh/MgujuWXA0TOgnAcLgxcHRo3EJTI=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-JQcIE4ihVELB5rSg6LWEGi5+a5SgNoLVAeCQJEVKhCg=";
+  cargoHash = "sha256-fJnlkmjSAlK5G7+y8LnEyW8IlRDP9kJqLC9wTEtzUq4=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-KG5r3fCTxsblyCF3bgzZcgqlhAfIpGSiYLaKWTpwTvA=";
+    hash = "sha256-/E40mIMYLSQhoE/uxO6I+X3qdTdiyNOGKk1vI3FhJtA=";
   };
 
   postPatch = ''
@@ -63,6 +64,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
   ];
+
+  nativeCheckInputs = [ cacert ];
 
   # Fails in sandbox
   checkFlags = map (x: "--skip=${x}") [

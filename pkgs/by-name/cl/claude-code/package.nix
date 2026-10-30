@@ -6,7 +6,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  makeBinaryWrapper,
+  makeShellWrapper,
   autoPatchelfHook,
   alsa-lib,
   procps,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    makeShellWrapper
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
@@ -59,7 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
       --set DISABLE_INSTALLATION_CHECKS 1 \
       --set USE_BUILTIN_RIPGREP 0 \
       --set-default CLAUDE_CODE_CERT_STORE system \
-      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      ${
+        # darwin reads from the keychain but not the provided roots from there. default to re-using nix's certs
+        lib.optionalString stdenv.hostPlatform.isDarwin ''
+          --run ${lib.escapeShellArg ''
+            if [ -z "''${NODE_EXTRA_CA_CERTS:-}" ] && [ -n "''${NIX_SSL_CERT_FILE:-}" ]; then
+              export NODE_EXTRA_CA_CERTS="$NIX_SSL_CERT_FILE"
+            fi
+          ''} \
+        ''
+      }${lib.optionalString stdenv.hostPlatform.isLinux ''
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
       ''}--prefix PATH : ${
         lib.makeBinPath (

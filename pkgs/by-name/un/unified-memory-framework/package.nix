@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   cmake,
   ninja,
@@ -66,6 +67,25 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  patches = [
+    # The IPC test scripts put `#!/bin/bash` after the license header, so
+    # ctest cannot execute them (exec format error).
+    # https://github.com/oneapi-src/unified-memory-framework/pull/1618
+    (fetchpatch {
+      name = "move-shebangs-to-the-top.patch";
+      url = "https://github.com/oneapi-src/unified-memory-framework/commit/3ab0bc195f72060555f154475ec3abe01d2ba742.patch";
+      hash = "sha256-0+dgOFNmGrxXPWxtsc1mvzj0V8+eJhH2HkGooDcNdhs=";
+    })
+    # Several file provider tests share a backing file name in the same
+    # working directory and race when ctest runs them in parallel.
+    # https://github.com/oneapi-src/unified-memory-framework/pull/1620
+    (fetchpatch {
+      name = "use-different-temporary-file-names.patch";
+      url = "https://github.com/oneapi-src/unified-memory-framework/commit/afa229239daabfee2722f780f83d933654d5965a.patch";
+      hash = "sha256-mDQCz9sAxFemsGGhY6hwx4vsQgSrchuik/a4+7Gdp9M=";
+    })
+  ];
+
   postPatch = ''
     # The CMake tries to find out the version via git.
     # Since we're not in a clone, git describe won't work.
@@ -84,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'set(UMF_LIBS umf_utils umf_ba umf_coarse $<BUILD_INTERFACE:''${UMF_HWLOC_NAME}>)' \
         'set(UMF_LIBS umf_utils umf_ba umf_coarse ''${UMF_HWLOC_NAME})'
+
+    # ctest runs the IPC test scripts directly
+    patchShebangs --build test
   '';
 
   # If included, jemalloc needs to be vendored, as they don't support using a pre-built version
