@@ -5,37 +5,18 @@
 
   cmake,
   empy ? python3Packages.empy,
+  heatshrink,
   jinja2 ? python3Packages.jinja2,
   kconfiglib ? python3Packages.kconfiglib,
+  micro-xrce-dds-client,
   ninja,
+  px4-gpsdrivers,
   rsync,
   symforce ? python3Packages.symforce,
 
   python3Packages,
 }:
 
-let
-  # PX4-Autopilot vendors libmicroxrceddsclient as a git submodule at
-  # src/modules/uxrce_dds_client/Micro-XRCE-DDS-Client. uorb_headers itself
-  # never builds or links against this module, but CMake's top-level
-  # configure (not just build) unconditionally add_subdirectory()s every
-  # module in the default px4_sitl_default module list, including
-  # modules/uxrce_dds_client, whose CMakeLists.txt calls ExternalProject_Add
-  # with SOURCE_DIR pointing at this submodule. ExternalProject_Add
-  # validates at *configure* time that SOURCE_DIR is an existing non-empty
-  # directory, so an empty/missing submodule placeholder is a hard
-  # `cmake -B` configure failure, not just a build failure -- confirmed by
-  # reproducing the configure step both with and without this submodule
-  # present. No other submodule is needed to configure or build
-  # uorb_headers, so only this one is fetched here instead of using
-  # fetchSubmodules = true on the whole PX4-Autopilot checkout.
-  microxrceddsclient = fetchFromGitHub {
-    owner = "PX4";
-    repo = "Micro-XRCE-DDS-Client";
-    rev = "711aef423edd1820347b866d1e4164832df35d04"; # px4 branch, pinned to the submodule commit PX4-Autopilot v1.17.0 references
-    hash = "sha256-ZnmhneL9Kgg+Tt6nBGveuBpowPYoTco6Leav/XxsEPY=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "px4-uorb-headers";
   version = "1.17.0";
@@ -47,13 +28,44 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "PX4";
     repo = "PX4-Autopilot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-odGVL3MlJuFqq10eSGInx8Ixjl6qj0/oUlIgYTg4BZw=";
+    hash = "sha256-wE0NlWqWEWYJ+G7NB6746hxTENrxpS2Zk70yq5oY9bw=";
   };
 
-  postPatch = ''
-    rmdir src/modules/uxrce_dds_client/Micro-XRCE-DDS-Client
-    cp -r --no-preserve=mode ${microxrceddsclient} src/modules/uxrce_dds_client/Micro-XRCE-DDS-Client
+  # PX4-Autopilot's top-level CMakeLists.txt unconditionally
+  # add_subdirectory()s every module in the default px4_sitl_default module
+  # list at *configure* time (not just build time) - uorb_headers itself
+  # never builds or links against any of the three modules patched below,
+  # but CMake still validates each one's own CMakeLists.txt as it's walked,
+  # so a vendored submodule any of them reference has to be real (or
+  # replaced) for `cmake -B` configure to succeed at all, even though none
+  # of them are ever actually built for this derivation's one target
+  # (confirmed by reproducing the configure step with and without each
+  # submodule present). No other submodule is needed to configure or build
+  # uorb_headers.
+  #
+  # Rather than vendoring the submodules (fetchSubmodules = true would pull
+  # in ~30 unrelated ones just for these three), each patch makes its module
+  # find_package() a real, independent nixpkgs package instead:
+  #   - modules/uxrce_dds_client's ExternalProject_Add validates at
+  #     *configure* time that its submodule SOURCE_DIR is an existing
+  #     non-empty directory, so an empty/missing placeholder is a hard
+  #     configure failure.
+  #   - lib/heatshrink and drivers/gps both list files from their
+  #     submodules directly as SRCS, which CMake validates exist at
+  #     generate time regardless of EXCLUDE_FROM_ALL.
+  patches = [
+    ./find-package-microxrcedds-client.patch
+    ./find-package-heatshrink.patch
+    ./find-package-px4-gpsdrivers.patch
+  ];
 
+  buildInputs = [
+    heatshrink
+    micro-xrce-dds-client
+    px4-gpsdrivers
+  ];
+
+  postPatch = ''
     cat > src/lib/version/CMakeLists.txt <<EOF
       set(version_string "${finalAttrs.version}")
 

@@ -1,0 +1,41 @@
+--- a/src/drivers/gps/CMakeLists.txt	2026-10-30 13:51:37.450142976 -0400
++++ b/src/drivers/gps/CMakeLists.txt	2026-10-30 13:52:22.543260800 -0400
+@@ -31,7 +31,16 @@
+ #
+ ############################################################################
+ 
+-px4_add_git_submodule(TARGET git_gps_devices PATH "devices")
++# Consumed as a real, independently-built nixpkgs package (pkgs/by-name/px/px4-gpsdrivers)
++# via find_package() instead of vendoring the "devices" submodule, the same
++# way QGroundControl's own copy of this same library is consumed in this
++# nixpkgs tree (see use-px4-gpsdrivers.patch there). NOTE: gps.cpp's own
++# #include "devices/src/ubx.h" is a path relative to this vendored submodule
++# layout and is left untouched - it's irrelevant to configuring or building
++# uorb_headers (this module is never part of that target's dependency
++# graph), and only matters if this drivers__gps module is ever actually
++# compiled standalone.
++find_package(px4-gpsdrivers REQUIRED)
+ 
+ px4_add_module(
+ 	MODULE drivers__gps
+@@ -40,19 +49,8 @@
+ 		-Wno-stringop-overflow # due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91707
+ 	SRCS
+ 		gps.cpp
+-		devices/src/crc.cpp
+-		devices/src/gps_helper.cpp
+-		devices/src/mtk.cpp
+-		devices/src/ashtech.cpp
+-		devices/src/ubx.cpp
+-		devices/src/rtcm.cpp
+-		devices/src/emlid_reach.cpp
+-		devices/src/femtomes.cpp
+-		devices/src/nmea.cpp
+-		devices/src/unicore.cpp
+-		devices/src/crc.cpp
+ 	MODULE_CONFIG
+ 		module.yaml
+ 	DEPENDS
+-		git_gps_devices
++		px4-gpsdrivers::gps
+ 	)
