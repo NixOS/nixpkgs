@@ -1,26 +1,23 @@
 {
   stdenvNoCC,
   lib,
-  fetchurl,
+  fetchzip,
   autoPatchelfHook,
   cups,
-  unzip,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "cups-idprt-mt890";
   version = "1.2.0";
 
-  src = fetchurl {
-    name = "idprt_mt890_printer_linux_driver.zip";
-    url = "https://www.idprt.com/prt_v2/files/down_file/id/320/fid/778.html"; # NOTE: This is NOT an HTML page, but a ZIP file
-    hash = "sha256-8yH+DSPRp4mjKOXw90TiGA4OzxJKHpBUMSLh3L2njw8=";
+  src = fetchzip {
+    url = "https://foreverfile.hprtcloud.com/hygj/annex_file/2025_11_05/qNL2iNg5PuZCOHwK/idprt_mt890_printer_linux_driver_v1.2.0.zip";
+    hash = "sha256-PiNbpfa9daD1gNE/4K4KbKXnLtJpyWKllc4z80USzSo=";
   };
 
   buildInputs = [ cups ];
   nativeBuildInputs = [
     autoPatchelfHook
-    unzip
   ];
 
   installPhase =
