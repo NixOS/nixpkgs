@@ -1,34 +1,33 @@
 {
-  lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  lib,
 }:
-let
-  version = "1.9.11";
-in
-python3.pkgs.buildPythonApplication rec {
-  inherit version;
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyflyby";
+  version = "1.9.11";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deshaw";
     repo = "pyflyby";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BBFLkojG0MeJ8Bj8cc10x/rUITqb4/UbLB+FQIVpYrw=";
   };
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     wheel
   ];
 
-  dependencies = with python3.pkgs; [
-    six
-    toml
-    isort
+  dependencies = with python3Packages; [
     black
     ipython
+    isort
+    six
+    toml
   ];
 
   pythonImportsCheck = [ "pyflyby" ];
@@ -40,4 +39,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "py";
   };
-}
+})
