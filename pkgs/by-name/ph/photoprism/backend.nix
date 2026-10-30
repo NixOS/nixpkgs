@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   coreutils,
   python313,
   src,
@@ -25,7 +25,7 @@ let
     '';
   };
 in
-buildGoModule {
+buildGo127Module {
   inherit src version;
   pname = "photoprism-backend";
 
@@ -49,7 +49,7 @@ buildGoModule {
     substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
   '';
 
-  vendorHash = "sha256-CJXLK4AYslnlGhbqQkAz2di299xBpkB9L5GwJ0AbVxs=";
+  vendorHash = "sha256-w7QJKGyxVQZZ3xlz9yqS495oYIokR9qiUCgZu/VxXl0=";
 
   subPackages = [ "cmd/photoprism" ];
 
