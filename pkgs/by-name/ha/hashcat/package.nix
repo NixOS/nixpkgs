@@ -2,55 +2,39 @@
   lib,
   stdenv,
   addDriverRunpath,
+  autoPatchelfHook,
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   fetchurl,
-  makeWrapper,
-  minizip,
-  opencl-headers,
+  libiconv,
   ocl-icd,
+  opencl-headers,
   perl,
   python3,
   rocmPackages,
   rocmSupport ? config.rocmSupport,
-  xxhash,
-  zlib,
-  libiconv,
   versionCheckHook,
+  xz,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hashcat";
-  version = "7.1.2";
+  version = "8.0.0";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${finalAttrs.version}.tar.gz";
-    hash = "sha256-lUamMm10dTC0T8wHm6utQDBKh/MtPJCAAW1Ys5z8i5Y=";
+    hash = "sha256-1qdTPh4lCiNqi5nQtyXN122P3OdEx+6ssr9CIQ/kdhs=";
   };
 
-  postPatch = ''
-     # MACOSX_DEPLOYMENT_TARGET is defined by the enviroment
-     # Remove hardcoded paths on darwin
-    substituteInPlace src/Makefile \
-      --replace-fail "export MACOSX_DEPLOYMENT_TARGET" "#export MACOSX_DEPLOYMENT_TARGET" \
-      --replace-fail "/usr/bin/ar" "ar" \
-      --replace-fail "/usr/bin/sed" "sed" \
-      --replace-fail '-i ""' '-i'
-  '';
-
-  nativeBuildInputs = [
-    makeWrapper
-  ]
-  ++ lib.optionals (cudaSupport || rocmSupport) [
-    addDriverRunpath
-  ];
+  nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
   buildInputs = [
-    minizip
     opencl-headers
     perl
     (python3.withPackages (
@@ -63,11 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
         simplejson
       ]
     ))
-    xxhash
     zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
   ];
 
   makeFlags = [
@@ -75,8 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     "COMPTIME=1337"
     "VERSION_TAG=${finalAttrs.version}"
     "USE_SYSTEM_OPENCL=1"
-    "USE_SYSTEM_XXHASH=1"
-    "USE_SYSTEM_ZLIB=1"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
     "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
@@ -87,39 +65,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preFixup = ''
-    for f in $out/share/hashcat/OpenCL/*.cl; do
-      # Rewrite files to be included for compilation at runtime for opencl offload
-      sed "s|#include \"\(.*\)\"|#include \"$out/share/hashcat/OpenCL/\1\"|g" -i "$f"
-      sed "s|#define COMPARE_\([SM]\) \"\(.*\.cl\)\"|#define COMPARE_\1 \"$out/share/hashcat/OpenCL/\2\"|g" -i "$f"
-    done
+  postPatch = ''
+    substituteInPlace src/ext_iconv.c \
+      --replace-fail \
+        '/usr/lib/libiconv.2.dylib' \
+        '${libiconv}/lib/libiconv2.dylib'
   '';
 
-  postFixup =
-    let
-      LD_LIBRARY_PATH = lib.makeLibraryPath (
-        [
-          ocl-icd
-        ]
-        ++ lib.optionals cudaSupport [
-          cudaPackages.cuda_nvrtc
-          cudaPackages.cuda_cudart
-        ]
-        ++ lib.optionals rocmSupport [
-          rocmPackages.clr
-        ]
-      );
-    in
-    ''
-      wrapProgram $out/bin/hashcat \
-        --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg LD_LIBRARY_PATH}
-    ''
-    + lib.optionalString (cudaSupport || rocmSupport) ''
-      for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
-        isELF "$program" || continue
-        addDriverRunpath "$program"
-      done
-    '';
+  appendRunpaths =
+    (
+      map (pkg: (lib.getLib pkg) + "/lib") [
+        libiconv
+        ocl-icd
+        xz
+        zlib
+        zstd
+      ]
+      ++ lib.optionals cudaSupport [
+        cudaPackages.cuda_nvrtc
+      ]
+      ++ lib.optionals rocmSupport [
+        rocmPackages.clr
+      ]
+    )
+    ++ [
+      "${addDriverRunpath.driverLink}/lib"
+    ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
