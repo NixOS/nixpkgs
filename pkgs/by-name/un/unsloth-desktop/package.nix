@@ -1,51 +1,131 @@
 {
   lib,
-  stdenv,
+  rustPlatform,
+  bashInteractive,
   cacert,
   buildFHSEnv,
-  nix-update-script,
-  fetchurl,
+  cargo-tauri,
+  coreutils,
   dpkg,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  nix-update-script,
   glib-networking,
+  gst_all_1,
+  libayatana-appindicator,
+  nodejs_24,
+  npmHooks,
+  openssl,
+  pkg-config,
+  webkitgtk_4_1,
+  wrapGAppsHook4,
+  zsh,
 }:
 
 let
-  version = "0.1.808-beta";
+  version = "0.1.913-beta";
 
-  unsloth-desktop-unwrapped = stdenv.mkDerivation {
+  unsloth-desktop-unwrapped = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "unsloth-desktop-unwrapped";
     inherit version;
 
-    src = fetchurl {
-      url = "https://github.com/unslothai/unsloth/releases/download/v${version}/Unsloth-Desktop-Ubuntu.deb";
-      hash = "sha256-cyKUax4L5foIOT6RyOeGnbH72kpLFKjWtYv0cJszkLw=";
+    src = fetchFromGitHub {
+      owner = "unslothai";
+      repo = "unsloth";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-JAswrvmUfg1V976YBmA/XSrXD02PtV+0/tLmDKxQIkA=";
     };
 
-    nativeBuildInputs = [ dpkg ];
+    cargoRoot = "studio/src-tauri";
+    buildAndTestSubdir = finalAttrs.cargoRoot;
+    cargoHash = "sha256-LxEmOwuXJEQpUzixaD3z43ZoIiyinjnMn/s0Ksr9VGY=";
 
-    dontConfigure = true;
-    dontBuild = true;
-    dontStrip = true;
-    dontPatchELF = true;
+    npmRoot = "studio/frontend";
+    npmDeps = fetchNpmDeps {
+      name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+      inherit (finalAttrs) src;
+      sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
+      hash = "sha256-mTnOkuMnitJPnysaIyWW9OA2xJ/IVBOSvH3Xm9/CD6A=";
+    };
 
-    installPhase = ''
-      runHook preInstall
-      dpkg-deb -x $src $out
-      runHook postInstall
+    cargoBuildFlags = [
+      "--config"
+      "profile.release.strip=true"
+    ];
+
+    nativeBuildInputs = [
+      cargo-tauri.hook
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      gst_all_1.gst-plugins-bad
+      nodejs_24
+      npmHooks.npmConfigHook
+      pkg-config
+      wrapGAppsHook4
+    ];
+
+    buildInputs = [
+      glib-networking
+      libayatana-appindicator
+      openssl
+      webkitgtk_4_1
+    ];
+
+    nativeCheckInputs = [
+      bashInteractive
+      cacert
+      dpkg
+      zsh
+    ];
+
+    # Tests changing the process-wide PATH interfere with other tests' children.
+    dontUseCargoParallelTests = true;
+
+    postPatch = ''
+      substituteInPlace studio/src-tauri/tauri.conf.json \
+        --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
+
+      # The environment isolation tests invoke env with a custom PATH.
+      substituteInPlace studio/src-tauri/src/process.rs \
+        --replace-fail '"/usr/bin/env"' '"${lib.getExe' coreutils "env"}"'
+
+      # The Debian updater tests expect package management tools in /usr/bin.
+      substituteInPlace studio/src-tauri/src/debian_update.rs \
+        --replace-fail '/usr/bin/dpkg-query' '${lib.getExe' dpkg "dpkg-query"}' \
+        --replace-fail 'system_command("/usr/bin/dpkg")' 'system_command("${lib.getExe dpkg}")'
+
+      # Exercise the history preservation tests with shells and env from the store.
+      substituteInPlace studio/src-tauri/src/shell_path.rs \
+        --replace-fail '["/bin", "/usr/bin", "/usr/local/bin", "/opt/homebrew/bin"]' \
+          '["${lib.getBin bashInteractive}/bin", "${lib.getBin zsh}/bin"]' \
+        --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${lib.getBin coreutils}/bin")'
+    '';
+
+    preBuild = ''
+      # Upstream stamps the release version into these placeholders in CI.
+      # This cannot be in postPatch or else cargoSetupPostPatchHook complains
+      # about inconsistency between Cargo.lock and its vendored version.
+      substituteInPlace studio/src-tauri/Cargo.toml studio/src-tauri/Cargo.lock \
+        --replace-fail 'version = "2026.4.8"' 'version = "${finalAttrs.version}"'
     '';
 
     meta = {
-      description = "Unsloth Studio desktop payload from the upstream .deb (unwrapped)";
+      description = "Desktop application for running and training AI models locally (unwrapped)";
       homepage = "https://unsloth.ai/";
       license = lib.licenses.agpl3Only;
-      platforms = [ "x86_64-linux" ];
-      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-darwin"
+        "aarch64-linux"
+      ];
     };
-  };
+  });
 in
 buildFHSEnv {
   pname = "unsloth-desktop";
   inherit version;
+  __structuredAttrs = true;
 
   includeClosures = true;
 
@@ -73,14 +153,14 @@ buildFHSEnv {
     export CC=gcc
   '';
 
-  runScript = "${unsloth-desktop-unwrapped}/usr/bin/unsloth-studio";
+  runScript = "${unsloth-desktop-unwrapped}/bin/unsloth-studio";
 
   extraInstallCommands = ''
-    install -Dm644 ${unsloth-desktop-unwrapped}/usr/share/applications/Unsloth.desktop \
+    install -Dm644 ${unsloth-desktop-unwrapped}/share/applications/Unsloth.desktop \
       $out/share/applications/unsloth-desktop.desktop
     substituteInPlace $out/share/applications/unsloth-desktop.desktop \
       --replace-fail "Exec=unsloth-studio" "Exec=unsloth-desktop"
-    install -Dm644 ${unsloth-desktop-unwrapped}/usr/share/icons/hicolor/128x128/apps/unsloth-studio.png \
+    install -Dm644 ${unsloth-desktop-unwrapped}/share/icons/hicolor/128x128/apps/unsloth-studio.png \
       $out/share/icons/hicolor/128x128/apps/unsloth-studio.png
   '';
 
@@ -98,11 +178,14 @@ buildFHSEnv {
     changelog = "https://github.com/unslothai/unsloth/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ parry-97 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
     mainProgram = "unsloth-desktop";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     longDescription = ''
-      Wraps the upstream Unsloth Desktop .deb in an FHS environment.
+      Builds Unsloth Desktop from source and wraps it in an FHS environment.
 
       The app manages its own runtime in ~/.unsloth/studio: on first run it
       bootstraps a uv venv, installs the unsloth PyPI backend and PyTorch
