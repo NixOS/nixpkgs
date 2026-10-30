@@ -54,8 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
   # (just a bare `install(TARGETS metis ...)`, no `install(EXPORT ...)` and
   # no Config.cmake of any kind), so `find_package(METIS)` can't find this
   # package from any consumer. Write one by hand describing the library and
-  # headers this derivation already installs, as a `METIS::METIS` imported
-  # target (the name/case consumers like symforce look for).
+  # headers this derivation already installs, as a `METIS::metis` imported
+  # target (matching the real `metis` target name METIS' own
+  # add_library(metis ...) call uses, kept lowercase as upstream has it).
   postInstall =
     let
       libSuffix =

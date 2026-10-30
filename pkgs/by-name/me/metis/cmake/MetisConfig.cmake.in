@@ -9,9 +9,9 @@
 # it doesn't need to be: it only ever describes this exact build's own
 # outputs.
 
-if(NOT TARGET METIS::METIS)
-  add_library(METIS::METIS UNKNOWN IMPORTED)
-  set_target_properties(METIS::METIS PROPERTIES
+if(NOT TARGET METIS::metis)
+  add_library(METIS::metis UNKNOWN IMPORTED)
+  set_target_properties(METIS::metis PROPERTIES
     IMPORTED_LOCATION "@out@/lib/libmetis@libSuffix@"
     INTERFACE_INCLUDE_DIRECTORIES "@out@/include"
     # METIS' own programs/CMakeLists.txt links its executables against

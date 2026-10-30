@@ -53,9 +53,9 @@ buildPythonPackage rec {
         # Downstream (e.g. symforce_cholesky below) links against a plain
         # "metis" target, matching the name METIS'"'"'s own CMakeLists.txt
         # gives it when built via the FetchContent path this replaces; alias
-        # that name to the METIS::METIS imported target find_package() gives
+        # that name to the METIS::metis imported target find_package() gives
         # us so the rest of this file does not need to change.
-        add_library(metis ALIAS METIS::METIS)
+        add_library(metis ALIAS METIS::metis)
       endfunction()
       function(hacky_mchackface)'
   '';
