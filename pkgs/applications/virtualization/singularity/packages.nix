@@ -103,6 +103,18 @@ let
 
             This is for binary substitutes only. Use pkgs.${packageName} instead.
           '';
+          problems = oldAttrs.meta.problems or { } // {
+            deprecated = {
+              message = ''
+                Sylabs Inc. has discontinued its development of its fork SingularityCE and the commercial versin SingularityPRO.
+                SingularityCE 4.6.0 was the last release, which incorporates code that was previously part of SingularityPRO only.
+                Use Apptainer (`apptainer`) instead.
+              '';
+              urls = [
+                "https://sylabs.io/"
+              ];
+            };
+          };
         };
       });
 in
