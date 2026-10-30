@@ -100,11 +100,13 @@ in
         machine.succeed("systemctl restart ${serviceName}")
         machine.wait_for_unit("${serviceName}")
         out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config-v3.toml.tmpl")
-        t.assertIn("MAGIC COMMENT V3", out, "the containerd version 3 config template does not contain the magic comment")
-        # the rendered config is the version 3 format and contains the magic comment
-        machine.wait_until_succeeds("grep -q 'MAGIC COMMENT V3' /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml")
+        t.assertIn("MAGIC V3 COMMENT", out, "the containerd version 3 config template does not contain the magic comment")
+        # the rendered config is the version 3 format, contains the magic comment, and ignores the
+        # version 2 template
+        machine.wait_until_succeeds("grep -q 'MAGIC V3 COMMENT' /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml")
         out=machine.succeed("cat /var/lib/rancher/${rancherDistro}/agent/etc/containerd/config.toml")
         t.assertIn("version = 3", out, "the containerd config is not in the version 3 format")
+        t.assertNotIn("MAGIC COMMENT", out, "the containerd config contains the version 2 template")
     '';
 
   meta.maintainers = lib.teams.k3s.members ++ pkgs.rke2.meta.maintainers;
