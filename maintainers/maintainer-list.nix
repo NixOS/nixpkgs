@@ -2526,6 +2526,14 @@
     githubId = 37151054;
     name = "Arnout Kroeze";
   };
+  arntanguy = {
+    email = "arn.tanguy@gmail.com";
+    matrix = "@arntanguy:matrix.org";
+    github = "arntanguy";
+    githubId = 67139;
+    name = "Arnaud Tanguy";
+    keys = [ { fingerprint = "64DF 9BCB F1C4 E405 20C8  F7C2 2B28 88B3 0874 2120"; } ];
+  };
   arobyn = {
     email = "shados@shados.net";
     github = "Shados";
