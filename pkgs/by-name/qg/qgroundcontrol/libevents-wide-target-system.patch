@@ -2,38 +2,40 @@ diff --git a/src/MAVLink/LibEvents/EventHandler.h b/src/MAVLink/LibEvents/EventH
 index 1111111..2222222 100644
 --- a/src/MAVLink/LibEvents/EventHandler.h
 +++ b/src/MAVLink/LibEvents/EventHandler.h
-@@ -21,7 +21,7 @@
- {
+@@ -23,7 +23,7 @@ class EventHandler : public QObject
      Q_OBJECT
+
  public:
--    using send_request_event_message_f = std::function<void(const mavlink_request_event_t& msg)>;
-+    using send_request_event_message_f = std::function<void(const mavlink_request_event_t& msg, uint32_t targetSystemId)>;
+-    using send_request_event_message_f = std::function<void(const mavlink_request_event_t &msg)>;
++    using send_request_event_message_f = std::function<void(const mavlink_request_event_t &msg, uint32_t targetSystemId)>;
      using handle_event_f = std::function<void(std::unique_ptr<events::parser::ParsedEvent>)>;
- 
-     EventHandler(QObject* parent, const QString& profile, handle_event_f handleEventCB,
-diff --git a/src/Vehicle/Vehicle.cc b/src/Vehicle/Vehicle.cc
+
+     EventHandler(QObject *parent,
+diff --git a/src/MAVLink/LibEvents/MAVLinkEventManager.cc b/src/MAVLink/LibEvents/MAVLinkEventManager.cc
 index 1111111..2222222 100644
---- a/src/Vehicle/Vehicle.cc
-+++ b/src/Vehicle/Vehicle.cc
-@@ -1230,15 +1230,18 @@
-     if (eventData == _events.end()) {
-         // add new component
- 
--        auto sendRequestEventMessageCB = [this](const mavlink_request_event_t& msg) {
-+        auto sendRequestEventMessageCB = [this](const mavlink_request_event_t& msg, uint32_t targetSystemId) {
-             SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
-             if (sharedLink) {
-                 mavlink_message_t message;
--                mavlink_msg_request_event_encode_chan(MAVLinkProtocol::instance()->getSystemId(),
-+                // Use pack_chan (rather than encode_chan, which would just copy the
-+                // already-narrowed/sentineled msg.target_system back out) so a wide
-+                // target_system_id still ends up correctly in the extended header.
-+                mavlink_msg_request_event_pack_chan(MAVLinkProtocol::instance()->getSystemId(),
-                         MAVLinkProtocol::getComponentId(),
-                         sharedLink->mavlinkChannel(),
-                         &message,
--                        &msg);
-+                        targetSystemId, msg.target_component, msg.first_sequence, msg.last_sequence);
-                 sendMessageOnLinkThreadSafe(sharedLink.get(), message);
-             }
-         };
+--- a/src/MAVLink/LibEvents/MAVLinkEventManager.cc
++++ b/src/MAVLink/LibEvents/MAVLinkEventManager.cc
+@@ -85,16 +85,19 @@ EventHandler &MAVLinkEventManager::_eventHandlerForCompId(uint8_t compid)
+     }
+
+     // Send mavlink REQUEST_EVENT on behalf of the protocol state machine.
+-    auto sendRequestEventMessageCB = [this](const mavlink_request_event_t &msg) {
++    auto sendRequestEventMessageCB = [this](const mavlink_request_event_t &msg, uint32_t targetSystemId) {
+         SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
+         if (!sharedLink) {
+             return;
+         }
+         mavlink_message_t message;
+-        mavlink_msg_request_event_encode_chan(MAVLinkProtocol::instance()->getSystemId(),
++        // Use pack_chan (rather than encode_chan, which would just copy the
++        // already-narrowed/sentineled msg.target_system back out) so a wide
++        // target_system_id still ends up correctly in the extended header.
++        mavlink_msg_request_event_pack_chan(MAVLinkProtocol::instance()->getSystemId(),
+                                               MAVLinkProtocol::getComponentId(),
+                                               sharedLink->mavlinkChannel(),
+                                               &message,
+-                                              &msg);
++                                              targetSystemId, msg.target_component, msg.first_sequence, msg.last_sequence);
+         _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
+     };
+
