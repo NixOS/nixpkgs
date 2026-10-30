@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=session_middleware::tests::test_session_auth"
 
     # tests require network access
-    "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon_social"
+    "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon"
     "--skip=scheduled_tasks::tests::test_nodeinfo_lemmy_ml"
   ];
 
