@@ -53,8 +53,7 @@ buildGoModule {
 
   subPackages = [ "cmd/photoprism" ];
 
-  # https://github.com/mattn/go-sqlite3/issues/822
-  CGO_CFLAGS = "-Wno-return-local-addr -I${libtensorflow}/include";
+  CGO_CFLAGS = "-I${libtensorflow}/include";
 
   CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
 
