@@ -16222,6 +16222,8 @@ self: super: with self; {
 
   pyroma = callPackage ../development/python-modules/pyroma { };
 
+  pyros-genmsg = callPackage ../development/python-modules/pyros-genmsg { };
+
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyrsistent = callPackage ../development/python-modules/pyrsistent { };
