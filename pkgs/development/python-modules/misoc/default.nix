@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromGitea,
 
   # dependencies
   pyserial,
@@ -19,8 +19,9 @@ buildPythonPackage {
   version = "0.12-unstable-2025-10-03";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "m-labs";
+  src = fetchFromGitea {
+    domain = "git.m-labs.hk";
+    owner = "M-Labs";
     repo = "misoc";
     rev = "59043e979f78934f2c2f99ac417c65aa0c7be0b9";
     hash = "sha256-dXamAZkLdTC9UeZV6biipsZN4LHO+ZLoXV4LO+L7HTM=";
