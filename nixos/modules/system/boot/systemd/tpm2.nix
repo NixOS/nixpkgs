@@ -89,6 +89,8 @@
           "systemd-pcrextend@.service"
         ];
 
+        boot.initrd.systemd.sockets.systemd-pcrextend.wantedBy = [ "sockets.target" ];
+
         boot.initrd.availableKernelModules = [
           "tpm-tis"
         ]
