@@ -51,6 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libarchive/libarchive/commit/28d2900e51b6d20f22d3a74eca6ddac5939ef104.patch";
       hash = "sha256-4vL54mn8iblIMB7i46nSDc/CXl2eyrZ43Tj+QOgC4mk=";
     })
+
+    # fixes Lix test deadlock and general questionable behavior
+    # https://github.com/libarchive/libarchive/pull/3693
+    (fetchpatch {
+      url = "https://github.com/libarchive/libarchive/commit/032c0ddead2f7acb5be56a0577159e03b3d4dc69.patch";
+      hash = "sha256-KM4/R15uwNT7A0qhwrxfpMzYulxLFkuicVnvN7EnFbs=";
+    })
   ];
 
   outputs = [
