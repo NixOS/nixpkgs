@@ -19358,6 +19358,8 @@ self: super: with self; {
 
   skyfield = callPackage ../development/python-modules/skyfield { };
 
+  skymarshal = callPackage ../development/python-modules/skymarshal { };
+
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
   skytemple-eventserver = callPackage ../development/python-modules/skytemple-eventserver { };
