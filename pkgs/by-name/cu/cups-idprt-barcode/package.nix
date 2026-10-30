@@ -4,6 +4,7 @@
   fetchzip,
   autoPatchelfHook,
   cups,
+  cups-idprt-update-script,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -38,6 +39,11 @@ stdenvNoCC.mkDerivation {
       chmod +x $out/lib/cups/filter/*
       runHook postInstall
     '';
+
+  passthru.updateScript = [
+    (lib.getExe cups-idprt-update-script)
+    "iD4S"
+  ];
 
   meta = {
     description = "CUPS drivers for iDPRT barcode printers (iD2P, iD2X, iD4P, iD4S, iE2P, iE2X, iE4P, iE4S, iT4B, iT4E, iT4P, iT4S, iT4X, iX4E, iX4L, iX4P, iX4E, iX6P)";
