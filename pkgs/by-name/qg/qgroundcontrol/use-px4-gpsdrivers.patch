@@ -1,218 +1,276 @@
-diff --git a/src/GPS/CMakeLists.txt b/src/GPS/CMakeLists.txt
-index 4b75ad4..7e558ef 100644
---- a/src/GPS/CMakeLists.txt
-+++ b/src/GPS/CMakeLists.txt
-@@ -14,9 +14,6 @@
-         GPSRTKFactGroup.h
-         RTCMMavlink.cc
-         RTCMMavlink.h
+diff --git a/src/GPS/Driver/CMakeLists.txt b/src/GPS/Driver/CMakeLists.txt
+index e2679ef..3e3d63b 100644
+--- a/src/GPS/Driver/CMakeLists.txt
++++ b/src/GPS/Driver/CMakeLists.txt
+@@ -9,10 +9,6 @@ target_sources(${CMAKE_PROJECT_NAME}
+         GPSDriver.h
+         GPSTransport.h
+         GPSType.h
+-        definitions.h
 -        satellite_info.h
 -        sensor_gnss_relative.h
 -        sensor_gps.h
  )
- 
- target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt6::Core)
-@@ -25,20 +22,6 @@
- 
- #===========================================================================#
- 
+
+ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+@@ -20,32 +16,6 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
+ # ----------------------------------------------------------------------------
+ # PX4 GPS Drivers Integration
+ # ----------------------------------------------------------------------------
 -CPMAddPackage(
 -    NAME px4-gpsdrivers
 -    GITHUB_REPOSITORY PX4/PX4-GPSDrivers
--    GIT_TAG main
+-    GIT_TAG cd6f506afda9bd6e8e4645f094dcf5415f1f8be4
 -    SOURCE_SUBDIR src
 -)
 -
--file(GLOB GPS_DRIVERS_SOURCES "${px4-gpsdrivers_SOURCE_DIR}/src/*")
--target_sources(${CMAKE_PROJECT_NAME}
--    PRIVATE
--        definitions.h
--        ${GPS_DRIVERS_SOURCES}
+-# NOTE: Using file(GLOB) for external dependency sources
+-# CONFIGURE_DEPENDS ensures CMake re-runs if files are added/removed
+-file(GLOB GPS_DRIVERS_SOURCES
+-    CONFIGURE_DEPENDS
+-    "${px4-gpsdrivers_SOURCE_DIR}/src/*.c"
+-    "${px4-gpsdrivers_SOURCE_DIR}/src/*.cpp"
+-    "${px4-gpsdrivers_SOURCE_DIR}/src/*.h"
 -)
 -
--target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE GPS_DEFINITIONS_HEADER=<${CMAKE_CURRENT_SOURCE_DIR}/definitions.h>)
+-add_library(px4-gpsdrivers OBJECT ${GPS_DRIVERS_SOURCES})
+-target_include_directories(px4-gpsdrivers SYSTEM PRIVATE ${px4-gpsdrivers_SOURCE_DIR}/src)
+-target_compile_definitions(px4-gpsdrivers PRIVATE GPS_DEFINITIONS_HEADER=<${CMAKE_CURRENT_SOURCE_DIR}/definitions.h>)
+-target_link_libraries(px4-gpsdrivers PRIVATE Qt6::Core)
+-qgc_disable_dependency_warnings(px4-gpsdrivers)
+-
+-target_sources(${CMAKE_PROJECT_NAME}
+-    PRIVATE
+-        $<TARGET_OBJECTS:px4-gpsdrivers>
+-)
 +find_package(px4-gpsdrivers REQUIRED)
- 
--target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${px4-gpsdrivers_SOURCE_DIR}/src)
+
+-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE GPS_DEFINITIONS_HEADER=<${CMAKE_CURRENT_SOURCE_DIR}/definitions.h>)
+-target_include_directories(${CMAKE_PROJECT_NAME} SYSTEM PRIVATE ${px4-gpsdrivers_SOURCE_DIR}/src)
 +target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE px4-gpsdrivers::gps)
+diff --git a/src/GPS/Driver/GPSDriver.h b/src/GPS/Driver/GPSDriver.h
+index 5110764..f919aa9 100644
+--- a/src/GPS/Driver/GPSDriver.h
++++ b/src/GPS/Driver/GPSDriver.h
+@@ -1,12 +1,15 @@
+ #pragma once
+
+ #include "GPSType.h"
+-#include "satellite_info.h"
+-#include "sensor_gps.h"
+
+ #include <QtCore/QByteArray>
+ #include <QtCore/QMetaType>
+
++// px4-gpsdrivers' own installed headers (not Qt-aware); the metatype
++// declarations below are what let these cross Qt's signal/slot boundary.
++#include <satellite_info.h>
++#include <sensor_gnss.h>
++
+ #include <cstdint>
+ #include <functional>
+ #include <memory>
+@@ -40,11 +43,17 @@ struct GPSSurveyInStatus
+ };
+ Q_DECLARE_METATYPE(GPSSurveyInStatus)
+
++// px4-gpsdrivers' structs carry no Qt dependency of their own; declare the
++// metatypes here, the one header shared by every file that passes these
++// across a Qt signal/slot (GPSProvider.h, GPSRtk.h), so moc always sees them.
++Q_DECLARE_METATYPE(sensor_gnss_s)
++Q_DECLARE_METATYPE(satellite_info_s)
++
+ /// Sinks the driver pushes decoded data into, invoked on the caller thread from
+ /// within configure()/receive().
+ struct GPSDriverSinks
+ {
+-    std::function<void(const sensor_gps_s &)> onPosition;
++    std::function<void(const sensor_gnss_s &)> onPosition;
+     std::function<void(const satellite_info_s &)> onSatelliteInfo;
+     std::function<void(const QByteArray &)> onRTCM;
+     std::function<void(const GPSSurveyInStatus &)> onSurveyIn;
+@@ -81,6 +90,6 @@ private:
+     GPSDriverSinks _sinks;
+
+     std::unique_ptr<GPSBaseStationSupport> _driver;
+-    sensor_gps_s _sensorGps{};
++    sensor_gnss_s _sensorGps{};
+     satellite_info_s _satelliteInfo{};
+ };
+diff --git a/src/GPS/Driver/GPSDriver.cc b/src/GPS/Driver/GPSDriver.cc
+index 130d1c7..87f9c2a 100644
+--- a/src/GPS/Driver/GPSDriver.cc
++++ b/src/GPS/Driver/GPSDriver.cc
+@@ -15,7 +15,8 @@
+ #include <utility>
+
+ QGC_LOGGING_CATEGORY(GPSDriverLog, "GPS.GPSDriver")
+-QGC_LOGGING_CATEGORY(GPSDriversLog, "GPS.Drivers") // backs the px4 GPS_INFO/WARN/ERR macros in definitions.h
++// GPSDriversLog is gone: it backed GPS_INFO/WARN/ERR in QGC's own, now-deleted
++// definitions.h - px4-gpsdrivers' own definitions.h defines those via fprintf.
+
+ namespace {
+ int callbackTrampoline(GPSCallbackType type, void *data1, int data2, void *user)
 diff --git a/src/GPS/GPSProvider.h b/src/GPS/GPSProvider.h
-index 1111111..2222222 100644
+index b5bc892..7d9b35c 100644
 --- a/src/GPS/GPSProvider.h
 +++ b/src/GPS/GPSProvider.h
-@@ -11,16 +11,13 @@
- 
- #include <QtCore/QByteArray>
- #include <QtCore/QLoggingCategory>
--#include <QtCore/QMetaType>
- #include <QtCore/QObject>
- #include <QtCore/QString>
- #include <QtCore/QThread>
- 
- #include <gps_helper.h>
- 
--#include "satellite_info.h"
--#include "sensor_gnss_relative.h"
--#include "sensor_gps.h"
-+#include "GPSMetaTypes.h"
- 
- Q_DECLARE_LOGGING_CATEGORY(GPSProviderLog)
- 
+@@ -30,7 +30,7 @@ public:
+
+ signals:
+     void satelliteInfoUpdate(const satellite_info_s &message);
+-    void sensorGpsUpdate(const sensor_gps_s &message);
++    void sensorGpsUpdate(const sensor_gnss_s &message);
+     void RTCMDataUpdate(const QByteArray &message);
+     void surveyInStatus(const GPSSurveyInStatus &status);
+     void connectionError(GPSConnectionError error);
+diff --git a/src/GPS/GPSProvider.cc b/src/GPS/GPSProvider.cc
+index cdbe3e3..f3b0581 100644
+--- a/src/GPS/GPSProvider.cc
++++ b/src/GPS/GPSProvider.cc
+@@ -37,7 +37,7 @@ void GPSProvider::run()
+
+     bool gotData = false;
+     GPSDriverSinks sinks;
+-    sinks.onPosition = [this](const sensor_gps_s &message) { emit sensorGpsUpdate(message); };
++    sinks.onPosition = [this](const sensor_gnss_s &message) { emit sensorGpsUpdate(message); };
+     sinks.onSatelliteInfo = [this](const satellite_info_s &message) { emit satelliteInfoUpdate(message); };
+     sinks.onRTCM = [this, &gotData](const QByteArray &message) {
+         gotData = true;
 diff --git a/src/GPS/GPSRtk.h b/src/GPS/GPSRtk.h
-index 4e69c84..83a4220 100644
+index a57ca45..7bc8b3f 100644
 --- a/src/GPS/GPSRtk.h
 +++ b/src/GPS/GPSRtk.h
-@@ -13,9 +13,7 @@
- #include <QtCore/QObject>
+@@ -4,8 +4,12 @@
  #include <QtCore/QString>
- 
+
+ #include "GPSProvider.h"
 -#include "satellite_info.h"
--#include "sensor_gnss_relative.h"
 -#include "sensor_gps.h"
-+#include "GPSMetaTypes.h"
- 
- Q_DECLARE_LOGGING_CATEGORY(GPSRtkLog)
- 
-diff --git a/src/GPS/GPSMetaTypes.h b/src/GPS/GPSMetaTypes.h
-new file mode 100644
-index 0000000..1111111
---- /dev/null
-+++ b/src/GPS/GPSMetaTypes.h
-@@ -0,0 +1,20 @@
-+/****************************************************************************
-+ *
-+ * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
-+ *
-+ * QGroundControl is licensed according to the terms in the file
-+ * COPYING.md in the root of the source code directory.
-+ *
-+ ****************************************************************************/
 +
-+#pragma once
-+
-+#include "satellite_info.h"
-+#include "sensor_gnss_relative.h"
-+#include "sensor_gps.h"
-+
-+#include <QtCore/QMetaType>
-+
-+Q_DECLARE_METATYPE(satellite_info_s)
-+Q_DECLARE_METATYPE(sensor_gnss_relative_s)
-+Q_DECLARE_METATYPE(sensor_gps_s)
-diff --git a/src/GPS/definitions.h b/src/GPS/definitions.h
++// px4-gpsdrivers' own installed headers; already pulled in transitively via
++// GPSProvider.h -> GPSDriver.h, included directly here too so this header
++// stays self-sufficient.
++#include <satellite_info.h>
++#include <sensor_gnss.h>
+
+ class GPSRTKFactGroup;
+ class FactGroup;
+@@ -34,7 +38,7 @@ public:
+
+ private slots:
+     void _satelliteInfoUpdate(const satellite_info_s& msg);
+-    void _sensorGpsUpdate(const sensor_gps_s& msg);
++    void _sensorGpsUpdate(const sensor_gnss_s& msg);
+     void _onGPSConnect();
+     void _onGPSDisconnect();
+     void _onGPSConnectionError(GPSConnectionError error);
+diff --git a/src/GPS/GPSRtk.cc b/src/GPS/GPSRtk.cc
+index 42a05ee..ea69e95 100644
+--- a/src/GPS/GPSRtk.cc
++++ b/src/GPS/GPSRtk.cc
+@@ -32,7 +32,7 @@ GPSRtk::GPSRtk(QObject* parent) : QObject(parent), _gpsRtkFactGroup(new GPSRTKFa
+     qCDebug(GPSRtkLog) << this;
+
+     (void) qRegisterMetaType<satellite_info_s>("satellite_info_s");
+-    (void) qRegisterMetaType<sensor_gps_s>("sensor_gps_s");
++    (void) qRegisterMetaType<sensor_gnss_s>("sensor_gnss_s");
+     (void) qRegisterMetaType<GPSConnectionError>("GPSConnectionError");
+     (void) qRegisterMetaType<GPSSurveyInStatus>("GPSSurveyInStatus");
+ }
+@@ -182,11 +182,11 @@ void GPSRtk::_satelliteInfoUpdate(const satellite_info_s& msg)
+     _gpsRtkFactGroup->numSatellitesUsed()->setRawValue(counts.used);
+ }
+
+-void GPSRtk::_sensorGpsUpdate(const sensor_gps_s& msg)
++void GPSRtk::_sensorGpsUpdate(const sensor_gnss_s& msg)
+ {
+     qCDebug(GPSRtkLog) << Q_FUNC_INFO
+                        << QStringLiteral("alt=%1, long=%2, lat=%3")
+-                              .arg(msg.altitude_msl_m)
+-                              .arg(msg.longitude_deg)
+-                              .arg(msg.latitude_deg);
++                              .arg(msg.altitude_msl)
++                              .arg(msg.longitude)
++                              .arg(msg.latitude);
+ }
+diff --git a/src/GPS/Driver/definitions.h b/src/GPS/Driver/definitions.h
 deleted file mode 100644
-index 1111111..0000000
---- a/src/GPS/definitions.h
+index ec1e22f..0000000
+--- a/src/GPS/Driver/definitions.h
 +++ /dev/null
-@@ -1,94 +0,0 @@
--/****************************************************************************
-- *
-- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
-- *
-- * QGroundControl is licensed according to the terms in the file
-- * COPYING.md in the root of the source code directory.
-- *
-- ****************************************************************************/
--
--/****************************************************************************
-- *
-- *   Copyright (c) 2016 PX4 Development Team. All rights reserved.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- *
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, this list of conditions and the following disclaimer.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in
-- *    the documentation and/or other materials provided with the
-- *    distribution.
-- * 3. Neither the name PX4 nor the names of its contributors may be
-- *    used to endorse or promote products derived from this software
-- *    without specific prior written permission.
-- *
-- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
-- * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
-- * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-- * POSSIBILITY OF SUCH DAMAGE.
-- *
-- ****************************************************************************/
--
--/**
-- * @file definitions.h
-- * common platform-specific definitions & abstractions for gps
-- * @author Beat Küng <beat-kueng@gmx.net>
-- */
--
+@@ -1,37 +0,0 @@
 -#pragma once
 -
--#include <QtCore/QtGlobal>
--#include <QtCore/QDateTime>
+-#include <chrono>
+-#include <cstdint>
+-#include <time.h> // IWYU pragma: keep — part of the GPS_DEFINITIONS_HEADER contract for px4 sources
+-
 -#include <QtCore/QLoggingCategory>
 -#include <QtCore/QThread>
+-#include <QtCore/QtMath>
 -
--#include "sensor_gps.h"
--#include "sensor_gnss_relative.h"
--#include "satellite_info.h"
+-#include "sensor_gps.h"          // IWYU pragma: keep — px4 sources resolve sensor_gps_s through this header
+-#include "sensor_gnss_relative.h" // IWYU pragma: keep — px4 sources resolve sensor_gnss_relative_s through this header
+-#include "satellite_info.h"      // IWYU pragma: keep — px4 sources resolve satellite_info_s through this header
+-
+-// Symbols below satisfy the px4-gpsdrivers GPS_DEFINITIONS_HEADER contract.
 -
 -Q_DECLARE_LOGGING_CATEGORY(GPSDriversLog)
 -
 -#define GPS_INFO(...) qCInfo(GPSDriversLog, __VA_ARGS__)
 -#define GPS_WARN(...) qCWarning(GPSDriversLog, __VA_ARGS__)
--#define GPS_ERR(...) qCCritical(GPSDriversLog, __VA_ARGS__)
+-#define GPS_ERR(...)  qCCritical(GPSDriversLog, __VA_ARGS__)
 -
--#define M_DEG_TO_RAD (M_PI / 180.0)
--#define M_RAD_TO_DEG (180.0 / M_PI)
--#define M_DEG_TO_RAD_F 0.0174532925f
--#define M_RAD_TO_DEG_F 57.2957795f
+-#define M_DEG_TO_RAD_F static_cast<float>(M_PI / 180.0)
+-#define M_RAD_TO_DEG   (180.0 / M_PI)
 -
--#define M_PI_2_F 0.63661977f
+-typedef uint64_t gps_abstime;
 -
--#ifdef _WIN32
--#if (_MSC_VER < 1900)
--struct timespec
+-static inline gps_abstime gps_absolute_time()
 -{
--    time_t tv_sec;
--    long tv_nsec;
--};
--#else
--#include <time.h>
--#endif
--#endif
+-    return std::chrono::duration_cast<std::chrono::microseconds>(
+-        std::chrono::steady_clock::now().time_since_epoch()).count();
+-}
 -
 -static inline void gps_usleep(unsigned long usecs)
 -{
 -    QThread::usleep(usecs);
 -}
--
--typedef uint64_t gps_abstime;
--static inline gps_abstime gps_absolute_time()
--{
--    return (QDateTime::currentMSecsSinceEpoch() * 1000);
--}
-diff --git a/src/GPS/sensor_gps.h b/src/GPS/sensor_gps.h
+diff --git a/src/GPS/Driver/satellite_info.h b/src/GPS/Driver/satellite_info.h
 deleted file mode 100644
-index 1111111..0000000
---- a/src/GPS/sensor_gps.h
+index c841e24..0000000
+--- a/src/GPS/Driver/satellite_info.h
 +++ /dev/null
-@@ -1,90 +0,0 @@
--/****************************************************************************
-- *
-- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
-- *
-- * QGroundControl is licensed according to the terms in the file
-- * COPYING.md in the root of the source code directory.
-- *
-- ****************************************************************************/
+@@ -1,22 +0,0 @@
+-/* https://github.com/PX4/Firmware/blob/master/msg/SatelliteInfo.msg */
 -
+-#pragma once
+-
+-#include <stdint.h>
+-
+-#include <QtCore/QMetaType>
+-
+-struct satellite_info_s
+-{
+-	uint64_t timestamp;
+-	static constexpr uint8_t SAT_INFO_MAX_SATELLITES = 20;
+-
+-	uint8_t count;
+-	uint8_t svid[SAT_INFO_MAX_SATELLITES];
+-	uint8_t used[SAT_INFO_MAX_SATELLITES];
+-	uint8_t elevation[SAT_INFO_MAX_SATELLITES];
+-	uint8_t azimuth[SAT_INFO_MAX_SATELLITES];
+-	uint8_t snr[SAT_INFO_MAX_SATELLITES];
+-	uint8_t prn[SAT_INFO_MAX_SATELLITES];
+-};
+-Q_DECLARE_METATYPE(satellite_info_s);
+diff --git a/src/GPS/Driver/sensor_gps.h b/src/GPS/Driver/sensor_gps.h
+deleted file mode 100644
+index d5a1e0f..0000000
+--- a/src/GPS/Driver/sensor_gps.h
++++ /dev/null
+@@ -1,81 +0,0 @@
 -/* https://github.com/PX4/Firmware/blob/master/msg/SensorGps.msg */
 -
 -#pragma once
@@ -294,58 +352,12 @@ index 1111111..0000000
 -	uint8_t rtcm_msg_used;
 -};
 -Q_DECLARE_METATYPE(sensor_gps_s);
-diff --git a/src/GPS/satellite_info.h b/src/GPS/satellite_info.h
+diff --git a/src/GPS/Driver/sensor_gnss_relative.h b/src/GPS/Driver/sensor_gnss_relative.h
 deleted file mode 100644
-index 1111111..0000000
---- a/src/GPS/satellite_info.h
+index c142f55..0000000
+--- a/src/GPS/Driver/sensor_gnss_relative.h
 +++ /dev/null
-@@ -1,31 +0,0 @@
--/****************************************************************************
-- *
-- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
-- *
-- * QGroundControl is licensed according to the terms in the file
-- * COPYING.md in the root of the source code directory.
-- *
-- ****************************************************************************/
--
--/* https://github.com/PX4/Firmware/blob/master/msg/SatelliteInfo.msg */
--
--#pragma once
--
--#include <stdint.h>
--
--#include <QtCore/QMetaType>
--
--struct satellite_info_s
--{
--	uint64_t timestamp;
--	static constexpr uint8_t SAT_INFO_MAX_SATELLITES = 20;
--
--	uint8_t count;
--	uint8_t svid[20];
--	uint8_t used[20];
--	uint8_t elevation[20];
--	uint8_t azimuth[20];
--	uint8_t snr[20];
--	uint8_t prn[20];
--};
--Q_DECLARE_METATYPE(satellite_info_s);
-diff --git a/src/GPS/sensor_gnss_relative.h b/src/GPS/sensor_gnss_relative.h
-deleted file mode 100644
-index 1111111..0000000
---- a/src/GPS/sensor_gnss_relative.h
-+++ /dev/null
-@@ -1,49 +0,0 @@
--/****************************************************************************
-- *
-- * (c) 2009-2024 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
-- *
-- * QGroundControl is licensed according to the terms in the file
-- * COPYING.md in the root of the source code directory.
-- *
-- ****************************************************************************/
--
+@@ -1,40 +0,0 @@
 -/* https://github.com/PX4/Firmware/blob/master/msg/SensorGnssRelative.msg */
 -
 -#pragma once
