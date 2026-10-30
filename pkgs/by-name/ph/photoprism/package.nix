@@ -31,6 +31,7 @@ let
 
   backend = callPackage ./backend.nix { inherit src version; };
   frontend = callPackage ./frontend.nix { inherit src version; };
+  onnxruntime = callPackage ./onnxruntime.nix { };
 
   fetchModel =
     { name, hash }:
@@ -111,7 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin ${assets_path}
 
     # install backend
-    ln -s ${backend}/bin/photoprism $out/bin/photoprism
+    # NB: this must be a copy not a symlink, photoprism looks for onnxruntime
+    # relative to its binary, and if we use a symlink we'd have to link the library
+    # in with the backend derivation itself
+    cp ${backend}/bin/photoprism $out/bin/photoprism
+    ln -s ${onnxruntime}/lib $out/lib
     wrapProgram $out/bin/photoprism \
       --set PHOTOPRISM_ASSETS_PATH ${assets_path} \
       --set PHOTOPRISM_DARKTABLE_BIN ${darktable}/bin/darktable-cli \
@@ -141,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit backend frontend;
+    inherit backend frontend onnxruntime;
 
     facenet = wrapModelForUpdate facenet;
     efficientformerv2_s2 = wrapModelForUpdate efficientformerv2_s2;
@@ -164,6 +169,8 @@ stdenv.mkDerivation (finalAttrs: {
         "efficientformerv2_s2"
         "--subpackage"
         "facenet"
+        "--subpackage"
+        "onnxruntime"
         "--subpackage"
         "sface"
         "--subpackage"
