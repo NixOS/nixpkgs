@@ -7,12 +7,15 @@
   stdenv,
   nixosTests,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "artalk";
   version = "2.10.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
@@ -33,7 +36,10 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   # TestAuthSSOExchange
   __darwinAllowLocalNetworking = true;
