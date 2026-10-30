@@ -7,9 +7,12 @@ int main(void)
     const char *name;
     const char *symbol;
   } libraries[] = {
-    { "libGLU.so", "gluNewTess" },
-    { "libfreetype.so", "FT_Init_FreeType" },
+    { "libbz2.so", "BZ2_bzlibVersion" },
     { "libfontconfig.so", "FcInit" },
+    { "libfreetype.so", "FT_Init_FreeType" },
+    { "libGLU.so", "gluNewTess" },
+    { "libopenal.so", "alGetString" },
+    { "libz.so", "zlibVersion" },
   };
 
   for (size_t i = 0; i < sizeof(libraries) / sizeof(libraries[0]); ++i) {

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  bzip2,
   boost,
   cmake,
   fontconfig,
@@ -9,8 +10,10 @@
   libGL,
   libGLU,
   libx11,
+  openal,
   expat,
   runCommandCC,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     expat
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    bzip2
+    openal
+    zlib
+  ]
   ++ lib.optional stdenv.hostPlatform.isLinux libx11;
 
   cmakeFlags = [
@@ -44,9 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${
       lib.makeLibraryPath [
-        libGLU
-        freetype
+        bzip2
         fontconfig
+        freetype
+        libGLU
+        openal
+        zlib
       ]
     } "$out/lib/libCoin.so"
   '';
@@ -59,7 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
         }
         ''
           $CC ${./runtime-linking.c} -lCoin -o runtime-linking
-          unset LD_LIBRARY_PATH COIN_GLU_LIBNAME COIN_FREETYPE2_LIBNAME COIN_FONTCONFIG_LIBNAME
+          unset LD_LIBRARY_PATH COIN_GLU_LIBNAME COIN_FREETYPE2_LIBNAME COIN_FONTCONFIG_LIBNAME \
+            COIN_BZIP2_LIBNAME COIN_OPENAL_LIBNAME COIN_ZLIB_LIBNAME
           COIN_DEBUG_DL=1 ./runtime-linking
           touch $out
         '';
