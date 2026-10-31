@@ -16,6 +16,11 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-ZA1q1YVJcdSUF9NTikyT3vrRnqbsu5plzRI2gMu+qnQ=";
   };
 
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export CLANG_MODULE_CACHE_PATH="$TMPDIR/clang-module-cache"
+    mkdir -p "$CLANG_MODULE_CACHE_PATH"
+  '';
+
   cargoHash = "sha256-oXOf9G0BMSbFFAsmRaAZzaquFva1i1gJ4ISqJkqSx4k=";
 
   meta = {
@@ -23,8 +28,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/SanderJSA/Pomodoro";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ annaaurora ];
-    # error: redefinition of module 'ObjectiveC'
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "pomodoro";
   };
 }
