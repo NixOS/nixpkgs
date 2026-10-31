@@ -12,6 +12,10 @@ in
     services.e-imzo = {
       enable = lib.mkEnableOption "E-IMZO";
 
+      autostart = lib.mkEnableOption "auto startup" // {
+        default = true;
+      };
+
       package = lib.mkPackageOption pkgs "e-imzo" {
         extraDescription = "Official mirror deletes old versions as soon as they release new one. Feel free to use either unstable or your own custom e-imzo package and ping maintainer.";
       };
@@ -22,17 +26,17 @@ in
     systemd.user.services.e-imzo = {
       enable = true;
       description = "E-IMZO, uzbek state web signing service";
-      documentation = [ "https://github.com/xinux-org/e-imzo" ];
+      documentation = [ "https://git.oss.uzinfocom.uz/xinux/e-imzo-manager/" ];
 
-      after = [
-        "network-online.target"
-        "graphical.target"
-      ];
       wants = [
         "network-online.target"
         "graphical.target"
       ];
-      wantedBy = [ "default.target" ];
+      after = lib.optionals cfg.autostart [
+        "network-online.target"
+        "graphical.target"
+      ];
+      wantedBy = lib.optionals cfg.autostart [ "default.target" ];
 
       serviceConfig = {
         Type = "simple";
