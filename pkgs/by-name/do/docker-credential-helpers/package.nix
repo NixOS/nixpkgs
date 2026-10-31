@@ -13,6 +13,8 @@ buildGoModule rec {
   pname = "docker-credential-helpers";
   version = "0.9.12";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker-credential-helpers";

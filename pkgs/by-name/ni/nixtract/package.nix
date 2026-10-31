@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  openssl,
+  aws-lc,
   stdenv,
   libiconv,
   nix,
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    openssl
+    aws-lc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

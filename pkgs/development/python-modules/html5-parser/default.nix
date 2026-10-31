@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "html5-parser";
-  version = "0.4.12";
+  version = "0.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "html5-parser";
     tag = "v${version}";
-    hash = "sha256-0Qn+To/d3+HMx+KhhgJBEHVYPOfIeBnngBraY7r4uSs=";
+    hash = "sha256-ZwgSCE7ukx+nheQJWX5Rzb8i7kmQ0TMmDx181c/60rg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
