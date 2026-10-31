@@ -62,7 +62,11 @@ runCommand "julia-depot"
       cp "$project/Project.toml" "$JULIA_PROJECT/Project.toml"
 
       mkdir -p $out/depot/artifacts
-      export JULIA_DEPOT_PATH="$out/depot"
+
+      # Keep Julia's own depots on the path, to avoid recompiling stdlibs
+      bundledDepots=$(julia --startup-file=no -e 'print(join(Base.DEPOT_PATH[2:end], ":"))')
+      export JULIA_DEPOT_PATH="$out/depot:$bundledDepots"
+
       cp ${overridesToml} $out/depot/artifacts/Overrides.toml
 
       # These can be useful to debug problems
