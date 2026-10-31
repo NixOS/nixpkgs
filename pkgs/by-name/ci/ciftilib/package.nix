@@ -52,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for reading and writing CIFTI files";
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.bsd2;
   };
 })
