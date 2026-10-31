@@ -3,23 +3,28 @@
   stdenv,
   fetchurl,
   rpmextract,
+  autoPatchelfHook,
   libjpeg,
   cups,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "epson_201310w";
-  version = "1.0.1";
+  version = "1.0.1-1";
 
   src = fetchurl {
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/15/64/77/6f825c323a9f4b8429e3f9f0f4e9c50b1b15f583/epson-inkjet-printer-201310w-${finalAttrs.version}-1.src.rpm";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/15/64/77/6f825c323a9f4b8429e3f9f0f4e9c50b1b15f583/epson-inkjet-printer-201310w-1.0.1-1.src.rpm";
     hash = "sha256-596qMon5KmMHe7mh+ykdpWeazJOCGA6HmmtvdGheRmA=";
   };
 
-  nativeBuildInputs = [ rpmextract ];
+  nativeBuildInputs = [
+    rpmextract
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     libjpeg
     cups
+    stdenv.cc.cc.lib
   ];
 
   unpackPhase = ''
@@ -45,8 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/share/cups/model/EPSON_L120.ppd \
-      --replace-fail "/home/epson/projects/PrinterDriver/P2/_rpmbuild/SOURCES/epson-inkjet-printer-201310w-1.0.1/watermark" "$out/watermark" \
-      --replace-fail "Epson_201310w.1.data" "$out/resource/Epson_201310w.1.data"
+      --replace-fail "/home/epson/projects/PrinterDriver/P2/_rpmbuild/SOURCES/epson-inkjet-printer-201310w-1.0.1/watermark" "$out/watermark"
   '';
 
   meta = {
@@ -71,4 +75,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ nukdokplex ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}
