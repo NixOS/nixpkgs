@@ -32,6 +32,11 @@ let
       appHash = "sha256-1TpfDRMmJ7d5MPp0iTr/RpZHAG7LDsXof9u35O3+5Mg=";
       modelHash = "sha256-+ec7kRPyWPVTk2wgRKMOP5mdmSnpv9mZmiRicEDKD6A=";
     };
+    "35" = {
+      version = "13.2.0";
+      appHash = "sha256-xe/cizixT2W8bEwZ6oQBNo1x0T7C7DLdJRyWx+U6wKU=";
+      modelHash = "sha256-utc6hCdqb9J68r5/E216S7Ho2Sb6pEIzIHSYocy/WSY=";
+    };
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
