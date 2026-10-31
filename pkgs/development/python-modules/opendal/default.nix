@@ -11,14 +11,15 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "opendal";
-  version = "0.46.0";
+  version = "0.47.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "opendal";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-OQGpz6o4R0Yp+1vAgFtik/l7wvHwJNcB1BhZLk+BFPg=";
+    tag = "v0.59.3";
+    hash = "sha256-pve2LwMtgfdRjC363eDp7Zz5YR09M3zHYBRgbDuDkKk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";
