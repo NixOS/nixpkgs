@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "airgradient";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "airgradienthq";
     repo = "python-airgradient";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OlCCImVvoDqOA/LiSShCXwQACHw5Hmwc10BXaMz1DD8=";
+    hash = "sha256-3W4Uf/PXB6Lk3lOFKB/sU4vDC7OPxU0SbWkFIIEMCYg=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
