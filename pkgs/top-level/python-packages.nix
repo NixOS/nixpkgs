@@ -2457,6 +2457,8 @@ self: super: with self; {
 
   biocframe = callPackage ../development/python-modules/biocframe { };
 
+  biocommons-seqrepo = callPackage ../development/python-modules/biocommons-seqrepo { };
+
   biocutils = callPackage ../development/python-modules/biocutils { };
 
   biom-format = callPackage ../development/python-modules/biom-format { };
@@ -2468,6 +2470,8 @@ self: super: with self; {
   biosppy = callPackage ../development/python-modules/biosppy { };
 
   biothings-client = callPackage ../development/python-modules/biothings-client { };
+
+  bioutils = callPackage ../development/python-modules/bioutils { };
 
   bip-utils = callPackage ../development/python-modules/bip-utils { };
 
@@ -6676,6 +6680,8 @@ self: super: with self; {
 
   g2pkk = callPackage ../development/python-modules/g2pkk { };
 
+  ga4gh = callPackage ../development/python-modules/ga4gh { };
+
   galario = toPythonModule (
     pkgs.galario.override {
       enablePython = true;
@@ -7722,6 +7728,8 @@ self: super: with self; {
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
 
   hg-git = callPackage ../development/python-modules/hg-git { };
+
+  hgvs = callPackage ../development/python-modules/hgvs { };
 
   hibpwned = callPackage ../development/python-modules/hibpwned { };
 
@@ -18134,6 +18142,8 @@ self: super: with self; {
   referencing = callPackage ../development/python-modules/referencing { };
 
   refery = callPackage ../development/python-modules/refery { };
+
+  refgen-detector = callPackage ../development/python-modules/refgen-detector { };
 
   reflex = callPackage ../development/python-modules/reflex { };
 
