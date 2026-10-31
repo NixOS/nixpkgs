@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchsvn,
+  cacert,
   cmake,
   pkg-config,
   makeWrapper,
@@ -108,7 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-include stdexcept"
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = ''
+    rm $out/share/supertuxkart/data/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/supertuxkart/data/cacert.pem
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     app=$out/Applications/SuperTuxKart.app
 
     mkdir -p "$out"/{bin,Applications}
