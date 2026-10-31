@@ -34,6 +34,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "barrage";
     maintainers = [ ];
     inherit (SDL.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
