@@ -113,9 +113,6 @@ buildPythonPackage (finalAttrs: {
       bindings of existing C++ code.
     '';
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      yuriaisaka
-      dotlambda
-    ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 })

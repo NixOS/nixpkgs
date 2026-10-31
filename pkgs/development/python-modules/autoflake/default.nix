@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/PyCQA/autoflake";
     changelog = "https://github.com/PyCQA/autoflake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yuriaisaka ];
+    maintainers = [ ];
     mainProgram = "autoflake";
   };
 })
