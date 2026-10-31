@@ -29416,12 +29416,6 @@
     github = "TheOnlyMrCat";
     githubId = 23222857;
   };
-  theoparis = {
-    email = "theo@tinted.dev";
-    github = "theoparis";
-    githubId = 11761863;
-    name = "Theo Paris";
-  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   stdenv,
 
@@ -41,6 +42,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ImzfUc+B5odozROkwhnDUY2a9XDXn8Il2wKuLzOvKAg=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # included in next release
+    (fetchpatch {
+      name = "c-blosc2-3.x-compat.patch";
+      url = "https://github.com/PyTables/PyTables/commit/5270dc217aae8bfe30d27da1fd1ed635df00f1a9.patch";
+      includes = [ "hdf5-blosc2/src/blosc2_filter.c" ];
+      hash = "sha256-TgUWNuTHZucI2skqPZY/JMumT4m3fePWyGP7oLn2ukI=";
+    })
+  ];
 
   build-system = [
     cython

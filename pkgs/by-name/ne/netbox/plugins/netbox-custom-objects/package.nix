@@ -8,14 +8,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-custom-objects";
-  version = "0.7.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netboxlabs";
     repo = "netbox-custom-objects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9x2pn55JNHvbFqi/xW9op2fcvyrjbqAvPeIo8AmbM88=";
+    hash = "sha256-VY31ITIqVpuW3jPOhozTKUL6ka2CE80w+guaksjg8zw=";
   };
 
   build-system = [ setuptools ];
