@@ -162,9 +162,10 @@ in
     systemd.services.glance = {
       description = "Glance feed dashboard server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       # adding nss-user-lookup.target is a fix for https://github.com/NixOS/nixpkgs/issues/409348
       after = [
-        "network.target"
+        "network-online.target"
         "nss-user-lookup.target"
       ];
       requires = [
