@@ -589,10 +589,10 @@
   };
 
   dune = {
-    version = "0-unstable-2026-05-21";
+    version = "0.1.0-unstable-2026-10-30";
     url = "github:tmcgilchrist/tree-sitter-dune";
-    rev = "dd00f0d232e5f081b583966a414994338614b35b";
-    hash = "sha256-yJYuK1uPgN2DH8SIq67prQ1eEazPeBQNlPgGdkEjjHg=";
+    rev = "8384b7d4a664a0a4adb9d0caa8533409a2858a93";
+    hash = "sha256-bRADFeDzxn+UA+G3BIfp7NHSVb6igYF8MPneSGUeAL8=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
