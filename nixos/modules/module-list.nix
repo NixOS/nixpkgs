@@ -263,6 +263,7 @@
   ./programs/kclock.nix
   ./programs/kde-pim.nix
   ./programs/kdeconnect.nix
+  ./programs/kopia.nix
   ./programs/kubeswitch.nix
   ./programs/ladybird.nix
   ./programs/lazygit.nix
