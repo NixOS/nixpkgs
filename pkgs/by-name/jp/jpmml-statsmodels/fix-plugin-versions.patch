@@ -1,0 +1,48 @@
+--- a/pom.xml	2026-09-23 08:39:16.186418100 +0000
++++ b/pom.xml	2026-09-23 08:39:16.187578276 +0000
+@@ -84,10 +84,45 @@
+ 	</dependencyManagement>
+ 
+ 	<build>
++		<pluginManagement>
++			<plugins>
++				<plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-compiler-plugin</artifactId>
++					<version>3.14.1</version>
++				</plugin>
++				<plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-jar-plugin</artifactId>
++					<version>3.5.0</version>
++				</plugin>
++				<plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-shade-plugin</artifactId>
++					<version>3.6.1</version>
++				</plugin>
++				<plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-enforcer-plugin</artifactId>
++					<version>3.6.2</version>
++				</plugin>
++				<plugin>
++					<groupId>org.jacoco</groupId>
++					<artifactId>jacoco-maven-plugin</artifactId>
++					<version>0.8.14</version>
++				</plugin>
++				<plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-resources-plugin</artifactId>
++					<version>3.4.0</version>
++				</plugin>
++			</plugins>
++		</pluginManagement>
+ 		<plugins>
+ 			<plugin>
+ 				<groupId>org.apache.maven.plugins</groupId>
+ 				<artifactId>maven-surefire-plugin</artifactId>
++				<version>3.5.4</version>
+ 				<configuration>
+ 					<systemPropertyVariables>
+ 						<java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
