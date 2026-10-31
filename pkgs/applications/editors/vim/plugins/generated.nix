@@ -15120,6 +15120,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  pentatonic-nvim = buildVimPlugin {
+    pname = "pentatonic.nvim";
+    version = "0-unstable-2026-10-31";
+    src = fetchFromGitHub {
+      owner = "farbzen";
+      repo = "pentatonic.nvim";
+      rev = "fe3c350795baa9a7cabd1a9fa37198c6a4c30f05";
+      hash = "sha256-aahik42orj0OfyaSY43Ln14MaDosT92j8cWjUv6gyfI=";
+    };
+    meta.homepage = "https://github.com/farbzen/pentatonic.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   perfanno-nvim = buildVimPlugin {
     pname = "perfanno.nvim";
     version = "0-unstable-2026-01-20";
