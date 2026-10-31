@@ -13,8 +13,8 @@
 let
   # https://github.com/anza-xyz/platform-tools/releases
   hashes = {
-    "1.54" = {
-      linux-x86_64 = "sha256-/MQWMcf3dWG/VBIhi/KXUB3M8DBeooDzOPCs4qq58x4=";
+    "1.58" = {
+      linux-x86_64 = "sha256-e4LrQgta69HlWQ2wriXFI+ygZyTUI4rgITlpBTVjbDc=";
       linux-aarch64 = "sha256-9igS3Za2scjg4s9ncUaRLFjIPpXXYsMOiSMNZp+cLmo=";
       osx-x86_64 = "sha256-0ctxZYkgB9Ea1y/e0Wx2km5d+p/yhv49mZRAwa80p1g=";
       osx-aarch64 = "sha256-HIs69ehhThxFk5OpXFsZv7zI7ROCKhy1OfrmhHH5v7s=";
@@ -95,7 +95,7 @@ let
     });
 in
 {
-  solana-platform-tools_154 = mkPlatformTools "1.54";
+  solana-platform-tools_154 = mkPlatformTools "1.58";
   solana-platform-tools_157 = mkPlatformTools "1.57";
 
   solana-platform-tools_latest = mkPlatformTools "1.57";
