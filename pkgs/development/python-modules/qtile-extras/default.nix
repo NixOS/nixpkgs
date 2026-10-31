@@ -85,9 +85,28 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pytestFlags = [
-    "--reruns 3"
-    "--reruns-delay 5"
+    "--reruns"
+    "3"
+    "--reruns-delay"
+    "5"
   ];
+
+  # pytestCheckHook's hardcoded `-m pytest` collects 0 tests under pytest 9; run pytest without it.
+  dontUsePytestCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    pytest \
+      ${lib.concatMapStringsSep " " (p: "--ignore-glob=${p}") finalAttrs.disabledTestPaths} \
+      ${
+        lib.optionalString (finalAttrs.disabledTests != [ ])
+          "-k '${lib.concatMapStringsSep " and " (t: "not (${t})") finalAttrs.disabledTests}'"
+      } \
+      ${lib.escapeShellArgs finalAttrs.pytestFlags}
+
+    runHook postCheck
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
