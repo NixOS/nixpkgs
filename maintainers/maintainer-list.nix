@@ -29749,6 +29749,12 @@
     githubId = 174156;
     name = "timor";
   };
+  timoteuszelle = {
+    name = "Timoteus Zelle";
+    email = "tim@oudesluijszelle.nl";
+    github = "timoteuszelle";
+    githubId = 46320568;
+  };
   timput = {
     email = "tim@timput.com";
     github = "TimPut";
