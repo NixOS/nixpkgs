@@ -41,6 +41,7 @@ let
     pname = "openttd-tools";
     buildInputs = [ ];
     cmakeFlags = oldAttrs.cmakeFlags or [ ] ++ [ (lib.cmakeBool "OPTION_TOOLS_ONLY" true) ];
+    doCheck = false;
     installPhase = ''
       install -Dm555 src/strgen/strgen -t $out/bin
       install -Dm555 src/settingsgen/settingsgen -t $out/bin
@@ -112,6 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withFluidSynth fluidsynth;
 
+  doCheck = true;
+  # regression tests need a graphics set
+  preCheck = ''
+    ln -s ${openttd-opengfx}/* baseset
+  '';
+  postCheck = ''
+    rm baseset/opengfx-*
+  '';
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
