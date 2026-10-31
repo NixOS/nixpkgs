@@ -97,6 +97,7 @@ stdenvNoCC.mkDerivation (
           aiohttp
           alembic
           anyio
+          apprise
           asyncssh
           authlib
           bcrypt
@@ -107,7 +108,7 @@ stdenvNoCC.mkDerivation (
           fastapi
           fastapi-pagination
           gunicorn
-          httpx
+          httpx2
           itsdangerous
           jinja2
           joserfc
