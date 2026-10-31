@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptoverif";
-  version = "2.12";
+  version = "2.13";
 
   src = fetchurl {
     url = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${finalAttrs.version}.tar.gz";
-    hash = "sha256-d3MIYb57+95bB493hdtHiGnTOronYaQo1Qqq1TcJh1c=";
+    hash = "sha256-5u20IqBlvX1ZpFIRDBsgAQS3TYdBjrPlETo/8Y7FOPU=";
   };
 
   /*
