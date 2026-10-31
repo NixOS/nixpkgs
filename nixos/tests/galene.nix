@@ -302,7 +302,10 @@ in
                 + "-re -loop 1 -i /etc/${galeneStreamFeedImage} " # loop of feed image
                 + "-map 0:a -map 1:v " # arrange the output stream to have silent audio & looped video
                 + "-c:a mp2 " # stream audio codec
-                + "-c:v libx264 -pix_fmt yuv420p " # stream video codec
+                # note: Force baseline profile and level 3.1 because the GStreamer openh264dec
+                # plugin in galene-stream rejects higher profiles, and 800x600 resolution exceeds
+                # the macroblock limit for level 3.0, causing the test to drop all video frames.
+                + "-c:v libx264 -profile:v baseline -level 3.1 -pix_fmt yuv420p " # stream video codec
                 + "-f mpegts " # stream format
                 + "'srt://localhost:${toString galeneStreamSrtPort}' "
                 + ">/dev/null 2>&1 &"
