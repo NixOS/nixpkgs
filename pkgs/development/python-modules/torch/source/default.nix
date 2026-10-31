@@ -317,6 +317,13 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
+
+    # AOTInductor links the model constants in from generated assembly that lacks a
+    # .note.GNU-stack section, so on x86_64 the .so needs an executable stack, and glibc
+    # 2.41+ refuses to dlopen it. Upstream PR (unmerged):
+    # https://github.com/pytorch/pytorch/pull/202887
+    # Rebased onto v2.14.1; only the line offsets differ from the upstream commit.
+    ./aoti-mark-generated-assembly-noexecstack.patch
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
