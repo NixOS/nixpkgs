@@ -193,6 +193,7 @@ lib.makeOverridable (
     inherit pname version src;
 
     __structuredAttrs = true;
+    strictDeps = true;
 
     enableParallelBuilding = true;
 
