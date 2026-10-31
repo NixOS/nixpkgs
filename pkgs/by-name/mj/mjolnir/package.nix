@@ -41,9 +41,24 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+  preBuild = ''
+    ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs/*.node \
+      node_modules/@matrix-org/matrix-sdk-crypto-nodejs/
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    yarn --offline test
+
+    runHook postCheck
+  '';
+
   postInstall = ''
     cp -r lib/* $out/lib/node_modules/mjolnir/lib/
 
+    # Sadly, not automatically installed
     rm -rf $out/lib/node_modules/mjolnir/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/mjolnir/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
 
