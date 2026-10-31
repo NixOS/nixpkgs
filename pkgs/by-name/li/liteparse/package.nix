@@ -24,6 +24,7 @@ let
         {
           "x86_64-linux" = "pdfium-linux-x64";
           "aarch64-linux" = "pdfium-linux-arm64";
+          "aarch64-darwin" = "pdfium-mac-arm64";
         }
         .${stdenv.hostPlatform.system};
 
@@ -31,6 +32,7 @@ let
         {
           "pdfium-linux-x64" = "sha256-r5byH9jp1TlVAT2tHRewA9ASACXnh7fOYRpoXVcodZQ=";
           "pdfium-linux-arm64" = "sha256-6B7ER90ACX6y/CbP+IvlPqMhSVcRpDr56ntQvr3qkiY=";
+          "pdfium-mac-arm64" = "sha256-lUzTFf99fsUYJMxiia0bAKCYFTPLl2Klb9EivKoSzSc=";
         }
         .${asset};
     in
@@ -117,14 +119,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doCheck = false;
 
-  preBuild = ''
-    mkdir -p "$HOME/.tesseract-rs"
-    cp -rL .tesseract-rs/third_party "$HOME/.tesseract-rs/"
-    chmod -R u+w "$HOME/.tesseract-rs"
-    mkdir -p "$HOME/.tesseract-rs/tessdata"
-    cp ${tesseract.languages.eng} "$HOME/.tesseract-rs/tessdata/eng.traineddata"
-    cp ${tesseract.languages.tur} "$HOME/.tesseract-rs/tessdata/tur.traineddata"
-  '';
+  preBuild =
+    let
+      # https://github.com/cafercangundogdu/tesseract-rs/blob/v0.2.0/build.rs#L16
+      tesseractRsDir =
+        if stdenv.hostPlatform.isDarwin then
+          "$HOME/Library/Application Support/tesseract-rs"
+        else
+          "$HOME/.tesseract-rs";
+    in
+    ''
+      mkdir -p "${tesseractRsDir}"
+      cp -rL .tesseract-rs/third_party "${tesseractRsDir}/"
+      chmod -R u+w "${tesseractRsDir}"
+      mkdir -p "${tesseractRsDir}/tessdata"
+      cp ${tesseract.languages.eng} "${tesseractRsDir}/tessdata/eng.traineddata"
+      cp ${tesseract.languages.tur} "${tesseractRsDir}/tessdata/tur.traineddata"
+    '';
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -154,6 +165,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     mainProgram = "lit";
   };
