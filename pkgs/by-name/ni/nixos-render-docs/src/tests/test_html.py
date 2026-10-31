@@ -269,4 +269,24 @@ def test_full() -> None:
            <p>foo</p>
           </dd>
          </dl>
+        </div>
+        <div class="informaltable">
+          <table class="informaltable" border="1">
+            <colgroup>
+              <col align="left" />
+              <col align="left" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th align="left">this</th>
+                <th align="left">is</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td align="left">a</td>
+                <td align="left">table</td>
+              </tr>
+            </tbody>
+          </table>
         </div>""")
