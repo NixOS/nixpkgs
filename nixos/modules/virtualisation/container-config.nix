@@ -16,6 +16,7 @@ with lib;
     # containers don't have a kernel
     boot.kernel.enable = false;
     boot.modprobeConfig.enable = false;
+    boot.kexec.enable = false;
 
     console.enable = mkDefault false;
 
