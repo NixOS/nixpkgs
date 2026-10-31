@@ -10,7 +10,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "nextcloud-whiteboard-server";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
@@ -20,10 +20,10 @@ buildNpmPackage (finalAttrs: {
       # Requested upstream: https://github.com/nextcloud/whiteboard/pull/1421
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
-    hash = "sha256-MlJHLiql2gGmUjNNPehkRTW4iQqTW5DL43+t1Wis6ys=";
+    hash = "sha256-bik/Ek/F8n+6E0IxTOO0e7q0rx6TRLKV9NAyGRB0q38=";
   };
 
-  npmDepsHash = "sha256-4zallneSkRAiJqyWhkkzHkQ55wi4Uf5RdHS8tc1KbLc=";
+  npmDepsHash = "sha256-OK19edJMOLmnq4ZN+r5oyCJhi6TXfYMNuPj2tNOYu4s=";
 
   npmFlags = [ "--legacy-peer-deps" ];
 
