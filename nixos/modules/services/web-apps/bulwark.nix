@@ -263,7 +263,7 @@ in
             description = ''
               Path to a file containing the secret key for encrypting "Remember me" sessions and settings sync data.
               Required for both "Remember me" and settings sync features.
-              Generate with: openssl rand -base64 32
+              Generate with: openssl rand -hex 32
             '';
           };
 
@@ -319,7 +319,7 @@ in
               options = brandingModule;
             };
             default = { };
-            description = "Branding configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example#L191), keys are written in camel case.";
+            description = "Branding configuration. Check [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/app/(main)/admin/_pages/branding.tsx#L35) for all available options.";
           };
 
           domainBranding = mkOption {
@@ -349,7 +349,7 @@ in
         };
       };
       default = { };
-      description = "Bulwark configuration. Check [the example env configuration](https://github.com/bulwarkmail/webmail/blob/1.8.1/.env.example) for more configuration options, keys are written in camel case. ";
+      description = "Bulwark configuration. Check [upstream](https://github.com/bulwarkmail/webmail/blob/1.21.2/.env.example) for all available options, keys are written in camel case.";
     };
 
     admin = mkOption {
