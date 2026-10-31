@@ -232,6 +232,10 @@ stdenv.mkDerivation (finalAttrs: {
     postConfigureHooks+=(enableStaticInLibtool)
   '';
 
+  # Install the static archives as well: `-static-libstdc++`, `-static` and
+  # friends need them, and quietly link the shared libraries without them.
+  dontDisableStatic = true;
+
   configurePlatforms = [
     "build"
     "host"

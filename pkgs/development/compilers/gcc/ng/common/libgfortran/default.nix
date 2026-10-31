@@ -175,6 +175,10 @@ stdenv.mkDerivation (finalAttrs: {
     "host"
   ];
 
+  # Install the static archives as well: `-static-libstdc++`, `-static` and
+  # friends need them, and quietly link the shared libraries without them.
+  dontDisableStatic = true;
+
   configureFlags = [
     "--disable-dependency-tracking"
     "gcc_cv_target_thread_file=single"

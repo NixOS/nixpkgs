@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     isGNU = true;
   };
 
+  # Install the static archives as well: `-static-libstdc++`, `-static` and
+  # friends need them, and quietly link the shared libraries without them.
+  dontDisableStatic = true;
+
   meta = gcc_meta // {
     homepage = "https://gcc.gnu.org/";
   };
