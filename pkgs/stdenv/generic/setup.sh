@@ -1508,14 +1508,17 @@ configurePhase() {
 }
 
 
+noMakefile() {
+    [[ -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]
+}
+
+
 buildPhase() {
     runHook preBuild
 
-    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags-}" ]] && noMakefile; then
         echo "no Makefile or custom buildPhase, doing nothing"
     else
-        foundMakefile=1
-
         # shellcheck disable=SC2086
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
@@ -1535,7 +1538,7 @@ buildPhase() {
 checkPhase() {
     runHook preCheck
 
-    if [[ -z "${foundMakefile:-}" ]]; then
+    if noMakefile; then
         echo "no Makefile or custom checkPhase, doing nothing"
         runHook postCheck
         return
@@ -1575,13 +1578,10 @@ checkPhase() {
 installPhase() {
     runHook preInstall
 
-    # Dont reuse 'foundMakefile' set in buildPhase, a makefile may have been created in buildPhase
-    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+    if [[ -z "${makeFlags-}" ]] && noMakefile; then
         echo "no Makefile or custom installPhase, doing nothing"
         runHook postInstall
         return
-    else
-        foundMakefile=1
     fi
 
     if [ -n "$prefix" ]; then
@@ -1662,7 +1662,7 @@ fixupPhase() {
 installCheckPhase() {
     runHook preInstallCheck
 
-    if [[ -z "${foundMakefile:-}" ]]; then
+    if [[ -z "${makeFlags-}" ]] && noMakefile; then
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
