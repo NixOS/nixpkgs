@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thokr";
-  version = "0.5.0";
+  version = "0.6.1";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jrnxf";
     repo = "thokr";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ms90Eo2Bk9+QTOZv9fc73gQ1xwDntTbiwXsifF79ELE=";
+    sha256 = "sha256-NHkIQgNxNJ/BziVKfpPCI0oKyj2SoaRmixly+JONOD8=";
   };
 
-  cargoHash = "sha256-U0nClfSQnliQEVX/PrG4B+TLqHNbL0xvttLukEGFKeI=";
+  cargoHash = "sha256-S+uj6woCzf2KnYackXkNmwY91EmKmdUHOSSXYPqin2k=";
 
   meta = {
     description = "Typing tui with visualized results and historical logging";
