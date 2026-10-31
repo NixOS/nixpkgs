@@ -6,7 +6,6 @@
   fetchPnpmDeps,
   nodejs,
   pnpm_10,
-  jq,
   pnpmConfigHook,
   installShellFiles,
   versionCheckHook,
@@ -15,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mo-viewer";
-  version = "1.6.9";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "mo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BXGMjybhKZzw+yae478EP2j3cKw/ZbJMrW342W8ZCmY=";
+    hash = "sha256-EaL0dU4rR3Kg5tuOHgu3374EACqr4X9zrrJ+tn0LEbw=";
   };
 
   frontend = stdenvNoCC.mkDerivation (finalFrontendAttrs: {
@@ -35,19 +34,17 @@ buildGoModule (finalAttrs: {
       sourceRoot = "${finalFrontendAttrs.src.name}/internal/frontend";
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-jnajsNerQ6VCOvgP5PQSG/SL+98SD+AXQXg2s0fC9xE=";
+      hash = "sha256-EOxHcL6h9vg31jI/DkkiJvdOsl3VyLY31D8jznjrMH8=";
     };
 
     nativeBuildInputs = [
       nodejs
       pnpm_10
       pnpmConfigHook
-      jq
     ];
 
-    postPatch = ''
-      jq 'del(.pnpm.executionEnv)' internal/frontend/package.json > internal/frontend/package.json.tmp
-      mv internal/frontend/package.json.tmp internal/frontend/package.json
+    preBuild = ''
+      ln -sf ${lib.getExe nodejs} internal/frontend/node_modules/.bin/node
     '';
 
     buildPhase = ''
@@ -63,7 +60,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-v1EfsHryyLfv9/ZzVazSMFySio62upqsB33eLV6LZZU=";
+  vendorHash = "sha256-b9jVZg4PByGyF/dLn9w2PT5lHsQMLdnx4jGloRj8EJo=";
 
   preBuild = ''
     cp -r ${finalAttrs.frontend} internal/static/dist
