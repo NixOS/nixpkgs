@@ -69,6 +69,30 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+  # SmartMacroCopy fs.cp's bundled docs out of the nix store (dirs mode 0555)
+  # into ~/.config/uhk-agent/smart-macro-docs, preserving source modes. Inside
+  # the minified SmartMacroCopy (Mi) the sequence is:
+  #   1. fs.cp(firmware/doc -> dest)               # creates dest as 0555
+  #   2. fs.cp(firmware/doc-dev -> dest/doc-dev)   # needs write on dest
+  #   3. (later) chmod -R +w smart-macro-docs
+  # Step 2 fails with EACCES on first launch; step 1's force-unlink fails on
+  # every subsequent launch against the leftover 0555 tree. The unhandled
+  # rejection aborts createWindow, leaving a live process with no window.
+  #
+  # Upstream fix: https://github.com/UltimateHackingKeyboard/agent/pull/3024
+  # (Vi is the existing makeFolderWriteableToUserOnLinux helper, hoisted).
+  # Drop this postFixup once a release containing that fix is packaged.
+  postFixup = ''
+    substituteInPlace $out/opt/${pname}/app.asar.unpacked/electron-main.js \
+      --replace-fail \
+        'await(0,Pi.cp)(s,i,{force:!0,recursive:!0});const a=g().join(e.tmpDirectory,"doc-dev"),c=g().join(i,"doc-dev");await(0,Pi.cp)(a,c,{force:!0,recursive:!0}),t.misc("[SmartMacroCopy] done")' \
+        'await Vi(i).catch(()=>{}),await(0,Pi.cp)(s,i,{force:!0,recursive:!0}),await Vi(i);const a=g().join(e.tmpDirectory,"doc-dev"),c=g().join(i,"doc-dev");await(0,Pi.cp)(a,c,{force:!0,recursive:!0}),t.misc("[SmartMacroCopy] done")'
+    wrapProgram $out/bin/${pname} --run '
+      docs="''${XDG_CONFIG_HOME:-$HOME/.config}/uhk-agent/smart-macro-docs"
+      [ -d "$docs" ] && chmod -R u+w "$docs" || true
+    '
+  '';
+
   meta = {
     description = "Configuration application of the Ultimate Hacking Keyboard";
     homepage = "https://github.com/UltimateHackingKeyboard/agent";
