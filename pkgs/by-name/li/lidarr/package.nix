@@ -5,73 +5,59 @@
   buildDotnetModule,
   dotnetCorePackages,
   sqlite,
+  chromaprint,
   fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs-slim_24,
   nixosTests,
-  # update script
-  writers,
-  python3Packages,
-  nix,
-  prefetch-yarn-deps,
-  applyPatches,
+  nix-update-script,
+  writeText,
 }:
 let
-  version = "3.1.0.4875";
-  # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
-  # the already patched lockfile to `fetchYarnDeps`.
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "Lidarr";
-      repo = "Lidarr";
-      tag = "v${version}";
-      hash = "sha256-RCJlToQw96U8seZaD/QCPL1Pn42yw5iXFWGJCHSHwQw=";
-    };
-    postPatch = ''
-      mv src/NuGet.config NuGet.Config
-    '';
-  };
+  inherit (stdenvNoCC.hostPlatform.extensions) sharedLibrary;
+  fpcalc = lib.getExe chromaprint;
+  libsqlite3 = "${lib.getLib sqlite}/lib/libsqlite3${sharedLibrary}";
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
-buildDotnetModule {
+buildDotnetModule (finalAttrs: {
   pname = "lidarr";
-  inherit version src;
+  version = "3.1.6.5079";
 
-  strictDeps = true;
-  nativeBuildInputs = [
-    nodejs
-    yarn
-    prefetch-yarn-deps
-    fixup-yarn-lock
-  ];
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-Jq2O7gvB+PKcz6uDBMg7ox6/Bu+pikXH6JGuLfKG5fI=";
+  src = fetchFromGitHub {
+    owner = "Lidarr";
+    repo = "Lidarr";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vazxW5aYlUjXo2SNSyspc+hk1HoLHI0brbm7e/qSrk0=";
   };
 
-  postConfigure = ''
-    yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs --build node_modules
+  postPatch = ''
+    mv src/NuGet.config NuGet.Config
+    rm -r src/Runtimes
   '';
-  postBuild = ''
-    yarn --offline run build --env production
-  '';
+
+  strictDeps = true;
+
+  installPath = "${placeholder "out"}/lib/lidarr/bin";
+
   postInstall = ''
-    cp -a -- _output/UI "$out/lib/lidarr/UI"
+    cp -a -- ${finalAttrs.passthru.frontend} "$dotnetInstallPath"/UI
+    cp -- ${finalAttrs.passthru.package_info} "$dotnetInstallPath"/../package_info
+    ln -sf -- ${libsqlite3} "$dotnetInstallPath"/libe_sqlite3${sharedLibrary}
+    ln -s -- ${fpcalc} "$dotnetInstallPath"/fpcalc
   '';
 
   nugetDeps = ./deps.json;
-
-  runtimeDeps = [ sqlite ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   doCheck = true;
+
+  preCheck = ''
+    ln -sf -- ${libsqlite3} _tests/net8.0/${rid}/libe_sqlite3${sharedLibrary}
+    ln -s -- ${fpcalc} _tests/net8.0/${rid}/fpcalc
+  '';
 
   __darwinAllowLocalNetworking = true; # for tests
 
@@ -91,16 +77,20 @@ buildDotnetModule {
     "src/NzbDrone.Host.Test/Lidarr.Host.Test.csproj"
     "src/NzbDrone.Libraries.Test/Lidarr.Libraries.Test.csproj"
     "src/NzbDrone.Mono.Test/Lidarr.Mono.Test.csproj"
-    "src/NzbDrone.Test.Common/Lidarr.Test.Common.csproj"
+    "src/NzbDrone.Update.Test/Lidarr.Update.Test.csproj"
+  ];
+
+  # https://github.com/NixOS/nixpkgs/pull/491217
+  dotnetTestFlags = lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    "--environment:DOTNET_SYSTEM_NET_DISABLEIPV6=1"
   ];
 
   dotnetFlags = [
     "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
-    "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
     # Override defaults in src/Directory.Build.props that use current time.
-    "--property:Copyright=Copyright 2014-2025 lidarr.audio (GNU General Public v3)"
-    "--property:AssemblyVersion=${version}"
+    "--property:Copyright=Copyright lidarr.audio (${finalAttrs.meta.license.fullName})"
+    "--property:AssemblyVersion=${finalAttrs.versionForDotnet}"
     "--property:AssemblyConfiguration=master"
     "--property:RuntimeIdentifier=${rid}"
   ];
@@ -116,10 +106,9 @@ buildDotnetModule {
     "FullyQualifiedName!~NzbDrone.Core.Test.ImportListTests.SpotifyMappingFixture"
     "FullyQualifiedName!~NzbDrone.Core.Test.MetadataSource.SkyHook.SkyHookProxyFixture"
     "FullyQualifiedName!~NzbDrone.Core.Test.MetadataSource.SkyHook.SkyHookProxySearchFixture"
-  ]
-  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-    # fails on macOS
-    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+
+    "FullyQualifiedName!~NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_fingerprint_file"
+    "FullyQualifiedName!~NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_lookup_file"
   ];
 
   disabledTests = [
@@ -138,38 +127,75 @@ buildDotnetModule {
     "NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
     "NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
     "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+
+    "NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_lookup_list"
+    "NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_lookup_list_when_fpcalc_fails_for_some_files"
+    "NzbDrone.Core.Test.ParserTests.FingerprintingServiceFixture.should_not_fail_for_some_invalid_fingerprints"
   ];
 
   passthru = {
-    tests = {
-      inherit (nixosTests) lidarr;
+    frontend = stdenvNoCC.mkDerivation {
+      inherit (finalAttrs) src version;
+      pname = "${finalAttrs.pname}-frontend";
+
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      nativeBuildInputs = [
+        nodejs-slim_24
+        yarnConfigHook
+        yarnBuildHook
+      ];
+
+      yarnOfflineCache = fetchYarnDeps {
+        yarnLock = "${finalAttrs.src}/yarn.lock";
+        hash = "sha256-Jq2O7gvB+PKcz6uDBMg7ox6/Bu+pikXH6JGuLfKG5fI=";
+      };
+
+      yarnBuildFlags = [ "--env=production" ];
+
+      installPhase = ''
+        runHook preInstall
+        mv _output/UI "$out"
+        runHook postInstall
+      '';
     };
 
-    updateScript = writers.writePython3 "lidarr-updater" {
-      libraries = with python3Packages; [ requests ];
-      flakeIgnore = [ "E501" ];
-      makeWrapperArgs = [
-        "--prefix"
-        "PATH"
-        ":"
-        (lib.makeBinPath [
-          nix
-          prefetch-yarn-deps
-        ])
-      ];
-    } ./update.py;
+    package_info = writeText "${finalAttrs.pname}-package_info" (
+      lib.generators.toKeyValue { } {
+        PackageAuthor = "[NixOS](https://nixos.org)";
+        PackageVersion = finalAttrs.version;
+        UpdateMethod = "External";
+        UpdateMethodMessage = "Lidarr is managed by Nix. Update it through your system configuration.";
+      }
+    );
+
+    tests = { inherit (nixosTests) lidarr; };
+
+    updateScript = nix-update-script {
+      extraArgs = lib.cli.toCommandLineGNU { } {
+        subpackage = "frontend";
+        use-github-releases = true;
+      };
+    };
   };
 
   meta = {
     description = "Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio";
-    changelog = "https://github.com/Lidarr/Lidarr/releases/tag/v${version}";
+    changelog = "https://github.com/Lidarr/Lidarr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       ramonacat
       karaolidis
+      connor-grady
     ];
     mainProgram = "Lidarr";
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+      fromSource
+    ];
     # platforms inherited from dotnet-sdk.
   };
-}
+})
