@@ -141,6 +141,8 @@ let
       // {
         inherit fetchedMavenDeps;
 
+        strictDeps = args.strictDeps or true;
+
         nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
           maven
         ];
