@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "coffeescript";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "jashkenas";
     repo = "coffeescript";
     tag = version;
-    hash = "sha256-vr46LKICX61rFPCkZ3G+8gJykg+MO43YRJnZGM3RoY0=";
+    hash = "sha256-zcNSUDbieY3dhbSyw5SZCxvBp0o0qPJ/ISzKnZvlNwA=";
   };
 
-  npmDepsHash = "sha256-mCm31OwI3wjq8taKRQuEj4+IWVZO9Z5KuIDBf39lYoQ=";
+  npmDepsHash = "sha256-qOsCR+/amR80c+6QlUXK645dDQHHc2LKrYEeFC+Yc48=";
 
   env = {
     PUPPETEER_SKIP_DOWNLOAD = true;
