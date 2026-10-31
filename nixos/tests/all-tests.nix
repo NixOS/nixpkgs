@@ -1303,7 +1303,7 @@ in
   npmrc = runTest ./npmrc.nix;
   nscd = runTest ./nscd.nix;
   nsd = runTest ./nsd.nix;
-  ntfy-sh = handleTest ./ntfy-sh.nix { };
+  ntfy-sh = runTest ./ntfy-sh.nix;
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix { };
   ntpd = runTest ./ntpd.nix;
   ntpd-rs = runTest ./ntpd-rs.nix;
