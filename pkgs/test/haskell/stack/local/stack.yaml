@@ -1,0 +1,5 @@
+snapshot: ghc-9.10.3
+packages:
+  - .
+nix:
+  enable: true
