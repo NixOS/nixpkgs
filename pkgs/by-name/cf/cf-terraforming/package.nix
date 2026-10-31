@@ -46,7 +46,10 @@ buildGo127Module (finalAttrs: {
     description = "Command line utility to facilitate terraforming your existing Cloudflare resources";
     homepage = "https://github.com/cloudflare/cf-terraforming/";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ benley ];
+    maintainers = with lib.maintainers; [
+      benley
+      kamadorueda
+    ];
     mainProgram = "cf-terraforming";
   };
 })
