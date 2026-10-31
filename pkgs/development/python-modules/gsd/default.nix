@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gsd";
-  version = "4.2.0";
+  version = "5.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "gsd";
     tag = "v${version}";
-    hash = "sha256-qswKeZ8HJEjIV27O2UBmjN+Napa2sItECS5r/vb+l7k=";
+    hash = "sha256-jgj5XgBN68E/Rd60YnXwsy0YIJDcPAk8ajnGeVe1k9g=";
   };
 
   build-system = [
@@ -46,6 +46,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/glotzerlab/gsd";
     changelog = "https://github.com/glotzerlab/gsd/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 }
