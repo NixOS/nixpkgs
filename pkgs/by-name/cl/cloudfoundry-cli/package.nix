@@ -1,9 +1,11 @@
 {
   lib,
+  callPackage,
   buildGoModule,
   fetchFromGitHub,
   fetchurl,
   installShellFiles,
+  runCommand,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -52,6 +54,28 @@ buildGoModule (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+
+  passthru = {
+    withPlugins = callPackage ./with-plugins.nix {
+      cloudfoundry-cli = finalAttrs.finalPackage;
+    };
+
+    tests.with-plugins =
+      runCommand "cloudfoundry-cli-with-plugins-test"
+        {
+          nativeBuildInputs = [
+            (finalAttrs.finalPackage.withPlugins (ps: [ ps.multiapps ]))
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          cf plugins | tee plugins.txt
+          grep -q '^multiapps' plugins.txt
+          cf deploy --help > deploy-help.txt
+          grep -q 'Deploy a multi-target app archive' deploy-help.txt
+          touch $out
+        '';
+  };
 
   meta = {
     description = "Official command line client for Cloud Foundry";
