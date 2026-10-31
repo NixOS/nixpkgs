@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "3.7.0";
+  version = "3.13.11";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-vQn45gHcMRLH5ta5+h3QXLODUlmDWeG1PSRRl/hgfiE=";
+    hash = "sha256-F958Nx6xThTBPJgabm7bixKgeIF+FuT0AdRUSBULl9E=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +47,6 @@ stdenv.mkDerivation rec {
     ./disable-broken-features.patch # some features require things not included in the source code, we'll disable/hide those
   ];
   postPatch = ''
-    # oslib doesn't seem to do releases and hasn't had a change since 2021, so always use commit d6ee6549bb
-    # it is not the latest commit because using a commit here whose hash starts with a number causes issues, but this works
-    substituteInPlace build.gradle \
-      --replace-fail '"com.github.wille:oslib:master-SNAPSHOT"' '"com.github.wille:oslib:d6ee6549bb"'
-    substituteInPlace application/src/main/java/module-info.java \
-      --replace-fail 'requires oslib.master.SNAPSHOT;' 'requires oslib.d6ee6549bb;'
-
     # remove "new version available" (not needed) and eddn question (eddn doesn't work in this build) popups
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
       --replace-fail 'versionPopup();' "" \
