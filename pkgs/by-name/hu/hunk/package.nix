@@ -12,13 +12,13 @@
 
 let
   pname = "hunk";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "modem-dev";
     repo = "hunk";
     tag = "v${version}";
-    hash = "sha256-Nb6OB7gD1+vyLbzB3Izjf3nPVcB8Yq1Y6UDhgC1ZyDg=";
+    hash = "sha256-uYj+01W3f9TE9oKIW/2kVERnJIUsB/r4BcGDbnhkS/Y=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -58,7 +58,7 @@ let
 
     dontFixup = true;
 
-    outputHash = "sha256-Y0X1FlNcW7n55MSB8mO0BpOLH5Ju4n14ibex9KM9em8=";
+    outputHash = "sha256-W3yciO7CHc7Nu7GPpu4DvokhlEAvg4BDbmjAtF6r7AE=";
     outputHashMode = "recursive";
   };
 in
