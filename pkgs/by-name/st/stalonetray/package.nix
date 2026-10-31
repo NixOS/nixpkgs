@@ -1,43 +1,56 @@
 {
-  autoreconfHook,
+  cmake,
   docbook_xml_dtd_44,
   docbook-xsl-ns,
   fetchFromGitHub,
   lib,
   libx11,
+  libxinerama,
   libxpm,
+  libxrandr,
   libxslt,
+  meson,
+  ninja,
+  pkg-config,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stalonetray";
-  version = "0.8.5";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "d3adb5";
     repo = "stalonetray";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/55oP6xA1LeLawOBkhh9acaDcObO4L4ojcy7e3vwnBw=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-8qf9WFvYdvBnX+Eca8vkAMDYkmEra9B9q+RkRhIXkX4=";
   };
 
   preConfigure =
     let
-      db_root = "${docbook-xsl-ns}/share/xml/docbook-xsl-ns";
-      ac_str = "AC_SUBST(DOCBOOK_ROOT)";
-      ac_str_sub = "DOCBOOK_ROOT=${db_root}; ${ac_str}";
+      docbook_loop = "for root in";
     in
     ''
-      substituteInPlace configure.ac --replace '${ac_str}' '${ac_str_sub}'
+      substituteInPlace generate-manpage.sh --replace '${docbook_loop} \' '${docbook_loop} ${docbook-xsl-ns}/share/xml/docbook-xsl-ns \'
     '';
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
+    cmake
+    pkg-config
     docbook-xsl-ns
     docbook_xml_dtd_44
+  ];
+  buildInputs = [
     libx11
+    libxinerama
+    libxrandr
     libxpm
     libxslt
+  ];
+  mesonFlags = [
+    "-Dtests=disabled"
   ];
 
   hardeningDisable = [ "format" ];
