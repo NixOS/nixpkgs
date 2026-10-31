@@ -50,6 +50,24 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
   ];
 
+  # Upstream's CMakeLists.txt registers no CTest tests at all, so exercise
+  # gpmetis and graphchk by hand against one of the graphs checked into
+  # upstream's own repo.
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./programs/graphchk ../graphs/4elt.graph | grep -q "format of the graph is correct"
+
+    ./programs/gpmetis ../graphs/4elt.graph 8
+    [ "$(wc -l < ../graphs/4elt.graph.part.8)" = "15606" ]
+    awk '$1 < 0 || $1 > 7 { exit 1 }' ../graphs/4elt.graph.part.8
+    rm -f ../graphs/4elt.graph.part.8
+
+    runHook postCheck
+  '';
+
   # Upstream's own CMakeLists.txt never exports a CMake package-config file
   # (just a bare `install(TARGETS metis ...)`, no `install(EXPORT ...)` and
   # no Config.cmake of any kind), so `find_package(METIS)` can't find this
