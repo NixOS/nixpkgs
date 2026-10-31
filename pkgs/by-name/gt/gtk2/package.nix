@@ -162,6 +162,10 @@ stdenv.mkDerivation (finalAttrs: {
       proprietary software with GTK without any license fees or royalties.
     '';
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
+    problems.removal.message = ''
+      GTK 2 has reached the end of its life and will soon be removed from nixpkgs.
+      More information in tracking issue: https://github.com/NixOS/nixpkgs/issues/410814
+    '';
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       raskin
