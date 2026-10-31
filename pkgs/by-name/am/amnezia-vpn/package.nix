@@ -12,7 +12,7 @@
   libssh,
   openssl,
   tun2socks,
-  v2ray-rules-dat,
+  xray-rules-dat,
   runtimeShell,
   callPackage,
   nix-update-script,
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Xray otherwise looks for geoip.dat and geosite.dat beside the service binary.
     substituteInPlace service/server/xray.cpp \
-      --replace-fail 'qDebug() << "Xray::startXray()";' $'qDebug() << "Xray::startXray()";\n    qputenv("XRAY_LOCATION_ASSET", QByteArrayLiteral("${v2ray-rules-dat}/share/v2ray"));'
+      --replace-fail 'qDebug() << "Xray::startXray()";' $'qDebug() << "Xray::startXray()";\n    qputenv("XRAY_LOCATION_ASSET", QByteArrayLiteral("${xray-rules-dat}/share/xray"));'
 
     # Link the Nix-built bindings directly instead of using a Conan package.
     substituteInPlace service/server/CMakeLists.txt \
