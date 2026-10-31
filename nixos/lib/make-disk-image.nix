@@ -530,6 +530,12 @@ let
     bootSize=$(round_to_nearest $(numfmt --from=iec '${bootSize}') $mebibyte)
     bootSizeMiB=$(( bootSize / 1024 / 1024 ))MiB
 
+    # Inodes number required for automatic space calculation + setting via mkfs -N
+    numInodes=$(find . | wc -l)
+    # Add fudge factor for inodes (reuse the fudge factor used for $diskUsage)
+    fudgeInodes=$(compute_fudge $numInodes)
+    requiredInodes=$(( numInodes + fudgeInodes ))
+
     ${
       if diskSize == "auto" then
         ''
@@ -573,8 +579,6 @@ let
 
           # Compute required space in filesystem blocks
           diskUsage=$(find . ! -type d -print0 | du --files0-from=- --apparent-size --count-links --block-size "${blockSize}" | cut -f1 | sum_lines)
-          # Each inode takes space!
-          numInodes=$(find . | wc -l)
           # Convert to bytes, inodes take two blocks each!
           diskUsage=$(( (diskUsage + 2 * numInodes) * ${blockSize} ))
           # Then increase the required space to account for the reserved blocks.
@@ -597,14 +601,21 @@ let
 
           printf "Automatic disk size...\n"
           printf "  Closure space use: %d bytes\n" $diskUsage
-          printf "  fudge: %d bytes\n" $fudge
+          printf "  Closure inodes use: %d\n" $numInodes
+          printf "  fudge (space): %d bytes\n" $fudge
+          printf "  fudge (inodes): %d\n" $fudgeInodes
           printf "  Filesystem size needed: %d bytes\n" $requiredFilesystemSpace
+          printf "  Inodes number needed: %d\n" $requiredInodes
           printf "  Additional space: %d bytes\n" $additionalSpace
           printf "  Disk image size: %d bytes\n" $diskSize
         ''
       else
         ''
           truncate -s ${toString diskSize}M $diskImage
+          printf "Fixed disk size: %dM\n" ${toString diskSize}
+          printf "  Closure inodes use: %d\n" $numInodes
+          printf "  fudge (inodes): %d\n" $fudgeInodes
+          printf "  Inodes number needed: %d\n" $requiredInodes
         ''
     }
 
@@ -616,11 +627,11 @@ let
           # Get start & length of the root partition in sectors to $START and $SECTORS.
           eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+          mkfs.${fsType} -b ${blockSize} -N $requiredInodes -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
         ''
       else
         ''
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
+          mkfs.${fsType} -b ${blockSize} -N $requiredInodes -F -L ${label} $diskImage
         ''
     }
 
