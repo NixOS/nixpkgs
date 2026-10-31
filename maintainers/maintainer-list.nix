@@ -25654,6 +25654,13 @@
     githubId = 3285720;
     name = "Robert Schaffar-Taurok";
   };
+  rschulman = {
+    name = "Ross Schulman";
+    email = "ross@rbs.io";
+    github = "rschulman";
+    githubId = 1304536;
+    matrix = "@rschulman:westwork.org";
+  };
   rseichter = {
     email = "nixos.org@seichter.de";
     github = "rseichter";
