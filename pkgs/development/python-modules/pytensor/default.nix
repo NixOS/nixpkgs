@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.3.4";
+  version = "3.3.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-b2CYHqjWtbugKotEfSjnU21m+P8RhoH+nelbc0whfqI=";
+    hash = "sha256-4biX+oVByz3v1hfNqcE6xIyXyvz8LNobedtNq/3C54o=";
   };
 
   build-system = [
@@ -101,6 +101,10 @@ buildPythonPackage (finalAttrs: {
     "test_betaincinv"
     "test_gammainccinv"
     "test_gammaincinv"
+
+    # AssertionError: Graph has 22 nodes, expected <= 20
+    # Also fails in upstream's benchmark CI job for rel-3.3.5
+    "test_scan_grad_subtensor_compile_benchmark"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # These hardcode `getrefcount(x) == 3`, but CPython 3.14 passes locals to calls as borrowed
