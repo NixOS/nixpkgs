@@ -1325,10 +1325,14 @@ Maintainers are encouraged to [subscribe to notifications](https://tracker.secur
 
 If you are investigating an [issue opened by the security tracker](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue%20state%3Aopen%20author%3Aapp%2Fnixpkgs-security-tracker):
 
-- Find the earliest patched version or a code patch in the CVE details;
-- Is the issue already patched (version up-to-date or patch applied manually) in Nixpkgs's `master` branch?
+- Has the vulnerability been patched? This information will be the earliest patched version or a code patch in the CVE details;
   - **No**:
-    - [Submit a security fix][security-fixes];
-    - Once the fix is merged into `master`, [submit the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests);
-  - **Yes**: [Backport the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests).
-- When the patch has made it into all the relevant branches (`master`, and the vulnerable releases), close the relevant issue(s).
+    - Submit a PR adding `meta.knownVulnerabilities` for the package, and [backport the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests).
+    - Consider [removing the package from nixpkgs](#deprecatingremoving-packages).
+  - **Yes**:
+    - Is the issue already patched (version up-to-date or patch applied manually) in Nixpkgs's `master` branch?
+      - **No**:
+        - [Submit a security fix][security-fixes];
+        - Once the fix is merged into `master`, [submit the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests);
+      - **Yes**: [Backport the change to the vulnerable release branch(es)](../CONTRIBUTING.md#how-to-backport-pull-requests).
+  - When the changes have made it into all the relevant branches (`master`, and the vulnerable releases), close the relevant issue(s).
