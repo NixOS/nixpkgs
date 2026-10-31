@@ -99,6 +99,7 @@ in
       "virtio_scsi"
       "virtio_balloon"
       "virtio_console"
+      "virtio_iommu"
 
       # VMware support.
       "mptspi"
