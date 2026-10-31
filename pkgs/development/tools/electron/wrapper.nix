@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   electron-unwrapped,
   wrapGAppsHook3,
@@ -7,6 +8,8 @@
   glib,
   gtk3,
   gtk4,
+
+  sandboxExecutableName ? "__electron_${lib.versions.major electron-unwrapped.version}-suid-sandbox",
 }:
 
 stdenv.mkDerivation {
@@ -31,7 +34,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     makeWrapper "${electron-unwrapped}/libexec/electron/electron" "$out/bin/electron" \
       "''${gappsWrapperArgs[@]}" \
-      --set CHROME_DEVEL_SANDBOX $out/libexec/electron/chrome-sandbox
+      --run 'export CHROME_DEVEL_SANDBOX="$(
+              [ -x /run/wrappers/bin/${sandboxExecutableName} ] \
+              && echo /run/wrappers/bin/${sandboxExecutableName} \
+              || echo '$out'/libexec/electron/chrome-sandbox)"'
 
     ln -s ${electron-unwrapped}/libexec $out/libexec
   '';
@@ -39,6 +45,7 @@ stdenv.mkDerivation {
   passthru = {
     unwrapped = electron-unwrapped;
     inherit (electron-unwrapped) headers dist;
+    inherit sandboxExecutableName;
   };
 
   __structuredAttrs = true;
