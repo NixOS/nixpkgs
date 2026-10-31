@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    dir=$out/Isabelle${isabelle.version}/contrib/${pname}-${version}
+    dir=$out/share/Isabelle${isabelle.version}/contrib/${pname}-${version}
     mkdir -p $dir
     cp -r * $dir/
   '';
