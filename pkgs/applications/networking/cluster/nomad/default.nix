@@ -1,6 +1,7 @@
 {
   lib,
   buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
   nixosTests,
   installShellFiles,
@@ -80,6 +81,19 @@ rec {
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
   nomad = nomad_1_11;
+
+  nomad_2_1 = generic {
+    buildGoModule = buildGo127Module;
+    version = "2.1.1";
+    hash = "sha256-Cv6fe8AKNuTNAJYmNI6mgxP9NvVzGizZIYbUVVm8Olw=";
+    vendorHash = "sha256-d8PfBcwz/7Pi6nRhnKNpRkCDxqXMzw9graSa4AkB76A=";
+    license = lib.licenses.bsl11;
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+    '';
+    __structuredAttrs = true;
+  };
 
   nomad_2_0 = generic {
     buildGoModule = buildGo126Module;
