@@ -8,7 +8,6 @@
   hatchling,
   jsonpath-ng,
   jsonschema-specifications,
-  pip,
   pytestCheckHook,
   referencing,
   rpds-py,
@@ -79,7 +78,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pip
     pytestCheckHook
   ];
 

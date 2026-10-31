@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pip,
   pylint,
   pytestCheckHook,
 }:
@@ -23,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pip
     pytestCheckHook
   ];
 
