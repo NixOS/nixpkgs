@@ -1,0 +1,40 @@
+commit 6c200844eb5a4c210a24468e896cf1e1dc175b22
+Author:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+AuthorDate: Sun Nov 23 12:14:14 2025 -0800
+Commit:     Jeremy Fleischman <jeremyfleischman@gmail.com>
+CommitDate: Sun Mar 15 10:28:09 2026 -0700
+
+    Don't initialize `uinput` unless it's necessary
+    
+    I'm only using `cecdaemon` to run commands, not to send keypresses via
+    `uinput`. I'd like to avoid initializing `uinput` because it's a bit
+    tricky to set up:
+    
+    1. It requires the user I'm running `cecdaemon` under to have permissions it
+       doesn't currently have.
+    2. It requires my system to have loaded the `uinput` kernel module,
+       which doesn't actually happen on my device. See
+       https://github.com/pyinput/python-uinput/issues/9#issuecomment-3568271848
+       for more details.
+    
+    While I could fix both of these issues, this is such a minor change to
+    `cecdaemon`, I thought it would be an acceptable change.
+
+diff --git a/cecdaemon/remote.py b/cecdaemon/remote.py
+index 49304cb..5fa4513 100644
+--- a/cecdaemon/remote.py
++++ b/cecdaemon/remote.py
+@@ -41,7 +41,12 @@ def __init__(self, cec=None, keymap=None):
+         #pylint: disable=W0612
+         for key, value in self.keymap.items():
+             devicekeys.append(getattr(uinput, value))
+-        self.device = uinput.Device(devicekeys)
++
++        # Avoid initializing uinput if the user doesn't need it (it can
++        # require special permissions the user may not even have).
++        if len(devicekeys) > 0:
++            self.device = uinput.Device(devicekeys)
++
+         logging.info('Remote initialized')
+ 
+     def eventrouter(self, event, key, state):
