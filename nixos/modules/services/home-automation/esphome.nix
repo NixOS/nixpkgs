@@ -18,8 +18,6 @@ let
 
   cfg = config.services.esphome;
 
-  stateDir = "/var/lib/esphome";
-
   esphomeHttpParams =
     if cfg.enableUnixSocket then
       [ "--socket=/run/esphome/esphome.sock" ]
@@ -157,6 +155,14 @@ in
         Extra command line arguments for the ESPHome Device Builder.
       '';
     };
+
+    stateDir = mkOption {
+      default = "/var/lib/esphome";
+      type = types.path;
+      description = ''
+        The place where esphome stores its state.
+      '';
+    };
   };
 
   imports = [
@@ -179,7 +185,7 @@ in
     # See: https://github.com/NixOS/nixpkgs/issues/339557
     users.users.esphome = {
       isSystemUser = true;
-      home = stateDir;
+      home = cfg.stateDir;
       group = "esphome";
     };
 
@@ -194,27 +200,27 @@ in
       environment = {
         # Set PLATFORMIO_CORE_DIR to a real path (not a symlink) so PlatformIO
         # and its downloaded toolchains can resolve paths correctly.
-        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+        PLATFORMIO_CORE_DIR = "${cfg.stateDir}/.platformio";
         # platformio needs a writable HOME for its configuration
-        HOME = stateDir;
+        HOME = cfg.stateDir;
       }
       // cfg.environment;
 
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
-          [ (lib.getExe cfg.package) ] ++ esphomeParams ++ [ stateDir ]
+          [ (lib.getExe cfg.package) ] ++ esphomeParams ++ [ cfg.stateDir ]
         );
         User = "esphome";
         Group = "esphome";
-        WorkingDirectory = stateDir;
+        WorkingDirectory = cfg.stateDir;
         StateDirectory = "esphome";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
         RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
         RuntimeDirectoryMode = "0750";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ReadWritePaths = [ stateDir ];
-        ExecPaths = [ stateDir ];
+        ReadWritePaths = [ cfg.stateDir ];
+        ExecPaths = [ cfg.stateDir ];
 
         # Hardening
         CapabilityBoundingSet = "";
