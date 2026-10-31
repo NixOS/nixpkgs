@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-WRVXmhwhbOf2Isjvyqw3d4scA5Vs8Vkyy1m7WC3xb0s=";
 
+  patches = [
+    ./use-platform-verifier.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
