@@ -1749,6 +1749,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  bg-nvim = buildVimPlugin {
+    pname = "bg.nvim";
+    version = "0-unstable-2026-02-18";
+    src = fetchFromGitHub {
+      owner = "typicode";
+      repo = "bg.nvim";
+      rev = "85da2c68409820466753b50c2e6f699517778a17";
+      hash = "sha256-s9m5OgQpehrkIU6bWj70RDEqvSzlxzpih8sRuQrtdC0=";
+    };
+    meta.homepage = "https://github.com/typicode/bg.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   bigfile-nvim = buildVimPlugin {
     pname = "bigfile.nvim";
     version = "0-unstable-2023-11-06";
